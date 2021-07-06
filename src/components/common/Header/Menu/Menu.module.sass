@@ -1,0 +1,41 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  width: 100%
+  height: 100vh
+  background-color: $ui-01
+  &.dark
+    background-color: $ui-06
+
+
+.container
+  height: 100%
+  padding-top: 104px
+  padding-bottom: 32px
+  justify-content: space-between
+
+.content, .footer
+  width: 100%
+
+.content
+  display: flex
+  flex-direction: column
+  align-items: center
+
+.button
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.footer
+  display: flex
+  justify-content: center
+  padding: 24px 0 16px
+
+.socials
+  margin-left: 20px
+  margin-right: 40px
+
+.socialLink
+  padding: 8px
+  margin: -8px 0

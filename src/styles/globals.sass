@@ -1,0 +1,50 @@
+@import "@styles/variables"
+
+html,
+body
+  padding: 0
+  margin: 0
+  line-height: 1.25
+  font-size: 14px
+  font-family: $font
+  min-width: 320px
+
+body
+  background-color: $ui-02
+  color: $text-03
+  &.dark
+    background-color: $ui-06
+    h1, h2, h3, h4, h5, h6
+      color: $text-inverse
+
+*
+  box-sizing: border-box
+
+h1, h2, h3, h4, h5, h6, p
+  margin: 0
+  padding: 0
+
+h1, h2, h3, h4, h5, h6
+  color: $text-01
+
+a
+  color: inherit
+  text-decoration: none
+  cursor: pointer
+  outline: none
+
+button
+  padding: 0
+  margin: 0
+  background-color: transparent
+  box-shadow: none
+  outline: none
+  border: none
+  cursor: pointer
+  &:disabled
+    cursor: not-allowed
+
+ul, ol
+  list-style: none
+  padding: 0
+  margin: 0

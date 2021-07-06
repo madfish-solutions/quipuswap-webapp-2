@@ -1,0 +1,21 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  width: 100%
+  min-width: 100%
+  margin: 0 auto
+  height: 100%
+  position: relative
+  padding: 0 24px
+  display: flex
+  flex-direction: column
+
+@include media(">desktop")
+  .root
+    max-width: 1560px
+    min-width: auto
+    padding: 0 160px
+    &.fluid
+      width: 100%
+      min-width: 100%

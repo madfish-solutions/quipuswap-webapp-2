@@ -1,0 +1,16 @@
+@import '@styles/breakpoints'
+
+.root
+  position: relative
+  padding-top: 64px
+
+.background
+  position: fixed
+  left: -37px
+  top: 64px
+  z-index: -1
+
+@include media('>desktop')
+  .background
+    left: 50%
+    transform: translateX(-50%)

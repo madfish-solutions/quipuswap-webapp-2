@@ -1,0 +1,61 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.wrapper
+  position: fixed
+  top: 0
+  left: 0
+  width: 100%
+  z-index: 5
+
+.root
+  width: 100%
+  height: 64px
+  background-color: $ui-02
+  z-index: 2
+  &.dark
+    background-color: $ui-06
+    .logo
+      color: $ui-01
+
+.container
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+
+.logo
+  display: flex
+  align-items: center
+  color: $ui-07
+  font-size: 1.125rem
+  font-weight: bold
+
+.links, .buttonLaunch, .coloModeSwitcher
+  display: none
+
+.menu
+  position: absolute
+  top: 0
+  left: 0
+  z-index: -1
+  transform: translateY(-100%)
+  transition: transform $animationTime
+  &.active
+    transform: translateY(0)
+
+@include media('>tablet')
+  .menuButton, .menu
+    display: none
+  .content
+    display: flex
+    align-items: center
+  .buttonLaunch
+    display: block
+    margin-left: 16px
+  .links, .coloModeSwitcher
+    display: flex
+    white-space: nowrap
+  .link
+    padding: 24px
+  .coloModeSwitcher
+    margin-left: 40px

@@ -1,0 +1,144 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+
+
+// Common
+.section
+  padding: 80px 0
+
+.header
+  font-size: 2rem
+  margin-bottom: 16px
+
+.sectionHeader
+  font-size: 1.4rem
+  margin-bottom: 12px
+
+.blockHeader
+  font-size: 1rem
+
+
+
+// Colors
+.colorsBlock
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  gap: 16px
+  width: 100%
+  &:not(:last-child)
+    margin-bottom: 48px
+
+.color
+  display: flex
+  flex-direction: column
+
+.colorInner
+  width: 100%
+  height: 100px
+  margin-bottom: 8px
+
+.brand01
+  background: $brand-01
+.brand02
+  background: $brand-02
+
+.text01
+  background-color: $text-01
+.text02
+  background-color: $text-02
+.text03
+  background-color: $text-03
+.textInverse
+  background-color: $text-inverse
+
+.ui01
+  background-color: $ui-01
+.ui02
+  background-color: $ui-02
+.ui03
+  background-color: $ui-03
+.ui04
+  background-color: $ui-04
+.ui05
+  background-color: $ui-05
+.ui06
+  background-color: $ui-06
+.ui07
+  background-color: $ui-07
+
+.hoverPrimary01
+  background: $hover-primary-01
+.hoverPrimary02
+  background: $hover-primary-02
+.hoverLightRow
+  background-color: $hover-light-row
+.hoverDarkRow
+  background-color: $hover-dark-row
+
+.supportSuccess
+  background-color: $support-success
+.supportError
+  background-color: $support-error
+
+
+
+// Elevations
+.elevationBlock
+  display: grid
+  grid-template-columns: repeat(2, 1fr)
+  gap: 16px
+  width: 100%
+
+.elevation
+  height: 160px
+  display: flex
+  justify-content: center
+  align-items: center
+  background-color: $ui-01
+.elevation02
+  box-shadow: $elevation-02
+.elevation03
+  box-shadow: $elevation-03
+.elevation04
+  box-shadow: $elevation-04
+.elevation05
+  box-shadow: $elevation-05
+.elevation06
+  box-shadow: $elevation-06
+
+
+
+// Buttons
+.buttonsBlock
+  display: flex
+  justify-content: flex-start
+  &:not(:last-child)
+    margin-bottom: 32px
+
+.button
+  max-width: 200px !important
+  &:not(:last-child)
+    margin-right: 32px
+
+
+
+@include media('>tablet')
+  .colorsBlock
+    grid-template-columns: repeat(4, 1fr)
+    gap: 32px
+  .section
+    padding: 200px 0
+  .elevationBlock
+    grid-template-columns: repeat(6, 1fr)
+    gap: 32px
+  .header
+    font-size: 4.2rem
+    margin-bottom: 32px
+  .sectionHeader
+    font-size: 2.6rem
+    margin-bottom: 24px
+  .blockHeader
+    font-size: 1.4rem
+  .colorInner
+    margin-bottom: 16px
