@@ -34,12 +34,12 @@ export const Header: React.FC<HeaderProps> = ({
   const content = useMemo(() => ([
     {
       id: 0,
-      href: 'https://www.google.com',
+      href: 'https://docs.quipuswap.com/',
       label: t('common:Docs'),
     },
     {
       id: 1,
-      href: 'https://www.google.com',
+      href: 'https://story.madfish.solutions/',
       label: t('common:Blog'),
     },
   ]), [t]);
