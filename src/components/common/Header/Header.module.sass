@@ -11,12 +11,8 @@
 .root
   width: 100%
   height: 64px
-  background-color: $ui-02
   z-index: 2
-  &.dark
-    background-color: $ui-06
-    .logo
-      color: $ui-01
+  transition: background-color $colorChangeAnimationTime
 
 .container
   flex-direction: row
@@ -26,12 +22,15 @@
 .logo
   display: flex
   align-items: center
-  color: $ui-07
   font-size: 1.125rem
   font-weight: bold
+  transition: color $colorChangeAnimationTime
 
 .links, .buttonLaunch, .coloModeSwitcher
   display: none
+
+.buttonLaunch
+  min-width: 160px
 
 .menu
   position: absolute
@@ -42,6 +41,16 @@
   transition: transform $animationTime
   &.active
     transform: translateY(0)
+
+.light
+  background-color: $ui-02
+  .logo
+    color: $ui-07
+
+.dark
+  background-color: $ui-06
+  .logo
+    color: $ui-01
 
 @include media('>tablet')
   .menuButton, .menu

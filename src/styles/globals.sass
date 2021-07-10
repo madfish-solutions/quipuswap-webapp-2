@@ -9,9 +9,13 @@ body
   font-family: $font
   min-width: 320px
 
+svg, path, rect
+  transition: stroke $colorChangeAnimationTime, fill $colorChangeAnimationTime
+
 body
   background-color: $ui-02
   color: $text-03
+  transition: background-color $colorChangeAnimationTime, color $colorChangeAnimationTime
   &.dark
     background-color: $ui-06
     h1, h2, h3, h4, h5, h6
@@ -19,6 +23,9 @@ body
 
 *
   box-sizing: border-box
+
+h1, h2, h3, h4, h5, h6, p, a, span, strong, button
+  transition: color $colorChangeAnimationTime
 
 h1, h2, h3, h4, h5, h6, p
   margin: 0
