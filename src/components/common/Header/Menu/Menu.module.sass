@@ -9,9 +9,10 @@
     background-color: $ui-06
 
 .container
+  display: flex
+  flex-direction: column
   height: 100%
-  padding-top: 104px
-  padding-bottom: 32px
+  padding-top: 80px
   justify-content: space-between
 
 .content, .footer
@@ -20,11 +21,12 @@
 .content
   display: flex
   flex-direction: column
-  align-items: center
+  align-items: flex-start
+  justify-content: flex-start
 
-.button
+.navlink
   &:not(:last-child)
-    margin-bottom: 16px
+    margin-bottom: 8px
 
 .footer
   display: flex

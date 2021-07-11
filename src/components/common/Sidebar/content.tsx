@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trans } from 'next-i18next';
+
 import { GovernanceIcon } from '@components/svg/Sidebar/GovernanceIcon';
 import { PortfolioIcon } from '@components/svg/Sidebar/PortfolioIcon';
 import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';

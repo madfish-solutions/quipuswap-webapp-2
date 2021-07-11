@@ -14,6 +14,7 @@ import { Socials } from '../Header/Menu/Socials';
 import { Navigation } from './content';
 
 import s from './Sidebar.module.sass';
+import { NavLink } from '../Header/NavLink';
 
 type SidebarProps = {
   className?: string
@@ -58,27 +59,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
       <div className={s.spacebetween}>
         <nav>
-          <ul className={s.links}>
-            {Navigation.map(({
-              id, href, label, Icon,
-            }) => (
-              <li key={id}>
-                <Button
-                  theme="clean"
-                  href={href}
-                  className={cx(s.link, { [s.active]: id === active })}
-                >
-                  <Icon active={id === active} />
-                  <span className={s.text}>{label}</span>
-                </Button>
-              </li>
-            ))}
-          </ul>
+          {Navigation.map(({
+            id, href, label, Icon,
+          }) => (
+            <NavLink
+              key={href}
+              active={id === active}
+              {...{ href }}
+              {...{ label }}
+              {...{ Icon }}
+            />
+          ))}
         </nav>
         <div>
-          <div className={s.account}>
+          <div className={s.footer}>
             <Token className={s.tokenIcon} />
-            <span className={s.invoice}>$ 5.34</span>
+            <span className={s.price}>$ 5.34</span>
           </div>
           <Socials className={s.socials} {...{ socialLinks }} />
         </div>
