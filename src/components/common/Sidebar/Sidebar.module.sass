@@ -1,0 +1,87 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  height: calc(100vh - 64px)
+  width: 192px
+  max-width: 192px
+  display: none
+  justify-content: flex-start
+  flex-direction: column
+  border-right: 1px solid $ui-03
+  background-color: $ui-02
+
+.dark
+  background-color: $ui-06
+  border-right: 1px solid $ui-07
+  
+.wallet
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: space-around
+  padding: 8px 0
+  width: 192px
+  height: 144px
+  border-bottom: 1px solid $ui-03
+ 
+.connect
+  width: 160px
+  
+.link
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: start
+  padding: 0 16px
+  height: 40px
+  width: 100%
+  &.active
+    &::before
+     content: ''
+     width: 4px
+     height: 36px
+     position: absolute
+     left: 0
+     top: 4px
+     background: $hover-primary-01
+
+.dark
+  .wallet
+      border-bottom: 1px solid $ui-07
+  .link
+    &.active
+      &::before
+       background: $hover-primary-02
+
+.spacebetween
+  display: flex
+  height: calc(100vh - 224px)
+  flex-direction: column
+  justify-content: space-between
+
+.account
+  margin: 16px
+  display: flex
+  align-items: center
+
+.invoice
+  padding: 4px 8px
+  font-size: 0.857rem
+  font-weight: 700
+  color: $text-01
+.dark
+  .invoice
+    color: $ui-01
+
+.text
+  padding: 8px
+  
+.socials
+  display: flex
+  justify-content: center
+  
+  
+@include media('>tablet')
+  .root
+    display: flex

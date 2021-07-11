@@ -1,7 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import Link from 'next/link';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 
@@ -10,23 +9,15 @@ const Home: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('home:Home page')}
-      description={t('home:Home page description. Couple sentences...')}
-    >
-      There will be home page
-      <br />
-      <Link href="/swap">
-        <a>
-          Go to swap
-        </a>
-      </Link>
-    </BaseLayout>
+      title={t('liquidity:Liquidity page')}
+      description={t('liquidity:Liquidity page description. Couple sentences...')}
+    />
   );
 };
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...await serverSideTranslations(locale, ['common', 'home']),
+    ...await serverSideTranslations(locale, ['common', 'liquidity']),
   },
 });
 

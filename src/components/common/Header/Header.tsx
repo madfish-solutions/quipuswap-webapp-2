@@ -1,17 +1,19 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
+import { Trans } from 'next-i18next';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Container } from '@components/ui/Container';
 import { Button } from '@components/ui/Button';
+import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { QUIPUSWAP } from '@utils/defaults';
+import { Navigation } from '../Sidebar/content';
 
 import s from './Header.module.sass';
 
@@ -27,55 +29,34 @@ const modeClass = {
 export const Header: React.FC<HeaderProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isMenuOpened, setIsMenuOpened] = useState(false);
-
-  const content = useMemo(() => ([
-    {
-      id: 0,
-      href: 'https://www.google.com',
-      label: t('common:Docs'),
-    },
-    {
-      id: 1,
-      href: 'https://www.google.com',
-      label: t('common:Blog'),
-    },
-  ]), [t]);
 
   return (
     <div className={s.wrapper}>
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <Container className={s.container}>
-          <Link href="/">
-            <a className={s.logo}>
-              <Logo className={s.logoIcon} />
-              QuipuSwap
-            </a>
-          </Link>
-          <div className={s.content}>
-            <ul className={s.links}>
-              {content.map(({ id, href, label }) => (
-                <li key={id}>
-                  <Button
-                    theme="clean"
-                    href={href}
-                    external
-                    className={s.link}
-                  >
-                    {label}
-                  </Button>
-                </li>
-              ))}
-            </ul>
+          <div className={s.leftpart}>
+            <Link href="/">
+              <a className={s.logo}>
+                <Logo className={s.logoIcon} />
+                <span className={s.logoText}>QuipuSwap</span>
+              </a>
+            </Link>
             <Button
-              className={s.buttonLaunch}
+              className={s.connect}
               href={QUIPUSWAP}
               external
             >
-              {t('common:Launch App')}
+              <Trans ns="common">Connect wallet</Trans>
             </Button>
+          </div>
+          <div className={s.content}>
+            <LanguageSwitcher
+              direction="bottom"
+              className={s.languageSwitcher}
+              buttonClassName={s.languageSwitcherButton}
+            />
             <ColorModeSwitcher className={s.coloModeSwitcher} />
             <Button
               theme="quaternary"
@@ -89,7 +70,7 @@ export const Header: React.FC<HeaderProps> = ({
       </header>
       <Menu
         className={cx(s.menu, { [s.active]: isMenuOpened })}
-        content={content}
+        content={Navigation}
       />
     </div>
   );

@@ -10,7 +10,15 @@
   top: 64px
   z-index: -1
 
+.sidebar
+  margin-top: 64px
+  display: none
+
 @include media('>desktop')
   .background
     left: 50%
     transform: translateX(-50%)
+
+@include media('>tablet')
+  .sidebar
+    display: block

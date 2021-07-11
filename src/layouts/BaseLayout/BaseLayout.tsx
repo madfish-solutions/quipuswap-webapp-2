@@ -4,6 +4,7 @@ import { NextSeo } from 'next-seo';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Sidebar } from '@components/common/Sidebar';
 import { Header } from '@components/common/Header';
 import { Footer } from '@components/common/Footer';
 import { Background } from '@components/svg/Background';
@@ -59,6 +60,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
       {isComponentDidMount ? (
         <>
           <Header />
+          <Sidebar className={s.sidebar} />
           <main className={cx(s.root, className)}>
             <Background className={s.background} />
             {children}

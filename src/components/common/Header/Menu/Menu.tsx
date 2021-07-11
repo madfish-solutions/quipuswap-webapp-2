@@ -1,48 +1,42 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Container } from '@components/ui/Container';
 import { Button } from '@components/ui/Button';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { socialLinks } from '@content/socialLinks';
+import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
+import { Socials } from './Socials';
 
 import s from './Menu.module.sass';
-
-type MenuProps = {
-  content: {
-    id: number
-    href: string
-    label: string
-  }[]
-  className?: string
-};
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
+type MenuProps = {
+  content: {
+    id: number
+    href: string
+    external?: boolean
+    label: React.ReactNode
+    Icon: React.FC
+  }[]
+  className?: string
+};
+
 export const Menu: React.FC<MenuProps> = ({
   content,
   className,
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <Container className={s.container}>
         <div className={s.content}>
-          <Button
-            className={s.button}
-            href={QUIPUSWAP}
-            external
-          >
-            {t('common:Launch App')}
-          </Button>
           {content.map(({ id, href, label }) => (
             <Button
               key={id}
@@ -57,21 +51,12 @@ export const Menu: React.FC<MenuProps> = ({
         </div>
         <footer className={s.footer}>
           <ColorModeSwitcher className={s.coloModeSwitcher} id="mobile" />
-          <div className={s.socials}>
-            {socialLinks.map(({
-              id, href, label, Icon,
-            }) => (
-              <Button
-                key={id}
-                theme="quaternary"
-                href={href}
-                title={label}
-                className={s.socialLink}
-              >
-                <Icon />
-              </Button>
-            ))}
-          </div>
+          <Socials className={s.socials} {...{ socialLinks }} />
+          <LanguageSwitcher
+            direction="up"
+            className={s.languageSwitcher}
+            buttonClassName={s.languageSwitcherButton}
+          />
         </footer>
       </Container>
     </div>

@@ -11,10 +11,12 @@
 .root
   width: 100%
   height: 64px
+  border-bottom: 1px solid $ui-03
   background-color: $ui-02
   z-index: 2
   &.dark
     background-color: $ui-06
+    border-bottom: 1px solid $ui-07
     .logo
       color: $ui-01
 
@@ -23,6 +25,13 @@
   justify-content: space-between
   align-items: center
 
+.logoText
+  display: none
+
+.leftpart
+  display: flex
+  flex-direction: row
+  
 .logo
   display: flex
   align-items: center
@@ -32,6 +41,15 @@
 
 .links, .buttonLaunch, .coloModeSwitcher
   display: none
+
+.languageSwitcher
+  display: none
+
+.connect
+  display: flex
+  align-items: center
+  width: 153px
+  margin: 0 16px
 
 .menu
   position: absolute
@@ -49,9 +67,10 @@
   .content
     display: flex
     align-items: center
-  .buttonLaunch
+  .logoText
     display: block
-    margin-left: 16px
+  .connect
+    display: none
   .links, .coloModeSwitcher
     display: flex
     white-space: nowrap
@@ -59,3 +78,5 @@
     padding: 24px
   .coloModeSwitcher
     margin-left: 40px
+  .languageSwitcher
+    display: flex

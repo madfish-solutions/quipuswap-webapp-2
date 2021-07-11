@@ -10,6 +10,7 @@
     "makemessages": "i18next 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
+    "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "next": "11.0.1",
     "next-i18next": "^8.5.3",

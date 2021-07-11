@@ -35,6 +35,7 @@ const themeColorsObj = {
 type ColorThemeContextValue = {
   colorThemeMode: ColorModes
   isComponentDidMount: boolean
+  inactiveIconColor: string,
   themeColors: ThemeColorsPros
   setColorThemeMode: () => void
 };
@@ -42,6 +43,7 @@ type ColorThemeContextValue = {
 export const defaultDataContext: ColorThemeContextValue = {
   colorThemeMode: ColorModes.Light,
   isComponentDidMount: false,
+  inactiveIconColor: '#8B90A0',
   themeColors: themeColorsObj.light,
   setColorThemeMode: () => {},
 };
@@ -94,6 +96,7 @@ export const ColorThemeProvider: React.FC = ({ children }) => {
       colorThemeMode,
       isComponentDidMount,
       themeColors,
+      inactiveIconColor: defaultDataContext.inactiveIconColor,
       setColorThemeMode: toggleColorTheme,
     }}
     >
