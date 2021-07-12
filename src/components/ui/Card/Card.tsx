@@ -38,17 +38,12 @@ export const CardDivider: React.FC<{}> = () => (
 export const CardHeader: React.FC<CardHeaderProps> = ({
   title,
   icon,
-}) => {
-  const t = 1;
-  console.log(t);
-
-  return (
-    <div className={s.cardHeader}>
-      <h5>{title}</h5>
-      {icon}
-    </div>
-  );
-};
+}) => (
+  <div className={s.cardHeader}>
+    <h5>{title}</h5>
+    {icon}
+  </div>
+);
 
 export const CardContent: React.FC<{}> = ({
   children,
