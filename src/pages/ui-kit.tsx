@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import cx from 'classnames';
@@ -20,9 +20,11 @@ import {
   CardList,
   CardListItem,
 } from '@components/ui/Card';
+import { Popup } from '@components/ui/Popup';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
+  const [value, setValue] = useState<boolean>(false);
 
   return (
     <BaseLayout
@@ -217,6 +219,38 @@ const UiKit: React.FC = () => {
         <Container>
           <h1 className={s.header}>Toggle Color theme</h1>
           <ColorModeSwitcher />
+        </Container>
+      </section>
+      <section className={s.section}>
+        <Container>
+          <h1 className={s.header}>Popup</h1>
+          <Button
+            className={s.button}
+            onClick={() => setValue(true)}
+          >
+            Show popup
+          </Button>
+          {value && (
+          <Popup closeHandler={() => setValue(false)}>
+            <Card className={s.card}>
+              <CardHeader title="title & list of components" icon={<MenuOpened />} />
+              <CardDivider />
+              <CardContent>
+                <CardList>
+                  <CardListItem>
+                    item1
+                  </CardListItem>
+                  <CardListItem>
+                    item2
+                  </CardListItem>
+                  <CardListItem>
+                    item3
+                  </CardListItem>
+                </CardList>
+              </CardContent>
+            </Card>
+          </Popup>
+          )}
         </Container>
       </section>
       <section className={s.section}>
