@@ -21,6 +21,7 @@ import {
   CardListItem,
 } from '@components/ui/Card';
 import { Popup } from '@components/ui/Popup';
+import { Bage } from '@components/ui/Bage';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
@@ -223,6 +224,20 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <Container>
+          <h1 className={s.header}>Bage for popupCells</h1>
+          <div className={s.cardsBlock}>
+            <Bage text="FA 2.0" />
+            <Bage text="ID 0" />
+
+          </div>
+          <div className={s.cardsBlock}>
+            <Bage text="some wide text" />
+            <Bage text="a" />
+          </div>
+        </Container>
+      </section>
+      <section className={s.section}>
+        <Container>
           <h1 className={s.header}>Popup</h1>
           <Button
             className={s.button}
@@ -256,7 +271,7 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <Container>
           <h1 className={s.header}>Cards</h1>
-          <div className={s.buttonsBlock}>
+          <div className={s.cardsBlock}>
             <Card className={s.card}>
               <CardHeader title="demo title" />
             </Card>
@@ -267,7 +282,7 @@ const UiKit: React.FC = () => {
               />
             </Card>
           </div>
-          <div className={s.buttonsBlock}>
+          <div className={s.cardsBlock}>
             <Card className={s.card}>
               <CardHeader title="title & content" />
               <CardDivider />
@@ -284,7 +299,7 @@ const UiKit: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-          <div className={s.buttonsBlock}>
+          <div className={s.cardsBlock}>
             <Card className={s.card}>
               <CardHeader title="title & list content" />
               <CardDivider />
@@ -303,7 +318,7 @@ const UiKit: React.FC = () => {
               </CardContent>
             </Card>
           </div>
-          <div className={s.buttonsBlock}>
+          <div className={s.cardsBlock}>
             <Card className={s.card}>
               <CardHeader title="title & list of components" />
               <CardDivider />
