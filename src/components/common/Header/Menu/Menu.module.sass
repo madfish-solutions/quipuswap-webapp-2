@@ -11,6 +11,16 @@
   padding-top: 80px
   justify-content: space-between
 
+.root::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.root::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.root::-webkit-scrollbar-thumb
+  border-radius: 10px
+  background-color: $hover-dark-row
+
 .footer
   display: flex
   justify-content: space-between
@@ -18,9 +28,13 @@
 
 .light
   background-color: $ui-01
+.light::-webkit-scrollbar-thumb
+  background-color: $hover-light-row
 
 .dark
   background-color: $ui-06
+.dark::-webkit-scrollbar-thumb
+  background-color: $hover-dark-row
 
 @include media('>SDesktop')
   .root

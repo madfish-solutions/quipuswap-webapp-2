@@ -9,13 +9,18 @@ import { LiquidityIcon } from '@components/svg/Sidebar/LiquidityIcon';
 import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
 import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
 import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
+import MoreIcon from '@icons/MoreIcon.svg';
 
 type NavigationDataProps = {
   id: number
-  href: string
+  href?: string
   label: React.ReactNode
-  external?: boolean
   Icon: React.FC<{ className?: string, id?: string }>
+  links?: {
+    id: number
+    href: string
+    label: string
+  }[]
 }[];
 
 export const NavigationData: NavigationDataProps = [
@@ -66,5 +71,42 @@ export const NavigationData: NavigationDataProps = [
     href: '/governance',
     label: <Trans ns="common">Governance</Trans>,
     Icon: GovernanceIcon,
+  },
+  {
+    id: 7,
+    label: <Trans ns="common">More</Trans>,
+    Icon: MoreIcon,
+    links: [
+      {
+        id: 0,
+        href: 'https://www.google.com',
+        label: 'Analytics',
+      },
+      {
+        id: 1,
+        href: 'https://www.google.com',
+        label: 'About',
+      },
+      {
+        id: 2,
+        href: 'https://www.google.com',
+        label: 'Audit',
+      },
+      {
+        id: 3,
+        href: 'https://www.google.com',
+        label: 'Help',
+      },
+      {
+        id: 4,
+        href: 'https://www.google.com',
+        label: 'Docs',
+      },
+      {
+        id: 5,
+        href: 'https://www.google.com',
+        label: 'Blog',
+      },
+    ],
   },
 ];
