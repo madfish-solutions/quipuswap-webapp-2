@@ -1,16 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
+import { useRouter } from 'next/router';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { socialLinks } from '@content/socialLinks';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Navigation } from '@components/common/Sidebar/content';
-import { useRouter } from 'next/router';
 import { Socials } from './Socials';
+import { NavLink } from '../NavLink';
 
 import s from './Menu.module.sass';
-import { NavLink } from '../NavLink';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

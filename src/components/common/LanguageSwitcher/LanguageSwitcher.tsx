@@ -61,7 +61,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
       <nav className={s.locales}>
         {locales?.map((loc) => (loc === locale
           ? (
-            <span className={cx(s.locale, s.active)}>
+            <span key={loc} className={cx(s.locale, s.active)}>
               {loc}
             </span>
           )

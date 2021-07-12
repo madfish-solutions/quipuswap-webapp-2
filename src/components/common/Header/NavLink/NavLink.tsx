@@ -4,8 +4,8 @@ import React, {
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
 import { Button } from '@components/ui/Button';
+
 import s from './NavLink.module.sass';
 
 const modeClass = {
@@ -37,7 +37,7 @@ export const NavLink: React.FC<NavLinkProps> = ({
         href={href}
         className={cx(s.root, { [s.active]: active }, modeClass[colorThemeMode])}
       >
-        <Icon {...{ active }} />
+        <Icon {...{ active }} className={s.icon} />
         <span className={s.text}>{label}</span>
       </Button>
     </div>

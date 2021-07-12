@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -6,12 +6,29 @@ import { appWithTranslation } from 'next-i18next';
 import { DefaultSeo } from 'next-seo';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
+import { debounce } from '@utils/helpers';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
 
 import '@styles/globals.sass';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
+  useEffect(() => {
+    // prevents flashing
+    const debouncedHandleResize = debounce(() => {
+      const vh = window.innerHeight * 0.01;
+      if (vh !== 0) {
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+    }, 1000);
+    debouncedHandleResize();
+
+    window.addEventListener('resize', debouncedHandleResize);
+    return () => {
+      window.removeEventListener('resize', debouncedHandleResize);
+    };
+  }, []);
 
   const languageAlternates: { hrefLang: string, href: string }[] = [];
   router.locales?.forEach((el) => {
@@ -27,7 +44,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <>
       <DefaultSeo
         title={undefined}
-        titleTemplate={`${DEFAULT_SEO.TITLE} | %s`}
+        titleTemplate={`${DEFAULT_SEO.TITLE}`}
         defaultTitle={DEFAULT_SEO.TITLE}
         description={description}
         openGraph={{
@@ -60,16 +77,8 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         {/* Fonts */}
         <link
-          rel="preload"
-          href="/fonts/Inter/Inter-Regular.ttf"
-          as="font"
-          crossOrigin=""
-        />
-        <link
-          rel="preload"
-          href="/fonts/Inter/Inter-Bold.ttf"
-          as="font"
-          crossOrigin=""
+          href="/fonts/style.css"
+          rel="stylesheet"
         />
         {/* Favicons */}
         <link
