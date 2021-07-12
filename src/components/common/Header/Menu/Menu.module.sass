@@ -3,43 +3,39 @@
 
 .root
   width: 100%
-  height: 100vh
   height: calc(var(--vh, 1vh) * 100)
-  transition: background-color $colorChangeAnimationTime
-
-.container
-  height: 100%
-  padding-top: 104px
-  padding-bottom: 32px
-  justify-content: space-between
-
-.content, .footer
-  width: 100%
-
-.content
+  background-color: $ui-01
+  overflow: auto
   display: flex
   flex-direction: column
-  align-items: center
+  padding-top: 80px
+  justify-content: space-between
 
-.button
-  &:not(:last-child)
-    margin-bottom: 16px
+.root::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.root::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.root::-webkit-scrollbar-thumb
+  border-radius: 10px
+  background-color: $hover-dark-row
 
 .footer
   display: flex
-  justify-content: center
-  padding: 24px 0 16px
-
-.socials
-  margin-left: 20px
-  margin-right: 40px
-
-.socialLink
-  padding: 8px
-  margin: -8px 0
+  justify-content: space-between
+  padding: 16px 24px
 
 .light
   background-color: $ui-01
+.light::-webkit-scrollbar-thumb
+  background-color: $hover-light-row
 
 .dark
   background-color: $ui-06
+.dark::-webkit-scrollbar-thumb
+  background-color: $hover-dark-row
+
+@include media('>SDesktop')
+  .root
+    display: none

@@ -87,7 +87,7 @@ export const ColorThemeProvider: React.FC = ({ children }) => {
     } else {
       setThemeColors(themeColorsObj.dark);
     }
-  });
+  }, [colorThemeMode]);
 
   return (
     <ColorThemeContext.Provider value={{
