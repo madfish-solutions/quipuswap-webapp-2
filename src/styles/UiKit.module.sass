@@ -121,7 +121,18 @@
   &:not(:last-child)
     margin-right: 32px
 
+// Cards
+.cardsBlock
+  display: flex
+  justify-content: flex-start
+  &:not(:last-child)
+    margin-bottom: 32px
 
+.card
+  min-width: 250px
+  max-width: 300px !important
+  &:not(:last-child)
+    margin-right: 32px
 
 @include media('>tablet')
   .colorsBlock

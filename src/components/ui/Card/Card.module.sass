@@ -1,0 +1,51 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+    
+.hr 
+    position: absolute
+    top: 47.5px
+    left: 0px
+    right: 0px
+    height: 0px
+
+.card
+    position: relative
+    background-color: white
+    box-shadow: $elevation-03
+    border-radius: 8px
+
+.cardHeader 
+    position: relative
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: 12px 24px
+    height: 48px
+
+.cardList
+    margin: 16px 0px 48px 0px
+    padding: 12px 0px
+
+
+.cardList
+    .hr
+        top: 87.5px
+
+.cardListItem 
+    position: relative
+    height: 88px
+    max-height: 88px
+    padding: 12px 24px
+
+.light
+    background-color: $ui-01
+    .hr
+        border: 1px solid #F0F1F3
+
+.dark
+    background-color: $ui-06
+    .hr
+        border: 1px solid #14171E
+    .cardListItem
+        .hr
+            border: 1px solid #505565

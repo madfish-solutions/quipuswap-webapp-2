@@ -12,6 +12,14 @@ import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
+import {
+  Card,
+  CardContent,
+  CardDivider,
+  CardHeader,
+  CardList,
+  CardListItem,
+} from '@components/ui/Card';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
@@ -209,6 +217,77 @@ const UiKit: React.FC = () => {
         <Container>
           <h1 className={s.header}>Toggle Color theme</h1>
           <ColorModeSwitcher />
+        </Container>
+      </section>
+      <section className={s.section}>
+        <Container>
+          <h1 className={s.header}>Cards</h1>
+          <div className={s.buttonsBlock}>
+            <Card className={s.card}>
+              <CardHeader title="demo title" />
+            </Card>
+            <Card className={s.card}>
+              <CardHeader
+                title="title & icon"
+                icon={<MenuOpened />}
+              />
+            </Card>
+          </div>
+          <div className={s.buttonsBlock}>
+            <Card className={s.card}>
+              <CardHeader title="title & content" />
+              <CardDivider />
+              <CardContent>demo</CardContent>
+            </Card>
+            <Card className={s.card}>
+              <CardHeader
+                title="title & icon & demo content"
+                icon={<MenuOpened />}
+              />
+              <CardDivider />
+              <CardContent>
+                demo
+              </CardContent>
+            </Card>
+          </div>
+          <div className={s.buttonsBlock}>
+            <Card className={s.card}>
+              <CardHeader title="title & list content" />
+              <CardDivider />
+              <CardContent>
+                <CardList>
+                  <CardListItem>
+                    item1
+                  </CardListItem>
+                  <CardListItem>
+                    item2
+                  </CardListItem>
+                  <CardListItem>
+                    item3
+                  </CardListItem>
+                </CardList>
+              </CardContent>
+            </Card>
+          </div>
+          <div className={s.buttonsBlock}>
+            <Card className={s.card}>
+              <CardHeader title="title & list of components" />
+              <CardDivider />
+              <CardContent>
+                <CardList>
+                  <CardListItem>
+                    item1
+                  </CardListItem>
+                  <CardListItem>
+                    item2
+                  </CardListItem>
+                  <CardListItem>
+                    item3
+                  </CardListItem>
+                </CardList>
+              </CardContent>
+            </Card>
+          </div>
         </Container>
       </section>
       <section className={s.section}>
