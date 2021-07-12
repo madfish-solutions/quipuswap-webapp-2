@@ -10,18 +10,19 @@ import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
 import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
 import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
 
-export const Navigation: Array<{
+type NavigationDataProps = {
   id: number
   href: string
   label: React.ReactNode
   external?: boolean
-  Icon: React.FC<IconProps>
-}> = [
+  Icon: React.FC<{ className?: string, id?: string }>
+}[];
+
+export const NavigationData: NavigationDataProps = [
   {
     id: 0,
-    href: 'https://quipuswap-landing.vercel.app/',
+    href: '/',
     label: <Trans ns="common">Home</Trans>,
-    external: true,
     Icon: HomeIcon,
   },
   {

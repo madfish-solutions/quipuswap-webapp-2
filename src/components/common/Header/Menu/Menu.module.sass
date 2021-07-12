@@ -4,40 +4,24 @@
 .root
   width: 100%
   height: calc(var(--vh, 1vh) * 100)
-  transition: background-color $colorChangeAnimationTime
   background-color: $ui-01
   overflow: auto
-  &.dark
-    background-color: $ui-06
-
-.container
   display: flex
   flex-direction: column
-  height: 100%
   padding-top: 80px
   justify-content: space-between
 
-.content, .footer
-  width: 100%
-
-.content
-  display: flex
-  flex-direction: column
-  align-items: flex-start
-  justify-content: flex-start
-
-.navlink
-  width: 100%
-  &:not(:last-child)
-    margin-bottom: 8px
-
 .footer
   display: flex
-  justify-content: center
-  padding: 24px 0 16px
+  justify-content: space-between
+  padding: 16px 24px
 
-.socials
-  display: flex
-  align-items: center
-  margin-left: 20px
-  margin-right: 40px
+.light
+  background-color: $ui-01
+
+.dark
+  background-color: $ui-06
+
+@include media('>SDesktop')
+  .root
+    display: none

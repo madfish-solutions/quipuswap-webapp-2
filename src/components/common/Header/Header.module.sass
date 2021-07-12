@@ -11,47 +11,30 @@
 .root
   width: 100%
   height: 64px
-  border-bottom: 1px solid $ui-03
-  background-color: $ui-02
-  transition: background-color $colorChangeAnimationTime
+  transition: background-color $colorChangeAnimationTime, border-color $colorChangeAnimationTime
   z-index: 2
-  &.dark
-    background-color: $ui-06
-    border-bottom: 1px solid $ui-07
-    .logo
-      color: $ui-01
-
-.container
-  flex-direction: row
-  justify-content: space-between
+  padding: 0 24px
+  display: flex
   align-items: center
 
-.logoText
-  display: none
-
-.leftpart
-  display: flex
-  flex-direction: row
-  
 .logo
   display: flex
   align-items: center
   font-size: 1.125rem
   font-weight: bold
-  transition: color $colorChangeAnimationTime
 
-.links, .buttonLaunch, .coloModeSwitcher
+.logoText
   display: none
 
-.languageSwitcher
+.coloModeSwitcher, .languageSwitcher
   display: none
 
 .connect
   display: flex
   align-items: center
   justify-content: center
-  width: 153px
-  margin: 0 16px
+  margin: 0 auto 0 16px
+  max-width: 160px
 
 .menu
   position: absolute
@@ -59,36 +42,36 @@
   left: 0
   z-index: -1
   transform: translateY(-100%)
-  transition: transform $animationTime
+  transition: transform $animationTime, background-color $colorChangeAnimationTime
   &.active
     transform: translateY(0)
 
 .light
+  border-bottom: 1px solid $ui-03
   background-color: $ui-02
-  .logo
-    color: $ui-07
 
 .dark
   background-color: $ui-06
-  .logo
-    color: $ui-01
+  border-bottom: 1px solid $ui-07
 
-@include media('>tablet')
-  .menuButton, .menu
+@include media('>SDesktop')
+  .root
+    padding: 0 32px 0 16px
+  .menuButton, .menu, .connect
     display: none
-  .content
-    display: flex
-    align-items: center
+  .logo
+    margin-right: auto
   .logoText
     display: block
-  .connect
-    display: none
-  .links, .coloModeSwitcher
-    display: flex
-    white-space: nowrap
-  .link
-    padding: 24px
+    font-size: 1.286rem
+    transition: color $colorChangeAnimationTime
   .coloModeSwitcher
     margin-left: 40px
-  .languageSwitcher
+  .languageSwitcher, .coloModeSwitcher
     display: flex
+  .light
+    .logoText
+      color: $ui-07
+  .dark
+    .logo
+      color: $ui-01
