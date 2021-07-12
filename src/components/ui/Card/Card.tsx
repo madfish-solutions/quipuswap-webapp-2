@@ -8,11 +8,6 @@ type CardProps = {
   className?: string,
 };
 
-type CardHeaderProps = {
-  title: string,
-  icon?: React.ReactNode,
-};
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
@@ -30,42 +25,3 @@ export const Card: React.FC<CardProps> = ({
     </div>
   );
 };
-
-export const CardDivider: React.FC<{}> = () => (
-  <div className={s.hr} />
-);
-
-export const CardHeader: React.FC<CardHeaderProps> = ({
-  title,
-  icon,
-}) => (
-  <div className={s.cardHeader}>
-    <h5>{title}</h5>
-    {icon}
-  </div>
-);
-
-export const CardContent: React.FC<{}> = ({
-  children,
-}) => (
-  <div className={s.cardContent}>
-    {children}
-  </div>
-);
-
-export const CardList: React.FC<{}> = ({
-  children,
-}) => (
-  <div className={s.cardList}>
-    {children}
-  </div>
-);
-
-export const CardListItem: React.FC<{}> = ({
-  children,
-}) => (
-  <div className={s.cardListItem}>
-    {children}
-    <div className={s.hr} />
-  </div>
-);
