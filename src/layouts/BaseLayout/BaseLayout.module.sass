@@ -1,8 +1,16 @@
+@import '@styles/variables'
 @import '@styles/breakpoints'
 
 .root
   position: relative
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  width: 100%
   padding-top: 64px
+
+.wrapper
+  padding: 24px
 
 .background
   position: fixed
@@ -10,15 +18,16 @@
   top: 64px
   z-index: -1
 
-.sidebar
-  margin-top: 64px
-  display: none
+@include media('>SDesktop')
+  .root
+    flex-direction: row
+  .wrapper
+    width: calc(100% - 192px)
+    max-width: 1236px
+    padding: 24px 32px 32px
+    margin: 0 auto
 
 @include media('>desktop')
   .background
     left: 50%
     transform: translateX(-50%)
-
-@include media('>tablet')
-  .sidebar
-    display: block

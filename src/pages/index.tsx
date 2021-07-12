@@ -13,13 +13,7 @@ const Home: React.FC = () => {
       title={t('home:Home page')}
       description={t('home:Home page description. Couple sentences...')}
     >
-      There will be home page
-      <br />
-      <Link href="/swap">
-        <a>
-          Go to swap
-        </a>
-      </Link>
+      <div style={{ height: 4000, backgroundColor: 'darkgray' }} />
     </BaseLayout>
   );
 };
