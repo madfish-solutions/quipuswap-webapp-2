@@ -6,7 +6,7 @@ import s from './Popup.module.sass';
 
 type PopupProps = {
   className?: string,
-  closeHandler: () => void
+  closeHandler?: () => void
 };
 
 const modeClass = {
@@ -24,10 +24,11 @@ export const Popup: React.FC<PopupProps> = ({
   return (
     <div
       onClick={() => {
-        closeHandler();
+        // do not pass closeHandler if u want implement blocking popup
+        if (closeHandler) closeHandler();
       }}
       aria-hidden="true"
-      className={cx(s.popup, modeClass[colorThemeMode], className)}
+      className={cx(modeClass[colorThemeMode], s.popup, className)}
     >
       <div
         aria-hidden="true"
