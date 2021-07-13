@@ -10,7 +10,6 @@
     "makemessages": "i18next 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
-    "@types/react-modal": "^3.12.1",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "next": "11.0.1",
@@ -23,6 +22,7 @@
     "sass": "^1.35.1"
   },
   "devDependencies": {
+    "@types/react-modal": "^3.12.1",
     "@types/classnames": "^2.3.1",
     "@types/react": "^17.0.13",
     "@typescript-eslint/eslint-plugin": "^4.28.2",

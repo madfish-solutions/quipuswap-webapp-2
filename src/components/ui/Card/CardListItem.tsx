@@ -6,6 +6,5 @@ export const CardListItem: React.FC<{}> = ({
 }) => (
   <div className={s.cardListItem}>
     {children}
-    <div className={s.hr} />
   </div>
 );

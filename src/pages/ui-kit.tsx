@@ -5,9 +5,7 @@ import { PopupClose } from '@components/svg/PopupClose';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
 import {
-  Card, CardDivider,
-  CardHeader,
-  CardList,
+  Card, CardList,
   CardListItem,
 } from '@components/ui/Card';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
@@ -239,24 +237,23 @@ const UiKit: React.FC = () => {
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
         >
-          <Card className={s.card}>
-            <CardHeader
-              title={(
-                <h5>
-                  title & list of components
-                </h5>
+          <Card
+            content={(
+              <h5>
+                title & list of components
+              </h5>
               )}
-              icon={(
-                <Button
-                  className={s.closeButton}
-                  onClick={() => setShowExamplePopup(false)}
-                  theme="quaternary"
-                >
-                  <PopupClose />
-                </Button>
+            button={(
+              <Button
+                className={s.closeButton}
+                onClick={() => setShowExamplePopup(false)}
+                theme="quaternary"
+              >
+                <PopupClose />
+              </Button>
               )}
-            />
-            <CardDivider />
+            className={s.card}
+          >
             <CardList>
               <CardListItem>
                 <PopupCell>

@@ -10,7 +10,7 @@ type BakerCellProps = {
 export const BakerCell: React.FC<BakerCellProps> = ({
   baker,
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['baker']);
   return (
     <div
       className={s.bakerCell}
@@ -22,7 +22,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       <div className={s.bakerFlexCell}>
         <div>
           <caption>
-            {t('common:Votes')}
+            {t('baker:Votes')}
             :
           </caption>
           <span className={s.label1}>{baker.votes}</span>
@@ -31,7 +31,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
           <caption>
-            {t('common:Fee')}
+            {t('baker:Fee')}
             :
           </caption>
           <div className={s.label1}>
@@ -42,12 +42,12 @@ export const BakerCell: React.FC<BakerCellProps> = ({
         </div>
         <div className={s.bakerBlock}>
           <caption>
-            {t('common:Space')}
+            {t('baker:Space')}
             :
           </caption>
           <span className={s.label1}>{baker?.space}</span>
+          {' '}
           <span className={s.bodyTextLink1}>
-            {' '}
             {baker?.currency}
           </span>
         </div>

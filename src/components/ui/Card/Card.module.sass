@@ -1,12 +1,5 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
-  
-.hr 
-  position: absolute
-  top: 47.5px
-  left: 0px
-  right: 0px
-  height: 0px
 
 .card
   position: relative
@@ -25,33 +18,27 @@
 .cardList
   margin: 16px 0px 0px 0px
 
-
-.cardList .hr
-  top: inherit
-  bottom: 0.5px
-
 .cardListItem 
   position: relative
   min-height: 64px
   padding: 12px 24px
   &:hover
-    background-color: #F4F5F8
+    background-color: $hover-light-row
   &:last-child
-    .hr 
-      display: none
+    border: none
 
 .light
   background-color: $ui-01
-  .hr
-    border: 1px solid #F0F1F3
-  .cardListItem
+  &>.cardHeader, &>.cardList>.cardListItem
+    border-bottom: 1px solid $ui-03
+  &>.cardListItem
     &:hover
-     background-color: #F4F5F8
+     background-color: $hover-light-row
 
 .dark
   background-color: $ui-06
-  .hr
-    border: 1px solid #14171E
-  .cardListItem
+  &>.cardHeader, &>.cardList>.cardListItem
+    border-bottom: 1px solid $ui-06
+  &>.cardListItem
     &:hover
-      background-color: #232427
+      background-color: $hover-dark-row

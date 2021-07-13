@@ -14,10 +14,6 @@
   justify-content: center
   max-height: 100vh
   overflow-y: auto
-  &.dark
-    background-color: rgba(255,255,255, 0.12)
-  &.light
-    background-color: rgba(7, 12, 18, 0.12)
 
 .portal
   position: relative
@@ -58,10 +54,14 @@
   box-sizing: content-box
 
 .light
+  &.overlay
+    background-color: rgba(7, 12, 18, 0.12)
   .inner
     background-color: $ui-01
 
 .dark
+  &.overlay
+    background-color: rgba(255,255,255, 0.12)
   .inner
     background-color: $ui-06
 
