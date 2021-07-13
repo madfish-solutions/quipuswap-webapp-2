@@ -1,0 +1,57 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.label1
+  font-family: $font
+  font-style: normal
+  font-weight: 600
+  font-size: 14px
+  line-height: 16px
+
+.inputLabel
+  margin-bottom: 8px
+
+.base
+  display: block
+
+.inputBase
+  box-sizing: border-box
+  border-radius: 8px
+  min-height: 40px
+  font-family: $font
+  font-style: normal
+  font-weight: normal
+  font-size: 14px
+  line-height: 24px
+  display: flex
+  align-items: center
+  outline: none
+
+.root
+  box-sizing: border-box
+  border-radius: 8px
+  min-height: 40px
+  font-family: $font
+  font-style: normal
+  font-weight: normal
+  font-size: 14px
+  line-height: 24px
+  display: flex
+  align-items: center
+  outline: none
+
+.light
+  .label1
+    color: $text-01
+  .root
+    background: $ui-01
+    border: 1px solid $ui-04
+    color: $text-01
+
+.dark
+  .label1
+    color: $text-inverse
+  .root
+    background: $ui-06
+    border: 1px solid $text-02
+    color: $text-inverse
