@@ -36,6 +36,7 @@ export const Popup: React.FC<PopupProps> = ({
           e.preventDefault();
           e.stopPropagation();
         }}
+        className={s.popupContent}
       >
         {children}
       </div>

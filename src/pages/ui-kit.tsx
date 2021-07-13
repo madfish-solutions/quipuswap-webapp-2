@@ -25,7 +25,7 @@ import { Bage } from '@components/ui/Bage';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
-  const [value, setValue] = useState<boolean>(false);
+  const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   return (
     <BaseLayout
@@ -241,26 +241,24 @@ const UiKit: React.FC = () => {
           <h1 className={s.header}>Popup</h1>
           <Button
             className={s.button}
-            onClick={() => setValue(true)}
+            onClick={() => setShowExamplePopup(true)}
           >
             Show popup
           </Button>
-          {value && (
-          <Popup closeHandler={() => setValue(false)}>
+          {showExamplePopup && (
+          <Popup closeHandler={() => setShowExamplePopup(false)}>
             <Card className={s.card}>
               <CardHeader title="title & list of components" icon={<MenuOpened />} />
               <CardDivider />
               <CardContent>
                 <CardList>
-                  <CardListItem>
-                    item1
-                  </CardListItem>
-                  <CardListItem>
-                    item2
-                  </CardListItem>
-                  <CardListItem>
-                    item3
-                  </CardListItem>
+                  {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
+                    <CardListItem key={x}>
+                      item
+                      {' '}
+                      {x}
+                    </CardListItem>
+                  ))}
                 </CardList>
               </CardContent>
             </Card>

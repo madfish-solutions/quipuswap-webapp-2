@@ -10,8 +10,17 @@
   background-color: rgba(255,255,255, 0.12)
   z-index: 10
 
+.popupContent
+  max-height: 656px
+  overflow-y: scroll
+  scrollbar-width: none
+  -ms-overflow-style: none
+  border-radius: 8px
+  &::-webkit-scrollbar
+    display: none
+
 .light 
-    background-color: rgba(7, 12, 18, 0.12)
+  background-color: rgba(7, 12, 18, 0.12)
 
 .dark
-    background-color: rgba(255,255,255, 0.12)
+  background-color: rgba(255,255,255, 0.12)
