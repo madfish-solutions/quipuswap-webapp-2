@@ -21,6 +21,13 @@ import {
 } from '@components/ui/Card';
 import { Popup } from '@components/ui/Popup';
 import { Bage } from '@components/ui/Bage';
+import { PopupCell } from '@components/ui/PopupCell';
+import { TokenCell } from '@components/ui/PopupCell/TokenCell';
+import { PopupClose } from '@components/svg/PopupClose';
+import { ChooseListCell } from '@components/ui/PopupCell/ChooseListCell';
+import { PositionCell } from '@components/ui/PopupCell/PositionCell';
+import { SwapCell } from '@components/ui/PopupCell/SwapCell';
+import { BakerCell } from '@components/ui/PopupCell/BakerCell';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
@@ -236,15 +243,16 @@ const UiKit: React.FC = () => {
         {showExamplePopup && (
           <Popup closeHandler={() => setShowExamplePopup(false)}>
             <Card className={s.card}>
-              <CardHeader title="title & list of components" icon={<MenuOpened />} />
+              <CardHeader title="title & list of components" icon={<PopupClose />} />
               <CardDivider />
               <CardContent>
                 <CardList>
                   {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
                     <CardListItem key={x}>
-                      item
-                      {' '}
-                      {x}
+                      <PopupCell>
+                        <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
+                        <h6>0.00</h6>
+                      </PopupCell>
                     </CardListItem>
                   ))}
                 </CardList>
@@ -262,7 +270,7 @@ const UiKit: React.FC = () => {
           <Card className={s.card}>
             <CardHeader
               title="title & icon"
-              icon={<MenuOpened />}
+              icon={<PopupClose />}
             />
           </Card>
         </div>
@@ -275,7 +283,7 @@ const UiKit: React.FC = () => {
           <Card className={s.card}>
             <CardHeader
               title="title & icon & demo content"
-              icon={<MenuOpened />}
+              icon={<PopupClose />}
             />
             <CardDivider />
             <CardContent>
@@ -309,13 +317,48 @@ const UiKit: React.FC = () => {
             <CardContent>
               <CardList>
                 <CardListItem>
-                  item1
+                  <PopupCell>
+                    <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
+                    <h6>0.00</h6>
+                  </PopupCell>
                 </CardListItem>
                 <CardListItem>
-                  item2
+                  <PopupCell>
+                    <ChooseListCell token={{ name: 'Token', label: 'Token' }} />
+                    {/* <Toggle state={true} /> */}
+                  </PopupCell>
                 </CardListItem>
                 <CardListItem>
-                  item3
+                  <PopupCell>
+                    <SwapCell transaction={{
+                      fromValue: '7.11', fromCurrency: 'XTZ', toValue: '6.44', toCurrency: 'CRUNCH', date: Date.now(),
+                    }}
+                    />
+                    {/* ExternalLinkIcon */}
+                  </PopupCell>
+                </CardListItem>
+                <CardListItem>
+                  <PopupCell>
+                    <PositionCell
+                      token1={{
+                        name: 'Token', vote: '2.868', veto: '3.868', balance: '1.868',
+                      }}
+                      token2={{ name: 'Token' }}
+                    />
+                  </PopupCell>
+                </CardListItem>
+                <CardListItem>
+                  <PopupCell>
+                    <BakerCell baker={{
+                      token: 'EVERSTAKE',
+                      votes: '100,002.868',
+                      fee: '10',
+                      space: '1,000,000,000.00',
+                      currency: 'TEZ',
+                    }}
+                    />
+                    {/* ExternalLinkIcon */}
+                  </PopupCell>
                 </CardListItem>
               </CardList>
             </CardContent>
