@@ -13,7 +13,7 @@ export const PopupClose: React.FC<IconProps> = ({
       <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="url(#PopupClose-paint0_linear)" />
       <defs>
         <linearGradient id="PopupClose-paint0_linear" x1="5" y1="5" x2="20.6591" y2="7.20206" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
       </defs>
