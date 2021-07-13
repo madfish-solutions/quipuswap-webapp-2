@@ -7,10 +7,12 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './Input.module.sass';
 
 type InputProps = {
+  error?: string
   disabled?: boolean
   readonly?: boolean
   className?: string
   label?: string
+  select?:boolean
 } & (
   | React.HTMLProps<HTMLInputElement>
 );
@@ -26,12 +28,17 @@ export const Input: React.FC<InputProps> = ({
   className,
   readonly = false,
   label = '',
+  error = '',
+  select,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const [isActive, setActive] = React.useState<boolean>(false);
 
   const compoundClassName = cx(
-    s.root,
+    s.inputBase,
+    error && s.inputBaseError,
+    isActive && !disabled && !readonly && s.inputBaseActive,
   );
   const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
@@ -41,14 +48,21 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className={compoundBaseClassName}>
       <div className={cx(s.label1, s.inputLabel)}>{label}</div>
-      <input
-        value={value}
-        disabled={disabled}
-        readOnly={readonly}
-        type="text"
-        {...(props as React.HTMLProps<HTMLInputElement>)}
-        className={compoundClassName}
-      />
+      <div className={compoundClassName}>
+        <input
+          value={value}
+          disabled={disabled}
+          readOnly={readonly}
+          type="text"
+          onFocus={() => setActive(true)}
+          onBlur={() => setActive(false)}
+          {...(props as React.HTMLProps<HTMLInputElement>)}
+          className={s.root}
+        />
+      </div>
+      <div className={s.inputError}>
+        {error}
+      </div>
     </div>
   );
 };

@@ -18,7 +18,7 @@ const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const handleInputChange = (state) => setInputValue(state.target.value);
+  const handleInputChange = (state:any) => setInputValue(state.target.value);
 
   return (
     <BaseLayout
@@ -206,23 +206,66 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Inputs</h1>
         <div className={s.inputsBlock}>
-
-          <Input className={s.input} value={inputValue} onChange={handleInputChange} />
-          <Input className={s.input} value={inputValue} onChange={handleInputChange} placeholder="Input placeholder" />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Input placeholder"
+          />
         </div>
         <div className={s.inputsBlock}>
-
-          <Input className={s.input} value={inputValue} onChange={handleInputChange} label="Input label" />
-          <Input className={s.input} value={inputValue} onChange={handleInputChange} label="Input label" placeholder="Input placeholder" />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Input label"
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Input label"
+            placeholder="Input placeholder"
+          />
         </div>
         <div className={s.inputsBlock}>
-
-          <Input className={s.input} value={inputValue} readonly label="Input label" placeholder="Input placeholder" />
-          <Input className={s.input} value={inputValue} disabled label="Input label" placeholder="Input placeholder" />
+          <Input
+            className={s.input}
+            value={inputValue}
+            readonly
+            label="Input label"
+            placeholder="Input placeholder"
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            disabled
+            label="Input label"
+            placeholder="Input placeholder"
+          />
         </div>
-        {/* disabled input with placeholder */}
-        {/* readonly input with placeholder */}
-        {/* input with label and with placeholder and with error */}
+        <div className={s.inputsBlock}>
+          <Input
+            error="Your password needs to be at least 8 characters long."
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Input label"
+            placeholder="Input placeholder"
+          />
+          <Input
+            select
+            className={s.input}
+            onChange={handleInputChange}
+            label="Input label"
+            placeholder="Input placeholder"
+          />
+        </div>
         {/* input with value and dropdown */}
         {/* input with value */}
         {/* input with icon */}
