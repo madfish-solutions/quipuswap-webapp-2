@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import cx from 'classnames';
-
-import { BaseLayout } from '@layouts/BaseLayout';
-import { Button } from '@components/ui/Button';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-
-import s from '@styles/UiKit.module.sass';
+import { PopupClose } from '@components/svg/PopupClose';
+import { Bage } from '@components/ui/Bage';
+import { Button } from '@components/ui/Button';
 import {
-  Card,
-  CardContent,
-  CardDivider,
+  Card, CardDivider,
   CardHeader,
   CardList,
   CardListItem,
 } from '@components/ui/Card';
-import { Bage } from '@components/ui/Bage';
+import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Modal } from '@components/ui/Modal';
 import {
   BakerCell, ChooseListCell, PopupCell, PositionCell, SwapCell, TokenCell,
 } from '@components/ui/PopupCell';
-import { PopupClose } from '@components/svg/PopupClose';
-import { Modal } from '@components/ui/Modal';
 import { Switcher } from '@components/ui/Switcher';
+import { BaseLayout } from '@layouts/BaseLayout';
+import s from '@styles/UiKit.module.sass';
+import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import React, { useState } from 'react';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
@@ -261,62 +257,60 @@ const UiKit: React.FC = () => {
               )}
             />
             <CardDivider />
-            <CardContent>
-              <CardList>
-                <CardListItem>
+            <CardList>
+              <CardListItem>
+                <PopupCell>
+                  <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
+                  <h6>0.00</h6>
+                </PopupCell>
+              </CardListItem>
+              <CardListItem>
+                <PopupCell>
+                  <ChooseListCell token={{ name: 'Token', label: 'Token' }} />
+                  {/* <Toggle state={true} /> */}
+                </PopupCell>
+              </CardListItem>
+              <CardListItem>
+                <PopupCell>
+                  <SwapCell transaction={{
+                    fromValue: '7.11', fromCurrency: 'XTZ', toValue: '6.44', toCurrency: 'CRUNCH', date: Date.now(),
+                  }}
+                  />
+                  {/* ExternalLinkIcon */}
+                </PopupCell>
+              </CardListItem>
+              <CardListItem>
+                <PopupCell>
+                  <PositionCell
+                    token1={{
+                      name: 'Token', vote: '2.868', veto: '3.868', balance: '1.868',
+                    }}
+                    token2={{ name: 'Token' }}
+                  />
+                </PopupCell>
+              </CardListItem>
+              <CardListItem>
+                <PopupCell>
+                  <BakerCell baker={{
+                    token: 'EVERSTAKE',
+                    votes: '100,002.868',
+                    fee: '10',
+                    space: '1,000,000,000.00',
+                    currency: 'TEZ',
+                  }}
+                  />
+                  {/* ExternalLinkIcon */}
+                </PopupCell>
+              </CardListItem>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
+                <CardListItem key={x}>
                   <PopupCell>
                     <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
                     <h6>0.00</h6>
                   </PopupCell>
                 </CardListItem>
-                <CardListItem>
-                  <PopupCell>
-                    <ChooseListCell token={{ name: 'Token', label: 'Token' }} />
-                    {/* <Toggle state={true} /> */}
-                  </PopupCell>
-                </CardListItem>
-                <CardListItem>
-                  <PopupCell>
-                    <SwapCell transaction={{
-                      fromValue: '7.11', fromCurrency: 'XTZ', toValue: '6.44', toCurrency: 'CRUNCH', date: Date.now(),
-                    }}
-                    />
-                    {/* ExternalLinkIcon */}
-                  </PopupCell>
-                </CardListItem>
-                <CardListItem>
-                  <PopupCell>
-                    <PositionCell
-                      token1={{
-                        name: 'Token', vote: '2.868', veto: '3.868', balance: '1.868',
-                      }}
-                      token2={{ name: 'Token' }}
-                    />
-                  </PopupCell>
-                </CardListItem>
-                <CardListItem>
-                  <PopupCell>
-                    <BakerCell baker={{
-                      token: 'EVERSTAKE',
-                      votes: '100,002.868',
-                      fee: '10',
-                      space: '1,000,000,000.00',
-                      currency: 'TEZ',
-                    }}
-                    />
-                    {/* ExternalLinkIcon */}
-                  </PopupCell>
-                </CardListItem>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
-                  <CardListItem key={x}>
-                    <PopupCell>
-                      <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
-                      <h6>0.00</h6>
-                    </PopupCell>
-                  </CardListItem>
-                ))}
-              </CardList>
-            </CardContent>
+              ))}
+            </CardList>
           </Card>
         </Modal>
       </section>
