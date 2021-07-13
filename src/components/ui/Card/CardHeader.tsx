@@ -2,7 +2,7 @@ import React from 'react';
 import s from './Card.module.sass';
 
 type CardHeaderProps = {
-  title: string,
+  title: React.ReactNode,
   icon?: React.ReactNode,
 };
 
@@ -11,7 +11,7 @@ export const CardHeader: React.FC<CardHeaderProps> = ({
   icon,
 }) => (
   <div className={s.cardHeader}>
-    <h5>{title}</h5>
+    {title}
     {icon}
   </div>
 );

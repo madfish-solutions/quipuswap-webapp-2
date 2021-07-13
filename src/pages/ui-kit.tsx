@@ -243,7 +243,11 @@ const UiKit: React.FC = () => {
         >
           <Card className={s.card}>
             <CardHeader
-              title="title & list of components"
+              title={(
+                <h5>
+                  title & list of components
+                </h5>
+              )}
               icon={(
                 <Button
                   className={s.closeButton}
