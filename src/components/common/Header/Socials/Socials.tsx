@@ -7,25 +7,27 @@ import { SocialLinksData } from './content';
 import s from './Socials.module.sass';
 
 type SocialsProps = {
+  id?: string
   className?: string
 };
 
 export const Socials: React.FC<SocialsProps> = ({
+  id,
   className,
 }) => (
   <div className={cx(s.root, className)}>
     {SocialLinksData.map(({
-      id, href, label, Icon,
+      id: socialId, href, label, Icon,
     }) => (
       <Button
-        key={id}
+        key={socialId}
         theme="quaternary"
         href={href}
         external
         title={label}
-        className={s.socialLink}
+        className={s.link}
       >
-        <Icon />
+        <Icon className={s.icon} id={id} />
       </Button>
     ))}
   </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import cx from 'classnames';
@@ -11,9 +11,11 @@ import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
+import { Switcher } from '@components/ui/Switcher';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
+  const [activeSwitcher, setActiveSwitcher] = useState(false);
 
   return (
     <BaseLayout
@@ -209,6 +211,20 @@ const UiKit: React.FC = () => {
           <MenuClosed className={s.icon} />
           <MenuOpened className={s.icon} />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Switcher</h1>
+        <Switcher
+          isActive={activeSwitcher}
+          onChange={(state) => setActiveSwitcher(state)}
+          className={s.switcher}
+        />
+        <Switcher
+          isActive={activeSwitcher}
+          onChange={(state) => setActiveSwitcher(state)}
+          disabled
+          className={s.switcher}
+        />
       </section>
     </BaseLayout>
   );

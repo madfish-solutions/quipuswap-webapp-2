@@ -1,10 +1,18 @@
+@import "@styles/variables"
+
 .root
   display: flex
   align-items: center
 
-.socialLink
+.link
   padding: 4px
   margin: -4px 0
   display: flex
   justify-content: center
   align-items: center
+  &:not(:hover):not(:focus)
+    .icon
+      defs
+        display: none
+      path
+        fill: $text-03
