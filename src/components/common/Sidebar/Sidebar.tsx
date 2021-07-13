@@ -49,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <Token className={s.tokenIcon} />
           <span className={s.price}>$ 5.34</span>
         </div>
-        <Socials className={s.socials} />
+        <Socials className={s.socials} id="desktop" />
       </footer>
     </div>
   );

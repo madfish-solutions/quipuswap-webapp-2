@@ -12,6 +12,7 @@
   width: 100%
   position: relative
   font-weight: 600
+  font-size: 1rem
   transition: background-color $animationTime
   &:not(:last-child)
     margin-bottom: 8px
@@ -73,17 +74,17 @@
 .light
   color: $text-01
   &:not(.active)
-    &:hover
+    &:hover, &:focus
       background-color: $hover-light-row
   &.active
     &::before
-      background: $hover-primary-01
+      background: $brand-01
 
 .dark
   color: $text-inverse
   &:not(.active)
-    &:hover
+    &:hover, &:focus
       background-color: $hover-dark-row
   &.active
     &::before
-      background: $hover-primary-02
+      background: $brand-02
