@@ -21,7 +21,9 @@
       "@hooks/*": ["hooks/*"],
       "@providers/*": ["providers/*"],
       "@icons/*": ["../public/svg/*"],
-      "@images/*": ["../public/images/*"]
+      "@images/*": ["../public/images/*"],
+      "@client": ["client.tsx"],
+      "@graphql": ["graphql.ts"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
@@ -29,5 +31,6 @@
     "isolatedModules": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ignorePatterns": ["graphql.ts"]
 }
