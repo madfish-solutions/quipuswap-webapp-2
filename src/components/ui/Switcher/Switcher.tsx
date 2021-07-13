@@ -40,7 +40,7 @@ export const Switcher: React.FC<SwitcherProps> = ({
         className={s.input}
         checked={isActive}
         disabled={disabled}
-        onClick={() => onChange(!isActive)}
+        onChange={() => onChange(!isActive)}
       />
     </label>
   );
