@@ -1,3 +1,6 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
 .popupCell
   min-width: 327px
   display: flex
@@ -76,9 +79,42 @@
   &>svg:last-child
     margin-left: -16px
 
+.bodyTextLink1
+  font-weight: bold
+
 .label1 
   font-style: normal
   font-weight: 600
   font-size: 14px
   line-height: 16px
-  color: #232735
+
+.swapLabel
+  color: $text-02
+  
+.swapLink
+  font-weight: 600
+  cursor: pointer
+
+.light
+  .label1
+    color: #232735
+  .swapLink
+    text-decoration-color: $hover-primary-01-fallback
+    text-decoration-line: underline
+    text-decoration-style: solid
+    text-decoration-thickness: auto
+    background: $hover-primary-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
+.dark
+  .label1
+    color: #FFFFFF
+  .swapLink
+    text-decoration-color: $hover-primary-02-fallback
+    text-decoration-line: underline
+    text-decoration-style: solid
+    text-decoration-thickness: auto
+    background: $hover-primary-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent

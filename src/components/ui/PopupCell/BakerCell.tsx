@@ -30,10 +30,10 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
-          <div className={s.label1}>
+          <caption>
             {t('common:Fee')}
             :
-          </div>
+          </caption>
           <div className={s.label1}>
             {baker?.fee}
             {' '}
@@ -41,10 +41,10 @@ export const BakerCell: React.FC<BakerCellProps> = ({
           </div>
         </div>
         <div className={s.bakerBlock}>
-          <div className={s.label1}>
+          <caption>
             {t('common:Space')}
             :
-          </div>
+          </caption>
           <span className={s.label1}>{baker?.space}</span>
           <span className={s.bodyTextLink1}>
             {' '}
