@@ -19,12 +19,12 @@ import {
   CardList,
   CardListItem,
 } from '@components/ui/Card';
-import { Popup } from '@components/ui/Popup';
 import { Bage } from '@components/ui/Bage';
 import {
   BakerCell, ChooseListCell, PopupCell, PositionCell, SwapCell, TokenCell,
 } from '@components/ui/PopupCell';
 import { PopupClose } from '@components/svg/PopupClose';
+import { Modal } from '@components/ui/Modal';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
@@ -237,79 +237,23 @@ const UiKit: React.FC = () => {
         >
           Show popup
         </Button>
-        {showExamplePopup && (
-          <Popup closeHandler={() => setShowExamplePopup(false)}>
-            <Card className={s.card}>
-              <CardHeader title="title & list of components" icon={<PopupClose />} />
-              <CardDivider />
-              <CardContent>
-                <CardList>
-                  {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
-                    <CardListItem key={x}>
-                      <PopupCell>
-                        <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
-                        <h6>0.00</h6>
-                      </PopupCell>
-                    </CardListItem>
-                  ))}
-                </CardList>
-              </CardContent>
-            </Card>
-          </Popup>
-        )}
-      </section>
-      <section className={s.section}>
-        <h1 className={s.header}>Cards</h1>
-        <div className={s.cardsBlock}>
-          <Card className={s.card}>
-            <CardHeader title="demo title" />
-          </Card>
+        <Modal
+          isOpen={showExamplePopup}
+          onRequestClose={() => setShowExamplePopup(false)}
+        >
           <Card className={s.card}>
             <CardHeader
-              title="title & icon"
-              icon={<PopupClose />}
+              title="title & list of components"
+              icon={(
+                <Button
+                  className={s.closeButton}
+                  onClick={() => setShowExamplePopup(false)}
+                  theme="quaternary"
+                >
+                  <PopupClose />
+                </Button>
+              )}
             />
-          </Card>
-        </div>
-        <div className={s.cardsBlock}>
-          <Card className={s.card}>
-            <CardHeader title="title & content" />
-            <CardDivider />
-            <CardContent>demo</CardContent>
-          </Card>
-          <Card className={s.card}>
-            <CardHeader
-              title="title & icon & demo content"
-              icon={<PopupClose />}
-            />
-            <CardDivider />
-            <CardContent>
-              demo
-            </CardContent>
-          </Card>
-        </div>
-        <div className={s.cardsBlock}>
-          <Card className={s.card}>
-            <CardHeader title="title & list content" />
-            <CardDivider />
-            <CardContent>
-              <CardList>
-                <CardListItem>
-                  item1
-                </CardListItem>
-                <CardListItem>
-                  item2
-                </CardListItem>
-                <CardListItem>
-                  item3
-                </CardListItem>
-              </CardList>
-            </CardContent>
-          </Card>
-        </div>
-        <div className={s.cardsBlock}>
-          <Card className={s.card}>
-            <CardHeader title="title & list of components" />
             <CardDivider />
             <CardContent>
               <CardList>
@@ -357,10 +301,18 @@ const UiKit: React.FC = () => {
                     {/* ExternalLinkIcon */}
                   </PopupCell>
                 </CardListItem>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
+                  <CardListItem key={x}>
+                    <PopupCell>
+                      <TokenCell token={{ name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'] }} />
+                      <h6>0.00</h6>
+                    </PopupCell>
+                  </CardListItem>
+                ))}
               </CardList>
             </CardContent>
           </Card>
-        </div>
+        </Modal>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Icons</h1>

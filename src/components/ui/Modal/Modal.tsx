@@ -1,27 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
-import Close from '@icons/Close.svg';
+import { PopupClose } from '@components/svg/PopupClose';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './Modal.module.sass';
 import { Button } from '../Button';
 
 type ModalProps = {
-  innerClassName?: string;
-  theme?: keyof typeof themeClass
+  innerClassName?: string
   withCloseButton?: boolean
   containerClassName?: string
 } & ReactModal.Props;
 
-const themeClass = {
-  primary: s.primary,
-  secondary: s.secondary,
+const modeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
 };
 
 export const Modal: React.FC<ModalProps> = ({
   className,
-  theme = 'primary',
   overlayClassName,
   portalClassName,
   isOpen,
@@ -37,10 +36,12 @@ export const Modal: React.FC<ModalProps> = ({
     className,
   );
 
+  const { colorThemeMode } = useContext(ColorThemeContext);
+
   const compoundContainerClassName = cx(
     s.container,
     { [s.withCloseButton]: withCloseButton },
-    themeClass[theme],
+    modeClass[colorThemeMode],
     containerClassName,
   );
 
@@ -54,7 +55,7 @@ export const Modal: React.FC<ModalProps> = ({
       }
       isOpen={isOpen}
       onRequestClose={onRequestClose}
-      overlayClassName={cx(s.overlay, overlayClassName)}
+      overlayClassName={cx(s.overlay, modeClass[colorThemeMode], overlayClassName)}
       portalClassName={cx(s.portal, { [s.hidden]: !isOpen }, portalClassName)}
       {...props}
     >
@@ -73,8 +74,9 @@ export const Modal: React.FC<ModalProps> = ({
               <Button
                 className={s.closeButton}
                 onClick={onRequestClose}
+                theme="quaternary"
               >
-                <Close />
+                <PopupClose />
               </Button>
             )}
             {children}
