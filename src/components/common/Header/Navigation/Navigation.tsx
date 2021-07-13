@@ -56,6 +56,7 @@ export const Navigation: React.FC<NavigationProps> = ({
     if (links) {
       content.push(
         <div
+          key="navigationWrapper"
           className={cx(s.linksWrapper, { [s.menuOpened]: isInnerMenuOpened })}
         >
           <button
