@@ -7,6 +7,7 @@ import { DefaultSeo } from 'next-seo';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { debounce } from '@utils/helpers';
+import { withApollo } from '@client';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
 
 import '@styles/globals.sass';
@@ -138,4 +139,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default appWithTranslation(MyApp);
+export default withApollo()(appWithTranslation(MyApp));
