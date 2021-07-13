@@ -21,13 +21,10 @@ import {
 } from '@components/ui/Card';
 import { Popup } from '@components/ui/Popup';
 import { Bage } from '@components/ui/Bage';
-import { PopupCell } from '@components/ui/PopupCell';
-import { TokenCell } from '@components/ui/PopupCell/TokenCell';
+import {
+  BakerCell, ChooseListCell, PopupCell, PositionCell, SwapCell, TokenCell,
+} from '@components/ui/PopupCell';
 import { PopupClose } from '@components/svg/PopupClose';
-import { ChooseListCell } from '@components/ui/PopupCell/ChooseListCell';
-import { PositionCell } from '@components/ui/PopupCell/PositionCell';
-import { SwapCell } from '@components/ui/PopupCell/SwapCell';
-import { BakerCell } from '@components/ui/PopupCell/BakerCell';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
