@@ -1,0 +1,55 @@
+@import '@styles/variables'
+
+$borderRadius: 24px
+
+.root
+  width: 48px
+  height: 24px
+  background-color: $ui-05
+  position: relative
+  border-radius: $borderRadius
+  cursor: pointer
+  display: block
+  &::before, &::after
+    content: ''
+    position: absolute
+  &::before
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    border-radius: $borderRadius
+    opacity: 0
+    transition: opacity $animationTime
+  &::after
+    top: 4px
+    left: 4px
+    border-radius: 50%
+    width: 16px
+    height: 16px
+    transition: transform $animationTime, background-color $colorChangeAnimationTime
+
+.input
+  opacity: 0
+  width: 0
+  height: 0
+
+.disabled
+  background-color: $ui-04
+
+.active
+  &::before
+    opacity: 1
+  &::after
+    transform: translateX(24px)
+
+.light
+  &::before
+    background: $hover-primary-01
+  &::after
+    background-color: $ui-01
+.dark
+  &::before
+    background: $hover-primary-02
+  &::after
+    background-color: $ui-07
