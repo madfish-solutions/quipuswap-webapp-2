@@ -4,7 +4,7 @@ import Discord from '@icons/Discord.svg';
 import Github from '@icons/Github.svg';
 import Reddit from '@icons/Reddit.svg';
 
-export const socialLinks = [
+export const SocialLinksData = [
   {
     id: 0,
     href: 'https://www.twitter.com',

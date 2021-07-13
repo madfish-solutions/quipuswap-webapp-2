@@ -1,0 +1,66 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  display: none
+
+@include media('>SDesktop')
+  .root
+    display: flex
+    position: sticky
+    top: 64px
+    height: calc(100vh - 64px)
+    width: 192px
+    flex-direction: column
+    padding-bottom: 16px
+    overflow-y: auto
+    padding-right: 0
+  .root::-webkit-scrollbar-track
+    border-radius: 10px
+    background-color: transparent
+  .root::-webkit-scrollbar
+    width: 8px
+    background-color: transparent
+  .root::-webkit-scrollbar-thumb
+    border-radius: 10px
+    background-color: $hover-dark-row
+  .wallet
+    display: flex
+    flex-direction: column
+    padding: 24px 16px
+  .button
+    &:not(:last-child)
+      margin-bottom: 16px
+  .navigation
+    margin-bottom: auto
+  .footer
+    margin-top: 32px
+  .token
+    padding: 16px
+    display: flex
+    align-items: center
+  .price
+    padding: 0 8px
+    font-size: 0.857rem
+    font-weight: 700
+  .socials
+    display: flex
+    justify-content: center
+  .light
+    border-right: 1px solid $ui-03
+    background-color: $ui-02
+    .wallet
+      border-bottom: 1px solid $ui-03
+    .price
+      color: $text-01
+  .light::-webkit-scrollbar-thumb
+    background-color: $hover-light-row
+  .dark
+    background-color: $ui-06
+    border-right: 1px solid $ui-07
+    .wallet
+      border-bottom: 1px solid $ui-07
+    .price
+      color: $ui-01
+  .dark::-webkit-scrollbar-thumb
+    background-color: $hover-dark-row

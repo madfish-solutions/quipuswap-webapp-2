@@ -61,11 +61,13 @@
     &:not(:disabled)
       &:hover, &:focus
         .text
+          color: $hover-primary-01-fallback
           background: $hover-primary-01
           -webkit-background-clip: text
           -webkit-text-fill-color: transparent
       &:active
         .text
+          color: $text-01
           background: none
           -webkit-background-clip: initial
           -webkit-text-fill-color: $text-01
@@ -75,10 +77,12 @@
   &.tertiary, &.quaternary, &.clean
     &:not(:disabled)
       &:hover, &:focus
+        color: $hover-primary-01-fallback
         background: $hover-primary-01
         -webkit-background-clip: text
         -webkit-text-fill-color: transparent
       &:active
+        color: $text-01
         background: none
         -webkit-background-clip: initial
         -webkit-text-fill-color: $text-01
@@ -104,11 +108,13 @@
     &:not(:disabled)
       &:hover, &:focus
         .text
+          color: $hover-primary-02-fallback
           background: $hover-primary-02
           -webkit-background-clip: text
           -webkit-text-fill-color: transparent
       &:active
         .text
+          color: $text-inverse
           background: none
           -webkit-background-clip: initial
           -webkit-text-fill-color: $text-inverse
@@ -118,10 +124,12 @@
   &.tertiary, &.quaternary, &.clean
     &:not(:disabled)
       &:hover, &:focus
+        color: $hover-primary-02-fallback
         background: $hover-primary-02
         -webkit-background-clip: text
         -webkit-text-fill-color: transparent
       &:active
+        color: $text-inverse
         background: none
         -webkit-background-clip: initial
         -webkit-text-fill-color: $text-inverse
