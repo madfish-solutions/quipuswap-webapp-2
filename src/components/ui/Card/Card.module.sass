@@ -34,6 +34,8 @@
   position: relative
   min-height: 64px
   padding: 12px 24px
+  &:hover
+    background-color: #F4F5F8
   &:last-child
     .hr 
       display: none
@@ -42,11 +44,14 @@
   background-color: $ui-01
   .hr
     border: 1px solid #F0F1F3
+  .cardListItem
+    &:hover
+     background-color: #F4F5F8
 
 .dark
   background-color: $ui-06
   .hr
     border: 1px solid #14171E
   .cardListItem
-    .hr
-      border: 1px solid #505565
+    &:hover
+      background-color: #232427
