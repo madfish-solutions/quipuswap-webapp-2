@@ -1,38 +1,38 @@
-import Twitter from '@icons/Twitter.svg';
-import Telegram from '@icons/Telegram.svg';
-import Discord from '@icons/Discord.svg';
-import Github from '@icons/Github.svg';
-import Reddit from '@icons/Reddit.svg';
+import { TwitterIcon } from '@components/svg/Socials/TwitterIcon';
+import { TelegramIcon } from '@components/svg/Socials/TelegramIcon';
+import { DiscordIcon } from '@components/svg/Socials/DiscordIcon';
+import { GithubIcon } from '@components/svg/Socials/GithubIcon';
+import { RedditIcon } from '@components/svg/Socials/RedditIcon';
 
 export const SocialLinksData = [
   {
     id: 0,
     href: 'https://www.twitter.com',
     label: 'Twitter',
-    Icon: Twitter,
+    Icon: TwitterIcon,
   },
   {
     id: 1,
     href: 'https://www.twitter.com',
     label: 'Telegram',
-    Icon: Telegram,
+    Icon: TelegramIcon,
   },
   {
     id: 2,
     href: 'https://www.twitter.com',
     label: 'Discord',
-    Icon: Discord,
+    Icon: DiscordIcon,
   },
   {
     id: 3,
     href: 'https://www.twitter.com',
     label: 'Github',
-    Icon: Github,
+    Icon: GithubIcon,
   },
   {
     id: 4,
     href: 'https://www.twitter.com',
     label: 'Reddit',
-    Icon: Reddit,
+    Icon: RedditIcon,
   },
 ];

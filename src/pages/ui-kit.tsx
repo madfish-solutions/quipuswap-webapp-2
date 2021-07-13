@@ -25,10 +25,12 @@ import {
 } from '@components/ui/PopupCell';
 import { PopupClose } from '@components/svg/PopupClose';
 import { Modal } from '@components/ui/Modal';
+import { Switcher } from '@components/ui/Switcher';
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
+  const [activeSwitcher, setActiveSwitcher] = useState(false);
 
   return (
     <BaseLayout
@@ -325,6 +327,20 @@ const UiKit: React.FC = () => {
           <MenuClosed className={s.icon} />
           <MenuOpened className={s.icon} />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Switcher</h1>
+        <Switcher
+          isActive={activeSwitcher}
+          onChange={(state) => setActiveSwitcher(state)}
+          className={s.switcher}
+        />
+        <Switcher
+          isActive={activeSwitcher}
+          onChange={(state) => setActiveSwitcher(state)}
+          disabled
+          className={s.switcher}
+        />
       </section>
     </BaseLayout>
   );

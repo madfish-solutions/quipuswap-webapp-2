@@ -55,11 +55,14 @@ export const Navigation: React.FC<NavigationProps> = ({
     }
     if (links) {
       content.push(
-        <div className={cx(s.linksWrapper, { [s.menuOpened]: isInnerMenuOpened })}>
+        <div
+          className={cx(s.linksWrapper, { [s.menuOpened]: isInnerMenuOpened })}
+        >
           <button
             type="button"
             className={cx(s.link, s.linkToggle, modeClass[colorThemeMode])}
             onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
+            onFocus={() => setIsInnerMenuOpened(true)}
           >
             <Icon className={s.icon} id={iconId} />
             {label}
