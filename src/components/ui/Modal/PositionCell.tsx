@@ -26,8 +26,12 @@ export const PositionCell: React.FC<PositionCellProps> = ({
     <div className={cx(modeClass[colorThemeMode], s.listItem)}>
       <div className={s.positionBlockCell}>
         <div className={s.tokenGroup}>
-          <Token />
-          <Token />
+          <div className={s.tokenItem}>
+            <Token />
+          </div>
+          <div className={s.tokenItem}>
+            <Token />
+          </div>
         </div>
         <div className={s.mleft8}>
           <h6>
