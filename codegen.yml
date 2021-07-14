@@ -1,0 +1,12 @@
+overwrite: true
+schema: "https://api.quipuswap.com/"
+documents: "src/**/*.graphql"
+generates:
+  src/graphql.ts:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
