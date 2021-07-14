@@ -24,7 +24,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
       <div className={s.splitRow}>
         <div className={s.joinRow}>
           <Token />
-          <div className={s.blockRow}>
+          <div className={s.mleft8}>
             <div className={s.joinRow}>
               <h6>
                 {token?.name}
@@ -32,7 +32,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
               {token?.badges.map((x:any) => <Bage className={s.bage} key={x} text={x} />) }
 
             </div>
-            <span>
+            <span className={s.caption}>
               {token?.label}
             </span>
           </div>

@@ -26,7 +26,7 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
       >
         <div className={s.joinRow}>
           <Token />
-          <div className={s.blockRow}>
+          <div className={s.mleft8}>
             <h6>
               {token?.name}
             </h6>

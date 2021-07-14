@@ -29,7 +29,7 @@ export const PositionCell: React.FC<PositionCellProps> = ({
           <Token />
           <Token />
         </div>
-        <div className={s.blockRow}>
+        <div className={s.mleft8}>
           <h6>
             {token1?.name}
             /
@@ -38,7 +38,7 @@ export const PositionCell: React.FC<PositionCellProps> = ({
 
         </div>
       </div>
-      <div className={s.positionFlexCell}>
+      <div className={cx(s.joinRow, s.centerRow)}>
         <div>
           <div className={s.caption}>
             {t('common:LP in Votes')}
@@ -46,14 +46,14 @@ export const PositionCell: React.FC<PositionCellProps> = ({
           </div>
           <span className={s.label1}>{token1?.vote}</span>
         </div>
-        <div>
+        <div className={s.mleft24}>
           <div className={s.caption}>
             {t('common:LP in Veto')}
             :
           </div>
           <span className={s.label1}>{token1?.veto}</span>
         </div>
-        <div>
+        <div className={s.mleft24}>
           <div className={s.caption}>
             {t('common:Total Balance')}
             :
