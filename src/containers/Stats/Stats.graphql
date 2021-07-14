@@ -1,0 +1,17 @@
+query TopStatsData {
+    overview {
+        totalLiquidity
+        totalLiquidityChange {
+            day
+        }
+        volume24h
+        volumeChange {
+            day
+        }
+        xtzUsdQuote
+        xtzUsdQuoteChange {
+            day
+        }
+        trasactionsCount24h
+    }
+}

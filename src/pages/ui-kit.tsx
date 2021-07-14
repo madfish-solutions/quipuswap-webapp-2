@@ -15,10 +15,58 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import React, { useState } from 'react';
 
+import { Tabs } from '@components/ui/Tabs';
+
+const TabsSmall = [
+  {
+    id: 'weekly',
+    label: 'W',
+  },
+  {
+    id: 'daily',
+    label: 'D',
+  },
+];
+
+const TabsMiddle = [
+  {
+    id: 'swap',
+    label: 'Swap',
+  },
+  {
+    id: 'send',
+    label: 'Send',
+  },
+];
+
+const TabsBig = [
+  {
+    id: 'first',
+    label: 'First item',
+  },
+  {
+    id: 'second',
+    label: 'Second long item',
+  },
+  {
+    id: 'third',
+    label: 'SL',
+  },
+  {
+    id: 'fourth',
+    label: 'Middle',
+  },
+];
+
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
+
   const [activeSwitcher, setActiveSwitcher] = useState(false);
+
+  const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
+  const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
+  const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
 
   return (
     <BaseLayout
@@ -284,6 +332,27 @@ const UiKit: React.FC = () => {
           isActive={activeSwitcher}
           onChange={(state) => setActiveSwitcher(state)}
           disabled
+          className={s.switcher}
+        />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Tabs</h1>
+        <Tabs
+          values={TabsSmall}
+          activeId={tabsSmallState}
+          setActiveId={(id) => setTabsSmallState(id)}
+          className={s.switcher}
+        />
+        <Tabs
+          values={TabsMiddle}
+          activeId={tabsMiddleState}
+          setActiveId={(id) => setTabsMiddleState(id)}
+          className={s.switcher}
+        />
+        <Tabs
+          values={TabsBig}
+          activeId={tabsBigState}
+          setActiveId={(id) => setTabsBigState(id)}
           className={s.switcher}
         />
       </section>
