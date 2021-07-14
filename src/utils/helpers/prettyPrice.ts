@@ -1,5 +1,5 @@
-export const prettyPrice = (value: number, dec?: number) => {
-  if (value.toString().length > 6) {
+export const prettyPrice = (value: number, dec?: number, length?: number) => {
+  if (value.toString().length > (length ?? 6)) {
     return new Intl.NumberFormat(
       'en',
       {

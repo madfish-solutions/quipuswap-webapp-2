@@ -1,17 +1,9 @@
-query TopStatsData {
-    overview {
-        totalLiquidity
-        totalLiquidityChange {
-            day
+query GetPairPlotLiquidity($id: String!) {
+    pair (id: $id) {
+        plotLiquidity {
+            time
+            value
+            xtzUsdQuoteHistorical
         }
-        volume24h
-        volumeChange {
-            day
-        }
-        xtzUsdQuote
-        xtzUsdQuoteChange {
-            day
-        }
-        trasactionsCount24h
     }
 }
