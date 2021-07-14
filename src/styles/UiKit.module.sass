@@ -121,13 +121,25 @@
   &:not(:last-child)
     margin-right: 32px
 
+// Cards
+.cardsBlock
+  display: flex
+  justify-content: flex-start
+  &>div 
+    margin: 4px
+  &:not(:last-child)
+    margin-bottom: 32px
+
+.card
+  min-width: 250px
+  &:not(:last-child)
+    margin-right: 32px
 
 
 // Switchers
 .switcher
   &:not(:last-child)
     margin-bottom: 32px
-
 
 
 @include media('>tablet')
