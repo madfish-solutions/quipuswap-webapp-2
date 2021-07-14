@@ -22,6 +22,7 @@ import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
+import { ComplexInput } from '@components/ui/ComplexInput';
 
 const TabsSmall = [
   {
@@ -349,6 +350,16 @@ const UiKit: React.FC = () => {
           <MenuClosed className={s.icon} />
           <MenuOpened className={s.icon} />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Complex inputs</h1>
+        <ComplexInput />
+        {/* input */}
+        {/* recipient address */}
+        {/* select lp */}
+        {/* output */}
+        {/* votes */}
+        {/* baker */}
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Switcher</h1>
