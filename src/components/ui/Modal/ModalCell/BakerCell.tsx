@@ -4,7 +4,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import cx from 'classnames';
 
 import { useTranslation } from 'next-i18next';
-import s from './Modal.module.sass';
+import s from './ModalCell.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

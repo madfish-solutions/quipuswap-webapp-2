@@ -1,0 +1,136 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.caption
+  font-family: $font
+  font-style: normal
+  font-weight: normal
+  font-size: 0.75rem
+  line-height: 1.33
+  color: $text-03
+
+.listItem
+  position: relative
+  padding: 12px 24px
+  transition: background-color $animationTime
+
+.splitRow
+  display: flex
+  justify-content: space-between
+
+.joinRow
+  display: flex
+
+.centerRow
+  align-items: center
+
+.centerLabel 
+  margin: 0px 8px
+
+.clickable 
+  cursor: pointer
+  user-select: none
+
+.mleft8 
+  margin-left: 8px
+
+.mleft24 
+  margin-left: 24px
+
+.bage
+  margin-left: 8px
+
+.tokenCell
+  display: flex
+  align-items: center
+  justify-content: space-between
+  &>.tokenCellChild
+    margin-left: 8px
+  &>.tokenCellChild:first-child
+    margin: 0px
+
+.swapFrom
+  margin: 8px 0px
+
+.bakerCell
+  flex: 1
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+.bakerFlexCell 
+  display: flex
+  align-items: center
+  .h6
+    margin-left: 8px
+  &:not(last-child)
+    margin-bottom: 8px
+
+.bakerBlock 
+  display: block
+  &:not(last-child)
+    margin-right: 24px
+
+.positionBlockCell
+  max-height: 32px
+  display: flex
+  align-items: center
+  margin-bottom: 8px
+  .h6 
+    margin-left: 8px
+  
+.tokenGroup
+  display: flex
+  &>.tokenItem:last-child
+    margin-left: -8px
+
+.bodyTextLink1
+  font-weight: bold
+
+.label1 
+  font-style: normal
+  font-weight: 600
+  font-size: 0.75rem
+  line-height: 1.33
+
+.swapLabel
+  color: $text-02
+  
+.swapLink
+  position: relative
+  font-weight: 600
+  cursor: pointer
+
+.swapLink:after
+  position: absolute
+  content: ''
+  height: 1px
+  bottom: -1px
+  left: 0px
+  width: 100%
+
+.light
+  border-bottom: 1px solid $ui-03
+  &:hover
+     background-color: $hover-light-row
+  .label1
+    color: $hover-dark-row
+  .swapLink:after
+    background: $hover-primary-01
+  .swapLink
+    background: $hover-primary-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
+.dark
+  border-bottom: 1px solid $ui-06
+  &:hover
+    background-color: $hover-dark-row
+  .label1
+    color: $text-inverse
+  .swapLink:before
+    background: $hover-primary-02
+  .swapLink
+    background: $hover-primary-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent

@@ -4,7 +4,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import cx from 'classnames';
 
 import { useTranslation } from 'next-i18next';
-import s from './Modal.module.sass';
+import s from './ModalCell.module.sass';
 
 type PositionCellProps = {
   token1?: any,
@@ -22,16 +22,13 @@ export const PositionCell: React.FC<PositionCellProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <div className={cx(modeClass[colorThemeMode], s.listItem)}>
       <div className={s.positionBlockCell}>
         <div className={s.tokenGroup}>
-          <div className={s.tokenItem}>
-            <Token />
-          </div>
-          <div className={s.tokenItem}>
-            <Token />
-          </div>
+          <Token className={s.tokenItem} />
+          <Token className={s.tokenItem} />
         </div>
         <div className={s.mleft8}>
           <h6>

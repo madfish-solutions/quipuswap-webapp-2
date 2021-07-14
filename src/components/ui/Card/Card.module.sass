@@ -3,37 +3,26 @@
 
 .card
   position: relative
-  background-color: white
   box-shadow: $elevation-03
   border-radius: 8px
+  overflow: hidden
 
-.cardHeader 
+.header
   position: relative
   display: flex
   align-items: center
   justify-content: space-between
   padding: 12px 24px
 
-.cardList
+.content
   margin-top: 16px
-
-.cardListItem 
-  position: relative
-  min-height: 64px
-  padding: 12px 24px
-  &:last-child
-    border: none
 
 .light
   background-color: $ui-01
-  &>.cardHeader, &>.cardList>.cardListItem
+  .header
     border-bottom: 1px solid $ui-03
-  &>.cardList>.cardListItem:hover
-     background-color: $hover-light-row
 
 .dark
   background-color: $ui-06
-  &>.cardHeader, &>.cardList>.cardListItem
+  .header
     border-bottom: 1px solid $ui-06
-  &>.cardList>.cardListItem:hover
-    background-color: $hover-dark-row

@@ -5,9 +5,13 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './Card.module.sass';
 
 type CardProps = {
-  className?: string,
-  content: React.ReactNode,
-  button?: React.ReactNode,
+  className?: string
+  header?: {
+    content: React.ReactNode
+    button?: React.ReactNode
+    className?: string
+  }
+  contentClassName?: string
 };
 
 const modeClass = {
@@ -17,21 +21,22 @@ const modeClass = {
 
 export const Card: React.FC<CardProps> = ({
   className,
-  content,
-  button,
+  header,
+  contentClassName,
   children,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(s.card, modeClass[colorThemeMode], className)}>
-      <div className={s.cardHeader}>
-        {content}
-        {button}
-      </div>
-      <div className={s.cardList}>
+      {header && (
+        <div className={cx(s.header, header.className)}>
+          {header.content}
+          {header.button}
+        </div>
+      )}
+      <div className={cx(s.content, contentClassName)}>
         {children}
-
       </div>
     </div>
   );
