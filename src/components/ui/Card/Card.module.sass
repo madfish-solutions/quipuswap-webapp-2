@@ -1,0 +1,28 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  position: relative
+  box-shadow: $elevation-03
+  border-radius: 8px
+  overflow: hidden
+
+.header
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 12px 24px
+
+.content
+  margin-top: 16px
+
+.light
+  background-color: $ui-01
+  .header
+    border-bottom: 1px solid $ui-03
+
+.dark
+  background-color: $ui-07
+  .header
+    border-bottom: 1px solid $ui-06
