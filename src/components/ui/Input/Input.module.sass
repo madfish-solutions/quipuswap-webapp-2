@@ -6,7 +6,8 @@
   align-items: center
   padding: 1px
   border-radius: 9px
-  &>.inputBase
+  transition: background-color $animationTime, color $animationTime
+  .inputBase
     flex: 1
 
 .adornment
@@ -23,23 +24,26 @@
 .inputBase
   display: flex
   align-items: center
-  padding: 8px 16px
+  padding: 7px 15px
   border-radius: 8px
-  &>.input
+  transition: background-color $animationTime, color $animationTime
+  .input
     flex: 1
 
 .small
+  .input
+    width: 78px
+    display: flex
+    text-align: center
+    justify-content: center
+    align-items: center
+    font-weight: bold
   .inputBase
     padding: 6px 0px
-    .input
-      width: 78px
-      display: flex
-      text-align: center
-      justify-content: center
-      align-items: center
-      font-weight: bold
   
 .input
+  &::placeholder
+    color: $text-03
   box-sizing: border-box
   font-family: $font
   font-style: normal
@@ -58,20 +62,19 @@
   font-weight: 600
   font-size: 1rem
   line-height: 1.33
+  margin-bottom: 8px
 
 .errorLabel
-  margin-top: 8px
-  color: $support-error
-
-.caption
   font-family: $font
   font-style: normal
   font-weight: normal
   font-size: 0.857rem
   line-height: 1.33
+  padding-top: 8px
+  color: $support-error
 
-.label
-  margin-bottom: 8px
+.errorContainer
+  transition: max-height $animationTime
 
 .light
   .label1
@@ -87,13 +90,10 @@
       color: $text-03
   .root
     background: $ui-04
-  .active
+  &.focused .root
     background: $brand-01
-  &.small
-    .inputBase
-      .input
-        &::placeholder 
-          color: $text-01
+  &.small .input::placeholder 
+      color: $text-01
 
 .dark
   .label1
@@ -109,15 +109,15 @@
       color: $ui-05
   .root
     background: $text-02
-  .active
+  &.focused .root
     background: $brand-02
   .inputError
     font-weight: 700
-  &.small
-    .inputBase
-      .input
-        &::placeholder 
-          color: $text-inverse
+  &.small .input::placeholder 
+      color: $text-inverse
 
-.error 
-  background: $support-error !important
+.error
+  .root 
+    background: $support-error !important
+  .errorContainer
+    max-height: 22px

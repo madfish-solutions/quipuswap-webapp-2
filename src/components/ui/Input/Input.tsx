@@ -9,15 +9,12 @@ import s from './Input.module.sass';
 type InputProps = {
   error?: string
   disabled?: boolean
-  readonly?: boolean
   className?: string
   label?: string
   inputSize?: keyof typeof sizeClass
   endAdornment?:React.ReactNode
   startAdornment?:React.ReactNode
-} & (
-  | React.HTMLProps<HTMLInputElement>
-);
+} & React.HTMLProps<HTMLInputElement>;
 
 const sizeClass = {
   medium: s.medium,
@@ -31,33 +28,36 @@ const modeClass = {
 
 export const Input: React.FC<InputProps> = ({
   inputSize = 'medium',
-  value = '',
   disabled = false,
   className,
-  readonly = false,
   label = '',
   error = '',
+  id,
   endAdornment,
   startAdornment,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [isActive, setActive] = React.useState<boolean>(false);
+  const [focused, setActive] = React.useState<boolean>(false);
 
   const compoundStatefulClassName = cx(
     s.root,
-    error && s.error,
-    isActive && !disabled && !readonly && s.active,
-    disabled && s.disabled,
+    { [s.disabled]: disabled },
   );
   const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
     sizeClass[inputSize],
+    { [s.error]: error },
+    { [s.focused]: focused },
     className,
   );
   return (
     <div className={compoundBaseClassName}>
-      {label && <div className={cx(s.label1, s.label)}>{label}</div>}
+      {label && (
+        <label htmlFor={id} className={s.label1}>
+          {label}
+        </label>
+      )}
       <div className={compoundStatefulClassName}>
         <div className={s.inputBase}>
           {startAdornment && (
@@ -66,13 +66,11 @@ export const Input: React.FC<InputProps> = ({
           </div>
           )}
           <input
-            value={value}
             disabled={disabled}
-            readOnly={readonly}
-            type="text"
+            id={id}
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
-            {...(props as React.HTMLProps<HTMLInputElement>)}
+            {...props}
             className={s.input}
           />
           {endAdornment && (
@@ -82,12 +80,12 @@ export const Input: React.FC<InputProps> = ({
           )}
 
         </div>
+      </div> 
+      <div className={s.errorContainer}>
+        <p className={cx(s.errorLabel)}>
+          {error}
+        </p>
       </div>
-      {error && (
-      <div className={cx(s.caption, s.errorLabel)}>
-        {error}
-      </div>
-      )}
     </div>
   );
 };

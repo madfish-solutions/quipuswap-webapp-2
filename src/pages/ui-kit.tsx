@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -73,12 +73,17 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputError, setInputError] = useState<boolean>(false);
   const handleInputChange = (state:any) => setInputValue(state.target.value);
 
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
   const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
+
+  useEffect(() => {
+    setInputError(inputValue.length > 7);
+  }, [inputValue]);
 
   return (
     <BaseLayout
@@ -311,7 +316,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.inputsBlock}>
           <Input
-            error="Your password needs to be at least 8 characters long."
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
