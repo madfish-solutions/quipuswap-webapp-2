@@ -8,6 +8,8 @@ import { Switcher } from '../Switcher';
 
 type ChooseListCellProps = {
   tokenList?: any,
+  isActive: boolean,
+  onChange: (state:boolean) => void
 };
 
 const modeClass = {
@@ -17,6 +19,8 @@ const modeClass = {
 
 export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   tokenList,
+  isActive,
+  onChange,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
@@ -37,8 +41,8 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
 
         </div>
         <Switcher
-          isActive
-          onChange={() => {}}
+          isActive={isActive}
+          onChange={onChange}
         />
       </div>
     </div>
