@@ -284,7 +284,7 @@ const UiKit: React.FC = () => {
             name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'], price: '0.00',
           }}
           />
-          <ChooseListCell token={{ name: 'Token', label: 'Token' }} />
+          <ChooseListCell tokenList={{ name: 'Token', label: 'Token' }} />
           <SwapCell transaction={{
             fromValue: '7.11', fromCurrency: 'XTZ', toValue: '6.44', toCurrency: 'CRUNCH', date: Date.now(),
           }}

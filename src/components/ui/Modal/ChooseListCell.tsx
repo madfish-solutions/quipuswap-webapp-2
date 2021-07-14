@@ -7,7 +7,7 @@ import s from './Modal.module.sass';
 import { Switcher } from '../Switcher';
 
 type ChooseListCellProps = {
-  token?: any,
+  tokenList?: any,
 };
 
 const modeClass = {
@@ -16,7 +16,7 @@ const modeClass = {
 };
 
 export const ChooseListCell: React.FC<ChooseListCellProps> = ({
-  token,
+  tokenList,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
@@ -28,10 +28,10 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
           <Token />
           <div className={s.mleft8}>
             <h6>
-              {token?.name}
+              {tokenList?.name}
             </h6>
             <span className={s.caption}>
-              {token?.label}
+              {tokenList?.label}
             </span>
           </div>
 
