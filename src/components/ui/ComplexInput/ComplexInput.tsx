@@ -25,7 +25,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState('');
 
   // const viewValue = new Intl.NumberFormat('en-US').format(value ? parseInt(value, 10) : 0);
   const viewValue = value;
@@ -54,7 +54,11 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 
         </div>
         <div className={cx(s.flex, s.centerRow, s.splitRow, s.botRow)}>
-          <input className={s.input} value={viewValue} onChange={(e) => setValue(e.target.value)} />
+          <input
+            className={s.input}
+            value={viewValue}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+          />
           <div className={cx(s.flex, s.centerRow)}>
             <Token />
             <h6 className={cx(s.mleft8)}>
