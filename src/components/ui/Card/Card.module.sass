@@ -13,17 +13,14 @@
   align-items: center
   justify-content: space-between
   padding: 12px 24px
-  height: 48px
 
 .cardList
-  margin: 16px 0px 0px 0px
+  margin-top: 16px
 
 .cardListItem 
   position: relative
   min-height: 64px
   padding: 12px 24px
-  &:hover
-    background-color: $hover-light-row
   &:last-child
     border: none
 
@@ -31,14 +28,12 @@
   background-color: $ui-01
   &>.cardHeader, &>.cardList>.cardListItem
     border-bottom: 1px solid $ui-03
-  &>.cardListItem
-    &:hover
+  &>.cardList>.cardListItem:hover
      background-color: $hover-light-row
 
 .dark
   background-color: $ui-06
   &>.cardHeader, &>.cardList>.cardListItem
     border-bottom: 1px solid $ui-06
-  &>.cardListItem
-    &:hover
-      background-color: $hover-dark-row
+  &>.cardList>.cardListItem:hover
+    background-color: $hover-dark-row

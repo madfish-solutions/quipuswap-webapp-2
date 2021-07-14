@@ -7,11 +7,13 @@ import { PopupClose } from '@components/svg/PopupClose';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './Modal.module.sass';
 import { Button } from '../Button';
+import { Card } from '../Card';
 
 type ModalProps = {
   innerClassName?: string
   withCloseButton?: boolean
   containerClassName?: string
+  title?:string
 } & ReactModal.Props;
 
 const modeClass = {
@@ -29,6 +31,7 @@ export const Modal: React.FC<ModalProps> = ({
   innerClassName,
   withCloseButton = false,
   containerClassName,
+  title = '',
   ...props
 }) => {
   const compoundRootClassName = cx(
@@ -69,8 +72,13 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <div className={compoundContainerClassName}>
-          <div className={cx(s.inner, innerClassName)}>
-            {withCloseButton && (
+          <Card
+            content={(
+              <h5>
+                {title}
+              </h5>
+              )}
+            button={(
               <Button
                 className={s.closeButton}
                 onClick={onRequestClose}
@@ -78,9 +86,11 @@ export const Modal: React.FC<ModalProps> = ({
               >
                 <PopupClose />
               </Button>
-            )}
+              )}
+          >
             {children}
-          </div>
+
+          </Card>
         </div>
       </div>
     </ReactModal>

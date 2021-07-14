@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Token from '@icons/Token.svg';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import cx from 'classnames';
 
 import { useTranslation } from 'next-i18next';
-import s from './PopupCell.module.sass';
+import s from './Modal.module.sass';
+
+const modeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
 
 type BakerCellProps = {
   baker?: any,
@@ -11,29 +18,28 @@ export const BakerCell: React.FC<BakerCellProps> = ({
   baker,
 }) => {
   const { t } = useTranslation(['baker']);
+  const { colorThemeMode } = useContext(ColorThemeContext);
   return (
-    <div
-      className={s.bakerCell}
-    >
+    <div className={cx(modeClass[colorThemeMode], s.listItem)}>
       <div className={s.bakerFlexCell}>
         <Token />
-        <h6>{baker.token}</h6>
+        <h6 className={s.h6}>{baker.token}</h6>
       </div>
       <div className={s.bakerFlexCell}>
         <div>
-          <caption>
+          <div className={s.caption}>
             {t('baker:Votes')}
             :
-          </caption>
-          <span className={s.label1}>{baker.votes}</span>
+          </div>
+          <div className={s.label1}>{baker.votes}</div>
         </div>
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
-          <caption>
+          <div className={s.caption}>
             {t('baker:Fee')}
             :
-          </caption>
+          </div>
           <div className={s.label1}>
             {baker?.fee}
             {' '}
@@ -41,10 +47,10 @@ export const BakerCell: React.FC<BakerCellProps> = ({
           </div>
         </div>
         <div className={s.bakerBlock}>
-          <caption>
+          <div className={s.caption}>
             {t('baker:Space')}
             :
-          </caption>
+          </div>
           <span className={s.label1}>{baker?.space}</span>
           {' '}
           <span className={s.bodyTextLink1}>

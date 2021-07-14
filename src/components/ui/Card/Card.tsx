@@ -29,7 +29,10 @@ export const Card: React.FC<CardProps> = ({
         {content}
         {button}
       </div>
-      {children}
+      <div className={s.cardList}>
+        {children}
+
+      </div>
     </div>
   );
 };
