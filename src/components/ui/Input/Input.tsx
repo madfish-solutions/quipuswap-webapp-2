@@ -12,7 +12,7 @@ type InputProps = {
   readonly?: boolean
   className?: string
   label?: string
-  inputSize: keyof typeof sizeClass
+  inputSize?: keyof typeof sizeClass
   endAdornment?:React.ReactNode
   startAdornment?:React.ReactNode
 } & (

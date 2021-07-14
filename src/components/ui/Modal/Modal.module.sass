@@ -1,0 +1,55 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.overlay
+  position: fixed
+  top: 0
+  right: 0
+  left: 0
+  bottom: 0
+  z-index: 100
+  cursor: pointer
+  display: flex
+  align-items: flex-start
+  justify-content: center
+  max-height: 100vh
+  overflow-y: auto
+
+.portal
+  position: relative
+  transition: none
+  opacity: 1
+  z-index: 100
+
+.root
+  outline: none
+  height: 100%
+  width: 100%
+
+.wrapper
+  display: flex
+  justify-content: center
+  align-items: center
+  min-height: 100%
+  padding: 10px 16px
+  box-sizing: border-box
+  cursor: default
+
+.closeButton
+  display: flex
+  justify-content: center
+  align-items: center
+
+.container
+  width: 100%
+  padding: 8px
+  position: relative
+  background: transparent
+  border-radius: 4px
+  max-width: 400px
+
+.light
+  background-color: rgba($ui-07, 0.12)
+
+.dark
+  background-color: rgba($ui-01, 0.12)

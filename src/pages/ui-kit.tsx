@@ -1,13 +1,21 @@
 import React, { useState } from 'react';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import cx from 'classnames';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Button } from '@components/ui/Button';
+import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Modal } from '@components/ui/Modal';
+import {
+  BakerCell,
+  ChooseListCell,
+  PositionCell,
+  SwapCell,
+  TokenCell,
+} from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
-import { Input } from '@components/ui/Input';
 import { Tabs } from '@components/ui/Tabs';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
@@ -17,6 +25,7 @@ import s from '@styles/UiKit.module.sass';
 
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+import { Input } from '@components/ui/Input';
 
 const TabsSmall = [
   {
@@ -61,6 +70,7 @@ const TabsBig = [
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
+  const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -341,6 +351,87 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Toggle Color theme</h1>
         <ColorModeSwitcher />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Bage for popupCells</h1>
+        <div className={s.cardsBlock}>
+          <Bage text="FA 2.0" />
+          <Bage text="ID: 0" />
+
+        </div>
+        <div className={s.cardsBlock}>
+          <Bage text="some wide text" />
+          <Bage text="a" />
+        </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Popup</h1>
+        <Button
+          className={s.button}
+          onClick={() => setShowExamplePopup(true)}
+        >
+          All modal cells popup
+        </Button>
+        <Modal
+          isOpen={showExamplePopup}
+          onRequestClose={() => setShowExamplePopup(false)}
+          title="title & list of components"
+        >
+          <TokenCell
+            token={{
+              name: 'Token',
+              label: 'Token',
+              badges: ['FA 2.0', 'ID: 0'],
+              price: '0.00',
+            }}
+          />
+          <ChooseListCell
+            onChange={() => {}}
+            isActive={false}
+            tokenList={{
+              name: 'Token',
+              label: 'Token',
+            }}
+          />
+          <SwapCell
+            transaction={{
+              fromValue: '7.11',
+              fromCurrency: 'XTZ',
+              toValue: '6.44',
+              toCurrency: 'CRUNCH',
+              date: Date.now(),
+            }}
+          />
+          <PositionCell
+            token1={{
+              name: 'Token',
+              vote: '2.868',
+              veto: '3.868',
+              balance: '1.868',
+            }}
+            token2={{ name: 'Token' }}
+          />
+          <BakerCell
+            baker={{
+              token: 'EVERSTAKE',
+              votes: '100,002.868',
+              fee: '10',
+              space: '1,000,000,000.00',
+              currency: 'TEZ',
+            }}
+          />
+          {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
+            <TokenCell
+              key={x}
+              token={{
+                name: 'Token',
+                label: 'Token',
+                badges: ['FA 2.0', 'ID: 0'],
+                price: '0.00',
+              }}
+            />
+          ))}
+        </Modal>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Icons</h1>

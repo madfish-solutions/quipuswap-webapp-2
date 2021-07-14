@@ -482,8 +482,8 @@ export const TopStatsDataDocument = gql`
 /**
  * __useTopStatsDataQuery__
  *
- * To run a query within a React component, call `useTopStatsDataQuery` and
- * pass it any options that fit your needs.
+ * To run a query within a React component, call `useTopStatsDataQuery`
+ * and pass it any options that fit your needs.
  * When your component renders, `useTopStatsDataQuery`
  * returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
@@ -501,20 +501,20 @@ export function useTopStatsDataQuery(
   TopStatsDataQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TopStatsDataQuery, TopStatsDataQueryVariables>(
-    TopStatsDataDocument,
-    options,
-  );
+  return Apollo.useQuery<
+  TopStatsDataQuery,
+  TopStatsDataQueryVariables
+  >(TopStatsDataDocument, options);
 }
-export function useTopStatsDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
-TopStatsDataQuery,
-TopStatsDataQueryVariables
->) {
+export function useTopStatsDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<TopStatsDataQuery,
+  TopStatsDataQueryVariables>,
+) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TopStatsDataQuery, TopStatsDataQueryVariables>(
-    TopStatsDataDocument,
-    options,
-  );
+  return Apollo.useLazyQuery<
+  TopStatsDataQuery,
+  TopStatsDataQueryVariables
+  >(TopStatsDataDocument, options);
 }
 export type TopStatsDataQueryHookResult = ReturnType<typeof useTopStatsDataQuery>;
 export type TopStatsDataLazyQueryHookResult = ReturnType<typeof useTopStatsDataLazyQuery>;
