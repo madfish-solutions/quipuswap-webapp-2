@@ -6,14 +6,15 @@ import cx from 'classnames';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Button } from '@components/ui/Button';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Switcher } from '@components/ui/Switcher';
+import { Input } from '@components/ui/Input';
+import { Tabs } from '@components/ui/Tabs';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
-import { Switcher } from '@components/ui/Switcher';
-import { Input } from '@components/ui/Input';
-import { Tabs } from '@components/ui/Tabs';
+
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
