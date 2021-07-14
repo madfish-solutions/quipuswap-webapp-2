@@ -36,7 +36,7 @@ export const Input: React.FC<InputProps> = ({
   const [isActive, setActive] = React.useState<boolean>(false);
 
   const compoundClassName = cx(
-    s.inputBase,
+    s.inputBaseWrapper,
     error && s.inputBaseError,
     isActive && !disabled && !readonly && s.inputBaseActive,
   );
@@ -49,20 +49,25 @@ export const Input: React.FC<InputProps> = ({
     <div className={compoundBaseClassName}>
       <div className={cx(s.label1, s.inputLabel)}>{label}</div>
       <div className={compoundClassName}>
-        <input
-          value={value}
-          disabled={disabled}
-          readOnly={readonly}
-          type="text"
-          onFocus={() => setActive(true)}
-          onBlur={() => setActive(false)}
-          {...(props as React.HTMLProps<HTMLInputElement>)}
-          className={s.root}
-        />
+        <div className={s.inputBase}>
+          <input
+            value={value}
+            disabled={disabled}
+            readOnly={readonly}
+            type="text"
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
+            {...(props as React.HTMLProps<HTMLInputElement>)}
+            className={s.root}
+          />
+        </div>
+
       </div>
-      <div className={s.inputError}>
+      {error && (
+      <div className={cx(s.caption, s.inputError)}>
         {error}
       </div>
+      )}
     </div>
   );
 };

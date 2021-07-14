@@ -4,31 +4,32 @@
 .base
   display: block
 
+.inputBaseWrapper
+  padding: 1px
+  border-radius: 9px
+
 .inputBase
-  padding: 12px 16px
   box-sizing: border-box
   border-radius: 8px
   min-height: 40px
   font-family: $font
   font-style: normal
   font-weight: normal
-  font-size: 14px
-  line-height: 24px
+  font-size: 0.875rem
+  line-height: 1.71
   display: flex
   align-items: center
   outline: none
 
-.inputBaseError 
-  background: red
-
 .root
+  padding: 12px 16px
   box-sizing: border-box
   border-radius: 8px
   font-family: $font
   font-style: normal
   font-weight: normal
-  font-size: 14px
-  line-height: 24px
+  font-size: 0.875rem
+  height: 16px
   display: flex
   align-items: center
   outline: none
@@ -39,8 +40,19 @@
   font-family: $font
   font-style: normal
   font-weight: 600
-  font-size: 14px
-  line-height: 16px
+  font-size: 0.875rem
+  line-height: 1.33
+
+.inputError
+  margin-top: 8px
+  color: $support-error
+
+.caption
+  font-family: $font
+  font-style: normal
+  font-weight: normal
+  font-size: 0.75rem
+  line-height: 1.33
 
 .inputLabel
   margin-bottom: 8px
@@ -48,15 +60,25 @@
 .light
   .label1
     color: $text-01
-  .inputBase
+  .root
     background: $ui-01
+  .inputBase
+    background: $ui-04
     border: 1px solid $ui-04
     color: $text-01
+  .inputBaseActive
+    background: $brand-01
 
 .dark
   .label1
     color: $text-inverse
-  .inputBase
+  .root
     background: $ui-06
-    border: 1px solid $text-02
+  .inputBase
+    background: $text-02
     color: $text-inverse
+  .inputBaseActive
+    background: $brand-02
+
+.inputBaseError 
+  background: $support-error !important
