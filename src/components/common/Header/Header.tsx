@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
@@ -30,6 +30,14 @@ export const Header: React.FC<HeaderProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const [isMenuOpened, setIsMenuOpened] = useState(false);
+
+  useEffect(() => {
+    if (isMenuOpened) {
+      document.querySelector('body')?.classList.add('ReactModal__Body--open');
+    } else {
+      document.querySelector('body')?.classList.remove('ReactModal__Body--open');
+    }
+  }, [isMenuOpened]);
 
   return (
     <div className={s.wrapper}>
