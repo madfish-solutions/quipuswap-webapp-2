@@ -20,7 +20,7 @@ const modeClass = {
 
 export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
-  balance = '0.00',
+  balance = '10.00',
   label,
 }) => {
   const { t } = useTranslation(['common']);
@@ -29,6 +29,11 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 
   // const viewValue = new Intl.NumberFormat('en-US').format(value ? parseInt(value, 10) : 0);
   const viewValue = value;
+
+  const handle25 = () => setValue((parseFloat(balance) * 0.25).toString());
+  const handle50 = () => setValue((parseFloat(balance) * 0.5).toString());
+  const handle75 = () => setValue((parseFloat(balance) * 0.75).toString());
+  const handleMAX = () => setValue(balance);
 
   const convertValue = value + 1;
 
@@ -69,10 +74,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         </div>
       </div>
       <div className={cx(s.mleft16, s.flex, s.centerRow, s.mtop8)}>
-        <div className={s.btn}>25%</div>
-        <div className={s.btn}>50%</div>
-        <div className={s.btn}>75%</div>
-        <div className={s.btn}>MAX</div>
+        <div aria-hidden onClick={handle25} className={s.btn}>25%</div>
+        <div aria-hidden onClick={handle50} className={s.btn}>50%</div>
+        <div aria-hidden onClick={handle75} className={s.btn}>75%</div>
+        <div aria-hidden onClick={handleMAX} className={s.btn}>MAX</div>
 
       </div>
     </div>
