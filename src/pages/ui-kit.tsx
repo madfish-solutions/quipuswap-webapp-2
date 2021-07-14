@@ -1,21 +1,27 @@
-import { Logo } from '@components/svg/Logo';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
-import { Bage } from '@components/ui/Bage';
-import { Button } from '@components/ui/Button';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import {
-  Modal, BakerCell, ChooseListCell, PositionCell, SwapCell, TokenCell,
-} from '@components/ui/Modal';
-import { Switcher } from '@components/ui/Switcher';
-import { BaseLayout } from '@layouts/BaseLayout';
-import s from '@styles/UiKit.module.sass';
+import React, { useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import React, { useState } from 'react';
 
+import { BaseLayout } from '@layouts/BaseLayout';
+import { Button } from '@components/ui/Button';
+import { Bage } from '@components/ui/Bage';
+import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Modal } from '@components/ui/Modal';
+import {
+  BakerCell,
+  ChooseListCell,
+  PositionCell,
+  SwapCell,
+  TokenCell,
+} from '@components/ui/Modal/ModalCell';
+import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
+import { Logo } from '@components/svg/Logo';
+import { MenuClosed } from '@components/svg/MenuClosed';
+import { MenuOpened } from '@components/svg/MenuOpened';
+
+import s from '@styles/UiKit.module.sass';
 
 const TabsSmall = [
   {
@@ -259,7 +265,7 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Bage for popupCells</h1>
         <div className={s.cardsBlock}>
           <Bage text="FA 2.0" />
-          <Bage text="ID 0" />
+          <Bage text="ID: 0" />
 
         </div>
         <div className={s.cardsBlock}>
@@ -273,45 +279,64 @@ const UiKit: React.FC = () => {
           className={s.button}
           onClick={() => setShowExamplePopup(true)}
         >
-          Show popup
+          All modal cells popup
         </Button>
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
           title="title & list of components"
         >
-          <TokenCell token={{
-            name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'], price: '0.00',
-          }}
+          <TokenCell
+            token={{
+              name: 'Token',
+              label: 'Token',
+              badges: ['FA 2.0', 'ID: 0'],
+              price: '0.00',
+            }}
           />
           <ChooseListCell
             onChange={() => {}}
             isActive={false}
-            tokenList={{ name: 'Token', label: 'Token' }}
+            tokenList={{
+              name: 'Token',
+              label: 'Token',
+            }}
           />
-          <SwapCell transaction={{
-            fromValue: '7.11', fromCurrency: 'XTZ', toValue: '6.44', toCurrency: 'CRUNCH', date: Date.now(),
-          }}
+          <SwapCell
+            transaction={{
+              fromValue: '7.11',
+              fromCurrency: 'XTZ',
+              toValue: '6.44',
+              toCurrency: 'CRUNCH',
+              date: Date.now(),
+            }}
           />
           <PositionCell
             token1={{
-              name: 'Token', vote: '2.868', veto: '3.868', balance: '1.868',
+              name: 'Token',
+              vote: '2.868',
+              veto: '3.868',
+              balance: '1.868',
             }}
             token2={{ name: 'Token' }}
           />
-          <BakerCell baker={{
-            token: 'EVERSTAKE',
-            votes: '100,002.868',
-            fee: '10',
-            space: '1,000,000,000.00',
-            currency: 'TEZ',
-          }}
+          <BakerCell
+            baker={{
+              token: 'EVERSTAKE',
+              votes: '100,002.868',
+              fee: '10',
+              space: '1,000,000,000.00',
+              currency: 'TEZ',
+            }}
           />
           {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
             <TokenCell
               key={x}
               token={{
-                name: 'Token', label: 'Token', badges: ['FA 2.0', 'ID: 0'], price: '0.00',
+                name: 'Token',
+                label: 'Token',
+                badges: ['FA 2.0', 'ID: 0'],
+                price: '0.00',
               }}
             />
           ))}

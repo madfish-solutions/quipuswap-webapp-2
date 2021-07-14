@@ -24,7 +24,6 @@ export const Bage: React.FC<BageProps> = ({
     <div className={cx(modeClass[colorThemeMode], s.bageBorder, className)}>
       <div className={s.bage}>
         {text}
-
       </div>
     </div>
   );

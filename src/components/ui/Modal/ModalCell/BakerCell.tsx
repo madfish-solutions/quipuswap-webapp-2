@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import Token from '@icons/Token.svg';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { useTranslation } from 'next-i18next';
-import s from './Modal.module.sass';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import Token from '@icons/Token.svg';
+
+import s from './ModalCell.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -57,7 +58,6 @@ export const BakerCell: React.FC<BakerCellProps> = ({
             {baker?.currency}
           </span>
         </div>
-
       </div>
     </div>
   );

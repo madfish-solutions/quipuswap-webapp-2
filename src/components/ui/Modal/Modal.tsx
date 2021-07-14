@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
 import { PopupClose } from '@components/svg/PopupClose';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './Modal.module.sass';
-import { Button } from '../Button';
-import { Card } from '../Card';
 
 type ModalProps = {
   innerClassName?: string
@@ -29,28 +29,15 @@ export const Modal: React.FC<ModalProps> = ({
   onRequestClose,
   children,
   innerClassName,
-  withCloseButton = false,
   containerClassName,
   title = '',
   ...props
 }) => {
-  const compoundRootClassName = cx(
-    s.root,
-    className,
-  );
-
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const compoundContainerClassName = cx(
-    s.container,
-    { [s.withCloseButton]: withCloseButton },
-    modeClass[colorThemeMode],
-    containerClassName,
-  );
 
   return (
     <ReactModal
-      className={compoundRootClassName}
+      className={cx(s.root, className)}
       appElement={
         typeof window !== 'undefined'
           ? document.querySelector('#__next')!
@@ -71,25 +58,22 @@ export const Modal: React.FC<ModalProps> = ({
           }
         }}
       >
-        <div className={compoundContainerClassName}>
+        <div className={cx(s.container, containerClassName)}>
           <Card
-            content={(
-              <h5>
-                {title}
-              </h5>
-              )}
-            button={(
-              <Button
-                className={s.closeButton}
-                onClick={onRequestClose}
-                theme="quaternary"
-              >
-                <PopupClose />
-              </Button>
-              )}
+            header={{
+              content: <h5>{title}</h5>,
+              button: (
+                <Button
+                  className={s.closeButton}
+                  onClick={onRequestClose}
+                  theme="quaternary"
+                >
+                  <PopupClose />
+                </Button>
+              ),
+            }}
           >
             {children}
-
           </Card>
         </div>
       </div>
