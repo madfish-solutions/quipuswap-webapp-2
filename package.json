@@ -15,6 +15,7 @@
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "graphql": "^15.5.1",
+    "lightweight-charts": "^3.3.0",
     "next": "11.0.1",
     "next-i18next": "^8.5.3",
     "next-react-svg": "^1.1.3",
@@ -25,7 +26,6 @@
     "sass": "^1.35.1"
   },
   "devDependencies": {
-    "@types/react-modal": "^3.12.1",
     "@graphql-codegen/cli": "1.21.7",
     "@graphql-codegen/introspection": "^1.18.2",
     "@graphql-codegen/typescript": "1.23.0",
@@ -33,6 +33,7 @@
     "@graphql-codegen/typescript-react-apollo": "2.3.1",
     "@types/classnames": "^2.3.1",
     "@types/react": "^17.0.13",
+    "@types/react-modal": "^3.12.1",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "eslint": "^7.30.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
