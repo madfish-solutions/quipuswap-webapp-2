@@ -12,11 +12,17 @@ type InputProps = {
   readonly?: boolean
   className?: string
   label?: string
+  inputSize: keyof typeof sizeClass
   endAdornment?:React.ReactNode
   startAdornment?:React.ReactNode
 } & (
   | React.HTMLProps<HTMLInputElement>
 );
+
+const sizeClass = {
+  medium: s.medium,
+  small: s.small,
+};
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -24,6 +30,7 @@ const modeClass = {
 };
 
 export const Input: React.FC<InputProps> = ({
+  inputSize = 'medium',
   value = '',
   disabled = false,
   className,
@@ -37,24 +44,24 @@ export const Input: React.FC<InputProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isActive, setActive] = React.useState<boolean>(false);
 
-  const compoundClassName = cx(
-    s.inputBaseWrapper,
-    error && s.inputBaseError,
-    isActive && !disabled && !readonly && s.inputBaseActive,
-    disabled && s.inputBaseDisabled,
+  const compoundStatefulClassName = cx(
+    s.root,
+    error && s.error,
+    isActive && !disabled && !readonly && s.active,
+    disabled && s.disabled,
   );
   const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
-    s.base,
+    sizeClass[inputSize],
     className,
   );
   return (
     <div className={compoundBaseClassName}>
-      <div className={cx(s.label1, s.inputLabel)}>{label}</div>
-      <div className={compoundClassName}>
+      {label && <div className={cx(s.label1, s.label)}>{label}</div>}
+      <div className={compoundStatefulClassName}>
         <div className={s.inputBase}>
           {startAdornment && (
-          <div className={cx(s.adornment, s.startAdornment)}>
+          <div className={cx(s.adornment, s.start)}>
             {startAdornment}
           </div>
           )}
@@ -66,10 +73,10 @@ export const Input: React.FC<InputProps> = ({
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
             {...(props as React.HTMLProps<HTMLInputElement>)}
-            className={s.root}
+            className={s.input}
           />
           {endAdornment && (
-          <div className={cx(s.adornment, s.endAdornment)}>
+          <div className={cx(s.adornment, s.end)}>
             {endAdornment}
           </div>
           )}
@@ -77,7 +84,7 @@ export const Input: React.FC<InputProps> = ({
         </div>
       </div>
       {error && (
-      <div className={cx(s.caption, s.inputError)}>
+      <div className={cx(s.caption, s.errorLabel)}>
         {error}
       </div>
       )}

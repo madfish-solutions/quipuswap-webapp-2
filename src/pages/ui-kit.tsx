@@ -330,25 +330,13 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.inputsBlock}>
           <Input
-            endAdornment={<Chevron />}
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
-            label="From"
-            placeholder="Input placeholder"
-          />
-          <Input
-            startAdornment={<Search />}
-            className={s.input}
-            value={inputValue}
-            onChange={handleInputChange}
-            label="Vetos"
-            placeholder="Input placeholder"
+            placeholder="Custom"
+            inputSize="small"
           />
         </div>
-        {/* input with value and dropdown */}
-        {/* input with value */}
-        {/* input with icon */}
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Toggle Color theme</h1>

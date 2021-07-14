@@ -1,10 +1,7 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
-.base
-  display: block
-
-.inputBaseWrapper
+.root
   display: flex
   align-items: center
   padding: 1px
@@ -17,22 +14,32 @@
   align-items: center
   justify-content: center
 
-.startAdornment
+.start
   margin-right: 4px
 
-.endAdornment
+.end
   margin-left: 4px
 
 .inputBase
   display: flex
   align-items: center
-  padding: 8px 12px
+  padding: 8px 16px
   border-radius: 8px
-  min-height: 40px
-  &>.root
+  &>.input
     flex: 1
+
+.small
+  .inputBase
+    padding: 6px 0px
+    .input
+      width: 78px
+      display: flex
+      text-align: center
+      justify-content: center
+      align-items: center
+      font-weight: bold
   
-.root
+.input
   box-sizing: border-box
   font-family: $font
   font-style: normal
@@ -52,7 +59,7 @@
   font-size: 1rem
   line-height: 1.33
 
-.inputError
+.errorLabel
   margin-top: 8px
   color: $support-error
 
@@ -63,7 +70,7 @@
   font-size: 0.857rem
   line-height: 1.33
 
-.inputLabel
+.label
   margin-bottom: 8px
 
 .light
@@ -71,38 +78,46 @@
     color: $text-01
   .inputBase
     background: $ui-01
-  .root
+  .input
     color: $text-01
-  .inputBaseDisabled
+  .disabled
     .inputBase
       background: $ui-04
-    .root
+    .input
       color: $text-03
-  .inputBaseWrapper
+  .root
     background: $ui-04
-  .inputBaseActive
+  .active
     background: $brand-01
+  &.small
+    .inputBase
+      .input
+        &::placeholder 
+          color: $text-01
 
 .dark
   .label1
     color: $text-inverse
   .inputBase
     background: $ui-06
-  .root
+  .input
     color: $text-inverse
-  .inputBaseDisabled
+  .disabled
     .inputBase
       background: $ui-04
-    .root
+    .input
       color: $ui-05
-  .inputBaseWrapper
+  .root
     background: $text-02
-  .inputBaseActive
+  .active
     background: $brand-02
-  .inputBaseDisabled
-    background: $ui-04
   .inputError
     font-weight: 700
+  &.small
+    .inputBase
+      .input
+        &::placeholder 
+          color: $text-inverse
 
-.inputBaseError 
+.error 
   background: $support-error !important
