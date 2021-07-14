@@ -12,7 +12,8 @@ type InputProps = {
   readonly?: boolean
   className?: string
   label?: string
-  select?:boolean
+  endAdornment?:React.ReactNode
+  startAdornment?:React.ReactNode
 } & (
   | React.HTMLProps<HTMLInputElement>
 );
@@ -29,7 +30,8 @@ export const Input: React.FC<InputProps> = ({
   readonly = false,
   label = '',
   error = '',
-  select,
+  endAdornment,
+  startAdornment,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -39,6 +41,7 @@ export const Input: React.FC<InputProps> = ({
     s.inputBaseWrapper,
     error && s.inputBaseError,
     isActive && !disabled && !readonly && s.inputBaseActive,
+    disabled && s.inputBaseDisabled,
   );
   const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
@@ -50,6 +53,11 @@ export const Input: React.FC<InputProps> = ({
       <div className={cx(s.label1, s.inputLabel)}>{label}</div>
       <div className={compoundClassName}>
         <div className={s.inputBase}>
+          {startAdornment && (
+          <div className={cx(s.adornment, s.startAdornment)}>
+            {startAdornment}
+          </div>
+          )}
           <input
             value={value}
             disabled={disabled}
@@ -60,8 +68,13 @@ export const Input: React.FC<InputProps> = ({
             {...(props as React.HTMLProps<HTMLInputElement>)}
             className={s.root}
           />
-        </div>
+          {endAdornment && (
+          <div className={cx(s.adornment, s.endAdornment)}>
+            {endAdornment}
+          </div>
+          )}
 
+        </div>
       </div>
       {error && (
       <div className={cx(s.caption, s.inputError)}>

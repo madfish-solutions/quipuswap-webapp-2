@@ -5,31 +5,40 @@
   display: block
 
 .inputBaseWrapper
+  display: flex
+  align-items: center
   padding: 1px
   border-radius: 9px
+  &>.inputBase
+    flex: 1
+
+.adornment
+  display: flex
+  align-items: center
+  justify-content: center
+
+.startAdornment
+  margin-right: 4px
+
+.endAdornment
+  margin-left: 4px
 
 .inputBase
-  box-sizing: border-box
+  display: flex
+  align-items: center
+  padding: 8px 12px
   border-radius: 8px
   min-height: 40px
+  &>.root
+    flex: 1
+  
+.root
+  box-sizing: border-box
   font-family: $font
   font-style: normal
   font-weight: normal
   font-size: 0.875rem
   line-height: 1.71
-  display: flex
-  align-items: center
-  outline: none
-
-.root
-  padding: 12px 16px
-  box-sizing: border-box
-  border-radius: 8px
-  font-family: $font
-  font-style: normal
-  font-weight: normal
-  font-size: 0.875rem
-  height: 16px
   display: flex
   align-items: center
   outline: none
@@ -60,25 +69,40 @@
 .light
   .label1
     color: $text-01
-  .root
-    background: $ui-01
   .inputBase
-    background: $ui-04
-    border: 1px solid $ui-04
+    background: $ui-01
+  .root
     color: $text-01
+  .inputBaseDisabled
+    .inputBase
+      background: $ui-04
+    .root
+      color: $text-03
+  .inputBaseWrapper
+    background: $ui-04
   .inputBaseActive
     background: $brand-01
 
 .dark
   .label1
     color: $text-inverse
-  .root
-    background: $ui-06
   .inputBase
-    background: $text-02
+    background: $ui-06
+  .root
     color: $text-inverse
+  .inputBaseDisabled
+    .inputBase
+      background: $ui-04
+    .root
+      color: $ui-05
+  .inputBaseWrapper
+    background: $text-02
   .inputBaseActive
     background: $brand-02
+  .inputBaseDisabled
+    background: $ui-04
+  .inputError
+    font-weight: 700
 
 .inputBaseError 
   background: $support-error !important

@@ -14,6 +14,8 @@ import s from '@styles/UiKit.module.sass';
 import { Switcher } from '@components/ui/Switcher';
 import { Input } from '@components/ui/Input';
 import { Tabs } from '@components/ui/Tabs';
+import Search from '@icons/Search.svg';
+import Chevron from '@icons/Chevron.svg';
 
 const TabsSmall = [
   {
@@ -285,14 +287,14 @@ const UiKit: React.FC = () => {
             className={s.input}
             value={inputValue}
             readonly
-            label="Input label"
+            label="Readonly input"
             placeholder="Input placeholder"
           />
           <Input
             className={s.input}
             value={inputValue}
             disabled
-            label="Input label"
+            label="Disabled input"
             placeholder="Input placeholder"
           />
         </div>
@@ -302,14 +304,44 @@ const UiKit: React.FC = () => {
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
-            label="Input label"
+            label="Error input"
+            placeholder="Input placeholder"
+          />
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            endAdornment={<Chevron />}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="End icon (dropdown) input"
             placeholder="Input placeholder"
           />
           <Input
-            select
+            startAdornment={<Search />}
             className={s.input}
+            value={inputValue}
             onChange={handleInputChange}
-            label="Input label"
+            label="Start icon input"
+            placeholder="Input placeholder"
+          />
+
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            endAdornment={<Chevron />}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="From"
+            placeholder="Input placeholder"
+          />
+          <Input
+            startAdornment={<Search />}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Vetos"
             placeholder="Input placeholder"
           />
         </div>
