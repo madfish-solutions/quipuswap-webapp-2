@@ -302,7 +302,6 @@ const UiKit: React.FC = () => {
           <Input
             className={s.input}
             value={inputValue}
-            readonly
             label="Readonly input"
             placeholder="Input placeholder"
           />
