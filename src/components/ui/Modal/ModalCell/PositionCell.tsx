@@ -1,9 +1,10 @@
 import React, { useContext } from 'react';
-import Token from '@icons/Token.svg';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { useTranslation } from 'next-i18next';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import Token from '@icons/Token.svg';
+
 import s from './ModalCell.module.sass';
 
 type PositionCellProps = {

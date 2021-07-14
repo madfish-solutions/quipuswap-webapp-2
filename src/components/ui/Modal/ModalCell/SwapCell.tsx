@@ -1,8 +1,8 @@
 import { useTranslation } from 'next-i18next';
 import React, { useContext } from 'react';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import s from './ModalCell.module.sass';
 
@@ -20,8 +20,9 @@ export const SwapCell: React.FC<SwapCellProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
+    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow, s.centerRow)}>
       <div>
         <div className={s.caption}>{new Date(transaction?.date).toISOString()}</div>
         <div className={cx(s.joinRow, s.centerRow, s.swapFrom)}>

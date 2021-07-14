@@ -37,13 +37,11 @@ export const TokenCell: React.FC<TokenCellProps> = ({
                 text={x}
               />
             )) }
-
           </div>
           <span className={s.caption}>
             {token?.label}
           </span>
         </div>
-
       </div>
       <h6>{token?.price}</h6>
     </div>

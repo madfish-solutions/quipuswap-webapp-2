@@ -25,7 +25,7 @@
   align-items: center
 
 .centerLabel 
-  margin: 0px 8px
+  margin: 0 8px
 
 .clickable 
   cursor: pointer
@@ -44,13 +44,13 @@
   display: flex
   align-items: center
   justify-content: space-between
-  &>.tokenCellChild
+
+.tokenCellChild
+  &:not(:first-child)
     margin-left: 8px
-  &>.tokenCellChild:first-child
-    margin: 0px
 
 .swapFrom
-  margin: 8px 0px
+  margin: 8px 0
 
 .bakerCell
   flex: 1
@@ -61,14 +61,15 @@
 .bakerFlexCell 
   display: flex
   align-items: center
-  .h6
-    margin-left: 8px
-  &:not(last-child)
+  &:not(:last-child)
     margin-bottom: 8px
+
+.h6
+  margin-left: 8px
 
 .bakerBlock 
   display: block
-  &:not(last-child)
+  &:not(:last-child)
     margin-right: 24px
 
 .positionBlockCell
@@ -76,13 +77,12 @@
   display: flex
   align-items: center
   margin-bottom: 8px
-  .h6 
-    margin-left: 8px
-  
+
 .tokenGroup
   display: flex
-  &>.tokenItem:last-child
-    margin-left: -8px
+
+.tokenItem:last-child
+  margin-left: -8px
 
 .bodyTextLink1
   font-weight: bold
@@ -100,37 +100,40 @@
   position: relative
   font-weight: 600
   cursor: pointer
-
-.swapLink:after
-  position: absolute
-  content: ''
-  height: 1px
-  bottom: -1px
-  left: 0px
-  width: 100%
+  &::after
+    position: absolute
+    content: ''
+    height: 1px
+    bottom: 1px
+    left: 0
+    width: 100%
 
 .light
-  border-bottom: 1px solid $ui-03
+  &:not(:last-child)
+    border-bottom: 1px solid $ui-03
   &:hover
      background-color: $hover-light-row
   .label1
     color: $hover-dark-row
-  .swapLink:after
-    background: $hover-primary-01
   .swapLink
+    color: $hover-primary-01-fallback
     background: $hover-primary-01
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
+    &::after
+      background: $hover-primary-01
 
 .dark
-  border-bottom: 1px solid $ui-06
+  &:not(:last-child)
+    border-bottom: 1px solid $ui-06
   &:hover
     background-color: $hover-dark-row
   .label1
     color: $text-inverse
-  .swapLink:before
-    background: $hover-primary-02
   .swapLink
+    color: $hover-primary-02-fallback
     background: $hover-primary-02
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
+    &::after
+      background: $hover-primary-02

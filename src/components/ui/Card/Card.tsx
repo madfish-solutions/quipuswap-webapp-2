@@ -28,7 +28,7 @@ export const Card: React.FC<CardProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(s.card, modeClass[colorThemeMode], className)}>
+    <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {header && (
         <div className={cx(s.header, header.className)}>
           {header.content}

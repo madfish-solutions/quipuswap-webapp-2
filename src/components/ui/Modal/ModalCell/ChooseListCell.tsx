@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import Token from '@icons/Token.svg';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Switcher } from '@components/ui/Switcher';
+import Token from '@icons/Token.svg';
+
 import s from './ModalCell.module.sass';
-import { Switcher } from '../../Switcher';
 
 type ChooseListCellProps = {
   tokenList?: any,

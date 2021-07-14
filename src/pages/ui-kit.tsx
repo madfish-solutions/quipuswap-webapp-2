@@ -265,7 +265,7 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Bage for popupCells</h1>
         <div className={s.cardsBlock}>
           <Bage text="FA 2.0" />
-          <Bage text="ID 0" />
+          <Bage text="ID: 0" />
 
         </div>
         <div className={s.cardsBlock}>
@@ -279,7 +279,7 @@ const UiKit: React.FC = () => {
           className={s.button}
           onClick={() => setShowExamplePopup(true)}
         >
-          Show popup
+          All modal cells popup
         </Button>
         <Modal
           isOpen={showExamplePopup}
