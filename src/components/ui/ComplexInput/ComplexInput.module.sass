@@ -1,0 +1,107 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+  
+.label 
+  font-family: $font
+  font-style: normal
+  font-weight: 600
+  font-size: 1rem
+  line-height: 1.14
+  color: $text-03
+  margin-bottom: 8px
+
+.caption
+  font-family: $font
+  font-style: normal
+  font-weight: normal
+  font-size: 0.857rem
+  line-height: 1.33
+  color: $text-03
+
+.label2
+  font-family: $font
+  font-style: normal
+  font-weight: bold
+  font-size: 0.857rem
+  line-height: 1.33
+  color: $text-03
+
+.shape
+  box-sizing: border-box
+  border-radius: 8px
+  padding: 16px
+
+.flex
+  display: flex
+
+.mleft8 
+  margin-left: 8px
+
+.mleft16
+  margin-left: 16px
+
+.mtop8
+  margin-top: 8px
+
+.btn
+  position: relative
+  font-weight: 600
+  cursor: pointer
+  &::after
+    position: absolute
+    content: ''
+    height: 1px
+    bottom: 1px
+    left: 0
+    width: 100%
+  &:not(:last-child)
+    margin-right: 24px
+
+.centerRow
+  align-items: center
+
+.splitRow
+  justify-content: space-between
+
+.input
+  background: transparent
+  outline: none
+  border: none
+  font-family: $font
+  font-style: normal
+  font-weight: 600
+  font-size: 1.714rem
+  line-height: 1.33
+
+
+.botRow
+  margin-top: 12px
+
+.light
+  .btn
+    color: $hover-primary-01-fallback
+    background: $hover-primary-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+  .input, .fWhite
+    color: $text-01
+  .shape
+    background: $ui-02
+    border: 1px solid $ui-03
+
+.dark
+  .btn
+    color: $hover-primary-02-fallback
+    background: $hover-primary-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+  .input, .fWhite
+    color: $text-inverse
+  .shape
+    background: $ui-06
+    border: 1px solid $text-02
+
+@include media('>tablet')
+  .btn
+    &:not(:last-child)
+      margin-right: 8px
