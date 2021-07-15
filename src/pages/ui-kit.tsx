@@ -295,12 +295,14 @@ const UiKit: React.FC = () => {
             value={inputValue}
             onChange={handleInputChange}
             label="Input label"
+            id="input-01"
           />
           <Input
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
             label="Input label"
+            id="input-02"
             placeholder="Input placeholder"
           />
         </div>
@@ -309,6 +311,7 @@ const UiKit: React.FC = () => {
             className={s.input}
             value={inputValue}
             label="Readonly input"
+            id="input-03"
             placeholder="Input placeholder"
           />
           <Input
@@ -316,6 +319,7 @@ const UiKit: React.FC = () => {
             value={inputValue}
             disabled
             label="Disabled input"
+            id="input-04"
             placeholder="Input placeholder"
           />
         </div>
@@ -326,31 +330,34 @@ const UiKit: React.FC = () => {
             value={inputValue}
             onChange={handleInputChange}
             label="Error input"
+            id="input-05"
             placeholder="Input placeholder"
           />
         </div>
         <div className={s.inputsBlock}>
           <Input
-            endAdornment={<Chevron />}
+            EndAdornment={Chevron}
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
             label="End icon (dropdown) input"
+            id="input-06"
             placeholder="Input placeholder"
           />
           <Input
-            startAdornment={<Search />}
+            StartAdornment={Search}
             className={s.input}
             value={inputValue}
             onChange={handleInputChange}
             label="Start icon input"
+            id="input-07"
             placeholder="Input placeholder"
           />
 
         </div>
         <div className={s.inputsBlock}>
           <Input
-            className={s.input}
+            className={cx(s.input, s.inputSmall)}
             value={inputValue}
             onChange={handleInputChange}
             placeholder="Custom"
