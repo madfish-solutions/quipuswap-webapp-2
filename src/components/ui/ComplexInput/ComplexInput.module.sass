@@ -2,25 +2,17 @@
 @import "@styles/breakpoints"
   
 .label 
-  font-family: $font
-  font-style: normal
   font-weight: 600
-  font-size: 1rem
   line-height: 1.14
   color: $text-03
   margin-bottom: 8px
 
 .caption
-  font-family: $font
-  font-style: normal
-  font-weight: normal
   font-size: 0.857rem
   line-height: 1.33
   color: $text-03
 
 .label2
-  font-family: $font
-  font-style: normal
   font-weight: bold
   font-size: 0.857rem
   line-height: 1.33
@@ -50,17 +42,8 @@
   align-items: center
   order: 1
 
-.flex
-  display: flex
-
-.mleft8 
+.token
   margin-left: 8px
-
-.mleft16
-  margin-left: 16px
-
-.mtop8
-  margin-top: 8px
 
 .btn
   position: relative
@@ -76,9 +59,6 @@
   &:not(:last-child)
     margin-right: 24px
 
-.centerRow
-  align-items: center
-
 .input
   background: transparent
   outline: none
@@ -89,13 +69,22 @@
   font-size: 1.714rem
   line-height: 1.33
 
+.controls 
+  margin-left: 16px
+  display: flex
+  align-items: center
+  margin-top: 8px
+
+.price
+  margin-left: 8px
+
 .light
   .btn
     color: $hover-primary-01-fallback
     background: $hover-primary-01
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
-  .input, .fWhite
+  .input, .price
     color: $text-01
   .shape
     background: $ui-02
@@ -107,7 +96,7 @@
     background: $hover-primary-02
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
-  .input, .fWhite
+  .input, .price
     color: $text-inverse
   .shape
     background: $ui-06

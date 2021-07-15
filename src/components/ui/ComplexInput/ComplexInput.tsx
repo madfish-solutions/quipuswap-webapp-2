@@ -52,7 +52,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             {t('common:Balance')}
             :
           </div>
-          <div className={cx(s.label2, s.fWhite, s.mleft8)}>
+          <div className={cx(s.label2, s.price)}>
             {prettyPrice(parseFloat(balance))}
           </div>
         </div>
@@ -64,13 +64,13 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         />
         <div className={cx(s.item4)}>
           <Token />
-          <h6 className={cx(s.mleft8)}>
+          <h6 className={cx(s.token)}>
             TOKEN
           </h6>
           <Shevron />
         </div>
       </div>
-      <div className={cx(s.mleft16, s.flex, s.centerRow, s.mtop8)}>
+      <div className={s.controls}>
         <div aria-hidden onClick={handle25} className={s.btn}>25%</div>
         <div aria-hidden onClick={handle50} className={s.btn}>50%</div>
         <div aria-hidden onClick={handle75} className={s.btn}>75%</div>
