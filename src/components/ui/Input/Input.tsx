@@ -1,4 +1,3 @@
-/* eslint-disable react/button-has-type */
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
@@ -42,9 +41,9 @@ export const Input: React.FC<InputProps> = ({
 
   const compoundClassName = cx(
     s.root,
-    { [s.start]: StartAdornment!! },
-    { [s.end]: EndAdornment!! },
-    { [s.error]: error!! },
+    { [s.start]: !!StartAdornment },
+    { [s.end]: !!EndAdornment },
+    { [s.error]: !!error },
     { [s.focused]: focused },
     { [s.disabled]: disabled },
     modeClass[colorThemeMode],
@@ -60,7 +59,7 @@ export const Input: React.FC<InputProps> = ({
         </label>
       )}
       <div className={s.background}>
-        {StartAdornment!! && (
+        {!!StartAdornment && (
           <StartAdornment className={s.adornment} />
         )}
         <input
@@ -71,7 +70,7 @@ export const Input: React.FC<InputProps> = ({
           className={s.input}
           {...props}
         />
-        {EndAdornment!! && (
+        {!!EndAdornment && (
           <EndAdornment className={s.adornment} />
         )}
       </div>
