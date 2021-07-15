@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -15,6 +15,7 @@ type ComplexInputProps = {
   balance?: string
   label: string
   error?: string
+  handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
@@ -26,6 +27,9 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
   balance = '10.00',
   label,
+  handleBalance,
+  value,
+  readOnly,
   error,
   id,
   ...props
@@ -33,23 +37,21 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
-  const [value, onChange] = React.useState<string>('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handle25 = () => !!onChange && onChange((parseFloat(balance) * 0.25).toString());
-  const handle50 = () => !!onChange && onChange((parseFloat(balance) * 0.5).toString());
-  const handle75 = () => !!onChange && onChange((parseFloat(balance) * 0.75).toString());
-  const handleMAX = () => !!onChange && onChange(balance);
+  // TODO: Change logic of buttons and dollar when connect to SDK
+  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
-    { [s.error]: !!error },
+    { [s.error]: !readOnly && !!error },
+    { [s.readOnly]: readOnly },
     modeClass[colorThemeMode],
     className,
   );
 
   const focusInput = () => {
-    if (inputRef?.current) {
+    if (inputRef?.current && !readOnly) {
       inputRef.current.focus();
     }
   };
@@ -69,7 +71,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           <div className={cx(s.item1, s.label2)}>
             = $
             {' '}
-            {prettyPrice(parseFloat(value || '0'))}
+            {prettyPrice(parseFloat(dollarEquivalent || '0'))}
           </div>
           <div className={cx(s.item2)}>
             <span className={s.caption}>
@@ -83,57 +85,63 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 
           <input
             className={cx(s.item3, s.input)}
-            {...props}
-            value={value}
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
             ref={inputRef}
+            readOnly={readOnly}
+            value={value}
+            {...props}
           />
-          <Button theme="quaternary" className={s.item4}>
+          <Button theme="quaternary" className={s.item4} disabled={readOnly}>
             <Token />
             <h6 className={cx(s.token)}>
               TOKEN
             </h6>
-            <Shevron />
+            {!readOnly && (<Shevron />)}
           </Button>
         </div>
       </div>
-      <div className={s.controls}>
-        <Button
-          theme="quaternary"
-          onClick={handle25}
-          className={s.btn}
-        >
-          25%
-        </Button>
-        <Button
-          theme="quaternary"
-          onClick={handle50}
-          className={s.btn}
-        >
-          50%
-        </Button>
-        <Button
-          theme="quaternary"
-          onClick={handle75}
-          className={s.btn}
-        >
-          75%
-        </Button>
-        <Button
-          theme="quaternary"
-          onClick={handleMAX}
-          className={s.btn}
-        >
-          MAX
-        </Button>
-      </div>
-      <div className={s.errorContainer}>
-        <p className={cx(s.errorLabel)}>
-          {error}
-        </p>
-      </div>
+      {!readOnly && handleBalance && (
+        <div className={s.controls}>
+          <Button
+            theme="quaternary"
+            onClick={() => handleBalance((parseFloat(balance) * 0.25).toString())}
+            className={s.btn}
+          >
+            25%
+          </Button>
+          <Button
+            theme="quaternary"
+            onClick={() => handleBalance((parseFloat(balance) * 0.5).toString())}
+            className={s.btn}
+          >
+            50%
+          </Button>
+          <Button
+            theme="quaternary"
+            onClick={() => handleBalance((parseFloat(balance) * 0.75).toString())}
+            className={s.btn}
+          >
+            75%
+          </Button>
+          <Button
+            theme="quaternary"
+            onClick={() => handleBalance(balance)}
+            className={s.btn}
+          >
+            MAX
+          </Button>
+        </div>
+      )}
+      {
+        !readOnly && (
+          <div className={s.errorContainer}>
+            <p className={cx(s.errorLabel)}>
+              {error}
+            </p>
+          </div>
+        )
+      }
     </div>
   );
 };

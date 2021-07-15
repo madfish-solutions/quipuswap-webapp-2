@@ -46,6 +46,8 @@
   display: flex
   align-items: center
   order: 1
+  &:disabled:hover
+    cursor: default
 
 .token
   margin-left: 8px
@@ -100,36 +102,44 @@
   color: $support-error
 
 .light
-  .btn
-    color: $hover-primary-01-fallback
-    background: $hover-primary-01
-    -webkit-background-clip: text
-    -webkit-text-fill-color: transparent
-  .input, .price
-    color: $text-01
-    caret-color: $hover-primary-01-fallback
+  &:not(.readOnly)
+    .btn
+      color: $hover-primary-01-fallback
+      background: $hover-primary-01
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+    .input
+      caret-color: $hover-primary-01-fallback
+    &.focused .background
+      background: $brand-01
   .background
     background: $ui-03
   .shape
     background: $ui-02
-  &.focused .background
-    background: $brand-01
+  .input, .price
+    color: $text-01
 
 .dark
-  .btn
-    color: $hover-primary-02-fallback
-    background: $hover-primary-02
-    -webkit-background-clip: text
-    -webkit-text-fill-color: transparent
-  .input, .price
-    color: $text-inverse
-    caret-color: $hover-primary-02-fallback
+  &:not(.readOnly)
+    .btn
+      color: $hover-primary-02-fallback
+      background: $hover-primary-02
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+    .input
+      caret-color: $hover-primary-02-fallback
+    &.focused .background
+      background: $brand-02
   .background
     background: $text-02
   .shape
     background: $ui-06
-  &.focused .background
-    background: $brand-02
+  .input, .price
+    color: $text-inverse
+
+.readOnly
+  .input
+    color: $text-03
 
 @include media('>tablet')
   .shape
@@ -146,7 +156,7 @@
     display: flex
     justify-content: flex-end
     margin-left: 32px
-    flex-basis: content
+    flex-basis: unset
   .item3
     margin-top: 8px
     order: 3

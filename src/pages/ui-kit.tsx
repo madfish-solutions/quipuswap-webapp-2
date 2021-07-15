@@ -22,7 +22,7 @@ import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
-import { ComplexInput, ComplexOutput } from '@components/ui/ComplexInput';
+import { ComplexInput } from '@components/ui/ComplexInput';
 import { SelectUI } from '@components/ui/Select';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import Search from '@icons/Search.svg';
@@ -89,7 +89,7 @@ const UiKit: React.FC = () => {
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
-  const handleInputChange = (state:any) => setInputValue(state.target.value);
+  const handleInputChange = (state: any) => setInputValue(state.target.value);
 
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
@@ -320,6 +320,7 @@ const UiKit: React.FC = () => {
           <Input
             className={s.input}
             value={inputValue}
+            readOnly
             label="Readonly input"
             id="input-03"
             placeholder="Input placeholder"
@@ -474,14 +475,18 @@ const UiKit: React.FC = () => {
           <ComplexInput
             value={inputValue}
             onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
             id="complexInput-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
             label="Input"
           />
         </div>
         <div className={s.complexInput}>
-          <ComplexOutput
-            label="Input"
+          <ComplexInput
+            value={123}
+            readOnly
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            label="Output"
           />
         </div>
         {/* input */}
