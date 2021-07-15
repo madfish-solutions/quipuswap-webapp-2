@@ -30,11 +30,6 @@ export const ComplexOutput: React.FC<ComplexOutputProps> = ({
 
   const viewValue = value;
 
-  const handle25 = () => setValue((parseFloat(balance) * 0.25).toString());
-  const handle50 = () => setValue((parseFloat(balance) * 0.5).toString());
-  const handle75 = () => setValue((parseFloat(balance) * 0.75).toString());
-  const handleMAX = () => setValue(balance);
-
   const convertValue = value + 1;
 
   return (
@@ -67,13 +62,6 @@ export const ComplexOutput: React.FC<ComplexOutputProps> = ({
             TOKEN
           </h6>
         </div>
-      </div>
-      <div className={s.controls}>
-        <div aria-hidden onClick={handle25} className={s.btn}>25%</div>
-        <div aria-hidden onClick={handle50} className={s.btn}>50%</div>
-        <div aria-hidden onClick={handle75} className={s.btn}>75%</div>
-        <div aria-hidden onClick={handleMAX} className={s.btn}>MAX</div>
-
       </div>
     </div>
   );
