@@ -1,6 +1,6 @@
+import React, { useContext, useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React, { useContext, useState } from 'react';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
@@ -8,12 +8,13 @@ import { Shevron } from '@components/svg/Shevron';
 import Token from '@icons/Token.svg';
 
 import s from './ComplexInput.module.sass';
+import { Button } from '../Button';
 
 type ComplexInputProps = {
   className?: string,
   balance?: string,
   label?:string
-};
+} & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -24,6 +25,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
   balance = '10.00',
   label,
+  ...props
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -49,7 +51,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         </div>
         <div className={cx(s.item2)}>
           <div className={s.caption}>
-            {t('common:Balance')}
+            {t('common:Total Balance')}
             :
           </div>
           <div className={cx(s.label2, s.price)}>
@@ -61,6 +63,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           className={cx(s.item3, s.input)}
           value={viewValue}
           onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+          {...props}
         />
         <div className={cx(s.item4)}>
           <Token />
@@ -71,10 +74,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         </div>
       </div>
       <div className={s.controls}>
-        <div aria-hidden onClick={handle25} className={s.btn}>25%</div>
-        <div aria-hidden onClick={handle50} className={s.btn}>50%</div>
-        <div aria-hidden onClick={handle75} className={s.btn}>75%</div>
-        <div aria-hidden onClick={handleMAX} className={s.btn}>MAX</div>
+        <Button theme="quaternary" onClick={handle25} className={s.btn}>25%</Button>
+        <Button theme="quaternary" onClick={handle50} className={s.btn}>50%</Button>
+        <Button theme="quaternary" onClick={handle75} className={s.btn}>75%</Button>
+        <Button theme="quaternary" onClick={handleMAX} className={s.btn}>MAX</Button>
 
       </div>
     </div>

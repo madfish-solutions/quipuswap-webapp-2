@@ -1,6 +1,6 @@
+import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React, { useContext } from 'react';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
