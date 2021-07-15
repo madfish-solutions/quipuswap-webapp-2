@@ -36,9 +36,13 @@
 .item1
   order: 2
 .item2
+  display: flex
   margin: 8px 0px
   order: 3
-  display: flex
+  flex-basis: 100%
+.item2Block
+  margin: 8px 0px
+  order: 3
   flex-basis: 100%
 .item3
   order: 4
@@ -48,6 +52,10 @@
   display: flex
   align-items: center
   order: 1
+
+.item2Line
+  display: flex
+  align-items: center
 
 .token
   margin-left: 8px
@@ -141,6 +149,8 @@
     background: $brand-02
 
 @include media('>tablet')
+  .item2Line
+    justify-content: flex-end
   .shape
     justify-content: space-between
   .item1
@@ -152,6 +162,12 @@
     width: max-content
     display: flex
     justify-content: flex-end
+    flex-basis: 50%
+    flex-grow: 1
+  .item2Block
+    margin: 0px
+    order: 2
+    width: max-content
     flex-basis: 50%
     flex-grow: 1
   .item3
