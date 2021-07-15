@@ -47,6 +47,7 @@ export const Input: React.FC<InputProps> = ({
   const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
     sizeClass[inputSize],
+    { [s.pad]: endAdornment || startAdornment },
     { [s.error]: error },
     { [s.focused]: focused },
     className,
