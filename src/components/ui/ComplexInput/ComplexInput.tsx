@@ -5,6 +5,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import Token from '@icons/Token.svg';
 
 import { Shevron } from '@components/svg/Shevron';
+import { prettyPrice } from '@utils/helpers';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
@@ -41,36 +42,32 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     <div className={cx(modeClass[colorThemeMode], className)}>
       <div className={s.label}>{label}</div>
       <div className={s.shape}>
-        <div className={cx(s.flex, s.centerRow, s.splitRow, s.topRow)}>
-          <div className={s.label2}>
-            = $
-            {' '}
-            {convertValue}
-          </div>
-          <div className={s.flex}>
-            <div className={s.caption}>
-              {t('common:Balance')}
-              :
-            </div>
-            <div className={cx(s.label2, s.fWhite, s.mleft8)}>
-              {balance}
-            </div>
-          </div>
-
+        <div className={cx(s.item1, s.label2)}>
+          = $
+          {' '}
+          {convertValue}
         </div>
-        <div className={cx(s.flex, s.centerRow, s.splitRow, s.botRow)}>
-          <input
-            className={s.input}
-            value={viewValue}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-          />
-          <div className={cx(s.flex, s.centerRow)}>
-            <Token />
-            <h6 className={cx(s.mleft8)}>
-              TOKEN
-            </h6>
-            <Shevron />
+        <div className={cx(s.item2)}>
+          <div className={s.caption}>
+            {t('common:Balance')}
+            :
           </div>
+          <div className={cx(s.label2, s.fWhite, s.mleft8)}>
+            {prettyPrice(parseFloat(balance))}
+          </div>
+        </div>
+
+        <input
+          className={cx(s.item3, s.input)}
+          value={viewValue}
+          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
+        />
+        <div className={cx(s.item4)}>
+          <Token />
+          <h6 className={cx(s.mleft8)}>
+            TOKEN
+          </h6>
+          <Shevron />
         </div>
       </div>
       <div className={cx(s.mleft16, s.flex, s.centerRow, s.mtop8)}>

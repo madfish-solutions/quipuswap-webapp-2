@@ -27,9 +27,26 @@
   color: $text-03
 
 .shape
+  display: grid
+  grid-gap: 8px
+  grid-template-columns: repeat(2, 1fr, minmax(20px, 1fr))
+  grid-template-rows: repeat(3, auto)
+  grid-template-areas: "a b" "c c" "d d"
   box-sizing: border-box
   border-radius: 8px
   padding: 16px
+
+.item1
+  grid-area: b
+.item2
+  display: flex
+  grid-area: c
+.item3
+  grid-area: d
+.item4
+  grid-area: a
+  display: flex
+  align-items: center
 
 .flex
   display: flex
@@ -60,9 +77,6 @@
 .centerRow
   align-items: center
 
-.splitRow
-  justify-content: space-between
-
 .input
   background: transparent
   outline: none
@@ -72,10 +86,6 @@
   font-weight: 600
   font-size: 1.714rem
   line-height: 1.33
-
-
-.botRow
-  margin-top: 12px
 
 .light
   .btn
@@ -102,6 +112,25 @@
     border: 1px solid $text-02
 
 @include media('>tablet')
+  .shape
+    grid-template-columns: repeat(2, auto)
+    grid-template-areas: "a b" "c d"
+    grid-gap: 0px
+    row-gap: 12px
+  .item1
+    grid-area: a
+  .item2
+    grid-area: b
+    display: flex
+    justify-content: flex-end
+    justify-self: end
+  .item3
+    grid-area: c
+  .item4
+    display: flex
+    align-items: center
+    justify-self: end
+    grid-area: d
   .btn
     &:not(:last-child)
       margin-right: 8px
