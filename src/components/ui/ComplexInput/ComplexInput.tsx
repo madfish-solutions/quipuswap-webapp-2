@@ -66,7 +66,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           <div className={cx(s.item1, s.label2)}>
             = $
             {' '}
-            {parseFloat(convertValue) ? prettyPrice(parseFloat(convertValue)) : ''}
+            {prettyPrice(parseFloat(convertValue || '0'))}
           </div>
           <div className={cx(s.item2)}>
             <div className={s.caption}>

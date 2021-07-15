@@ -159,21 +159,27 @@
     justify-content: space-between
   .item1
     order: 1
+    flex-grow: 1
     flex-basis: 50%
+    overflow: hidden
   .item2
     margin: 0px
     order: 2
-    width: max-content
     display: flex
     justify-content: flex-end
     flex-basis: 50%
     flex-grow: 1
+    margin-left: 32px
+    flex-basis: unset
+    flex-basis: content
   .item2Block
     margin: 0px
     order: 2
     width: max-content
-    flex-basis: 50%
     flex-grow: 1
+    margin-left: 32px
+    flex-basis: unset
+    flex-basis: content
   .item3
     margin-top: 8px
     order: 3
@@ -185,7 +191,8 @@
     align-items: center
     justify-content: flex-end
     order: 4
-    flex-basis: 50%
+    flex-basis: content
+    margin-left: 32px
   .btn
     &:not(:last-child)
       margin-right: 8px
