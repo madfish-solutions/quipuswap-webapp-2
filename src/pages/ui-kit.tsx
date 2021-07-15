@@ -28,7 +28,7 @@ import { MenuOpened } from '@components/svg/MenuOpened';
 import s from '@styles/UiKit.module.sass';
 import {
   ComplexBaker,
-  ComplexInput, ComplexOutput, ComplexSelect, ComplexVotes,
+  ComplexInput, ComplexOutput, ComplexRecipient, ComplexSelect, ComplexVotes,
 } from '@components/ui/ComplexInput';
 
 import Search from '@icons/Search.svg';
@@ -510,6 +510,14 @@ const UiKit: React.FC = () => {
           <ComplexBaker
             label="Baker"
             id="ComplexBaker-01"
+          />
+        </div>
+        <div className={s.complexInput}>
+          <ComplexRecipient
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Recipient address"
+            id="ComplexRecipient-01"
           />
         </div>
         {/* recipient address */}

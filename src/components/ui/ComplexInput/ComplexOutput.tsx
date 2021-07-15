@@ -42,7 +42,7 @@ export const ComplexOutput: React.FC<ComplexOutputProps> = ({
           <div className={cx(s.item1, s.label2)}>
             = $
             {' '}
-            {convertValue}
+            {parseFloat(convertValue) ? prettyPrice(parseFloat(convertValue)) : ''}
           </div>
           <div className={cx(s.item2)}>
             <div className={s.caption}>

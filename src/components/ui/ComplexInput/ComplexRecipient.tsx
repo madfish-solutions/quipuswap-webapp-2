@@ -1,22 +1,15 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
-import { Shevron } from '@components/svg/Shevron';
-import Token from '@icons/Token.svg';
 import { Button } from '../Button';
-import { PercentSelector } from './PercentSelector';
-import { ComplexError } from './ComplexError';
 
 import s from './ComplexInput.module.sass';
 
-type ComplexInputProps = {
+type ComplexRecipientProps = {
   className?: string,
-  balance?: string,
   label?:string,
-  error?:string,
 } & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
@@ -24,11 +17,9 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const ComplexInput: React.FC<ComplexInputProps> = ({
+export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   className,
-  balance = '10.00',
   label,
-  error,
   id,
   ...props
 }) => {
@@ -37,13 +28,8 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const [value, onChange] = React.useState<string>('');
 
-  const viewValue = value!!;
-
-  const convertValue = value!! && value.toString() + 1;
-
   const compoundClassName = cx(
     { [s.focused]: focused },
-    { [s.error]: error },
     modeClass[colorThemeMode],
     className,
   );
@@ -63,38 +49,22 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
       <div className={s.background}>
 
         <div className={s.shape}>
-          <div className={cx(s.item1, s.label2)}>
-            = $
-            {' '}
-            {parseFloat(convertValue) ? prettyPrice(parseFloat(convertValue)) : ''}
-          </div>
-          <div className={cx(s.item2)}>
-            <div className={s.caption}>
-              {t('common:Total Balance')}
-              :
-            </div>
-            <div className={cx(s.label2, s.price)}>
-              {prettyPrice(parseFloat(balance))}
-            </div>
-          </div>
+          <div className={cx(s.item1, s.label2)} />
+          <div className={s.item2} />
 
           <input
             className={cx(s.item3, s.input)}
             {...props}
-            value={viewValue}
+            value={value}
             onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           />
           <Button onMouseDown={(e:React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); e.stopPropagation(); }} theme="quaternary" className={cx(s.item4)}>
-            <Token />
-            <h6 className={cx(s.token)}>
-              TOKEN
-            </h6>
-            <Shevron />
+            <div className={cx(s.paste)}>
+              {t('swap:Paste')}
+            </div>
           </Button>
         </div>
       </div>
-      <PercentSelector value={balance} onChange={onChange} />
-      <ComplexError error={error} />
     </div>
   );
 };
