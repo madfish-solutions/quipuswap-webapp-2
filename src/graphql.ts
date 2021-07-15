@@ -502,6 +502,7 @@ export function useGetPairPlotLiquidityLazyQuery(
 }
 export type GetPairPlotLiquidityQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityQuery>;
 export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<
-typeof useGetPairPlotLiquidityLazyQuery>;
+typeof useGetPairPlotLiquidityLazyQuery
+>;
 export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery,
 GetPairPlotLiquidityQueryVariables>;

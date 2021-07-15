@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -21,10 +21,14 @@ import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
+import { Input } from '@components/ui/Input';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
 import { ComplexInput } from '@components/ui/ComplexInput';
+
+import Search from '@icons/Search.svg';
+import Chevron from '@icons/Chevron.svg';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -76,10 +80,17 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputError, setInputError] = useState<boolean>(false);
+  const handleInputChange = (state:any) => setInputValue(state.target.value);
 
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
   const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
+
+  useEffect(() => {
+    setInputError(inputValue.length > 7);
+  }, [inputValue]);
 
   return (
     <BaseLayout
@@ -262,6 +273,97 @@ const UiKit: React.FC = () => {
           >
             Quaternary
           </Button>
+        </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Inputs</h1>
+        <div className={s.inputsBlock}>
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Input placeholder"
+          />
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Input label"
+            id="input-01"
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Input label"
+            id="input-02"
+            placeholder="Input placeholder"
+          />
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            className={s.input}
+            value={inputValue}
+            label="Readonly input"
+            id="input-03"
+            placeholder="Input placeholder"
+          />
+          <Input
+            className={s.input}
+            value={inputValue}
+            disabled
+            label="Disabled input"
+            id="input-04"
+            placeholder="Input placeholder"
+          />
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Error input"
+            id="input-05"
+            placeholder="Input placeholder"
+          />
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            EndAdornment={Chevron}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="End icon (dropdown) input"
+            id="input-06"
+            placeholder="Input placeholder"
+          />
+          <Input
+            StartAdornment={Search}
+            className={s.input}
+            value={inputValue}
+            onChange={handleInputChange}
+            label="Start icon input"
+            id="input-07"
+            placeholder="Input placeholder"
+          />
+
+        </div>
+        <div className={s.inputsBlock}>
+          <Input
+            className={cx(s.input, s.inputSmall)}
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder="Custom"
+            inputSize="small"
+          />
         </div>
       </section>
       <section className={s.section}>
