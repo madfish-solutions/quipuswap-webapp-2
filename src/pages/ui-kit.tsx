@@ -25,7 +25,7 @@ import { Input } from '@components/ui/Input';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
-import { ComplexInput } from '@components/ui/ComplexInput';
+import { ComplexInput, ComplexOutput } from '@components/ui/ComplexInput';
 
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
@@ -461,9 +461,11 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Complex inputs</h1>
-        <div style={{ maxWidth: '400px' }}>
+        <div className={s.complexInput}>
           <ComplexInput label="Input" />
-
+        </div>
+        <div className={s.complexInput}>
+          <ComplexOutput label="Input" />
         </div>
         {/* input */}
         {/* recipient address */}
