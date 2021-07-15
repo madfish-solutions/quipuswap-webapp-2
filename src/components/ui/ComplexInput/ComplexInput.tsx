@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { prettyPrice } from '@utils/helpers';
@@ -13,7 +13,8 @@ import { Button } from '../Button';
 type ComplexInputProps = {
   className?: string,
   balance?: string,
-  label?:string
+  label?:string,
+  error?:string,
 } & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
@@ -25,52 +26,74 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
   balance = '10.00',
   label,
+  error,
+  id,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [value, setValue] = useState('');
+  const [focused, setActive] = React.useState<boolean>(false);
+  const [value, onChange] = React.useState<string>('');
 
-  const viewValue = value;
+  const viewValue = value!!;
 
-  const handle25 = () => setValue((parseFloat(balance) * 0.25).toString());
-  const handle50 = () => setValue((parseFloat(balance) * 0.5).toString());
-  const handle75 = () => setValue((parseFloat(balance) * 0.75).toString());
-  const handleMAX = () => setValue(balance);
+  const handle25 = () => onChange!! && onChange((parseFloat(balance) * 0.25).toString());
+  const handle50 = () => onChange!! && onChange((parseFloat(balance) * 0.5).toString());
+  const handle75 = () => onChange!! && onChange((parseFloat(balance) * 0.75).toString());
+  const handleMAX = () => onChange!! && onChange(balance);
 
-  const convertValue = value + 1;
+  const convertValue = value!! && value.toString() + 1;
+
+  const compoundClassName = cx(
+    { [s.focused]: focused },
+    { [s.error]: error },
+    modeClass[colorThemeMode],
+    className,
+  );
 
   return (
-    <div className={cx(modeClass[colorThemeMode], className)}>
-      <div className={s.label}>{label}</div>
-      <div className={s.shape}>
-        <div className={cx(s.item1, s.label2)}>
-          = $
-          {' '}
-          {convertValue}
-        </div>
-        <div className={cx(s.item2)}>
-          <div className={s.caption}>
-            {t('common:Total Balance')}
-            :
-          </div>
-          <div className={cx(s.label2, s.price)}>
-            {prettyPrice(parseFloat(balance))}
-          </div>
-        </div>
+    <div
+      tabIndex={-1}
+      className={compoundClassName}
+      onFocus={() => setActive(true)}
+      onBlur={() => setActive(false)}
+    >
+      {label && (
+        <label htmlFor={id} className={s.label}>
+          {label}
+        </label>
+      )}
+      <div className={s.background}>
 
-        <input
-          className={cx(s.item3, s.input)}
-          value={viewValue}
-          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-          {...props}
-        />
-        <div className={cx(s.item4)}>
-          <Token />
-          <h6 className={cx(s.token)}>
-            TOKEN
-          </h6>
-          <Shevron />
+        <div className={s.shape}>
+          <div className={cx(s.item1, s.label2)}>
+            = $
+            {' '}
+            {convertValue}
+          </div>
+          <div className={cx(s.item2)}>
+            <div className={s.caption}>
+              {t('common:Total Balance')}
+              :
+            </div>
+            <div className={cx(s.label2, s.price)}>
+              {prettyPrice(parseFloat(balance))}
+            </div>
+          </div>
+
+          <input
+            className={cx(s.item3, s.input)}
+            {...props}
+            value={viewValue}
+            onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
+          />
+          <Button onMouseDown={(e:React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); e.stopPropagation(); }} theme="quaternary" className={cx(s.item4)}>
+            <Token />
+            <h6 className={cx(s.token)}>
+              TOKEN
+            </h6>
+            <Shevron />
+          </Button>
         </div>
       </div>
       <div className={s.controls}>
@@ -79,6 +102,11 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         <Button theme="quaternary" onClick={handle75} className={s.btn}>75%</Button>
         <Button theme="quaternary" onClick={handleMAX} className={s.btn}>MAX</Button>
 
+      </div>
+      <div className={s.errorContainer}>
+        <p className={cx(s.errorLabel)}>
+          {error}
+        </p>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 @import "@styles/breakpoints"
   
 .label 
+  display: inline-block
   font-weight: 600
   line-height: 1.14
   color: $text-03
@@ -24,7 +25,7 @@
   justify-content: space-between
   box-sizing: border-box
   border-radius: 8px
-  padding: 16px
+  padding: 15px
 
 .item1
   order: 2
@@ -79,6 +80,28 @@
 .price
   margin-left: 8px
 
+.background
+  padding: 1px
+  border-radius: 9px
+
+.error
+  .background
+    background: $support-error !important
+  .errorContainer
+    max-height: 22px
+
+.errorContainer
+  max-height: 0
+  overflow: hidden
+  transition: max-height $animationTime
+
+.errorLabel
+  font-size: 0.857rem
+  line-height: 1.33
+  padding-top: 8px
+  display: inline-block
+  color: $support-error
+
 .light
   .btn
     color: $hover-primary-01-fallback
@@ -87,9 +110,13 @@
     -webkit-text-fill-color: transparent
   .input, .price
     color: $text-01
+    caret-color: $hover-primary-01-fallback
+  .background
+    background: $ui-03
   .shape
     background: $ui-02
-    border: 1px solid $ui-03
+  &.focused .background
+    background: $brand-01
 
 .dark
   .btn
@@ -99,9 +126,13 @@
     -webkit-text-fill-color: transparent
   .input, .price
     color: $text-inverse
+    caret-color: $hover-primary-02-fallback
+  .background
+    background: $text-02
   .shape
     background: $ui-06
-    border: 1px solid $text-02
+  &.focused .background
+    background: $brand-02
 
 @include media('>tablet')
   .shape

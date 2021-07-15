@@ -462,10 +462,18 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Complex inputs</h1>
         <div className={s.complexInput}>
-          <ComplexInput label="Input" />
+          <ComplexInput
+            value={inputValue}
+            onChange={handleInputChange}
+            id="complexInput-01"
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            label="Input"
+          />
         </div>
         <div className={s.complexInput}>
-          <ComplexOutput label="Input" />
+          <ComplexOutput
+            label="Input"
+          />
         </div>
         {/* input */}
         {/* recipient address */}
