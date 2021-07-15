@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
+
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -51,9 +52,8 @@ export type Change = {
 /** Currency Enum. */
 export enum CurrencyEnum {
   Usd = 'USD',
-  Xtz = 'XTZ'
+  Xtz = 'XTZ',
 }
-
 
 /** Overview data for main page of Analytics. */
 export type Overview = {
@@ -163,7 +163,7 @@ export enum PairActionType {
   Remove = 'Remove',
   Swap1to2 = 'Swap1to2',
   Swap2to1 = 'Swap2to1',
-  All = 'All'
+  All = 'All',
 }
 
 export type PairConnection = {
@@ -265,12 +265,10 @@ export type Query = {
   search: SearchResult;
 };
 
-
 export type QueryTokenArgs = {
   id: Scalars['String'];
   tokenId?: Maybe<Scalars['String']>;
 };
-
 
 export type QueryTokensArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -278,11 +276,9 @@ export type QueryTokensArgs = {
   addressList?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
-
 export type QueryPairArgs = {
   id: Scalars['String'];
 };
-
 
 export type QueryPairsArgs = {
   limit?: Maybe<Scalars['Int']>;
@@ -292,7 +288,6 @@ export type QueryPairsArgs = {
   tokenId?: Maybe<Scalars['String']>;
 };
 
-
 export type QueryTransactionsArgs = {
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -301,7 +296,6 @@ export type QueryTransactionsArgs = {
   trxType?: Maybe<PairActionType>;
   tokenId?: Maybe<Scalars['String']>;
 };
-
 
 export type QuerySearchArgs = {
   address: Scalars['String'];
@@ -316,7 +310,7 @@ export enum ScopeType {
   Overview = 'Overview',
   Token = 'Token',
   Pair = 'Pair',
-  Account = 'Account'
+  Account = 'Account',
 }
 
 /** Search result. */
@@ -362,7 +356,7 @@ export type SimpleToken = {
 export enum Standard {
   Null = 'Null',
   Fa12 = 'FA12',
-  Fa2 = 'FA2'
+  Fa2 = 'FA2',
 }
 
 /** Token object. */
@@ -421,7 +415,6 @@ export type Token = {
   plotVolume: Array<Maybe<PlotPoint>>;
 };
 
-
 /** Token object. */
 export type TokenPriceChangeArgs = {
   currency?: Maybe<CurrencyEnum>;
@@ -450,7 +443,6 @@ export type GetPairPlotLiquidityQueryVariables = Exact<{
   id: Scalars['String'];
 }>;
 
-
 export type GetPairPlotLiquidityQuery = (
   { __typename?: 'Query' }
   & { pair: (
@@ -461,7 +453,6 @@ export type GetPairPlotLiquidityQuery = (
     )>> }
   ) }
 );
-
 
 export const GetPairPlotLiquidityDocument = gql`
     query GetPairPlotLiquidity($id: String!) {
@@ -478,8 +469,10 @@ export const GetPairPlotLiquidityDocument = gql`
 /**
  * __useGetPairPlotLiquidityQuery__
  *
- * To run a query within a React component, call `useGetPairPlotLiquidityQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetPairPlotLiquidityQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component,
+ * call `useGetPairPlotLiquidityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPairPlotLiquidityQuery`
+ * returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
@@ -491,14 +484,24 @@ export const GetPairPlotLiquidityDocument = gql`
  *   },
  * });
  */
-export function useGetPairPlotLiquidityQuery(baseOptions: Apollo.QueryHookOptions<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
-      }
-export function useGetPairPlotLiquidityLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
-        }
+export function useGetPairPlotLiquidityQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
+}
+export function useGetPairPlotLiquidityLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
+}
 export type GetPairPlotLiquidityQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityQuery>;
-export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityLazyQuery>;
-export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>;
+export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<
+typeof useGetPairPlotLiquidityLazyQuery>;
+export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery,
+GetPairPlotLiquidityQueryVariables>;
