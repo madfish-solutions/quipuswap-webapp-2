@@ -3,128 +3,114 @@
 
 .root
   display: flex
-  align-items: center
+  flex-direction: column
+
+.background
+  display: flex
   padding: 1px
   border-radius: 9px
-  transition: background-color $animationTime, color $animationTime
-  .inputBase
-    flex: 1
+  transition: background-color $animationTime
+  position: relative
 
-.adornment
-  display: flex
-  align-items: center
-  justify-content: center
+.label
+  font-weight: 600
+  line-height: 1.14
+  margin-bottom: 8px
 
-.start
-  margin-right: 4px
-
-.end
-  margin-left: 4px
-
-.inputBase
-  display: flex
-  align-items: center
+.input
   padding: 7px 15px
   border-radius: 8px
   transition: background-color $animationTime, color $animationTime
-  .input
-    flex: 1
-
-.pad .inputBase
-  padding: 7px 15px
-
-.small
-  .input
-    box-sizing: border-box
-    font-family: $font
-    font-style: normal
-    font-weight: bold
-    font-size: 1rem
-    outline: none
-    background: transparent
-    border: none
-    width: 78px
-    text-align: center
-  .inputBase
-    padding: 5px 0px
-
-.medium .input
+  flex-grow: 1
   box-sizing: border-box
   font-family: $font
-  font-style: normal
-  font-weight: normal
-  font-size: 1rem
   outline: none
-  background: transparent
   border: none
 
-.label1
-  font-family: $font
-  font-style: normal
-  font-weight: 600
-  font-size: 1rem
-  line-height: 1.33
-  margin-bottom: 8px
+.adornment
+  position: absolute
+  top: 50%
+  transform: translateY(-50%)
+  pointer-events: none
 
-.errorLabel
-  font-family: $font
-  font-style: normal
-  font-weight: normal
-  font-size: 0.857rem
-  line-height: 1.33
-  padding-top: 8px
-  color: $support-error
+.start
+  .input
+    padding-left: 44px
+  .adornment
+    left: 16px
+
+.end
+  .input
+    padding-right: 44px
+  .adornment
+    right: 16px
+
+.root.disabled
+  .background
+    background: $ui-04
+  .input
+    background-color: $ui-04
+    color: $text-03
+
+.error
+  .background
+    background: $support-error !important
+  .errorContainer
+    max-height: 22px
 
 .errorContainer
   max-height: 0
+  overflow: hidden
   transition: max-height $animationTime
 
-.light
-  .label1
-    color: $text-01
-  .inputBase
-    background: $ui-01
-  .input:placeholder
-    color: $text-03
+.errorLabel
+  font-size: 0.857rem
+  line-height: 1.33
+  padding-top: 8px
+  display: inline-block
+  color: $support-error
+
+// Sizes
+.medium
   .input
+    font-family: $font
+    font-size: 1rem
+
+.small
+  .input
+    font-weight: bold
+    font-size: 0.857rem
+    width: 76px
+    text-align: center
+    padding: 5px 0
+
+// Colors
+.light
+  .label
     color: $text-01
-  .disabled
-    .inputBase
-      background: $ui-04
-    .input
-      color: $text-03
-  .root
+  .background
     background: $ui-04
-  &.focused .root
+  .input
+    background: $ui-01
+    color: $text-01
+    &::placeholder
+      color: $text-03
+  &.focused .background
     background: $brand-01
   &.small .input::placeholder 
       color: $text-01
 
 .dark
-  .label1
+  .label
     color: $text-inverse
-  .inputBase
-    background: $ui-06
-  .input:placeholder
-    color: $text-03
-  .input
-    color: $text-inverse
-  .disabled
-    .inputBase
-      background: $ui-04
-    .input
-      color: $ui-05
-  .root
+  .background
     background: $text-02
-  &.focused .root
+  .input
+    background: $ui-06
+    color: $text-inverse
+    &::placeholder
+      color: $text-03
+  &.focused .background
     background: $brand-02
-  .inputError
-    font-weight: 700
-  &.small .input::placeholder 
+  &.small .input::placeholder
       color: $text-inverse
-
-.error
-  .root 
-    background: $support-error !important
-  .errorContainer
-    max-height: 22px

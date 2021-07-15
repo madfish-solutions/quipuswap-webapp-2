@@ -12,8 +12,8 @@ type InputProps = {
   className?: string
   label?: string
   inputSize?: keyof typeof sizeClass
-  endAdornment?:React.ReactNode
-  startAdornment?:React.ReactNode
+  StartAdornment?: React.FC<{ className?: string }>
+  EndAdornment?: React.FC<{ className?: string }>
 } & React.HTMLProps<HTMLInputElement>;
 
 const sizeClass = {
@@ -30,57 +30,50 @@ export const Input: React.FC<InputProps> = ({
   inputSize = 'medium',
   disabled = false,
   className,
-  label = '',
-  error = '',
+  label,
   id,
-  endAdornment,
-  startAdornment,
+  error,
+  StartAdornment,
+  EndAdornment,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
 
-  const compoundStatefulClassName = cx(
+  const compoundClassName = cx(
     s.root,
+    { [s.start]: StartAdornment!! },
+    { [s.end]: EndAdornment!! },
+    { [s.error]: error!! },
+    { [s.focused]: focused },
     { [s.disabled]: disabled },
-  );
-  const compoundBaseClassName = cx(
     modeClass[colorThemeMode],
     sizeClass[inputSize],
-    { [s.pad]: endAdornment || startAdornment },
-    { [s.error]: error },
-    { [s.focused]: focused },
     className,
   );
+
   return (
-    <div className={compoundBaseClassName}>
+    <div className={compoundClassName}>
       {label && (
-        <label htmlFor={id} className={s.label1}>
+        <label htmlFor={id} className={s.label}>
           {label}
         </label>
       )}
-      <div className={compoundStatefulClassName}>
-        <div className={s.inputBase}>
-          {startAdornment && (
-          <div className={cx(s.adornment, s.start)}>
-            {startAdornment}
-          </div>
-          )}
-          <input
-            disabled={disabled}
-            id={id}
-            onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
-            {...props}
-            className={s.input}
-          />
-          {endAdornment && (
-          <div className={cx(s.adornment, s.end)}>
-            {endAdornment}
-          </div>
-          )}
-
-        </div>
+      <div className={s.background}>
+        {StartAdornment!! && (
+          <StartAdornment className={s.adornment} />
+        )}
+        <input
+          disabled={disabled}
+          id={id}
+          onFocus={() => setActive(true)}
+          onBlur={() => setActive(false)}
+          className={s.input}
+          {...props}
+        />
+        {EndAdornment!! && (
+          <EndAdornment className={s.adornment} />
+        )}
       </div>
       <div className={s.errorContainer}>
         <p className={cx(s.errorLabel)}>
