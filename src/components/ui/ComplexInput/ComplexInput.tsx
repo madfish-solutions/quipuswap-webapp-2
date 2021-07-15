@@ -1,11 +1,12 @@
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import React, { useContext, useState } from 'react';
+import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import Token from '@icons/Token.svg';
 
 import { Shevron } from '@components/svg/Shevron';
-import { prettyPrice } from '@utils/helpers';
+import Token from '@icons/Token.svg';
+
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
@@ -28,7 +29,6 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [value, setValue] = useState('');
 
-  // const viewValue = new Intl.NumberFormat('en-US').format(value ? parseInt(value, 10) : 0);
   const viewValue = value;
 
   const handle25 = () => setValue((parseFloat(balance) * 0.25).toString());
