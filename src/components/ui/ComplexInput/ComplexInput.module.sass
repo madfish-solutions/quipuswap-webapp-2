@@ -24,6 +24,7 @@
   color: $text-03
 
 .shape
+  position: relative
   display: flex
   flex-wrap: wrap
   justify-content: space-between
@@ -37,6 +38,8 @@
   margin-right: -8px
   z-index: 1
 
+.recipientBase .item1 textarea
+  min-height: 64px
 .item1
   order: 2
 .item2
@@ -60,6 +63,10 @@
 .item2Line
   display: flex
   align-items: center
+.pasteWrap
+  position: absolute
+  bottom: 24px
+  right: 16px
 
 .token
   margin-left: 8px
@@ -88,6 +95,11 @@
   font-weight: 600
   font-size: 1.714rem
   line-height: 1.33
+
+.recipient
+  font-size: 1.143rem
+  font-weight: normal
+  line-height: 2
 
 .controls 
   margin-left: 16px
@@ -121,7 +133,7 @@
   color: $support-error
 
 .light
-  .btn
+  .btn, .paste
     color: $hover-primary-01-fallback
     background: $hover-primary-01
     -webkit-background-clip: text
@@ -137,7 +149,7 @@
     background: $brand-01
 
 .dark
-  .btn
+  .btn, .paste
     color: $hover-primary-02-fallback
     background: $hover-primary-02
     -webkit-background-clip: text
