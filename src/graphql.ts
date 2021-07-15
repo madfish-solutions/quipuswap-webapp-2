@@ -439,86 +439,70 @@ export type TokenEdge = {
   cursor: Scalars['String'];
 };
 
-export type TopStatsDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPairPlotLiquidityQueryVariables = Exact<{
+  id: Scalars['String'];
+}>;
 
-export type TopStatsDataQuery = (
+export type GetPairPlotLiquidityQuery = (
   { __typename?: 'Query' }
-  & { overview: (
-    { __typename?: 'Overview' }
-    & Pick<Overview, 'totalLiquidity' | 'volume24h' | 'xtzUsdQuote' | 'trasactionsCount24h'>
-    & { totalLiquidityChange: (
-      { __typename?: 'Change' }
-      & Pick<Change, 'day'>
-    ), volumeChange: (
-      { __typename?: 'Change' }
-      & Pick<Change, 'day'>
-    ), xtzUsdQuoteChange: (
-      { __typename?: 'Change' }
-      & Pick<Change, 'day'>
-    ) }
+  & { pair: (
+    { __typename?: 'Pair' }
+    & { plotLiquidity: Array<Maybe<(
+      { __typename?: 'PlotPoint' }
+      & Pick<PlotPoint, 'time' | 'value' | 'xtzUsdQuoteHistorical'>
+    )>> }
   ) }
 );
 
-export const TopStatsDataDocument = gql`
-    query TopStatsData {
-  overview {
-    totalLiquidity
-    totalLiquidityChange {
-      day
+export const GetPairPlotLiquidityDocument = gql`
+    query GetPairPlotLiquidity($id: String!) {
+  pair(id: $id) {
+    plotLiquidity {
+      time
+      value
+      xtzUsdQuoteHistorical
     }
-    volume24h
-    volumeChange {
-      day
-    }
-    xtzUsdQuote
-    xtzUsdQuoteChange {
-      day
-    }
-    trasactionsCount24h
   }
 }
     `;
 
 /**
- * __useTopStatsDataQuery__
+ * __useGetPairPlotLiquidityQuery__
  *
- * To run a query within a React component, call `useTopStatsDataQuery`
- * and pass it any options that fit your needs.
- * When your component renders, `useTopStatsDataQuery`
+ * To run a query within a React component,
+ * call `useGetPairPlotLiquidityQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPairPlotLiquidityQuery`
  * returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useTopStatsDataQuery({
+ * const { data, loading, error } = useGetPairPlotLiquidityQuery({
  *   variables: {
+ *      id: // value for 'id'
  *   },
  * });
  */
-export function useTopStatsDataQuery(
-  baseOptions?: Apollo.QueryHookOptions<TopStatsDataQuery,
-  TopStatsDataQueryVariables>,
+export function useGetPairPlotLiquidityQuery(
+  baseOptions: Apollo.QueryHookOptions<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<
-  TopStatsDataQuery,
-  TopStatsDataQueryVariables
-  >(TopStatsDataDocument, options);
+  return Apollo.useQuery<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
 }
-export function useTopStatsDataLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TopStatsDataQuery,
-  TopStatsDataQueryVariables>,
+export function useGetPairPlotLiquidityLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<
-  TopStatsDataQuery,
-  TopStatsDataQueryVariables
-  >(TopStatsDataDocument, options);
+  return Apollo.useLazyQuery<GetPairPlotLiquidityQuery,
+  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
 }
-export type TopStatsDataQueryHookResult = ReturnType<typeof useTopStatsDataQuery>;
-export type TopStatsDataLazyQueryHookResult = ReturnType<typeof useTopStatsDataLazyQuery>;
-export type TopStatsDataQueryResult = Apollo.QueryResult<
-TopStatsDataQuery,
-TopStatsDataQueryVariables
+export type GetPairPlotLiquidityQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityQuery>;
+export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<
+typeof useGetPairPlotLiquidityLazyQuery
 >;
+export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery,
+GetPairPlotLiquidityQueryVariables>;
