@@ -6,13 +6,14 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import { Shevron } from '@components/svg/Shevron';
 import Token from '@icons/Token.svg';
+
 import { Button } from '../Button';
 import { PercentSelector } from './PercentSelector';
 import { ComplexError } from './ComplexError';
 
 import s from './ComplexInput.module.sass';
 
-type ComplexInputProps = {
+type ComplexVotesProps = {
   className?: string,
   balance?: string,
   label?:string,
@@ -24,7 +25,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const ComplexInput: React.FC<ComplexInputProps> = ({
+export const ComplexVotes: React.FC<ComplexVotesProps> = ({
   className,
   balance = '10.00',
   label,
@@ -38,8 +39,6 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [value, onChange] = React.useState<string>('');
 
   const viewValue = value!!;
-
-  const convertValue = value!! && value.toString() + 1;
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -63,14 +62,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
       <div className={s.background}>
 
         <div className={s.shape}>
-          <div className={cx(s.item1, s.label2)}>
-            = $
-            {' '}
-            {convertValue}
-          </div>
+          <div className={cx(s.item1, s.label2)} />
           <div className={cx(s.item2)}>
             <div className={s.caption}>
-              {t('common:Total Balance')}
+              {t('common:Available Balance')}
               :
             </div>
             <div className={cx(s.label2, s.price)}>
@@ -85,9 +80,12 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           />
           <Button onMouseDown={(e:React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); e.stopPropagation(); }} theme="quaternary" className={cx(s.item4)}>
+            <div className={s.tokenGroup}>
+              <Token />
+            </div>
             <Token />
             <h6 className={cx(s.token)}>
-              TOKEN
+              LP TOKEN
             </h6>
             <Shevron />
           </Button>

@@ -25,7 +25,7 @@ import { Input } from '@components/ui/Input';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
-import { ComplexInput, ComplexOutput } from '@components/ui/ComplexInput';
+import { ComplexInput, ComplexOutput, ComplexVotes } from '@components/ui/ComplexInput';
 
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
@@ -472,13 +472,20 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexOutput
-            label="Input"
+            label="Output"
           />
         </div>
-        {/* input */}
+        <div className={s.complexInput}>
+          <ComplexVotes
+            label="Votes"
+            value={inputValue}
+            onChange={handleInputChange}
+            id="complexInput-02"
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+          />
+        </div>
         {/* recipient address */}
         {/* select lp */}
-        {/* output */}
         {/* votes */}
         {/* baker */}
       </section>
