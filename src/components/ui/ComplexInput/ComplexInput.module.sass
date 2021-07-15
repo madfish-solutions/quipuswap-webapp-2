@@ -29,8 +29,12 @@
 
 .item1
   order: 2
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  line-height: 24px
 .item2
-  margin: 8px 0px
+  margin: 8px 0
   order: 3
   display: flex
   flex-basis: 100%
@@ -45,18 +49,11 @@
 
 .token
   margin-left: 8px
+  line-height: 1
 
 .btn
   position: relative
-  font-weight: 600
   cursor: pointer
-  &::after
-    position: absolute
-    content: ''
-    height: 1px
-    bottom: 1px
-    left: 0
-    width: 100%
   &:not(:last-child)
     margin-right: 24px
 
@@ -142,13 +139,13 @@
     flex-grow: 1
     flex-basis: 50%
     overflow: hidden
+    line-height: unset
   .item2
     margin: 0px
     order: 2
     display: flex
     justify-content: flex-end
     margin-left: 32px
-    flex-basis: unset
     flex-basis: content
   .item3
     margin-top: 8px

@@ -22,14 +22,13 @@ import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
+import { ComplexInput, ComplexOutput } from '@components/ui/ComplexInput';
 import { SelectUI } from '@components/ui/Select';
 import { MenuOpened } from '@components/svg/MenuOpened';
-
-import s from '@styles/UiKit.module.sass';
-import { ComplexInput, ComplexOutput } from '@components/ui/ComplexInput';
-
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+
+import s from '@styles/UiKit.module.sass';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
