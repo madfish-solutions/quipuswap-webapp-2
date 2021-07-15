@@ -27,6 +27,7 @@ import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
 import {
+  ComplexBaker,
   ComplexInput, ComplexOutput, ComplexSelect, ComplexVotes,
 } from '@components/ui/ComplexInput';
 
@@ -492,7 +493,7 @@ const UiKit: React.FC = () => {
             label="Votes"
             value={inputValue}
             onChange={handleInputChange}
-            id="complexInput-02"
+            id="ComplexVotes-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
           />
         </div>
@@ -501,13 +502,17 @@ const UiKit: React.FC = () => {
             label="Select LP"
             value={inputValue}
             onChange={handleInputChange}
-            id="complexInput-02"
+            id="ComplexSelect-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
           />
         </div>
+        <div className={s.complexInput}>
+          <ComplexBaker
+            label="Baker"
+            id="ComplexBaker-01"
+          />
+        </div>
         {/* recipient address */}
-        {/* select lp */}
-        {/* votes */}
         {/* baker */}
       </section>
       <section className={s.section}>
