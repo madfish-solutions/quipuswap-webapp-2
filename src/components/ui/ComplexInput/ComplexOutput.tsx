@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
@@ -11,6 +11,7 @@ import s from './ComplexInput.module.sass';
 type ComplexOutputProps = {
   className?: string,
   balance?: string,
+  value?: string,
   label?:string
 };
 
@@ -22,11 +23,11 @@ const modeClass = {
 export const ComplexOutput: React.FC<ComplexOutputProps> = ({
   className,
   balance = '10.00',
+  value = '10.00',
   label,
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [value, setValue] = useState('');
 
   const viewValue = value;
 
@@ -51,11 +52,11 @@ export const ComplexOutput: React.FC<ComplexOutputProps> = ({
           </div>
         </div>
 
-        <input
-          className={cx(s.item3, s.input)}
-          value={viewValue}
-          onChange={(e:React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
-        />
+        <div
+          className={cx(s.item3, s.output)}
+        >
+          {viewValue}
+        </div>
         <div className={cx(s.item4)}>
           <Token />
           <h6 className={cx(s.token)}>
