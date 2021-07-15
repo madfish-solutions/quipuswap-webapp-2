@@ -22,6 +22,7 @@ import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
+import { SelectUI } from '@components/ui/Select';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
@@ -74,6 +75,13 @@ const TabsBig = [
   },
 ];
 
+const selectValues = [
+  { value: 'mainnet', label: 'Mainnet' },
+  { value: 'edo2testnet', label: 'Edo2 Testnet' },
+  { value: 'florenceTestnet', label: 'Florence Testnet' },
+  { value: 'localhost8888', label: 'localhost: 8888' },
+];
+
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
@@ -86,6 +94,8 @@ const UiKit: React.FC = () => {
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
   const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
+
+  const [selectState, setSelectState] = useState(selectValues[0]);
 
   useEffect(() => {
     setInputError(inputValue.length > 7);
@@ -470,6 +480,15 @@ const UiKit: React.FC = () => {
           onChange={(state) => setActiveSwitcher(state)}
           disabled
           className={s.switcher}
+        />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Selects</h1>
+        <SelectUI
+          options={selectValues}
+          value={selectState}
+          onChange={(value) => setSelectState(value ?? selectValues[0])}
+          className={s.select}
         />
       </section>
       <section className={s.section}>
