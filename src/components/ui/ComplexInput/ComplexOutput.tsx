@@ -6,7 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import Token from '@icons/Token.svg';
 
-import s from './ComplexOutput.module.sass';
+import s from './ComplexInput.module.sass';
 
 type ComplexOutputProps = {
   className?: string,
