@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import dynamic from 'next/dynamic';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Button } from '@components/ui/Button';
@@ -17,12 +18,17 @@ import {
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
+import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from '@styles/UiKit.module.sass';
 import { ComplexInput } from '@components/ui/ComplexInput';
+
+const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+  ssr: false,
+});
 
 const TabsSmall = [
   {
@@ -395,6 +401,10 @@ const UiKit: React.FC = () => {
           setActiveId={(id) => setTabsBigState(id)}
           className={s.switcher}
         />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Graphics</h1>
+        <LineChart data={LineChartSampleData} />
       </section>
     </BaseLayout>
   );

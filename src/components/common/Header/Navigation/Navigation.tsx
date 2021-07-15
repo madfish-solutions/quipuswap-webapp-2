@@ -63,7 +63,6 @@ export const Navigation: React.FC<NavigationProps> = ({
             type="button"
             className={cx(s.link, s.linkToggle, modeClass[colorThemeMode])}
             onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
-            onFocus={() => setIsInnerMenuOpened(true)}
           >
             <Icon className={s.icon} id={iconId} />
             {label}
@@ -81,6 +80,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                   )}
                   target="_blank"
                   rel="noreferrer noopener"
+                  onFocus={() => setIsInnerMenuOpened(true)}
                 >
                   {el.label}
                 </a>
