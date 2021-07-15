@@ -39,7 +39,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar when connect to SDK
+  // TODO: Change logic of buttons and dollar during connection to SDK
   const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
 
   const compoundClassName = cx(
