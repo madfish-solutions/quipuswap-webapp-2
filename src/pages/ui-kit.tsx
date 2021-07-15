@@ -359,7 +359,10 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Complex inputs</h1>
-        <ComplexInput label="Input" />
+        <div style={{ maxWidth: '400px' }}>
+          <ComplexInput label="Input" />
+
+        </div>
         {/* input */}
         {/* recipient address */}
         {/* select lp */}
