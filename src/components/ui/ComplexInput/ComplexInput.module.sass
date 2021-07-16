@@ -1,6 +1,10 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
   
+.baker
+  display: flex
+  align-items: center
+
 .label 
   display: inline-block
   font-weight: 600
@@ -20,12 +24,20 @@
   color: $text-03
 
 .shape
+  position: relative
   display: flex
   flex-wrap: wrap
   justify-content: space-between
   box-sizing: border-box
   border-radius: 8px
   padding: 15px
+
+.tokenGroup
+  display: flex
+  align-items: center
+  margin-right: -8px
+  z-index: 1
+
 
 .item1
   order: 2
@@ -36,7 +48,6 @@
 .item2
   margin: 8px 0
   order: 3
-  display: flex
   flex-basis: 100%
 .item3
   order: 4
@@ -49,6 +60,14 @@
   &:disabled:hover
     cursor: default
 
+.item2Line
+  display: flex
+  align-items: center
+.pasteWrap
+  position: absolute
+  bottom: 24px
+  right: 16px
+
 .token
   margin-left: 8px
   line-height: 1
@@ -59,7 +78,7 @@
   &:not(:last-child)
     margin-right: 24px
 
-.input, .output
+.input
   min-width: 10px
   background: transparent
   outline: none
@@ -116,6 +135,11 @@
     background: $ui-03
   .shape
     background: $ui-02
+  .paste
+    color: $hover-primary-01-fallback
+    background: $hover-primary-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
   .input, .price
     color: $text-01
 
@@ -134,6 +158,11 @@
     background: $text-02
   .shape
     background: $ui-06
+  .paste
+    color: $hover-primary-02-fallback
+    background: $hover-primary-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
   .input, .price
     color: $text-inverse
 
@@ -141,7 +170,20 @@
   .input
     color: $text-03
 
+.recipient
+  height: fit-content
+  min-height: 48px
+  resize: none
+  font-size: 1.143rem
+  font-weight: normal
+  line-height: 1.4
+  flex: 1
+  white-space: normal
+  overflow: unset !important
+
 @include media('>tablet')
+  .item2Line
+    justify-content: flex-end
   .shape
     justify-content: space-between
   .item1
@@ -151,17 +193,16 @@
     overflow: hidden
     line-height: unset
   .item2
-    margin: 0px
+    margin: 0
     order: 2
-    display: flex
-    justify-content: flex-end
+    flex-grow: 1
     margin-left: 32px
     flex-basis: unset
   .item3
     margin-top: 8px
     order: 3
     flex-grow: 1
-    flex-basis: 50%
+    flex-basis: 20%
   .item4
     margin-top: 8px
     display: flex
@@ -170,6 +211,9 @@
     order: 4
     flex-basis: content
     margin-left: 32px
+  .recipient
+    min-height: 26px
+    line-height: 1.4
   .btn
     &:not(:last-child)
       margin-right: 8px

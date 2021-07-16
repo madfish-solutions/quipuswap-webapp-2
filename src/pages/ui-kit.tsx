@@ -22,9 +22,12 @@ import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
-import { ComplexInput } from '@components/ui/ComplexInput';
 import { SelectUI } from '@components/ui/Select';
+import {
+  ComplexBaker, ComplexInput, ComplexRecipient,
+} from '@components/ui/ComplexInput';
 import { MenuOpened } from '@components/svg/MenuOpened';
+
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
@@ -87,6 +90,7 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
+  const [inputAddress, setInputAddress] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
   const handleInputChange = (state: any) => setInputValue(state.target.value);
@@ -476,24 +480,56 @@ const UiKit: React.FC = () => {
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
-            id="complexInput-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-01"
             label="Input"
           />
         </div>
         <div className={s.complexInput}>
           <ComplexInput
-            value={123}
+            value={inputValue}
             readOnly
-            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
             label="Output"
           />
         </div>
-        {/* input */}
+        <div className={s.complexInput}>
+          <ComplexInput
+            value={inputValue}
+            onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-02"
+            label="Votes"
+            mode="votes"
+          />
+        </div>
+        <div className={s.complexInput}>
+          <ComplexInput
+            value={inputValue}
+            onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-03"
+            label="Votes"
+            mode="select"
+          />
+        </div>
+        <div className={s.complexInput}>
+          <ComplexBaker
+            label="Baker"
+            id="ComplexBaker-01"
+          />
+        </div>
+        <div className={s.complexInput}>
+          <ComplexRecipient
+            value={inputAddress}
+            onChange={(state: any) => setInputAddress(state.target.value)}
+            handleInput={(state) => setInputAddress(state)}
+            label="Recipient address"
+            id="ComplexRecipient-01"
+          />
+        </div>
         {/* recipient address */}
-        {/* select lp */}
-        {/* output */}
-        {/* votes */}
         {/* baker */}
       </section>
       <section className={s.section}>
