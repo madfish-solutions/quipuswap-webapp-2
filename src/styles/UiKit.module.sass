@@ -125,11 +125,12 @@
 .inputsBlock
   display: flex
   justify-content: flex-start
+  flex-direction: column
   &:not(:last-child)
     margin-bottom: 32px
 .input
   &:not(:last-child)
-    margin-right: 32px
+    margin-bottom: 32px
 
 // Complex inputs
 .complexInput
@@ -182,6 +183,16 @@
     font-size: 1.4rem
   .colorInner
     margin-bottom: 16px
+
+@include media('>Ltablet')
+  .inputsBlock
+    flex-direction: row
+    &:not(:last-child)
+      margin-bottom: 32px
+  .input
+    &:not(:last-child)
+      margin-bottom: 0
+      margin-right: 32px
   .input
     &:not(.inputSmall)
       min-width: 448px

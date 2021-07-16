@@ -502,13 +502,6 @@ const UiKit: React.FC = () => {
             label="Votes"
             mode="votes"
           />
-          {/* <ComplexVotes
-            label="Votes"
-            value={inputValue}
-            onChange={handleInputChange}
-            id="ComplexVotes-01"
-            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
-          /> */}
         </div>
         <div className={s.complexInput}>
           <ComplexInput
@@ -520,13 +513,6 @@ const UiKit: React.FC = () => {
             label="Votes"
             mode="select"
           />
-          {/* <ComplexSelect
-            label="Select LP"
-            value={inputValue}
-            onChange={handleInputChange}
-            id="ComplexSelect-01"
-            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
-          /> */}
         </div>
         <div className={s.complexInput}>
           <ComplexBaker
@@ -536,7 +522,6 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexRecipient
-            rows={1}
             value={inputAddress}
             onChange={(state: any) => setInputAddress(state.target.value)}
             handleInput={(state) => setInputAddress(state)}
