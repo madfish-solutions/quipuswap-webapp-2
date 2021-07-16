@@ -67,7 +67,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     }
   };
 
-  const equivalentContent = mode !== 'votes' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
 
   return (
     // eslint-disable-next-line max-len
