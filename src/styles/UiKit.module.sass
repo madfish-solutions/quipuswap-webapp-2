@@ -121,6 +121,23 @@
   &:not(:last-child)
     margin-right: 32px
 
+// Inputs
+.inputsBlock
+  display: flex
+  justify-content: flex-start
+  flex-direction: column
+  &:not(:last-child)
+    margin-bottom: 32px
+.input
+  &:not(:last-child)
+    margin-bottom: 32px
+
+// Complex inputs
+.complexInput
+  max-width: 400px
+  &:not(:last-child)
+    margin-bottom: 32px
+    
 // Cards
 .cardsBlock
   display: flex
@@ -142,6 +159,11 @@
     margin-bottom: 32px
 
 
+// Selects
+.select
+  max-width: 160px
+
+
 @include media('>tablet')
   .colorsBlock
     grid-template-columns: repeat(4, 1fr)
@@ -161,3 +183,16 @@
     font-size: 1.4rem
   .colorInner
     margin-bottom: 16px
+
+@include media('>Ltablet')
+  .inputsBlock
+    flex-direction: row
+    &:not(:last-child)
+      margin-bottom: 32px
+  .input
+    &:not(:last-child)
+      margin-bottom: 0
+      margin-right: 32px
+  .input
+    &:not(.inputSmall)
+      min-width: 448px
