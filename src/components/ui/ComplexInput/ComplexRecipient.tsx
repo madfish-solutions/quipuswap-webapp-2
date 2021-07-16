@@ -79,10 +79,9 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           disabled={readOnly}
           onClick={handlePaste}
           theme="quaternary"
+          className={s.btn}
         >
-          <div className={cx(s.paste)}>
-            {t('swap:Paste')}
-          </div>
+          {t('swap:Paste')}
         </Button>
       </div>
       {!readOnly && (<ComplexError error={error} />)}
