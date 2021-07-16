@@ -536,6 +536,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexRecipient
+            rows={1}
             value={inputAddress}
             onChange={(state: any) => setInputAddress(state.target.value)}
             handleInput={(state) => setInputAddress(state)}

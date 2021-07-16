@@ -171,6 +171,8 @@
     color: $text-03
 
 .recipient
+  height: fit-content
+  min-height: 64px
   max-height: 64px
   resize: none
   font-size: 1.143rem
@@ -180,6 +182,10 @@
   white-space: normal
 
 @include media('>tablet')
+  .recipient
+    height: fit-content
+    min-height: 20px
+    max-height: 64px
   .item2Line
     justify-content: flex-end
   .shape
