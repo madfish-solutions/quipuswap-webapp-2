@@ -1,22 +1,24 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
+import { Button } from '@components/ui/Button';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
+
 import Token from '@icons/Token.svg';
-import { Button } from '../Button';
-import { PercentSelector } from './PercentSelector';
-import { ComplexError } from './ComplexError';
 
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
-  className?: string,
-  balance?: string,
-  label?:string,
-  error?:string,
+  className?: string
+  balance?: string
+  label: string
+  error?: string
+  handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
@@ -28,6 +30,9 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
   balance = '10.00',
   label,
+  handleBalance,
+  value,
+  readOnly,
   error,
   id,
   ...props
@@ -35,66 +40,75 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
-  const [value, onChange] = React.useState<string>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const viewValue = value!!;
-
-  const convertValue = value!! && value.toString() + 1;
+  // TODO: Change logic of buttons and dollar during connection to SDK
+  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
-    { [s.error]: error },
+    { [s.error]: !readOnly && !!error },
+    { [s.readOnly]: readOnly },
     modeClass[colorThemeMode],
     className,
   );
 
-  return (
-    <div
-      tabIndex={-1}
-      className={compoundClassName}
-      onFocus={() => setActive(true)}
-      onBlur={() => setActive(false)}
-    >
-      {label && (
-        <label htmlFor={id} className={s.label}>
-          {label}
-        </label>
-      )}
-      <div className={s.background}>
+  const focusInput = () => {
+    if (inputRef?.current && !readOnly) {
+      inputRef.current.focus();
+    }
+  };
 
+  return (
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    <div
+      className={compoundClassName}
+      onClick={focusInput}
+    >
+      <label htmlFor={id} className={s.label}>
+        {label}
+      </label>
+      <div className={s.background}>
         <div className={s.shape}>
           <div className={cx(s.item1, s.label2)}>
             = $
             {' '}
-            {prettyPrice(parseFloat(convertValue || '0'))}
+            {prettyPrice(parseFloat(dollarEquivalent || '0'))}
           </div>
           <div className={cx(s.item2)}>
-            <div className={s.caption}>
+            <span className={s.caption}>
               {t('common:Total Balance')}
               :
-            </div>
-            <div className={cx(s.label2, s.price)}>
+            </span>
+            <span className={cx(s.label2, s.price)}>
               {prettyPrice(parseFloat(balance))}
-            </div>
+            </span>
           </div>
 
           <input
             className={cx(s.item3, s.input)}
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
+            ref={inputRef}
+            readOnly={readOnly}
+            value={value}
             {...props}
-            value={viewValue}
-            onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
           />
-          <Button onMouseDown={(e:React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); e.stopPropagation(); }} theme="quaternary" className={cx(s.item4)}>
+          <Button theme="quaternary" className={s.item4} disabled={readOnly}>
             <Token />
             <h6 className={cx(s.token)}>
               TOKEN
             </h6>
-            <Shevron />
+            {!readOnly && (<Shevron />)}
           </Button>
         </div>
       </div>
-      <PercentSelector value={balance} onChange={onChange} />
-      <ComplexError error={error} />
+      {
+        !readOnly
+        && handleBalance && (<PercentSelector value={balance} handleBalance={handleBalance} />)
+      }
+      {!readOnly && (<ComplexError error={error} />)}
     </div>
   );
 };

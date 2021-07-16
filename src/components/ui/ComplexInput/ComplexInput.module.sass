@@ -42,13 +42,17 @@
   min-height: 64px
 .item1
   order: 2
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  line-height: 24px
 .item2
   display: flex
-  margin: 8px 0px
+  margin: 8px 0
   order: 3
   flex-basis: 100%
 .item2Block
-  margin: 8px 0px
+  margin: 8px 0
   order: 3
   flex-basis: 100%
 .item3
@@ -59,6 +63,8 @@
   display: flex
   align-items: center
   order: 1
+  &:disabled:hover
+    cursor: default
 
 .item2Line
   display: flex
@@ -70,18 +76,11 @@
 
 .token
   margin-left: 8px
+  line-height: 1
 
 .btn
   position: relative
-  font-weight: 600
   cursor: pointer
-  &::after
-    position: absolute
-    content: ''
-    height: 1px
-    bottom: 1px
-    left: 0
-    width: 100%
   &:not(:last-child)
     margin-right: 24px
 
@@ -133,36 +132,54 @@
   color: $support-error
 
 .light
-  .btn, .paste
+  &:not(.readOnly)
+    .btn
+      color: $hover-primary-01-fallback
+      background: $hover-primary-01
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+    .input
+      caret-color: $hover-primary-01-fallback
+    &.focused .background
+      background: $brand-01
+  .background
+    background: $ui-03
+  .shape
+    background: $ui-02
+  .paste
     color: $hover-primary-01-fallback
     background: $hover-primary-01
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
   .input, .price
     color: $text-01
-    caret-color: $hover-primary-01-fallback
-  .background
-    background: $ui-03
-  .shape
-    background: $ui-02
-  &.focused .background
-    background: $brand-01
 
 .dark
-  .btn, .paste
+  &:not(.readOnly)
+    .btn
+      color: $hover-primary-02-fallback
+      background: $hover-primary-02
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+    .input
+      caret-color: $hover-primary-02-fallback
+    &.focused .background
+      background: $brand-02
+  .background
+    background: $text-02
+  .shape
+    background: $ui-06
+  .paste
     color: $hover-primary-02-fallback
     background: $hover-primary-02
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
   .input, .price
     color: $text-inverse
-    caret-color: $hover-primary-02-fallback
-  .background
-    background: $text-02
-  .shape
-    background: $ui-06
-  &.focused .background
-    background: $brand-02
+
+.readOnly
+  .input
+    color: $text-03
 
 @include media('>tablet')
   .item2Line
@@ -174,6 +191,7 @@
     flex-grow: 1
     flex-basis: 50%
     overflow: hidden
+    line-height: unset
   .item2
     margin: 0px
     order: 2
@@ -191,7 +209,6 @@
     flex-grow: 1
     margin-left: 32px
     flex-basis: unset
-    flex-basis: content
   .item3
     margin-top: 8px
     order: 3

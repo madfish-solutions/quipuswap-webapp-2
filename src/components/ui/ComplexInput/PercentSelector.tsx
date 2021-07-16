@@ -4,18 +4,18 @@ import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type PercentSelectorProps = {
-  onChange: (state:string) => void,
+  handleBalance: (state:string) => void,
   value: string,
 };
 
 export const PercentSelector: React.FC<PercentSelectorProps> = ({
-  onChange,
+  handleBalance,
   value,
 }) => {
-  const handle25 = () => onChange!! && onChange((parseFloat(value) * 0.25).toString());
-  const handle50 = () => onChange!! && onChange((parseFloat(value) * 0.5).toString());
-  const handle75 = () => onChange!! && onChange((parseFloat(value) * 0.75).toString());
-  const handleMAX = () => onChange!! && onChange(value);
+  const handle25 = () => handleBalance((parseFloat(value) * 0.25).toString());
+  const handle50 = () => handleBalance((parseFloat(value) * 0.5).toString());
+  const handle75 = () => handleBalance((parseFloat(value) * 0.75).toString());
+  const handleMAX = () => handleBalance(value);
 
   return (
     <div className={s.controls}>
