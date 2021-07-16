@@ -18,7 +18,7 @@
 .quaternary, .clean
   min-width: auto
 
-.quaternary
+.quaternary, .inverse
   padding: 6px 8px
   margin: -6px -8px
 
@@ -88,6 +88,11 @@
         -webkit-text-fill-color: $text-01
     &:disabled
       color: $ui-04
+  &.inverse
+    color: $hover-primary-01-fallback
+    background: $brand-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
 
 .dark
   color: $text-inverse
@@ -135,3 +140,8 @@
         -webkit-text-fill-color: $text-inverse
     &:disabled
       color: $ui-04
+  &.inverse
+    color: $hover-primary-02-fallback
+    background: $brand-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent

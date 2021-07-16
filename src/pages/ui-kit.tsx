@@ -537,8 +537,6 @@ const UiKit: React.FC = () => {
             id="ComplexRecipient-01"
           />
         </div>
-        {/* recipient address */}
-        {/* baker */}
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Switcher</h1>
