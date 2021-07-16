@@ -32,6 +32,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -594,6 +595,13 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Graphics</h1>
         <LineChart data={LineChartSampleData} />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Currency amounts</h1>
+        <div className={s.currencies}>
+          <CurrencyAmount amount="1233" currency="TOKEN" />
+          <CurrencyAmount amount="1233" currency="TOKEN" dollarEquivalent="12" />
+        </div>
       </section>
     </BaseLayout>
   );
