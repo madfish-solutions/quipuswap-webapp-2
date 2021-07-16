@@ -83,7 +83,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
         <Button
           disabled={readOnly}
           onClick={handlePaste}
-          theme="quaternary"
+          theme="inverse"
           className={s.btn}
         >
           {t('swap:Paste')}
