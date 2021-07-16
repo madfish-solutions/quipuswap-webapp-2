@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Shevron } from '@components/svg/Shevron';
 import Token from '@icons/Token.svg';
-
 import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {
@@ -42,8 +41,8 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         </label>
       )}
       <div className={s.background}>
-
         <div className={s.shape}>
+          {/* TODO: add hidden input w/ selected baker */}
           <Button theme="quaternary" className={s.baker}>
             <Token />
             <h6 className={cx(s.token)}>

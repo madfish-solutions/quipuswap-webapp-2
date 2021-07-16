@@ -1,12 +1,10 @@
 import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { isTouchDevice } from '@utils/helpers';
-
-import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Button } from '@components/ui/Button';
-
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import s from './ComplexInput.module.sass';
 
 type ComplexRecipientProps = {
@@ -14,9 +12,7 @@ type ComplexRecipientProps = {
   label?:string,
   error?: string
   handleInput: (value: string) => void
-} & (
-  | React.HTMLProps<HTMLTextAreaElement>
-  | React.HTMLProps<HTMLInputElement>);
+} & React.HTMLProps<HTMLTextAreaElement>;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -35,14 +31,13 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
-  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
     modeClass[colorThemeMode],
     { [s.error]: !readOnly && !!error },
     { [s.readOnly]: readOnly },
-    s.recipientBase,
     className,
   );
 
@@ -51,6 +46,8 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
       inputRef.current.focus();
     }
   };
+
+  const handlePaste = async () => handleInput(await navigator.clipboard.readText());
 
   return (
     // eslint-disable-next-line max-len
@@ -67,42 +64,26 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
       <div className={s.background}>
 
         <div className={s.shape}>
-          {isTouchDevice()
-            ? (
-              <textarea
-                className={cx(s.recipient, s.item1, s.input)}
-                ref={inputRef as React.Ref<HTMLTextAreaElement>}
-                onFocus={() => setActive(true)}
-                onBlur={() => setActive(false)}
-                readOnly={readOnly}
-                {...props as React.HTMLProps<HTMLTextAreaElement>}
-              />
-            ) : (
-              <input
-                className={cx(s.recipient, s.item1, s.input)}
-                ref={inputRef as React.Ref<HTMLInputElement>}
-                onFocus={() => setActive(true)}
-                onBlur={() => setActive(false)}
-                readOnly={readOnly}
-                {...props as React.HTMLProps<HTMLInputElement>}
-              />
-            )}
-          <Button
-            disabled={readOnly}
-            onClick={() => {
-              async function paste() {
-                handleInput(await navigator.clipboard.readText());
-              }
-              paste();
-            }}
-            theme="quaternary"
-            className={s.pasteWrap}
-          >
-            <div className={cx(s.paste)}>
-              {t('swap:Paste')}
-            </div>
-          </Button>
+          <textarea
+            className={cx(s.recipient, s.item1, s.input)}
+            ref={inputRef}
+            onFocus={() => setActive(true)}
+            onBlur={() => setActive(false)}
+            readOnly={readOnly}
+            {...props}
+          />
         </div>
+      </div>
+      <div className={s.controls}>
+        <Button
+          disabled={readOnly}
+          onClick={handlePaste}
+          theme="quaternary"
+        >
+          <div className={cx(s.paste)}>
+            {t('swap:Paste')}
+          </div>
+        </Button>
       </div>
       {!readOnly && (<ComplexError error={error} />)}
     </div>

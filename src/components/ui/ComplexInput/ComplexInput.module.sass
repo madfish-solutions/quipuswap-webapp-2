@@ -38,8 +38,7 @@
   margin-right: -8px
   z-index: 1
 
-.recipientBase .item1 textarea
-  min-height: 64px
+
 .item1
   order: 2
   white-space: nowrap
@@ -172,6 +171,8 @@
     color: $text-03
 
 .recipient
+  max-height: 64px
+  resize: none
   font-size: 1.143rem
   font-weight: normal
   line-height: 2
@@ -208,9 +209,6 @@
     order: 4
     flex-basis: content
     margin-left: 32px
-  .recipient
-    flex: initial
-    white-space: nowrap
   .btn
     &:not(:last-child)
       margin-right: 8px
