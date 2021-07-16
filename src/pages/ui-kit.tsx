@@ -85,6 +85,13 @@ const selectValues = [
   { value: 'localhost8888', label: 'localhost: 8888' },
 ];
 
+const selectValuesTop = [
+  { value: 'mainnet', label: 'Mainnet Top' },
+  { value: 'edo2testnet', label: 'Edo2 Testnet Top' },
+  { value: 'florenceTestnet', label: 'Florence Testnet Top' },
+  { value: 'localhost8888', label: 'localhost: 8888 Top' },
+];
+
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
@@ -100,6 +107,7 @@ const UiKit: React.FC = () => {
   const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
 
   const [selectState, setSelectState] = useState(selectValues[0]);
+  const [selectTopState, setSelectTopState] = useState(selectValuesTop[0]);
 
   useEffect(() => {
     setInputError(inputValue.length > 7);
@@ -548,12 +556,21 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Selects</h1>
-        <SelectUI
-          options={selectValues}
-          value={selectState}
-          onChange={(value) => setSelectState(value ?? selectValues[0])}
-          className={s.select}
-        />
+        <div className={s.selectWrapper}>
+          <SelectUI
+            options={selectValues}
+            value={selectState}
+            onChange={(value) => setSelectState(value ?? selectValues[0])}
+            className={s.select}
+          />
+          <SelectUI
+            menuPlacement="top"
+            options={selectValuesTop}
+            value={selectTopState}
+            onChange={(value) => setSelectTopState(value ?? selectValuesTop[0])}
+            className={s.select}
+          />
+        </div>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Tabs</h1>
