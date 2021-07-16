@@ -160,8 +160,13 @@
 
 
 // Selects
+.selectWrapper
+  display: flex
+
 .select
-  max-width: 160px
+  min-width: 160px
+  &:not(:last-child)
+    margin-right: 32px
 
 
 @include media('>tablet')

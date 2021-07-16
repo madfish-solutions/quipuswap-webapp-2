@@ -19,11 +19,34 @@ export const PercentSelector: React.FC<PercentSelectorProps> = ({
 
   return (
     <div className={s.controls}>
-      <Button theme="quaternary" onClick={handle25} className={s.btn}>25%</Button>
-      <Button theme="quaternary" onClick={handle50} className={s.btn}>50%</Button>
-      <Button theme="quaternary" onClick={handle75} className={s.btn}>75%</Button>
-      <Button theme="quaternary" onClick={handleMAX} className={s.btn}>MAX</Button>
-
+      <Button
+        theme="inverse"
+        onClick={handle25}
+        className={s.btn}
+      >
+        25%
+      </Button>
+      <Button
+        theme="inverse"
+        onClick={handle50}
+        className={s.btn}
+      >
+        50%
+      </Button>
+      <Button
+        theme="inverse"
+        onClick={handle75}
+        className={s.btn}
+      >
+        75%
+      </Button>
+      <Button
+        theme="inverse"
+        onClick={handleMAX}
+        className={s.btn}
+      >
+        MAX
+      </Button>
     </div>
   );
 };
