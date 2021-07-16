@@ -2,9 +2,9 @@ import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
 import { isTouchDevice } from '@utils/helpers';
 
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Button } from '@components/ui/Button';
 
 import s from './ComplexInput.module.sass';
@@ -12,6 +12,7 @@ import s from './ComplexInput.module.sass';
 type ComplexRecipientProps = {
   className?: string,
   label?:string,
+  error?: string
   handleInput: (value: string) => void
 } & (
   | React.HTMLProps<HTMLTextAreaElement>
@@ -27,6 +28,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   label,
   id,
   readOnly,
+  error,
   handleInput,
   ...props
 }) => {
@@ -38,6 +40,8 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   const compoundClassName = cx(
     { [s.focused]: focused },
     modeClass[colorThemeMode],
+    { [s.error]: !readOnly && !!error },
+    { [s.readOnly]: readOnly },
     s.recipientBase,
     className,
   );
@@ -70,6 +74,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
                 ref={inputRef as React.Ref<HTMLTextAreaElement>}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
+                readOnly={readOnly}
                 {...props as React.HTMLProps<HTMLTextAreaElement>}
               />
             ) : (
@@ -78,10 +83,12 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
                 ref={inputRef as React.Ref<HTMLInputElement>}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
+                readOnly={readOnly}
                 {...props as React.HTMLProps<HTMLInputElement>}
               />
             )}
           <Button
+            disabled={readOnly}
             onClick={() => {
               async function paste() {
                 handleInput(await navigator.clipboard.readText());
@@ -97,6 +104,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           </Button>
         </div>
       </div>
+      {!readOnly && (<ComplexError error={error} />)}
     </div>
   );
 };
