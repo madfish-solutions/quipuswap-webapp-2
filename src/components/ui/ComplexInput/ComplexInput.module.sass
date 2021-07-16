@@ -172,17 +172,16 @@
 
 .recipient
   height: fit-content
-  min-height: 64px
+  min-height: 48px
   resize: none
   font-size: 1.143rem
   font-weight: normal
-  line-height: 2
+  line-height: 1.4
   flex: 1
   white-space: normal
+  overflow: unset !important
 
 @include media('>tablet')
-  .recipient
-    min-height: 20px
   .item2Line
     justify-content: flex-end
   .shape
@@ -194,7 +193,7 @@
     overflow: hidden
     line-height: unset
   .item2
-    margin: 0px
+    margin: 0
     order: 2
     flex-grow: 1
     margin-left: 32px
@@ -212,6 +211,9 @@
     order: 4
     flex-basis: content
     margin-left: 32px
+  .recipient
+    min-height: 26px
+    line-height: 1.4
   .btn
     &:not(:last-child)
       margin-right: 8px
