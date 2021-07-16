@@ -1,16 +1,18 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import { isTouchDevice } from '@utils/helpers';
-import { Button } from '../Button';
+
+import { Button } from '@components/ui/Button';
 
 import s from './ComplexInput.module.sass';
 
 type ComplexRecipientProps = {
   className?: string,
   label?:string,
+  handleInput: (value: string) => void
 } & (
   | React.HTMLProps<HTMLTextAreaElement>
   | React.HTMLProps<HTMLInputElement>);
@@ -24,12 +26,14 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   className,
   label,
   id,
+  readOnly,
+  handleInput,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
-  const [value, onChange] = React.useState<string>('');
+  const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -38,12 +42,18 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
     className,
   );
 
+  const focusInput = () => {
+    if (inputRef?.current && !readOnly) {
+      inputRef.current.focus();
+    }
+  };
+
   return (
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div
-      tabIndex={-1}
       className={compoundClassName}
-      onFocus={() => setActive(true)}
-      onBlur={() => setActive(false)}
+      onClick={focusInput}
     >
       {label && (
         <label htmlFor={id} className={s.label}>
@@ -56,20 +66,31 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           {isTouchDevice()
             ? (
               <textarea
-                className={cx(s.item1, s.input, s.recipient)}
+                className={cx(s.recipient, s.item1, s.input)}
+                ref={inputRef as React.Ref<HTMLTextAreaElement>}
+                onFocus={() => setActive(true)}
+                onBlur={() => setActive(false)}
                 {...props as React.HTMLProps<HTMLTextAreaElement>}
-                value={value}
-                onChange={(e:React.ChangeEvent<HTMLTextAreaElement>) => onChange(e.target.value)}
               />
             ) : (
               <input
-                className={cx(s.item1, s.input, s.recipient)}
+                className={cx(s.recipient, s.item1, s.input)}
+                ref={inputRef as React.Ref<HTMLInputElement>}
+                onFocus={() => setActive(true)}
+                onBlur={() => setActive(false)}
                 {...props as React.HTMLProps<HTMLInputElement>}
-                value={value}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}
               />
             )}
-          <Button onMouseDown={(e:React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); e.stopPropagation(); }} theme="quaternary" className={s.pasteWrap}>
+          <Button
+            onClick={() => {
+              async function paste() {
+                handleInput(await navigator.clipboard.readText());
+              }
+              paste();
+            }}
+            theme="quaternary"
+            className={s.pasteWrap}
+          >
             <div className={cx(s.paste)}>
               {t('swap:Paste')}
             </div>

@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
+import { Button } from '@components/ui/Button';
 import { Shevron } from '@components/svg/Shevron';
 import Token from '@icons/Token.svg';
-
-import { Button } from '../Button';
 
 import s from './ComplexInput.module.sass';
 

@@ -47,11 +47,6 @@
   text-overflow: ellipsis
   line-height: 24px
 .item2
-  display: flex
-  margin: 8px 0
-  order: 3
-  flex-basis: 100%
-.item2Block
   margin: 8px 0
   order: 3
   flex-basis: 100%
@@ -84,7 +79,7 @@
   &:not(:last-child)
     margin-right: 24px
 
-.input, .output
+.input
   min-width: 10px
   background: transparent
   outline: none
@@ -94,11 +89,6 @@
   font-weight: 600
   font-size: 1.714rem
   line-height: 1.33
-
-.recipient
-  font-size: 1.143rem
-  font-weight: normal
-  line-height: 2
 
 .controls 
   margin-left: 16px
@@ -181,6 +171,13 @@
   .input
     color: $text-03
 
+.recipient
+  font-size: 1.143rem
+  font-weight: normal
+  line-height: 2
+  flex: 1
+  white-space: normal
+
 @include media('>tablet')
   .item2Line
     justify-content: flex-end
@@ -195,17 +192,6 @@
   .item2
     margin: 0px
     order: 2
-    display: flex
-    justify-content: flex-end
-    flex-basis: 50%
-    flex-grow: 1
-    margin-left: 32px
-    flex-basis: unset
-    flex-basis: content
-  .item2Block
-    margin: 0px
-    order: 2
-    width: max-content
     flex-grow: 1
     margin-left: 32px
     flex-basis: unset
@@ -213,7 +199,7 @@
     margin-top: 8px
     order: 3
     flex-grow: 1
-    flex-basis: 50%
+    flex-basis: 20%
   .item4
     margin-top: 8px
     display: flex
@@ -222,6 +208,9 @@
     order: 4
     flex-basis: content
     margin-left: 32px
+  .recipient
+    flex: initial
+    white-space: nowrap
   .btn
     &:not(:last-child)
       margin-right: 8px

@@ -24,7 +24,7 @@ import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import {
-  ComplexBaker, ComplexInput, ComplexRecipient, ComplexSelect, ComplexVotes,
+  ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
@@ -90,6 +90,7 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
+  const [inputAddress, setInputAddress] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
   const handleInputChange = (state: any) => setInputValue(state.target.value);
@@ -478,7 +479,9 @@ const UiKit: React.FC = () => {
           <ComplexInput
             value={inputValue}
             onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-01"
             label="Input"
           />
         </div>
@@ -490,22 +493,40 @@ const UiKit: React.FC = () => {
           />
         </div>
         <div className={s.complexInput}>
-          <ComplexVotes
+          <ComplexInput
+            value={inputValue}
+            onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-02"
+            label="Votes"
+            mode="votes"
+          />
+          {/* <ComplexVotes
             label="Votes"
             value={inputValue}
             onChange={handleInputChange}
             id="ComplexVotes-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
-          />
+          /> */}
         </div>
         <div className={s.complexInput}>
-          <ComplexSelect
+          <ComplexInput
+            value={inputValue}
+            onChange={handleInputChange}
+            handleBalance={(value) => setInputValue(value)}
+            error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
+            id="complexInput-03"
+            label="Votes"
+            mode="select"
+          />
+          {/* <ComplexSelect
             label="Select LP"
             value={inputValue}
             onChange={handleInputChange}
             id="ComplexSelect-01"
             error={inputError ? 'Your password needs to be at least 8 characters long.' : ''}
-          />
+          /> */}
         </div>
         <div className={s.complexInput}>
           <ComplexBaker
@@ -515,8 +536,9 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexRecipient
-            value={inputValue}
-            onChange={handleInputChange}
+            value={inputAddress}
+            onChange={(state: any) => setInputAddress(state.target.value)}
+            handleInput={(state) => setInputAddress(state)}
             label="Recipient address"
             id="ComplexRecipient-01"
           />
