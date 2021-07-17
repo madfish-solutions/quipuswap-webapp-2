@@ -1,13 +1,17 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { SwapSend } from '@containers/SwapSend';
-import LineChart from '@components/ui/LineChart';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 
 import s from '@styles/SwapSend.module.sass';
+
+const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+  ssr: false,
+});
 
 const SwapSendPage: React.FC = () => {
   const { t } = useTranslation(['common', 'home']);
