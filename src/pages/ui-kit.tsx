@@ -19,20 +19,21 @@ import {
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
-import { Logo } from '@components/svg/Logo';
-import { MenuClosed } from '@components/svg/MenuClosed';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Slippage } from '@components/common/Slippage';
+import { Route } from '@components/common/Route';
+import { Logo } from '@components/svg/Logo';
+import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -602,6 +603,16 @@ const UiKit: React.FC = () => {
           <CurrencyAmount amount="1233" currency="TOKEN" />
           <CurrencyAmount amount="1233" currency="TOKEN" dollarEquivalent="12" />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Slippage</h1>
+        <Slippage />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Routes</h1>
+        <Route
+          routes={['qpsp', 'usd', 'xtz']}
+        />
       </section>
     </BaseLayout>
   );
