@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import cx from 'classnames';
 
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
