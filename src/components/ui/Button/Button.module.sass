@@ -2,6 +2,7 @@
 @import "@styles/breakpoints"
 
 .root
+  font-size: 1rem
   line-height: 1.14
   font-weight: 600
   text-align: center
@@ -18,7 +19,7 @@
 .quaternary, .clean
   min-width: auto
 
-.quaternary, .inverse
+.quaternary, .inverse, .underlined
   padding: 6px 8px
   margin: -6px -8px
 
@@ -39,6 +40,17 @@
 
 .tertiary, .quaternary, .clean
   transition: background $colorChangeAnimationTime
+
+.underlined
+  position: relative
+  line-height: 1
+  &::after
+    content: ''
+    position: absolute
+    bottom: 4px
+    left: 8px
+    width: calc(100% - 16px)
+    height: 1px
 
 // Colors
 .light
@@ -88,11 +100,15 @@
         -webkit-text-fill-color: $text-01
     &:disabled
       color: $ui-04
-  &.inverse
+  &.inverse, &.underlined
     color: $hover-primary-01-fallback
     background: $brand-01
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
+  &.underlined
+    position: relative
+    &::after
+      background: $brand-01
 
 .dark
   color: $text-inverse
@@ -140,8 +156,12 @@
         -webkit-text-fill-color: $text-inverse
     &:disabled
       color: $ui-04
-  &.inverse
+  &.inverse, &.underlined
     color: $hover-primary-02-fallback
     background: $brand-02
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
+  &.underlined
+    position: relative
+    &::after
+      background: $brand-02

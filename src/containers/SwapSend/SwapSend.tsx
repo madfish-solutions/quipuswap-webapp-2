@@ -143,7 +143,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           />
         </CardCell>
         <Button
-          className={s.pairAnalytics}
+          className={s.detailsButton}
           theme="inverse"
         >
           View Pair Analytics

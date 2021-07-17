@@ -9,7 +9,7 @@ import s from './CurrencyAmount.module.sass';
 type CurrencyAmountProps = {
   className?: string
   amount: string
-  currency: string
+  currency?: string
   dollarEquivalent?: string
 };
 
@@ -31,7 +31,7 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
       <span className={s.inner}>
         {parseFloat(amount) ? prettyPrice(parseFloat(amount), 8, 40) : amount}
       </span>
-      <span className={s.currency}>{currency}</span>
+      {currency && (<span className={s.currency}>{currency}</span>)}
     </span>
   );
 
