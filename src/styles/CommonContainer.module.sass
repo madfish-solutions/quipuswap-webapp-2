@@ -28,7 +28,7 @@
 
 .button
   margin-left: auto
-  max-width: 180px
+  width: 180px
   margin-top: 40px
 
 .cell
@@ -43,11 +43,23 @@
 .equal
   margin: 0 8px
 
-.pairAnalytics
+.detailsButton
   display: flex
   align-items: center
   margin-left: auto
   margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-top: 32px
+  margin-left: auto
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+    &:not(:first-child)
+      margin-top: 16px
 
 .linkIcon
   margin-left: 8px
@@ -59,3 +71,49 @@
 
 .switcherInput
   margin-right: 8px
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+  .button
+    margin-top: 0
+    margin-left: 0
+    width: 100%
+    max-width: 280px
+    &:not(:last-child)
+      margin-bottom: 16px
+
+@include media('>Lphone', '<=tablet')
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+  .detailsButtons
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+
+@include media('>Ltablet')
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+
+@include media('>1060px')
+  .detailsButtons
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px

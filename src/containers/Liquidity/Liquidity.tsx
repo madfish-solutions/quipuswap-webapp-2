@@ -179,20 +179,22 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             routes={['qpsp', 'usd', 'xtz']}
           />
         </CardCell>
-        <Button
-          className={s.pairAnalytics}
-          theme="inverse"
-        >
-          View Pair Analytics
-          <ExternalLink className={s.linkIcon} />
-        </Button>
-        <Button
-          className={s.pairAnalytics}
-          theme="inverse"
-        >
-          View Pair Contract
-          <ExternalLink className={s.linkIcon} />
-        </Button>
+        <div className={s.detailsButtons}>
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+          >
+            View Pair Analytics
+            <ExternalLink className={s.linkIcon} />
+          </Button>
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+          >
+            View Pair Contract
+            <ExternalLink className={s.linkIcon} />
+          </Button>
+        </div>
       </Card>
     </StickyBlock>
   );
