@@ -1,0 +1,18 @@
+@import "@styles/breakpoints"
+
+.wrapper
+  display: flex
+  flex-direction: column
+
+.chart
+  margin-top: 24px
+
+@include media('>tablet')
+  .chart
+    order: -1
+    margin-top: 0
+    margin-bottom: 24px
+
+@include media('>Ltablet')
+  .chart
+    margin-bottom: 32px

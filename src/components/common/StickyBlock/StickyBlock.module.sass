@@ -1,0 +1,29 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  display: flex
+  flex-direction: column
+  >div
+    &:not(:last-child)
+      margin-bottom: 24px
+
+@include media('>tablet')
+  .root
+    flex-direction: row
+    align-items: flex-start
+    position: relative
+    >div
+      width: 50%
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+      &:last-child
+        position: sticky
+        top: 84px
+
+@include media('>Ltablet')
+  .root
+    >div
+      &:not(:last-child)
+        margin-right: 32px
