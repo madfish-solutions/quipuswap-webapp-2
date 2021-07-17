@@ -10,6 +10,10 @@ import { SwapIcon } from '@components/svg/Swap';
 
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Slippage } from '@components/common/Slippage';
+import { CardCell } from '@components/ui/Card/CardCell';
+import { Route } from '@components/common/Route';
+import { ExternalLink } from '@components/svg/ExternalLink';
 import s from './SwapSend.module.sass';
 
 const TabsContent = [
@@ -96,7 +100,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             className={s.input}
           />
         )}
-        {/* Slippage */}
+        <Slippage />
         <div className={s.receive}>
           <span className={s.receiveLabel}>
             Minimum received:
@@ -105,6 +109,45 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </div>
         <Button className={s.button}>
           {currentTab.label}
+        </Button>
+      </Card>
+      <Card
+        header={{
+          content: `${currentTab.label} Details`,
+        }}
+        contentClassName={s.content}
+      >
+        <CardCell header="Sell Price" className={s.cell}>
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency="tez" />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
+          </div>
+        </CardCell>
+        <CardCell header="Buy Price" className={s.cell}>
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency="QPSP" />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
+          </div>
+        </CardCell>
+        <CardCell header="Price impact" className={s.cell}>
+          <CurrencyAmount amount="<0.01" currency="%" />
+        </CardCell>
+        <CardCell header="Fee" className={s.cell}>
+          <CurrencyAmount amount="0.001" currency="XTZ" />
+        </CardCell>
+        <CardCell header="Route" className={s.cell}>
+          <Route
+            routes={['qpsp', 'usd', 'xtz']}
+          />
+        </CardCell>
+        <Button
+          className={s.pairAnalytics}
+          theme="inverse"
+        >
+          View Pair Analytics
+          <ExternalLink className={s.linkIcon} />
         </Button>
       </Card>
     </StickyBlock>
