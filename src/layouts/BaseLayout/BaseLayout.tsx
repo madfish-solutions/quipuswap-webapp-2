@@ -57,11 +57,11 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
         }] : []}
       />
       {isComponentDidMount ? (
-        <div className={cx(s.root, className)}>
+        <div className={s.root}>
           <Header />
           <Sidebar className={s.sidebar} />
           <Background className={s.background} />
-          <main className={s.wrapper}>
+          <main className={cx(s.wrapper, className)}>
             {children}
           </main>
         </div>

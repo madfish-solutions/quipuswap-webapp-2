@@ -11,5 +11,8 @@ export const prettyPrice = (value: number, dec?: number, length?: number) => {
 
   return new Intl.NumberFormat(
     'en',
+    {
+      maximumFractionDigits: dec ?? 6,
+    },
   ).format(value);
 };

@@ -1,19 +1,14 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
-import { Liquidity } from '@containers/Liquidity';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import { Voting } from '@containers/Voting';
+import { VotingStats } from '@components/voting/StickyBlock';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
-  ssr: false,
-});
-
-const LiquidityPage: React.FC = () => {
+const VotingPage: React.FC = () => {
   const { t } = useTranslation(['common', 'swap']);
 
   return (
@@ -22,8 +17,8 @@ const LiquidityPage: React.FC = () => {
       description={t('swap:Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
-      <Liquidity />
-      <LineChart className={s.chart} data={LineChartSampleData} />
+      <VotingStats className={s.votingStats} />
+      <Voting />
     </BaseLayout>
   );
 };
@@ -34,4 +29,4 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   },
 });
 
-export default LiquidityPage;
+export default VotingPage;
