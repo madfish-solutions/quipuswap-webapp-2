@@ -28,7 +28,9 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
 
   const content = (
     <span className={cx(s.amount, modeClass[colorThemeMode])}>
-      <span className={s.inner}>{prettyPrice(parseFloat(amount))}</span>
+      <span className={s.inner}>
+        {parseFloat(amount) ? prettyPrice(parseFloat(amount), 8, 40) : amount}
+      </span>
       <span className={s.currency}>{currency}</span>
     </span>
   );
@@ -44,7 +46,7 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
         ≈ $
         {' '}
         <span className={s.dollarEquivalentInner}>
-          {prettyPrice(parseFloat(dollarEquivalent))}
+          {prettyPrice(parseFloat(dollarEquivalent), 8, 40)}
         </span>
       </span>
     </div>
