@@ -7,14 +7,14 @@ import { BaseLayout } from '@layouts/BaseLayout';
 import { SwapSend } from '@containers/SwapSend';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 
-import s from '@styles/SwapSend.module.sass';
+import s from '@styles/SwapLiquidity.module.sass';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
 });
 
 const SwapSendPage: React.FC = () => {
-  const { t } = useTranslation(['common', 'home']);
+  const { t } = useTranslation(['common', 'swap']);
 
   return (
     <BaseLayout

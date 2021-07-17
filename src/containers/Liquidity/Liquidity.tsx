@@ -1,41 +1,44 @@
 import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 
-import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
-import { ComplexInput, ComplexRecipient } from '@components/ui/ComplexInput';
+import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
+import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { Switcher } from '@components/ui/Switcher';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
-import { SwapIcon } from '@components/svg/Swap';
+import { ArrowDown } from '@components/svg/ArrowDown';
+import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
 const TabsContent = [
   {
-    id: 'swap',
-    label: 'Swap',
+    id: 'add',
+    label: 'Add',
   },
   {
-    id: 'send',
-    label: 'Send',
+    id: 'remove',
+    label: 'Remove',
   },
 ];
 
-type SwapSendProps = {
+type LiquidityProps = {
   className?: string
 };
 
-export const SwapSend: React.FC<SwapSendProps> = ({
+export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
+  const [switcherValue, setSwitcherValue] = useState(true); // TODO: Delete when lib added
   const handleInputChange = (state: any) => {
     setInputValue(state.target.value);
   }; // TODO: Delete when lib added
@@ -68,52 +71,86 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }}
         contentClassName={s.content}
       >
-        <ComplexInput
-          value={inputValue}
-          onChange={handleInputChange}
-          handleBalance={(value) => setInputValue(value)}
-          id="swap-send-from"
-          label="From"
-          className={s.input}
-        />
-        <Button
-          theme="quaternary"
-          className={s.iconButton}
-        >
-          <SwapIcon />
-        </Button>
-        <ComplexInput
-          value={inputValue}
-          onChange={handleInputChange}
-          handleBalance={(value) => setInputValue(value)}
-          id="swap-send-to"
-          label="To"
-          className={cx(s.input, s.mb24)}
-        />
-        {currentTab.id === 'send' && (
-          <ComplexRecipient
-            value={inputValue}
-            onChange={handleInputChange}
-            handleInput={(state) => setInputValue(state)}
-            label="Recipient address"
-            id="swap-send-recipient"
-            className={cx(s.input, s.mb24)}
-          />
+        {currentTab.id === 'remove' && (
+          <>
+            <ComplexInput
+              value={inputValue}
+              onChange={handleInputChange}
+              handleBalance={(value) => setInputValue(value)}
+              id="liquidity-remove-input"
+              label="Input"
+              className={s.input}
+              mode="votes"
+            />
+            <ArrowDown className={s.iconButton} />
+          </>
         )}
+
+        <ComplexInput
+          value={inputValue}
+          onChange={handleInputChange}
+          handleBalance={(value) => setInputValue(value)}
+          id="liquidity-token-1"
+          label="Output"
+          className={s.input}
+          readOnly={currentTab.id === 'remove'}
+        />
+        <Plus className={s.iconButton} />
+        <ComplexInput
+          value={inputValue}
+          onChange={handleInputChange}
+          handleBalance={(value) => setInputValue(value)}
+          id="liquidity-token-1"
+          label="Output"
+          className={cx(s.input, s.mb24)}
+          readOnly={currentTab.id === 'remove'}
+        />
+
+        {/* SWAP */}
+
         <Slippage />
-        <div className={s.receive}>
-          <span className={s.receiveLabel}>
-            Minimum received:
-          </span>
-          <CurrencyAmount amount="1233" currency="XTZ" />
-        </div>
+
+        {currentTab.id === 'add' && (
+          <>
+            <div className={cx(s.receive, s.mb24)}>
+              <span className={s.receiveLabel}>
+                Minimum received:
+              </span>
+              <CurrencyAmount amount="1233" currency="XTZ/QPLP" />
+            </div>
+            <div className={s.switcher}>
+              <Switcher
+                isActive={switcherValue}
+                onChange={() => setSwitcherValue(!switcherValue)}
+                className={s.switcherInput}
+              />
+              Rebalance Liquidity
+            </div>
+          </>
+        )}
+        {currentTab.id === 'remove' && (
+          <>
+            <div className={s.receive}>
+              <span className={s.receiveLabel}>
+                Minimum received XTZ:
+              </span>
+              <CurrencyAmount amount="1233" currency="XTZ" />
+            </div>
+            <div className={s.receive}>
+              <span className={s.receiveLabel}>
+                Minimum received QPTP:
+              </span>
+              <CurrencyAmount amount="1233" currency="QPTP" />
+            </div>
+          </>
+        )}
         <Button className={s.button}>
-          {currentTab.label}
+          {currentTab.id === 'add' ? 'Add' : 'Remove & Unvote'}
         </Button>
       </Card>
       <Card
         header={{
-          content: `${currentTab.label} Details`,
+          content: `${currentTab.label} Liquidity Details`,
         }}
         contentClassName={s.content}
       >
@@ -147,6 +184,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           theme="inverse"
         >
           View Pair Analytics
+          <ExternalLink className={s.linkIcon} />
+        </Button>
+        <Button
+          className={s.pairAnalytics}
+          theme="inverse"
+        >
+          View Pair Contract
           <ExternalLink className={s.linkIcon} />
         </Button>
       </Card>
