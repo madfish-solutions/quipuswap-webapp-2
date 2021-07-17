@@ -1,0 +1,21 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.header
+  font-weight: 600
+  font-size: 1.286rem
+  line-height: 1.33
+  margin-bottom: 16px
+
+@include media('>Lphone')
+  .header
+    font-size: 2.214rem
+    line-height: 1.43
+    margin-bottom: 16px
+
+
+@include media('>Ltablet')  
+  .header
+    font-size: 3.143rem
+    line-height: 1.5
+    margin-bottom: 16px
