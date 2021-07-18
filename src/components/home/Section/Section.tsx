@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import s from './Section.module.sass';
 
-type SectionProps = {
+export type SectionProps = {
   header: string
   description: string
   className?: string
