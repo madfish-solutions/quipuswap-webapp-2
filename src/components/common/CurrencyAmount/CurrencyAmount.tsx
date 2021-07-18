@@ -10,7 +10,14 @@ type CurrencyAmountProps = {
   className?: string
   amount: string
   currency?: string
+  labelSize?: keyof typeof sizeClass
+  isRightCurrency?: boolean
   dollarEquivalent?: string
+};
+
+const sizeClass = {
+  large: s.large,
+  small: s.small,
 };
 
 const modeClass = {
@@ -20,18 +27,27 @@ const modeClass = {
 
 export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
   className,
+  labelSize = 'small',
   amount,
   currency,
+  isRightCurrency = false,
   dollarEquivalent,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const content = (
-    <span className={cx(s.amount, modeClass[colorThemeMode])}>
+    <span className={cx(
+      s.amount,
+      { [s.isRightCurrency]: isRightCurrency },
+      sizeClass[labelSize],
+      modeClass[colorThemeMode],
+    )}
+    >
+      {currency && isRightCurrency && (<span className={s.currency}>{currency}</span>)}
       <span className={s.inner}>
         {parseFloat(amount) ? prettyPrice(parseFloat(amount), 8, 40) : amount}
       </span>
-      {currency && (<span className={s.currency}>{currency}</span>)}
+      {currency && !isRightCurrency && (<span className={s.currency}>{currency}</span>)}
     </span>
   );
 

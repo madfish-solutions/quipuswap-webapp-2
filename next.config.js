@@ -7,5 +7,8 @@ module.exports = withReactSvg({
   webpack(config, options) {
     return config
   },
+  images: {
+    domains: ['img.templewallet.com'],
+  },
   i18n
 });
