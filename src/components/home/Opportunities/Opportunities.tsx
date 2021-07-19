@@ -1,11 +1,11 @@
 import React from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import cx from 'classnames';
 
 import { Section } from '@components/home/Section';
-import { OpportunityCard } from './OpportunityCard';
-import { OpportunitiesCardsData } from './content';
+import { OpportunityCard } from '@components/home/Opportunities/OpportunityCard/OpportunityCard';
 
+import { OpportunitiesCardsData } from './content';
 import s from './Opportunities.module.sass';
 
 type OpportunitiesProps = {

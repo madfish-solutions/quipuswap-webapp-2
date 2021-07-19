@@ -15,9 +15,9 @@ const Home: React.FC = () => {
       title={t('home:Home page')}
       description={t('home:Home page description. Couple sentences...')}
     >
+      <Opportunities />
       <TopPairs />
       <TopFarmings />
-      <Opportunities />
     </BaseLayout>
   );
 };

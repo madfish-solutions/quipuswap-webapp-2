@@ -2,7 +2,7 @@ import React, { ReactNode, useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
+import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 
 import s from './OpportunityCard.module.sass';
@@ -40,8 +40,8 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({
   );
 
   return (
-    <div className={compoundClassName}>
-      <Icon className={s.center} />
+    <Card className={compoundClassName}>
+      <Icon className={s.icon} />
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
       <Button
@@ -51,6 +51,6 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({
       >
         {button.label}
       </Button>
-    </div>
+    </Card>
   );
 };
