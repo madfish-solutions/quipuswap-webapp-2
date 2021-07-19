@@ -9,14 +9,8 @@ import Temple from '@icons/Temple.svg';
 
 import s from './WalletModal.module.sass';
 
-type ModalProps = {
-  isShow?: boolean
-  setShow?: (state:boolean) => void
-} & ReactModal.Props;
-
-export const WalletModal: React.FC<ModalProps> = ({
-  isShow = false,
-  setShow = () => {},
+export const WalletModal: React.FC<ReactModal.Props> = ({
+  ...props
 }) => {
   const { t } = useTranslation(['common']);
 
@@ -24,9 +18,8 @@ export const WalletModal: React.FC<ModalProps> = ({
     <Modal
       containerClassName={s.modalWrap}
       contentClassName={s.modal}
-      isOpen={isShow}
-      onRequestClose={() => setShow(false)}
       title={t('common:Connect wallet')}
+      {...props}
     >
       <Button
         className={s.button}

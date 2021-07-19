@@ -30,11 +30,11 @@ import { Route } from '@components/common/Route';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { WalletModal } from '@components/ui/WalletModal';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { WalletModal } from '@components/ui/WalletModal';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -422,7 +422,7 @@ const UiKit: React.FC = () => {
         >
           Wallet connect
         </Button>
-        <WalletModal isShow={showWalletPopup} setShow={setShowWalletPopup} />
+        <WalletModal isOpen={showWalletPopup} onRequestClose={() => setShowWalletPopup(false)} />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
