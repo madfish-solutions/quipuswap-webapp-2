@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
-import { Copy } from '@components/svg/Copy';
+import { Input } from '@components/ui/Input';
 
 import s from './NetworkModal.module.sass';
 
@@ -23,40 +23,48 @@ export const NetworkModal: React.FC<ComplexRecipientProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const [name, setName] = React.useState<string>('');
+  const [rpc, setRPC] = React.useState<string>('');
+  const [lambda, setLambda] = React.useState<string>('');
+
   const compoundClassName = cx(
     s.modal,
     modeClass[colorThemeMode],
   );
 
-  const handleCopy = async () => navigator.clipboard.writeText('');
-
   return (
     <Modal
       containerClassName={s.modalWrap}
       contentClassName={compoundClassName}
-      title={t('common:Account')}
+      title={t('common:Add Network')}
       {...props}
     >
-      <div className={s.row}>
-        <div className={s.addr}>
-          tz1TryFD...KGdK
-        </div>
-        <Button
-          onClick={handleCopy}
-          theme="inverse"
-        >
-          <div className={s.buttonContent}>
-            <Copy className={s.icon} />
-            {t('swap:Copy')}
-
-          </div>
-        </Button>
-      </div>
+      <Input
+        className={s.input}
+        value={name}
+        label={t('common:Name')}
+        onChange={(ev:any) => setName(ev.target.value)}
+        placeholder={t('common:My custom network')}
+      />
+      <Input
+        className={s.input}
+        value={rpc}
+        label={t('common:RPC base URL')}
+        onChange={(ev:any) => setRPC(ev.target.value)}
+        placeholder={t('common:http://localhost:2000')}
+      />
+      <Input
+        className={s.input}
+        value={lambda}
+        label={t('common:Lambda View contract(optional)')}
+        onChange={(ev:any) => setLambda(ev.target.value)}
+        placeholder={t('common:e.g. Kscwf2r3...')}
+      />
       <Button
+        theme="primary"
         className={s.button}
-        theme="secondary"
       >
-        {t('common:Log Out')}
+        {t('common:Add')}
       </Button>
     </Modal>
   );

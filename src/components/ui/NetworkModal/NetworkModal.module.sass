@@ -1,19 +1,22 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
-.addr
-  font-weight: 600
-  color: #8B90A0
-  font-size: 1.125rem
-  line-height: 1.5
-
 .modal
   padding: 24px
-  padding-top: 16px
+  padding-top: 40px
+
+.input
+  label
+    font-weight: 600
+    color: $text-03 !important
+    line-height: 1.14
+  &:not(:last-child)
+    margin-bottom: 40px
 
 .button
-  margin-top: 40px
-  background: $support-error !important
+  max-width: 180px
+  margin-top: 24px
+  margin-left: calc(100% - 180px)
 
 .row
   display: flex
@@ -25,16 +28,3 @@
   align-items: center
   .icon
     margin-right: 8px
-
-.light
-  .button
-    color: $text-01 !important
-
-.dark
-  .button
-    color: $text-inverse !important
-
-
-@include media('>tablet')
-  .button
-    max-width: none
