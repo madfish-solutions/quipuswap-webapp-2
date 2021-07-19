@@ -31,6 +31,7 @@ import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { WalletModal } from '@components/ui/WalletModal';
+import { AccountModal } from '@components/ui/AccountModal';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
@@ -99,6 +100,7 @@ const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [showWalletPopup, setShowWalletPopup] = useState<boolean>(false);
+  const [showAccountPopup, setShowAccountPopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -422,7 +424,14 @@ const UiKit: React.FC = () => {
         >
           Wallet connect
         </Button>
+        <Button
+          className={s.button}
+          onClick={() => setShowAccountPopup(true)}
+        >
+          Account modal
+        </Button>
         <WalletModal isOpen={showWalletPopup} onRequestClose={() => setShowWalletPopup(false)} />
+        <AccountModal isOpen={showAccountPopup} onRequestClose={() => setShowAccountPopup(false)} address="tz1TryFD...KGdK" />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
