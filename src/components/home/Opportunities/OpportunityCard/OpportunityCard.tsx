@@ -13,7 +13,7 @@ type OpportunityCardProps = {
   title: ReactNode
   description: ReactNode
   button: {
-    label: string
+    label: ReactNode
     href: string
     external?: boolean
   }

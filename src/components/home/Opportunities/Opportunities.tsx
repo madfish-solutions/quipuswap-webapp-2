@@ -26,14 +26,14 @@ export const Opportunities: React.FC<OpportunitiesProps> = ({
       <div className={s.cards}>
         {
           OpportunitiesCardsData.map(({
-            id, title, description, button, Icon,
+            id, Icon, title, description, button,
           }) => (
             <OpportunityCard
               key={id}
+              Icon={Icon}
               title={title}
               description={description}
               button={button}
-              Icon={Icon}
             />
           ))
         }
