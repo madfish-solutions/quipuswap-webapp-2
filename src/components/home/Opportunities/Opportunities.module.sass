@@ -1,0 +1,15 @@
+@import "@styles/breakpoints"
+@import "@styles/variables"
+
+.cards
+  display: grid
+  gap: 24px
+
+@include media('>Lphone')
+  .cards
+    grid-template-columns: repeat(2,1fr)
+
+@include media('>Ltablet')
+  .cards
+    grid-template-columns: repeat(3,1fr)
+    gap: 32px

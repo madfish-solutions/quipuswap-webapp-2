@@ -1,0 +1,56 @@
+@import "@styles/breakpoints"
+@import "@styles/variables"
+
+.root
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+  padding: 24px 16px
+  border-radius: 8px
+  box-shadow: $elevation-02
+  transition: background-color $colorChangeAnimationTime
+
+.title
+  font-size: 1.286rem
+  line-height: 1.33
+  margin-top: 16px
+
+.description
+  font-size: 1rem
+  line-height: 1.71
+  margin-top: 16px
+
+.button
+  display: flex
+  flex-direction: column
+  margin-top: 16px
+
+.center
+  margin: auto
+
+.light
+  background-color: $ui-01
+
+.dark
+  background-color: $ui-07
+
+@include media('>Lphone')
+  .title
+    font-size: 1.286rem
+    line-height: 1.33
+
+@include media('>Ltablet')
+  .title
+    font-size: 2.286rem
+    line-height: 1.5
+  
+  .description
+    font-size: 1.143rem
+    line-height: 1.62
+  
+  .center
+    margin: 0
+  
+  .button
+    max-width: 180px
+    margin-left: auto

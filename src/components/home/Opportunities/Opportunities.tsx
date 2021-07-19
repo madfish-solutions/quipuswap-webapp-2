@@ -1,0 +1,43 @@
+import React from 'react';
+import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+
+import { Section } from '@components/home/Section';
+import { OpportunityCard } from './OpportunityCard';
+import { OpportunitiesCardsData } from './content';
+
+import s from './Opportunities.module.sass';
+
+type OpportunitiesProps = {
+  className?: string
+};
+
+export const Opportunities: React.FC<OpportunitiesProps> = ({
+  className,
+}) => {
+  const { t } = useTranslation(['home']);
+
+  return (
+    <Section
+      className={cx(s.root, className)}
+      header={t('home:QuipuSwap opportunities')}
+      description={t('home:Start to work with the biggest DEX on Tezos: swap, farm, stake.')}
+    >
+      <div className={s.cards}>
+        {
+          OpportunitiesCardsData.map(({
+            id, title, description, button, Icon,
+          }) => (
+            <OpportunityCard
+              key={id}
+              title={title}
+              description={description}
+              button={button}
+              Icon={Icon}
+            />
+          ))
+        }
+      </div>
+    </Section>
+  );
+};
