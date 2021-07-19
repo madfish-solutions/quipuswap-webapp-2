@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
-
 import { Beacon } from '@components/svg/Beacon';
 import { Temple } from '@components/svg/Temple';
 
