@@ -1,9 +1,5 @@
-import React from 'react';
 
-export const Temple: React.FC<IconProps> = ({
-  className,
-}) => (
-  <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#Temple-clip0)">
       <path d="M22.6562 9.85H27.575L25.1125 0H7.88745L10.3437 9.85H15.2687L17.7312 19.6938H14.6562L15.8875 24.6188H18.9625L20.1937 29.5438H27.575L22.6562 9.85Z" fill="url(#Temple-paint0_linear)" />
       <path d="M25.1125 12.3124H23.2687L22.6562 9.84988H27.575L25.1125 12.3124Z" fill="url(#Temple-paint1_linear)" />
@@ -72,5 +68,3 @@ export const Temple: React.FC<IconProps> = ({
       </clipPath>
     </defs>
   </svg>
-
-);

@@ -3,8 +3,9 @@ import { useTranslation } from 'next-i18next';
 
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
-import { Beacon } from '@components/svg/Beacon';
-import { Temple } from '@components/svg/Temple';
+
+import Beacon from '@icons/Beacon.svg';
+import Temple from '@icons/Temple.svg';
 
 import s from './WalletModal.module.sass';
 
