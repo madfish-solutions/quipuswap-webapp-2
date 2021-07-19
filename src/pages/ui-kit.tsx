@@ -34,6 +34,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { WalletModal } from '@components/ui/WalletModal';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -97,6 +98,7 @@ const selectValuesTop = [
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
+  const [showWalletPopup, setShowWalletPopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -414,6 +416,13 @@ const UiKit: React.FC = () => {
         >
           All modal cells popup
         </Button>
+        <Button
+          className={s.button}
+          onClick={() => setShowWalletPopup(true)}
+        >
+          Wallet connect
+        </Button>
+        <WalletModal isShow={showWalletPopup} setShow={setShowWalletPopup} />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
