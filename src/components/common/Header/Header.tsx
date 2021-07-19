@@ -1,14 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { QUIPUSWAP } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
@@ -28,7 +27,7 @@ export const Header: React.FC<HeaderProps> = ({
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
+
   const [isMenuOpened, setIsMenuOpened] = useState(false);
 
   useEffect(() => {
@@ -48,13 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
             <span className={s.logoText}>QuipuSwap</span>
           </a>
         </Link>
-        <Button
-          className={s.connect}
-          href={QUIPUSWAP}
-          external
-        >
-          {t('common:Connect wallet')}
-        </Button>
+        <ConnectWalletButton className={s.connect} />
         <LanguageSwitcher
           direction="bottom"
           className={s.languageSwitcher}

@@ -6,6 +6,7 @@ import { appWithTranslation } from 'next-i18next';
 import { DefaultSeo } from 'next-seo';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
+import { DAppProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
@@ -132,9 +133,12 @@ function MyApp({ Component, pageProps }: AppProps) {
           href="/icons/icon-512x512.png"
         />
       </Head>
-      <ColorThemeProvider>
-        <Component {...pageProps} />
-      </ColorThemeProvider>
+
+      <DAppProvider>
+        <ColorThemeProvider>
+          <Component {...pageProps} />
+        </ColorThemeProvider>
+      </DAppProvider>
     </>
   );
 }
