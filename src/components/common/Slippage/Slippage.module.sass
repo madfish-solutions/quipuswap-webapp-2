@@ -11,12 +11,9 @@
 .buttons
   display: flex
   margin-top: 8px
-  flex-wrap: wrap
 
 .button
-  white-space: nowrap
   padding: 1px
-  flex: 1
   border-radius: 9px
   &:not(:last-child)
     margin-right: 8px
@@ -25,7 +22,6 @@
   padding: 5px 15px
   display: flex
   align-items: center
-  justify-content: center
   min-height: 25px
   font-size: 0.857rem
   line-height: 1
@@ -49,7 +45,3 @@
   .buttonInner
     background-color: $ui-07
     color: $text-inverse
-
-@include media('>Ltablet')
-  .button
-    flex: none
