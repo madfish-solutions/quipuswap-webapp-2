@@ -1,3 +1,5 @@
+import { QSNetwork } from '@utils/types';
+
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
 export const DEFAULT_DECIMALS = 6;
@@ -15,3 +17,35 @@ export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/5
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
+
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
+export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
+
+// NETWORKS
+export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
+export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
+export const NETWORK_ID_KEY = 'networkId';
+export const FLORENCENET_NETWORK: QSNetwork = {
+  id: 'florencenet',
+  connectType: 'default',
+  name: 'Florence Testnet',
+  type: 'test',
+  rpcBaseURL: 'https://testnet-tezos.giganode.io',
+  description: 'Florence testnet',
+  disabled: false,
+};
+export const MAINNET_NETWORK: QSNetwork = {
+  id: 'mainnet',
+  connectType: 'default',
+  name: 'Tezos Mainnet',
+  type: 'main',
+  rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
+  description: 'Tezos mainnet',
+  disabled: false,
+};
+export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK];
+export const DEFAULT_NETWORK = MAINNET_NETWORK;
+export const CHAIN_ID_MAPPING = new Map<string, string>([
+  ['florencenet', 'NetXxkAx4woPLyu'],
+  ['mainnet', 'NetXdQprcVkpaWU'],
+]);

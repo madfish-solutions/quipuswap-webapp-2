@@ -41,7 +41,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }; // TODO: Delete when lib added
 
   const currentTab = useMemo(
-    () => (TabsContent.filter(({ id }) => id === tabsState)[0]),
+    () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
 

@@ -3,7 +3,10 @@ import cx from 'classnames';
 import { NextSeo } from 'next-seo';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
+import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WalletModal } from '@components/ui/WalletModal';
+import { AccountModal } from '@components/ui/AccountModal';
 import { Sidebar } from '@components/common/Sidebar';
 import { Header } from '@components/common/Header';
 import { Background } from '@components/svg/Background';
@@ -57,14 +60,19 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
         }] : []}
       />
       {isComponentDidMount ? (
-        <div className={s.root}>
-          <Header />
-          <Sidebar className={s.sidebar} />
-          <Background className={s.background} />
-          <main className={cx(s.wrapper, className)}>
-            {children}
-          </main>
-        </div>
+        <ConnectModalsStateProvider>
+          <div className={s.root}>
+            <Header />
+            <Sidebar className={s.sidebar} />
+            <Background className={s.background} />
+            <main className={cx(s.wrapper, className)}>
+              {children}
+            </main>
+          </div>
+
+          <WalletModal />
+          <AccountModal />
+        </ConnectModalsStateProvider>
       ) : <div />}
     </>
   );
