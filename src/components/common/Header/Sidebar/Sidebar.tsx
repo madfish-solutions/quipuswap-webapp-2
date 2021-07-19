@@ -4,10 +4,10 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
-import Token from '@icons/Token.svg';
 
-import { Navigation } from '../Header/Navigation';
-import { Socials } from '../Header/Socials';
+import { Navigation } from '../Navigation';
+import { Socials } from '../Socials';
+import { QPToken } from '../QPToken';
 import s from './Sidebar.module.sass';
 
 type SidebarProps = {
@@ -32,10 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
-        <div className={s.token}>
-          <Token className={s.tokenIcon} />
-          <span className={s.price}>$ 5.34</span>
-        </div>
+        <QPToken className={s.token} />
         <Socials className={s.socials} id="desktop" />
       </footer>
     </div>

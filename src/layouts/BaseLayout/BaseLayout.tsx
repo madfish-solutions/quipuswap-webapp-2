@@ -7,7 +7,7 @@ import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WalletModal } from '@components/ui/WalletModal';
 import { AccountModal } from '@components/ui/AccountModal';
-import { Sidebar } from '@components/common/Sidebar';
+import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
 import { Background } from '@components/svg/Background';
 
