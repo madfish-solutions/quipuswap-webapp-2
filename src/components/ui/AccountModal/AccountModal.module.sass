@@ -1,0 +1,40 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.addr
+  font-weight: 600
+  color: #8B90A0
+  font-size: 1.125rem
+  line-height: 1.5
+
+.modal
+  padding: 24px
+  padding-top: 16px
+
+.button
+  margin-top: 40px
+  background: $support-error !important
+
+.row
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.buttonContent 
+  display: flex
+  align-items: center
+  .icon
+    margin-right: 8px
+
+.light
+  .button
+    color: $text-01 !important
+
+.dark
+  .button
+    color: $text-inverse !important
+
+
+@include media('>tablet')
+  .button
+    max-width: none
