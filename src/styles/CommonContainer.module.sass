@@ -28,6 +28,7 @@
 
 .button
   margin-top: 40px
+  max-width: 280px
 
 .cell
   &:not(:last-child)
@@ -83,6 +84,8 @@
       margin-bottom: 16px
 
 @include media('>Lphone', '<=tablet')
+  .button
+    margin-left: auto
   .buttons
     flex-direction: row
     justify-content: flex-end
