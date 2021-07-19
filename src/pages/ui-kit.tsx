@@ -31,11 +31,11 @@ import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { WalletModal } from '@components/ui/WalletModal';
+import { AccountModal } from '@components/ui/AccountModal';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { AccountModal } from '@components/ui/AccountModal';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
