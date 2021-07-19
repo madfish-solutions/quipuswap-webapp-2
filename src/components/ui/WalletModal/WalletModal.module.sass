@@ -2,24 +2,32 @@
 @import "@styles/breakpoints"
 
 .button
-  margin-bottom: 24px
-  margin-left: 24px
+  max-width: 280px
+  &:not(:last-child)
+    margin-bottom: 24px
+
+.modal
+  max-width: 344px
+  padding: 0 0 24px 24px
 
 .buttonContent 
   display: flex
   align-items: center
-  svg
+  .icon
     margin-right: 8px
 
 @include media('>tablet')
   .button
-    margin: 0
-    margin-right: 24px
     width: 176px
+    &:not(:last-child)
+      margin-right: 24px
+      margin-bottom: 0
+      
 
   .modalWrap
     max-width: 424px  
   .modal
-    padding: 24px 0 24px 24px
+    padding: 24px
     display: flex
     align-items: center
+    max-width: 424px

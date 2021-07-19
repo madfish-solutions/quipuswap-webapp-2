@@ -4,8 +4,8 @@ import { useTranslation } from 'next-i18next';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 
-import Beacon from '@icons/Beacon.svg';
-import Temple from '@icons/Temple.svg';
+import { Beacon } from '@components/svg/Beacon';
+import { Temple } from '@components/svg/Temple';
 
 import s from './WalletModal.module.sass';
 
@@ -26,7 +26,7 @@ export const WalletModal: React.FC<ReactModal.Props> = ({
         theme="secondary"
       >
         <div className={s.buttonContent}>
-          <Temple />
+          <Temple className={s.icon} />
           Temple wallet
         </div>
       </Button>
@@ -35,7 +35,7 @@ export const WalletModal: React.FC<ReactModal.Props> = ({
         theme="secondary"
       >
         <div className={s.buttonContent}>
-          <Beacon />
+          <Beacon className={s.icon} />
           Another wallet
         </div>
       </Button>
