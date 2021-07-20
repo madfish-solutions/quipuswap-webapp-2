@@ -6,6 +6,7 @@
   font-weight: 600
 
 .reward
+  position: relative
   display: flex
   justify-content: space-between
   padding: 32px 24px
@@ -35,16 +36,29 @@
   max-width: 280px
   margin-top: 40px
 
+.rewardBorder
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
+  bottom: 0
+  border-radius: 8px
+  &#VotingBorder-rect
+    width: calc(100% - 2px)
+    
+
 .light
+  .rewardBorder
+    stroke: $hover-primary-01-fallback
   .reward
-    border: 2px dashed $hover-primary-01-fallback
     color: $text-01
   .amount
     color: $text-01
 
 .dark
+  .rewardBorder
+    stroke: $hover-primary-02-fallback
   .reward
-    border: 2px dashed $hover-primary-02-fallback
     color: $text-inverse
   .amount
     color: $text-inverse

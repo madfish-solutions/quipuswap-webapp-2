@@ -5,6 +5,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
+import VotingBorder from '@icons/VotingBorder.svg';
 
 import s from './VotingStats.module.sass';
 
@@ -43,6 +44,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
       <div className={s.reward}>
+        <VotingBorder className={s.rewardBorder} />
         <div className={s.rewardContent}>
           <span className={s.rewardHeader}>Your Pending Rewards:</span>
           <span className={s.rewardAmount}>
