@@ -30,9 +30,7 @@ import { Route } from '@components/common/Route';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-import { WalletModal } from '@components/ui/WalletModal';
 import { NetworkModal } from '@components/ui/NetworkModal';
-import { AccountModal } from '@components/ui/AccountModal';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
@@ -100,6 +98,7 @@ const selectValuesTop = [
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
+  const [showNetworkPopup, setShowNetworkPopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -417,9 +416,13 @@ const UiKit: React.FC = () => {
         >
           All modal cells popup
         </Button>
-        <WalletModal />
-        <AccountModal />
-        <NetworkModal />
+        <Button
+          className={s.button}
+          onClick={() => setShowNetworkPopup(true)}
+        >
+          Add network modal
+        </Button>
+        <NetworkModal isOpen={showNetworkPopup} onRequestClose={() => setShowNetworkPopup(false)} />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}

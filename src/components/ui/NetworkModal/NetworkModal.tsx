@@ -3,25 +3,25 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 
 import s from './NetworkModal.module.sass';
 
+type ComplexRecipientProps = {
+} & ReactModal.Props;
+
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const NetworkModal: React.FC = () => {
+export const NetworkModal: React.FC<ComplexRecipientProps> = ({
+  ...props
+}) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const {
-    networkAddModalOpen,
-    closeNetworkAddModal,
-  } = useConnectModalsState();
 
   const [name, setName] = React.useState<string>('');
   const [rpc, setRPC] = React.useState<string>('');
@@ -37,8 +37,7 @@ export const NetworkModal: React.FC = () => {
       containerClassName={s.modalWrap}
       contentClassName={compoundClassName}
       title={t('swap:Add Network')}
-      isOpen={networkAddModalOpen}
-      onRequestClose={closeNetworkAddModal}
+      {...props}
     >
       <Input
         className={s.input}
