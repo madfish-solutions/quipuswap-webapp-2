@@ -16,7 +16,7 @@ type DashboardCardProps = {
 
 const sizeClass = {
   large: s.large,
-  small: s.small,
+  extraLarge: s.extraLarge,
 };
 
 const modeClass = {
@@ -26,7 +26,7 @@ const modeClass = {
 
 export const DashboardCard: React.FC<DashboardCardProps> = ({
   volume,
-  size = 'small',
+  size = 'large',
   label,
   units,
   className,
@@ -37,7 +37,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
     <div className={cx(s.root, className, sizeClass[size], modeClass[colorThemeMode])}>
       <h4 className={s.header}>{label}</h4>
       <div className={s.currency}>
-        <CurrencyAmount amount={volume} currency="$" isRightCurrency labelSize="extraLarge" />
+        <CurrencyAmount amount={volume} currency="$" isRightCurrency labelSize={size} />
         {units && <span className={s.units}>{` ${units}`}</span>}
       </div>
     </div>

@@ -11,7 +11,6 @@
   line-height: 1.14
 
 .inner
-  min-width: 180px
   margin-right: 4px
   transition: color $colorChangeAnimationTime
 
@@ -45,4 +44,9 @@
   line-height: 1.33
 
 .extraLarge
-  font-size: inherit
+  font-size: 1.285rem
+
+@include media('>Ltablet')
+  .extraLarge
+    font-size: 2.286rem
+  

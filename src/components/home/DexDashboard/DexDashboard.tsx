@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
+import { Card } from '@components/ui/Card';
 import { DashboardCard } from './DashboardCard';
 import { DEXDashboardData } from './content';
 
@@ -30,32 +31,34 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       description={t('home:The short overview of the most relevant DEX information.')}
       className={cx(className, s.root, modeClass[colorThemeMode])}
     >
-      <div className={s.wrapper}>
-        <div className={cx(s.primary)}>
+      <Card>
+        <div className={cx(s.content)}>
           {
             DEXDashboardData.slice(0, 4).map((item) => (
               <DashboardCard
                 key={item.id}
-                size="large"
+                size="extraLarge"
                 volume={item.volume}
                 label={item.label}
                 units={item.units}
               />
             ))
           }
+          <div className={s.row}>
+            {
+              DEXDashboardData.slice(4).map((item) => (
+                <DashboardCard
+                  key={item.id}
+                  size="large"
+                  volume={item.volume}
+                  label={item.label}
+                  units={item.units}
+                />
+              ))
+            }
+          </div>
         </div>
-        <div className={cx(s.secondary)}>
-          {DEXDashboardData.slice(4).map((item) => (
-            <DashboardCard
-              key={item.id}
-              size="small"
-              volume={item.volume}
-              label={item.label}
-              units={item.units}
-            />
-          ))}
-        </div>
-      </div>
+      </Card>
     </Section>
   );
 };
