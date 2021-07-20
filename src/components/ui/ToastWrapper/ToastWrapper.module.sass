@@ -1,0 +1,54 @@
+@import '@styles/variables'
+@import '@styles/breakpoints'
+
+.notificationContainer
+  width: 1496px
+  min-width: 1496px
+  padding: 0
+  top: 20px
+
+.notification
+  margin-bottom: 24px
+  width: 100%
+  position: relative
+  display: flex
+  align-items: center
+  font-size: 16px
+  padding: 8px
+  border-radius: 4px
+  //background: rgba($white, .3)
+  &.success
+    //color: $purple-text
+    //border: 1px solid $green
+    .toastBody
+      //background-color: $green
+  &.error
+    //border: 1px solid $burgundy
+    //color: $white
+    .toastBody
+      //background-color: $burgundy
+
+.toastBody
+  text-align: center
+  padding: 16px 56px
+  border-radius: 4px
+
+.closeButton
+  padding: 8px
+  position: absolute
+  top: 50%
+  right: 22px
+  transform: translateY(-50%)
+
+@include media("<=1560px")
+  .notificationContainer
+    width: 1216px
+    min-width: 1216px
+@include media("<=desktop")
+  .notificationContainer
+    width: 1016px
+    min-width: 1016px
+@include media('<=1080px')
+  .notificationContainer
+    width: calc(100% - 32px)
+    min-width: calc(100% - 32px)

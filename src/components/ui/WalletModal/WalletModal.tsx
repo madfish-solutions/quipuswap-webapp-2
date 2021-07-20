@@ -9,6 +9,7 @@ import {
   useConnectWithTemple,
 } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 
@@ -43,6 +44,7 @@ export const Wallet: React.FC<WalletProps> = ({
 
 export const WalletModal: React.FC = () => {
   const { t } = useTranslation(['common']);
+  const updateToast = useUpdateToast();
 
   const {
     connectWalletModalOpen,
@@ -66,11 +68,24 @@ export const WalletModal: React.FC = () => {
       } else {
         const authenticationWasRejected = (e.name === 'NotGrantedTempleWalletError') || (e instanceof AbortedBeaconError);
         if (!authenticationWasRejected) {
-          //  TODO: toast
+          updateToast({
+            type: 'error',
+            render: t('common:errorWhileConnectingWallet', {
+              walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
+              error: e.message,
+            }),
+          });
         }
       }
     }
-  }, [closeConnectWalletModal, connectWithBeacon, connectWithTemple, openInstallTempleWalletModal]);
+  }, [
+    closeConnectWalletModal,
+    connectWithBeacon,
+    connectWithTemple,
+    openInstallTempleWalletModal,
+    t,
+    updateToast,
+  ]);
 
   return (
     <Modal
