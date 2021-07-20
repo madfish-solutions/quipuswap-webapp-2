@@ -33,16 +33,16 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       <div className={s.wrapper}>
         <div className={cx(s.primary)}>
           {
-          DEXDashboardData.slice(0, 4).map((item) => (
-            <DashboardCard
-              key={item.id}
-              size="large"
-              volume={item.volume}
-              label={item.label}
-              units={item.units}
-            />
-          ))
-        }
+            DEXDashboardData.slice(0, 4).map((item) => (
+              <DashboardCard
+                key={item.id}
+                size="large"
+                volume={item.volume}
+                label={item.label}
+                units={item.units}
+              />
+            ))
+          }
         </div>
         <div className={cx(s.secondary)}>
           {DEXDashboardData.slice(4).map((item) => (

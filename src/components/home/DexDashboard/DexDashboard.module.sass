@@ -1,8 +1,6 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
-.root
-
 .light
   .primary, .secondary
     background-color: $ui-01
@@ -19,5 +17,14 @@
   display: flex
   align-items: center
   justify-content: space-around
-  flex: 1 0 auto
   flex-wrap: wrap
+  flex-direction: column
+  border-radius: 8px
+  
+@include media('>Ltablet')
+  .primary
+    flex-direction: row
+  .secondary
+    flex-direction: row
+      
+

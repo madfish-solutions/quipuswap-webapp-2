@@ -6,12 +6,15 @@
   
 .header
   text-align: center
-  color: $text-03
+  color: $text-03 !important
   font-size: 1.15rem
 
 .currency
   margin-top: 8px
-  font-size: 2.29rem
+  font-size: 1.28rem
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
 
 .units 
   font-weight: 600
@@ -19,3 +22,9 @@
 .small
   .currency
     font-size: 1.28rem
+
+
+@include media('>Ltablet')
+  .currency
+    font-size: 2.29rem
+    text-overflow: visible
