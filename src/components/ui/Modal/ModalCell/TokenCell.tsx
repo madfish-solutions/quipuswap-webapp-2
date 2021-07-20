@@ -2,13 +2,17 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
-import Token from '@icons/Token.svg';
 
 import s from './ModalCell.module.sass';
 
 type TokenCellProps = {
-  token?: any,
+  contractAddress: string
+  icon?: string
+  name?: string
+  symbol?: string
+  badges: string[]
 };
 
 const modeClass = {
@@ -17,20 +21,29 @@ const modeClass = {
 };
 
 export const TokenCell: React.FC<TokenCellProps> = ({
-  token,
+  contractAddress,
+  icon,
+  name,
+  symbol,
+  badges,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
       <div className={s.joinRow}>
-        <Token />
+        <TokensLogos
+          token1={{
+            icon,
+            name: name ?? symbol ?? contractAddress,
+          }}
+        />
         <div className={s.mleft8}>
           <div className={s.joinRow}>
             <h6>
-              {token?.name}
+              {symbol ?? name ?? 'Unnamed'}
             </h6>
-            {token?.badges.map((x:any) => (
+            {badges.map((x) => (
               <Bage
                 className={s.bage}
                 key={x}
@@ -39,11 +52,10 @@ export const TokenCell: React.FC<TokenCellProps> = ({
             )) }
           </div>
           <span className={s.caption}>
-            {token?.label}
+            {name ?? symbol ?? contractAddress}
           </span>
         </div>
       </div>
-      <h6>{token?.price}</h6>
     </div>
   );
 };

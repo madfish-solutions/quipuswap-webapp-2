@@ -27,6 +27,7 @@ import {
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
+import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
@@ -97,6 +98,7 @@ const selectValuesTop = [
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
+  const [tokensModal, setTokensModal] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -414,6 +416,13 @@ const UiKit: React.FC = () => {
         >
           All modal cells popup
         </Button>
+        <Button
+          className={s.button}
+          onClick={() => setTokensModal(true)}
+        >
+          Open tokens modal
+        </Button>
+        <TokensModal isOpen={tokensModal} onRequestClose={() => setTokensModal(false)} />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}

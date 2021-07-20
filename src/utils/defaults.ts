@@ -21,6 +21,8 @@ export const IPFS_IO = 'https://ipfs.io/ipfs/';
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
+export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
