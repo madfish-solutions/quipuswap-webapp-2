@@ -3,25 +3,25 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 
 import s from './NetworkModal.module.sass';
 
-type ComplexRecipientProps = {
-} & ReactModal.Props;
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const NetworkModal: React.FC<ComplexRecipientProps> = ({
-  ...props
-}) => {
+export const NetworkModal: React.FC = () => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const {
+    networkAddModalOpen,
+    closeNetworkAddModal,
+  } = useConnectModalsState();
 
   const [name, setName] = React.useState<string>('');
   const [rpc, setRPC] = React.useState<string>('');
@@ -36,35 +36,36 @@ export const NetworkModal: React.FC<ComplexRecipientProps> = ({
     <Modal
       containerClassName={s.modalWrap}
       contentClassName={compoundClassName}
-      title={t('common:Add Network')}
-      {...props}
+      title={t('swap:Add Network')}
+      isOpen={networkAddModalOpen}
+      onRequestClose={closeNetworkAddModal}
     >
       <Input
         className={s.input}
         value={name}
-        label={t('common:Name')}
+        label={t('swap:Name')}
         onChange={(ev:any) => setName(ev.target.value)}
-        placeholder={t('common:My custom network')}
+        placeholder={t('swap:My custom network')}
       />
       <Input
         className={s.input}
         value={rpc}
-        label={t('common:RPC base URL')}
+        label={t('swap:RPC base URL')}
         onChange={(ev:any) => setRPC(ev.target.value)}
-        placeholder={t('common:http://localhost:2000')}
+        placeholder={t('swap:http://localhost:2000')}
       />
       <Input
         className={s.input}
         value={lambda}
-        label={t('common:Lambda View contract(optional)')}
+        label={t('swap:Lambda View contract(optional)')}
         onChange={(ev:any) => setLambda(ev.target.value)}
-        placeholder={t('common:e.g. Kscwf2r3...')}
+        placeholder={t('swap:e.g. Kscwf2r3...')}
       />
       <Button
         theme="primary"
         className={s.button}
       >
-        {t('common:Add')}
+        {t('swap:Add')}
       </Button>
     </Modal>
   );
