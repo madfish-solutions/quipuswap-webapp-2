@@ -10,6 +10,7 @@ type InputProps = {
   disabled?: boolean
   className?: string
   label?: string
+  labelClassName?: string
   inputSize?: keyof typeof sizeClass
   StartAdornment?: React.FC<{ className?: string }>
   EndAdornment?: React.FC<{ className?: string }>
@@ -30,6 +31,7 @@ export const Input: React.FC<InputProps> = ({
   disabled = false,
   className,
   label,
+  labelClassName,
   id,
   error,
   StartAdornment,
@@ -54,7 +56,7 @@ export const Input: React.FC<InputProps> = ({
   return (
     <div className={compoundClassName}>
       {label && (
-        <label htmlFor={id} className={s.label}>
+        <label htmlFor={id} className={cx(labelClassName, s.label)}>
           {label}
         </label>
       )}
