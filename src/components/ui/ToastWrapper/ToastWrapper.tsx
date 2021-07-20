@@ -7,6 +7,7 @@ import {
 } from 'react-toastify';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+// import ToastError from '@icons/ToastError.svg';
 
 import s from './ToastWrapper.module.sass';
 
@@ -49,7 +50,6 @@ const typeDependentClassNames: Partial<Record<TypeOptions, string>> = {
 };
 
 const getToastClassName: Exclude<ToastClassName, string> = (context) => cx(
-  s.notification,
   context?.type && typeDependentClassNames[context?.type],
 );
 
@@ -63,10 +63,10 @@ export const ToastWrapper: React.FC<ToastWrapperProps> = ({
       autoClose={5000}
       hideProgressBar
       position="top-center"
-      className={s.notificationContainer}
+      className={cx(modeClass[colorThemeMode], s.notificationContainer)}
       bodyClassName={s.toastBody}
       closeButton={CustomCloseButton}
-      toastClassName={cx(getToastClassName, modeClass[colorThemeMode], className)}
+      toastClassName={cx(getToastClassName, s.notification, className)}
       pauseOnHover
       closeOnClick={false}
       pauseOnFocusLoss

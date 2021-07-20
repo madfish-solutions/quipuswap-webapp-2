@@ -2,10 +2,11 @@
 @import '@styles/breakpoints'
 
 .notificationContainer
-  width: 1496px
-  min-width: 1496px
+  position: fixed
+  width: 1016px
+  min-width: 1016px
   padding: 0
-  top: 20px
+  top: 88px
 
 .notification
   margin-bottom: 24px
@@ -15,7 +16,8 @@
   align-items: center
   font-size: 16px
   padding: 8px
-  border-radius: 4px
+  box-shadow: $elevation-06
+  border-radius: 8px
   //background: rgba($white, .3)
   &.success
     //color: $purple-text
@@ -40,14 +42,23 @@
   right: 22px
   transform: translateY(-50%)
 
+.light
+  .notification
+    color: $text-inverse
+    background: $ui-07
+.dark
+  .notification
+    color: $text-01
+    background: $ui-01
+
 @include media("<=1560px")
-  .notificationContainer
-    width: 1216px
-    min-width: 1216px
-@include media("<=desktop")
   .notificationContainer
     width: 1016px
     min-width: 1016px
+@include media("<=desktop")
+  .notificationContainer
+    width: 900px
+    min-width: 900px
 @include media('<=1080px')
   .notificationContainer
     width: calc(100% - 32px)

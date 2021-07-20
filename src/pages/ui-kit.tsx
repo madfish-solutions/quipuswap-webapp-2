@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 
+import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
@@ -96,6 +97,7 @@ const selectValuesTop = [
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
+  const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
@@ -110,6 +112,27 @@ const UiKit: React.FC = () => {
 
   const [selectState, setSelectState] = useState(selectValues[0]);
   const [selectTopState, setSelectTopState] = useState(selectValuesTop[0]);
+
+  const handleErrorToast = () => {
+    updateToast({
+      type: 'error',
+      render: t('common:errorWhileConnectingWallet'),
+    });
+  };
+
+  const handleSuccessToast = () => {
+    updateToast({
+      type: 'success',
+      render: t('common:Success'),
+    });
+  };
+
+  const handleLoadToast = () => {
+    updateToast({
+      type: 'info',
+      render: t('common:Loading'),
+    });
+  };
 
   useEffect(() => {
     setInputError(inputValue.length > 7);
@@ -405,6 +428,27 @@ const UiKit: React.FC = () => {
           <Bage text="some wide text" />
           <Bage text="a" />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Toast</h1>
+        <Button
+          className={s.button}
+          onClick={() => handleErrorToast()}
+        >
+          Error toast
+        </Button>
+        <Button
+          className={s.button}
+          onClick={() => handleSuccessToast()}
+        >
+          Success toast
+        </Button>
+        <Button
+          className={s.button}
+          onClick={() => handleLoadToast()}
+        >
+          loading toast
+        </Button>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Popup</h1>
