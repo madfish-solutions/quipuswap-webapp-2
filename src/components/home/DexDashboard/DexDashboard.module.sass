@@ -1,0 +1,23 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+
+.light
+  .primary, .secondary
+    background-color: $ui-01
+
+.dark
+  .primary, .secondary
+    background-color: $ui-07
+
+.wrapper
+  border-radius: 8px
+  box-shadow: 0px 4px 8px rgb(0 0 0 / 10%)
+
+.primary, .secondary
+  display: flex
+  align-items: center
+  justify-content: space-around
+  flex: 1 0 auto
+  flex-wrap: wrap
