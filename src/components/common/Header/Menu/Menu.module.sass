@@ -21,10 +21,23 @@
   border-radius: 10px
   background-color: $hover-dark-row
 
+.navigation
+  margin-bottom: auto
+
 .footer
+  margin-top: 32px
+  display: flex
+  flex-direction: column
+  padding: 0 24px
+
+.row
   display: flex
   justify-content: space-between
-  padding: 16px 24px
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.select
+  min-width: 168px
 
 .light
   background-color: $ui-01

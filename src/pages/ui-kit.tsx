@@ -100,9 +100,6 @@ const selectValuesTop = [
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
-  const [showWalletPopup, setShowWalletPopup] = useState<boolean>(false);
-  const [showAccountPopup, setShowAccountPopup] = useState<boolean>(false);
-  const [showNetworkPopup, setShowNetworkPopup] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -420,27 +417,9 @@ const UiKit: React.FC = () => {
         >
           All modal cells popup
         </Button>
-        <Button
-          className={s.button}
-          onClick={() => setShowWalletPopup(true)}
-        >
-          Wallet connect
-        </Button>
-        <Button
-          className={s.button}
-          onClick={() => setShowAccountPopup(true)}
-        >
-          Account modal
-        </Button>
-        <Button
-          className={s.button}
-          onClick={() => setShowNetworkPopup(true)}
-        >
-          Add network modal
-        </Button>
-        <WalletModal isOpen={showWalletPopup} onRequestClose={() => setShowWalletPopup(false)} />
-        <AccountModal isOpen={showAccountPopup} onRequestClose={() => setShowAccountPopup(false)} address="tz1TryFD...KGdK" />
-        <NetworkModal isOpen={showNetworkPopup} onRequestClose={() => setShowNetworkPopup(false)} />
+        <WalletModal />
+        <AccountModal />
+        <NetworkModal />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
