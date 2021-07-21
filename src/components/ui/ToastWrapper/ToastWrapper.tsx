@@ -10,7 +10,11 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
+import { Loader } from '@components/ui/Loader';
 import { ToastClose } from '@components/svg/ToastClose';
+
+import ToastSuccess from '@icons/ToastSuccess.svg';
+import ToastError from '@icons/ToastError.svg';
 
 import s from './ToastWrapper.module.sass';
 
@@ -45,7 +49,7 @@ export const ToastWrapper: React.FC = () => {
 
   return (
     <ToastContainer
-      autoClose={5000}
+      autoClose={false}
       limit={3}
       hideProgressBar
       position="top-center"
@@ -67,11 +71,14 @@ export const toastContent = (
   let icon;
 
   if (type && type !== 'default') {
-    if (type === 'success' || type === 'error') {
-      icon = <span className={s.icon}>Some icon</span>;
-    }
     if (type === 'info') {
-      icon = <span className={s.icon}>Loading icon</span>;
+      icon = <Loader className={s.icon} />;
+    }
+    if (type === 'success') {
+      icon = <ToastSuccess className={s.icon} />;
+    }
+    if (type === 'error') {
+      icon = <ToastError className={s.icon} />;
     }
   }
 

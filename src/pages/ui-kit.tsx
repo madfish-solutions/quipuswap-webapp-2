@@ -116,7 +116,7 @@ const UiKit: React.FC = () => {
   const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
-      render: t('common:errorWhileConnectingWallet'),
+      render: `${t('common:errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
     });
   }, [t, updateToast]);
 
