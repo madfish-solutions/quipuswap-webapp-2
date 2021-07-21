@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
@@ -9,7 +10,6 @@ import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
@@ -36,6 +36,7 @@ type LiquidityProps = {
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common', 'liquidity']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const [switcherValue, setSwitcherValue] = useState(true); // TODO: Delete when lib added
@@ -44,7 +45,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   }; // TODO: Delete when lib added
 
   const currentTab = useMemo(
-    () => (TabsContent.filter(({ id }) => id === tabsState)[0]),
+    () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
 
@@ -154,30 +155,31 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         }}
         contentClassName={s.content}
       >
-        <CardCell header="Sell Price" className={s.cell}>
+        <CardCell header={t('common:Sell Price')} className={s.cell}>
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="tez" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
           </div>
         </CardCell>
-        <CardCell header="Buy Price" className={s.cell}>
+        <CardCell header={t('common:Buy Price')} className={s.cell}>
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="QPSP" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
           </div>
         </CardCell>
-        <CardCell header="Price impact" className={s.cell}>
-          <CurrencyAmount amount="<0.01" currency="%" />
+        <CardCell header={t('liquidity:Token A Locked')} className={s.cell}>
+          <CurrencyAmount amount="10000" currency="tez" />
         </CardCell>
-        <CardCell header="Fee" className={s.cell}>
-          <CurrencyAmount amount="0.001" currency="XTZ" />
+        <CardCell header={t('liquidity:Token B Locked')} className={s.cell}>
+          <CurrencyAmount amount="10000" currency="QPSP" />
         </CardCell>
-        <CardCell header="Route" className={s.cell}>
-          <Route
-            routes={['qpsp', 'usd', 'xtz']}
-          />
+        <CardCell header={t('liquidity:Your Total LP')} className={s.cell}>
+          <CurrencyAmount amount="1000000" />
+        </CardCell>
+        <CardCell header={t('liquidity:Your Frozen LP')} className={s.cell}>
+          <CurrencyAmount amount="100" />
         </CardCell>
         <div className={s.detailsButtons}>
           <Button

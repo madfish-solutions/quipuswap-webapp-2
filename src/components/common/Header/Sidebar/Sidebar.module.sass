@@ -6,11 +6,12 @@
 
 @include media('>SDesktop')
   .root
+    flex: 1
     display: flex
     position: sticky
     top: 64px
     height: calc(100vh - 64px)
-    width: 200px
+    max-width: 200px
     flex-direction: column
     padding-bottom: 16px
     overflow-y: scroll
@@ -37,12 +38,6 @@
     margin-top: 32px
   .token
     padding: 16px
-    display: flex
-    align-items: center
-  .price
-    padding: 0 8px
-    font-size: 0.857rem
-    font-weight: 700
   .socials
     display: flex
     justify-content: center
@@ -64,3 +59,7 @@
       color: $ui-01
   .dark::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
+
+@include media('>LDesktop')
+  .root
+    margin-left: auto

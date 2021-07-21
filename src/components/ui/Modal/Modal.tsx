@@ -13,6 +13,7 @@ type ModalProps = {
   innerClassName?: string
   withCloseButton?: boolean
   containerClassName?: string
+  contentClassName?:string,
   title?:string
 } & ReactModal.Props;
 
@@ -30,6 +31,7 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   innerClassName,
   containerClassName,
+  contentClassName,
   title = '',
   ...props
 }) => {
@@ -60,6 +62,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         <div className={cx(s.container, containerClassName)}>
           <Card
+            contentClassName={contentClassName}
             header={{
               content: <h5>{title}</h5>,
               button: (

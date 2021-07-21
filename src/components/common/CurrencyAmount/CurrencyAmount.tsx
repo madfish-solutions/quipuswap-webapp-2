@@ -16,6 +16,7 @@ type CurrencyAmountProps = {
 };
 
 const sizeClass = {
+  extraLarge: s.extraLarge,
   large: s.large,
   small: s.small,
 };

@@ -42,14 +42,17 @@
 
 .container
   width: 100%
-  padding: 8px
   position: relative
   background: transparent
   border-radius: 4px
-  max-width: 400px
+  max-width: 327px
 
 .light
   background-color: rgba($ui-07, 0.12)
 
 .dark
   background-color: rgba($ui-01, 0.12)
+
+@include media('>tablet')
+  .container
+    max-width: 424px

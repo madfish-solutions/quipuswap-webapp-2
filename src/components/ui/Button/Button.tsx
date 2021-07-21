@@ -12,6 +12,8 @@ type ButtonProps = {
   theme?: keyof typeof themeClass
   external?: boolean
   className?: string
+  innerClassName?: string
+  textClassName?: string
 } & (
   | React.HTMLProps<HTMLButtonElement>
   | LinkProps
@@ -38,6 +40,8 @@ export const Button: React.FC<ButtonProps> = ({
   theme = 'primary',
   external = false,
   className,
+  innerClassName,
+  textClassName,
   children,
   ...props
 }) => {
@@ -51,8 +55,8 @@ export const Button: React.FC<ButtonProps> = ({
   );
 
   const content = theme === 'secondary' ? (
-    <span className={s.inner}>
-      <span className={s.text}>
+    <span className={cx(s.inner, innerClassName)}>
+      <span className={cx(s.text, textClassName)}>
         {children}
       </span>
     </span>
