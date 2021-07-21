@@ -6,12 +6,11 @@
 
 @include media('>SDesktop')
   .root
-    flex: 1
     display: flex
     position: sticky
     top: 64px
     height: calc(100vh - 64px)
-    max-width: 200px
+    width: 200px
     flex-direction: column
     padding-bottom: 16px
     overflow-y: scroll
@@ -59,7 +58,3 @@
       color: $ui-01
   .dark::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
-
-@include media('>LDesktop')
-  .root
-    margin-left: auto
