@@ -17,23 +17,17 @@
   display: flex
   align-items: center
 
-.logo
+.coloModeSwitcher, .languageSwitcher, .controls
+  display: none
+
+.controls
   display: flex
   align-items: center
-  font-size: 1.125rem
-  font-weight: bold
-
-.logoText
-  display: none
-
-.coloModeSwitcher, .languageSwitcher
-  display: none
+  justify-content: flex-end
+  margin-left: auto
+  max-width: 160px
 
 .connect
-  display: flex
-  align-items: center
-  justify-content: center
-  margin: 0 auto 0 16px
   max-width: 160px
 
 .menu
@@ -57,7 +51,7 @@
 @include media('>SDesktop')
   .root
     padding: 0 32px 0 16px
-  .menuButton, .menu, .connect
+  .menuButton, .menu
     display: none
   .logo
     margin-right: auto
@@ -69,9 +63,3 @@
     margin-left: 40px
   .languageSwitcher, .coloModeSwitcher
     display: flex
-  .light
-    .logoText
-      color: $ui-07
-  .dark
-    .logo
-      color: $ui-01

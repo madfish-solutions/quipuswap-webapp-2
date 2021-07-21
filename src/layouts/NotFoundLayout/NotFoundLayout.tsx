@@ -5,8 +5,7 @@ import { NextSeo } from 'next-seo';
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { NotFoundHeader } from '@components/common/NotFoundHeader';
-import { Background } from '@components/svg/Background';
-// import { NotFoundBackground } from '@components/svg/NotFoundBackground';
+import { NotFoundBackground } from '@components/svg/NotFoundBackground';
 
 import s from './NotFoundLayout.module.sass';
 
@@ -59,7 +58,7 @@ export const NotFoundLayout: React.FC<NotFoundLayoutProps> = ({
       {isComponentDidMount ? (
         <div className={s.root}>
           <NotFoundHeader />
-          <Background className={s.background} />
+          <NotFoundBackground className={s.background} />
           {/* <NotFoundBackground className={s.background} /> */}
           <main className={cx(s.wrapper, className)}>
             {children}

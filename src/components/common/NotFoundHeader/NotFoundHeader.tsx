@@ -42,7 +42,10 @@ export const NotFoundHeader: React.FC<NotFoundHeaderProps> = ({
     <div className={s.wrapper}>
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton />
-        <LaunchAppButton className={s.connect} />
+        <div className={s.controls}>
+          <LaunchAppButton className={s.connect} />
+
+        </div>
         <LanguageSwitcher
           direction="bottom"
           className={s.languageSwitcher}
