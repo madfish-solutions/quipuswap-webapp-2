@@ -7,6 +7,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
+
 import s from './NetworkModal.module.sass';
 
 const modeClass = {
