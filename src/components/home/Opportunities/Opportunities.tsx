@@ -3,8 +3,8 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { Section } from '@components/home/Section';
-import { OpportunityCard } from '@components/home/Opportunities/OpportunityCard/OpportunityCard';
 
+import { OpportunityCard } from './OpportunityCard';
 import { OpportunitiesCardsData } from './content';
 import s from './Opportunities.module.sass';
 

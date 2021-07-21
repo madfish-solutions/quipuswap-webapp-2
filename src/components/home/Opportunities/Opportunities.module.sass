@@ -3,13 +3,13 @@
 
 .cards
   display: grid
-  gap: 24px
+  gap: 16px
 
-@include media('>Lphone')
+@include media('>660px')
   .cards
-    grid-template-columns: repeat(2,1fr)
+    grid-template-columns: repeat(2, 1fr)
 
-@include media('>Ltablet')
+@include media('>SDesktop')
   .cards
-    grid-template-columns: repeat(3,1fr)
+    grid-template-columns: repeat(3, 1fr)
     gap: 32px
