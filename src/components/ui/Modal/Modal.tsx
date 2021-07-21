@@ -14,6 +14,7 @@ type ModalProps = {
   withCloseButton?: boolean
   containerClassName?: string
   contentClassName?:string,
+  header?:React.ReactNode,
   title?:string
 } & ReactModal.Props;
 
@@ -33,6 +34,7 @@ export const Modal: React.FC<ModalProps> = ({
   containerClassName,
   contentClassName,
   title = '',
+  header,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -76,6 +78,7 @@ export const Modal: React.FC<ModalProps> = ({
               ),
             }}
           >
+            {header}
             {children}
           </Card>
         </div>

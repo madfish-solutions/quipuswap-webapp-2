@@ -427,13 +427,22 @@ const UiKit: React.FC = () => {
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
           title="title & list of components"
+          header={(
+            <Input
+              StartAdornment={Search}
+              className={s.modalInput}
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="Search"
+            />
+          )}
         >
           <TokenCell
-            token={{
+            {...{
+              contractAddress: 'undefined',
               name: 'Token',
-              label: 'Token',
+              symbol: 'Token',
               badges: ['FA 2.0', 'ID: 0'],
-              price: '0.00',
             }}
           />
           <ChooseListCell
@@ -441,7 +450,7 @@ const UiKit: React.FC = () => {
             isActive={false}
             tokenList={{
               name: 'Token',
-              label: 'Token',
+              symbol: 'Token',
             }}
           />
           <SwapCell
@@ -474,11 +483,11 @@ const UiKit: React.FC = () => {
           {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
             <TokenCell
               key={x}
-              token={{
+              {...{
+                contractAddress: `${x}undefined`,
                 name: 'Token',
-                label: 'Token',
+                symbol: 'Token',
                 badges: ['FA 2.0', 'ID: 0'],
-                price: '0.00',
               }}
             />
           ))}

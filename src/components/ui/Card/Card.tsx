@@ -11,6 +11,7 @@ type CardProps = {
     button?: React.ReactNode
     className?: string
   }
+  additional?: React.ReactNode
   contentClassName?: string
 };
 
@@ -22,6 +23,7 @@ const modeClass = {
 export const Card: React.FC<CardProps> = ({
   className,
   header,
+  additional,
   contentClassName,
   children,
 }) => {
@@ -33,6 +35,11 @@ export const Card: React.FC<CardProps> = ({
         <div className={cx(s.header, header.className)}>
           {header.content}
           {header.button}
+        </div>
+      )}
+      {additional && (
+        <div className={s.additional}>
+          {additional}
         </div>
       )}
       <div className={cx(s.content, contentClassName)}>

@@ -5,7 +5,7 @@ import {
   TEMPLEWALLET_IMG,
 } from '@utils/defaults';
 
-export const prepareTokenLogo = (url: string | null) => {
+export const prepareTokenLogo = (url: string | null | undefined) => {
   if (!url?.trim()) {
     return null;
   }
