@@ -5,6 +5,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { TopPairs } from '@containers/home/TopPairs';
 import { TopFarmings } from '@containers/home/TopFarmings';
+import { DexDashboard } from '@components/home/DexDashboard';
+import { Opportunities } from '@components/home/Opportunities';
 
 const Home: React.FC = () => {
   const { t } = useTranslation(['common', 'home']);
@@ -14,6 +16,8 @@ const Home: React.FC = () => {
       title={t('home:Home page')}
       description={t('home:Home page description. Couple sentences...')}
     >
+      <DexDashboard />
+      <Opportunities />
       <TopPairs />
       <TopFarmings />
     </BaseLayout>
