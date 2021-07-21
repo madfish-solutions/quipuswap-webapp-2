@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -8,7 +7,7 @@ import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { Logo } from '@components/svg/Logo';
+import { LogoButton } from '@components/common/LogoButton';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 
@@ -41,12 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <div className={s.wrapper}>
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
-        <Link href="/">
-          <a className={s.logo}>
-            <Logo />
-            <span className={s.logoText}>QuipuSwap</span>
-          </a>
-        </Link>
+        <LogoButton />
         <ConnectWalletButton className={s.connect} />
         <LanguageSwitcher
           direction="bottom"
