@@ -1,11 +1,12 @@
 @import "@styles/breakpoints"
 @import "@styles/variables"
 
-.root
-  padding: 16px 24px
-  height: 100%
+.content
+  padding: 24px
   display: flex
   flex-direction: column
+  align-items: flex-start
+  height: 100%
 
 .title
   font-size: 1.286rem
@@ -13,41 +14,38 @@
   margin-top: 24px
 
 .description
-  line-height: 1.71
   margin-top: 16px
   margin-bottom: 40px
+  line-height: 1.71
 
 .button
-  display: flex
-  justify-content: center
   margin-top: auto
 
 .icon
   margin: 0 auto
 
-.light
-  background-color: $ui-01
-
-.dark
-  background-color: $ui-07
+@include media('>422px', '<=660px')
+  .icon
+    margin-left: 0
 
 @include media('>Lphone')
   .title
-    font-size: 1.286rem
-    line-height: 1.33
+    font-size: 1.857rem
+    line-height: 1.4
+
+@include media('>812px')
+  .icon
+    margin-left: 0
 
 @include media('>Ltablet')
-  .title
-    font-size: 2.286rem
-    line-height: 1.5
-  
-  .description
-    font-size: 1.143rem
-    line-height: 1.62
-  
-  .icon
-    margin: 0
-  
   .button
     max-width: 180px
     margin-left: auto
+
+@include media('>desktop')
+  .title
+    font-size: 2.286rem
+    line-height: 1.5
+  .description
+    font-size: 1.143rem
+    line-height: 1.62

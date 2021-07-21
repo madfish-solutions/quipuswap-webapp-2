@@ -1,7 +1,5 @@
-import React, { ReactNode, useContext } from 'react';
-import cx from 'classnames';
+import React, { ReactNode } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 
@@ -19,38 +17,23 @@ type OpportunityCardProps = {
   }
 };
 
-const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
-};
-
 export const OpportunityCard: React.FC<OpportunityCardProps> = ({
   className,
   Icon,
   title,
   description,
   button,
-}) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const compoundClassName = cx(
-    s.root,
-    modeClass[colorThemeMode],
-    className,
-  );
-
-  return (
-    <Card className={compoundClassName}>
-      <Icon className={s.icon} />
-      <h3 className={s.title}>{title}</h3>
-      <p className={s.description}>{description}</p>
-      <Button
-        href={button.href}
-        external={button.external}
-        className={s.button}
-      >
-        {button.label}
-      </Button>
-    </Card>
-  );
-};
+}) => (
+  <Card className={className} contentClassName={s.content}>
+    <Icon className={s.icon} />
+    <h3 className={s.title}>{title}</h3>
+    <p className={s.description}>{description}</p>
+    <Button
+      href={button.href}
+      external={button.external}
+      className={s.button}
+    >
+      {button.label}
+    </Button>
+  </Card>
+);
