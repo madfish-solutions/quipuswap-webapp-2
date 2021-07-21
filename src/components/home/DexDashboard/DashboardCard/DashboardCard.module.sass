@@ -2,30 +2,12 @@
 @import "@styles/breakpoints"
 
 .root
-  padding: 40px 32px
+  padding: 24px
+  display: flex
+  flex-direction: column
+  align-items: center
   
 .header
-  text-align: center
   color: $text-03 !important
   font-size: 1.15rem
-
-.currency
-  margin-top: 8px
-  font-size: 1.28rem
-  text-align: center
-  white-space: nowrap
-  text-overflow: ellipsis
-  overflow: hidden
-
-.units 
-  font-weight: 600
-
-.large
-  .currency
-    font-size: 1.28rem
-
-
-@include media('>Ltablet')
-  .currency
-    font-size: 2.29rem
-    text-overflow: visible
+  margin-bottom: 8px

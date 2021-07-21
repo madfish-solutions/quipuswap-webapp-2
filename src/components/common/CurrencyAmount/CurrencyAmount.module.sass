@@ -39,14 +39,17 @@
   .inner, .dollarEquivalentInner
     color: $text-inverse
 
-.large
+.large, .extraLarge
   font-size: 1.286rem
   line-height: 1.33
 
-.extraLarge
-  font-size: 1.285rem
-
 @include media('>Ltablet')
   .extraLarge
+    font-size: 1.857rem
+    line-height: 1.4
+
+@include media('>desktop')
+  .extraLarge
     font-size: 2.286rem
+    line-height: 1.5
   

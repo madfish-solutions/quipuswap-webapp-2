@@ -5,18 +5,20 @@ type DEXDashboardDataProps = {
   id: number
   volume: string
   label: React.ReactNode
-  units?: string
+  currency?: string
 }[];
 
 export const DEXDashboardData: DEXDashboardDataProps = [
   {
     id: 0,
     volume: '8888888888888',
+    currency: '$',
     label: <Trans ns="home">TVL</Trans>,
   },
   {
     id: 1,
     volume: '888888888888888',
+    currency: '$',
     label: <Trans ns="home">Daily Volume</Trans>,
   },
   {
@@ -27,13 +29,14 @@ export const DEXDashboardData: DEXDashboardDataProps = [
   {
     id: 3,
     volume: '888888888888888',
+    currency: '$',
     label: <Trans ns="home">Daily Reward</Trans>,
   },
   {
     id: 4,
     volume: '888888888888',
     label: <Trans ns="home">Total supply</Trans>,
-    units: 'QPSP',
+    currency: 'QPSP',
   },
   {
     id: 5,
@@ -49,6 +52,6 @@ export const DEXDashboardData: DEXDashboardDataProps = [
     id: 7,
     volume: '888888888888',
     label: <Trans ns="home">Max Supply</Trans>,
-    units: 'QPSP',
+    currency: 'QPSP',
   },
 ];
