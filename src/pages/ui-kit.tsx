@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -113,26 +113,26 @@ const UiKit: React.FC = () => {
   const [selectState, setSelectState] = useState(selectValues[0]);
   const [selectTopState, setSelectTopState] = useState(selectValuesTop[0]);
 
-  const handleErrorToast = () => {
+  const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
       render: t('common:errorWhileConnectingWallet'),
     });
-  };
+  }, [t, updateToast]);
 
-  const handleSuccessToast = () => {
+  const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
       render: t('common:Success'),
     });
-  };
+  }, [t, updateToast]);
 
-  const handleLoadToast = () => {
+  const handleLoadToast = useCallback(() => {
     updateToast({
       type: 'info',
       render: t('common:Loading'),
     });
-  };
+  }, [t, updateToast]);
 
   useEffect(() => {
     setInputError(inputValue.length > 7);

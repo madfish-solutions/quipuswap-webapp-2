@@ -7,7 +7,8 @@ import {
 } from 'react-toastify';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-// import ToastError from '@icons/ToastError.svg';
+import { Button } from '@components/ui/Button';
+import { ToastClose } from '@components/svg/ToastClose';
 
 import s from './ToastWrapper.module.sass';
 
@@ -19,18 +20,27 @@ const CustomCloseButton = ({
 }: any) => {
   const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    closeToast(e);
+    closeToast();
   }, [closeToast]);
 
+  if (type !== 'error') {
+    return (
+      <Button
+        {...props}
+        className={s.closeButton}
+        theme="quaternary"
+      />
+    );
+  }
   return (
-    <button
+    <Button
       {...props}
-      type="button"
       className={s.closeButton}
       onClick={handleClick}
+      theme="quaternary"
     >
-      {/* Close icon */}
-    </button>
+      <ToastClose />
+    </Button>
   );
 };
 
@@ -49,9 +59,13 @@ const typeDependentClassNames: Partial<Record<TypeOptions, string>> = {
   info: s.info,
 };
 
-const getToastClassName: Exclude<ToastClassName, string> = (context) => cx(
-  context?.type && typeDependentClassNames[context?.type],
-);
+const getToastClassName: Exclude<ToastClassName, string> = (context) => {
+  const p = cx(
+    s.notification,
+    context?.type && typeDependentClassNames[context?.type],
+  );
+  return p;
+};
 
 export const ToastWrapper: React.FC<ToastWrapperProps> = ({
   className,
@@ -66,7 +80,7 @@ export const ToastWrapper: React.FC<ToastWrapperProps> = ({
       className={cx(modeClass[colorThemeMode], s.notificationContainer)}
       bodyClassName={s.toastBody}
       closeButton={CustomCloseButton}
-      toastClassName={cx(getToastClassName, s.notification, className)}
+      toastClassName={cx(getToastClassName(), className)}
       pauseOnHover
       closeOnClick={false}
       pauseOnFocusLoss
