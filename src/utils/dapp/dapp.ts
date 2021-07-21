@@ -13,13 +13,13 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 import { NetworkType } from '@airgap/beacon-sdk';
 
+import { getTokens } from '@utils/dapp/tokens';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
   setNetwork,
   toBeaconNetworkType,
 } from './network';
-import { getTokens } from './tokens';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
