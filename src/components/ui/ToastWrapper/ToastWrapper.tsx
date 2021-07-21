@@ -1,10 +1,12 @@
-import React, { useCallback, useContext } from 'react';
+import React, { ReactNode, useContext } from 'react';
 import cx from 'classnames';
 import {
   ToastClassName,
   ToastContainer,
+  ToastContentProps,
   TypeOptions,
 } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
@@ -12,41 +14,15 @@ import { ToastClose } from '@components/svg/ToastClose';
 
 import s from './ToastWrapper.module.sass';
 
-const CustomCloseButton = ({
-  children,
-  type,
-  closeToast,
-  ...props
-}: any) => {
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    closeToast();
-  }, [closeToast]);
-
-  if (type !== 'error') {
-    return (
-      <Button
-        {...props}
-        className={s.closeButton}
-        theme="quaternary"
-      />
-    );
-  }
-  return (
-    <Button
-      {...props}
-      className={s.closeButton}
-      onClick={handleClick}
-      theme="quaternary"
-    >
-      <ToastClose />
-    </Button>
-  );
-};
-
-type ToastWrapperProps = {
-  className?: string
-};
+const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (
+  <Button
+    className={s.closeButton}
+    onClick={closeToast}
+    theme="quaternary"
+  >
+    <ToastClose />
+  </Button>
+);
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -59,31 +35,50 @@ const typeDependentClassNames: Partial<Record<TypeOptions, string>> = {
   info: s.info,
 };
 
-const getToastClassName: Exclude<ToastClassName, string> = (context) => {
-  const p = cx(
-    s.notification,
-    context?.type && typeDependentClassNames[context?.type],
-  );
-  return p;
-};
+const getToastClassName: Exclude<ToastClassName, string> = (context) => cx(
+  s.notification,
+  context?.type && typeDependentClassNames[context?.type],
+);
 
-export const ToastWrapper: React.FC<ToastWrapperProps> = ({
-  className,
-}) => {
+export const ToastWrapper: React.FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <ToastContainer
       autoClose={5000}
+      limit={3}
       hideProgressBar
       position="top-center"
       className={cx(modeClass[colorThemeMode], s.notificationContainer)}
       bodyClassName={s.toastBody}
       closeButton={CustomCloseButton}
-      toastClassName={cx(getToastClassName(), className)}
+      toastClassName={getToastClassName}
       pauseOnHover
       closeOnClick={false}
       pauseOnFocusLoss
     />
+  );
+};
+
+export const toastContent = (
+  children: ReactNode,
+  type?: TypeOptions | null,
+) => {
+  let icon;
+
+  if (type && type !== 'default') {
+    if (type === 'success' || type === 'error') {
+      icon = <span className={s.icon}>Some icon</span>;
+    }
+    if (type === 'info') {
+      icon = <span className={s.icon}>Loading icon</span>;
+    }
+  }
+
+  return (
+    <>
+      {icon}
+      {children}
+    </>
   );
 };
