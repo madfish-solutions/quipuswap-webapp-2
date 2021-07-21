@@ -31,6 +31,7 @@ import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
@@ -435,6 +436,13 @@ const UiKit: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Search"
             />
+          )}
+          footer={(
+            <Button className={s.modalButton} theme="inverse">
+              Manage Lists
+              <Pen className={s.penIcon} />
+
+            </Button>
           )}
         >
           <TokenCell

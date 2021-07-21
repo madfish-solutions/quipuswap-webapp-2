@@ -15,6 +15,7 @@ type ModalProps = {
   containerClassName?: string
   contentClassName?:string,
   header?:React.ReactNode,
+  footer?:React.ReactNode,
   title?:string
 } & ReactModal.Props;
 
@@ -35,6 +36,7 @@ export const Modal: React.FC<ModalProps> = ({
   contentClassName,
   title = '',
   header,
+  footer,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -78,6 +80,7 @@ export const Modal: React.FC<ModalProps> = ({
               ),
             }}
             additional={header}
+            footer={footer}
           >
             {children}
           </Card>
