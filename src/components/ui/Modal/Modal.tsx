@@ -64,7 +64,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         <div className={cx(s.container, containerClassName)}>
           <Card
-            contentClassName={contentClassName}
+            contentClassName={cx(contentClassName, s.modalCard)}
             header={{
               content: <h5>{title}</h5>,
               button: (
@@ -77,8 +77,8 @@ export const Modal: React.FC<ModalProps> = ({
                 </Button>
               ),
             }}
+            additional={header}
           >
-            {header}
             {children}
           </Card>
         </div>
