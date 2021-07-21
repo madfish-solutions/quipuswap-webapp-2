@@ -7,17 +7,15 @@ import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 
+import ReactModal from 'react-modal';
 import s from './NetworkModal.module.sass';
-
-type ComplexRecipientProps = {
-} & ReactModal.Props;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const NetworkModal: React.FC<ComplexRecipientProps> = ({
+export const NetworkModal: React.FC<ReactModal.Props> = ({
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -42,7 +40,6 @@ export const NetworkModal: React.FC<ComplexRecipientProps> = ({
       <Input
         className={s.input}
         value={name}
-        labelClassName={s.label}
         label={t('common:Name')}
         onChange={(ev:any) => setName(ev.target.value)}
         placeholder={t('common:My custom network')}
@@ -51,7 +48,6 @@ export const NetworkModal: React.FC<ComplexRecipientProps> = ({
       <Input
         className={s.input}
         value={rpc}
-        labelClassName={s.label}
         label={t('common:RPC base URL')}
         onChange={(ev:any) => setRPC(ev.target.value)}
         placeholder={t('common:http://localhost:2000')}
@@ -60,7 +56,6 @@ export const NetworkModal: React.FC<ComplexRecipientProps> = ({
       <Input
         className={s.input}
         value={lambda}
-        labelClassName={s.label}
         label={t('common:Lambda View contract(optional)')}
         onChange={(ev:any) => setLambda(ev.target.value)}
         placeholder={t('common:e.g. Kscwf2r3...')}
