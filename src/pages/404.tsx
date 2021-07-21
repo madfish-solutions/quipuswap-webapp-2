@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { NotFoundLayout } from '@layouts/NotFoundLayout';
+import { BaseLayout } from '@layouts/BaseLayout';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -18,7 +18,7 @@ const NotFound: React.FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <NotFoundLayout
+    <BaseLayout
       title={t('common:Page Not Found')}
       description={t('common:Page not found description. Couple sentences...')}
       className={cx(s.wrapper404, modeClass[colorThemeMode])}
@@ -30,7 +30,7 @@ const NotFound: React.FC = () => {
         {t('common:Page Not Found')}
         !
       </div>
-    </NotFoundLayout>
+    </BaseLayout>
   );
 };
 
