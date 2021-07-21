@@ -59,7 +59,6 @@ export const NotFoundLayout: React.FC<NotFoundLayoutProps> = ({
         <div className={s.root}>
           <NotFoundHeader />
           <NotFoundBackground className={s.background} />
-          {/* <NotFoundBackground className={s.background} /> */}
           <main className={cx(s.wrapper, className)}>
             {children}
           </main>

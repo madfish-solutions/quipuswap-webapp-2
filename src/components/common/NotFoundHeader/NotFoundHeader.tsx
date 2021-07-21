@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import Link from 'next/link';
+import Link from 'next/link';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
@@ -27,6 +28,7 @@ export const NotFoundHeader: React.FC<NotFoundHeaderProps> = ({
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
 
@@ -43,6 +45,22 @@ export const NotFoundHeader: React.FC<NotFoundHeaderProps> = ({
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton />
         <div className={s.controls}>
+          <Link href="/">
+            <a className={s.button}>
+              <Button theme="quaternary">
+                {t('common:Docs')}
+
+              </Button>
+            </a>
+          </Link>
+          <Link href="/">
+            <a className={s.button}>
+              <Button theme="quaternary">
+                {t('common:Blog')}
+
+              </Button>
+            </a>
+          </Link>
           <LaunchAppButton className={s.connect} />
 
         </div>

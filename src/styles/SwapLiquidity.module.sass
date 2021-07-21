@@ -1,14 +1,43 @@
 @import "@styles/breakpoints"
+@import "@styles/variables"
 
 .wrapper
   display: flex
   flex-direction: column
+
+.wrapper404
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
 
 .chart
   margin-top: 24px
 
 .votingStats
   margin-bottom: 24px
+
+.status
+  font-weight: 600
+  font-size: 1.286rem
+  line-height: 1.33
+
+.statusCode
+  font-weight: 600
+  font-size: 15.857rem
+  line-height: 1.17
+
+.light
+  .statusCode
+    color: $ui-04
+  .status
+    color: $text-02
+
+.dark
+  .statusCode
+    color: $text-01
+  .status
+    color: $text-03
 
 @include media('>tablet')
   .chart
