@@ -49,7 +49,7 @@ export const ToastWrapper: React.FC = () => {
 
   return (
     <ToastContainer
-      autoClose={5000}
+      autoClose={false}
       limit={3}
       hideProgressBar
       position="top-center"

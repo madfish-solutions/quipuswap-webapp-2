@@ -3,8 +3,10 @@
 
 .notificationContainer
   position: fixed
-  width: 1016px
-  min-width: 1016px
+  left: 24px
+  width: calc(100% - 48px)
+  min-width: calc(100% - 48px)
+  transform: none
   padding: 0
   top: 88px
 
@@ -52,15 +54,15 @@
     color: $text-01
     background: $ui-01
 
-@include media("<=1560px")
+@include media(">SDesktop")
   .notificationContainer
-    width: 1016px
-    min-width: 1016px
-@include media("<=desktop")
+    left: 232px
+    right: 32px
+    transform: none
+    width: initial
+    min-width: initial
+    max-width: 1172px
+
+@include media(">desktop")
   .notificationContainer
-    width: 900px
-    min-width: 900px
-@include media('<=1080px')
-  .notificationContainer
-    width: calc(100% - 32px)
-    min-width: calc(100% - 32px)
+    margin: 0px auto
