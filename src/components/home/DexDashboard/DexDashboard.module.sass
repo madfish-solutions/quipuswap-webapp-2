@@ -6,24 +6,34 @@
   align-items: center
   justify-items: stretch
   grid-template-columns: 1fr
-  grid-column: 1 / 2
 
-.row
-  display: grid
-  justify-content: space-around
-  grid-template-columns: 1fr
-  grid-column: 1 / 2
+.light
+  .content
+    .card:nth-of-type()
+      border-bottom: 1px solid $ui-03
+      border-right: 1px solid $ui-03
+    .card:last-child
+      border-bottom: 1px solid $ui-03
+.dark
+  .content
+    .card:nth-of-type()
+      border-bottom: 1px solid $ui-06
+      border-right: 1px solid $ui-03
+    .card:nth-child(2n-5)
+      border-bottom: 1px solid $ui-06
 
 @include media('>Ltablet')
   .content
-    grid-column: 1 / 1
-  .row
-    grid-template-columns: repeat(2, 1fr)
-    grid-template-rows: 1fr 1fr
-    grid-column: 1 / 3
-
-@include media('>desktop')
-  .row
-    grid-template-columns: repeat(4, 1fr)
-    grid-template-rows: 1fr
-
+    grid-template-columns: repeat(4, 25%)
+    .card:nth-child(n-5)
+      grid-column: 3 / 5
+    .card:nth-child(2n-5)
+      grid-column: 1 / 3
+    .card:nth-child(5)
+      grid-column: 1 / 1
+    .card:nth-child(6)
+      grid-column: 2 / 2
+    .card:nth-child(7)
+      grid-column: 3 / 3
+    .card:nth-child(8)
+      grid-column: 4 / 4

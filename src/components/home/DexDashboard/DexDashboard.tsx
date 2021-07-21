@@ -24,7 +24,6 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
 }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
   return (
     <Section
       header={t('home:DEX Dashboard')}
@@ -32,31 +31,21 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       className={cx(className, s.root, modeClass[colorThemeMode])}
     >
       <Card>
-        <div className={cx(s.content)}>
+        <div className={s.content}>
           {
-            DEXDashboardData.slice(0, 4).map((item) => (
+            DEXDashboardData.map(({
+              id, volume, label, units,
+            }, idx) => (
               <DashboardCard
-                key={item.id}
-                size="extraLarge"
-                volume={item.volume}
-                label={item.label}
-                units={item.units}
+                key={id}
+                className={s.card}
+                size={idx > 3 ? 'large' : 'extraLarge'}
+                volume={volume}
+                label={label}
+                units={units}
               />
             ))
           }
-          <div className={s.row}>
-            {
-              DEXDashboardData.slice(4).map((item) => (
-                <DashboardCard
-                  key={item.id}
-                  size="large"
-                  volume={item.volume}
-                  label={item.label}
-                  units={item.units}
-                />
-              ))
-            }
-          </div>
         </div>
       </Card>
     </Section>

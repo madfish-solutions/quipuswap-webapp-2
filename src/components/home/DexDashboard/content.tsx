@@ -11,7 +11,7 @@ type DEXDashboardDataProps = {
 export const DEXDashboardData: DEXDashboardDataProps = [
   {
     id: 0,
-    volume: '888888888888888',
+    volume: '8888888888888',
     label: <Trans ns="home">TVL</Trans>,
   },
   {
@@ -31,23 +31,23 @@ export const DEXDashboardData: DEXDashboardDataProps = [
   },
   {
     id: 4,
-    volume: '888888888888888',
+    volume: '888888888888',
     label: <Trans ns="home">Total supply</Trans>,
     units: 'QPSP',
   },
   {
     id: 5,
-    volume: '888888888888888',
+    volume: '888888888888',
     label: <Trans ns="home">LP Providers</Trans>,
   },
   {
     id: 6,
-    volume: '888888888888888',
+    volume: '888888888888',
     label: <Trans ns="home">Pairs listed</Trans>,
   },
   {
     id: 7,
-    volume: '888888888888888',
+    volume: '888888888888',
     label: <Trans ns="home">Max Supply</Trans>,
     units: 'QPSP',
   },
