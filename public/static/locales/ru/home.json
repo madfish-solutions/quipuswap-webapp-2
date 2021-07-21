@@ -1,4 +1,14 @@
 {
   "Home page": "Home page",
-  "Home page description. Couple sentences...": "Home page description. Couple sentences..."
+  "Home page description. Couple sentences...": "Home page description. Couple sentences...",
+  "DEX Dashboard": "DEX Dashboard",
+  "The short overview of the most relevant DEX information.": "The short overview of the most relevant DEX information.",
+  "TVL": "TVL",
+  "Daily Volume": "Daily Volume",
+  "Daily Transactions": "Daily Transactions",
+  "Daily Reward": "Daily Reward",
+  "Total Supply": "Total Supply",
+  "LP Providers" : "LP Providers",
+  "Pairs Listed": "Pairs Listed",
+  "Max Supply": "Max Supply"
 }
