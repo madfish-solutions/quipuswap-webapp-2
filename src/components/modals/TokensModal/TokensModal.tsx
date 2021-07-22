@@ -60,26 +60,18 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           const res = (isName
             || isSymbol
             || isContract);
-          // console.log(res);
           return res;
         },
       );
-      // console.log(buff);
       if (buff.length === 0 && oldInput.length > 0) {
-        // console.log(oldInput, parseInt(oldInputToken, 10));
-        // ex KT1JkoE42rrMBP9b2oDhbx6EUr26GcySZMUH fa1.2
-        // ex KT1AxaBxkFLCUi3f8rdDAAxBKHfzY8LfKDRA fa1.2
-        // ex KT1LRboPna9yQY9BrjtQYDS1DVxhKESK4VVd fa2
         addCustomToken(oldInput, parseInt(oldInputToken, 10));
       }
-      // console.log(buff, oldInput.toLowerCase(), inputValue.toLowerCase());
       setFilteredTokens(buff);
     },
     1000,
   );
 
   useEffect(() => {
-    // console.log(oldInput, oldInputToken);
     debouncedFilter();
   }, [oldInput, tokens, oldInputToken]);
 

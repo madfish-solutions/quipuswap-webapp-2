@@ -229,7 +229,6 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  // const getContractInfo = useCallback((address:string) => tezos?.contract.at(address), []);
   const getContractInfo = useCallback((address:string) => {
     const tk = new TezosToolkit(net.rpcBaseURL);
     return tk.contract.at(address);
