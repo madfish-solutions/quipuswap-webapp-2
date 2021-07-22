@@ -8,6 +8,7 @@ import { Button } from '@components/ui/Button';
 import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
+import { TokenType } from '@components/ui/TokensLogos';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -75,6 +76,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         {currentTab.id === 'remove' && (
           <>
             <ComplexInput
+              token1={{ name: 'TOKEN' } as TokenType}
               value={inputValue}
               onChange={handleInputChange}
               handleBalance={(value) => setInputValue(value)}
@@ -88,6 +90,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         )}
 
         <ComplexInput
+          token1={{ name: 'TOKEN' } as TokenType}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
@@ -98,6 +101,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         />
         <Plus className={s.iconButton} />
         <ComplexInput
+          token1={{ name: 'TOKEN' } as TokenType}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}

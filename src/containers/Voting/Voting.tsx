@@ -6,6 +6,7 @@ import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { TokenType } from '@components/ui/TokensLogos';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
@@ -66,6 +67,7 @@ export const Voting: React.FC<VotingProps> = ({
         contentClassName={s.content}
       >
         <ComplexInput
+          token1={{ name: 'TOKEN' } as TokenType}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
