@@ -50,8 +50,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     [tabsState],
   );
 
-  console.log(token1, token2);
-
   return (
     <StickyBlock className={className}>
       <TokensModal
