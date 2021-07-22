@@ -5,11 +5,10 @@ import { useTranslation } from 'next-i18next';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
+import { TokensLogos, TokenType } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
-
-import Token from '@icons/Token.svg';
 
 import s from './ComplexInput.module.sass';
 
@@ -18,6 +17,9 @@ type ComplexInputProps = {
   balance?: string
   label: string
   error?: string
+  onClick?: () => void
+  token1: TokenType
+  token2?: TokenType
   mode?: keyof typeof modeClass
   handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
@@ -43,6 +45,9 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   error,
   id,
   mode = 'input',
+  onClick,
+  token1,
+  token2,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -116,15 +121,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             value={value}
             {...props}
           />
-          <Button theme="quaternary" className={s.item4} disabled={readOnly}>
-            {mode !== 'input' && (
-            <div className={s.tokenGroup}>
-              <Token />
-            </div>
-            )}
-            <Token />
+          <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
+            <TokensLogos token1={token1} token2={token2} />
             <h6 className={cx(s.token)}>
-              {mode === 'input' && 'TOKEN'}
+              {mode === 'input' && token1.name}
               {mode === 'select' && 'TOKEN / TOKEN'}
               {mode === 'votes' && 'SELECT LP'}
             </h6>

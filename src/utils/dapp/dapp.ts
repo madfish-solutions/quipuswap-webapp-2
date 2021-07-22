@@ -14,6 +14,8 @@ import { QSNetwork, WhitelistedToken } from '@utils/types';
 import { NetworkType } from '@airgap/beacon-sdk';
 
 import { getTokens } from '@utils/dapp/tokens';
+import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
+import { isValidContract } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -163,14 +165,14 @@ function useDApp() {
           );
 
           if (lastUsedConnection === 'temple') {
-            setState({
+            const pkh = wlt.connected ? await wlt.getPKH() : null;
+            setState((prevState) => ({
+              ...prevState,
               templeWallet: wlt,
               tezos: wlt.connected ? wlt.toTezos() : fallbackToolkit,
-              accountPkh: wlt.connected ? await wlt.getPKH() : null,
+              accountPkh: pkh,
               connectionType: wlt.connected ? 'temple' : null,
-              network: net,
-              tokens: [],
-            });
+            }));
           } else {
             setState((prevState) => ({
               ...prevState,
@@ -226,6 +228,12 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
+  // const getContractInfo = useCallback((address:string) => tezos?.contract.at(address), []);
+  const getContractInfo = useCallback((address:string) => {
+    const tk = new TezosToolkit(net.rpcBaseURL);
+    return tk.contract.at(address);
+  }, []);
+
   const getTokensData = useCallback(() => getTokens(), []);
   const {
     data: tokensData,
@@ -240,6 +248,22 @@ function useDApp() {
       tokens: tokensData ?? [],
     }));
   }, [tokensData]);
+
+  const addCustomToken = useCallback(
+    async (address: string) => {
+      if (isValidContract(address)) {
+        // const type = await getContractInfo(address); // returns fa1.2 | fa2
+        // console.log(type);
+        const customToken = await getTokenMetadata(address);
+        setState((prevState) => ({
+          ...prevState,
+          tokens: [...tokens, { contractAddress: address, metadata: customToken, type: 'fa1.2' }],
+          // tokens: [...tokens, { contractAddress: address, metadata: customToken, type }],
+        }));
+      }
+    },
+    [tokens],
+  );
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
@@ -327,6 +351,8 @@ function useDApp() {
     connectWithTemple,
     disconnect,
     changeNetwork,
+    addCustomToken,
+    getContractInfo,
   };
 }
 
@@ -343,6 +369,7 @@ export const [
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
+  useAddCustomToken,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -356,4 +383,6 @@ export const [
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
+  (v) => v.addCustomToken,
+  (v) => v.getContractInfo,
 );

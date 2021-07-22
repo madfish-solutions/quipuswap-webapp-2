@@ -7,7 +7,7 @@ import FallbackLogo from '@icons/FallbackLogo.svg';
 
 import s from './TokensLogos.module.sass';
 
-type TokenType = {
+export type TokenType = {
   icon: string | null | undefined
   name: string
 };

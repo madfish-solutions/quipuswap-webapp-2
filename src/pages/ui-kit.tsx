@@ -36,6 +36,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { TokenType } from '@components/ui/TokensLogos';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -423,7 +424,11 @@ const UiKit: React.FC = () => {
         >
           Open tokens modal
         </Button>
-        <TokensModal isOpen={tokensModal} onRequestClose={() => setTokensModal(false)} />
+        <TokensModal
+          isOpen={tokensModal}
+          onRequestClose={() => setTokensModal(false)}
+          onChange={() => {}}
+        />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
@@ -513,6 +518,7 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Complex inputs</h1>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={{ name: 'TOKEN' } as TokenType}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -523,6 +529,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={{ name: 'TOKEN' } as TokenType}
             value={inputValue}
             readOnly
             label="Output"
@@ -530,6 +537,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={{ name: 'TOKEN' } as TokenType}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -541,6 +549,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={{ name: 'TOKEN' } as TokenType}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}

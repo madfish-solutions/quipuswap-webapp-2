@@ -15,6 +15,7 @@
     "@apollo/client": "^3.3.21",
     "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/taquito": "^9.2.0",
+    "@taquito/utils": "^9.2.0",
     "@temple-wallet/dapp": "^4.0.0",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
