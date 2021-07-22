@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { useTranslation } from 'next-i18next';
 
@@ -25,10 +25,17 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const addCustomToken = useAddCustomToken();
   const { t } = useTranslation(['common']);
   const [inputValue, setInputValue] = React.useState<string>('');
+  const [inputToken, setInputToken] = React.useState<string>('');
   const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
   const handleInputChange = (state: any) => setInputValue(state.target.value);
+  const handleTokenChange = (state: any) => setInputToken(state.target.value);
 
   const tokens = useTokens();
+
+  console.log(tokens);
+
+  const oldInput = useMemo(() => inputValue, [inputValue]);
+  const oldInputToken = useMemo(() => inputToken, [inputToken]);
 
   const debouncedFilter = debounce(
     () => {
@@ -36,33 +43,74 @@ export const TokensModal: React.FC<TokensModalProps> = ({
         ({
           metadata,
           contractAddress,
-        }) => metadata.name.toLowerCase().includes(inputValue.toLowerCase())
-      || contractAddress.toLowerCase().includes(inputValue.toLowerCase())
-      || metadata.symbol.toLowerCase().includes(inputValue.toLowerCase()),
+          fa2TokenId,
+        }) => {
+          const isName = metadata.name.toLowerCase().includes(oldInput.toLowerCase());
+          const isSymbol = metadata.symbol.toLowerCase().includes(oldInput.toLowerCase());
+          const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
+          if (fa2TokenId || oldInputToken.length > 0) {
+            let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
+            if (!oldInputToken) isFa2 = true;
+            const res = ((isName
+              || isSymbol
+              || isContract)
+              && isFa2);
+            return res;
+          }
+          const res = (isName
+            || isSymbol
+            || isContract);
+          // console.log(res);
+          return res;
+        },
       );
-      if (buff.length === 0 && inputValue.length > 0) {
-        // ex KT1JkoE42rrMBP9b2oDhbx6EUr26GcySZMUH
-        // ex KT1AxaBxkFLCUi3f8rdDAAxBKHfzY8LfKDRA
-        addCustomToken(inputValue);
+      // console.log(buff);
+      if (buff.length === 0 && oldInput.length > 0) {
+        // console.log(oldInput, parseInt(oldInputToken, 10));
+        // ex KT1JkoE42rrMBP9b2oDhbx6EUr26GcySZMUH fa1.2
+        // ex KT1AxaBxkFLCUi3f8rdDAAxBKHfzY8LfKDRA fa1.2
+        // ex KT1LRboPna9yQY9BrjtQYDS1DVxhKESK4VVd fa2
+        addCustomToken(oldInput, parseInt(oldInputToken, 10));
       }
+      // console.log(buff, oldInput.toLowerCase(), inputValue.toLowerCase());
       setFilteredTokens(buff);
     },
     1000,
   );
 
-  useEffect(() => { debouncedFilter(); }, [inputValue, tokens, debouncedFilter]);
+  useEffect(() => {
+    // console.log(oldInput, oldInputToken);
+    debouncedFilter();
+  }, [oldInput, tokens, oldInputToken]);
+
+  const isSoleFa2Token = useMemo(
+    () => filteredTokens.find((x) => x.contractAddress === inputValue)?.type === 'fa2', [filteredTokens, inputValue],
+  );
+
+  console.log(filteredTokens);
 
   return (
     <Modal
       title={t('common:Search token')}
       header={(
-        <Input
-          StartAdornment={Search}
-          className={s.modalInput}
-          value={inputValue}
-          onChange={handleInputChange}
-          placeholder="Search"
-        />
+        <div className={s.inputs}>
+          <Input
+            StartAdornment={Search}
+            className={s.modalInput}
+            value={inputValue}
+            onChange={handleInputChange}
+            placeholder={t('common:Search')}
+          />
+          {(isSoleFa2Token || !!inputToken) && (
+          <Input
+            EndAdornment={Search}
+            className={s.modalInput}
+            value={inputToken}
+            onChange={handleTokenChange}
+            placeholder={t('common:Token ID')}
+          />
+          )}
+        </div>
       )}
       footer={(
         <Button className={s.modalButton} theme="inverse">

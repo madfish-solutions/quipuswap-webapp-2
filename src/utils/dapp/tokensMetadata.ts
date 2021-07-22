@@ -2,10 +2,10 @@ import {
   METADATA_API,
 } from '@utils/defaults';
 
-export const getTokenMetadata = async (address:string) => {
-  const data = await fetch(`${METADATA_API}/${address}/0`)
+export const getTokenMetadata = async (address:string, tokenId?:number) => {
+  const data = await fetch(`${METADATA_API}/${address}/${tokenId || 0}`)
     .then((res) => res.json())
-    .catch(() => ([]));
+    .catch(() => (null));
 
   return data;
 };

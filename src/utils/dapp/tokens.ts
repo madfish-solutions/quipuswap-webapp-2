@@ -1,13 +1,20 @@
 import {
   MAINNET_TOKENS,
+  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 
-export const getTokens = async () => fetch(MAINNET_TOKENS.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
+
+export const getTokens = async (b?:boolean) => fetch(MAINNET_TOKENS.replace('ipfs://', 'https://ipfs.io/ipfs/'))
   .then((res) => res.json())
   .then((json) => {
-    if (json.tokens && json.tokens.length === 0) {
-      return [];
+    let res = [];
+    if (!(json.tokens && json.tokens.length === 0)) {
+      res = json.tokens;
     }
-    return json.tokens;
+    if (b) {
+      res = [...res, ...getSavedTokens()];
+    }
+    return res;
   })
   .catch(() => ([]));

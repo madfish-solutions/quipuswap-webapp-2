@@ -8,12 +8,13 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
+  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { BeaconWallet } from '@taquito/beacon-wallet';
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSNetwork, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 import { NetworkType } from '@airgap/beacon-sdk';
 
-import { getTokens } from '@utils/dapp/tokens';
+import { getSavedTokens, getTokens } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { isValidContract } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
@@ -234,7 +235,7 @@ function useDApp() {
     return tk.contract.at(address);
   }, []);
 
-  const getTokensData = useCallback(() => getTokens(), []);
+  const getTokensData = useCallback(() => getTokens(true), []);
   const {
     data: tokensData,
   } = useSWR(
@@ -250,19 +251,33 @@ function useDApp() {
   }, [tokensData]);
 
   const addCustomToken = useCallback(
-    async (address: string) => {
-      if (isValidContract(address)) {
-        // const type = await getContractInfo(address); // returns fa1.2 | fa2
-        // console.log(type);
-        const customToken = await getTokenMetadata(address);
-        setState((prevState) => ({
-          ...prevState,
-          tokens: [...tokens, { contractAddress: address, metadata: customToken, type: 'fa1.2' }],
-          // tokens: [...tokens, { contractAddress: address, metadata: customToken, type }],
-        }));
+    async (address: string, tokenId?: number) => {
+      // if (address === '') return;
+      const p = isValidContract(address);
+      console.log(p);
+      if (p) {
+        const type = await getContractInfo(address);
+        const isFa2 = !!type.methods.update_operators;
+        const customToken = await getTokenMetadata(address, tokenId);
+        if (customToken !== null) {
+          const token = {
+            contractAddress: address,
+            metadata: customToken as WhitelistedTokenMetadata,
+            type: !isFa2 ? 'fa1.2' : 'fa2',
+            fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+          };
+          window.localStorage.setItem(
+            SAVED_TOKENS_KEY,
+            JSON.stringify([...getSavedTokens(), token]),
+          );
+          setState((prevState) => ({
+            ...prevState,
+            tokens: [...tokens, token as WhitelistedToken],
+          }));
+        }
       }
     },
-    [tokens],
+    [getContractInfo, tokens],
   );
 
   useEffect(() => {

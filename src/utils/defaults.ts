@@ -23,8 +23,9 @@ export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 
+export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 // NETWORKS
-export const METADATA_API = 'http://localhost:3001/metadata';
+export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
