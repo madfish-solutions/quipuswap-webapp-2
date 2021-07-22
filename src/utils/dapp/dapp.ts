@@ -251,10 +251,7 @@ function useDApp() {
 
   const addCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      // if (address === '') return;
-      const p = isValidContract(address);
-      console.log(p);
-      if (p) {
+      if (isValidContract(address)) {
         const type = await getContractInfo(address);
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);
