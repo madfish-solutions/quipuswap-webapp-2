@@ -232,7 +232,6 @@ function useDApp() {
 
   const getContractInfo = useCallback((address:string) => {
     const tk = new TezosToolkit(net.rpcBaseURL);
-    console.log('check3');
     return tk.contract.at(address);
   }, []);
 
@@ -253,9 +252,7 @@ function useDApp() {
 
   const addCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      console.log('check1');
       if (isContractAddress(address)) {
-        console.log('check2');
         const type = await getContractInfo(address);
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);

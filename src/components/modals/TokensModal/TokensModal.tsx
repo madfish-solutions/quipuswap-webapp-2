@@ -1,15 +1,9 @@
-// import React, { useCallback, useEffect, useMemo } from 'react';
-// import React, { useCallback } from 'react';
 import React from 'react';
 import ReactModal from 'react-modal';
-// import diff from 'object-diff';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
-// import { OnChange } from 'react-final-form-listeners';
 
 import { useAddCustomToken, useTokens } from '@utils/dapp';
-// import { useTokens } from '@utils/dapp';
-// import { debounce, parseNumber } from '@utils/helpers';
 import { parseNumber, searchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { isContractAddress, validateMinMax } from '@utils/validators';
@@ -55,8 +49,6 @@ const Header:React.FC<HeaderProps> = ({
       await promise;
     }
 
-    // const difference = diff(val, values);
-    // if (Object.keys(difference).length) {
     if (true) {
       // values have changed
       setVal(values);
@@ -131,7 +123,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = React.useState<string>('');
   const [inputToken, setInputToken] = React.useState<number>(0);
-  // console.log(inputValue, inputToken);
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
@@ -149,63 +140,17 @@ export const TokensModal: React.FC<TokensModalProps> = ({
         ),
       );
     setFilteredTokens(isTokens);
-    console.log('precheck', inputValue.length, isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
-      console.log('check0');
       addCustomToken(inputValue, inputToken);
     }
   };
 
   React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
-
-  // const debouncedFilter = debounce(
-  //   () => {
-  //     const buff = tokens.filter(
-  //       ({
-  //         metadata,
-  //         contractAddress,
-  //         fa2TokenId,
-  //       }) => {
-  //         const isName = metadata.name?.toLowerCase().includes(oldInput.toLowerCase());
-  //         const isSymbol = metadata.symbol?.toLowerCase().includes(oldInput.toLowerCase());
-  //         const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
-  //         if (fa2TokenId || oldInputToken.length > 0) {
-  //           let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
-  //           if (!oldInputToken) isFa2 = true;
-  //           const res = ((isName
-  //             || isSymbol
-  //             || isContract)
-  //             && isFa2);
-  //           return res;
-  //         }
-  //         const res = (isName
-  //           || isSymbol
-  //           || isContract);
-  //         return res;
-  //       },
-  //     );
-  //     if (buff.length === 0 && oldInput.length > 0) {
-  //       addCustomToken(oldInput, parseInt(oldInputToken, 10));
-  //     }
-  //     setFilteredTokens(buff);
-  //   },
-  //   1000,
-  // );
-
   const isSoleFa2Token = React.useMemo(
     () => filteredTokens.find(
       (x) => x.contractAddress === inputValue,
     )?.type === 'fa2' || typeof inputToken !== undefined, [filteredTokens, inputValue, inputToken],
   );
-
-  // const isSoleFa2Token = true;
-
-  // const onSubmit = useCallback(async (
-  //   values: FormValues,
-  // ) => {
-  //   console.log('submit', values);
-  // }, []);
-
   return (
     <Form
       onSubmit={handleInput}
