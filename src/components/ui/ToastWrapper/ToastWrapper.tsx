@@ -1,7 +1,6 @@
 import React, { ReactNode, useContext } from 'react';
 import cx from 'classnames';
 import {
-  ToastClassName,
   ToastContainer,
   ToastContentProps,
   TypeOptions,
@@ -12,7 +11,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Loader } from '@components/ui/Loader';
 import { ToastClose } from '@components/svg/ToastClose';
-
 import ToastSuccess from '@icons/ToastSuccess.svg';
 import ToastError from '@icons/ToastError.svg';
 
@@ -33,17 +31,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const typeDependentClassNames: Partial<Record<TypeOptions, string>> = {
-  success: s.success,
-  error: s.error,
-  info: s.info,
-};
-
-const getToastClassName: Exclude<ToastClassName, string> = (context) => cx(
-  s.notification,
-  context?.type && typeDependentClassNames[context?.type],
-);
-
 export const ToastWrapper: React.FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -56,7 +43,7 @@ export const ToastWrapper: React.FC = () => {
       className={cx(modeClass[colorThemeMode], s.notificationContainer)}
       bodyClassName={s.toastBody}
       closeButton={CustomCloseButton}
-      toastClassName={getToastClassName}
+      toastClassName={s.notification}
       pauseOnHover
       closeOnClick={false}
       pauseOnFocusLoss
