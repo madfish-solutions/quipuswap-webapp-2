@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
+
 import {
   APP_NAME,
   BASE_URL,
@@ -11,12 +13,11 @@ import {
   SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { BeaconWallet } from '@taquito/beacon-wallet';
-import { QSNetwork, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
-import { NetworkType } from '@airgap/beacon-sdk';
+import { QSNetwork, WhitelistedToken } from '@utils/types';
 
 import { getSavedTokens, getTokens } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
-import { isValidContract } from '@utils/helpers';
+import { isContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -251,26 +252,26 @@ function useDApp() {
 
   const addCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      if (isValidContract(address)) {
+      console.log('check1');
+      if (isContractAddress(address)) {
+        console.log('check2');
         const type = await getContractInfo(address);
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);
-        if (customToken !== null) {
-          const token = {
-            contractAddress: address,
-            metadata: customToken as WhitelistedTokenMetadata,
-            type: !isFa2 ? 'fa1.2' : 'fa2',
-            fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-          };
-          window.localStorage.setItem(
-            SAVED_TOKENS_KEY,
-            JSON.stringify([...getSavedTokens(), token]),
-          );
-          setState((prevState) => ({
-            ...prevState,
-            tokens: [...tokens, token as WhitelistedToken],
-          }));
-        }
+        const token = {
+          contractAddress: address,
+          metadata: customToken,
+          type: !isFa2 ? 'fa1.2' : 'fa2',
+          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+        } as WhitelistedToken;
+        window.localStorage.setItem(
+          SAVED_TOKENS_KEY,
+          JSON.stringify([...getSavedTokens(), token]),
+        );
+        setState((prevState) => ({
+          ...prevState,
+          tokens: [...tokens, token],
+        }));
       }
     },
     [getContractInfo, tokens],
@@ -363,7 +364,6 @@ function useDApp() {
     disconnect,
     changeNetwork,
     addCustomToken,
-    getContractInfo,
   };
 }
 
@@ -395,5 +395,4 @@ export const [
   (v) => v.disconnect,
   (v) => v.changeNetwork,
   (v) => v.addCustomToken,
-  (v) => v.getContractInfo,
 );
