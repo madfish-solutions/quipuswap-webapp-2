@@ -254,13 +254,14 @@ function useDApp() {
       if (isValidContract(address)) {
         const type = await getContractInfo(address);
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(address, tokenId);
+        const customToken = await getTokenMetadata(network, address, tokenId);
         if (customToken !== null) {
           const token = {
             contractAddress: address,
             metadata: customToken as WhitelistedTokenMetadata,
             type: !isFa2 ? 'fa1.2' : 'fa2',
             fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+            network: network.id,
           };
           window.localStorage.setItem(
             SAVED_TOKENS_KEY,

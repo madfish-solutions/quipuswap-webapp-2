@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import ReactModal from 'react-modal';
 import { useTranslation } from 'next-i18next';
 
-import { useAddCustomToken, useTokens } from '@utils/dapp';
+import { useAddCustomToken, useNetwork, useTokens } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
@@ -31,6 +31,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const handleTokenChange = (state: any) => setInputToken(state.target.value);
 
   const tokens = useTokens();
+  const network = useNetwork();
 
   const oldInput = useMemo(() => inputValue, [inputValue]);
   const oldInputToken = useMemo(() => inputToken, [inputToken]);
@@ -42,22 +43,25 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           metadata,
           contractAddress,
           fa2TokenId,
+          network: tokenNetwork,
         }) => {
           const isName = metadata.name?.toLowerCase().includes(oldInput.toLowerCase());
           const isSymbol = metadata.symbol?.toLowerCase().includes(oldInput.toLowerCase());
           const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
+          let res = false;
           if (fa2TokenId || oldInputToken.length > 0) {
             let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
             if (!oldInputToken) isFa2 = true;
-            const res = ((isName
+            res = ((isName
               || isSymbol
               || isContract)
               && isFa2);
-            return res;
+          } else {
+            res = (isName
+              || isSymbol
+              || isContract);
           }
-          const res = (isName
-            || isSymbol
-            || isContract);
+          res = res && network.id === tokenNetwork;
           return res;
         },
       );
@@ -71,7 +75,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   useEffect(() => {
     debouncedFilter();
-  }, [oldInput, tokens, oldInputToken]);
+  }, [oldInput, tokens, network, oldInputToken]);
 
   const isSoleFa2Token = useMemo(
     () => filteredTokens.find((x) => x.contractAddress === inputValue)?.type === 'fa2', [filteredTokens, inputValue],
