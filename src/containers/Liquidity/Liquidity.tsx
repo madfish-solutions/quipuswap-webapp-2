@@ -9,6 +9,7 @@ import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenType } from '@components/ui/TokensLogos';
+import { PositionsModal } from '@components/modals/PositionsModal';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -18,6 +19,7 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { WhitelistedTokenPair } from '@utils/types';
 
 const TabsContent = [
   {
@@ -38,6 +40,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
+  const [tokensModal, setTokensModal] = useState<number>(0);
+  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const [switcherValue, setSwitcherValue] = useState(true); // TODO: Delete when lib added
@@ -50,8 +54,19 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     [tabsState],
   );
 
+  console.log(tokenPair);
+
   return (
     <StickyBlock className={className}>
+      <PositionsModal
+        isOpen={tokensModal !== 0}
+        onRequestClose={() => setTokensModal(0)}
+        onChange={(token) => {
+          if (tokensModal === 1) setTokenPair(token);
+          // else setToken2(token);
+          setTokensModal(0);
+        }}
+      />
       <Card
         header={{
           content: (
@@ -79,6 +94,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
               token1={{ name: 'TOKEN' } as TokenType}
               value={inputValue}
               onChange={handleInputChange}
+              onClick={() => setTokensModal(1)}
               handleBalance={(value) => setInputValue(value)}
               id="liquidity-remove-input"
               label="Input"

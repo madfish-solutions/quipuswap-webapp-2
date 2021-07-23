@@ -38,6 +38,10 @@ export const FLORENCENET_NETWORK: QSNetwork = {
   description: 'Florence testnet',
   disabled: false,
 };
+
+export const TEZ_TOKEN = {
+  contractAddress: '', type: '', name: 'Tezos', metadata: { symbol: 'TEZ', thumbnailUri: 'ipfs://Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222' },
+};
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
   connectType: 'default',
