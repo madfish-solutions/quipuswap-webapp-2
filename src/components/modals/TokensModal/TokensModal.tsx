@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import { useTranslation } from 'next-i18next';
 
 import { useAddCustomToken, useNetwork, useTokens } from '@utils/dapp';
-import { debounce } from '@utils/helpers';
+import { debounce, searchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
 import { TokenCell } from '@components/ui/Modal/ModalCell';
@@ -39,31 +39,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const debouncedFilter = debounce(
     () => {
       const buff = tokens.filter(
-        ({
-          metadata,
-          contractAddress,
-          fa2TokenId,
-          network: tokenNetwork,
-        }) => {
-          const isName = metadata.name?.toLowerCase().includes(oldInput.toLowerCase());
-          const isSymbol = metadata.symbol?.toLowerCase().includes(oldInput.toLowerCase());
-          const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
-          let res = false;
-          if (fa2TokenId || oldInputToken.length > 0) {
-            let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
-            if (!oldInputToken) isFa2 = true;
-            res = ((isName
-              || isSymbol
-              || isContract)
-              && isFa2);
-          } else {
-            res = (isName
-              || isSymbol
-              || isContract);
-          }
-          res = res && network.id === tokenNetwork;
-          return res;
-        },
+        (token) => searchToken(token, network, oldInput, oldInputToken),
       );
       if (buff.length === 0 && oldInput.length > 0) {
         addCustomToken(oldInput, parseInt(oldInputToken, 10));

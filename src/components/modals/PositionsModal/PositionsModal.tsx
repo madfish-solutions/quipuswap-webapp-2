@@ -4,13 +4,14 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { useAddCustomToken, useNetwork, useTokens } from '@utils/dapp';
-import { debounce } from '@utils/helpers';
+import { debounce, searchToken } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
 import { PositionCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 
+import { TEZ_TOKEN } from '@utils/defaults';
 import s from './PositionsModal.module.sass';
 
 type PositionsModalProps = {
@@ -31,38 +32,15 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
 
   const tokens = useTokens();
   const network = useNetwork();
+  // ex lp KT1P3RGEAa78XLTs3Hkpd1VWtryQRLDjiXqF
 
   const oldInput = useMemo(() => inputValue, [inputValue]);
   const oldInputToken = useMemo(() => inputToken, [inputToken]);
 
   const debouncedFilter = debounce(
     () => {
-      const buff = tokens.filter(
-        ({
-          metadata,
-          contractAddress,
-          fa2TokenId,
-          network: tokenNetwork,
-        }) => {
-          const isName = metadata.name?.toLowerCase().includes(oldInput.toLowerCase());
-          const isSymbol = metadata.symbol?.toLowerCase().includes(oldInput.toLowerCase());
-          const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
-          let res = false;
-          if (fa2TokenId || oldInputToken.length > 0) {
-            let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
-            if (!oldInputToken) isFa2 = true;
-            res = ((isName
-              || isSymbol
-              || isContract)
-              && isFa2);
-          } else {
-            res = (isName
-              || isSymbol
-              || isContract);
-          }
-          res = res && network.id === tokenNetwork;
-          return res;
-        },
+      const buff = ([...tokens, TEZ_TOKEN] as WhitelistedToken[]).filter(
+        (token) => searchToken(token, network, oldInput, oldInputToken),
       );
       if (buff.length === 0 && oldInput.length > 0) {
         addCustomToken(oldInput, parseInt(oldInputToken, 10));
