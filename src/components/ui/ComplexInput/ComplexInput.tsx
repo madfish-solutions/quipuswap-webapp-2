@@ -3,9 +3,10 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
-import { TokensLogos, TokenType } from '@components/ui/TokensLogos';
+import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
@@ -18,8 +19,8 @@ type ComplexInputProps = {
   label: string
   error?: string
   onClick?: () => void
-  token1: TokenType
-  token2?: TokenType
+  token1: WhitelistedToken
+  token2?: WhitelistedToken
   mode?: keyof typeof modeClass
   handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
@@ -124,7 +125,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
             <TokensLogos token1={token1} token2={token2} />
             <h6 className={cx(s.token)}>
-              {mode === 'input' && token1.name}
+              {mode === 'input' && token1?.metadata?.symbol}
               {mode === 'select' && 'TOKEN / TOKEN'}
               {mode === 'votes' && 'SELECT LP'}
             </h6>
