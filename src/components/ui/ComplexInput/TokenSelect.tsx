@@ -117,7 +117,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
             <TokensLogos token1={token} />
             <h6 className={cx(s.token)}>
-              {token?.metadata.symbol}
+              {token?.metadata?.symbol ?? token?.metadata?.name ?? token?.contractAddress}
             </h6>
             <Shevron />
           </Button>

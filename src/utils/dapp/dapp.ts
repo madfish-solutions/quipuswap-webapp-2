@@ -232,6 +232,7 @@ function useDApp() {
 
   const getContractInfo = useCallback((address:string) => {
     const tk = new TezosToolkit(net.rpcBaseURL);
+    console.log('check3');
     return tk.contract.at(address);
   }, []);
 

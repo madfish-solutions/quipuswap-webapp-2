@@ -2,7 +2,7 @@
 // import React, { useCallback } from 'react';
 import React from 'react';
 import ReactModal from 'react-modal';
-import diff from 'object-diff';
+// import diff from 'object-diff';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 // import { OnChange } from 'react-final-form-listeners';
@@ -28,7 +28,7 @@ type TokensModalProps = {
 } & ReactModal.Props;
 
 type HeaderProps = {
-  isSoleFa2Token:boolean
+  isSecondInput:boolean
   debounce:number,
   save:any,
   values:any
@@ -40,11 +40,11 @@ type FormValues = {
 };
 
 const Header:React.FC<HeaderProps> = ({
-  isSoleFa2Token, debounce, save, values,
+  isSecondInput, debounce, save, values,
 }) => {
   const { t } = useTranslation(['common']);
 
-  const [val, setVal] = React.useState(values);
+  const [, setVal] = React.useState(values);
   const [, setSubm] = React.useState<boolean>(false);
 
   let timeout:any;
@@ -55,12 +55,13 @@ const Header:React.FC<HeaderProps> = ({
       await promise;
     }
 
-    const difference = diff(val, values);
-    if (Object.keys(difference).length) {
+    // const difference = diff(val, values);
+    // if (Object.keys(difference).length) {
+    if (true) {
       // values have changed
       setVal(values);
       setSubm(true);
-      promise = save(difference);
+      promise = save(values);
       await promise;
       setSubm(false);
     }
@@ -92,11 +93,11 @@ const Header:React.FC<HeaderProps> = ({
         )}
 
       </Field>
-      {(isSoleFa2Token) && (
+      {(isSecondInput) && (
       <Field
         name="tokenId"
         validate={validateMinMax(0, 100)}
-        parse={(value) => parseNumber(value, 1, 100)}
+        parse={(value) => parseNumber(value, 0, 100)}
       >
         {({ input, meta }) => (
           <>
@@ -128,26 +129,34 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { Form } = withTypes<FormValues>();
   const tokens = useTokens();
   const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
-  const [inputValue, setInputValue] = React.useState<string>();
-  console.log(inputValue);
+  const [inputValue, setInputValue] = React.useState<string>('');
+  const [inputToken, setInputToken] = React.useState<number>(0);
+  // console.log(inputValue, inputToken);
 
   const handleInput = (values:FormValues) => {
-    console.log('handleInput');
+    setInputValue(values.search ?? '');
+    setInputToken(values.tokenId);
+  };
+
+  const handleTokenSearch = () => {
     const isTokens = tokens
       .filter(
         (token) => searchToken(
           token,
           MAINNET_NETWORK,
-          values.search ?? '',
-          values.tokenId,
+          inputValue,
+          inputToken,
         ),
       );
     setFilteredTokens(isTokens);
-    setInputValue(values.search ?? '');
-    if ((values.search ?? '').length > 0 && isTokens.length === 0) {
-      addCustomToken(values.search ?? '', values.tokenId);
+    console.log('precheck', inputValue.length, isTokens);
+    if (inputValue.length > 0 && isTokens.length === 0) {
+      console.log('check0');
+      addCustomToken(inputValue, inputToken);
     }
   };
+
+  React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
   // const debouncedFilter = debounce(
   //   () => {
@@ -183,11 +192,11 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   //   1000,
   // );
 
-  // const isSoleFa2Token = React.useMemo(
-  //   () => filteredTokens.find(
-  //     (x) => x.contractAddress === inputValue,
-  //   )?.type === 'fa2', [filteredTokens, inputValue],
-  // );
+  const isSoleFa2Token = React.useMemo(
+    () => filteredTokens.find(
+      (x) => x.contractAddress === inputValue,
+    )?.type === 'fa2' || typeof inputToken !== undefined, [filteredTokens, inputValue, inputToken],
+  );
 
   // const isSoleFa2Token = true;
 
@@ -205,7 +214,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
         <Modal
           title={t('common:Search token')}
           header={
-            <AutoSave debounce={1000} save={handleInput} />
+            <AutoSave debounce={1000} save={handleInput} isSecondInput={isSoleFa2Token} />
               }
           footer={(
             <Button className={s.modalButton} theme="inverse">

@@ -1336,11 +1336,6 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.0.0.tgz#067a6c49dc7a5c2412a505628e26902ae967bf6f"
   integrity sha512-TmCW5HoZ2o2/z2EYi109jLqIaPIi9y/lc2LmDCWzuCi35bcaQ+OtUh6nwBiFK7SOu25FAU5+YKdqFZUwtqGSdg==
 
-"@types/object-diff@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@types/object-diff/-/object-diff-0.0.1.tgz#6b11c581af80c098843c68f10ac7616bc88eef17"
-  integrity sha512-8GDqljJQEm1GqX+aN9eYQb7bwkoU7T4UgWQhyDAK24X6DG5YvSaE8ofatKrjEm1h7HI5pxzBCak5HMyr/qvhrg==
-
 "@types/parse-json@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
@@ -5552,11 +5547,6 @@ object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
   integrity sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=
-
-object-diff@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/object-diff/-/object-diff-0.0.4.tgz#d883b0444fe8fd6e04e595d7bb665682c916047f"
-  integrity sha1-2IOwRE/o/W4E5ZXXu2ZWgskWBH8=
 
 object-inspect@^1.10.3:
   version "1.10.3"
