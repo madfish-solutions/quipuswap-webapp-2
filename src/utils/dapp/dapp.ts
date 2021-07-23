@@ -8,13 +8,12 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
-  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 import { NetworkType } from '@airgap/beacon-sdk';
 
-import { getSavedTokens, getTokens } from '@utils/dapp/tokens';
+import { getTokens, saveCustomToken } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { isValidContract } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
@@ -262,14 +261,11 @@ function useDApp() {
             type: !isFa2 ? 'fa1.2' : 'fa2',
             fa2TokenId: isFa2 ? tokenId || 0 : undefined,
             network: network.id,
-          };
-          window.localStorage.setItem(
-            SAVED_TOKENS_KEY,
-            JSON.stringify([...getSavedTokens(), token]),
-          );
+          } as WhitelistedToken;
+          saveCustomToken(token);
           setState((prevState) => ({
             ...prevState,
-            tokens: [...tokens, token as WhitelistedToken],
+            tokens: [...tokens, token],
           }));
         }
       }

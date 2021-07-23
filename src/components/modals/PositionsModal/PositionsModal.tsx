@@ -3,7 +3,9 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { useAddCustomToken, useNetwork, useTokens } from '@utils/dapp';
+import {
+  mergeTokensToPair, useNetwork, useTokens,
+} from '@utils/dapp';
 import { debounce, searchToken } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
@@ -22,11 +24,11 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   onChange,
   ...props
 }) => {
-  const addCustomToken = useAddCustomToken();
+  // const addCustomToken = useAddCustomToken();
   const { t } = useTranslation(['common']);
   const [inputValue, setInputValue] = React.useState<string>('');
   const [inputToken, setInputToken] = React.useState<string>('');
-  const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
+  const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedTokenPair[]>([]);
   const handleInputChange = (state: any) => setInputValue(state.target.value);
   const handleTokenChange = (state: any) => setInputToken(state.target.value);
 
@@ -34,25 +36,28 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const network = useNetwork();
   // ex lp KT1P3RGEAa78XLTs3Hkpd1VWtryQRLDjiXqF
 
-  const oldInput = useMemo(() => inputValue, [inputValue]);
-  const oldInputToken = useMemo(() => inputToken, [inputToken]);
+  const oldInput1 = useMemo(() => inputValue, [inputValue]);
+  const oldInput2 = useMemo(() => inputToken, [inputToken]);
 
   const debouncedFilter = debounce(
     () => {
       const buff = ([...tokens, TEZ_TOKEN] as WhitelistedToken[]).filter(
-        (token) => searchToken(token, network, oldInput, oldInputToken),
+        (token) => searchToken(token, network, oldInput1, ''),
       );
-      if (buff.length === 0 && oldInput.length > 0) {
-        addCustomToken(oldInput, parseInt(oldInputToken, 10));
-      }
-      setFilteredTokens(buff);
+      const buff1 = ([...tokens, TEZ_TOKEN] as WhitelistedToken[]).filter(
+        (token) => searchToken(token, network, oldInput2, ''),
+      );
+      // if (buff.length === 0 && oldInput1.length > 0 && buff1.length === 0) {
+      //   addCustomToken(oldInput1);
+      // }
+      setFilteredTokens(mergeTokensToPair(buff, buff1));
     },
     1000,
   );
 
   useEffect(() => {
     debouncedFilter();
-  }, [oldInput, tokens, network, oldInputToken]);
+  }, [oldInput1, tokens, network, oldInput2]);
 
   return (
     <Modal
@@ -68,7 +73,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           />
           {(inputValue.length > 0 || !!inputToken) && (
           <Input
-            EndAdornment={Search}
+            StartAdornment={Search}
             className={cx(s.modalInput, s.secretInput)}
             value={inputToken}
             onChange={handleTokenChange}
@@ -79,14 +84,14 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
       )}
       {...props}
     >
-      {filteredTokens.map((token) => (
+      {filteredTokens.map((pair) => (
         <div
           aria-hidden
-          key={`${token.contractAddress}_${token.fa2TokenId ?? 0}`}
-          onClick={() => onChange({ token1: token, token2: token } as WhitelistedTokenPair)}
+          key={`${pair.token1.contractAddress}_${pair.token1.fa2TokenId ?? 0}`}
+          onClick={() => onChange(pair)}
         >
           <PositionCell
-            tokenPair={{ token1: token, token2: token } as WhitelistedTokenPair}
+            tokenPair={pair}
           />
         </div>
       ))}
