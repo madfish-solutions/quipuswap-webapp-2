@@ -1,9 +1,11 @@
 // import React, { useCallback, useEffect, useMemo } from 'react';
-import React, { useCallback } from 'react';
+// import React, { useCallback } from 'react';
+import React from 'react';
 import ReactModal from 'react-modal';
+import diff from 'object-diff';
 import { useTranslation } from 'next-i18next';
-import { Field, withTypes } from 'react-final-form';
-import { OnChange } from 'react-final-form-listeners';
+import { Field, FormSpy, withTypes } from 'react-final-form';
+// import { OnChange } from 'react-final-form-listeners';
 
 import { useAddCustomToken, useTokens } from '@utils/dapp';
 // import { useTokens } from '@utils/dapp';
@@ -25,10 +27,97 @@ type TokensModalProps = {
   onChange: (token: WhitelistedToken) => void
 } & ReactModal.Props;
 
+type HeaderProps = {
+  isSoleFa2Token:boolean
+  debounce:number,
+  save:any,
+  values:any
+};
+
 type FormValues = {
   search: string
   tokenId: number
 };
+
+const Header:React.FC<HeaderProps> = ({
+  isSoleFa2Token, debounce, save, values,
+}) => {
+  const { t } = useTranslation(['common']);
+
+  const [val, setVal] = React.useState(values);
+  const [, setSubm] = React.useState<boolean>(false);
+
+  let timeout:any;
+  let promise:any;
+
+  const saveFunc = async () => {
+    if (promise) {
+      await promise;
+    }
+
+    const difference = diff(val, values);
+    if (Object.keys(difference).length) {
+      // values have changed
+      setVal(values);
+      setSubm(true);
+      promise = save(difference);
+      await promise;
+      setSubm(false);
+    }
+  };
+
+  React.useEffect(() => {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(saveFunc, debounce);
+  }, [values]);
+
+  return (
+    <div className={s.inputs}>
+      <Field
+        name="search"
+        validate={isContractAddress}
+      >
+        {({ input, meta }) => (
+          <>
+            <Input
+              {...input}
+              StartAdornment={Search}
+              className={s.modalInput}
+              placeholder={t('common:Search')}
+              error={meta.error}
+            />
+          </>
+        )}
+
+      </Field>
+      {(isSoleFa2Token) && (
+      <Field
+        name="tokenId"
+        validate={validateMinMax(0, 100)}
+        parse={(value) => parseNumber(value, 1, 100)}
+      >
+        {({ input, meta }) => (
+          <>
+            <Input
+              {...input}
+              EndAdornment={Search}
+              className={s.modalInput}
+              placeholder={t('common:Token ID')}
+              error={meta.error}
+            />
+          </>
+        )}
+      </Field>
+      )}
+    </div>
+  );
+};
+
+const AutoSave = (props:any) => (
+  <FormSpy {...props} subscription={{ values: true }} component={Header} />
+);
 
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
@@ -38,7 +127,27 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
   const tokens = useTokens();
-  // const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
+  const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
+  const [inputValue, setInputValue] = React.useState<string>();
+  console.log(inputValue);
+
+  const handleInput = (values:FormValues) => {
+    console.log('handleInput');
+    const isTokens = tokens
+      .filter(
+        (token) => searchToken(
+          token,
+          MAINNET_NETWORK,
+          values.search ?? '',
+          values.tokenId,
+        ),
+      );
+    setFilteredTokens(isTokens);
+    setInputValue(values.search ?? '');
+    if ((values.search ?? '').length > 0 && isTokens.length === 0) {
+      addCustomToken(values.search ?? '', values.tokenId);
+    }
+  };
 
   // const debouncedFilter = debounce(
   //   () => {
@@ -74,119 +183,30 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   //   1000,
   // );
 
-  // useEffect(() => {
-  //   debouncedFilter();
-  // }, [tokens]);
-
-  // const isSoleFa2Token = useMemo(
+  // const isSoleFa2Token = React.useMemo(
   //   () => filteredTokens.find(
-  // (x) => x.contractAddress === inputValue)?.type === 'fa2', [filteredTokens, inputValue],
+  //     (x) => x.contractAddress === inputValue,
+  //   )?.type === 'fa2', [filteredTokens, inputValue],
   // );
 
   // const isSoleFa2Token = true;
 
-  const onSubmit = useCallback(async (
-    values: FormValues,
-  ) => {
-    console.log('submit', values);
-  }, []);
+  // const onSubmit = useCallback(async (
+  //   values: FormValues,
+  // ) => {
+  //   console.log('submit', values);
+  // }, []);
 
   return (
     <Form
-      onSubmit={onSubmit}
-      mutators={{
-        setValue: ([field, value], state, { changeValue }) => {
-          changeValue(state, field, () => value);
-        },
-      }}
-      render={({
-        handleSubmit, values,
-      }) => (
+      onSubmit={handleInput}
+      render={() => (
+
         <Modal
           title={t('common:Search token')}
-          header={(
-
-            <form onSubmit={handleSubmit} className={s.inputs}>
-              <Field
-                name="search"
-                validate={isContractAddress}
-              >
-                {({ input, meta }) => (
-                  <>
-                    <Input
-                      {...input}
-                      StartAdornment={Search}
-                      className={s.modalInput}
-                      placeholder={t('common:Search')}
-                      error={meta.error}
-                    />
-                    <OnChange name="search">
-                      {(value) => {
-                        const isTokens = tokens
-                          .filter(
-                            (token) => searchToken(
-                              token,
-                              MAINNET_NETWORK,
-                              values.search ?? '',
-                              values.tokenId,
-                            ),
-                          );
-                        if (value && isTokens.length === 0) {
-                          addCustomToken(values.search, values.tokenId);
-                        }
-                      }}
-                    </OnChange>
-                  </>
-                )}
-
-              </Field>
-              {(tokens
-                .filter(
-                  (token) => searchToken(
-                    token,
-                    MAINNET_NETWORK,
-                    values.search ?? '',
-                    values.tokenId,
-                  ),
-                ).find(
-                  (x) => x.contractAddress === values.search,
-                )?.type === 'fa2' || values.tokenId >= 0) && (
-                <Field
-                  name="tokenId"
-                  validate={validateMinMax(0, 100)}
-                  parse={(value) => parseNumber(value, 1, 100)}
-                >
-                  {({ input, meta }) => (
-                    <>
-                      <Input
-                        {...input}
-                        EndAdornment={Search}
-                        className={s.modalInput}
-                        placeholder={t('common:Token ID')}
-                        error={meta.error}
-                      />
-                      <OnChange name="tokenId">
-                        {(value) => {
-                          const isTokens = tokens
-                            .filter(
-                              (token) => searchToken(
-                                token,
-                                MAINNET_NETWORK,
-                                values.search ?? '',
-                                values.tokenId,
-                              ),
-                            );
-                          if (value && isTokens.length === 0) {
-                            addCustomToken(values.search, values.tokenId);
-                          }
-                        }}
-                      </OnChange>
-                    </>
-                  )}
-                </Field>
-              )}
-            </form>
-          )}
+          header={
+            <AutoSave debounce={1000} save={handleInput} />
+              }
           footer={(
             <Button className={s.modalButton} theme="inverse">
               Manage Lists
@@ -196,28 +216,20 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           )}
           {...props}
         >
-          {tokens
-            .filter(
-              (token) => searchToken(
-                token,
-                MAINNET_NETWORK,
-                values.search ?? '',
-                values.tokenId,
-              ),
-            )
-            .map((token) => {
-              const {
-                contractAddress, fa2TokenId,
-              } = token;
-              return (
-                <div aria-hidden key={`${contractAddress}_${fa2TokenId ?? 0}`} onClick={() => onChange(token)}>
-                  <TokenCell
-                    token={token}
-                  />
-                </div>
-              );
-            })}
+          {filteredTokens.map((token) => {
+            const {
+              contractAddress, fa2TokenId,
+            } = token;
+            return (
+              <div aria-hidden key={`${contractAddress}_${fa2TokenId ?? 0}`} onClick={() => onChange(token)}>
+                <TokenCell
+                  token={token}
+                />
+              </div>
+            );
+          })}
         </Modal>
+
       )}
     />
   );
