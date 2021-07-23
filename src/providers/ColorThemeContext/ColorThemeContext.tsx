@@ -13,7 +13,6 @@ type ThemeColorsPros = {
   fill2: string
   fill2Inverse: string
   stroke: string
-  stroke2: string
   background1: string
   background2: string
 };
@@ -25,7 +24,6 @@ const themeColorsObj = {
     fill2: '#1373E4',
     fill2Inverse: '#F9A605',
     stroke: '#ffffff',
-    stroke2: '#F0F1F3',
     background1: '#F0F1F3',
     background2: '#FAFAFC',
   },
@@ -35,7 +33,6 @@ const themeColorsObj = {
     fill2: '#F9A605',
     fill2Inverse: '#1373E4',
     stroke: '#14171E',
-    stroke2: '#232735',
     background1: '#070C12',
     background2: '#14171E',
   },
