@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 
+import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
@@ -97,6 +98,7 @@ const selectValuesTop = [
 
 const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
+  const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [showNetworkPopup, setShowNetworkPopup] = useState<boolean>(false);
 
@@ -112,6 +114,27 @@ const UiKit: React.FC = () => {
 
   const [selectState, setSelectState] = useState(selectValues[0]);
   const [selectTopState, setSelectTopState] = useState(selectValuesTop[0]);
+
+  const handleErrorToast = useCallback(() => {
+    updateToast({
+      type: 'error',
+      render: `${t('common:errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
+    });
+  }, [t, updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('common:Success'),
+    });
+  }, [t, updateToast]);
+
+  const handleLoadToast = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common:Loading'),
+    });
+  }, [t, updateToast]);
 
   useEffect(() => {
     setInputError(inputValue.length > 7);
@@ -407,6 +430,27 @@ const UiKit: React.FC = () => {
           <Bage text="some wide text" />
           <Bage text="a" />
         </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Toast</h1>
+        <Button
+          className={s.button}
+          onClick={() => handleErrorToast()}
+        >
+          Error toast
+        </Button>
+        <Button
+          className={s.button}
+          onClick={() => handleSuccessToast()}
+        >
+          Success toast
+        </Button>
+        <Button
+          className={s.button}
+          onClick={() => handleLoadToast()}
+        >
+          loading toast
+        </Button>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Popup</h1>

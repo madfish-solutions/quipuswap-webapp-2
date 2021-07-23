@@ -9,8 +9,9 @@ export enum ColorModes {
 
 type ThemeColorsPros = {
   fill1: string
+  fill1Inverse: string
   fill2: string
-  fill3: string
+  fill2Inverse: string
   stroke: string
   stroke2: string
   background1: string
@@ -20,8 +21,9 @@ type ThemeColorsPros = {
 const themeColorsObj = {
   light: {
     fill1: '#5C1EE0',
+    fill1Inverse: '#FF6B00',
     fill2: '#1373E4',
-    fill3: '#FFFFFF',
+    fill2Inverse: '#F9A605',
     stroke: '#ffffff',
     stroke2: '#F0F1F3',
     background1: '#F0F1F3',
@@ -29,8 +31,9 @@ const themeColorsObj = {
   },
   dark: {
     fill1: '#FF6B00',
+    fill1Inverse: '#5C1EE0',
     fill2: '#F9A605',
-    fill3: '#070C12',
+    fill2Inverse: '#1373E4',
     stroke: '#14171E',
     stroke2: '#232735',
     background1: '#070C12',
