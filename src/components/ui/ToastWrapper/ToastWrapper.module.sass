@@ -2,10 +2,13 @@
 @import '@styles/breakpoints'
 
 .notificationContainer
-  width: 1496px
-  min-width: 1496px
+  position: fixed
+  left: 24px
+  width: calc(100% - 48px)
+  min-width: calc(100% - 48px)
+  transform: none
   padding: 0
-  top: 20px
+  top: 88px
 
 .notification
   margin-bottom: 24px
@@ -15,40 +18,48 @@
   align-items: center
   font-size: 16px
   padding: 8px
-  border-radius: 4px
-  //background: rgba($white, .3)
-  &.success
-    //color: $purple-text
-    //border: 1px solid $green
-    .toastBody
-      //background-color: $green
-  &.error
-    //border: 1px solid $burgundy
-    //color: $white
-    .toastBody
-      //background-color: $burgundy
+  box-shadow: $elevation-06
+  border-radius: 8px
 
 .toastBody
-  text-align: center
-  padding: 16px 56px
+  padding: 12px 56px 12px 48px
+  display: flex
+  align-items: center
   border-radius: 4px
+  line-height: 1.72
+
+.icon
+  position: absolute
+  top: 22px
+  display: flex
+  align-items: center
+  left: 16px
 
 .closeButton
-  padding: 8px
   position: absolute
-  top: 50%
-  right: 22px
-  transform: translateY(-50%)
+  top: 22px
+  display: flex
+  align-items: center
+  right: 16px
 
-@include media("<=1560px")
+.light
+  .notification
+    color: $text-inverse
+    background: $ui-07
+.dark
+  .notification
+    color: $text-01
+    background: $ui-01
+
+@include media(">SDesktop")
   .notificationContainer
-    width: 1216px
-    min-width: 1216px
-@include media("<=desktop")
+    left: 232px
+    right: 32px
+    transform: none
+    width: initial
+    min-width: initial
+    max-width: 1172px
+
+@include media(">desktop")
   .notificationContainer
-    width: 1016px
-    min-width: 1016px
-@include media('<=1080px')
-  .notificationContainer
-    width: calc(100% - 32px)
-    min-width: calc(100% - 32px)
+    margin: 0px auto
