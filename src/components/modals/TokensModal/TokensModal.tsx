@@ -32,8 +32,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   const tokens = useTokens();
 
-  console.log(tokens);
-
   const oldInput = useMemo(() => inputValue, [inputValue]);
   const oldInputToken = useMemo(() => inputToken, [inputToken]);
 
@@ -45,8 +43,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contractAddress,
           fa2TokenId,
         }) => {
-          const isName = metadata.name.toLowerCase().includes(oldInput.toLowerCase());
-          const isSymbol = metadata.symbol.toLowerCase().includes(oldInput.toLowerCase());
+          const isName = metadata.name?.toLowerCase().includes(oldInput.toLowerCase());
+          const isSymbol = metadata.symbol?.toLowerCase().includes(oldInput.toLowerCase());
           const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
           if (fa2TokenId || oldInputToken.length > 0) {
             let isFa2 = fa2TokenId === parseInt(oldInputToken, 10);
@@ -78,8 +76,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const isSoleFa2Token = useMemo(
     () => filteredTokens.find((x) => x.contractAddress === inputValue)?.type === 'fa2', [filteredTokens, inputValue],
   );
-
-  console.log(filteredTokens);
 
   return (
     <Modal
