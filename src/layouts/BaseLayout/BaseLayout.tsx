@@ -5,10 +5,11 @@ import { NextSeo } from 'next-seo';
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WalletModal } from '@components/ui/WalletModal';
+import { AccountModal } from '@components/ui/AccountModal';
+import { ToastWrapper } from '@components/ui/ToastWrapper';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
-import { WalletModal } from '@components/modals/WalletModal';
-import { AccountModal } from '@components/modals/AccountModal';
 import { Background } from '@components/svg/Background';
 
 import s from './BaseLayout.module.sass';
@@ -66,6 +67,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
             <Sidebar className={s.sidebar} />
             <Background className={s.background} />
             <main className={cx(s.wrapper, className)}>
+              <ToastWrapper />
               {children}
             </main>
           </div>
