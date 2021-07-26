@@ -102,25 +102,6 @@ const Header:React.FC<HeaderProps> = ({
       >
         {({ input, meta }) => (
           <>
-            {/* <Input
-              {...input}
-              EndAdornment={({ className }) => (
-                <div className={cx(className, s.tokenid)}>
-                  <TopArrow />
-                  <BotArrow />
-                </div>
-              )}
-              className={s.modalInput}
-              placeholder={t('common:Token ID')}
-              error={meta.error}
-            /> */}
-            {/* <Input
-              {...input}
-              type="number"
-              className={s.modalInput}
-              placeholder={t('common:Token ID')}
-              error={meta.error}
-            /> */}
             <NumberInput
               {...input}
               className={s.modalInput}
