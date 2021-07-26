@@ -163,8 +163,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { colorThemeMode } = React.useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
-  const tokens = useTokens();
-  const searchTokens = useSearchTokens();
+  const { data: tokens, loading: tokensLoading } = useTokens();
+  const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = React.useState<string>('');
   const [inputToken, setInputToken] = React.useState<number>(0);
@@ -173,6 +173,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     setInputValue(values.search ?? '');
     setInputToken(values.tokenId);
   };
+
+  console.log(tokensLoading, searchLoading);
 
   const handleTokenSearch = () => {
     const isTokens = tokens
@@ -235,7 +237,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           {isEmptyTokens ? (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{searchLoading ? 'loading' : t('common:No tokens found')}</div>
               {' '}
             </div>
           ) : [...filteredTokens, ...searchTokens].map((token) => {

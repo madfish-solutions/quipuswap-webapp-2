@@ -111,8 +111,8 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
-  tokens: WhitelistedToken[],
-  searchTokens: WhitelistedToken[],
+  tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -127,8 +127,8 @@ function useDApp() {
     accountPkh: null,
     templeWallet: null,
     network: net,
-    tokens: [],
-    searchTokens: [],
+    tokens: { loading: true, data: [] },
+    searchTokens: { loading: false, data: [] },
   });
 
   const setFallbackState = useCallback(
@@ -248,14 +248,30 @@ function useDApp() {
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      tokens: tokensData ?? [],
+      tokens: { loading: false, data: tokensData ?? [] },
     }));
   }, [tokensData]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
       if (isContractAddress(address)) {
-        const type = await getContractInfo(address);
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: true, data: [] },
+        }));
+        let type;
+        try {
+          type = await getContractInfo(address);
+        } catch (e) {
+          type = null;
+        }
+        if (!type) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return;
+        }
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);
         const token = {
@@ -266,7 +282,7 @@ function useDApp() {
         } as WhitelistedToken;
         setState((prevState) => ({
           ...prevState,
-          searchTokens: [token],
+          searchTokens: { loading: false, data: [token] },
         }));
       }
     },
@@ -280,8 +296,8 @@ function useDApp() {
     );
     setState((prevState) => ({
       ...prevState,
-      tokens: [...tokens, token],
-      searchTokens: [],
+      tokens: { ...tokens, data: [...tokens.data, token] },
+      searchTokens: { loading: false, data: [] },
     }));
   }, [tokens]);
 
