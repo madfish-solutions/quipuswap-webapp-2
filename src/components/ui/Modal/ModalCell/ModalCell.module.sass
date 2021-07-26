@@ -1,6 +1,21 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+  
+// SKELETON
+
+.loading svg
+  display: none
+
+.loadingBage
+  margin-left: 8px
+//   display: none
+
+.loadingName
+  margin-bottom: 2px
+  
+// SKELETON
+
 .caption
   font-family: $font
   font-style: normal
@@ -109,6 +124,27 @@
     width: 100%
 
 .light
+  .loadingLogos, .loadingName, .loadingSymbol, .loadingBage
+    background-image: $skeleton-light
+    background-color: $hover-light-row
+    background-repeat: no-repeat
+    animation: loading 3s infinite
+  .loadingLogos 
+    width: 24px
+    height: 24px
+    border-radius: 12px
+    background-size: 100px
+  .loadingName, .loadingSymbol 
+    height: 16px
+    width: 200px
+    border-radius: 8px
+    background-size: 400px
+  .loadingBage
+    height: 16px
+    width: 40px
+    border-radius: 8px
+    background-size: 100px
+
   &:not(:last-child)
     border-bottom: 1px solid $ui-03
   &:hover
@@ -124,6 +160,27 @@
       background: $hover-primary-01
 
 .dark
+  .loadingLogos, .loadingName, .loadingSymbol, .loadingBage
+    background-image: $skeleton-dark
+    background-color: $hover-dark-row
+    background-repeat: no-repeat
+    animation: loading 3s infinite
+  .loadingLogos
+    width: 24px
+    height: 24px
+    border-radius: 12px
+    background-size: 100px
+  .loadingName, .loadingSymbol 
+    height: 16px
+    width: 200px
+    border-radius: 8px
+    background-size: 400px
+  .loadingBage
+    height: 16px
+    width: 40px
+    border-radius: 8px
+    background-size: 100px
+
   &:not(:last-child)
     border-bottom: 1px solid $ui-06
   &:hover
@@ -137,3 +194,11 @@
     -webkit-text-fill-color: transparent
     &::after
       background: $hover-primary-02
+
+@keyframes loading 
+  0% 
+    background-position: 150% 0%
+  75%
+    background-position: -150% 0, 0 0
+  100%
+    background-position: -150% 0, 0 0

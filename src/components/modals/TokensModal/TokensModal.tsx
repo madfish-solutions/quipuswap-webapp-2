@@ -154,6 +154,34 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
+type ModalLoaderProps = {
+  isEmptyTokens:boolean
+  searchLoading:boolean,
+};
+
+const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading }) => {
+  const { t } = useTranslation(['common']);
+  if (isEmptyTokens && !searchLoading) {
+    return (
+      <div className={s.tokenNotFound}>
+        <TokenNotFound />
+        <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+        {' '}
+      </div>
+    );
+  } if (isEmptyTokens && searchLoading) {
+    return (
+      <div>
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+      </div>
+    );
+  }
+  return null;
+};
+
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
   ...props
@@ -193,6 +221,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   };
 
   const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
+  console.log(isEmptyTokens);
 
   // ex KT1NEa7CmaLaWgHNi6LkRi5Z1f4oHfdzRdGA
 
@@ -234,13 +263,11 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {isEmptyTokens ? (
-            <div className={s.tokenNotFound}>
-              <TokenNotFound />
-              <div className={s.notFoundLabel}>{searchLoading ? 'loading' : t('common:No tokens found')}</div>
-              {' '}
-            </div>
-          ) : [...filteredTokens, ...searchTokens].map((token) => {
+          <ModalLoader
+            isEmptyTokens={isEmptyTokens}
+            searchLoading={searchLoading}
+          />
+          {[...filteredTokens, ...searchTokens].map((token) => {
             const {
               contractAddress, fa2TokenId,
             } = token;
