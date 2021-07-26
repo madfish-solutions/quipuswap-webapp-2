@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-// import cx from 'classnames';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
@@ -193,6 +193,10 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             </Button>
           )}
           className={themeClass[colorThemeMode]}
+          modalClassName={s.tokenModal}
+          containerClassName={s.tokenModal}
+          cardClassName={cx(s.tokenModal, s.maxHeight)}
+          contentClassName={cx(s.tokenModal)}
           {...props}
         >
           {isEmptyTokens ? (
