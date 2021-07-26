@@ -111,7 +111,8 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
-  tokens: WhitelistedToken[]
+  tokens: WhitelistedToken[],
+  searchTokens: WhitelistedToken[],
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -119,7 +120,7 @@ fallbackToolkit.setPackerProvider(michelEncoder);
 
 function useDApp() {
   const [{
-    connectionType, tezos, accountPkh, templeWallet, network, tokens,
+    connectionType, tezos, accountPkh, templeWallet, network, tokens, searchTokens,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
@@ -127,6 +128,7 @@ function useDApp() {
     templeWallet: null,
     network: net,
     tokens: [],
+    searchTokens: [],
   });
 
   const setFallbackState = useCallback(
@@ -250,7 +252,7 @@ function useDApp() {
     }));
   }, [tokensData]);
 
-  const addCustomToken = useCallback(
+  const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
       if (isContractAddress(address)) {
         const type = await getContractInfo(address);
@@ -262,18 +264,26 @@ function useDApp() {
           type: !isFa2 ? 'fa1.2' : 'fa2',
           fa2TokenId: isFa2 ? tokenId || 0 : undefined,
         } as WhitelistedToken;
-        window.localStorage.setItem(
-          SAVED_TOKENS_KEY,
-          JSON.stringify([...getSavedTokens(), token]),
-        );
         setState((prevState) => ({
           ...prevState,
-          tokens: [...tokens, token],
+          searchTokens: [token],
         }));
       }
     },
-    [getContractInfo, tokens],
+    [getContractInfo],
   );
+
+  const addCustomToken = useCallback((token:WhitelistedToken) => {
+    window.localStorage.setItem(
+      SAVED_TOKENS_KEY,
+      JSON.stringify([...getSavedTokens(), token]),
+    );
+    setState((prevState) => ({
+      ...prevState,
+      tokens: [...tokens, token],
+      searchTokens: [],
+    }));
+  }, [tokens]);
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
@@ -357,11 +367,13 @@ function useDApp() {
     ready,
     network,
     tokens,
+    searchTokens,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork,
     addCustomToken,
+    searchCustomToken,
   };
 }
 
@@ -374,11 +386,13 @@ export const [
   useReady,
   useNetwork,
   useTokens,
+  useSearchTokens,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
   useAddCustomToken,
+  useSearchCustomTokens,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -388,9 +402,11 @@ export const [
   (v) => v.ready,
   (v) => v.network,
   (v) => v.tokens,
+  (v) => v.searchTokens,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
   (v) => v.addCustomToken,
+  (v) => v.searchCustomToken,
 );

@@ -3,8 +3,8 @@ import cx from 'classnames';
 
 import { Input, InputProps } from '@components/ui/Input';
 
-import PlusIcon from '@icons/Plus.svg';
-import MinusIcon from '@icons/Minus.svg';
+import PlusIcon from '@icons/TopArrow.svg';
+import MinusIcon from '@icons/BotArrow.svg';
 
 import s from './NumberInput.module.sass';
 
@@ -16,14 +16,13 @@ type NumberInputProps = {
 
 const themeClass = {
   small: s.small,
-  large: s.large,
+  medium: s.medium,
 };
 
 export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
   theme = 'small',
   className,
   labelClassName,
-  inputClassName,
   onIncrementClick,
   onDecrementClick,
   disabled,
@@ -35,7 +34,6 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
       ref={ref}
       className={cx(s.wrapper)}
       labelClassName={cx(s.label, labelClassName)}
-      inputClassName={cx(s.input, inputClassName)}
       disabled={disabled}
       {...props}
     />

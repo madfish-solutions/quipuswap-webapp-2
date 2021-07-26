@@ -14,39 +14,22 @@
   appearance: textfield
   &::-webkit-inner-spin-button, &::-webkit-outer-spin-button
     -webkit-appearance: none
+    margin: 0
 
 .buttons
   position: absolute
   display: flex
   flex-direction: column
-  top: 30px
-  height: 45px
+  top: 0px
+  height: 40px
+  right: 16px
   justify-content: center
 
 .button
   display: flex
   justify-content: center
   align-items: center
-  &:first-child
-    margin-bottom: 3px
-  &:disabled
-    .icon
-      path
-        fill: $dark-60
 
 .icon
   width: 16px
   height: auto
-
-// Themes
-.small
-  width: 120px
-  .label
-    margin-left: 0
-    text-align: center
-  .buttons
-    right: 10px
-
-.large
-  .buttons
-    right: 16px

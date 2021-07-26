@@ -5,7 +5,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Input.module.sass';
 
-type InputProps = {
+export type InputProps = {
   error?: string
   disabled?: boolean
   className?: string

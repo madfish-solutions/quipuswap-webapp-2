@@ -5,8 +5,10 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { useAddCustomToken, useTokens } from '@utils/dapp';
-import { parseNumber, searchToken } from '@utils/helpers';
+import {
+  useAddCustomToken, useSearchCustomTokens, useSearchTokens, useTokens,
+} from '@utils/dapp';
+import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { MAINNET_NETWORK } from '@utils/defaults';
@@ -20,6 +22,7 @@ import Search from '@icons/Search.svg';
 // import BotArrow from '@icons/BotArrow.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
+import { NumberInput } from '@components/ui/NumberInput';
 import s from './TokensModal.module.sass';
 
 const themeClass = {
@@ -35,7 +38,8 @@ type HeaderProps = {
   isSecondInput:boolean
   debounce:number,
   save:any,
-  values:any
+  values:any,
+  form:any,
 };
 
 type FormValues = {
@@ -44,7 +48,7 @@ type FormValues = {
 };
 
 const Header:React.FC<HeaderProps> = ({
-  isSecondInput, debounce, save, values,
+  isSecondInput, debounce, save, values, form,
 }) => {
   const { t } = useTranslation(['common']);
 
@@ -58,15 +62,11 @@ const Header:React.FC<HeaderProps> = ({
     if (promise) {
       await promise;
     }
-
-    if (true) {
-      // values have changed
-      setVal(values);
-      setSubm(true);
-      promise = save(values);
-      await promise;
-      setSubm(false);
-    }
+    setVal(values);
+    setSubm(true);
+    promise = save(values);
+    await promise;
+    setSubm(false);
   };
 
   React.useEffect(() => {
@@ -114,12 +114,33 @@ const Header:React.FC<HeaderProps> = ({
               placeholder={t('common:Token ID')}
               error={meta.error}
             /> */}
-            <Input
+            {/* <Input
               {...input}
               type="number"
               className={s.modalInput}
               placeholder={t('common:Token ID')}
               error={meta.error}
+            /> */}
+            <NumberInput
+              {...input}
+              className={s.modalInput}
+              placeholder={t('common:Token ID')}
+              step={1}
+              min={0}
+              max={100}
+              error={(meta.touched && meta.error) || meta.submitError}
+              onIncrementClick={() => {
+                form.mutators.setValue(
+                  'tokenId',
+                  +input.value + 1 > 100 ? 100 : +input.value + 1,
+                );
+              }}
+              onDecrementClick={() => {
+                form.mutators.setValue(
+                  'tokenId',
+                  +input.value - 1 < 1 ? 1 : +input.value - 1,
+                );
+              }}
             />
           </>
         )}
@@ -138,10 +159,12 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
+  const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = React.useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
   const tokens = useTokens();
+  const searchTokens = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = React.useState<string>('');
   const [inputToken, setInputToken] = React.useState<number>(0);
@@ -154,7 +177,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const handleTokenSearch = () => {
     const isTokens = tokens
       .filter(
-        (token) => searchToken(
+        (token) => localSearchToken(
           token,
           MAINNET_NETWORK,
           inputValue,
@@ -163,28 +186,38 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
-      addCustomToken(inputValue, inputToken);
+      searchCustomToken(inputValue, inputToken);
     }
   };
 
-  const isEmptyTokens = filteredTokens.length === 0;
+  const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
+
+  // ex KT1NEa7CmaLaWgHNi6LkRi5Z1f4oHfdzRdGA
 
   React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
   const isSoleFa2Token = React.useMemo(
-    () => filteredTokens.find(
-      (x) => x.contractAddress === inputValue,
-    )?.type === 'fa2' || typeof inputToken !== undefined, [filteredTokens, inputValue, inputToken],
+    () => filteredTokens.every((x) => x.type === 'fa2'), [filteredTokens, inputValue, inputToken],
   );
   return (
     <Form
       onSubmit={handleInput}
-      render={() => (
+      mutators={{
+        setValue: ([field, value], state, { changeValue }) => {
+          changeValue(state, field, () => value);
+        },
+      }}
+      render={({ form }) => (
 
         <Modal
           title={t('common:Search token')}
-          header={
-            <AutoSave debounce={1000} save={handleInput} isSecondInput={isSoleFa2Token} />
-              }
+          header={(
+            <AutoSave
+              form={form}
+              debounce={1000}
+              save={handleInput}
+              isSecondInput={isSoleFa2Token}
+            />
+          )}
           footer={(
             <Button className={s.modalButton} theme="inverse">
               Manage Lists
@@ -205,12 +238,25 @@ export const TokensModal: React.FC<TokensModalProps> = ({
               <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
               {' '}
             </div>
-          ) : filteredTokens.map((token) => {
+          ) : [...filteredTokens, ...searchTokens].map((token) => {
             const {
               contractAddress, fa2TokenId,
             } = token;
             return (
-              <div aria-hidden key={`${contractAddress}_${fa2TokenId ?? 0}`} onClick={() => onChange(token)}>
+              <div
+                aria-hidden
+                key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                onClick={() => {
+                  onChange(token);
+                  if (searchTokens.length > 0) {
+                    addCustomToken(token);
+                  }
+                  form.mutators.setValue('search', '');
+                  form.mutators.setValue('tokenId', 0);
+                  setInputValue('');
+                  setInputToken(0);
+                }}
+              >
                 <TokenCell
                   token={token}
                 />

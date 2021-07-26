@@ -118,7 +118,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             <TokensLogos token1={token} />
             <h6 className={cx(s.token)}>
 
-              {token?.metadata?.symbol ?? token?.metadata?.name ?? token ? shortize(token.contractAddress) : 'Unnamed'}
+              {token?.metadata?.symbol ?? token?.metadata?.name ?? 'Unnamed' ?? shortize(token?.contractAddress || '', 10)}
             </h6>
             <Shevron />
           </Button>
