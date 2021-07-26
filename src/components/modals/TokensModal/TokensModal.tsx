@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactModal from 'react-modal';
+// import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { useAddCustomToken, useTokens } from '@utils/dapp';
 import { parseNumber, searchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { isContractAddress, validateMinMax } from '@utils/validators';
+import { validateMinMax } from '@utils/validators';
 import { MAINNET_NETWORK } from '@utils/defaults';
 import { Modal } from '@components/ui/Modal';
 import { TokenCell } from '@components/ui/Modal/ModalCell';
@@ -14,6 +15,8 @@ import { Input } from '@components/ui/Input';
 import { Button } from '@components/ui/Button';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
+// import TopArrow from '@icons/TopArrow.svg';
+// import BotArrow from '@icons/BotArrow.svg';
 
 import s from './TokensModal.module.sass';
 
@@ -70,7 +73,6 @@ const Header:React.FC<HeaderProps> = ({
     <div className={s.inputs}>
       <Field
         name="search"
-        validate={isContractAddress}
       >
         {({ input, meta }) => (
           <>
@@ -93,9 +95,21 @@ const Header:React.FC<HeaderProps> = ({
       >
         {({ input, meta }) => (
           <>
+            {/* <Input
+              {...input}
+              EndAdornment={({ className }) => (
+                <div className={cx(className, s.tokenid)}>
+                  <TopArrow />
+                  <BotArrow />
+                </div>
+              )}
+              className={s.modalInput}
+              placeholder={t('common:Token ID')}
+              error={meta.error}
+            /> */}
             <Input
               {...input}
-              EndAdornment={Search}
+              type="number"
               className={s.modalInput}
               placeholder={t('common:Token ID')}
               error={meta.error}

@@ -7,6 +7,6 @@ export const getTokenMetadata = async (address:string, tokenId?:number) => {
     .then((res) => res.json())
     .catch(() => (null));
 
-  if (data.message) return null;
+  if (data?.message) return null;
   return data;
 };
