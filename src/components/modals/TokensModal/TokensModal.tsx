@@ -4,6 +4,7 @@ import ReactModal from 'react-modal';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useAddCustomToken, useTokens } from '@utils/dapp';
 import { parseNumber, searchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -17,8 +18,14 @@ import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 // import TopArrow from '@icons/TopArrow.svg';
 // import BotArrow from '@icons/BotArrow.svg';
+import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './TokensModal.module.sass';
+
+const themeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
 
 type TokensModalProps = {
   onChange: (token: WhitelistedToken) => void
@@ -131,6 +138,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
+  const { colorThemeMode } = React.useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
   const tokens = useTokens();
@@ -159,6 +167,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     }
   };
 
+  const isEmptyTokens = filteredTokens.length === 0;
+
   React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
   const isSoleFa2Token = React.useMemo(
     () => filteredTokens.find(
@@ -182,9 +192,16 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
             </Button>
           )}
+          className={themeClass[colorThemeMode]}
           {...props}
         >
-          {filteredTokens.map((token) => {
+          {isEmptyTokens ? (
+            <div className={s.tokenNotFound}>
+              <TokenNotFound />
+              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              {' '}
+            </div>
+          ) : filteredTokens.map((token) => {
             const {
               contractAddress, fa2TokenId,
             } = token;
