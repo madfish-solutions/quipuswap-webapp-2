@@ -1,14 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 
-import { WhitelistedToken } from '@utils/types';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
-import { ComplexInput, ComplexRecipient } from '@components/ui/ComplexInput';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { TokensModal } from '@components/modals/TokensModal';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -17,6 +15,7 @@ import { SwapIcon } from '@components/svg/Swap';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 const TabsContent = [
   {
@@ -36,9 +35,9 @@ type SwapSendProps = {
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
-  const [tokensModal, setTokensModal] = useState<number>(0);
-  const [token1, setToken1] = useState<WhitelistedToken>();
-  const [token2, setToken2] = useState<WhitelistedToken>();
+  // const [tokensModal, setTokensModal] = useState<number>(0);
+  // const [token1, setToken1] = useState<WhitelistedToken>();
+  // const [token2, setToken2] = useState<WhitelistedToken>();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const handleInputChange = (state: any) => {
@@ -52,15 +51,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   return (
     <StickyBlock className={className}>
-      <TokensModal
-        isOpen={tokensModal !== 0}
-        onRequestClose={() => setTokensModal(0)}
-        onChange={(token) => {
-          if (tokensModal === 1) setToken1(token);
-          else setToken2(token);
-          setTokensModal(0);
-        }}
-      />
       <Card
         header={{
           content: (
@@ -82,15 +72,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }}
         contentClassName={s.content}
       >
-        <ComplexInput
+        <TokenSelect
           value={inputValue}
           onChange={handleInputChange}
-          onClick={() => setTokensModal(1)}
           handleBalance={(value) => setInputValue(value)}
           id="swap-send-from"
           label="From"
           className={s.input}
-          token1={{ name: token1?.metadata.symbol ?? 'TOKEN', icon: token1?.metadata.thumbnailUri }}
         />
         <Button
           theme="quaternary"
@@ -98,15 +86,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         >
           <SwapIcon />
         </Button>
-        <ComplexInput
+        <TokenSelect
           value={inputValue}
           onChange={handleInputChange}
-          onClick={() => setTokensModal(2)}
           handleBalance={(value) => setInputValue(value)}
           id="swap-send-to"
           label="To"
           className={cx(s.input, s.mb24)}
-          token1={{ name: token2?.metadata.symbol ?? 'TOKEN', icon: token2?.metadata.thumbnailUri }}
         />
         {currentTab.id === 'send' && (
           <ComplexRecipient

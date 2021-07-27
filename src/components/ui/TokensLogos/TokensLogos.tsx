@@ -3,18 +3,14 @@ import Image from 'next/image';
 import cx from 'classnames';
 
 import { prepareTokenLogo } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import FallbackLogo from '@icons/FallbackLogo.svg';
 
 import s from './TokensLogos.module.sass';
 
-export type TokenType = {
-  icon: string | null | undefined
-  name: string
-};
-
 export interface TokensLogosInterface {
-  token1: TokenType
-  token2?: TokenType
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
   className?: string
 }
 
@@ -29,24 +25,24 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
     className,
   );
 
-  const prepareToken1 = {
+  const prepareToken1 = token1 && {
     ...token1,
-    icon: prepareTokenLogo(token1.icon),
+    icon: prepareTokenLogo(token1.metadata?.thumbnailUri),
   };
   const prepareToken2 = token2 && {
     ...token2,
-    icon: prepareTokenLogo(token2.icon),
+    icon: prepareTokenLogo(token2.metadata?.thumbnailUri),
   };
 
   return (
     <div className={compoundClassName}>
-      {prepareToken1.icon ? (
+      {prepareToken1?.icon ? (
         <Image
           layout="fixed"
           width={24}
           height={24}
           src={prepareToken1.icon}
-          alt={prepareToken1.name ?? 'Symbol'}
+          alt={prepareToken1.metadata.symbol ?? 'Symbol'}
           className={cx(s.image)}
         />
       ) : (
@@ -60,14 +56,14 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             width={24}
             height={24}
             src={prepareToken2.icon}
-            alt={prepareToken2.name ?? 'Symbol'}
+            alt={prepareToken2.metadata.symbol ?? 'Symbol'}
             className={cx(s.image)}
           />
         </div>
       )}
 
       {
-        prepareToken2?.icon === null && (
+        prepareToken2?.metadata.thumbnailUri === null && (
           <div className={s.secondImage}>
             <FallbackLogo className={cx(s.image)} />
           </div>

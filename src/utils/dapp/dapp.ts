@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from 'react';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
+
 import {
   APP_NAME,
   BASE_URL,
@@ -10,12 +12,11 @@ import {
   LAST_USED_CONNECTION_KEY,
 } from '@utils/defaults';
 import { BeaconWallet } from '@taquito/beacon-wallet';
-import { QSNetwork, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
-import { NetworkType } from '@airgap/beacon-sdk';
+import { QSNetwork, WhitelistedToken } from '@utils/types';
 
 import { getTokens, saveCustomToken } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
-import { isValidContract } from '@utils/helpers';
+import { isContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -109,7 +110,8 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
-  tokens: WhitelistedToken[]
+  tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -117,14 +119,15 @@ fallbackToolkit.setPackerProvider(michelEncoder);
 
 function useDApp() {
   const [{
-    connectionType, tezos, accountPkh, templeWallet, network, tokens,
+    connectionType, tezos, accountPkh, templeWallet, network, tokens, searchTokens,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
     accountPkh: null,
     templeWallet: null,
     network: net,
-    tokens: [],
+    tokens: { loading: true, data: [] },
+    searchTokens: { loading: false, data: [] },
   });
 
   const setFallbackState = useCallback(
@@ -244,34 +247,56 @@ function useDApp() {
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      tokens: tokensData ?? [],
+      tokens: { loading: false, data: tokensData ?? [] },
     }));
   }, [tokensData]);
 
-  const addCustomToken = useCallback(
+  const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      if (isValidContract(address)) {
-        const type = await getContractInfo(address);
-        const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(network, address, tokenId);
-        if (customToken !== null) {
-          const token = {
-            contractAddress: address,
-            metadata: customToken as WhitelistedTokenMetadata,
-            type: !isFa2 ? 'fa1.2' : 'fa2',
-            fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-            network: network.id,
-          } as WhitelistedToken;
-          saveCustomToken(token);
+      if (isContractAddress(address)) {
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: true, data: [] },
+        }));
+        let type;
+        try {
+          type = await getContractInfo(address);
+        } catch (e) {
+          type = null;
+        }
+        if (!type) {
           setState((prevState) => ({
             ...prevState,
-            tokens: [...tokens, token],
+            searchTokens: { loading: false, data: [] },
           }));
+          return;
         }
+        const isFa2 = !!type.methods.update_operators;
+        const customToken = await getTokenMetadata(network, address, tokenId);
+        const token = {
+          contractAddress: address,
+          metadata: customToken,
+          type: !isFa2 ? 'fa1.2' : 'fa2',
+          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+          network: network.id,
+        } as WhitelistedToken;
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: false, data: [token] },
+        }));
       }
     },
-    [getContractInfo, tokens],
+    [getContractInfo, network],
   );
+
+  const addCustomToken = useCallback((token:WhitelistedToken) => {
+    saveCustomToken(token);
+    setState((prevState) => ({
+      ...prevState,
+      tokens: { ...tokens, data: [...tokens.data, token] },
+      searchTokens: { loading: false, data: [] },
+    }));
+  }, [tokens]);
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
@@ -355,12 +380,13 @@ function useDApp() {
     ready,
     network,
     tokens,
+    searchTokens,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork,
     addCustomToken,
-    getContractInfo,
+    searchCustomToken,
   };
 }
 
@@ -373,11 +399,13 @@ export const [
   useReady,
   useNetwork,
   useTokens,
+  useSearchTokens,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
   useAddCustomToken,
+  useSearchCustomTokens,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -387,10 +415,11 @@ export const [
   (v) => v.ready,
   (v) => v.network,
   (v) => v.tokens,
+  (v) => v.searchTokens,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
   (v) => v.addCustomToken,
-  (v) => v.getContractInfo,
+  (v) => v.searchCustomToken,
 );

@@ -3,10 +3,13 @@ import {
   SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { ipfsToHttps } from '@utils/helpers';
 
 export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
-export const getTokens = async (addTokensFromLocalStorage?:boolean) => fetch(MAINNET_TOKENS.replace('ipfs://', 'https://ipfs.io/ipfs/'))
+export const getTokens = async (
+  addTokensFromLocalStorage?:boolean,
+) => fetch(ipfsToHttps(MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
     let res = [];

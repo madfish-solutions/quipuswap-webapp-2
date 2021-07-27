@@ -15,7 +15,6 @@ import {
   ChooseListCell,
   // PositionCell,
   SwapCell,
-  TokenCell,
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
@@ -37,7 +36,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { TokenType } from '@components/ui/TokensLogos';
+import { TEZOS_TOKEN } from '@utils/defaults';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -494,14 +493,6 @@ const UiKit: React.FC = () => {
             </Button>
           )}
         >
-          <TokenCell
-            {...{
-              contractAddress: 'undefined',
-              name: 'Token',
-              symbol: 'Token',
-              badges: ['FA 2.0', 'ID: 0'],
-            }}
-          />
           <ChooseListCell
             onChange={() => {}}
             isActive={false}
@@ -537,17 +528,6 @@ const UiKit: React.FC = () => {
               currency: 'TEZ',
             }}
           />
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
-            <TokenCell
-              key={x}
-              {...{
-                contractAddress: `${x}undefined`,
-                name: 'Token',
-                symbol: 'Token',
-                badges: ['FA 2.0', 'ID: 0'],
-              }}
-            />
-          ))}
         </Modal>
       </section>
       <section className={s.section}>
@@ -562,7 +542,7 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Complex inputs</h1>
         <div className={s.complexInput}>
           <ComplexInput
-            token1={{ name: 'TOKEN' } as TokenType}
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -573,7 +553,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
-            token1={{ name: 'TOKEN' } as TokenType}
+            token1={TEZOS_TOKEN}
             value={inputValue}
             readOnly
             label="Output"
@@ -581,7 +561,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
-            token1={{ name: 'TOKEN' } as TokenType}
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -593,7 +573,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
-            token1={{ name: 'TOKEN' } as TokenType}
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}

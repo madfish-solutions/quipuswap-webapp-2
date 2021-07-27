@@ -8,6 +8,6 @@ export const getTokenMetadata = async (network:QSNetwork, address:string, tokenI
     .then((res) => res.json())
     .catch(() => (null));
 
-  if (data.message) return null;
+  if (data?.message) return null;
   return data;
 };
