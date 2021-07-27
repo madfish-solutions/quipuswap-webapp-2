@@ -202,13 +202,10 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   };
 
   const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
-  console.log(isEmptyTokens);
-
-  // ex KT1NEa7CmaLaWgHNi6LkRi5Z1f4oHfdzRdGA
 
   React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
   const isSoleFa2Token = React.useMemo(
-    () => filteredTokens.every((x) => x.type === 'fa2'), [filteredTokens, inputValue, inputToken],
+    () => [...filteredTokens, ...searchTokens].every((x) => x.type === 'fa2'), [filteredTokens, searchTokens, inputValue, inputToken],
   );
   return (
     <Form
