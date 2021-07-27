@@ -27,6 +27,7 @@ export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
   contractAddress: '',
+  network: 'mainnet',
   metadata: {
     decimals: 6,
     name: 'Tezos',
