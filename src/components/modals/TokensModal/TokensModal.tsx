@@ -204,8 +204,12 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
 
   React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
+
+  const allTokens = inputValue.length > 0 && filteredTokens.length === 0
+    ? searchTokens : filteredTokens;
+
   const isSoleFa2Token = React.useMemo(
-    () => [...filteredTokens, ...searchTokens].every((x) => x.type === 'fa2'), [filteredTokens, searchTokens, inputValue, inputToken],
+    () => allTokens.every((x) => x.type === 'fa2'), [allTokens, inputValue, inputToken],
   );
   return (
     <Form
@@ -245,7 +249,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             isEmptyTokens={isEmptyTokens}
             searchLoading={searchLoading}
           />
-          {[...filteredTokens, ...searchTokens].map((token) => {
+          {allTokens.map((token) => {
             const {
               contractAddress, fa2TokenId,
             } = token;
