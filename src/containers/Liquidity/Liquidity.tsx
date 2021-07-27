@@ -45,11 +45,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
-  const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const [switcherValue, setSwitcherValue] = useState(true); // TODO: Delete when lib added
-  const handleInputChange = (state: any) => {
-    setInputValue(state.target.value);
-  }; // TODO: Delete when lib added
 
   const [lastChange, setLastChange] = useState('token1');
 
@@ -93,18 +89,28 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           render={({ form, values }) => (
             <>
               {currentTab.id === 'remove' && (
-              <>
-                <ComplexInput
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  handleBalance={(value) => setInputValue(value)}
-                  id="liquidity-remove-input"
-                  label="Input"
-                  className={s.input}
-                  mode="votes"
-                />
-                <ArrowDown className={s.iconButton} />
-              </>
+              <Field
+                name="tokenPair"
+              >
+                {({ input }) => (
+                  <>
+                    <ComplexInput
+                      {...input}
+                      handleBalance={(value) => {
+                        form.mutators.setValue(
+                          'token3',
+                          +value,
+                        );
+                      }}
+                      id="liquidity-remove-input"
+                      label="Select LP"
+                      className={s.input}
+                      mode="votes"
+                    />
+                    <ArrowDown className={s.iconButton} />
+                  </>
+                )}
+              </Field>
               )}
 
               <Field
