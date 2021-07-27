@@ -153,34 +153,13 @@ const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading 
   } if (isEmptyTokens && searchLoading) {
     return (
       <div>
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
-        <TokenCell
-          loading
-          token={{} as WhitelistedToken}
-        />
+        {[1, 2, 3, 4, 5, 6, 7].map((x) => (
+          <TokenCell
+            key={x}
+            loading
+            token={{} as WhitelistedToken}
+          />
+        ))}
       </div>
     );
   }
