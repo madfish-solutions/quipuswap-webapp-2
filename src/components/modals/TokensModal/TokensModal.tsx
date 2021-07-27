@@ -157,6 +157,30 @@ const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading 
           loading
           token={{} as WhitelistedToken}
         />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
+        <TokenCell
+          loading
+          token={{} as WhitelistedToken}
+        />
       </div>
     );
   }
