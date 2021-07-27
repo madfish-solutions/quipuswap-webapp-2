@@ -16,7 +16,8 @@ import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
   className?: string
-  balance?: string
+  balance: string
+  exchangeRate: string | null
   label: string
   error?: string
   handleChange?: (token:WhitelistedToken) => void
@@ -39,6 +40,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   balance = '10.00',
   label,
   handleBalance,
+  exchangeRate,
   value,
   error,
   id,
@@ -54,7 +56,11 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
+  const dollarEquivalent = useMemo(() => (exchangeRate
+    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
+    : ''
+  ),
+  [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -69,7 +75,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   //   }
   // };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  const equivalentContent = mode === 'input' && exchangeRate
+    ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`
+    : '';
 
   return (
     // eslint-disable-next-line max-len

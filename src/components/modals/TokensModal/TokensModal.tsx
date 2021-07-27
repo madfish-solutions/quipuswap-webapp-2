@@ -175,6 +175,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       (x) => x.contractAddress === inputValue,
     )?.type === 'fa2' || typeof inputToken !== undefined, [filteredTokens, inputValue, inputToken],
   );
+
   return (
     <Form
       onSubmit={handleInput}

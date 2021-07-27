@@ -63,7 +63,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
       )}
 
       {
-        prepareToken2?.metadata.thumbnailUri === null && (
+        prepareToken2?.metadata?.thumbnailUri === null && (
           <div className={s.secondImage}>
             <FallbackLogo className={cx(s.image)} />
           </div>

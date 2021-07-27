@@ -1117,6 +1117,13 @@
     "@nodelib/fs.scandir" "2.1.4"
     fastq "^1.6.0"
 
+"@quipuswap/sdk@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-2.0.3.tgz#e75ec4a12884bbba79a8d297a8e6ef927d210307"
+  integrity sha512-p4iNOjw2v2dcVcbF4g8/NFc/3Q25X9oB3+3YG0y5HjiJfKPBvO+Y9lw+K8hdaTKIixKQuUWKMgZt5u5vmfEa2w==
+  dependencies:
+    bignumber.js "^9.0.1"
+
 "@rushstack/eslint-patch@^1.0.6":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.0.6.tgz#023d72a5c4531b4ce204528971700a78a85a0c50"
