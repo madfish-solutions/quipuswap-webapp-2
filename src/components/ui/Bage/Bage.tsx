@@ -6,6 +6,7 @@ import s from './Bage.module.sass';
 
 type BageProps = {
   className?: string,
+  loading?: boolean,
   text: string,
 };
 
@@ -16,13 +17,14 @@ const modeClass = {
 
 export const Bage: React.FC<BageProps> = ({
   className,
+  loading = false,
   text,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(modeClass[colorThemeMode], s.bageBorder, className)}>
-      <div className={s.bage}>
+      <div className={cx(s.bage, loading ? s.loading : '')}>
         {text}
       </div>
     </div>
