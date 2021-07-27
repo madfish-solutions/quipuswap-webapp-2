@@ -31,15 +31,47 @@
   transform: rotate(90deg)
   left: -11px
 
+.top-start .arrow 
+  bottom: -8px
+  right: 11px
+.bottom-start .arrow 
+  transform: rotate(180deg)
+  top: -8px
+  right: 11px
+.left-start .arrow 
+  transform: rotate(-90deg)
+  right: -11px
+  bottom: 8px
+.right-start .arrow 
+  transform: rotate(90deg)
+  left: -11px
+  bottom: 8px
+
+.top-end .arrow 
+  bottom: -8px
+  left: 11px
+.bottom-end .arrow 
+  transform: rotate(180deg)
+  top: -8px
+  left: 11px
+.left-end .arrow 
+  transform: rotate(-90deg)
+  right: -11px
+  top: 8px
+.right-end .arrow 
+  transform: rotate(90deg)
+  left: -11px
+  top: 8px
+
 .light
-  .arrow svg
+  .arrow
     fill: $text-inverse
   &.tippyPopup
     background-color: $text-inverse
     color: $text-01
 
 .dark
-  .arrow svg
+  .arrow
     fill: $text-01
   &.tippyPopup
     background-color: $text-01

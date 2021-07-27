@@ -555,6 +555,73 @@ const UiKit: React.FC = () => {
             bot
           </Tooltip>
         </div>
+        <div className={s.buttonsBlock}>
+          <Tooltip placement="top-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              top-end
+            </Button>
+          </Tooltip>
+          <Tooltip placement="top-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              top-start
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="left-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              left-start
+            </Button>
+          </Tooltip>
+          <Tooltip placement="left-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              left-end
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="right-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              right-start
+            </Button>
+          </Tooltip>
+          <Tooltip placement="right-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              right-end
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="bottom-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              bottom-start
+            </Button>
+          </Tooltip>
+          <Tooltip placement="bottom-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              bottom-end
+            </Button>
+          </Tooltip>
+        </div>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Complex inputs</h1>
