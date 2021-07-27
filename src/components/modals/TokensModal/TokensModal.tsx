@@ -209,7 +209,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     ? searchTokens : filteredTokens;
 
   const isSoleFa2Token = React.useMemo(
-    () => allTokens.every((x) => x.type === 'fa2'), [allTokens, inputValue, inputToken],
+    () => allTokens.every((x) => x.type === 'fa2'), [allTokens],
   );
   return (
     <Form
