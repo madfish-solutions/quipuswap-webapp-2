@@ -22,6 +22,7 @@ import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
+import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
@@ -534,6 +535,25 @@ const UiKit: React.FC = () => {
           <Logo className={s.icon} />
           <MenuClosed className={s.icon} />
           <MenuOpened className={s.icon} />
+        </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Tooltips</h1>
+        <div className={s.inputsBlock}>
+          <Tooltip placement="top" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            top
+          </Tooltip>
+          <Tooltip placement="left" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            left
+          </Tooltip>
+        </div>
+        <div className={s.inputsBlock}>
+          <Tooltip placement="right" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            right
+          </Tooltip>
+          <Tooltip placement="bottom" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            bot
+          </Tooltip>
         </div>
       </section>
       <section className={s.section}>
