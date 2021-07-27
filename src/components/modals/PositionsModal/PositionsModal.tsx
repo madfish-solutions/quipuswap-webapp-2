@@ -13,7 +13,7 @@ import { PositionCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 
-import { TEZ_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './PositionsModal.module.sass';
 
 type PositionsModalProps = {
@@ -32,7 +32,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const handleInputChange = (state: any) => setInputValue(state.target.value);
   const handleTokenChange = (state: any) => setInputToken(state.target.value);
 
-  const tokens = useTokens();
+  const { data: tokens } = useTokens();
   const network = useNetwork();
   // ex lp KT1P3RGEAa78XLTs3Hkpd1VWtryQRLDjiXqF
 
@@ -41,10 +41,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
 
   const debouncedFilter = debounce(
     () => {
-      const buff = ([...tokens, TEZ_TOKEN] as WhitelistedToken[]).filter(
+      const buff = ([...tokens, TEZOS_TOKEN] as WhitelistedToken[]).filter(
         (token) => searchToken(token, network, oldInput1, ''),
       );
-      const buff1 = ([...tokens, TEZ_TOKEN] as WhitelistedToken[]).filter(
+      const buff1 = ([...tokens, TEZOS_TOKEN] as WhitelistedToken[]).filter(
         (token) => searchToken(token, network, oldInput2, ''),
       );
       // if (buff.length === 0 && oldInput1.length > 0 && buff1.length === 0) {
