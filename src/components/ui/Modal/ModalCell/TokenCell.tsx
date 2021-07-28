@@ -9,14 +9,6 @@ import { Bage } from '@components/ui/Bage';
 
 import s from './ModalCell.module.sass';
 
-// type TokenCellProps = {
-//   contractAddress: string
-//   icon?: string
-//   name?: string
-//   symbol?: string
-//   badges: string[]
-// };
-
 type TokenCellProps = {
   token: WhitelistedToken,
   loading?: boolean

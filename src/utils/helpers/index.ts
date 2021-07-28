@@ -8,3 +8,4 @@ export * from './isTouchDevice';
 export * from './shortize';
 export * from './parseNumber';
 export * from './localSearchToken';
+export * from './localSearchBaker';

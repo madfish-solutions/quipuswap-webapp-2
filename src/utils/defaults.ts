@@ -22,8 +22,10 @@ export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+export const MAINNET_BAKERS = process.env.NEXT_PUBLIC_MAINNET_BAKERS!;
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
+export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
   contractAddress: '',
@@ -35,6 +37,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   },
 };
 export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
+export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';

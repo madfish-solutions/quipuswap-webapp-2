@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 export interface QSNetwork {
   id:
   | 'mainnet'
@@ -24,6 +26,15 @@ export interface WhitelistedToken {
   contractAddress: string
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
+}
+
+export interface WhitelistedBaker {
+  name: string,
+  contractAddress: string,
+  logo: string,
+  votes: number,
+  fee: number,
+  space: BigNumber
 }
 
 export type WhitelistedTokenMetadata = {
