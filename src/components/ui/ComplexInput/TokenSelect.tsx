@@ -12,6 +12,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -49,7 +50,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = React.useState<boolean>(false);
-  const [token, setToken] = React.useState<WhitelistedToken>();
+  const [token, setToken] = React.useState<WhitelistedToken>(TEZOS_TOKEN);
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 

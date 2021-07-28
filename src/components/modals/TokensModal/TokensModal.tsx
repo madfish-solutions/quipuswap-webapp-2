@@ -1,4 +1,6 @@
-import React from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -6,7 +8,7 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  useAddCustomToken, useSearchCustomTokens, useSearchTokens, useTokens,
+  useAddCustomToken, useSearchCustomTokens, useSearchTokens, useTezos, useTokens,
 } from '@utils/dapp';
 import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -23,6 +25,7 @@ import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import { NumberInput } from '@components/ui/NumberInput';
+import { isTokenFa2 } from '@utils/dapp/tokens';
 import s from './TokensModal.module.sass';
 
 const themeClass = {
@@ -52,10 +55,10 @@ const Header:React.FC<HeaderProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
 
-  const [, setVal] = React.useState(values);
-  const [, setSubm] = React.useState<boolean>(false);
+  const [, setVal] = useState(values);
+  const [, setSubm] = useState<boolean>(false);
 
-  let timeout:any;
+  const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
   const saveFunc = async () => {
@@ -69,11 +72,11 @@ const Header:React.FC<HeaderProps> = ({
     setSubm(false);
   };
 
-  React.useEffect(() => {
-    if (timeout) {
-      clearTimeout(timeout);
+  useEffect(() => {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
     }
-    timeout = setTimeout(saveFunc, debounce);
+    timeout.current = setTimeout(saveFunc, debounce);
   }, [values]);
 
   return (
@@ -172,21 +175,21 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 }) => {
   const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
-  const { colorThemeMode } = React.useContext(ColorThemeContext);
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
+  const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens, loading: tokensLoading } = useTokens();
+  const { data: tokens } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
-  const [filteredTokens, setFilteredTokens] = React.useState<WhitelistedToken[]>([]);
-  const [inputValue, setInputValue] = React.useState<string>('');
-  const [inputToken, setInputToken] = React.useState<number>(0);
+  const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [inputToken, setInputToken] = useState<number>(0);
+  const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
-    setInputToken(values.tokenId);
+    setInputToken(isSoleFa2Token ? values.tokenId : 0);
   };
-
-  console.log(tokensLoading, searchLoading);
 
   const handleTokenSearch = () => {
     const isTokens = tokens
@@ -206,14 +209,19 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
 
-  React.useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
   const allTokens = inputValue.length > 0 && filteredTokens.length === 0
     ? searchTokens : filteredTokens;
 
-  const isSoleFa2Token = React.useMemo(
-    () => allTokens.every((x) => x.type === 'fa2'), [allTokens],
-  );
+  useEffect(() => {
+    const getFa2 = async () => {
+      const res = await isTokenFa2(inputValue, tezos!!);
+      setSoleFa2Token(res);
+    };
+    getFa2();
+  }, [inputValue, tezos]);
+
   return (
     <Form
       onSubmit={handleInput}
@@ -223,7 +231,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
         },
       }}
       render={({ form }) => (
-
         <Modal
           title={t('common:Search token')}
           header={(

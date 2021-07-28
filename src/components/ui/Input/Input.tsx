@@ -11,6 +11,7 @@ export type InputProps = {
   className?: string
   label?: string
   labelClassName?: string
+  inputClassName?: string
   inputSize?: keyof typeof sizeClass
   StartAdornment?: React.FC<{ className?: string }>
   EndAdornment?: React.FC<{ className?: string }>
@@ -32,6 +33,7 @@ export const Input: React.FC<InputProps> = ({
   className,
   label,
   labelClassName,
+  inputClassName,
   id,
   error,
   StartAdornment,
@@ -69,7 +71,7 @@ export const Input: React.FC<InputProps> = ({
           id={id}
           onFocus={() => setActive(true)}
           onBlur={() => setActive(false)}
-          className={s.input}
+          className={cx(s.input, inputClassName)}
           {...props}
         />
         {!!EndAdornment && (

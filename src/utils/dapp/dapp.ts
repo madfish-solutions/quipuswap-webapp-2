@@ -274,12 +274,12 @@ function useDApp() {
         }
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);
-        const token = {
+        const token : WhitelistedToken = {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
           fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-        } as WhitelistedToken;
+        };
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
