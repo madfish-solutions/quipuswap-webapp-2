@@ -1,6 +1,6 @@
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 
-export const searchToken = ({
+export const localSearchToken = ({
   metadata,
   contractAddress,
   fa2TokenId,

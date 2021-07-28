@@ -7,4 +7,4 @@ export * from './debounce';
 export * from './isTouchDevice';
 export * from './shortize';
 export * from './parseNumber';
-export * from './searchToken';
+export * from './localSearchToken';

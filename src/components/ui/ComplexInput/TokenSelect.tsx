@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { prettyPrice } from '@utils/helpers';
+import { prettyPrice, shortize } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
@@ -125,7 +125,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
             <TokensLogos token1={token} />
             <h6 className={cx(s.token)}>
-              {token?.metadata?.symbol ?? token?.metadata?.name ?? token?.contractAddress}
+
+              {token?.metadata?.symbol ?? token?.metadata?.name ?? 'Unnamed' ?? shortize(token?.contractAddress || '', 10)}
             </h6>
             <Shevron />
           </Button>

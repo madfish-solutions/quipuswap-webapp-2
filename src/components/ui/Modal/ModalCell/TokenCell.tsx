@@ -18,7 +18,8 @@ import s from './ModalCell.module.sass';
 // };
 
 type TokenCellProps = {
-  token: WhitelistedToken
+  token: WhitelistedToken,
+  loading?: boolean
 };
 
 const modeClass = {
@@ -28,31 +29,54 @@ const modeClass = {
 
 export const TokenCell: React.FC<TokenCellProps> = ({
   token,
+  loading = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const compoundClassName = cx(
+    modeClass[colorThemeMode],
+    loading && s.loading,
+    s.listItem,
+    s.splitRow,
+  );
+
+  const loadingLogoClassName = loading ? s.loadingLogos : '';
+  const loadingNameClassName = loading ? s.loadingName : '';
+  const loadginSymbolClassName = loading ? s.loadingSymbol : '';
+  const loadingBageClassName = loading ? s.loadingBage : '';
+
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
+    <div className={compoundClassName}>
       <div className={s.joinRow}>
         <TokensLogos
           token1={token}
+          className={loadingLogoClassName}
         />
         <div className={s.mleft8}>
           <div className={s.joinRow}>
-            <h6>
-              {token.metadata?.symbol ?? token.metadata?.name ?? 'Unnamed'}
+            <h6 className={loadingNameClassName}>
+              {loading ? '' : token.metadata?.symbol ?? token.metadata?.name ?? 'Unnamed'}
             </h6>
-            {(token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId}`]).map((x) => (
+            {loading && (
+            <Bage
+              className={loadingBageClassName}
+              text={'   '}
+              loading
+            />
+            )}
+            {token?.type ? (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId}`]).map((x) => (
               <Bage
                 className={s.bage}
                 key={x}
                 text={x}
               />
-            )) }
+            )) : ''}
           </div>
-          <span className={s.caption}>
-            {token.metadata?.name ?? token.metadata?.symbol ?? token.contractAddress}
-          </span>
+          {!loading ? (
+            <span className={cx(s.caption)}>
+              {token.metadata?.name ?? token.metadata?.symbol ?? token.contractAddress}
+            </span>
+          ) : <div className={loadginSymbolClassName} />}
         </div>
       </div>
     </div>
