@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
+import { OldVersionButton } from '@components/common/OldVersionButton';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';
@@ -29,6 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={s.button} />
+        <OldVersionButton className={s.button} />
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
