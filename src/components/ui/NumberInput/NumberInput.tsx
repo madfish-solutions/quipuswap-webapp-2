@@ -2,7 +2,6 @@ import React, { forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Input, InputProps } from '@components/ui/Input';
-
 import PlusIcon from '@icons/TopArrow.svg';
 import MinusIcon from '@icons/BotArrow.svg';
 

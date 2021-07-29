@@ -35,9 +35,6 @@ type SwapSendProps = {
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
-  // const [tokensModal, setTokensModal] = useState<number>(0);
-  // const [token1, setToken1] = useState<WhitelistedToken>();
-  // const [token2, setToken2] = useState<WhitelistedToken>();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const handleInputChange = (state: any) => {

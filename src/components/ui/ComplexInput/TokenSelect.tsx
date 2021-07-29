@@ -1,7 +1,10 @@
-import React, { useContext, useMemo, useRef } from 'react';
+import React, {
+  useContext, useMemo, useRef, useState,
+} from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { prettyPrice, shortize } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -12,7 +15,6 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -21,14 +23,8 @@ type TokenSelectProps = {
   label: string
   error?: string
   handleChange?: (token:WhitelistedToken) => void
-  mode?: keyof typeof modeClass
   handleBalance: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
-
-const modeClass = {
-  input: s.inputMode,
-  select: s.selectMode,
-};
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -43,15 +39,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   value,
   error,
   id,
-  mode = 'input',
   handleChange,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [tokensModal, setTokensModal] = React.useState<boolean>(false);
-  const [token, setToken] = React.useState<WhitelistedToken>(TEZOS_TOKEN);
-  const [focused, setActive] = React.useState<boolean>(false);
+  const [tokensModal, setTokensModal] = useState<boolean>(false);
+  const [token, setToken] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // TODO: Change logic of buttons and dollar during connection to SDK
@@ -70,7 +65,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     }
   };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  const equivalentContent = `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`;
 
   return (
     <>
@@ -83,8 +78,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           setTokensModal(false);
         }}
       />
+      {/* eslint-disable-next-line max-len */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
       <div
-        aria-hidden
         className={compoundClassName}
         onClick={focusInput}
       >

@@ -21,6 +21,5 @@ export const localSearchToken = ({
           || isSymbol
           || isContract);
   }
-  //   res = res && network.id === tokenNetwork;
   return res;
 };
