@@ -3,9 +3,8 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
-import { WhitelistedToken } from '@utils/types';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { Bage } from '@components/ui/Bage';
+// import { Bage } from '@components/ui/Bage';
+import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './ModalCell.module.sass';
 
@@ -29,20 +28,12 @@ export const LoadingTokenCell: React.FC<{}> = () => {
       className={compoundClassName}
     >
       <div className={s.joinRow}>
-        <TokensLogos
-          token1={{} as WhitelistedToken}
-          className={s.loadingLogos}
-        />
+        <Skeleton type="logo" />
         <div className={s.mleft8}>
           <div className={s.joinRow}>
-            <span className={s.loadingName} />
-            <Bage
-              className={s.loadingBage}
-              text={'   '}
-              loading
-            />
+            <Skeleton type="longText" />
           </div>
-          <div className={s.loadingSymbol} />
+          <Skeleton type="text" />
         </div>
       </div>
     </div>

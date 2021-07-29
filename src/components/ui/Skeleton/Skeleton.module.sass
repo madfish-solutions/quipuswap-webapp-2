@@ -1,0 +1,48 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.skeleton .svg
+  display: none
+
+.loadingBage
+  margin-left: 8px
+
+.loadingName
+  margin-bottom: 2px
+
+.loadingLogos
+    width: 24px
+    height: 24px
+    border-radius: 12px
+    background-size: 100px
+.loadingName, .loadingSymbol 
+    height: 16px
+    width: 200px
+    border-radius: 8px
+    background-size: 400px
+.loadingBage
+    height: 16px
+    width: 40px
+    border-radius: 8px
+    background-size: 100px
+
+.light
+  &.loadingLogos, &.loadingName, &.loadingSymbol, &.loadingBage
+    background-image: $skeleton-light
+    background-color: $hover-light-row
+
+.dark
+  &.loadingLogos, &.loadingName, &.loadingSymbol, &.loadingBage
+    background-image: $skeleton-dark
+    background-color: $hover-dark-row
+
+.loadingLogos, .loadingName, .loadingSymbol, .loadingBage
+    background-repeat: no-repeat
+    animation: loading 3s infinite
+    @keyframes loading 
+      0% 
+        background-position: 150% 0%
+      75%
+        background-position: -150% 0, 0 0
+      100%
+        background-position: -150% 0, 0 0

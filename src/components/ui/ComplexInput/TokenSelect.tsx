@@ -4,7 +4,6 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { prettyPrice, shortize } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -24,6 +23,8 @@ type TokenSelectProps = {
   error?: string
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
+  token: WhitelistedToken,
+  setToken: (token:WhitelistedToken) => void
 } & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
@@ -40,12 +41,13 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   error,
   id,
   handleChange,
+  token,
+  setToken,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
-  const [token, setToken] = useState<WhitelistedToken>(TEZOS_TOKEN);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -47,7 +47,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
           width={24}
           height={24}
           src={prepareToken1.icon}
-          alt={getTokenName(prepareToken2)}
+          alt={getTokenName(prepareToken1)}
           className={cx(s.image)}
         />
       ) : (
