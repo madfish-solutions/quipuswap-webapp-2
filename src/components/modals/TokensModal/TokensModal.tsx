@@ -264,8 +264,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
               contractAddress, fa2TokenId,
             } = token;
             return (
-              <div
-                aria-hidden
+              <TokenCell
+                tabIndex={0}
+                token={token}
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
                 onClick={() => {
                   onChange(token);
@@ -277,11 +278,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
                   setInputValue('');
                   setInputToken(0);
                 }}
-              >
-                <TokenCell
-                  token={token}
-                />
-              </div>
+              />
             );
           })}
         </Modal>
