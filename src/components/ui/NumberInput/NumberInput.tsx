@@ -35,6 +35,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
       className={cx(s.wrapper)}
       labelClassName={cx(s.label, labelClassName)}
       disabled={disabled}
+      inputClassName={s.input}
       {...props}
     />
     <div className={s.buttons}>

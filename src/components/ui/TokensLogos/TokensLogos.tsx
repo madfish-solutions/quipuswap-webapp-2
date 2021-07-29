@@ -9,7 +9,7 @@ import FallbackLogo from '@icons/FallbackLogo.svg';
 import s from './TokensLogos.module.sass';
 
 export interface TokensLogosInterface {
-  token1?: WhitelistedToken
+  token1: WhitelistedToken
   token2?: WhitelistedToken
   className?: string
 }
@@ -63,7 +63,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
       )}
 
       {
-        prepareToken2?.metadata?.thumbnailUri === null && (
+        prepareToken2?.icon === null && (
           <div className={s.secondImage}>
             <FallbackLogo className={cx(s.image)} />
           </div>

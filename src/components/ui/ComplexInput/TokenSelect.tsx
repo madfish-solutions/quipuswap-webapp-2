@@ -12,6 +12,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -51,7 +52,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = React.useState<boolean>(false);
-  const [token, setToken] = React.useState<WhitelistedToken>();
+  const [token, setToken] = React.useState<WhitelistedToken>(TEZOS_TOKEN);
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -69,23 +70,18 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     className,
   );
 
-  // const focusInput = () => {
-  //   if (inputRef?.current) {
-  //     inputRef.current.focus();
-  //   }
-  // };
+  const focusInput = () => {
+    if (inputRef?.current) {
+      inputRef.current.focus();
+    }
+  };
 
   const equivalentContent = mode === 'input' && exchangeRate
     ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`
     : '';
 
   return (
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div
-      className={compoundClassName}
-      // onClick={focusInput}
-    >
+    <>
       <TokensModal
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
@@ -95,45 +91,51 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           setTokensModal(false);
         }}
       />
-      <label htmlFor={id} className={s.label}>
-        {label}
-      </label>
-      <div className={s.background}>
-        <div className={s.shape}>
-          <div className={cx(s.item1, s.label2)}>
-            {equivalentContent}
-          </div>
-          <div className={s.item2}>
-            <div className={s.item2Line}>
-              <div className={s.caption}>
-                {t('common:Total Balance')}
-                :
-              </div>
-              <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance))}
+      <div
+        aria-hidden
+        className={compoundClassName}
+        onClick={focusInput}
+      >
+        <label htmlFor={id} className={s.label}>
+          {label}
+        </label>
+        <div className={s.background}>
+          <div className={s.shape}>
+            <div className={cx(s.item1, s.label2)}>
+              {equivalentContent}
+            </div>
+            <div className={s.item2}>
+              <div className={s.item2Line}>
+                <div className={s.caption}>
+                  {t('common:Total Balance')}
+                  :
+                </div>
+                <div className={cx(s.label2, s.price)}>
+                  {prettyPrice(parseFloat(balance))}
+                </div>
               </div>
             </div>
-          </div>
-          <input
-            className={cx(s.item3, s.input)}
-            onFocus={() => setActive(true)}
-            onBlur={() => setActive(false)}
-            ref={inputRef}
-            value={value}
-            {...props}
-          />
-          <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-            <TokensLogos token1={token} />
-            <h6 className={cx(s.token)}>
+            <input
+              className={cx(s.item3, s.input)}
+              onFocus={() => setActive(true)}
+              onBlur={() => setActive(false)}
+              ref={inputRef}
+              value={value}
+              {...props}
+            />
+            <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
+              <TokensLogos token1={token} />
+              <h6 className={cx(s.token)}>
 
-              {token?.metadata?.symbol ?? token?.metadata?.name ?? 'Unnamed' ?? shortize(token?.contractAddress || '', 10)}
-            </h6>
-            <Shevron />
-          </Button>
+                {token?.metadata?.symbol ?? token?.metadata?.name ?? 'Unnamed' ?? shortize(token?.contractAddress || '', 10)}
+              </h6>
+              <Shevron />
+            </Button>
+          </div>
         </div>
+        <PercentSelector value={balance} handleBalance={handleBalance} />
+        <ComplexError error={error} />
       </div>
-      <PercentSelector value={balance} handleBalance={handleBalance} />
-      <ComplexError error={error} />
-    </div>
+    </>
   );
 };

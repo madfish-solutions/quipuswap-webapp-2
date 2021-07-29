@@ -19,7 +19,9 @@ import s from './ModalCell.module.sass';
 
 type TokenCellProps = {
   token: WhitelistedToken,
-  loading?: boolean
+  loading?: boolean,
+  onClick?: () => void,
+  tabIndex?: number
 };
 
 const modeClass = {
@@ -30,6 +32,8 @@ const modeClass = {
 export const TokenCell: React.FC<TokenCellProps> = ({
   token,
   loading = false,
+  onClick,
+  tabIndex,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -46,7 +50,19 @@ export const TokenCell: React.FC<TokenCellProps> = ({
   const loadingBageClassName = loading ? s.loadingBage : '';
 
   return (
-    <div className={compoundClassName}>
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    <div
+      tabIndex={tabIndex}
+      onClick={onClick}
+      onKeyUp={(e) => {
+        if (e.key === 'Enter' && onClick) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      className={compoundClassName}
+    >
       <div className={s.joinRow}>
         <TokensLogos
           token1={token}
