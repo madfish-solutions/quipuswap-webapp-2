@@ -15,7 +15,7 @@ import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { MAINNET_NETWORK } from '@utils/defaults';
 import { Modal } from '@components/ui/Modal';
-import { TokenCell } from '@components/ui/Modal/ModalCell';
+import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import { Button } from '@components/ui/Button';
 import { Pen } from '@components/svg/Pen';
@@ -156,13 +156,7 @@ const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading 
   } if (isEmptyTokens && searchLoading) {
     return (
       <div>
-        {[1, 2, 3, 4, 5, 6, 7].map((x) => (
-          <TokenCell
-            key={x}
-            loading
-            token={{} as WhitelistedToken}
-          />
-        ))}
+        {[1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))}
       </div>
     );
   }
