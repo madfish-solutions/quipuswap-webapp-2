@@ -67,12 +67,12 @@ export const Input: React.FC<InputProps> = ({
           <StartAdornment className={s.adornment} />
         )}
         <input
+          {...props}
           disabled={disabled}
           id={id}
           onFocus={() => setActive(true)}
           onBlur={() => setActive(false)}
           className={cx(s.input, inputClassName)}
-          {...props}
         />
         {!!EndAdornment && (
           <EndAdornment className={s.adornment} />
