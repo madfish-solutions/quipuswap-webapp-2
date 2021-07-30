@@ -42,7 +42,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
         type="button"
         className={s.button}
         onMouseDown={onIncrementClick}
-        disabled={disabled}
+        disabled={disabled || !onIncrementClick}
       >
         <PlusIcon className={s.icon} />
       </button>
@@ -50,7 +50,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
         type="button"
         className={s.button}
         onMouseDown={onDecrementClick}
-        disabled={disabled}
+        disabled={disabled || !onDecrementClick}
       >
         <MinusIcon className={s.icon} />
       </button>
