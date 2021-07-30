@@ -37,7 +37,6 @@ export const getTokens = async (
     }
     if (addTokensFromLocalStorage) {
       res = [...getSavedTokens(), ...res];
-      console.log(res);
     }
     return res;
   })
