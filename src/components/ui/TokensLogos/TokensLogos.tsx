@@ -14,7 +14,7 @@ export interface TokensLogosInterface {
   className?: string
 }
 
-const getTokenName = (token:any) : string => token.metadata.symbol
+const getTokenName = (token:WhitelistedToken) : string => token.metadata.symbol
 ?? token.metadata.name
 ?? shortize(token.contractAddress)
 ?? 'Token';

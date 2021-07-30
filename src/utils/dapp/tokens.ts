@@ -26,17 +26,12 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
   return false;
 };
 
-export const getTokens = async (
-  addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(MAINNET_TOKENS))
+export const getTokens = async () => fetch(ipfsToHttps(MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
     let res = [];
     if (json.tokens?.length !== 0) {
       res = json.tokens;
-    }
-    if (addTokensFromLocalStorage) {
-      res = [...res, ...getSavedTokens()];
     }
     return res;
   })
