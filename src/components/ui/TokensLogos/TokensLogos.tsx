@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { prepareTokenLogo, shortize } from '@utils/helpers';
+import { prepareTokenLogo, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import FallbackLogo from '@icons/FallbackLogo.svg';
 
@@ -13,11 +13,6 @@ export interface TokensLogosInterface {
   token2?: WhitelistedToken
   className?: string
 }
-
-const getTokenName = (token:WhitelistedToken) : string => token.metadata.symbol
-?? token.metadata.name
-?? shortize(token.contractAddress)
-?? 'Token';
 
 export const TokensLogos: React.FC<TokensLogosInterface> = ({
   token1,
@@ -47,7 +42,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
           width={24}
           height={24}
           src={prepareToken1.icon}
-          alt={getTokenName(prepareToken1)}
+          alt={getWhitelistedTokenSymbol(prepareToken1)}
           className={cx(s.image)}
         />
       ) : (
@@ -61,7 +56,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             width={24}
             height={24}
             src={prepareToken2.icon}
-            alt={getTokenName(prepareToken2)}
+            alt={getWhitelistedTokenSymbol(prepareToken2)}
             className={cx(s.image)}
           />
         </div>

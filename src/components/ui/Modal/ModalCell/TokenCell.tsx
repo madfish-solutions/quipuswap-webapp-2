@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
-import { shortize } from '@utils/helpers';
+import { getWhitelistedTokenName } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
@@ -67,7 +67,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
           </div>
 
           <span className={cx(s.caption)}>
-            {token.metadata?.name ?? token.metadata?.symbol ?? shortize(token.contractAddress)}
+            {getWhitelistedTokenName(token)}
           </span>
 
         </div>
