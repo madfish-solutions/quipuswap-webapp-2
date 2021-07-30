@@ -247,9 +247,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             } = token;
             return (
               <TokenCell
-                tabIndex={0}
-                token={token}
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                token={token}
+                tabIndex={0}
                 onClick={() => {
                   onChange(token);
                   if (searchTokens.length > 0) {
