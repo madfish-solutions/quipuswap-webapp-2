@@ -18,14 +18,14 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement = 'top' }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const placementClassName = placement ? s[placement] : '';
 
   return (
     <Tippy
       placement={placement}
-      render={(attrs) => (
+      render={(attrs:any) => (
         <div {...attrs} className={cx(modeClass[colorThemeMode], s.tippyPopup, placementClassName)}>
           {content}
           <TooltipPointer className={s.arrow} />
