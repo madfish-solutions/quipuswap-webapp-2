@@ -607,18 +607,22 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.buttonsBlock}>
 
-          <Tooltip placement="bottom-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+          <Tooltip placement="bottom-start" content="Short">
             <Button
               className={s.button}
             >
-              bottom-start
+              bottom-start Energistically syndicate
+              distinctive metrics without client-centric technology.
+              Energistically syndicate distinctive metrics without client-centric technology.
             </Button>
           </Tooltip>
-          <Tooltip placement="bottom-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+          <Tooltip placement="bottom-end" content="Short">
             <Button
               className={s.button}
             >
               bottom-end
+              Energistically syndicate distinctive metrics without client-centric technology.
+              Energistically syndicate distinctive metrics without client-centric technology.
             </Button>
           </Tooltip>
         </div>

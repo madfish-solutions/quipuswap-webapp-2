@@ -34,13 +34,13 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement =
     >
       <div className={s.tippy}>
         {/* for debug */}
-        {/* <div
+        <div
           data-popper-placement={placement}
           className={cx(modeClass[colorThemeMode], s.tippyPopup, placementClassName)}
         >
           {content}
           <TooltipPointer className={s.arrow} />
-        </div> */}
+        </div>
         <div className={cx(modeClass[colorThemeMode], s.tippyContent)}>
           {children}
         </div>
