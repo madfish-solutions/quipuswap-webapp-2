@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
+import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -31,6 +33,7 @@ type VotingProps = {
 export const Voting: React.FC<VotingProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['vote']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const handleInputChange = (state: any) => {
@@ -95,28 +98,70 @@ export const Voting: React.FC<VotingProps> = ({
         }}
         contentClassName={s.content}
       >
-        <CardCell header="Delegated To" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:Current baker elected by simple majority of votes.')}>
+              {t('vote:Delegated To')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <Button theme="underlined">
             Everstake
           </Button>
         </CardCell>
-        <CardCell header="Second Candidate" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}>
+              {t('vote:Second Candidate')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <Button theme="underlined">
             Bake’n’Roll
           </Button>
         </CardCell>
-        <CardCell header="Total Votes" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:The total amount of votes cast to elect a baker in the pool.')}>
+              {t('veto:Total Votes')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="1000000" />
         </CardCell>
-        <CardCell header="Total Vetos" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:The total amount of shares cast so far to veto the current baker.')}>
+              {t('veto:Total Vetos')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="1000000" />
         </CardCell>
-        <CardCell header="Your Candidate" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:The candidate you voted for.')}>
+              {t('veto:Your Candidate')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <Button theme="underlined">
             Bake’n’Roll
           </Button>
         </CardCell>
-        <CardCell header="Total Votes" className={s.cell}>
+        <CardCell
+          header={(
+            <Tooltip placement="top-start" content={t('vote:This much more votes needed to veto a delegate.')}>
+              {t('Votes To Veto Left')}
+            </Tooltip>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="1000000" />
         </CardCell>
         <div className={s.detailsButtons}>

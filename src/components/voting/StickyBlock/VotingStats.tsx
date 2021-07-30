@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
 
-import { useTranslation } from 'next-i18next';
-import { Tooltip } from '@components/ui/Tooltip';
 import s from './VotingStats.module.sass';
 
 const content = [
@@ -65,7 +65,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       }) => (
         <div key={id} className={s.item}>
           <span className={s.header}>
-            <Tooltip content={t(tooltip)}>
+            <Tooltip placement="top-start" content={t(tooltip)}>
               {header}
               :
             </Tooltip>
