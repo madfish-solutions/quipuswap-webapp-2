@@ -28,7 +28,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement =
       render={(attrs:any) => (
         <div {...attrs} className={cx(modeClass[colorThemeMode], s.tippyPopup, placementClassName)}>
           {content}
-          <TooltipPointer className={s.arrow} />
+          <div data-popper-arrow="" id="arrow" className={s.arrow} />
         </div>
       )}
     >
