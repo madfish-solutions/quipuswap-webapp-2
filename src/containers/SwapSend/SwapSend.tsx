@@ -36,7 +36,7 @@ type SwapSendProps = {
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['swap']);
+  const { t } = useTranslation(['common', 'swap']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
   const handleInputChange = (state: any) => {
@@ -122,8 +122,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       >
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('swap:The amount of token B you receive for 1 token A, according to the current exchange rate.')}>
-              {t('swap:Sell Price')}
+            <Tooltip placement="top-start" content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}>
+              {t('common:Sell Price')}
             </Tooltip>
         )}
           className={s.cell}
@@ -136,8 +136,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('swap:The amount of token A you receive for 1 token B, according to the current exchange rate.')}>
-              {t('swap:Buy Price')}
+            <Tooltip placement="top-start" content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}>
+              {t('common:Buy Price')}
             </Tooltip>
         )}
           className={s.cell}
@@ -151,7 +151,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         <CardCell
           header={(
             <Tooltip placement="top-start" content={t('swap:The impact your transaction is expected to make on the exchange rate.')}>
-              {t('swap:Price impact')}
+              {t('common:Price impact')}
             </Tooltip>
         )}
           className={s.cell}
@@ -161,7 +161,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         <CardCell
           header={(
             <Tooltip placement="top-start" content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}>
-              {t('swap:Fee')}
+              {t('common:Fee')}
             </Tooltip>
         )}
           className={s.cell}
@@ -171,7 +171,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         <CardCell
           header={(
             <Tooltip placement="top-start" content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}>
-              {t('swap:Route')}
+              {t('common:Route')}
             </Tooltip>
         )}
           className={s.cell}
