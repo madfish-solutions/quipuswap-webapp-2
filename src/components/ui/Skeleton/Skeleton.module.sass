@@ -1,48 +1,37 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
-.skeleton .svg
-  display: none
+.root
+  position: relative
+  overflow: hidden
+  border-radius: 8px
+  &::after
+    content: ''
+    position: absolute
+    top: -100%
+    left: -100px
+    height: 300%
+    width: 20%
+    min-width: 40px
+    transform: rotate(-30deg)
+    animation: slide 3s ease-in-out infinite
 
-.loadingBage
-  margin-left: 8px
-
-.loadingName
-  margin-bottom: 2px
-
-.loadingLogos
-    width: 24px
-    height: 24px
-    border-radius: 12px
-    background-size: 100px
-.loadingName, .loadingSymbol 
-    height: 16px
-    width: 200px
-    border-radius: 8px
-    background-size: 400px
-.loadingBage
-    height: 16px
-    width: 40px
-    border-radius: 8px
-    background-size: 100px
 
 .light
-  &.loadingLogos, &.loadingName, &.loadingSymbol, &.loadingBage
-    background-image: $skeleton-light
-    background-color: $hover-light-row
+  background-color: #f4f5f8
+  &::after
+    background: linear-gradient(to right, rgba(#fff, 0) 0%, #fff 50%, rgba(#fff, 0) 100%)
 
 .dark
-  &.loadingLogos, &.loadingName, &.loadingSymbol, &.loadingBage
-    background-image: $skeleton-dark
-    background-color: $hover-dark-row
+  background-color: #232427
+  &::after
+    background: linear-gradient(to right, rgba(#000, 0) 0%, #000 50%, rgba(#000, 0) 100%)
 
-.loadingLogos, .loadingName, .loadingSymbol, .loadingBage
-    background-repeat: no-repeat
-    animation: loading 3s infinite
-    @keyframes loading 
-      0% 
-        background-position: 150% 0%
-      75%
-        background-position: -150% 0, 0 0
-      100%
-        background-position: -150% 0, 0 0
+
+@keyframes slide
+  0%
+    left: -50px
+  65%
+    left: calc(100% + 50px)
+  100%
+    left: calc(100% + 50px)

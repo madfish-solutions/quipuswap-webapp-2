@@ -5,16 +5,8 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Skeleton.module.sass';
 
-export enum SkeletonModes {
-  Text = 'text',
-  LongText = 'longText',
-  Logo = 'logo',
-  Bage = 'bage',
-}
-
 type SkeletonProps = {
   className?: string
-  type: SkeletonModes
 };
 
 const themeClass = {
@@ -22,17 +14,14 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const modeClass = {
-  [SkeletonModes.Text]: s.text,
-  [SkeletonModes.LongText]: s.LongText,
-  [SkeletonModes.Logo]: s.logo,
-  [SkeletonModes.Bage]: s.bage,
-};
-
-export const Skeleton: React.FC<SkeletonProps> = ({ className, type }) => {
+export const Skeleton: React.FC<SkeletonProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(themeClass[colorThemeMode], modeClass[type], s.skeleton, className);
+  const compoundClassName = cx(
+    s.root,
+    themeClass[colorThemeMode],
+    className,
+  );
 
   return (
     <div className={compoundClassName} />

@@ -6,26 +6,28 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  useAddCustomToken, useSearchCustomTokens, useSearchTokens, useTezos, useTokens,
+  useAddCustomToken,
+  useSearchCustomTokens,
+  useSearchTokens,
+  useTezos,
+  useTokens,
+  isTokenFa2,
 } from '@utils/dapp';
 import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { MAINNET_NETWORK } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
+import { NumberInput } from '@components/ui/NumberInput';
 import { Button } from '@components/ui/Button';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
-// import TopArrow from '@icons/TopArrow.svg';
-// import BotArrow from '@icons/BotArrow.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
-import { NumberInput } from '@components/ui/NumberInput';
-import { isTokenFa2 } from '@utils/dapp/tokens';
 import s from './TokensModal.module.sass';
 
 const themeClass = {
@@ -143,31 +145,6 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-type ModalLoaderProps = {
-  isEmptyTokens:boolean
-  searchLoading:boolean,
-};
-
-const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading }) => {
-  const { t } = useTranslation(['common']);
-  if (isEmptyTokens && !searchLoading) {
-    return (
-      <div className={s.tokenNotFound}>
-        <TokenNotFound />
-        <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-        {' '}
-      </div>
-    );
-  } if (isEmptyTokens && searchLoading) {
-    return (
-      <div>
-        {[1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))}
-      </div>
-    );
-  }
-  return null;
-};
-
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
   ...props
@@ -254,10 +231,16 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          <ModalLoader
-            isEmptyTokens={isEmptyTokens}
-            searchLoading={searchLoading}
-          />
+          {isEmptyTokens && !searchLoading && (
+            <div className={s.tokenNotFound}>
+              <TokenNotFound />
+              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              {' '}
+            </div>
+          )}
+          {isEmptyTokens && searchLoading && (
+            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+          )}
           {allTokens.map((token) => {
             const {
               contractAddress, fa2TokenId,

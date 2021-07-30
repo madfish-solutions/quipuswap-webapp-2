@@ -140,3 +140,27 @@
 
 .loading:hover
   background-color: transparent
+
+
+.loading
+  .loadingLogo
+    width: 24px
+    height: 24px
+    border-radius: 50%
+
+  .loadingName
+    margin-bottom: 2px
+
+  .loadingName, .loadingSymbol
+    height: 16px
+    width: 200px
+    &::after
+      animation-delay: 200ms
+
+  .loadingBage
+    margin-left: 8px
+    height: 24px
+    width: 52px
+    &::after
+      animation-delay: 400ms
+      transform: rotate(-25deg)

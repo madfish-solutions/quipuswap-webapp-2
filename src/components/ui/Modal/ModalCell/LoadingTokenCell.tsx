@@ -2,9 +2,7 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
-// import { Bage } from '@components/ui/Bage';
-import { Skeleton, SkeletonModes } from '@components/ui/Skeleton';
+import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './ModalCell.module.sass';
 
@@ -28,12 +26,13 @@ export const LoadingTokenCell: React.FC<{}> = () => {
       className={compoundClassName}
     >
       <div className={s.joinRow}>
-        <Skeleton type={SkeletonModes.Logo} />
+        <Skeleton className={s.loadingLogo} />
         <div className={s.mleft8}>
           <div className={s.joinRow}>
-            <Skeleton type={SkeletonModes.LongText} />
+            <Skeleton className={s.loadingSymbol} />
+            <Skeleton className={s.loadingBage} />
           </div>
-          <Skeleton type={SkeletonModes.Text} />
+          <Skeleton className={s.loadingName} />
         </div>
       </div>
     </div>
