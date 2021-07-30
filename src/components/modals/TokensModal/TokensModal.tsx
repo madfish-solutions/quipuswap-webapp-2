@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState, useMemo,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
@@ -183,12 +183,16 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     }
   };
 
-  const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
+  const isEmptyTokens = useMemo(
+    () => filteredTokens.length === 0
+    && searchTokens.length === 0,
+    [searchTokens, filteredTokens],
+  );
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
-  const allTokens = inputValue.length > 0 && filteredTokens.length === 0
-    ? searchTokens : filteredTokens;
+  const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
+    ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
 
   useEffect(() => {
     const getFa2 = async () => {
