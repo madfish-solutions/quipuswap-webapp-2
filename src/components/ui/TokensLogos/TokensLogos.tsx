@@ -2,19 +2,15 @@ import React from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { prepareTokenLogo } from '@utils/helpers';
+import { prepareTokenLogo, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import FallbackLogo from '@icons/FallbackLogo.svg';
 
 import s from './TokensLogos.module.sass';
 
-type TokenType = {
-  icon: string | null
-  name: string
-};
-
 export interface TokensLogosInterface {
-  token1: TokenType
-  token2?: TokenType
+  token1: WhitelistedToken
+  token2?: WhitelistedToken
   className?: string
 }
 
@@ -29,13 +25,13 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
     className,
   );
 
-  const prepareToken1 = {
+  const prepareToken1 = token1 && {
     ...token1,
-    icon: prepareTokenLogo(token1.icon),
+    icon: prepareTokenLogo(token1.metadata?.thumbnailUri),
   };
   const prepareToken2 = token2 && {
     ...token2,
-    icon: prepareTokenLogo(token2.icon),
+    icon: prepareTokenLogo(token2.metadata?.thumbnailUri),
   };
 
   return (
@@ -46,7 +42,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
           width={24}
           height={24}
           src={prepareToken1.icon}
-          alt={prepareToken1.name ?? 'Symbol'}
+          alt={getWhitelistedTokenSymbol(prepareToken1)}
           className={cx(s.image)}
         />
       ) : (
@@ -60,7 +56,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             width={24}
             height={24}
             src={prepareToken2.icon}
-            alt={prepareToken2.name ?? 'Symbol'}
+            alt={getWhitelistedTokenSymbol(prepareToken2)}
             className={cx(s.image)}
           />
         </div>

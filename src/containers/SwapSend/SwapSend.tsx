@@ -1,11 +1,14 @@
 import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 
+import { WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
-import { ComplexInput, ComplexRecipient } from '@components/ui/ComplexInput';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -39,6 +42,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const handleInputChange = (state: any) => {
     setInputValue(state.target.value);
   }; // TODO: Delete when lib added
+  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -68,7 +73,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }}
         contentClassName={s.content}
       >
-        <ComplexInput
+        <TokenSelect
+          token={token1}
+          setToken={setToken1}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
@@ -82,7 +89,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         >
           <SwapIcon />
         </Button>
-        <ComplexInput
+        <TokenSelect
+          token={token2}
+          setToken={setToken2}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}

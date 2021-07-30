@@ -8,11 +8,21 @@
   font-size: 0.857rem
   line-height: 1.33
   color: $text-03
+  display: inline-block
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  max-width: 100%
+
+.tokenBody
+  max-width: calc(100% - 32px)
 
 .listItem
   position: relative
   padding: 12px 24px
   transition: background-color $animationTime
+  outline: none
+  cursor: pointer
 
 .splitRow
   display: flex
@@ -111,7 +121,7 @@
 .light
   &:not(:last-child)
     border-bottom: 1px solid $ui-03
-  &:hover
+  &:hover, &:focus
      background-color: $hover-light-row
   .label1
     color: $hover-dark-row
@@ -126,7 +136,7 @@
 .dark
   &:not(:last-child)
     border-bottom: 1px solid $ui-06
-  &:hover
+  &:hover, &:focus
     background-color: $hover-dark-row
   .label1
     color: $text-inverse
@@ -137,3 +147,30 @@
     -webkit-text-fill-color: transparent
     &::after
       background: $hover-primary-02
+
+.loading:hover
+  background-color: transparent
+
+
+.loading
+  .loadingLogo
+    width: 24px
+    height: 24px
+    border-radius: 50%
+
+  .loadingName
+    margin-bottom: 2px
+
+  .loadingName, .loadingSymbol
+    height: 16px
+    width: 200px
+    &::after
+      animation-delay: 200ms
+
+  .loadingBage
+    margin-left: 8px
+    height: 24px
+    width: 52px
+    &::after
+      animation-delay: 400ms
+      transform: rotate(-25deg)
