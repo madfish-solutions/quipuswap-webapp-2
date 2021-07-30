@@ -19,7 +19,6 @@ export const LogoButton: React.FC = () => {
     <Link href="/">
       <a className={cx(modeClass[colorThemeMode], s.logo)}>
         <Logo />
-        <span className={s.logoText}>QuipuSwap</span>
       </a>
     </Link>
   );
