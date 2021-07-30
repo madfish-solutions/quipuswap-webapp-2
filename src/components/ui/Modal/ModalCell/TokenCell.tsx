@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
-import { getWhitelistedTokenName } from '@utils/helpers';
+import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
@@ -55,7 +55,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
         <div className={s.mleft8}>
           <div className={s.joinRow}>
             <h6>
-              {token.metadata?.symbol ?? token.metadata?.name ?? 'Unnamed'}
+              {getWhitelistedTokenSymbol(token)}
             </h6>
             {token?.type && (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId}`]).map((x) => (
               <Bage
