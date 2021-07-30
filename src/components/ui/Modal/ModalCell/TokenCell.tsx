@@ -12,7 +12,6 @@ import s from './ModalCell.module.sass';
 
 type TokenCellProps = {
   token: WhitelistedToken,
-  loading?: boolean,
   onClick?: () => void,
   tabIndex?: number
 };
@@ -24,7 +23,6 @@ const modeClass = {
 
 export const TokenCell: React.FC<TokenCellProps> = ({
   token,
-  loading = false,
   onClick,
   tabIndex,
 }) => {
@@ -32,15 +30,9 @@ export const TokenCell: React.FC<TokenCellProps> = ({
 
   const compoundClassName = cx(
     modeClass[colorThemeMode],
-    loading && s.loading,
     s.listItem,
     s.splitRow,
   );
-
-  const loadingLogoClassName = cx({ [s.loadingLogos]: loading });
-  const loadingNameClassName = cx({ [s.loadingName]: loading });
-  const loadginSymbolClassName = cx({ [s.loadingSymbol]: loading });
-  const loadingBageClassName = cx({ [s.loadingBage]: loading });
 
   return (
     // eslint-disable-next-line max-len
@@ -59,20 +51,12 @@ export const TokenCell: React.FC<TokenCellProps> = ({
       <div className={s.joinRow}>
         <TokensLogos
           token1={token}
-          className={loadingLogoClassName}
         />
         <div className={s.mleft8}>
           <div className={s.joinRow}>
-            <h6 className={loadingNameClassName}>
-              {!loading && (token.metadata?.symbol ?? token.metadata?.name ?? 'Unnamed')}
+            <h6>
+              {token.metadata?.symbol ?? token.metadata?.name ?? 'Unnamed'}
             </h6>
-            {loading && (
-            <Bage
-              className={loadingBageClassName}
-              text={'   '}
-              loading
-            />
-            )}
             {token?.type && (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId}`]).map((x) => (
               <Bage
                 className={s.bage}
@@ -81,11 +65,11 @@ export const TokenCell: React.FC<TokenCellProps> = ({
               />
             ))}
           </div>
-          {!loading ? (
-            <span className={cx(s.caption)}>
-              {token.metadata?.name ?? token.metadata?.symbol ?? shortize(token.contractAddress)}
-            </span>
-          ) : <div className={loadginSymbolClassName} />}
+
+          <span className={cx(s.caption)}>
+            {token.metadata?.name ?? token.metadata?.symbol ?? shortize(token.contractAddress)}
+          </span>
+
         </div>
       </div>
     </div>
