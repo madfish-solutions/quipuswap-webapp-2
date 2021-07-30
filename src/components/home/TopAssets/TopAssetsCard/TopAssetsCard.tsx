@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
+import { Tooltip } from '@components/ui/Tooltip';
 import { TokensNames, TokensNamesProps } from '@components/common/TokensNames';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
@@ -53,25 +54,41 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
       <TokensNames {...pair} className={s.pair} />
       {'tvl' in data && (
         <div className={s.item}>
-          <h4 className={s.header}>TVL</h4>
+          <h4 className={s.header}>
+            <Tooltip placement="top-start" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.">
+              TVL
+            </Tooltip>
+          </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
         </div>
       )}
       {'volume24' in data && (
         <div className={s.item}>
-          <h4 className={s.header}>Volume 24h</h4>
+          <h4 className={s.header}>
+            <Tooltip placement="top-start" content="A total amount of funds that were swapped via each pool today.">
+              Volume 24h
+            </Tooltip>
+          </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
         </div>
       )}
       {'totalStaked' in data && (
         <div className={s.item}>
-          <h4 className={s.header}>Total staked</h4>
+          <h4 className={s.header}>
+            <Tooltip placement="top-start" content="Total funds locked in the farming contract for each pool.">
+              Total staked
+            </Tooltip>
+          </h4>
           <CurrencyAmount amount={data.totalStaked} currency="$" isRightCurrency labelSize="large" />
         </div>
       )}
       {'apr' in data && (
         <div className={s.item}>
-          <h4 className={s.header}>APR</h4>
+          <h4 className={s.header}>
+            <Tooltip placement="top-start" content="Expected APR (annual percentage rate) earned through an investment.">
+              APR
+            </Tooltip>
+          </h4>
           <CurrencyAmount amount={data.apr} currency="%" labelSize="large" />
         </div>
       )}

@@ -2,10 +2,10 @@
 @import "@styles/breakpoints"
 
 .tippy
-  text-decoration: underline
   cursor: pointer
 
 .tippyPopup
+  box-shadow: $elevation-06
   position: relative
   padding: 16px
   max-width: 180px
@@ -33,11 +33,11 @@
 
 .top-start .arrow 
   bottom: -8px
-  right: 11px
+  left: 11px
 .bottom-start .arrow 
   transform: rotate(180deg)
   top: -8px
-  right: 11px
+  left: 11px
 .left-start .arrow 
   transform: rotate(-90deg)
   right: -11px
@@ -49,11 +49,11 @@
 
 .top-end .arrow 
   bottom: -8px
-  left: 11px
+  right: 11px
 .bottom-end .arrow 
   transform: rotate(180deg)
   top: -8px
-  left: 11px
+  right: 11px
 .left-end .arrow 
   transform: rotate(-90deg)
   right: -11px

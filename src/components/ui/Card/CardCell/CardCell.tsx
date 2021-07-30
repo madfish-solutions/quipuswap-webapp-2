@@ -6,7 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from './CardCell.module.sass';
 
 type CardCellProps = {
-  header?: string
+  header?: React.ReactNode
   className?: string
 };
 

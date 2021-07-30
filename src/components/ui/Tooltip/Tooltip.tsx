@@ -18,7 +18,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement }) => {
+export const Tooltip: React.FC<TooltipProps> = ({ children, content, placement = 'top' }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const placementClassName = placement ? s[placement] : '';
 
