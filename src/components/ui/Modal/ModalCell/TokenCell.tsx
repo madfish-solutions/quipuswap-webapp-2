@@ -52,7 +52,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
         <TokensLogos
           token1={token}
         />
-        <div className={s.mleft8}>
+        <div className={cx(s.mleft8, s.tokenBody)}>
           <div className={s.joinRow}>
             <h6>
               {getWhitelistedTokenSymbol(token)}
@@ -67,7 +67,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
           </div>
 
           <span className={cx(s.caption)}>
-            {getWhitelistedTokenName(token)}
+            {getWhitelistedTokenName(token, 100)}
           </span>
 
         </div>
