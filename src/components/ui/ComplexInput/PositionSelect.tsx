@@ -4,17 +4,17 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { PositionsModal } from '@components/modals/PositionsModal';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { PositionsModal } from '@components/modals/PositionsModal';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
   type PositionSelectProps = {

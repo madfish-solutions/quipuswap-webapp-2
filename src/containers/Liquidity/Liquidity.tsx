@@ -2,12 +2,15 @@ import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
@@ -18,9 +21,6 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 
 const TabsContent = [
   {
@@ -56,8 +56,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
-
-  console.log(tokenPair);
 
   return (
     <StickyBlock className={className}>

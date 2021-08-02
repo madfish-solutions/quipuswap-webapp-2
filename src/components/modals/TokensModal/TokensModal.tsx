@@ -184,8 +184,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     }
   };
 
-  console.log(tokens, filteredTokens);
-
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0
     && searchTokens.length === 0,
@@ -204,8 +202,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     };
     getFa2();
   }, [inputValue, tezos]);
-
-  useEffect(() => {}, [tokens]);
 
   return (
     <Form

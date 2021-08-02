@@ -7,7 +7,6 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import {
-  // useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
   useTezos,
@@ -15,14 +14,17 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken } from '@utils/helpers';
+import { parseNumber, localSearchToken, isTokensEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Checkbox } from '@components/ui/Checkbox';
+import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import { NumberInput } from '@components/ui/NumberInput';
+import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 
 import s from './PositionsModal.module.sass';
@@ -145,7 +147,6 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   onChange,
   ...props
 }) => {
-  // const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
@@ -218,6 +219,16 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               isSecondInput={isSoleFa2Token}
             />
           )}
+          footer={(
+            <Button
+              onClick={() => onChange({ token1: values.token1, token2: values.token2, dex: '' })}
+              disabled={!values.token2 || !values.token1}
+              className={s.modalButton}
+              theme="primary"
+            >
+              Select
+            </Button>
+          )}
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -225,42 +236,90 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {/* {isEmptyTokens && !searchLoading && (
-            <div className={s.tokenNotFound}>
-              <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-              {' '}
+          <Field name="token1">
+            {({ input }) => {
+              const token = input.value;
+              if (!token) return '';
+              return (
+                <TokenCell
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                  // onChange(token);
+                    if (values.token2 && values.token1) {
+                      form.mutators.setValue('token1', values.token2);
+                      form.mutators.setValue('token2', undefined);
+                    } else if (!values.token1) {
+                      form.mutators.setValue('token1', token);
+                    } else {
+                      form.mutators.setValue('token1', undefined);
+                    }
+                  }}
+                >
+                  <Checkbox checked />
+                </TokenCell>
+              );
+            }}
+          </Field>
+          {values.token1 && (
+          <div className={s.listItem}>
+            <Plus className={s.iconButton} />
+            <div className={s.listText}>
+              Search another Token
             </div>
-          )} */}
+          </div>
+          )}
+          <Field name="token2">
+            {({ input }) => {
+              const token = input.value;
+              if (!token) return '';
+              return (
+                <TokenCell
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                    if (!values.token2) {
+                      form.mutators.setValue('token2', token);
+                    } else {
+                      form.mutators.setValue('token2', undefined);
+                    }
+                  }}
+                >
+                  <Checkbox checked />
+                </TokenCell>
+              );
+            }}
+          </Field>
           {isEmptyTokens && searchLoading && (
             [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
           )}
-          {allTokens.map((token) => {
-            const {
-              contractAddress, fa2TokenId,
-            } = token;
-            return (
-              <TokenCell
-                key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                token={token}
-                tabIndex={0}
-                onClick={() => {
-                  // onChange(token);
-                  if (searchTokens.length > 0) {
+          {!values.token2 && allTokens
+            .filter((x) => !values.token1 || !isTokensEqual(x, values.token1))
+            .map((token) => {
+              const {
+                contractAddress, fa2TokenId,
+              } = token;
+              return (
+                <TokenCell
+                  key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
                     if (!values.token1) {
                       form.mutators.setValue('token1', token);
                     } else if (!values.token2) {
                       form.mutators.setValue('token2', token);
                     }
-                  }
-                  form.mutators.setValue('search', '');
-                  form.mutators.setValue('tokenId', 0);
-                  setInputValue('');
-                  setInputToken(0);
-                }}
-              />
-            );
-          })}
+                    form.mutators.setValue('search', '');
+                    form.mutators.setValue('tokenId', 0);
+                    setInputValue('');
+                    setInputToken(0);
+                  }}
+                >
+                  <Checkbox checked={false} />
+                </TokenCell>
+              );
+            })}
         </Modal>
 
       )}
