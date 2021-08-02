@@ -18,7 +18,6 @@ import {
 import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
-import { MAINNET_NETWORK } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';

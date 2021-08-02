@@ -266,7 +266,7 @@ function useDApp() {
           return;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(address, tokenId);
+        const customToken = await getTokenMetadata(network, address, tokenId);
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
