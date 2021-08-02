@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Button } from '@components/ui/Button';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
@@ -23,6 +25,7 @@ type MenuProps = {
 export const Menu: React.FC<MenuProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -31,12 +34,22 @@ export const Menu: React.FC<MenuProps> = ({
       <footer className={s.footer}>
         <div className={s.row}>
           <QPToken />
-          <NetworkSelect menuPlacement="top" className={s.select} />
+          <div className={cx(s.mb0, s.row)}>
+            <LanguageSwitcher direction="up" />
+            <div className={s.ml24}>
+              <ColorModeSwitcher id="mobile" />
+            </div>
+          </div>
         </div>
         <div className={s.row}>
-          <ColorModeSwitcher id="mobile" />
+          <NetworkSelect menuPlacement="top" className={s.select} />
+          <Button href="https://quipuswap.com/" theme="secondary" className={s.button}>
+            {t('common:Old version')}
+          </Button>
+
+        </div>
+        <div className={s.row}>
           <Socials />
-          <LanguageSwitcher direction="up" />
         </div>
       </footer>
     </div>
