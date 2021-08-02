@@ -6,7 +6,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
-import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
 import { PositionsModal } from '@components/modals/PositionsModal';
@@ -19,7 +18,9 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { WhitelistedTokenPair } from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 
 const TabsContent = [
   {
@@ -48,6 +49,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const handleInputChange = (state: any) => {
     setInputValue(state.target.value);
   }; // TODO: Delete when lib added
+  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -61,9 +64,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       <PositionsModal
         isOpen={tokensModal !== 0}
         onRequestClose={() => setTokensModal(0)}
-        onChange={(token) => {
-          if (tokensModal === 1) setTokenPair(token);
-          // else setToken2(token);
+        onChange={(tp) => {
+          if (tokensModal === 1) setTokenPair(tp);
           setTokensModal(0);
         }}
       />
@@ -90,40 +92,42 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       >
         {currentTab.id === 'remove' && (
           <>
-            <ComplexInput
-              token1={TEZOS_TOKEN}
+            <PositionSelect
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
               value={inputValue}
               onChange={handleInputChange}
               onClick={() => setTokensModal(1)}
               handleBalance={(value) => setInputValue(value)}
               id="liquidity-remove-input"
-              label="Input"
+              label="Select LP"
               className={s.input}
-              mode="votes"
             />
             <ArrowDown className={s.iconButton} />
           </>
         )}
 
-        <ComplexInput
-          token1={TEZOS_TOKEN}
+        <TokenSelect
+          token={token1}
+          setToken={setToken1}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
           id="liquidity-token-1"
-          label="Output"
+          label="Input"
           className={s.input}
           readOnly={currentTab.id === 'remove'}
         />
         <Plus className={s.iconButton} />
-        <ComplexInput
-          token1={TEZOS_TOKEN}
+        <TokenSelect
+          token={token2}
+          setToken={setToken2}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
-          id="liquidity-token-1"
-          label="Output"
-          className={cx(s.input, s.mb24)}
+          id="liquidity-token-2"
+          label="Input"
+          className={s.input}
           readOnly={currentTab.id === 'remove'}
         />
 

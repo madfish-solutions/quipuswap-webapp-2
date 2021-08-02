@@ -25,6 +25,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
   token,
   onClick,
   tabIndex,
+  // children
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
