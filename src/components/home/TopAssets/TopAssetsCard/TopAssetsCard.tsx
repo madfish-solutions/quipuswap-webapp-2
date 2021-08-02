@@ -56,7 +56,10 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
         <div className={s.item}>
           <h4 className={s.header}>
             <Tooltip placement="top-start" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.">
-              TVL
+              <span>
+                TVL
+              </span>
+
             </Tooltip>
           </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
@@ -66,7 +69,10 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
         <div className={s.item}>
           <h4 className={s.header}>
             <Tooltip placement="top-start" content="A total amount of funds that were swapped via each pool today.">
-              Volume 24h
+              <span>
+                Volume 24h
+              </span>
+
             </Tooltip>
           </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
@@ -76,7 +82,10 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
         <div className={s.item}>
           <h4 className={s.header}>
             <Tooltip placement="top-start" content="Total funds locked in the farming contract for each pool.">
-              Total staked
+              <span>
+                Total staked
+              </span>
+
             </Tooltip>
           </h4>
           <CurrencyAmount amount={data.totalStaked} currency="$" isRightCurrency labelSize="large" />
@@ -86,7 +95,10 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
         <div className={s.item}>
           <h4 className={s.header}>
             <Tooltip placement="top-start" content="Expected APR (annual percentage rate) earned through an investment.">
-              APR
+              <span>
+                APR
+              </span>
+
             </Tooltip>
           </h4>
           <CurrencyAmount amount={data.apr} currency="%" labelSize="large" />

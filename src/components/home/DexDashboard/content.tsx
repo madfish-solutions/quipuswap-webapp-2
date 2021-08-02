@@ -20,7 +20,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="TVL (Total Value Locked) represents the total amount of assets currently locked on a DeFi platform. In the case of a DEX it also represents the overall volume of liquidity."
         >
-          TVL
+          <span>
+            TVL
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -33,7 +35,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The accumulated cost of all assets traded via QuipuSwap today."
         >
-          Daily Volume
+          <span>
+            Daily Volume
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -45,7 +49,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The overall number of transactions conducted on QuipuSwap today."
         >
-          Daily Transaction
+          <span>
+            Daily Transaction
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -58,7 +64,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The amount of fee rewards generated on QuipuSwap today and spread between the LP owners. (Directly pegged to Daily Volume)."
         >
-          Daily Reward
+          <span>
+            Daily Reward
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -70,7 +78,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The current number of available Quipu tokens."
         >
-          Total supply
+          <span>
+            Total supply
+          </span>
         </Tooltip>
       </Trans>),
     currency: 'QPSP',
@@ -83,7 +93,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The number of unique addresses that currently provide liquidity on QuipuSwap."
         >
-          LP Providers
+          <span>
+            LP Providers
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -95,7 +107,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The number of liquidity pools currently active on QuipuSwap."
         >
-          Pairs listed
+          <span>
+            Pairs listed
+          </span>
         </Tooltip>
       </Trans>),
   },
@@ -107,7 +121,9 @@ export const DEXDashboardData: DEXDashboardDataProps = [
         <Tooltip
           content="The final number of Quipu tokens. (There will never be more Quipu tokens than that)"
         >
-          Max Supply
+          <span>
+            Max Supply
+          </span>
         </Tooltip>
       </Trans>),
     currency: 'QPSP',
