@@ -5,3 +5,5 @@ export * from './transformMutezToTez';
 export * from './debounce';
 export * from './isTouchDevice';
 export * from './shortize';
+export * from './parseNumber';
+export * from './parseDecimals';

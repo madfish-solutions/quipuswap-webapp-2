@@ -4,6 +4,8 @@ import { useTranslation } from 'next-i18next';
 import { withTypes, Field } from 'react-final-form';
 import { OnChange } from 'react-final-form-listeners';
 
+import { validateMinMax } from '@utils/validators';
+import { parseDecimals } from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -17,6 +19,8 @@ import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
+
+import Info from '@icons/Info.svg';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -98,7 +102,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                       {...input}
                       handleBalance={(value) => {
                         form.mutators.setValue(
-                          'token3',
+                          'tokenPair',
                           +value,
                         );
                       }}
@@ -115,6 +119,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
               <Field
                 name="token1"
+                validate={validateMinMax(0, Infinity)}
+                parse={(value) => parseDecimals(value, 0, Infinity)}
               >
                 {({ input }) => (
                   <>
@@ -155,6 +161,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
               <Plus className={s.iconButton} />
               <Field
                 name="token2"
+                validate={validateMinMax(0, Infinity)}
+                parse={(value) => parseDecimals(value, 0, Infinity)}
               >
                 {({ input }) => (
                   <>
@@ -198,12 +206,44 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
               {currentTab.id === 'add' && (
               <>
-                <div className={cx(s.receive, s.mb24)}>
-                  <span className={s.receiveLabel}>
-                    Minimum received:
-                  </span>
-                  <CurrencyAmount amount="1233" currency="XTZ/QPLP" />
-                </div>
+                {!switcherValue ? (
+                  <Field name="token2">
+                    {({ input }) => (
+                      <div className={cx(s.receive, s.mb24)}>
+                        <span className={s.receiveLabel}>
+                          Max invested XTZ/QPLP:
+                        </span>
+                        <CurrencyAmount amount={input.value} />
+                      </div>
+
+                    )}
+
+                  </Field>
+                )
+                  : (
+                    <>
+                      <Field name="token1">
+                        {({ input }) => (
+                          <div className={s.receive}>
+                            <span className={s.receiveLabel}>
+                              Max invested XTZ:
+                            </span>
+                            <CurrencyAmount amount={input.value} />
+                          </div>
+                        )}
+                      </Field>
+                      <Field name="token2">
+                        {({ input }) => (
+                          <div className={cx(s.receive, s.mb24)}>
+                            <span className={s.receiveLabel}>
+                              Max invested QPTP:
+                            </span>
+                            <CurrencyAmount amount={input.value} />
+                          </div>
+                        )}
+                      </Field>
+                    </>
+                  )}
                 <div className={s.switcher}>
                   <Switcher
                     isActive={switcherValue}
@@ -219,6 +259,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                     className={s.switcherInput}
                   />
                   Rebalance Liquidity
+                  <Info className={s.info} />
                 </div>
               </>
               )}
