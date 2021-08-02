@@ -13,7 +13,11 @@ type ModalProps = {
   innerClassName?: string
   withCloseButton?: boolean
   containerClassName?: string
+  modalClassName?: string
   contentClassName?:string,
+  cardClassName?:string,
+  header?:React.ReactNode,
+  footer?:React.ReactNode,
   title?:string
 } & ReactModal.Props;
 
@@ -30,9 +34,13 @@ export const Modal: React.FC<ModalProps> = ({
   onRequestClose,
   children,
   innerClassName,
+  modalClassName,
   containerClassName,
   contentClassName,
+  cardClassName,
   title = '',
+  header,
+  footer,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -53,7 +61,7 @@ export const Modal: React.FC<ModalProps> = ({
     >
       <div
         aria-hidden="true"
-        className={s.wrapper}
+        className={cx(s.wrapper, modalClassName)}
         onClick={(e) => {
           if (e.target === e.currentTarget && onRequestClose) {
             onRequestClose(e);
@@ -62,7 +70,8 @@ export const Modal: React.FC<ModalProps> = ({
       >
         <div className={cx(s.container, containerClassName)}>
           <Card
-            contentClassName={contentClassName}
+            className={cardClassName}
+            contentClassName={cx(contentClassName, s.modalCard)}
             header={{
               content: <h5>{title}</h5>,
               button: (
@@ -75,6 +84,8 @@ export const Modal: React.FC<ModalProps> = ({
                 </Button>
               ),
             }}
+            additional={header}
+            footer={footer}
           >
             {children}
           </Card>

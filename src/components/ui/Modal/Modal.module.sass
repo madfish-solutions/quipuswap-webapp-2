@@ -47,6 +47,10 @@
   border-radius: 4px
   max-width: 327px
 
+.modalCard
+  overflow-y: scroll
+  overflow-x: hidden
+
 .light
   background-color: rgba($ui-07, 0.12)
 
@@ -56,3 +60,20 @@
 @include media('>tablet')
   .container
     max-width: 424px
+
+@include media('>SDesktop')
+  .modalCard
+    overflow-y: scroll
+  .modalCard::-webkit-scrollbar-track
+    border-radius: 10px
+    background-color: transparent
+  .modalCard::-webkit-scrollbar
+    width: 8px
+    background-color: transparent
+  .dark
+    .modalCard::-webkit-scrollbar-thumb
+      border-radius: 10px
+      background-color: $hover-dark-row
+  .light 
+    .modalCard::-webkit-scrollbar-thumb
+      background-color: $hover-light-row

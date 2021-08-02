@@ -5,12 +5,13 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Input.module.sass';
 
-type InputProps = {
+export type InputProps = {
   error?: string
   disabled?: boolean
   className?: string
   label?: string
   labelClassName?: string
+  inputClassName?: string
   inputSize?: keyof typeof sizeClass
   StartAdornment?: React.FC<{ className?: string }>
   EndAdornment?: React.FC<{ className?: string }>
@@ -32,6 +33,7 @@ export const Input: React.FC<InputProps> = ({
   className,
   label,
   labelClassName,
+  inputClassName,
   id,
   error,
   StartAdornment,
@@ -65,12 +67,12 @@ export const Input: React.FC<InputProps> = ({
           <StartAdornment className={s.adornment} />
         )}
         <input
+          {...props}
           disabled={disabled}
           id={id}
           onFocus={() => setActive(true)}
           onBlur={() => setActive(false)}
-          className={s.input}
-          {...props}
+          className={cx(s.input, inputClassName)}
         />
         {!!EndAdornment && (
           <EndAdornment className={s.adornment} />

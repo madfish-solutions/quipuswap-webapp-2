@@ -6,6 +6,7 @@ import { OnChange } from 'react-final-form-listeners';
 
 import { validateMinMax } from '@utils/validators';
 import { parseDecimals } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -100,6 +101,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                   <>
                     <ComplexInput
                       {...input}
+                      token1={TEZOS_TOKEN}
                       handleBalance={(value) => {
                         form.mutators.setValue(
                           'tokenPair',
@@ -126,6 +128,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                   <>
                     <ComplexInput
                       {...input}
+                      token1={TEZOS_TOKEN}
                       handleBalance={(value) => {
                         form.mutators.setValue(
                           'token1',
@@ -168,6 +171,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                   <>
                     <ComplexInput
                       {...input}
+                      token1={TEZOS_TOKEN}
                       handleBalance={(value) => {
                         form.mutators.setValue(
                           'token2',
