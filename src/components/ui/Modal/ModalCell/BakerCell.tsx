@@ -16,11 +16,15 @@ const modeClass = {
 
 type BakerCellProps = {
   baker?: WhitelistedBaker,
-  loading?: boolean
+  loading?: boolean,
+  tabIndex?: number,
+  onClick?: () => void,
 };
 export const BakerCell: React.FC<BakerCellProps> = ({
   baker,
   loading = false,
+  onClick,
+  tabIndex,
 }) => {
   const { t } = useTranslation(['baker']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -36,11 +40,19 @@ export const BakerCell: React.FC<BakerCellProps> = ({
   // const loadingBageClassName = loading ? s.loadingBage : '';
 
   return (
-    <div className={compoundClassName}>
-      {/* ANOTHER VARIANT */}
-      {/* <TokensLogos
-        className={loadingLogoClassName}
-      /> */}
+    // eslint-disable-next-line max-len
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
+    <div
+      tabIndex={tabIndex}
+      onClick={onClick}
+      onKeyUp={(e) => {
+        if (e.key === 'Enter' && onClick) {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+      className={compoundClassName}
+    >
       <div className={loadingLogoClassName}>
         <Token />
         <h6 className={s.h6}>{baker?.name ?? baker?.contractAddress}</h6>

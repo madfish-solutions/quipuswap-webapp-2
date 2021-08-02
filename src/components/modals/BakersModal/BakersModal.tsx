@@ -1,19 +1,22 @@
-import React from 'react';
+import React, {
+  useContext, useEffect, useRef, useState,
+} from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  useAddCustomBaker, useBakers, useSearchBakers, useSearchCustomBaker,
+  useBakers,
 } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
-import { MAINNET_NETWORK } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-import { BakerCell } from '@components/ui/Modal/ModalCell';
+import { BakerCell, LoadingTokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
+import { Button } from '@components/ui/Button';
+import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -32,11 +35,11 @@ type HeaderProps = {
   debounce:number,
   save:any,
   values:any,
+  form:any,
 };
 
 type FormValues = {
   search: string
-  tokenId: number
 };
 
 const Header:React.FC<HeaderProps> = ({
@@ -44,10 +47,10 @@ const Header:React.FC<HeaderProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
 
-  const [, setVal] = React.useState(values);
-  const [, setSubm] = React.useState<boolean>(false);
+  const [, setVal] = useState(values);
+  const [, setSubm] = useState<boolean>(false);
 
-  let timeout:any;
+  const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
   const saveFunc = async () => {
@@ -61,11 +64,16 @@ const Header:React.FC<HeaderProps> = ({
     setSubm(false);
   };
 
-  React.useEffect(() => {
-    if (timeout) {
-      clearTimeout(timeout);
+  useEffect(() => {
+    if (timeout.current) {
+      clearTimeout(timeout.current);
     }
-    timeout = setTimeout(saveFunc, debounce);
+    timeout.current = setTimeout(saveFunc, debounce);
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
   }, [values]);
 
   return (
@@ -94,77 +102,39 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-type ModalLoaderProps = {
-  isEmptyBakers:boolean
-  searchLoading:boolean,
-};
-
-const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyBakers, searchLoading }) => {
-  const { t } = useTranslation(['common']);
-  if (isEmptyBakers && !searchLoading) {
-    return (
-      <div className={s.tokenNotFound}>
-        <TokenNotFound />
-        <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-        {' '}
-      </div>
-    );
-  } if (isEmptyBakers && searchLoading) {
-    return (
-      <div>
-        {[1, 2, 3, 4, 5, 6, 7].map((x) => (
-          <BakerCell
-            key={x}
-            loading
-          />
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
 export const BakersModal: React.FC<BakersModalProps> = ({
   onChange,
   ...props
 }) => {
-  const addCustomBaker = useAddCustomBaker();
-  const searchCustomBaker = useSearchCustomBaker();
-  const { colorThemeMode } = React.useContext(ColorThemeContext);
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
   const { data: bakers } = useBakers();
-  const { data: searchBakers, loading: searchLoading } = useSearchBakers();
-  const [filteredBakers, setFilteredBakers] = React.useState<WhitelistedBaker[]>([]);
-  const [inputValue, setInputValue] = React.useState<string>('');
+  const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
   };
-
-  // console.log(tokensLoading, searchLoading);
 
   const handleTokenSearch = () => {
     const isBakers = bakers
       .filter(
         (baker) => localSearchBaker(
           baker,
-          MAINNET_NETWORK,
           inputValue,
         ),
       );
     setFilteredBakers(isBakers);
-    if (inputValue.length > 0 && isBakers.length === 0) {
-      searchCustomBaker(inputValue);
-    }
+    // if (inputValue.length > 0 && isBakers.length === 0) {
+    //   searchCustomToken(inputValue, inputToken);
+    // }
   };
 
-  const isEmptyBakers = filteredBakers.length === 0 && searchBakers.length === 0;
+  const isEmptyBakers = filteredBakers.length === 0;
 
-  React.useEffect(() => handleTokenSearch(), [bakers, inputValue]);
+  useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
-  const allTokens = inputValue.length > 0 && filteredBakers.length === 0
-    ? searchBakers : filteredBakers;
   return (
     <Form
       onSubmit={handleInput}
@@ -174,7 +144,6 @@ export const BakersModal: React.FC<BakersModalProps> = ({
         },
       }}
       render={({ form }) => (
-
         <Modal
           title={t('common:Bakers List')}
           header={(
@@ -184,6 +153,13 @@ export const BakersModal: React.FC<BakersModalProps> = ({
               save={handleInput}
             />
           )}
+          footer={(
+            <Button className={s.modalButton} theme="inverse">
+              Manage Lists
+              <Pen className={s.penIcon} />
+
+            </Button>
+          )}
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -191,31 +167,34 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          <ModalLoader
-            isEmptyBakers={isEmptyBakers}
-            searchLoading={searchLoading}
-          />
-          {allTokens.map((baker) => {
+          {isEmptyBakers && (
+            <div className={s.tokenNotFound}>
+              <TokenNotFound />
+              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              {' '}
+            </div>
+          )}
+          {isEmptyBakers && (
+            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+          )}
+          {filteredBakers.map((baker) => {
             const {
               contractAddress,
             } = baker;
             return (
-              <div
-                aria-hidden
+              <BakerCell
                 key={contractAddress}
+                baker={baker}
+                tabIndex={0}
                 onClick={() => {
-                  // onChange(baker);
-                  if (searchBakers.length > 0) {
-                    addCustomBaker(baker);
-                  }
+                  onChange(baker);
+                  // if (searchBakers.length > 0) {
+                  //   addCustomToken(token);
+                  // }
                   form.mutators.setValue('search', '');
                   setInputValue('');
                 }}
-              >
-                <BakerCell
-                  baker={baker}
-                />
-              </div>
+              />
             );
           })}
         </Modal>

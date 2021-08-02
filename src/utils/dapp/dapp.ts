@@ -13,7 +13,7 @@ import {
   LAST_USED_CONNECTION_KEY,
   SAVED_TOKENS_KEY,
 } from '@utils/defaults';
-import { getBakers, saveCustomBaker } from '@utils/dapp/bakers';
+import { getBakers } from '@utils/dapp/bakers';
 import { QSNetwork, WhitelistedBaker, WhitelistedToken } from '@utils/types';
 import { getContractInfo, getSavedTokens, getTokens } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
@@ -360,7 +360,6 @@ function useDApp() {
   );
 
   const addCustomBaker = useCallback((baker:WhitelistedBaker) => {
-    saveCustomBaker(baker);
     setState((prevState) => ({
       ...prevState,
       bakers: { ...bakers, data: [...bakers.data, baker] },
