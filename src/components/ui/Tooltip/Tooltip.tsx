@@ -18,7 +18,7 @@ const modeClass = {
 };
 
 export const Tooltip: React.FC<TooltipProps> = ({
-  content, className, children, ...props
+  content, className, ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(
