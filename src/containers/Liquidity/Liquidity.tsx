@@ -190,7 +190,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
+            <Tooltip placement="top-start" content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
               {t('liquidity:Token A Locked')}
             </Tooltip>
           )}
@@ -200,7 +200,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
+            <Tooltip placement="top-start" content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
               {t('liquidity:Token B Locked')}
             </Tooltip>
           )}
@@ -210,7 +210,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}>
+            <Tooltip placement="top-start" content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}>
               {t('liquidity:Your Total LP')}
             </Tooltip>
           )}
@@ -220,7 +220,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}>
+            <Tooltip placement="top-start" content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}>
               {t('liquidity:Your Frozen LP')}
             </Tooltip>
           )}

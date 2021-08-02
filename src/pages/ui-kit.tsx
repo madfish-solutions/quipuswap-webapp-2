@@ -543,18 +543,28 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Tooltips</h1>
         <div className={s.inputsBlock}>
           <Tooltip placement="top" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            top
+            <div>
+              top
+
+            </div>
           </Tooltip>
           <Tooltip placement="left" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            left
+            <div>
+              left
+
+            </div>
           </Tooltip>
         </div>
         <div className={s.inputsBlock}>
           <Tooltip placement="right" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            right
+            <div>
+              right
+            </div>
           </Tooltip>
           <Tooltip placement="bottom" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            bot
+            <div>
+              bot
+            </div>
           </Tooltip>
         </div>
         <div className={s.buttonsBlock}>

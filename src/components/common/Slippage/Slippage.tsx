@@ -31,9 +31,10 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <span className={s.header}>
-        <Tooltip content={t('common:Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')}>
-          Slippage
-
+        <Tooltip placement="top-start" content={t('common:Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')}>
+          <span>
+            Slippage
+          </span>
         </Tooltip>
       </span>
       <div className={s.buttons}>

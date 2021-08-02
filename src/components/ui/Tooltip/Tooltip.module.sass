@@ -1,139 +1,71 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+  
 .tippy
   cursor: pointer
 
-.tippyPopup
+.wrapper
+  padding: 8px
+  margin: -8px
+  cursor: pointer
+  display: flex
+
+.root
   box-shadow: $elevation-06
-  position: relative
-  padding: 16px
   max-width: 180px
   border-radius: 8px
-  font-weight: bold
-  padding: 4px 8px
-  font-size: 13px
+  font-weight: normal
+  padding: 16px
+  font-size: 0.857rem
   border-radius: 4px
-      
-
-.arrow,
-.arrow::before 
-  position: absolute
-  width: 8px
-  height: 8px
-  background: inherit
-
-
-.arrow 
-  visibility: hidden
-
-
-.arrow::before 
-  visibility: visible
-  content: ''
-  transform: rotate(45deg)
-
-
-.tippyPopup[data-popper-placement^='top'] > .arrow 
-  bottom: -4px
-
-
-.tippyPopup[data-popper-placement^='bottom'] > .arrow 
-  top: -4px
-
-
-.tippyPopup[data-popper-placement^='left'] > .arrow 
-  right: -4px
-
-
-.tippyPopup[data-popper-placement^='right'] > .arrow 
-  left: -4px
-
-
-// .arrow
-//   &::after 
-//     content: ''
-//     display: block
-//     position: absolute
-//     left: 140px
-//     bottom: 100%
-//     width: 0
-//     height: 0
-//     border-bottom: 10px solid black
-//     border-top: 10px solid transparent
-//     border-left: 10px solid transparent
-//     border-right: 10px solid transparent
-
-
-// .tippyPopup
-//   \:global(.customSelect__value-container)
-//   min-height: 38px
-//   border-radius: 8px
-//   margin: 0
-//   padding: 0
-
-// .arrow
-//   position: absolute
-//   width: 15px
-//   height: 8px
-//   background: inherit
-//   background-color: transparent
-
-// .top .arrow 
-//   bottom: -8px
-// .bottom .arrow 
-//   transform: rotate(180deg)
-//   top: -8px
-// .left .arrow 
-//   transform: rotate(-90deg)
-//   right: -11px
-// .right .arrow 
-//   transform: rotate(90deg)
-//   left: -11px
-
-// .top-start .arrow 
-//   bottom: -8px
-//   left: 11px
-// .bottom-start .arrow 
-//   transform: rotate(180deg)
-//   top: -8px
-//   left: 11px
-// .left-start .arrow 
-//   transform: rotate(-90deg)
-//   right: -11px
-//   bottom: 8px
-// .right-start .arrow 
-//   transform: rotate(90deg)
-//   left: -11px
-//   bottom: 8px
-
-// .top-end .arrow 
-//   bottom: -8px
-//   right: 11px
-// .bottom-end .arrow 
-//   transform: rotate(180deg)
-//   top: -8px
-//   right: 11px
-// .left-end .arrow 
-//   transform: rotate(-90deg)
-//   right: -11px
-//   top: 8px
-// .right-end .arrow 
-//   transform: rotate(90deg)
-//   left: -11px
-//   top: 8px
-    
+  &[data-placement^='right'], &[data-placement^='left']
+    \:global(.tippy-arrow)
+      border-top: 8px solid transparent
+      border-bottom: 8px solid transparent
+  &[data-placement^='top'], &[data-placement^='bottom']
+    \:global(.tippy-arrow)
+      border-left: 8px solid transparent
+      border-right: 8px solid transparent
 
 .light
-  .arrow
-    fill: $text-inverse
-  &.tippyPopup
-    background-color: $text-inverse
-    color: $text-01
+  background: $text-inverse
+  border: 1px solid $text-inverse
+  color: $text-01
+  &[data-placement^='right']
+    \:global(.tippy-arrow)
+      border-right: 15px solid $text-inverse
+      left: -15px
+  &[data-placement^='left']
+    \:global(.tippy-arrow)
+      border-left: 15px solid $text-inverse
+      right: -15px
+  &[data-placement^='top']
+    \:global(.tippy-arrow)
+      border-top: 15px solid $text-inverse
+      bottom: -15px
+  &[data-placement^='bottom']
+    \:global(.tippy-arrow)
+      border-bottom: 15px solid $text-inverse
+      top: -15px
 
 .dark
-  .arrow
-    fill: $text-01
-  &.tippyPopup
-    background-color: $text-01
-    color: $text-inverse
+  background: $text-01
+  border: 1px solid $text-01
+  color: $text-inverse
+  &[data-placement^='right']
+    \:global(.tippy-arrow)
+      border-right: 9px solid $text-01
+      left: -9px
+  &[data-placement^='left']
+    \:global(.tippy-arrow)
+      border-left: 9px solid $text-01
+      right: -9px
+  &[data-placement^='top']
+    \:global(.tippy-arrow)
+      border-top: 9px solid $text-01
+      bottom: -9px
+  &[data-placement^='bottom']
+    \:global(.tippy-arrow)
+      border-bottom: 9px solid $text-01
+      top: -9px

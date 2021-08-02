@@ -66,8 +66,11 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         <div key={id} className={s.item}>
           <span className={s.header}>
             <Tooltip placement="top-start" content={t(tooltip)}>
-              {header}
-              :
+              <span>
+                {header}
+                :
+
+              </span>
             </Tooltip>
           </span>
           <span className={s.amount}>{amount}</span>
