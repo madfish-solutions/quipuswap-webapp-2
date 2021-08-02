@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
-import { OldVersionButton } from '@components/common/OldVersionButton';
+import { Button } from '@components/ui/Button';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';
@@ -23,6 +24,7 @@ const modeClass = {
 export const Sidebar: React.FC<SidebarProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -30,7 +32,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={s.button} />
-        <OldVersionButton className={s.button} />
+        <Button href="https://quipuswap.com/" theme="secondary" className={s.button}>
+          {t('common:Old version')}
+        </Button>
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
