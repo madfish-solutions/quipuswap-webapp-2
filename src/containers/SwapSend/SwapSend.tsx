@@ -131,9 +131,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       >
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}>
+            <>
               {t('common:Sell Price')}
-            </Tooltip>
+              <Tooltip content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -145,9 +146,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}>
+            <>
               {t('common:Buy Price')}
-            </Tooltip>
+              <Tooltip content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -159,9 +161,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('swap:The impact your transaction is expected to make on the exchange rate.')}>
+            <>
               {t('common:Price impact')}
-            </Tooltip>
+              <Tooltip content={t('swap:The impact your transaction is expected to make on the exchange rate.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -169,9 +172,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}>
+            <>
               {t('common:Fee')}
-            </Tooltip>
+              <Tooltip content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -179,9 +183,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}>
+            <>
               {t('common:Route')}
-            </Tooltip>
+              <Tooltip content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")} />
+            </>
         )}
           className={s.cell}
         >

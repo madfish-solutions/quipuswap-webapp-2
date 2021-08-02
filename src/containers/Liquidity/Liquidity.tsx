@@ -131,6 +131,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                 className={s.switcherInput}
               />
               Rebalance Liquidity
+              <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
             </div>
           </>
         )}
@@ -162,9 +163,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       >
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}>
+            <>
               {t('common:Sell Price')}
-            </Tooltip>
+              <Tooltip content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -176,9 +178,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}>
+            <>
               {t('common:Buy Price')}
-            </Tooltip>
+              <Tooltip content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')} />
+            </>
         )}
           className={s.cell}
         >
@@ -190,9 +193,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
+            <>
               {t('liquidity:Token A Locked')}
-            </Tooltip>
+              <Tooltip content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -200,9 +204,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}>
+            <>
               {t('liquidity:Token B Locked')}
-            </Tooltip>
+              <Tooltip content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -210,9 +215,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}>
+            <>
               {t('liquidity:Your Total LP')}
-            </Tooltip>
+              <Tooltip content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")} />
+            </>
           )}
           className={s.cell}
         >
@@ -220,9 +226,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}>
+            <>
               {t('liquidity:Your Frozen LP')}
-            </Tooltip>
+              <Tooltip content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')} />
+            </>
           )}
           className={s.cell}
         >

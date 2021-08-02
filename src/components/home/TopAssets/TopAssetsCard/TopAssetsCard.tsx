@@ -55,12 +55,8 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
       {'tvl' in data && (
         <div className={s.item}>
           <h4 className={s.header}>
-            <Tooltip placement="top-start" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.">
-              <span>
-                TVL
-              </span>
-
-            </Tooltip>
+            TVL
+            <Tooltip content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
           </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
         </div>
@@ -68,12 +64,8 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
       {'volume24' in data && (
         <div className={s.item}>
           <h4 className={s.header}>
-            <Tooltip placement="top-start" content="A total amount of funds that were swapped via each pool today.">
-              <span>
-                Volume 24h
-              </span>
-
-            </Tooltip>
+            Volume 24h
+            <Tooltip content="A total amount of funds that were swapped via each pool today." />
           </h4>
           <CurrencyAmount amount={data.tvl} currency="$" isRightCurrency labelSize="large" />
         </div>
@@ -81,12 +73,8 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
       {'totalStaked' in data && (
         <div className={s.item}>
           <h4 className={s.header}>
-            <Tooltip placement="top-start" content="Total funds locked in the farming contract for each pool.">
-              <span>
-                Total staked
-              </span>
-
-            </Tooltip>
+            Total staked
+            <Tooltip content="Total funds locked in the farming contract for each pool." />
           </h4>
           <CurrencyAmount amount={data.totalStaked} currency="$" isRightCurrency labelSize="large" />
         </div>
@@ -94,12 +82,8 @@ export const TopAssetsCard: React.FC<TopAssetsCardProps> = ({
       {'apr' in data && (
         <div className={s.item}>
           <h4 className={s.header}>
-            <Tooltip placement="top-start" content="Expected APR (annual percentage rate) earned through an investment.">
-              <span>
-                APR
-              </span>
-
-            </Tooltip>
+            APR
+            <Tooltip content="Expected APR (annual percentage rate) earned through an investment." />
           </h4>
           <CurrencyAmount amount={data.apr} currency="%" labelSize="large" />
         </div>

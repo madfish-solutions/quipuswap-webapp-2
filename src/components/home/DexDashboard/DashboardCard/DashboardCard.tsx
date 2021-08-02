@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Tooltip } from '@components/ui/Tooltip';
 
 import s from './DashboardCard.module.sass';
 
@@ -11,6 +12,7 @@ type DashboardCardProps = {
   size?: 'large' | 'extraLarge'
   label: React.ReactNode
   currency?: string
+  tooltip?: string
   className?: string
 };
 
@@ -24,13 +26,18 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   size = 'large',
   label,
   currency,
+  tooltip,
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(s.root, className, modeClass[colorThemeMode])}>
-      <h4 className={s.header}>{label}</h4>
+      <h4 className={s.header}>
+        {label}
+        {' '}
+        <Tooltip content={tooltip} />
+      </h4>
       <CurrencyAmount
         amount={volume}
         currency={currency}

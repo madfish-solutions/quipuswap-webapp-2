@@ -3,6 +3,7 @@ import Tippy, { TippyProps } from '@tippyjs/react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import Info from '@icons/Info.svg';
 
 import s from './Tooltip.module.sass';
 
@@ -33,9 +34,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
       {...props}
       content={content}
     >
-      {/* <div className={cx(modeClass[colorThemeMode], s.tippyContent)}> */}
       <div className={cx(s.wrapper, className)}>
-        {children}
+        <Info className={s.info} />
       </div>
     </Tippy>
   );

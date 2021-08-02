@@ -102,9 +102,10 @@ export const Voting: React.FC<VotingProps> = ({
       >
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:Current baker elected by simple majority of votes.')}>
+            <>
               {t('vote:Delegated To')}
-            </Tooltip>
+              <Tooltip content={t('vote:Current baker elected by simple majority of votes.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -114,9 +115,10 @@ export const Voting: React.FC<VotingProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}>
+            <>
               {t('vote:Second Candidate')}
-            </Tooltip>
+              <Tooltip content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -126,9 +128,10 @@ export const Voting: React.FC<VotingProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:The total amount of votes cast to elect a baker in the pool.')}>
+            <>
               {t('veto:Total Votes')}
-            </Tooltip>
+              <Tooltip content={t('vote:The total amount of votes cast to elect a baker in the pool.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -136,9 +139,10 @@ export const Voting: React.FC<VotingProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:The total amount of shares cast so far to veto the current baker.')}>
+            <>
               {t('veto:Total Vetos')}
-            </Tooltip>
+              <Tooltip content={t('vote:The total amount of shares cast so far to veto the current baker.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -146,9 +150,10 @@ export const Voting: React.FC<VotingProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:The candidate you voted for.')}>
+            <>
               {t('veto:Your Candidate')}
-            </Tooltip>
+              <Tooltip content={t('vote:The candidate you voted for.')} />
+            </>
           )}
           className={s.cell}
         >
@@ -158,9 +163,10 @@ export const Voting: React.FC<VotingProps> = ({
         </CardCell>
         <CardCell
           header={(
-            <Tooltip placement="top-start" content={t('vote:This much more votes needed to veto a delegate.')}>
+            <>
               {t('Votes To Veto Left')}
-            </Tooltip>
+              <Tooltip content={t('vote:This much more votes needed to veto a delegate.')} />
+            </>
           )}
           className={s.cell}
         >
