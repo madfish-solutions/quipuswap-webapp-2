@@ -165,7 +165,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('common:Sell Price')}
-              <Tooltip content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
             </>
         )}
           className={s.cell}
@@ -180,7 +183,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('common:Buy Price')}
-              <Tooltip content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
             </>
         )}
           className={s.cell}
@@ -195,7 +201,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('liquidity:Token A Locked')}
-              <Tooltip content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+              />
             </>
           )}
           className={s.cell}
@@ -206,7 +215,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('liquidity:Token B Locked')}
-              <Tooltip content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+              />
             </>
           )}
           className={s.cell}
@@ -217,7 +229,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('liquidity:Your Total LP')}
-              <Tooltip content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")} />
+              <Tooltip
+                sizeT="small"
+                content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
+              />
             </>
           )}
           className={s.cell}
@@ -228,7 +243,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           header={(
             <>
               {t('liquidity:Your Frozen LP')}
-              <Tooltip content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
+              />
             </>
           )}
           className={s.cell}

@@ -133,7 +133,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           header={(
             <>
               {t('common:Sell Price')}
-              <Tooltip content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
             </>
         )}
           className={s.cell}
@@ -148,7 +151,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           header={(
             <>
               {t('common:Buy Price')}
-              <Tooltip content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
             </>
         )}
           className={s.cell}
@@ -163,7 +169,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           header={(
             <>
               {t('common:Price impact')}
-              <Tooltip content={t('swap:The impact your transaction is expected to make on the exchange rate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+              />
             </>
         )}
           className={s.cell}
@@ -174,7 +183,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           header={(
             <>
               {t('common:Fee')}
-              <Tooltip content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+              />
             </>
         )}
           className={s.cell}
@@ -185,7 +197,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           header={(
             <>
               {t('common:Route')}
-              <Tooltip content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")} />
+              <Tooltip
+                sizeT="small"
+                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+              />
             </>
         )}
           className={s.cell}

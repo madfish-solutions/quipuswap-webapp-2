@@ -9,6 +9,7 @@ import s from './Tooltip.module.sass';
 
 type TooltipProps = {
   content: React.ReactNode,
+  sizeT?: keyof typeof sizeClass
   className?: string
 } & TippyProps;
 
@@ -17,12 +18,19 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+const sizeClass = {
+  default: s.default,
+  small: s.small,
+};
+
 export const Tooltip: React.FC<TooltipProps> = ({
-  content, className, ...props
+  content,
+  sizeT = 'default',
+  className,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(
-    // s.tippy,
     s.root,
     modeClass[colorThemeMode],
   );
@@ -34,7 +42,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       {...props}
       content={content}
     >
-      <div className={cx(s.wrapper, className)}>
+      <div className={cx(s.wrapper, sizeClass[sizeT], className)}>
         <Info className={s.info} />
       </div>
     </Tippy>

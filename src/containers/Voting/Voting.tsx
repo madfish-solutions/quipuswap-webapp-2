@@ -104,7 +104,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('vote:Delegated To')}
-              <Tooltip content={t('vote:Current baker elected by simple majority of votes.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:Current baker elected by simple majority of votes.')}
+              />
             </>
           )}
           className={s.cell}
@@ -117,7 +120,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('vote:Second Candidate')}
-              <Tooltip content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
+              />
             </>
           )}
           className={s.cell}
@@ -130,7 +136,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('veto:Total Votes')}
-              <Tooltip content={t('vote:The total amount of votes cast to elect a baker in the pool.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:The total amount of votes cast to elect a baker in the pool.')}
+              />
             </>
           )}
           className={s.cell}
@@ -141,7 +150,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('veto:Total Vetos')}
-              <Tooltip content={t('vote:The total amount of shares cast so far to veto the current baker.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:The total amount of shares cast so far to veto the current baker.')}
+              />
             </>
           )}
           className={s.cell}
@@ -152,7 +164,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('veto:Your Candidate')}
-              <Tooltip content={t('vote:The candidate you voted for.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:The candidate you voted for.')}
+              />
             </>
           )}
           className={s.cell}
@@ -165,7 +180,10 @@ export const Voting: React.FC<VotingProps> = ({
           header={(
             <>
               {t('Votes To Veto Left')}
-              <Tooltip content={t('vote:This much more votes needed to veto a delegate.')} />
+              <Tooltip
+                sizeT="small"
+                content={t('vote:This much more votes needed to veto a delegate.')}
+              />
             </>
           )}
           className={s.cell}
