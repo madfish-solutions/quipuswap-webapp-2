@@ -2,7 +2,6 @@ import React, { forwardRef } from 'react';
 import cx from 'classnames';
 
 import { Input, InputProps } from '@components/ui/Input';
-
 import PlusIcon from '@icons/TopArrow.svg';
 import MinusIcon from '@icons/BotArrow.svg';
 
@@ -35,6 +34,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
       className={cx(s.wrapper)}
       labelClassName={cx(s.label, labelClassName)}
       disabled={disabled}
+      inputClassName={s.input}
       {...props}
     />
     <div className={s.buttons}>
@@ -42,7 +42,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
         type="button"
         className={s.button}
         onMouseDown={onIncrementClick}
-        disabled={disabled}
+        disabled={disabled || !onIncrementClick}
       >
         <PlusIcon className={s.icon} />
       </button>
@@ -50,7 +50,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
         type="button"
         className={s.button}
         onMouseDown={onDecrementClick}
-        disabled={disabled}
+        disabled={disabled || !onDecrementClick}
       >
         <MinusIcon className={s.icon} />
       </button>
