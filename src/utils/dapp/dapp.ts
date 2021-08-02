@@ -2,17 +2,21 @@ import { useCallback, useEffect, useState } from 'react';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
+import { BeaconWallet } from '@taquito/beacon-wallet';
+
 import {
   APP_NAME,
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
+  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
-import { BeaconWallet } from '@taquito/beacon-wallet';
-import { QSNetwork } from '@utils/types';
-import { NetworkType } from '@airgap/beacon-sdk';
-
+import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { getContractInfo, getSavedTokens, getTokens } from '@utils/dapp/tokens';
+import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
+import { isContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -106,6 +110,8 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
+  tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -113,13 +119,15 @@ fallbackToolkit.setPackerProvider(michelEncoder);
 
 function useDApp() {
   const [{
-    connectionType, tezos, accountPkh, templeWallet, network,
+    connectionType, tezos, accountPkh, templeWallet, network, tokens, searchTokens,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
     accountPkh: null,
     templeWallet: null,
     network: net,
+    tokens: { loading: true, data: [] },
+    searchTokens: { loading: false, data: [] },
   });
 
   const setFallbackState = useCallback(
@@ -160,13 +168,14 @@ function useDApp() {
           );
 
           if (lastUsedConnection === 'temple') {
-            setState({
+            const pkh = wlt.connected ? await wlt.getPKH() : null;
+            setState((prevState) => ({
+              ...prevState,
               templeWallet: wlt,
               tezos: wlt.connected ? wlt.toTezos() : fallbackToolkit,
-              accountPkh: wlt.connected ? await wlt.getPKH() : null,
+              accountPkh: pkh,
               connectionType: wlt.connected ? 'temple' : null,
-              network: net,
-            });
+            }));
           } else {
             setState((prevState) => ({
               ...prevState,
@@ -201,13 +210,14 @@ function useDApp() {
         const toolkit = new TezosToolkit(net.rpcBaseURL);
         toolkit.setPackerProvider(michelEncoder);
         toolkit.setWalletProvider(beaconWallet);
-        setState({
+        setState((prevState) => ({
+          ...prevState,
           templeWallet: null,
           accountPkh: value.address,
           connectionType: 'beacon',
           tezos: toolkit,
           network: net,
-        });
+        }));
       }).catch((e) => {
         console.error(e);
         setFallbackState();
@@ -221,17 +231,89 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
+  const getTokensData = useCallback(() => getTokens(true), []);
+  const {
+    data: tokensData,
+  } = useSWR(
+    ['tokens-initial-data'],
+    getTokensData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      tokens: { loading: false, data: tokensData ?? [] },
+    }));
+  }, [tokensData]);
+
+  const searchCustomToken = useCallback(
+    async (address: string, tokenId?: number) => {
+      if (await isContractAddress(address) === true) {
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: true, data: [] },
+        }));
+        let type;
+        try {
+          type = await getContractInfo(address, tezos!!);
+        } catch (e) {
+          type = null;
+        }
+        if (!type) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return;
+        }
+        const isFa2 = !!type.methods.update_operators;
+        const customToken = await getTokenMetadata(address, tokenId);
+        if (!customToken) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return;
+        }
+        const token : WhitelistedToken = {
+          contractAddress: address,
+          metadata: customToken,
+          type: !isFa2 ? 'fa1.2' : 'fa2',
+          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+        };
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: false, data: [token] },
+        }));
+      }
+    },
+    [tezos],
+  );
+
+  const addCustomToken = useCallback((token:WhitelistedToken) => {
+    window.localStorage.setItem(
+      SAVED_TOKENS_KEY,
+      JSON.stringify([...getSavedTokens(), token]),
+    );
+    setState((prevState) => ({
+      ...prevState,
+      tokens: { ...tokens, data: [...tokens.data, token] },
+      searchTokens: { loading: false, data: [] },
+    }));
+  }, [tokens]);
+
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
       TempleWallet.onPermissionChange((perm) => {
         if (!perm) {
-          setState({
+          setState((prevState) => ({
+            ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
             tezos: new TezosToolkit(net.rpcBaseURL),
             accountPkh: null,
             connectionType: null,
             network: net,
-          });
+          }));
         }
       });
     }
@@ -240,13 +322,14 @@ function useDApp() {
   const connectWithTemple = useCallback(
     async (forcePermission: boolean) => {
       const { pkh, toolkit, wallet } = await connectWalletTemple(forcePermission, network);
-      setState({
+      setState((prevState) => ({
+        ...prevState,
         connectionType: 'temple',
         tezos: toolkit,
         accountPkh: pkh,
         templeWallet: wallet,
         network,
-      });
+      }));
     },
     [network],
   );
@@ -254,13 +337,14 @@ function useDApp() {
   const connectWithBeacon = useCallback(
     async (forcePermission: boolean) => {
       const { pkh, toolkit } = await connectWalletBeacon(forcePermission, network);
-      setState({
+      setState((prevState) => ({
+        ...prevState,
         connectionType: 'beacon',
         tezos: toolkit,
         accountPkh: pkh,
         templeWallet: null,
         network,
-      });
+      }));
     },
     [network],
   );
@@ -299,10 +383,14 @@ function useDApp() {
     templeWallet,
     ready,
     network,
+    tokens,
+    searchTokens,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork,
+    addCustomToken,
+    searchCustomToken,
   };
 }
 
@@ -314,10 +402,14 @@ export const [
   useTempleWallet,
   useReady,
   useNetwork,
+  useTokens,
+  useSearchTokens,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
+  useAddCustomToken,
+  useSearchCustomTokens,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -326,8 +418,12 @@ export const [
   (v) => v.templeWallet,
   (v) => v.ready,
   (v) => v.network,
+  (v) => v.tokens,
+  (v) => v.searchTokens,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
+  (v) => v.addCustomToken,
+  (v) => v.searchCustomToken,
 );

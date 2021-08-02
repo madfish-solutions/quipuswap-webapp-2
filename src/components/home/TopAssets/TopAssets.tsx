@@ -4,12 +4,14 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Section, SectionProps } from '@components/home/Section';
-import { TopAssetsCard, TopAssetsCardProps } from '@components/home/TopAssets/TopAssetsCard';
+// import { TopAssetsCard, TopAssetsCardProps } from '@components/home/TopAssets/TopAssetsCard';
+import { TopAssetsCard } from '@components/home/TopAssets/TopAssetsCard';
 
 import s from './TopAssets.module.sass';
 
 type TopAssetsProps = Omit<SectionProps, 'className'> & {
-  data: Omit<TopAssetsCardProps, 'className'>[]
+  // data: Omit<TopAssetsCardProps, 'className'>[]
+  data: any
   button: {
     label: string
     href: string
@@ -39,7 +41,7 @@ export const TopAssets: React.FC<TopAssetsProps> = ({
       className={className}
     >
       <div className={cx(s.cards, modeClass[colorThemeMode])}>
-        {data.map((item) => (
+        {data.map((item:any) => (
           <TopAssetsCard
             key={item.id}
             {...item}

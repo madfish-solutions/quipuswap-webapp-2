@@ -1,4 +1,4 @@
-import { QSNetwork } from '@utils/types';
+import { QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -21,6 +21,20 @@ export const IPFS_IO = 'https://ipfs.io/ipfs/';
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
+export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+
+export const SAVED_TOKENS_KEY = 'savedCustomTokens';
+export const TEZOS_TOKEN: WhitelistedToken = {
+  type: 'fa1.2',
+  contractAddress: 'tez',
+  metadata: {
+    decimals: 6,
+    name: 'Tezos',
+    symbol: 'TEZ',
+    thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
+  },
+};
+export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';

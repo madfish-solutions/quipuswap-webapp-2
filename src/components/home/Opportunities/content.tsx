@@ -1,7 +1,9 @@
 import React, { ReactNode } from 'react';
 import { Trans } from 'next-i18next';
 
-import { Traders } from '@components/svg/Opportunities/Traders';
+import { Earn } from '@components/svg/Opportunities/Earn';
+import { Farm } from '@components/svg/Opportunities/Farm';
+import { Trade } from '@components/svg/Opportunities/Trade';
 
 type OpportunitiesCardsDataType = {
   id: number
@@ -18,7 +20,7 @@ type OpportunitiesCardsDataType = {
 export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
   {
     id: 0,
-    Icon: Traders,
+    Icon: Trade,
     title: <Trans ns="home">Trade Any Tezos-based token</Trans>,
     description: <Trans ns="home">Swap any FA1.2-FA2 tokens on the QuipuSwap DEX instantly. We have more than 150 trading pairs available and low fees.</Trans>,
     button: {
@@ -29,7 +31,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
   },
   {
     id: 1,
-    Icon: Traders,
+    Icon: Farm,
     title: <Trans ns="home">Farm tokens with QuipuSwap</Trans>,
     description: <Trans ns="home">You may earn extra rewards by participating in our farm projects. Add liquidity to the pool, stake your Liquidity tokens in our farms, and earn rewards.</Trans>,
     button: {
@@ -40,7 +42,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
   },
   {
     id: 2,
-    Icon: Traders,
+    Icon: Earn,
     title: <Trans ns="home">Earn by providing Liquidity</Trans>,
     description: <Trans ns="home">By adding your tokens to the Liquidity pool, you will earn a part of the 0.3% fee charged from each trade operation in this pool as well as baking rewards.</Trans>,
     button: {

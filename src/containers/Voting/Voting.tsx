@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -69,6 +70,7 @@ export const Voting: React.FC<VotingProps> = ({
         contentClassName={s.content}
       >
         <ComplexInput
+          token1={TEZOS_TOKEN}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}

@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Voting } from '@containers/Voting';
-import { VotingStats } from '@components/voting/StickyBlock';
+import { VotingStats } from '@components/voting/VotingStats';
 
 import s from '@styles/SwapLiquidity.module.sass';
 

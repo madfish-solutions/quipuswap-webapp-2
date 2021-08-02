@@ -1,6 +1,6 @@
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import cx from 'classnames';
 import React, { useContext } from 'react';
+import cx from 'classnames';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Bage.module.sass';
 

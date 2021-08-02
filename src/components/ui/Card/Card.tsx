@@ -11,6 +11,8 @@ type CardProps = {
     button?: React.ReactNode
     className?: string
   }
+  additional?: React.ReactNode
+  footer?: React.ReactNode
   contentClassName?: string
 };
 
@@ -22,7 +24,9 @@ const modeClass = {
 export const Card: React.FC<CardProps> = ({
   className,
   header,
+  additional,
   contentClassName,
+  footer,
   children,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -35,9 +39,19 @@ export const Card: React.FC<CardProps> = ({
           {header.button}
         </div>
       )}
+      {additional && (
+        <div className={s.additional}>
+          {additional}
+        </div>
+      )}
       <div className={cx(s.content, contentClassName)}>
         {children}
       </div>
+      {footer && (
+        <div className={s.footer}>
+          {footer}
+        </div>
+      )}
     </div>
   );
 };

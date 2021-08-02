@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Tooltip } from '@components/ui/Tooltip';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -76,6 +77,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         {currentTab.id === 'remove' && (
           <>
             <ComplexInput
+              token1={TEZOS_TOKEN}
               value={inputValue}
               onChange={handleInputChange}
               handleBalance={(value) => setInputValue(value)}
@@ -89,6 +91,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         )}
 
         <ComplexInput
+          token1={TEZOS_TOKEN}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
@@ -99,6 +102,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         />
         <Plus className={s.iconButton} />
         <ComplexInput
+          token1={TEZOS_TOKEN}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}

@@ -15,7 +15,6 @@ import {
   ChooseListCell,
   PositionCell,
   SwapCell,
-  TokenCell,
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
@@ -29,14 +28,16 @@ import {
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
+import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-import { NetworkModal } from '@components/ui/NetworkModal';
+import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { TEZOS_TOKEN } from '@utils/defaults';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
@@ -101,7 +102,7 @@ const UiKit: React.FC = () => {
   const { t } = useTranslation(['common', 'ui-kit']);
   const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
-  const [showNetworkPopup, setShowNetworkPopup] = useState<boolean>(false);
+  const [tokensModal, setTokensModal] = useState<boolean>(false);
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -463,30 +464,42 @@ const UiKit: React.FC = () => {
         </Button>
         <Button
           className={s.button}
-          onClick={() => setShowNetworkPopup(true)}
+          onClick={() => setTokensModal(true)}
         >
-          Add network modal
+          Open tokens modal
         </Button>
-        <NetworkModal isOpen={showNetworkPopup} onRequestClose={() => setShowNetworkPopup(false)} />
+        <TokensModal
+          isOpen={tokensModal}
+          onRequestClose={() => setTokensModal(false)}
+          onChange={() => {}}
+        />
         <Modal
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
           title="title & list of components"
+          header={(
+            <Input
+              StartAdornment={Search}
+              className={s.modalInput}
+              value={inputValue}
+              onChange={handleInputChange}
+              placeholder="Search"
+            />
+          )}
+          footer={(
+            <Button className={s.modalButton} theme="inverse">
+              Manage Lists
+              <Pen className={s.penIcon} />
+
+            </Button>
+          )}
         >
-          <TokenCell
-            token={{
-              name: 'Token',
-              label: 'Token',
-              badges: ['FA 2.0', 'ID: 0'],
-              price: '0.00',
-            }}
-          />
           <ChooseListCell
             onChange={() => {}}
             isActive={false}
             tokenList={{
               name: 'Token',
-              label: 'Token',
+              symbol: 'Token',
             }}
           />
           <SwapCell
@@ -516,17 +529,6 @@ const UiKit: React.FC = () => {
               currency: 'TEZ',
             }}
           />
-          {[1, 2, 3, 4, 5, 6, 7, 8].map((x) => (
-            <TokenCell
-              key={x}
-              token={{
-                name: 'Token',
-                label: 'Token',
-                badges: ['FA 2.0', 'ID: 0'],
-                price: '0.00',
-              }}
-            />
-          ))}
         </Modal>
       </section>
       <section className={s.section}>
@@ -631,6 +633,7 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Complex inputs</h1>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -641,6 +644,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={TEZOS_TOKEN}
             value={inputValue}
             readOnly
             label="Output"
@@ -648,6 +652,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
@@ -659,6 +664,7 @@ const UiKit: React.FC = () => {
         </div>
         <div className={s.complexInput}>
           <ComplexInput
+            token1={TEZOS_TOKEN}
             value={inputValue}
             onChange={handleInputChange}
             handleBalance={(value) => setInputValue(value)}
