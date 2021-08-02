@@ -2,14 +2,14 @@ import React from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { prepareTokenLogo } from '@utils/helpers';
+import { prepareTokenLogo, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import FallbackLogo from '@icons/FallbackLogo.svg';
 
 import s from './TokensLogos.module.sass';
 
 export interface TokensLogosInterface {
-  token1?: WhitelistedToken
+  token1: WhitelistedToken
   token2?: WhitelistedToken
   className?: string
 }
@@ -36,13 +36,13 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
 
   return (
     <div className={compoundClassName}>
-      {prepareToken1?.icon ? (
+      {prepareToken1.icon ? (
         <Image
           layout="fixed"
           width={24}
           height={24}
           src={prepareToken1.icon}
-          alt={prepareToken1.metadata.symbol ?? 'Symbol'}
+          alt={getWhitelistedTokenSymbol(prepareToken1)}
           className={cx(s.image)}
         />
       ) : (
@@ -56,14 +56,14 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             width={24}
             height={24}
             src={prepareToken2.icon}
-            alt={prepareToken2.metadata.symbol ?? 'Symbol'}
+            alt={getWhitelistedTokenSymbol(prepareToken2)}
             className={cx(s.image)}
           />
         </div>
       )}
 
       {
-        prepareToken2?.metadata.thumbnailUri === null && (
+        prepareToken2?.icon === null && (
           <div className={s.secondImage}>
             <FallbackLogo className={cx(s.image)} />
           </div>

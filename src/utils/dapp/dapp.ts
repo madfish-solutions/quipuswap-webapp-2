@@ -4,6 +4,7 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
+import { BeaconWallet } from '@taquito/beacon-wallet';
 
 import {
   APP_NAME,
@@ -12,11 +13,9 @@ import {
   LAST_USED_CONNECTION_KEY,
   SAVED_TOKENS_KEY,
 } from '@utils/defaults';
-import { BeaconWallet } from '@taquito/beacon-wallet';
-import { QSNetwork, WhitelistedBaker, WhitelistedToken } from '@utils/types';
-
-import { getSavedTokens, getTokens } from '@utils/dapp/tokens';
 import { getBakers, saveCustomBaker } from '@utils/dapp/bakers';
+import { QSNetwork, WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import { getContractInfo, getSavedTokens, getTokens } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
@@ -247,11 +246,6 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getContractInfo = useCallback((address:string) => {
-    const tk = new TezosToolkit(net.rpcBaseURL);
-    return tk.contract.at(address);
-  }, []);
-
   const getTokensData = useCallback(() => getTokens(true), []);
   const {
     data: tokensData,
@@ -284,14 +278,14 @@ function useDApp() {
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      if (isContractAddress(address)) {
+      if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: true, data: [] },
         }));
         let type;
         try {
-          type = await getContractInfo(address);
+          type = await getContractInfo(address, tezos!!);
         } catch (e) {
           type = null;
         }
@@ -304,19 +298,26 @@ function useDApp() {
         }
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(address, tokenId);
-        const token = {
+        if (!customToken) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return;
+        }
+        const token : WhitelistedToken = {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
           fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-        } as WhitelistedToken;
+        };
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
         }));
       }
     },
-    [getContractInfo],
+    [tezos],
   );
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {
