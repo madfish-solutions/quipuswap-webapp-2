@@ -6,17 +6,13 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import {
-  useBakers,
-} from '@utils/dapp';
+import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-import { BakerCell, LoadingTokenCell } from '@components/ui/Modal/ModalCell';
+import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
-import { Button } from '@components/ui/Button';
-import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -109,7 +105,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
-  const { data: bakers } = useBakers();
+  const { data: bakers, loading } = useBakers();
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -126,9 +122,6 @@ export const BakersModal: React.FC<BakersModalProps> = ({
         ),
       );
     setFilteredBakers(isBakers);
-    // if (inputValue.length > 0 && isBakers.length === 0) {
-    //   searchCustomToken(inputValue, inputToken);
-    // }
   };
 
   const isEmptyBakers = filteredBakers.length === 0;
@@ -153,13 +146,6 @@ export const BakersModal: React.FC<BakersModalProps> = ({
               save={handleInput}
             />
           )}
-          footer={(
-            <Button className={s.modalButton} theme="inverse">
-              Manage Lists
-              <Pen className={s.penIcon} />
-
-            </Button>
-          )}
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -170,27 +156,24 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           {isEmptyBakers && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{t('common:No bakers found')}</div>
               {' '}
             </div>
           )}
-          {isEmptyBakers && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+          {loading && (
+            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingBakerCell key={x} />))
           )}
           {filteredBakers.map((baker) => {
             const {
-              contractAddress,
+              address,
             } = baker;
             return (
               <BakerCell
-                key={contractAddress}
+                key={address}
                 baker={baker}
                 tabIndex={0}
                 onClick={() => {
                   onChange(baker);
-                  // if (searchBakers.length > 0) {
-                  //   addCustomToken(token);
-                  // }
                   form.mutators.setValue('search', '');
                   setInputValue('');
                 }}

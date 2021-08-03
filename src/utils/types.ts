@@ -30,11 +30,11 @@ export interface WhitelistedToken {
 
 export interface WhitelistedBaker {
   name: string,
-  contractAddress: string,
+  address: string,
   logo: string,
   votes: number,
   fee: number,
-  space: BigNumber
+  freeSpace: BigNumber
 }
 
 export type WhitelistedTokenMetadata = {

@@ -525,8 +525,8 @@ const UiKit: React.FC = () => {
               name: 'EVERSTAKE',
               votes: 100002,
               fee: 10,
-              space: new BigNumber('1,000,000,000.00'),
-              contractAddress: 'test',
+              freeSpace: new BigNumber('1,000,000,000.00'),
+              address: 'test',
               logo: '',
             }}
           />

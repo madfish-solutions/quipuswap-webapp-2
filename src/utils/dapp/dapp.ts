@@ -342,11 +342,11 @@ function useDApp() {
         const customBaker = await getBakerMetadata(address);
         if (customBaker) {
           const baker = {
-            contractAddress: address,
+            address: customBaker.address,
             name: customBaker.name,
             logo: customBaker.logo,
             fee: customBaker.fee,
-            space: new BigNumber(customBaker.freeSpace),
+            freeSpace: new BigNumber(customBaker.freeSpace),
             votes: 0,
           } as WhitelistedBaker;
           setState((prevState) => ({

@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { transformTezToKTez } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
-// import { TokensLogos } from '@components/ui/TokensLogos';
-import Token from '@icons/Token.svg';
 
+import { BakerLogos } from '@components/ui/BakerLogos';
 import s from './ModalCell.module.sass';
 
 const modeClass = {
@@ -15,14 +15,12 @@ const modeClass = {
 };
 
 type BakerCellProps = {
-  baker?: WhitelistedBaker,
-  loading?: boolean,
+  baker: WhitelistedBaker,
   tabIndex?: number,
   onClick?: () => void,
 };
 export const BakerCell: React.FC<BakerCellProps> = ({
   baker,
-  loading = false,
   onClick,
   tabIndex,
 }) => {
@@ -30,14 +28,8 @@ export const BakerCell: React.FC<BakerCellProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(
     modeClass[colorThemeMode],
-    loading && s.loading,
     s.listItem,
   );
-
-  const loadingLogoClassName = cx(s.bakerFlexCell, loading ? s.loadingLogos : '');
-  // const loadingNameClassName = loading ? s.loadingName : '';
-  // const loadginSymbolClassName = loading ? s.loadingSymbol : '';
-  // const loadingBageClassName = loading ? s.loadingBage : '';
 
   return (
     // eslint-disable-next-line max-len
@@ -53,18 +45,9 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       }}
       className={compoundClassName}
     >
-      <div className={loadingLogoClassName}>
-        <Token />
-        <h6 className={s.h6}>{baker?.name ?? baker?.contractAddress}</h6>
-      </div>
       <div className={s.bakerFlexCell}>
-        <div>
-          <div className={s.caption}>
-            {t('baker:Votes')}
-            :
-          </div>
-          <div className={s.label1}>{baker?.votes}</div>
-        </div>
+        <BakerLogos baker={baker} />
+        <h6 className={s.h6}>{baker?.name ?? baker?.address}</h6>
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
@@ -73,7 +56,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
             :
           </div>
           <div className={s.label1}>
-            {baker?.fee}
+            {baker.fee}
             {' '}
             %
           </div>
@@ -83,11 +66,16 @@ export const BakerCell: React.FC<BakerCellProps> = ({
             {t('baker:Space')}
             :
           </div>
-          <span className={s.label1}>{baker?.space}</span>
-          {' '}
-          <span className={s.bodyTextLink1}>
-            TEZ
-          </span>
+          <div>
+            <span className={s.label1}>
+              {transformTezToKTez(baker.freeSpace.toString() ?? '')}
+              K
+            </span>
+            {' '}
+            <span className={s.bodyTextLink1}>
+              TEZ
+            </span>
+          </div>
         </div>
       </div>
     </div>

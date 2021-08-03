@@ -5,8 +5,9 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
 import { BakersModal } from '@components/modals/BakersModal';
 import { Button } from '@components/ui/Button';
+import { BakerLogos } from '@components/ui/BakerLogos';
 import { Shevron } from '@components/svg/Shevron';
-import Token from '@icons/Token.svg';
+
 import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {
@@ -59,7 +60,7 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         <div className={s.shape}>
           {/* TODO: add hidden input w/ selected baker */}
           <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.baker}>
-            <Token />
+            <BakerLogos baker={baker ?? {} as WhitelistedBaker} />
             <h6 className={cx(s.token)}>
               {baker ? baker.name : 'BAKER NAME'}
             </h6>

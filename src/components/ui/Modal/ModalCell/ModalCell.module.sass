@@ -161,11 +161,22 @@
   .loadingName
     margin-bottom: 2px
 
-  .loadingName, .loadingSymbol
+  .loadingName, .loadingSymbol, .loadingCaption
     height: 16px
     width: 200px
     &::after
       animation-delay: 200ms
+
+  .caption, .loadingCaption
+    width: 100px
+    &:not(:last-child)
+      margin-bottom: 4px
+
+  .loadingBakerBlock 
+    display: flex
+    flex-direction: column
+    &:not(:last-child)
+      margin-right: 24px
 
   .loadingBage
     margin-left: 8px
