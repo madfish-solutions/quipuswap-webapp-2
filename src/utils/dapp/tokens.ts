@@ -13,7 +13,7 @@ export const getContractInfo = (address:string, tz:TezosToolkit) => tz
   .at(address);
 
 export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
-  if (isContractAddress(address)) {
+  if (await isContractAddress(address) === true) {
     let type;
     try {
       type = await getContractInfo(address, tz);
@@ -21,8 +21,7 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
       type = null;
     }
     if (!type) return false;
-    const isFa2 = !!type.methods.update_operators;
-    return isFa2;
+    return !!type.methods.update_operators;
   }
   return false;
 };
@@ -37,7 +36,7 @@ export const getTokens = async (
       res = json.tokens;
     }
     if (addTokensFromLocalStorage) {
-      res = [...res, ...getSavedTokens()];
+      res = [...getSavedTokens(), ...res];
     }
     return res;
   })

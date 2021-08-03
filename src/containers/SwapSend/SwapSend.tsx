@@ -10,13 +10,15 @@ import {
   getUserBalance,
 } from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useTranslation } from 'next-i18next';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/Button';
+import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -69,6 +71,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
 
+  const { t } = useTranslation(['common', 'swap']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
 
   const [tokensData, setTokensData] = useState(
@@ -85,12 +88,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       try {
         console.log('tokensData', tokensData);
 
-        const fromAsset = tokensData.first.token.id
-          ? { contract: tokensData.first.token.address, id: tokensData.first.token.id }
-          : { contract: tokensData.first.token.address };
-        const toAsset = tokensData.second.token.id
-          ? { contract: tokensData.second.token.address, id: tokensData.second.token.id }
-          : { contract: tokensData.second.token.address };
+        const fromAsset = {
+          contract: tokensData.first.token.address,
+          id: tokensData.first.token.id ?? 0,
+        };
+        const toAsset = {
+          contract: tokensData.second.token.address,
+          id: tokensData.second.token.id ?? 0,
+        };
         const inputValueInner = +state.target.value; // in mutez (without decimals)
         console.log('fromAsset', fromAsset);
         console.log('toAsset', toAsset);
@@ -109,6 +114,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       }
     }
   }; // TODO: Delete when lib added
+  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -183,6 +190,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         contentClassName={s.content}
       >
         <TokenSelect
+          token={token1}
+          setToken={setToken1}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
@@ -200,6 +209,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           <SwapIcon />
         </Button>
         <TokenSelect
+          token={token2}
+          setToken={setToken2}
           value={inputValue}
           onChange={handleInputChange}
           handleBalance={(value) => setInputValue(value)}
@@ -237,27 +248,82 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }}
         contentClassName={s.content}
       >
-        <CardCell header="Sell Price" className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Sell Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="tez" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
           </div>
         </CardCell>
-        <CardCell header="Buy Price" className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Buy Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="QPSP" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
           </div>
         </CardCell>
-        <CardCell header="Price impact" className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Price impact')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="<0.01" currency="%" />
         </CardCell>
-        <CardCell header="Fee" className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Fee')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="0.001" currency="XTZ" />
         </CardCell>
-        <CardCell header="Route" className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Route')}
+              <Tooltip
+                sizeT="small"
+                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <Route
             routes={['qpsp', 'usd', 'xtz']}
           />

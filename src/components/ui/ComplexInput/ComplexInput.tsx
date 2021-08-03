@@ -2,7 +2,7 @@ import React, { useContext, useMemo, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
@@ -125,7 +125,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
             <TokensLogos token1={token1} token2={token2} />
             <h6 className={cx(s.token)}>
-              {mode === 'input' && token1?.metadata?.symbol}
+              {mode === 'input' && getWhitelistedTokenSymbol(token1)}
               {mode === 'select' && 'TOKEN / TOKEN'}
               {mode === 'votes' && 'SELECT LP'}
             </h6>

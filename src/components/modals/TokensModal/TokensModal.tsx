@@ -1,31 +1,33 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState, useMemo,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  useAddCustomToken, useSearchCustomTokens, useSearchTokens, useTezos, useTokens,
+  useAddCustomToken,
+  useSearchCustomTokens,
+  useSearchTokens,
+  useTezos,
+  useTokens,
+  isTokenFa2,
 } from '@utils/dapp';
 import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { MAINNET_NETWORK } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-import { TokenCell } from '@components/ui/Modal/ModalCell';
+import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
+import { NumberInput } from '@components/ui/NumberInput';
 import { Button } from '@components/ui/Button';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
-// import TopArrow from '@icons/TopArrow.svg';
-// import BotArrow from '@icons/BotArrow.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
-import { NumberInput } from '@components/ui/NumberInput';
-import { isTokenFa2 } from '@utils/dapp/tokens';
 import s from './TokensModal.module.sass';
 
 const themeClass = {
@@ -77,6 +79,11 @@ const Header:React.FC<HeaderProps> = ({
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
   }, [values]);
 
   return (
@@ -138,37 +145,6 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-type ModalLoaderProps = {
-  isEmptyTokens:boolean
-  searchLoading:boolean,
-};
-
-const ModalLoader: React.FC<ModalLoaderProps> = ({ isEmptyTokens, searchLoading }) => {
-  const { t } = useTranslation(['common']);
-  if (isEmptyTokens && !searchLoading) {
-    return (
-      <div className={s.tokenNotFound}>
-        <TokenNotFound />
-        <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-        {' '}
-      </div>
-    );
-  } if (isEmptyTokens && searchLoading) {
-    return (
-      <div>
-        {[1, 2, 3, 4, 5, 6, 7].map((x) => (
-          <TokenCell
-            key={x}
-            loading
-            token={{} as WhitelistedToken}
-          />
-        ))}
-      </div>
-    );
-  }
-  return null;
-};
-
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
   ...props
@@ -207,12 +183,16 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     }
   };
 
-  const isEmptyTokens = filteredTokens.length === 0 && searchTokens.length === 0;
+  const isEmptyTokens = useMemo(
+    () => filteredTokens.length === 0
+    && searchTokens.length === 0,
+    [searchTokens, filteredTokens],
+  );
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
-  const allTokens = inputValue.length > 0 && filteredTokens.length === 0
-    ? searchTokens : filteredTokens;
+  const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
+    ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
 
   useEffect(() => {
     const getFa2 = async () => {
@@ -255,19 +235,25 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          <ModalLoader
-            isEmptyTokens={isEmptyTokens}
-            searchLoading={searchLoading}
-          />
+          {isEmptyTokens && !searchLoading && (
+            <div className={s.tokenNotFound}>
+              <TokenNotFound />
+              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              {' '}
+            </div>
+          )}
+          {isEmptyTokens && searchLoading && (
+            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+          )}
           {allTokens.map((token) => {
             const {
               contractAddress, fa2TokenId,
             } = token;
             return (
               <TokenCell
-                tabIndex={0}
-                token={token}
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                token={token}
+                tabIndex={0}
                 onClick={() => {
                   onChange(token);
                   if (searchTokens.length > 0) {
