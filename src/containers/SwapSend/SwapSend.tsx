@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { estimateSwap } from '@quipuswap/sdk';
@@ -44,13 +44,24 @@ type SwapSendProps = {
   className?: string
 };
 
-const fallbackTokensData = {
+type TokenDataType = {
+  token: {
+    address: string,
+    type: 'fa1.2' | 'fa2',
+    id?: number
+    decimals: number,
+  },
+  balance: string,
+  exchangeRate?: string
+};
+
+const fallbackTokensData : TokenDataType = {
   token: {
     address: 'tez',
-    id: null,
+    type: 'fa1.2',
+    decimals: 6,
   },
   balance: '0',
-  exchangeRate: null,
 };
 
 const factories = {
@@ -80,6 +91,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       second: fallbackTokensData,
     },
   );
+
   const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
 
   const handleInputChange = async (state: any) => {
@@ -100,15 +112,19 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         console.log('fromAsset', fromAsset);
         console.log('toAsset', toAsset);
 
-        const estimatedOutputValue = await estimateSwap(
-          tezos,
-          factories,
-          fromAsset,
-          toAsset,
-          { inputValue: inputValueInner },
-        );
-
-        console.info({ estimatedOutputValue });
+        try {
+          const estimatedOutputValue = await estimateSwap(
+            tezos,
+            factories,
+            fromAsset,
+            toAsset,
+            { inputValue: inputValueInner },
+          );
+          console.info({ estimatedOutputValue });
+        } catch (e) {
+          // code above fails every time on XTZ
+          // console.error(e);
+        }
       } catch (err) {
         console.error(err);
       }
@@ -147,9 +163,12 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       tokenId?: number,
       exchangeRate: string
     }) => (
-      el.tokenAddress === token.contractAddress
+      token.contractAddress === TEZOS_TOKEN.contractAddress && el.tokenAddress === undefined ? el
+        : el.tokenAddress === token.contractAddress
       && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
     ));
+
+    // console.log('tokenExchangeRate', tokenExchangeRate);
 
     setTokensData((prevState) => (
       {
@@ -157,7 +176,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         [tokenNumber]: {
           token: {
             address: token.contractAddress,
+            type: token.type,
             id: token.type === 'fa2' ? token.fa2TokenId : null,
+            decimals: token.metadata.decimals,
           },
           balance: finalBalance,
           exchangeRate: tokenExchangeRate?.exchangeRate ?? null,
@@ -165,6 +186,33 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       }
     ));
   };
+
+  useEffect(() => {
+    if (!tokensData.first.exchangeRate) {
+      handleTokenChange(
+        {
+          contractAddress: tokensData.first.token.address,
+          type: tokensData.first.token.type,
+          metadata:
+          {
+            decimals: tokensData.first.token.decimals,
+          },
+        } as WhitelistedToken, 'first',
+      );
+    }
+    if (!tokensData.second.exchangeRate) {
+      handleTokenChange(
+        {
+          contractAddress: tokensData.second.token.address,
+          type: tokensData.second.token.type,
+          metadata:
+        {
+          decimals: tokensData.second.token.decimals,
+        },
+        } as WhitelistedToken, 'second',
+      );
+    }
+  }, [exchangeRates]);
 
   return (
     <StickyBlock className={className}>

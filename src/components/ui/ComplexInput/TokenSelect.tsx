@@ -19,7 +19,7 @@ import s from './ComplexInput.module.sass';
 type TokenSelectProps = {
   className?: string
   balance: string
-  exchangeRate: string | null
+  exchangeRate?: string
   label: string
   error?: string
   handleChange?: (token:WhitelistedToken) => void
@@ -38,7 +38,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   balance = '10.00',
   label,
   handleBalance,
-  exchangeRate,
+  exchangeRate = null,
   value,
   error,
   id,
