@@ -242,7 +242,7 @@ function useDApp() {
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      tokens: { loading: false, data: tokensData ?? [] },
+      tokens: { loading: !tokensData, data: tokensData ?? [] },
     }));
   }, [tokensData]);
 

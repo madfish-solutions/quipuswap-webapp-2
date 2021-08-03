@@ -155,7 +155,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens } = useTokens();
+  const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -235,14 +235,14 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {isEmptyTokens && !searchLoading && (
+          {isEmptyTokens && (!searchLoading && !tokensLoading) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
               {' '}
             </div>
           )}
-          {isEmptyTokens && searchLoading && (
+          {isEmptyTokens && (searchLoading || tokensLoading) && (
             [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {allTokens.map((token) => {
