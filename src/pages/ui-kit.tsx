@@ -3,9 +3,11 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
+import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
@@ -36,8 +38,6 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import BigNumber from 'bignumber.js';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
