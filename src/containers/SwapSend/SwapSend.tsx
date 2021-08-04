@@ -3,7 +3,7 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import { estimateSwap } from '@quipuswap/sdk';
+import { estimateSwap, swap } from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
@@ -16,7 +16,7 @@ import {
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
 import {
-  getWhitelistedTokenSymbol, isPairEqual, isTokenEqual, parseNumber,
+  getWhitelistedTokenSymbol, isPairEqual, isTokenEqual, parseNumber, slippageToBignum,
 } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
@@ -56,7 +56,7 @@ type TokenDataType = {
   token: {
     address: string,
     type: 'fa1.2' | 'fa2',
-    id?: number
+    id?: number | null
     decimals: number,
   },
   balance: string,
@@ -73,6 +73,7 @@ const fallbackTokensData : TokenDataType = {
     address: 'tez',
     type: 'fa1.2',
     decimals: 6,
+    id: null,
   },
   balance: '0',
 };
@@ -160,6 +161,7 @@ const Header:React.FC<HeaderProps> = ({
     const prevTokenB = undefinedTokenDataToToken(prevTokens, 'second');
 
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
+    // console.log(isTokensSame, currentTokenA, currentTokenB);
     const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
 
@@ -231,6 +233,39 @@ const Header:React.FC<HeaderProps> = ({
       }
     };
   }, [values, tokensData]);
+
+  const handleSwapSubmit = async () => {
+    if (!tezos) return;
+    try {
+      const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
+        contract: tokensData.first.token.address,
+        id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+      };
+      const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
+        contract: tokensData.second.token.address,
+        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+      };
+      const estimatedOutputValue = await swap(
+        tezos,
+        factories,
+        fromAsset,
+        toAsset,
+        new BigNumber(values.balance1),
+        slippageToBignum(values.slippage),
+        tokensData.second.token.address,
+      );
+      console.log(estimatedOutputValue);
+      // const retValue = estimatedOutputValue.div(
+      //   new BigNumber(10)
+      //     .pow(
+      //       new BigNumber(decimals2),
+      //     ),
+      // ).toString();
+      // form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
     <Card
@@ -345,9 +380,10 @@ const Header:React.FC<HeaderProps> = ({
       )}
       <Field initialValue="0.5 %" name="slippage">
         {({ input }) => {
-          const slippageToNum = (str?: string) => (str ? +str.split('%')[0].trim() : 0.5);
-          const slippagePercent = (values.balance2 * (slippageToNum(values.slippage) / 100))
-            .toFixed(tokensData.second.token.decimals);
+          const slippagePercent = (
+            (
+              values.balance2 * (+slippageToBignum(values.slippage))
+            ).toFixed(tokensData.second.token.decimals)).toString();
           const minimumReceived = values.balance2 - (+slippagePercent);
           return (
             <>
@@ -366,7 +402,7 @@ const Header:React.FC<HeaderProps> = ({
         }}
 
       </Field>
-      <Button className={s.button}>
+      <Button onClick={handleSwapSubmit} className={s.button}>
         {currentTab.label}
       </Button>
     </Card>
@@ -462,7 +498,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    if (exchangeRates) {
+    if (exchangeRates && tezos && accountPkh) {
       if (!tokensData.first.exchangeRate) {
         handleTokenChange(
           {
@@ -488,7 +524,26 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         );
       }
     }
-  }, [exchangeRates]);
+  }, [exchangeRates, tezos, accountPkh]);
+
+  // useEffect(() => {
+  //   const awFunc = async () => {
+  //     if (tezos && accountPkh) {
+  //       const amount = await tezos.tz.getBalance(accountPkh);
+  //       setTokensData((prevState) => (
+  //         {
+  //           ...prevState,
+  //           first: {
+  //             ...fallbackTokensData,
+  //             balance: mutezToTz(amount, tezos).toString(),
+  //           },
+  //         }
+  //       ));
+  //       // return mutezToTz(amount);
+  //     }
+  //   };
+  //   if (tokensData.first.token.address === 'tez' && tezos && accountPkh) { awFunc(); }
+  // }, [tezos, accountPkh]);
 
   return (
     <StickyBlock className={className}>

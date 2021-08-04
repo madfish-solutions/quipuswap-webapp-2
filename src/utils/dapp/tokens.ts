@@ -2,6 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
+  TEZOS_TOKEN,
 } from '@utils/defaults';
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps } from '@utils/helpers';
@@ -43,10 +44,11 @@ export const getTokens = async (
         return res;
       })
       .catch(() => ([]));
-  } else networkTokens = [];
+  } else networkTokens = [TEZOS_TOKEN];
   let localhostTokens = [];
   if (addTokensFromLocalStorage) {
     localhostTokens = getSavedTokens();
   }
-  return [...localhostTokens, ...networkTokens];
+  const res = [...localhostTokens, ...networkTokens];
+  return res;
 };

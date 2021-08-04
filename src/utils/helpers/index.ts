@@ -12,3 +12,5 @@ export * from './getWhitelistedTokenName';
 export * from './getWhitelistedTokenSymbol';
 export * from './isTokenEqual';
 export * from './isPairEqual';
+export * from './slippageToBignum';
+export * from './mutezToTz';

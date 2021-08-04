@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
-
 import { getStorageInfo } from './getStorageInfo';
 
 export const getUserBalance = async (
@@ -10,6 +9,10 @@ export const getUserBalance = async (
   type: 'fa1.2' | 'fa2' = 'fa1.2',
   tokenId?: number,
 ) => {
+  if (contract === 'tez') {
+    const amount = await tezos.tz.getBalance(accountPkh);
+    return amount;
+  }
   const storage = await getStorageInfo(tezos, contract);
   let val = null;
   if (type === 'fa1.2') {
