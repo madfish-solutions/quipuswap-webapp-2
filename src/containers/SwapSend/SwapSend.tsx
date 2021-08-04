@@ -333,9 +333,6 @@ const Header:React.FC<HeaderProps> = ({
               id="swap-send-recipient"
               className={cx(s.input, s.mb24)}
             />
-            {/* <OnChange name="recipient">
-                      {(value:string) => handleInputChange(value, form, 'recipient')}
-                    </OnChange> */}
           </>
         )}
       </Field>
@@ -346,15 +343,6 @@ const Header:React.FC<HeaderProps> = ({
           const slippagePercent = (values.balance2 * (slippageToNum(values.slippage) / 100))
             .toFixed(tokensData.second.token.decimals);
           const minimumReceived = values.balance2 - (+slippagePercent);
-          // () {
-          //   if (!this.outputToken || !this.outputAmount) return null;
-          //   const base = new BigNumber(100)
-          //     .minus(this.activeSlippagePercentage || 0)
-          //     .div(100)
-          //     .times(this.outputAmount);
-
-          //   return base.toFixed(this.outputToken.decimals, BigNumber.ROUND_DOWN);
-          // }
           return (
             <>
               <Slippage handleChange={(value) => input.onChange(value)} />
@@ -441,8 +429,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         : el.tokenAddress === token.contractAddress
       && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
     ));
-
-    // console.log('tokenExchangeRate', tokenExchangeRate);
 
     setTokensData((prevState) => (
       {
