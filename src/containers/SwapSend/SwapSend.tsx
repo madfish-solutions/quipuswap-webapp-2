@@ -5,7 +5,6 @@ import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { estimateSwap } from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
-import { OnChange } from 'react-final-form-listeners';
 import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
@@ -16,7 +15,7 @@ import {
   getUserBalance,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
-import { parseNumber } from '@utils/helpers';
+import { isTokenEqual, parseNumber } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
@@ -129,15 +128,27 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
 }) => {
   const tezos = useTezos();
-  const [, setVal] = useState(values);
+  const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [lastChange, setLastChange] = useState<string>('');
+  const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
   const handleInputChange = async (val: FormValues) => {
-    console.log(val, lastChange);
+    // console.log(val, lastChange);
+    // console.log(formValues);
+    if (val[lastChange] === formValues[lastChange]) return;
+    if (isTokenEqual(
+      {
+        contractAddress: tokensData.first.token.address,
+        fa2TokenId: tokensData.first.token.id,
+      } as WhitelistedToken,
+      {
+        contractAddress: tokensData.second.token.address,
+        fa2TokenId: tokensData.second.token.id,
+      } as WhitelistedToken,
+    )) return;
     if (tezos) {
       try {
         console.log('tokensData', tokensData);
@@ -173,7 +184,7 @@ const Header:React.FC<HeaderProps> = ({
                 new BigNumber(decimals2),
               ),
           ).toString();
-          console.log(estimatedOutputValue, retValue);
+          console.log(estimatedOutputValue.toString(), retValue);
           form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
         } catch (e) {
           console.error(e);
@@ -190,6 +201,7 @@ const Header:React.FC<HeaderProps> = ({
     }
     setVal(values);
     setSubm(true);
+    console.log(values);
     handleInputChange(values);
     promise = save(values);
     await promise;
@@ -239,7 +251,7 @@ const Header:React.FC<HeaderProps> = ({
           <>
             <TokenSelect
               {...input}
-              onFocus={() => setLastChange('balance2')}
+              onFocus={() => setLastChange('balance1')}
               token={token1}
               setToken={setToken1}
               handleBalance={(value) => {
@@ -255,9 +267,6 @@ const Header:React.FC<HeaderProps> = ({
               label="From"
               className={s.input}
             />
-            <OnChange name="balance1">
-              {() => setLastChange('balance1')}
-            </OnChange>
           </>
         )}
       </Field>
@@ -369,6 +378,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+    if (!exchangeRates) return;
     let finalBalance = '0';
     if (tezos && accountPkh) {
       const balance = await getUserBalance(
