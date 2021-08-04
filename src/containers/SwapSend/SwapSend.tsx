@@ -15,7 +15,7 @@ import {
   getUserBalance,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
-import { isTokenEqual, parseNumber } from '@utils/helpers';
+import { isPairEqual, isTokenEqual, parseNumber } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
@@ -33,6 +33,7 @@ import { SwapIcon } from '@components/svg/Swap';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { usePrevious } from '@hooks/usePrevious';
 
 const TabsContent = [
   {
@@ -106,10 +107,23 @@ type HeaderProps = {
   token2:WhitelistedToken,
   setToken2:(token:WhitelistedToken) => void,
   tokensData:TokenDataMap,
-  setTokensData:(tokenData:TokenDataMap) => void,
+  handleSwapTokens:() => void,
   handleTokenChange:(token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
   currentTab:any
 };
+
+const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
+  contractAddress: tokenData.token.address,
+  fa2TokenId: tokenData.token.id,
+} as WhitelistedToken);
+
+const undefinedTokenDataToToken = (
+  tokenData:any,
+  key: any,
+) : WhitelistedToken => ({
+  contractAddress: tokenData[key].token.address ?? null,
+  fa2TokenId: tokenData[key].token.id ?? null,
+} as WhitelistedToken);
 
 const Header:React.FC<HeaderProps> = ({
   debounce,
@@ -123,7 +137,7 @@ const Header:React.FC<HeaderProps> = ({
   setToken1,
   setToken2,
   tokensData,
-  setTokensData,
+  handleSwapTokens,
   handleTokenChange,
   currentTab,
 }) => {
@@ -131,28 +145,24 @@ const Header:React.FC<HeaderProps> = ({
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
+  const prevTokens = usePrevious(tokensData);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
   const handleInputChange = async (val: FormValues) => {
-    // console.log(val, lastChange);
-    // console.log(formValues);
-    if (val[lastChange] === formValues[lastChange]) return;
-    if (isTokenEqual(
-      {
-        contractAddress: tokensData.first.token.address,
-        fa2TokenId: tokensData.first.token.id,
-      } as WhitelistedToken,
-      {
-        contractAddress: tokensData.second.token.address,
-        fa2TokenId: tokensData.second.token.id,
-      } as WhitelistedToken,
-    )) return;
+    const currentTokenA = tokenDataToToken(tokensData.first);
+    const currentTokenB = tokenDataToToken(tokensData.second);
+    const prevTokenA = undefinedTokenDataToToken(prevTokens, 'first');
+    const prevTokenB = undefinedTokenDataToToken(prevTokens, 'second');
+
+    const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
+    const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
+    const isValuesSame = val[lastChange] === formValues[lastChange];
+
+    if (isTokensSame || (isValuesSame && isTokensPairSame)) return;
     if (tezos) {
       try {
-        console.log('tokensData', tokensData);
-
         const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
           contract: tokensData.first.token.address,
           id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
@@ -170,13 +180,14 @@ const Header:React.FC<HeaderProps> = ({
         const inputValueInner = new BigNumber(
           (lastChange === 'balance1' ? val.balance1 : val.balance2) * (10 ** decimals1),
         );
+        const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
         try {
           const estimatedOutputValue = await estimateSwap(
             tezos,
             factories,
             fromAsset,
             toAsset,
-            { inputValue: inputValueInner },
+            valuesInner,
           );
           const retValue = estimatedOutputValue.div(
             new BigNumber(10)
@@ -184,7 +195,6 @@ const Header:React.FC<HeaderProps> = ({
                 new BigNumber(decimals2),
               ),
           ).toString();
-          console.log(estimatedOutputValue.toString(), retValue);
           form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
         } catch (e) {
           console.error(e);
@@ -201,7 +211,6 @@ const Header:React.FC<HeaderProps> = ({
     }
     setVal(values);
     setSubm(true);
-    console.log(values);
     handleInputChange(values);
     promise = save(values);
     await promise;
@@ -218,7 +227,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+  }, [values, tokensData]);
 
   return (
     <Card
@@ -273,10 +282,7 @@ const Header:React.FC<HeaderProps> = ({
       <Button
         theme="quaternary"
         className={s.iconButton}
-        onClick={() => {
-          console.log('click');
-          setTokensData({ first: tokensData.second, second: tokensData.first });
-        }}
+        onClick={handleSwapTokens}
       >
         <SwapIcon />
       </Button>
@@ -378,7 +384,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
-    if (!exchangeRates) return;
+    if (!exchangeRates || !exchangeRates.find) return;
     let finalBalance = '0';
     if (tezos && accountPkh) {
       const balance = await getUserBalance(
@@ -425,6 +431,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         },
       }
     ));
+  };
+
+  const handleSwapTokens = () => {
+    setToken1(token2);
+    setToken2(token1);
+    setTokensData({ first: tokensData.second, second: tokensData.first });
+    // handleTokenChange(token1, 'second');
+    // handleTokenChange(token2, 'first');
   };
 
   useEffect(() => {
@@ -478,7 +492,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             setToken1={setToken1}
             setToken2={setToken2}
             tokensData={tokensData}
-            setTokensData={setTokensData}
+            handleSwapTokens={handleSwapTokens}
             handleTokenChange={handleTokenChange}
             currentTab={currentTab}
           />
