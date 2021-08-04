@@ -285,7 +285,13 @@ const Header:React.FC<HeaderProps> = ({
       <Button
         theme="quaternary"
         className={s.iconButton}
-        onClick={handleSwapTokens}
+        onClick={() => {
+          form.mutators.setValue(
+            'balance1',
+            values.balance2,
+          );
+          handleSwapTokens();
+        }}
       >
         <SwapIcon />
       </Button>
