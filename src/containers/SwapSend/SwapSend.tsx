@@ -15,7 +15,9 @@ import {
   getUserBalance,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
-import { isPairEqual, isTokenEqual, parseNumber } from '@utils/helpers';
+import {
+  getWhitelistedTokenSymbol, isPairEqual, isTokenEqual, parseNumber,
+} from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
@@ -93,6 +95,7 @@ type FormValues = {
   balance2: number
   recipient: string
   lastChange: string
+  slippage: string
 };
 
 type HeaderProps = {
@@ -337,13 +340,38 @@ const Header:React.FC<HeaderProps> = ({
         )}
       </Field>
       )}
-      <Slippage />
-      <div className={s.receive}>
-        <span className={s.receiveLabel}>
-          Minimum received:
-        </span>
-        <CurrencyAmount amount="1233" currency="XTZ" />
-      </div>
+      <Field initialValue="0.5 %" name="slippage">
+        {({ input }) => {
+          const slippageToNum = (str?: string) => (str ? +str.split('%')[0].trim() : 0.5);
+          const slippagePercent = (values.balance2 * (slippageToNum(values.slippage) / 100))
+            .toFixed(tokensData.second.token.decimals);
+          const minimumReceived = values.balance2 - (+slippagePercent);
+          // () {
+          //   if (!this.outputToken || !this.outputAmount) return null;
+          //   const base = new BigNumber(100)
+          //     .minus(this.activeSlippagePercentage || 0)
+          //     .div(100)
+          //     .times(this.outputAmount);
+
+          //   return base.toFixed(this.outputToken.decimals, BigNumber.ROUND_DOWN);
+          // }
+          return (
+            <>
+              <Slippage handleChange={(value) => input.onChange(value)} />
+              <div className={s.receive}>
+                <span className={s.receiveLabel}>
+                  Minimum received:
+                </span>
+                <CurrencyAmount
+                  amount={minimumReceived.toString()}
+                  currency={getWhitelistedTokenSymbol(token2)}
+                />
+              </div>
+            </>
+          );
+        }}
+
+      </Field>
       <Button className={s.button}>
         {currentTab.label}
       </Button>

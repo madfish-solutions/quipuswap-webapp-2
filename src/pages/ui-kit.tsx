@@ -766,7 +766,7 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Slippage</h1>
-        <Slippage />
+        <Slippage handleChange={() => {}} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Routes</h1>

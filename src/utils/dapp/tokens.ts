@@ -5,6 +5,7 @@ import {
 } from '@utils/defaults';
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps } from '@utils/helpers';
+import { QSNetwork } from '@utils/types';
 
 export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
@@ -27,17 +28,25 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
 };
 
 export const getTokens = async (
+  network: QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(MAINNET_TOKENS))
-  .then((res) => res.json())
-  .then((json) => {
-    let res = [];
-    if (json.tokens?.length !== 0) {
-      res = json.tokens;
-    }
-    if (addTokensFromLocalStorage) {
-      res = [...getSavedTokens(), ...res];
-    }
-    return res;
-  })
-  .catch(() => ([]));
+) => {
+  let networkTokens;
+  if (network.id === 'mainnet') {
+    networkTokens = await fetch(ipfsToHttps(MAINNET_TOKENS))
+      .then((res) => res.json())
+      .then((json) => {
+        let res = [];
+        if (json.tokens?.length !== 0) {
+          res = json.tokens;
+        }
+        return res;
+      })
+      .catch(() => ([]));
+  } else networkTokens = [];
+  let localhostTokens = [];
+  if (addTokensFromLocalStorage) {
+    localhostTokens = getSavedTokens();
+  }
+  return [...localhostTokens, ...networkTokens];
+};

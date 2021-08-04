@@ -11,7 +11,8 @@ import s from './Slippage.module.sass';
 const slippagePercents = ['0.5 %', '1 %', '3 %'];
 
 type StickyBlockProps = {
-  className?: string
+  className?: string,
+  handleChange: (value:string) => void
 };
 
 const modeClass = {
@@ -21,6 +22,7 @@ const modeClass = {
 
 export const Slippage: React.FC<StickyBlockProps> = ({
   className,
+  handleChange,
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -43,6 +45,7 @@ export const Slippage: React.FC<StickyBlockProps> = ({
             onClick={() => {
               setActiveButton(index);
               setInputValue(percent);
+              handleChange(percent);
             }}
           >
             <span className={s.buttonInner}>
@@ -54,8 +57,10 @@ export const Slippage: React.FC<StickyBlockProps> = ({
           inputSize="small"
           value={inputValue}
           onChange={(e) => {
+            const val = e.currentTarget.value;
             setActiveButton(null);
-            setInputValue(e.currentTarget.value);
+            setInputValue(val);
+            handleChange(val);
           }}
         />
       </div>

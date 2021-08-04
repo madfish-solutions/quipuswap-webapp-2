@@ -231,7 +231,7 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getTokensData = useCallback(() => getTokens(true), []);
+  const getTokensData = useCallback(() => getTokens(network, true), [network]);
   const {
     data: tokensData,
   } = useSWR(
