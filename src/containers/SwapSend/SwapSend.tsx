@@ -196,17 +196,17 @@ const Header:React.FC<HeaderProps> = ({
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     // console.log(isTokensSame, currentTokenA, currentTokenB);
     // const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
-    const isTokensPairSame = false;
+    // const isTokensPairSame = false;
     const isValuesSame = val[lastChange] === formValues[lastChange];
 
     // console.log(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
-    console.log(currentTokenA, currentTokenB);
-    console.log(
-      isTokensSame || (isValuesSame && isTokensPairSame),
-      isTokensSame,
-      isValuesSame,
-      isTokensPairSame,
-    );
+    // console.log(currentTokenA, currentTokenB);
+    // console.log(
+    //   isTokensSame || (isValuesSame && isTokensPairSame),
+    //   isTokensSame,
+    //   isValuesSame,
+    //   isTokensPairSame,
+    // );
     // if (isTokensSame || (isValuesSame && isTokensPairSame)) return;
     if (isTokensSame || (isValuesSame)) return;
     if (tezos) {
@@ -307,6 +307,7 @@ const Header:React.FC<HeaderProps> = ({
         contract: tokensData.second.token.address,
         id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
       };
+      // console.log(tezos);
       const estimatedOutputValue = await swap(
         tezos,
         FACTORIES[networkId],
@@ -479,6 +480,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
   const tezos = useTezos();
+  // console.log(tezos, tezos?.signer);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
