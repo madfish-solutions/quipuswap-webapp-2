@@ -3,22 +3,32 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import { estimateSwap, swap } from '@quipuswap/sdk';
+import {
+  estimateSwap, findDex, swap,
+} from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
+// import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken } from '@utils/types';
 import {
   useAccountPkh,
   useTezos,
   getUserBalance,
+  useNetwork,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
 import {
-  getWhitelistedTokenSymbol, isPairEqual, isTokenEqual, parseNumber, slippageToBignum,
+  getWhitelistedTokenSymbol,
+  // isPairEqual,
+  isTokenEqual,
+  parseNumber,
+  slippageToBignum,
 } from '@utils/helpers';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import {
+  FACTORIES, TEZOS_TOKEN,
+} from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
@@ -35,7 +45,6 @@ import { SwapIcon } from '@components/svg/Swap';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { usePrevious } from '@hooks/usePrevious';
 
 const TabsContent = [
   {
@@ -78,17 +87,6 @@ const fallbackTokensData : TokenDataType = {
   balance: '0',
 };
 
-const factories = {
-  fa1_2Factory: [
-    'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
-    'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD',
-  ],
-  fa2Factory: [
-    'KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ',
-    'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
-  ],
-};
-
 type FormValues = {
   // token1: string
   // token2: string
@@ -121,13 +119,15 @@ const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
   fa2TokenId: tokenData.token.id,
 } as WhitelistedToken);
 
-const undefinedTokenDataToToken = (
-  tokenData:any,
-  key: any,
-) : WhitelistedToken => ({
-  contractAddress: tokenData[key].token.address ?? null,
-  fa2TokenId: tokenData[key].token.id ?? null,
-} as WhitelistedToken);
+// const undefinedTokenDataToToken = (
+//   tokenData:any,
+//   key: any,
+// ) : WhitelistedToken => ({
+//   contractAddress: (tokenData && tokenData[key].token.address) ?? null,
+//   fa2TokenId: (tokenData && tokenData[key].token.id) ?? null,
+// } as WhitelistedToken);
+
+type QSMainNet = 'mainnet' | 'florencenet';
 
 const Header:React.FC<HeaderProps> = ({
   debounce,
@@ -146,26 +146,69 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
 }) => {
   const tezos = useTezos();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  const prevTokens = usePrevious(tokensData);
+  // const prevTokens = usePrevious(tokensData);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
+  const fromNat = (amount: any, token: any) => new BigNumber(amount).div(10 ** token.decimals);
+
+  const estimateTezToToken = (
+    tezAmount: BigNumber,
+    dexStorage: any,
+    token: any,
+  ) => {
+    if (!tezAmount) return new BigNumber(0);
+
+    const mutezAmount = tezos!!.format('tz', 'mutez', tezAmount) as any;
+    // const mutezAmount = tezAmount;
+
+    const tezInWithFee = mutezAmount.times(997);
+    const numerator = tezInWithFee.times(dexStorage.token_pool);
+    const denominator = new BigNumber(dexStorage.tez_pool)
+      .times(1000)
+      .plus(tezInWithFee);
+    const tokensOut = numerator.idiv(denominator);
+    const na = fromNat(tokensOut, token);
+    // console.log(
+    //   tezAmount.toString(),
+    //   mutezAmount.toString(),
+    //   tezInWithFee.toString(),
+    //   numerator.toString(),
+    //   denominator.toString(),
+    //   tokensOut.toString(),
+    //   na.toString(),
+    // );
+
+    return na;
+  };
+
   const handleInputChange = async (val: FormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
-    const prevTokenA = undefinedTokenDataToToken(prevTokens, 'first');
-    const prevTokenB = undefinedTokenDataToToken(prevTokens, 'second');
+    // const prevTokenA = undefinedTokenDataToToken(prevTokens, 'first');
+    // const prevTokenB = undefinedTokenDataToToken(prevTokens, 'second');
 
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     // console.log(isTokensSame, currentTokenA, currentTokenB);
-    const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
+    // const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
+    const isTokensPairSame = false;
     const isValuesSame = val[lastChange] === formValues[lastChange];
 
-    if (isTokensSame || (isValuesSame && isTokensPairSame)) return;
+    // console.log(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
+    console.log(currentTokenA, currentTokenB);
+    console.log(
+      isTokensSame || (isValuesSame && isTokensPairSame),
+      isTokensSame,
+      isValuesSame,
+      isTokensPairSame,
+    );
+    // if (isTokensSame || (isValuesSame && isTokensPairSame)) return;
+    if (isTokensSame || (isValuesSame)) return;
     if (tezos) {
       try {
         const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
@@ -182,27 +225,46 @@ const Header:React.FC<HeaderProps> = ({
         const decimals2 = lastChange !== 'balance1'
           ? tokensData.first.token.decimals
           : tokensData.second.token.decimals;
-        const inputValueInner = new BigNumber(
-          (lastChange === 'balance1' ? val.balance1 : val.balance2) * (10 ** decimals1),
-        );
+        const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
+        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
         const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
-        try {
-          const estimatedOutputValue = await estimateSwap(
-            tezos,
-            factories,
-            fromAsset,
-            toAsset,
-            valuesInner,
-          );
-          const retValue = estimatedOutputValue.div(
-            new BigNumber(10)
-              .pow(
-                new BigNumber(decimals2),
-              ),
-          ).toString();
-          form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
-        } catch (e) {
-          console.error(e);
+
+        // only on testnet and xtz => token
+        if (networkId === 'florencenet') {
+          try {
+            const token = {
+              contract: tokensData.second.token.address,
+              id: tokensData.second.token.id ?? undefined,
+            };
+            const dexAddress = await findDex(tezos, FACTORIES[networkId], token);
+            const amount = estimateTezToToken(
+              new BigNumber(inputWrapper),
+              dexAddress.storage.storage,
+              tokensData.second.token,
+            );
+            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', amount);
+          } catch (e) {
+            // console.log(e);
+          }
+        } else {
+          try {
+            const estimatedOutputValue = await estimateSwap(
+              tezos,
+              FACTORIES[networkId],
+              fromAsset,
+              toAsset,
+              valuesInner,
+            );
+            const retValue = estimatedOutputValue.div(
+              new BigNumber(10)
+                .pow(
+                  new BigNumber(decimals2),
+                ),
+            ).toString();
+            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
+          } catch (e) {
+            console.error(e);
+          }
         }
       } catch (err) {
         console.error(err);
@@ -247,7 +309,7 @@ const Header:React.FC<HeaderProps> = ({
       };
       const estimatedOutputValue = await swap(
         tezos,
-        factories,
+        FACTORIES[networkId],
         fromAsset,
         toAsset,
         new BigNumber(values.balance1),
@@ -419,6 +481,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
 
   const { t } = useTranslation(['common', 'swap']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
@@ -450,7 +513,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         accountPkh,
         token.contractAddress,
         token.type,
-        token.fa2TokenId ?? 0,
+        token.fa2TokenId,
       );
       if (balance) {
         finalBalance = balance.div(
@@ -472,6 +535,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
     ));
 
+    // console.log('setTokensData', token, tokenNumber);
     setTokensData((prevState) => (
       {
         ...prevState,
@@ -479,7 +543,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           token: {
             address: token.contractAddress,
             type: token.type,
-            id: token.type === 'fa2' ? token.fa2TokenId : null,
+            id: token.fa2TokenId,
             decimals: token.metadata.decimals,
           },
           balance: finalBalance,
@@ -498,7 +562,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    if (exchangeRates && tezos && accountPkh) {
+    if (exchangeRates && tezos && accountPkh && !initialLoad) {
+      setInitialLoad(true);
       if (!tokensData.first.exchangeRate) {
         handleTokenChange(
           {
@@ -558,7 +623,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           <AutoSave
             form={form}
             debounce={1000}
-            // save={(handleInputChange)}
             save={() => {}}
             setTabsState={setTabsState}
             tabsState={tabsState}

@@ -35,6 +35,30 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   },
 };
 export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
+
+export const FACTORIES = {
+  florencenet: {
+    fa1_2Factory: [
+      'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
+      'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY',
+    ],
+    fa2Factory: [
+      'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
+      'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
+    ],
+  },
+  mainnet: {
+    fa1_2Factory: [
+      'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
+      'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD',
+    ],
+    fa2Factory: [
+      'KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ',
+      'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
+    ],
+  },
+};
+
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
