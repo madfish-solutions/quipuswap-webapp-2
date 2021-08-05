@@ -14,17 +14,20 @@ import {
   getUserBalance, useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { WhitelistedToken } from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
-import { getWhitelistedTokenSymbol, isTokenEqual, parseDecimals } from '@utils/helpers';
+import {
+  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum,
+} from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
-import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -32,7 +35,6 @@ import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -81,7 +83,7 @@ type FormValues = {
   switcher: boolean
   balance1: number
   balance2: number
-  recipient: string
+  balance3: number
   lastChange: string
   slippage: string
 };
@@ -96,6 +98,8 @@ type HeaderProps = {
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
   setToken2:(token:WhitelistedToken) => void,
+  tokenPair: WhitelistedTokenPair,
+  setTokenPair: (pair:WhitelistedTokenPair) => void,
   tokensData:TokenDataMap,
   handleTokenChange:(token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
   currentTab:any,
@@ -123,8 +127,10 @@ const Header:React.FC<HeaderProps> = ({
   tabsState,
   token1,
   token2,
+  tokenPair,
   setToken1,
   setToken2,
+  setTokenPair,
   tokensData,
   handleTokenChange,
   currentTab,
@@ -309,23 +315,33 @@ const Header:React.FC<HeaderProps> = ({
     >
       {currentTab.id === 'remove' && (
       <Field
-        name="tokenPair"
+        name="balance3"
       >
         {({ input }) => (
           <>
-            <ComplexInput
+            <PositionSelect
               {...input}
-              token1={TEZOS_TOKEN}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
               handleBalance={(value) => {
+                const tezValue = value;
+                const tokenValue = value;
                 form.mutators.setValue(
-                  'tokenPair',
+                  'balance1',
+                  tezValue,
+                );
+                form.mutators.setValue(
+                  'balance2',
+                  tokenValue,
+                );
+                form.mutators.setValue(
+                  'balance3',
                   +value,
                 );
               }}
               id="liquidity-remove-input"
               label="Select LP"
               className={s.input}
-              mode="votes"
             />
             <ArrowDown className={s.iconButton} />
           </>
@@ -366,12 +382,14 @@ const Header:React.FC<HeaderProps> = ({
             />
             <OnChange name="balance1">
               {(value:string) => {
-                setLastChange('balance1');
-                if (!values.switcher) {
-                  form.mutators.setValue(
-                    'balance2',
-                    +value,
-                  );
+                if (currentTab.id !== 'remove') {
+                  setLastChange('balance1');
+                  if (!values.switcher) {
+                    form.mutators.setValue(
+                      'balance2',
+                      +value,
+                    );
+                  }
                 }
               }}
             </OnChange>
@@ -414,12 +432,14 @@ const Header:React.FC<HeaderProps> = ({
             />
             <OnChange name="balance2">
               {(value:string) => {
-                setLastChange('balance2');
-                if (!values.switcher) {
-                  form.mutators.setValue(
-                    'token1',
-                    value,
-                  );
+                if (currentTab.id !== 'remove') {
+                  setLastChange('balance2');
+                  if (!values.switcher) {
+                    form.mutators.setValue(
+                      'balance1',
+                      value,
+                    );
+                  }
                 }
               }}
             </OnChange>
@@ -427,101 +447,117 @@ const Header:React.FC<HeaderProps> = ({
         )}
       </Field>
 
-      <Slippage handleChange={() => {}} />
-
-      {currentTab.id === 'add' && (
-      <>
-        {!values.switcher ? (
-          <Field name="token2">
-            {({ input }) => (
-              <div className={cx(s.receive, s.mb24)}>
-                <span className={s.receiveLabel}>
-                  Max invested XTZ/QPLP:
-                </span>
-                <CurrencyAmount amount={input.value} />
-              </div>
-
-            )}
-
-          </Field>
-        )
-          : (
+      <Field initialValue="0.5 %" name="slippage">
+        {({ input }) => {
+          const slippagePercent = (
+            (
+              (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
+            ).toFixed(tokensData.second.token.decimals)).toString();
+          const minimumReceivedA = (values.balance2 ?? 0) - (+slippagePercent);
+          const minimumReceivedB = (values.balance1 ?? 0) - (+slippagePercent);
+          const maxInvestedA = (values.balance2 ?? 0) - (+slippagePercent);
+          const maxInvestedB = (values.balance1 ?? 0) - (+slippagePercent);
+          return (
             <>
-              <div className={s.receive}>
-                <span className={s.receiveLabel}>
-                  Max invested:
-                </span>
-                <CurrencyAmount
-                  currency={getWhitelistedTokenSymbol(token1)}
-                  amount={values.balance1}
-                />
-              </div>
-              <div className={cx(s.receive, s.mb24)}>
-                <span className={s.receiveLabel}>
-                  Max invested:
-                </span>
-                <CurrencyAmount
-                  currency={getWhitelistedTokenSymbol(token2)}
-                  amount={values.balance2}
-                />
-              </div>
+              <Slippage handleChange={(value) => input.onChange(value)} />
+              {currentTab.id === 'add' && (
+              <>
+                {!values.switcher ? (
+                  <div className={cx(s.receive, s.mb24)}>
+                    <span className={s.receiveLabel}>
+                      Max invested XTZ/QPLP:
+                    </span>
+                    <CurrencyAmount
+                      currency={`${getWhitelistedTokenSymbol(token1)}/${getWhitelistedTokenSymbol(token2)}`}
+                      amount={maxInvestedA.toString()}
+                    />
+                  </div>
+                )
+                  : (
+                    <>
+                      <div className={s.receive}>
+                        <span className={s.receiveLabel}>
+                          Max invested:
+                        </span>
+                        <CurrencyAmount
+                          currency={getWhitelistedTokenSymbol(token1)}
+                          amount={maxInvestedA.toString()}
+                        />
+                      </div>
+                      <div className={cx(s.receive, s.mb24)}>
+                        <span className={s.receiveLabel}>
+                          Max invested:
+                        </span>
+                        <CurrencyAmount
+                          currency={getWhitelistedTokenSymbol(token2)}
+                          amount={maxInvestedB.toString()}
+                        />
+                      </div>
+                    </>
+                  )}
+              </>
+              )}
+
+              {currentTab.id === 'remove' && (
+                <>
+                  <div className={s.receive}>
+                    <span className={s.receiveLabel}>
+                      Minimum received:
+                    </span>
+                    <CurrencyAmount
+                      currency={getWhitelistedTokenSymbol(token1)}
+                      amount={minimumReceivedA.toString()}
+                    />
+                  </div>
+                  <div className={s.receive}>
+                    <span className={s.receiveLabel}>
+                      Minimum received:
+                    </span>
+                    <CurrencyAmount
+                      currency={getWhitelistedTokenSymbol(token2)}
+                      amount={minimumReceivedB.toString()}
+                    />
+                  </div>
+                  <Button className={s.button}>
+                    {currentTab.id === 'add' ? 'Add' : 'Remove & Unvote'}
+                  </Button>
+                </>
+              )}
             </>
-          )}
+          );
+        }}
 
-        {currentTab.id === 'remove' && (
+      </Field>
+      {currentTab.id === 'add' && (
         <>
-          <div className={s.receive}>
-            <span className={s.receiveLabel}>
-              Minimum received:
-            </span>
-            <CurrencyAmount
-              currency={getWhitelistedTokenSymbol(token1)}
-              amount={values.balance1}
-            />
-          </div>
-          <div className={s.receive}>
-            <span className={s.receiveLabel}>
-              Minimum received:
-            </span>
-            <CurrencyAmount
-              currency={getWhitelistedTokenSymbol(token2)}
-              amount={values.balance2}
-            />
-          </div>
+          <Field name="switcher">
+            {({ input }) => (
+
+              <div className={s.switcher}>
+                <Switcher
+                  isActive={input.value}
+                  onChange={() => {
+                    if (input.value) {
+                      form.mutators.setValue(
+                        lastChange === 'balance1' ? 'balance2' : 'balance1',
+                        values[lastChange !== 'balance1' ? 'balance2' : 'balance1'],
+                      );
+                    }
+                    input.onChange(!input.value);
+                  }}
+                  className={s.switcherInput}
+                />
+                Rebalance Liquidity
+                <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
+              </div>
+            )}
+          </Field>
+          <Button onClick={handleSwapSubmit} className={s.button}>
+            {currentTab.label}
+          </Button>
         </>
-        )}
-        <Button className={s.button}>
-          {currentTab.id === 'add' ? 'Add' : 'Remove & Unvote'}
-        </Button>
-
-        <Field name="switcher">
-          {({ input }) => (
-
-            <div className={s.switcher}>
-              <Switcher
-                isActive={input.value}
-                onChange={() => {
-                  if (input.value) {
-                    form.mutators.setValue(
-                      lastChange === 'balance1' ? 'balance2' : 'balance1',
-                      values[lastChange !== 'balance1' ? 'balance2' : 'balance1'],
-                    );
-                  }
-                  input.onChange(!input.value);
-                }}
-                className={s.switcherInput}
-              />
-              Rebalance Liquidity
-              <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
-            </div>
-          )}
-        </Field>
-      </>
       )}
 
-      <Button onClick={handleSwapSubmit} className={s.button}>
-        {currentTab.label}
-      </Button>
     </Card>
   );
 };
@@ -529,6 +565,12 @@ const Header:React.FC<HeaderProps> = ({
 const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
+
+const fallbackTokenPair : WhitelistedTokenPair = {
+  token1: TEZOS_TOKEN,
+  token2: TEZOS_TOKEN,
+  dex: null,
+};
 
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
@@ -549,6 +591,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const { Form } = withTypes<FormValues>();
   const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
   const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [
+    tokenPair,
+    setTokenPair,
+  ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -651,8 +697,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             tabsState={tabsState}
             token1={token1}
             token2={token2}
+            tokenPair={tokenPair}
             setToken1={setToken1}
             setToken2={setToken2}
+            setTokenPair={setTokenPair}
             tokensData={tokensData}
             handleTokenChange={handleTokenChange}
             currentTab={currentTab}

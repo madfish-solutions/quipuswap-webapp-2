@@ -1,11 +1,13 @@
-export interface QSNetwork {
-  id:
+type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet'
+  | 'carthagenet';
+
+export interface QSNetwork {
+  id: QSNetworkType
   connectType: 'default' | 'custom'
   name: string
   type: 'main' | 'test'
@@ -19,11 +21,20 @@ export enum WalletType {
   TEMPLE = 'temple',
 }
 
+export interface WhitelistedTokenPair {
+  balance?: string,
+  frozenBalance?: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  dex: any
+}
+
 export interface WhitelistedToken {
   type: 'fa1.2' | 'fa2'
   contractAddress: string
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
+  network: QSNetworkType
 }
 
 export type WhitelistedTokenMetadata = {

@@ -1,15 +1,14 @@
 import React, { useContext } from 'react';
-import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import Token from '@icons/Token.svg';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { WhitelistedTokenPair } from '@utils/types';
 
 import s from './ModalCell.module.sass';
 
 type PositionCellProps = {
-  token1?: any,
-  token2?: any,
+  tokenPair: WhitelistedTokenPair
 };
 
 const modeClass = {
@@ -18,29 +17,30 @@ const modeClass = {
 };
 
 export const PositionCell: React.FC<PositionCellProps> = ({
-  token1,
-  token2,
+  tokenPair,
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { token1, token2 } = tokenPair;
+  const { name: name1 } = token1.metadata;
+  const { name: name2 } = token2.metadata;
 
   return (
     <div className={cx(modeClass[colorThemeMode], s.listItem)}>
       <div className={s.positionBlockCell}>
-        <div className={s.tokenGroup}>
-          <Token className={s.tokenItem} />
-          <Token className={s.tokenItem} />
-        </div>
+        <TokensLogos
+          token1={token1}
+          token2={token2}
+        />
         <div className={s.mleft8}>
           <h6>
-            {token1?.name}
+            {name1}
             /
-            {token2?.name}
+            {name2}
           </h6>
 
         </div>
       </div>
-      <div className={cx(s.joinRow, s.centerRow)}>
+      {/* <div className={cx(s.joinRow, s.centerRow)}>
         <div>
           <div className={s.caption}>
             {t('common:LP in Votes')}
@@ -62,7 +62,7 @@ export const PositionCell: React.FC<PositionCellProps> = ({
           </div>
           <span className={s.label1}>{token1?.balance}</span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

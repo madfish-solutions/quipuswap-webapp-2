@@ -4,9 +4,9 @@ import {
   SAVED_TOKENS_KEY,
   TEZOS_TOKEN,
 } from '@utils/defaults';
+import { WhitelistedToken, QSNetwork } from '@utils/types';
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps } from '@utils/helpers';
-import { QSNetwork } from '@utils/types';
 
 export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
@@ -39,7 +39,7 @@ export const getTokens = async (
       .then((json) => {
         let res = [];
         if (json.tokens?.length !== 0) {
-          res = json.tokens;
+          res = json.tokens.map((x:WhitelistedToken) => ({ ...x, network: 'mainnet' }));
         }
         return res;
       })
@@ -51,4 +51,11 @@ export const getTokens = async (
   }
   const res = [...localhostTokens, ...networkTokens];
   return res;
+};
+
+export const saveCustomToken = (token:WhitelistedToken) => {
+  window.localStorage.setItem(
+    SAVED_TOKENS_KEY,
+    JSON.stringify([...getSavedTokens(), token]),
+  );
 };
