@@ -131,14 +131,11 @@ function useDApp() {
   });
 
   const setFallbackState = useCallback(
-    () => {
-      console.log('here1');
-      return setState((prevState) => ({
-        ...prevState,
-        connectionType: null,
-        tezos: prevState.tezos ?? fallbackToolkit,
-      }));
-    },
+    () => setState((prevState) => ({
+      ...prevState,
+      connectionType: null,
+      tezos: prevState.tezos ?? fallbackToolkit,
+    })),
     [],
   );
 
@@ -172,16 +169,19 @@ function useDApp() {
 
           if (lastUsedConnection === 'temple') {
             const pkh = wlt.connected ? await wlt.getPKH() : null;
-            console.log('here2');
+            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkit;
+            if (wlt.connected && pkh) {
+              const { publicKey } = wlt.permission!;
+              tk.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
+            }
             setState((prevState) => ({
               ...prevState,
               templeWallet: wlt,
-              tezos: wlt.connected ? wlt.toTezos() : fallbackToolkit,
+              tezos: tk,
               accountPkh: pkh,
               connectionType: wlt.connected ? 'temple' : null,
             }));
           } else {
-            console.log('here3');
             setState((prevState) => ({
               ...prevState,
               tezos: prevState.tezos ?? fallbackToolkit,
@@ -215,7 +215,7 @@ function useDApp() {
         const toolkit = new TezosToolkit(net.rpcBaseURL);
         toolkit.setPackerProvider(michelEncoder);
         toolkit.setWalletProvider(beaconWallet);
-        console.log('here4');
+
         setState((prevState) => ({
           ...prevState,
           templeWallet: null,
@@ -310,11 +310,8 @@ function useDApp() {
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
-      console.log('here5');
-      console.log(templeWallet, tezos);
       TempleWallet.onPermissionChange((perm) => {
         if (!perm) {
-          console.log('here5_1');
           setState((prevState) => ({
             ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
@@ -330,7 +327,6 @@ function useDApp() {
 
   const connectWithTemple = useCallback(
     async (forcePermission: boolean) => {
-      console.log('here6');
       const { pkh, toolkit, wallet } = await connectWalletTemple(forcePermission, network);
       setState((prevState) => ({
         ...prevState,
@@ -347,7 +343,7 @@ function useDApp() {
   const connectWithBeacon = useCallback(
     async (forcePermission: boolean) => {
       const { pkh, toolkit } = await connectWalletBeacon(forcePermission, network);
-      console.log('here7');
+
       setState((prevState) => ({
         ...prevState,
         connectionType: 'beacon',
@@ -362,7 +358,6 @@ function useDApp() {
 
   const disconnect = useCallback(
     async () => {
-      console.log('here8');
       setState((prevState) => ({
         ...prevState,
         tezos: fallbackToolkit,
@@ -376,7 +371,6 @@ function useDApp() {
 
   const changeNetwork = useCallback(
     async (networkNew: QSNetwork) => {
-      console.log('here9');
       setState((prevState) => ({
         ...prevState,
         tezos: fallbackToolkit,

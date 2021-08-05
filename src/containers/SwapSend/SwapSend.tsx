@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import {
-  estimateSwap, findDex, swap,
+  estimateSwap, findDex, swap, batchify,
 } from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -25,6 +25,7 @@ import {
   isTokenEqual,
   parseNumber,
   slippageToBignum,
+  slippageToNum,
 } from '@utils/helpers';
 import {
   FACTORIES, TEZOS_TOKEN,
@@ -127,6 +128,12 @@ const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
 //   fa2TokenId: (tokenData && tokenData[key].token.id) ?? null,
 // } as WhitelistedToken);
 
+const toNat = (amount: any, decimals: number) => new BigNumber(amount)
+  .times(10 ** decimals)
+  .integerValue(BigNumber.ROUND_DOWN);
+
+const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
+
 type QSMainNet = 'mainnet' | 'florencenet';
 
 const Header:React.FC<HeaderProps> = ({
@@ -173,16 +180,16 @@ const Header:React.FC<HeaderProps> = ({
       .times(1000)
       .plus(tezInWithFee);
     const tokensOut = numerator.idiv(denominator);
-    const na = fromNat(tokensOut, token);
     // console.log(
-    //   tezAmount.toString(),
-    //   mutezAmount.toString(),
-    //   tezInWithFee.toString(),
-    //   numerator.toString(),
-    //   denominator.toString(),
+    //   // tezAmount.toString(),
+    //   // mutezAmount.toString(),
+    //   // tezInWithFee.toString(),
+    //   // numerator.toString(),
+    //   // denominator.toString(),
     //   tokensOut.toString(),
-    //   na.toString(),
+    //   // na.toString(),
     // );
+    const na = fromNat(tokensOut, token);
 
     return na;
   };
@@ -299,32 +306,31 @@ const Header:React.FC<HeaderProps> = ({
   const handleSwapSubmit = async () => {
     if (!tezos) return;
     try {
-      const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
+      const fromAsset = isTez(tokensData.first) ? 'tez' : {
         contract: tokensData.first.token.address,
         id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
       };
-      const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
+      const toAsset = isTez(tokensData.second) ? 'tez' : {
         contract: tokensData.second.token.address,
         id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
       };
-      // console.log(tezos);
-      const estimatedOutputValue = await swap(
+      const slippage = slippageToNum(values.slippage) / 100;
+      const inputValue = isTez(tokensData.first)
+        ? tezos!!.format('tz', 'mutez', values.balance1) as any
+        : toNat(values.balance1, tokensData.first.token.decimals);
+      const swapParams = await swap(
         tezos,
         FACTORIES[networkId],
         fromAsset,
         toAsset,
-        new BigNumber(values.balance1),
-        slippageToBignum(values.slippage),
-        tokensData.second.token.address,
+        inputValue,
+        slippage,
       );
-      console.log(estimatedOutputValue);
-      // const retValue = estimatedOutputValue.div(
-      //   new BigNumber(10)
-      //     .pow(
-      //       new BigNumber(decimals2),
-      //     ),
-      // ).toString();
-      // form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
+      const op = await batchify(
+        tezos.wallet.batch([]),
+        swapParams,
+      ).send();
+      await op.confirmation();
     } catch (e) {
       console.error(e);
     }
@@ -354,7 +360,7 @@ const Header:React.FC<HeaderProps> = ({
     >
       <Field
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseNumber(value, 0, Infinity)}
+        parse={(value) => value}
         name="balance1"
       >
         {({ input }) => (
