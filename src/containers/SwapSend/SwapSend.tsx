@@ -2,6 +2,7 @@ import React, {
   useMemo, useState, useEffect, useRef,
 } from 'react';
 import cx from 'classnames';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import {
   estimateSwap, findDex, swap, batchify,
@@ -9,7 +10,6 @@ import {
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
-// import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken } from '@utils/types';
 import {
@@ -21,7 +21,6 @@ import {
 import { validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
-  // isPairEqual,
   isTokenEqual,
   parseNumber,
   slippageToBignum,
@@ -89,8 +88,6 @@ const fallbackTokensData : TokenDataType = {
 };
 
 type FormValues = {
-  // token1: string
-  // token2: string
   balance1: number
   balance2: number
   recipient: string
@@ -104,7 +101,6 @@ type HeaderProps = {
   values:any,
   form:any,
   tabsState:any,
-  setTabsState:any,
   token1:WhitelistedToken,
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
@@ -120,14 +116,6 @@ const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
   fa2TokenId: tokenData.token.id,
 } as WhitelistedToken);
 
-// const undefinedTokenDataToToken = (
-//   tokenData:any,
-//   key: any,
-// ) : WhitelistedToken => ({
-//   contractAddress: (tokenData && tokenData[key].token.address) ?? null,
-//   fa2TokenId: (tokenData && tokenData[key].token.id) ?? null,
-// } as WhitelistedToken);
-
 const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)
   .integerValue(BigNumber.ROUND_DOWN);
@@ -142,7 +130,6 @@ const Header:React.FC<HeaderProps> = ({
   values,
   form,
   tabsState,
-  setTabsState,
   token1,
   token2,
   setToken1,
@@ -153,11 +140,11 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
 }) => {
   const tezos = useTezos();
+  const router = useRouter();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  // const prevTokens = usePrevious(tokensData);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -172,7 +159,6 @@ const Header:React.FC<HeaderProps> = ({
     if (!tezAmount) return new BigNumber(0);
 
     const mutezAmount = tezos!!.format('tz', 'mutez', tezAmount) as any;
-    // const mutezAmount = tezAmount;
 
     const tezInWithFee = mutezAmount.times(997);
     const numerator = tezInWithFee.times(dexStorage.token_pool);
@@ -180,15 +166,6 @@ const Header:React.FC<HeaderProps> = ({
       .times(1000)
       .plus(tezInWithFee);
     const tokensOut = numerator.idiv(denominator);
-    // console.log(
-    //   // tezAmount.toString(),
-    //   // mutezAmount.toString(),
-    //   // tezInWithFee.toString(),
-    //   // numerator.toString(),
-    //   // denominator.toString(),
-    //   tokensOut.toString(),
-    //   // na.toString(),
-    // );
     const na = fromNat(tokensOut, token);
 
     return na;
@@ -197,24 +174,8 @@ const Header:React.FC<HeaderProps> = ({
   const handleInputChange = async (val: FormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
-    // const prevTokenA = undefinedTokenDataToToken(prevTokens, 'first');
-    // const prevTokenB = undefinedTokenDataToToken(prevTokens, 'second');
-
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-    // console.log(isTokensSame, currentTokenA, currentTokenB);
-    // const isTokensPairSame = isPairEqual(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
-    // const isTokensPairSame = false;
     const isValuesSame = val[lastChange] === formValues[lastChange];
-
-    // console.log(currentTokenA, currentTokenB, prevTokenA, prevTokenB);
-    // console.log(currentTokenA, currentTokenB);
-    // console.log(
-    //   isTokensSame || (isValuesSame && isTokensPairSame),
-    //   isTokensSame,
-    //   isValuesSame,
-    //   isTokensPairSame,
-    // );
-    // if (isTokensSame || (isValuesSame && isTokensPairSame)) return;
     if (isTokensSame || (isValuesSame)) return;
     if (tezos) {
       try {
@@ -251,7 +212,7 @@ const Header:React.FC<HeaderProps> = ({
             );
             form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', amount);
           } catch (e) {
-            // console.log(e);
+            console.error(e);
           }
         } else {
           try {
@@ -325,6 +286,7 @@ const Header:React.FC<HeaderProps> = ({
         toAsset,
         inputValue,
         slippage,
+        router.pathname === '/send' ? values.recipient : undefined,
       );
       const op = await batchify(
         tezos.wallet.batch([]),
@@ -343,7 +305,7 @@ const Header:React.FC<HeaderProps> = ({
           <Tabs
             values={TabsContent}
             activeId={tabsState}
-            setActiveId={(val) => setTabsState(val)}
+            setActiveId={(val) => router.replace(`/${val}`)}
             className={s.tabs}
           />
         ),
@@ -436,7 +398,7 @@ const Header:React.FC<HeaderProps> = ({
               handleInput={(value) => {
                 form.mutators.setValue(
                   'recipient',
-                  +value,
+                  value,
                 );
               }}
               label="Recipient address"
@@ -451,9 +413,9 @@ const Header:React.FC<HeaderProps> = ({
         {({ input }) => {
           const slippagePercent = (
             (
-              values.balance2 * (+slippageToBignum(values.slippage))
+              (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
             ).toFixed(tokensData.second.token.decimals)).toString();
-          const minimumReceived = values.balance2 - (+slippagePercent);
+          const minimumReceived = (values.balance2 ?? 0) - (+slippagePercent);
           return (
             <>
               <Slippage handleChange={(value) => input.onChange(value)} />
@@ -486,13 +448,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
   const tezos = useTezos();
-  // console.log(tezos, tezos?.signer);
+  const router = useRouter();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
 
   const { t } = useTranslation(['common', 'swap']);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
+  const [tabsState, setTabsState] = useState(router.pathname.slice(1));
 
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
@@ -500,8 +462,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       second: fallbackTokensData,
     },
   );
-
-  // const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
 
   const { Form } = withTypes<FormValues>();
   const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
@@ -543,7 +503,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
     ));
 
-    // console.log('setTokensData', token, tokenNumber);
     setTokensData((prevState) => (
       {
         ...prevState,
@@ -565,8 +524,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     setToken1(token2);
     setToken2(token1);
     setTokensData({ first: tokensData.second, second: tokensData.first });
-    // handleTokenChange(token1, 'second');
-    // handleTokenChange(token2, 'first');
   };
 
   useEffect(() => {
@@ -598,25 +555,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       }
     }
   }, [exchangeRates, tezos, accountPkh]);
-
-  // useEffect(() => {
-  //   const awFunc = async () => {
-  //     if (tezos && accountPkh) {
-  //       const amount = await tezos.tz.getBalance(accountPkh);
-  //       setTokensData((prevState) => (
-  //         {
-  //           ...prevState,
-  //           first: {
-  //             ...fallbackTokensData,
-  //             balance: mutezToTz(amount, tezos).toString(),
-  //           },
-  //         }
-  //       ));
-  //       // return mutezToTz(amount);
-  //     }
-  //   };
-  //   if (tokensData.first.token.address === 'tez' && tezos && accountPkh) { awFunc(); }
-  // }, [tezos, accountPkh]);
 
   return (
     <StickyBlock className={className}>
