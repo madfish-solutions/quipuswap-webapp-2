@@ -22,7 +22,7 @@ import { validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
   isTokenEqual,
-  parseNumber,
+  parseDecimals,
   slippageToBignum,
   slippageToNum,
 } from '@utils/helpers';
@@ -322,7 +322,7 @@ const Header:React.FC<HeaderProps> = ({
     >
       <Field
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => value}
+        parse={(value) => parseDecimals(value, 0, Infinity)}
         name="balance1"
       >
         {({ input }) => (
@@ -363,7 +363,7 @@ const Header:React.FC<HeaderProps> = ({
       </Button>
       <Field
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseNumber(value, 0, Infinity)}
+        parse={(value) => parseDecimals(value, 0, Infinity)}
         name="balance2"
       >
         {({ input }) => (
