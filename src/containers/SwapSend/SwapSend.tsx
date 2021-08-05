@@ -17,6 +17,7 @@ import {
   useTezos,
   getUserBalance,
   useNetwork,
+  estimateTezToToken,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
 import {
@@ -149,28 +150,6 @@ const Header:React.FC<HeaderProps> = ({
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
-  const fromNat = (amount: any, token: any) => new BigNumber(amount).div(10 ** token.decimals);
-
-  const estimateTezToToken = (
-    tezAmount: BigNumber,
-    dexStorage: any,
-    token: any,
-  ) => {
-    if (!tezAmount) return new BigNumber(0);
-
-    const mutezAmount = tezos!!.format('tz', 'mutez', tezAmount) as any;
-
-    const tezInWithFee = mutezAmount.times(997);
-    const numerator = tezInWithFee.times(dexStorage.token_pool);
-    const denominator = new BigNumber(dexStorage.tez_pool)
-      .times(1000)
-      .plus(tezInWithFee);
-    const tokensOut = numerator.idiv(denominator);
-    const na = fromNat(tokensOut, token);
-
-    return na;
-  };
-
   const handleInputChange = async (val: FormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
@@ -206,6 +185,7 @@ const Header:React.FC<HeaderProps> = ({
             };
             const dexAddress = await findDex(tezos, FACTORIES[networkId], token);
             const amount = estimateTezToToken(
+              tezos,
               new BigNumber(inputWrapper),
               dexAddress.storage.storage,
               tokensData.second.token,

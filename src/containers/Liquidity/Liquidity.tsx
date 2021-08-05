@@ -5,19 +5,30 @@ import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { withTypes, Field, FormSpy } from 'react-final-form';
-import { OnChange } from 'react-final-form-listeners';
 import {
-  addLiquidity, batchify, estimateSwap, findDex, Token,
+  addLiquidity,
+  batchify,
+  estimateSharesInTez,
+  estimateSharesInToken,
+  estimateSwap,
+  estimateTezInShares,
+  estimateTokenInShares,
+  findDex,
+  FoundDex,
+  getLiquidityShare,
+  removeLiquidity,
+  Token,
 } from '@quipuswap/sdk';
 
 import {
-  getUserBalance, useAccountPkh, useNetwork, useTezos,
+  getUserBalance,
+  useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import {
-  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum,
+  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -37,6 +48,7 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { ComplexInput } from '@components/ui/ComplexInput';
 
 const TabsContent = [
   {
@@ -84,14 +96,17 @@ type FormValues = {
   balance1: number
   balance2: number
   balance3: number
+  lpBalance: string
+  frozenBalance: string
   lastChange: string
+  estimateLP: string
   slippage: string
 };
 
 type HeaderProps = {
   debounce:number,
   save:any,
-  values:any,
+  values:FormValues,
   form:any,
   tabsState:any,
   token1:WhitelistedToken,
@@ -140,77 +155,79 @@ const Header:React.FC<HeaderProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
-
-  const fromNat = (amount: any, token: any) => new BigNumber(amount).div(10 ** token.decimals);
-
-  const estimateTezToToken = (
-    tezAmount: BigNumber,
-    dexStorage: any,
-    token: any,
-  ) => {
-    if (!tezAmount) return new BigNumber(0);
-
-    const mutezAmount = tezos!!.format('tz', 'mutez', tezAmount) as any;
-
-    const tezInWithFee = mutezAmount.times(997);
-    const numerator = tezInWithFee.times(dexStorage.token_pool);
-    const denominator = new BigNumber(dexStorage.tez_pool)
-      .times(1000)
-      .plus(tezInWithFee);
-    const tokensOut = numerator.idiv(denominator);
-    const na = fromNat(tokensOut, token);
-
-    return na;
-  };
 
   const handleInputChange = async (val: FormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isTokensSame || (isValuesSame)) return;
     if (tezos) {
-      try {
-        const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.first.token.address,
-          id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-        };
-        const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-        };
-        const decimals1 = lastChange === 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const decimals2 = lastChange !== 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
-        const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
+      if (currentTab.id === 'remove') {
+        if (val.balance3 === formValues.balance3) return;
+        try {
+          const getMethod = async (
+            token:WhitelistedToken,
+            dex:FoundDex,
+            value:number,
+          ) => (token.contractAddress === 'tez'
+            ? estimateTezInShares(dex.storage, value.toString())
+            : estimateTokenInShares(dex.storage, value.toString()));
+          const sharesA = await getMethod(
+            tokenPair.token1,
+            tokenPair.dex,
+            parseInt(values.balance3.toString(), 10),
+          );
+          const sharesB = await getMethod(
+            tokenPair.token2,
+            tokenPair.dex,
+            parseInt(values.balance3.toString(), 10),
+          );
 
-        // only on testnet and xtz => token
-        if (networkId === 'florencenet') {
-          try {
-            const token = {
-              contract: tokensData.second.token.address,
-              id: tokensData.second.token.id ?? undefined,
-            };
-            const dexAddress = await findDex(tezos, FACTORIES[networkId], token);
-            const amount = estimateTezToToken(
-              new BigNumber(inputWrapper),
-              dexAddress.storage.storage,
-              tokensData.second.token,
-            );
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', amount);
-          } catch (e) {
-            console.error(e);
-          }
-        } else {
+          const bal1 = sharesA.toString();
+          const bal2 = sharesB.div(
+            new BigNumber(10)
+              .pow(
+                new BigNumber(tokenPair.token2.metadata.decimals - 6),
+              ),
+          ).toString();
+
+          form.mutators.setValue(
+            'balance1',
+            +bal1,
+          );
+
+          form.mutators.setValue(
+            'balance2',
+            +bal2,
+          );
+        } catch (err) {
+          console.error(err);
+        }
+      } else if (!val.switcher) {
+        if (isTokensSame || (isValuesSame)) return;
+        try {
+          const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
+            contract: tokensData.first.token.address,
+            id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+          };
+          const toAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
+            contract: tokensData.second.token.address,
+            id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+          };
+          const decimals1 = lastChange === 'balance1'
+            ? tokensData.first.token.decimals
+            : tokensData.second.token.decimals;
+          const decimals2 = lastChange !== 'balance1'
+            ? tokensData.first.token.decimals
+            : tokensData.second.token.decimals;
+          const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
+          const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
+          const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
           try {
             const estimatedOutputValue = await estimateSwap(
               tezos,
@@ -226,12 +243,48 @@ const Header:React.FC<HeaderProps> = ({
                 ),
             ).toString();
             form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
+            const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
+              ? tezos!!.format('tz', 'mutez', balance) as any
+              : toNat(balance, token.token.decimals));
+
+            const getMethod = async (
+              token:TokenDataType,
+              dex:FoundDex,
+              value:string,
+            ) => (isTez(token)
+              ? estimateSharesInTez(dex.storage, getInputValue(token, value))
+              : estimateSharesInToken(dex.storage, getInputValue(token, value)));
+            const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+            const sharesA = await getMethod(tokensData.first, dex, values.balance1.toString());
+            const sharesB = await getMethod(
+              tokensData.second,
+              dex,
+              values.balance2 ? values.balance2.toString() : retValue,
+            );
+
+            const lp1 = sharesA.div(
+              new BigNumber(10)
+                .pow(
+                  new BigNumber(tokensData.first.token.decimals),
+                ),
+            ).toString();
+            const lp2 = sharesB.div(
+              new BigNumber(10)
+                .pow(
+                  new BigNumber(tokensData.second.token.decimals),
+                ),
+            ).toString();
+
+            form.mutators.setValue(
+              'estimateLP',
+              lp1 + lp2,
+            );
           } catch (e) {
             console.error(e);
           }
+        } catch (err) {
+          console.error(err);
         }
-      } catch (err) {
-        console.error(err);
       }
     }
   };
@@ -260,30 +313,55 @@ const Header:React.FC<HeaderProps> = ({
     };
   }, [values, tokensData]);
 
-  const handleSwapSubmit = async () => {
+  const handleAddLiquidity = async () => {
     if (!tezos) return;
     try {
-      // const fromAsset = isTez(tokensData.first) ? 'tez' : {
-      //   contract: tokensData.first.token.address,
-      //   id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-      // };
       const toAsset = isTez(tokensData.second) ? 'tez' : {
         contract: tokensData.second.token.address,
         id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
       };
-      const inputValue = isTez(tokensData.first)
-        ? tezos!!.format('tz', 'mutez', values.balance1) as any
-        : toNat(values.balance1, tokensData.first.token.decimals);
-
       const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+
       const addLiquidityParams = await addLiquidity(
         tezos,
         dex,
-        { tezValue: inputValue },
+        { tezValue: values.balance1 },
       );
+      console.log(addLiquidityParams);
       const op = await batchify(
         tezos.wallet.batch([]),
         addLiquidityParams,
+      ).send();
+      await op.confirmation();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleRemoveLiquidity = async () => {
+    if (!tezos || !accountPkh) return;
+    try {
+      const account = accountPkh;
+      const slippageTolerance = slippageToNum(values.slippage) / 100;
+
+      const toAsset = {
+        contract: tokensData.second.token.address,
+        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+      };
+      const dex = await findDex(tezos, FACTORIES[networkId], toAsset);
+      const share = await getLiquidityShare(tezos, dex, account);
+
+      const lpTokenValue = share.total;
+      const removeLiquidityParams = await removeLiquidity(
+        tezos,
+        dex,
+        lpTokenValue,
+        slippageTolerance,
+      );
+
+      const op = await batchify(
+        tezos.wallet.batch([]),
+        removeLiquidityParams,
       ).send();
       await op.confirmation();
     } catch (e) {
@@ -322,23 +400,52 @@ const Header:React.FC<HeaderProps> = ({
             <PositionSelect
               {...input}
               tokenPair={tokenPair}
-              setTokenPair={setTokenPair}
+              setTokenPair={(pair) => {
+                const asyncFunc = async () => {
+                  if (!tezos || !accountPkh || !networkId) return;
+                  try {
+                    const secondAsset = {
+                      contract: pair.token2.contractAddress,
+                      id: pair.token2.fa2TokenId,
+                    };
+                    const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+                    const share = await getLiquidityShare(tezos, dex, accountPkh!!);
+
+                    // const lpTokenValue = share.total;
+                    const frozenBalance = share.frozen.div(
+                      new BigNumber(10)
+                        .pow(
+                          // new BigNumber(pair.token2.metadata.decimals),
+                          // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
+                          // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
+                          new BigNumber(6),
+                        ),
+                    ).toString();
+                    const totalBalance = share.total.div(
+                      new BigNumber(10)
+                        .pow(
+                          // new BigNumber(pair.token2.metadata.decimals),
+                          new BigNumber(6),
+                        ),
+                    ).toString();
+                    const res = {
+                      ...pair, frozenBalance, balance: totalBalance, dex,
+                    };
+                    setTokenPair(res);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                };
+                asyncFunc();
+              }}
               handleBalance={(value) => {
-                const tezValue = value;
-                const tokenValue = value;
-                form.mutators.setValue(
-                  'balance1',
-                  tezValue,
-                );
-                form.mutators.setValue(
-                  'balance2',
-                  tokenValue,
-                );
                 form.mutators.setValue(
                   'balance3',
                   +value,
                 );
               }}
+              balance={tokenPair.balance}
+              frozenBalance={tokenPair.frozenBalance}
               id="liquidity-remove-input"
               label="Select LP"
               className={s.input}
@@ -355,44 +462,40 @@ const Header:React.FC<HeaderProps> = ({
       >
         {({ input }) => (
           <>
-            <TokenSelect
-              {...input}
-              onFocus={() => setLastChange('balance1')}
-              token={token1}
-              setToken={setToken1}
-              handleBalance={(value) => {
-                form.mutators.setValue(
-                  'balance1',
-                  +value,
-                );
-                if (!values.switcher) {
+            {currentTab.id !== 'remove' && (
+            <>
+              <TokenSelect
+                {...input}
+                onFocus={() => setLastChange('balance1')}
+                token={token1}
+                setToken={setToken1}
+                handleBalance={(value) => {
                   form.mutators.setValue(
-                    'balance2',
+                    'balance1',
                     +value,
                   );
-                }
-              }}
-              handleChange={(token) => handleTokenChange(token, 'first')}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
-              id="liquidity-token-1"
-              label={currentTab.id === 'remove' ? 'Output' : 'Input'}
-              className={s.input}
-              readOnly={currentTab.id === 'remove'}
-            />
-            <OnChange name="balance1">
-              {(value:string) => {
-                if (currentTab.id !== 'remove') {
-                  setLastChange('balance1');
-                  if (!values.switcher) {
-                    form.mutators.setValue(
-                      'balance2',
-                      +value,
-                    );
-                  }
-                }
-              }}
-            </OnChange>
+                }}
+                handleChange={(token) => handleTokenChange(token, 'first')}
+                balance={tokensData.first.balance}
+                exchangeRate={tokensData.first.exchangeRate}
+                id="liquidity-token-1"
+                label="Input"
+                className={s.input}
+              />
+            </>
+            )}
+            {currentTab.id === 'remove' && (
+              <ComplexInput
+                {...input}
+                token1={tokenPair.token1}
+                handleBalance={() => {}}
+                balance={tokensData.first.balance}
+                id="liquidity-token-1"
+                label="Output"
+                className={cx(s.input, s.mb24)}
+                readOnly
+              />
+            )}
           </>
         )}
 
@@ -405,44 +508,40 @@ const Header:React.FC<HeaderProps> = ({
       >
         {({ input }) => (
           <>
-            <TokenSelect
-              {...input}
-              onFocus={() => setLastChange('balance2')}
-              token={token2}
-              setToken={setToken2}
-              handleBalance={(value) => {
-                form.mutators.setValue(
-                  'balance2',
-                  +value,
-                );
-                if (!values.switcher) {
+            {currentTab.id !== 'remove' && (
+            <>
+              <TokenSelect
+                {...input}
+                onFocus={() => setLastChange('balance2')}
+                token={token2}
+                setToken={setToken2}
+                handleBalance={(value) => {
                   form.mutators.setValue(
-                    'balance1',
+                    'balance2',
                     +value,
                   );
-                }
-              }}
-              handleChange={(token) => handleTokenChange(token, 'second')}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
-              id="liquidity-token-2"
-              label={currentTab.id === 'remove' ? 'Output' : 'Input'}
-              className={cx(s.input, s.mb24)}
-              readOnly={currentTab.id === 'remove'}
-            />
-            <OnChange name="balance2">
-              {(value:string) => {
-                if (currentTab.id !== 'remove') {
-                  setLastChange('balance2');
-                  if (!values.switcher) {
-                    form.mutators.setValue(
-                      'balance1',
-                      value,
-                    );
-                  }
-                }
-              }}
-            </OnChange>
+                }}
+                handleChange={(token) => handleTokenChange(token, 'second')}
+                balance={tokensData.second.balance}
+                exchangeRate={tokensData.second.exchangeRate}
+                id="liquidity-token-2"
+                label="Input"
+                className={cx(s.input, s.mb24)}
+              />
+            </>
+            )}
+            {currentTab.id === 'remove' && (
+              <ComplexInput
+                {...input}
+                token1={tokenPair.token2}
+                handleBalance={() => {}}
+                balance={tokensData.second.balance}
+                id="liquidity-token-2"
+                label="Output"
+                className={cx(s.input, s.mb24)}
+                readOnly
+              />
+            )}
           </>
         )}
       </Field>
@@ -453,10 +552,10 @@ const Header:React.FC<HeaderProps> = ({
             (
               (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
             ).toFixed(tokensData.second.token.decimals)).toString();
-          const minimumReceivedA = (values.balance2 ?? 0) - (+slippagePercent);
-          const minimumReceivedB = (values.balance1 ?? 0) - (+slippagePercent);
-          const maxInvestedA = (values.balance2 ?? 0) - (+slippagePercent);
-          const maxInvestedB = (values.balance1 ?? 0) - (+slippagePercent);
+          const minimumReceivedA = (values.balance1 ?? 0) - (+slippagePercent);
+          const minimumReceivedB = (values.balance2 ?? 0) - (+slippagePercent);
+          const maxInvestedA = (values.balance1 ?? 0) - (+slippagePercent);
+          const maxInvestedB = (values.balance2 ?? 0) - (+slippagePercent);
           return (
             <>
               <Slippage handleChange={(value) => input.onChange(value)} />
@@ -465,11 +564,11 @@ const Header:React.FC<HeaderProps> = ({
                 {!values.switcher ? (
                   <div className={cx(s.receive, s.mb24)}>
                     <span className={s.receiveLabel}>
-                      Max invested XTZ/QPLP:
+                      Max invested:
                     </span>
                     <CurrencyAmount
                       currency={`${getWhitelistedTokenSymbol(token1)}/${getWhitelistedTokenSymbol(token2)}`}
-                      amount={maxInvestedA.toString()}
+                      amount={values.estimateLP}
                     />
                   </div>
                 )
@@ -505,7 +604,7 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={getWhitelistedTokenSymbol(token1)}
+                      currency={getWhitelistedTokenSymbol(tokenPair.token1)}
                       amount={minimumReceivedA.toString()}
                     />
                   </div>
@@ -514,12 +613,12 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={getWhitelistedTokenSymbol(token2)}
+                      currency={getWhitelistedTokenSymbol(tokenPair.token2)}
                       amount={minimumReceivedB.toString()}
                     />
                   </div>
-                  <Button className={s.button}>
-                    {currentTab.id === 'add' ? 'Add' : 'Remove & Unvote'}
+                  <Button onClick={handleRemoveLiquidity} className={s.button}>
+                    Remove & Unvote
                   </Button>
                 </>
               )}
@@ -535,16 +634,8 @@ const Header:React.FC<HeaderProps> = ({
 
               <div className={s.switcher}>
                 <Switcher
+                  {...input}
                   isActive={input.value}
-                  onChange={() => {
-                    if (input.value) {
-                      form.mutators.setValue(
-                        lastChange === 'balance1' ? 'balance2' : 'balance1',
-                        values[lastChange !== 'balance1' ? 'balance2' : 'balance1'],
-                      );
-                    }
-                    input.onChange(!input.value);
-                  }}
                   className={s.switcherInput}
                 />
                 Rebalance Liquidity
@@ -552,7 +643,7 @@ const Header:React.FC<HeaderProps> = ({
               </div>
             )}
           </Field>
-          <Button onClick={handleSwapSubmit} className={s.button}>
+          <Button onClick={handleAddLiquidity} className={s.button}>
             {currentTab.label}
           </Button>
         </>

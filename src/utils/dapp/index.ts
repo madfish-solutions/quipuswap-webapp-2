@@ -6,3 +6,4 @@ export * from './tokensMetadata';
 export * from './useOnBlock';
 export * from './getStorageInfo';
 export * from './getUserBalance';
+export * from './estimateTezToToken';
