@@ -173,26 +173,34 @@ const Header:React.FC<HeaderProps> = ({
           const getMethod = async (
             token:WhitelistedToken,
             dex:FoundDex,
-            value:number,
+            value:BigNumber,
           ) => (token.contractAddress === 'tez'
             ? estimateTezInShares(dex.storage, value.toString())
             : estimateTokenInShares(dex.storage, value.toString()));
+          // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
+          const balance = new BigNumber(
+            values.balance3 * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
+          );
           const sharesA = await getMethod(
             tokenPair.token1,
             tokenPair.dex,
-            parseInt(values.balance3.toString(), 10),
+            balance.integerValue(),
           );
           const sharesB = await getMethod(
             tokenPair.token2,
             tokenPair.dex,
-            parseInt(values.balance3.toString(), 10),
+            balance.integerValue(),
           );
-
-          const bal1 = sharesA.toString();
+          const bal1 = sharesA.div(
+            new BigNumber(10)
+              .pow(
+                new BigNumber(6),
+              ),
+          ).toString();
           const bal2 = sharesB.div(
             new BigNumber(10)
               .pow(
-                new BigNumber(tokenPair.token2.metadata.decimals - 6),
+                new BigNumber(6),
               ),
           ).toString();
 
@@ -215,7 +223,7 @@ const Header:React.FC<HeaderProps> = ({
             contract: tokensData.first.token.address,
             id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
           };
-          const toAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
+          const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
             contract: tokensData.second.token.address,
             id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
           };
@@ -226,7 +234,7 @@ const Header:React.FC<HeaderProps> = ({
             ? tokensData.first.token.decimals
             : tokensData.second.token.decimals;
           const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-          const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
+          const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1)).integerValue();
           const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
           try {
             const estimatedOutputValue = await estimateSwap(
@@ -241,8 +249,8 @@ const Header:React.FC<HeaderProps> = ({
                 .pow(
                   new BigNumber(decimals2),
                 ),
-            ).toString();
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
+            );
+            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue.toString());
             const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
               ? tezos!!.format('tz', 'mutez', balance) as any
               : toNat(balance, token.token.decimals));
@@ -250,16 +258,16 @@ const Header:React.FC<HeaderProps> = ({
             const getMethod = async (
               token:TokenDataType,
               dex:FoundDex,
-              value:string,
+              value:BigNumber,
             ) => (isTez(token)
-              ? estimateSharesInTez(dex.storage, getInputValue(token, value))
-              : estimateSharesInToken(dex.storage, getInputValue(token, value)));
+              ? estimateSharesInTez(dex.storage, getInputValue(token, value.toString()))
+              : estimateSharesInToken(dex.storage, getInputValue(token, value.toString())));
             const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-            const sharesA = await getMethod(tokensData.first, dex, values.balance1.toString());
+            const sharesA = await getMethod(tokensData.first, dex, new BigNumber(values.balance1));
             const sharesB = await getMethod(
               tokensData.second,
               dex,
-              values.balance2 ? values.balance2.toString() : retValue,
+              lastChange === 'balance2' ? new BigNumber(values.balance2) : estimatedOutputValue.integerValue(),
             );
 
             const lp1 = sharesA.div(
@@ -325,9 +333,9 @@ const Header:React.FC<HeaderProps> = ({
       const addLiquidityParams = await addLiquidity(
         tezos,
         dex,
+        // { tezValue: values.balance1, tokenValue: values.balance2 },
         { tezValue: values.balance1 },
       );
-      console.log(addLiquidityParams);
       const op = await batchify(
         tezos.wallet.batch([]),
         addLiquidityParams,
@@ -470,6 +478,7 @@ const Header:React.FC<HeaderProps> = ({
                 token={token1}
                 setToken={setToken1}
                 handleBalance={(value) => {
+                  setLastChange('balance1');
                   form.mutators.setValue(
                     'balance1',
                     +value,
@@ -516,6 +525,7 @@ const Header:React.FC<HeaderProps> = ({
                 token={token2}
                 setToken={setToken2}
                 handleBalance={(value) => {
+                  setLastChange('balance2');
                   form.mutators.setValue(
                     'balance2',
                     +value,

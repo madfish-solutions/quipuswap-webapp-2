@@ -173,7 +173,7 @@ const Header:React.FC<HeaderProps> = ({
           ? tokensData.first.token.decimals
           : tokensData.second.token.decimals;
         const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
+        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1)).integerValue();
         const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
         // only on testnet and xtz => token
@@ -196,6 +196,7 @@ const Header:React.FC<HeaderProps> = ({
           }
         } else {
           try {
+            console.log(valuesInner);
             const estimatedOutputValue = await estimateSwap(
               tezos,
               FACTORIES[networkId],
@@ -313,9 +314,10 @@ const Header:React.FC<HeaderProps> = ({
               token={token1}
               setToken={setToken1}
               handleBalance={(value) => {
+                setLastChange('balance1');
                 form.mutators.setValue(
                   'balance1',
-                  +value,
+                  value,
                 );
               }}
               handleChange={(token) => handleTokenChange(token, 'first')}
@@ -354,9 +356,10 @@ const Header:React.FC<HeaderProps> = ({
               token={token2}
               setToken={setToken2}
               handleBalance={(value) => {
+                setLastChange('balance2');
                 form.mutators.setValue(
                   'balance2',
-                  +value,
+                  value,
                 );
               }}
               handleChange={(token) => handleTokenChange(token, 'second')}
