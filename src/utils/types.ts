@@ -1,10 +1,14 @@
-type QSNetworkType =
+import BigNumber from 'bignumber.js';
+
+export interface QSNetworkType {
+  id:
   | 'mainnet'
   | 'florencenet'
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+}
 
 export interface QSNetwork {
   id: QSNetworkType
@@ -35,6 +39,15 @@ export interface WhitelistedToken {
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
   network: QSNetworkType
+}
+
+export interface WhitelistedBaker {
+  name: string,
+  address: string,
+  logo: string,
+  votes: number,
+  fee: number,
+  freeSpace: BigNumber
 }
 
 export type WhitelistedTokenMetadata = {

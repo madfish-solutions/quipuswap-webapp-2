@@ -12,10 +12,15 @@ import {
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
 } from '@utils/defaults';
-import { QSNetwork, WhitelistedToken } from '@utils/types';
-import { getContractInfo, getTokens, saveCustomToken } from '@utils/dapp/tokens';
+import { getBakers } from '@utils/dapp/bakers';
+import { QSNetwork, WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import {
+  getContractInfo, getTokens, saveCustomToken,
+} from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
+import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
+import BigNumber from 'bignumber.js';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -111,6 +116,8 @@ export type DAppType = {
   network: QSNetwork
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
+  searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -118,7 +125,15 @@ fallbackToolkit.setPackerProvider(michelEncoder);
 
 function useDApp() {
   const [{
-    connectionType, tezos, accountPkh, templeWallet, network, tokens, searchTokens,
+    connectionType,
+    tezos,
+    accountPkh,
+    templeWallet,
+    network,
+    tokens,
+    searchTokens,
+    bakers,
+    searchBakers,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
@@ -127,6 +142,8 @@ function useDApp() {
     network: net,
     tokens: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
+    bakers: { loading: true, data: [] },
+    searchBakers: { loading: false, data: [] },
   });
 
   const setFallbackState = useCallback(
@@ -251,6 +268,21 @@ function useDApp() {
     }));
   }, [tokensData]);
 
+  const getBakersData = useCallback(() => getBakers(), []);
+  const {
+    data: bakersData,
+  } = useSWR(
+    ['bakers-initial-data'],
+    getBakersData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      bakers: { loading: false, data: bakersData ?? [] },
+    }));
+  }, [bakersData]);
+
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
       if (await isContractAddress(address) === true) {
@@ -304,6 +336,41 @@ function useDApp() {
       searchTokens: { loading: false, data: [] },
     }));
   }, [tokens]);
+
+  const searchCustomBaker = useCallback(
+    async (address: string) => {
+      if (isContractAddress(address)) {
+        setState((prevState) => ({
+          ...prevState,
+          searchBakers: { loading: true, data: [] },
+        }));
+        const customBaker = await getBakerMetadata(address);
+        if (customBaker) {
+          const baker = {
+            address: customBaker.address,
+            name: customBaker.name,
+            logo: customBaker.logo,
+            fee: customBaker.fee,
+            freeSpace: new BigNumber(customBaker.freeSpace),
+            votes: 0,
+          } as WhitelistedBaker;
+          setState((prevState) => ({
+            ...prevState,
+            searchBakers: { loading: false, data: [baker] },
+          }));
+        }
+      }
+    },
+    [getContractInfo],
+  );
+
+  const addCustomBaker = useCallback((baker:WhitelistedBaker) => {
+    setState((prevState) => ({
+      ...prevState,
+      bakers: { ...bakers, data: [...bakers.data, baker] },
+      searchBakers: { loading: false, data: [] },
+    }));
+  }, [bakers]);
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
@@ -389,12 +456,16 @@ function useDApp() {
     network,
     tokens,
     searchTokens,
+    bakers,
+    searchBakers,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork,
     addCustomToken,
     searchCustomToken,
+    addCustomBaker,
+    searchCustomBaker,
   };
 }
 
@@ -408,12 +479,16 @@ export const [
   useNetwork,
   useTokens,
   useSearchTokens,
+  useBakers,
+  useSearchBakers,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
   useAddCustomToken,
   useSearchCustomTokens,
+  useAddCustomBaker,
+  useSearchCustomBaker,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -424,10 +499,14 @@ export const [
   (v) => v.network,
   (v) => v.tokens,
   (v) => v.searchTokens,
+  (v) => v.bakers,
+  (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
   (v) => v.addCustomToken,
   (v) => v.searchCustomToken,
+  (v) => v.addCustomBaker,
+  (v) => v.searchCustomBaker,
 );
