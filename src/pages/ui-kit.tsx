@@ -771,7 +771,7 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Routes</h1>
         <Route
-          routes={['qpsp', 'usd', 'xtz']}
+          routes={[{ name: 'qpsp', link: '', id: 1 }, { name: 'usd', link: '', id: 2 }, { name: 'xtz', link: '', id: 3 }]}
         />
       </section>
     </BaseLayout>
