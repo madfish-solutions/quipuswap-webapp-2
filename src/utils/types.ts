@@ -1,14 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-export interface QSNetworkType {
-  id:
+export type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet'
-}
+  | 'carthagenet';
 
 export interface QSNetwork {
   id: QSNetworkType

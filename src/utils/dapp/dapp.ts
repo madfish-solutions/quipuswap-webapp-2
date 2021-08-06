@@ -13,7 +13,9 @@ import {
   LAST_USED_CONNECTION_KEY,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
-import { QSNetwork, WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import {
+  QSNetwork, WhitelistedBaker, WhitelistedToken,
+} from '@utils/types';
 import {
   getContractInfo, getTokens, saveCustomToken,
 } from '@utils/dapp/tokens';

@@ -33,6 +33,7 @@ import {
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { ComplexInput } from '@components/ui/ComplexInput';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -49,7 +50,6 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { ComplexInput } from '@components/ui/ComplexInput';
 
 const TabsContent = [
   {
