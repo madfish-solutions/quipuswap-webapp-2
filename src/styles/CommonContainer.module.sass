@@ -8,6 +8,12 @@
 .tabs
   margin-bottom: -1px
 
+.govTabs
+  margin-bottom: -1px
+  min-width: 60px
+  white-space: nowrap
+  overflow-x: scroll
+
 .tabContent
   padding: 0px 24px
 
@@ -91,6 +97,10 @@
     max-width: 280px
     &:not(:last-child)
       margin-bottom: 16px
+
+@include media('>Lphone')
+  .govTabs
+    overflow-x: hidden
 
 @include media('>Lphone', '<=tablet')
   .button

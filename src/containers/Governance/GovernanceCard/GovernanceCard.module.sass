@@ -10,9 +10,12 @@
 
 .govHeader
   display: flex
+  flex-wrap: wrap
 
 .govDates
-  margin-left: 16px
+  flex: 50%
+  font-size: 1rem
+  order: -1
   color: $text-03
 
 .govContent
@@ -26,8 +29,11 @@
 .fullWidth
   width: 100% !important
 
+.govName
+  flex: 100%
+
 .govBage
-  margin-left: 16px
+  order: -1
   color: $text-03
 
 .mb24
@@ -40,13 +46,10 @@
   margin-bottom: 24px
 
 .govButton
-  max-width: 180px
-
-.govBlocks
-  display: flex
-  justify-content: space-between
+  display: none
 
 .govBlockHeader
+  font-size: 1rem
   margin-bottom: 8px
   color: $text-03
   font-weight: 600
@@ -55,8 +58,15 @@
   font-size: 1.286rem
   font-weight: bold
 
+.govBlock
+  margin-bottom: 16px
+
 .govBlockSpan
   color: $text-03
+
+.govButtonButtom
+  max-width: inherit
+  width: 100%
 
 
 .light
@@ -70,3 +80,27 @@
     color: $text-03
   .govBlockLabel
     color: $text-inverse
+
+
+@include media('>Ltablet')
+  .govBlocks
+    display: flex
+    justify-content: space-between
+  .govBlock
+    margin-bottom: 0px
+  .govButton
+    display: block
+    max-width: 180px
+  .govButtonButtom
+    display: none
+  .govDates
+    flex: initial
+    font-size: 1.143rem
+    margin-left: 16px
+    order: 1
+  .govBage
+    flex: initial
+    order: 2
+    margin-left: 16px
+  .govName
+    flex: initial

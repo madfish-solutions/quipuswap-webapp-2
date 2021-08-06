@@ -24,6 +24,8 @@ export type GovernanceCardProps = {
   className?: string
 };
 
+const convertDateToDDMMYYYY = (date:Date) => `${(date.getDate() > 9) ? date.getDate() : (`0${date.getDate()}`)} ${(date.getMonth() > 8) ? (date.getMonth() + 1) : (`0${date.getMonth() + 1}`)} ${date.getFullYear()}`;
+
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 
@@ -82,13 +84,13 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
       header={{
         content: (
           <div className={s.govHeader}>
-            <div>
+            <div className={s.govName}>
               {name}
             </div>
             <div className={s.govDates}>
-              <span>{workDates[0].toISOString()}</span>
+              <span>{convertDateToDDMMYYYY(workDates[0])}</span>
               <span> - </span>
-              <span>{workDates[1].toISOString()}</span>
+              <span>{convertDateToDDMMYYYY(workDates[1])}</span>
             </div>
             <Bage
               className={s.govBage}
@@ -177,6 +179,9 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
         </div>
       </div>
+      <Button className={s.govButtonButtom}>
+        View Details
+      </Button>
     </Card>
   );
 };

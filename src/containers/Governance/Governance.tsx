@@ -86,7 +86,7 @@ export const Governance: React.FC<GovernanceProps> = ({
           values={TabsContent}
           activeId={tabsState}
           setActiveId={(val) => setTabsState(val)}
-          className={s.tabs}
+          className={s.govTabs}
         />
       </Card>
 

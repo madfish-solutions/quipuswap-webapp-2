@@ -22,8 +22,8 @@ const GovernancePage: React.FC = () => {
       description={t('swap:Governance page description. Couple sentences...')}
       className={s.wrapper}
     >
+      <LineChart data={LineChartSampleData} />
       <Governance />
-      <LineChart className={s.chart} data={LineChartSampleData} />
     </BaseLayout>
   );
 };
