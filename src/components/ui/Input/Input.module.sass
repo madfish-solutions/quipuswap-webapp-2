@@ -19,6 +19,8 @@
   margin-bottom: 8px
 
 .input
+
+.input
   padding: 7px 15px
   border-radius: 8px
   transition: background-color $animationTime, color $animationTime
@@ -91,6 +93,10 @@
 .light
   .background
     background: $ui-04
+  .input:-webkit-autofill, .input:-webkit-autofill:hover, .input:-webkit-autofill:focus, .input:-webkit-autofill:active
+    -webkit-box-shadow: 0 0 0 30px $ui-01 inset !important
+  .input:-webkit-autofill
+    -webkit-text-fill-color: $text-01
   .input
     background: $ui-01
     color: $text-01
@@ -104,6 +110,10 @@
 .dark
   .background
     background: $text-02
+  .input:-webkit-autofill, .input:-webkit-autofill:hover, .input:-webkit-autofill:focus, .input:-webkit-autofill:active
+    -webkit-box-shadow: 0 0 0 30px $ui-06 inset !important
+  .input:-webkit-autofill
+    -webkit-text-fill-color: $text-inverse
   .input
     background: $ui-06
     color: $text-inverse

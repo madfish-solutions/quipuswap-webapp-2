@@ -36,13 +36,14 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       <Card contentClassName={s.content}>
         {
           DEXDashboardData.map(({
-            id, volume, label, currency,
+            id, volume, label, currency, tooltip,
           }, idx) => (
             <DashboardCard
               key={id}
               className={cx(s.card, modeClass[colorThemeMode])}
               size={idx < 4 ? 'extraLarge' : 'large'}
               volume={volume}
+              tooltip={tooltip}
               label={label}
               currency={currency}
             />
