@@ -1,10 +1,14 @@
-import { WhitelistedToken } from '@utils/types';
+import { QSNetwork, WhitelistedToken } from '@utils/types';
+
+type WhitelistedOrCustomToken = WhitelistedToken & { network: string };
 
 export const localSearchToken = ({
   metadata,
   contractAddress,
   fa2TokenId,
-} : WhitelistedToken, oldInput:string, oldInputToken:number) => {
+  network: tokenNetwork,
+} : WhitelistedOrCustomToken,
+network:QSNetwork, oldInput:string, oldInputToken:number) => {
   const isName = metadata?.name?.toLowerCase().includes(oldInput.toLowerCase());
   const isSymbol = metadata?.symbol?.toLowerCase().includes(oldInput.toLowerCase());
   const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
@@ -20,6 +24,9 @@ export const localSearchToken = ({
     res = (isName
           || isSymbol
           || isContract);
+  }
+  if (tokenNetwork) {
+    res = res && tokenNetwork === network.id;
   }
   return res;
 };

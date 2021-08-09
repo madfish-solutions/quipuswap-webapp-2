@@ -247,22 +247,24 @@ function useDApp() {
   }, [tokensData]);
 
   useEffect(() => {
-    if (!tezos) return;
-    if (tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
+    if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
       const wlt = new TempleWallet(
         APP_NAME,
         null,
       );
+      const fallbackTzTk = new TezosToolkit(network.rpcBaseURL);
+      fallbackTzTk.setPackerProvider(michelEncoder);
       const pkh = null;
       setState((prevState) => ({
         ...prevState,
+        network,
         templeWallet: wlt,
-        tezos: fallbackToolkit,
+        tezos: fallbackTzTk,
         accountPkh: pkh,
         connectionType: null,
       }));
     }
-  }, [tezos, network]);
+  }, [network]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
@@ -297,7 +299,7 @@ function useDApp() {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
-          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
           network: network.id,
         } as WhitelistedToken;
         setState((prevState) => ({
