@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
 
@@ -47,33 +47,35 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <div className={s.reward}>
-        <div className={s.rewardContent}>
-          <span className={s.rewardHeader}>
-            Your Pending Rewards:
-          </span>
-          <span className={s.rewardAmount}>
-            100,000,000
-            <span className={s.rewardCurrency}>TEZ</span>
-          </span>
+    <Card className={className}>
+      <CardContent className={cx(s.content, modeClass[colorThemeMode])}>
+        <div className={s.reward}>
+          <div className={s.rewardContent}>
+            <span className={s.rewardHeader}>
+              Your Pending Rewards:
+            </span>
+            <span className={s.rewardAmount}>
+              100,000,000
+              <span className={s.rewardCurrency}>TEZ</span>
+            </span>
+          </div>
+          <VotingReward />
         </div>
-        <VotingReward />
-      </div>
-      {content.map(({
-        id, header, amount, tooltip,
-      }) => (
-        <div key={id} className={s.item}>
-          <span className={s.header}>
-            {header}
-            :
+        {content.map(({
+          id, header, amount, tooltip,
+        }) => (
+          <div key={id} className={s.item}>
+            <span className={s.header}>
+              {header}
+              :
 
-            <Tooltip content={t(tooltip)} />
-          </span>
-          <span className={s.amount}>{amount}</span>
-        </div>
-      ))}
-      <Button className={s.button}>Claim Reward</Button>
+              <Tooltip content={t(tooltip)} />
+            </span>
+            <span className={s.amount}>{amount}</span>
+          </div>
+        ))}
+        <Button className={s.button}>Claim Reward</Button>
+      </CardContent>
     </Card>
   );
 };
