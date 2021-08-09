@@ -130,8 +130,6 @@ function useDApp() {
     searchTokens: { loading: false, data: [] },
   });
 
-  // console.log(`network: ${network.id || network}`, tokens.data.length);
-
   const setFallbackState = useCallback(
     () => setState((prevState) => ({
       ...prevState,
@@ -248,8 +246,28 @@ function useDApp() {
     }));
   }, [tokensData]);
 
+  useEffect(() => {
+    if (!tezos) return;
+    if (tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
+      const wlt = new TempleWallet(
+        APP_NAME,
+        null,
+      );
+      const pkh = null;
+      setState((prevState) => ({
+        ...prevState,
+        templeWallet: wlt,
+        tezos: fallbackToolkit,
+        accountPkh: pkh,
+        connectionType: null,
+      }));
+    }
+    console.log(network.id, tezos?.rpc.getRpcUrl());
+  }, [tezos, network]);
+
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
+      console.log(network.id, tezos?.rpc.getRpcUrl());
       if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
@@ -269,7 +287,7 @@ function useDApp() {
           return;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(address, tokenId);
+        const customToken = await getTokenMetadata(network, address, tokenId);
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
@@ -290,7 +308,7 @@ function useDApp() {
         }));
       }
     },
-    [tezos],
+    [tezos, network],
   );
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {

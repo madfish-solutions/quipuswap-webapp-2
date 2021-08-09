@@ -35,7 +35,8 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };
-export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
+export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
+export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
@@ -46,6 +47,7 @@ export const FLORENCENET_NETWORK: QSNetwork = {
   name: 'Florence Testnet',
   type: 'test',
   rpcBaseURL: 'https://testnet-tezos.giganode.io',
+  metadata: METADATA_API_TESTNET,
   description: 'Florence testnet',
   disabled: false,
 };
@@ -55,6 +57,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   name: 'Tezos Mainnet',
   type: 'main',
   rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
+  metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
   disabled: false,
 };

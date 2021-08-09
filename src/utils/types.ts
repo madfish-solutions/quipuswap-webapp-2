@@ -12,6 +12,7 @@ export interface QSNetwork {
   name: string
   type: 'main' | 'test'
   rpcBaseURL: string
+  metadata: string
   description: string
   disabled: boolean
 }
