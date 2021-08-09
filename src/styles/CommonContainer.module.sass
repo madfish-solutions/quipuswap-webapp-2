@@ -10,9 +10,11 @@
 
 .govTabs
   margin-bottom: -1px
-  min-width: 60px
   white-space: nowrap
   overflow-x: scroll
+  position: relative
+  display: inline-block
+  width: 100%
 
 .tabContent
   padding: 0px 24px
@@ -22,6 +24,22 @@
 
 .unsticky
   flex-direction: column
+  .govCard
+    margin: 24px 0px
+    width: 100%
+
+.proposal
+  .proposalInfo
+    flex: 1
+  .proposalDetails
+    width: 424px
+
+.proposalHeader
+  display: flex
+  align-items: center
+
+.proposalBackIcon
+  margin-right: 8px
 
 .content
   padding: 40px 24px 24px
@@ -29,7 +47,7 @@
   flex-direction: column
 
 .mb24
-    margin-bottom: 24px
+  margin-bottom: 24px
 
 .iconButton
   margin: 11px auto

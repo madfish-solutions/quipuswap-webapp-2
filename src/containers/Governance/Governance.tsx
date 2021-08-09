@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import cx from 'classnames';
+import dynamic from 'next/dynamic';
 
 import { Tabs } from '@components/ui/Tabs';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent } from '@components/ui/Card';
 import { StickyBlock } from '@components/common/StickyBlock';
+import { LineChartSampleData } from '@components/ui/LineChart/content';
 
 import s from '@styles/CommonContainer.module.sass';
+
 import { GovernanceCard, GovernanceCardProps } from './GovernanceCard';
+
+const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+  ssr: false,
+});
 
 const TabsContent = [
   {
@@ -43,12 +50,14 @@ export const Governance: React.FC<GovernanceProps> = ({
   className,
 }) => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
+  const [proposal, selectProposal] = useState<string>('');
 
   const content: GovernanceCardProps[] = [{
     name: 'Add USDs/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
     status: 'PENDING',
-    description: `Lorem ipsum dolor sit amet, consectetur
+    description: 'https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md',
+    shortDescription: `Lorem ipsum dolor sit amet, consectetur
     adipiscing elit. Sit adipiscing placerat
     augue gravida nunc. Enim sit volutpat ut amet, viverra.`,
     remaining: new Date(Date.now() + (3600 * 24000 * 3) + 4500000),
@@ -63,7 +72,8 @@ export const Governance: React.FC<GovernanceProps> = ({
     name: 'Add USDs/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
     status: 'PENDING',
-    description: `Lorem ipsum dolor sit amet, consectetur
+    description: 'https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md',
+    shortDescription: `Lorem ipsum dolor sit amet, consectetur
     adipiscing elit. Sit adipiscing placerat
     augue gravida nunc. Enim sit volutpat ut amet, viverra.`,
     remaining: new Date(Date.now() + (3600 * 24000 * 3) + 1300000),
@@ -76,22 +86,51 @@ export const Governance: React.FC<GovernanceProps> = ({
     currency: 'QNOT',
   }];
 
-  return (
-    <StickyBlock className={cx(className, s.unsticky)}>
-      <Card
-        className={cx(s.fullWidth, s.mb24i)}
-        contentClassName={s.tabContent}
-      >
-        <Tabs
-          values={TabsContent}
-          activeId={tabsState}
-          setActiveId={(val) => setTabsState(val)}
-          className={s.govTabs}
+  const handleUnselect = () => selectProposal('');
+
+  const proposalObj = content.find((x) => x.id === proposal);
+  if (proposal && proposalObj) {
+    return (
+      <StickyBlock className={cx(className, s.proposal)}>
+        <GovernanceCard
+          {...proposalObj}
+          size="full"
+          onClick={() => {
+            // TODO
+          }}
+          handleUnselect={handleUnselect}
         />
-      </Card>
 
-      {content.map((x) => <GovernanceCard key={x.id} {...x} />)}
+      </StickyBlock>
+    );
+  }
 
-    </StickyBlock>
+  return (
+    <>
+      <LineChart data={LineChartSampleData} />
+      <StickyBlock className={cx(className, s.unsticky)}>
+        <Card
+          className={cx(s.govCard, s.mb24i)}
+        >
+          <CardContent className={s.tabContent}>
+            <Tabs
+              values={TabsContent}
+              activeId={tabsState}
+              setActiveId={(val) => setTabsState(val)}
+              className={s.govTabs}
+            />
+          </CardContent>
+        </Card>
+
+        {content.map((x) => (
+          <GovernanceCard
+            key={x.id}
+            {...x}
+            onClick={() => selectProposal(x.id)}
+          />
+        ))}
+
+      </StickyBlock>
+    </>
   );
 };

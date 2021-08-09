@@ -1,18 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
-
-import { Card } from '@components/ui/Card';
-import { Bage } from '@components/ui/Bage';
-import { Button } from '@components/ui/Button';
+import ReactMarkdown from 'react-markdown';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { Bage } from '@components/ui/Bage';
+import { Button } from '@components/ui/Button';
+import { Back } from '@components/svg/Back';
+
 import s from './GovernanceCard.module.sass';
 
 export type GovernanceCardProps = {
   name: React.ReactNode
   workDates: Date[]
+  size?: keyof typeof sizeClass
   status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
-  description: React.ReactNode
+  description: string
+  shortDescription: React.ReactNode
   remaining: Date
   voted: string
   support: string
@@ -22,6 +26,8 @@ export type GovernanceCardProps = {
   currency: string
   id:string
   className?: string
+  onClick?: () => void
+  handleUnselect?: () => void
 };
 
 const convertDateToDDMMYYYY = (date:Date) => `${(date.getDate() > 9) ? date.getDate() : (`0${date.getDate()}`)} ${(date.getMonth() > 8) ? (date.getMonth() + 1) : (`0${date.getMonth() + 1}`)} ${date.getFullYear()}`;
@@ -32,28 +38,21 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   // calculate days
   const days = Math.floor(diffInMilliSeconds / 86400);
   diffInMilliSeconds -= days * 86400;
-  console.log('calculated days', days);
 
   // calculate hours
   const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
   diffInMilliSeconds -= hours * 3600;
-  console.log('calculated hours', hours);
 
   // calculate minutes
   const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
   diffInMilliSeconds -= minutes * 60;
-  console.log('minutes', minutes);
-
-  // let difference = '';
-  // if (days > 0) {
-  //   difference += (days === 1) ? `${days} day, ` : `${days} days, `;
-  // }
-
-  // difference += (hours === 0 || hours === 1) ? `${hours} hour, ` : `${hours} hours, `;
-
-  // difference += (minutes === 0 || hours === 1) ? `${minutes} minutes` : `${minutes} minutes`;
 
   return { days, hours, minutes };
+};
+
+const sizeClass = {
+  full: s.full,
+  short: s.short,
 };
 
 const modeClass = {
@@ -66,6 +65,8 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   workDates,
   status = 'PENDING',
   description,
+  size = 'short',
+  shortDescription,
   remaining,
   voted,
   support,
@@ -74,114 +75,198 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   claimable,
   currency,
   className,
+  onClick,
+  handleUnselect,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
+  const compountClassName = cx(
+    modeClass[colorThemeMode],
+    s.fullWidth,
+    s.mb24i,
+    s.govBody,
+    sizeClass[size],
+    className,
+  );
+  const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
+  const loadDescription = () => {
+    fetch(description).then((x) => x.text()).then((x) => {
+      console.log(x);
+      setDescription({ loadedDescription: x, isLoaded: true });
+    });
+  };
+  useEffect(() => {
+    if (size === 'full') loadDescription();
+  }, []);
+  if (size === 'full') {
+    return (
+      <>
+        <Card
+          className={compountClassName}
+        >
+          <CardHeader header={{
+            content: (
+              <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
+                <Back className={s.proposalBackIcon} />
+                Back
+              </Button>
+            ),
+          }}
+          />
+          <CardHeader
+            header={{
+              content: (
+                <div className={s.govHeader}>
+                  <div className={s.govName}>
+                    {name}
+                  </div>
+                  <div className={s.govGroup}>
+                    <div className={s.govDates}>
+                      <span>{convertDateToDDMMYYYY(workDates[0])}</span>
+                      <span> - </span>
+                      <span>{convertDateToDDMMYYYY(workDates[1])}</span>
+                    </div>
+                    <Bage
+                      className={s.govBage}
+                      text={status}
+                      variant={status === 'PENDING' || status === 'FAILED' ? 'inverse' : 'primary'}
+                    />
+
+                  </div>
+                </div>
+              ),
+              button: (
+                <Button onClick={() => (onClick ? onClick() : null)} className={s.govButton}>
+                  Vote
+                </Button>
+
+              ),
+            }}
+            className={s.proposalHeader}
+          />
+          <CardContent className={s.govContent}>
+            <div className={s.govDescription}>
+              <ReactMarkdown>{!isLoaded ? 'Loading...' : loadedDescription}</ReactMarkdown>
+            </div>
+          </CardContent>
+        </Card>
+        <div className={s.proposalDetails}>
+          <Card>proposal details</Card>
+          <Card>proposal votes</Card>
+          <Card>proposal references</Card>
+        </div>
+      </>
+    );
+  }
   return (
     <Card
       className={cx(modeClass[colorThemeMode], s.fullWidth, s.mb24i, s.govBody, className)}
-      contentClassName={s.govContent}
-      header={{
-        content: (
-          <div className={s.govHeader}>
-            <div className={s.govName}>
-              {name}
-            </div>
-            <div className={s.govDates}>
-              <span>{convertDateToDDMMYYYY(workDates[0])}</span>
-              <span> - </span>
-              <span>{convertDateToDDMMYYYY(workDates[1])}</span>
-            </div>
-            <Bage
-              className={s.govBage}
-              text={status}
-              variant={status === 'PENDING' || status === 'FAILED' ? 'inverse' : 'primary'}
-            />
-          </div>
-        ),
-        button: (
-          <Button className={s.govButton}>
-            View Details
-          </Button>
-        ),
-        className: s.govHeaderWrapper,
-      }}
     >
-      <div className={s.govDescription}>
-        {description}
-      </div>
-      <div className={s.govBlocks}>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Remaining
+      <CardHeader
+        header={{
+          content: (
+            <div className={s.govHeader}>
+              <div className={s.govName}>
+                {name}
+              </div>
+              <div className={s.govDates}>
+                <span>{convertDateToDDMMYYYY(workDates[0])}</span>
+                <span> - </span>
+                <span>{convertDateToDDMMYYYY(workDates[1])}</span>
+              </div>
+              <Bage
+                className={s.govBage}
+                text={status}
+                variant={status === 'PENDING' || status === 'FAILED' ? 'inverse' : 'primary'}
+              />
+            </div>
+          ),
+          button: (
+            <Button onClick={() => (onClick ? onClick() : null)} className={s.govButton}>
+              View Details
+            </Button>
+          ),
+        }}
+        className={s.govHeaderWrapper}
+      />
+      <CardContent className={s.govContent}>
+
+        <div className={s.govDescription}>
+          {shortDescription}
+        </div>
+        <div className={s.govBlocks}>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Remaining
+            </div>
+            <div className={s.govBlockLabel}>
+              {days}
+              <span className={s.govBlockSpan}>D</span>
+              {' '}
+              {hours}
+              <span className={s.govBlockSpan}>H</span>
+              {' '}
+              {minutes}
+              <span className={s.govBlockSpan}>M</span>
+            </div>
           </div>
-          <div className={s.govBlockLabel}>
-            {days}
-            <span className={s.govBlockSpan}>D</span>
-            {' '}
-            {hours}
-            <span className={s.govBlockSpan}>H</span>
-            {' '}
-            {minutes}
-            <span className={s.govBlockSpan}>M</span>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Voted
+            </div>
+            <div className={s.govBlockLabel}>
+              {voted}
+              {' '}
+              <span className={s.govBlockSpan}>
+                {currency}
+              </span>
+            </div>
+          </div>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Support
+            </div>
+            <div className={s.govBlockLabel}>
+              {support}
+              {' '}
+              <span className={s.govBlockSpan}>
+                {currency}
+              </span>
+            </div>
+          </div>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Reject
+            </div>
+            <div className={s.govBlockLabel}>
+              {reject}
+              {' '}
+              <span className={s.govBlockSpan}>
+                {currency}
+              </span>
+            </div>
+          </div>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Your Votes
+            </div>
+            <div className={s.govBlockLabel}>
+              {votes}
+            </div>
+          </div>
+          <div className={s.govBlock}>
+            <div className={s.govBlockHeader}>
+              Claimable Votes
+            </div>
+            <div className={s.govBlockLabel}>
+              {claimable}
+            </div>
           </div>
         </div>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Voted
-          </div>
-          <div className={s.govBlockLabel}>
-            {voted}
-            {' '}
-            <span className={s.govBlockSpan}>
-              {currency}
-            </span>
-          </div>
-        </div>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Support
-          </div>
-          <div className={s.govBlockLabel}>
-            {support}
-            {' '}
-            <span className={s.govBlockSpan}>
-              {currency}
-            </span>
-          </div>
-        </div>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Reject
-          </div>
-          <div className={s.govBlockLabel}>
-            {reject}
-            {' '}
-            <span className={s.govBlockSpan}>
-              {currency}
-            </span>
-          </div>
-        </div>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Your Votes
-          </div>
-          <div className={s.govBlockLabel}>
-            {votes}
-          </div>
-        </div>
-        <div className={s.govBlock}>
-          <div className={s.govBlockHeader}>
-            Claimable Votes
-          </div>
-          <div className={s.govBlockLabel}>
-            {claimable}
-          </div>
-        </div>
-      </div>
-      <Button className={s.govButtonButtom}>
-        View Details
-      </Button>
+        <Button onClick={() => (onClick ? onClick() : null)} className={s.govButtonButtom}>
+          View Details
+        </Button>
+      </CardContent>
     </Card>
   );
 };

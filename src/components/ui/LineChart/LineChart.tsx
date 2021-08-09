@@ -11,7 +11,7 @@ import { createChart, IChartApi } from 'lightweight-charts';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import {
   GraphicColors,
@@ -157,29 +157,31 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   return (
     <Card
-      header={{ content: 'Graphic' }}
       className={className}
-      contentClassName={s.container}
     >
-      <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <p className={s.caption}>
-          Price:
-        </p>
-        <p className={s.token}>
-          {prettyPrice(value.price, 3)}
-          {' '}
-          TOKEN
-        </p>
-        <p className={s.dollar}>
-          $
-          {' '}
-          {prettyPrice(value.price, 3)}
-        </p>
-        <p className={s.date}>
-          {new Date(value.time * 1000).toISOString()}
-        </p>
-      </div>
-      <div ref={chartRef} className={s.chart} />
+      <CardHeader header={{ content: 'Graphic' }} />
+      <CardContent className={s.container}>
+        <div className={cx(s.info, modeClass[colorThemeMode])}>
+          <p className={s.caption}>
+            Price:
+          </p>
+          <p className={s.token}>
+            {prettyPrice(value.price, 3)}
+            {' '}
+            TOKEN
+          </p>
+          <p className={s.dollar}>
+            $
+            {' '}
+            {prettyPrice(value.price, 3)}
+          </p>
+          <p className={s.date}>
+            {new Date(value.time * 1000).toISOString()}
+          </p>
+        </div>
+        <div ref={chartRef} className={s.chart} />
+
+      </CardContent>
     </Card>
   );
 };
