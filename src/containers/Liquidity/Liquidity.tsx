@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Tooltip } from '@components/ui/Tooltip';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
@@ -148,6 +149,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                 className={s.switcherInput}
               />
               Rebalance Liquidity
+              <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
             </div>
           </>
         )}
@@ -177,30 +179,96 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         }}
         contentClassName={s.content}
       >
-        <CardCell header={t('common:Sell Price')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Sell Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="tez" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
           </div>
         </CardCell>
-        <CardCell header={t('common:Buy Price')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Buy Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
           <div className={s.cellAmount}>
             <CurrencyAmount amount="1" currency="QPSP" />
             <span className={s.equal}>=</span>
             <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
           </div>
         </CardCell>
-        <CardCell header={t('liquidity:Token A Locked')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('liquidity:Token A Locked')}
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+              />
+            </>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="10000" currency="tez" />
         </CardCell>
-        <CardCell header={t('liquidity:Token B Locked')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('liquidity:Token B Locked')}
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+              />
+            </>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="10000" currency="QPSP" />
         </CardCell>
-        <CardCell header={t('liquidity:Your Total LP')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('liquidity:Your Total LP')}
+              <Tooltip
+                sizeT="small"
+                content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
+              />
+            </>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="1000000" />
         </CardCell>
-        <CardCell header={t('liquidity:Your Frozen LP')} className={s.cell}>
+        <CardCell
+          header={(
+            <>
+              {t('liquidity:Your Frozen LP')}
+              <Tooltip
+                sizeT="small"
+                content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
+              />
+            </>
+          )}
+          className={s.cell}
+        >
           <CurrencyAmount amount="100" />
         </CardCell>
         <div className={s.detailsButtons}>

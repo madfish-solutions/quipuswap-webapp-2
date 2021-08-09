@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Section, SectionProps } from '@components/home/Section';
-// import { TopAssetsCard, TopAssetsCardProps } from '@components/home/TopAssets/TopAssetsCard';
 import { TopAssetsCard } from '@components/home/TopAssets/TopAssetsCard';
 
 import s from './TopAssets.module.sass';
