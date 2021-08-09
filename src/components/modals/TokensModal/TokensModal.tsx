@@ -13,11 +13,11 @@ import {
   useTezos,
   useTokens,
   isTokenFa2,
+  useNetwork,
 } from '@utils/dapp';
 import { parseNumber, localSearchToken } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
-import { MAINNET_NETWORK } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
@@ -154,6 +154,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
+  const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: tokens } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
@@ -168,11 +169,12 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   };
 
   const handleTokenSearch = () => {
+    if (!network || !tezos) return;
     const isTokens = tokens
       .filter(
-        (token) => localSearchToken(
+        (token:any) => localSearchToken(
           token,
-          MAINNET_NETWORK,
+          network,
           inputValue,
           inputToken,
         ),
@@ -189,7 +191,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
 
   const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
     ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);

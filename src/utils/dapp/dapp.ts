@@ -231,11 +231,11 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getTokensData = useCallback(() => getTokens(true), []);
+  const getTokensData = useCallback(() => getTokens(network, true), [network]);
   const {
     data: tokensData,
   } = useSWR(
-    ['tokens-initial-data'],
+    ['tokens-initial-data', network],
     getTokensData,
   );
 
@@ -245,6 +245,26 @@ function useDApp() {
       tokens: { loading: false, data: tokensData ?? [] },
     }));
   }, [tokensData]);
+
+  useEffect(() => {
+    if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
+      const wlt = new TempleWallet(
+        APP_NAME,
+        null,
+      );
+      const fallbackTzTk = new TezosToolkit(network.rpcBaseURL);
+      fallbackTzTk.setPackerProvider(michelEncoder);
+      const pkh = null;
+      setState((prevState) => ({
+        ...prevState,
+        network,
+        templeWallet: wlt,
+        tezos: fallbackTzTk,
+        accountPkh: pkh,
+        connectionType: null,
+      }));
+    }
+  }, [network]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
@@ -267,7 +287,7 @@ function useDApp() {
           return;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(address, tokenId);
+        const customToken = await getTokenMetadata(network, address, tokenId);
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
@@ -279,15 +299,16 @@ function useDApp() {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
-          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-        };
+          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
+          network: network.id,
+        } as WhitelistedToken;
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
         }));
       }
     },
-    [tezos],
+    [tezos, network],
   );
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {
@@ -363,12 +384,9 @@ function useDApp() {
   );
 
   const changeNetwork = useCallback(
-    async (networkNew: QSNetwork) => {
+    (networkNew: QSNetwork) => {
       setState((prevState) => ({
         ...prevState,
-        tezos: fallbackToolkit,
-        accountPkh: null,
-        connectionType: null,
         network: networkNew,
       }));
       setNetwork(networkNew);
