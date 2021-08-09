@@ -27,7 +27,6 @@ export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
-  network: 'mainnet',
   contractAddress: 'tez',
   metadata: {
     decimals: 6,
