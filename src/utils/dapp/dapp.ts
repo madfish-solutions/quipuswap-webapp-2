@@ -262,12 +262,10 @@ function useDApp() {
         connectionType: null,
       }));
     }
-    console.log(network.id, tezos?.rpc.getRpcUrl());
   }, [tezos, network]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
-      console.log(network.id, tezos?.rpc.getRpcUrl());
       if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
