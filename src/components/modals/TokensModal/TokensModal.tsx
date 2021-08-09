@@ -12,7 +12,6 @@ import {
   useSearchTokens,
   useTezos,
   useTokens,
-  useNetwork,
   isTokenFa2,
 } from '@utils/dapp';
 import { parseNumber, localSearchToken } from '@utils/helpers';
@@ -156,7 +155,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
   const { data: tokens } = useTokens();
-  const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -173,7 +171,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       .filter(
         (token) => localSearchToken(
           token,
-          network,
           inputValue,
           inputToken,
         ),
@@ -190,7 +187,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
   const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
     ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);

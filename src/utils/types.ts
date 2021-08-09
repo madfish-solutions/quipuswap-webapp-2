@@ -26,7 +26,6 @@ export interface WhitelistedToken {
   contractAddress: string
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
-  network: QSNetworkType
 }
 
 export type WhitelistedTokenMetadata = {

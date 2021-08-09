@@ -130,6 +130,8 @@ function useDApp() {
     searchTokens: { loading: false, data: [] },
   });
 
+  // console.log(`network: ${network.id || network}`, tokens.data.length);
+
   const setFallbackState = useCallback(
     () => setState((prevState) => ({
       ...prevState,
@@ -231,11 +233,11 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getTokensData = useCallback(() => getTokens(true), []);
+  const getTokensData = useCallback(() => getTokens(network, true), [network]);
   const {
     data: tokensData,
   } = useSWR(
-    ['tokens-initial-data'],
+    ['tokens-initial-data', network],
     getTokensData,
   );
 
@@ -364,7 +366,7 @@ function useDApp() {
   );
 
   const changeNetwork = useCallback(
-    async (networkNew: QSNetwork) => {
+    (networkNew: QSNetwork) => {
       setState((prevState) => ({
         ...prevState,
         tezos: fallbackToolkit,

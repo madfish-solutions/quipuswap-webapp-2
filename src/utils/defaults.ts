@@ -22,6 +22,7 @@ export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const TEZOS_TOKEN: WhitelistedToken = {

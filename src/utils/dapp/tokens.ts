@@ -2,8 +2,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
+  TESTNET_TOKENS,
 } from '@utils/defaults';
-import { WhitelistedToken } from '@utils/types';
+import { QSNetwork } from '@utils/types';
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps } from '@utils/helpers';
 
@@ -28,13 +29,14 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
 };
 
 export const getTokens = async (
+  network:QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(MAINNET_TOKENS))
+) => fetch(ipfsToHttps(network.id === 'florencenet' ? TESTNET_TOKENS : MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
     let res = [];
     if (json.tokens?.length !== 0) {
-      res = json.tokens.map((x:WhitelistedToken) => ({ ...x, network: 'mainnet' }));
+      res = json.tokens;
     }
     if (addTokensFromLocalStorage) {
       res = [...getSavedTokens(), ...res];
