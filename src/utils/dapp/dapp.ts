@@ -387,9 +387,6 @@ function useDApp() {
     (networkNew: QSNetwork) => {
       setState((prevState) => ({
         ...prevState,
-        tezos: fallbackToolkit,
-        accountPkh: null,
-        connectionType: null,
         network: networkNew,
       }));
       setNetwork(networkNew);
