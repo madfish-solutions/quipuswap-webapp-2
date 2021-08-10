@@ -13,3 +13,4 @@ export * from './localSearchBaker';
 export * from './getWhitelistedTokenName';
 export * from './getWhitelistedTokenSymbol';
 export * from './getWhitelistedBakerName';
+export * from './isTokensEqual';

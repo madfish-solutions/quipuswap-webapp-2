@@ -7,6 +7,7 @@ import { BakersModal } from '@components/modals/BakersModal';
 import { Button } from '@components/ui/Button';
 import { Shevron } from '@components/svg/Shevron';
 
+import { getWhitelistedBakerName } from '@utils/helpers';
 import s from './ComplexInput.module.sass';
 import { TokensLogos } from '../TokensLogos';
 
@@ -64,7 +65,7 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
               metadata:
             {
               thumbnailUri: baker?.logo,
-              name: baker?.name ?? baker?.address,
+              name: getWhitelistedBakerName((baker ?? {}) as WhitelistedBaker),
               symbol: '',
             },
             } as WhitelistedToken}

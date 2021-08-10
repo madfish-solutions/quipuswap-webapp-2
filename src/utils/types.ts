@@ -24,6 +24,14 @@ export enum WalletType {
   TEMPLE = 'temple',
 }
 
+export interface WhitelistedTokenPair {
+  balance?: string,
+  frozenBalance?: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  dex: string
+}
+
 export interface WhitelistedToken {
   type: 'fa1.2' | 'fa2'
   contractAddress: string

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { prettyPrice } from '@utils/helpers';
+import { getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -50,8 +50,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
           metadata:
             {
               thumbnailUri: baker.logo,
-              name: baker.name ?? baker.address,
-              symbol: '',
+              name: getWhitelistedBakerName(baker),
             },
         } as WhitelistedToken}
         />

@@ -25,6 +25,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
   token,
   onClick,
   tabIndex,
+  children,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -48,7 +49,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
       }}
       className={compoundClassName}
     >
-      <div className={s.joinRow}>
+      <div className={s.splitRow}>
         <TokensLogos
           token1={token}
         />
@@ -72,6 +73,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
 
         </div>
       </div>
+      {children}
     </div>
   );
 };

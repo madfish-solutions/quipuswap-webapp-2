@@ -2,21 +2,24 @@ import React, { useMemo, useState } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { withTypes, Field } from 'react-final-form';
-import { OnChange } from 'react-final-form-listeners';
 
-import { validateMinMax } from '@utils/validators';
-import { parseDecimals } from '@utils/helpers';
-import { Tooltip } from '@components/ui/Tooltip';
+import { WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
+import { parseDecimals } from '@utils/helpers';
+import { validateMinMax } from '@utils/validators';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
-import { ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { ComplexInput } from '@components/ui/ComplexInput';
+import { Tooltip } from '@components/ui/Tooltip';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { PositionsModal } from '@components/modals/PositionsModal';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
@@ -36,8 +39,15 @@ const TabsContent = [
 ];
 
 type FormValues = {
-  token1: string
-  token2: string
+  switcher: boolean
+  balance1: number
+  balance2: number
+  balance3: number
+  lpBalance: string
+  frozenBalance: string
+  lastChange: string
+  estimateLP: string
+  slippage: string
 };
 
 type LiquidityProps = {
@@ -48,10 +58,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
+  const [tokensModal, setTokensModal] = useState<number>(0);
+  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
-  const [switcherValue, setSwitcherValue] = useState(true); // TODO: Delete when lib added
-
-  const [lastChange, setLastChange] = useState('token1');
+  const [, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
 
   const { Form } = withTypes<FormValues>();
 
@@ -62,233 +72,249 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
   return (
     <StickyBlock className={className}>
-      <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
-              className={s.tabs}
-            />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
+      <PositionsModal
+        isOpen={tokensModal !== 0}
+        onRequestClose={() => setTokensModal(0)}
+        onChange={(tp) => {
+          if (tokensModal === 1) setTokenPair(tp);
+          setTokensModal(0);
         }}
-        contentClassName={s.content}
-      >
-        <Form
-          onSubmit={() => {}}
-          mutators={{
-            setValue: ([field, value], state, { changeValue }) => {
-              changeValue(state, field, () => value);
-            },
-          }}
-          render={({ form, values }) => (
-            <>
-              {currentTab.id === 'remove' && (
+      />
+      <Form
+        onSubmit={() => {}}
+        mutators={{
+          setValue: ([field, value], state, { changeValue }) => {
+            changeValue(state, field, () => value);
+          },
+        }}
+        render={({ form, values }) => (
+          <Card
+            header={{
+              content: (
+                <Tabs
+                  values={TabsContent}
+                  activeId={tabsState}
+                  setActiveId={(val) => setTabsState(val)}
+                  className={s.tabs}
+                />
+              ),
+              button: (
+                <Button
+                  theme="quaternary"
+                >
+                  <Transactions />
+                </Button>
+              ),
+              className: s.header,
+            }}
+            contentClassName={s.content}
+          >
+            {currentTab.id === 'remove' && (
               <Field
-                name="tokenPair"
+                name="balance3"
               >
                 {({ input }) => (
                   <>
-                    <ComplexInput
+                    <PositionSelect
                       {...input}
-                      token1={TEZOS_TOKEN}
+                      tokenPair={tokenPair}
+                      setTokenPair={(pair) => {
+                        setTokenPair(pair);
+                      }}
                       handleBalance={(value) => {
                         form.mutators.setValue(
-                          'tokenPair',
+                          'balance3',
                           +value,
                         );
                       }}
+                      balance={(values.balance3 ?? 0).toString()}
                       id="liquidity-remove-input"
                       label="Select LP"
                       className={s.input}
-                      mode="votes"
                     />
                     <ArrowDown className={s.iconButton} />
                   </>
                 )}
               </Field>
+            )}
+            <Field
+              name="balance1"
+              validate={validateMinMax(0, Infinity)}
+              parse={(value) => parseDecimals(value, 0, Infinity)}
+            >
+              {({ input }) => (
+                <>
+                  {currentTab.id !== 'remove' && (
+                    <>
+                      <TokenSelect
+                        {...input}
+                        onFocus={() => setLastChange('balance1')}
+                        token={(tokenPair?.token1) ?? TEZOS_TOKEN}
+                        setToken={() => {}}
+                        handleBalance={(value) => {
+                          setLastChange('balance1');
+                          form.mutators.setValue(
+                            'balance1',
+                            +value,
+                          );
+                        }}
+                        id="liquidity-token-1"
+                        label="Input"
+                        className={s.input}
+                      />
+                    </>
+                  )}
+                  {currentTab.id === 'remove' && (
+                    <ComplexInput
+                      {...input}
+                      token1={(tokenPair?.token1) ?? TEZOS_TOKEN}
+                      id="liquidity-token-1"
+                      label="Output"
+                      className={cx(s.input, s.mb24)}
+                      readOnly
+                    />
+                  )}
+                </>
               )}
 
-              <Field
-                name="token1"
-                validate={validateMinMax(0, Infinity)}
-                parse={(value) => parseDecimals(value, 0, Infinity)}
-              >
-                {({ input }) => (
-                  <>
+            </Field>
+            <Plus className={s.iconButton} />
+            <Field
+              name="balance2"
+              validate={validateMinMax(0, Infinity)}
+              parse={(value) => parseDecimals(value, 0, Infinity)}
+            >
+              {({ input }) => (
+                <>
+                  {currentTab.id !== 'remove' && (
+                    <>
+                      <TokenSelect
+                        {...input}
+                        onFocus={() => setLastChange('balance2')}
+                        token={(tokenPair?.token2) ?? TEZOS_TOKEN}
+                        setToken={() => {}}
+                        handleBalance={(value) => {
+                          setLastChange('balance2');
+                          form.mutators.setValue(
+                            'balance2',
+                            +value,
+                          );
+                        }}
+                        id="liquidity-token-2"
+                        label="Input"
+                        className={cx(s.input, s.mb24)}
+                      />
+                    </>
+                  )}
+                  {currentTab.id === 'remove' && (
                     <ComplexInput
                       {...input}
-                      token1={TEZOS_TOKEN}
-                      handleBalance={(value) => {
-                        form.mutators.setValue(
-                          'token1',
-                          +value,
-                        );
-                        if (!switcherValue) {
-                          form.mutators.setValue(
-                            'token2',
-                            +value,
-                          );
-                        }
-                      }}
-                      id="liquidity-token-1"
-                      label="Input"
-                      className={s.input}
-                      readOnly={currentTab.id === 'remove'}
-                    />
-                    <OnChange name="token1">
-                      {(value:string) => {
-                        setLastChange('token1');
-                        if (!switcherValue) {
-                          form.mutators.setValue(
-                            'token2',
-                            +value,
-                          );
-                        }
-                      }}
-                    </OnChange>
-                  </>
-                )}
-
-              </Field>
-              <Plus className={s.iconButton} />
-              <Field
-                name="token2"
-                validate={validateMinMax(0, Infinity)}
-                parse={(value) => parseDecimals(value, 0, Infinity)}
-              >
-                {({ input }) => (
-                  <>
-                    <ComplexInput
-                      {...input}
-                      token1={TEZOS_TOKEN}
-                      handleBalance={(value) => {
-                        form.mutators.setValue(
-                          'token2',
-                          +value,
-                        );
-                        if (!switcherValue) {
-                          form.mutators.setValue(
-                            'token1',
-                            +value,
-                          );
-                        }
-                      }}
+                      token1={(tokenPair?.token2) ?? TEZOS_TOKEN}
                       id="liquidity-token-2"
                       label="Output"
                       className={cx(s.input, s.mb24)}
-                      readOnly={currentTab.id === 'remove'}
+                      readOnly
                     />
-                    <OnChange name="token2">
-                      {(value:string) => {
-                        setLastChange('token2');
-                        if (!switcherValue) {
-                          form.mutators.setValue(
-                            'token1',
-                            value,
-                          );
-                        }
-                      }}
-                    </OnChange>
-                  </>
-                )}
-              </Field>
+                  )}
+                </>
+              )}
+            </Field>
 
-              {/* SWAP */}
-
-              <Slippage />
-
-              {currentTab.id === 'add' && (
-              <>
-                {!switcherValue ? (
-                  <Field name="token2">
-                    {({ input }) => (
+            <Field initialValue="0.5 %" name="slippage">
+              {() => (
+                <>
+                  <Slippage />
+                  {currentTab.id === 'add' && (
+                  <>
+                    {!values.switcher ? (
                       <div className={cx(s.receive, s.mb24)}>
                         <span className={s.receiveLabel}>
-                          Max invested XTZ/QPLP:
+                          Max invested:
                         </span>
-                        <CurrencyAmount amount={input.value} />
+                        <CurrencyAmount
+                          currency="XTZ / XTZ"
+                          amount="5"
+                        />
                       </div>
-
-                    )}
-
-                  </Field>
-                )
-                  : (
-                    <>
-                      <Field name="token1">
-                        {({ input }) => (
+                    )
+                      : (
+                        <>
                           <div className={s.receive}>
                             <span className={s.receiveLabel}>
-                              Max invested XTZ:
+                              Max invested:
                             </span>
-                            <CurrencyAmount amount={input.value} />
+                            <CurrencyAmount
+                              currency="XTZ"
+                              amount="5"
+                            />
                           </div>
-                        )}
-                      </Field>
-                      <Field name="token2">
-                        {({ input }) => (
                           <div className={cx(s.receive, s.mb24)}>
                             <span className={s.receiveLabel}>
-                              Max invested QPTP:
+                              Max invested:
                             </span>
-                            <CurrencyAmount amount={input.value} />
+                            <CurrencyAmount
+                              currency="XTZ"
+                              amount="5"
+                            />
                           </div>
-                        )}
-                      </Field>
+                        </>
+                      )}
+                  </>
+                  )}
+
+                  {currentTab.id === 'remove' && (
+                    <>
+                      <div className={s.receive}>
+                        <span className={s.receiveLabel}>
+                          Minimum received:
+                        </span>
+                        <CurrencyAmount
+                          currency="XTZ"
+                          amount="5"
+                        />
+                      </div>
+                      <div className={s.receive}>
+                        <span className={s.receiveLabel}>
+                          Minimum received:
+                        </span>
+                        <CurrencyAmount
+                          currency="XTZ"
+                          amount="5"
+                        />
+                      </div>
+                      <Button className={s.button}>
+                        Remove & Unvote
+                      </Button>
                     </>
                   )}
-                <div className={s.switcher}>
-                  <Switcher
-                    isActive={switcherValue}
-                    onChange={() => {
-                      if (switcherValue) {
-                        form.mutators.setValue(
-                          lastChange === 'token1' ? 'token2' : 'token1',
-                          values[lastChange !== 'token1' ? 'token2' : 'token1'],
-                        );
-                      }
-                      setSwitcherValue(!switcherValue);
-                    }}
-                    className={s.switcherInput}
-                  />
-                  Rebalance Liquidity
-                  <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
-                </div>
-              </>
+                </>
               )}
-              {currentTab.id === 'remove' && (
+            </Field>
+
+            {currentTab.id === 'add' && (
               <>
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>
-                    Minimum received XTZ:
-                  </span>
-                  <CurrencyAmount amount="1233" currency="XTZ" />
-                </div>
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>
-                    Minimum received QPTP:
-                  </span>
-                  <CurrencyAmount amount="1233" currency="QPTP" />
-                </div>
+                <Field name="switcher">
+                  {({ input }) => (
+
+                    <div className={s.switcher}>
+                      <Switcher
+                        {...input}
+                        isActive={input.value}
+                        className={s.switcherInput}
+                      />
+                      Rebalance Liquidity
+                      <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
+                    </div>
+                  )}
+                </Field>
+                <Button className={s.button}>
+                  {currentTab.label}
+                </Button>
               </>
-              )}
-              <Button className={s.button}>
-                {currentTab.id === 'add' ? 'Add' : 'Remove & Unvote'}
-              </Button>
-            </>
-          )}
-        />
-      </Card>
+            )}
+          </Card>
+        )}
+      />
       <Card
         header={{
           content: `${currentTab.label} Liquidity Details`,
