@@ -40,29 +40,6 @@ export const PositionCell: React.FC<PositionCellProps> = ({
 
         </div>
       </div>
-      {/* <div className={cx(s.joinRow, s.centerRow)}>
-        <div>
-          <div className={s.caption}>
-            {t('common:LP in Votes')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.vote}</span>
-        </div>
-        <div className={s.mleft24}>
-          <div className={s.caption}>
-            {t('common:LP in Veto')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.veto}</span>
-        </div>
-        <div className={s.mleft24}>
-          <div className={s.caption}>
-            {t('common:Total Balance')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.balance}</span>
-        </div>
-      </div> */}
     </div>
   );
 };

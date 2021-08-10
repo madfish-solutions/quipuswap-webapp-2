@@ -49,7 +49,7 @@ export const getTokens = async (
 export const saveCustomToken = (token:WhitelistedToken) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
-    JSON.stringify([...getSavedTokens(), token]),
+    JSON.stringify([token, ...getSavedTokens()]),
   );
 };
 
