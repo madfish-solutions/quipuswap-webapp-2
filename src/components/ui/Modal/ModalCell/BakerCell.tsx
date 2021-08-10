@@ -51,6 +51,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
             {
               thumbnailUri: baker.logo,
               name: baker.name ?? baker.address,
+              symbol: '',
             },
         } as WhitelistedToken}
         />
