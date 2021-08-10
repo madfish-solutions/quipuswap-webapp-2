@@ -192,6 +192,7 @@ const Header:React.FC<HeaderProps> = ({
             tokenPair.dex,
             balance.integerValue(),
           );
+          console.log(sharesA.toString(), sharesB.toString());
           const bal1 = sharesA.div(
             new BigNumber(10)
               .pow(
@@ -201,9 +202,10 @@ const Header:React.FC<HeaderProps> = ({
           const bal2 = sharesB.div(
             new BigNumber(10)
               .pow(
-                new BigNumber(6),
+                new BigNumber(tokenPair.token2.metadata.decimals),
               ),
           ).toString();
+          console.log(bal1, bal2);
 
           form.mutators.setValue(
             'balance1',
@@ -411,7 +413,10 @@ const Header:React.FC<HeaderProps> = ({
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
                 const asyncFunc = async () => {
-                  if (!tezos || !accountPkh || !networkId) return;
+                  if (!tezos || !accountPkh || !networkId) {
+                    setTokenPair(pair);
+                    return;
+                  }
                   try {
                     const secondAsset = {
                       contract: pair.token2.contractAddress,
@@ -500,6 +505,7 @@ const Header:React.FC<HeaderProps> = ({
                 token1={tokenPair.token1}
                 handleBalance={() => {}}
                 balance={tokensData.first.balance}
+                exchangeRate={tokensData.first.exchangeRate}
                 id="liquidity-token-1"
                 label="Output"
                 className={cx(s.input, s.mb24)}
@@ -547,6 +553,7 @@ const Header:React.FC<HeaderProps> = ({
                 token1={tokenPair.token2}
                 handleBalance={() => {}}
                 balance={tokensData.second.balance}
+                exchangeRate={tokensData.second.exchangeRate}
                 id="liquidity-token-2"
                 label="Output"
                 className={cx(s.input, s.mb24)}

@@ -53,7 +53,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
   const dollarEquivalent = useMemo(() => (exchangeRate
     ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
     : ''

@@ -16,6 +16,7 @@ import s from './ComplexInput.module.sass';
 type ComplexInputProps = {
   className?: string
   balance?: string
+  exchangeRate?: string
   label: string
   error?: string
   onClick?: () => void
@@ -41,6 +42,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   balance = '10.00',
   label,
   handleBalance,
+  exchangeRate = null,
   value,
   readOnly,
   error,
@@ -56,8 +58,11 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
+  const dollarEquivalent = useMemo(() => (exchangeRate
+    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
+    : ''
+  ),
+  [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
