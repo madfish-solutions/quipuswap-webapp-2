@@ -65,7 +65,7 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
               metadata:
             {
               thumbnailUri: baker?.logo,
-              name: getWhitelistedBakerName((baker ?? {}) as WhitelistedBaker),
+              name: getWhitelistedBakerName((baker ?? { name: '' }) as WhitelistedBaker),
               symbol: '',
             },
             } as WhitelistedToken}
