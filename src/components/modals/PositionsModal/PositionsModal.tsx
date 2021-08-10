@@ -171,7 +171,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const handleTokenSearch = () => {
     const isTokens = tokens
       .filter(
-        (token) => localSearchToken(
+        (token:any) => localSearchToken(
           token,
           network,
           inputValue,
@@ -189,7 +189,6 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
     && searchTokens.length === 0,
     [searchTokens, filteredTokens],
   );
-  console.log(isEmptyTokens, searchTokens, filteredTokens);
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 

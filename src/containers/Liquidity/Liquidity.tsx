@@ -127,7 +127,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
                           +value,
                         );
                       }}
-                      balance={values.balance3.toString()}
+                      balance={(values.balance3 ?? 0).toString()}
                       id="liquidity-remove-input"
                       label="Select LP"
                       className={s.input}
@@ -221,8 +221,9 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             </Field>
 
             <Field initialValue="0.5 %" name="slippage">
-
-              <Slippage />
+              {() => (
+                <Slippage />
+              )}
             </Field>
             {currentTab.id === 'add' && (
               <>
