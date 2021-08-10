@@ -12,6 +12,7 @@ export interface QSNetwork {
   name: string
   type: 'main' | 'test'
   rpcBaseURL: string
+  metadata: string
   description: string
   disabled: boolean
 }
@@ -34,7 +35,6 @@ export interface WhitelistedToken {
   contractAddress: string
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
-  network: QSNetworkType
 }
 
 export type WhitelistedTokenMetadata = {
