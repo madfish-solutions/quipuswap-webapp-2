@@ -296,6 +296,13 @@ const Header:React.FC<HeaderProps> = ({
         } catch (err) {
           console.error(err);
         }
+      } else {
+        // TODO: make
+        // total$ = AmountA * (1/ExchangeA) + AmountB * (1/ExchangeB)
+        // $toA = AmountA * total$
+        // $toB = AmountB * total$
+        // call exchange func with $toA + $toB, which are 50:50 ratio
+        console.log('switcher');
       }
     }
   };
