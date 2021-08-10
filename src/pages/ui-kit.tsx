@@ -23,6 +23,7 @@ import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
+import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
@@ -538,6 +539,106 @@ const UiKit: React.FC = () => {
           <Logo className={s.icon} />
           <MenuClosed className={s.icon} />
           <MenuOpened className={s.icon} />
+        </div>
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Tooltips</h1>
+        <div className={s.inputsBlock}>
+          <Tooltip placement="top" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <div>
+              top
+
+            </div>
+          </Tooltip>
+          <Tooltip placement="left" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <div>
+              left
+
+            </div>
+          </Tooltip>
+        </div>
+        <div className={s.inputsBlock}>
+          <Tooltip placement="right" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <div>
+              right
+            </div>
+          </Tooltip>
+          <Tooltip placement="bottom" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <div>
+              bot
+            </div>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+          <Tooltip placement="top-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              top-end
+            </Button>
+          </Tooltip>
+          <Tooltip placement="top-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              top-start
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="left-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              left-start
+            </Button>
+          </Tooltip>
+          <Tooltip placement="left-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              left-end
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="right-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              right-start
+            </Button>
+          </Tooltip>
+          <Tooltip placement="right-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
+            <Button
+              className={s.button}
+            >
+              right-end
+            </Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
+
+          <Tooltip placement="bottom-start" content="Short">
+            <Button
+              className={s.button}
+            >
+              bottom-start Energistically syndicate
+              distinctive metrics without client-centric technology.
+              Energistically syndicate distinctive metrics without client-centric technology.
+            </Button>
+          </Tooltip>
+          <Tooltip placement="bottom-end" content="Short">
+            <Button
+              className={s.button}
+            >
+              bottom-end
+              Energistically syndicate distinctive metrics without client-centric technology.
+              Energistically syndicate distinctive metrics without client-centric technology.
+            </Button>
+          </Tooltip>
         </div>
       </section>
       <section className={s.section}>
