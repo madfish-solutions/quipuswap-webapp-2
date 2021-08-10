@@ -1,4 +1,3 @@
-/* eslint-disable react/button-has-type */
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
@@ -7,7 +6,6 @@ import { CheckboxIcon } from '@components/svg/CheckboxIcon';
 import { Checkdone } from '@components/svg/Checkdone';
 
 import s from './Checkbox.module.sass';
-import { Button } from '../Button';
 
 type CheckboxProps = {
   external?: boolean
@@ -35,13 +33,9 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   );
 
   return (
-    <Button
-      // @ts-ignore
-      className={compoundClassName}
-      theme="quaternary"
-    >
+    <div className={compoundClassName}>
       {!checked ? <CheckboxIcon /> : <Checkdone />}
       <input hidden type="checkbox" {...props} />
-    </Button>
+    </div>
   );
 };

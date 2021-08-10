@@ -41,6 +41,7 @@ type PositionsModalProps = {
 } & ReactModal.Props;
 
 type HeaderProps = {
+  isSecondInput:boolean,
   debounce:number,
   save:any,
   values:any,
@@ -55,7 +56,7 @@ type FormValues = {
 };
 
 const Header:React.FC<HeaderProps> = ({
-  debounce, save, values, form,
+  isSecondInput, debounce, save, values, form,
 }) => {
   const { t } = useTranslation(['common']);
 
@@ -101,11 +102,13 @@ const Header:React.FC<HeaderProps> = ({
               className={s.modalInput}
               placeholder={t('common:Search')}
               error={meta.error}
+              readOnly={values.token1 && values.token2}
             />
           </>
         )}
 
       </Field>
+      {(isSecondInput) && (
       <Field
         name="tokenId"
         validate={validateMinMax(0, 100)}
@@ -119,6 +122,7 @@ const Header:React.FC<HeaderProps> = ({
               step={1}
               min={0}
               max={100}
+              readOnly={values.token1 && values.token2}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
                 form.mutators.setValue(
@@ -136,6 +140,7 @@ const Header:React.FC<HeaderProps> = ({
           </>
         )}
       </Field>
+      )}
     </div>
   );
 };
@@ -165,7 +170,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
-    setInputToken(values.tokenId ?? '');
+    setInputToken(isSoleFa2Token ? values.tokenId : '');
   };
 
   const handleTokenSearch = () => {
@@ -303,7 +308,6 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-              {' '}
             </div>
           )}
           {isEmptyTokens && searchLoading && (

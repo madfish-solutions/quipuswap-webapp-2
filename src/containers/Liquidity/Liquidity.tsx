@@ -222,9 +222,75 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
             <Field initialValue="0.5 %" name="slippage">
               {() => (
-                <Slippage />
+                <>
+                  <Slippage />
+                  {currentTab.id === 'add' && (
+                  <>
+                    {!values.switcher ? (
+                      <div className={cx(s.receive, s.mb24)}>
+                        <span className={s.receiveLabel}>
+                          Max invested:
+                        </span>
+                        <CurrencyAmount
+                          currency="XTZ / XTZ"
+                          amount="5"
+                        />
+                      </div>
+                    )
+                      : (
+                        <>
+                          <div className={s.receive}>
+                            <span className={s.receiveLabel}>
+                              Max invested:
+                            </span>
+                            <CurrencyAmount
+                              currency="XTZ"
+                              amount="5"
+                            />
+                          </div>
+                          <div className={cx(s.receive, s.mb24)}>
+                            <span className={s.receiveLabel}>
+                              Max invested:
+                            </span>
+                            <CurrencyAmount
+                              currency="XTZ"
+                              amount="5"
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                  )}
+
+                  {currentTab.id === 'remove' && (
+                    <>
+                      <div className={s.receive}>
+                        <span className={s.receiveLabel}>
+                          Minimum received:
+                        </span>
+                        <CurrencyAmount
+                          currency="XTZ"
+                          amount="5"
+                        />
+                      </div>
+                      <div className={s.receive}>
+                        <span className={s.receiveLabel}>
+                          Minimum received:
+                        </span>
+                        <CurrencyAmount
+                          currency="XTZ"
+                          amount="5"
+                        />
+                      </div>
+                      <Button className={s.button}>
+                        Remove & Unvote
+                      </Button>
+                    </>
+                  )}
+                </>
               )}
             </Field>
+
             {currentTab.id === 'add' && (
               <>
                 <Field name="switcher">
