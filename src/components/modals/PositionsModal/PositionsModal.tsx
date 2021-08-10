@@ -311,7 +311,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             </div>
           )}
           {isEmptyTokens && searchLoading && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {!values.token2 && allTokens
             .filter((x) => !values.token1 || !isTokensEqual(x, values.token1))
