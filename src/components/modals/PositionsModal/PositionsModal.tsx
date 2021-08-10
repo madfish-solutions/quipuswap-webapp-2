@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
   useAddCustomToken,
   useSearchCustomTokens,
@@ -16,7 +17,6 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import { localSearchToken, isTokensEqual } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Checkbox } from '@components/ui/Checkbox';

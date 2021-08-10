@@ -4,9 +4,9 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
-import { WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { Button } from '@components/ui/Button';

@@ -4,8 +4,8 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { WhitelistedTokenPair } from '@utils/types';
-
 import { getWhitelistedTokenName } from '@utils/helpers';
+
 import s from './ModalCell.module.sass';
 
 type PositionCellProps = {
