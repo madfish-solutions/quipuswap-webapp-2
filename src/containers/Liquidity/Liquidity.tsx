@@ -298,9 +298,19 @@ const Header:React.FC<HeaderProps> = ({
         }
       } else {
         // TODO: make
+        const exA = +(tokensData.first.exchangeRate ?? '1');
+        const exB = +(tokensData.second.exchangeRate ?? '1');
+        const total$ = (
+          (values.balance1 * exA)
+          + (values.balance2 * exB)
+        ) / 2;
         // total$ = AmountA * (1/ExchangeA) + AmountB * (1/ExchangeB)
+        const $toA = total$ / exA;
+        const $toB = total$ / exB;
+        // console.log(values.balance1, exA, total$);
         // $toA = AmountA * total$
         // $toB = AmountB * total$
+        console.log($toA, $toB);
         // call exchange func with $toA + $toB, which are 50:50 ratio
         console.log('switcher');
       }
