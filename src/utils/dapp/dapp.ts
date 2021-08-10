@@ -11,10 +11,9 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
-  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { QSNetwork, WhitelistedToken } from '@utils/types';
-import { getContractInfo, getSavedTokens, getTokens } from '@utils/dapp/tokens';
+import { getContractInfo, getTokens, saveCustomToken } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { isContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
@@ -241,7 +240,7 @@ function useDApp() {
   const {
     data: tokensData,
   } = useSWR(
-    ['tokens-initial-data'],
+    ['tokens-initial-data', network],
     getTokensData,
   );
 
@@ -251,6 +250,26 @@ function useDApp() {
       tokens: { loading: !tokensData, data: tokensData ?? [] },
     }));
   }, [tokensData]);
+
+  useEffect(() => {
+    if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
+      const wlt = new TempleWallet(
+        APP_NAME,
+        null,
+      );
+      const fallbackTzTk = new TezosToolkit(network.rpcBaseURL);
+      fallbackTzTk.setPackerProvider(michelEncoder);
+      const pkh = null;
+      setState((prevState) => ({
+        ...prevState,
+        network,
+        templeWallet: wlt,
+        tezos: fallbackTzTk,
+        accountPkh: pkh,
+        connectionType: null,
+      }));
+    }
+  }, [network]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number) => {
@@ -273,7 +292,7 @@ function useDApp() {
           return;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(address, tokenId);
+        const customToken = await getTokenMetadata(network, address, tokenId);
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
@@ -285,22 +304,20 @@ function useDApp() {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
-          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-        };
+          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
+          network: network.id,
+        } as WhitelistedToken;
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
         }));
       }
     },
-    [tezos],
+    [tezos, network],
   );
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {
-    window.localStorage.setItem(
-      SAVED_TOKENS_KEY,
-      JSON.stringify([...getSavedTokens(), token]),
-    );
+    saveCustomToken(token);
     setState((prevState) => ({
       ...prevState,
       tokens: { ...tokens, data: [...tokens.data, token] },
@@ -370,12 +387,9 @@ function useDApp() {
   );
 
   const changeNetwork = useCallback(
-    async (networkNew: QSNetwork) => {
+    (networkNew: QSNetwork) => {
       setState((prevState) => ({
         ...prevState,
-        tezos: fallbackToolkit,
-        accountPkh: null,
-        connectionType: null,
         network: networkNew,
       }));
       setNetwork(networkNew);

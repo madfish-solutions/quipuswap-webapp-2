@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
   useAddCustomToken,
   useSearchCustomTokens,
@@ -15,32 +16,32 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Checkbox } from '@components/ui/Checkbox';
+import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import { NumberInput } from '@components/ui/NumberInput';
-import { Button } from '@components/ui/Button';
-import { Pen } from '@components/svg/Pen';
+import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
-import s from './TokensModal.module.sass';
+import s from './PositionsModal.module.sass';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-type TokensModalProps = {
-  onChange: (token: WhitelistedToken) => void
+type PositionsModalProps = {
+  onChange: (tokenPair: WhitelistedTokenPair) => void
 } & ReactModal.Props;
 
 type HeaderProps = {
-  isSecondInput:boolean
+  isSecondInput:boolean,
   debounce:number,
   save:any,
   values:any,
@@ -49,7 +50,9 @@ type HeaderProps = {
 
 type FormValues = {
   search: string
-  tokenId: number
+  tokenId: string
+  token1: WhitelistedToken
+  token2: WhitelistedToken
 };
 
 const Header:React.FC<HeaderProps> = ({
@@ -99,6 +102,7 @@ const Header:React.FC<HeaderProps> = ({
               className={s.modalInput}
               placeholder={t('common:Search')}
               error={meta.error}
+              readOnly={values.token1 && values.token2}
             />
           </>
         )}
@@ -108,7 +112,6 @@ const Header:React.FC<HeaderProps> = ({
       <Field
         name="tokenId"
         validate={validateMinMax(0, 100)}
-        parse={(value) => parseNumber(value, 0, 100)}
       >
         {({ input, meta }) => (
           <>
@@ -119,6 +122,7 @@ const Header:React.FC<HeaderProps> = ({
               step={1}
               min={0}
               max={100}
+              readOnly={values.token1 && values.token2}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
                 form.mutators.setValue(
@@ -145,8 +149,9 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-export const TokensModal: React.FC<TokensModalProps> = ({
+export const PositionsModal: React.FC<PositionsModalProps> = ({
   onChange,
+  onRequestClose,
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
@@ -154,34 +159,33 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
-  const network = useNetwork();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens, loading: tokensLoading } = useTokens();
+  const { data: tokens } = useTokens();
+  const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
-  const [inputToken, setInputToken] = useState<number>(0);
+  const [inputToken, setInputToken] = useState<string>('');
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
-    setInputToken(isSoleFa2Token ? values.tokenId : 0);
+    setInputToken(isSoleFa2Token ? values.tokenId : '');
   };
 
   const handleTokenSearch = () => {
-    if (!network || !tezos) return;
     const isTokens = tokens
       .filter(
         (token:any) => localSearchToken(
           token,
           network,
           inputValue,
-          inputToken,
+          +inputToken,
         ),
       );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
-      searchCustomToken(inputValue, inputToken);
+      searchCustomToken(inputValue, +inputToken);
     }
   };
 
@@ -191,7 +195,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
   const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
     ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
@@ -212,9 +216,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           changeValue(state, field, () => value);
         },
       }}
-      render={({ form }) => (
+      render={({ form, values }) => (
         <Modal
-          title={t('common:Search token')}
+          title={t('common:Your Positions')}
           header={(
             <AutoSave
               form={form}
@@ -224,10 +228,13 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             />
           )}
           footer={(
-            <Button className={s.modalButton} theme="inverse">
-              Manage Lists
-              <Pen className={s.penIcon} />
-
+            <Button
+              onClick={() => onChange({ token1: values.token1, token2: values.token2, dex: '' })}
+              disabled={!values.token2 || !values.token1}
+              className={s.modalButton}
+              theme="primary"
+            >
+              Select
             </Button>
           )}
           className={themeClass[colorThemeMode]}
@@ -235,40 +242,107 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
           contentClassName={cx(s.tokenModal)}
+          onRequestClose={(e) => {
+            if (values.token1 && values.token2) {
+              onChange({ token1: values.token1, token2: values.token2, dex: '' });
+            }
+            if (onRequestClose) onRequestClose(e);
+          }}
           {...props}
         >
-          {isEmptyTokens && (!searchLoading && !tokensLoading) && (
+          <Field name="token1">
+            {({ input }) => {
+              const token = input.value;
+              if (!token) return '';
+              return (
+                <TokenCell
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                  // onChange(token);
+                    if (values.token2 && values.token1) {
+                      form.mutators.setValue('token1', values.token2);
+                      form.mutators.setValue('token2', undefined);
+                    } else if (!values.token1) {
+                      form.mutators.setValue('token1', token);
+                    } else {
+                      form.mutators.setValue('token1', undefined);
+                    }
+                  }}
+                >
+                  <Checkbox checked />
+                </TokenCell>
+              );
+            }}
+          </Field>
+          {values.token1 && (
+          <div className={s.listItem}>
+            <Plus className={s.iconButton} />
+            <div className={s.listText}>
+              Search another Token
+            </div>
+          </div>
+          )}
+          <Field name="token2">
+            {({ input }) => {
+              const token = input.value;
+              if (!token) return '';
+              return (
+                <TokenCell
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                    if (!values.token2) {
+                      form.mutators.setValue('token2', token);
+                    } else {
+                      form.mutators.setValue('token2', undefined);
+                    }
+                  }}
+                >
+                  <Checkbox checked />
+                </TokenCell>
+              );
+            }}
+          </Field>
+          {isEmptyTokens && !searchLoading && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
-              {' '}
             </div>
           )}
-          {isEmptyTokens && (searchLoading || tokensLoading) && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+          {isEmptyTokens && searchLoading && (
+            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
           )}
-          {allTokens.map((token) => {
-            const {
-              contractAddress, fa2TokenId,
-            } = token;
-            return (
-              <TokenCell
-                key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                token={token}
-                tabIndex={0}
-                onClick={() => {
-                  onChange(token);
-                  if (searchTokens.length > 0) {
-                    addCustomToken(token);
-                  }
-                  form.mutators.setValue('search', '');
-                  form.mutators.setValue('tokenId', 0);
-                  setInputValue('');
-                  setInputToken(0);
-                }}
-              />
-            );
-          })}
+          {!values.token2 && allTokens
+            .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
+            .map((token) => {
+              const {
+                contractAddress, fa2TokenId,
+              } = token;
+              return (
+                <TokenCell
+                  key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                    if (searchTokens.length > 0) {
+                      addCustomToken(token);
+                    }
+                    if (!values.token1) {
+                      form.mutators.setValue('token1', token);
+                    } else if (!values.token2) {
+                      form.mutators.setValue('token2', token);
+                    }
+                    form.mutators.setValue('search', '');
+                    form.mutators.setValue('tokenId', '');
+                    setInputValue('');
+                    setInputToken('');
+                  }}
+                >
+                  <Checkbox checked={false} />
+                </TokenCell>
+              );
+            })}
         </Modal>
 
       )}

@@ -1,15 +1,18 @@
-export interface QSNetwork {
-  id:
+type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet'
+  | 'carthagenet';
+
+export interface QSNetwork {
+  id: QSNetworkType
   connectType: 'default' | 'custom'
   name: string
   type: 'main' | 'test'
   rpcBaseURL: string
+  metadata: string
   description: string
   disabled: boolean
 }
@@ -17,6 +20,14 @@ export interface QSNetwork {
 export enum WalletType {
   BEACON = 'beacon',
   TEMPLE = 'temple',
+}
+
+export interface WhitelistedTokenPair {
+  balance?: string,
+  frozenBalance?: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  dex: string
 }
 
 export interface WhitelistedToken {

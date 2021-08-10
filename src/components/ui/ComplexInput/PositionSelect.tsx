@@ -1,14 +1,15 @@
 import React, {
-  useContext, useMemo, useRef, useState,
+  useContext, useRef, useState,
 } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { WhitelistedToken } from '@utils/types';
+import { WhitelistedTokenPair } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { PositionsModal } from '@components/modals/PositionsModal';
 import { Button } from '@components/ui/Button';
-import { TokensModal } from '@components/modals/TokensModal';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
@@ -16,35 +17,33 @@ import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
-type TokenSelectProps = {
-  className?: string
-  balance: string
-  exchangeRate?: string
-  label: string
-  error?: string
-  handleChange?: (token:WhitelistedToken) => void
-  handleBalance: (value: string) => void
-  token: WhitelistedToken,
-  setToken: (token:WhitelistedToken) => void
-} & React.HTMLProps<HTMLInputElement>;
+  type PositionSelectProps = {
+    className?: string
+    balance?: string
+    label: string
+    error?: string
+    handleChange?: (tokenPair:WhitelistedTokenPair) => void
+    handleBalance: (value: string) => void
+    tokenPair?: WhitelistedTokenPair,
+    setTokenPair: (tokenPair:WhitelistedTokenPair) => void
+  } & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const TokenSelect: React.FC<TokenSelectProps> = ({
+export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
   label,
   handleBalance,
-  exchangeRate = null,
   value,
   error,
   id,
   handleChange,
-  token,
-  setToken,
+  tokenPair,
+  setTokenPair,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -52,13 +51,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (exchangeRate
-    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
-    : ''
-  ),
-  [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -73,15 +65,13 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     }
   };
 
-  const equivalentContent = `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`;
-
   return (
     <>
-      <TokensModal
+      <PositionsModal
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={(selectedToken) => {
-          setToken(selectedToken);
+          setTokenPair(selectedToken);
           if (handleChange) handleChange(selectedToken);
           setTokensModal(false);
         }}
@@ -97,10 +87,18 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </label>
         <div className={s.background}>
           <div className={s.shape}>
-            <div className={cx(s.item1, s.label2)}>
-              {equivalentContent}
-            </div>
+            <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
+              <div className={s.item2Line}>
+                <div className={s.caption}>
+                  {t('common:Frozen Balance')}
+                  :
+                </div>
+                <div className={cx(s.label2, s.price)}>
+                  {prettyPrice(parseFloat(balance))}
+                </div>
+
+              </div>
               <div className={s.item2Line}>
                 <div className={s.caption}>
                   {t('common:Total Balance')}
@@ -120,10 +118,12 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {...props}
             />
             <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-              <TokensLogos token1={token} />
+              <TokensLogos
+                token1={tokenPair?.token1 ?? TEZOS_TOKEN}
+                token2={tokenPair?.token2 ?? TEZOS_TOKEN}
+              />
               <h6 className={cx(s.token)}>
-
-                {getWhitelistedTokenSymbol(token)}
+                {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
               </h6>
               <Shevron />
             </Button>
