@@ -205,7 +205,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
               {/* SWAP */}
 
-              <Slippage />
+              <Slippage handleChange={() => {}} />
 
               {currentTab.id === 'add' && (
               <>

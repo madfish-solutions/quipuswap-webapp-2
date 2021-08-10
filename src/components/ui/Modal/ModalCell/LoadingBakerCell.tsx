@@ -1,21 +1,12 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './ModalCell.module.sass';
 
-const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
-};
-
 export const LoadingBakerCell: React.FC<{}> = () => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-
   const compoundClassName = cx(
-    modeClass[colorThemeMode],
     s.loading,
     s.listItem,
   );
@@ -28,20 +19,12 @@ export const LoadingBakerCell: React.FC<{}> = () => {
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.loadingBakerBlock}>
-          <div className={s.caption}>
-            <Skeleton className={s.loadingCaption} />
-          </div>
-          <div className={s.caption}>
-            <Skeleton className={s.loadingCaption} />
-          </div>
+          <Skeleton className={s.loadingCaption} />
+          <Skeleton className={s.loadingCaption} />
         </div>
         <div className={s.loadingBakerBlock}>
-          <div className={s.caption}>
-            <Skeleton className={s.loadingCaption} />
-          </div>
-          <div className={s.caption}>
-            <Skeleton className={s.loadingCaption} />
-          </div>
+          <Skeleton className={s.loadingCaption} />
+          <Skeleton className={s.loadingCaption} />
         </div>
       </div>
     </div>

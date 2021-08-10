@@ -2,11 +2,11 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { transformTezToKTez } from '@utils/helpers';
+import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedBaker } from '@utils/types';
+import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import { TokensLogos } from '@components/ui/TokensLogos';
 
-import { BakerLogos } from '@components/ui/BakerLogos';
 import s from './ModalCell.module.sass';
 
 const modeClass = {
@@ -46,8 +46,15 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       className={compoundClassName}
     >
       <div className={s.bakerFlexCell}>
-        <BakerLogos baker={baker} />
-        <h6 className={s.h6}>{baker?.name ?? baker?.address}</h6>
+        <TokensLogos token1={{
+          metadata:
+            {
+              thumbnailUri: baker.logo,
+              name: baker.name ?? baker.address,
+            },
+        } as WhitelistedToken}
+        />
+        <h6 className={cx(s.h6, s.bakerName)}>{baker.name ?? baker.address}</h6>
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
@@ -68,8 +75,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
           </div>
           <div>
             <span className={s.label1}>
-              {transformTezToKTez(baker.freeSpace.toString() ?? '')}
-              K
+              {prettyPrice((+baker.freeSpace.toString()) ?? 0, 3, 3)}
             </span>
             {' '}
             <span className={s.bodyTextLink1}>

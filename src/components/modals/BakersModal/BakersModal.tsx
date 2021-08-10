@@ -30,7 +30,7 @@ type BakersModalProps = {
 type HeaderProps = {
   debounce:number,
   save:any,
-  values:any,
+  values:FormValues,
   form:any,
 };
 
@@ -157,7 +157,6 @@ export const BakersModal: React.FC<BakersModalProps> = ({
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No bakers found')}</div>
-              {' '}
             </div>
           )}
           {loading && (
