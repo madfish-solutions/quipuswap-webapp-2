@@ -11,3 +11,4 @@ export * from './parseDecimals';
 export * from './localSearchToken';
 export * from './getWhitelistedTokenName';
 export * from './getWhitelistedTokenSymbol';
+export * from './isTokensEqual';

@@ -13,7 +13,7 @@ import { Modal } from '@components/ui/Modal';
 import {
   BakerCell,
   ChooseListCell,
-  PositionCell,
+  // PositionCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
@@ -511,7 +511,7 @@ const UiKit: React.FC = () => {
               date: Date.now(),
             }}
           />
-          <PositionCell
+          {/* <PositionCell
             token1={{
               name: 'Token',
               vote: '2.868',
@@ -519,7 +519,7 @@ const UiKit: React.FC = () => {
               balance: '1.868',
             }}
             token2={{ name: 'Token' }}
-          />
+          /> */}
           <BakerCell
             baker={{
               token: 'EVERSTAKE',

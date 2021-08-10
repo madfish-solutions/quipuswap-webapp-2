@@ -11,10 +11,9 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
-  SAVED_TOKENS_KEY,
 } from '@utils/defaults';
 import { QSNetwork, WhitelistedToken } from '@utils/types';
-import { getContractInfo, getSavedTokens, getTokens } from '@utils/dapp/tokens';
+import { getContractInfo, getTokens, saveCustomToken } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { isContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
@@ -312,10 +311,7 @@ function useDApp() {
   );
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {
-    window.localStorage.setItem(
-      SAVED_TOKENS_KEY,
-      JSON.stringify([...getSavedTokens(), token]),
-    );
+    saveCustomToken(token);
     setState((prevState) => ({
       ...prevState,
       tokens: { ...tokens, data: [...tokens.data, token] },
