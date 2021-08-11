@@ -700,11 +700,10 @@ const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-const fallbackTokenPair : WhitelistedTokenPair = {
+const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
   token2: TEZOS_TOKEN,
-  dex: null,
-};
+} as WhitelistedTokenPair;
 
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,

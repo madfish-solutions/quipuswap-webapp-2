@@ -1,7 +1,6 @@
 export * from './getUniqueKey';
 export * from './prettyPrice';
 export * from './prepareTokenLogo';
-export * from './searchToken';
 export * from './transformMutezToTez';
 export * from './ipfsToHttps';
 export * from './debounce';
