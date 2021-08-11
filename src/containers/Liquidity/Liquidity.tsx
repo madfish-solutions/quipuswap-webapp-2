@@ -335,7 +335,6 @@ const Header:React.FC<HeaderProps> = ({
     setSubm(true);
     handleInputChange(values);
     if (tezos && accountPkh) {
-      console.log('asyncGetLiquidityShare');
       asyncGetLiquidityShare(
         setDex,
         setTokenPair,
@@ -349,7 +348,6 @@ const Header:React.FC<HeaderProps> = ({
         tokenPair,
         currentTab.id === 'remove' ? tokenPair.dex : dex,
         currentTab,
-        tokensData,
         tezos,
         accountPkh,
         networkId,
@@ -370,7 +368,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, tokensData]);
+  }, [values, token1, token2, tokenPair]);
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;

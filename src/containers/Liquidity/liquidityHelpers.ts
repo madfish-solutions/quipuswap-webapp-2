@@ -6,7 +6,6 @@ import {
   FoundDex,
   getLiquidityShare,
   initializeLiquidity,
-  isTezAsset,
   removeLiquidity,
   Token,
 } from '@quipuswap/sdk';
@@ -32,6 +31,7 @@ export const asyncFindPairDex = async (
       id: pair.token2.fa2TokenId,
     };
     const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+    console.log(dex);
     const share = await getLiquidityShare(tezos, dex, accountPkh);
 
     // const lpTokenValue = share.total;
@@ -187,7 +187,6 @@ export const asyncGetLiquidityShare = async (
   tokenPair: WhitelistedTokenPair,
   dex: FoundDex,
   currentTab:any,
-  tokensData: any,
   tezos: TezosToolkit,
   accountPkh: any,
   networkId: QSMainNet,
@@ -196,7 +195,9 @@ export const asyncGetLiquidityShare = async (
   try {
     const account = accountPkh;
     const slippageTolerance = slippageToNum(values.slippage) / 100;
+    console.log(dex, token1, token2, tokenPair);
     if (dex) {
+      console.log('heree');
       const share = await getLiquidityShare(tezos, dex, account);
       const lpTokenValue = share.total;
       const remParams = await removeLiquidity(
@@ -227,15 +228,14 @@ export const asyncGetLiquidityShare = async (
         networkId,
       );
     } else {
-      const toAsset = isTezAsset(tokensData.second) ? {
+      const toAsset = token2.contractAddress === 'tez' ? {
         contract: 'tez',
       } : {
-        contract: tokensData.second.token.address,
-        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+        contract: token2.contractAddress,
+        id: token2.fa2TokenId,
       };
-
-      const { first, second } = tokensData;
-      if (JSON.stringify(first) !== JSON.stringify(second)) {
+      if (JSON.stringify(token1) !== JSON.stringify(token2)) {
+        console.log('heere');
         const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
         if (tempDex && tempDex !== dex) {
           setDex(tempDex);
