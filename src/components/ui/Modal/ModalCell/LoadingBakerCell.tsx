@@ -15,12 +15,12 @@ export const LoadingBakerCell: React.FC<{}> = () => {
     <div className={compoundClassName}>
       <div className={s.bakerFlexCell}>
         <Skeleton className={s.loadingLogo} />
-        <Skeleton className={s.loadingName} />
+        <Skeleton className={cx(s.loadingName, s.loadingNameBaker)} />
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.loadingBakerBlock}>
-          <Skeleton className={s.loadingCaption} />
-          <Skeleton className={s.loadingCaption} />
+          <Skeleton className={cx(s.loadingCaption, s.loadingCaptionSmall)} />
+          <Skeleton className={cx(s.loadingCaption, s.loadingCaptionSmall)} />
         </div>
         <div className={s.loadingBakerBlock}>
           <Skeleton className={s.loadingCaption} />

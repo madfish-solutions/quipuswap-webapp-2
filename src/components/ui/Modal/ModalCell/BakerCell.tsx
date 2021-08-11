@@ -55,7 +55,12 @@ export const BakerCell: React.FC<BakerCellProps> = ({
             },
         } as WhitelistedToken}
         />
-        <h6 className={cx(s.h6, s.bakerName)}>{baker.name ?? baker.address}</h6>
+        <h6
+          className={cx(s.h6, s.bakerName)}
+          title={baker.name ?? baker.address}
+        >
+          {baker.name ?? baker.address}
+        </h6>
       </div>
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>

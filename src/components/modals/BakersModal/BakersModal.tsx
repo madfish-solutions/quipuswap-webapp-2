@@ -158,7 +158,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
             </div>
           )}
           {loading && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingBakerCell key={x} />))
+            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingBakerCell key={x} />))
           )}
           {filteredBakers.map((baker) => {
             const {
