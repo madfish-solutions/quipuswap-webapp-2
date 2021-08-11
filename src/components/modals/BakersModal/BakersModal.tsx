@@ -78,15 +78,13 @@ const Header:React.FC<HeaderProps> = ({
         name="search"
       >
         {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common:Search')}
-              error={meta.error}
-            />
-          </>
+          <Input
+            {...input}
+            StartAdornment={Search}
+            className={s.modalInput}
+            placeholder={t('common:Search')}
+            error={meta.error}
+          />
         )}
 
       </Field>
