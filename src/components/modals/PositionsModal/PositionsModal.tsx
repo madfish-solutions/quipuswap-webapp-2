@@ -229,7 +229,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           )}
           footer={(
             <Button
-              onClick={() => onChange({ token1: values.token1, token2: values.token2, dex: '' })}
+              onClick={() => onChange({
+                token1: values.token1,
+                token2: values.token2,
+              } as WhitelistedTokenPair)}
               disabled={!values.token2 || !values.token1}
               className={s.modalButton}
               theme="primary"
@@ -244,7 +247,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           onRequestClose={(e) => {
             if (values.token1 && values.token2) {
-              onChange({ token1: values.token1, token2: values.token2, dex: '' });
+              onChange({ token1: values.token1, token2: values.token2 } as WhitelistedTokenPair);
             }
             if (onRequestClose) onRequestClose(e);
           }}
