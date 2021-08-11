@@ -2,7 +2,6 @@ import React, {
   useMemo, useState, useEffect, useRef,
 } from 'react';
 import cx from 'classnames';
-import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import {
   estimateSwap, findDex, swap, batchify,
@@ -17,12 +16,14 @@ import {
   useTezos,
   getUserBalance,
   useNetwork,
+  useTokens,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import { validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
   isTokenEqual,
-  parseNumber,
+  localSearchToken,
   slippageToBignum,
   slippageToNum,
 } from '@utils/helpers';
@@ -45,6 +46,7 @@ import { SwapIcon } from '@components/svg/Swap';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { useRouter } from 'next/router';
 
 const TabsContent = [
   {
@@ -101,7 +103,7 @@ type HeaderProps = {
   values:any,
   form:any,
   tabsState:any,
-  setTabsState: (id:string) => void,
+  setTabsState: (state:string) => void,
   token1:WhitelistedToken,
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
@@ -142,11 +144,15 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
 }) => {
   const tezos = useTezos();
-  const router = useRouter();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
+
+  useEffect(() => {
+    form.mutators.setValue('balance1', undefined);
+    form.mutators.setValue('balance2', undefined);
+  }, [networkId]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -178,7 +184,7 @@ const Header:React.FC<HeaderProps> = ({
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isTokensSame || (isValuesSame)) return;
+    if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
     if (tezos) {
       try {
         const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
@@ -288,7 +294,7 @@ const Header:React.FC<HeaderProps> = ({
         toAsset,
         inputValue,
         slippage,
-        router.pathname === '/send' ? values.recipient : undefined,
+        tabsState === 'send' ? values.recipient : undefined,
       );
       const op = await batchify(
         tezos.wallet.batch([]),
@@ -299,6 +305,11 @@ const Header:React.FC<HeaderProps> = ({
       console.error(e);
     }
   };
+
+  const blackListedTokens = useMemo(
+    () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
+    [token1, token2],
+  );
 
   return (
     <Card
@@ -324,13 +335,13 @@ const Header:React.FC<HeaderProps> = ({
     >
       <Field
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => value}
         name="balance1"
       >
         {({ input }) => (
           <>
             <TokenSelect
               {...input}
+              blackListedTokens={blackListedTokens}
               onFocus={() => setLastChange('balance1')}
               token={token1}
               setToken={setToken1}
@@ -365,13 +376,13 @@ const Header:React.FC<HeaderProps> = ({
       </Button>
       <Field
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseNumber(value, 0, Infinity)}
         name="balance2"
       >
         {({ input }) => (
           <>
             <TokenSelect
               {...input}
+              blackListedTokens={blackListedTokens}
               onFocus={() => setLastChange('balance2')}
               token={token2}
               setToken={setToken2}
@@ -427,7 +438,7 @@ const Header:React.FC<HeaderProps> = ({
                 </span>
                 <CurrencyAmount
                   amount={minimumReceived.toString()}
-                  currency={getWhitelistedTokenSymbol(token2)}
+                  currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
                 />
               </div>
             </>
@@ -450,13 +461,18 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
   const tezos = useTezos();
-  const router = useRouter();
+  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
+  const network = useNetwork();
+  const searchCustomToken = useSearchCustomTokens();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
 
   const { t } = useTranslation(['common', 'swap']);
-  const [tabsState, setTabsState] = useState(router.pathname.slice(1));
+  const [tabsState, setTabsState] = useState(TabsContent[0].id);
+  const router = useRouter();
+  const { from, to } = router.query;
 
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
@@ -466,8 +482,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const { Form } = withTypes<FormValues>();
-  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
-  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [token1, setToken1] = useState<WhitelistedToken>();
+  const [token2, setToken2] = useState<WhitelistedToken>();
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -529,34 +545,64 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    if (exchangeRates && tezos && accountPkh && !initialLoad) {
-      setInitialLoad(true);
-      if (!tokensData.first.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.first.token.address,
-            type: tokensData.first.token.type,
-            metadata:
-            {
-              decimals: tokensData.first.token.decimals,
-            },
-          } as WhitelistedToken, 'first',
-        );
-      }
-      if (!tokensData.second.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.second.token.address,
-            type: tokensData.second.token.type,
-            metadata:
-          {
-            decimals: tokensData.second.token.decimals,
-          },
-          } as WhitelistedToken, 'second',
-        );
-      }
+    if (token1 && token2) {
+      router.push(`/swap/${token1.contractAddress}/${token2.contractAddress}`, undefined, { shallow: true });
+    } else if (token1) {
+      router.push(`/swap/${token1.contractAddress}`, undefined, { shallow: true });
     }
-  }, [exchangeRates, tezos, accountPkh]);
+  }, [token1, token2]);
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      setInitialLoad(true);
+      const searchPart = (typeStr:'from' | 'to', str:string | string[]):WhitelistedToken => {
+        const strStr = Array.isArray(str) ? str[0] : str;
+        const inputValue = strStr.split('_')[0];
+        const inputToken = strStr.split('_')[1] ?? '0';
+        if (inputValue.toLowerCase() === 'tez') {
+          return TEZOS_TOKEN;
+        }
+        const isTokens = tokens
+          .filter(
+            (token:any) => localSearchToken(
+              token,
+              network,
+              inputValue,
+              +inputToken,
+            ),
+          );
+        if (isTokens.length === 0) {
+          searchCustomToken(inputValue, +inputToken, true).then((x) => {
+            if (x) {
+              return x;
+            }
+            return TEZOS_TOKEN;
+            router.push('/swap', undefined, { shallow: true });
+          });
+        }
+        return isTokens[0];
+      };
+      console.log(from, to);
+      if (from) {
+        if (to) {
+          const res = searchPart('to', to);
+          setToken1(res);
+          handleTokenChange(res, 'first');
+        }
+        const res1 = searchPart('from', from);
+        setToken1(res1);
+        handleTokenChange(res1, 'first');
+      }
+    };
+    if (tezos && !initialLoad) asyncCall();
+  }, [tezos, initialLoad]);
+
+  useEffect(() => {
+    setToken1(undefined);
+    setToken2(undefined);
+  }, [networkId]);
+
+  console.log(token1, token2);
 
   return (
     <StickyBlock className={className}>
