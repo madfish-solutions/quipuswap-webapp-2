@@ -9,6 +9,8 @@ export * from './shortize';
 export * from './parseNumber';
 export * from './parseDecimals';
 export * from './localSearchToken';
+export * from './localSearchBaker';
 export * from './getWhitelistedTokenName';
 export * from './getWhitelistedTokenSymbol';
+export * from './getWhitelistedBakerName';
 export * from './isTokensEqual';
