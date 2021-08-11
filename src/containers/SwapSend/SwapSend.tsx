@@ -101,6 +101,7 @@ type HeaderProps = {
   values:any,
   form:any,
   tabsState:any,
+  setTabsState: (id:string) => void,
   token1:WhitelistedToken,
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
@@ -130,6 +131,7 @@ const Header:React.FC<HeaderProps> = ({
   values,
   form,
   tabsState,
+  setTabsState,
   token1,
   token2,
   setToken1,
@@ -305,7 +307,7 @@ const Header:React.FC<HeaderProps> = ({
           <Tabs
             values={TabsContent}
             activeId={tabsState}
-            setActiveId={(val) => router.replace(`/${val}`)}
+            setActiveId={(val) => setTabsState(val)}
             className={s.tabs}
           />
         ),

@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
@@ -35,6 +37,15 @@ export interface WhitelistedToken {
   contractAddress: string
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
+}
+
+export interface WhitelistedBaker {
+  name: string,
+  address: string,
+  logo: string,
+  votes: number,
+  fee: number,
+  freeSpace: BigNumber
 }
 
 export type WhitelistedTokenMetadata = {
