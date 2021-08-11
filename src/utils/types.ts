@@ -1,3 +1,5 @@
+import { FoundDex } from '@quipuswap/sdk';
+
 type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
@@ -27,7 +29,7 @@ export interface WhitelistedTokenPair {
   frozenBalance?: string,
   token1: WhitelistedToken,
   token2: WhitelistedToken,
-  dex: string
+  dex: FoundDex
 }
 
 export interface WhitelistedToken {

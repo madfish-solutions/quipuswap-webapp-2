@@ -79,7 +79,7 @@ export const asyncGetShares = async (
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
     const attempt = await asyncFindPairDex(
-      { token1, token2, dex: '' },
+      { token1, token2 } as WhitelistedTokenPair,
       setTokenPair,
       tezos,
       accountPkh,
