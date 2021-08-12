@@ -482,8 +482,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const { Form } = withTypes<FormValues>();
-  const [token1, setToken1] = useState<WhitelistedToken>();
-  const [token2, setToken2] = useState<WhitelistedToken>();
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -539,8 +538,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   const handleSwapTokens = () => {
-    setToken1(token2);
-    setToken2(token1);
+    setTokens([token2, token1]);
     setTokensData({ first: tokensData.second, second: tokensData.first });
   };
 
@@ -555,7 +553,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   useEffect(() => {
     const asyncCall = async () => {
       setInitialLoad(true);
-      const searchPart = (typeStr:'from' | 'to', str:string | string[]):WhitelistedToken => {
+      const searchPart = async (typeStr:'from' | 'to', str:string | string[]):Promise<WhitelistedToken> => {
         const strStr = Array.isArray(str) ? str[0] : str;
         const inputValue = strStr.split('_')[0];
         const inputToken = strStr.split('_')[1] ?? '0';
@@ -572,37 +570,35 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             ),
           );
         if (isTokens.length === 0) {
-          searchCustomToken(inputValue, +inputToken, true).then((x) => {
+          return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
             if (x) {
               return x;
             }
-            return TEZOS_TOKEN;
             router.push('/swap', undefined, { shallow: true });
+            return TEZOS_TOKEN;
           });
         }
         return isTokens[0];
       };
-      console.log(from, to);
+      let res:any[] = [];
       if (from) {
         if (to) {
-          const res = searchPart('to', to);
-          setToken1(res);
-          handleTokenChange(res, 'first');
+          const resTo = await searchPart('to', to);
+          res = [resTo];
+          handleTokenChange(resTo, 'first');
         }
-        const res1 = searchPart('from', from);
-        setToken1(res1);
-        handleTokenChange(res1, 'first');
+        const resFrom = await searchPart('from', from);
+        res = [resFrom, ...res];
+        setTokens(res);
+        handleTokenChange(resFrom, 'first');
       }
     };
     if (tezos && !initialLoad) asyncCall();
   }, [tezos, initialLoad]);
 
   useEffect(() => {
-    setToken1(undefined);
-    setToken2(undefined);
+    setTokens([]);
   }, [networkId]);
-
-  console.log(token1, token2);
 
   return (
     <StickyBlock className={className}>
@@ -622,8 +618,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             tabsState={tabsState}
             token1={token1}
             token2={token2}
-            setToken1={setToken1}
-            setToken2={setToken2}
+            setToken1={(token:WhitelistedToken) => setTokens([(token2 || undefined), token])}
+            setToken2={(token:WhitelistedToken) => setTokens([token, (token1 || undefined)])}
             tokensData={tokensData}
             handleSwapTokens={handleSwapTokens}
             handleTokenChange={handleTokenChange}

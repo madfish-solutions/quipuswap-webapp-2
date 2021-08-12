@@ -51,8 +51,8 @@ export const getTokens = async (
 export const saveCustomToken = (token:WhitelistedToken) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
-    JSON.stringify([token, ...getSavedTokens()]
-      .filter((x:WhitelistedToken) => !isTokenEqual(x, token))),
+    JSON.stringify([token, ...getSavedTokens()
+      .filter((x:WhitelistedToken) => !isTokenEqual(x, token))]),
   );
 };
 
