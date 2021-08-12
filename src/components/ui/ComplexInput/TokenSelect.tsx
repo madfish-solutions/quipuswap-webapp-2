@@ -14,6 +14,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -119,10 +120,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {...props}
             />
             <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-              <TokensLogos token1={token} />
+              <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
-                {getWhitelistedTokenSymbol(token)}
+                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>
               <Shevron />
             </Button>

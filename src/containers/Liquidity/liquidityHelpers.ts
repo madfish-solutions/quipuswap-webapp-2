@@ -238,8 +238,10 @@ export const asyncGetLiquidityShare = async (
         console.log('heere');
         const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
         if (tempDex && tempDex !== dex) {
+          console.log('dex');
           setDex(tempDex);
         } else if (!tempDex) {
+          console.log('!dex');
           const strictFactories = {
             fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
             fa2Factory: FACTORIES[networkId].fa2Factory[0],

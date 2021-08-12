@@ -6,15 +6,16 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import {
+  addLiquidity,
   batchify,
   estimateSharesInTez,
   estimateSharesInToken,
-  estimateSwap,
   estimateTezInShares,
   estimateTokenInShares,
   findDex,
   FoundDex,
   getLiquidityShare,
+  swap,
   TransferParams,
 } from '@quipuswap/sdk';
 
@@ -26,7 +27,7 @@ import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import {
-  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum,
+  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -48,6 +49,7 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { asyncGetLiquidityShare } from './liquidityHelpers';
 
 const TabsContent = [
@@ -108,6 +110,9 @@ type FormValues = {
 };
 
 type HeaderProps = {
+  handleSubmit: () => void,
+  setAddLiquidityParams: (params:TransferParams[]) => void,
+  setRemoveLiquidityParams: (params:TransferParams[]) => void,
   debounce:number,
   save:any,
   values:FormValues,
@@ -141,6 +146,7 @@ const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 type QSMainNet = 'mainnet' | 'florencenet';
 
 const Header:React.FC<HeaderProps> = ({
+  handleSubmit,
   debounce,
   save,
   values,
@@ -158,7 +164,10 @@ const Header:React.FC<HeaderProps> = ({
   handleTokenChange,
   currentTab,
   setTabsState,
+  setAddLiquidityParams,
+  setRemoveLiquidityParams,
 }) => {
+  const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
@@ -169,8 +178,6 @@ const Header:React.FC<HeaderProps> = ({
   const [, setPoolShare] = useState<
   { unfrozen:BigNumber, frozen:BigNumber, total:BigNumber }
   >();
-  const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
-  const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -233,39 +240,23 @@ const Header:React.FC<HeaderProps> = ({
         const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
         const isValuesSame = val[lastChange] === formValues[lastChange];
         if (isTokensSame || (isValuesSame) || !dex) return;
+        if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+        const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
+        const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
+        const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
+
+        form.mutators.setValue(
+          lastChange === 'balance1' ? 'balance2' : 'balance1',
+          parseDecimals(
+            retValue.toString(),
+            0,
+            Infinity,
+            decimals,
+          ),
+        );
         try {
-          const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
-            contract: tokensData.first.token.address,
-            id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-          };
-          const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
-            contract: tokensData.second.token.address,
-            id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-          };
-          const decimals1 = lastChange === 'balance1'
-            ? tokensData.first.token.decimals
-            : tokensData.second.token.decimals;
-          const decimals2 = lastChange !== 'balance1'
-            ? tokensData.first.token.decimals
-            : tokensData.second.token.decimals;
-          const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-          const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1)).integerValue();
-          const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
           try {
-            const estimatedOutputValue = await estimateSwap(
-              tezos,
-              FACTORIES[networkId],
-              fromAsset,
-              toAsset,
-              valuesInner,
-            );
-            const retValue = estimatedOutputValue.div(
-              new BigNumber(10)
-                .pow(
-                  new BigNumber(decimals2),
-                ),
-            );
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue.toString());
+            console.log('ww');
             const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
               ? tezos!!.format('tz', 'mutez', balance) as any
               : toNat(balance, token.token.decimals));
@@ -285,7 +276,7 @@ const Header:React.FC<HeaderProps> = ({
             const sharesB = await getMethod(
               tokensData.second,
               dex,
-              lastChange === 'balance2' ? new BigNumber(values.balance2) : estimatedOutputValue.integerValue(),
+              lastChange === 'balance2' ? new BigNumber(values.balance2) : new BigNumber(retValue),
             );
 
             const lp1 = sharesA.div(
@@ -321,6 +312,40 @@ const Header:React.FC<HeaderProps> = ({
         const $toA = total$ / exA;
         const $toB = total$ / exB;
         console.log($toA, $toB);
+        let inputValue:BigNumber;
+        if (values.balance1 - $toA < values.balance2 - $toB) {
+          inputValue = isTez(tokensData.first)
+            ? tezos!!.format('tz', 'mutez', values.balance2 - $toB) as any
+            : toNat(values.balance2 - $toB, tokensData.first.token.decimals);
+        } else {
+          inputValue = isTez(tokensData.first)
+            ? tezos!!.format('tz', 'mutez', values.balance1 - $toA) as any
+            : toNat(values.balance1 - $toA, tokensData.first.token.decimals);
+        }
+        const fromAsset = isTez(tokensData.first) ? 'tez' : {
+          contract: tokensData.first.token.address,
+          id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+        };
+        const toAsset = isTez(tokensData.second) ? 'tez' : {
+          contract: tokensData.second.token.address,
+          id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+        };
+        const slippage = slippageToNum(values.slippage) / 100;
+        const swapParams = await swap(
+          tezos,
+          FACTORIES[networkId],
+          fromAsset,
+          toAsset,
+          inputValue,
+          slippage,
+        );
+        const addParams = await addLiquidity(
+          tezos,
+          dex,
+          { tezValue: $toA, tokenValue: $toB },
+        );
+        setAddLiquidityParams([...swapParams, ...addParams]);
+
         // call exchange func with $toA + $toB, which are 50:50 ratio
         console.log('switcher');
       }
@@ -334,7 +359,7 @@ const Header:React.FC<HeaderProps> = ({
     setVal(values);
     setSubm(true);
     handleInputChange(values);
-    if (tezos && accountPkh) {
+    if (tezos && accountPkh && token1 && token2) {
       asyncGetLiquidityShare(
         setDex,
         setTokenPair,
@@ -372,28 +397,18 @@ const Header:React.FC<HeaderProps> = ({
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;
-    try {
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        addLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
     }
+    handleSubmit();
   };
 
   const handleRemoveLiquidity = async () => {
     if (!tezos) return;
-    try {
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        removeLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
     }
+    handleSubmit();
   };
 
   return (
@@ -510,7 +525,7 @@ const Header:React.FC<HeaderProps> = ({
       <Field
         name="balance1"
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseDecimals(value, 0, Infinity)}
+        parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
       >
         {({ input }) => (
           <TokenSelect
@@ -522,7 +537,7 @@ const Header:React.FC<HeaderProps> = ({
               setLastChange('balance1');
               form.mutators.setValue(
                 'balance1',
-                +value,
+                +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
               );
             }}
             handleChange={(token) => handleTokenChange(token, 'first')}
@@ -560,7 +575,7 @@ const Header:React.FC<HeaderProps> = ({
       <Field
         name="balance2"
         validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseDecimals(value, 0, Infinity)}
+        parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
       >
         {({ input }) => (
           <TokenSelect
@@ -572,7 +587,7 @@ const Header:React.FC<HeaderProps> = ({
               setLastChange('balance2');
               form.mutators.setValue(
                 'balance2',
-                +value,
+                +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
               );
             }}
             handleChange={(token) => handleTokenChange(token, 'second')}
@@ -607,7 +622,7 @@ const Header:React.FC<HeaderProps> = ({
                       Max invested:
                     </span>
                     <CurrencyAmount
-                      currency={`${getWhitelistedTokenSymbol(token1)}/${getWhitelistedTokenSymbol(token2)}`}
+                      currency={`${token1 ? getWhitelistedTokenSymbol(token1) : ''}/${token2 ? getWhitelistedTokenSymbol(token2) : ''}`}
                       amount={values.estimateLP}
                     />
                   </div>
@@ -619,7 +634,7 @@ const Header:React.FC<HeaderProps> = ({
                           Max invested:
                         </span>
                         <CurrencyAmount
-                          currency={getWhitelistedTokenSymbol(token1)}
+                          currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
                           amount={maxInvestedA.toString()}
                         />
                       </div>
@@ -628,7 +643,7 @@ const Header:React.FC<HeaderProps> = ({
                           Max invested:
                         </span>
                         <CurrencyAmount
-                          currency={getWhitelistedTokenSymbol(token2)}
+                          currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
                           amount={maxInvestedB.toString()}
                         />
                       </div>
@@ -644,7 +659,7 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={getWhitelistedTokenSymbol(tokenPair.token1)}
+                      currency={tokenPair.token1 ? getWhitelistedTokenSymbol(tokenPair.token1) : ''}
                       amount={minimumReceivedA.toString()}
                     />
                   </div>
@@ -653,7 +668,7 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={getWhitelistedTokenSymbol(tokenPair.token2)}
+                      currency={tokenPair.token2 ? getWhitelistedTokenSymbol(tokenPair.token2) : ''}
                       amount={minimumReceivedB.toString()}
                     />
                   </div>
@@ -719,10 +734,11 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     },
   );
 
+  const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
+  const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<FormValues>();
   const [dex, setDex] = useState<FoundDex>();
-  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
-  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
   const [
     tokenPair,
     setTokenPair,
@@ -825,15 +841,42 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={() => {}}
+        onSubmit={() => {
+          if (!tezos) return;
+          const asyncFunc = async () => {
+            if (currentTab.id === 'remove') {
+              try {
+                const op = await batchify(
+                  tezos.wallet.batch([]),
+                  removeLiquidityParams,
+                ).send();
+                await op.confirmation();
+              } catch (e) {
+                console.error(e);
+              }
+            } else {
+              try {
+                const op = await batchify(
+                  tezos.wallet.batch([]),
+                  addLiquidityParams,
+                ).send();
+                await op.confirmation();
+              } catch (e) {
+                console.error(e);
+              }
+            }
+          };
+          asyncFunc();
+        }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
           },
         }}
-        render={({ form }) => (
+        render={({ handleSubmit, form }) => (
           <AutoSave
             form={form}
+            handleSubmit={handleSubmit}
             debounce={1000}
             save={() => {}}
             setTabsState={setTabsState}
@@ -843,12 +886,14 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             token1={token1}
             token2={token2}
             tokenPair={tokenPair}
-            setToken1={setToken1}
-            setToken2={setToken2}
+            setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
+            setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
             setTokenPair={setTokenPair}
             tokensData={tokensData}
             handleTokenChange={handleTokenChange}
             currentTab={currentTab}
+            setRemoveLiquidityParams={setRemoveLiquidityParams}
+            setAddLiquidityParams={setAddLiquidityParams}
           />
         )}
       />
