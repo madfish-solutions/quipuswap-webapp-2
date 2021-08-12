@@ -19,7 +19,9 @@ import {
   useTokens,
   useSearchCustomTokens,
 } from '@utils/dapp';
-import { validateMinMax } from '@utils/validators';
+import {
+  composeValidators, isAddress, isBalance, validateMinMax,
+} from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
   isTokenEqual,
@@ -166,7 +168,7 @@ const Header:React.FC<HeaderProps> = ({
     if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
     const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
-    const retValue = lastChange === 'balance1' ? (val.balance1) * rate : rate / (val.balance2);
+    const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
     const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
     form.mutators.setValue(
@@ -266,11 +268,14 @@ const Header:React.FC<HeaderProps> = ({
       contentClassName={s.content}
     >
       <Field
-        validate={validateMinMax(0, Infinity)}
-        parse={(v) => parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+        validate={composeValidators(
+          validateMinMax(0, Infinity),
+          isBalance(+tokensData.first.balance),
+        )}
+        parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         name="balance1"
       >
-        {({ input }) => (
+        {({ input, meta }) => (
           <>
             <TokenSelect
               {...input}
@@ -279,10 +284,12 @@ const Header:React.FC<HeaderProps> = ({
               token={token1}
               setToken={setToken1}
               handleBalance={(value) => {
-                form.mutators.setValue(
-                  'balance1',
-                  +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
-                );
+                if (token1) {
+                  form.mutators.setValue(
+                    'balance1',
+                    +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                  );
+                }
               }}
               handleChange={(token) => handleTokenChange(token, 'first')}
               balance={tokensData.first.balance}
@@ -290,6 +297,7 @@ const Header:React.FC<HeaderProps> = ({
               id="swap-send-from"
               label="From"
               className={s.input}
+              error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
             />
           </>
         )}
@@ -308,11 +316,14 @@ const Header:React.FC<HeaderProps> = ({
         <SwapIcon />
       </Button>
       <Field
-        validate={validateMinMax(0, Infinity)}
-        parse={(v) => parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+        validate={composeValidators(
+          validateMinMax(0, Infinity),
+          isBalance(+tokensData.second.balance),
+        )}
+        parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
         name="balance2"
       >
-        {({ input }) => (
+        {({ input, meta }) => (
           <>
             <TokenSelect
               {...input}
@@ -321,10 +332,12 @@ const Header:React.FC<HeaderProps> = ({
               token={token2}
               setToken={setToken2}
               handleBalance={(value) => {
-                form.mutators.setValue(
-                  'balance2',
-                  +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
-                );
+                if (token2) {
+                  form.mutators.setValue(
+                    'balance2',
+                    +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                  );
+                }
               }}
               handleChange={(token) => handleTokenChange(token, 'second')}
               balance={tokensData.second.balance}
@@ -332,27 +345,30 @@ const Header:React.FC<HeaderProps> = ({
               id="swap-send-to"
               label="To"
               className={cx(s.input, s.mb24)}
+              error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
             />
           </>
         )}
       </Field>
       {currentTab.id === 'send' && (
-      <Field name="recipient">
-        {({ input }) => (
-          <>
-            <ComplexRecipient
-              {...input}
-              handleInput={(value) => {
-                form.mutators.setValue(
-                  'recipient',
-                  value,
-                );
-              }}
-              label="Recipient address"
-              id="swap-send-recipient"
-              className={cx(s.input, s.mb24)}
-            />
-          </>
+      <Field
+        validate={isAddress}
+        name="recipient"
+      >
+        {({ input, meta }) => (
+          <ComplexRecipient
+            {...input}
+            handleInput={(value) => {
+              form.mutators.setValue(
+                'recipient',
+                value,
+              );
+            }}
+            label="Recipient address"
+            id="swap-send-recipient"
+            className={cx(s.input, s.mb24)}
+            error={((meta.touched && meta.error) || meta.submitError)}
+          />
         )}
       </Field>
       )}
