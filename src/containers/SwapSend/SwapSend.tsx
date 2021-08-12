@@ -9,6 +9,7 @@ import {
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken } from '@utils/types';
 import {
@@ -147,6 +148,8 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
 }) => {
   const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const { openConnectWalletModal } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -208,6 +211,9 @@ const Header:React.FC<HeaderProps> = ({
 
   const handleSwapSubmit = async () => {
     if (!tezos) return;
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
     try {
       const fromAsset = isTez(tokensData.first) ? 'tez' : {
         contract: tokensData.first.token.address,
@@ -276,30 +282,28 @@ const Header:React.FC<HeaderProps> = ({
         name="balance1"
       >
         {({ input, meta }) => (
-          <>
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance1')}
-              token={token1}
-              setToken={setToken1}
-              handleBalance={(value) => {
-                if (token1) {
-                  form.mutators.setValue(
-                    'balance1',
-                    +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
-                  );
-                }
-              }}
-              handleChange={(token) => handleTokenChange(token, 'first')}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
-              id="swap-send-from"
-              label="From"
-              className={s.input}
-              error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
-            />
-          </>
+          <TokenSelect
+            {...input}
+            blackListedTokens={blackListedTokens}
+            onFocus={() => setLastChange('balance1')}
+            token={token1}
+            setToken={setToken1}
+            handleBalance={(value) => {
+              if (token1) {
+                form.mutators.setValue(
+                  'balance1',
+                  +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                );
+              }
+            }}
+            handleChange={(token) => handleTokenChange(token, 'first')}
+            balance={tokensData.first.balance}
+            exchangeRate={tokensData.first.exchangeRate}
+            id="swap-send-from"
+            label="From"
+            className={s.input}
+            error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
+          />
         )}
       </Field>
       <Button
@@ -324,54 +328,55 @@ const Header:React.FC<HeaderProps> = ({
         name="balance2"
       >
         {({ input, meta }) => (
-          <>
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance2')}
-              token={token2}
-              setToken={setToken2}
-              handleBalance={(value) => {
-                if (token2) {
-                  form.mutators.setValue(
-                    'balance2',
-                    +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
-                  );
-                }
-              }}
-              handleChange={(token) => handleTokenChange(token, 'second')}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
-              id="swap-send-to"
-              label="To"
-              className={cx(s.input, s.mb24)}
-              error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
-            />
-          </>
+          <TokenSelect
+            {...input}
+            blackListedTokens={blackListedTokens}
+            onFocus={() => setLastChange('balance2')}
+            token={token2}
+            setToken={setToken2}
+            handleBalance={(value) => {
+              if (token2) {
+                form.mutators.setValue(
+                  'balance2',
+                  +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                );
+              }
+            }}
+            handleChange={(token) => handleTokenChange(token, 'second')}
+            balance={tokensData.second.balance}
+            exchangeRate={tokensData.second.exchangeRate}
+            id="swap-send-to"
+            label="To"
+            className={cx(s.input, s.mb24)}
+            error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
+          />
         )}
       </Field>
-      {currentTab.id === 'send' && (
       <Field
         validate={isAddress}
         name="recipient"
       >
-        {({ input, meta }) => (
-          <ComplexRecipient
-            {...input}
-            handleInput={(value) => {
-              form.mutators.setValue(
-                'recipient',
-                value,
-              );
-            }}
-            label="Recipient address"
-            id="swap-send-recipient"
-            className={cx(s.input, s.mb24)}
-            error={((meta.touched && meta.error) || meta.submitError)}
-          />
-        )}
+        {({ input, meta }) => {
+          if (currentTab.id === 'send') {
+            return (
+              <ComplexRecipient
+                {...input}
+                handleInput={(value) => {
+                  form.mutators.setValue(
+                    'recipient',
+                    value,
+                  );
+                }}
+                label="Recipient address"
+                id="swap-send-recipient"
+                className={cx(s.input, s.mb24)}
+                error={((meta.touched && meta.error) || meta.submitError)}
+              />
+            );
+          }
+          return '';
+        }}
       </Field>
-      )}
       <Field initialValue="0.5 %" name="slippage">
         {({ input }) => {
           const slippagePercent = (
@@ -566,7 +571,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={() => {}}
+        onSubmit={() => {
+        }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
