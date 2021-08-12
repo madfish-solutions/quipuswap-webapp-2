@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import {
-  estimateSwap, findDex, swap, batchify,
+  swap, batchify,
 } from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -24,6 +24,7 @@ import {
   getWhitelistedTokenSymbol,
   isTokenEqual,
   localSearchToken,
+  parseDecimals,
   slippageToBignum,
   slippageToNum,
 } from '@utils/helpers';
@@ -157,95 +158,26 @@ const Header:React.FC<HeaderProps> = ({
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
-  const fromNat = (amount: any, token: any) => new BigNumber(amount).div(10 ** token.decimals);
-
-  const estimateTezToToken = (
-    tezAmount: BigNumber,
-    dexStorage: any,
-    token: any,
-  ) => {
-    if (!tezAmount) return new BigNumber(0);
-
-    const mutezAmount = tezos!!.format('tz', 'mutez', tezAmount) as any;
-
-    const tezInWithFee = mutezAmount.times(997);
-    const numerator = tezInWithFee.times(dexStorage.token_pool);
-    const denominator = new BigNumber(dexStorage.tez_pool)
-      .times(1000)
-      .plus(tezInWithFee);
-    const tokensOut = numerator.idiv(denominator);
-    const na = fromNat(tokensOut, token);
-
-    return na;
-  };
-
   const handleInputChange = async (val: FormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
     if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
-    if (tezos) {
-      try {
-        const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.first.token.address,
-          id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-        };
-        const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-        };
-        const decimals1 = lastChange === 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const decimals2 = lastChange !== 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1));
-        const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
+    if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+    const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
+    const retValue = lastChange === 'balance1' ? (val.balance1) * rate : rate / (val.balance2);
+    const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
-        // only on testnet and xtz => token
-        if (networkId === 'florencenet') {
-          try {
-            const token = {
-              contract: tokensData.second.token.address,
-              id: tokensData.second.token.id ?? undefined,
-            };
-            const dexAddress = await findDex(tezos, FACTORIES[networkId], token);
-            const amount = estimateTezToToken(
-              new BigNumber(inputWrapper),
-              dexAddress.storage.storage,
-              tokensData.second.token,
-            );
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', amount);
-          } catch (e) {
-            console.error(e);
-          }
-        } else {
-          try {
-            const estimatedOutputValue = await estimateSwap(
-              tezos,
-              FACTORIES[networkId],
-              fromAsset,
-              toAsset,
-              valuesInner,
-            );
-            const retValue = estimatedOutputValue.div(
-              new BigNumber(10)
-                .pow(
-                  new BigNumber(decimals2),
-                ),
-            ).toString();
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
+    form.mutators.setValue(
+      lastChange === 'balance1' ? 'balance2' : 'balance1',
+      parseDecimals(
+        retValue.toString(),
+        0,
+        Infinity,
+        decimals,
+      ),
+    );
   };
 
   const saveFunc = async () => {
@@ -335,6 +267,7 @@ const Header:React.FC<HeaderProps> = ({
     >
       <Field
         validate={validateMinMax(0, Infinity)}
+        parse={(v) => parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         name="balance1"
       >
         {({ input }) => (
@@ -348,7 +281,7 @@ const Header:React.FC<HeaderProps> = ({
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance1',
-                  +value,
+                  +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
                 );
               }}
               handleChange={(token) => handleTokenChange(token, 'first')}
@@ -376,6 +309,7 @@ const Header:React.FC<HeaderProps> = ({
       </Button>
       <Field
         validate={validateMinMax(0, Infinity)}
+        parse={(v) => parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
         name="balance2"
       >
         {({ input }) => (
@@ -389,7 +323,7 @@ const Header:React.FC<HeaderProps> = ({
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance2',
-                  +value,
+                  +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
                 );
               }}
               handleChange={(token) => handleTokenChange(token, 'second')}
@@ -514,11 +448,16 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       tokenAddress: string,
       tokenId?: number,
       exchangeRate: string
-    }) => (
-      token.contractAddress === TEZOS_TOKEN.contractAddress && el.tokenAddress === undefined ? el
-        : el.tokenAddress === token.contractAddress
-      && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
-    ));
+    }) => {
+      const isTokenTez = token.contractAddress === TEZOS_TOKEN.contractAddress
+      && el.tokenAddress === undefined;
+      if (isTokenTez) return true;
+      if (el.tokenAddress === token.contractAddress) {
+        if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
+        if (!token.fa2TokenId) return true;
+      }
+      return false;
+    });
 
     setTokensData((prevState) => (
       {
@@ -585,7 +524,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         if (to) {
           const resTo = await searchPart('to', to);
           res = [resTo];
-          handleTokenChange(resTo, 'first');
+          handleTokenChange(resTo, 'second');
         }
         const resFrom = await searchPart('from', from);
         res = [resFrom, ...res];
@@ -595,6 +534,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     };
     if (tezos && !initialLoad) asyncCall();
   }, [tezos, initialLoad]);
+
+  useEffect(() => {
+    console.log(accountPkh);
+    if (tezos && token1 && token2) {
+      handleTokenChange(token1, 'first');
+      handleTokenChange(token2, 'second');
+    }
+  }, [tezos, accountPkh, networkId]);
 
   useEffect(() => {
     setTokens([]);
@@ -618,8 +565,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             tabsState={tabsState}
             token1={token1}
             token2={token2}
-            setToken1={(token:WhitelistedToken) => setTokens([(token2 || undefined), token])}
-            setToken2={(token:WhitelistedToken) => setTokens([token, (token1 || undefined)])}
+            setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
+            setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
             tokensData={tokensData}
             handleSwapTokens={handleSwapTokens}
             handleTokenChange={handleTokenChange}
