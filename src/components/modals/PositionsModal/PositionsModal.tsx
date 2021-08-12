@@ -6,7 +6,9 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
+  useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
   useTezos,
@@ -14,8 +16,7 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken, isTokensEqual } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Checkbox } from '@components/ui/Checkbox';
@@ -26,6 +27,7 @@ import { Input } from '@components/ui/Input';
 import { NumberInput } from '@components/ui/NumberInput';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
+import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './PositionsModal.module.sass';
 
@@ -39,6 +41,7 @@ type PositionsModalProps = {
 } & ReactModal.Props;
 
 type HeaderProps = {
+  isSecondInput:boolean,
   debounce:number,
   save:any,
   values:any,
@@ -47,13 +50,13 @@ type HeaderProps = {
 
 type FormValues = {
   search: string
-  tokenId: number
+  tokenId: string
   token1: WhitelistedToken
   token2: WhitelistedToken
 };
 
 const Header:React.FC<HeaderProps> = ({
-  debounce, save, values, form,
+  isSecondInput, debounce, save, values, form,
 }) => {
   const { t } = useTranslation(['common']);
 
@@ -99,15 +102,16 @@ const Header:React.FC<HeaderProps> = ({
               className={s.modalInput}
               placeholder={t('common:Search')}
               error={meta.error}
+              readOnly={values.token1 && values.token2}
             />
           </>
         )}
 
       </Field>
+      {(isSecondInput) && (
       <Field
         name="tokenId"
         validate={validateMinMax(0, 100)}
-        parse={(value) => parseNumber(value, 0, 100)}
       >
         {({ input, meta }) => (
           <>
@@ -118,6 +122,7 @@ const Header:React.FC<HeaderProps> = ({
               step={1}
               min={0}
               max={100}
+              readOnly={values.token1 && values.token2}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
                 form.mutators.setValue(
@@ -135,6 +140,7 @@ const Header:React.FC<HeaderProps> = ({
           </>
         )}
       </Field>
+      )}
     </div>
   );
 };
@@ -145,8 +151,10 @@ const AutoSave = (props:any) => (
 
 export const PositionsModal: React.FC<PositionsModalProps> = ({
   onChange,
+  onRequestClose,
   ...props
 }) => {
+  const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
@@ -157,27 +165,27 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
-  const [inputToken, setInputToken] = useState<number>(0);
+  const [inputToken, setInputToken] = useState<string>('');
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
-    setInputToken(isSoleFa2Token ? values.tokenId : 0);
+    setInputToken(isSoleFa2Token ? values.tokenId : '');
   };
 
   const handleTokenSearch = () => {
     const isTokens = tokens
       .filter(
-        (token) => localSearchToken(
+        (token:any) => localSearchToken(
           token,
           network,
           inputValue,
-          inputToken,
+          +inputToken,
         ),
       );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
-      searchCustomToken(inputValue, inputToken);
+      searchCustomToken(inputValue, +inputToken);
     }
   };
 
@@ -234,6 +242,12 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
           contentClassName={cx(s.tokenModal)}
+          onRequestClose={(e) => {
+            if (values.token1 && values.token2) {
+              onChange({ token1: values.token1, token2: values.token2, dex: '' });
+            }
+            if (onRequestClose) onRequestClose(e);
+          }}
           {...props}
         >
           <Field name="token1">
@@ -290,11 +304,17 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               );
             }}
           </Field>
+          {isEmptyTokens && !searchLoading && (
+            <div className={s.tokenNotFound}>
+              <TokenNotFound />
+              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+            </div>
+          )}
           {isEmptyTokens && searchLoading && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {!values.token2 && allTokens
-            .filter((x) => !values.token1 || !isTokensEqual(x, values.token1))
+            .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
             .map((token) => {
               const {
                 contractAddress, fa2TokenId,
@@ -305,15 +325,18 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                   token={token}
                   tabIndex={0}
                   onClick={() => {
+                    if (searchTokens.length > 0) {
+                      addCustomToken(token);
+                    }
                     if (!values.token1) {
                       form.mutators.setValue('token1', token);
                     } else if (!values.token2) {
                       form.mutators.setValue('token2', token);
                     }
                     form.mutators.setValue('search', '');
-                    form.mutators.setValue('tokenId', 0);
+                    form.mutators.setValue('tokenId', '');
                     setInputValue('');
-                    setInputToken(0);
+                    setInputToken('');
                   }}
                 >
                   <Checkbox checked={false} />

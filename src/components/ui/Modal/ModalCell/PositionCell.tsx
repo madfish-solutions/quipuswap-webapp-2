@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { WhitelistedTokenPair } from '@utils/types';
+import { getWhitelistedTokenName } from '@utils/helpers';
 
 import s from './ModalCell.module.sass';
 
@@ -21,8 +22,6 @@ export const PositionCell: React.FC<PositionCellProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { token1, token2 } = tokenPair;
-  const { name: name1 } = token1.metadata;
-  const { name: name2 } = token2.metadata;
 
   return (
     <div className={cx(modeClass[colorThemeMode], s.listItem)}>
@@ -33,36 +32,13 @@ export const PositionCell: React.FC<PositionCellProps> = ({
         />
         <div className={s.mleft8}>
           <h6>
-            {name1}
+            {getWhitelistedTokenName(token1)}
             /
-            {name2}
+            {getWhitelistedTokenName(token2)}
           </h6>
 
         </div>
       </div>
-      {/* <div className={cx(s.joinRow, s.centerRow)}>
-        <div>
-          <div className={s.caption}>
-            {t('common:LP in Votes')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.vote}</span>
-        </div>
-        <div className={s.mleft24}>
-          <div className={s.caption}>
-            {t('common:LP in Veto')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.veto}</span>
-        </div>
-        <div className={s.mleft24}>
-          <div className={s.caption}>
-            {t('common:Total Balance')}
-            :
-          </div>
-          <span className={s.label1}>{token1?.balance}</span>
-        </div>
-      </div> */}
     </div>
   );
 };

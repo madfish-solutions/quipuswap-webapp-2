@@ -15,7 +15,7 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken } from '@utils/helpers';
+import { parseNumber, localSearchToken, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -36,7 +36,8 @@ const themeClass = {
 };
 
 type TokensModalProps = {
-  onChange: (token: WhitelistedToken) => void
+  onChange: (token: WhitelistedToken) => void,
+  blackListedTokens: WhitelistedToken[],
 } & ReactModal.Props;
 
 type HeaderProps = {
@@ -147,6 +148,7 @@ const AutoSave = (props:any) => (
 
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
+  blackListedTokens = [],
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
@@ -154,9 +156,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
+  const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: tokens, loading: tokensLoading } = useTokens();
-  const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -169,9 +171,10 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   };
 
   const handleTokenSearch = () => {
+    if (!network || !tezos) return;
     const isTokens = tokens
       .filter(
-        (token) => localSearchToken(
+        (token:any) => localSearchToken(
           token,
           network,
           inputValue,
@@ -190,10 +193,15 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
 
-  const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
-    ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
+  const allTokens = useMemo(() => (
+    inputValue.length > 0 && filteredTokens.length === 0
+      ? searchTokens
+      : filteredTokens
+  )
+    .filter((x) => !blackListedTokens.find((y) => isTokenEqual(x, y))),
+  [inputValue, filteredTokens, searchTokens, blackListedTokens]);
 
   useEffect(() => {
     const getFa2 = async () => {

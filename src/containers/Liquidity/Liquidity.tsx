@@ -30,8 +30,8 @@ import { validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
-import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -39,6 +39,8 @@ import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { ComplexInput } from '@components/ui/ComplexInput';
+import { Tooltip } from '@components/ui/Tooltip';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -48,7 +50,6 @@ import { Plus } from '@components/svg/Plus';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { ComplexInput } from '@components/ui/ComplexInput';
 
 const TabsContent = [
   {
@@ -474,6 +475,7 @@ const Header:React.FC<HeaderProps> = ({
             <>
               <TokenSelect
                 {...input}
+                blackListedTokens={[]}
                 onFocus={() => setLastChange('balance1')}
                 token={token1}
                 setToken={setToken1}
@@ -521,6 +523,7 @@ const Header:React.FC<HeaderProps> = ({
             <>
               <TokenSelect
                 {...input}
+                blackListedTokens={[]}
                 onFocus={() => setLastChange('balance2')}
                 token={token2}
                 setToken={setToken2}
@@ -670,8 +673,7 @@ const AutoSave = (props:any) => (
 const fallbackTokenPair : WhitelistedTokenPair = {
   token1: TEZOS_TOKEN,
   token2: TEZOS_TOKEN,
-  dex: null,
-};
+} as WhitelistedTokenPair;
 
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,

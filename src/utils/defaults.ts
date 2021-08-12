@@ -15,6 +15,7 @@ export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs'
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
+export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
 
@@ -23,11 +24,12 @@ export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
+export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
-  network: 'mainnet',
   contractAddress: 'tez',
   metadata: {
     decimals: 6,
@@ -36,8 +38,6 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };
-export const METADATA_API = process.env.NEXT_PUBLIC_METADATA_API_URL!; // 'ex https://<host>:<port>/metadata'
-
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [
@@ -61,6 +61,9 @@ export const FACTORIES = {
   },
 };
 
+export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
+export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
+export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
@@ -71,6 +74,7 @@ export const FLORENCENET_NETWORK: QSNetwork = {
   name: 'Florence Testnet',
   type: 'test',
   rpcBaseURL: 'https://testnet-tezos.giganode.io',
+  metadata: METADATA_API_TESTNET,
   description: 'Florence testnet',
   disabled: false,
 };
@@ -80,6 +84,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   name: 'Tezos Mainnet',
   type: 'main',
   rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
+  metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
   disabled: false,
 };

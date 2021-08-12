@@ -4,8 +4,8 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -14,6 +14,8 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -24,7 +26,8 @@ type TokenSelectProps = {
   error?: string
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
-  token: WhitelistedToken,
+  token?: WhitelistedToken,
+  blackListedTokens: WhitelistedToken[],
   setToken: (token:WhitelistedToken) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -45,6 +48,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   handleChange,
   token,
   setToken,
+  blackListedTokens,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -52,6 +56,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const account = useAccountPkh();
 
   // TODO: Change logic of buttons and dollar during connection to SDK
   const dollarEquivalent = useMemo(() => (exchangeRate
@@ -78,6 +83,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   return (
     <>
       <TokensModal
+        blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={(selectedToken) => {
@@ -101,6 +107,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {equivalentContent}
             </div>
             <div className={s.item2}>
+              {account && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
                   {t('common:Total Balance')}
@@ -110,6 +117,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   {prettyPrice(parseFloat(balance))}
                 </div>
               </div>
+              )}
             </div>
             <input
               className={cx(s.item3, s.input)}
@@ -120,10 +128,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {...props}
             />
             <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-              <TokensLogos token1={token} />
+              <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
-                {getWhitelistedTokenSymbol(token)}
+                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>
               <Shevron />
             </Button>
