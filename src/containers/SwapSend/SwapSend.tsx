@@ -102,6 +102,7 @@ type FormValues = {
 };
 
 type HeaderProps = {
+  handleSubmit:() => void,
   debounce:number,
   save:any,
   values:any,
@@ -146,6 +147,7 @@ const Header:React.FC<HeaderProps> = ({
   handleSwapTokens,
   handleTokenChange,
   currentTab,
+  handleSubmit,
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -214,36 +216,7 @@ const Header:React.FC<HeaderProps> = ({
     if (!accountPkh) {
       openConnectWalletModal(); return;
     }
-    try {
-      const fromAsset = isTez(tokensData.first) ? 'tez' : {
-        contract: tokensData.first.token.address,
-        id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-      };
-      const toAsset = isTez(tokensData.second) ? 'tez' : {
-        contract: tokensData.second.token.address,
-        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-      };
-      const slippage = slippageToNum(values.slippage) / 100;
-      const inputValue = isTez(tokensData.first)
-        ? tezos!!.format('tz', 'mutez', values.balance1) as any
-        : toNat(values.balance1, tokensData.first.token.decimals);
-      const swapParams = await swap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        inputValue,
-        slippage,
-        tabsState === 'send' ? values.recipient : undefined,
-      );
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        swapParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
-    }
+    handleSubmit();
   };
 
   const blackListedTokens = useMemo(
@@ -557,7 +530,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [tezos, initialLoad]);
 
   useEffect(() => {
-    console.log(accountPkh);
     if (tezos && token1 && token2) {
       handleTokenChange(token1, 'first');
       handleTokenChange(token2, 'second');
@@ -571,15 +543,50 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={() => {
+        onSubmit={(values: FormValues) => {
+          if (!tezos) return;
+          const asyncFunc = async () => {
+            try {
+              const fromAsset = isTez(tokensData.first) ? 'tez' : {
+                contract: tokensData.first.token.address,
+                id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+              };
+              const toAsset = isTez(tokensData.second) ? 'tez' : {
+                contract: tokensData.second.token.address,
+                id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+              };
+              const slippage = slippageToNum(values.slippage) / 100;
+              const inputValue = isTez(tokensData.first)
+                ? tezos!!.format('tz', 'mutez', values.balance1) as any
+                : toNat(values.balance1, tokensData.first.token.decimals);
+              const swapParams = await swap(
+                tezos,
+                FACTORIES[networkId],
+                fromAsset,
+                toAsset,
+                inputValue,
+                slippage,
+                tabsState === 'send' ? values.recipient : undefined,
+              );
+              const op = await batchify(
+                tezos.wallet.batch([]),
+                swapParams,
+              ).send();
+              await op.confirmation();
+            } catch (e) {
+              console.error(e);
+            }
+          };
+          asyncFunc();
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
           },
         }}
-        render={({ form }) => (
+        render={({ handleSubmit, form }) => (
           <AutoSave
+            handleSubmit={handleSubmit}
             form={form}
             debounce={1000}
             save={() => {}}
