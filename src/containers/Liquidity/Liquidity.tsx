@@ -145,25 +145,24 @@ export const Liquidity: React.FC<LiquidityProps> = ({
               {({ input }) => (
                 <>
                   {currentTab.id !== 'remove' && (
-                    <>
-                      <TokenSelect
-                        {...input}
-                        onFocus={() => setLastChange('balance1')}
-                        token={(tokenPair?.token1) ?? TEZOS_TOKEN}
-                        setToken={() => {}}
-                        handleBalance={(value) => {
-                          setLastChange('balance1');
-                          form.mutators.setValue(
-                            'balance1',
-                            +value,
-                          );
-                        }}
-                        balance="10"
-                        id="liquidity-token-1"
-                        label="Input"
-                        className={s.input}
-                      />
-                    </>
+                  <TokenSelect
+                    {...input}
+                    blackListedTokens={[]}
+                    onFocus={() => setLastChange('balance1')}
+                    token={(tokenPair?.token1) ?? TEZOS_TOKEN}
+                    setToken={() => {}}
+                    handleBalance={(value) => {
+                      setLastChange('balance1');
+                      form.mutators.setValue(
+                        'balance1',
+                        +value,
+                      );
+                    }}
+                    balance="10"
+                    id="liquidity-token-1"
+                    label="Input"
+                    className={s.input}
+                  />
                   )}
                   {currentTab.id === 'remove' && (
                     <ComplexInput
@@ -188,25 +187,24 @@ export const Liquidity: React.FC<LiquidityProps> = ({
               {({ input }) => (
                 <>
                   {currentTab.id !== 'remove' && (
-                    <>
-                      <TokenSelect
-                        {...input}
-                        onFocus={() => setLastChange('balance2')}
-                        token={(tokenPair?.token2) ?? TEZOS_TOKEN}
-                        setToken={() => {}}
-                        handleBalance={(value) => {
-                          setLastChange('balance2');
-                          form.mutators.setValue(
-                            'balance2',
-                            +value,
-                          );
-                        }}
-                        balance="10"
-                        id="liquidity-token-2"
-                        label="Input"
-                        className={cx(s.input, s.mb24)}
-                      />
-                    </>
+                  <TokenSelect
+                    {...input}
+                    blackListedTokens={[]}
+                    onFocus={() => setLastChange('balance2')}
+                    token={(tokenPair?.token2) ?? TEZOS_TOKEN}
+                    setToken={() => {}}
+                    handleBalance={(value) => {
+                      setLastChange('balance2');
+                      form.mutators.setValue(
+                        'balance2',
+                        +value,
+                      );
+                    }}
+                    balance="10"
+                    id="liquidity-token-2"
+                    label="Input"
+                    className={cx(s.input, s.mb24)}
+                  />
                   )}
                   {currentTab.id === 'remove' && (
                     <ComplexInput
