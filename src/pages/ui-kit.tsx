@@ -470,6 +470,7 @@ const UiKit: React.FC = () => {
           Open tokens modal
         </Button>
         <TokensModal
+          blackListedTokens={[]}
           isOpen={tokensModal}
           onRequestClose={() => setTokensModal(false)}
           onChange={() => {}}
