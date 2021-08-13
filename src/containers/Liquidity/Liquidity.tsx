@@ -116,6 +116,8 @@ type HeaderProps = {
   handleSubmit: () => void,
   setAddLiquidityParams: (params:TransferParams[]) => void,
   setRemoveLiquidityParams: (params:TransferParams[]) => void,
+  addLiquidityParams:TransferParams[],
+  removeLiquidityParams:TransferParams[],
   debounce:number,
   save:any,
   values:FormValues,
@@ -124,6 +126,7 @@ type HeaderProps = {
   dex: FoundDex,
   setDex: (dex:FoundDex) => void,
   token1:WhitelistedToken,
+  setTokens: (tokens:WhitelistedToken[]) => void,
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
   setToken2:(token:WhitelistedToken) => void,
@@ -211,6 +214,7 @@ const Header:React.FC<HeaderProps> = ({
   token1,
   token2,
   tokenPair,
+  setTokens,
   setToken1,
   setToken2,
   setTokenPair,
@@ -219,10 +223,12 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
   setTabsState,
   setAddLiquidityParams,
+  addLiquidityParams,
   setRemoveLiquidityParams,
+  removeLiquidityParams,
 }) => {
-  const { openConnectWalletModal } = useConnectModalsState();
   const { t } = useTranslation(['common', 'liquidity']);
+  const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
@@ -446,7 +452,16 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, token1, token2, tokenPair, dex, currentTab]);
+  }, [
+    values.balance1,
+    values.balance2,
+    values.balance3,
+    values.slippage,
+    token1,
+    token2,
+    tokenPair,
+    dex,
+    currentTab]);
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;
@@ -463,6 +478,15 @@ const Header:React.FC<HeaderProps> = ({
     }
     handleSubmit();
   };
+
+  console.log(addLiquidityParams, removeLiquidityParams, tokensData);
+
+  const pairLink = useMemo(() => (removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to
+    ? `https://analytics.quipuswap.com/pairs/${removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to}`
+    : '#'), [removeLiquidityParams]);
+
+  const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
+  const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
 
   return (
     <>
@@ -496,14 +520,19 @@ const Header:React.FC<HeaderProps> = ({
               <PositionSelect
                 {...input}
                 tokenPair={tokenPair}
-                setTokenPair={(pair) => hanldeTokenPairSelect(
-                  pair,
-                  setTokenPair,
-                  handleTokenChange,
-                  tezos,
-                  accountPkh,
-                  networkId,
-                )}
+                setTokenPair={(pair) => {
+                  setTokens([pair.token1, pair.token2]);
+                  handleTokenChange(pair.token1, 'first');
+                  handleTokenChange(pair.token2, 'second');
+                  hanldeTokenPairSelect(
+                    pair,
+                    setTokenPair,
+                    handleTokenChange,
+                    tezos,
+                    accountPkh,
+                    networkId,
+                  );
+                }}
                 handleBalance={(value) => {
                   form.mutators.setValue(
                     'balance3',
@@ -643,7 +672,7 @@ const Header:React.FC<HeaderProps> = ({
                         Max invested:
                       </span>
                       <CurrencyAmount
-                        currency={`${token1 ? getWhitelistedTokenSymbol(token1) : ''}/${token2 ? getWhitelistedTokenSymbol(token2) : ''}`}
+                        currency={`${tokenAName}/${tokenBName}`}
                         amount={values.estimateLP}
                       />
                     </div>
@@ -655,7 +684,7 @@ const Header:React.FC<HeaderProps> = ({
                             Max invested:
                           </span>
                           <CurrencyAmount
-                            currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
+                            currency={tokenAName}
                             amount={maxInvestedA.toString()}
                           />
                         </div>
@@ -664,7 +693,7 @@ const Header:React.FC<HeaderProps> = ({
                             Max invested:
                           </span>
                           <CurrencyAmount
-                            currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
+                            currency={tokenBName}
                             amount={maxInvestedB.toString()}
                           />
                         </div>
@@ -680,7 +709,7 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={tokenPair.token1 ? getWhitelistedTokenSymbol(tokenPair.token1) : ''}
+                      currency={tokenAName}
                       amount={minimumReceivedA < 0 ? '0' : minimumReceivedA.toString()}
                     />
                   </div>
@@ -689,7 +718,7 @@ const Header:React.FC<HeaderProps> = ({
                       Minimum received:
                     </span>
                     <CurrencyAmount
-                      currency={tokenPair.token2 ? getWhitelistedTokenSymbol(tokenPair.token2) : ''}
+                      currency={tokenBName}
                       amount={minimumReceivedB < 0 ? '0' : minimumReceivedB.toString()}
                     />
                   </div>
@@ -739,19 +768,22 @@ const Header:React.FC<HeaderProps> = ({
               {t('common:Sell Price')}
               <Tooltip
                 sizeT="small"
-                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+                content={t('common:The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
               />
             </>
           )}
           className={s.cell}
         >
           <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(token1)} />
+            <CurrencyAmount
+              amount="1"
+              currency={tokenAName}
+            />
             <span className={s.equal}>=</span>
             <CurrencyAmount
               amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
-              currency={getWhitelistedTokenSymbol(token2)}
-              dollarEquivalent={`${tokensData.first.exchangeRate}`}
+              currency={tokenBName}
+              dollarEquivalent={`${tokensData.first.exchangeRate ?? 0}`}
             />
           </div>
         </CardCell>
@@ -761,29 +793,32 @@ const Header:React.FC<HeaderProps> = ({
               {t('common:Buy Price')}
               <Tooltip
                 sizeT="small"
-                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+                content={t('common:The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
               />
             </>
           )}
           className={s.cell}
         >
           <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(token2)} />
+            <CurrencyAmount
+              amount="1"
+              currency={tokenBName}
+            />
             <span className={s.equal}>=</span>
             <CurrencyAmount
               amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
-              currency={getWhitelistedTokenSymbol(token1)}
-              dollarEquivalent={`${tokensData.second.exchangeRate}`}
+              currency={tokenAName}
+              dollarEquivalent={`${tokensData.second.exchangeRate ?? 0}`}
             />
           </div>
         </CardCell>
         <CardCell
           header={(
             <>
-              {t('liquidity:Token A Locked')}
+              {t('liquidity:{{tokenAName}} Locked', { tokenAName })}
               <Tooltip
                 sizeT="small"
-                content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+                content={t('liquidity:The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
               />
             </>
       )}
@@ -797,10 +832,10 @@ const Header:React.FC<HeaderProps> = ({
         <CardCell
           header={(
             <>
-              {t('liquidity:Token B Locked')}
+              {t('liquidity:{{tokenBName}} Locked', { tokenBName })}
               <Tooltip
                 sizeT="small"
-                content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+                content={t('liquidity:The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
               />
             </>
       )}
@@ -843,6 +878,7 @@ const Header:React.FC<HeaderProps> = ({
           <Button
             className={s.detailsButton}
             theme="inverse"
+            href={pairLink}
           >
             View Pair Analytics
             <ExternalLink className={s.linkIcon} />
@@ -1026,6 +1062,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             token1={token1}
             token2={token2}
             tokenPair={tokenPair}
+            setTokens={setTokens}
             setToken1={(token:WhitelistedToken) => {
               setTokens([token, (token2 || undefined)]);
               if (token2) {
@@ -1057,7 +1094,9 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             handleTokenChange={handleTokenChange}
             currentTab={currentTab}
             setRemoveLiquidityParams={setRemoveLiquidityParams}
+            removeLiquidityParams={removeLiquidityParams}
             setAddLiquidityParams={setAddLiquidityParams}
+            addLiquidityParams={addLiquidityParams}
           />
         )}
       />
