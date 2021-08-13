@@ -4,9 +4,9 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
-import { WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { Button } from '@components/ui/Button';
@@ -125,7 +125,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                 token2={tokenPair?.token2 ?? TEZOS_TOKEN}
               />
               <h6 className={cx(s.token)}>
-                {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1)} / ${getWhitelistedTokenSymbol(tokenPair.token2)}` : 'Select LP'}
+                {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
               </h6>
               <Shevron />
             </Button>

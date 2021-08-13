@@ -58,7 +58,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
             <h6>
               {getWhitelistedTokenSymbol(token)}
             </h6>
-            {token?.type && (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId}`]).map((x) => (
+            {token?.type && (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId ?? 0}`]).map((x) => (
               <Bage
                 className={s.bage}
                 key={x}

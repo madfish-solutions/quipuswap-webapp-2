@@ -7,6 +7,7 @@ import { BakersModal } from '@components/modals/BakersModal';
 import { Button } from '@components/ui/Button';
 import { BakerLogos } from '@components/ui/BakerLogos';
 import { Shevron } from '@components/svg/Shevron';
+// import Token from '@icons/Token.svg';
 
 import s from './ComplexInput.module.sass';
 

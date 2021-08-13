@@ -2,7 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { getWhitelistedBakerName, prepareTokenLogo } from '@utils/helpers';
+import { prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import FallbackLogo from '@icons/FallbackLogo.svg';
 
@@ -35,7 +35,7 @@ export const BakerLogos: React.FC<BakerLogosInterface> = ({
           width={24}
           height={24}
           src={prepareBaker.icon}
-          alt={getWhitelistedBakerName(prepareBaker)}
+          alt=""
           className={cx(s.image)}
         />
       ) : (

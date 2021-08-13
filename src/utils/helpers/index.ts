@@ -1,7 +1,6 @@
 export * from './getUniqueKey';
 export * from './prettyPrice';
 export * from './prepareTokenLogo';
-export * from './searchToken';
 export * from './transformMutezToTez';
 export * from './transformTezToKTez';
 export * from './ipfsToHttps';
@@ -18,5 +17,3 @@ export * from './isTokenEqual';
 export * from './isPairEqual';
 export * from './slippageToBignum';
 export * from './mutezToTz';
-export * from './isTokensEqual';
-export * from './getWhitelistedBakerName';

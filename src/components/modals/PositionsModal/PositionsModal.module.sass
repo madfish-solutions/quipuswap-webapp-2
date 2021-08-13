@@ -12,7 +12,9 @@
   margin-left: 8px
 
 .modalButton
+  width: 100%
   display: flex
+  justify-content: center
   align-items: center
 
 .modalInput:not(:last-child)
@@ -62,3 +64,7 @@
     color: $text-03
   .tokenNotFound
     color: $text-inverse
+
+@include media('>Ltablet')
+  .modalButton
+    max-width: 180px
