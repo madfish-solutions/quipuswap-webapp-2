@@ -222,7 +222,6 @@ const Header:React.FC<HeaderProps> = ({
   currentTab,
   setTabsState,
   setAddLiquidityParams,
-  addLiquidityParams,
   setRemoveLiquidityParams,
   removeLiquidityParams,
 }) => {
@@ -478,7 +477,10 @@ const Header:React.FC<HeaderProps> = ({
     handleSubmit();
   };
 
-  console.log(addLiquidityParams, removeLiquidityParams, tokensData);
+  const blackListedTokens = useMemo(
+    () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
+    [token1, token2],
+  );
 
   const pairLink = useMemo(() => (removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to
     ? `https://analytics.quipuswap.com/pairs/${removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to}`
@@ -579,6 +581,7 @@ const Header:React.FC<HeaderProps> = ({
           {({ input }) => (
             <TokenSelect
               {...input}
+              blackListedTokens={blackListedTokens}
               onFocus={() => setLastChange('balance1')}
               token={token1}
               setToken={setToken1}
@@ -629,6 +632,7 @@ const Header:React.FC<HeaderProps> = ({
           {({ input }) => (
             <TokenSelect
               {...input}
+              blackListedTokens={blackListedTokens}
               onFocus={() => setLastChange('balance2')}
               token={token2}
               setToken={setToken2}

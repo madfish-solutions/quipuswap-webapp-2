@@ -1,16 +1,15 @@
 import React, {
   useMemo, useState, useEffect, useRef,
-  useCallback,
 } from 'react';
 import cx from 'classnames';
-import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import {
-  estimateSwap, findDex, swap, batchify, TransferParams,
+  swap, batchify,
 } from '@quipuswap/sdk';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken } from '@utils/types';
 import {
@@ -18,17 +17,22 @@ import {
   useTezos,
   getUserBalance,
   useNetwork,
-  estimateTezToToken,
+  useTokens,
+  useSearchCustomTokens,
 } from '@utils/dapp';
-import { validateMinMax } from '@utils/validators';
+import {
+  composeValidators, isAddress, isBalance, validateMinMax,
+} from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
   isTokenEqual,
+  localSearchToken,
   parseDecimals,
   slippageToBignum,
+  slippageToNum,
 } from '@utils/helpers';
 import {
-  FACTORIES, FEE_RATE, TEZOS_TOKEN,
+  FACTORIES, TEZOS_TOKEN,
 } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
@@ -39,13 +43,13 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { SwapIcon } from '@components/svg/Swap';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { useRouter } from 'next/router';
 
 const TabsContent = [
   {
@@ -97,11 +101,13 @@ type FormValues = {
 };
 
 type HeaderProps = {
+  handleSubmit:() => void,
   debounce:number,
   save:any,
-  values:FormValues,
+  values:any,
   form:any,
   tabsState:any,
+  setTabsState: (state:string) => void,
   token1:WhitelistedToken,
   setToken1:(token:WhitelistedToken) => void,
   token2:WhitelistedToken,
@@ -117,6 +123,12 @@ const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
   fa2TokenId: tokenData.token.id,
 } as WhitelistedToken);
 
+const toNat = (amount: any, decimals: number) => new BigNumber(amount)
+  .times(10 ** decimals)
+  .integerValue(BigNumber.ROUND_DOWN);
+
+const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
+
 type QSMainNet = 'mainnet' | 'florencenet';
 
 const Header:React.FC<HeaderProps> = ({
@@ -125,6 +137,7 @@ const Header:React.FC<HeaderProps> = ({
   values,
   form,
   tabsState,
+  setTabsState,
   token1,
   token2,
   setToken1,
@@ -133,17 +146,20 @@ const Header:React.FC<HeaderProps> = ({
   handleSwapTokens,
   handleTokenChange,
   currentTab,
+  handleSubmit,
 }) => {
-  const { t } = useTranslation(['common', 'swap']);
   const tezos = useTezos();
-  const router = useRouter();
+  const accountPkh = useAccountPkh();
+  const { openConnectWalletModal } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  const [fee, setFee] = useState<number>(0);
-  const [estimatedOutputValue, setEstimatedOutputValue] = useState<string>('');
-  const [swapParams, setSwapParams] = useState<TransferParams[]>([]);
+
+  useEffect(() => {
+    form.mutators.setValue('balance1', undefined);
+    form.mutators.setValue('balance2', undefined);
+  }, [networkId]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -153,105 +169,21 @@ const Header:React.FC<HeaderProps> = ({
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isTokensSame || (isValuesSame)) return;
-    if (tezos) {
-      try {
-        const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.first.token.address,
-          id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-        };
-        const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
-          contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-        };
-        const decimals1 = lastChange === 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const decimals2 = lastChange !== 'balance1'
-          ? tokensData.first.token.decimals
-          : tokensData.second.token.decimals;
-        const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-        const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1)).integerValue();
-        const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
-        // only on testnet and xtz => token
-        if (networkId === 'florencenet') {
-          try {
-            const token = {
-              contract: tokensData.second.token.address,
-              id: tokensData.second.token.id ?? undefined,
-            };
-            const dexAddress = await findDex(tezos, FACTORIES[networkId], token);
-            const amount = estimateTezToToken(
-              tezos,
-              new BigNumber(inputWrapper),
-              dexAddress.storage.storage,
-              tokensData.second.token,
-            );
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', amount);
-          } catch (e) {
-            console.error(e);
-          }
-        } else {
-          try {
-            const estimateValue = await estimateSwap(
-              tezos,
-              FACTORIES[networkId],
-              fromAsset,
-              toAsset,
-              valuesInner,
-            );
-            setEstimatedOutputValue(estimateValue.toString());
-            const retValue = estimateValue.div(
-              new BigNumber(10)
-                .pow(
-                  new BigNumber(decimals2),
-                ),
-            ).toString();
-            form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', retValue);
-          } catch (e) {
-            console.error(e);
-          }
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
+    if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
+    if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+    const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
+    const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
+    const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
-  const loadFee = useCallback(async () => {
-    const retValue = new BigNumber(estimatedOutputValue).div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
-    if (retValue === 'NaN') return;
-    setFee((+retValue) * (+FEE_RATE));
-  }, [estimatedOutputValue]);
-
-  const asyncGetSwapParams = async () => {
-    if (!tezos) return;
-    try {
-      const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
-        contract: tokensData.first.token.address,
-        id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
-      };
-      const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
-        contract: tokensData.second.token.address,
-        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
-      };
-      const paramsValue = await swap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        5,
-      );
-      console.log(paramsValue);
-      setSwapParams(paramsValue);
-    } catch (e) {
-      console.error(e);
-    }
+    form.mutators.setValue(
+      lastChange === 'balance1' ? 'balance2' : 'balance1',
+      parseDecimals(
+        retValue.toString(),
+        0,
+        Infinity,
+        decimals,
+      ),
+    );
   };
 
   const saveFunc = async () => {
@@ -261,7 +193,6 @@ const Header:React.FC<HeaderProps> = ({
     setVal(values);
     setSubm(true);
     handleInputChange(values);
-    asyncGetSwapParams();
     promise = save(values);
     await promise;
     setSubm(false);
@@ -272,125 +203,134 @@ const Header:React.FC<HeaderProps> = ({
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
-    loadFee();
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
       }
     };
-  }, [values, token1, token2]);
+  }, [values, tokensData]);
 
   const handleSwapSubmit = async () => {
     if (!tezos) return;
-    try {
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        swapParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
     }
+    handleSubmit();
   };
 
+  const blackListedTokens = useMemo(
+    () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
+    [token1, token2],
+  );
+
   return (
-    <>
-      <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => router.replace(`/${val}`)}
-              className={s.tabs}
-            />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
-        }}
-        contentClassName={s.content}
+    <Card
+      header={{
+        content: (
+          <Tabs
+            values={TabsContent}
+            activeId={tabsState}
+            setActiveId={(val) => setTabsState(val)}
+            className={s.tabs}
+          />
+        ),
+        button: (
+          <Button
+            theme="quaternary"
+          >
+            <Transactions />
+          </Button>
+        ),
+        className: s.header,
+      }}
+      contentClassName={s.content}
+    >
+      <Field
+        validate={composeValidators(
+          validateMinMax(0, Infinity),
+          isBalance(+tokensData.first.balance),
+        )}
+        parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+        name="balance1"
       >
-        <Field
-          validate={validateMinMax(0, Infinity)}
-          parse={(value) => parseDecimals(value, 0, Infinity)}
-          name="balance1"
-        >
-          {({ input }) => (
-            <>
-              <TokenSelect
-                {...input}
-                onFocus={() => setLastChange('balance1')}
-                token={token1}
-                setToken={setToken1}
-                handleBalance={(value) => {
-                  setLastChange('balance1');
-                  form.mutators.setValue(
-                    'balance1',
-                    value,
-                  );
-                }}
-                handleChange={(token) => handleTokenChange(token, 'first')}
-                balance={tokensData.first.balance}
-                exchangeRate={tokensData.first.exchangeRate}
-                id="swap-send-from"
-                label="From"
-                className={s.input}
-              />
-            </>
-          )}
-        </Field>
-        <Button
-          theme="quaternary"
-          className={s.iconButton}
-          onClick={() => {
-            form.mutators.setValue(
-              'balance1',
-              values.balance2,
-            );
-            handleSwapTokens();
-          }}
-        >
-          <SwapIcon />
-        </Button>
-        <Field
-          validate={validateMinMax(0, Infinity)}
-          parse={(value) => parseDecimals(value, 0, Infinity)}
-          name="balance2"
-        >
-          {({ input }) => (
-            <>
-              <TokenSelect
-                {...input}
-                onFocus={() => setLastChange('balance2')}
-                token={token2}
-                setToken={setToken2}
-                handleBalance={(value) => {
-                  setLastChange('balance2');
-                  form.mutators.setValue(
-                    'balance2',
-                    value,
-                  );
-                }}
-                handleChange={(token) => handleTokenChange(token, 'second')}
-                balance={tokensData.second.balance}
-                exchangeRate={tokensData.second.exchangeRate}
-                id="swap-send-to"
-                label="To"
-                className={cx(s.input, s.mb24)}
-              />
-            </>
-          )}
-        </Field>
-        {currentTab.id === 'send' && (
-        <Field name="recipient">
-          {({ input }) => (
-            <>
+        {({ input, meta }) => (
+          <TokenSelect
+            {...input}
+            blackListedTokens={blackListedTokens}
+            onFocus={() => setLastChange('balance1')}
+            token={token1}
+            setToken={setToken1}
+            handleBalance={(value) => {
+              if (token1) {
+                form.mutators.setValue(
+                  'balance1',
+                  +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                );
+              }
+            }}
+            handleChange={(token) => handleTokenChange(token, 'first')}
+            balance={tokensData.first.balance}
+            exchangeRate={tokensData.first.exchangeRate}
+            id="swap-send-from"
+            label="From"
+            className={s.input}
+            error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
+          />
+        )}
+      </Field>
+      <Button
+        theme="quaternary"
+        className={s.iconButton}
+        onClick={() => {
+          form.mutators.setValue(
+            'balance1',
+            values.balance2,
+          );
+          handleSwapTokens();
+        }}
+      >
+        <SwapIcon />
+      </Button>
+      <Field
+        validate={composeValidators(
+          validateMinMax(0, Infinity),
+          isBalance(+tokensData.second.balance),
+        )}
+        parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+        name="balance2"
+      >
+        {({ input, meta }) => (
+          <TokenSelect
+            {...input}
+            blackListedTokens={blackListedTokens}
+            onFocus={() => setLastChange('balance2')}
+            token={token2}
+            setToken={setToken2}
+            handleBalance={(value) => {
+              if (token2) {
+                form.mutators.setValue(
+                  'balance2',
+                  +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                );
+              }
+            }}
+            handleChange={(token) => handleTokenChange(token, 'second')}
+            balance={tokensData.second.balance}
+            exchangeRate={tokensData.second.exchangeRate}
+            id="swap-send-to"
+            label="To"
+            className={cx(s.input, s.mb24)}
+            error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
+          />
+        )}
+      </Field>
+      <Field
+        validate={isAddress}
+        name="recipient"
+      >
+        {({ input, meta }) => {
+          if (currentTab.id === 'send') {
+            return (
               <ComplexRecipient
                 {...input}
                 handleInput={(value) => {
@@ -402,172 +342,41 @@ const Header:React.FC<HeaderProps> = ({
                 label="Recipient address"
                 id="swap-send-recipient"
                 className={cx(s.input, s.mb24)}
+                error={((meta.touched && meta.error) || meta.submitError)}
               />
-            </>
-          )}
-        </Field>
-        )}
-        <Field initialValue="0.5 %" name="slippage">
-          {({ input }) => {
-            const slippagePercent = (
-              (
-                (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
-              ).toFixed(tokensData.second.token.decimals)).toString();
-            const minimumReceived = (values.balance2 ?? 0) - (+slippagePercent);
-            return (
-              <>
-                <Slippage handleChange={(value) => input.onChange(value)} />
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>
-                    Minimum received:
-                  </span>
-                  <CurrencyAmount
-                    amount={minimumReceived.toString()}
-                    currency={getWhitelistedTokenSymbol(token2)}
-                  />
-                </div>
-              </>
             );
-          }}
-
-        </Field>
-        <Button onClick={handleSwapSubmit} className={s.button}>
-          {currentTab.label}
-        </Button>
-      </Card>
-      <Card
-        header={{
-          content: `${currentTab.label} Details`,
+          }
+          return '';
         }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
+      </Field>
+      <Field initialValue="0.5 %" name="slippage">
+        {({ input }) => {
+          const slippagePercent = (
+            (
+              (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
+            ).toFixed(tokensData.second.token.decimals)).toString();
+          const minimumReceived = (values.balance2 ?? 0) - (+slippagePercent);
+          return (
             <>
-              {t('common:Sell Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
-              />
+              <Slippage handleChange={(value) => input.onChange(value)} />
+              <div className={s.receive}>
+                <span className={s.receiveLabel}>
+                  Minimum received:
+                </span>
+                <CurrencyAmount
+                  amount={minimumReceived.toString()}
+                  currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
+                />
+              </div>
             </>
-          )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(token1)} />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount
-              amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
-              currency={getWhitelistedTokenSymbol(token2)}
-              dollarEquivalent={`${tokensData.first.exchangeRate}`}
-            />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Buy Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(token2)} />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount
-              amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
-              currency={getWhitelistedTokenSymbol(token1)}
-              dollarEquivalent={`${tokensData.second.exchangeRate}`}
-            />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Price impact')}
-              <Tooltip
-                sizeT="small"
-                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          {/* TODO: find how to calculate */}
-          {/* depends on token amount and token pool */}
-          <CurrencyAmount amount="<0.01" currency="%" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Fee')}
-              <Tooltip
-                sizeT="small"
-                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={fee.toString()} currency="XTZ" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Route')}
-              <Tooltip
-                sizeT="small"
-                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Route
-            routes={
-              // swapParams
-              //   .map((x, i) => ({
-              //     id: i,
-              //     name: getWhitelistedTokenSymbol(
-              //       tokens.find((y) => x.to === y.contractAddress) ?? TEZOS_TOKEN,
-              //     ),
-              //     link: `https://analytics.quipuswap.com/tokens/${x.to}`,
-              //   }))
-              //  generates ERROR state - TEZ or TEZ -> TEZ
-                [{
-                  id: 0,
-                  name: getWhitelistedTokenSymbol(token1),
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.first.token.address}`,
-                },
-                ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
-                  id: 1,
-                  name: 'XTZ',
-                  link: 'https://analytics.quipuswap.com/tokens/tez',
-                }] : []),
-                {
-                  id: 2,
-                  name: getWhitelistedTokenSymbol(token2),
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.second.token.address}`,
-                }]
-              }
-          />
-        </CardCell>
-        {swapParams.length > 0 && (
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={`https://analytics.quipuswap.com/pairs/${swapParams.find((x) => x.parameter?.entrypoint === 'tokenToTezPayment')?.to}`}
-        >
-          View Pair Analytics
-          <ExternalLink className={s.linkIcon} />
-        </Button>
-        )}
-      </Card>
-    </>
+          );
+        }}
+
+      </Field>
+      <Button onClick={handleSwapSubmit} className={s.button}>
+        {currentTab.label}
+      </Button>
+    </Card>
   );
 };
 
@@ -579,11 +388,18 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
   const tezos = useTezos();
-  const router = useRouter();
+  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
+  const network = useNetwork();
+  const searchCustomToken = useSearchCustomTokens();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tabsState, setTabsState] = useState(router.pathname.slice(1));
+
+  const { t } = useTranslation(['common', 'swap']);
+  const [tabsState, setTabsState] = useState(TabsContent[0].id);
+  const router = useRouter();
+  const { from, to } = router.query;
 
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
@@ -593,8 +409,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const { Form } = withTypes<FormValues>();
-  const [token1, setToken1] = useState<WhitelistedToken>(TEZOS_TOKEN);
-  const [token2, setToken2] = useState<WhitelistedToken>(TEZOS_TOKEN);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -626,11 +441,16 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       tokenAddress: string,
       tokenId?: number,
       exchangeRate: string
-    }) => (
-      token.contractAddress === TEZOS_TOKEN.contractAddress && el.tokenAddress === undefined ? el
-        : el.tokenAddress === token.contractAddress
-      && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
-    ));
+    }) => {
+      const isTokenTez = token.contractAddress === TEZOS_TOKEN.contractAddress
+      && el.tokenAddress === undefined;
+      if (isTokenTez) return true;
+      if (el.tokenAddress === token.contractAddress) {
+        if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
+        if (!token.fa2TokenId) return true;
+      }
+      return false;
+    });
 
     setTokensData((prevState) => (
       {
@@ -650,52 +470,122 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   const handleSwapTokens = () => {
-    setToken1(token2);
-    setToken2(token1);
+    setTokens([token2, token1]);
     setTokensData({ first: tokensData.second, second: tokensData.first });
   };
 
   useEffect(() => {
-    if (exchangeRates && tezos && accountPkh && !initialLoad) {
-      setInitialLoad(true);
-      if (!tokensData.first.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.first.token.address,
-            type: tokensData.first.token.type,
-            metadata:
-            {
-              decimals: tokensData.first.token.decimals,
-            },
-          } as WhitelistedToken, 'first',
-        );
-      }
-      if (!tokensData.second.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.second.token.address,
-            type: tokensData.second.token.type,
-            metadata:
-          {
-            decimals: tokensData.second.token.decimals,
-          },
-          } as WhitelistedToken, 'second',
-        );
-      }
+    if (token1 && token2) {
+      router.push(`/swap/${token1.contractAddress}/${token2.contractAddress}`, undefined, { shallow: true });
+    } else if (token1) {
+      router.push(`/swap/${token1.contractAddress}`, undefined, { shallow: true });
     }
-  }, [exchangeRates, tezos, accountPkh]);
+  }, [token1, token2]);
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      setInitialLoad(true);
+      const searchPart = async (typeStr:'from' | 'to', str:string | string[]):Promise<WhitelistedToken> => {
+        const strStr = Array.isArray(str) ? str[0] : str;
+        const inputValue = strStr.split('_')[0];
+        const inputToken = strStr.split('_')[1] ?? '0';
+        if (inputValue.toLowerCase() === 'tez') {
+          return TEZOS_TOKEN;
+        }
+        const isTokens = tokens
+          .filter(
+            (token:any) => localSearchToken(
+              token,
+              network,
+              inputValue,
+              +inputToken,
+            ),
+          );
+        if (isTokens.length === 0) {
+          return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
+            if (x) {
+              return x;
+            }
+            router.push('/swap', undefined, { shallow: true });
+            return TEZOS_TOKEN;
+          });
+        }
+        return isTokens[0];
+      };
+      let res:any[] = [];
+      if (from) {
+        if (to) {
+          const resTo = await searchPart('to', to);
+          res = [resTo];
+          handleTokenChange(resTo, 'second');
+        }
+        const resFrom = await searchPart('from', from);
+        res = [resFrom, ...res];
+        setTokens(res);
+        handleTokenChange(resFrom, 'first');
+      }
+    };
+    if (tezos && !initialLoad) asyncCall();
+  }, [tezos, initialLoad]);
+
+  useEffect(() => {
+    if (tezos && token1 && token2) {
+      handleTokenChange(token1, 'first');
+      handleTokenChange(token2, 'second');
+    }
+  }, [tezos, accountPkh, networkId]);
+
+  useEffect(() => {
+    setTokens([]);
+  }, [networkId]);
 
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={() => {}}
+        onSubmit={(values: FormValues) => {
+          if (!tezos) return;
+          const asyncFunc = async () => {
+            try {
+              const fromAsset = isTez(tokensData.first) ? 'tez' : {
+                contract: tokensData.first.token.address,
+                id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+              };
+              const toAsset = isTez(tokensData.second) ? 'tez' : {
+                contract: tokensData.second.token.address,
+                id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+              };
+              const slippage = slippageToNum(values.slippage) / 100;
+              const inputValue = isTez(tokensData.first)
+                ? tezos!!.format('tz', 'mutez', values.balance1) as any
+                : toNat(values.balance1, tokensData.first.token.decimals);
+              const swapParams = await swap(
+                tezos,
+                FACTORIES[networkId],
+                fromAsset,
+                toAsset,
+                inputValue,
+                slippage,
+                tabsState === 'send' ? values.recipient : undefined,
+              );
+              const op = await batchify(
+                tezos.wallet.batch([]),
+                swapParams,
+              ).send();
+              await op.confirmation();
+            } catch (e) {
+              console.error(e);
+            }
+          };
+          asyncFunc();
+        }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
           },
         }}
-        render={({ form }) => (
+        render={({ handleSubmit, form }) => (
           <AutoSave
+            handleSubmit={handleSubmit}
             form={form}
             debounce={1000}
             save={() => {}}
@@ -703,8 +593,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             tabsState={tabsState}
             token1={token1}
             token2={token2}
-            setToken1={setToken1}
-            setToken2={setToken2}
+            setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
+            setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
             tokensData={tokensData}
             handleSwapTokens={handleSwapTokens}
             handleTokenChange={handleTokenChange}
@@ -712,6 +602,100 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           />
         )}
       />
+      <Card
+        header={{
+          content: `${currentTab.label} Details`,
+        }}
+        contentClassName={s.content}
+      >
+        <CardCell
+          header={(
+            <>
+              {t('common:Sell Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency="tez" />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
+          </div>
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Buy Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency="QPSP" />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
+          </div>
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Price impact')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
+          <CurrencyAmount amount="<0.01" currency="%" />
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Fee')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
+          <CurrencyAmount amount="0.001" currency="XTZ" />
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Route')}
+              <Tooltip
+                sizeT="small"
+                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+              />
+            </>
+        )}
+          className={s.cell}
+        >
+          {/* <Route
+            routes={['qpsp', 'usd', 'xtz']}
+          /> */}
+        </CardCell>
+        <Button
+          className={s.detailsButton}
+          theme="inverse"
+        >
+          View Pair Analytics
+          <ExternalLink className={s.linkIcon} />
+        </Button>
+      </Card>
     </StickyBlock>
   );
 };

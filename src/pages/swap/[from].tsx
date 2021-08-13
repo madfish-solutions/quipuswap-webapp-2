@@ -13,7 +13,14 @@ const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
 });
 
-const SwapSendPage: React.FC = () => {
+export async function getStaticPaths() {
+  return {
+    paths: [],
+    fallback: true,
+  };
+}
+
+const SwapSendFromPage: React.FC = () => {
   const { t } = useTranslation(['common', 'swap']);
 
   return (
@@ -34,4 +41,4 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   },
 });
 
-export default SwapSendPage;
+export default SwapSendFromPage;

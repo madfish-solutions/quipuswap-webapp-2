@@ -15,6 +15,7 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -25,7 +26,8 @@ type TokenSelectProps = {
   error?: string
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
-  token: WhitelistedToken,
+  token?: WhitelistedToken,
+  blackListedTokens: WhitelistedToken[],
   setToken: (token:WhitelistedToken) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -46,6 +48,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   handleChange,
   token,
   setToken,
+  blackListedTokens,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -53,6 +56,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const account = useAccountPkh();
 
   const dollarEquivalent = useMemo(() => (exchangeRate
     ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
@@ -78,6 +82,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   return (
     <>
       <TokensModal
+        blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={(selectedToken) => {
@@ -101,6 +106,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {equivalentContent}
             </div>
             <div className={s.item2}>
+              {account && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
                   {t('common:Total Balance')}
@@ -110,6 +116,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   {prettyPrice(parseFloat(balance))}
                 </div>
               </div>
+              )}
             </div>
             <input
               className={cx(s.item3, s.input)}

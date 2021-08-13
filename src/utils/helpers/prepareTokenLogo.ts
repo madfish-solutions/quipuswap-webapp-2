@@ -1,4 +1,5 @@
 import {
+  BAKERS_HTTP,
   CLOUDFLARE_IPFS,
   IPFS,
   IPFS_IO,
@@ -22,7 +23,8 @@ export const prepareTokenLogo = (url?: string | null) => {
 
   if (trimUrl.match(/\.(jpeg|jpg|gif|png)$/) !== null
   || trimUrl.includes(CLOUDFLARE_IPFS)
-  || trimUrl.includes(IPFS_IO)) {
+  || trimUrl.includes(IPFS_IO)
+  || trimUrl.includes(BAKERS_HTTP)) {
     return `${TEMPLEWALLET_IMG}/${trimUrl}`;
   }
 
