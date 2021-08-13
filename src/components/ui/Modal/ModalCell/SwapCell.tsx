@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ExternalLink } from '@components/svg/ExternalLink';
+
 import s from './ModalCell.module.sass';
 
 const modeClass = {

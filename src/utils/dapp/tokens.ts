@@ -2,9 +2,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
-  TEZOS_TOKEN,
+  TESTNET_TOKENS,
 } from '@utils/defaults';
 import { WhitelistedToken, QSNetwork } from '@utils/types';
+
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps } from '@utils/helpers';
 
@@ -29,33 +30,25 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
 };
 
 export const getTokens = async (
-  network: QSNetwork,
+  network:QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => {
-  let networkTokens;
-  if (network.id === 'mainnet') {
-    networkTokens = await fetch(ipfsToHttps(MAINNET_TOKENS))
-      .then((res) => res.json())
-      .then((json) => {
-        let res = [];
-        if (json.tokens?.length !== 0) {
-          res = json.tokens.map((x:WhitelistedToken) => ({ ...x, network: 'mainnet' }));
-        }
-        return res;
-      })
-      .catch(() => ([]));
-  } else networkTokens = [TEZOS_TOKEN];
-  let localhostTokens = [];
-  if (addTokensFromLocalStorage) {
-    localhostTokens = getSavedTokens();
-  }
-  const res = [...localhostTokens, ...networkTokens];
-  return res;
-};
+) => fetch(ipfsToHttps(network.id === 'florencenet' ? TESTNET_TOKENS : MAINNET_TOKENS))
+  .then((res) => res.json())
+  .then((json) => {
+    let res = [];
+    if (json.tokens?.length !== 0) {
+      res = json.tokens;
+    }
+    if (addTokensFromLocalStorage) {
+      res = [...getSavedTokens(), ...res];
+    }
+    return res;
+  })
+  .catch(() => ([]));
 
 export const saveCustomToken = (token:WhitelistedToken) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
-    JSON.stringify([...getSavedTokens(), token]),
+    JSON.stringify([token, ...getSavedTokens()]),
   );
 };

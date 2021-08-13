@@ -4,8 +4,8 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -14,6 +14,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -53,7 +54,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
   const dollarEquivalent = useMemo(() => (exchangeRate
     ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
     : ''
@@ -120,10 +120,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {...props}
             />
             <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-              <TokensLogos token1={token} />
+              <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
-                {getWhitelistedTokenSymbol(token)}
+                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>
               <Shevron />
             </Button>
