@@ -14,19 +14,19 @@ const content = [
   {
     id: 0,
     header: 'Your LP',
-    amount: '1,000,000.00',
+    amount: '0',
     tooltip: 'vote:Total number of LP tokens you own.',
   },
   {
     id: 1,
     header: 'Your votes',
-    amount: '777.77',
+    amount: '0',
     tooltip: 'The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
   },
   {
     id: 2,
     header: 'Your vetos',
-    amount: '3.00',
+    amount: '0',
     tooltip: 'The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
   },
 ];
@@ -38,10 +38,14 @@ const modeClass = {
 
 type VotingStatsProps = {
   className?: string
+  pendingReward?: string
+  amounts?: string[]
 };
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
+  pendingReward = '100,000,000',
+  amounts = [],
 }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -54,7 +58,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
             Your Pending Rewards:
           </span>
           <span className={s.rewardAmount}>
-            100,000,000
+            {pendingReward}
             <span className={s.rewardCurrency}>TEZ</span>
           </span>
         </div>
@@ -70,7 +74,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
 
             <Tooltip content={t(tooltip)} />
           </span>
-          <span className={s.amount}>{amount}</span>
+          <span className={s.amount}>{amounts[id] ? amounts[id] : amount}</span>
         </div>
       ))}
       <Button className={s.button}>Claim Reward</Button>

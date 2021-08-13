@@ -12,6 +12,7 @@ export * from './parseDecimals';
 export * from './localSearchToken';
 export * from './localSearchBaker';
 export * from './getWhitelistedTokenName';
+export * from './getWhitelistedBakerName';
 export * from './getWhitelistedTokenSymbol';
 export * from './isTokenEqual';
 export * from './isPairEqual';

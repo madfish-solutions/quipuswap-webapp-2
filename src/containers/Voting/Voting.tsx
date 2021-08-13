@@ -8,26 +8,26 @@ import {
   batchify,
   estimateReward,
   findDex,
+  FoundDex,
   getLiquidityShare,
-  Token,
   TransferParams,
-  vetoCurrentBaker,
-  voteForBaker,
 } from '@quipuswap/sdk';
+import { TezosToolkit } from '@taquito/taquito';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  getUserBalance,
+  useAccountPkh, useBakers, useNetwork, useTezos,
 } from '@utils/dapp';
-// import { useExchangeRates } from '@hooks/useExchangeRate';
-import { WhitelistedBaker, WhitelistedTokenPair } from '@utils/types';
+import { WhitelistedBaker, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { ComplexBaker } from '@components/ui/ComplexInput';
+import { VotingStats } from '@components/voting/VotingStats';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { ComplexBaker } from '@components/ui/ComplexInput';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
@@ -35,6 +35,10 @@ import { ArrowDown } from '@components/svg/ArrowDown';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+
+function sharesFromNat(val: BigNumber.Value) {
+  return new BigNumber(val).div(10 ** 6);
+}
 
 const TabsContent = [
   {
@@ -51,80 +55,131 @@ type VotingProps = {
   className?: string
 };
 
+type TokenDataType = {
+  token: {
+    address: string,
+    type: 'fa1.2' | 'fa2',
+    id?: number | null
+    decimals: number,
+  },
+  balance: string,
+  exchangeRate?: string
+};
+
+type TokenDataMap = {
+  first: TokenDataType,
+  second: TokenDataType
+};
+
+const fallbackTokensData : TokenDataType = {
+  token: {
+    address: 'tez',
+    type: 'fa1.2',
+    decimals: 6,
+    id: null,
+  },
+  balance: '0',
+};
+
 type FormValues = {
-  voteBalance: number
-  vetoBalance: number
+  switcher: boolean
+  balance1: number
+  balance2: number
+  balance3: number
+  balanceA: number
+  balanceB: number
+  balanceTotalA: number
+  balanceTotalB: number
+  lpBalance: string
+  frozenBalance: string
+  lastChange: string
+  estimateLP: string
+  slippage: string
 };
 
 type HeaderProps = {
+  handleSubmit: () => void,
+  setAddLiquidityParams: (params:TransferParams[]) => void,
+  setRemoveLiquidityParams: (params:TransferParams[]) => void,
+  addLiquidityParams:TransferParams[],
+  removeLiquidityParams:TransferParams[],
   debounce:number,
   save:any,
   values:FormValues,
   form:any,
   tabsState:any,
+  dex: FoundDex,
+  setDex: (dex:FoundDex) => void,
+  rewards: string,
+  setRewards: (reward:string) => void,
+  voter: any,
+  setVoter: (voter:any) => void,
   tokenPair: WhitelistedTokenPair,
   setTokenPair: (pair:WhitelistedTokenPair) => void,
-  baker: WhitelistedBaker,
-  setBaker: (baker:WhitelistedBaker) => void,
+  tokensData:TokenDataMap,
+  handleTokenChange:(token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
   currentTab:any,
   setTabsState:(val:any) => void
 };
 
 type QSMainNet = 'mainnet' | 'florencenet';
 
-const Header:React.FC<HeaderProps> = ({
-  debounce,
-  save,
-  values,
-  form,
-  tabsState,
-  tokenPair,
-  setTokenPair,
-  baker,
-  setBaker,
-  currentTab,
-  setTabsState,
-}) => {
-  const { t } = useTranslation(['vote']);
-  const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
-  const accountPkh = useAccountPkh();
-  // const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
-  const [removeLiquidityParams] = useState<TransferParams[]>([]);
-  // const [poolShare, setPoolShare] = useState<
-  // { unfrozen:BigNumber, frozen:BigNumber, total:BigNumber }
-  // >();
+// const getDexShares = async (address: string, exchange: string) => {
+//   const storage = await getDexStorage(exchange);
+//   const ledger = storage.ledger || storage.accounts;
+//   const val = await ledger.get(address);
+//   if (!val) return null;
 
-  const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+//   const unfrozen = new BigNumber(val.balance);
+//   const frozen = new BigNumber(val.frozen_balance);
 
-  // const handleInputChange = async () => {
-  //   if (tezos) {
-  //     if (currentTab.id === 'remove') {
-  //       console.log('rem');
-  //     } else {
-  //       try {
-  //         // TODO
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-  //     }
-  //   }
-  // };
+//   return {
+//     unfrozen,
+//     frozen,
+//     total: unfrozen.plus(frozen),
+//   };
+// }
 
-  async function asyncFindPairDex(
-    pair:WhitelistedTokenPair,
-  ) : Promise<WhitelistedTokenPair | undefined> {
-    if (!tezos || !accountPkh || !networkId) return undefined;
+const hanldeTokenPairSelect = (
+  pair:WhitelistedTokenPair,
+  setTokenPair: (pair:WhitelistedTokenPair) => void,
+  setDex:(dex:FoundDex) => void,
+  setRewards:(reward:string) => void,
+  setVoter:(voter:VoterType) => any,
+  tezos:TezosToolkit | null,
+  accountPkh:string | null,
+  networkId?:QSMainNet,
+) => {
+  const asyncFunc = async () => {
+    if (!tezos || !accountPkh || !networkId) {
+      setTokenPair(pair);
+      return;
+    }
     try {
       const secondAsset = {
         contract: pair.token2.contractAddress,
         id: pair.token2.fa2TokenId,
       };
-      const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-      const share = await getLiquidityShare(tezos, dex, accountPkh!!);
+      const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+      setDex(foundDex);
+      const asyncRewards = async () => {
+        const res = await estimateReward(tezos, foundDex, accountPkh);
+        const rewards = res.div(new BigNumber(10).pow(new BigNumber(6))).toString();
+        setRewards(rewards);
+      };
+      asyncRewards();
+      const asyncVoter = async () => {
+        const voter = await foundDex.storage.storage.voters.get(accountPkh);
+        if (voter) {
+          setVoter({
+            veto: voter.veto.div(new BigNumber(10).pow(new BigNumber(6))).toString(),
+            candidate: voter.candidate,
+            vote: voter.vote.div(new BigNumber(10).pow(new BigNumber(6))).toString(),
+          });
+        } else setVoter({} as VoterType);
+      };
+      asyncVoter();
+      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
       // const lpTokenValue = share.total;
       const frozenBalance = share.frozen.div(
@@ -144,45 +199,46 @@ const Header:React.FC<HeaderProps> = ({
           ),
       ).toString();
       const res = {
-        ...pair, frozenBalance, balance: totalBalance, dex,
+        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
       };
       setTokenPair(res);
-      return res;
     } catch (err) {
       console.error(err);
     }
-    return undefined;
-  }
-
-  const asyncGetLiquidityShare = async () => {
-    if (!tezos || !accountPkh) return;
-    try {
-      const account = accountPkh;
-      const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset);
-      // const share = await getLiquidityShare(tezos, dex, account);
-
-      // const lpTokenValue = share.total;
-      // const paramsValue = await removeLiquidity(
-      //   tezos,
-      //   dex,
-      //   lpTokenValue,
-      //   slippageTolerance,
-      // );
-      // console.log(share);
-      // console.log(paramsValue);
-      // setPoolShare(share);
-      // setRemoveLiquidityParams(paramsValue);
-      // asyncGetShares(share.total);
-      const rewards = estimateReward(tezos, dex, account);
-      console.log(rewards);
-    } catch (e) {
-      console.error(e);
-    }
   };
+  asyncFunc();
+};
+
+const Header:React.FC<HeaderProps> = ({
+  handleSubmit,
+  debounce,
+  save,
+  values,
+  form,
+  tabsState,
+  setRewards,
+  setVoter,
+  voter,
+  dex,
+  tokenPair,
+  setTokenPair,
+  setDex,
+  handleTokenChange,
+  currentTab,
+  setTabsState,
+}) => {
+  const { t } = useTranslation(['common', 'liquidity']);
+  // const { openConnectWalletModal } = useConnectModalsState();
+  const { data: bakers } = useBakers();
+  const tezos = useTezos();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const [, setVal] = useState(values);
+  const [, setSubm] = useState<boolean>(false);
+  const accountPkh = useAccountPkh();
+  // const prevDex = usePrevious(dex);
+
+  const timeout = useRef(setTimeout(() => {}, 0));
+  let promise:any;
 
   const saveFunc = async () => {
     if (promise) {
@@ -191,7 +247,6 @@ const Header:React.FC<HeaderProps> = ({
     setVal(values);
     setSubm(true);
     // handleInputChange(values);
-    asyncGetLiquidityShare();
     promise = save(values);
     await promise;
     setSubm(false);
@@ -207,109 +262,58 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, tokenPair, baker]);
+  }, [
+    values.balance1,
+    tokenPair,
+    dex,
+    currentTab]);
 
-  const handleUnvote = async () => {
-    if (!tezos) return;
-    try {
-      const toAsset = tokenPair.token2.contractAddress ? 'tez' : {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-
-      const addLiquidityParams = await voteForBaker(
-        tezos,
-        dex,
-        baker.address,
-        0,
-      );
-      console.log(addLiquidityParams);
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        addLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+  const currentCandidate:WhitelistedBaker | undefined = useMemo(() => {
+    if (dex?.storage?.storage) {
+      return bakers.find((x) => x.address === dex.storage.storage.current_candidate);
     }
-  };
+    return {} as WhitelistedBaker;
+  }, [dex, bakers]);
 
-  const handleVote = async () => {
-    if (!tezos) return;
-    try {
-      const toAsset = tokenPair.token2.contractAddress ? 'tez' : {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-
-      const addLiquidityParams = await voteForBaker(
-        tezos,
-        dex,
-        baker.address,
-        values.voteBalance,
-      );
-      console.log(addLiquidityParams);
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        addLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+  const secondCandidate:WhitelistedBaker | undefined = useMemo(() => {
+    if (dex?.storage?.storage) {
+      return bakers.find((x) => x.address === dex.storage.storage.current_delegated);
     }
-  };
+    return undefined;
+  }, [dex, bakers]);
 
-  const handleRemoveVeto = async () => {
-    if (!tezos) return;
-    try {
-      const toAsset = tokenPair.token2.contractAddress ? 'tez' : {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-
-      const addLiquidityParams = await vetoCurrentBaker(
-        tezos,
-        dex,
-        0,
-      );
-      console.log(addLiquidityParams);
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        addLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+  const myCandidate:WhitelistedBaker | undefined = useMemo(() => {
+    if (voter?.candidate) {
+      return bakers.find((x) => x.address === voter?.candidate);
     }
-  };
+    return undefined;
+  }, [voter, bakers]);
 
-  const handleVeto = async () => {
-    if (!tezos) return;
-    try {
-      const toAsset = tokenPair.token2.contractAddress ? 'tez' : {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-
-      const addLiquidityParams = await vetoCurrentBaker(
-        tezos,
-        dex,
-        values.vetoBalance,
-      );
-      console.log(addLiquidityParams);
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        addLiquidityParams,
-      ).send();
-      await op.confirmation();
-    } catch (e) {
-      console.error(e);
+  const totalVotes = useMemo(() => {
+    if (dex?.storage?.storage) {
+      return sharesFromNat(dex.storage.storage.total_votes).toFixed();
     }
-  };
+    return '';
+  }, [dex, bakers]);
+
+  const totalVeto = useMemo(() => {
+    if (dex?.storage?.storage) {
+      return sharesFromNat(dex.storage.storage.veto).toFixed();
+    }
+    return '';
+  }, [dex]);
+
+  const votesToVeto = useMemo(() => {
+    if (dex?.storage?.storage) {
+      return sharesFromNat(dex.storage.storage.total_votes)
+        .div(3)
+        .minus(sharesFromNat(dex.storage.storage.veto))
+        .toFixed(6);
+    }
+    return '';
+  }, [dex]);
+
+  console.log(currentCandidate, secondCandidate, myCandidate, dex);
 
   return (
     <>
@@ -334,9 +338,8 @@ const Header:React.FC<HeaderProps> = ({
         }}
         contentClassName={s.content}
       >
-        {currentTab.id === 'vote' && (
         <Field
-          name="voteBalance"
+          name="balance1"
         >
           {({ input }) => (
             <>
@@ -344,17 +347,28 @@ const Header:React.FC<HeaderProps> = ({
                 {...input}
                 tokenPair={tokenPair}
                 setTokenPair={(pair) => {
-                  asyncFindPairDex(pair);
+                  handleTokenChange(pair.token1, 'first');
+                  handleTokenChange(pair.token2, 'second');
+                  hanldeTokenPairSelect(
+                    pair,
+                    setTokenPair,
+                    setDex,
+                    setRewards,
+                    setVoter,
+                    tezos,
+                    accountPkh,
+                    networkId,
+                  );
                 }}
                 handleBalance={(value) => {
                   form.mutators.setValue(
-                    'voteBalance',
+                    'balance1',
                     +value,
                   );
                 }}
                 balance={tokenPair.balance}
-                frozenBalance={tokenPair.frozenBalance}
-                id="vote-input"
+                notFrozen
+                id="liquidity-remove-input"
                 label="Select LP"
                 className={s.input}
               />
@@ -362,66 +376,20 @@ const Header:React.FC<HeaderProps> = ({
             </>
           )}
         </Field>
-        )}
-        {currentTab.id !== 'vote' && (
-        <Field
-          name="vetoBalance"
-        >
-          {({ input }) => (
-            <>
-              <PositionSelect
-                {...input}
-                tokenPair={tokenPair}
-                setTokenPair={(pair) => {
-                  asyncFindPairDex(pair);
-                }}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'vetoBalance',
-                    +value,
-                  );
-                }}
-                balance={tokenPair.balance}
-                frozenBalance={tokenPair.frozenBalance}
-                id="veto-input"
-                label="Select LP"
-                className={s.input}
-              />
-              <ArrowDown className={s.iconButton} />
-            </>
-          )}
-        </Field>
-        )}
         {currentTab.id === 'vote' && (
-        <ComplexBaker
-          handleChange={(b:WhitelistedBaker) => {
-            setBaker(b);
-          }}
-          label="Baker"
-          id="voting-baker"
-        />
+          <ComplexBaker
+            label="Baker"
+            id="voting-baker"
+          />
         )}
-        {currentTab.id === 'vote' && (
         <div className={s.buttons}>
-          <Button theme="secondary" onClick={handleUnvote} className={s.button}>
-            Unvote
+          <Button onClick={handleSubmit} className={s.button} theme="secondary">
+            {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
           </Button>
-          <Button onClick={handleVote} className={s.button}>
+          <Button onClick={handleSubmit} className={s.button}>
             {currentTab.label}
           </Button>
         </div>
-        )}
-
-        {currentTab.id === 'veto' && (
-        <div className={s.buttons}>
-          <Button theme="secondary" onClick={handleRemoveVeto} className={s.button}>
-            Remove veto
-          </Button>
-          <Button onClick={handleVeto} className={s.button}>
-            {currentTab.label}
-          </Button>
-        </div>
-        )}
 
       </Card>
       <Card
@@ -442,8 +410,8 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <Button theme="underlined">
-            Everstake
+          <Button href={currentCandidate ? `https://tzkt.io/${currentCandidate.address}` : '#'} theme="underlined">
+            {currentCandidate?.name}
           </Button>
         </CardCell>
         <CardCell
@@ -458,8 +426,8 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <Button theme="underlined">
-            Bake’n’Roll
+          <Button href={secondCandidate ? `https://tzkt.io/${secondCandidate.address}` : '#'} theme="underlined">
+            {secondCandidate?.name}
           </Button>
         </CardCell>
         <CardCell
@@ -474,7 +442,7 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <CurrencyAmount amount="1000000" />
+          <CurrencyAmount amount={totalVotes} />
         </CardCell>
         <CardCell
           header={(
@@ -488,7 +456,7 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <CurrencyAmount amount="1000000" />
+          <CurrencyAmount amount={totalVeto} />
         </CardCell>
         <CardCell
           header={(
@@ -502,8 +470,8 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <Button theme="underlined">
-            Bake’n’Roll
+          <Button href={myCandidate ? `https://tzkt.io/${myCandidate.address}` : '#'} theme="underlined">
+            {myCandidate?.name}
           </Button>
         </CardCell>
         <CardCell
@@ -518,22 +486,21 @@ const Header:React.FC<HeaderProps> = ({
           )}
           className={s.cell}
         >
-          <CurrencyAmount amount="1000000" />
+          <CurrencyAmount amount={votesToVeto} />
         </CardCell>
         <div className={s.detailsButtons}>
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to}`}
           >
-            View Pair Analytics
+            Pair Analytics
             <ExternalLink className={s.linkIcon} />
           </Button>
           <Button
             className={s.detailsButton}
             theme="inverse"
           >
-            View Delegation Analytics
+            Delegation Analytics
             <ExternalLink className={s.linkIcon} />
           </Button>
         </div>
@@ -551,13 +518,31 @@ const fallbackTokenPair = {
   token2: TEZOS_TOKEN,
 } as WhitelistedTokenPair;
 
+type VoterType = {
+  vote: string,
+  veto: string,
+  candidate: string
+};
+
 export const Voting: React.FC<VotingProps> = ({
   className,
 }) => {
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
+  const [tokensData, setTokensData] = useState<TokenDataMap>(
+    {
+      first: fallbackTokensData,
+      second: fallbackTokensData,
+    },
+  );
 
+  const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
+  const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<FormValues>();
-  const [baker, setBaker] = useState<WhitelistedBaker>();
+  const [dex, setDex] = useState<FoundDex>();
+  const [rewards, setRewards] = useState('100000000');
+  const [voter, setVoter] = useState<VoterType>();
   const [
     tokenPair,
     setTokenPair,
@@ -568,30 +553,109 @@ export const Voting: React.FC<VotingProps> = ({
     [tabsState],
   );
 
+  const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+    let finalBalance = '0';
+    if (tezos && accountPkh) {
+      const balance = await getUserBalance(
+        tezos,
+        accountPkh,
+        token.contractAddress,
+        token.type,
+        token.fa2TokenId,
+      );
+      if (balance) {
+        finalBalance = balance.div(
+          new BigNumber(10)
+            .pow(
+              new BigNumber(token.metadata.decimals),
+            ),
+        ).toString();
+      }
+    }
+    const newTokensData = {
+      ...tokensData,
+      [tokenNumber]: {
+        token: {
+          address: token.contractAddress,
+          type: token.type,
+          id: token.fa2TokenId,
+          decimals: token.metadata.decimals,
+        },
+        balance: finalBalance,
+      },
+    };
+
+    setTokensData(newTokensData);
+  };
+
   return (
-    <StickyBlock className={className}>
-      <Form
-        onSubmit={() => {}}
-        mutators={{
-          setValue: ([field, value], state, { changeValue }) => {
-            changeValue(state, field, () => value);
-          },
-        }}
-        render={({ form }) => (
-          <AutoSave
-            form={form}
-            debounce={1000}
-            save={() => {}}
-            setTabsState={setTabsState}
-            tabsState={tabsState}
-            tokenPair={tokenPair}
-            setTokenPair={setTokenPair}
-            baker={baker}
-            setBaker={setBaker}
-            currentTab={currentTab}
-          />
-        )}
+    <>
+      <VotingStats
+        pendingReward={rewards}
+        amounts={[tokenPair.balance ?? '', voter?.vote ?? '', voter?.veto ?? '']}
+        className={s.votingStats}
       />
-    </StickyBlock>
+      <StickyBlock className={className}>
+        <Form
+          onSubmit={() => {
+            if (!tezos) return;
+            const asyncFunc = async () => {
+              if (currentTab.id === 'remove') {
+                try {
+                  const op = await batchify(
+                    tezos.wallet.batch([]),
+                    removeLiquidityParams,
+                  ).send();
+                  await op.confirmation();
+                } catch (e) {
+                  console.error(e);
+                }
+              } else {
+                try {
+                  const op = await batchify(
+                    tezos.wallet.batch([]),
+                    addLiquidityParams,
+                  ).send();
+                  await op.confirmation();
+                } catch (e) {
+                  console.error(e);
+                }
+              }
+            };
+            asyncFunc();
+          }}
+          mutators={{
+            setValue: ([field, value], state, { changeValue }) => {
+              changeValue(state, field, () => value);
+            },
+          }}
+          render={({ handleSubmit, form }) => (
+            <AutoSave
+              form={form}
+              handleSubmit={handleSubmit}
+              debounce={1000}
+              save={() => {}}
+              setTabsState={setTabsState}
+              tabsState={tabsState}
+              dex={dex}
+              setDex={setDex}
+              rewards={rewards}
+              setRewards={setRewards}
+              voter={voter}
+              setVoter={setVoter}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
+              tokensData={tokensData}
+              handleTokenChange={handleTokenChange}
+              currentTab={currentTab}
+              setRemoveLiquidityParams={setRemoveLiquidityParams}
+              removeLiquidityParams={removeLiquidityParams}
+              setAddLiquidityParams={setAddLiquidityParams}
+              addLiquidityParams={addLiquidityParams}
+            />
+          )}
+        />
+      </StickyBlock>
+    </>
   );
 };

@@ -17,17 +17,18 @@ import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
-  type PositionSelectProps = {
-    className?: string
-    balance?: string
-    frozenBalance?: string
-    label: string
-    error?: string
-    handleChange?: (tokenPair:WhitelistedTokenPair) => void
-    handleBalance: (value: string) => void
-    tokenPair?: WhitelistedTokenPair,
-    setTokenPair: (tokenPair:WhitelistedTokenPair) => void
-  } & React.HTMLProps<HTMLInputElement>;
+type PositionSelectProps = {
+  className?: string
+  balance?: string
+  frozenBalance?: string
+  label: string
+  error?: string
+  notFrozen?:boolean
+  handleChange?: (tokenPair:WhitelistedTokenPair) => void
+  handleBalance: (value: string) => void
+  tokenPair?: WhitelistedTokenPair,
+  setTokenPair: (tokenPair:WhitelistedTokenPair) => void
+} & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -46,6 +47,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   handleChange,
   tokenPair,
   setTokenPair,
+  notFrozen,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -91,16 +93,18 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common:Frozen Balance')}
-                  :
-                </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(frozenBalance))}
-                </div>
+              {notFrozen ? '' : (
+                <div className={s.item2Line}>
+                  <div className={s.caption}>
+                    {t('common:Frozen Balance')}
+                    :
+                  </div>
+                  <div className={cx(s.label2, s.price)}>
+                    {prettyPrice(parseFloat(frozenBalance))}
+                  </div>
 
-              </div>
+                </div>
+              )}
               <div className={s.item2Line}>
                 <div className={s.caption}>
                   {t('common:Total Balance')}

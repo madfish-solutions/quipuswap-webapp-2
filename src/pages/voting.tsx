@@ -4,7 +4,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Voting } from '@containers/Voting';
-import { VotingStats } from '@components/voting/VotingStats';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -17,7 +16,6 @@ const VotingPage: React.FC = () => {
       description={t('swap:Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
-      <VotingStats className={s.votingStats} />
       <Voting />
     </BaseLayout>
   );
