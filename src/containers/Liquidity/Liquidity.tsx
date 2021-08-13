@@ -18,11 +18,14 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
+import { TezosToolkit } from '@taquito/taquito';
 
 import {
   getUserBalance,
   useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
@@ -49,7 +52,6 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { asyncGetLiquidityShare } from './liquidityHelpers';
 
 const TabsContent = [
@@ -134,7 +136,7 @@ type HeaderProps = {
 
 const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
   contractAddress: tokenData.token.address,
-  fa2TokenId: tokenData.token.id,
+  fa2TokenId: tokenData.token.id ?? undefined,
 } as WhitelistedToken);
 
 const toNat = (amount: any, decimals: number) => new BigNumber(amount)
@@ -144,6 +146,57 @@ const toNat = (amount: any, decimals: number) => new BigNumber(amount)
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
 type QSMainNet = 'mainnet' | 'florencenet';
+
+const hanldeTokenPairSelect = (
+  pair:WhitelistedTokenPair,
+  setTokenPair: (pair:WhitelistedTokenPair) => void,
+  handleTokenChange: (token:WhitelistedToken, tokenNum:'first' | 'second') => void,
+  tezos:TezosToolkit | null,
+  accountPkh:string | null,
+  networkId?:QSMainNet,
+) => {
+  const asyncFunc = async () => {
+    handleTokenChange(pair.token1, 'first');
+    handleTokenChange(pair.token2, 'second');
+    if (!tezos || !accountPkh || !networkId) {
+      setTokenPair(pair);
+      return;
+    }
+    try {
+      const secondAsset = {
+        contract: pair.token2.contractAddress,
+        id: pair.token2.fa2TokenId,
+      };
+      const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
+
+      // const lpTokenValue = share.total;
+      const frozenBalance = share.frozen.div(
+        new BigNumber(10)
+          .pow(
+            // new BigNumber(pair.token2.metadata.decimals),
+            // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
+            // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
+            new BigNumber(6),
+          ),
+      ).toString();
+      const totalBalance = share.total.div(
+        new BigNumber(10)
+          .pow(
+            // new BigNumber(pair.token2.metadata.decimals),
+            new BigNumber(6),
+          ),
+      ).toString();
+      const res = {
+        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
+      };
+      setTokenPair(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  asyncFunc();
+};
 
 const Header:React.FC<HeaderProps> = ({
   handleSubmit,
@@ -174,7 +227,7 @@ const Header:React.FC<HeaderProps> = ({
   const [, setSubm] = useState<boolean>(false);
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  // const [poolShare, setPoolShare] = useState<
+  const prevDex = usePrevious(dex);
   const [, setPoolShare] = useState<
   { unfrozen:BigNumber, frozen:BigNumber, total:BigNumber }
   >();
@@ -183,9 +236,34 @@ const Header:React.FC<HeaderProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: FormValues) => {
+    const currentTokenA = tokenDataToToken(tokensData.first);
+    const currentTokenB = tokenDataToToken(tokensData.second);
+    const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
+    const isValuesSame = val[lastChange] === formValues[lastChange];
+    const isRemValuesSame = val.balance3 === formValues.balance3;
+    const isDexSame = dex === prevDex;
+    if (tezos && accountPkh && token1 && token2) {
+      if (isTokensSame || ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame) && isDexSame)) return;
+      asyncGetLiquidityShare(
+        setDex,
+        setTokenPair,
+        form.mutators.setValue,
+        setPoolShare,
+        setRemoveLiquidityParams,
+        setAddLiquidityParams,
+        values,
+        token1,
+        token2,
+        tokenPair,
+        currentTab.id === 'remove' ? tokenPair.dex : dex,
+        currentTab,
+        tezos,
+        accountPkh,
+        networkId,
+      );
+    }
     if (tezos) {
       if (currentTab.id === 'remove') {
-        console.log('rem', tokenPair.dex);
         if (val.balance3 === formValues.balance3 || !tokenPair.dex) return;
         try {
           const getMethod = async (
@@ -223,23 +301,19 @@ const Header:React.FC<HeaderProps> = ({
           ).toString();
 
           form.mutators.setValue(
-            'balance1',
+            'balanceA',
             +bal1,
           );
 
           form.mutators.setValue(
-            'balance2',
+            'balanceB',
             +bal2,
           );
         } catch (err) {
           console.error(err);
         }
       } else if (!val.switcher) {
-        const currentTokenA = tokenDataToToken(tokensData.first);
-        const currentTokenB = tokenDataToToken(tokensData.second);
-        const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-        const isValuesSame = val[lastChange] === formValues[lastChange];
-        if (isTokensSame || (isValuesSame) || !dex) return;
+        if (isTokensSame || (isValuesSame)) return;
         if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
         const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
         const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
@@ -254,9 +328,9 @@ const Header:React.FC<HeaderProps> = ({
             decimals,
           ),
         );
+        if (!dex) return;
         try {
           try {
-            console.log('ww');
             const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
               ? tezos!!.format('tz', 'mutez', balance) as any
               : toNat(balance, token.token.decimals));
@@ -311,7 +385,6 @@ const Header:React.FC<HeaderProps> = ({
         ) / 2;
         const $toA = total$ / exA;
         const $toB = total$ / exB;
-        console.log($toA, $toB);
         let inputValue:BigNumber;
         if (values.balance1 - $toA < values.balance2 - $toB) {
           inputValue = isTez(tokensData.first)
@@ -345,9 +418,6 @@ const Header:React.FC<HeaderProps> = ({
           { tezValue: $toA, tokenValue: $toB },
         );
         setAddLiquidityParams([...swapParams, ...addParams]);
-
-        // call exchange func with $toA + $toB, which are 50:50 ratio
-        console.log('switcher');
       }
     }
   };
@@ -359,25 +429,6 @@ const Header:React.FC<HeaderProps> = ({
     setVal(values);
     setSubm(true);
     handleInputChange(values);
-    if (tezos && accountPkh && token1 && token2) {
-      asyncGetLiquidityShare(
-        setDex,
-        setTokenPair,
-        form.mutators.setValue,
-        setPoolShare,
-        setRemoveLiquidityParams,
-        setAddLiquidityParams,
-        values,
-        token1,
-        token2,
-        tokenPair,
-        currentTab.id === 'remove' ? tokenPair.dex : dex,
-        currentTab,
-        tezos,
-        accountPkh,
-        networkId,
-      );
-    }
     promise = save(values);
     await promise;
     setSubm(false);
@@ -393,7 +444,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, token1, token2, tokenPair]);
+  }, [values, token1, token2, tokenPair, dex, currentTab]);
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;
@@ -442,47 +493,14 @@ const Header:React.FC<HeaderProps> = ({
             <PositionSelect
               {...input}
               tokenPair={tokenPair}
-              setTokenPair={(pair) => {
-                const asyncFunc = async () => {
-                  if (!tezos || !accountPkh || !networkId) {
-                    setTokenPair(pair);
-                    return;
-                  }
-                  try {
-                    const secondAsset = {
-                      contract: pair.token2.contractAddress,
-                      id: pair.token2.fa2TokenId,
-                    };
-                    const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-                    const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
-
-                    // const lpTokenValue = share.total;
-                    const frozenBalance = share.frozen.div(
-                      new BigNumber(10)
-                        .pow(
-                          // new BigNumber(pair.token2.metadata.decimals),
-                          // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
-                          // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
-                          new BigNumber(6),
-                        ),
-                    ).toString();
-                    const totalBalance = share.total.div(
-                      new BigNumber(10)
-                        .pow(
-                          // new BigNumber(pair.token2.metadata.decimals),
-                          new BigNumber(6),
-                        ),
-                    ).toString();
-                    const res = {
-                      ...pair, frozenBalance, balance: totalBalance, foundDex,
-                    };
-                    setTokenPair(res);
-                  } catch (err) {
-                    console.error(err);
-                  }
-                };
-                asyncFunc();
-              }}
+              setTokenPair={(pair) => hanldeTokenPairSelect(
+                pair,
+                setTokenPair,
+                handleTokenChange,
+                tezos,
+                accountPkh,
+                networkId,
+              )}
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance3',
@@ -660,7 +678,7 @@ const Header:React.FC<HeaderProps> = ({
                     </span>
                     <CurrencyAmount
                       currency={tokenPair.token1 ? getWhitelistedTokenSymbol(tokenPair.token1) : ''}
-                      amount={minimumReceivedA.toString()}
+                      amount={minimumReceivedA < 0 ? '0' : minimumReceivedA.toString()}
                     />
                   </div>
                   <div className={s.receive}>
@@ -669,7 +687,7 @@ const Header:React.FC<HeaderProps> = ({
                     </span>
                     <CurrencyAmount
                       currency={tokenPair.token2 ? getWhitelistedTokenSymbol(tokenPair.token2) : ''}
-                      amount={minimumReceivedB.toString()}
+                      amount={minimumReceivedB < 0 ? '0' : minimumReceivedB.toString()}
                     />
                   </div>
                   <Button onClick={handleRemoveLiquidity} className={s.button}>
@@ -724,6 +742,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
+  const networkId = useNetwork().id as QSMainNet;
   const { t } = useTranslation(['common', 'liquidity']);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
@@ -750,7 +769,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   );
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
-    // console.log(token, tokenNumber);
     if (!exchangeRates || !exchangeRates.find) return;
     let finalBalance = '0';
     if (tezos && accountPkh) {
@@ -794,16 +812,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         exchangeRate: tokenExchangeRate?.exchangeRate ?? null,
       },
     };
-
-    // add later on click
-
-    // const op = await batchify(
-    //   tezos.wallet.batch([]),
-    //   initializeLiquidityParams,
-    // ).send();
-    // await op.confirmation();
-
-    // add later on click
 
     setTokensData(newTokensData);
   };
@@ -886,8 +894,32 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             token1={token1}
             token2={token2}
             tokenPair={tokenPair}
-            setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
-            setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
+            setToken1={(token:WhitelistedToken) => {
+              setTokens([token, (token2 || undefined)]);
+              if (token2) {
+                hanldeTokenPairSelect(
+                  { token1: token, token2 } as WhitelistedTokenPair,
+                  setTokenPair,
+                  handleTokenChange,
+                  tezos,
+                  accountPkh,
+                  networkId,
+                );
+              }
+            }}
+            setToken2={(token:WhitelistedToken) => {
+              setTokens([(token1 || undefined), token]);
+              if (token1) {
+                hanldeTokenPairSelect(
+                  { token1, token2: token } as WhitelistedTokenPair,
+                  setTokenPair,
+                  handleTokenChange,
+                  tezos,
+                  accountPkh,
+                  networkId,
+                );
+              }
+            }}
             setTokenPair={setTokenPair}
             tokensData={tokensData}
             handleTokenChange={handleTokenChange}

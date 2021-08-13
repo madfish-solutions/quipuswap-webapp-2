@@ -31,10 +31,7 @@ export const asyncFindPairDex = async (
       id: pair.token2.fa2TokenId,
     };
     const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-    console.log(dex);
     const share = await getLiquidityShare(tezos, dex, accountPkh);
-
-    // const lpTokenValue = share.total;
     const frozenBalance = share.frozen.div(
       new BigNumber(10)
         .pow(
@@ -47,7 +44,6 @@ export const asyncFindPairDex = async (
     const totalBalance = share.total.div(
       new BigNumber(10)
         .pow(
-          // new BigNumber(pair.token2.metadata.decimals),
           new BigNumber(6),
         ),
     ).toString();
@@ -75,7 +71,6 @@ export const asyncGetShares = async (
   accountPkh: any,
   networkId: QSMainNet,
 ) => {
-  // if (!tezos) return;
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
     const attempt = await asyncFindPairDex(
@@ -97,7 +92,6 @@ export const asyncGetShares = async (
     ) => (token.contractAddress === 'tez'
       ? estimateTezInShares(foundDex.storage, value.toString())
       : estimateTokenInShares(foundDex.storage, value.toString()));
-      // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
     const balance = new BigNumber(
       (values.balance3 ?? 0) * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
     );
@@ -123,8 +117,6 @@ export const asyncGetShares = async (
           new BigNumber(6),
         ),
     ).toString();
-
-    console.log('setValue balanceA balanceB');
     setValue(
       'balanceA',
       +bal1,
@@ -158,8 +150,6 @@ export const asyncGetShares = async (
           new BigNumber(6),
         ),
     ).toString();
-
-    console.log('setValue balanceTotalA balanceTotalB');
     setValue(
       'balanceTotalA',
       +balA1,
@@ -191,13 +181,10 @@ export const asyncGetLiquidityShare = async (
   accountPkh: any,
   networkId: QSMainNet,
 ) => {
-  // if (!tezos || !accountPkh) return;
   try {
     const account = accountPkh;
     const slippageTolerance = slippageToNum(values.slippage) / 100;
-    console.log(dex, token1, token2, tokenPair);
     if (dex) {
-      console.log('heree');
       const share = await getLiquidityShare(tezos, dex, account);
       const lpTokenValue = share.total;
       const remParams = await removeLiquidity(
@@ -235,13 +222,10 @@ export const asyncGetLiquidityShare = async (
         id: token2.fa2TokenId,
       };
       if (JSON.stringify(token1) !== JSON.stringify(token2)) {
-        console.log('heere');
         const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
         if (tempDex && tempDex !== dex) {
-          console.log('dex');
           setDex(tempDex);
         } else if (!tempDex) {
-          console.log('!dex');
           const strictFactories = {
             fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
             fa2Factory: FACTORIES[networkId].fa2Factory[0],
