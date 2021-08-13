@@ -462,6 +462,11 @@ const Header:React.FC<HeaderProps> = ({
     handleSubmit();
   };
 
+  const blackListedTokens = useMemo(
+    () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
+    [token1, token2],
+  );
+
   return (
     <Card
       header={{
@@ -548,6 +553,7 @@ const Header:React.FC<HeaderProps> = ({
         {({ input }) => (
           <TokenSelect
             {...input}
+            blackListedTokens={blackListedTokens}
             onFocus={() => setLastChange('balance1')}
             token={token1}
             setToken={setToken1}
@@ -598,6 +604,7 @@ const Header:React.FC<HeaderProps> = ({
         {({ input }) => (
           <TokenSelect
             {...input}
+            blackListedTokens={blackListedTokens}
             onFocus={() => setLastChange('balance2')}
             token={token2}
             setToken={setToken2}
