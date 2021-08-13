@@ -29,6 +29,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getBakers } from './bakers';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -269,6 +270,21 @@ function useDApp() {
       tokens: { loading: !tokensData, data: tokensData ?? [] },
     }));
   }, [tokensData]);
+
+  const getBakersData = useCallback(() => getBakers(), []);
+  const {
+    data: bakersData,
+  } = useSWR(
+    ['bakers-initial-data'],
+    getBakersData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      bakers: { loading: false, data: bakersData ?? [] },
+    }));
+  }, [bakersData]);
 
   useEffect(() => {
     if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {

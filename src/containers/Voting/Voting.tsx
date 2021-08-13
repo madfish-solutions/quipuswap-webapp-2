@@ -313,7 +313,8 @@ const Header:React.FC<HeaderProps> = ({
     return '';
   }, [dex]);
 
-  console.log(currentCandidate, secondCandidate, myCandidate, dex);
+  console.log(dex, bakers);
+  // console.log(currentCandidate, secondCandidate, myCandidate, dex);
 
   return (
     <>
