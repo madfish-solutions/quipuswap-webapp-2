@@ -44,7 +44,7 @@ type VotingStatsProps = {
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
-  pendingReward = '100,000,000',
+  pendingReward = '0',
   amounts = [],
 }) => {
   const { t } = useTranslation(['vote']);

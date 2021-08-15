@@ -13,10 +13,10 @@ import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {
   className?: string,
-  label?:string,
-  error?:string,
-  id?:string,
-  handleChange?: (baker:WhitelistedBaker) => void
+  label?: string,
+  error?: string,
+  id?: string,
+  handleChange?: (baker: WhitelistedBaker) => void
 };
 
 const modeClass = {

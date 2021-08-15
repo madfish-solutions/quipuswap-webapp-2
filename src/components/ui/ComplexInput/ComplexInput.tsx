@@ -61,8 +61,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const dollarEquivalent = useMemo(() => (exchangeRate
     ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
     : ''
-  ),
-  [exchangeRate, value]);
+  ), [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -97,16 +96,16 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           </div>
           <div className={s.item2}>
             {mode === 'select' && (
-            <div className={s.item2Line}>
-              <div className={s.caption}>
-                {t('common:Frozen Balance')}
-                :
-              </div>
-              <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance))}
-              </div>
+              <div className={s.item2Line}>
+                <div className={s.caption}>
+                  {t('common:Frozen Balance')}
+                  :
+                </div>
+                <div className={cx(s.label2, s.price)}>
+                  {prettyPrice(parseFloat(balance))}
+                </div>
 
-            </div>
+              </div>
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>

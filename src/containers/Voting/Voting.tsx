@@ -11,6 +11,8 @@ import {
   FoundDex,
   getLiquidityShare,
   TransferParams,
+  vetoCurrentBaker,
+  voteForBaker,
 } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
@@ -71,7 +73,7 @@ type TokenDataMap = {
   second: TokenDataType
 };
 
-const fallbackTokensData : TokenDataType = {
+const fallbackTokensData: TokenDataType = {
   token: {
     address: 'tez',
     type: 'fa1.2',
@@ -82,44 +84,30 @@ const fallbackTokensData : TokenDataType = {
 };
 
 type FormValues = {
-  switcher: boolean
   balance1: number
-  balance2: number
-  balance3: number
-  balanceA: number
-  balanceB: number
-  balanceTotalA: number
-  balanceTotalB: number
-  lpBalance: string
-  frozenBalance: string
-  lastChange: string
-  estimateLP: string
-  slippage: string
+  selectedBaker: string
 };
 
 type HeaderProps = {
   handleSubmit: () => void,
-  setAddLiquidityParams: (params:TransferParams[]) => void,
-  setRemoveLiquidityParams: (params:TransferParams[]) => void,
-  addLiquidityParams:TransferParams[],
-  removeLiquidityParams:TransferParams[],
-  debounce:number,
-  save:any,
-  values:FormValues,
-  form:any,
-  tabsState:any,
+  setVoteParams: (params: TransferParams[]) => void,
+  debounce: number,
+  save: any,
+  values: FormValues,
+  form: any,
+  tabsState: any,
   dex: FoundDex,
-  setDex: (dex:FoundDex) => void,
+  setDex: (dex: FoundDex) => void,
   rewards: string,
-  setRewards: (reward:string) => void,
+  setRewards: (reward: string) => void,
   voter: any,
-  setVoter: (voter:any) => void,
+  setVoter: (voter: any) => void,
   tokenPair: WhitelistedTokenPair,
-  setTokenPair: (pair:WhitelistedTokenPair) => void,
-  tokensData:TokenDataMap,
-  handleTokenChange:(token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
-  currentTab:any,
-  setTabsState:(val:any) => void
+  setTokenPair: (pair: WhitelistedTokenPair) => void,
+  tokensData: TokenDataMap,
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
+  currentTab: any,
+  setTabsState: (val: any) => void
 };
 
 type QSMainNet = 'mainnet' | 'florencenet';
@@ -141,14 +129,14 @@ type QSMainNet = 'mainnet' | 'florencenet';
 // }
 
 const hanldeTokenPairSelect = (
-  pair:WhitelistedTokenPair,
-  setTokenPair: (pair:WhitelistedTokenPair) => void,
-  setDex:(dex:FoundDex) => void,
-  setRewards:(reward:string) => void,
-  setVoter:(voter:VoterType) => any,
-  tezos:TezosToolkit | null,
-  accountPkh:string | null,
-  networkId?:QSMainNet,
+  pair: WhitelistedTokenPair,
+  setTokenPair: (pair: WhitelistedTokenPair) => void,
+  setDex: (dex: FoundDex) => void,
+  setRewards: (reward: string) => void,
+  setVoter: (voter: VoterType) => any,
+  tezos: TezosToolkit | null,
+  accountPkh: string | null,
+  networkId?: QSMainNet,
 ) => {
   const asyncFunc = async () => {
     if (!tezos || !accountPkh || !networkId) {
@@ -209,7 +197,7 @@ const hanldeTokenPairSelect = (
   asyncFunc();
 };
 
-const Header:React.FC<HeaderProps> = ({
+const Header: React.FC<HeaderProps> = ({
   handleSubmit,
   debounce,
   save,
@@ -226,6 +214,7 @@ const Header:React.FC<HeaderProps> = ({
   handleTokenChange,
   currentTab,
   setTabsState,
+  setVoteParams,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   // const { openConnectWalletModal } = useConnectModalsState();
@@ -237,8 +226,8 @@ const Header:React.FC<HeaderProps> = ({
   const accountPkh = useAccountPkh();
   // const prevDex = usePrevious(dex);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  const timeout = useRef(setTimeout(() => { }, 0));
+  let promise: any;
 
   const saveFunc = async () => {
     if (promise) {
@@ -263,26 +252,26 @@ const Header:React.FC<HeaderProps> = ({
       }
     };
   }, [
-    values.balance1,
+    values,
     tokenPair,
     dex,
     currentTab]);
 
-  const currentCandidate:WhitelistedBaker | undefined = useMemo(() => {
+  const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
       return bakers.find((x) => x.address === dex.storage.storage.current_candidate);
     }
     return {} as WhitelistedBaker;
   }, [dex, bakers]);
 
-  const secondCandidate:WhitelistedBaker | undefined = useMemo(() => {
+  const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
       return bakers.find((x) => x.address === dex.storage.storage.current_delegated);
     }
     return undefined;
   }, [dex, bakers]);
 
-  const myCandidate:WhitelistedBaker | undefined = useMemo(() => {
+  const myCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (voter?.candidate) {
       return bakers.find((x) => x.address === voter?.candidate);
     }
@@ -313,8 +302,33 @@ const Header:React.FC<HeaderProps> = ({
     return '';
   }, [dex]);
 
-  console.log(dex, bakers);
-  // console.log(currentCandidate, secondCandidate, myCandidate, dex);
+  const handleFirstButton = async () => {
+    if (tezos) {
+      if (currentTab.id === 'vote') {
+        const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
+        setVoteParams(params);
+      } else {
+        const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
+        setVoteParams(params);
+      }
+      handleSubmit();
+    }
+  };
+
+  const handleSecondButton = async () => {
+    if (tezos) {
+      if (currentTab.id === 'vote') {
+        const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
+        setVoteParams(params);
+        // add vote params
+      } else {
+        const params = await vetoCurrentBaker(tezos, dex, values.balance1);
+        setVoteParams(params);
+        // add veto paramsx
+      }
+      handleSubmit();
+    }
+  };
 
   return (
     <>
@@ -378,16 +392,22 @@ const Header:React.FC<HeaderProps> = ({
           )}
         </Field>
         {currentTab.id === 'vote' && (
-          <ComplexBaker
-            label="Baker"
-            id="voting-baker"
-          />
+          <Field name="selectedBaker">
+            {({ input }) => (
+              <ComplexBaker
+                label="Baker"
+                id="voting-baker"
+                handleChange={(baker) => input.onChange(baker.address)}
+              />
+            )}
+
+          </Field>
         )}
         <div className={s.buttons}>
-          <Button onClick={handleSubmit} className={s.button} theme="secondary">
+          <Button onClick={handleFirstButton} className={s.button} theme="secondary">
             {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
           </Button>
-          <Button onClick={handleSubmit} className={s.button}>
+          <Button onClick={handleSecondButton} className={s.button}>
             {currentTab.label}
           </Button>
         </div>
@@ -510,7 +530,7 @@ const Header:React.FC<HeaderProps> = ({
   );
 };
 
-const AutoSave = (props:any) => (
+const AutoSave = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
@@ -538,11 +558,10 @@ export const Voting: React.FC<VotingProps> = ({
     },
   );
 
-  const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
-  const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
+  const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<FormValues>();
   const [dex, setDex] = useState<FoundDex>();
-  const [rewards, setRewards] = useState('100000000');
+  const [rewards, setRewards] = useState('0');
   const [voter, setVoter] = useState<VoterType>();
   const [
     tokenPair,
@@ -601,27 +620,11 @@ export const Voting: React.FC<VotingProps> = ({
           onSubmit={() => {
             if (!tezos) return;
             const asyncFunc = async () => {
-              if (currentTab.id === 'remove') {
-                try {
-                  const op = await batchify(
-                    tezos.wallet.batch([]),
-                    removeLiquidityParams,
-                  ).send();
-                  await op.confirmation();
-                } catch (e) {
-                  console.error(e);
-                }
-              } else {
-                try {
-                  const op = await batchify(
-                    tezos.wallet.batch([]),
-                    addLiquidityParams,
-                  ).send();
-                  await op.confirmation();
-                } catch (e) {
-                  console.error(e);
-                }
-              }
+              const op = await batchify(
+                tezos.wallet.batch([]),
+                voteParams,
+              ).send();
+              await op.confirmation();
             };
             asyncFunc();
           }}
@@ -635,7 +638,7 @@ export const Voting: React.FC<VotingProps> = ({
               form={form}
               handleSubmit={handleSubmit}
               debounce={1000}
-              save={() => {}}
+              save={() => { }}
               setTabsState={setTabsState}
               tabsState={tabsState}
               dex={dex}
@@ -649,10 +652,7 @@ export const Voting: React.FC<VotingProps> = ({
               tokensData={tokensData}
               handleTokenChange={handleTokenChange}
               currentTab={currentTab}
-              setRemoveLiquidityParams={setRemoveLiquidityParams}
-              removeLiquidityParams={removeLiquidityParams}
-              setAddLiquidityParams={setAddLiquidityParams}
-              addLiquidityParams={addLiquidityParams}
+              setVoteParams={setVoteParams}
             />
           )}
         />
