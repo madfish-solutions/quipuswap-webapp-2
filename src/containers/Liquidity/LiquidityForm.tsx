@@ -1,5 +1,6 @@
 import React, {
   useEffect, useMemo, useRef, useState,
+  useCallback,
 } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
@@ -10,13 +11,10 @@ import {
   estimateSharesInToken,
   estimateTezInShares,
   estimateTokenInShares,
-  findDex,
   FoundDex,
-  getLiquidityShare,
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
-import { TezosToolkit } from '@taquito/taquito';
 
 import {
   useAccountPkh, useNetwork, useTezos,
@@ -49,7 +47,7 @@ import { Plus } from '@components/svg/Plus';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { asyncGetLiquidityShare } from './liquidityHelpers';
+import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 
 const TabsContent = [
@@ -92,11 +90,6 @@ type LiquidityFormProps = {
   tabsState:any,
   dex: FoundDex,
   setDex: (dex:FoundDex) => void,
-  token1:WhitelistedToken,
-  setTokens: (tokens:WhitelistedToken[]) => void,
-  setToken1:(token:WhitelistedToken) => void,
-  token2:WhitelistedToken,
-  setToken2:(token:WhitelistedToken) => void,
   tokenPair: WhitelistedTokenPair,
   setTokenPair: (pair:WhitelistedTokenPair) => void,
   tokensData:TokenDataMap,
@@ -118,57 +111,6 @@ const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
   type QSMainNet = 'mainnet' | 'florencenet';
 
-const hanldeTokenPairSelect = (
-  pair:WhitelistedTokenPair,
-  setTokenPair: (pair:WhitelistedTokenPair) => void,
-  handleTokenChange: (token:WhitelistedToken, tokenNum:'first' | 'second') => void,
-  tezos:TezosToolkit | null,
-  accountPkh:string | null,
-  networkId?:QSMainNet,
-) => {
-  const asyncFunc = async () => {
-    handleTokenChange(pair.token1, 'first');
-    handleTokenChange(pair.token2, 'second');
-    if (!tezos || !accountPkh || !networkId) {
-      setTokenPair(pair);
-      return;
-    }
-    try {
-      const secondAsset = {
-        contract: pair.token2.contractAddress,
-        id: pair.token2.fa2TokenId,
-      };
-      const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
-
-      // const lpTokenValue = share.total;
-      const frozenBalance = share.frozen.div(
-        new BigNumber(10)
-          .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
-            // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
-            new BigNumber(6),
-          ),
-      ).toString();
-      const totalBalance = share.total.div(
-        new BigNumber(10)
-          .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            new BigNumber(6),
-          ),
-      ).toString();
-      const res = {
-        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
-      };
-      setTokenPair(res);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  asyncFunc();
-};
-
 export const LiquidityForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
   debounce,
@@ -178,12 +120,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
   tabsState,
   dex,
   setDex,
-  token1,
-  token2,
   tokenPair,
-  setTokens,
-  setToken1,
-  setToken2,
   setTokenPair,
   tokensData,
   handleTokenChange,
@@ -198,6 +135,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const prevDex = usePrevious(dex);
@@ -449,6 +387,33 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
+
+  const setToken1 = useCallback((token:WhitelistedToken) => {
+    setTokens([token, (token2 || undefined)]);
+    if (token2) {
+      hanldeTokenPairSelect(
+        { token1: token, token2 } as WhitelistedTokenPair,
+        setTokenPair,
+        handleTokenChange,
+        tezos,
+        accountPkh,
+        networkId,
+      );
+    }
+  }, [tezos, accountPkh, networkId]);
+  const setToken2 = useCallback((token:WhitelistedToken) => {
+    setTokens([(token1 || undefined), token]);
+    if (token1) {
+      hanldeTokenPairSelect(
+        { token1, token2: token } as WhitelistedTokenPair,
+        setTokenPair,
+        handleTokenChange,
+        tezos,
+        accountPkh,
+        networkId,
+      );
+    }
+  }, [tezos, accountPkh, networkId]);
 
   return (
     <>

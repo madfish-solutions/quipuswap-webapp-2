@@ -9,10 +9,7 @@ import {
   TransferParams,
 } from '@quipuswap/sdk';
 
-import {
-  getUserBalance,
-  useAccountPkh, useNetwork, useTezos,
-} from '@utils/dapp';
+import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import {
   TokenDataMap, TokenDataType,
@@ -23,7 +20,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import { LiquidityForm, LiquidityFormValues } from './LiquidityForm';
-import { hanldeTokenPairSelect } from './liquidityHelpers';
 
 const TabsContent = [
   {
@@ -50,8 +46,6 @@ const fallbackTokensData : TokenDataType = {
   balance: '0',
 };
 
-type QSMainNet = 'mainnet' | 'florencenet';
-
 const AutoSave = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={LiquidityForm} />
 );
@@ -67,7 +61,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
-  const networkId = useNetwork().id as QSMainNet;
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
@@ -81,7 +74,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<LiquidityFormValues>();
   const [dex, setDex] = useState<FoundDex>();
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
   const [
     tokenPair,
     setTokenPair,
@@ -215,36 +207,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             tabsState={tabsState}
             dex={dex}
             setDex={setDex}
-            token1={token1}
-            token2={token2}
             tokenPair={tokenPair}
-            setTokens={setTokens}
-            setToken1={(token:WhitelistedToken) => {
-              setTokens([token, (token2 || undefined)]);
-              if (token2) {
-                hanldeTokenPairSelect(
-                  { token1: token, token2 } as WhitelistedTokenPair,
-                  setTokenPair,
-                  handleTokenChange,
-                  tezos,
-                  accountPkh,
-                  networkId,
-                );
-              }
-            }}
-            setToken2={(token:WhitelistedToken) => {
-              setTokens([(token1 || undefined), token]);
-              if (token1) {
-                hanldeTokenPairSelect(
-                  { token1, token2: token } as WhitelistedTokenPair,
-                  setTokenPair,
-                  handleTokenChange,
-                  tezos,
-                  accountPkh,
-                  networkId,
-                );
-              }
-            }}
             setTokenPair={setTokenPair}
             tokensData={tokensData}
             handleTokenChange={handleTokenChange}
