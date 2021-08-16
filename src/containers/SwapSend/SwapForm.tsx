@@ -180,11 +180,11 @@ const RealForm:React.FC<SwapFormProps> = ({
     try {
       const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
         contract: tokensData.first.token.address,
-        id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+        id: tokensData.first.token.id ?? undefined,
       };
       const toAsset = tokensData.second.token.address === 'tez' ? 'tez' : {
         contract: tokensData.second.token.address,
-        id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+        id: tokensData.second.token.id ?? undefined,
       };
       const paramsValue = await swap(
         tezos,
