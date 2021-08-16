@@ -37,6 +37,7 @@ import { ArrowDown } from '@components/svg/ArrowDown';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 
 function sharesFromNat(val: BigNumber.Value) {
   return new BigNumber(val).div(10 ** 6);
@@ -112,22 +113,6 @@ type HeaderProps = {
 
 type QSMainNet = 'mainnet' | 'florencenet';
 
-// const getDexShares = async (address: string, exchange: string) => {
-//   const storage = await getDexStorage(exchange);
-//   const ledger = storage.ledger || storage.accounts;
-//   const val = await ledger.get(address);
-//   if (!val) return null;
-
-//   const unfrozen = new BigNumber(val.balance);
-//   const frozen = new BigNumber(val.frozen_balance);
-
-//   return {
-//     unfrozen,
-//     frozen,
-//     total: unfrozen.plus(frozen),
-//   };
-// }
-
 const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
@@ -169,13 +154,10 @@ const hanldeTokenPairSelect = (
       asyncVoter();
       const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
-      // const lpTokenValue = share.total;
       const frozenBalance = share.frozen.div(
         new BigNumber(10)
           .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
-            // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
+            // TODO: allow token->token
             new BigNumber(6),
           ),
       ).toString();
@@ -217,7 +199,7 @@ const Header: React.FC<HeaderProps> = ({
   setVoteParams,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
-  // const { openConnectWalletModal } = useConnectModalsState();
+  const { openConnectWalletModal } = useConnectModalsState();
   const { data: bakers } = useBakers();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
@@ -303,32 +285,42 @@ const Header: React.FC<HeaderProps> = ({
   }, [dex]);
 
   const handleFirstButton = async () => {
-    if (tezos) {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
-        setVoteParams(params);
-      } else {
-        const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
-        setVoteParams(params);
-      }
-      handleSubmit();
+    if (!tezos) return;
+    if (!accountPkh) {
+      openConnectWalletModal();
+      return;
     }
+    if (currentTab.id === 'vote') {
+      const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
+      setVoteParams(params);
+    } else {
+      const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
+      setVoteParams(params);
+    }
+    handleSubmit();
   };
 
   const handleSecondButton = async () => {
-    if (tezos) {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
-        setVoteParams(params);
-        // add vote params
-      } else {
-        const params = await vetoCurrentBaker(tezos, dex, values.balance1);
-        setVoteParams(params);
-        // add veto paramsx
-      }
-      handleSubmit();
+    if (!tezos) return;
+    if (!accountPkh) {
+      openConnectWalletModal();
+      return;
     }
+    if (currentTab.id === 'vote') {
+      const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
+      setVoteParams(params);
+    } else {
+      const params = await vetoCurrentBaker(tezos, dex, values.balance1);
+      setVoteParams(params);
+    }
+    handleSubmit();
   };
+
+  console.log(tokenPair.dex);
+
+  const pairLink = useMemo(() => (tokenPair.dex
+    ? `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`
+    : '#'), [tokenPair.dex]);
 
   return (
     <>
@@ -513,6 +505,7 @@ const Header: React.FC<HeaderProps> = ({
           <Button
             className={s.detailsButton}
             theme="inverse"
+            href={pairLink}
           >
             Pair Analytics
             <ExternalLink className={s.linkIcon} />
@@ -520,6 +513,8 @@ const Header: React.FC<HeaderProps> = ({
           <Button
             className={s.detailsButton}
             theme="inverse"
+            href="#"
+            // TODO: find out delegation analytics reqs
           >
             Delegation Analytics
             <ExternalLink className={s.linkIcon} />
