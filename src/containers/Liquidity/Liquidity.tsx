@@ -28,7 +28,9 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { composeValidators, required, validateMinMax } from '@utils/validators';
+import {
+  composeValidators, required, validateBalance, validateMinMax,
+} from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
@@ -494,7 +496,8 @@ const Header:React.FC<HeaderProps> = ({
         name="balance3"
         validate={composeValidators(
           required,
-          validateMinMax(0, tokenPair.balance ? +tokenPair.balance : Infinity),
+          validateMinMax(0, Infinity),
+          tokenPair.balance ? validateBalance(+tokenPair.balance) : () => undefined,
         )}
         parse={(v) => parseDecimals(v, 0, Infinity)}
       >
@@ -555,7 +558,8 @@ const Header:React.FC<HeaderProps> = ({
         name="balance1"
         validate={composeValidators(
           required,
-          validateMinMax(0, tokensData.first.balance ? +tokensData.first.balance : Infinity),
+          validateMinMax(0, Infinity),
+          validateBalance(+tokensData.first.balance),
         )}
         parse={(v) => parseDecimals(v, 0, Infinity)}
       >
@@ -568,10 +572,12 @@ const Header:React.FC<HeaderProps> = ({
             setToken={setToken1}
             handleBalance={(value) => {
               setLastChange('balance1');
-              form.mutators.setValue(
-                'balance1',
-                +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
-              );
+              if (token1) {
+                form.mutators.setValue(
+                  'balance1',
+                  +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                );
+              }
             }}
             handleChange={(token) => handleTokenChange(token, 'first')}
             balance={tokensData.first.balance}
@@ -610,7 +616,8 @@ const Header:React.FC<HeaderProps> = ({
         name="balance2"
         validate={composeValidators(
           required,
-          validateMinMax(0, tokensData.second.balance ? +tokensData.second.balance : Infinity),
+          validateMinMax(0, Infinity),
+          validateBalance(+tokensData.second.balance),
         )}
         parse={(v) => parseDecimals(v, 0, Infinity)}
       >
@@ -623,10 +630,12 @@ const Header:React.FC<HeaderProps> = ({
             setToken={setToken2}
             handleBalance={(value) => {
               setLastChange('balance2');
-              form.mutators.setValue(
-                'balance2',
-                +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
-              );
+              if (token2) {
+                form.mutators.setValue(
+                  'balance2',
+                  +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                );
+              }
             }}
             handleChange={(token) => handleTokenChange(token, 'second')}
             balance={tokensData.second.balance}
