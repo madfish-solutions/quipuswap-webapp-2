@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 
+export type QSMainNet = 'mainnet' | 'florencenet';
+
 type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
