@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
@@ -12,7 +13,7 @@ import {
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
 } from '@utils/defaults';
-// import { getBakers } from '@utils/dapp/bakers';
+import { getBakers } from '@utils/dapp/bakers';
 import {
   QSNetwork, WhitelistedBaker, WhitelistedToken,
 } from '@utils/types';
@@ -22,14 +23,12 @@ import {
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
-import BigNumber from 'bignumber.js';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
   setNetwork,
   toBeaconNetworkType,
 } from './network';
-import { getBakers } from './bakers';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({

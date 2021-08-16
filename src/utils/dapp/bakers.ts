@@ -4,8 +4,5 @@ import {
 
 export const getBakers = async () => fetch(BAKERS_API)
   .then((res) => res.json())
-  .then((json) => {
-    const res = json;
-    return res;
-  })
+  .then((json) => json)
   .catch(() => ([]));

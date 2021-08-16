@@ -4,6 +4,7 @@
 .baker
   display: flex
   align-items: center
+  max-width: 100%
 
 .label 
   display: inline-block
@@ -71,6 +72,12 @@
 .token
   margin-left: 8px
   line-height: 1
+
+.bakerLabel
+  white-space: nowrap
+  max-width: calc(100% - 48px)
+  overflow: hidden
+  text-overflow: ellipsis
 
 .btn
   position: relative

@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedBaker } from '@utils/types';
-import { BakersModal } from '@components/modals/BakersModal';
+import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import { getWhitelistedBakerName } from '@utils/helpers';
 import { Button } from '@components/ui/Button';
-import { BakerLogos } from '@components/ui/BakerLogos';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { BakersModal } from '@components/modals/BakersModal';
 import { Shevron } from '@components/svg/Shevron';
-// import Token from '@icons/Token.svg';
 
 import s from './ComplexInput.module.sass';
 
@@ -61,8 +61,21 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         <div className={s.shape}>
           {/* TODO: add hidden input w/ selected baker */}
           <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.baker}>
-            <BakerLogos baker={baker ?? {} as WhitelistedBaker} />
-            <h6 className={cx(s.token)}>
+            <TokensLogos token1={
+              {
+                metadata:
+                {
+                  thumbnailUri: baker?.logo,
+                  name: getWhitelistedBakerName((baker ?? { name: '' }) as WhitelistedBaker, 1000),
+                  symbol: '',
+                },
+              } as WhitelistedToken
+            }
+            />
+            <h6
+              className={cx(s.token, s.bakerLabel)}
+              title={baker ? baker.name : 'BAKER NAME'}
+            >
               {baker ? baker.name : 'BAKER NAME'}
             </h6>
             <Shevron />

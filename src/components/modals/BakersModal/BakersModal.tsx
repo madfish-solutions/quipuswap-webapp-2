@@ -30,7 +30,7 @@ type BakersModalProps = {
 type HeaderProps = {
   debounce:number,
   save:any,
-  values:any,
+  values:FormValues,
   form:any,
 };
 
@@ -78,15 +78,13 @@ const Header:React.FC<HeaderProps> = ({
         name="search"
       >
         {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common:Search')}
-              error={meta.error}
-            />
-          </>
+          <Input
+            {...input}
+            StartAdornment={Search}
+            className={s.modalInput}
+            placeholder={t('common:Search')}
+            error={meta.error}
+          />
         )}
 
       </Field>
@@ -157,11 +155,10 @@ export const BakersModal: React.FC<BakersModalProps> = ({
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No bakers found')}</div>
-              {' '}
             </div>
           )}
           {loading && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingBakerCell key={x} />))
+            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingBakerCell key={x} />))
           )}
           {filteredBakers.map((baker) => {
             const {
