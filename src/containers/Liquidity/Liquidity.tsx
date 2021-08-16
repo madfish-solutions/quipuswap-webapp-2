@@ -28,7 +28,7 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { validateMinMax } from '@utils/validators';
+import { composeValidators, required, validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
@@ -492,8 +492,13 @@ const Header:React.FC<HeaderProps> = ({
       {currentTab.id === 'remove' && (
       <Field
         name="balance3"
+        validate={composeValidators(
+          required,
+          validateMinMax(0, tokenPair.balance ? +tokenPair.balance : Infinity),
+        )}
+        parse={(v) => parseDecimals(v, 0, Infinity)}
       >
-        {({ input }) => (
+        {({ input, meta }) => (
           <>
             <PositionSelect
               {...input}
@@ -517,6 +522,7 @@ const Header:React.FC<HeaderProps> = ({
               id="liquidity-remove-input"
               label="Select LP"
               className={s.input}
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
             <ArrowDown className={s.iconButton} />
           </>
@@ -547,10 +553,13 @@ const Header:React.FC<HeaderProps> = ({
       {currentTab.id !== 'remove' && (
       <Field
         name="balance1"
-        validate={validateMinMax(0, Infinity)}
-        parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+        validate={composeValidators(
+          required,
+          validateMinMax(0, tokensData.first.balance ? +tokensData.first.balance : Infinity),
+        )}
+        parse={(v) => parseDecimals(v, 0, Infinity)}
       >
-        {({ input }) => (
+        {({ input, meta }) => (
           <TokenSelect
             {...input}
             blackListedTokens={blackListedTokens}
@@ -570,6 +579,7 @@ const Header:React.FC<HeaderProps> = ({
             id="liquidity-token-1"
             label="Input"
             className={s.input}
+            error={((meta.touched && meta.error) || meta.submitError)}
           />
         )}
 
@@ -598,10 +608,13 @@ const Header:React.FC<HeaderProps> = ({
       {currentTab.id !== 'remove' && (
       <Field
         name="balance2"
-        validate={validateMinMax(0, Infinity)}
-        parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+        validate={composeValidators(
+          required,
+          validateMinMax(0, tokensData.second.balance ? +tokensData.second.balance : Infinity),
+        )}
+        parse={(v) => parseDecimals(v, 0, Infinity)}
       >
-        {({ input }) => (
+        {({ input, meta }) => (
           <TokenSelect
             {...input}
             blackListedTokens={blackListedTokens}
@@ -621,6 +634,7 @@ const Header:React.FC<HeaderProps> = ({
             id="liquidity-token-2"
             label="Input"
             className={cx(s.input, s.mb24)}
+            error={((meta.touched && meta.error) || meta.submitError)}
           />
         )}
       </Field>
@@ -648,7 +662,7 @@ const Header:React.FC<HeaderProps> = ({
                     </span>
                     <CurrencyAmount
                       currency={`${token1 ? getWhitelistedTokenSymbol(token1) : ''}/${token2 ? getWhitelistedTokenSymbol(token2) : ''}`}
-                      amount={values.estimateLP}
+                      amount={values.estimateLP ? values.estimateLP : '0'}
                     />
                   </div>
                 )
