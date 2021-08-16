@@ -246,10 +246,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     <StickyBlock className={className}>
       <Form
         onSubmit={(values: SwapFormValues) => {
-          console.log(values, tezos);
           if (!tezos) return;
           const asyncFunc = async () => {
-            console.log('call tez swap', tokensData);
             try {
               const fromAsset = isTez(tokensData.first) ? 'tez' : {
                 contract: tokensData.first.token.address,
