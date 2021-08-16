@@ -32,7 +32,7 @@ import {
   slippageToNum,
 } from '@utils/helpers';
 import {
-  FACTORIES, TEZOS_TOKEN,
+  FACTORIES, STABLE_TOKEN, TEZOS_TOKEN,
 } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
@@ -83,15 +83,15 @@ type TokenDataMap = {
   second: TokenDataType
 };
 
-const fallbackTokensData : TokenDataType = {
+const fallbackTokenToTokenData = (token:WhitelistedToken):TokenDataType => ({
   token: {
-    address: 'tez',
-    type: 'fa1.2',
-    decimals: 6,
-    id: null,
+    address: token.contractAddress,
+    type: token.type,
+    id: token.fa2TokenId,
+    decimals: token.metadata.decimals,
   },
   balance: '0',
-};
+});
 
 type FormValues = {
   balance1: number
@@ -411,13 +411,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
-      first: fallbackTokensData,
-      second: fallbackTokensData,
+      first: fallbackTokenToTokenData(TEZOS_TOKEN),
+      second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
 
   const { Form } = withTypes<FormValues>();
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
