@@ -92,40 +92,6 @@ export const asyncGetShares = async (
     ) => (token.contractAddress === 'tez'
       ? estimateTezInShares(foundDex.storage, value.toString())
       : estimateTokenInShares(foundDex.storage, value.toString()));
-    const balance = new BigNumber(
-      (values.balance3 ?? 0) * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
-    );
-    const sharesA = await getMethod(
-      tokenPairValue.token1,
-      tokenPairValue.dex,
-      balance.integerValue(),
-    );
-    const sharesB = await getMethod(
-      tokenPairValue.token2,
-      tokenPairValue.dex,
-      balance.integerValue(),
-    );
-    const bal1 = sharesA.div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
-    const bal2 = sharesB.div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
-    setValue(
-      'balanceA',
-      +bal1,
-    );
-
-    setValue(
-      'balanceB',
-      +bal2,
-    );
 
     const balanceAB = shares;
     const sharesTotalA = await getMethod(
