@@ -514,8 +514,10 @@ const Header:React.FC<HeaderProps> = ({
         {currentTab.id === 'remove' && (
         <Field
           name="balance3"
+          validate={validateMinMax(0, Infinity)}
+          parse={(v) => parseDecimals(v, 0, Infinity)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <>
               <PositionSelect
                 {...input}
@@ -544,6 +546,7 @@ const Header:React.FC<HeaderProps> = ({
                 id="liquidity-remove-input"
                 label="Select LP"
                 className={s.input}
+                error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
               />
               <ArrowDown className={s.iconButton} />
             </>
@@ -577,7 +580,7 @@ const Header:React.FC<HeaderProps> = ({
           validate={validateMinMax(0, Infinity)}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               onFocus={() => setLastChange('balance1')}
@@ -596,6 +599,7 @@ const Header:React.FC<HeaderProps> = ({
               id="liquidity-token-1"
               label="Input"
               className={s.input}
+              error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
             />
           )}
 
@@ -627,7 +631,7 @@ const Header:React.FC<HeaderProps> = ({
           validate={validateMinMax(0, Infinity)}
           parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               onFocus={() => setLastChange('balance2')}
@@ -646,6 +650,7 @@ const Header:React.FC<HeaderProps> = ({
               id="liquidity-token-2"
               label="Input"
               className={cx(s.input, s.mb24)}
+              error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
             />
           )}
         </Field>

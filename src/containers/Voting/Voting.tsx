@@ -16,10 +16,13 @@ import {
 } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   getUserBalance,
   useAccountPkh, useBakers, useNetwork, useTezos,
 } from '@utils/dapp';
+import { composeValidators, required, validateMinMax } from '@utils/validators';
+import { parseDecimals } from '@utils/helpers';
 import { WhitelistedBaker, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -37,7 +40,6 @@ import { ArrowDown } from '@components/svg/ArrowDown';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 
 function sharesFromNat(val: BigNumber.Value) {
   return new BigNumber(val).div(10 ** 6);
@@ -206,7 +208,6 @@ const Header: React.FC<HeaderProps> = ({
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const accountPkh = useAccountPkh();
-  // const prevDex = usePrevious(dex);
 
   const timeout = useRef(setTimeout(() => { }, 0));
   let promise: any;
@@ -290,12 +291,16 @@ const Header: React.FC<HeaderProps> = ({
       openConnectWalletModal();
       return;
     }
-    if (currentTab.id === 'vote') {
-      const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
-      setVoteParams(params);
-    } else {
-      const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
-      setVoteParams(params);
+    try {
+      if (currentTab.id === 'vote') {
+        const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
+        setVoteParams(params);
+      } else {
+        const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
+        setVoteParams(params);
+      }
+    } catch (e) {
+      console.error(e);
     }
     handleSubmit();
   };
@@ -306,17 +311,24 @@ const Header: React.FC<HeaderProps> = ({
       openConnectWalletModal();
       return;
     }
-    if (currentTab.id === 'vote') {
-      const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
-      setVoteParams(params);
-    } else {
-      const params = await vetoCurrentBaker(tezos, dex, values.balance1);
-      setVoteParams(params);
+    if (!values.balance1) {
+      // throw form validation error
+      handleSubmit();
+      return;
+    }
+    try {
+      if (currentTab.id === 'vote') {
+        const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
+        setVoteParams(params);
+      } else {
+        const params = await vetoCurrentBaker(tezos, dex, values.balance1);
+        setVoteParams(params);
+      }
+    } catch (e) {
+      console.error(e);
     }
     handleSubmit();
   };
-
-  console.log(tokenPair.dex);
 
   const pairLink = useMemo(() => (tokenPair.dex
     ? `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`
@@ -347,8 +359,13 @@ const Header: React.FC<HeaderProps> = ({
       >
         <Field
           name="balance1"
+          validate={composeValidators(
+            required,
+            validateMinMax(0, tokenPair.balance ? +tokenPair.balance : Infinity),
+          )}
+          parse={(v) => parseDecimals(v, 0, Infinity)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <>
               <PositionSelect
                 {...input}
@@ -378,18 +395,21 @@ const Header: React.FC<HeaderProps> = ({
                 id="liquidity-remove-input"
                 label="Select LP"
                 className={s.input}
+                error={(meta.touched && meta.error) || meta.submitError}
               />
               <ArrowDown className={s.iconButton} />
             </>
           )}
         </Field>
         {currentTab.id === 'vote' && (
-          <Field name="selectedBaker">
-            {({ input }) => (
+          <Field validate={required} name="selectedBaker">
+            {({ input, meta }) => (
               <ComplexBaker
+                {...input}
                 label="Baker"
                 id="voting-baker"
                 handleChange={(baker) => input.onChange(baker.address)}
+                error={(meta.touched && meta.error) || meta.submitError}
               />
             )}
 
