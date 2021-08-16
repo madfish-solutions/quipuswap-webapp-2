@@ -2,7 +2,6 @@ import React, {
   useEffect, useMemo, useRef, useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import {
   batchify,
@@ -19,31 +18,26 @@ import { TezosToolkit } from '@taquito/taquito';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   getUserBalance,
-  useAccountPkh, useBakers, useNetwork, useTezos,
+  useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
 import { composeValidators, required, validateMinMax } from '@utils/validators';
 import { parseDecimals } from '@utils/helpers';
-import { WhitelistedBaker, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { Tooltip } from '@components/ui/Tooltip';
+import {
+  VoterType, WhitelistedToken, WhitelistedTokenPair,
+} from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { VotingStats } from '@components/voting/VotingStats';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-
-function sharesFromNat(val: BigNumber.Value) {
-  return new BigNumber(val).div(10 ** 6);
-}
+import { VotingDetails } from './VotingDetails';
 
 const TabsContent = [
   {
@@ -200,9 +194,7 @@ const Header: React.FC<HeaderProps> = ({
   setTabsState,
   setVoteParams,
 }) => {
-  const { t } = useTranslation(['common', 'liquidity']);
   const { openConnectWalletModal } = useConnectModalsState();
-  const { data: bakers } = useBakers();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
@@ -239,51 +231,6 @@ const Header: React.FC<HeaderProps> = ({
     tokenPair,
     dex,
     currentTab]);
-
-  const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
-    if (dex?.storage?.storage) {
-      return bakers.find((x) => x.address === dex.storage.storage.current_candidate);
-    }
-    return {} as WhitelistedBaker;
-  }, [dex, bakers]);
-
-  const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
-    if (dex?.storage?.storage) {
-      return bakers.find((x) => x.address === dex.storage.storage.current_delegated);
-    }
-    return undefined;
-  }, [dex, bakers]);
-
-  const myCandidate: WhitelistedBaker | undefined = useMemo(() => {
-    if (voter?.candidate) {
-      return bakers.find((x) => x.address === voter?.candidate);
-    }
-    return undefined;
-  }, [voter, bakers]);
-
-  const totalVotes = useMemo(() => {
-    if (dex?.storage?.storage) {
-      return sharesFromNat(dex.storage.storage.total_votes).toFixed();
-    }
-    return '';
-  }, [dex, bakers]);
-
-  const totalVeto = useMemo(() => {
-    if (dex?.storage?.storage) {
-      return sharesFromNat(dex.storage.storage.veto).toFixed();
-    }
-    return '';
-  }, [dex]);
-
-  const votesToVeto = useMemo(() => {
-    if (dex?.storage?.storage) {
-      return sharesFromNat(dex.storage.storage.total_votes)
-        .div(3)
-        .minus(sharesFromNat(dex.storage.storage.veto))
-        .toFixed(6);
-    }
-    return '';
-  }, [dex]);
 
   const handleFirstButton = async () => {
     if (!tezos) return;
@@ -329,10 +276,6 @@ const Header: React.FC<HeaderProps> = ({
     }
     handleSubmit();
   };
-
-  const pairLink = useMemo(() => (tokenPair.dex
-    ? `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`
-    : '#'), [tokenPair.dex]);
 
   return (
     <>
@@ -425,122 +368,11 @@ const Header: React.FC<HeaderProps> = ({
         </div>
 
       </Card>
-      <Card
-        header={{
-          content: 'Voting Details',
-        }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
-            <>
-              {t('vote:Delegated To')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:Current baker elected by simple majority of votes.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button href={currentCandidate ? `https://tzkt.io/${currentCandidate.address}` : '#'} theme="underlined">
-            {currentCandidate?.name}
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('vote:Second Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button href={secondCandidate ? `https://tzkt.io/${secondCandidate.address}` : '#'} theme="underlined">
-            {secondCandidate?.name}
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Votes')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of votes cast to elect a baker in the pool.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={totalVotes} />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Vetos')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of shares cast so far to veto the current baker.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={totalVeto} />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Your Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate you voted for.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button href={myCandidate ? `https://tzkt.io/${myCandidate.address}` : '#'} theme="underlined">
-            {myCandidate?.name}
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('Votes To Veto Left')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:This much more votes needed to veto a delegate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={votesToVeto} />
-        </CardCell>
-        <div className={s.detailsButtons}>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-            href={pairLink}
-          >
-            Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-            href="#"
-            // TODO: find out delegation analytics reqs
-          >
-            Delegation Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-        </div>
-      </Card>
+      <VotingDetails
+        tokenPair={tokenPair}
+        dex={dex}
+        voter={voter}
+      />
     </>
   );
 };
@@ -553,12 +385,6 @@ const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
   token2: TEZOS_TOKEN,
 } as WhitelistedTokenPair;
-
-type VoterType = {
-  vote: string,
-  veto: string,
-  candidate: string
-};
 
 export const Voting: React.FC<VotingProps> = ({
   className,

@@ -55,3 +55,9 @@ export type WhitelistedTokenMetadata = {
   name: string
   thumbnailUri: string
 };
+
+export type VoterType = {
+  vote: string,
+  veto: string,
+  candidate: string
+};
