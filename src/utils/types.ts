@@ -55,3 +55,19 @@ export type WhitelistedTokenMetadata = {
   name: string
   thumbnailUri: string
 };
+
+export type TokenDataType = {
+  token: {
+    address: string,
+    type: 'fa1.2' | 'fa2',
+    id?: number | null
+    decimals: number,
+  },
+  balance: string,
+  exchangeRate?: string
+};
+
+export type TokenDataMap = {
+  first: TokenDataType,
+  second: TokenDataType
+};
