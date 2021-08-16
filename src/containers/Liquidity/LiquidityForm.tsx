@@ -308,11 +308,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         }
         const fromAsset = isTez(tokensData.first) ? 'tez' : {
           contract: tokensData.first.token.address,
-          id: tokensData.first.token.id ? tokensData.first.token.id : undefined,
+          id: tokensData.first.token.id ?? undefined,
         };
         const toAsset = isTez(tokensData.second) ? 'tez' : {
           contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ? tokensData.second.token.id : undefined,
+          id: tokensData.second.token.id ?? undefined,
         };
         const slippage = slippageToNum(values.slippage) / 100;
         const swapParams = await swap(
