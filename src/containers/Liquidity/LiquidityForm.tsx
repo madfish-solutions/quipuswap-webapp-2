@@ -27,7 +27,7 @@ import {
 } from '@utils/types';
 
 import {
-  composeValidators, required, validateBalance,
+  composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
@@ -445,6 +445,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance3"
             validate={composeValidators(
               required,
+              validateMinMax(0, Infinity),
               validateBalance(tokenPair.balance ? +tokenPair.balance : Infinity),
             )}
           >
@@ -510,6 +511,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance1"
             validate={composeValidators(
               required,
+              validateMinMax(0, Infinity),
               validateBalance(tokensData.first.balance ? +tokensData.first.balance : Infinity),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity)}
@@ -570,6 +572,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance2"
             validate={composeValidators(
               required,
+              validateMinMax(0, Infinity),
               validateBalance(tokensData.second.balance ? +tokensData.second.balance : Infinity),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity)}
