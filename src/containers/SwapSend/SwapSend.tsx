@@ -21,7 +21,7 @@ import {
   useSearchCustomTokens,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, validateBalance, validateMinMax,
+  composeValidators, isAddress, required, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
@@ -248,6 +248,7 @@ const Header:React.FC<HeaderProps> = ({
     >
       <Field
         validate={composeValidators(
+          required,
           validateMinMax(0, Infinity),
           validateBalance(+tokensData.first.balance),
         )}
@@ -294,6 +295,7 @@ const Header:React.FC<HeaderProps> = ({
       </Button>
       <Field
         validate={composeValidators(
+          required,
           validateMinMax(0, Infinity),
           validateBalance(+tokensData.second.balance),
         )}
