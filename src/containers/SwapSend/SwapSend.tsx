@@ -22,7 +22,7 @@ import {
   useSearchCustomTokens,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, isBalance, validateMinMax,
+  composeValidators, isAddress, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
@@ -279,9 +279,9 @@ const Header:React.FC<HeaderProps> = ({
         <Field
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            isBalance(+tokensData.first.balance),
+            validateBalance(+tokensData.first.balance),
           )}
-          parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+          parse={(v) => parseDecimals(v, 0, Infinity)}
           name="balance1"
         >
           {({ input, meta }) => (
@@ -295,7 +295,10 @@ const Header:React.FC<HeaderProps> = ({
                 if (token1) {
                   form.mutators.setValue(
                     'balance1',
-                    +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                    +parseDecimals(value,
+                      0,
+                      Infinity,
+                      token1 ? token1.metadata.decimals : undefined),
                   );
                 }
               }}
@@ -325,9 +328,9 @@ const Header:React.FC<HeaderProps> = ({
         <Field
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            isBalance(+tokensData.second.balance),
+            validateBalance(+tokensData.second.balance),
           )}
-          parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+          parse={(v) => parseDecimals(v, 0, Infinity)}
           name="balance2"
         >
           {({ input, meta }) => (
@@ -341,7 +344,10 @@ const Header:React.FC<HeaderProps> = ({
                 if (token2) {
                   form.mutators.setValue(
                     'balance2',
-                    +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                    +parseDecimals(value,
+                      0,
+                      Infinity,
+                      token2 ? token2.metadata.decimals : undefined),
                   );
                 }
               }}
