@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import { Field } from 'react-final-form';
+import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
   estimateSharesInTez,
@@ -22,7 +22,8 @@ import {
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import {
-  PoolShare, TokenDataMap, TokenDataType,
+  PoolShare,
+  TokenDataMap, TokenDataType,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 
@@ -111,9 +112,9 @@ const toNat = (amount: any, decimals: number) => new BigNumber(amount)
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
-  type QSMainNet = 'mainnet' | 'florencenet';
+type QSMainNet = 'mainnet' | 'florencenet';
 
-export const LiquidityForm:React.FC<LiquidityFormProps> = ({
+const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
   debounce,
   save,
@@ -184,7 +185,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
           ) => (token.contractAddress === 'tez'
             ? estimateTezInShares(foundDex.storage, value.toString())
             : estimateTokenInShares(foundDex.storage, value.toString()));
-            // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
+          // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
           const balance = new BigNumber(
             values.balance3 * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
           );
@@ -292,7 +293,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
         const exB = +(tokensData.second.exchangeRate ?? '1');
         const total$ = (
           (values.balance1 * exA)
-            + (values.balance2 * exB)
+          + (values.balance2 * exB)
         ) / 2;
         const $toA = total$ / exA;
         const $toB = total$ / exB;
@@ -622,67 +623,67 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
               <>
                 <Slippage handleChange={(value) => input.onChange(value)} />
                 {currentTab.id === 'add' && (
-                  <>
-                    {!values.switcher ? (
-                      <div className={cx(s.receive, s.mb24)}>
-                        <span className={s.receiveLabel}>
-                          Max invested:
-                        </span>
-                        <CurrencyAmount
-                          currency={`${tokenAName}/${tokenBName}`}
-                          amount={values.estimateLP}
-                        />
-                      </div>
-                    )
-                      : (
-                        <>
-                          <div className={s.receive}>
-                            <span className={s.receiveLabel}>
-                              Max invested:
-                            </span>
-                            <CurrencyAmount
-                              currency={tokenAName}
-                              amount={maxInvestedA.toString()}
-                            />
-                          </div>
-                          <div className={cx(s.receive, s.mb24)}>
-                            <span className={s.receiveLabel}>
-                              Max invested:
-                            </span>
-                            <CurrencyAmount
-                              currency={tokenBName}
-                              amount={maxInvestedB.toString()}
-                            />
-                          </div>
-                        </>
-                      )}
-                  </>
+                <>
+                  {!values.switcher ? (
+                    <div className={cx(s.receive, s.mb24)}>
+                      <span className={s.receiveLabel}>
+                        Max invested:
+                      </span>
+                      <CurrencyAmount
+                        currency={`${tokenAName}/${tokenBName}`}
+                        amount={values.estimateLP}
+                      />
+                    </div>
+                  )
+                    : (
+                      <>
+                        <div className={s.receive}>
+                          <span className={s.receiveLabel}>
+                            Max invested:
+                          </span>
+                          <CurrencyAmount
+                            currency={tokenAName}
+                            amount={maxInvestedA.toString()}
+                          />
+                        </div>
+                        <div className={cx(s.receive, s.mb24)}>
+                          <span className={s.receiveLabel}>
+                            Max invested:
+                          </span>
+                          <CurrencyAmount
+                            currency={tokenBName}
+                            amount={maxInvestedB.toString()}
+                          />
+                        </div>
+                      </>
+                    )}
+                </>
                 )}
 
                 {currentTab.id === 'remove' && (
-                  <>
-                    <div className={s.receive}>
-                      <span className={s.receiveLabel}>
-                        Minimum received:
-                      </span>
-                      <CurrencyAmount
-                        currency={tokenAName}
-                        amount={minimumReceivedA < 0 ? '0' : minimumReceivedA.toString()}
-                      />
-                    </div>
-                    <div className={s.receive}>
-                      <span className={s.receiveLabel}>
-                        Minimum received:
-                      </span>
-                      <CurrencyAmount
-                        currency={tokenBName}
-                        amount={minimumReceivedB < 0 ? '0' : minimumReceivedB.toString()}
-                      />
-                    </div>
-                    <Button onClick={handleRemoveLiquidity} className={s.button}>
-                      Remove & Unvote
-                    </Button>
-                  </>
+                <>
+                  <div className={s.receive}>
+                    <span className={s.receiveLabel}>
+                      Minimum received:
+                    </span>
+                    <CurrencyAmount
+                      currency={tokenAName}
+                      amount={minimumReceivedA < 0 ? '0' : minimumReceivedA.toString()}
+                    />
+                  </div>
+                  <div className={s.receive}>
+                    <span className={s.receiveLabel}>
+                      Minimum received:
+                    </span>
+                    <CurrencyAmount
+                      currency={tokenBName}
+                      amount={minimumReceivedB < 0 ? '0' : minimumReceivedB.toString()}
+                    />
+                  </div>
+                  <Button onClick={handleRemoveLiquidity} className={s.button}>
+                    Remove & Unvote
+                  </Button>
+                </>
                 )}
               </>
             );
@@ -727,3 +728,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
     </>
   );
 };
+
+export const LiquidityForm = (props:any) => (
+  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
+);

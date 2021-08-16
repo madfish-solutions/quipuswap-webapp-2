@@ -2,7 +2,7 @@ import React, {
   useEffect, useMemo, useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
-import { withTypes, FormSpy } from 'react-final-form';
+import { withTypes } from 'react-final-form';
 import {
   batchify,
   FoundDex,
@@ -45,10 +45,6 @@ const fallbackTokensData : TokenDataType = {
   },
   balance: '0',
 };
-
-const AutoSave = (props:any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={LiquidityForm} />
-);
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
@@ -198,7 +194,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           },
         }}
         render={({ handleSubmit, form }) => (
-          <AutoSave
+          <LiquidityForm
             form={form}
             handleSubmit={handleSubmit}
             debounce={1000}

@@ -10,7 +10,7 @@ import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { WhitelistedToken } from '@utils/types';
+import { TokenDataMap, TokenDataType, WhitelistedToken } from '@utils/types';
 import {
   useAccountPkh,
   useTezos,
@@ -22,6 +22,7 @@ import {
 import {
   localSearchToken,
   slippageToNum,
+  fallbackTokenToTokenData,
 } from '@utils/helpers';
 import {
   FACTORIES, STABLE_TOKEN, TEZOS_TOKEN,
@@ -51,32 +52,6 @@ const TabsContent = [
 type SwapSendProps = {
   className?: string
 };
-
-type TokenDataType = {
-  token: {
-    address: string,
-    type: 'fa1.2' | 'fa2',
-    id?: number | null
-    decimals: number,
-  },
-  balance: string,
-  exchangeRate?: string
-};
-
-type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
-};
-
-const fallbackTokenToTokenData = (token:WhitelistedToken):TokenDataType => ({
-  token: {
-    address: token.contractAddress,
-    type: token.type,
-    id: token.fa2TokenId,
-    decimals: token.metadata.decimals,
-  },
-  balance: '0',
-});
 
 const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)
