@@ -26,7 +26,9 @@ import {
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 
-import { composeValidators, required, validateMinMax } from '@utils/validators';
+import {
+  composeValidators, required, validateBalance,
+} from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
 } from '@utils/helpers';
@@ -400,7 +402,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
         networkId,
       );
     }
-  }, [tezos, accountPkh, networkId]);
+  }, [tezos, accountPkh, networkId, token2]);
   const setToken2 = useCallback((token:WhitelistedToken) => {
     setTokens([(token1 || undefined), token]);
     if (token1) {
@@ -413,7 +415,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
         networkId,
       );
     }
-  }, [tezos, accountPkh, networkId]);
+  }, [tezos, accountPkh, networkId, token1]);
 
   return (
     <>
@@ -443,7 +445,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance3"
             validate={composeValidators(
               required,
-              validateMinMax(0, tokenPair.balance ? +tokenPair.balance : Infinity),
+              validateBalance(tokenPair.balance ? +tokenPair.balance : Infinity),
             )}
           >
             {({ input, meta }) => (
@@ -508,7 +510,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance1"
             validate={composeValidators(
               required,
-              validateMinMax(0, tokensData.first.balance ? +tokensData.first.balance : Infinity),
+              validateBalance(tokensData.first.balance ? +tokensData.first.balance : Infinity),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity)}
           >
@@ -523,7 +525,12 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
                   setLastChange('balance1');
                   form.mutators.setValue(
                     'balance1',
-                    +parseDecimals(value, 0, Infinity, token1.metadata.decimals),
+                    +parseDecimals(
+                      value,
+                      0,
+                      Infinity,
+                      token1 ? token1.metadata.decimals : undefined,
+                    ),
                   );
                 }}
                 handleChange={(token) => handleTokenChange(token, 'first')}
@@ -563,7 +570,7 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
             name="balance2"
             validate={composeValidators(
               required,
-              validateMinMax(0, tokensData.second.balance ? +tokensData.second.balance : Infinity),
+              validateBalance(tokensData.second.balance ? +tokensData.second.balance : Infinity),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity)}
           >
@@ -578,7 +585,12 @@ export const LiquidityForm:React.FC<LiquidityFormProps> = ({
                   setLastChange('balance2');
                   form.mutators.setValue(
                     'balance2',
-                    +parseDecimals(value, 0, Infinity, token2.metadata.decimals),
+                    +parseDecimals(
+                      value,
+                      0,
+                      Infinity,
+                      token2 ? token2.metadata.decimals : undefined,
+                    ),
                   );
                 }}
                 handleChange={(token) => handleTokenChange(token, 'second')}
