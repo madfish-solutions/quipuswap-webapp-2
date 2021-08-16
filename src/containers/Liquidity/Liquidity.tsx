@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 import { withTypes, Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
@@ -27,7 +26,9 @@ import {
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import {
+  PoolShare, TokenDataMap, TokenDataType, WhitelistedToken, WhitelistedTokenPair,
+} from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
@@ -37,7 +38,6 @@ import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
@@ -48,11 +48,11 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
 import { asyncGetLiquidityShare } from './liquidityHelpers';
+import { LiquidityDetails } from './LiquidityDetails';
 
 const TabsContent = [
   {
@@ -67,22 +67,6 @@ const TabsContent = [
 
 type LiquidityProps = {
   className?: string
-};
-
-type TokenDataType = {
-  token: {
-    address: string,
-    type: 'fa1.2' | 'fa2',
-    id?: number | null
-    decimals: number,
-  },
-  balance: string,
-  exchangeRate?: string
-};
-
-type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
 };
 
 const fallbackTokensData : TokenDataType = {
@@ -225,7 +209,6 @@ const Header:React.FC<HeaderProps> = ({
   setRemoveLiquidityParams,
   removeLiquidityParams,
 }) => {
-  const { t } = useTranslation(['common', 'liquidity']);
   const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
@@ -234,9 +217,7 @@ const Header:React.FC<HeaderProps> = ({
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const prevDex = usePrevious(dex);
-  const [poolShare, setPoolShare] = useState<
-  { unfrozen:BigNumber, frozen:BigNumber, total:BigNumber }
-  >();
+  const [poolShare, setPoolShare] = useState<PoolShare>();
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -481,10 +462,6 @@ const Header:React.FC<HeaderProps> = ({
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
   );
-
-  const pairLink = useMemo(() => (removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to
-    ? `https://analytics.quipuswap.com/pairs/${removeLiquidityParams.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to}`
-    : '#'), [removeLiquidityParams]);
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
@@ -759,142 +736,17 @@ const Header:React.FC<HeaderProps> = ({
         )}
 
       </Card>
-      <Card
-        header={{
-          content: `${currentTab.label} Liquidity Details`,
-        }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
-            <>
-              {t('common:Sell Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount
-              amount="1"
-              currency={tokenAName}
-            />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount
-              amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
-              currency={tokenBName}
-              dollarEquivalent={`${tokensData.first.exchangeRate ?? 0}`}
-            />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Buy Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount
-              amount="1"
-              currency={tokenBName}
-            />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount
-              amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
-              currency={tokenAName}
-              dollarEquivalent={`${tokensData.second.exchangeRate ?? 0}`}
-            />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:{{tokenAName}} Locked', { tokenAName })}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
-              />
-            </>
-      )}
-          className={s.cell}
-        >
-          <CurrencyAmount
-            amount={(values.balanceTotalA ?? 0).toString()}
-            currency={getWhitelistedTokenSymbol(tokenPair.token1)}
-          />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:{{tokenBName}} Locked', { tokenBName })}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
-              />
-            </>
-      )}
-          className={s.cell}
-        >
-          <CurrencyAmount
-            amount={(values.balanceTotalB ?? 0).toString()}
-            currency={getWhitelistedTokenSymbol(tokenPair.token2)}
-          />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Your Total LP')}
-              <Tooltip
-                sizeT="small"
-                content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
-              />
-            </>
-      )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={(poolShare?.total.toString()) ?? '0'} />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Your Frozen LP')}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
-              />
-            </>
-      )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount={(poolShare?.frozen.toString()) ?? '0'} />
-        </CardCell>
-        <div className={s.detailsButtons}>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-            href={pairLink}
-          >
-            View Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-          >
-            View Pair Contract
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-        </div>
-      </Card>
+      <LiquidityDetails
+        currentTab={currentTab.label}
+        params={removeLiquidityParams}
+        token1={token1}
+        token2={token2}
+        tokensData={tokensData}
+        tokenPair={tokenPair}
+        poolShare={poolShare}
+        balanceTotalA={(values.balanceTotalA ?? 0).toString()}
+        balanceTotalB={(values.balanceTotalB ?? 0).toString()}
+      />
     </>
   );
 };
