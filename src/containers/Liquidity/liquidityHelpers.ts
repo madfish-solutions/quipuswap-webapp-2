@@ -18,6 +18,57 @@ import { slippageToNum } from '@utils/helpers';
 
 type QSMainNet = 'mainnet' | 'florencenet';
 
+export const hanldeTokenPairSelect = (
+  pair:WhitelistedTokenPair,
+  setTokenPair: (pair:WhitelistedTokenPair) => void,
+  handleTokenChange: (token:WhitelistedToken, tokenNum:'first' | 'second') => void,
+  tezos:TezosToolkit | null,
+  accountPkh:string | null,
+  networkId?:QSMainNet,
+) => {
+  const asyncFunc = async () => {
+    handleTokenChange(pair.token1, 'first');
+    handleTokenChange(pair.token2, 'second');
+    if (!tezos || !accountPkh || !networkId) {
+      setTokenPair(pair);
+      return;
+    }
+    try {
+      const secondAsset = {
+        contract: pair.token2.contractAddress,
+        id: pair.token2.fa2TokenId,
+      };
+      const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
+
+      // const lpTokenValue = share.total;
+      const frozenBalance = share.frozen.div(
+        new BigNumber(10)
+          .pow(
+            // new BigNumber(pair.token2.metadata.decimals),
+            // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
+            // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
+            new BigNumber(6),
+          ),
+      ).toString();
+      const totalBalance = share.total.div(
+        new BigNumber(10)
+          .pow(
+            // new BigNumber(pair.token2.metadata.decimals),
+            new BigNumber(6),
+          ),
+      ).toString();
+      const res = {
+        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
+      };
+      setTokenPair(res);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  asyncFunc();
+};
+
 export const asyncFindPairDex = async (
   pair:WhitelistedTokenPair,
   setTokenPair:(pair:WhitelistedTokenPair) => void,
