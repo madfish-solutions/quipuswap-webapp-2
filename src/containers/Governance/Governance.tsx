@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent } from '@components/ui/Card';
+import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { PieChartSampleData } from '@components/ui/PieChart/content';
 
@@ -42,6 +44,11 @@ const TabsContent = [
   },
 ];
 
+const themeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
+
 type GovernanceProps = {
   className?: string
 };
@@ -51,6 +58,7 @@ export const Governance: React.FC<GovernanceProps> = ({
 }) => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [proposal, selectProposal] = useState<string>('');
+  const { colorThemeMode } = useContext(ColorThemeContext);
 
   const content: GovernanceCardProps[] = [{
     name: 'Add USDs/QNOT pool',
@@ -108,7 +116,55 @@ export const Governance: React.FC<GovernanceProps> = ({
 
   return (
     <>
-      <PieChart data={PieChartSampleData} />
+      <Card
+        className={cx(className, themeClass[colorThemeMode])}
+      >
+        <CardContent className={s.container}>
+          <div className={s.pieInfo}>
+            <div className={s.info}>
+              <h5>Proposal summary</h5>
+              <div>On-going</div>
+              <div>Approved</div>
+              <div>Pending</div>
+              <div>Failed</div>
+              <div>Activated</div>
+            </div>
+            <div className={s.piechart}>
+              <PieChart data={PieChartSampleData} />
+            </div>
+
+          </div>
+          <div className={s.voteInfo}>
+            <div>
+              <div className={s.voteRow}>
+                <div className={s.voteCat}>Total vetoed QNOTs:</div>
+                <div className={s.voteNum}>1,000,000.00</div>
+              </div>
+              <div className={s.voteRow}>
+                <div className={s.voteCat}>Total QNOTs balance:</div>
+                <div className={s.voteNum}>1,000,000.00</div>
+              </div>
+              <div className={s.voteRow}>
+                <div className={s.voteCat}>Your Voted QNOTs:</div>
+                <div className={s.voteNum}>1,000,000.00</div>
+              </div>
+              <div className={s.voteRow}>
+                <div className={s.voteCat}>Total Climable QNOTs:</div>
+                <div className={s.voteNum}>1,000,000.00</div>
+              </div>
+            </div>
+            <div className={s.voteButtons}>
+              <Button theme="secondary" className={s.voteButton}>
+                Submit proposal
+              </Button>
+              <Button className={s.voteButton}>
+                Claim unlocked
+              </Button>
+            </div>
+          </div>
+          {/* TODO */}
+        </CardContent>
+      </Card>
       <StickyBlock className={cx(className, s.unsticky)}>
         <Card
           className={cx(s.govCard, s.mb24i)}

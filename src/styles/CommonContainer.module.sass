@@ -16,6 +16,42 @@
   display: inline-block
   width: 100%
 
+.container
+  padding: 24px
+
+.voteInfo
+  width: 100%
+
+.voteButton
+  margin-top: 16px
+
+.voteButtons 
+  margin-top: 24px
+
+.voteRow, .voteButtons
+  display: flex
+  align-items: center
+  justify-content: space-between
+  flex-direction: column
+  &:not(:last-child)
+    margin-bottom: 16px
+    
+.voteCat
+  font-size: 1rem
+  font-weight: bold
+
+.voteNum
+  margin-top: 8px
+  font-weight: bold
+  font-size: 1.143rem
+  line-height: 1.33
+
+.pieInfo
+  width: 100%
+
+.piechart
+  width: 100%
+
 .tabContent
   padding: 0px 24px
 
@@ -118,6 +154,13 @@
     &:not(:last-child)
       margin-bottom: 16px
 
+.light
+  .voteNum
+      color: $text-01
+.dark
+  .voteNum
+      color: $text-inverse
+
 @include media('>Lphone')
   .govTabs
     overflow-x: hidden
@@ -142,6 +185,41 @@
         margin-left: 32px
 
 @include media('>Ltablet')
+  .container
+    display: flex
+    justify-content: space-between
+  .piechart
+    width: 200px
+    max-width: 200px
+  .pieInfo
+    width: min-content
+    display: flex
+    margin-left: 56px
+    flex: 1
+  .voteButtons
+    margin-top: 0px
+  .voteRow, .voteButtons
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-direction: row
+    &:not(:last-child)
+      margin-bottom: 16px
+  .voteInfo
+    flex: 1
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    max-width: 384px
+  .voteCat
+    font-weight: bold
+  .voteNum
+    margin-top: 0px
+    font-weight: bold
+    font-size: 1.714rem
+    line-height: 1.33
+  .voteButton
+    max-width: 180px
   .proposal
     flex-direction: row
   .button
