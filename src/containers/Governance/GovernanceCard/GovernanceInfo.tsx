@@ -69,15 +69,10 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
 }) => {
   const { t } = useTranslation(['common', 'governance']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const compountClassName = cx(
-    modeClass[colorThemeMode],
-    s.fullWidth,
-    s.mb24i,
-    s.govBody,
-    className,
-  );
+
   const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
   const [voteModal, setVoteModal] = useState<boolean>(false);
+
   useEffect(() => {
     const loadDescription = () => {
       fetch(description).then((x) => x.text()).then((x) => {
@@ -86,6 +81,14 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
     };
     loadDescription();
   }, []);
+
+  const compountClassName = cx(
+    modeClass[colorThemeMode],
+    s.fullWidth,
+    s.mb24i,
+    s.govBody,
+    className,
+  );
   return (
     <>
       <VoteModal

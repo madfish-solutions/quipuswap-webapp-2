@@ -11,7 +11,9 @@ import { PieChartSampleData } from '@components/ui/PieChart/content';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { GovernanceCard, GovernanceCardProps, GovernanceInfo } from './GovernanceCard';
+import {
+  GovernanceCard, GovernanceCardProps, GovernanceInfo, GovernanceForm,
+} from './GovernanceCard';
 
 const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
@@ -58,6 +60,7 @@ export const Governance: React.FC<GovernanceProps> = ({
 }) => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [proposal, selectProposal] = useState<string>('');
+  const [submitProposal, setSubmitProposal] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const content: GovernanceCardProps[] = [{
@@ -109,7 +112,16 @@ export const Governance: React.FC<GovernanceProps> = ({
           }}
           handleUnselect={handleUnselect}
         />
+      </div>
+    );
+  }
 
+  if (submitProposal === true) {
+    return (
+      <div className={cx(className, s.proposal)}>
+        <GovernanceForm
+          handleUnselect={handleUnselect}
+        />
       </div>
     );
   }
@@ -154,7 +166,13 @@ export const Governance: React.FC<GovernanceProps> = ({
               </div>
             </div>
             <div className={s.voteButtons}>
-              <Button theme="secondary" className={s.voteButton}>
+              <Button
+                onClick={() => {
+                  setSubmitProposal(true);
+                }}
+                theme="secondary"
+                className={s.voteButton}
+              >
                 Submit proposal
               </Button>
               <Button className={s.voteButton}>
@@ -162,7 +180,6 @@ export const Governance: React.FC<GovernanceProps> = ({
               </Button>
             </div>
           </div>
-          {/* TODO */}
         </CardContent>
       </Card>
       <StickyBlock className={cx(className, s.unsticky)}>

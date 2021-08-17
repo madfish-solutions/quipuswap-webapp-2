@@ -7,6 +7,23 @@
   order: -1
   justify-content: space-between
   width: 100%
+
+.submitFlex
+  width: 100%
+  display: flex
+  justify-content: space-between
+
+.desktopFlex, .desktopBlock
+  display: none
+
+.govSubmitGroup
+  color: $text-03
+  font-weight: bold
+  line-height: 1.14
+  order: 2
+
+.submitCurrency
+  color: $text-03
   
 .proposalSidebar
   position: relative
@@ -84,6 +101,14 @@
   justify-content: space-between
   flex-wrap: wrap
 
+.submitHeader
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+
+.submitDates
+  color: $text-03
+  flex: 50%
 .govDates
   flex: 50%
   font-size: 1rem
@@ -105,6 +130,9 @@
 
 .govBage
   color: $text-03
+
+.mt40
+  margin-top: 40px
 
 .mb24
   margin-bottom: 24px
@@ -165,6 +193,13 @@
 
 
 @include media('>Ltablet')
+  .formInputs
+    display: flex
+    align-items: center
+  .formInput
+    flex: 1
+    &:not(:last-child)
+      margin-right: 24px
   .proposalSidebar
     position: relative
     width: min-content
@@ -184,6 +219,12 @@
     justify-content: flex-start
     width: auto
     order: 1
+  .desktopFlex
+    display: flex
+  .desktopBlock
+    display: block
+  .submitDates
+    flex: initial
   .govDates
     flex: initial
     font-size: 1.143rem
@@ -199,3 +240,10 @@
     justify-content: flex-start
     align-items: center
     flex-wrap: wrap
+  .submitHeader
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    flex-wrap: wrap
+  .submitFlex
+    margin-right: 32px
