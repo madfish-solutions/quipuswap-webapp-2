@@ -20,9 +20,17 @@ export const SwapCell: React.FC<SwapCellProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    modeClass[colorThemeMode],
+    s.listItem,
+    s.splitRow,
+    s.centerRow,
+    s.clickable,
+    s.hover,
+  );
 
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow, s.centerRow)}>
+    <div className={compoundClassName}>
       <div>
         <div className={s.caption}>{new Date(transaction?.date).toISOString()}</div>
         <div className={cx(s.joinRow, s.centerRow, s.swapFrom)}>

@@ -27,6 +27,7 @@ const themeClass = {
   quaternary: s.quaternary,
   inverse: s.inverse,
   underlined: s.underlined,
+  colored: s.colored,
   clean: s.clean,
 };
 

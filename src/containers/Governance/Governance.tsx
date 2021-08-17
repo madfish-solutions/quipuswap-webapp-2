@@ -5,13 +5,13 @@ import dynamic from 'next/dynamic';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent } from '@components/ui/Card';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import { PieChartSampleData } from '@components/ui/PieChart/content';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { GovernanceCard, GovernanceCardProps } from './GovernanceCard';
+import { GovernanceCard, GovernanceCardProps, GovernanceInfo } from './GovernanceCard';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
 });
 
@@ -68,6 +68,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     claimable: '0',
     id: '0',
     currency: 'QNOT',
+    author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   }, {
     name: 'Add USDs/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
@@ -84,6 +85,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     claimable: '0',
     id: '1',
     currency: 'QNOT',
+    author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   }];
 
   const handleUnselect = () => selectProposal('');
@@ -91,23 +93,22 @@ export const Governance: React.FC<GovernanceProps> = ({
   const proposalObj = content.find((x) => x.id === proposal);
   if (proposal && proposalObj) {
     return (
-      <StickyBlock className={cx(className, s.proposal)}>
-        <GovernanceCard
+      <div className={cx(className, s.proposal)}>
+        <GovernanceInfo
           {...proposalObj}
-          size="full"
           onClick={() => {
             // TODO
           }}
           handleUnselect={handleUnselect}
         />
 
-      </StickyBlock>
+      </div>
     );
   }
 
   return (
     <>
-      <LineChart data={LineChartSampleData} />
+      <PieChart data={PieChartSampleData} />
       <StickyBlock className={cx(className, s.unsticky)}>
         <Card
           className={cx(s.govCard, s.mb24i)}

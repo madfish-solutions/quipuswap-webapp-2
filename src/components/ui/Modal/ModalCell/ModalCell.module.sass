@@ -21,8 +21,6 @@
   position: relative
   padding: 12px 24px
   transition: background-color $animationTime
-  outline: none
-  cursor: pointer
 
 .splitRow
   display: flex
@@ -121,7 +119,7 @@
 .light
   &:not(:last-child)
     border-bottom: 1px solid $ui-03
-  &:hover, &:focus
+  &.hover:hover, &.hover:focus
      background-color: $hover-light-row
   .label1
     color: $hover-dark-row
@@ -136,7 +134,7 @@
 .dark
   &:not(:last-child)
     border-bottom: 1px solid $ui-06
-  &:hover, &:focus
+  &.hover:hover, &.hover:focus
     background-color: $hover-dark-row
   .label1
     color: $text-inverse

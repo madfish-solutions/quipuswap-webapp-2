@@ -20,8 +20,14 @@ export const BakerCell: React.FC<BakerCellProps> = ({
 }) => {
   const { t } = useTranslation(['baker']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    modeClass[colorThemeMode],
+    s.listItem,
+    s.clickable,
+    s.hover,
+  );
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem)}>
+    <div className={compoundClassName}>
       <div className={s.bakerFlexCell}>
         <Token />
         <h6 className={s.h6}>{baker.token}</h6>

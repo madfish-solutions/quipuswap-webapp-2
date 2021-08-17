@@ -24,8 +24,15 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   onChange,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    modeClass[colorThemeMode],
+    s.listItem,
+    s.splitRow,
+    s.clickable,
+    s.hover,
+  );
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
+    <div className={compoundClassName}>
       <div className={s.joinRow}>
         <Token />
         <div className={s.mleft8}>

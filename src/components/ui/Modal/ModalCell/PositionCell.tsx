@@ -23,9 +23,15 @@ export const PositionCell: React.FC<PositionCellProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    modeClass[colorThemeMode],
+    s.listItem,
+    s.clickable,
+    s.hover,
+  );
 
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem)}>
+    <div className={compoundClassName}>
       <div className={s.positionBlockCell}>
         <div className={s.tokenGroup}>
           <Token className={s.tokenItem} />

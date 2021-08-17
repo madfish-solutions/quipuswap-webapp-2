@@ -32,6 +32,8 @@ export const TokenCell: React.FC<TokenCellProps> = ({
     modeClass[colorThemeMode],
     s.listItem,
     s.splitRow,
+    s.clickable,
+    s.hover,
   );
 
   return (

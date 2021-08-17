@@ -29,6 +29,8 @@
     width: 100%
 
 .proposal
+  display: flex
+  flex-direction: column
   .proposalInfo
     flex: 1
   .proposalDetails
@@ -140,6 +142,8 @@
         margin-left: 32px
 
 @include media('>Ltablet')
+  .proposal
+    flex-direction: row
   .button
     margin-left: auto
     width: 180px

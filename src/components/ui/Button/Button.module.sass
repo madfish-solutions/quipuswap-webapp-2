@@ -19,7 +19,7 @@
 .quaternary, .clean
   min-width: auto
 
-.quaternary, .inverse, .underlined
+.quaternary, .inverse, .underlined, .colored
   padding: 6px 8px
   margin: -6px -8px
 
@@ -100,12 +100,12 @@
         -webkit-text-fill-color: $text-01
     &:disabled
       color: $ui-04
-  &.inverse, &.underlined
+  &.inverse, &.underlined, &.colored
     color: $hover-primary-01-fallback
     background: $brand-01
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
-  &.underlined
+  &.underlined, &.colored
     position: relative
     &::after
       background: $brand-01
@@ -156,12 +156,12 @@
         -webkit-text-fill-color: $text-inverse
     &:disabled
       color: $ui-04
-  &.inverse, &.underlined
+  &.inverse, &.underlined, &.colored
     color: $hover-primary-02-fallback
     background: $brand-02
     -webkit-background-clip: text
     -webkit-text-fill-color: transparent
-  &.underlined
+  &.underlined, &.colored
     position: relative
     &::after
       background: $brand-02

@@ -19,6 +19,7 @@ export const LoadingTokenCell: React.FC<{}> = () => {
     s.loading,
     s.listItem,
     s.splitRow,
+    s.hover,
   );
 
   return (

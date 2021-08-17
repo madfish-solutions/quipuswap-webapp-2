@@ -1,19 +1,16 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import cx from 'classnames';
-import ReactMarkdown from 'react-markdown';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
-import { Back } from '@components/svg/Back';
 
 import s from './GovernanceCard.module.sass';
 
 export type GovernanceCardProps = {
   name: React.ReactNode
   workDates: Date[]
-  size?: keyof typeof sizeClass
   status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
   description: string
   shortDescription: React.ReactNode
@@ -25,12 +22,23 @@ export type GovernanceCardProps = {
   claimable: string
   currency: string
   id:string
+  author:string
   className?: string
   onClick?: () => void
   handleUnselect?: () => void
 };
 
-const convertDateToDDMMYYYY = (date:Date) => `${(date.getDate() > 9) ? date.getDate() : (`0${date.getDate()}`)} ${(date.getMonth() > 8) ? (date.getMonth() + 1) : (`0${date.getMonth() + 1}`)} ${date.getFullYear()}`;
+const convertDateToDDMMYYYY = (date:Date) => `${
+  (date.getDate() > 9)
+    ? date.getDate()
+    : (`0${date.getDate()}`)
+} 
+  ${
+  (date.getMonth() > 8)
+    ? (date.getMonth() + 1)
+    : (`0${date.getMonth() + 1}`)
+} 
+    ${date.getFullYear()}`;
 
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
@@ -50,11 +58,6 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   return { days, hours, minutes };
 };
 
-const sizeClass = {
-  full: s.full,
-  short: s.short,
-};
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
@@ -64,8 +67,6 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   name,
   workDates,
   status = 'PENDING',
-  description,
-  size = 'short',
   shortDescription,
   remaining,
   voted,
@@ -76,7 +77,6 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   currency,
   className,
   onClick,
-  handleUnselect,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
@@ -85,82 +85,11 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
     s.fullWidth,
     s.mb24i,
     s.govBody,
-    sizeClass[size],
     className,
   );
-  const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
-  const loadDescription = () => {
-    fetch(description).then((x) => x.text()).then((x) => {
-      console.log(x);
-      setDescription({ loadedDescription: x, isLoaded: true });
-    });
-  };
-  useEffect(() => {
-    if (size === 'full') loadDescription();
-  }, []);
-  if (size === 'full') {
-    return (
-      <>
-        <Card
-          className={compountClassName}
-        >
-          <CardHeader header={{
-            content: (
-              <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
-                <Back className={s.proposalBackIcon} />
-                Back
-              </Button>
-            ),
-          }}
-          />
-          <CardHeader
-            header={{
-              content: (
-                <div className={s.govHeader}>
-                  <div className={s.govName}>
-                    {name}
-                  </div>
-                  <div className={s.govGroup}>
-                    <div className={s.govDates}>
-                      <span>{convertDateToDDMMYYYY(workDates[0])}</span>
-                      <span> - </span>
-                      <span>{convertDateToDDMMYYYY(workDates[1])}</span>
-                    </div>
-                    <Bage
-                      className={s.govBage}
-                      text={status}
-                      variant={status === 'PENDING' || status === 'FAILED' ? 'inverse' : 'primary'}
-                    />
-
-                  </div>
-                </div>
-              ),
-              button: (
-                <Button onClick={() => (onClick ? onClick() : null)} className={s.govButton}>
-                  Vote
-                </Button>
-
-              ),
-            }}
-            className={s.proposalHeader}
-          />
-          <CardContent className={s.govContent}>
-            <div className={s.govDescription}>
-              <ReactMarkdown>{!isLoaded ? 'Loading...' : loadedDescription}</ReactMarkdown>
-            </div>
-          </CardContent>
-        </Card>
-        <div className={s.proposalDetails}>
-          <Card>proposal details</Card>
-          <Card>proposal votes</Card>
-          <Card>proposal references</Card>
-        </div>
-      </>
-    );
-  }
   return (
     <Card
-      className={cx(modeClass[colorThemeMode], s.fullWidth, s.mb24i, s.govBody, className)}
+      className={compountClassName}
     >
       <CardHeader
         header={{
