@@ -22,6 +22,8 @@ type ComplexInputProps = {
   token1: WhitelistedToken
   token2?: WhitelistedToken
   mode?: keyof typeof modeClass
+  withoutSelect?: boolean
+  noDollar?: boolean
   handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -46,6 +48,8 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   error,
   id,
   mode = 'input',
+  withoutSelect = false,
+  noDollar = false,
   onClick,
   token1,
   token2,
@@ -88,7 +92,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
       <div className={s.background}>
         <div className={s.shape}>
           <div className={cx(s.item1, s.label2)}>
-            {equivalentContent}
+            {noDollar ? '' : equivalentContent}
           </div>
           <div className={s.item2}>
             {mode === 'select' && (
@@ -122,15 +126,17 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             value={value}
             {...props}
           />
-          <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
-            <TokensLogos token1={token1} token2={token2} />
-            <h6 className={cx(s.token)}>
-              {mode === 'input' && getWhitelistedTokenSymbol(token1)}
-              {mode === 'select' && 'TOKEN / TOKEN'}
-              {mode === 'votes' && 'SELECT LP'}
-            </h6>
-            {!readOnly && (<Shevron />)}
-          </Button>
+          {withoutSelect ? '' : (
+            <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
+              <TokensLogos token1={token1} token2={token2} />
+              <h6 className={cx(s.token)}>
+                {mode === 'input' && getWhitelistedTokenSymbol(token1)}
+                {mode === 'select' && 'TOKEN / TOKEN'}
+                {mode === 'votes' && 'SELECT LP'}
+              </h6>
+              {!readOnly && (<Shevron />)}
+            </Button>
+          )}
         </div>
       </div>
       {

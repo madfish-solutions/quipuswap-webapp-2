@@ -1,0 +1,83 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.content
+  overflow: hidden
+  padding: 24px
+  display: flex
+  justify-content: flex-end
+
+.inputs
+  padding: 8px 0px 0px 8px
+  font-size: 1.143rem
+  line-height: 1.5
+  display: flex
+  align-items: center
+  flex-direction: column
+
+.icon
+  margin-bottom: 12px
+
+.button
+  width: 100%
+
+.maxHeight
+  display: flex
+  flex-direction: column
+  
+.penIcon
+  margin-left: 8px
+
+.mtop16
+  margin-top: 16px
+
+.mb24
+  margin-bottom: 24px
+
+.input
+  max-width: 279px
+  margin-top: 24px
+
+.modalButton
+  display: flex
+  align-items: center
+
+.modalInput:not(:last-child)
+  margin-bottom: 16px
+
+.tokenid 
+  display: flex
+  flex-direction: column
+
+.tokenNotFound
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 96px 0px
+  margin: 0px auto
+  font-weight: 600
+  font-size: 1.143rem
+  line-height: 1.5
+
+.notFoundLabel
+  margin-top: 16px
+
+.light
+  .inputs
+    color: $text-02
+  .tokenNotFound
+    color: $text-01
+
+.dark
+  .inputs
+    color: $text-03
+  .tokenNotFound
+    color: $text-inverse
+
+  
+@include media('>tablet')
+  .input
+    max-width: none
+  .button
+    max-width: 180px
+    margin-left: auto

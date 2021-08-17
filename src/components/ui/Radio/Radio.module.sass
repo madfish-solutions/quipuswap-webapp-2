@@ -1,0 +1,38 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  width: 100%
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.clickable 
+  cursor: pointer
+  user-select: none
+
+.input
+  display: flex
+  align-items: center
+  font-size: 1.143rem
+
+.radioButton
+  display: flex
+  align-items: center
+
+.label
+  margin-left: 8px
+
+.light
+  .input
+    color: $text-02
+  .active
+    .input
+      font-weight: bold
+
+.dark
+  .input
+    color: $text-03
+  .active
+    .input
+      font-weight: bold

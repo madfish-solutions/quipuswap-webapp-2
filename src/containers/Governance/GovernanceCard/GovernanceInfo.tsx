@@ -10,13 +10,14 @@ import { Button } from '@components/ui/Button';
 import { Back } from '@components/svg/Back';
 import { Markdown } from '@components/ui/Markdown';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { VoteCell } from '@components/ui/Modal/ModalCell/VoteCell';
+import { VoteModal } from '@components/modals/VoteModal';
 import { useTranslation } from 'next-i18next';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { shortize } from '@utils/helpers';
-import For from '@icons/For.svg';
 import { ExternalLink } from '@components/svg/ExternalLink';
+import For from '@icons/For.svg';
 
-import { VoteCell } from '@components/ui/Modal/ModalCell/VoteCell';
 import s from './GovernanceCard.module.sass';
 
 import { GovernanceCardProps } from './GovernanceCard';
@@ -64,7 +65,6 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   currency,
   className,
   author,
-  onClick,
   handleUnselect,
 }) => {
   const { t } = useTranslation(['common', 'governance']);
@@ -77,6 +77,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
     className,
   );
   const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
+  const [voteModal, setVoteModal] = useState<boolean>(false);
   useEffect(() => {
     const loadDescription = () => {
       fetch(description).then((x) => x.text()).then((x) => {
@@ -87,6 +88,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   }, []);
   return (
     <>
+      <VoteModal
+        isOpen={voteModal}
+        onRequestClose={() => setVoteModal(false)}
+        onChange={() => setVoteModal(false)}
+      />
       <Card
         className={compountClassName}
       >
@@ -122,7 +128,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             ),
             button: (
-              <Button onClick={() => (onClick ? onClick() : null)} className={s.govButton}>
+              <Button onClick={() => setVoteModal(true)} className={s.govButton}>
                 Vote
               </Button>
 
@@ -136,6 +142,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               {!isLoaded ? 'Loading...' : loadedDescription}
             </Markdown>
           </div>
+          <Button onClick={() => setVoteModal(true)} className={s.govButtonButtom}>
+            Vote
+          </Button>
         </CardContent>
       </Card>
       <div className={cx(modeClass[colorThemeMode], s.proposalSidebar)}>
@@ -251,7 +260,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   The proposal on forum
                   <ExternalLink className={s.linkIcon} />
                 </Button>
-          )}
+             )}
             />
             <CardCell
               className={s.cell}
@@ -263,7 +272,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   The QIP on Github
                   <ExternalLink className={s.linkIcon} />
                 </Button>
-          )}
+              )}
             />
             <CardCell
               className={s.cell}
@@ -275,7 +284,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   Governance FAQs
                   <ExternalLink className={s.linkIcon} />
                 </Button>
-          )}
+              )}
             />
           </CardContent>
         </Card>
