@@ -91,7 +91,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                   </h3>
                   <Bage
                     className={s.govBage}
-                    text="ONGOING"
+                    text="ON-GOING"
                     variant="primary"
                   />
 
@@ -101,7 +101,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                 <div>
                   Proposal Stake
                 </div>
-                <h3>
+                <h3 className={s.submitCost}>
                   {PROPOSAL_COST}
                   {' '}
                   <span className={s.submitCurrency}>QPSP</span>
@@ -151,6 +151,9 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             {!isLoaded ? 'Loading...' : loadedDescription}
           </Markdown>
         </div>
+        <Button className={s.govButtonButtom}>
+          Submit
+        </Button>
       </CardContent>
     </Card>
   );
