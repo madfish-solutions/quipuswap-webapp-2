@@ -14,6 +14,11 @@
   white-space: nowrap
   max-width: 100%
 
+.bakerName
+  text-overflow: ellipsis
+  overflow: hidden
+  white-space: nowrap
+
 .tokenBody
   max-width: calc(100% - 32px)
 
@@ -159,11 +164,28 @@
   .loadingName
     margin-bottom: 2px
 
-  .loadingName, .loadingSymbol
+  .loadingNameBaker
+    margin-left: 8px
+
+  .loadingName, .loadingSymbol, .loadingCaption
     height: 16px
     width: 200px
     &::after
       animation-delay: 200ms
+
+  .caption, .loadingCaption
+    width: 100px
+    &:not(:last-child)
+      margin-bottom: 4px
+
+  .loadingCaptionSmall
+    width: 56px
+
+  .loadingBakerBlock 
+    display: flex
+    flex-direction: column
+    &:not(:last-child)
+      margin-right: 24px
 
   .loadingBage
     margin-left: 8px
