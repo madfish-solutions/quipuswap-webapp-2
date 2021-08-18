@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { swap } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
 import { TransferParams } from '@taquito/taquito';
 
@@ -14,7 +15,7 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, required, validateBalance, validateMinMax,
+  composeValidators, isAddress, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
@@ -34,7 +35,6 @@ import { Transactions } from '@components/svg/Transactions';
 import { SwapIcon } from '@components/svg/Swap';
 
 import s from '@styles/CommonContainer.module.sass';
-import { swap } from '@quipuswap/sdk';
 import { SwapDetails } from './SwapDetails';
 
 const TabsContent = [
@@ -120,10 +120,10 @@ const RealForm:React.FC<SwapFormProps> = ({
   const accountPkh = useAccountPkh();
   const { openConnectWalletModal } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
-  const [formValues, setVal] = useState(values);
+  const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  const [fee, setFee] = useState<number>(0);
+  const [fee, setFee] = useState<BigNumber>();
   const [estimatedOutputValue, setEstimatedOutputValue] = useState<string>('');
   const [swapParams, setSwapParams] = useState<TransferParams[]>([]);
 
@@ -136,11 +136,11 @@ const RealForm:React.FC<SwapFormProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: SwapFormValues) => {
+    if (token1 === undefined || token2 === undefined) return;
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-    const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
+    if (isTokensSame) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
     const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
     const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
@@ -170,13 +170,13 @@ const RealForm:React.FC<SwapFormProps> = ({
         .pow(
           new BigNumber(6),
         ),
-    ).toString();
-    if (retValue === 'NaN') return;
-    setFee((+retValue) * (+FEE_RATE));
+    );
+    if (retValue.isNaN()) return;
+    setFee(retValue.multipliedBy(new BigNumber(FEE_RATE)));
   }, [estimatedOutputValue]);
 
   const asyncGetSwapParams = async () => {
-    if (!tezos) return;
+    if (!tezos || !values.balance1) return;
     try {
       const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
         contract: tokensData.first.token.address,
@@ -191,7 +191,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         FACTORIES[networkId],
         fromAsset,
         toAsset,
-        values.balance1 ? values.balance1 : 5,
+        values.balance1,
         values.slippage,
       );
       setSwapParams(paramsValue);
@@ -224,7 +224,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, tezos, accountPkh, token1, token2]);
+  }, [values, tokensData, tezos, accountPkh, token1, token2]);
 
   const handleSwapSubmit = async () => {
     if (!tezos) return;
@@ -264,9 +264,8 @@ const RealForm:React.FC<SwapFormProps> = ({
       >
         <Field
           validate={composeValidators(
-            required,
             validateMinMax(0, Infinity),
-            validateBalance(+tokensData.first.balance),
+            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
           )}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
           name="balance1"
@@ -338,35 +337,34 @@ const RealForm:React.FC<SwapFormProps> = ({
             />
           )}
         </Field>
-        {currentTab.id === 'send' && (
         <Field
-          validate={isAddress}
+          validate={currentTab.id === 'send' ? isAddress : () => undefined}
           name="recipient"
         >
-          {({ input, meta }) => {
-            <ComplexRecipient
-              {...input}
-              handleInput={(value) => {
-                form.mutators.setValue(
-                  'recipient',
-                  value,
-                );
-              }}
-              label="Recipient address"
-              id="swap-send-recipient"
-              className={cx(s.input, s.mb24)}
-              error={((meta.touched && meta.error) || meta.submitError)}
-            />;
-          }}
+          {({ input, meta }) => (
+            <>
+              {currentTab.id === 'send' && (
+              <ComplexRecipient
+                {...input}
+                handleInput={(value) => {
+                  form.mutators.setValue(
+                    'recipient',
+                    value,
+                  );
+                }}
+                label="Recipient address"
+                id="swap-send-recipient"
+                className={cx(s.input, s.mb24)}
+                error={((meta.touched && meta.error) || meta.submitError)}
+              />
+              )}
+            </>
+          )}
         </Field>
-        )}
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
-            const slippagePercent = (
-              (
-                (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
-              ).toFixed(tokensData.second.token.decimals)).toString();
-            const minimumReceived = (values.balance2 ?? 0) - (+slippagePercent);
+            const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
+            const minimumReceived = new BigNumber(values.balance2 ?? 0).minus(slipPerc);
             return (
               <>
                 <Slippage handleChange={(value) => input.onChange(value)} />
@@ -384,7 +382,16 @@ const RealForm:React.FC<SwapFormProps> = ({
           }}
 
         </Field>
-        <Button type="submit" onClick={handleSwapSubmit} className={s.button}>
+        <Button
+          disabled={
+          values.balance1 === undefined
+          || values.balance1.toString() === ''
+          || token2 === undefined
+        }
+          type="submit"
+          onClick={handleSwapSubmit}
+          className={s.button}
+        >
           {currentTab.label}
         </Button>
       </Card>
@@ -392,7 +399,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         currentTab={currentTab.label}
         token1={token1}
         token2={token2}
-        fee={fee.toString()}
+        fee={(fee ?? 0).toString()}
         tokensData={tokensData}
         swapParams={swapParams}
       />
