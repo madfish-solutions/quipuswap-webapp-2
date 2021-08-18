@@ -5,6 +5,7 @@ import { TransferParams } from '@taquito/taquito';
 import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
+import { STABLE_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -34,6 +35,25 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   swapParams,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
+  /*
+    Let X = ETH
+
+    Let Y = TokenA
+
+    price impact for buying Y amount of tokens:
+
+    price impact on buying = (Yamount*0.97) / current Yamount in pool
+
+    price impact for selling Y amount of tokens:
+
+    Let u = Y amount of tokens to be sold
+    Let er = current ETH exchange rate in reference with TokenA
+    er = X - { (XY) / (Y+0.97u) }
+
+    price impact on selling = 0.97er / current Xamount in pool
+  */
+  console.log(swapParams);
+  // const priceImpact =
   return (
     <Card
       header={{
@@ -58,7 +78,8 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <span className={s.equal}>=</span>
           <CurrencyAmount
             amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
-            currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
+            currency={token2
+              ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
             dollarEquivalent={`${tokensData.first.exchangeRate}`}
           />
         </div>
@@ -76,12 +97,12 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : ''} />
+          <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
             amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-            dollarEquivalent={`${tokensData.second.exchangeRate}`}
+            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
         </div>
       </CardCell>
@@ -98,7 +119,6 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         {/* TODO: find how to calculate */}
-        {/* depends on token amount and token pool */}
         <CurrencyAmount amount="<0.01" currency="%" />
       </CardCell>
       <CardCell
