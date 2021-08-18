@@ -4,9 +4,43 @@
 .container
   padding: 16px 16px 12px 24px
   position: relative
+  display: flex
+  justify-content: center
+
+.pieChart
+  width: 256px
+  height: 184px
 
 .chart
-  min-height: 300px
+  position: relative
+
+.result
+  position: absolute
+  bottom: 12px
+  left: auto
+  right: auto
+  text-align: center
+
+.h2
+  font-weight: bold
+
+.for, .notfor
+  display: flex
+  align-items: center
+  justify-content: center
+  position: absolute
+  top: 0
+
+.for
+  left: 0px
+
+.notfor
+  right: 0px
+
+.label
+  font-size: 0.857rem
+  font-weight: bold
+  color: $text-03
 
 .info
   font-weight: 600

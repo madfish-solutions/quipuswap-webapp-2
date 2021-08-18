@@ -2,6 +2,11 @@ import { ChartOptions, DeepPartial } from 'lightweight-charts';
 
 export const GraphicHeight = 300;
 
+export const GraphicDimensions = {
+  width: 256,
+  height: 184,
+};
+
 export const GraphicColors = {
   light: {
     primary1: '#232735',

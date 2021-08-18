@@ -21,12 +21,14 @@ import {
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
+// import { DonutChartSampleData } from '@components/ui/DonutChart/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -39,8 +41,13 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { CardCell } from '@components/ui/Card/CardCell';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+  ssr: false,
+});
+
+const DonutChart = dynamic(() => import('@components/ui/DonutChart'), {
   ssr: false,
 });
 
@@ -758,6 +765,25 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Graphics</h1>
         <LineChart data={LineChartSampleData} />
+
+        <Card>
+          <CardHeader header={{ content: <h5>Details</h5> }} />
+          <CardContent>
+            <CardCell header={t('governance:IPFS')}>
+              <div>
+                <Button theme="underlined">
+                  #Qmexv71
+                </Button>
+              </div>
+            </CardCell>
+            <CardCell header={t('governance:Your Votes')}>
+              <div>
+                <CurrencyAmount amount="100" currency="XTZ" />
+              </div>
+            </CardCell>
+            <DonutChart votes={1000000} vetos={120000} />
+          </CardContent>
+        </Card>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Currency amounts</h1>
