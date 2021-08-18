@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { TransferParams } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
+import { findDex } from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { STABLE_TOKEN } from '@utils/defaults';
-import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { useNetwork, useTezos } from '@utils/dapp';
+import { FACTORIES, STABLE_TOKEN } from '@utils/defaults';
+import {
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+} from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -24,6 +29,7 @@ type SwapDetailsProps = {
   token2: WhitelistedToken
   tokensData: TokenDataMap
   swapParams: TransferParams[]
+  values: SwapFormValues
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
@@ -33,27 +39,30 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   token2,
   tokensData,
   swapParams,
+  values,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  /*
-    Let X = ETH
+  const tezos = useTezos();
+  const networkId = useNetwork().id as QSMainNet;
+  const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
 
-    Let Y = TokenA
-
-    price impact for buying Y amount of tokens:
-
-    price impact on buying = (Yamount*0.97) / current Yamount in pool
-
-    price impact for selling Y amount of tokens:
-
-    Let u = Y amount of tokens to be sold
-    Let er = current ETH exchange rate in reference with TokenA
-    er = X - { (XY) / (Y+0.97u) }
-
-    price impact on selling = 0.97er / current Xamount in pool
-  */
-  console.log(swapParams);
-  // const priceImpact =
+  useEffect(() => {
+    const asyncCall = async () => {
+      if (!tezos || !token2 || token2.contractAddress === 'tez') return;
+      const toAsset = {
+        contract: token2.contractAddress,
+        id: token2.fa2TokenId ?? undefined,
+      };
+      const dex = await findDex(tezos, FACTORIES[networkId], toAsset);
+      const dexStorage:any = await dex.contract.storage();
+      const calc = new BigNumber(values.balance2)
+        .multipliedBy(0.97)
+        .div(dexStorage.storage.total_supply);
+      if (calc.isNaN()) return;
+      setPriceImpact(calc);
+    };
+    asyncCall();
+  }, [tezos, networkId, FACTORIES, token2, values]);
   return (
     <Card
       header={{
@@ -118,8 +127,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        {/* TODO: find how to calculate */}
-        <CurrencyAmount amount="<0.01" currency="%" />
+        <CurrencyAmount amount={priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)} currency="%" />
       </CardCell>
       <CardCell
         header={(

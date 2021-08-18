@@ -3,16 +3,16 @@ import BigNumber from 'bignumber.js';
 import { batchify, swap } from '@quipuswap/sdk';
 
 import { FACTORIES } from '@utils/defaults';
-import { QSMainNet, TokenDataMap, TokenDataType } from '@utils/types';
+import {
+  QSMainNet, SwapFormValues, TokenDataMap, TokenDataType,
+} from '@utils/types';
 import { slippageToBignum } from '@utils/helpers';
 
-import { SwapFormValues } from './SwapForm';
-
-const toNat = (amount: any, decimals: number) => new BigNumber(amount)
+export const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)
   .integerValue(BigNumber.ROUND_DOWN);
 
-const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
+export const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
 export const submitForm = (
   values: SwapFormValues,

@@ -8,7 +8,7 @@ import { withTypes } from 'react-final-form';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, TokenDataMap, WhitelistedToken,
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -26,7 +26,7 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import { SwapForm, SwapFormValues } from './SwapForm';
+import { SwapForm } from './SwapForm';
 import { submitForm } from './swapHelpers';
 
 const TabsContent = [
@@ -144,9 +144,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     const fromToken = token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress
       ? getWhitelistedTokenSymbol(token1)
       : getWhitelistedTokenSymbol(TEZOS_TOKEN);
-    const toToken = token2 && token2.contractAddress !== STABLE_TOKEN.contractAddress
+    let toToken = token2 && token2.contractAddress !== STABLE_TOKEN.contractAddress
       ? getWhitelistedTokenSymbol(token2)
       : getWhitelistedTokenSymbol(STABLE_TOKEN);
+    if (fromToken === toToken) toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
     router.replace(`/swap?from=${fromToken}&to=${toToken}`, undefined, { shallow: true });
   }, [token1, token2]);
 
@@ -177,7 +178,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }
         return isTokens[0];
       };
-      let res:any[] = [TEZOS_TOKEN, STABLE_TOKEN];
+      let res:any[] = [];
       if (from) {
         if (to) {
           const resTo = await searchPart(to);

@@ -73,3 +73,11 @@ export type TokenDataMap = {
   first: TokenDataType,
   second: TokenDataType
 };
+
+export type SwapFormValues = {
+  balance1: number
+  balance2: number
+  recipient: string
+  lastChange: string
+  slippage: string
+};
