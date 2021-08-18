@@ -3,7 +3,6 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { DonutChartSampleData } from '@components/ui/DonutChart/content';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -235,7 +234,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 <For className={s.voteIcon} />
               </div>
             </CardCell>
-            <DonutChart data={DonutChartSampleData} />
+            <DonutChart votes={+voted} vetos={100000} />
           </CardContent>
         </Card>
         <Card className={cx(s.proposalDetails)}>
