@@ -20,6 +20,7 @@ import {
   useSearchCustomTokens,
 } from '@utils/dapp';
 import {
+  getWhitelistedTokenSymbol,
   localSearchToken,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
@@ -87,7 +88,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const { Form } = withTypes<SwapFormValues>();
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -160,11 +161,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    if (token1 && token2) {
-      router.replace(`/swap/${token1.contractAddress}/${token2.contractAddress}`, undefined, { shallow: true });
-    } else if (token1) {
-      router.replace(`/swap/${token1.contractAddress}`, undefined, { shallow: true });
-    }
+    const fromToken = token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress
+      ? getWhitelistedTokenSymbol(token1)
+      : getWhitelistedTokenSymbol(TEZOS_TOKEN);
+    const toToken = token2 && token2.contractAddress !== STABLE_TOKEN.contractAddress
+      ? getWhitelistedTokenSymbol(token2)
+      : getWhitelistedTokenSymbol(STABLE_TOKEN);
+    router.replace(`/swap?from=${fromToken}&to=${toToken}`, undefined, { shallow: true });
   }, [token1, token2]);
 
   useEffect(() => {
@@ -174,9 +177,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         const strStr = Array.isArray(str) ? str[0] : str;
         const inputValue = strStr.split('_')[0];
         const inputToken = strStr.split('_')[1] ?? '0';
-        if (inputValue.toLowerCase() === 'tez') {
-          return TEZOS_TOKEN;
-        }
         const isTokens = tokens
           .filter(
             (token:any) => localSearchToken(
@@ -197,7 +197,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }
         return isTokens[0];
       };
-      let res:any[] = [];
+      let res:any[] = [TEZOS_TOKEN, STABLE_TOKEN];
       if (from) {
         if (to) {
           const resTo = await searchPart(to);
@@ -210,8 +210,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         handleTokenChange(resFrom, 'first');
       }
     };
-    if (tezos && !initialLoad) asyncCall();
-  }, [tezos, initialLoad]);
+    if (from && to && !initialLoad) asyncCall();
+  }, [from, to, initialLoad]);
 
   useEffect(() => {
     if (tezos && token1 && token2) {
