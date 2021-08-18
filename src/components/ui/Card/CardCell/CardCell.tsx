@@ -8,6 +8,7 @@ import s from './CardCell.module.sass';
 type CardCellProps = {
   header?: React.ReactNode
   className?: string
+  headerClassName?: string
 };
 
 const modeClass = {
@@ -18,13 +19,14 @@ const modeClass = {
 export const CardCell: React.FC<CardCellProps> = ({
   header,
   className,
+  headerClassName,
   children,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
-      <h6 className={s.header}>
+      <h6 className={cx(s.header, headerClassName)}>
         {header}
       </h6>
       {children}

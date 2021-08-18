@@ -157,6 +157,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
           />
           <CardContent className={s.content}>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:IPFS')}
               className={s.cell}
             >
@@ -167,6 +168,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Start Date')}
               className={s.cell}
             >
@@ -175,6 +177,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:End Date')}
               className={s.cell}
             >
@@ -183,6 +186,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Author')}
               className={s.cell}
             >
@@ -193,6 +197,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Participants')}
               className={s.cell}
             >
@@ -201,6 +206,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Quorum')}
               className={s.cell}
             >
@@ -209,6 +215,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Total Votes')}
               className={s.cell}
             >
@@ -217,6 +224,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Your Votes')}
               className={s.cell}
             >
@@ -225,6 +233,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Option')}
               className={s.cell}
             >

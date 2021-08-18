@@ -35,7 +35,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
       <div className={s.chart}>
         <PieChart
           data={[{ value: votes, color: '#2ED33E' }, { value: vetos, color: '#EA2424' }]}
-          lineWidth={24}
+          lineWidth={32}
           rounded
           startAngle={180}
           lengthAngle={180}
