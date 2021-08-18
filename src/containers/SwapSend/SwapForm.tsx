@@ -12,7 +12,7 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, required, validateBalance, validateMinMax,
+  composeValidators, isAddress, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
@@ -31,6 +31,7 @@ import { Transactions } from '@components/svg/Transactions';
 import { SwapIcon } from '@components/svg/Swap';
 
 import s from '@styles/CommonContainer.module.sass';
+import BigNumber from 'bignumber.js';
 
 const TabsContent = [
   {
@@ -117,7 +118,7 @@ const RealForm:React.FC<SwapFormProps> = ({
   const accountPkh = useAccountPkh();
   const { openConnectWalletModal } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
-  const [formValues, setVal] = useState(values);
+  const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
 
@@ -130,11 +131,11 @@ const RealForm:React.FC<SwapFormProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: SwapFormValues) => {
+    if (token1 === undefined || token2 === undefined) return;
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-    const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isTokensSame || (isValuesSame) || token1 === undefined || token2 === undefined) return;
+    if (isTokensSame) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
     const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
     const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
@@ -173,7 +174,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, tokensData]);
+  }, [values, tokensData, token1, token2]);
 
   const handleSwapSubmit = async () => {
     if (!tezos) return;
@@ -212,9 +213,8 @@ const RealForm:React.FC<SwapFormProps> = ({
     >
       <Field
         validate={composeValidators(
-          required,
           validateMinMax(0, Infinity),
-          validateBalance(+tokensData.first.balance),
+          accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
         )}
         parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         name="balance1"
@@ -240,7 +240,7 @@ const RealForm:React.FC<SwapFormProps> = ({
             id="swap-send-from"
             label="From"
             className={s.input}
-            error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
+            error={((meta.touched && meta.error) || meta.submitError)}
           />
         )}
       </Field>
@@ -261,7 +261,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         parse={(v) => parseDecimals(v, 0, Infinity)}
         name="balance2"
       >
-        {({ input, meta }) => (
+        {({ input }) => (
           <TokenSelect
             {...input}
             blackListedTokens={blackListedTokens}
@@ -282,39 +282,37 @@ const RealForm:React.FC<SwapFormProps> = ({
             id="swap-send-to"
             label="To"
             className={cx(s.input, s.mb24)}
-            error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
           />
         )}
       </Field>
-      {currentTab.id === 'send' && (
       <Field
-        validate={isAddress}
+        validate={currentTab.id === 'send' ? isAddress : () => undefined}
         name="recipient"
       >
-        {({ input, meta }) => {
-          <ComplexRecipient
-            {...input}
-            handleInput={(value) => {
-              form.mutators.setValue(
-                'recipient',
-                value,
-              );
-            }}
-            label="Recipient address"
-            id="swap-send-recipient"
-            className={cx(s.input, s.mb24)}
-            error={((meta.touched && meta.error) || meta.submitError)}
-          />;
-        }}
+        {({ input, meta }) => (
+          <>
+            {currentTab.id === 'send' && (
+            <ComplexRecipient
+              {...input}
+              handleInput={(value) => {
+                form.mutators.setValue(
+                  'recipient',
+                  value,
+                );
+              }}
+              label="Recipient address"
+              id="swap-send-recipient"
+              className={cx(s.input, s.mb24)}
+              error={((meta.touched && meta.error) || meta.submitError)}
+            />
+            )}
+          </>
+        )}
       </Field>
-      )}
       <Field initialValue="0.5 %" name="slippage">
         {({ input }) => {
-          const slippagePercent = (
-            (
-              (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
-            ).toFixed(tokensData.second.token.decimals)).toString();
-          const minimumReceived = (values.balance2 ?? 0) - (+slippagePercent);
+          const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
+          const minimumReceived = new BigNumber(values.balance2 ?? 0).minus(slipPerc);
           return (
             <>
               <Slippage handleChange={(value) => input.onChange(value)} />
@@ -332,7 +330,16 @@ const RealForm:React.FC<SwapFormProps> = ({
         }}
 
       </Field>
-      <Button type="submit" onClick={handleSwapSubmit} className={s.button}>
+      <Button
+        type="submit"
+        disabled={
+          values.balance1 === undefined
+          || values.balance1.toString() === ''
+          || token2 === undefined
+        }
+        onClick={handleSwapSubmit}
+        className={s.button}
+      >
         {currentTab.label}
       </Button>
     </Card>

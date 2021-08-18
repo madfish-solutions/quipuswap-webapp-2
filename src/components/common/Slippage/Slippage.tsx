@@ -21,6 +21,8 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+const Percentage: React.FC<{}> = () => <div className={s.customPercent}>%</div>;
+
 export const Slippage: React.FC<StickyBlockProps> = ({
   className,
   handleChange,
@@ -29,7 +31,7 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [activeButton, setActiveButton] = useState<number | null>(0);
-  const [customValue, setCustomValue] = useState('CUSTOM');
+  const [customValue, setCustomValue] = useState();
 
   const handleCustomValueChange = useCallback((val) => {
     const validValue = validateMinMax(0, 30)(val);
@@ -53,6 +55,7 @@ export const Slippage: React.FC<StickyBlockProps> = ({
             className={cx(s.button, { [s.active]: index === activeButton })}
             onClick={() => {
               setActiveButton(index);
+              handleCustomValueChange('');
               handleChange(percent);
             }}
           >
@@ -63,7 +66,9 @@ export const Slippage: React.FC<StickyBlockProps> = ({
         ))}
         <Input
           inputSize="small"
+          placeholder="CUSTOM"
           value={customValue}
+          EndAdornment={customValue ? Percentage : undefined}
           onChange={(e) => {
             const val = e.currentTarget.value;
             setActiveButton(null);

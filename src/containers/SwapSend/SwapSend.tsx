@@ -1,16 +1,16 @@
 import { useRouter } from 'next/router';
 import React, {
-  useMemo, useState, useEffect,
+  useMemo, useState, useEffect, useCallback,
 } from 'react';
 import BigNumber from 'bignumber.js';
-import {
-  swap, batchify,
-} from '@quipuswap/sdk';
 import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { WhitelistedToken } from '@utils/types';
+import useUpdateToast from '@hooks/useUpdateToast';
+import {
+  QSMainNet, TokenDataMap, TokenDataType, WhitelistedToken,
+} from '@utils/types';
 import {
   useAccountPkh,
   useTezos,
@@ -21,11 +21,8 @@ import {
 } from '@utils/dapp';
 import {
   localSearchToken,
-  slippageToNum,
 } from '@utils/helpers';
-import {
-  FACTORIES, STABLE_TOKEN, TEZOS_TOKEN,
-} from '@utils/defaults';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -37,6 +34,7 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 import { SwapForm, SwapFormValues } from './SwapForm';
+import { submitForm } from './swapHelpers';
 
 const TabsContent = [
   {
@@ -53,22 +51,6 @@ type SwapSendProps = {
   className?: string
 };
 
-type TokenDataType = {
-  token: {
-    address: string,
-    type: 'fa1.2' | 'fa2',
-    id?: number | null
-    decimals: number,
-  },
-  balance: string,
-  exchangeRate?: string
-};
-
-type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
-};
-
 const fallbackTokenToTokenData = (token:WhitelistedToken):TokenDataType => ({
   token: {
     address: token.contractAddress,
@@ -79,17 +61,10 @@ const fallbackTokenToTokenData = (token:WhitelistedToken):TokenDataType => ({
   balance: '0',
 });
 
-const toNat = (amount: any, decimals: number) => new BigNumber(amount)
-  .times(10 ** decimals)
-  .integerValue(BigNumber.ROUND_DOWN);
-
-const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
-
-type QSMainNet = 'mainnet' | 'florencenet';
-
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
+  const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
@@ -112,12 +87,19 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   );
 
   const { Form } = withTypes<SwapFormValues>();
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
     if (!exchangeRates || !exchangeRates.find) return;
@@ -149,8 +131,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       && el.tokenAddress === undefined;
       if (isTokenTez) return true;
       if (el.tokenAddress === token.contractAddress) {
-        if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
         if (!token.fa2TokenId) return true;
+        if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
       }
       return false;
     });
@@ -179,16 +161,16 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   useEffect(() => {
     if (token1 && token2) {
-      router.push(`/swap/${token1.contractAddress}/${token2.contractAddress}`, undefined, { shallow: true });
+      router.replace(`/swap/${token1.contractAddress}/${token2.contractAddress}`, undefined, { shallow: true });
     } else if (token1) {
-      router.push(`/swap/${token1.contractAddress}`, undefined, { shallow: true });
+      router.replace(`/swap/${token1.contractAddress}`, undefined, { shallow: true });
     }
   }, [token1, token2]);
 
   useEffect(() => {
     const asyncCall = async () => {
       setInitialLoad(true);
-      const searchPart = async (typeStr:'from' | 'to', str:string | string[]):Promise<WhitelistedToken> => {
+      const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
         const strStr = Array.isArray(str) ? str[0] : str;
         const inputValue = strStr.split('_')[0];
         const inputToken = strStr.split('_')[1] ?? '0';
@@ -209,7 +191,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             if (x) {
               return x;
             }
-            router.push('/swap', undefined, { shallow: true });
+            router.push('/swap');
             return TEZOS_TOKEN;
           });
         }
@@ -218,11 +200,11 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       let res:any[] = [];
       if (from) {
         if (to) {
-          const resTo = await searchPart('to', to);
+          const resTo = await searchPart(to);
           res = [resTo];
           handleTokenChange(resTo, 'second');
         }
-        const resFrom = await searchPart('from', from);
+        const resFrom = await searchPart(from);
         res = [resFrom, ...res];
         setTokens(res);
         handleTokenChange(resFrom, 'first');
@@ -245,48 +227,23 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={(values: SwapFormValues) => {
+        onSubmit={(values) => {
           if (!tezos) return;
-          const asyncFunc = async () => {
-            try {
-              const fromAsset = isTez(tokensData.first) ? 'tez' : {
-                contract: tokensData.first.token.address,
-                id: tokensData.first.token.id ?? undefined,
-              };
-              const toAsset = isTez(tokensData.second) ? 'tez' : {
-                contract: tokensData.second.token.address,
-                id: tokensData.second.token.id ?? undefined,
-              };
-              const slippage = slippageToNum(values.slippage) / 100;
-              const inputValue = isTez(tokensData.first)
-                ? tezos!!.format('tz', 'mutez', values.balance1) as any
-                : toNat(values.balance1, tokensData.first.token.decimals);
-              const swapParams = await swap(
-                tezos,
-                FACTORIES[networkId],
-                fromAsset,
-                toAsset,
-                inputValue,
-                slippage,
-                tabsState === 'send' ? values.recipient : undefined,
-              );
-              const op = await batchify(
-                tezos.wallet.batch([]),
-                swapParams,
-              ).send();
-              await op.confirmation();
-            } catch (e) {
-              console.error(e);
-            }
-          };
-          asyncFunc();
+          submitForm(values,
+            tezos,
+            tokensData,
+            tabsState,
+            networkId,
+            (err) => handleErrorToast(err));
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
           },
         }}
-        render={({ handleSubmit, form }) => (
+        render={({
+          handleSubmit, form,
+        }) => (
           <SwapForm
             handleSubmit={handleSubmit}
             form={form}
