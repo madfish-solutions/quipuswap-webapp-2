@@ -767,7 +767,7 @@ const UiKit: React.FC = () => {
         <LineChart data={LineChartSampleData} />
 
         <Card>
-          <CardHeader header={{ content: <h5>Details</h5> }} />
+          <CardHeader header={{ content: <h5>Donut Chart</h5> }} />
           <CardContent>
             <CardCell header={t('governance:IPFS')}>
               <div>

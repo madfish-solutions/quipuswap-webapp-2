@@ -9,17 +9,23 @@
 
 .pieChart
   width: 256px
-  height: 184px
+  height: 128px
 
 .chart
+  width: 256px
+  height: 184px
   position: relative
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
 
 .result
+  display: flex
+  align-items: center
+  width: 100%
+  flex-direction: column
   position: absolute
-  bottom: 12px
-  left: auto
-  right: auto
-  text-align: center
+  bottom: 0px
 
 .h2
   font-weight: bold
@@ -28,7 +34,11 @@
   display: flex
   align-items: center
   justify-content: center
+  flex-direction: column
   position: absolute
+  font-weight: 700
+  font-size: 0.857rem
+  line-height: 1.33
   top: 0
 
 .for
@@ -64,10 +74,14 @@
   font-weight: 400
 
 .light
+  .count
+    color: $text-01
   .token
     color: $text-01
 
 .dark
+  .count
+    color: $text-inverse
   .token
     color: $text-inverse
 
