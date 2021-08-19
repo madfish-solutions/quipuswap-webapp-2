@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, TokenDataMap, TokenDataType, WhitelistedToken,
+  QSMainNet, SwapFormValues, TokenDataMap, TokenDataType, WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -35,7 +35,6 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 import { SwapForm } from './SwapForm';
-// import { SwapForm, SwapFormValues } from './SwapForm';
 import { submitForm } from './swapHelpers';
 
 const TabsContent = [
