@@ -3,17 +3,15 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import {
+  GovernanceCard, GovernanceCardProps, GovernanceInfo, GovernanceForm,
+} from '@containers/Governance/GovernanceCard';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { PieChartSampleData } from '@components/ui/PieChart/content';
 
 import s from '@styles/CommonContainer.module.sass';
-
-import {
-  GovernanceCard, GovernanceCardProps, GovernanceInfo, GovernanceForm,
-} from './GovernanceCard';
 
 const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
@@ -132,20 +130,18 @@ export const Governance: React.FC<GovernanceProps> = ({
         className={cx(className, themeClass[colorThemeMode])}
       >
         <CardContent className={s.container}>
-          <div className={s.pieInfo}>
-            <div className={s.info}>
-              <h5>Proposal summary</h5>
-              <div>On-going</div>
-              <div>Approved</div>
-              <div>Pending</div>
-              <div>Failed</div>
-              <div>Activated</div>
-            </div>
-            <div className={s.piechart}>
-              <PieChart data={PieChartSampleData} />
-            </div>
-
-          </div>
+          <PieChart
+            data={[
+              { value: 2, color: '#1373E4', label: 'On-going' },
+              { value: 4, color: '#2ED33E', label: 'Approved' },
+              { value: 6, color: '#F9A605', label: 'Pending' },
+              { value: 8, color: '#EA2424', label: 'Failed' },
+              { value: 10, color: '#A1A4B1', label: 'Activated' },
+            ]}
+            legend
+            label="Proposals summary"
+            showTotal
+          />
           <div className={s.voteInfo}>
             <div>
               <div className={s.voteRow}>

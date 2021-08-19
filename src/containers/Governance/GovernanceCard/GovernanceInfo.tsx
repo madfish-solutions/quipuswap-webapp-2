@@ -161,7 +161,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:IPFS')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <Button theme="underlined">
                   #Qmexv71
                 </Button>
@@ -172,7 +172,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:Start Date')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 {convertDateToDDMMYYYY(workDates[0])}
               </div>
             </CardCell>
@@ -181,7 +181,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:End Date')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 {convertDateToDDMMYYYY(workDates[1])}
               </div>
             </CardCell>
@@ -190,7 +190,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:Author')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <Button href={`https://tzkt.io/${author}`} theme="underlined">
                   {shortize(author)}
                 </Button>
@@ -201,7 +201,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:Participants')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <CurrencyAmount amount="1000000" />
               </div>
             </CardCell>
@@ -237,7 +237,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               header={t('governance:Option')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 For
                 {' '}
                 <For className={s.voteIcon} />

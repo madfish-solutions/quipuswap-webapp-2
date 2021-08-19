@@ -51,6 +51,10 @@ const DonutChart = dynamic(() => import('@components/ui/DonutChart'), {
   ssr: false,
 });
 
+const PieChart = dynamic(() => import('@components/ui/PieChart'), {
+  ssr: false,
+});
+
 const TabsSmall = [
   {
     id: 'weekly',
@@ -782,6 +786,67 @@ const UiKit: React.FC = () => {
               </div>
             </CardCell>
             <DonutChart votes={1000000} vetos={120000} />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader header={{ content: <h5>Pie Chart</h5> }} />
+          <CardContent>
+            <CardCell header={t('governance:IPFS')}>
+              <div>
+                <Button theme="underlined">
+                  #Qmexv71
+                </Button>
+              </div>
+            </CardCell>
+            <CardCell header={t('governance:Your Votes')}>
+              <div>
+                <CurrencyAmount amount="100" currency="XTZ" />
+              </div>
+            </CardCell>
+            <PieChart
+              data={[
+                { value: 2, color: '#1373E4', label: 'On-going' },
+                { value: 4, color: '#2ED33E', label: 'Approved' },
+                { value: 6, color: '#F9A605', label: 'Pending' },
+                { value: 8, color: '#EA2424', label: 'Failed' },
+                { value: 10, color: '#A1A4B1', label: 'Activated' },
+              ]}
+              legend
+              label="Proposals summary"
+              showTotal
+            />
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader header={{ content: <h5>Pie Chart</h5> }} />
+          <CardContent>
+            <CardCell header={t('governance:IPFS')}>
+              <div>
+                <Button theme="underlined">
+                  #Qmexv71
+                </Button>
+              </div>
+            </CardCell>
+            <CardCell header={t('governance:Your Votes')}>
+              <div>
+                <CurrencyAmount amount="100" currency="XTZ" />
+              </div>
+            </CardCell>
+            <PieChart
+              alignCenter
+              data={[
+                { value: 2, color: '#1373E4', label: 'Token A' },
+                { value: 4, color: '#2ED33E', label: 'Token B' },
+                { value: 6, color: '#F9A605', label: 'Token C' },
+                { value: 8, color: '#EA2424', label: 'Token D' },
+                { value: 10, color: '#A1A4B1', label: 'Token E' },
+              ]}
+              legendPlacement="right"
+              legend
+              legendMarks
+            />
           </CardContent>
         </Card>
       </section>
