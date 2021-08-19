@@ -6,7 +6,7 @@ import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { WhitelistedToken } from '@utils/types';
+import { SwapFormValues, WhitelistedToken } from '@utils/types';
 import {
   useAccountPkh,
   useTezos,
@@ -31,7 +31,10 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
+// import { estimateSwap } from '@quipuswap/sdk';
+// import { FACTORIES } from '@utils/defaults';
 import { SwapButton } from './SwapButton';
+// import { tokenToAsset } from './swapHelpers';
 
 const TabsContent = [
   {
@@ -62,14 +65,6 @@ type TokenDataType = {
 type TokenDataMap = {
   first: TokenDataType,
   second: TokenDataType
-};
-
-export type SwapFormValues = {
-  balance1: number
-  balance2: number
-  recipient: string
-  lastChange: string
-  slippage: string
 };
 
 type SwapFormProps = {
@@ -119,6 +114,7 @@ const RealForm:React.FC<SwapFormProps> = ({
   const { openConnectWalletModal } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
+  // const [formValues, setSubm] = useState<boolean>(false);
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
 
@@ -131,17 +127,45 @@ const RealForm:React.FC<SwapFormProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: SwapFormValues) => {
+    if (!tezos) return;
     if (token1 === undefined || token2 === undefined) return;
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
+    const isValuesSame = val[lastChange] === values[lastChange];
     if (val[lastChange] && val[lastChange].toString() === '') return;
-    if (isTokensSame) return;
+    if (isTokensSame || isValuesSame) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
     const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
     const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
     const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
+    // const fromAsset = tokenToAsset(tokensData.second);
+    // const toAsset = tokenToAsset(tokensData.second);
+
+    // const asyncUpdatePrice = async () => {
+    //   try {
+    //     const result = await estimateSwap(
+    //       tezos,
+    //       FACTORIES[networkId],
+    //       fromAsset,
+    //       toAsset,
+    //       { inputValue: new BigNumber(lastChange === 'balance1' ? val.balance1 : val.balance2) },
+    //     );
+    //     form.mutators.setValue(
+    //       lastChange === 'balance1' ? 'balance2' : 'balance1',
+    //       parseDecimals(
+    //         result.toString(),
+    //         0,
+    //         Infinity,
+    //         decimals,
+    //       ),
+    //     );
+    //   } catch (e) {
+    //     console.error(e);
+    //   }
+    // };
+    // asyncUpdatePrice();
     form.mutators.setValue(
       lastChange === 'balance1' ? 'balance2' : 'balance1',
       parseDecimals(

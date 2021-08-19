@@ -3,10 +3,10 @@ import BigNumber from 'bignumber.js';
 import { batchify, swap } from '@quipuswap/sdk';
 
 import { FACTORIES } from '@utils/defaults';
-import { QSMainNet, TokenDataMap, TokenDataType } from '@utils/types';
+import {
+  QSMainNet, SwapFormValues, TokenDataMap, TokenDataType,
+} from '@utils/types';
 import { slippageToBignum } from '@utils/helpers';
-
-import { SwapFormValues } from './SwapForm';
 
 const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)
@@ -57,3 +57,8 @@ export const submitForm = (
   };
   asyncFunc();
 };
+
+export const tokenToAsset = (token:TokenDataType) => (token.token.address === 'TEZ' ? 'tez' : {
+  contract: token.token.address,
+  id: token.token.id ?? undefined,
+});

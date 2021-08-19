@@ -72,3 +72,11 @@ export type TokenDataMap = {
 };
 
 export type QSMainNet = 'mainnet' | 'florencenet';
+
+export type SwapFormValues = {
+  balance1: number
+  balance2: number
+  recipient: string
+  lastChange: string
+  slippage: string
+};
