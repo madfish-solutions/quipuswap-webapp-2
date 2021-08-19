@@ -161,13 +161,46 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    const fromToken = token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress
-      ? getWhitelistedTokenSymbol(token1)
-      : getWhitelistedTokenSymbol(TEZOS_TOKEN);
-    const toToken = token2 && token2.contractAddress !== STABLE_TOKEN.contractAddress
-      ? getWhitelistedTokenSymbol(token2)
-      : getWhitelistedTokenSymbol(STABLE_TOKEN);
-    router.replace(`/swap?from=${fromToken}&to=${toToken}`, undefined, { shallow: true });
+    console.log(router.query, window.location.search);
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const params = Object.fromEntries(urlSearchParams.entries());
+    if (!initialLoad) {
+      if (!params.from) {
+        const url = `/swap?from=${getWhitelistedTokenSymbol(TEZOS_TOKEN)}&to=${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
+        router.replace(url, undefined, { shallow: true });
+        console.log(url);
+        return;
+      } if (!params.to) {
+        let toToken;
+        if (params.from === STABLE_TOKEN.metadata.symbol) {
+          toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+        } else {
+          toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
+        }
+        const url = `/swap?from=${params.from}&to=${toToken}`;
+        console.log(url);
+        router.replace(url, undefined, { shallow: true });
+      }
+      //
+    } else {
+      const fromToken = token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress
+        ? getWhitelistedTokenSymbol(token1)
+        : getWhitelistedTokenSymbol(TEZOS_TOKEN);
+      let toToken;
+      if (token2) {
+        toToken = getWhitelistedTokenSymbol(token2);
+      } else if (token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress) {
+        toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+      } else {
+        toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
+      }
+      // const toToken = token2 && token2.contractAddress !== STABLE_TOKEN.contractAddress
+      //   ? getWhitelistedTokenSymbol(token2)
+      //   : getWhitelistedTokenSymbol(STABLE_TOKEN);
+      const url = `/swap?from=${fromToken}&to=${toToken}`;
+      console.log(url, token1, token2, initialLoad);
+      router.replace(url, undefined, { shallow: true });
+    }
   }, [token1, token2]);
 
   useEffect(() => {
@@ -206,9 +239,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }
         const resFrom = await searchPart(from);
         res = [resFrom, ...res];
-        setTokens(res);
         handleTokenChange(resFrom, 'first');
       }
+      console.log(from, to, res);
+      setTokens(res);
     };
     if (from && to && !initialLoad) asyncCall();
   }, [from, to, initialLoad]);
