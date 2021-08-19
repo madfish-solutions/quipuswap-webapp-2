@@ -29,6 +29,7 @@ import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -41,7 +42,6 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { CardCell } from '@components/ui/Card/CardCell';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
