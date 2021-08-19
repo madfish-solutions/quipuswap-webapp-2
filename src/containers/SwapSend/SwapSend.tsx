@@ -34,7 +34,8 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { SwapForm, SwapFormValues } from './SwapForm';
+import { SwapForm } from './SwapForm';
+// import { SwapForm, SwapFormValues } from './SwapForm';
 import { submitForm } from './swapHelpers';
 
 const TabsContent = [
