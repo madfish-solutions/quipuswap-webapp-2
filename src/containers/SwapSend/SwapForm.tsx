@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import { Field, FormSpy } from 'react-final-form';
+import BigNumber from 'bignumber.js';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { WhitelistedToken } from '@utils/types';
@@ -28,10 +29,9 @@ import { Button } from '@components/ui/Button';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
-import { SwapIcon } from '@components/svg/Swap';
 
 import s from '@styles/CommonContainer.module.sass';
-import BigNumber from 'bignumber.js';
+import { SwapButton } from './SwapButton';
 
 const TabsContent = [
   {
@@ -245,20 +245,15 @@ const RealForm:React.FC<SwapFormProps> = ({
           />
         )}
       </Field>
-      <Button
-        theme="quaternary"
-        className={s.iconButton}
-        onClick={() => {
-          form.mutators.setValue(
-            'balance1',
-            values.balance2,
-          );
-          setLastChange(lastChange === 'balance1' ? 'balance2' : 'balance1');
-          handleSwapTokens();
-        }}
-      >
-        <SwapIcon />
-      </Button>
+      <SwapButton onClick={() => {
+        form.mutators.setValue(
+          'balance1',
+          values.balance2,
+        );
+        setLastChange(lastChange === 'balance1' ? 'balance2' : 'balance1');
+        handleSwapTokens();
+      }}
+      />
       <Field
         parse={(v) => parseDecimals(v, 0, Infinity)}
         name="balance2"
