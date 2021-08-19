@@ -321,7 +321,7 @@ const RealForm:React.FC<SwapFormProps> = ({
                   Minimum received:
                 </span>
                 <CurrencyAmount
-                  amount={minimumReceived.toString()}
+                  amount={minimumReceived.isNaN() ? '0' : minimumReceived.toString()}
                   currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
                 />
               </div>
