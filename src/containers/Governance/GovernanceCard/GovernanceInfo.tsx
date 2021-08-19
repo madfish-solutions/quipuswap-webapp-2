@@ -140,9 +140,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
         />
         <CardContent className={s.govContent}>
           <div className={s.govDescription}>
-            <Markdown>
-              {!isLoaded ? 'Loading...' : loadedDescription}
-            </Markdown>
+            <Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />
           </div>
           <Button onClick={() => setVoteModal(true)} className={s.govButtonButtom}>
             Vote

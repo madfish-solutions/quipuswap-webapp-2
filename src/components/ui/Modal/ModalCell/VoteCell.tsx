@@ -57,11 +57,13 @@ export const VoteCell: React.FC<VoteCellProps> = ({
               {t('common:Votes')}
               :
             </div>
-            <span className={s.label1}>{vote.value}</span>
-            {' '}
-            <span className={s.bodyTextLink1}>
-              {currency}
-            </span>
+            <div>
+              <span className={s.label1}>{vote.value}</span>
+              {' '}
+              <span className={s.bodyTextLink1}>
+                {currency}
+              </span>
+            </div>
           </div>
         </div>
       </div>

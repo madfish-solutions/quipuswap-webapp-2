@@ -147,9 +147,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
 
         </div>
         <div className={cx(s.mt40, s.govDescription)}>
-          <Markdown>
-            {!isLoaded ? 'Loading...' : loadedDescription}
-          </Markdown>
+          {description && (<Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />)}
         </div>
         <Button className={s.govButtonButtom}>
           Submit
