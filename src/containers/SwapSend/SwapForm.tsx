@@ -12,7 +12,7 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, isContractAddress, validateBalance, validateMinMax,
+  composeValidators, isAddress, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol,
