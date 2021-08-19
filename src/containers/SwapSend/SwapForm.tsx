@@ -253,6 +253,7 @@ const RealForm:React.FC<SwapFormProps> = ({
             'balance1',
             values.balance2,
           );
+          setLastChange(lastChange === 'balance1' ? 'balance2' : 'balance1');
           handleSwapTokens();
         }}
       >
