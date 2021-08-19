@@ -135,7 +135,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-    if (val[lastChange].toString() === '') return;
+    if (val[lastChange] && val[lastChange].toString() === '') return;
     if (isTokensSame) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
     const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
