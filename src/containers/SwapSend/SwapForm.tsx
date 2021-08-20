@@ -66,6 +66,37 @@ export type SwapSendProps = {
   className?: string
 };
 
+export async function estimateSwap(
+  fromAsset: Asset,
+  toAsset: Asset,
+  values: { inputValue: BigNumber.Value } | { outputValue: BigNumber.Value },
+  dex:FoundDex,
+) {
+  if (isTezAsset(fromAsset) && isTokenAsset(toAsset)) {
+    return 'outputValue' in values
+      ? estimateTezToTokenInverse(dex.storage, values.outputValue)
+      : estimateTezToToken(dex.storage, values.inputValue);
+  } if (isTokenAsset(fromAsset) && isTezAsset(toAsset)) {
+    return 'outputValue' in values
+      ? estimateTokenToTezInverse(dex.storage, values.outputValue)
+      : estimateTokenToTez(dex.storage, values.inputValue);
+  } if (isTokenAsset(fromAsset) && isTokenAsset(toAsset)) {
+    if ('outputValue' in values) {
+      const intermediateTezValue = estimateTezToTokenInverse(
+        dex.storage,
+        values.outputValue,
+      );
+      return estimateTokenToTezInverse(dex.storage, intermediateTezValue);
+    }
+    const intermediateTezValue = estimateTokenToTez(
+      dex.storage,
+      values.inputValue,
+    );
+    return estimateTezToToken(dex.storage, intermediateTezValue);
+  }
+  throw new Error('Unsupported exchange way');
+}
+
 type SwapFormProps = {
   handleSubmit:() => void,
   debounce:number,
@@ -468,34 +499,3 @@ const RealForm:React.FC<SwapFormProps> = ({
 export const SwapForm = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );
-
-export async function estimateSwap(
-  fromAsset: Asset,
-  toAsset: Asset,
-  values: { inputValue: BigNumber.Value } | { outputValue: BigNumber.Value },
-  dex:FoundDex,
-) {
-  if (isTezAsset(fromAsset) && isTokenAsset(toAsset)) {
-    return 'outputValue' in values
-      ? estimateTezToTokenInverse(dex.storage, values.outputValue)
-      : estimateTezToToken(dex.storage, values.inputValue);
-  } if (isTokenAsset(fromAsset) && isTezAsset(toAsset)) {
-    return 'outputValue' in values
-      ? estimateTokenToTezInverse(dex.storage, values.outputValue)
-      : estimateTokenToTez(dex.storage, values.inputValue);
-  } if (isTokenAsset(fromAsset) && isTokenAsset(toAsset)) {
-    if ('outputValue' in values) {
-      const intermediateTezValue = estimateTezToTokenInverse(
-        dex.storage,
-        values.outputValue,
-      );
-      return estimateTokenToTezInverse(dex.storage, intermediateTezValue);
-    }
-    const intermediateTezValue = estimateTokenToTez(
-      dex.storage,
-      values.inputValue,
-    );
-    return estimateTezToToken(dex.storage, intermediateTezValue);
-  }
-  throw new Error('Unsupported exchange way');
-}

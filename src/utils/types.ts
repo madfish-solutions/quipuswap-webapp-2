@@ -75,8 +75,8 @@ export type TokenDataMap = {
 };
 
 export type SwapFormValues = {
-  balance1: number
-  balance2: number
+  balance1: BigNumber
+  balance2: BigNumber
   recipient: string
   lastChange: string
   slippage: string

@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
-import { findDex } from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { useNetwork, useTezos } from '@utils/dapp';
-import { FACTORIES, STABLE_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN } from '@utils/defaults';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -30,6 +28,9 @@ type SwapDetailsProps = {
   tokensData: TokenDataMap
   swapParams: TransferParams[]
   values: SwapFormValues
+  priceImpact: BigNumber
+  rate1: BigNumber
+  rate2: BigNumber
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
@@ -39,30 +40,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   token2,
   tokensData,
   swapParams,
-  values,
+  priceImpact,
+  // rate1,
+  // rate2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const tezos = useTezos();
-  const networkId = useNetwork().id as QSMainNet;
-  const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
-
-  useEffect(() => {
-    const asyncCall = async () => {
-      if (!tezos || !token2 || token2.contractAddress === 'tez') return;
-      const toAsset = {
-        contract: token2.contractAddress,
-        id: token2.fa2TokenId ?? undefined,
-      };
-      const dex = await findDex(tezos, FACTORIES[networkId], toAsset);
-      const dexStorage:any = await dex.contract.storage();
-      const calc = new BigNumber(values.balance2)
-        .multipliedBy(0.97)
-        .div(dexStorage.storage.total_supply);
-      if (calc.isNaN()) return;
-      setPriceImpact(calc);
-    };
-    asyncCall();
-  }, [tezos, networkId, FACTORIES, token2, values]);
+  const sellRate = (+(tokensData.first.exchangeRate ?? 1))
+  / (+(tokensData.second.exchangeRate ?? 1));
+  const buyRate = (+(tokensData.second.exchangeRate ?? 1))
+  / (+(tokensData.first.exchangeRate ?? 1));
   return (
     <Card
       header={{
@@ -86,7 +72,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
+            amount={sellRate.toString()}
             currency={token2
               ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
             dollarEquivalent={`${tokensData.first.exchangeRate}`}
@@ -109,7 +95,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
+            amount={buyRate.toString()}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
             dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
@@ -141,7 +127,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        <CurrencyAmount amount={fee} currency="XTZ" />
+        <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="XTZ" />
       </CardCell>
       <CardCell
         header={(

@@ -164,11 +164,11 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       //
     } else {
       const fromToken = token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress
-        ? getWhitelistedTokenSymbol(token1)
+        ? getWhitelistedTokenSymbol(token1, 36)
         : getWhitelistedTokenSymbol(TEZOS_TOKEN);
       let toToken;
       if (token2) {
-        toToken = getWhitelistedTokenSymbol(token2);
+        toToken = getWhitelistedTokenSymbol(token2, 36);
       } else if (token1 && token1.contractAddress !== TEZOS_TOKEN.contractAddress) {
         toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
       } else {

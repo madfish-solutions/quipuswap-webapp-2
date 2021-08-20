@@ -19,10 +19,10 @@ export const parseDecimals = (value: string, min: number, max: number, decimals?
   }
   if (onlyNums === '') return '';
   let res = onlyNums;
-  if (+onlyNums < min) {
+  if (new BigNumber(onlyNums).lt(min)) {
     res = min.toString();
   }
-  if (+onlyNums > max) {
+  if (new BigNumber(onlyNums).gt(max)) {
     res = max.toString();
   }
   return res;
