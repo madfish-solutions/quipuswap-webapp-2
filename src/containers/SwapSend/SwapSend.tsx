@@ -261,7 +261,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           <SwapForm
             handleSubmit={handleSubmit}
             form={form}
-            debounce={1000}
+            debounce={100}
             save={() => {}}
             setTabsState={setTabsState}
             tabsState={tabsState}
