@@ -1,4 +1,5 @@
 import React from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
@@ -11,19 +12,6 @@ import s from '@styles/SwapLiquidity.module.sass';
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
 });
-
-export async function getStaticPaths() {
-  return {
-    paths: [],
-    fallback: true,
-  };
-}
-
-export async function getStaticProps() {
-  return {
-    props: {},
-  };
-}
 
 const SwapSendPage: React.FC = () => {
   const { t } = useTranslation(['common', 'swap']);
@@ -39,5 +27,14 @@ const SwapSendPage: React.FC = () => {
     </BaseLayout>
   );
 };
+
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: true,
+});
+
+export const getStaticProps: GetStaticProps = async () => ({
+  props: {},
+});
 
 export default SwapSendPage;
