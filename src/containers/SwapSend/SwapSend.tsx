@@ -60,12 +60,15 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const router = useRouter();
-  let { from, to } = router.query;
-  const urlSearchParams = new URLSearchParams(window.location.search);
-  const params = Object.fromEntries(urlSearchParams.entries());
+  let from:any;
+  let to:any;
+  const urlSearchParams = router.query['from-to'] && typeof router.query['from-to'] === 'string' ? router.query['from-to'].split('-') : window.location.pathname.slice(6).split('-');
+  const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
+  // console.log(router.query, params);
   if (Object.keys(router.query).length === 0 && (params.from || params.to)) {
     ({ from, to } = params);
   }
+  if (!to) to = 'usds';
 
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
@@ -152,7 +155,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       if (token1 && token2) {
         const fromToken = getWhitelistedTokenSymbol(token1, 36);
         const toToken = getWhitelistedTokenSymbol(token2, 36);
-        const url = `/swap?from=${fromToken}&to=${toToken}`;
+        const url = `/swap/${fromToken}-${toToken}`;
         router.replace(url, undefined, { shallow: true });
       }
     }
@@ -160,7 +163,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   useEffect(() => {
     if (!from) {
-      const url = `/swap?from=${getWhitelistedTokenSymbol(TEZOS_TOKEN)}&to=${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
+      const url = `/swap/${getWhitelistedTokenSymbol(TEZOS_TOKEN)}-${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
       router.replace(url, undefined, { shallow: true });
       return;
     } if (!to) {
@@ -170,7 +173,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       } else if (from === TEZOS_TOKEN.metadata.symbol) {
         toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
       }
-      const url = `/swap?from=${from}&to=${toToken}`;
+      const url = `/swap/${from}-${toToken}`;
       router.replace(url, undefined, { shallow: true });
     }
   }, []);
