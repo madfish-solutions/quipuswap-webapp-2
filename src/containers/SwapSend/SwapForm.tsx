@@ -71,8 +71,7 @@ export async function estimateSwap(
   toAsset: Asset,
   values: { inputValue: BigNumber.Value } | { outputValue: BigNumber.Value },
   dex:FoundDex,
-  dex2:FoundDex,
-  lastChange: string,
+  dex2?:FoundDex,
 ) {
   if (isTezAsset(fromAsset) && isTokenAsset(toAsset)) {
     return 'outputValue' in values
@@ -82,7 +81,7 @@ export async function estimateSwap(
     return 'outputValue' in values
       ? estimateTokenToTezInverse(dex.storage, values.outputValue)
       : estimateTokenToTez(dex.storage, values.inputValue);
-  } if (isTokenAsset(fromAsset) && isTokenAsset(toAsset)) {
+  } if (isTokenAsset(fromAsset) && isTokenAsset(toAsset) && dex2) {
     if ('outputValue' in values) {
       const intermediateTezValue = estimateTezToTokenInverse(
         dex.storage,
@@ -197,7 +196,11 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     let retValue = new BigNumber(0);
     try {
-      retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex, dex2, lastChange);
+      if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
+        retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex, dex2);
+      } else {
+        retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex);
+      }
       retValue = retValue.div(
         new BigNumber(10)
           .pow(
