@@ -21,6 +21,7 @@ import {
 import {
   fallbackTokenToTokenData,
   getWhitelistedTokenSymbol,
+  isTokenEqual,
   localSearchToken,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
@@ -147,21 +148,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   };
 
   useEffect(() => {
-    if (urlLoaded) {
-      if (!from) {
-        const url = `/swap?from=${getWhitelistedTokenSymbol(TEZOS_TOKEN)}&to=${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
-        router.replace(url, undefined, { shallow: true });
-        return;
-      } if (!to) {
-        let toToken;
-        if (from === STABLE_TOKEN.metadata.symbol) {
-          toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-        } else if (from === TEZOS_TOKEN.metadata.symbol) {
-          toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
-        }
-        const url = `/swap?from=${from}&to=${toToken}`;
-        router.replace(url, undefined, { shallow: true });
-      }
+    if (urlLoaded && initialLoad) {
       if (token1 && token2) {
         const fromToken = getWhitelistedTokenSymbol(token1, 36);
         const toToken = getWhitelistedTokenSymbol(token2, 36);
@@ -169,7 +156,24 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         router.replace(url, undefined, { shallow: true });
       }
     }
-  }, [token1, token2, urlLoaded]);
+  }, [token1, token2]);
+
+  useEffect(() => {
+    if (!from) {
+      const url = `/swap?from=${getWhitelistedTokenSymbol(TEZOS_TOKEN)}&to=${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
+      router.replace(url, undefined, { shallow: true });
+      return;
+    } if (!to) {
+      let toToken;
+      if (from === STABLE_TOKEN.metadata.symbol) {
+        toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+      } else if (from === TEZOS_TOKEN.metadata.symbol) {
+        toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
+      }
+      const url = `/swap?from=${from}&to=${toToken}`;
+      router.replace(url, undefined, { shallow: true });
+    }
+  }, []);
 
   useEffect(() => {
     const asyncCall = async () => {
@@ -178,7 +182,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
         const strStr = Array.isArray(str) ? str[0] : str;
         const inputValue = strStr.split('_')[0];
-        const inputToken = strStr.split('_')[1] ?? '0';
+        const inputToken = strStr.split('_')[1] ?? -1;
         const isTokens = tokens
           .filter(
             (token:any) => localSearchToken(
@@ -193,7 +197,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             if (x) {
               return x;
             }
-            router.push('/swap');
             return TEZOS_TOKEN;
           });
         }
@@ -211,10 +214,12 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         handleTokenChange(resFrom, 'first');
       }
       setUrlLoaded(true);
-      setTokens(res);
+      if (!isTokenEqual(res[0], res[1])) {
+        setTokens(res);
+      }
     };
-    if (from && to && !initialLoad) asyncCall();
-  }, [from, to, initialLoad]);
+    if (from && to && !initialLoad && tokens.length > 0) asyncCall();
+  }, [from, to, initialLoad, tokens]);
 
   useEffect(() => {
     if (tezos && token1 && token2) {
@@ -224,7 +229,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [tezos, accountPkh, networkId]);
 
   useEffect(() => {
-    setTokens([]);
+    setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
   }, [networkId]);
 
   return (
