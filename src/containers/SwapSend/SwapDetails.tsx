@@ -41,13 +41,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   tokensData,
   swapParams,
   priceImpact,
-  // rate1,
-  // rate2,
+  rate1,
+  rate2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const sellRate = (+(tokensData.first.exchangeRate ?? 1))
+  const sellRate = rate2 || (+(tokensData.first.exchangeRate ?? 1))
   / (+(tokensData.second.exchangeRate ?? 1));
-  const buyRate = (+(tokensData.second.exchangeRate ?? 1))
+  const buyRate = rate1 || (+(tokensData.second.exchangeRate ?? 1))
   / (+(tokensData.first.exchangeRate ?? 1));
   return (
     <Card
