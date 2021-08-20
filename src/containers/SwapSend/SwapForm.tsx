@@ -71,6 +71,8 @@ export async function estimateSwap(
   toAsset: Asset,
   values: { inputValue: BigNumber.Value } | { outputValue: BigNumber.Value },
   dex:FoundDex,
+  dex2:FoundDex,
+  lastChange: string,
 ) {
   if (isTezAsset(fromAsset) && isTokenAsset(toAsset)) {
     return 'outputValue' in values
@@ -86,10 +88,10 @@ export async function estimateSwap(
         dex.storage,
         values.outputValue,
       );
-      return estimateTokenToTezInverse(dex.storage, intermediateTezValue);
+      return estimateTokenToTezInverse(dex2.storage, intermediateTezValue);
     }
     const intermediateTezValue = estimateTokenToTez(
-      dex.storage,
+      dex2.storage,
       values.inputValue,
     );
     return estimateTezToToken(dex.storage, intermediateTezValue);
@@ -152,14 +154,16 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [rate1, setRate1] = useState<BigNumber>(new BigNumber(0));
   const [rate2, setRate2] = useState<BigNumber>(new BigNumber(0));
   const [dex, setDex] = useState<FoundDex>();
+  const [dex2, setDex2] = useState<FoundDex>();
   const [dexstorage, setDexstorage] = useState<any>();
+  const [, setDexstorage2] = useState<any>();
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
 
   const handleInputChange = async (val: SwapFormValues) => {
     if (!tezos) return;
-    if (!dex || !dexstorage) return;
+    if (!dex || !dexstorage || (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
     if (val[lastChange] && val[lastChange].toString() === '') return;
 
@@ -193,7 +197,7 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     let retValue = new BigNumber(0);
     try {
-      retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex);
+      retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex, dex2, lastChange);
       retValue = retValue.div(
         new BigNumber(10)
           .pow(
@@ -322,10 +326,16 @@ const RealForm:React.FC<SwapFormProps> = ({
         id: token2.fa2TokenId ?? undefined,
       };
 
-      const dexbuf = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
-      const dexStorageBuf:any = await dexbuf.contract.storage();
-      setDex(dexbuf);
-      setDexstorage(dexStorageBuf);
+      const dexbuf1 = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
+      const dexStorageBuf1:any = await dexbuf1.contract.storage();
+      setDex(dexbuf1);
+      setDexstorage(dexStorageBuf1);
+      if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
+        const dexbuf2 = await findDex(tezos, FACTORIES[networkId], fromAsset);
+        const dexStorageBuf2:any = await dexbuf2.contract.storage();
+        setDex2(dexbuf2);
+        setDexstorage2(dexStorageBuf2);
+      }
     };
     getDex();
   }, [token2, token1, tezos, networkId]);
