@@ -8,11 +8,11 @@ import {
 } from '@utils/types';
 import { slippageToBignum } from '@utils/helpers';
 
-const toNat = (amount: any, decimals: number) => new BigNumber(amount)
+export const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)
   .integerValue(BigNumber.ROUND_DOWN);
 
-const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
+export const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
 export const submitForm = (
   values: SwapFormValues,

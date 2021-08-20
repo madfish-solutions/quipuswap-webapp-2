@@ -4,12 +4,11 @@ import React, {
 } from 'react';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, TokenDataType, WhitelistedToken,
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -20,20 +19,13 @@ import {
   useSearchCustomTokens,
 } from '@utils/dapp';
 import {
+  fallbackTokenToTokenData,
   getWhitelistedTokenSymbol,
   localSearchToken,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { Route } from '@components/common/Route';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
-import s from '@styles/CommonContainer.module.sass';
 import { SwapForm } from './SwapForm';
 import { submitForm } from './swapHelpers';
 
@@ -52,16 +44,6 @@ type SwapSendProps = {
   className?: string
 };
 
-const fallbackTokenToTokenData = (token:WhitelistedToken):TokenDataType => ({
-  token: {
-    address: token.contractAddress,
-    type: token.type,
-    id: token.fa2TokenId,
-    decimals: token.metadata.decimals,
-  },
-  balance: '0',
-});
-
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
@@ -74,8 +56,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const searchCustomToken = useSearchCustomTokens();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-
-  const { t } = useTranslation(['common', 'swap']);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const router = useRouter();
   const { from, to } = router.query;
@@ -230,7 +210,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         }
         return isTokens[0];
       };
-      let res:any[] = [TEZOS_TOKEN, STABLE_TOKEN];
+      let res:any[] = [];
       if (from) {
         if (to) {
           const resTo = await searchPart(to);
@@ -296,100 +276,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           />
         )}
       />
-      <Card
-        header={{
-          content: `${currentTab.label} Details`,
-        }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
-            <>
-              {t('common:Sell Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency="tez" />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Buy Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency="QPSP" />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Price impact')}
-              <Tooltip
-                sizeT="small"
-                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="<0.01" currency="%" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Fee')}
-              <Tooltip
-                sizeT="small"
-                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="0.001" currency="XTZ" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Route')}
-              <Tooltip
-                sizeT="small"
-                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <Route
-            routes={['qpsp', 'usd', 'xtz']}
-          />
-        </CardCell>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-        >
-          View Pair Analytics
-          <ExternalLink className={s.linkIcon} />
-        </Button>
-      </Card>
     </StickyBlock>
   );
 };

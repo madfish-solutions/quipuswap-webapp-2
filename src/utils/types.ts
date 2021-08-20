@@ -1,4 +1,7 @@
 import BigNumber from 'bignumber.js';
+import { FoundDex } from '@quipuswap/sdk';
+
+export type QSMainNet = 'mainnet' | 'florencenet';
 
 type QSNetworkType =
   | 'mainnet'
@@ -29,7 +32,7 @@ export interface WhitelistedTokenPair {
   frozenBalance?: string,
   token1: WhitelistedToken,
   token2: WhitelistedToken,
-  dex: string
+  dex: FoundDex
 }
 
 export interface WhitelistedToken {
@@ -70,8 +73,6 @@ export type TokenDataMap = {
   first: TokenDataType,
   second: TokenDataType
 };
-
-export type QSMainNet = 'mainnet' | 'florencenet';
 
 export type SwapFormValues = {
   balance1: number
