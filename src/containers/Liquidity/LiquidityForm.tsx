@@ -146,25 +146,31 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     const isValuesSame = val[lastChange] === formValues[lastChange];
     const isRemValuesSame = val.balance3 === formValues.balance3;
     const isDexSame = dex === prevDex;
+    if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
+    if (val.switcher && !val.balance3) return;
     if (tezos && accountPkh && token1 && token2) {
       if (isTokensSame || ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame) && isDexSame)) return;
-      asyncGetLiquidityShare(
-        setDex,
-        setTokenPair,
-        form.mutators.setValue,
-        setPoolShare,
-        setRemoveLiquidityParams,
-        setAddLiquidityParams,
-        values,
-        token1,
-        token2,
-        tokenPair,
-        currentTab.id === 'remove' ? tokenPair.dex : dex,
-        currentTab,
-        tezos,
-        accountPkh,
-        networkId,
-      );
+      try {
+        asyncGetLiquidityShare(
+          setDex,
+          setTokenPair,
+          form.mutators.setValue,
+          setPoolShare,
+          setRemoveLiquidityParams,
+          setAddLiquidityParams,
+          values,
+          token1,
+          token2,
+          tokenPair,
+          currentTab.id === 'remove' ? tokenPair.dex : dex,
+          currentTab,
+          tezos,
+          accountPkh,
+          networkId,
+        );
+      } catch (e) {
+        console.error(e);
+      }
     }
     if (tezos) {
       if (currentTab.id === 'remove') {
@@ -287,43 +293,57 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           .multipliedBy(exA)
           .plus(new BigNumber(values.balance2).multipliedBy(exB))
           .div(2);
-        const $toA = total$.div(exA);
-        const $toB = total$.div(exB);
+        const $toA = parseDecimals(
+          total$.div(exA).toString(),
+          0,
+          Infinity,
+          tokensData.first.token.decimals,
+        );
+        const $toB = parseDecimals(
+          total$.div(exB).toString(),
+          0,
+          Infinity,
+          tokensData.second.token.decimals,
+        );
         let inputValue:BigNumber;
-        if (new BigNumber(values.balance1)
+        const whichTokenDifferenceLower = new BigNumber(values.balance1)
           .minus($toA)
-          .lt(new BigNumber(values.balance2).minus($toB))) {
-          inputValue = isTez(tokensData.first)
-            ? tezos!!.format('tz', 'mutez', new BigNumber(values.balance2).minus($toB)) as any
-            : toNat(new BigNumber(values.balance2).minus($toB), tokensData.first.token.decimals);
+          .lt(new BigNumber(values.balance2).minus($toB));
+        if (whichTokenDifferenceLower) {
+          inputValue = toNat(
+            new BigNumber(values.balance2).minus($toA),
+            tokensData.second.token.decimals,
+          );
         } else {
-          inputValue = isTez(tokensData.first)
-            ? tezos!!.format('tz', 'mutez', new BigNumber(values.balance1).minus($toA)) as any
-            : toNat(new BigNumber(values.balance1).minus($toA), tokensData.first.token.decimals);
+          inputValue = tezos!!.format('tz', 'mutez', new BigNumber(values.balance1).minus($toB)) as any;
         }
-        const fromAsset = isTez(tokensData.first) ? 'tez' : {
-          contract: tokensData.first.token.address,
-          id: tokensData.first.token.id ?? undefined,
-        };
-        const toAsset = isTez(tokensData.second) ? 'tez' : {
+        const fromAsset = 'tez';
+        const toAsset = {
           contract: tokensData.second.token.address,
           id: tokensData.second.token.id ?? undefined,
         };
         const slippage = slippageToBignum(values.slippage).div(100);
-        const swapParams = await swap(
-          tezos,
-          FACTORIES[networkId],
-          fromAsset,
-          toAsset,
-          inputValue,
-          slippage,
-        );
-        const addParams = await addLiquidity(
-          tezos,
-          dex,
-          { tezValue: $toA, tokenValue: $toB },
-        );
-        setAddLiquidityParams([...swapParams, ...addParams]);
+        inputValue = new BigNumber(parseDecimals(inputValue.toString(), 0, Infinity, 6));
+        try {
+          const swapParams = await swap(
+            tezos,
+            FACTORIES[networkId],
+            fromAsset,
+            toAsset,
+            inputValue,
+            slippage,
+          );
+          const tezValue = new BigNumber($toA).multipliedBy(10 ** 6);
+          const addParams = await addLiquidity(
+            tezos,
+            dex,
+            { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
+          );
+          const params = [...swapParams, ...addParams];
+          setAddLiquidityParams(params);
+        } catch (e) {
+          console.error(e);
+        }
       }
     }
   };

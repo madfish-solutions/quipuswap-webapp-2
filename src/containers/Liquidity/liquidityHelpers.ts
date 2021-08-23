@@ -105,11 +105,9 @@ export const asyncFindPairDex = async (
     setTokenPair(res);
     return res;
   } catch (err) {
-    console.info('1');
     console.error(err);
     return pair;
   }
-  return undefined;
 };
 
 export const asyncGetShares = async (
@@ -300,6 +298,7 @@ export const submitForm = async (
   updateToast: (err:string) => void,
 ) => {
   try {
+    console.log(liquidityParams);
     const op = await batchify(
       tezos.wallet.batch([]),
       liquidityParams,
