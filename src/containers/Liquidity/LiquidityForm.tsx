@@ -35,7 +35,7 @@ import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum,
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -121,6 +121,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   currentTab,
   setTabsState,
   setAddLiquidityParams,
+  addLiquidityParams,
   setRemoveLiquidityParams,
   removeLiquidityParams,
 }) => {
@@ -139,6 +140,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const handleInputChange = async (val: LiquidityFormValues) => {
     const currentTokenA = tokenDataToToken(tokensData.first);
+    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
@@ -670,7 +672,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       amount={minimumReceivedB.isNaN() ? '0' : minimumReceivedB.toString()}
                     />
                   </div>
-                  <Button onClick={handleRemoveLiquidity} className={s.button}>
+                  <Button
+                    onClick={handleRemoveLiquidity}
+                    className={s.button}
+                    disabled={removeLiquidityParams.length < 1}
+                  >
                     Remove & Unvote
                   </Button>
                 </>
@@ -697,7 +703,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 </div>
               )}
             </Field>
-            <Button onClick={handleAddLiquidity} className={s.button}>
+            <Button
+              onClick={handleAddLiquidity}
+              className={s.button}
+              disabled={addLiquidityParams.length < 1}
+            >
               {currentTab.label}
             </Button>
           </>
@@ -706,7 +716,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       </Card>
       <LiquidityDetails
         currentTab={currentTab.label}
-        params={removeLiquidityParams}
+        params={removeLiquidityParams.length < 1 ? addLiquidityParams : removeLiquidityParams}
         token1={token1}
         token2={token2}
         tokensData={tokensData}

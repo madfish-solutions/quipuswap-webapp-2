@@ -204,24 +204,28 @@ export const asyncGetLiquidityShare = async (
     const slippageTolerance = slippageToBignum(values.slippage).div(100);
     if (dex) {
       const share = await getLiquidityShare(tezos, dex, account);
-      const lpTokenValue = new BigNumber(values.balance3).multipliedBy(10 ** 6);
       try {
-        const remParams = await removeLiquidity(
-          tezos,
-          dex,
-          lpTokenValue,
-          slippageTolerance,
-        );
+        if (values.balance3) {
+          const lpTokenValue = new BigNumber(values.balance3).multipliedBy(10 ** 6);
+          const remParams = await removeLiquidity(
+            tezos,
+            dex,
+            lpTokenValue,
+            slippageTolerance,
+          );
+          setRemoveLiquidityParams(remParams);
+        }
         setPoolShare(share);
+        console.log(values.balance1);
         if (values.balance1) {
+          const tezValue = new BigNumber(values.balance1).multipliedBy(10 ** 6);
           const addParams = await addLiquidity(
             tezos,
             dex,
-            { tezValue: values.balance1 },
+            { tezValue },
           );
           setAddLiquidityParams(addParams);
         }
-        setRemoveLiquidityParams(remParams);
         asyncGetShares(
           setTokenPair,
           setValue,

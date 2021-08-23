@@ -42,8 +42,8 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   balanceTotalB,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
-  const pairLink = useMemo(() => (params.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to
-    ? `https://analytics.quipuswap.com/pairs/${params.find((x) => x.parameter?.entrypoint === 'divestLiquidity')?.to}`
+  const pairLink = useMemo(() => (params.find((x) => x.parameter?.entrypoint === 'divestLiquidity' || x.parameter?.entrypoint === 'investLiquidity')?.to
+    ? `https://analytics.quipuswap.com/pairs/${params.find((x) => x.parameter?.entrypoint === 'divestLiquidity' || x.parameter?.entrypoint === 'investLiquidity')?.to}`
     : '#'), [params]);
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
