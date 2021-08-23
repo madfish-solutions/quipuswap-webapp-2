@@ -124,6 +124,8 @@ const RealForm:React.FC<SwapFormProps> = ({
 
   const handleInputChange = async (val: SwapFormValues) => {
     if (!tezos) return;
+    if (Object.keys(val).length < 1) return;
+    if (!val[lastChange]) return;
     if (!dex || !dexstorage || (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
     if (val[lastChange] && val[lastChange].toString() === '') return;
