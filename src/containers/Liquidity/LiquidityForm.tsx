@@ -446,7 +446,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           validate={composeValidators(
             required,
             validateMinMax(0, Infinity),
-            validateBalance(tokenPair.balance ? +tokenPair.balance : Infinity),
+            validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
           )}
         >
           {({ input, meta }) => (
@@ -512,7 +512,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           validate={composeValidators(
             required,
             validateMinMax(0, Infinity),
-            validateBalance(tokensData.first.balance ? +tokensData.first.balance : Infinity),
+            validateBalance(new BigNumber(tokensData.first.balance
+              ? tokensData.first.balance
+              : Infinity)),
           )}
           parse={(v) => parseDecimals(v, 0, Infinity)}
         >
@@ -573,7 +575,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           validate={composeValidators(
             required,
             validateMinMax(0, Infinity),
-            validateBalance(tokensData.second.balance ? +tokensData.second.balance : Infinity),
+            validateBalance(new BigNumber(tokensData.second.balance
+              ? tokensData.second.balance
+              : Infinity)),
           )}
           parse={(v) => parseDecimals(v, 0, Infinity)}
         >
