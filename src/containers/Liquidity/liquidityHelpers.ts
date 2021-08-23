@@ -1,5 +1,6 @@
 import {
   addLiquidity,
+  batchify,
   estimateTezInShares,
   estimateTokenInShares,
   findDex,
@@ -261,5 +262,21 @@ export const asyncGetLiquidityShare = async (
     }
   } catch (e) {
     console.error(e);
+  }
+};
+
+export const submitForm = async (
+  tezos:TezosToolkit,
+  liquidityParams: TransferParams[],
+  updateToast: (err:string) => void,
+) => {
+  try {
+    const op = await batchify(
+      tezos.wallet.batch([]),
+      liquidityParams,
+    ).send();
+    await op.confirmation();
+  } catch (e) {
+    updateToast(e);
   }
 };

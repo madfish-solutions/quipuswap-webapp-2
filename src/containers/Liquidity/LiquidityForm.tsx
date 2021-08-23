@@ -22,13 +22,14 @@ import {
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import {
+  LiquidityFormValues,
   PoolShare,
   TokenDataMap, TokenDataType,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 
 import {
-  composeValidators, required, validateBalance, validateMinMax,
+  composeValidators, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, slippageToNum,
@@ -64,22 +65,6 @@ const TabsContent = [
   },
 ];
 
-export type LiquidityFormValues = {
-  switcher: boolean
-  balance1: number
-  balance2: number
-  balance3: number
-  balanceA: number
-  balanceB: number
-  balanceTotalA: number
-  balanceTotalB: number
-  lpBalance: string
-  frozenBalance: string
-  lastChange: string
-  estimateLP: string
-  slippage: string
-};
-
 type LiquidityFormProps = {
   handleSubmit: () => void,
   setAddLiquidityParams: (params:TransferParams[]) => void,
@@ -92,6 +77,9 @@ type LiquidityFormProps = {
   form:any,
   tabsState:any,
   dex: FoundDex,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  setTokens: (tokens:WhitelistedToken[]) => void,
   setDex: (dex:FoundDex) => void,
   tokenPair: WhitelistedTokenPair,
   setTokenPair: (pair:WhitelistedTokenPair) => void,
@@ -122,6 +110,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   form,
   tabsState,
   dex,
+  token1,
+  token2,
+  setTokens,
   setDex,
   tokenPair,
   setTokenPair,
@@ -138,7 +129,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([]);
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const prevDex = usePrevious(dex);
@@ -445,7 +435,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           <Field
             name="balance3"
             validate={composeValidators(
-              required,
               validateMinMax(0, Infinity),
               validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
             )}
@@ -511,7 +500,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance1"
           validate={composeValidators(
-            required,
             validateMinMax(0, Infinity),
             validateBalance(new BigNumber(tokensData.first.balance
               ? tokensData.first.balance
@@ -574,7 +562,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance2"
           validate={composeValidators(
-            required,
             validateMinMax(0, Infinity),
             validateBalance(new BigNumber(tokensData.second.balance
               ? tokensData.second.balance

@@ -1,25 +1,29 @@
 import React, {
+  useCallback,
   useEffect, useMemo, useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 import {
-  batchify,
   FoundDex,
   TransferParams,
 } from '@quipuswap/sdk';
 
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
+import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  TokenDataMap, TokenDataType,
-  WhitelistedToken, WhitelistedTokenPair,
+  LiquidityFormValues,
+  TokenDataMap,
+  WhitelistedToken,
+  WhitelistedTokenPair,
 } from '@utils/types';
-
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import { LiquidityForm, LiquidityFormValues } from './LiquidityForm';
+import { fallbackTokenToTokenData } from '@utils/helpers';
+import { LiquidityForm } from './LiquidityForm';
+import { submitForm } from './liquidityHelpers';
 
 const TabsContent = [
   {
@@ -36,24 +40,15 @@ type LiquidityProps = {
   className?: string
 };
 
-const fallbackTokensData : TokenDataType = {
-  token: {
-    address: 'tez',
-    type: 'fa1.2',
-    decimals: 6,
-    id: null,
-  },
-  balance: '0',
-};
-
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: TEZOS_TOKEN,
+  token2: STABLE_TOKEN,
 } as WhitelistedTokenPair;
 
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
+  const updateToast = useUpdateToast();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
@@ -61,8 +56,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
-      first: fallbackTokensData,
-      second: fallbackTokensData,
+      first: fallbackTokenToTokenData(TEZOS_TOKEN),
+      second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
 
@@ -74,11 +69,19 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     tokenPair,
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
     if (!exchangeRates || !exchangeRates.find) return;
@@ -163,30 +166,13 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       <Form
         onSubmit={() => {
           if (!tezos) return;
-          const asyncFunc = async () => {
-            if (currentTab.id === 'remove') {
-              try {
-                const op = await batchify(
-                  tezos.wallet.batch([]),
-                  removeLiquidityParams,
-                ).send();
-                await op.confirmation();
-              } catch (e) {
-                console.error(e);
-              }
-            } else {
-              try {
-                const op = await batchify(
-                  tezos.wallet.batch([]),
-                  addLiquidityParams,
-                ).send();
-                await op.confirmation();
-              } catch (e) {
-                console.error(e);
-              }
-            }
-          };
-          asyncFunc();
+          submitForm(
+            tezos,
+            currentTab.id === 'remove'
+              ? removeLiquidityParams
+              : addLiquidityParams,
+            handleErrorToast,
+          );
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
@@ -203,6 +189,9 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             tabsState={tabsState}
             dex={dex}
             setDex={setDex}
+            token1={token1}
+            token2={token2}
+            setTokens={setTokens}
             tokenPair={tokenPair}
             setTokenPair={setTokenPair}
             tokensData={tokensData}
