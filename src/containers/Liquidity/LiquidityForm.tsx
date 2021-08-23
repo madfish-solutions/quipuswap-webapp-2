@@ -290,7 +290,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         const $toA = total$.div(exA);
         const $toB = total$.div(exB);
         let inputValue:BigNumber;
-        // console.log(total$, $toA, $toB);
         if (new BigNumber(values.balance1)
           .minus($toA)
           .lt(new BigNumber(values.balance2).minus($toB))) {
@@ -386,19 +385,19 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
 
-  const setToken1 = useCallback((token:WhitelistedToken) => {
-    setTokens([token, (token2 || undefined)]);
-    if (token2) {
-      hanldeTokenPairSelect(
-        { token1: token, token2 } as WhitelistedTokenPair,
-        setTokenPair,
-        handleTokenChange,
-        tezos,
-        accountPkh,
-        networkId,
-      );
-    }
-  }, [tezos, accountPkh, networkId, token2]);
+  // const setToken1 = useCallback((token:WhitelistedToken) => {
+  //   setTokens([token, (token2 || undefined)]);
+  //   if (token2) {
+  //     hanldeTokenPairSelect(
+  //       { token1: token, token2 } as WhitelistedTokenPair,
+  //       setTokenPair,
+  //       handleTokenChange,
+  //       tezos,
+  //       accountPkh,
+  //       networkId,
+  //     );
+  //   }
+  // }, [tezos, accountPkh, networkId, token2]);
   const setToken2 = useCallback((token:WhitelistedToken) => {
     setTokens([(token1 || undefined), token]);
     if (token1) {
@@ -448,6 +447,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               <>
                 <PositionSelect
                   {...input}
+                  notSelectable1={TEZOS_TOKEN}
                   tokenPair={tokenPair}
                   setTokenPair={(pair) => {
                     setTokens([pair.token1, pair.token2]);
@@ -491,7 +491,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               handleBalance={() => {}}
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
-              id="liquidity-token-1"
+              id="liquidity-token-A"
               label="Output"
               className={cx(s.input, s.mb24)}
               readOnly
@@ -506,11 +506,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           name="balance1"
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            validateBalance(new BigNumber(tokensData.first.balance
-              ? tokensData.first.balance
-              : Infinity)),
+            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
           )}
-          parse={(v) => parseDecimals(v, 0, Infinity)}
+          parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         >
           {({ input, meta }) => (
             <TokenSelect
@@ -518,7 +516,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               blackListedTokens={blackListedTokens}
               onFocus={() => setLastChange('balance1')}
               token={token1}
-              setToken={setToken1}
+              setToken={() => {}}
+              notSelectable
               handleBalance={(value) => {
                 setLastChange('balance1');
                 form.mutators.setValue(
@@ -555,7 +554,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               handleBalance={() => {}}
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
-              id="liquidity-token-2"
+              id="liquidity-token-B"
               label="Output"
               className={cx(s.input, s.mb24)}
               readOnly
@@ -568,11 +567,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           name="balance2"
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            validateBalance(new BigNumber(tokensData.second.balance
-              ? tokensData.second.balance
-              : Infinity)),
+            accountPkh && !values.switcher
+              ? validateBalance(new BigNumber(tokensData.second.balance))
+              : () => undefined,
           )}
-          parse={(v) => parseDecimals(v, 0, Infinity)}
+          parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
         >
           {({ input, meta }) => (
             <TokenSelect

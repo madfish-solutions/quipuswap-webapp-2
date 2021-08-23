@@ -216,7 +216,6 @@ export const asyncGetLiquidityShare = async (
           setRemoveLiquidityParams(remParams);
         }
         setPoolShare(share);
-        console.log(values.balance1);
         if (values.balance1) {
           const tezValue = new BigNumber(values.balance1).multipliedBy(10 ** 6);
           const addParams = await addLiquidity(
@@ -281,7 +280,6 @@ export const submitForm = async (
   updateToast: (err:string) => void,
 ) => {
   try {
-    console.log(liquidityParams);
     const op = await batchify(
       tezos.wallet.batch([]),
       liquidityParams,

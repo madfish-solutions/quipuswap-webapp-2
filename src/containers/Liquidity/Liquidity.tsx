@@ -226,7 +226,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           res = [resTo];
           handleTokenChange(resTo, 'second');
         }
-        const resFrom = await searchPart(from);
+        // const resFrom = await searchPart(from);
+        const resFrom = TEZOS_TOKEN;
         res = [resFrom, ...res];
         handleTokenChange(resFrom, 'first');
       }
