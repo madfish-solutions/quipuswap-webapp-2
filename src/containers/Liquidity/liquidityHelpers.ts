@@ -13,7 +13,7 @@ import {
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { slippageToBignum } from '@utils/helpers';
 
@@ -105,7 +105,9 @@ export const asyncFindPairDex = async (
     setTokenPair(res);
     return res;
   } catch (err) {
+    console.info('1');
     console.error(err);
+    return pair;
   }
   return undefined;
 };
@@ -239,33 +241,51 @@ export const asyncGetLiquidityShare = async (
           networkId,
         );
       } catch (e) {
-        console.info(e);
+        console.error(e);
       }
     } else {
-      const toAsset = token2.contractAddress === 'tez' ? {
+      let toAsset:any = {
         contract: 'tez',
-      } : {
-        contract: token2.contractAddress,
-        id: token2.fa2TokenId,
       };
-      if (JSON.stringify(token1) !== JSON.stringify(token2)) {
-        const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-        if (tempDex && tempDex !== dex) {
-          setDex(tempDex);
-        } else if (!tempDex) {
-          const strictFactories = {
-            fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
-            fa2Factory: FACTORIES[networkId].fa2Factory[0],
+      if (token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
+        toAsset = {
+          contract: token2.contractAddress,
+        };
+        if (!token2.fa2TokenId) {
+          toAsset = {
+            contract: token2.contractAddress,
+            id: 0,
           };
-
-          const initParams = await initializeLiquidity(
-            tezos,
-            strictFactories,
-            toAsset,
-            values.balance2,
-            values.balance1,
-          );
-          setAddLiquidityParams(initParams);
+        }
+      }
+      if (JSON.stringify(token1) !== JSON.stringify(token2)) {
+        try {
+          const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+          if (tempDex && tempDex !== dex) {
+            setDex(tempDex);
+          }
+        } catch (e) {
+          if (e.name === 'DexNotFoundError') {
+            if (values.balance1 && values.balance2) {
+              const strictFactories = {
+                fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
+                fa2Factory: FACTORIES[networkId].fa2Factory[0],
+              };
+              const tezVal = new BigNumber(values.balance1).multipliedBy(10 ** 6);
+              const tokenVal = new BigNumber(values.balance2);
+              const initParams = await initializeLiquidity(
+                tezos,
+                strictFactories,
+                toAsset,
+                tokenVal,
+                tezVal,
+              );
+              setAddLiquidityParams(initParams);
+              return;
+            }
+            return;
+          }
+          console.error(e);
         }
       }
     }
