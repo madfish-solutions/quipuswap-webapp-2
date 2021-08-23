@@ -19,6 +19,7 @@ export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
 
+export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 

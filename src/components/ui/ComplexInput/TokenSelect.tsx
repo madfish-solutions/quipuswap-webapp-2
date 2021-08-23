@@ -109,11 +109,11 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {account && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Total Balance')}
+                  {t('common:Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+                  {prettyPrice(parseFloat(balance), 3)}
                 </div>
               </div>
               )}

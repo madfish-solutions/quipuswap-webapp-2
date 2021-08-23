@@ -1,6 +1,8 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+export type QSMainNet = 'mainnet' | 'florencenet';
+
 type QSNetworkType =
   | 'mainnet'
   | 'florencenet'
@@ -70,4 +72,12 @@ export type TokenDataType = {
 export type TokenDataMap = {
   first: TokenDataType,
   second: TokenDataType
+};
+
+export type SwapFormValues = {
+  balance1: BigNumber
+  balance2: BigNumber
+  recipient: string
+  lastChange: string
+  slippage: string
 };

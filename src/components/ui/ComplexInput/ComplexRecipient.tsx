@@ -69,7 +69,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           <TextareaAutosize
             minRows={1}
             maxRows={6}
-            className={cx(s.recipient, s.item1, s.input)}
+            className={cx(s.recipient, s.item1, s.unitem1, s.input)}
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
             readOnly={readOnly}
