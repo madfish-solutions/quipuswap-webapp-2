@@ -138,22 +138,21 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       && (token.fa2TokenId ? el.tokenId === token.fa2TokenId : true)
     ));
 
-    const newTokensData = {
-      [tokenNumber]: {
-        token: {
-          address: token.contractAddress,
-          type: token.type,
-          id: token.fa2TokenId,
-          decimals: token.metadata.decimals,
+    setTokensData((prevState) => (
+      {
+        ...prevState,
+        [tokenNumber]: {
+          token: {
+            address: token.contractAddress,
+            type: token.type,
+            id: token.fa2TokenId,
+            decimals: token.metadata.decimals,
+          },
+          balance: finalBalance,
+          exchangeRate: tokenExchangeRate?.exchangeRate ?? null,
         },
-        balance: finalBalance,
-        exchangeRate: tokenExchangeRate?.exchangeRate ?? null,
-      },
-    };
-
-    setTokensData((prevValue) => ({
-      ...prevValue, ...newTokensData,
-    }));
+      }
+    ));
   };
 
   useEffect(() => {
@@ -246,6 +245,21 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     };
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) asyncCall();
   }, [from, to, initialLoad, tokens, exchangeRates]);
+
+  useEffect(() => {
+    if (tezos && token1 && token2) {
+      handleTokenChange(token1, 'first');
+      handleTokenChange(token2, 'second');
+      hanldeTokenPairSelect(
+        { token1, token2 } as WhitelistedTokenPair,
+        setTokenPair,
+        handleTokenChange,
+        tezos,
+        accountPkh,
+        network.id as QSMainNet,
+      );
+    }
+  }, [tezos, accountPkh, network.id]);
 
   return (
     <StickyBlock className={className}>

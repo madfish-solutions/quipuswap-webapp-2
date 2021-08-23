@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@utils/defaults';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { slippageToNum } from '@utils/helpers';
+import { slippageToBignum } from '@utils/helpers';
 
 type QSMainNet = 'mainnet' | 'florencenet';
 
@@ -201,37 +201,43 @@ export const asyncGetLiquidityShare = async (
 ) => {
   try {
     const account = accountPkh;
-    const slippageTolerance = slippageToNum(values.slippage) / 100;
+    const slippageTolerance = slippageToBignum(values.slippage).div(100);
     if (dex) {
       const share = await getLiquidityShare(tezos, dex, account);
-      const lpTokenValue = share.total;
-      const remParams = await removeLiquidity(
-        tezos,
-        dex,
-        lpTokenValue,
-        slippageTolerance,
-      );
-      const addParams = await addLiquidity(
-        tezos,
-        dex,
-        { tezValue: values.balance1 },
-      );
-      setPoolShare(share);
-      setRemoveLiquidityParams(remParams);
-      setAddLiquidityParams(addParams);
-      asyncGetShares(
-        setTokenPair,
-        setValue,
-        token1,
-        token2,
-        tokenPair,
-        share.total,
-        currentTab,
-        values,
-        tezos,
-        accountPkh,
-        networkId,
-      );
+      const lpTokenValue = new BigNumber(values.balance3).multipliedBy(10 ** 6);
+      try {
+        const remParams = await removeLiquidity(
+          tezos,
+          dex,
+          lpTokenValue,
+          slippageTolerance,
+        );
+        setPoolShare(share);
+        if (values.balance1) {
+          const addParams = await addLiquidity(
+            tezos,
+            dex,
+            { tezValue: values.balance1 },
+          );
+          setAddLiquidityParams(addParams);
+        }
+        setRemoveLiquidityParams(remParams);
+        asyncGetShares(
+          setTokenPair,
+          setValue,
+          token1,
+          token2,
+          tokenPair,
+          share.total,
+          currentTab,
+          values,
+          tezos,
+          accountPkh,
+          networkId,
+        );
+      } catch (e) {
+        console.info(e);
+      }
     } else {
       const toAsset = token2.contractAddress === 'tez' ? {
         contract: 'tez',
@@ -271,6 +277,7 @@ export const submitForm = async (
   updateToast: (err:string) => void,
 ) => {
   try {
+    console.log(liquidityParams);
     const op = await batchify(
       tezos.wallet.batch([]),
       liquidityParams,
