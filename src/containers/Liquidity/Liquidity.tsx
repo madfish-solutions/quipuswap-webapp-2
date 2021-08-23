@@ -9,11 +9,14 @@ import {
   TransferParams,
 } from '@quipuswap/sdk';
 
-import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
+import {
+  getUserBalance, useAccountPkh, useNetwork, useSearchCustomTokens, useTezos, useTokens,
+} from '@utils/dapp';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
   LiquidityFormValues,
+  QSMainNet,
   TokenDataMap,
   WhitelistedToken,
   WhitelistedTokenPair,
@@ -21,9 +24,12 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import { fallbackTokenToTokenData } from '@utils/helpers';
+import {
+  fallbackTokenToTokenData, getWhitelistedTokenSymbol, isTokenEqual, localSearchToken,
+} from '@utils/helpers';
+import { useRouter } from 'next/router';
 import { LiquidityForm } from './LiquidityForm';
-import { submitForm } from './liquidityHelpers';
+import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
 const TabsContent = [
   {
@@ -50,8 +56,11 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 }) => {
   const updateToast = useUpdateToast();
   const tezos = useTezos();
+  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
+  const network = useNetwork();
+  const searchCustomToken = useSearchCustomTokens();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
@@ -65,11 +74,26 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<LiquidityFormValues>();
   const [dex, setDex] = useState<FoundDex>();
+  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [
     tokenPair,
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const router = useRouter();
+  let from:any;
+  let to:any;
+  const lastSlash = window.location.pathname.lastIndexOf('/');
+  const slashCount = window.location.pathname.split('/');
+  const urlSearchParams = router.query['from-to'] && typeof router.query['from-to'] === 'string' ? router.query['from-to'].split('-') : window.location.pathname.slice(lastSlash + 1).split('-');
+  const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
+  if (slashCount.length < 3) {
+    from = 'XTZ';
+    to = 'usds';
+  } else if (Object.keys(router.query).length === 0 && (params.from || params.to)) {
+    ({ from, to } = params);
+  }
+  if (!to) to = 'usds';
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
@@ -115,7 +139,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     ));
 
     const newTokensData = {
-      ...tokensData,
       [tokenNumber]: {
         token: {
           address: token.contractAddress,
@@ -128,38 +151,101 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       },
     };
 
-    setTokensData(newTokensData);
+    setTokensData((prevValue) => ({
+      ...prevValue, ...newTokensData,
+    }));
   };
 
   useEffect(() => {
-    if (exchangeRates && tezos && accountPkh && !initialLoad) {
-      setInitialLoad(true);
-      if (!tokensData.first.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.first.token.address,
-            type: tokensData.first.token.type,
-            metadata:
-            {
-              decimals: tokensData.first.token.decimals,
-            },
-          } as WhitelistedToken, 'first',
-        );
-      }
-      if (!tokensData.second.exchangeRate) {
-        handleTokenChange(
-          {
-            contractAddress: tokensData.second.token.address,
-            type: tokensData.second.token.type,
-            metadata:
-          {
-            decimals: tokensData.second.token.decimals,
-          },
-          } as WhitelistedToken, 'second',
-        );
+    if (urlLoaded && initialLoad) {
+      if (token1 && token2) {
+        const fromToken = getWhitelistedTokenSymbol(token1, 36);
+        const toToken = getWhitelistedTokenSymbol(token2, 36);
+        const url = `/liquidity/${fromToken}-${toToken}`;
+        router.replace(url, undefined, { shallow: true });
       }
     }
-  }, [exchangeRates, tezos, accountPkh]);
+  }, [token1, token2]);
+
+  useEffect(() => {
+    if (urlLoaded && initialLoad) {
+      const fromToken = getWhitelistedTokenSymbol(tokenPair.token1, 36);
+      const toToken = getWhitelistedTokenSymbol(tokenPair.token2, 36);
+      const url = `/liquidity/${fromToken}-${toToken}`;
+      router.replace(url, undefined, { shallow: true });
+    }
+  }, [tokenPair]);
+
+  useEffect(() => {
+    if (!from) {
+      const url = `/liquidity/${getWhitelistedTokenSymbol(TEZOS_TOKEN)}-${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
+      router.replace(url, undefined, { shallow: true });
+      return;
+    } if (!to) {
+      let toToken;
+      if (from === STABLE_TOKEN.metadata.symbol) {
+        toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+      } else if (from === TEZOS_TOKEN.metadata.symbol) {
+        toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
+      }
+      const url = `/liquidity/${from}-${toToken}`;
+      router.replace(url, undefined, { shallow: true });
+    }
+  }, []);
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      setInitialLoad(true);
+      setUrlLoaded(false);
+      const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
+        const strStr = Array.isArray(str) ? str[0] : str;
+        const inputValue = strStr.split('_')[0];
+        const inputToken = strStr.split('_')[1] ?? -1;
+        const isTokens = tokens
+          .filter(
+            (token:any) => localSearchToken(
+              token,
+              network,
+              inputValue,
+              +inputToken,
+            ),
+          );
+        if (isTokens.length === 0) {
+          return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
+            if (x) {
+              return x;
+            }
+            return TEZOS_TOKEN;
+          });
+        }
+        return isTokens[0];
+      };
+      let res:any[] = [];
+      if (from) {
+        if (to) {
+          const resTo = await searchPart(to);
+          res = [resTo];
+          handleTokenChange(resTo, 'second');
+        }
+        const resFrom = await searchPart(from);
+        res = [resFrom, ...res];
+        handleTokenChange(resFrom, 'first');
+      }
+      setUrlLoaded(true);
+      if (!isTokenEqual(res[0], res[1])) {
+        setTokens(res);
+        hanldeTokenPairSelect(
+          { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
+          setTokenPair,
+          handleTokenChange,
+          tezos,
+          accountPkh,
+          network.id as QSMainNet,
+        );
+      }
+    };
+    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) asyncCall();
+  }, [from, to, initialLoad, tokens, exchangeRates]);
 
   return (
     <StickyBlock className={className}>

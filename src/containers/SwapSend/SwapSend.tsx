@@ -64,7 +64,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   let to:any;
   const urlSearchParams = router.query['from-to'] && typeof router.query['from-to'] === 'string' ? router.query['from-to'].split('-') : window.location.pathname.slice(6).split('-');
   const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
-  // console.log(router.query, params);
   if (Object.keys(router.query).length === 0 && (params.from || params.to)) {
     ({ from, to } = params);
   }

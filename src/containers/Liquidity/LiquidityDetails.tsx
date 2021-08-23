@@ -76,7 +76,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
             currency={tokenBName}
-            dollarEquivalent={`${tokensData.first.exchangeRate ?? 0}`}
+            dollarEquivalent={`${tokensData.first.exchangeRate ?? 1}`}
           />
         </div>
       </CardCell>
@@ -101,7 +101,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
             currency={tokenAName}
-            dollarEquivalent={`${tokensData.second.exchangeRate ?? 0}`}
+            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
         </div>
       </CardCell>
