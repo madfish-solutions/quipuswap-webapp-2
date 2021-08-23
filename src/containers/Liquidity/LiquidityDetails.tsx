@@ -5,6 +5,7 @@ import {
 } from '@quipuswap/sdk';
 
 import {
+  PoolShare,
   TokenDataMap, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -24,6 +25,7 @@ type LiquidityDetailsProps = {
   token2: WhitelistedToken
   tokensData:TokenDataMap
   tokenPair: WhitelistedTokenPair
+  poolShare?: PoolShare
   balanceTotalA: string
   balanceTotalB: string
 };
@@ -35,6 +37,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   token2,
   tokensData,
   tokenPair,
+  poolShare,
   balanceTotalA,
   balanceTotalB,
 }) => {
@@ -148,7 +151,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        <CurrencyAmount amount="0" />
+        <CurrencyAmount amount={(poolShare?.total.toString()) ?? '0'} />
       </CardCell>
       <CardCell
         header={(
@@ -162,7 +165,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        <CurrencyAmount amount="0" />
+        <CurrencyAmount amount={(poolShare?.frozen.toString()) ?? '0'} />
       </CardCell>
       <div className={s.detailsButtons}>
         <Button

@@ -81,3 +81,9 @@ export type SwapFormValues = {
   lastChange: string
   slippage: string
 };
+
+export type PoolShare = {
+  unfrozen:BigNumber,
+  frozen:BigNumber,
+  total:BigNumber
+};

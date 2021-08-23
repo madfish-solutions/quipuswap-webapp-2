@@ -22,6 +22,7 @@ import {
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { usePrevious } from '@hooks/usePrevious';
 import {
+  PoolShare,
   TokenDataMap, TokenDataType,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
@@ -111,7 +112,7 @@ const toNat = (amount: any, decimals: number) => new BigNumber(amount)
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
-    type QSMainNet = 'mainnet' | 'florencenet';
+type QSMainNet = 'mainnet' | 'florencenet';
 
 const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
@@ -141,7 +142,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const prevDex = usePrevious(dex);
-  const [,setPoolShare] = useState<any>();
+  const [poolShare, setPoolShare] = useState<PoolShare>();
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -292,7 +293,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         const exB = +(tokensData.second.exchangeRate ?? '1');
         const total$ = (
           (values.balance1 * exA)
-              + (values.balance2 * exB)
+          + (values.balance2 * exB)
         ) / 2;
         const $toA = total$ / exA;
         const $toB = total$ / exB;
@@ -441,49 +442,49 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         contentClassName={s.content}
       >
         {currentTab.id === 'remove' && (
-        <Field
-          name="balance3"
-          validate={composeValidators(
-            required,
-            validateMinMax(0, Infinity),
-            validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
-          )}
-        >
-          {({ input, meta }) => (
-            <>
-              <PositionSelect
-                {...input}
-                tokenPair={tokenPair}
-                setTokenPair={(pair) => {
-                  setTokens([pair.token1, pair.token2]);
-                  handleTokenChange(pair.token1, 'first');
-                  handleTokenChange(pair.token2, 'second');
-                  hanldeTokenPairSelect(
-                    pair,
-                    setTokenPair,
-                    handleTokenChange,
-                    tezos,
-                    accountPkh,
-                    networkId,
-                  );
-                }}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'balance3',
-                    +value,
-                  );
-                }}
-                balance={tokenPair.balance}
-                frozenBalance={tokenPair.frozenBalance}
-                id="liquidity-remove-input"
-                label="Select LP"
-                className={s.input}
-                error={((meta.touched && meta.error) || meta.submitError)}
-              />
-              <ArrowDown className={s.iconButton} />
-            </>
-          )}
-        </Field>
+          <Field
+            name="balance3"
+            validate={composeValidators(
+              required,
+              validateMinMax(0, Infinity),
+              validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
+            )}
+          >
+            {({ input, meta }) => (
+              <>
+                <PositionSelect
+                  {...input}
+                  tokenPair={tokenPair}
+                  setTokenPair={(pair) => {
+                    setTokens([pair.token1, pair.token2]);
+                    handleTokenChange(pair.token1, 'first');
+                    handleTokenChange(pair.token2, 'second');
+                    hanldeTokenPairSelect(
+                      pair,
+                      setTokenPair,
+                      handleTokenChange,
+                      tezos,
+                      accountPkh,
+                      networkId,
+                    );
+                  }}
+                  handleBalance={(value) => {
+                    form.mutators.setValue(
+                      'balance3',
+                      +value,
+                    );
+                  }}
+                  balance={tokenPair.balance}
+                  frozenBalance={tokenPair.frozenBalance}
+                  id="liquidity-remove-input"
+                  label="Select LP"
+                  className={s.input}
+                  error={((meta.touched && meta.error) || meta.submitError)}
+                />
+                <ArrowDown className={s.iconButton} />
+              </>
+            )}
+          </Field>
         )}
         {currentTab.id === 'remove' && (
         <Field
@@ -611,7 +612,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           )}
         </Field>
         )}
-
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
             const slippagePercent = (
@@ -694,26 +694,26 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
         </Field>
         {currentTab.id === 'add' && (
-        <>
-          <Field name="switcher">
-            {({ input }) => (
+          <>
+            <Field name="switcher">
+              {({ input }) => (
 
-              <div className={s.switcher}>
-                <Switcher
-                  {...input}
-                  isActive={input.value}
-                  className={s.switcherInput}
-                  disabled={!dex}
-                />
-                Rebalance Liquidity
-                <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
-              </div>
-            )}
-          </Field>
-          <Button onClick={handleAddLiquidity} className={s.button}>
-            {currentTab.label}
-          </Button>
-        </>
+                <div className={s.switcher}>
+                  <Switcher
+                    {...input}
+                    isActive={input.value}
+                    className={s.switcherInput}
+                    disabled={!dex}
+                  />
+                  Rebalance Liquidity
+                  <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
+                </div>
+              )}
+            </Field>
+            <Button onClick={handleAddLiquidity} className={s.button}>
+              {currentTab.label}
+            </Button>
+          </>
         )}
 
       </Card>
@@ -724,6 +724,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         token2={token2}
         tokensData={tokensData}
         tokenPair={tokenPair}
+        poolShare={poolShare}
         balanceTotalA={(values.balanceTotalA ?? 0).toString()}
         balanceTotalB={(values.balanceTotalB ?? 0).toString()}
       />
