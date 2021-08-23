@@ -4,15 +4,9 @@ import React, {
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import {
-  Asset,
-  estimateTezToToken,
-  estimateTezToTokenInverse,
-  estimateTokenToTez,
-  estimateTokenToTezInverse,
+  estimateSwap,
   findDex,
   FoundDex,
-  isTezAsset,
-  isTokenAsset,
   swap,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
@@ -65,38 +59,6 @@ const TabsContent = [
 export type SwapSendProps = {
   className?: string
 };
-
-export async function estimateSwap(
-  fromAsset: Asset,
-  toAsset: Asset,
-  values: { inputValue: BigNumber.Value } | { outputValue: BigNumber.Value },
-  dex:FoundDex,
-  dex2?:FoundDex,
-) {
-  if (isTezAsset(fromAsset) && isTokenAsset(toAsset)) {
-    return 'outputValue' in values
-      ? estimateTezToTokenInverse(dex.storage, values.outputValue)
-      : estimateTezToToken(dex.storage, values.inputValue);
-  } if (isTokenAsset(fromAsset) && isTezAsset(toAsset)) {
-    return 'outputValue' in values
-      ? estimateTokenToTezInverse(dex.storage, values.outputValue)
-      : estimateTokenToTez(dex.storage, values.inputValue);
-  } if (isTokenAsset(fromAsset) && isTokenAsset(toAsset) && dex2) {
-    if ('outputValue' in values) {
-      const intermediateTezValue = estimateTezToTokenInverse(
-        dex.storage,
-        values.outputValue,
-      );
-      return estimateTokenToTezInverse(dex2.storage, intermediateTezValue);
-    }
-    const intermediateTezValue = estimateTokenToTez(
-      dex2.storage,
-      values.inputValue,
-    );
-    return estimateTezToToken(dex.storage, intermediateTezValue);
-  }
-  throw new Error('Unsupported exchange way');
-}
 
 type SwapFormProps = {
   handleSubmit:() => void,
@@ -197,9 +159,24 @@ const RealForm:React.FC<SwapFormProps> = ({
     let retValue = new BigNumber(0);
     try {
       if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
-        retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex, dex2);
+        retValue = await estimateSwap(
+          tezos,
+          FACTORIES[networkId],
+          fromAsset,
+          toAsset,
+          valuesInner,
+          { inputDex: dex2, outputDex: dex },
+        );
       } else {
-        retValue = await estimateSwap(fromAsset, toAsset, valuesInner, dex);
+        const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
+        retValue = await estimateSwap(
+          tezos,
+          FACTORIES[networkId],
+          fromAsset,
+          toAsset,
+          valuesInner,
+          sendDex,
+        );
       }
       retValue = retValue.div(
         new BigNumber(10)
@@ -217,12 +194,11 @@ const RealForm:React.FC<SwapFormProps> = ({
       Infinity,
       decimals2,
     );
-
     if (lastChange === 'balance1') {
       const rate1buf = new BigNumber(val.balance1)
         .div(result);
       const priceImp = rate1buf
-        .div(+tokensData.second.exchangeRate / +tokensData.first.exchangeRate)
+        .div(1 / +tokensData.first.exchangeRate)
         .multipliedBy(100).minus(100);
       setRate1(rate1buf);
       setRate2(rate1buf.exponentiatedBy(-1));
@@ -230,9 +206,10 @@ const RealForm:React.FC<SwapFormProps> = ({
     } else {
       const rate2buf = new BigNumber(val.balance2)
         .div(result);
-      const priceImp = rate2buf
-        .div(+tokensData.first.exchangeRate / +tokensData.second.exchangeRate)
+      const priceImp = new BigNumber(tokensData.first.exchangeRate)
+        .div(rate2buf)
         .multipliedBy(100).minus(100);
+
       setRate1(rate2buf.exponentiatedBy(-1));
       setRate2(rate2buf);
       setPriceImpact(priceImp);
