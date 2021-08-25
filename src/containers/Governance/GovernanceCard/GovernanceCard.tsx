@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
@@ -27,18 +28,6 @@ export type GovernanceCardProps = {
   onClick?: () => void
   handleUnselect?: () => void
 };
-
-const convertDateToDDMMYYYY = (date:Date) => `${
-  (date.getDate() > 9)
-    ? date.getDate()
-    : (`0${date.getDate()}`)
-} 
-  ${
-  (date.getMonth() > 8)
-    ? (date.getMonth() + 1)
-    : (`0${date.getMonth() + 1}`)
-} 
-    ${date.getFullYear()}`;
 
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
@@ -99,9 +88,9 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
                 {name}
               </div>
               <div className={s.govDates}>
-                <span>{convertDateToDDMMYYYY(workDates[0])}</span>
+                <span>{moment(workDates[0]).format('DD MMM YYYY')}</span>
                 <span> - </span>
-                <span>{convertDateToDDMMYYYY(workDates[1])}</span>
+                <span>{moment(workDates[1]).format('DD MMM YYYY')}</span>
               </div>
               <Bage
                 className={s.govBage}
