@@ -169,7 +169,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           networkId,
         );
       } catch (e) {
-        console.info('qq');
         console.error(e);
       }
     }
