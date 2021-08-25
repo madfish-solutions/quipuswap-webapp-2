@@ -48,6 +48,8 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
+  const totalShare = useMemo(() => (poolShare?.total.div(10 ** 6).toString()) ?? '0', [poolShare]);
+  const frozenShare = useMemo(() => (poolShare?.frozen.div(10 ** 6).toString()) ?? '0', [poolShare]);
   return (
     <Card
       header={{
@@ -151,7 +153,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        <CurrencyAmount amount={(poolShare?.total.toString()) ?? '0'} />
+        <CurrencyAmount amount={totalShare} />
       </CardCell>
       <CardCell
         header={(
@@ -165,7 +167,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        <CurrencyAmount amount={(poolShare?.frozen.toString()) ?? '0'} />
+        <CurrencyAmount amount={frozenShare} />
       </CardCell>
       <div className={s.detailsButtons}>
         <Button
