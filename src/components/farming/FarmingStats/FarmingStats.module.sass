@@ -1,0 +1,109 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.flex
+  display: block
+
+.header
+  display: flex
+  align-items: center
+
+.content
+  padding: 24px
+  font-weight: 600
+
+.reward
+  margin-bottom: 24px
+  display: flex
+  justify-content: space-between
+  padding: 32px 24px
+  border-radius: 8px
+  align-items: center
+  margin-bottom: 24px
+
+.rewardHeader
+  display: flex
+  flex-direction: column
+
+.rewardAmount, .amount
+  font-size: 1.143rem
+  line-height: 1.5
+
+.rewardCurrency
+  margin-left: 8px
+
+.item
+  display: flex
+  flex-direction: column
+  align-items: center
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.button
+  width: 100%
+  max-width: 280px
+  margin-top: 40px
+
+.light
+  .reward
+    border: 2px dashed $hover-primary-01-fallback
+    color: $text-01
+  .amount
+    color: $text-01
+
+.dark
+  .reward
+    border: 2px dashed $hover-primary-02-fallback
+    color: $text-inverse
+  .amount
+    color: $text-inverse
+
+
+@include media('>phone')
+  .rewardAmount
+    font-size: 1.714rem
+
+@include media('>Lphone', '<=Ltablet')
+  .rewardAmount
+    font-size: 2.286rem
+
+@include media('>Lphone')
+  .rewardContent
+    margin-right: 32px
+  .amount
+    font-size: 1.429rem
+
+@include media('>Ltablet')
+  .flex
+    display: flex
+    align-items: center
+  .content
+    display: flex
+    align-items: center
+    justify-content: space-between
+  .reward
+    margin-bottom: 0px
+    margin-right: 32px
+  .item
+    align-items: flex-start
+    &:not(:last-child)
+      margin-bottom: 0px
+  .rewardAmount
+    font-size: 1.714rem
+  .amount
+    font-size: 1.429rem
+  .button
+    width: 160px
+    margin-top: auto
+
+@include media('>desktop')
+  .header
+    text-align: left
+  .rewardAmount
+    font-size: 2.286rem
+  .amount
+    font-size: 1.714rem
+    line-height: 1.33
+  .button
+    width: 160px
+    margin-top: auto

@@ -54,3 +54,18 @@ export type WhitelistedTokenMetadata = {
   name: string
   thumbnailUri: string
 };
+
+export type WhitelistedFarm = {
+  tokenPair: WhitelistedTokenPair
+  totalValueLocked: string
+  apy: string
+  daily: string
+  balance: string
+  deposit: string
+  earned: string
+  multiplier: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+};
