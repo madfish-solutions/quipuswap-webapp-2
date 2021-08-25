@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
-import { Liquidity } from '@containers/Liquidity';
+import { SwapSend } from '@containers/SwapSend';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
 
 import s from '@styles/SwapLiquidity.module.sass';
@@ -13,16 +13,16 @@ const LineChart = dynamic(() => import('@components/ui/LineChart'), {
   ssr: false,
 });
 
-const LiquidityPage: React.FC = () => {
-  const { t } = useTranslation(['common', 'liquidity']);
+const SwapSendPage: React.FC = () => {
+  const { t } = useTranslation(['common', 'swap']);
 
   return (
     <BaseLayout
-      title={t('liquidity:Liquidity page')}
-      description={t('liquidity:Liquidity page description. Couple sentences...')}
+      title={t('swap:Swap page')}
+      description={t('swap:Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
-      <Liquidity />
+      <SwapSend />
       <LineChart className={s.chart} data={LineChartSampleData} />
     </BaseLayout>
   );
@@ -30,8 +30,8 @@ const LiquidityPage: React.FC = () => {
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...await serverSideTranslations(locale, ['common', 'liquidity']),
+    ...await serverSideTranslations(locale, ['common', 'swap']),
   },
 });
 
-export default LiquidityPage;
+export default SwapSendPage;
