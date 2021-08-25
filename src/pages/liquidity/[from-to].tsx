@@ -14,12 +14,12 @@ const LineChart = dynamic(() => import('@components/ui/LineChart'), {
 });
 
 const LiquidityPage: React.FC = () => {
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = useTranslation(['common', 'liquidity']);
 
   return (
     <BaseLayout
-      title={t('swap:Liquidity page')}
-      description={t('swap:Liquidity page description. Couple sentences...')}
+      title={t('liquidity:Liquidity page')}
+      description={t('liquidity:Liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Liquidity />
@@ -34,7 +34,7 @@ export const getStaticPaths = async () => ({
 });
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...await serverSideTranslations(locale, ['common', 'swap']),
+    ...await serverSideTranslations(locale, ['common', 'liquidity']),
   },
 });
 
