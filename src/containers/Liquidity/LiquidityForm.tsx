@@ -51,6 +51,7 @@ import { Plus } from '@components/svg/Plus';
 
 import s from '@styles/CommonContainer.module.sass';
 
+import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 
@@ -88,11 +89,6 @@ type LiquidityFormProps = {
   currentTab:any,
   setTabsState:(val:any) => void
 };
-
-const tokenDataToToken = (tokenData:TokenDataType) : WhitelistedToken => ({
-  contractAddress: tokenData.token.address,
-  fa2TokenId: tokenData.token.id ?? undefined,
-} as WhitelistedToken);
 
 const toNat = (amount: any, decimals: number) => new BigNumber(amount)
   .times(10 ** decimals)

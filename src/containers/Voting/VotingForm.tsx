@@ -4,7 +4,9 @@ import React, {
 import BigNumber from 'bignumber.js';
 import { Field, FormSpy } from 'react-final-form';
 import {
+  findDex,
   FoundDex,
+  Token,
   TransferParams,
   vetoCurrentBaker,
   voteForBaker,
@@ -34,6 +36,9 @@ import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from '@styles/CommonContainer.module.sass';
 
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
+import { usePrevious } from '@hooks/usePrevious';
 import { VotingDetails } from './VotingDetails';
 import { hanldeTokenPairSelect } from './votingHelpers';
 
@@ -85,6 +90,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   setTokenPair,
   setDex,
   handleTokenChange,
+  tokensData,
   currentTab,
   setTabsState,
   setVoteParams,
@@ -95,9 +101,39 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const accountPkh = useAccountPkh();
+  const prevDex = usePrevious(dex);
 
   const timeout = useRef(setTimeout(() => { }, 0));
   let promise: any;
+
+  const handleInputChange = async () => {
+    if (!tezos) return;
+    const currentTokenA = tokenDataToToken(tokensData.first);
+    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
+    if (dex
+      && prevDex
+      && ((prevDex ?? ({ contract: { address: '' } })).contract?.address) === dex.contract.address) return;
+    if (tezos && accountPkh && tokenPair) {
+      let toAsset:any = {
+        contract: 'tez',
+      };
+      if (tokenPair.token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
+        toAsset = {
+          contract: tokenPair.token2.contractAddress,
+        };
+        if (!tokenPair.token2.fa2TokenId) {
+          toAsset = {
+            contract: tokenPair.token2.contractAddress,
+            id: 0,
+          };
+        }
+      }
+      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+      if (tempDex && tempDex !== dex) {
+        setDex(tempDex);
+      }
+    }
+  };
 
   const saveFunc = async () => {
     if (promise) {
@@ -105,7 +141,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     }
     setVal(values);
     setSubm(true);
-    // handleInputChange(values);
+    handleInputChange();
     promise = save(values);
     await promise;
     setSubm(false);
@@ -207,6 +243,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             <>
               <PositionSelect
                 {...input}
+                notSelectable1={TEZOS_TOKEN}
                 tokenPair={tokenPair}
                 setTokenPair={(pair) => {
                   handleTokenChange(pair.token1, 'first');
