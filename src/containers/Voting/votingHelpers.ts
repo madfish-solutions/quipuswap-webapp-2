@@ -1,7 +1,8 @@
 import {
+  batchify,
   estimateReward, findDex, FoundDex, getLiquidityShare,
 } from '@quipuswap/sdk';
-import { TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { VoterType, WhitelistedTokenPair } from '@utils/types';
@@ -73,4 +74,20 @@ export const hanldeTokenPairSelect = (
     }
   };
   asyncFunc();
+};
+
+export const submitForm = async (
+  tezos:TezosToolkit,
+  voteParams:TransferParams[],
+  updateToast: (err:string) => void,
+) => {
+  try {
+    const op = await batchify(
+      tezos.wallet.batch([]),
+      voteParams,
+    ).send();
+    await op.confirmation();
+  } catch (e) {
+    updateToast(e);
+  }
 };

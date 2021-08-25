@@ -33,7 +33,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   dex,
   voter,
 }) => {
-  const { t } = useTranslation(['common', 'liquidity']);
+  const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {

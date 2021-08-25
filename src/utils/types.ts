@@ -109,3 +109,8 @@ export type PoolShare = {
   frozen:BigNumber,
   total:BigNumber
 };
+
+export type VoteFormValues = {
+  balance1: number
+  selectedBaker: string
+};

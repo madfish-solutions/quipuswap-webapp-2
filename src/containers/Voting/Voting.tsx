@@ -1,40 +1,40 @@
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useCallback,
+  useEffect,
+  useMemo, useState,
 } from 'react';
 import BigNumber from 'bignumber.js';
-import { withTypes, Field, FormSpy } from 'react-final-form';
+import { withTypes } from 'react-final-form';
 import {
-  batchify,
   FoundDex,
   TransferParams,
-  vetoCurrentBaker,
-  voteForBaker,
 } from '@quipuswap/sdk';
+import { useRouter } from 'next/router';
 
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { fallbackTokenToTokenData, isTokenEqual, localSearchToken } from '@utils/helpers';
 import {
   getUserBalance,
-  useAccountPkh, useNetwork, useTezos,
+  useAccountPkh,
+  useNetwork,
+  useSearchCustomTokens,
+  useTezos,
+  useTokens,
 } from '@utils/dapp';
-import { composeValidators, required, validateMinMax } from '@utils/validators';
-import { parseDecimals } from '@utils/helpers';
 import {
+  QSMainNet,
+  TokenDataMap,
+  VoteFormValues,
   VoterType, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { VotingStats } from '@components/voting/VotingStats';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
-import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
-import { ComplexBaker } from '@components/ui/ComplexInput';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { Transactions } from '@components/svg/Transactions';
-import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from '@styles/CommonContainer.module.sass';
-import { VotingDetails } from './VotingDetails';
-import { hanldeTokenPairSelect } from './votingHelpers';
+import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
+import { VotingForm } from './VotingForm';
+import { submitForm } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -51,299 +51,64 @@ type VotingProps = {
   className?: string
 };
 
-type TokenDataType = {
-  token: {
-    address: string,
-    type: 'fa1.2' | 'fa2',
-    id?: number | null
-    decimals: number,
-  },
-  balance: string,
-  exchangeRate?: string
-};
-
-type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
-};
-
-const fallbackTokensData: TokenDataType = {
-  token: {
-    address: 'tez',
-    type: 'fa1.2',
-    decimals: 6,
-    id: null,
-  },
-  balance: '0',
-};
-
-type FormValues = {
-  balance1: number
-  selectedBaker: string
-};
-
-type HeaderProps = {
-  handleSubmit: () => void,
-  setVoteParams: (params: TransferParams[]) => void,
-  debounce: number,
-  save: any,
-  values: FormValues,
-  form: any,
-  tabsState: any,
-  dex: FoundDex,
-  setDex: (dex: FoundDex) => void,
-  rewards: string,
-  setRewards: (reward: string) => void,
-  voter: any,
-  setVoter: (voter: any) => void,
-  tokenPair: WhitelistedTokenPair,
-  setTokenPair: (pair: WhitelistedTokenPair) => void,
-  tokensData: TokenDataMap,
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
-  currentTab: any,
-  setTabsState: (val: any) => void
-};
-
-type QSMainNet = 'mainnet' | 'florencenet';
-
-const Header: React.FC<HeaderProps> = ({
-  handleSubmit,
-  debounce,
-  save,
-  values,
-  form,
-  tabsState,
-  setRewards,
-  setVoter,
-  voter,
-  dex,
-  tokenPair,
-  setTokenPair,
-  setDex,
-  handleTokenChange,
-  currentTab,
-  setTabsState,
-  setVoteParams,
-}) => {
-  const { openConnectWalletModal } = useConnectModalsState();
-  const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
-  const accountPkh = useAccountPkh();
-
-  const timeout = useRef(setTimeout(() => { }, 0));
-  let promise: any;
-
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    // handleInputChange(values);
-    promise = save(values);
-    await promise;
-    setSubm(false);
-  };
-
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, [
-    values,
-    tokenPair,
-    dex,
-    currentTab]);
-
-  const handleFirstButton = async () => {
-    if (!tezos) return;
-    if (!accountPkh) {
-      openConnectWalletModal();
-      return;
-    }
-    try {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
-        setVoteParams(params);
-      } else {
-        const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
-        setVoteParams(params);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    handleSubmit();
-  };
-
-  const handleSecondButton = async () => {
-    if (!tezos) return;
-    if (!accountPkh) {
-      openConnectWalletModal();
-      return;
-    }
-    if (!values.balance1) {
-      // throw form validation error
-      handleSubmit();
-      return;
-    }
-    try {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
-        setVoteParams(params);
-      } else {
-        const params = await vetoCurrentBaker(tezos, dex, values.balance1);
-        setVoteParams(params);
-      }
-    } catch (e) {
-      console.error(e);
-    }
-    handleSubmit();
-  };
-
-  return (
-    <>
-      <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
-              className={s.tabs}
-            />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
-        }}
-        contentClassName={s.content}
-      >
-        <Field
-          name="balance1"
-          validate={composeValidators(
-            required,
-            validateMinMax(0, tokenPair.balance ? +tokenPair.balance : Infinity),
-          )}
-          parse={(v) => parseDecimals(v, 0, Infinity)}
-        >
-          {({ input, meta }) => (
-            <>
-              <PositionSelect
-                {...input}
-                tokenPair={tokenPair}
-                setTokenPair={(pair) => {
-                  handleTokenChange(pair.token1, 'first');
-                  handleTokenChange(pair.token2, 'second');
-                  hanldeTokenPairSelect(
-                    pair,
-                    setTokenPair,
-                    setDex,
-                    setRewards,
-                    setVoter,
-                    tezos,
-                    accountPkh,
-                    networkId,
-                  );
-                }}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'balance1',
-                    +value,
-                  );
-                }}
-                balance={tokenPair.balance}
-                notFrozen
-                id="liquidity-remove-input"
-                label="Select LP"
-                className={s.input}
-                error={(meta.touched && meta.error) || meta.submitError}
-              />
-              <ArrowDown className={s.iconButton} />
-            </>
-          )}
-        </Field>
-        {currentTab.id === 'vote' && (
-          <Field validate={required} name="selectedBaker">
-            {({ input, meta }) => (
-              <ComplexBaker
-                {...input}
-                label="Baker"
-                id="voting-baker"
-                handleChange={(baker) => input.onChange(baker.address)}
-                error={(meta.touched && meta.error) || meta.submitError}
-              />
-            )}
-
-          </Field>
-        )}
-        <div className={s.buttons}>
-          <Button onClick={handleFirstButton} className={s.button} theme="secondary">
-            {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
-          </Button>
-          <Button onClick={handleSecondButton} className={s.button}>
-            {currentTab.label}
-          </Button>
-        </div>
-
-      </Card>
-      <VotingDetails
-        tokenPair={tokenPair}
-        dex={dex}
-        voter={voter}
-      />
-    </>
-  );
-};
-
-const AutoSave = (props: any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={Header} />
-);
-
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: TEZOS_TOKEN,
+  token2: STABLE_TOKEN,
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({
   className,
 }) => {
+  const updateToast = useUpdateToast();
   const tezos = useTezos();
+  const network = useNetwork();
+  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
+  const searchCustomToken = useSearchCustomTokens();
   const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
-      first: fallbackTokensData,
-      second: fallbackTokensData,
+      first: fallbackTokenToTokenData(TEZOS_TOKEN),
+      second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
-
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
-  const { Form } = withTypes<FormValues>();
+  const { Form } = withTypes<VoteFormValues>();
   const [dex, setDex] = useState<FoundDex>();
+  const [, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState('0');
   const [voter, setVoter] = useState<VoterType>();
   const [
     tokenPair,
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const router = useRouter();
+  let from:any;
+  let to:any;
+  const lastSlash = window.location.pathname.lastIndexOf('/');
+  const slashCount = window.location.pathname.split('/');
+  const urlSearchParams = router.query['from-to'] && typeof router.query['from-to'] === 'string' ? router.query['from-to'].split('-') : window.location.pathname.slice(lastSlash + 1).split('-');
+  const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
+  if (slashCount.length < 3) {
+    from = 'XTZ';
+    to = 'usds';
+  } else if (Object.keys(router.query).length === 0 && (params.from || params.to)) {
+    ({ from, to } = params);
+  }
+  if (!to) to = 'usds';
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
     let finalBalance = '0';
@@ -364,8 +129,9 @@ export const Voting: React.FC<VotingProps> = ({
         ).toString();
       }
     }
-    const newTokensData = {
-      ...tokensData,
+
+    setTokensData((prevState) => ({
+      ...prevState,
       [tokenNumber]: {
         token: {
           address: token.contractAddress,
@@ -375,10 +141,77 @@ export const Voting: React.FC<VotingProps> = ({
         },
         balance: finalBalance,
       },
-    };
-
-    setTokensData(newTokensData);
+    }));
   };
+
+  useEffect(() => {
+    const asyncCall = async () => {
+      setInitialLoad(true);
+      setUrlLoaded(false);
+      const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
+        const strStr = Array.isArray(str) ? str[0] : str;
+        const inputValue = strStr.split('_')[0];
+        const inputToken = strStr.split('_')[1] ?? -1;
+        const isTokens = tokens
+          .filter(
+            (token:any) => localSearchToken(
+              token,
+              network,
+              inputValue,
+              +inputToken,
+            ),
+          );
+        if (isTokens.length === 0) {
+          return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
+            if (x) {
+              return x;
+            }
+            return TEZOS_TOKEN;
+          });
+        }
+        return isTokens[0];
+      };
+      let res:any[] = [];
+      if (from) {
+        if (to) {
+          const resTo = await searchPart(to);
+          res = [resTo];
+          handleTokenChange(resTo, 'second');
+        }
+        // const resFrom = await searchPart(from);
+        const resFrom = TEZOS_TOKEN;
+        res = [resFrom, ...res];
+        handleTokenChange(resFrom, 'first');
+      }
+      setUrlLoaded(true);
+      if (!isTokenEqual(res[0], res[1])) {
+        hanldeTokenPairSelect(
+          { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
+          setTokenPair,
+          handleTokenChange,
+          tezos,
+          accountPkh,
+          network.id as QSMainNet,
+        );
+      }
+    };
+    if (from && to && !initialLoad && tokens.length > 0) asyncCall();
+  }, [from, to, initialLoad, tokens]);
+
+  useEffect(() => {
+    if (tezos && tokenPair) {
+      handleTokenChange(tokenPair.token1, 'first');
+      handleTokenChange(tokenPair.token2, 'second');
+      hanldeTokenPairSelect(
+        tokenPair,
+        setTokenPair,
+        handleTokenChange,
+        tezos,
+        accountPkh,
+        network.id as QSMainNet,
+      );
+    }
+  }, [tezos, accountPkh, network.id]);
 
   return (
     <>
@@ -391,14 +224,7 @@ export const Voting: React.FC<VotingProps> = ({
         <Form
           onSubmit={() => {
             if (!tezos) return;
-            const asyncFunc = async () => {
-              const op = await batchify(
-                tezos.wallet.batch([]),
-                voteParams,
-              ).send();
-              await op.confirmation();
-            };
-            asyncFunc();
+            submitForm(tezos, voteParams, handleErrorToast);
           }}
           mutators={{
             setValue: ([field, value], state, { changeValue }) => {
@@ -406,7 +232,7 @@ export const Voting: React.FC<VotingProps> = ({
             },
           }}
           render={({ handleSubmit, form }) => (
-            <AutoSave
+            <VotingForm
               form={form}
               handleSubmit={handleSubmit}
               debounce={1000}
