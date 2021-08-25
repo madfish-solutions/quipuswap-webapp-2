@@ -306,7 +306,11 @@ function useDApp() {
   }, [network]);
 
   const searchCustomToken = useCallback(
-    async (address: string, tokenId?: number) => {
+    async (
+      address: string,
+      tokenId?: number,
+      saveAfterSearch?:boolean,
+    ): Promise<WhitelistedToken | null> => {
       if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
@@ -323,7 +327,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] },
           }));
-          return;
+          return null;
         }
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(network, address, tokenId);
@@ -332,7 +336,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] },
           }));
-          return;
+          return null;
         }
         const token : WhitelistedToken = {
           contractAddress: address,
@@ -345,7 +349,10 @@ function useDApp() {
           ...prevState,
           searchTokens: { loading: false, data: [token] },
         }));
+        if (saveAfterSearch) saveCustomToken(token);
+        return token;
       }
+      return null;
     },
     [tezos, network],
   );

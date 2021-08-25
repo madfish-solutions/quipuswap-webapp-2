@@ -1,7 +1,7 @@
 import React from 'react';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { SwapSend } from '@containers/SwapSend';
@@ -27,6 +27,17 @@ const SwapSendPage: React.FC = () => {
     </BaseLayout>
   );
 };
+
+export const getStaticPaths = async () => ({
+  paths: [
+    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'en' },
+    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'fr' },
+    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'ru' },
+    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'es' },
+    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'pt' },
+  ],
+  fallback: true,
+});
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {

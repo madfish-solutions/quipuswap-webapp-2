@@ -17,3 +17,4 @@ export * from './isTokenEqual';
 export * from './isPairEqual';
 export * from './slippageToBignum';
 export * from './mutezToTz';
+export * from './fallbackTokenToTokenData';

@@ -1,4 +1,10 @@
 {
-  "Liquidity page": "Liquidity page",
-  "Liquidity page description. Couple sentences...": "Liquidity page description. Couple sentences..."
+  "Token A Locked": "Token A Locked",
+  "The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.": "The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.",
+  "Token B Locked": "Token B Locked",
+  "The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.": "The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.",
+  "Your Total LP": "Your Total LP",
+  "Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.": "Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.",
+  "Your Frozen LP": "Your Frozen LP",
+  "Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.": "Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them."
 }

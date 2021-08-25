@@ -40,6 +40,18 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   },
 };
 
+export const STABLE_TOKEN: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1REEb5VxWRjcHm5GzDMwErMmNFftsE5Gpf',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'USDS',
+    name: 'Stably USD',
+    thumbnailUri: 'https://quipuswap.com/tokens/stably.png',
+  },
+};
+
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [

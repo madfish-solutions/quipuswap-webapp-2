@@ -1,5 +1,6 @@
 const path = require('path');
 const withReactSvg = require('next-react-svg');
+
 const { i18n } = require('./next-i18next.config');
 
 module.exports = withReactSvg({
@@ -10,5 +11,19 @@ module.exports = withReactSvg({
   images: {
     domains: ['img.templewallet.com'],
   },
-  i18n
+  i18n,
+  async redirects() {
+    return [
+      {
+        source: '/swap',
+        destination: `/swap/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+      {
+        source: '/liquidity',
+        destination: `/liquidity/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+    ]
+  },
 });
