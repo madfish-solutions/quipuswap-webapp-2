@@ -27,6 +27,7 @@ export type FarmingCardProps = {
 
 export const FarmingCard: React.FC<FarmingCardProps> = ({
   farm,
+  onClick = () => {},
   className,
 }) => {
   const {
@@ -157,7 +158,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button className={s.button}>Select</Button>
+        <Button onClick={() => onClick(farm)} className={s.button}>Select</Button>
 
       </div>
     </Card>

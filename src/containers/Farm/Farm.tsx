@@ -8,19 +8,13 @@ import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { Shevron } from '@components/svg/Shevron';
 import Search from '@icons/Search.svg';
 
 import s from '@styles/CommonContainer.module.sass';
-import { useTranslation } from 'next-i18next';
-import { StickyBlock } from '@components/common/StickyBlock';
-import { Slippage } from '@components/common/Slippage';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Route } from '@components/common/Route';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 type FarmProps = {
   className?: string
@@ -69,6 +63,7 @@ const farms:WhitelistedFarm[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
+    remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
     tokenPair: fallbackPair,
@@ -83,6 +78,7 @@ const farms:WhitelistedFarm[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
+    remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
     tokenPair: fallbackPair,
@@ -97,6 +93,7 @@ const farms:WhitelistedFarm[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
+    remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
     tokenPair: fallbackPair,
@@ -111,6 +108,7 @@ const farms:WhitelistedFarm[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
+    remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
     tokenPair: fallbackPair,
@@ -125,123 +123,16 @@ const farms:WhitelistedFarm[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
+    remaining: new Date(Date.now() + 48 * 3600000),
   },
 ];
 
 export const Farm: React.FC<FarmProps> = () => {
-  const { t } = useTranslation(['common']);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   if (selectedFarming) {
     // TODO
     return (
-      <StickyBlock>
-        <Card>
-          <Slippage />
-          <div className={s.receive}>
-            <span className={s.receiveLabel}>
-              Minimum received:
-            </span>
-            <CurrencyAmount amount="1233" currency="XTZ" />
-          </div>
-          <Button className={s.button}>
-            Quo
-          </Button>
-        </Card>
-        <Card
-          header={{
-            content: 'Details',
-          }}
-          contentClassName={s.content}
-        >
-          <CardCell
-            header={(
-              <>
-                {t('common:Sell Price')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <CurrencyAmount amount="1" currency="tez" />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common:Buy Price')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
-                />
-              </>
-             )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <CurrencyAmount amount="1" currency="QPSP" />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common:Price impact')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <CurrencyAmount amount="<0.01" currency="%" />
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common:Fee')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <CurrencyAmount amount="0.001" currency="XTZ" />
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common:Route')}
-                <Tooltip
-                  sizeT="small"
-                  content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <Route
-              routes={['qpsp', 'usd', 'xtz']}
-            />
-          </CardCell>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-          >
-            View Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-        </Card>
-      </StickyBlock>
+      <FarmingInfo handleUnselect={() => selectFarm(undefined)} farm={selectedFarming} />
     );
   }
   return (

@@ -32,7 +32,6 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
             </span>
             <span className={s.rewardAmount}>
               100,000,000
-              <span className={s.rewardCurrency}>TEZ</span>
             </span>
           </div>
           <VotingReward />

@@ -1,0 +1,175 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.chart
+  margin-bottom: 24px
+
+.govBody
+  font-size: 1.143rem
+
+.fullWidth
+  width: 100%
+
+.content, .topContent
+  padding: 24px
+  font-weight: 600
+
+.baker
+  margin-top: 24px
+
+.tradeControls
+  margin-top: 24px
+
+.tradeBtn
+  &:not(:last-child)
+    margin-right: 24px
+
+.govBlockSpan
+  color: $text-03
+
+.proposalHeader
+  display: flex
+  align-items: center
+
+.proposalBackIcon
+  margin-right: 12px
+
+.notRewards
+  flex: 1
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+.itemsRows
+  display: block  
+
+.mb24i
+  margin-bottom: 24px !important
+
+.flex
+  display: block
+
+.header
+  text-align: left
+
+.reward
+  margin-bottom: 24px
+  display: flex
+  justify-content: space-between
+  padding: 32px 24px
+  border-radius: 8px
+  align-items: center
+  margin-bottom: 24px
+
+.rewardHeader
+  display: flex
+  flex-direction: column
+
+.rewardAmount, .amount
+  font-size: 1.143rem
+  line-height: 1.5
+
+.rewardCurrency
+  margin-left: 8px
+
+.item
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.button
+  width: 100%
+  max-width: 280px
+  margin-top: 40px
+
+.statButton 
+  width: 100%
+  max-width: none
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+
+.light
+  .reward
+    border: 2px dashed $hover-primary-01-fallback
+    color: $text-01
+  .amount
+    color: $text-01
+  .govBlockLabel
+    color: $text-01
+
+.dark
+  .reward
+    border: 2px dashed $hover-primary-02-fallback
+    color: $text-inverse
+  .amount
+    color: $text-inverse
+  .govBlockLabel
+    color: $text-inverse
+
+@include media('>phone')
+  .rewardAmount
+    font-size: 1.714rem
+
+@include media('>Lphone', '<=Ltablet')
+  .rewardAmount
+    font-size: 2.286rem
+
+@include media('>Lphone')
+  .rewardContent
+    margin-right: 32px
+  .amount
+    font-size: 1.429rem
+
+@include media('>Ltablet')
+  .chart
+    margin-bottom: 32px
+  .header
+    text-align: left
+  .notRewards
+    flex: 1
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+  .itemsRows
+    justify-content: space-between
+    display: flex
+  .flex
+    display: flex
+    align-items: center
+  .topContent
+    display: flex
+    align-items: center
+    justify-content: space-between
+  .reward
+    margin-bottom: 0px
+    margin-right: 32px
+  .item
+    align-items: flex-start
+    &:not(:last-child)
+      margin-bottom: 16px
+      margin-right: 32px
+  .rewardAmount
+    font-size: 1.714rem
+  .amount
+    font-size: 1.429rem
+  .button
+    width: 160px
+    max-width: 160px
+    margin-top: auto
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+  .statButton
+    margin-top: 32px
+
+@include media('>desktop')
+  .rewardAmount
+    font-size: 2.286rem
+  .amount
+    font-size: 1.714rem
+    line-height: 1.33

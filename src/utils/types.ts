@@ -56,6 +56,7 @@ export type WhitelistedTokenMetadata = {
 };
 
 export type WhitelistedFarm = {
+  remaining: Date
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string
   apy: string
