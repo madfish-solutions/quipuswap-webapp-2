@@ -16,13 +16,13 @@ import { Tabs } from '@components/ui/Tabs';
 import { WhitelistedFarm } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Route } from '@components/common/Route';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import VotingReward from '@icons/VotingReward.svg';
 
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/ui/LineChart'), {
@@ -77,6 +77,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
 }) => {
   const {
     remaining,
+    tokenPair,
   } = farm;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -155,7 +156,27 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           </div>
         </div>
       </Card>
-      <LineChart className={s.chart} data={LineChartSampleData} />
+      <LineChart
+        className={s.chart}
+        data={LineChartSampleData}
+        headerContent={(
+          <div className={s.tokens}>
+            <TokensLogos
+              token1={tokenPair.token1}
+              token2={tokenPair.token2}
+              width={32}
+              className={s.tokenLogos}
+            />
+            <h3 className={s.title}>
+              {getWhitelistedTokenSymbol(tokenPair.token1)}
+              {' '}
+              /
+              {' '}
+              {getWhitelistedTokenSymbol(tokenPair.token1)}
+            </h3>
+          </div>
+        )}
+      />
       <StickyBlock>
         <Card
           header={{
@@ -220,95 +241,184 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           header={{
             content: 'Farm Details',
           }}
-          contentClassName={s.content}
+          contentClassName={cx(modeClass[colorThemeMode], s.content)}
         >
           <CardCell
             header={(
               <>
-                {t('common:Sell Price')}
+                {t('common:Value Locked')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+                  content={t('common:TOOLTIP TODO')}
                 />
               </>
             )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              <CurrencyAmount amount="1" currency="tez" />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
+              $
+              {' '}
+              <span className={s.priceAmount}>
+                1000000
+              </span>
             </div>
           </CardCell>
           <CardCell
             header={(
               <>
-                {t('common:Buy Price')}
+                {t('common:APR')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+                  content={t('common:TOOLTIP TODO')}
                 />
               </>
-             )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              <CurrencyAmount amount="1" currency="QPSP" />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
+              <span className={s.priceAmount}>
+                888 %
+              </span>
             </div>
           </CardCell>
           <CardCell
             header={(
               <>
-                {t('common:Price impact')}
+                {t('common:Daily')}
                 <Tooltip
                   sizeT="small"
-                  content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+                  content={t('common:TOOLTIP TODO')}
                 />
               </>
             )}
             className={s.cell}
           >
-            <CurrencyAmount amount="<0.01" currency="%" />
+            <div className={s.cellAmount}>
+              <span className={s.priceAmount}>
+                0.008 %
+              </span>
+            </div>
           </CardCell>
           <CardCell
             header={(
               <>
-                {t('common:Fee')}
+                {t('common:Current Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+                  content={t('common:TOOLTIP TODO')}
                 />
               </>
             )}
             className={s.cell}
           >
-            <CurrencyAmount amount="0.001" currency="XTZ" />
+            <Button href="#" theme="underlined">
+              Bake&Bake
+            </Button>
           </CardCell>
           <CardCell
             header={(
               <>
-                {t('common:Route')}
+                {t('common:Next Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+                  content={t('common:TOOLTIP TODO')}
                 />
               </>
             )}
             className={s.cell}
           >
-            <Route
-              routes={['qpsp', 'usd', 'xtz']}
-            />
+            <Button href="#" theme="underlined">
+              Everstake
+            </Button>
           </CardCell>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
+          <CardCell
+            header={(
+              <>
+                {t('common:Lock Period')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:TOOLTIP TODO')}
+                />
+              </>
+            )}
+            className={s.cell}
           >
-            View Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
+            <div className={s.cellAmount}>
+              <div className={cx(s.govBlockLabel, s.priceAmount)}>
+                1
+                {' '}
+                <span className={s.govBlockSpan}>D</span>
+              </div>
+            </div>
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('common:Withdrawal Fee')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:TOOLTIP TODO')}
+                />
+              </>
+            )}
+            className={s.cell}
+          >
+            <div className={s.cellAmount}>
+              <span className={s.priceAmount}>
+                888 %
+              </span>
+            </div>
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('common:Interface Fee')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:TOOLTIP TODO')}
+                />
+              </>
+            )}
+            className={s.cell}
+          >
+            <div className={s.cellAmount}>
+              <span className={s.priceAmount}>
+                888 %
+              </span>
+            </div>
+          </CardCell>
+          <div className={s.detailsButtons}>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              Pair Analytics
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              Farm Contract
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+          </div>
+          <div className={s.detailsButtons}>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              Token Contract
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              Project
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+          </div>
         </Card>
       </StickyBlock>
     </>

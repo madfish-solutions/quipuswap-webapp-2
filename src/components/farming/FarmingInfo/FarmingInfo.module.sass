@@ -1,8 +1,22 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.priceAmount
+  font-weight: 600
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
 .chart
   margin-bottom: 24px
+
+.tokens
+  display: flex
+  align-items: center
+
+.title
+  margin-left: 16px
 
 .govBody
   font-size: 1.143rem
@@ -93,39 +107,77 @@
   flex-direction: column
   margin-top: 40px
 
+.detailsButton
+  display: flex
+  align-items: center
+  margin-left: auto
+  margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-left: auto
+  margin-top: 12px
+  &:not(:last-child)
+    margin-top: 32px
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+    &:not(:first-child)
+      margin-top: 16px
+
 .light
   .reward
     border: 2px dashed $hover-primary-01-fallback
     color: $text-01
-  .amount
-    color: $text-01
-  .govBlockLabel
+  .amount, govBlockLabel, .priceAmount
     color: $text-01
 
 .dark
   .reward
     border: 2px dashed $hover-primary-02-fallback
     color: $text-inverse
-  .amount
-    color: $text-inverse
-  .govBlockLabel
+  .amount, govBlockLabel, .priceAmount
     color: $text-inverse
 
 @include media('>phone')
   .rewardAmount
     font-size: 1.714rem
 
-@include media('>Lphone', '<=Ltablet')
-  .rewardAmount
-    font-size: 2.286rem
-
 @include media('>Lphone')
+  .detailsButtons
+    justify-content: flex-end
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
   .rewardContent
     margin-right: 32px
   .amount
     font-size: 1.429rem
 
+
+@include media('>Lphone', '<=Ltablet')
+  .detailsButtons
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    margin-left: auto
+    margin-top: 12px
+  .rewardAmount
+    font-size: 2.286rem
+
+
 @include media('>Ltablet')
+  .detailsButtons
+    justify-content: flex-end
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
   .chart
     margin-bottom: 32px
   .header

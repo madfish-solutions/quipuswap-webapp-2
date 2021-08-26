@@ -57,6 +57,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             token1={tokenPair.token1}
             token2={tokenPair.token2}
             width={48}
+            className={s.tokenLogos}
           />
           <h3 className={s.title}>
             {getWhitelistedTokenSymbol(tokenPair.token1)}
