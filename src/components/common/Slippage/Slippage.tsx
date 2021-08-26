@@ -6,7 +6,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Input } from '@components/ui/Input';
 
 import { Tooltip } from '@components/ui/Tooltip';
-import { validateMinMax } from '@utils/validators';
 import s from './Slippage.module.sass';
 
 const slippagePercents = ['0.5 %', '1 %', '3 %'];
@@ -20,6 +19,12 @@ const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
+
+const validateMinMax = (min: number, max: number) => (value: string) => (
+  !value || (+value >= min && +value <= max)
+    ? undefined
+    : 'err'
+);
 
 const Percentage: React.FC<{}> = () => <div className={s.customPercent}>%</div>;
 

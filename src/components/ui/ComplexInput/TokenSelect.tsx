@@ -19,6 +19,7 @@ import { useAccountPkh } from '@utils/dapp';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
+  noBalanceButtons?: boolean
   className?: string
   balance: string
   exchangeRate?: string
@@ -39,6 +40,7 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
+  noBalanceButtons = false,
   label,
   handleBalance,
   exchangeRate = null,
@@ -137,7 +139,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        <PercentSelector value={balance} handleBalance={handleBalance} />
+        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
         <ComplexError error={error} />
       </div>
     </>

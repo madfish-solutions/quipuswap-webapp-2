@@ -108,7 +108,7 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [, setSubm] = useState<boolean>(false);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [fee, setFee] = useState<BigNumber>();
-  const [swapParams, setSwapParams] = useState<TransferParams[]>([]);
+  const [, setSwapParams] = useState<TransferParams[]>([]);
   const [oldToken1, setOldToken1] = useState<WhitelistedToken>();
   const [oldToken2, setOldToken2] = useState<WhitelistedToken>();
   const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
@@ -384,10 +384,17 @@ const RealForm:React.FC<SwapFormProps> = ({
           )}
         </Field>
         <SwapButton onClick={() => {
-          form.mutators.setValue(
-            'balance1',
-            values.balance2,
-          );
+          if (lastChange === 'balance1') {
+            form.mutators.setValue(
+              'balance1',
+              values.balance2,
+            );
+          } else {
+            form.mutators.setValue(
+              'balance2',
+              values.balance1,
+            );
+          }
           handleSwapTokens();
         }}
         />
@@ -402,14 +409,8 @@ const RealForm:React.FC<SwapFormProps> = ({
               onFocus={() => setLastChange('balance2')}
               token={token2}
               setToken={setToken2}
-              handleBalance={(value) => {
-                if (token2) {
-                  form.mutators.setValue(
-                    'balance2',
-                    new BigNumber(parseDecimals(value, 0, Infinity, token2.metadata.decimals)),
-                  );
-                }
-              }}
+              handleBalance={() => {}}
+              noBalanceButtons
               handleChange={(token) => handleTokenChange(token, 'second')}
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
@@ -479,12 +480,12 @@ const RealForm:React.FC<SwapFormProps> = ({
         </Button>
       </Card>
       <SwapDetails
+        dex={dex}
         currentTab={currentTab.label}
         token1={token1}
         token2={token2}
         fee={(fee ?? 0).toString()}
         tokensData={tokensData}
-        swapParams={swapParams}
         values={values}
         priceImpact={priceImpact}
         rate1={rate1}
