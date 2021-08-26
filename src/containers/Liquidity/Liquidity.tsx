@@ -180,8 +180,8 @@ const Header:React.FC<HeaderProps> = ({
             : estimateTokenInShares(dex.storage, value.toString()));
           // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
           const balance = new BigNumber(
-            values.balance3 * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
-          );
+            values.balance3, // ONLY WORKS FOR XTZ LPs!
+          ).multipliedBy(new BigNumber(10).pow(new BigNumber(6)));
           const sharesA = await getMethod(
             tokenPair.token1,
             tokenPair.dex,
@@ -235,7 +235,9 @@ const Header:React.FC<HeaderProps> = ({
             ? tokensData.first.token.decimals
             : tokensData.second.token.decimals;
           const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-          const inputValueInner = new BigNumber(inputWrapper * (10 ** decimals1)).integerValue();
+          const inputValueInner = new BigNumber(inputWrapper)
+            .multipliedBy(new BigNumber(10).pow(new BigNumber(decimals1)))
+            .integerValue();
           const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
           try {
             const estimatedOutputValue = await estimateSwap(
@@ -454,7 +456,7 @@ const Header:React.FC<HeaderProps> = ({
                 );
               }}
               balance={tokenPair.balance}
-              frozenBalance={tokenPair.frozenBalance}
+              frozenBalance={tokenPair.frozenBalance ?? '0'}
               id="liquidity-remove-input"
               label="Select LP"
               className={s.input}

@@ -18,3 +18,5 @@ export * from './slippageToBignum';
 export * from './mutezToTz';
 export * from './getWhitelistedBakerName';
 export * from './fallbackTokenToTokenData';
+export * from './fromDecimals';
+export * from './toDecimals';

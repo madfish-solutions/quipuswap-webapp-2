@@ -35,7 +35,7 @@ export const submitForm = (
       };
       const slippage = slippageToBignum(values.slippage).div(100);
       const inputValue = isTez(tokensData.first)
-        ? tezos!!.format('tz', 'mutez', values.balance1) as any
+        ? new BigNumber(tezos!!.format('tz', 'mutez', values.balance1))
         : toNat(values.balance1, tokensData.first.token.decimals);
       const swapParams = await swap(
         tezos,

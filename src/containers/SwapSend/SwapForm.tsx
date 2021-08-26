@@ -25,6 +25,7 @@ import {
   composeValidators, isAddress, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
+  fromDecimals,
   getWhitelistedTokenSymbol,
   isTokenEqual,
   parseDecimals,
@@ -145,7 +146,8 @@ const RealForm:React.FC<SwapFormProps> = ({
       : tokensData.second.token.decimals;
 
     const inputWrapper = lastChange === 'balance1' ? val.balance1 : val.balance2;
-    const inputValueInner = new BigNumber(+inputWrapper * (10 ** decimals1)).integerValue();
+    const inputValueInner = new BigNumber(inputWrapper)
+      .multipliedBy(new BigNumber(10).pow(new BigNumber(decimals1)));
 
     const fromAsset = tokensData.first.token.address === 'tez' ? 'tez' : {
       contract: tokensData.first.token.address,
@@ -180,12 +182,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           sendDex,
         );
       }
-      retValue = retValue.div(
-        new BigNumber(10)
-          .pow(
-            new BigNumber(decimals2),
-          ),
-      );
+      retValue = fromDecimals(retValue, decimals2);
     } catch (e) {
       console.error(e);
     }
@@ -200,7 +197,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       const rate1buf = new BigNumber(val.balance1)
         .div(result);
       const priceImp = rate1buf
-        .div(1 / +tokensData.first.exchangeRate)
+        .div(new BigNumber(1).div(tokensData.first.exchangeRate))
         .multipliedBy(100).minus(100);
       setRate1(rate1buf);
       setRate2(rate1buf.exponentiatedBy(-1));
