@@ -4,10 +4,12 @@ import {
   SAVED_TOKENS_KEY,
   TESTNET_TOKENS,
 } from '@utils/defaults';
-import { WhitelistedToken, WhitelistedTokenPair, QSNetwork } from '@utils/types';
+import {
+  WhitelistedToken, WhitelistedTokenPair, QSNetwork,
+} from '@utils/types';
 
 import { isContractAddress } from '@utils/validators';
-import { ipfsToHttps } from '@utils/helpers';
+import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 
 export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
@@ -49,7 +51,8 @@ export const getTokens = async (
 export const saveCustomToken = (token:WhitelistedToken) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
-    JSON.stringify([token, ...getSavedTokens()]),
+    JSON.stringify([token, ...getSavedTokens()
+      .filter((x:WhitelistedToken) => !isTokenEqual(x, token))]),
   );
 };
 

@@ -1,17 +1,19 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
-
 import { Tooltip } from '@components/ui/Tooltip';
+
 import s from './Slippage.module.sass';
 
 const slippagePercents = ['0.5 %', '1 %', '3 %'];
 
 type StickyBlockProps = {
-  className?: string
+  className?: string,
+  handleChange: (value:string) => void
 };
 
 const modeClass = {
@@ -19,14 +21,27 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+const Percentage: React.FC<{ className?: string }> = ({ className }) => (
+  <div className={cx(className, s.customPercent)}>%</div>
+);
+
 export const Slippage: React.FC<StickyBlockProps> = ({
   className,
+  handleChange,
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const [activeButton, setActiveButton] = useState<number | null>(0);
-  const [inputValue, setInputValue] = useState(slippagePercents[0]);
+  const [activeButton, setActiveButton] = useState<number | 'input' | null>(0);
+  const [customValue, setCustomValue] = useState<string>('');
+
+  const handleCustomValueChange = useCallback((val) => {
+    const validValue = validateMinMax(0, 30)(val);
+    if (!validValue) {
+      setCustomValue(val);
+      handleChange(val);
+    }
+  }, []);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
@@ -42,7 +57,8 @@ export const Slippage: React.FC<StickyBlockProps> = ({
             className={cx(s.button, { [s.active]: index === activeButton })}
             onClick={() => {
               setActiveButton(index);
-              setInputValue(percent);
+              handleCustomValueChange('');
+              handleChange(percent);
             }}
           >
             <span className={s.buttonInner}>
@@ -52,10 +68,14 @@ export const Slippage: React.FC<StickyBlockProps> = ({
         ))}
         <Input
           inputSize="small"
-          value={inputValue}
+          placeholder="CUSTOM"
+          value={customValue}
+          EndAdornment={customValue ? Percentage : undefined}
+          active={activeButton === 'input'}
           onChange={(e) => {
-            setActiveButton(null);
-            setInputValue(e.currentTarget.value);
+            const val = e.currentTarget.value;
+            setActiveButton('input');
+            handleCustomValueChange(val);
           }}
         />
       </div>

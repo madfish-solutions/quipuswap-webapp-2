@@ -16,7 +16,7 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { localSearchToken, isTokensEqual } from '@utils/helpers';
+import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Checkbox } from '@components/ui/Checkbox';
@@ -229,7 +229,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           )}
           footer={(
             <Button
-              onClick={() => onChange({ token1: values.token1, token2: values.token2, dex: '' })}
+              onClick={() => onChange({
+                token1: values.token1,
+                token2: values.token2,
+              } as WhitelistedTokenPair)}
               disabled={!values.token2 || !values.token1}
               className={s.modalButton}
               theme="primary"
@@ -244,7 +247,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           onRequestClose={(e) => {
             if (values.token1 && values.token2) {
-              onChange({ token1: values.token1, token2: values.token2, dex: '' });
+              onChange({ token1: values.token1, token2: values.token2 } as WhitelistedTokenPair);
             }
             if (onRequestClose) onRequestClose(e);
           }}
@@ -314,7 +317,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {!values.token2 && allTokens
-            .filter((x) => !values.token1 || !isTokensEqual(x, values.token1))
+            .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
             .map((token) => {
               const {
                 contractAddress, fa2TokenId,

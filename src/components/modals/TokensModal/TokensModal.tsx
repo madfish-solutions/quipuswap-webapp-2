@@ -15,7 +15,7 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken } from '@utils/helpers';
+import { parseNumber, localSearchToken, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -36,7 +36,8 @@ const themeClass = {
 };
 
 type TokensModalProps = {
-  onChange: (token: WhitelistedToken) => void
+  onChange: (token: WhitelistedToken) => void,
+  blackListedTokens: WhitelistedToken[],
 } & ReactModal.Props;
 
 type HeaderProps = {
@@ -147,6 +148,7 @@ const AutoSave = (props:any) => (
 
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
+  blackListedTokens = [],
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
@@ -156,7 +158,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const tezos = useTezos();
   const network = useNetwork();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens } = useTokens();
+  const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -193,8 +195,13 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
 
-  const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
-    ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
+  const allTokens = useMemo(() => (
+    inputValue.length > 0 && filteredTokens.length === 0
+      ? searchTokens
+      : filteredTokens
+  )
+    .filter((x) => !blackListedTokens.find((y) => isTokenEqual(x, y))),
+  [inputValue, filteredTokens, searchTokens, blackListedTokens]);
 
   useEffect(() => {
     const getFa2 = async () => {
@@ -237,14 +244,14 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {isEmptyTokens && !searchLoading && (
+          {isEmptyTokens && (!searchLoading && !tokensLoading) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
               {' '}
             </div>
           )}
-          {isEmptyTokens && searchLoading && (
+          {isEmptyTokens && (searchLoading || tokensLoading) && (
             [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {allTokens.map((token) => {

@@ -20,6 +20,7 @@ import s from './ComplexInput.module.sass';
   type PositionSelectProps = {
     className?: string
     balance?: string
+    frozenBalance?: string
     label: string
     error?: string
     handleChange?: (tokenPair:WhitelistedTokenPair) => void
@@ -36,6 +37,7 @@ const themeClass = {
 export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
+  frozenBalance = '10.00',
   label,
   handleBalance,
   value,
@@ -95,7 +97,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+                  {prettyPrice(parseFloat(frozenBalance))}
                 </div>
 
               </div>
