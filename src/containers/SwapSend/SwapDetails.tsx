@@ -45,12 +45,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const sellRate = ((rate2 && !rate2.isNaN()) && !rate2.eq(0))
+  const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
     ? rate2
-    : (+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1));
-  const buyRate = ((rate1 && !rate1.isNaN()) && !rate1.eq(0))
+    : (+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1)))
+    .toString();
+  const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
     ? rate1
-    : (+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1));
+    : (+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1)))
+    .toString();
   return (
     <Card
       header={{
@@ -74,7 +76,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={sellRate.toString()}
+            amount={sellRate}
             currency={token2
               ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
             dollarEquivalent={`${tokensData.first.exchangeRate}`}
@@ -97,7 +99,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={buyRate.toString()}
+            amount={buyRate}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
             dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
