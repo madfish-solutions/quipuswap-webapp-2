@@ -28,17 +28,7 @@ const LiquidityPage: React.FC = () => {
   );
 };
 
-export const getStaticPaths = async () => ({
-  paths: [
-    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'en' },
-    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'fr' },
-    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'ru' },
-    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'es' },
-    { params: { 'from-to': process.env.DEFAULT_SWAP_URI }, locale: 'pt' },
-  ],
-  fallback: true,
-});
-export const getStaticProps = async ({ locale }: { locale: string }) => ({
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
     ...await serverSideTranslations(locale, ['common', 'liquidity']),
   },
