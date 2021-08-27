@@ -1,9 +1,9 @@
 import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
 
@@ -21,14 +21,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const validateMinMax = (min: BigNumber, max: BigNumber) => (value: string) => (
-  !value || (
-    new BigNumber(value).gte(min)
-    && new BigNumber(value).lte(max))
-    ? undefined
-    : 'err'
-);
-
 const Percentage: React.FC<{}> = () => <div className={s.customPercent}>%</div>;
 
 export const Slippage: React.FC<StickyBlockProps> = ({
@@ -42,7 +34,7 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
-    const validValue = validateMinMax(new BigNumber(0), new BigNumber(30))(val);
+    const validValue = validateMinMax(0, 30)(val);
     if (!validValue) {
       setCustomValue(val);
       handleChange(val);

@@ -360,6 +360,7 @@ const RealForm:React.FC<SwapFormProps> = ({
                   );
                 }
               }}
+              noBalanceButtons={tokensData.first.balance === '0'}
               handleChange={(token) => handleTokenChange(token, 'first')}
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}

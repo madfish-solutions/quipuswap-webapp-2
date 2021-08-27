@@ -66,7 +66,7 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
             </span>
           )
           : (
-            <Link key={loc} href={`${router.pathname}`} locale={loc}>
+            <Link key={loc} href={`${router.asPath}`} locale={loc}>
               <a className={s.locale}>
                 {loc}
               </a>

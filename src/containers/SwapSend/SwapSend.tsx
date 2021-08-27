@@ -2,7 +2,6 @@ import { useRouter } from 'next/router';
 import React, {
   useMemo, useState, useEffect, useCallback,
 } from 'react';
-import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
@@ -21,6 +20,7 @@ import {
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
+  fromDecimals,
   getWhitelistedTokenSymbol,
   isTokenEqual,
   localSearchToken,
@@ -97,12 +97,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         token.fa2TokenId,
       );
       if (balance) {
-        finalBalance = balance.div(
-          new BigNumber(10)
-            .pow(
-              new BigNumber(token.metadata.decimals),
-            ),
-        ).toString();
+        finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
       }
     }
 
