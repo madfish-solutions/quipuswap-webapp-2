@@ -1,11 +1,12 @@
 import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Input } from '@components/ui/Input';
-
 import { Tooltip } from '@components/ui/Tooltip';
+
 import s from './Slippage.module.sass';
 
 const slippagePercents = ['0.5 %', '1 %', '3 %'];
@@ -20,8 +21,10 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const validateMinMax = (min: number, max: number) => (value: string) => (
-  !value || (+value >= min && +value <= max)
+const validateMinMax = (min: BigNumber, max: BigNumber) => (value: string) => (
+  !value || (
+    new BigNumber(value).gte(min)
+    && new BigNumber(value).lte(max))
     ? undefined
     : 'err'
 );
@@ -36,10 +39,10 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [activeButton, setActiveButton] = useState<number | null>(0);
-  const [customValue, setCustomValue] = useState();
+  const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
-    const validValue = validateMinMax(0, 30)(val);
+    const validValue = validateMinMax(new BigNumber(0), new BigNumber(30))(val);
     if (!validValue) {
       setCustomValue(val);
       handleChange(val);
