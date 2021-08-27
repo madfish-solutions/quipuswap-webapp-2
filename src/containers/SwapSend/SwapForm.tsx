@@ -268,7 +268,17 @@ const RealForm:React.FC<SwapFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values, tokensData, tezos, accountPkh, token1, token2, dex, dexstorage]);
+  }, [
+    values,
+    tokensData,
+    tezos,
+    accountPkh,
+    token1,
+    token2,
+    dex,
+    dex2,
+    dexstorage,
+  ]);
 
   useEffect(() => {
     form.mutators.setValue('balance1', undefined);
@@ -374,13 +384,13 @@ const RealForm:React.FC<SwapFormProps> = ({
         <SwapButton onClick={() => {
           if (lastChange === 'balance1') {
             form.mutators.setValue(
-              'balance1',
-              values.balance2,
+              'balance2',
+              values.balance1,
             );
           } else {
             form.mutators.setValue(
-              'balance2',
-              values.balance1,
+              'balance1',
+              values.balance2,
             );
           }
           handleSwapTokens();
