@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
-import { TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
+import { FoundDex } from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
@@ -26,11 +26,11 @@ type SwapDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData: TokenDataMap
-  swapParams: TransferParams[]
   values: SwapFormValues
   priceImpact: BigNumber
   rate1: BigNumber
   rate2: BigNumber
+  dex?: FoundDex
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
@@ -39,16 +39,20 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   token1,
   token2,
   tokensData,
-  swapParams,
   priceImpact,
   rate1,
   rate2,
+  dex,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const sellRate = rate2 && !rate2.isNaN() ? rate2 : (+(tokensData.first.exchangeRate ?? 1))
-  / (+(tokensData.second.exchangeRate ?? 1));
-  const buyRate = rate1 && !rate1.isNaN() ? rate1 : (+(tokensData.second.exchangeRate ?? 1))
-  / (+(tokensData.first.exchangeRate ?? 1));
+  const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
+    ? rate2
+    : (+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1)))
+    .toString();
+  const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
+    ? rate1
+    : (+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1)))
+    .toString();
   return (
     <Card
       header={{
@@ -72,7 +76,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={sellRate.toString()}
+            amount={sellRate}
             currency={token2
               ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
             dollarEquivalent={`${tokensData.first.exchangeRate}`}
@@ -95,7 +99,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={buyRate.toString()}
+            amount={buyRate}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
             dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
@@ -161,12 +165,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               }
         />
       </CardCell>
-      {swapParams.length > 0 && (
+      {dex && (
       <Button
         className={s.detailsButton}
         theme="inverse"
         target="_blank"
-        href={`https://analytics.quipuswap.com/pairs/${swapParams.find((x) => x.parameter?.entrypoint === 'tezToTokenPayment' || x.parameter?.entrypoint === 'tezToTokenPayment')?.to}`}
+        href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+        external
       >
         View Pair Analytics
         <ExternalLink className={s.linkIcon} />

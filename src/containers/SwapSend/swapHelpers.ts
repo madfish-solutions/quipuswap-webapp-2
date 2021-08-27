@@ -1,18 +1,11 @@
 import { TezosToolkit } from '@taquito/taquito';
-import BigNumber from 'bignumber.js';
 import { batchify, swap } from '@quipuswap/sdk';
 
 import { FACTORIES } from '@utils/defaults';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, TokenDataType,
+  QSMainNet, SwapFormValues, TokenDataMap,
 } from '@utils/types';
-import { slippageToBignum } from '@utils/helpers';
-
-export const toNat = (amount: any, decimals: number) => new BigNumber(amount)
-  .times(10 ** decimals)
-  .integerValue(BigNumber.ROUND_DOWN);
-
-export const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
+import { getValueForSDK, slippageToBignum, transformTokenDataToAsset } from '@utils/helpers';
 
 export const submitForm = (
   values: SwapFormValues,
@@ -25,18 +18,10 @@ export const submitForm = (
   if (!tezos) return;
   const asyncFunc = async () => {
     try {
-      const fromAsset = isTez(tokensData.first) ? 'tez' : {
-        contract: tokensData.first.token.address,
-        id: tokensData.first.token.id ?? undefined,
-      };
-      const toAsset = isTez(tokensData.second) ? 'tez' : {
-        contract: tokensData.second.token.address,
-        id: tokensData.second.token.id ?? undefined,
-      };
+      const fromAsset = transformTokenDataToAsset(tokensData.first);
+      const toAsset = transformTokenDataToAsset(tokensData.second);
       const slippage = slippageToBignum(values.slippage).div(100);
-      const inputValue = isTez(tokensData.first)
-        ? tezos!!.format('tz', 'mutez', values.balance1) as any
-        : toNat(values.balance1, tokensData.first.token.decimals);
+      const inputValue = getValueForSDK(tokensData.first, values.balance1, tezos);
       const swapParams = await swap(
         tezos,
         FACTORIES[networkId],
@@ -57,8 +42,3 @@ export const submitForm = (
   };
   asyncFunc();
 };
-
-export const tokenToAsset = (token:TokenDataType) => (token.token.address === 'TEZ' ? 'tez' : {
-  contract: token.token.address,
-  id: token.token.id ?? undefined,
-});
