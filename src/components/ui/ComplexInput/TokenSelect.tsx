@@ -16,6 +16,7 @@ import { Shevron } from '@components/svg/Shevron';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useAccountPkh } from '@utils/dapp';
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -60,9 +61,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
   const dollarEquivalent = useMemo(() => (exchangeRate
-    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
     : ''
   ),
   [exchangeRate, value]);
