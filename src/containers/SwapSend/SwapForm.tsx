@@ -110,18 +110,17 @@ const RealForm:React.FC<SwapFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [fee, setFee] = useState<BigNumber>();
   const [, setSwapParams] = useState<TransferParams[]>([]);
+  const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [oldToken1, setOldToken1] = useState<WhitelistedToken>();
   const [oldToken2, setOldToken2] = useState<WhitelistedToken>();
   const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
   const [rate1, setRate1] = useState<BigNumber>(new BigNumber(0));
   const [rate2, setRate2] = useState<BigNumber>(new BigNumber(0));
-  const [dex, setDex] = useState<FoundDex>();
-  const [dex2, setDex2] = useState<FoundDex>();
-  const [dexstorage, setDexstorage] = useState<any>();
-  const [, setDexstorage2] = useState<any>();
+  const [[dex, dex2], setDex] = useState<FoundDex[]>([]);
+  const [[dexstorage, dexstorage2], setDexstorage] = useState<any>([]);
+  // const setLastChange = (val: 'balance1' | 'balance2') => form.mutators.setValue('lastChange', val);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -166,13 +165,14 @@ const RealForm:React.FC<SwapFormProps> = ({
     let retValue = new BigNumber(0);
     try {
       if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
+        const sendDex = { inputDex: dex, outputDex: dex2 };
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
           fromAsset,
           toAsset,
           valuesInner,
-          { inputDex: dex2, outputDex: dex },
+          sendDex,
         );
       } else {
         const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
@@ -305,15 +305,18 @@ const RealForm:React.FC<SwapFormProps> = ({
         id: token2.fa2TokenId ?? undefined,
       };
 
-      const dexbuf1 = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
-      const dexStorageBuf1:any = await dexbuf1.contract.storage();
-      setDex(dexbuf1);
-      setDexstorage(dexStorageBuf1);
       if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
-        const dexbuf2 = await findDex(tezos, FACTORIES[networkId], fromAsset);
+        const dexbuf1 = await findDex(tezos, FACTORIES[networkId], fromAsset);
+        const dexStorageBuf1:any = await dexbuf1.contract.storage();
+        const dexbuf2 = await findDex(tezos, FACTORIES[networkId], toAsset);
         const dexStorageBuf2:any = await dexbuf2.contract.storage();
-        setDex2(dexbuf2);
-        setDexstorage2(dexStorageBuf2);
+        setDex([dexbuf1, dexbuf2]);
+        setDexstorage([dexStorageBuf1, dexStorageBuf2]);
+      } else {
+        const dexbuf = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
+        const dexStorageBuf:any = await dexbuf.contract.storage();
+        setDex([dex]);
+        setDexstorage([dexStorageBuf, undefined]);
       }
     };
     getDex();
@@ -382,18 +385,26 @@ const RealForm:React.FC<SwapFormProps> = ({
           )}
         </Field>
         <SwapButton onClick={() => {
+          handleSwapTokens();
+          if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
+            setDex([dex2, dex]);
+            setDexstorage([dexstorage2, dexstorage]);
+          }
           if (lastChange === 'balance1') {
-            form.mutators.setValue(
-              'balance2',
-              values.balance1,
-            );
-          } else {
+            if (values.balance1) {
+              form.mutators.setValue(
+                'balance2',
+                new BigNumber(values.balance1),
+              );
+              setLastChange('balance2');
+            }
+          } else if (values.balance2) {
             form.mutators.setValue(
               'balance1',
-              values.balance2,
+              new BigNumber(values.balance2),
             );
+            setLastChange('balance1');
           }
-          handleSwapTokens();
         }}
         />
         <Field
