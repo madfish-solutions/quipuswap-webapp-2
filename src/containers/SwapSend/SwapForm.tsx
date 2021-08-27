@@ -120,7 +120,6 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [rate2, setRate2] = useState<BigNumber>(new BigNumber(0));
   const [[dex, dex2], setDex] = useState<FoundDex[]>([]);
   const [[dexstorage, dexstorage2], setDexstorage] = useState<any>([]);
-  // const setLastChange = (val: 'balance1' | 'balance2') => form.mutators.setValue('lastChange', val);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
