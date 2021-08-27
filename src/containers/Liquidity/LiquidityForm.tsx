@@ -735,7 +735,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       </Card>
       <LiquidityDetails
         currentTab={currentTab.label}
-        params={removeLiquidityParams.length < 1 ? addLiquidityParams : removeLiquidityParams}
         token1={token1}
         token2={token2}
         tokensData={tokensData}

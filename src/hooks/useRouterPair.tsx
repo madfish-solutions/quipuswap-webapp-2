@@ -2,8 +2,8 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, isTokenEqual } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 
 type RouterPairType = {
   page: string,
@@ -11,14 +11,13 @@ type RouterPairType = {
   initialLoad:boolean,
   token1:WhitelistedToken,
   token2:WhitelistedToken,
-  tokenPair?: WhitelistedTokenPair
 };
 
 const pairString = '[from-to]';
 const pairLength = pairString.length;
 
 export const useRouterPair = ({
-  page, urlLoaded, initialLoad, token1, token2, tokenPair,
+  page, urlLoaded, initialLoad, token1, token2,
 }:RouterPairType) => {
   const router = useRouter();
   let urlSearchParams;
@@ -44,21 +43,6 @@ export const useRouterPair = ({
       }
     }
   }, [token1, token2]);
-
-  useEffect(() => {
-    if (
-      tokenPair
-        && (!isTokenEqual(tokenPair.token1, token1)
-        || !isTokenEqual(tokenPair.token2, token2))
-    ) {
-      if (urlLoaded && initialLoad) {
-        const fromToken = getWhitelistedTokenSymbol(tokenPair.token1, 36);
-        const toToken = getWhitelistedTokenSymbol(tokenPair.token2, 36);
-        const url = `/${page}/${fromToken}-${toToken}`;
-        router.replace(url, undefined, { shallow: true });
-      }
-    }
-  }, [tokenPair]);
 
   useEffect(() => {
     if (!from) {

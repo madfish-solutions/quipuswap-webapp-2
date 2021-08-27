@@ -87,7 +87,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     initialLoad,
     token1,
     token2,
-    tokenPair,
   });
 
   const currentTab = useMemo(
