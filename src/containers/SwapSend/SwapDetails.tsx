@@ -47,11 +47,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   const { t } = useTranslation(['common', 'swap']);
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
     ? rate2
-    : (+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1)))
+    : new BigNumber(tokensData.first.exchangeRate ?? 1)
+      .div(new BigNumber(tokensData.second.exchangeRate ?? 1)))
     .toString();
   const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
     ? rate1
-    : (+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1)))
+    : new BigNumber(tokensData.second.exchangeRate ?? 1)
+      .div(new BigNumber(tokensData.first.exchangeRate ?? 1)))
     .toString();
   return (
     <Card
