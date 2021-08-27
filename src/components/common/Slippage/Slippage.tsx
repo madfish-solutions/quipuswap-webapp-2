@@ -32,7 +32,7 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const [activeButton, setActiveButton] = useState<number | 'input' | null>(0);
+  const [activeButton, setActiveButton] = useState<number | 'input' | null>(null);
   const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
