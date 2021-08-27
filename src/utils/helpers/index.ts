@@ -25,3 +25,5 @@ export * from './toNat';
 export * from './transformTokenDataToAsset';
 export * from './transformWhitelistedTokenToAsset';
 export * from './getValueForSDK';
+export * from './handleTokenChange';
+export * from './handleSearchToken';
