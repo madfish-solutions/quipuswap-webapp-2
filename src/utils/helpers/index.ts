@@ -20,7 +20,7 @@ export * from './getWhitelistedBakerName';
 export * from './fallbackTokenToTokenData';
 export * from './fromDecimals';
 export * from './toDecimals';
-export * from './isAddressTez';
+export * from './isTokenDataAddressTez';
 export * from './toNat';
 export * from './transformTokenDataToAsset';
 export * from './transformWhitelistedTokenToAsset';
