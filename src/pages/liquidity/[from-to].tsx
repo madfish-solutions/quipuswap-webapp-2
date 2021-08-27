@@ -45,7 +45,7 @@ export const getServerSideProps = async (props:any) => {
   if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
     return {
       redirect: {
-        destination: `/swap/${from}-${to}`,
+        destination: `/liquidity/${from}-${to}`,
         permanent: false,
       },
     };
@@ -54,7 +54,7 @@ export const getServerSideProps = async (props:any) => {
   if (splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
     return {
       redirect: {
-        destination: `/swap/${from}-${to}`,
+        destination: `/liquidity/${from}-${to}`,
         permanent: false,
       },
     };
