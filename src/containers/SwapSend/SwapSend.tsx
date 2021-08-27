@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
   QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
