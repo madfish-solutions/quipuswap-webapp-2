@@ -314,7 +314,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       } else {
         const dexbuf = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
         const dexStorageBuf:any = await dexbuf.contract.storage();
-        setDex([dex]);
+        setDex([dexbuf]);
         setDexstorage([dexStorageBuf, undefined]);
       }
     };
@@ -407,7 +407,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         }}
         />
         <Field
-          parse={(v) => parseDecimals(v, 0, Infinity)}
+          parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
           name="balance2"
         >
           {({ input, meta }) => (
