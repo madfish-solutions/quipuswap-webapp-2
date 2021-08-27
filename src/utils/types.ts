@@ -75,10 +75,10 @@ export type TokenDataMap = {
 };
 
 export type SwapFormValues = {
+  lastChange: 'balance1' | 'balance2'
   balance1: BigNumber
   balance2: BigNumber
   recipient: string
-  lastChange: string
   slippage: string
 };
 
