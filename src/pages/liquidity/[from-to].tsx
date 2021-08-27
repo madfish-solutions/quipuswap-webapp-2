@@ -3,6 +3,8 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Liquidity } from '@containers/Liquidity';
 import { LineChartSampleData } from '@components/ui/LineChart/content';
@@ -28,10 +30,41 @@ const LiquidityPage: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...await serverSideTranslations(locale, ['common', 'liquidity']),
-  },
-});
+export const getServerSideProps = async (props:any) => {
+  const { locale, query } = props;
+  const splittedTokens = query['from-to'].split('-');
+  let from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+  const to = getWhitelistedTokenSymbol(STABLE_TOKEN);
+  const isSoleToken = splittedTokens.length < 2;
+  const isNoTokens = splittedTokens.length < 1;
+
+  if (
+    (isSoleToken && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) || splittedTokens[1] === ''
+  ) [from] = splittedTokens;
+
+  if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
+    return {
+      redirect: {
+        destination: `/swap/${from}-${to}`,
+        permanent: false,
+      },
+    };
+  }
+
+  if (splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
+    return {
+      redirect: {
+        destination: `/swap/${from}-${to}`,
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      ...await serverSideTranslations(locale, ['common', 'liquidity']),
+    },
+  };
+};
 
 export default LiquidityPage;

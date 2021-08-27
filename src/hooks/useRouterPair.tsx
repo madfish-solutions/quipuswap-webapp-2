@@ -44,22 +44,5 @@ export const useRouterPair = ({
     }
   }, [token1, token2]);
 
-  useEffect(() => {
-    if (!from) {
-      const url = `/${page}/${getWhitelistedTokenSymbol(TEZOS_TOKEN)}-${getWhitelistedTokenSymbol(STABLE_TOKEN)}`;
-      router.replace(url, undefined, { shallow: true });
-      return;
-    } if (!to) {
-      let toToken;
-      if (from === STABLE_TOKEN.metadata.symbol) {
-        toToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-      } else if (from === TEZOS_TOKEN.metadata.symbol) {
-        toToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
-      }
-      const url = `/${page}/${from}-${toToken}`;
-      router.replace(url, undefined, { shallow: true });
-    }
-  }, []);
-
   return { from, to };
 };
