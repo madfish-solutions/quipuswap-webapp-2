@@ -8,6 +8,7 @@ import s from './Input.module.sass';
 export type InputProps = {
   error?: string
   disabled?: boolean
+  active?: boolean
   className?: string
   label?: string
   labelClassName?: string
@@ -30,6 +31,7 @@ const modeClass = {
 export const Input: React.FC<InputProps> = ({
   inputSize = 'medium',
   disabled = false,
+  active = false,
   className,
   label,
   labelClassName,
@@ -48,7 +50,7 @@ export const Input: React.FC<InputProps> = ({
     { [s.start]: !!StartAdornment },
     { [s.end]: !!EndAdornment },
     { [s.error]: !!error },
-    { [s.focused]: focused },
+    { [s.focused]: focused || active },
     { [s.disabled]: disabled },
     modeClass[colorThemeMode],
     sizeClass[inputSize],
