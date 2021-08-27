@@ -47,12 +47,10 @@ export const getServerSideProps = async (props:any) => {
     };
   }
 
-  console.log(splittedTokens);
-
   if (splittedTokens.length > 0
     && (splittedTokens[0] !== TEZOS_TOKEN.contractAddress
-    || splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol
-    || splittedTokens[0] !== TEZOS_TOKEN.metadata.name)
+    && splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol
+    && splittedTokens[0] !== TEZOS_TOKEN.metadata.name)
   ) {
     return {
       redirect: {

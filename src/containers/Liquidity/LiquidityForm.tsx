@@ -742,6 +742,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         poolShare={poolShare}
         balanceTotalA={(values.balanceTotalA ?? 0).toString()}
         balanceTotalB={(values.balanceTotalB ?? 0).toString()}
+        dex={dex}
       />
     </>
   );
