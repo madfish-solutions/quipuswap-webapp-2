@@ -283,12 +283,27 @@ const RealForm:React.FC<SwapFormProps> = ({
     tokensData,
     tezos,
     accountPkh,
-    token1,
-    token2,
     dex,
     dex2,
     dexstorage,
   ]);
+
+  useEffect(() => {
+    const localSaveFunc = () => {
+      handleInputChange(values);
+      if (tezos && accountPkh && token1 && token2) { asyncGetSwapParams(); }
+      promise = save(values);
+    };
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    timeout.current = setTimeout(localSaveFunc, debounce);
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
+  }, [token1, token2]);
 
   useEffect(() => {
     form.mutators.setValue('recipient', accountPkh);
