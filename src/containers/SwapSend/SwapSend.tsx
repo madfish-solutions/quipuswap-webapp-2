@@ -86,6 +86,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast]);
 
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: 'Swap completed!',
+    });
+  }, [updateToast]);
+
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
     tokenNumber: 'first' | 'second',
@@ -134,14 +141,16 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={(values) => {
+        onSubmit={(values, form) => {
           if (!tezos) return;
           submitForm(values,
             tezos,
             tokensData,
             tabsState,
             networkId,
-            (err) => handleErrorToast(err));
+            form,
+            (err) => handleErrorToast(err),
+            handleSuccessToast);
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {

@@ -106,7 +106,11 @@ const RealForm:React.FC<SwapFormProps> = ({
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const { openConnectWalletModal } = useConnectModalsState();
+  const {
+    openConnectWalletModal,
+    connectWalletModalOpen,
+    closeConnectWalletModal,
+  } = useConnectModalsState();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -288,6 +292,9 @@ const RealForm:React.FC<SwapFormProps> = ({
 
   useEffect(() => {
     form.mutators.setValue('recipient', accountPkh);
+    if (connectWalletModalOpen && accountPkh) {
+      closeConnectWalletModal();
+    }
   }, [accountPkh]);
 
   useEffect(() => {
