@@ -143,28 +143,35 @@ const RealForm:React.FC<SwapFormProps> = ({
     const currentTokenA = tokenDataToToken(tokensData.first);
     const currentTokenB = tokenDataToToken(tokensData.second);
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
-    const isValuesSame = val[lastChange] === formValues[lastChange];
     const oldTokens = token1 === oldToken1 && token2 === oldToken2;
+    let lastChangeMod = lastChange;
+    const isValuesSameMod = val.balance1 === formValues.balance1;
+    if (!oldTokens && isValuesSameMod && lastChange === 'balance2') {
+      lastChangeMod = 'balance1';
+    }
+    const isValuesSame = val[lastChange] === formValues[lastChange];
     if (isTokensSame || (isValuesSame && oldTokens)) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-    const decimals1 = lastChange === 'balance1'
+    console.log(oldTokens);
+    const decimals1 = lastChangeMod === 'balance1'
       ? tokensData.first.token.decimals
       : tokensData.second.token.decimals;
-    const decimals2 = lastChange !== 'balance1'
+    const decimals2 = lastChangeMod !== 'balance1'
       ? tokensData.first.token.decimals
       : tokensData.second.token.decimals;
 
-    const inputWrapper = new BigNumber(lastChange === 'balance1' ? val.balance1 : val.balance2);
+    const inputWrapper = new BigNumber(lastChangeMod === 'balance1' ? val.balance1 : val.balance2);
     const inputValueInner = toDecimals(inputWrapper, decimals1);
     const fromAsset = transformTokenDataToAsset(tokensData.first);
     const toAsset = transformTokenDataToAsset(tokensData.second);
 
-    const valuesInner = lastChange === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
+    const valuesInner = lastChangeMod === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
     let retValue = new BigNumber(0);
     try {
       if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
+        console.log('ret await');
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -173,8 +180,10 @@ const RealForm:React.FC<SwapFormProps> = ({
           valuesInner,
           sendDex,
         );
+        console.log(retValue.toString());
       } else {
         const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
+        console.log('ret await');
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -183,6 +192,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           valuesInner,
           sendDex,
         );
+        console.log(retValue.toString());
       }
       retValue = fromDecimals(retValue, decimals2);
     } catch (e) {
@@ -195,7 +205,10 @@ const RealForm:React.FC<SwapFormProps> = ({
       Infinity,
       decimals2,
     ));
-    if (lastChange === 'balance1') {
+
+    console.log(`result ${lastChangeMod === 'balance1' ? 'balance2' : 'balance1'}`, result.toString(), lastChange, lastChangeMod, token1.metadata.symbol);
+
+    if (lastChangeMod === 'balance1') {
       const rate1buf = new BigNumber(val.balance1)
         .div(result);
       const priceImp = rate1buf
@@ -217,8 +230,9 @@ const RealForm:React.FC<SwapFormProps> = ({
     }
 
     form.mutators.setValue(
-      lastChange === 'balance1' ? 'balance2' : 'balance1', result,
+      lastChangeMod === 'balance1' ? 'balance2' : 'balance1', result,
     );
+
     const feeVal = fromDecimals(result, 6);
     setFee(feeVal.multipliedBy(new BigNumber(FEE_RATE)));
     setOldToken1(token1);
@@ -372,14 +386,14 @@ const RealForm:React.FC<SwapFormProps> = ({
                   );
                 }
               }}
-              noBalanceButtons={tokensData.first.balance === '0'}
+              noBalanceButtons={!accountPkh}
               handleChange={(token) => handleTokenChange(token, 'first')}
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="swap-send-from"
               label="From"
               className={s.input}
-              error={((lastChange === 'balance1' && meta.touched && meta.error) || meta.submitError)}
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
           )}
         </Field>
