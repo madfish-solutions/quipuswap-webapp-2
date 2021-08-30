@@ -129,7 +129,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [from, to, initialLoad, tokens]);
 
   const getBalance = useCallback(() => {
-    console.log('getBalance');
     if (tezos && token1 && token2) {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
