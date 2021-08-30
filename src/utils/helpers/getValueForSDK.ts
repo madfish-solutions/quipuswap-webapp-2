@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { TokenDataType } from '@utils/types';
 
-import { isTokenDataAddressTez } from './isAddressTez';
+import { isTokenDataAddressTez } from './isTokenDataAddressTez';
 import { toNat } from './toNat';
 
 export const getValueForSDK = (token: TokenDataType, value: BigNumber, tezos:TezosToolkit) => (

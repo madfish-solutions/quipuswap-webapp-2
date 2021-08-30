@@ -16,7 +16,12 @@ module.exports = withReactSvg({
     return [
       {
         source: '/swap',
-        destination: `/swap${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/swap/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+      {
+        source: '/liquidity',
+        destination: `/liquidity/${process.env.DEFAULT_SWAP_URI}`,
         permanent: true,
       },
     ]

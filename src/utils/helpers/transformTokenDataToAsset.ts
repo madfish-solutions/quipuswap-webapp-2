@@ -1,5 +1,5 @@
 import { TokenDataType } from '@utils/types';
-import { isTokenDataAddressTez } from './isAddressTez';
+import { isTokenDataAddressTez } from './isTokenDataAddressTez';
 
 export const transformTokenDataToAsset = (token: TokenDataType) => (isTokenDataAddressTez(token) ? 'tez' : {
   contract: token.token.address,
