@@ -590,7 +590,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         )}
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
-            const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
+            const slipPerc = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.balance2 ?? 0));
             const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPerc);
             const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPerc);
             const maxInvestedA = new BigNumber(values.balance1 ?? 0).minus(slipPerc);

@@ -170,7 +170,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           <LiquidityForm
             form={form}
             handleSubmit={handleSubmit}
-            debounce={1000}
+            debounce={100}
             save={() => {}}
             setTabsState={setTabsState}
             tabsState={tabsState}
