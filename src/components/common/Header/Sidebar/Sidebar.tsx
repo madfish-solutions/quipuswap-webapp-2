@@ -32,7 +32,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={s.button} />
-        <Button href="https://quipuswap.com/" theme="secondary" className={s.button}>
+        <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
           {t('common:Old version')}
         </Button>
       </div>

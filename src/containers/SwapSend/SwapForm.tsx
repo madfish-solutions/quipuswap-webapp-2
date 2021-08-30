@@ -188,11 +188,14 @@ const RealForm:React.FC<SwapFormProps> = ({
       decimals2,
     ));
 
+    const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate)
+      .div(tokensData.second.exchangeRate);
+
     if (lastChangeMod === 'balance1') {
       const rate1buf = new BigNumber(val.balance1)
         .div(result);
       const priceImp = new BigNumber(1)
-        .minus(rate1buf.exponentiatedBy(-1).div(tokensData.first.exchangeRate))
+        .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
         .multipliedBy(100);
       setRate1(rate1buf);
       setRate2(rate1buf.exponentiatedBy(-1));
@@ -201,7 +204,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       const rate2buf = new BigNumber(val.balance2)
         .div(result);
       const priceImp = new BigNumber(1)
-        .minus(rate2buf.div(tokensData.second.exchangeRate))
+        .minus(rate2buf.div(tokenToTokenRate.exponentiatedBy(-1)))
         .multipliedBy(100);
 
       setRate1(rate2buf.exponentiatedBy(-1));
@@ -327,8 +330,10 @@ const RealForm:React.FC<SwapFormProps> = ({
 
       const rate1buf = new BigNumber(values.balance1)
         .div(result);
+      const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate)
+        .div(tokensData.second.exchangeRate);
       const priceImp = new BigNumber(1)
-        .minus(rate1buf.exponentiatedBy(-1).div(tokensData.first.exchangeRate))
+        .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
         .multipliedBy(100);
       setRate1(rate1buf);
       setRate2(rate1buf.exponentiatedBy(-1));
