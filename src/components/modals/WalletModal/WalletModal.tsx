@@ -38,7 +38,9 @@ export const Wallet: React.FC<WalletProps> = ({
     onClick={() => onClick(id)}
   >
     <Icon className={s.icon} />
-    {label}
+    <span>
+      {label}
+    </span>
   </Button>
 );
 

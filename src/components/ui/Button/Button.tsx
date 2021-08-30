@@ -54,13 +54,23 @@ export const Button: React.FC<ButtonProps> = ({
     className,
   );
 
-  const content = theme === 'secondary' ? (
-    <span className={cx(s.inner, innerClassName)}>
+  let content = theme === 'primary'
+    ? children
+    : (
       <span className={cx(s.text, textClassName)}>
         {children}
       </span>
-    </span>
-  ) : children;
+    );
+
+  if (theme === 'secondary') {
+    content = (
+      <span className={cx(s.inner, innerClassName)}>
+        <span className={cx(s.text, textClassName)}>
+          {children}
+        </span>
+      </span>
+    );
+  }
 
   if ('href' in props) {
     if (external) {
