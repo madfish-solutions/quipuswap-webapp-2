@@ -32,7 +32,8 @@ import {
   composeValidators, validateBalance, validateMinMax,
 } from '@utils/validators';
 import {
-  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum,
+  fromDecimals,
+  getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, toDecimals,
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -184,9 +185,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             ? estimateTezInShares(foundDex.storage, value.toString())
             : estimateTokenInShares(foundDex.storage, value.toString()));
           // const balance = new BigNumber(values.balance3 * (10 ** decimals1));
-          const balance = new BigNumber(
-            values.balance3 * (10 ** 6), // ONLY WORKS FOR XTZ LPs!
-          );
+          const balance = toDecimals(new BigNumber(values.balance3), 6);
           const sharesA = await getMethod(
             tokenPair.token1,
             tokenPair.dex,
@@ -197,36 +196,20 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             tokenPair.dex,
             balance.integerValue(),
           );
-          const bal1 = sharesA.div(
-            new BigNumber(10)
-              .pow(
-                new BigNumber(6),
-              ),
-          ).toString();
-          const bal2 = sharesB.div(
-            new BigNumber(10)
-              .pow(
-                new BigNumber(tokenPair.token2.metadata.decimals),
-              ),
-          ).toString();
+          const bal1 = fromDecimals(sharesA, tokenPair.token1.metadata.decimals);
+          const bal2 = fromDecimals(sharesB, tokenPair.token2.metadata.decimals);
 
-          form.mutators.setValue(
-            'balanceA',
-            +bal1,
-          );
-
-          form.mutators.setValue(
-            'balanceB',
-            +bal2,
-          );
+          form.mutators.setValue('balanceA', bal1);
+          form.mutators.setValue('balanceB', bal2);
         } catch (err) {
           console.error(err);
         }
       } else if (!val.switcher) {
         if (isTokensSame || (isValuesSame)) return;
         if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-        const rate = (+tokensData.first.exchangeRate) / (+tokensData.second.exchangeRate);
-        const retValue = lastChange === 'balance1' ? (val.balance1) * rate : (val.balance2) / rate;
+        const rate = new BigNumber(tokensData.first.exchangeRate)
+          .dividedBy(new BigNumber(tokensData.second.exchangeRate));
+        const retValue = lastChange === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).dividedBy(rate);
         const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
         form.mutators.setValue(
@@ -260,25 +243,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             const sharesB = await getMethod(
               tokensData.second,
               dex,
-              lastChange === 'balance2' ? new BigNumber(values.balance2) : new BigNumber(retValue),
+              lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
             );
 
-            const lp1 = sharesA.div(
-              new BigNumber(10)
-                .pow(
-                  new BigNumber(tokensData.first.token.decimals),
-                ),
-            ).toString();
-            const lp2 = sharesB.div(
-              new BigNumber(10)
-                .pow(
-                  new BigNumber(tokensData.second.token.decimals),
-                ),
-            ).toString();
+            const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
+            const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
 
             form.mutators.setValue(
               'estimateLP',
-              lp1 + lp2,
+              lp1.plus(lp2),
             );
           } catch (e) {
             console.error(e);
@@ -287,24 +260,24 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           console.error(err);
         }
       } else {
-        const exA = +(tokensData.first.exchangeRate ?? '1');
-        const exB = +(tokensData.second.exchangeRate ?? '1');
+        const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
+        const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
         const total$ = new BigNumber(values.balance1)
           .multipliedBy(exA)
           .plus(new BigNumber(values.balance2).multipliedBy(exB))
           .div(2);
-        const $toA = parseDecimals(
+        const $toA = new BigNumber(parseDecimals(
           total$.div(exA).toString(),
           0,
           Infinity,
           tokensData.first.token.decimals,
-        );
-        const $toB = parseDecimals(
+        ));
+        const $toB = new BigNumber(parseDecimals(
           total$.div(exB).toString(),
           0,
           Infinity,
           tokensData.second.token.decimals,
-        );
+        ));
         let inputValue:BigNumber;
         const whichTokenDifferenceLower = new BigNumber(values.balance1)
           .minus($toA)
@@ -333,7 +306,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             inputValue,
             slippage,
           );
-          const tezValue = new BigNumber($toA).multipliedBy(10 ** 6);
+          const tezValue = toDecimals($toA, 6);
           const addParams = await addLiquidity(
             tezos,
             dex,
@@ -405,19 +378,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
 
-  // const setToken1 = useCallback((token:WhitelistedToken) => {
-  //   setTokens([token, (token2 || undefined)]);
-  //   if (token2) {
-  //     hanldeTokenPairSelect(
-  //       { token1: token, token2 } as WhitelistedTokenPair,
-  //       setTokenPair,
-  //       handleTokenChange,
-  //       tezos,
-  //       accountPkh,
-  //       networkId,
-  //     );
-  //   }
-  // }, [tezos, accountPkh, networkId, token2]);
   const setToken2 = useCallback((token:WhitelistedToken) => {
     setTokens([(token1 || undefined), token]);
     if (token1) {
@@ -462,6 +422,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               validateMinMax(0, Infinity),
               validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
             )}
+            parse={(v) => parseDecimals(v, 0, Infinity, 6)}
           >
             {({ input, meta }) => (
               <>
@@ -488,7 +449,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       +value,
                     );
                   }}
-                  balance={tokenPair.balance}
+                  balance={
+                    new BigNumber(tokenPair.balance ?? '0')
+                      .minus(new BigNumber(tokenPair.frozenBalance ?? '0'))
+                      .toString()
+                  }
                   frozenBalance={tokenPair.frozenBalance}
                   id="liquidity-remove-input"
                   label="Select LP"
@@ -625,7 +590,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         )}
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
-            const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
+            const slipPerc = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.balance2 ?? 0));
             const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPerc);
             const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPerc);
             const maxInvestedA = new BigNumber(values.balance1 ?? 0).minus(slipPerc);
@@ -642,7 +608,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       </span>
                       <CurrencyAmount
                         currency={`${tokenAName}/${tokenBName}`}
-                        amount={values.estimateLP}
+                        amount={(values.estimateLP ?? 0).toString()}
                       />
                     </div>
                   )
