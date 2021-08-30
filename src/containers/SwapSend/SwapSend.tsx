@@ -15,6 +15,7 @@ import {
   useNetwork,
   useTokens,
   useSearchCustomTokens,
+  useOnBlock,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -127,12 +128,19 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     }
   }, [from, to, initialLoad, tokens]);
 
-  useEffect(() => {
+  const getBalance = useCallback(() => {
+    console.log('getBalance');
     if (tezos && token1 && token2) {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
     }
   }, [tezos, accountPkh, networkId]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, networkId]);
+
+  useOnBlock(tezos, getBalance);
 
   useEffect(() => {
     setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
