@@ -87,6 +87,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast]);
 
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
@@ -150,6 +157,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       <Form
         onSubmit={(values, form) => {
           if (!tezos) return;
+          handleLoader();
           submitForm(values,
             tezos,
             tokensData,
