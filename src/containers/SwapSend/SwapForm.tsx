@@ -152,7 +152,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     const isValuesSame = val[lastChange] === formValues[lastChange];
     if (isTokensSame || (isValuesSame && oldTokens)) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-    console.log(oldTokens);
     const decimals1 = lastChangeMod === 'balance1'
       ? tokensData.first.token.decimals
       : tokensData.second.token.decimals;
@@ -171,7 +170,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     try {
       if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
-        console.log('ret await');
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -180,10 +178,8 @@ const RealForm:React.FC<SwapFormProps> = ({
           valuesInner,
           sendDex,
         );
-        console.log(retValue.toString());
       } else {
         const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
-        console.log('ret await');
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -192,7 +188,6 @@ const RealForm:React.FC<SwapFormProps> = ({
           valuesInner,
           sendDex,
         );
-        console.log(retValue.toString());
       }
       retValue = fromDecimals(retValue, decimals2);
     } catch (e) {
@@ -206,23 +201,21 @@ const RealForm:React.FC<SwapFormProps> = ({
       decimals2,
     ));
 
-    console.log(`result ${lastChangeMod === 'balance1' ? 'balance2' : 'balance1'}`, result.toString(), lastChange, lastChangeMod, token1.metadata.symbol);
-
     if (lastChangeMod === 'balance1') {
       const rate1buf = new BigNumber(val.balance1)
         .div(result);
-      const priceImp = rate1buf
-        .div(new BigNumber(1).div(tokensData.first.exchangeRate))
-        .multipliedBy(100).minus(100);
+      const priceImp = new BigNumber(1)
+        .minus(rate1buf.exponentiatedBy(-1).div(tokensData.first.exchangeRate))
+        .multipliedBy(100);
       setRate1(rate1buf);
       setRate2(rate1buf.exponentiatedBy(-1));
       setPriceImpact(priceImp);
     } else {
       const rate2buf = new BigNumber(val.balance2)
         .div(result);
-      const priceImp = new BigNumber(tokensData.first.exchangeRate)
-        .div(rate2buf)
-        .multipliedBy(100).minus(100);
+      const priceImp = new BigNumber(1)
+        .minus(rate2buf.div(tokensData.second.exchangeRate))
+        .multipliedBy(100);
 
       setRate1(rate2buf.exponentiatedBy(-1));
       setRate2(rate2buf);
@@ -292,6 +285,10 @@ const RealForm:React.FC<SwapFormProps> = ({
     dex2,
     dexstorage,
   ]);
+
+  useEffect(() => {
+    form.mutators.setValue('recipient', accountPkh);
+  }, [accountPkh]);
 
   useEffect(() => {
     form.mutators.setValue('balance1', undefined);
@@ -503,6 +500,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       </Card>
       <SwapDetails
         dex={dex}
+        dex2={dex2}
         currentTab={currentTab.label}
         token1={token1}
         token2={token2}
