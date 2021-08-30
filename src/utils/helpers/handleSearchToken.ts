@@ -51,7 +51,7 @@ export const handleSearchToken = async ({
   const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
     const strStr = Array.isArray(str) ? str[0] : str;
     const inputValue = strStr.split('_')[0];
-    const inputToken = strStr.split('_')[1] ?? -1;
+    const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
       .filter(
         (token:any) => localSearchToken(

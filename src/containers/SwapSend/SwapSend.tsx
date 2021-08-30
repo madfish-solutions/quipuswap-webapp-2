@@ -113,6 +113,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0) {
+      console.log('handleSearchToken', tokens);
       handleSearchToken({
         tokens,
         network,
