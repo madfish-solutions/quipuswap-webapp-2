@@ -422,6 +422,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               validateMinMax(0, Infinity),
               validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
             )}
+            parse={(v) => parseDecimals(v, 0, Infinity, 6)}
           >
             {({ input, meta }) => (
               <>
