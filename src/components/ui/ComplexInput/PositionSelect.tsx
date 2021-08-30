@@ -125,7 +125,12 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               value={value}
               {...props}
             />
-            <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
+            <Button
+              onClick={() => setTokensModal(true)}
+              theme="quaternary"
+              className={s.item4}
+              textClassName={s.item4Inner}
+            >
               <TokensLogos
                 token1={tokenPair?.token1 ?? TEZOS_TOKEN}
                 token2={tokenPair?.token2 ?? TEZOS_TOKEN}

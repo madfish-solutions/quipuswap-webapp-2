@@ -133,7 +133,13 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               value={value}
               {...props}
             />
-            <Button disabled={notSelectable} onClick={() => !notSelectable && setTokensModal(true)} theme="quaternary" className={s.item4}>
+            <Button
+              disabled={notSelectable}
+              onClick={() => !notSelectable && setTokensModal(true)}
+              theme="quaternary"
+              className={s.item4}
+              textClassName={s.item4Inner}
+            >
               <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
