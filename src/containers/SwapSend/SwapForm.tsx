@@ -132,7 +132,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       );
       return;
     }
-    if (!dex || !dexstorage || (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && !dex2)) return;
+    if (!dex || !dexstorage || (tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
     if (val[lastChange] && val[lastChange].toString() === '') return;
     const lastChangeMod = lastChange;
@@ -155,7 +155,7 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     let retValue = new BigNumber(0);
     try {
-      if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
+      if (tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
         retValue = await estimateSwap(
           tezos,
@@ -166,7 +166,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           sendDex,
         );
       } else {
-        const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
+        const sendDex = tokensData.second.token.address === 'tez' ? { outputDex: dex } : { inputDex: dex };
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
