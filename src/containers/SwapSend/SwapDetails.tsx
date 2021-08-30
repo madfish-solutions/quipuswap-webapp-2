@@ -31,6 +31,7 @@ type SwapDetailsProps = {
   rate1: BigNumber
   rate2: BigNumber
   dex?: FoundDex
+  dex2?: FoundDex
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
@@ -43,6 +44,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   rate1,
   rate2,
   dex,
+  dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
@@ -167,6 +169,18 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               }
         />
       </CardCell>
+      {dex2 && (
+      <Button
+        className={s.detailsButton}
+        theme="inverse"
+        target="_blank"
+        href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
+        external
+      >
+        View First Pair Analytics
+        <ExternalLink className={s.linkIcon} />
+      </Button>
+      )}
       {dex && (
       <Button
         className={s.detailsButton}
@@ -175,7 +189,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
         external
       >
-        View Pair Analytics
+        {dex2 ? 'View Second Pair Analytics' : 'View Pair Analytics'}
         <ExternalLink className={s.linkIcon} />
       </Button>
       )}

@@ -15,7 +15,7 @@ network:QSNetwork, oldInput:string, oldInputToken:number) => {
   let res = false;
   if (fa2TokenId || oldInputToken >= 0) {
     let isFa2 = fa2TokenId === oldInputToken;
-    if (!oldInputToken) isFa2 = true;
+    if (!oldInputToken || oldInputToken === -1) isFa2 = true;
     res = ((isName
           || isSymbol
           || isContract)
