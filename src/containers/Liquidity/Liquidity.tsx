@@ -29,6 +29,7 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
+import { useRouter } from 'next/router';
 import { LiquidityForm } from './LiquidityForm';
 import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
@@ -63,7 +64,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const network = useNetwork();
   const searchCustomToken = useSearchCustomTokens();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
       first: fallbackTokenToTokenData(TEZOS_TOKEN),
@@ -81,8 +81,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const router = useRouter();
+  const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
   const { from, to } = useRouterPair({
-    page: 'liquidity',
+    page: `liquidity/${router.query.method}`,
     urlLoaded,
     initialLoad,
     token1,

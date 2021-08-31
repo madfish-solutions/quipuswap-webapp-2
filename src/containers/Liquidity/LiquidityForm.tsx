@@ -53,6 +53,7 @@ import { Plus } from '@components/svg/Plus';
 
 import s from '@styles/CommonContainer.module.sass';
 
+import router from 'next/router';
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 
@@ -118,10 +119,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   setDex,
   tokenPair,
   setTokenPair,
+  setTabsState,
   tokensData,
   handleTokenChange,
   currentTab,
-  setTabsState,
   setAddLiquidityParams,
   addLiquidityParams,
   setRemoveLiquidityParams,
@@ -397,7 +398,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             <Tabs
               values={TabsContent}
               activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
+              setActiveId={(val) => {
+                router.replace(
+                  `/liquidity/${val}/${getWhitelistedTokenSymbol(token1)}-${getWhitelistedTokenSymbol(token2)}`,
+                  undefined,
+                  { shallow: true },
+                );
+                setTabsState(val);
+              }}
               className={s.tabs}
             />
           ),
