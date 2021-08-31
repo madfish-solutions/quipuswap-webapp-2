@@ -6,6 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 import { Button } from '@components/ui/Button';
+import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';
@@ -40,6 +41,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <footer className={s.footer}>
         <QPToken className={s.token} />
         <Socials className={s.socials} id="desktop" />
+        <div className={s.madfish}>
+          <Button
+            href="https://www.madfish.solutions/"
+            external
+            theme="quaternary"
+          >
+            <Madfish />
+          </Button>
+
+        </div>
       </footer>
     </div>
   );
