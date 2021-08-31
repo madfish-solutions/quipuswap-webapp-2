@@ -3,7 +3,6 @@ import React, {
   useEffect,
   useMemo, useState,
 } from 'react';
-import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 import {
   FoundDex,
@@ -12,16 +11,21 @@ import {
 import { useRouter } from 'next/router';
 
 import useUpdateToast from '@hooks/useUpdateToast';
-import { fallbackTokenToTokenData, isTokenEqual, localSearchToken } from '@utils/helpers';
+import { useRouterPair } from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 import {
-  getUserBalance,
+  fallbackTokenToTokenData, handleSearchToken, handleTokenChange,
+} from '@utils/helpers';
+import {
   useAccountPkh,
   useNetwork,
+  useOnBlock,
   useSearchCustomTokens,
   useTezos,
   useTokens,
 } from '@utils/dapp';
 import {
+  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   VoterType, WhitelistedToken, WhitelistedTokenPair,
@@ -31,10 +35,8 @@ import { VotingStats } from '@components/voting/VotingStats';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import s from '@styles/CommonContainer.module.sass';
-import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
-import { useRouterPair } from '@hooks/useRouterPair';
 import { VotingForm } from './VotingForm';
-import { submitForm } from './votingHelpers';
+import { hanldeTokenPairSelect, submitForm, submitWithdraw } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -62,6 +64,7 @@ export const Voting: React.FC<VotingProps> = ({
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const network = useNetwork();
+  const exchangeRates = useExchangeRates();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
@@ -71,10 +74,11 @@ export const Voting: React.FC<VotingProps> = ({
       second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
-  const { Form } = withTypes<VoteFormValues>();
   const [dex, setDex] = useState<FoundDex>();
+  const { Form } = withTypes<VoteFormValues>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState('0');
   const [voter, setVoter] = useState<VoterType>();
@@ -104,102 +108,74 @@ export const Voting: React.FC<VotingProps> = ({
     });
   }, [updateToast]);
 
-  const handleTokenChange = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
-    let finalBalance = '0';
-    if (tezos && accountPkh) {
-      const balance = await getUserBalance(
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+    });
+  }, [updateToast]);
+
+  const handleTokenChangeWrapper = (
+    token: WhitelistedToken,
+    tokenNumber: 'first' | 'second',
+  ) => handleTokenChange({
+    token,
+    tokenNumber,
+    exchangeRates,
+    tezos: tezos!,
+    accountPkh: accountPkh!,
+    setTokensData,
+  });
+
+  useEffect(() => {
+    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+      handleSearchToken({
+        tokens,
+        tezos: tezos!,
+        network,
+        accountPkh: accountPkh!,
+        from,
+        to,
+        fixTokenFrom: TEZOS_TOKEN,
+        setInitialLoad,
+        setUrlLoaded,
+        setTokens,
+        setTokenPair,
+        searchCustomToken,
+        handleTokenChangeWrapper,
+      });
+    }
+  }, [from, to, initialLoad, tokens, exchangeRates]);
+
+  const getBalance = useCallback(() => {
+    if (tezos && token1 && token2) {
+      handleTokenChangeWrapper(token1, 'first');
+      handleTokenChangeWrapper(token2, 'second');
+      hanldeTokenPairSelect(
+        { token1, token2 } as WhitelistedTokenPair,
+        setTokenPair,
+        setDex,
+        setRewards,
+        setVoter,
         tezos,
         accountPkh,
-        token.contractAddress,
-        token.type,
-        token.fa2TokenId,
-      );
-      if (balance) {
-        finalBalance = balance.div(
-          new BigNumber(10)
-            .pow(
-              new BigNumber(token.metadata.decimals),
-            ),
-        ).toString();
-      }
-    }
-
-    setTokensData((prevState) => ({
-      ...prevState,
-      [tokenNumber]: {
-        token: {
-          address: token.contractAddress,
-          type: token.type,
-          id: token.fa2TokenId,
-          decimals: token.metadata.decimals,
-        },
-        balance: finalBalance,
-      },
-    }));
-  };
-
-  useEffect(() => {
-    const asyncCall = async () => {
-      setInitialLoad(true);
-      setUrlLoaded(false);
-      const searchPart = async (str:string | string[]):Promise<WhitelistedToken> => {
-        const strStr = Array.isArray(str) ? str[0] : str;
-        const inputValue = strStr.split('_')[0];
-        const inputToken = strStr.split('_')[1] ?? -1;
-        const isTokens = tokens
-          .filter(
-            (token:any) => localSearchToken(
-              token,
-              network,
-              inputValue,
-              +inputToken,
-            ),
-          );
-        if (isTokens.length === 0) {
-          return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
-            if (x) {
-              return x;
-            }
-            return TEZOS_TOKEN;
-          });
-        }
-        return isTokens[0];
-      };
-      let res:any[] = [];
-      if (from) {
-        if (to) {
-          const resTo = await searchPart(to);
-          res = [resTo];
-          handleTokenChange(resTo, 'second');
-        }
-        // const resFrom = await searchPart(from);
-        const resFrom = TEZOS_TOKEN;
-        res = [resFrom, ...res];
-        handleTokenChange(resFrom, 'first');
-      }
-      setUrlLoaded(true);
-      if (!isTokenEqual(res[0], res[1])) {
-        hanldeTokenPairSelect(
-          { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
-          setTokenPair,
-          handleTokenChange,
-        );
-      }
-    };
-    if (from && to && !initialLoad && tokens.length > 0) asyncCall();
-  }, [from, to, initialLoad, tokens]);
-
-  useEffect(() => {
-    if (tezos && tokenPair) {
-      handleTokenChange(tokenPair.token1, 'first');
-      handleTokenChange(tokenPair.token2, 'second');
-      hanldeTokenPairSelect(
-        tokenPair,
-        setTokenPair,
-        handleTokenChange,
+        network.id as QSMainNet,
       );
     }
   }, [tezos, accountPkh, network.id]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, network.id]);
+
+  useOnBlock(tezos, getBalance);
 
   return (
     <>
@@ -207,12 +183,19 @@ export const Voting: React.FC<VotingProps> = ({
         pendingReward={rewards}
         amounts={[tokenPair.balance ?? '', voter?.vote ?? '', voter?.veto ?? '']}
         className={s.votingStats}
+        dex={dex}
+        handleSubmit={(params:TransferParams[]) => {
+          if (!tezos) return;
+          handleLoader();
+          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast);
+        }}
       />
       <StickyBlock className={className}>
         <Form
           onSubmit={() => {
             if (!tezos) return;
-            submitForm(tezos, voteParams, handleErrorToast);
+            handleLoader();
+            submitForm(tezos, voteParams, handleErrorToast, handleSuccessToast);
           }}
           mutators={{
             setValue: ([field, value], state, { changeValue }) => {
@@ -223,15 +206,15 @@ export const Voting: React.FC<VotingProps> = ({
             <VotingForm
               form={form}
               handleSubmit={handleSubmit}
-              debounce={1000}
+              debounce={100}
               save={() => { }}
               setTabsState={setTabsState}
               tabsState={tabsState}
-              dex={dex}
-              setDex={setDex}
               rewards={rewards}
               setRewards={setRewards}
               voter={voter}
+              dex={dex}
+              setDex={setDex}
               setVoter={setVoter}
               tokenPair={tokenPair}
               setTokenPair={setTokenPair}

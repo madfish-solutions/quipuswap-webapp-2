@@ -20,7 +20,7 @@ import s from '@styles/CommonContainer.module.sass';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair
-  dex: FoundDex
+  dex?: FoundDex
   voter: VoterType
 };
 
@@ -37,14 +37,22 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
-      return bakers.find((x) => x.address === dex.storage.storage.current_candidate);
+      return bakers.find((x) => x.address === dex.storage.storage.current_candidate)
+      || {
+        name: dex.storage.storage.current_candidate,
+        address: dex.storage.storage.current_candidate,
+      } as WhitelistedBaker;
     }
     return {} as WhitelistedBaker;
   }, [dex, bakers]);
 
   const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
-      return bakers.find((x) => x.address === dex.storage.storage.current_delegated);
+      return bakers.find((x) => x.address === dex.storage.storage.current_delegated)
+      || {
+        name: dex.storage.storage.current_delegated,
+        address: dex.storage.storage.current_delegated,
+      } as WhitelistedBaker;
     }
     return undefined;
   }, [dex, bakers]);
@@ -186,17 +194,18 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           className={s.detailsButton}
           theme="inverse"
           href={pairLink}
+          external
+          icon={<ExternalLink className={s.linkIcon} />}
         >
           Pair Analytics
-          <ExternalLink className={s.linkIcon} />
         </Button>
         <Button
           className={s.detailsButton}
           theme="inverse"
           href="#"
+          icon={<ExternalLink className={s.linkIcon} />}
         >
           Delegation Analytics
-          <ExternalLink className={s.linkIcon} />
         </Button>
       </div>
     </Card>

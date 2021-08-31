@@ -5,10 +5,8 @@ import {
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { VoterType, WhitelistedTokenPair } from '@utils/types';
+import { QSMainNet, VoterType, WhitelistedTokenPair } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
-
-type QSMainNet = 'mainnet' | 'florencenet';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
@@ -80,6 +78,7 @@ export const submitForm = async (
   tezos:TezosToolkit,
   voteParams:TransferParams[],
   updateToast: (err:string) => void,
+  handleSuccessToast:any,
 ) => {
   try {
     const op = await batchify(
@@ -87,6 +86,25 @@ export const submitForm = async (
       voteParams,
     ).send();
     await op.confirmation();
+    handleSuccessToast();
+  } catch (e) {
+    updateToast(e);
+  }
+};
+
+export const submitWithdraw = async (
+  tezos:TezosToolkit,
+  voteParams:TransferParams[],
+  updateToast: (err:string) => void,
+  handleSuccessToast:any,
+) => {
+  try {
+    const op = await batchify(
+      tezos.wallet.batch([]),
+      voteParams,
+    ).send();
+    await op.confirmation();
+    handleSuccessToast();
   } catch (e) {
     updateToast(e);
   }

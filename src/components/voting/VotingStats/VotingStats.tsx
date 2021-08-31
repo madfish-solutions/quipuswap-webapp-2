@@ -8,6 +8,8 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
 
+import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import s from './VotingStats.module.sass';
 
 const content = [
@@ -39,16 +41,22 @@ const modeClass = {
 type VotingStatsProps = {
   className?: string
   pendingReward?: string
-  amounts?: string[]
+  amounts?: string[],
+  dex?:FoundDex
+  handleSubmit: (params: TransferParams[]) => void
 };
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
   pendingReward = '0',
   amounts = [],
+  dex,
+  handleSubmit,
 }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
@@ -77,7 +85,21 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           <span className={s.amount}>{amounts[id] ? amounts[id] : amount}</span>
         </div>
       ))}
-      <Button className={s.button}>Claim Reward</Button>
+      <Button
+        disabled={!tezos || !accountPkh || !dex}
+        onClick={() => {
+          const asyncFunc = async () => {
+            if (!tezos || !dex || !accountPkh) return;
+            const params = await withdrawReward(tezos, dex, accountPkh);
+            handleSubmit(params);
+          };
+          asyncFunc();
+        }}
+        className={s.button}
+      >
+        Claim Reward
+
+      </Button>
     </Card>
   );
 };

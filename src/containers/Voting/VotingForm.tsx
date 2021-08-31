@@ -62,8 +62,6 @@ type LiquidityFormProps = {
   values: VoteFormValues,
   form: any,
   tabsState: any,
-  dex: FoundDex,
-  setDex: (dex: FoundDex) => void,
   rewards: string,
   setRewards: (reward: string) => void,
   voter: any,
@@ -86,10 +84,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   setRewards,
   setVoter,
   voter,
-  dex,
   tokenPair,
   setTokenPair,
-  setDex,
   handleTokenChange,
   tokensData,
   currentTab,
@@ -101,6 +97,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const [dex, setDex] = useState<FoundDex>();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const prevDex = usePrevious(dex);
@@ -167,6 +164,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const handleFirstButton = async () => {
     if (!tezos) return;
+    if (!dex) return;
     if (!accountPkh) {
       openConnectWalletModal();
       return;
@@ -187,6 +185,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const handleSecondButton = async () => {
     if (!tezos) return;
+    if (!dex) return;
     if (!accountPkh) {
       openConnectWalletModal();
       return;
@@ -304,12 +303,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             onClick={handleFirstButton}
             className={s.button}
             theme="secondary"
-            disabled={!values.selectedBaker}
           >
             {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
           </Button>
           <Button
-            disabled={!values.selectedBaker}
             onClick={handleSecondButton}
             className={s.button}
           >
