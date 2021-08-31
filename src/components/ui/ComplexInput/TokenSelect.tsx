@@ -16,9 +16,11 @@ import { Shevron } from '@components/svg/Shevron';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useAccountPkh } from '@utils/dapp';
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
+  noBalanceButtons?: boolean
   className?: string
   balance: string
   exchangeRate?: string
@@ -40,6 +42,7 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
+  noBalanceButtons = false,
   label,
   handleBalance,
   exchangeRate = null,
@@ -61,7 +64,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const account = useAccountPkh();
 
   const dollarEquivalent = useMemo(() => (exchangeRate
-    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
     : ''
   ),
   [exchangeRate, value]);
@@ -138,7 +143,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        <PercentSelector value={balance} handleBalance={handleBalance} />
+        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
         <ComplexError error={error} />
       </div>
     </>

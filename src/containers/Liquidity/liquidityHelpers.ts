@@ -8,14 +8,15 @@ import {
   getLiquidityShare,
   initializeLiquidity,
   removeLiquidity,
-  Token,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { FACTORIES } from '@utils/defaults';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { slippageToBignum } from '@utils/helpers';
+import {
+  fromDecimals, isTokenEqual, slippageToBignum, toDecimals,
+} from '@utils/helpers';
 
 type QSMainNet = 'mainnet' | 'florencenet';
 
@@ -42,23 +43,8 @@ export const hanldeTokenPairSelect = (
       const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
       const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
-      // const lpTokenValue = share.total;
-      const frozenBalance = share.frozen.div(
-        new BigNumber(10)
-          .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
-            // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
-            new BigNumber(6),
-          ),
-      ).toString();
-      const totalBalance = share.total.div(
-        new BigNumber(10)
-          .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            new BigNumber(6),
-          ),
-      ).toString();
+      const frozenBalance = fromDecimals(share.frozen, 6).toString();
+      const totalBalance = fromDecimals(share.total, 6).toString();
       const res = {
         ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
       };
@@ -84,21 +70,8 @@ export const asyncFindPairDex = async (
     };
     const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
     const share = await getLiquidityShare(tezos, dex, accountPkh);
-    const frozenBalance = share.frozen.div(
-      new BigNumber(10)
-        .pow(
-          // new BigNumber(pair.token2.metadata.decimals),
-          // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
-          // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
-          new BigNumber(6),
-        ),
-    ).toString();
-    const totalBalance = share.total.div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
+    const frozenBalance = fromDecimals(share.frozen, 6).toString();
+    const totalBalance = fromDecimals(share.total, 6).toString();
     const res = {
       ...pair, frozenBalance, balance: totalBalance, dex,
     };
@@ -156,26 +129,16 @@ export const asyncGetShares = async (
       tokenPairValue.dex,
       balanceAB.integerValue(),
     );
-    const balA1 = sharesTotalA.div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
-    const balA2 = sharesTotalB.div(
-      new BigNumber(10)
-        .pow(
-          new BigNumber(6),
-        ),
-    ).toString();
+    const balA1 = fromDecimals(sharesTotalA, 6).toString();
+    const balA2 = fromDecimals(sharesTotalB, 6).toString();
     setValue(
       'balanceTotalA',
-      +balA1,
+      balA1,
     );
 
     setValue(
       'balanceTotalB',
-      +balA2,
+      balA2,
     );
   } catch (err) {
     console.error(err);
@@ -206,7 +169,7 @@ export const asyncGetLiquidityShare = async (
       const share = await getLiquidityShare(tezos, dex, account);
       try {
         if (values.balance3) {
-          const lpTokenValue = new BigNumber(values.balance3).multipliedBy(10 ** 6);
+          const lpTokenValue = toDecimals(new BigNumber(values.balance3), 6);
           const remParams = await removeLiquidity(
             tezos,
             dex,
@@ -217,7 +180,7 @@ export const asyncGetLiquidityShare = async (
         }
         setPoolShare(share);
         if (values.balance1) {
-          const tezValue = new BigNumber(values.balance1).multipliedBy(10 ** 6);
+          const tezValue = toDecimals(new BigNumber(values.balance1), 6);
           const addParams = await addLiquidity(
             tezos,
             dex,
@@ -242,23 +205,13 @@ export const asyncGetLiquidityShare = async (
         console.error(e);
       }
     } else {
-      let toAsset:any = {
-        contract: 'tez',
+      const toAsset = {
+        contract: token2.contractAddress,
+        id: token2.fa2TokenId ?? undefined,
       };
-      if (token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
-        toAsset = {
-          contract: token2.contractAddress,
-        };
-        if (!token2.fa2TokenId) {
-          toAsset = {
-            contract: token2.contractAddress,
-            id: 0,
-          };
-        }
-      }
-      if (JSON.stringify(token1) !== JSON.stringify(token2)) {
+      if (!isTokenEqual(token1, token2)) {
         try {
-          const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+          const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
           if (tempDex && tempDex !== dex) {
             setDex(tempDex);
           }
@@ -269,7 +222,7 @@ export const asyncGetLiquidityShare = async (
                 fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
                 fa2Factory: FACTORIES[networkId].fa2Factory[0],
               };
-              const tezVal = new BigNumber(values.balance1).multipliedBy(10 ** 6);
+              const tezVal = toDecimals(new BigNumber(values.balance1), 6);
               const tokenVal = new BigNumber(values.balance2);
               const initParams = await initializeLiquidity(
                 tezos,
@@ -298,7 +251,6 @@ export const submitForm = async (
   updateToast: (err:string) => void,
 ) => {
   try {
-    console.log(liquidityParams);
     const op = await batchify(
       tezos.wallet.batch([]),
       liquidityParams,

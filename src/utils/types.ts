@@ -81,26 +81,26 @@ export type TokenDataMap = {
 };
 
 export type SwapFormValues = {
+  lastChange: 'balance1' | 'balance2'
   balance1: BigNumber
   balance2: BigNumber
   recipient: string
-  lastChange: string
   slippage: string
 };
 
 export type LiquidityFormValues = {
   switcher: boolean
-  balance1: number
-  balance2: number
-  balance3: number
-  balanceA: number
-  balanceB: number
-  balanceTotalA: number
-  balanceTotalB: number
-  lpBalance: string
-  frozenBalance: string
+  balance1: BigNumber
+  balance2: BigNumber
+  balance3: BigNumber
+  balanceA: BigNumber
+  balanceB: BigNumber
+  balanceTotalA: BigNumber
+  balanceTotalB: BigNumber
+  lpBalance: BigNumber
+  frozenBalance: BigNumber
   lastChange: string
-  estimateLP: string
+  estimateLP: BigNumber
   slippage: string
 };
 

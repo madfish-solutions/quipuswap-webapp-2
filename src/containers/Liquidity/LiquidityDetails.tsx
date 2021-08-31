@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import {
-  TransferParams,
+  FoundDex,
 } from '@quipuswap/sdk';
 
 import {
@@ -17,10 +17,10 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import BigNumber from 'bignumber.js';
 
 type LiquidityDetailsProps = {
   currentTab: string
-  params: TransferParams[]
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData:TokenDataMap
@@ -28,11 +28,11 @@ type LiquidityDetailsProps = {
   poolShare?: PoolShare
   balanceTotalA: string
   balanceTotalB: string
+  dex?: FoundDex
 };
 
 export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   currentTab,
-  params,
   token1,
   token2,
   tokensData,
@@ -40,16 +40,22 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   poolShare,
   balanceTotalA,
   balanceTotalB,
+  dex,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
-  const pairLink = useMemo(() => (params.find((x) => x.parameter?.entrypoint === 'divestLiquidity' || x.parameter?.entrypoint === 'investLiquidity')?.to
-    ? `https://analytics.quipuswap.com/pairs/${params.find((x) => x.parameter?.entrypoint === 'divestLiquidity' || x.parameter?.entrypoint === 'investLiquidity')?.to}`
-    : '#'), [params]);
+  const pairLink = useMemo(() => (!dex ? '#' : `https://analytics.quipuswap.com/pairs/${dex.contract.address}`), [dex]);
+  const contractLink = useMemo(() => (!dex ? '#' : `https://tzkt.io/${dex.contract.address}`), [dex]);
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
   const totalShare = useMemo(() => (poolShare?.total.div(10 ** 6).toString()) ?? '0', [poolShare]);
   const frozenShare = useMemo(() => (poolShare?.frozen.div(10 ** 6).toString()) ?? '0', [poolShare]);
+  const sellPrice = useMemo(() => new BigNumber(tokensData.first.exchangeRate ?? 1)
+    .div(new BigNumber(tokensData.second.exchangeRate ?? 1))
+    .toString(), [tokensData]);
+  const buyPrice = useMemo(() => new BigNumber(tokensData.second.exchangeRate ?? 1)
+    .div(new BigNumber(tokensData.first.exchangeRate ?? 1))
+    .toString(), [tokensData]);
   return (
     <Card
       header={{
@@ -76,7 +82,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={`${(+(tokensData.first.exchangeRate ?? 1)) / (+(tokensData.second.exchangeRate ?? 1))}`}
+            amount={sellPrice}
             currency={tokenBName}
             dollarEquivalent={`${tokensData.first.exchangeRate ?? 1}`}
           />
@@ -101,7 +107,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           />
           <span className={s.equal}>=</span>
           <CurrencyAmount
-            amount={`${(+(tokensData.second.exchangeRate ?? 1)) / (+(tokensData.first.exchangeRate ?? 1))}`}
+            amount={buyPrice}
             currency={tokenAName}
             dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
           />
@@ -169,11 +175,13 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       >
         <CurrencyAmount amount={frozenShare} />
       </CardCell>
+      {dex && (
       <div className={s.detailsButtons}>
         <Button
           className={s.detailsButton}
           theme="inverse"
           href={pairLink}
+          external
         >
           View Pair Analytics
           <ExternalLink className={s.linkIcon} />
@@ -181,11 +189,14 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         <Button
           className={s.detailsButton}
           theme="inverse"
+          href={contractLink}
+          external
         >
           View Pair Contract
           <ExternalLink className={s.linkIcon} />
         </Button>
       </div>
+      )}
     </Card>
   );
 };
