@@ -171,6 +171,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
           },
+          setValues: (fields, state, { changeValue }) => {
+            fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
+          },
         }}
         render={({
           handleSubmit, form,

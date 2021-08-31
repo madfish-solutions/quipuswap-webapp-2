@@ -413,6 +413,25 @@ const RealForm:React.FC<SwapFormProps> = ({
     getDex();
   }, [token2, token1, tezos, networkId]);
 
+  const handleSwapButton = () => {
+    handleSwapTokens();
+    if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
+      setDex([dex2, dex]);
+      setDexstorage([dexstorage2, dexstorage]);
+    }
+    if (lastChange === 'balance1') {
+      setLastChange('balance2');
+    } else {
+      setLastChange('balance1');
+    }
+    if (values.balance1 && values.balance2) {
+      form.mutators.setValues(
+        ['balance1', new BigNumber(values.balance2)],
+        ['balance2', new BigNumber(values.balance1)],
+      );
+    }
+  };
+
   const blackListedTokens = useMemo(
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
@@ -475,29 +494,7 @@ const RealForm:React.FC<SwapFormProps> = ({
             />
           )}
         </Field>
-        <SwapButton onClick={() => {
-          handleSwapTokens();
-          if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
-            setDex([dex2, dex]);
-            setDexstorage([dexstorage2, dexstorage]);
-          }
-          if (lastChange === 'balance1') {
-            if (values.balance1) {
-              form.mutators.setValue(
-                'balance2',
-                new BigNumber(values.balance1),
-              );
-              setLastChange('balance2');
-            }
-          } else if (values.balance2) {
-            form.mutators.setValue(
-              'balance1',
-              new BigNumber(values.balance2),
-            );
-            setLastChange('balance1');
-          }
-        }}
-        />
+        <SwapButton onClick={handleSwapButton} />
         <Field
           parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
           name="balance2"
