@@ -20,7 +20,7 @@ import {
   useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { usePrevious } from '@hooks/usePrevious';
+// import { usePrevious } from '@hooks/usePrevious';
 import {
   LiquidityFormValues,
   PoolShare,
@@ -33,6 +33,7 @@ import {
 } from '@utils/validators';
 import {
   fromDecimals,
+  getValueForSDK,
   getWhitelistedTokenSymbol, isTokenEqual, parseDecimals, slippageToBignum, toDecimals,
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -133,7 +134,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const [, setSubm] = useState<boolean>(false);
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
-  const prevDex = usePrevious(dex);
+  // const prevDex = usePrevious(dex);
   const [poolShare, setPoolShare] = useState<PoolShare>();
 
   const timeout = useRef(setTimeout(() => {}, 0));
@@ -146,11 +147,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
     const isRemValuesSame = val.balance3 === formValues.balance3;
-    const isDexSame = dex === prevDex;
     if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
-    if (val.switcher && !val.balance3) return;
     if (tezos && accountPkh && token1 && token2) {
-      if (isTokensSame || ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame) && isDexSame)) return;
+      if (isTokensSame || ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame))) return;
       try {
         asyncGetLiquidityShare(
           setDex,
@@ -260,6 +259,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           console.error(err);
         }
       } else {
+        console.log('switcher');
+        if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
         const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
         const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
         const total$ = new BigNumber(values.balance1)
@@ -279,16 +280,27 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           tokensData.second.token.decimals,
         ));
         let inputValue:BigNumber;
-        const whichTokenDifferenceLower = new BigNumber(values.balance1)
-          .minus($toA)
-          .lt(new BigNumber(values.balance2).minus($toB));
+        const val1 = new BigNumber(values.balance1).minus($toA);
+        const val2 = new BigNumber(values.balance2).minus($toB);
+        const whichTokenDifferenceLower = val1
+          .lt(val2);
         if (whichTokenDifferenceLower) {
-          inputValue = toNat(
-            new BigNumber(values.balance2).minus($toA),
-            tokensData.second.token.decimals,
+          inputValue = getValueForSDK(
+            tokensData.first,
+            val1,
+            tezos,
           );
+          // inputValue = toDecimals(
+          //   new BigNumber(values.balance2).minus($toA),
+          //   tokensData.second.token.decimals,
+          // );
         } else {
-          inputValue = tezos!!.format('tz', 'mutez', new BigNumber(values.balance1).minus($toB)) as any;
+          inputValue = getValueForSDK(
+            tokensData.first,
+            val2,
+            tezos,
+          );
+          // inputValue = toDecimals(new BigNumber(values.balance1).minus($toB), 6);
         }
         const fromAsset = 'tez';
         const toAsset = {
@@ -296,7 +308,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           id: tokensData.second.token.id ?? undefined,
         };
         const slippage = slippageToBignum(values.slippage).div(100);
-        inputValue = new BigNumber(parseDecimals(inputValue.toString(), 0, Infinity, 6));
+        console.log(inputValue, inputValue.toString());
         try {
           const swapParams = await swap(
             tezos,
@@ -313,6 +325,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
           );
           const params = [...swapParams, ...addParams];
+          console.log(params);
           setAddLiquidityParams(params);
         } catch (e) {
           console.error(e);
@@ -521,7 +534,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               id="liquidity-token-1"
               label="Input"
               className={s.input}
-              error={((meta.touched && meta.error) || meta.submitError)}
+              error={((meta.error) || meta.submitError)}
             />
           )}
 
@@ -552,7 +565,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           name="balance2"
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            accountPkh && !values.switcher
+            accountPkh
               ? validateBalance(new BigNumber(tokensData.second.balance))
               : () => undefined,
           )}
@@ -583,7 +596,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               id="liquidity-token-2"
               label="Input"
               className={cx(s.input, s.mb24)}
-              error={((meta.touched && meta.error) || meta.submitError)}
+              error={((meta.error) || meta.submitError)}
             />
           )}
         </Field>
@@ -591,11 +604,20 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
             const slipPerc = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.estimateLP ?? 0));
+            const slipPerc1 = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.balance1 ?? 0));
+            const slipPerc2 = slippageToBignum(values.slippage)
               .multipliedBy(new BigNumber(values.balance2 ?? 0));
-            const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPerc);
-            const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPerc);
-            const maxInvestedA = new BigNumber(values.balance1 ?? 0).minus(slipPerc);
-            const maxInvestedB = new BigNumber(values.balance2 ?? 0).minus(slipPerc);
+            const slipPercA = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.balanceA ?? 0));
+            const slipPercB = slippageToBignum(values.slippage)
+              .multipliedBy(new BigNumber(values.balanceB ?? 0));
+            const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
+            const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
+            const maxInvestedA = new BigNumber(values.balance1 ?? 0).minus(slipPerc1);
+            const maxInvestedB = new BigNumber(values.balance2 ?? 0).minus(slipPerc2);
+            const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
             return (
               <>
                 <Slippage handleChange={(value) => input.onChange(value)} />
@@ -608,7 +630,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       </span>
                       <CurrencyAmount
                         currency={`${tokenAName}/${tokenBName}`}
-                        amount={(values.estimateLP ?? 0).toString()}
+                        amount={maxInvestedLp.isNaN() ? '0' : maxInvestedLp.toString()}
                       />
                     </div>
                   )
