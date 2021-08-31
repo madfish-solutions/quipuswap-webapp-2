@@ -57,6 +57,7 @@ import s from '@styles/CommonContainer.module.sass';
 
 import router from 'next/router';
 import { usePrevious } from '@hooks/usePrevious';
+import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 
