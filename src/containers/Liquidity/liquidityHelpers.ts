@@ -252,6 +252,7 @@ export const submitForm = async (
   tezos:TezosToolkit,
   liquidityParams: TransferParams[],
   updateToast: (err:string) => void,
+  handleSuccessToast: any,
 ) => {
   try {
     const op = await batchify(
@@ -259,6 +260,7 @@ export const submitForm = async (
       liquidityParams,
     ).send();
     await op.confirmation();
+    handleSuccessToast();
   } catch (e) {
     updateToast(e);
   }

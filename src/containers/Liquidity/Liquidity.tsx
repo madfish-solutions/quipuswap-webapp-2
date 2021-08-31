@@ -101,6 +101,20 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     });
   }, [updateToast]);
 
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+    });
+  }, [updateToast]);
+
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
     tokenNumber: 'first' | 'second',
@@ -153,12 +167,14 @@ export const Liquidity: React.FC<LiquidityProps> = ({
       <Form
         onSubmit={() => {
           if (!tezos) return;
+          handleLoader();
           submitForm(
             tezos,
             currentTab.id === 'remove'
               ? removeLiquidityParams
               : addLiquidityParams,
             handleErrorToast,
+            handleSuccessToast,
           );
         }}
         mutators={{
