@@ -160,11 +160,11 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         network.id as QSMainNet,
       );
     }
-  }, [tezos, accountPkh, networkId.id]);
+  }, [tezos, accountPkh, network.id]);
 
   useEffect(() => {
     getBalance();
-  }, [tezos, accountPkh, networkId.id]);
+  }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
 
