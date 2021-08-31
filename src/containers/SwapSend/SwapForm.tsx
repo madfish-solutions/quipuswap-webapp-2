@@ -191,26 +191,19 @@ const RealForm:React.FC<SwapFormProps> = ({
     const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate)
       .div(tokensData.second.exchangeRate);
 
+    let rate1buf = new BigNumber(result)
+      .div(val.balance2);
     if (lastChangeMod === 'balance1') {
-      const rate1buf = new BigNumber(val.balance1)
+      rate1buf = new BigNumber(val.balance1)
         .div(result);
-      const priceImp = new BigNumber(1)
-        .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
-        .multipliedBy(100);
-      setRate1(rate1buf);
-      setRate2(rate1buf.exponentiatedBy(-1));
-      setPriceImpact(priceImp);
-    } else {
-      const rate2buf = new BigNumber(result)
-        .div(val.balance2);
-      const priceImp = new BigNumber(1)
-        .minus(rate2buf.exponentiatedBy(-1).div(tokenToTokenRate))
-        .multipliedBy(100);
-
-      setRate1(rate2buf);
-      setRate2(rate2buf.exponentiatedBy(-1));
-      setPriceImpact(priceImp);
     }
+
+    const priceImp = new BigNumber(1)
+      .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
+      .multipliedBy(100);
+    setRate1(rate1buf);
+    setRate2(rate1buf.exponentiatedBy(-1));
+    setPriceImpact(priceImp);
 
     form.mutators.setValue(
       lastChangeMod === 'balance1' ? 'balance2' : 'balance1', result,
