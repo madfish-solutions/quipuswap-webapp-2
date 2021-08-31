@@ -22,9 +22,9 @@ import {
   VoteFormValues,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
-import { parseDecimals } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
 import {
-  composeValidators, validateBalance, validateMinMax,
+  composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
@@ -39,6 +39,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { usePrevious } from '@hooks/usePrevious';
+import { useRouter } from 'next/router';
 import { VotingDetails } from './VotingDetails';
 import { hanldeTokenPairSelect } from './votingHelpers';
 
@@ -100,6 +101,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const router = useRouter();
   const accountPkh = useAccountPkh();
   const prevDex = usePrevious(dex);
 
@@ -216,7 +218,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             <Tabs
               values={TabsContent}
               activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
+              setActiveId={(val) => {
+                router.replace(
+                  `/voting/${val}/${getWhitelistedTokenSymbol(tokenPair.token1)}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
+                  undefined,
+                  { shallow: true },
+                );
+                setTabsState(val);
+              }}
               className={s.tabs}
             />
           ),
@@ -270,14 +279,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 id="liquidity-remove-input"
                 label="Select LP"
                 className={s.input}
-                error={(meta.touched && meta.error) || meta.submitError}
+                error={(meta.error) || meta.submitError}
               />
               <ArrowDown className={s.iconButton} />
             </>
           )}
         </Field>
         {currentTab.id === 'vote' && (
-          <Field name="selectedBaker">
+          <Field name="selectedBaker" validate={required}>
             {({ input, meta }) => (
               <ComplexBaker
                 {...input}

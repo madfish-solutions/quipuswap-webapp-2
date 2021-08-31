@@ -32,6 +32,7 @@ import { StickyBlock } from '@components/common/StickyBlock';
 
 import s from '@styles/CommonContainer.module.sass';
 import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
+import { useRouterPair } from '@hooks/useRouterPair';
 import { VotingForm } from './VotingForm';
 import { submitForm } from './votingHelpers';
 
@@ -64,7 +65,6 @@ export const Voting: React.FC<VotingProps> = ({
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
       first: fallbackTokenToTokenData(TEZOS_TOKEN),
@@ -75,7 +75,7 @@ export const Voting: React.FC<VotingProps> = ({
   const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<VoteFormValues>();
   const [dex, setDex] = useState<FoundDex>();
-  const [, setUrlLoaded] = useState<boolean>(true);
+  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState('0');
   const [voter, setVoter] = useState<VoterType>();
   const [
@@ -83,19 +83,14 @@ export const Voting: React.FC<VotingProps> = ({
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
-  let from:any;
-  let to:any;
-  const lastSlash = window.location.pathname.lastIndexOf('/');
-  const slashCount = window.location.pathname.split('/');
-  const urlSearchParams = router.query['from-to'] && typeof router.query['from-to'] === 'string' ? router.query['from-to'].split('-') : window.location.pathname.slice(lastSlash + 1).split('-');
-  const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
-  if (slashCount.length < 3) {
-    from = 'XTZ';
-    to = 'usds';
-  } else if (Object.keys(router.query).length === 0 && (params.from || params.to)) {
-    ({ from, to } = params);
-  }
-  if (!to) to = 'usds';
+  const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
+  const { from, to } = useRouterPair({
+    page: `voting/${router.query.method}`,
+    urlLoaded,
+    initialLoad,
+    token1: tokenPair.token1,
+    token2: tokenPair.token2,
+  });
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
