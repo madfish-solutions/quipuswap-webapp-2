@@ -98,8 +98,7 @@ export const WalletModal: React.FC = () => {
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
-      <div>
-
+      <div className={s.terms}>
         <div className={s.def}>
           <Button onClick={() => setCheck1(!check1)} theme="quaternary" className={s.btn}>
             <Checkbox checked={check1} />
