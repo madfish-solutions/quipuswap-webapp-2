@@ -4,7 +4,6 @@ import React, {
 } from 'react';
 import { withTypes } from 'react-final-form';
 import {
-  FoundDex,
   TransferParams,
 } from '@quipuswap/sdk';
 
@@ -74,7 +73,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<LiquidityFormValues>();
-  const [dex, setDex] = useState<FoundDex>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [
     tokenPair,
@@ -198,8 +196,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             save={() => {}}
             setTabsState={setTabsState}
             tabsState={tabsState}
-            dex={dex}
-            setDex={setDex}
             token1={token1}
             token2={token2}
             setTokens={setTokens}

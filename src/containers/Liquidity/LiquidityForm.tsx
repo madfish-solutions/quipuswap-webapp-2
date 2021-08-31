@@ -11,7 +11,9 @@ import {
   estimateSharesInToken,
   estimateTezInShares,
   estimateTokenInShares,
+  findDex,
   FoundDex,
+  getLiquidityShare,
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
@@ -83,7 +85,6 @@ type LiquidityFormProps = {
   token1: WhitelistedToken,
   token2: WhitelistedToken,
   setTokens: (tokens:WhitelistedToken[]) => void,
-  setDex: (dex:FoundDex) => void,
   tokenPair: WhitelistedTokenPair,
   setTokenPair: (pair:WhitelistedTokenPair) => void,
   tokensData:TokenDataMap,
@@ -112,11 +113,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   values,
   form,
   tabsState,
-  dex,
   token1,
   token2,
   setTokens,
-  setDex,
   tokenPair,
   setTokenPair,
   setTabsState,
@@ -133,6 +132,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const [dex, setDex] = useState<FoundDex>();
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   // const prevDex = usePrevious(dex);
@@ -148,6 +148,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     const isTokensSame = isTokenEqual(currentTokenA, currentTokenB);
     const isValuesSame = val[lastChange] === formValues[lastChange];
     const isRemValuesSame = val.balance3 === formValues.balance3;
+    if (!dex) return;
     if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
     if (tezos && accountPkh && token1 && token2) {
       if (isTokensSame || ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame))) return;
@@ -318,6 +319,66 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       }
     }
   };
+
+  useEffect(() => {
+    setPoolShare(undefined);
+    form.mutators.setValue(
+      'balanceTotalA',
+      0,
+    );
+
+    form.mutators.setValue(
+      'balanceTotalB',
+      0,
+    );
+    const getDex = async () => {
+      if (!tezos || !token2 || !token1) return;
+      const toAsset = {
+        contract: token2.contractAddress,
+        id: token2.fa2TokenId ?? undefined,
+      };
+      const dexbuf = await findDex(tezos, FACTORIES[networkId], toAsset);
+      setDex(dexbuf);
+      try {
+        const getMethod = async (
+          token:WhitelistedToken,
+          foundDex:FoundDex,
+          value:BigNumber,
+        ) => (token.contractAddress === 'tez'
+          ? estimateTezInShares(foundDex.storage, value.toString())
+          : estimateTokenInShares(foundDex.storage, value.toString()));
+
+        if (!accountPkh) return;
+        const share = await getLiquidityShare(tezos, dexbuf, accountPkh);
+        setPoolShare(share);
+        const balanceAB = share.total;
+        const sharesTotalA = await getMethod(
+          token1,
+          dexbuf,
+          balanceAB.integerValue(),
+        );
+        const sharesTotalB = await getMethod(
+          token2,
+          dexbuf,
+          balanceAB.integerValue(),
+        );
+        const balA1 = fromDecimals(sharesTotalA, 6).toString();
+        const balA2 = fromDecimals(sharesTotalB, 6).toString();
+        form.mutators.setValue(
+          'balanceTotalA',
+          balA1,
+        );
+
+        form.mutators.setValue(
+          'balanceTotalB',
+          balA2,
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getDex();
+  }, [token2, token1, tezos, networkId, accountPkh]);
 
   const saveFunc = async () => {
     if (promise) {
