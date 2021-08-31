@@ -176,9 +176,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         target="_blank"
         href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
         external
+        icon={<ExternalLink className={s.linkIcon} />}
       >
         View First Pair Analytics
-        <ExternalLink className={s.linkIcon} />
       </Button>
       )}
       {dex && (
@@ -188,9 +188,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         target="_blank"
         href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
         external
+        icon={<ExternalLink className={s.linkIcon} />}
       >
         {dex2 ? 'View Second Pair Analytics' : 'View Pair Analytics'}
-        <ExternalLink className={s.linkIcon} />
       </Button>
       )}
     </Card>

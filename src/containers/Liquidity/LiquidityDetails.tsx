@@ -182,18 +182,18 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           theme="inverse"
           href={pairLink}
           external
+          icon={<ExternalLink className={s.linkIcon} />}
         >
           View Pair Analytics
-          <ExternalLink className={s.linkIcon} />
         </Button>
         <Button
           className={s.detailsButton}
           theme="inverse"
           href={contractLink}
           external
+          icon={<ExternalLink className={s.linkIcon} />}
         >
           View Pair Contract
-          <ExternalLink className={s.linkIcon} />
         </Button>
       </div>
       )}

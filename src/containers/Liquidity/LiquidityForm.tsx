@@ -259,48 +259,34 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           console.error(err);
         }
       } else {
-        console.log('switcher');
         if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+        const bal1 = new BigNumber(values.balance1);
+        const bal2 = new BigNumber(values.balance2);
         const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
         const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
-        const total$ = new BigNumber(values.balance1)
-          .multipliedBy(exA)
-          .plus(new BigNumber(values.balance2).multipliedBy(exB))
-          .div(2);
-        const $toA = new BigNumber(parseDecimals(
-          total$.div(exA).toString(),
-          0,
-          Infinity,
-          tokensData.first.token.decimals,
-        ));
-        const $toB = new BigNumber(parseDecimals(
-          total$.div(exB).toString(),
-          0,
-          Infinity,
-          tokensData.second.token.decimals,
-        ));
+        const initialAto$ = bal1.multipliedBy(exA);
+        const initialBto$ = bal2.multipliedBy(exB);
+        const total$ = initialAto$
+          .plus(initialBto$)
+          .div(2); // Total amount of Tokens pool in USD
+        const $toA = total$.div(exA); // represents Token A in equal portion (50-50) in USD
         let inputValue:BigNumber;
-        const val1 = new BigNumber(values.balance1).minus($toA);
-        const val2 = new BigNumber(values.balance2).minus($toB);
-        const whichTokenDifferenceLower = val1
-          .lt(val2);
-        if (whichTokenDifferenceLower) {
+        const val1 = initialAto$.minus(total$);
+        const val2 = initialBto$.minus(total$);
+        const whichTokenPoolIsGreater = val1
+          .gt(val2);
+        if (whichTokenPoolIsGreater) {
           inputValue = getValueForSDK(
             tokensData.first,
-            val1,
+            val1.div(exA),
             tezos,
           );
-          // inputValue = toDecimals(
-          //   new BigNumber(values.balance2).minus($toA),
-          //   tokensData.second.token.decimals,
-          // );
         } else {
           inputValue = getValueForSDK(
-            tokensData.first,
-            val2,
+            tokensData.second,
+            val2.div(exB),
             tezos,
           );
-          // inputValue = toDecimals(new BigNumber(values.balance1).minus($toB), 6);
         }
         const fromAsset = 'tez';
         const toAsset = {
@@ -308,7 +294,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           id: tokensData.second.token.id ?? undefined,
         };
         const slippage = slippageToBignum(values.slippage).div(100);
-        console.log(inputValue, inputValue.toString());
         try {
           const swapParams = await swap(
             tezos,
@@ -325,7 +310,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
           );
           const params = [...swapParams, ...addParams];
-          console.log(params);
           setAddLiquidityParams(params);
         } catch (e) {
           console.error(e);
@@ -605,18 +589,25 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           {({ input }) => {
             const slipPerc = slippageToBignum(values.slippage)
               .multipliedBy(new BigNumber(values.estimateLP ?? 0));
-            const slipPerc1 = slippageToBignum(values.slippage)
-              .multipliedBy(new BigNumber(values.balance1 ?? 0));
-            const slipPerc2 = slippageToBignum(values.slippage)
-              .multipliedBy(new BigNumber(values.balance2 ?? 0));
             const slipPercA = slippageToBignum(values.slippage)
               .multipliedBy(new BigNumber(values.balanceA ?? 0));
             const slipPercB = slippageToBignum(values.slippage)
               .multipliedBy(new BigNumber(values.balanceB ?? 0));
             const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
             const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
-            const maxInvestedA = new BigNumber(values.balance1 ?? 0).minus(slipPerc1);
-            const maxInvestedB = new BigNumber(values.balance2 ?? 0).minus(slipPerc2);
+            const bal1 = new BigNumber(values.balance1);
+            const bal2 = new BigNumber(values.balance2);
+            const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
+            const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
+            const initialAto$ = bal1.multipliedBy(exA);
+            const initialBto$ = bal2.multipliedBy(exB);
+            const total$ = initialAto$
+              .plus(initialBto$)
+              .div(2); // Total amount of Tokens pool in USD
+            const maxInvestedA = total$
+              .minus(slippageToBignum(values.slippage).multipliedBy(total$)).div(exA);
+            const maxInvestedB = total$
+              .minus(slippageToBignum(values.slippage).multipliedBy(total$)).div(exB);
             const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
             return (
               <>
