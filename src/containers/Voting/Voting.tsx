@@ -22,7 +22,6 @@ import {
   useTokens,
 } from '@utils/dapp';
 import {
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   VoterType, WhitelistedToken, WhitelistedTokenPair,
@@ -189,9 +188,6 @@ export const Voting: React.FC<VotingProps> = ({
           { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
           setTokenPair,
           handleTokenChange,
-          tezos,
-          accountPkh,
-          network.id as QSMainNet,
         );
       }
     };
@@ -206,9 +202,6 @@ export const Voting: React.FC<VotingProps> = ({
         tokenPair,
         setTokenPair,
         handleTokenChange,
-        tezos,
-        accountPkh,
-        network.id as QSMainNet,
       );
     }
   }, [tezos, accountPkh, network.id]);
