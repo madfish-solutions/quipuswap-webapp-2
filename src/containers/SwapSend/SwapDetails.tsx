@@ -6,7 +6,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { STABLE_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import {
   SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
@@ -178,7 +178,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         external
         icon={<ExternalLink className={s.linkIcon} />}
       >
-        View First Pair Analytics
+        {`View ${getWhitelistedTokenSymbol(token1)}/${TEZOS_TOKEN.metadata.symbol} Pair Analytics`}
       </Button>
       )}
       {dex && (
@@ -190,7 +190,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         external
         icon={<ExternalLink className={s.linkIcon} />}
       >
-        {dex2 ? 'View Second Pair Analytics' : 'View Pair Analytics'}
+        {dex2 ? `View ${TEZOS_TOKEN.metadata.symbol}/${getWhitelistedTokenSymbol(token2)} Pair Analytics` : 'View Pair Analytics'}
       </Button>
       )}
     </Card>
