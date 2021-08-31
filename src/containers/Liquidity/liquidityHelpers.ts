@@ -11,12 +11,10 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@utils/defaults';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { QSMainNet, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
   fromDecimals, isTokenEqual, toDecimals,
 } from '@utils/helpers';
-
-type QSMainNet = 'mainnet' | 'florencenet';
 
 export const hanldeTokenPairSelect = (
   pair:WhitelistedTokenPair,
