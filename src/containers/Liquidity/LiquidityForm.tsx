@@ -413,6 +413,85 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     dex,
     currentTab]);
 
+  useEffect(() => {
+    const localSaveFunc = async () => {
+      if (promise) {
+        await promise;
+      }
+      setVal(values);
+      setSubm(true);
+      if (values.switcher !== formValues.switcher) {
+        if (!values.switcher) {
+          if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+          const rate = new BigNumber(tokensData.first.exchangeRate)
+            .dividedBy(new BigNumber(tokensData.second.exchangeRate));
+          const retValue = lastChange === 'balance1' ? new BigNumber(values.balance1).multipliedBy(rate) : new BigNumber(values.balance2).dividedBy(rate);
+          const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
+
+          form.mutators.setValue(
+            lastChange === 'balance1' ? 'balance2' : 'balance1',
+            parseDecimals(
+              retValue.toString(),
+              0,
+              Infinity,
+              decimals,
+            ),
+          );
+          if (!dex) return;
+          try {
+            try {
+              const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
+                ? tezos!!.format('tz', 'mutez', balance) as any
+                : toNat(balance, token.token.decimals));
+
+              const getMethod = async (
+                token:TokenDataType,
+                foundDex:FoundDex,
+                value:BigNumber,
+              ) => (isTez(token)
+                ? estimateSharesInTez(foundDex.storage, getInputValue(token, value.toString()))
+                : estimateSharesInToken(foundDex.storage, getInputValue(token, value.toString())));
+              const sharesA = await getMethod(
+                tokensData.first,
+                dex,
+                new BigNumber(values.balance1),
+              );
+              const sharesB = await getMethod(
+                tokensData.second,
+                dex,
+                lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
+              );
+
+              const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
+              const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
+
+              form.mutators.setValue(
+                'estimateLP',
+                lp1.plus(lp2),
+              );
+            } catch (e) {
+              console.error(e);
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      }
+      promise = save(values);
+      await promise;
+      setSubm(false);
+    };
+    if (timeout.current) {
+      clearTimeout(timeout.current);
+    }
+    timeout.current = setTimeout(localSaveFunc, debounce);
+    return () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    };
+  }, [values.switcher]);
+
   const handleAddLiquidity = async () => {
     if (!tezos) return;
     if (!accountPkh) {

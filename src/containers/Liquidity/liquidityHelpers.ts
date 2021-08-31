@@ -131,8 +131,6 @@ export const asyncGetShares = async (
     );
     const balA1 = fromDecimals(sharesTotalA, 6).toString();
     const balA2 = fromDecimals(sharesTotalB, 6).toString();
-
-    console.log(balA1);
     setValue(
       'balanceTotalA',
       balA1,
@@ -190,7 +188,6 @@ export const asyncGetLiquidityShare = async (
           );
           setAddLiquidityParams(addParams);
         }
-        console.log('share', share);
         asyncGetShares(
           setTokenPair,
           setValue,
