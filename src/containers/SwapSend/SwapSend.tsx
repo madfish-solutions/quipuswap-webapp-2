@@ -15,6 +15,7 @@ import {
   useNetwork,
   useTokens,
   useSearchCustomTokens,
+  useOnBlock,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -86,6 +87,20 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast]);
 
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: 'Swap completed!',
+    });
+  }, [updateToast]);
+
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
     tokenNumber: 'first' | 'second',
@@ -120,12 +135,18 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     }
   }, [from, to, initialLoad, tokens]);
 
-  useEffect(() => {
+  const getBalance = useCallback(() => {
     if (tezos && token1 && token2) {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
     }
   }, [tezos, accountPkh, networkId]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, networkId]);
+
+  useOnBlock(tezos, getBalance);
 
   useEffect(() => {
     setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
@@ -134,18 +155,24 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   return (
     <StickyBlock className={className}>
       <Form
-        onSubmit={(values) => {
+        onSubmit={(values, form) => {
           if (!tezos) return;
+          handleLoader();
           submitForm(values,
             tezos,
             tokensData,
             tabsState,
             networkId,
-            (err) => handleErrorToast(err));
+            form,
+            (err) => handleErrorToast(err),
+            handleSuccessToast);
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
             changeValue(state, field, () => value);
+          },
+          setValues: (fields, state, { changeValue }) => {
+            fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
           },
         }}
         render={({

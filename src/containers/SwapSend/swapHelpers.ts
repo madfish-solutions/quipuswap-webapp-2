@@ -13,7 +13,9 @@ export const submitForm = (
   tokensData:TokenDataMap,
   tabsState:string,
   networkId:QSMainNet,
+  form:any,
   updateToast: (err:string) => void,
+  handleSuccessToast: any,
 ) => {
   if (!tezos) return;
   const asyncFunc = async () => {
@@ -35,7 +37,10 @@ export const submitForm = (
         tezos.wallet.batch([]),
         swapParams,
       ).send();
+      form.mutators.setValue('balance1', '');
+      form.mutators.setValue('balance2', '');
       await op.confirmation();
+      handleSuccessToast();
     } catch (e) {
       updateToast(e);
     }

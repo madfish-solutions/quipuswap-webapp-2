@@ -69,7 +69,12 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
       <div className={s.background}>
         <div className={s.shape}>
           <input {...props} ref={inputRef} value={value} hidden />
-          <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.baker}>
+          <Button
+            onClick={() => setTokensModal(true)}
+            theme="quaternary"
+            className={s.baker}
+            textClassName={s.bakerInner}
+          >
             <TokensLogos token1={
               {
                 metadata:

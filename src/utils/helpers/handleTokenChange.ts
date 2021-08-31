@@ -27,15 +27,19 @@ export const handleTokenChange = async ({
   if (!exchangeRates || !exchangeRates.find) return;
   let finalBalance = '0';
   if (tezos && accountPkh) {
-    const balance = await getUserBalance(
-      tezos,
-      accountPkh,
-      token.contractAddress,
-      token.type,
-      token.fa2TokenId,
-    );
-    if (balance) {
-      finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
+    try {
+      const balance = await getUserBalance(
+        tezos,
+        accountPkh,
+        token.contractAddress,
+        token.type,
+        token.fa2TokenId,
+      );
+      if (balance) {
+        finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
+      }
+    } catch (e) {
+      console.error(e);
     }
   }
 

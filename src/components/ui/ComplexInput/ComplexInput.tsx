@@ -126,7 +126,13 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             value={value}
             {...props}
           />
-          <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
+          <Button
+            onClick={onClick}
+            theme="quaternary"
+            className={s.item4}
+            textClassName={s.item4Inner}
+            disabled={readOnly}
+          >
             <TokensLogos token1={token1} token2={token2} />
             <h6 className={cx(s.token)}>
               {mode === 'input' && getWhitelistedTokenSymbol(token1)}

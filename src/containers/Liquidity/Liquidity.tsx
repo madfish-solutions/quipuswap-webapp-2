@@ -4,7 +4,6 @@ import React, {
 } from 'react';
 import { withTypes } from 'react-final-form';
 import {
-  FoundDex,
   TransferParams,
 } from '@quipuswap/sdk';
 
@@ -12,7 +11,7 @@ import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  useAccountPkh, useNetwork, useSearchCustomTokens, useTezos, useTokens,
+  useAccountPkh, useNetwork, useOnBlock, useSearchCustomTokens, useTezos, useTokens,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -21,7 +20,6 @@ import {
 } from '@utils/helpers';
 import {
   LiquidityFormValues,
-  QSMainNet,
   TokenDataMap,
   WhitelistedToken,
   WhitelistedTokenPair,
@@ -29,6 +27,7 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
+import { useRouter } from 'next/router';
 import { LiquidityForm } from './LiquidityForm';
 import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
@@ -63,7 +62,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const network = useNetwork();
   const searchCustomToken = useSearchCustomTokens();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
       first: fallbackTokenToTokenData(TEZOS_TOKEN),
@@ -74,15 +72,16 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
   const { Form } = withTypes<LiquidityFormValues>();
-  const [dex, setDex] = useState<FoundDex>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [
     tokenPair,
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const router = useRouter();
+  const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
   const { from, to } = useRouterPair({
-    page: 'liquidity',
+    page: `liquidity/${router.query.method}`,
     urlLoaded,
     initialLoad,
     token1,
@@ -98,6 +97,20 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     updateToast({
       type: 'error',
       render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
     });
   }, [updateToast]);
 
@@ -133,7 +146,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     }
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
-  useEffect(() => {
+  const getBalance = useCallback(() => {
     if (tezos && token1 && token2) {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
@@ -141,24 +154,29 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         { token1, token2 } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper,
-        tezos,
-        accountPkh,
-        network.id as QSMainNet,
       );
     }
   }, [tezos, accountPkh, network.id]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, network.id]);
+
+  useOnBlock(tezos, getBalance);
 
   return (
     <StickyBlock className={className}>
       <Form
         onSubmit={() => {
           if (!tezos) return;
+          handleLoader();
           submitForm(
             tezos,
             currentTab.id === 'remove'
               ? removeLiquidityParams
               : addLiquidityParams,
             handleErrorToast,
+            handleSuccessToast,
           );
         }}
         mutators={{
@@ -174,8 +192,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
             save={() => {}}
             setTabsState={setTabsState}
             tabsState={tabsState}
-            dex={dex}
-            setDex={setDex}
             token1={token1}
             token2={token2}
             setTokens={setTokens}

@@ -27,6 +27,15 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const READ_ONLY_SIGNER_PK = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK!;
+export const READ_ONLY_SIGNER_PK_HASH = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH!;
+export const KNOWN_LAMBDA_CONTRACTS = new Map([
+  ['NetXdQprcVkpaWU', 'KT1CPuTzwC7h7uLXd5WQmpMFso1HxrLBUtpE'],
+  ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
+  ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
+  ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
+]);
+
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const TEZOS_TOKEN: WhitelistedToken = {
@@ -42,13 +51,13 @@ export const TEZOS_TOKEN: WhitelistedToken = {
 
 export const STABLE_TOKEN: WhitelistedToken = {
   type: 'fa2',
-  contractAddress: 'KT1REEb5VxWRjcHm5GzDMwErMmNFftsE5Gpf',
+  contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
   metadata: {
     decimals: 6,
-    symbol: 'USDS',
-    name: 'Stably USD',
-    thumbnailUri: 'https://quipuswap.com/tokens/stably.png',
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
   },
 };
 

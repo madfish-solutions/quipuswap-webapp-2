@@ -41,7 +41,7 @@ export const getServerSideProps = async (props:any) => {
   if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
     return {
       redirect: {
-        destination: `/liquidity/${from}-${to}`,
+        destination: `/liquidity/${query.method}/${from}-${to}`,
         permanent: false,
       },
     };
@@ -54,7 +54,7 @@ export const getServerSideProps = async (props:any) => {
   ) {
     return {
       redirect: {
-        destination: `/liquidity/${from}-${to}`,
+        destination: `/liquidity/${query.method}/${from}-${to}`,
         permanent: false,
       },
     };

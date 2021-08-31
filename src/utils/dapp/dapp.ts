@@ -317,11 +317,13 @@ function useDApp() {
           searchTokens: { loading: true, data: [] },
         }));
         let type;
+        console.log('searching');
         try {
           type = await getContractInfo(address, tezos!!);
         } catch (e) {
           type = null;
         }
+        console.log(type);
         if (!type) {
           setState((prevState) => ({
             ...prevState,

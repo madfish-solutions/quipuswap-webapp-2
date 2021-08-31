@@ -1,52 +1,64 @@
 import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
-import { getStorageInfo } from './getStorageInfo';
+import memoizee from 'memoizee';
+
+import { getReadOnlyTezos } from './getReadOnlyTezos';
+import { KNOWN_LAMBDA_CONTRACTS } from '../defaults';
+
+const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
+  normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
+});
+
+// TODO: implement for liquidity
+// const isLPToken = (contract: string) => false;
 
 export const getUserBalance = async (
   tezos: TezosToolkit,
-  accountPkh: string,
-  contract: string,
+  account: string,
+  contractAddress: string,
   type: 'fa1.2' | 'fa2' = 'fa1.2',
-  tokenId?: number,
+  tokenId = 0,
 ) => {
-  if (contract === 'tez') {
-    const amount = await tezos.tz.getBalance(accountPkh);
-    return amount;
+  const newTezos = getReadOnlyTezos(tezos);
+
+  if (contractAddress === 'tez') {
+    return newTezos.tz.getBalance(account);
   }
-  const storage = await getStorageInfo(tezos, contract);
-  let val = null;
-  if (type === 'fa1.2') {
-    const { ledger, token } = storage;
-    if (!ledger && !token) {
+  const contract = await newTezos.contract.at(contractAddress);
+
+  // if (isLPToken(contractAddress)) {
+  //   const dexStorage = await contract.storage<any>();
+  //   const ledgerValue = await dexStorage.storage.ledger.get(account);
+  //
+  //   return ledgerValue
+  //     ? new BigNumber(ledgerValue.balance).plus(ledgerValue.frozen_balance)
+  //     : new BigNumber(0);
+  // }
+  const chainId = await loadChainId(newTezos);
+  const lambdaContract = KNOWN_LAMBDA_CONTRACTS.get(chainId);
+
+  let nat: BigNumber | undefined;
+
+  if (type === 'fa2') {
+    try {
+      const response = await contract.views
+        .balance_of([{ owner: account, token_id: tokenId }])
+        .read(lambdaContract);
+      nat = response[0].balance;
+    } catch (e) {
       return null;
-    }
-    if (ledger) {
-      val = await ledger.get(accountPkh);
-    }
-    if (token) {
-      val = await token.ledger.get(accountPkh);
     }
   } else {
-    const { assets } = storage;
-    if (!assets) {
+    try {
+      nat = await contract.views.getBalance(account).read(lambdaContract);
+    } catch {
       return null;
     }
-    val = await assets.ledger.get([accountPkh, tokenId]);
   }
 
-  if (!val) {
+  if (!nat || nat.isNaN()) {
     return null;
   }
 
-  const finalVal = new BigNumber(val);
-  if (finalVal.toNumber()) {
-    return finalVal;
-  }
-
-  const finalValBalance = new BigNumber(val.balance);
-  if (!finalValBalance) {
-    return null;
-  }
-
-  return finalValBalance;
+  return nat;
 };
