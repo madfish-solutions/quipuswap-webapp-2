@@ -351,7 +351,10 @@ const RealForm:React.FC<SwapFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [token1, token2, tezos,
+  }, [
+    token1,
+    token2,
+    tezos,
     accountPkh,
     dex,
     dex2,

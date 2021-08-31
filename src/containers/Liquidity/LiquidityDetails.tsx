@@ -6,9 +6,9 @@ import {
 
 import {
   PoolShare,
-  TokenDataMap, WhitelistedToken, WhitelistedTokenPair,
+  TokenDataMap, WhitelistedToken,
 } from '@utils/types';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -24,7 +24,6 @@ type LiquidityDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData:TokenDataMap
-  tokenPair: WhitelistedTokenPair
   poolShare?: PoolShare
   balanceTotalA: string
   balanceTotalB: string
@@ -36,7 +35,6 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   token1,
   token2,
   tokensData,
-  tokenPair,
   poolShare,
   balanceTotalA,
   balanceTotalB,
@@ -48,8 +46,8 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
-  const totalShare = useMemo(() => (poolShare?.total.div(10 ** 6).toString()) ?? '0', [poolShare]);
-  const frozenShare = useMemo(() => (poolShare?.frozen.div(10 ** 6).toString()) ?? '0', [poolShare]);
+  const totalShare = useMemo(() => (fromDecimals(poolShare?.total || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
+  const frozenShare = useMemo(() => (fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
   const sellPrice = useMemo(() => new BigNumber(tokensData.first.exchangeRate ?? 1)
     .div(new BigNumber(tokensData.second.exchangeRate ?? 1))
     .toString(), [tokensData]);
@@ -127,7 +125,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       >
         <CurrencyAmount
           amount={balanceTotalA}
-          currency={getWhitelistedTokenSymbol(tokenPair.token1)}
+          currency={tokenAName}
         />
       </CardCell>
       <CardCell
@@ -144,7 +142,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       >
         <CurrencyAmount
           amount={balanceTotalB}
-          currency={getWhitelistedTokenSymbol(tokenPair.token2)}
+          currency={tokenBName}
         />
       </CardCell>
       <CardCell

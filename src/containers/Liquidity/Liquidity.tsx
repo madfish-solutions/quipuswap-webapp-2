@@ -20,7 +20,6 @@ import {
 } from '@utils/helpers';
 import {
   LiquidityFormValues,
-  QSMainNet,
   TokenDataMap,
   WhitelistedToken,
   WhitelistedTokenPair,
@@ -155,9 +154,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         { token1, token2 } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper,
-        tezos,
-        accountPkh,
-        network.id as QSMainNet,
       );
     }
   }, [tezos, accountPkh, network.id]);

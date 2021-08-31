@@ -1,5 +1,4 @@
 import {
-  addLiquidity,
   batchify,
   estimateTezInShares,
   estimateTokenInShares,
@@ -7,7 +6,6 @@ import {
   FoundDex,
   getLiquidityShare,
   initializeLiquidity,
-  removeLiquidity,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
@@ -15,7 +13,7 @@ import BigNumber from 'bignumber.js';
 import { FACTORIES } from '@utils/defaults';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
-  fromDecimals, isTokenEqual, slippageToBignum, toDecimals,
+  fromDecimals, isTokenEqual, toDecimals,
 } from '@utils/helpers';
 
 type QSMainNet = 'mainnet' | 'florencenet';
@@ -24,36 +22,10 @@ export const hanldeTokenPairSelect = (
   pair:WhitelistedTokenPair,
   setTokenPair: (pair:WhitelistedTokenPair) => void,
   handleTokenChange: (token:WhitelistedToken, tokenNum:'first' | 'second') => void,
-  tezos:TezosToolkit | null,
-  accountPkh:string | null,
-  networkId?:QSMainNet,
 ) => {
-  const asyncFunc = async () => {
-    handleTokenChange(pair.token1, 'first');
-    handleTokenChange(pair.token2, 'second');
-    if (!tezos || !accountPkh || !networkId) {
-      setTokenPair(pair);
-      return;
-    }
-    try {
-      const secondAsset = {
-        contract: pair.token2.contractAddress,
-        id: pair.token2.fa2TokenId,
-      };
-      const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
-
-      const frozenBalance = fromDecimals(share.frozen, 6).toString();
-      const totalBalance = fromDecimals(share.total, 6).toString();
-      const res = {
-        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
-      };
-      setTokenPair(res);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  asyncFunc();
+  handleTokenChange(pair.token1, 'first');
+  handleTokenChange(pair.token2, 'second');
+  setTokenPair(pair);
 };
 
 export const asyncFindPairDex = async (
@@ -145,66 +117,29 @@ export const asyncGetShares = async (
   }
 };
 
-export const asyncGetLiquidityShare = async (
+type GetShareType = {
   setDex: (dex:FoundDex) => void,
-  setTokenPair:(pair:WhitelistedTokenPair) => void,
-  setValue:(key:string, value: any) => void,
-  setPoolShare: (share:any) => void,
-  setRemoveLiquidityParams: (params: TransferParams[]) => void,
   setAddLiquidityParams: (params: TransferParams[]) => void,
   values: any,
   token1: WhitelistedToken,
   token2: WhitelistedToken,
-  tokenPair: WhitelistedTokenPair,
   dex: FoundDex,
-  currentTab:any,
   tezos: TezosToolkit,
-  accountPkh: any,
   networkId: QSMainNet,
-) => {
+};
+
+export const asyncGetLiquidityShare = async ({
+  setDex,
+  setAddLiquidityParams,
+  values,
+  token1,
+  token2,
+  dex,
+  tezos,
+  networkId,
+} : GetShareType) => {
   try {
-    const account = accountPkh;
-    const slippageTolerance = slippageToBignum(values.slippage).div(100);
-    if (dex) {
-      const share = await getLiquidityShare(tezos, dex, account);
-      try {
-        if (values.balance3) {
-          const lpTokenValue = toDecimals(new BigNumber(values.balance3), 6);
-          const remParams = await removeLiquidity(
-            tezos,
-            dex,
-            lpTokenValue,
-            slippageTolerance,
-          );
-          setRemoveLiquidityParams(remParams);
-        }
-        setPoolShare(share);
-        if (values.balance1) {
-          const tezValue = toDecimals(new BigNumber(values.balance1), 6);
-          const addParams = await addLiquidity(
-            tezos,
-            dex,
-            { tezValue },
-          );
-          setAddLiquidityParams(addParams);
-        }
-        asyncGetShares(
-          setTokenPair,
-          setValue,
-          token1,
-          token2,
-          tokenPair,
-          share.total,
-          currentTab,
-          values,
-          tezos,
-          accountPkh,
-          networkId,
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    } else {
+    if (!dex) {
       const toAsset = {
         contract: token2.contractAddress,
         id: token2.fa2TokenId ?? undefined,

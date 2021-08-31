@@ -2,7 +2,7 @@ import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import {
-  QSMainNet, QSNetwork, WhitelistedToken, WhitelistedTokenPair,
+  QSNetwork, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
 
@@ -34,7 +34,6 @@ type SearchTokenType = {
 export const handleSearchToken = async ({
   tokens,
   network,
-  accountPkh,
   tezos,
   from,
   to,
@@ -95,9 +94,6 @@ export const handleSearchToken = async ({
         { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper,
-        tezos,
-        accountPkh,
-        network.id as QSMainNet,
       );
     }
   }
