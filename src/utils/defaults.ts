@@ -41,13 +41,13 @@ export const TEZOS_TOKEN: WhitelistedToken = {
 
 export const STABLE_TOKEN: WhitelistedToken = {
   type: 'fa2',
-  contractAddress: 'KT1REEb5VxWRjcHm5GzDMwErMmNFftsE5Gpf',
+  contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
   metadata: {
     decimals: 6,
-    symbol: 'USDS',
-    name: 'Stably USD',
-    thumbnailUri: 'https://quipuswap.com/tokens/stably.png',
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
   },
 };
 

@@ -1,52 +1,15 @@
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="24" height="24" rx="12" fill="#162244"/>
-  <g clip-path="url(#clip0)">
-    <rect 
-      x="-0.375"
-      y="0.375"
-      width="2.58333"
-      height="10.9167"
-      rx="1.29167"
-      transform="matrix(-1 -4.21468e-08 4.21469e-08 1 12.9167 2)"
-      fill="url(#pl)"
-      stroke="#162244"
-      stroke-width="0.75"/>
-    <path 
-      d="M12 7.79164C9.67585 7.79164 7.79171 9.67578 7.79171 12C7.79171 14.3242 9.67584 16.2083 12 16.2083C14.3242 16.2083 16.2084 14.3242 16.2084 12C16.2084 9.67578 14.3242 7.79164 12 7.79164Z" 
-      fill="url(#plone)" 
-      stroke="#162244" 
-      stroke-width="0.75"/>
-    <rect 
-      x="0.375" 
-      y="-0.375" 
-      width="2.58333" 
-      height="8.41667" 
-      rx="1.29167" 
-      transform="matrix(1 0 -8.42799e-08 -1 10.3333 21.25)" 
-      fill="url(#pltwo)" 
-      stroke="#162244" 
-      stroke-width="0.75"/>
-    <path d="M14.0033 15.83C14.5077 16.3344 15.3256 16.3344 15.83 15.83C16.3344 15.3256 16.3344 14.5077 15.83 14.0033L12.9133 11.0866C12.4089 10.5822 11.5911 10.5822 11.0866 11.0866C10.5822 11.5911 10.5822 12.4089 11.0866 12.9133L14.0033 15.83Z" fill="url(#plthree)" stroke="#232735" stroke-width="0.75"/>
-  </g>
-  <defs>
-    <linearGradient id="pl" x1="0" y1="0" x2="3.79596" y2="0.152516" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#FF6B00"/>
-    <stop offset="1" stop-color="#F9A605"/>
-    </linearGradient>
-    <linearGradient id="plone" x1="16.5834" y1="16.5833" x2="15.1416" y2="6.33034" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#FF6B00"/>
-    <stop offset="1" stop-color="#F9A605"/>
-    </linearGradient>
-    <linearGradient id="pltwo" x1="0" y1="0" x2="3.79217" y2="0.193918" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#FF6B00"/>
-    <stop offset="1" stop-color="#F9A605"/>
-    </linearGradient>
-    <linearGradient id="plthree" x1="16.5833" y1="10.3333" x2="9.59265" y2="11.3164" gradientUnits="userSpaceOnUse">
-    <stop stop-color="#FF6B00"/>
-    <stop offset="1" stop-color="#F9A605"/>
-    </linearGradient>
-    <clipPath id="clip0">
-      <rect width="20" height="20" fill="white" transform="translate(2 2)"/>
-    </clipPath>
-  </defs>
+    <path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="#14202C"/>
+    <path d="M9.65025 8.84852L15.1554 14.3537C15.8691 15.0673 16.9905 15.1693 17.8061 14.7615C18.01 14.6595 18.1119 14.5576 18.3158 14.3537C19.2333 13.4362 19.2333 12.0089 18.3158 11.1933L12.8106 5.68815C11.995 4.77062 10.5678 4.77062 9.65025 5.68815C9.44636 5.89204 9.24246 6.19788 9.14051 6.40178C8.83467 7.21736 9.03857 8.23684 9.65025 8.84852Z" fill="url(#QuipuToken-paint0_linear)"/>
+    <path d="M14.3147 15.2075L8.73096 9.58906C8.12183 9.07829 7.30964 8.87398 6.59898 9.07829C6.29442 9.18045 5.98985 9.38475 5.68528 9.69122C4.77157 10.6106 4.77157 12.0408 5.68528 12.858L11.1675 18.3743C11.8782 19.0894 12.9949 19.1915 13.9086 18.6808C14.1117 18.5786 14.2132 18.4765 14.3147 18.3743C15.2284 17.5571 15.2284 16.1269 14.3147 15.2075Z" fill="url(#QuipuToken-paint1_linear)"/>
+    <defs>
+        <linearGradient id="QuipuToken-paint0_linear" x1="9" y1="5" x2="20.1893" y2="6.57412" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FF6B00"/>
+            <stop offset="1" stop-color="#F9A605"/>
+        </linearGradient>
+        <linearGradient id="QuipuToken-paint1_linear" x1="5" y1="9" x2="16.1851" y2="10.5729" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#FF6B00"/>
+            <stop offset="1" stop-color="#F9A605"/>
+        </linearGradient>
+    </defs>
 </svg>
