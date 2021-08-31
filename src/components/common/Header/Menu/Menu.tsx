@@ -50,16 +50,15 @@ export const Menu: React.FC<MenuProps> = ({
 
         </div>
         <div className={s.row}>
-          <div className={s.madfish}>
-            <Button
-              href="https://www.madfish.solutions/"
-              external
-              theme="quaternary"
-            >
-              <Madfish />
-            </Button>
+          <Button
+            href="https://www.madfish.solutions/"
+            external
+            theme="clean"
+            className={s.madfish}
+          >
+            <Madfish />
+          </Button>
 
-          </div>
           <Socials />
         </div>
       </footer>

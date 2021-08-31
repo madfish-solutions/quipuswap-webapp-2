@@ -41,16 +41,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <footer className={s.footer}>
         <QPToken className={s.token} />
         <Socials className={s.socials} id="desktop" />
-        <div className={s.madfish}>
-          <Button
-            href="https://www.madfish.solutions/"
-            external
-            theme="quaternary"
-          >
-            <Madfish />
-          </Button>
-
-        </div>
+        <Button
+          href="https://www.madfish.solutions/"
+          external
+          theme="clean"
+          className={s.madfish}
+        >
+          <Madfish />
+        </Button>
       </footer>
     </div>
   );
