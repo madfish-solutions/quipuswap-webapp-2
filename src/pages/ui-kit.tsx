@@ -15,12 +15,14 @@ import { Modal } from '@components/ui/Modal';
 import {
   BakerCell,
   ChooseListCell,
-  // PositionCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import {
+  LineChartSampleData,
+  CandleChartSampleData,
+} from '@components/charts/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -40,7 +42,10 @@ import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const LineChart = dynamic(() => import('@components/charts/LineChart'), {
+  ssr: false,
+});
+const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
   ssr: false,
 });
 
@@ -758,7 +763,14 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Graphics</h1>
-        <LineChart data={LineChartSampleData} />
+        <LineChart
+          data={LineChartSampleData}
+          className={s.chart}
+        />
+        <CandleChart
+          data={CandleChartSampleData}
+          className={s.chart}
+        />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Currency amounts</h1>
