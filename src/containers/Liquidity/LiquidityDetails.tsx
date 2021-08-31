@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import {
   FoundDex,
@@ -17,7 +18,6 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import BigNumber from 'bignumber.js';
 
 type LiquidityDetailsProps = {
   currentTab: string

@@ -2,6 +2,7 @@ import React, {
   useCallback,
   useEffect, useMemo, useState,
 } from 'react';
+import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 import {
   TransferParams,
@@ -27,7 +28,6 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import { useRouter } from 'next/router';
 import { LiquidityForm } from './LiquidityForm';
 import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
