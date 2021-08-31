@@ -12,7 +12,7 @@ import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  useAccountPkh, useNetwork, useSearchCustomTokens, useTezos, useTokens,
+  useAccountPkh, useNetwork, useOnBlock, useSearchCustomTokens, useTezos, useTokens,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -147,7 +147,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     }
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
-  useEffect(() => {
+  const getBalance = useCallback(() => {
     if (tezos && token1 && token2) {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
@@ -160,7 +160,13 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         network.id as QSMainNet,
       );
     }
-  }, [tezos, accountPkh, network.id]);
+  }, [tezos, accountPkh, networkId.id]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, networkId.id]);
+
+  useOnBlock(tezos, getBalance);
 
   return (
     <StickyBlock className={className}>
