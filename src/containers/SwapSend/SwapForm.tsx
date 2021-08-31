@@ -201,14 +201,14 @@ const RealForm:React.FC<SwapFormProps> = ({
       setRate2(rate1buf.exponentiatedBy(-1));
       setPriceImpact(priceImp);
     } else {
-      const rate2buf = new BigNumber(val.balance2)
-        .div(result);
+      const rate2buf = new BigNumber(result)
+        .div(val.balance2);
       const priceImp = new BigNumber(1)
-        .minus(rate2buf.div(tokenToTokenRate.exponentiatedBy(-1)))
+        .minus(rate2buf.exponentiatedBy(-1).div(tokenToTokenRate))
         .multipliedBy(100);
 
-      setRate1(rate2buf.exponentiatedBy(-1));
-      setRate2(rate2buf);
+      setRate1(rate2buf);
+      setRate2(rate2buf.exponentiatedBy(-1));
       setPriceImpact(priceImp);
     }
 
