@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
-        <QPToken className={s.token} />
+        <QPToken className={s.token} id="desktop" />
         <Socials className={s.socials} id="desktop" />
       </footer>
     </div>

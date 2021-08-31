@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { STABLE_TOKEN } from '@utils/defaults';
-import Token from '@icons/Token.svg';
+import { QuipuToken } from '@components/svg/QuipuToken';
 
 import s from './QPToken.module.sass';
 
@@ -15,10 +15,12 @@ const modeClass = {
 };
 
 type QPTokenProps = {
+  id?: string
   className?: string
 };
 
 export const QPToken: React.FC<QPTokenProps> = ({
+  id,
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -26,7 +28,7 @@ export const QPToken: React.FC<QPTokenProps> = ({
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
-      <Token />
+      <QuipuToken id={id} />
       <span className={s.price}>
         $
         {' '}
