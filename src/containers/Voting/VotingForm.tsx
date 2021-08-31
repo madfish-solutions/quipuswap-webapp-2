@@ -64,6 +64,8 @@ type LiquidityFormProps = {
   tabsState: any,
   rewards: string,
   setRewards: (reward: string) => void,
+  dex?: FoundDex,
+  setDex: (dex:FoundDex) => void,
   voter: any,
   setVoter: (voter: any) => void,
   tokenPair: WhitelistedTokenPair,
@@ -82,6 +84,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   form,
   tabsState,
   setRewards,
+  setDex,
+  dex,
   setVoter,
   voter,
   tokenPair,
@@ -97,7 +101,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [dex, setDex] = useState<FoundDex>();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const prevDex = usePrevious(dex);
@@ -273,7 +276,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     +value,
                   );
                 }}
-                balance={tokenPair.balance}
+                balance={tokenPair.balance ?? '0'}
                 notFrozen
                 id="liquidity-remove-input"
                 label="Select LP"

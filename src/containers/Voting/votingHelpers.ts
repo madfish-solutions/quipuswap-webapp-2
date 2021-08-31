@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 
 import { QSMainNet, VoterType, WhitelistedTokenPair } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
+import { fromDecimals } from '@utils/helpers';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
@@ -19,7 +20,7 @@ export const hanldeTokenPairSelect = (
   networkId?: QSMainNet,
 ) => {
   const asyncFunc = async () => {
-    if (!tezos || !accountPkh || !networkId) {
+    if (!tezos || !networkId) {
       setTokenPair(pair);
       return;
     }
@@ -31,12 +32,14 @@ export const hanldeTokenPairSelect = (
       const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
       setDex(foundDex);
       const asyncRewards = async () => {
+        if (!accountPkh) return;
         const res = await estimateReward(tezos, foundDex, accountPkh);
         const rewards = res.div(new BigNumber(10).pow(new BigNumber(6))).toString();
         setRewards(rewards);
       };
       asyncRewards();
       const asyncVoter = async () => {
+        if (!accountPkh) return;
         const voter = await foundDex.storage.storage.voters.get(accountPkh);
         if (voter) {
           setVoter({
@@ -47,22 +50,14 @@ export const hanldeTokenPairSelect = (
         } else setVoter({} as VoterType);
       };
       asyncVoter();
-      const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
+      let frozenBalance = '0';
+      let totalBalance = '0';
+      if (accountPkh) {
+        const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
-      const frozenBalance = share.frozen.div(
-        new BigNumber(10)
-          .pow(
-            // TODO: allow token->token
-            new BigNumber(6),
-          ),
-      ).toString();
-      const totalBalance = share.total.div(
-        new BigNumber(10)
-          .pow(
-            // new BigNumber(pair.token2.metadata.decimals),
-            new BigNumber(6),
-          ),
-      ).toString();
+        frozenBalance = fromDecimals(share.frozen, 6).toString();
+        totalBalance = fromDecimals(share.total, 6).toString();
+      }
       const res = {
         ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
       };
