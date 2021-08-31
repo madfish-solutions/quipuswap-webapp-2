@@ -483,7 +483,7 @@ const RealForm:React.FC<SwapFormProps> = ({
               id="swap-send-from"
               label="From"
               className={s.input}
-              error={((meta.touched && meta.error) || meta.submitError)}
+              error={((meta.error) || meta.submitError)}
             />
           )}
         </Field>
