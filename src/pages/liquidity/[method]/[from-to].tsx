@@ -38,11 +38,14 @@ export const getServerSideProps = async (props:any) => {
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 
-  if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
+  const isQueryMethod = query.method === 'add' || query.method === 'remove';
+  const method = isQueryMethod ? query.method : 'add';
+
+  if (isNoTokens || isSoleToken || splittedTokens[1] === '' || !isQueryMethod) {
     return {
       redirect: {
-        destination: `/liquidity/${query.method}/${from}-${to}`,
-        permanent: false,
+        destination: `/liquidity/${method}/${from}-${to}`,
+        permanent: true,
       },
     };
   }
@@ -54,8 +57,8 @@ export const getServerSideProps = async (props:any) => {
   ) {
     return {
       redirect: {
-        destination: `/liquidity/${query.method}/${from}-${to}`,
-        permanent: false,
+        destination: `/liquidity/${method}/${from}-${to}`,
+        permanent: true,
       },
     };
   }

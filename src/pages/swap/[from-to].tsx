@@ -46,7 +46,7 @@ export const getServerSideProps = async (props:any) => {
     return {
       redirect: {
         destination: `/swap/${from}-${to}`,
-        permanent: false,
+        permanent: true,
       },
     };
   }

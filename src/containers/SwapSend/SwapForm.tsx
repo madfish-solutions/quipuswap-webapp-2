@@ -1,5 +1,6 @@
 import React, {
   useMemo, useState, useEffect, useRef,
+  useCallback,
 } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -13,6 +14,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { TransferParams } from '@taquito/taquito';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
 import {
   QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
@@ -100,6 +102,7 @@ const RealForm:React.FC<SwapFormProps> = ({
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const updateToast = useUpdateToast();
   const {
     openConnectWalletModal,
     connectWalletModalOpen,
@@ -119,6 +122,13 @@ const RealForm:React.FC<SwapFormProps> = ({
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const handleInputChange = async (val: SwapFormValues) => {
     if (!tezos) return;
@@ -177,7 +187,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       }
       retValue = fromDecimals(retValue, decimals2);
     } catch (e) {
-      console.error(e);
+      handleErrorToast(e);
     }
 
     const result = new BigNumber(parseDecimals(
@@ -227,7 +237,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       );
       setSwapParams(paramsValue);
     } catch (e) {
-      console.error(e);
+      handleErrorToast(e);
     }
   };
 
@@ -316,7 +326,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         }
         retValue = fromDecimals(retValue, decimals2);
       } catch (e) {
-        console.error(e);
+        handleErrorToast(e);
       }
 
       const result = new BigNumber(parseDecimals(
@@ -414,7 +424,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     getDex();
   }, [token2, token1, tezos, networkId]);
 
-  const handleSwapButton = () => {
+  const handleSwapButton = useCallback(() => {
     handleSwapTokens();
     if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
       setDex([dex2, dex]);
@@ -431,7 +441,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         ['balance2', new BigNumber(values.balance1)],
       );
     }
-  };
+  }, [token1, token2, dex, dex2, lastChange, values, form, dexstorage, dexstorage2]);
 
   const blackListedTokens = useMemo(
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],

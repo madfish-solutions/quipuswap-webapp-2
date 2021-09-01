@@ -57,6 +57,7 @@ import s from '@styles/CommonContainer.module.sass';
 
 import router from 'next/router';
 import { usePrevious } from '@hooks/usePrevious';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 
@@ -136,7 +137,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const accountPkh = useAccountPkh();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const prevDex = usePrevious(dex);
+  const updateToast = useUpdateToast();
   const [poolShare, setPoolShare] = useState<PoolShare>();
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -172,9 +181,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           dex,
           tezos,
           networkId,
+          updateToast: handleErrorToast,
         });
       } catch (e) {
-        console.error(e);
+        handleErrorToast(e);
       }
     }
     if (tezos) {
@@ -205,7 +215,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           form.mutators.setValue('balanceA', bal1);
           form.mutators.setValue('balanceB', bal2);
         } catch (err) {
-          console.error(err);
+          handleErrorToast(err);
         }
       } else if (!val.switcher) {
         if (!val.balance1 && !val.balance2) return;
@@ -320,7 +330,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           const params = [...swapParams, ...addParams];
           setAddLiquidityParams(params);
         } catch (e) {
-          console.error(e);
+          handleErrorToast(e);
         }
       }
     }
@@ -369,7 +379,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         balA2,
       );
     } catch (err) {
-      console.error(err);
+      handleErrorToast(err);
     }
   }, [token2, token1, tezos, networkId, accountPkh]);
 
@@ -477,10 +487,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 lp1.plus(lp2),
               );
             } catch (e) {
-              console.error(e);
+              handleErrorToast(e);
             }
           } catch (err) {
-            console.error(err);
+            handleErrorToast(err);
           }
         }
       }
