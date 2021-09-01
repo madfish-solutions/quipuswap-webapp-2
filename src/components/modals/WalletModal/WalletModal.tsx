@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 
@@ -13,6 +13,7 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 
+import { Checkbox } from '@components/ui/Checkbox';
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
 
@@ -47,6 +48,8 @@ export const Wallet: React.FC<WalletProps> = ({
 export const WalletModal: React.FC = () => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
+  const [check1, setCheck1] = useState<boolean>(false);
+  const [check2, setCheck2] = useState<boolean>(false);
 
   const {
     connectWalletModalOpen,
@@ -97,15 +100,66 @@ export const WalletModal: React.FC = () => {
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
-      {Wallets.map(({ id, Icon, label }) => (
-        <Wallet
-          key={id}
-          id={id}
-          Icon={Icon}
-          label={label}
-          onClick={handleConnectClick}
-        />
-      ))}
+      <div className={s.terms}>
+        <div className={s.def}>
+          <Button onClick={() => setCheck1(!check1)} theme="quaternary" className={s.btn}>
+            <Checkbox checked={check1} />
+            {' '}
+            <div className={s.btnText}>{t('common:Accept terms')}</div>
+          </Button>
+          {t('common:I have read and agree to the')}
+          {' '}
+          <Button
+            className={s.defText}
+            theme="underlined"
+            href="#"
+            external
+          >
+            {t('common:Terms of Usage')}
+          </Button>
+          {' '}
+          {t('common:and')}
+          {' '}
+          <Button
+            className={s.defText}
+            theme="underlined"
+            href="#"
+            external
+          >
+            {t('common:Privacy Policy')}
+          </Button>
+        </div>
+        <div className={s.def}>
+          <Button onClick={() => setCheck2(!check2)} theme="quaternary" className={s.btn}>
+            <Checkbox checked={check2} />
+            {' '}
+            <div className={s.btnText}>{t('common:Analytics')}</div>
+          </Button>
+          {t('common:I agree to the')}
+          {' '}
+          <Button
+            className={s.defText}
+            theme="underlined"
+            href="#"
+            external
+          >
+            {t('common:anonymous information collecting')}
+          </Button>
+
+        </div>
+      </div>
+      <div className={s.wallets}>
+        {Wallets.map(({ id, Icon, label }) => (
+          <Wallet
+            key={id}
+            id={id}
+            Icon={Icon}
+            label={label}
+            onClick={handleConnectClick}
+          />
+        ))}
+
+      </div>
     </Modal>
   );
 };
