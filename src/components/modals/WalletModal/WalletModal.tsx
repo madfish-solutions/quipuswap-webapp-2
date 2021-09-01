@@ -8,6 +8,7 @@ import {
   useConnectWithBeacon,
   useConnectWithTemple,
 } from '@utils/dapp';
+import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { Modal } from '@components/ui/Modal';
@@ -23,6 +24,7 @@ type WalletProps = {
   Icon: React.FC<{ className?: string }>
   label: string
   onClick: (walletType: WalletType) => void
+  disabled?: boolean
 };
 
 export const Wallet: React.FC<WalletProps> = ({
@@ -30,6 +32,7 @@ export const Wallet: React.FC<WalletProps> = ({
   Icon,
   label,
   onClick,
+  disabled = false,
 }) => (
   <Button
     className={s.button}
@@ -37,6 +40,7 @@ export const Wallet: React.FC<WalletProps> = ({
     textClassName={s.buttonContent}
     theme="secondary"
     onClick={() => onClick(id)}
+    disabled={disabled}
   >
     <Icon className={s.icon} />
     {label}
@@ -46,8 +50,8 @@ export const Wallet: React.FC<WalletProps> = ({
 export const WalletModal: React.FC = () => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
-  const [check1, setCheck1] = useState<boolean>(false);
-  const [check2, setCheck2] = useState<boolean>(false);
+  const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
+  const [check2, setCheck2] = useState<boolean>(localStorage.getItem(SAVED_ANALYTICS_KEY) === 'true' ?? false);
 
   const {
     connectWalletModalOpen,
@@ -90,6 +94,16 @@ export const WalletModal: React.FC = () => {
     updateToast,
   ]);
 
+  const handleCheck1 = () => {
+    setCheck1(!check1);
+    localStorage.setItem(SAVED_TERMS_KEY, `${!check1}`);
+  };
+
+  const handleCheck2 = () => {
+    setCheck2(!check2);
+    localStorage.setItem(SAVED_ANALYTICS_KEY, `${!check2}`);
+  };
+
   return (
     <Modal
       containerClassName={s.modalWrap}
@@ -100,7 +114,7 @@ export const WalletModal: React.FC = () => {
     >
       <div className={s.terms}>
         <div className={s.def}>
-          <Button onClick={() => setCheck1(!check1)} theme="quaternary" className={s.btn}>
+          <Button onClick={handleCheck1} theme="quaternary" className={s.btn}>
             <Checkbox checked={check1} />
             {' '}
             <div className={s.btnText}>{t('common:Accept terms')}</div>
@@ -128,7 +142,7 @@ export const WalletModal: React.FC = () => {
           </Button>
         </div>
         <div className={s.def}>
-          <Button onClick={() => setCheck2(!check2)} theme="quaternary" className={s.btn}>
+          <Button onClick={handleCheck2} theme="quaternary" className={s.btn}>
             <Checkbox checked={check2} />
             {' '}
             <div className={s.btnText}>{t('common:Analytics')}</div>
@@ -154,6 +168,7 @@ export const WalletModal: React.FC = () => {
             Icon={Icon}
             label={label}
             onClick={handleConnectClick}
+            disabled={!check1}
           />
         ))}
 
