@@ -27,3 +27,4 @@ export * from './transformWhitelistedTokenToAsset';
 export * from './getValueForSDK';
 export * from './handleTokenChange';
 export * from './handleSearchToken';
+export * from './localSearchSortSymbol';

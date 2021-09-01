@@ -13,9 +13,9 @@ network:QSNetwork, oldInput:string, oldInputToken:number) => {
   const isSymbol = metadata?.symbol?.toLowerCase().includes(oldInput.toLowerCase());
   const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
   let res = false;
-  if (fa2TokenId || oldInputToken >= 0) {
+  if (fa2TokenId) {
     let isFa2 = fa2TokenId === oldInputToken;
-    if (!oldInputToken || oldInputToken === -1) isFa2 = true;
+    if (!oldInputToken) isFa2 = true;
     res = ((isName
           || isSymbol
           || isContract)
