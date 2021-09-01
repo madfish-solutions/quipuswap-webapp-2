@@ -29,7 +29,7 @@ export const QPToken: React.FC<QPTokenProps> = ({
   const price = new BigNumber(exchangeRates
     ? exchangeRates
       .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
-    : 5.34);
+    : NaN);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
@@ -37,7 +37,7 @@ export const QPToken: React.FC<QPTokenProps> = ({
       <span className={s.price}>
         $
         {' '}
-        {price.isNaN() ? '5.34' : price.toFixed(2)}
+        {price.isNaN() ? '???' : price.toFixed(2)}
       </span>
     </div>
   );

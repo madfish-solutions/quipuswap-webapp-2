@@ -51,7 +51,7 @@ export const WalletModal: React.FC = () => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
-  const [check2, setCheck2] = useState<boolean>(false);
+  const [check2, setCheck2] = useState<boolean>(localStorage.getItem(SAVED_ANALYTICS_KEY) === 'true' ?? false);
 
   const {
     connectWalletModalOpen,
