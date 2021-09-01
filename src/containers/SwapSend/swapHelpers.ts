@@ -14,7 +14,7 @@ export const submitForm = (
   tabsState:string,
   networkId:QSMainNet,
   form:any,
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
   handleSuccessToast: any,
 ) => {
   if (!tezos) return;

@@ -32,7 +32,7 @@ export const asyncFindPairDex = async (
   tezos:TezosToolkit,
   accountPkh: string,
   networkId: QSMainNet,
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
 ) => {
   try {
     const secondAsset = {
@@ -66,7 +66,7 @@ export const asyncGetShares = async (
   tezos: TezosToolkit,
   accountPkh: string,
   networkId: QSMainNet,
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
 ) => {
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
@@ -127,7 +127,7 @@ type GetShareType = {
   dex: FoundDex,
   tezos: TezosToolkit,
   networkId: QSMainNet,
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
 };
 
 export const asyncGetLiquidityShare = async ({
@@ -186,7 +186,7 @@ export const asyncGetLiquidityShare = async ({
 export const submitForm = async (
   tezos:TezosToolkit,
   liquidityParams: TransferParams[],
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
   handleSuccessToast: any,
 ) => {
   try {
