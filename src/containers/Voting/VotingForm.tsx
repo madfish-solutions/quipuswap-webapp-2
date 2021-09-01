@@ -68,6 +68,7 @@ type LiquidityFormProps = {
   setDex: (dex:FoundDex) => void,
   voter: any,
   setVoter: (voter: any) => void,
+  setTokens: (tokens: WhitelistedToken[]) => void,
   tokenPair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
   tokensData: TokenDataMap,
@@ -86,6 +87,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   setRewards,
   setDex,
   dex,
+  setTokens,
   setVoter,
   voter,
   tokenPair,
@@ -259,6 +261,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 setTokenPair={(pair) => {
                   handleTokenChange(pair.token1, 'first');
                   handleTokenChange(pair.token2, 'second');
+                  setTokens([pair.token1, pair.token2]);
                   hanldeTokenPairSelect(
                     pair,
                     setTokenPair,

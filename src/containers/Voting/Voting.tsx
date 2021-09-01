@@ -74,7 +74,7 @@ export const Voting: React.FC<VotingProps> = ({
       second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const [, setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
   const [dex, setDex] = useState<FoundDex>();
@@ -155,11 +155,11 @@ export const Voting: React.FC<VotingProps> = ({
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
-    if (tezos && token1 && token2) {
-      handleTokenChangeWrapper(token1, 'first');
-      handleTokenChangeWrapper(token2, 'second');
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      handleTokenChangeWrapper(tokenPair.token1, 'first');
+      handleTokenChangeWrapper(tokenPair.token2, 'second');
       hanldeTokenPairSelect(
-        { token1, token2 } as WhitelistedTokenPair,
+        tokenPair,
         setTokenPair,
         setDex,
         setRewards,
@@ -169,7 +169,7 @@ export const Voting: React.FC<VotingProps> = ({
         network.id as QSMainNet,
       );
     }
-  }, [tezos, accountPkh, network.id]);
+  }, [tezos, accountPkh, network.id, tokenPair]);
 
   useEffect(() => {
     getBalance();
@@ -216,6 +216,7 @@ export const Voting: React.FC<VotingProps> = ({
               dex={dex}
               setDex={setDex}
               setVoter={setVoter}
+              setTokens={setTokens}
               tokenPair={tokenPair}
               setTokenPair={setTokenPair}
               tokensData={tokensData}
