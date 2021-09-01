@@ -123,7 +123,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       handleSearchToken({
         tokens,
         network,
-        accountPkh: accountPkh!,
         from,
         to,
         setInitialLoad,
@@ -140,7 +139,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
     }
-  }, [tezos, accountPkh, networkId]);
+  }, [tezos, accountPkh, networkId, token1, token2]);
 
   useEffect(() => {
     getBalance();

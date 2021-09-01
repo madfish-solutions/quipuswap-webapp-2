@@ -134,7 +134,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     }
     if (!dex || !dexstorage || (tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
-    if (val[lastChange] && val[lastChange].toString() === '') return;
     const lastChangeMod = lastChange;
     const isValuesSame = val[lastChange] === formValues[lastChange];
     if (isValuesSame) return;
@@ -270,6 +269,12 @@ const RealForm:React.FC<SwapFormProps> = ({
       if (!tezos) return;
       if (Object.keys(values).length < 1) return;
       if (!values[lastChange]) {
+        form.mutators.setValue(
+          'balance1', undefined,
+        );
+        form.mutators.setValue(
+          'balance2', undefined,
+        );
         return;
       }
 
