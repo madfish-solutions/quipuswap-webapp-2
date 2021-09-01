@@ -14,7 +14,6 @@ type SearchTokenType = {
   tokens: WhitelistedToken[]
   tezos?: TezosToolkit
   network: QSNetwork
-  accountPkh: string
   from: string
   to: string
   fixTokenFrom?: WhitelistedToken

@@ -132,7 +132,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         tokens,
         tezos: tezos!,
         network,
-        accountPkh: accountPkh!,
         from,
         to,
         fixTokenFrom: TEZOS_TOKEN,

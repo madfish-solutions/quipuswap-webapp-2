@@ -323,7 +323,6 @@ function useDApp() {
         } catch (e) {
           type = null;
         }
-        console.log(type);
         if (!type) {
           setState((prevState) => ({
             ...prevState,

@@ -149,6 +149,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     const isValuesSame = val[lastChange] === formValues[lastChange];
     const isRemValuesSame = val.balance3 === formValues.balance3;
     const isDexSame = dex === prevDex;
+    if (!val[lastChange] && currentTab.id !== 'remove') {
+      form.mutators.setValue(
+        'balance1', undefined,
+      );
+      form.mutators.setValue(
+        'balance2', undefined,
+      );
+      return;
+    }
     if (!dex) return;
     if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
     if (tezos && accountPkh && token1 && token2) {
