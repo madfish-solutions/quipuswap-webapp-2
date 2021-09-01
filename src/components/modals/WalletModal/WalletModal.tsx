@@ -60,6 +60,7 @@ export const WalletModal: React.FC = () => {
     closeConnectWalletModal,
     openInstallTempleWalletModal,
   } = useConnectModalsState();
+  const { closeAccountInfoModal } = useConnectModalsState();
   const connectWithBeacon = useConnectWithBeacon();
   const connectWithTemple = useConnectWithTemple();
 
@@ -70,6 +71,7 @@ export const WalletModal: React.FC = () => {
       } else {
         await connectWithTemple(true);
       }
+      closeAccountInfoModal();
       closeConnectWalletModal();
     } catch (e) {
       if (e.message === TEMPLE_WALLET_NOT_INSTALLED_MESSAGE) {
@@ -116,9 +118,14 @@ export const WalletModal: React.FC = () => {
     >
       <div className={s.terms}>
         <div className={s.def}>
-          <Button onClick={handleCheck1} theme="quaternary" className={s.btn}>
-            <Checkbox checked={check1} />
-            {' '}
+          <Button
+            control={
+              <Checkbox checked={check1} />
+            }
+            onClick={handleCheck1}
+            theme="quaternary"
+            className={s.btn}
+          >
             <div className={s.btnText}>{t('common:Accept terms')}</div>
           </Button>
           {t('common:I have read and agree to the')}
@@ -144,9 +151,14 @@ export const WalletModal: React.FC = () => {
           </Button>
         </div>
         <div className={s.def}>
-          <Button onClick={handleCheck2} theme="quaternary" className={s.btn}>
-            <Checkbox checked={check2} />
-            {' '}
+          <Button
+            control={
+              <Checkbox checked={check2} />
+            }
+            onClick={handleCheck2}
+            theme="quaternary"
+            className={s.btn}
+          >
             <div className={s.btnText}>{t('common:Analytics')}</div>
           </Button>
           {t('common:I agree to the')}
