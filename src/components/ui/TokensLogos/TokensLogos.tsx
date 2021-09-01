@@ -11,12 +11,14 @@ import s from './TokensLogos.module.sass';
 export interface TokensLogosInterface {
   token1: WhitelistedToken
   token2?: WhitelistedToken
+  width?:number
   className?: string
 }
 
 export const TokensLogos: React.FC<TokensLogosInterface> = ({
   token1,
   token2,
+  width = 24,
   className,
 }) => {
   const compoundClassName = cx(
@@ -39,8 +41,8 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
       {prepareToken1.icon ? (
         <Image
           layout="fixed"
-          width={24}
-          height={24}
+          width={width}
+          height={width}
           src={prepareToken1.icon}
           alt={getWhitelistedTokenSymbol(prepareToken1)}
           className={cx(s.image)}
@@ -53,8 +55,8 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
         <div className={s.secondImage}>
           <Image
             layout="fixed"
-            width={24}
-            height={24}
+            width={width}
+            height={width}
             src={prepareToken2.icon}
             alt={getWhitelistedTokenSymbol(prepareToken2)}
             className={cx(s.image)}

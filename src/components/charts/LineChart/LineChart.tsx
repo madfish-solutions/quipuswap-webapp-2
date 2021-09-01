@@ -23,6 +23,7 @@ import s from './LineChart.module.sass';
 
 type LineChartProps = {
   data: any[]
+  headerContent?: React.ReactNode
   className?: string
 };
 
@@ -34,6 +35,7 @@ const modeClass = {
 export const LineChart: React.FC<LineChartProps> = ({
   data,
   className,
+  headerContent,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -161,7 +163,7 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   return (
     <Card
-      header={{ content: 'Graphic' }}
+      header={{ content: headerContent || 'Graphic' }}
       className={className}
       contentClassName={s.container}
     >

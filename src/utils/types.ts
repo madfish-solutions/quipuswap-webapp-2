@@ -81,3 +81,35 @@ export type SwapFormValues = {
   recipient: string
   slippage: string
 };
+
+export type WhitelistedFarm = {
+  remaining: Date
+  tokenPair: WhitelistedTokenPair
+  totalValueLocked: string
+  apy: string
+  daily: string
+  balance: string
+  deposit: string
+  earned: string
+  multiplier: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+};
+
+export type WhitelistedStake = {
+  remaining: Date
+  tokenPair: WhitelistedTokenPair
+  totalValueLocked: string
+  apy: string
+  daily: string
+  balance: string
+  deposit: string
+  earned: string
+  earn: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+};
