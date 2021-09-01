@@ -37,6 +37,8 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const SAVED_BAKERS_KEY = 'savedCustomBakers';
+export const SAVED_TERMS_KEY = 'savedTerms';
+export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
   contractAddress: 'tez',

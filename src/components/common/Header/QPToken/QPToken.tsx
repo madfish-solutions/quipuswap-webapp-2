@@ -26,17 +26,18 @@ export const QPToken: React.FC<QPTokenProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const exchangeRates = useExchangeRates();
 
+  const price = new BigNumber(exchangeRates
+    ? exchangeRates
+      .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
+    : NaN);
+
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <QuipuToken id={id} />
       <span className={s.price}>
         $
         {' '}
-        {new BigNumber(exchangeRates
-          ? exchangeRates
-            .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)
-            .exchangeRate
-          : 5.34).toFixed(2) ?? '5.34'}
+        {price.isNaN() ? '???' : price.toFixed(2)}
       </span>
     </div>
   );
