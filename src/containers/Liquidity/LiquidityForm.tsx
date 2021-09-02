@@ -159,15 +159,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       }
     }
     if (!dex) return;
-    let lastChangeMod = lastChange;
     const isTokensSame = isTokenEqual(token1, oldToken1)
       && isTokenEqual(token2, oldToken2);
     const isValuesSame = val[lastChange] === formValues[lastChange];
     const isRemValuesSame = val.balance3 === formValues.balance3;
     const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
-    if (isValuesSame && !isTokensSame) {
-      lastChangeMod = 'balance1';
-    }
     if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
     if (tezos && accountPkh && token1 && token2) {
       if (isDexSame && isTokensSame && ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame))) return;
@@ -234,12 +230,12 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
         const rate = new BigNumber(tokensData.first.exchangeRate)
           .dividedBy(new BigNumber(tokensData.second.exchangeRate));
-        const retValue = lastChangeMod === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).dividedBy(rate);
-        const decimals = lastChangeMod === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
+        const retValue = lastChange === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).dividedBy(rate);
+        const decimals = lastChange === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
 
         const res = retValue.toFixed(decimals);
         form.mutators.setValue(
-          lastChangeMod === 'balance1' ? 'balance2' : 'balance1',
+          lastChange === 'balance1' ? 'balance2' : 'balance1',
           res,
         );
         if (!dex) return;
@@ -263,7 +259,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           const sharesB = await getMethod(
             tokensData.second,
             dex,
-            lastChangeMod === 'balance2' ? new BigNumber(values.balance2) : retValue,
+            lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
           );
 
           const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
@@ -672,6 +668,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               }}
               noBalanceButtons={!accountPkh}
               handleChange={(token) => {
+                setLastChange('balance1');
                 handleTokenChange(token, 'first');
                 setDex(undefined);
               }}
