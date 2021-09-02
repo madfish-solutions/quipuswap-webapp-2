@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { Card } from '@components/ui/Card';
+import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 
 import s from './OpportunityCard.module.sass';
@@ -24,16 +24,18 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({
   description,
   button,
 }) => (
-  <Card className={className} contentClassName={s.content}>
-    <Icon className={s.icon} />
-    <h3 className={s.title}>{title}</h3>
-    <p className={s.description}>{description}</p>
-    <Button
-      href={button.href}
-      external={button.external}
-      className={s.button}
-    >
-      {button.label}
-    </Button>
+  <Card className={className}>
+    <CardContent className={s.content}>
+      <Icon className={s.icon} />
+      <h3 className={s.title}>{title}</h3>
+      <p className={s.description}>{description}</p>
+      <Button
+        href={button.href}
+        external={button.external}
+        className={s.button}
+      >
+        {button.label}
+      </Button>
+    </CardContent>
   </Card>
 );

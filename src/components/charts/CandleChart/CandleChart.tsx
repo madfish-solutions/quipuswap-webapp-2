@@ -11,7 +11,7 @@ import { createChart, IChartApi } from 'lightweight-charts';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import {
   CandleGraphOptions,
@@ -191,64 +191,64 @@ export const CandleChart: React.FC<LineChartProps> = ({
   ]);
 
   return (
-    <Card
-      header={{ content: 'Graphic' }}
-      className={className}
-      contentClassName={s.container}
-    >
-      <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <span className={s.prices}>
-          <span className={s.tokenPrice}>
-            {prettyPrice(value.close, 2, 10)}
-            {' '}
-            TOKEN
+    <Card className={className}>
+      <CardHeader header={{ content: 'Graphic' }} />
+      <CardContent className={s.container}>
+
+        <div className={cx(s.info, modeClass[colorThemeMode])}>
+          <span className={s.prices}>
+            <span className={s.tokenPrice}>
+              {prettyPrice(value.close, 2, 10)}
+              {' '}
+              TOKEN
+            </span>
+            <span className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
+              $
+              {' '}
+              {prettyPrice(value.close, 2, 10)}
+            </span>
           </span>
-          <span className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
-            $
-            {' '}
-            {prettyPrice(value.close, 2, 10)}
-          </span>
-        </span>
-        <div className={s.details}>
-          <div className={s.column}>
-            <div className={s.item}>
-              <span className={s.label}>
-                Open
-              </span>
-              <span className={s.value}>
-                {value.open}
-              </span>
+          <div className={s.details}>
+            <div className={s.column}>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Open
+                </span>
+                <span className={s.value}>
+                  {value.open}
+                </span>
+              </div>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Close
+                </span>
+                <span className={s.value}>
+                  {value.close}
+                </span>
+              </div>
             </div>
-            <div className={s.item}>
-              <span className={s.label}>
-                Close
-              </span>
-              <span className={s.value}>
-                {value.close}
-              </span>
-            </div>
-          </div>
-          <div className={s.column}>
-            <div className={s.item}>
-              <span className={s.label}>
-                Max
-              </span>
-              <span className={s.value}>
-                {value.high}
-              </span>
-            </div>
-            <div className={s.item}>
-              <span className={s.label}>
-                Min
-              </span>
-              <span className={s.value}>
-                {value.low}
-              </span>
+            <div className={s.column}>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Max
+                </span>
+                <span className={s.value}>
+                  {value.high}
+                </span>
+              </div>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Min
+                </span>
+                <span className={s.value}>
+                  {value.low}
+                </span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <div ref={chartRef} className={s.chart} />
+        <div ref={chartRef} className={s.chart} />
+      </CardContent>
     </Card>
   );
 };

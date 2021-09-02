@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent } from '@components/ui/Card';
 
 import { DashboardCard } from './DashboardCard';
 import { DEXDashboardData } from './content';
@@ -33,22 +33,24 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       description={t('home:The short overview of the most relevant DEX information.')}
       className={cx(className)}
     >
-      <Card contentClassName={s.content}>
-        {
-          DEXDashboardData.map(({
-            id, volume, label, currency, tooltip,
-          }, idx) => (
-            <DashboardCard
-              key={id}
-              className={cx(s.card, modeClass[colorThemeMode])}
-              size={idx < 4 ? 'extraLarge' : 'large'}
-              volume={volume}
-              tooltip={tooltip}
-              label={label}
-              currency={currency}
-            />
-          ))
+      <Card>
+        <CardContent className={s.content}>
+          {
+            DEXDashboardData.map(({
+              id, volume, label, currency, tooltip,
+            }, idx) => (
+              <DashboardCard
+                key={id}
+                className={cx(s.card, modeClass[colorThemeMode])}
+                size={idx < 4 ? 'extraLarge' : 'large'}
+                volume={volume}
+                tooltip={tooltip}
+                label={label}
+                currency={currency}
+              />
+            ))
         }
+        </CardContent>
       </Card>
     </Section>
   );

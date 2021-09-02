@@ -4,7 +4,9 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
+import {
+  Card, CardAdditional, CardContent, CardFooter, CardHeader,
+} from '@components/ui/Card';
 import { PopupClose } from '@components/svg/PopupClose';
 
 import s from './Modal.module.sass';
@@ -69,10 +71,8 @@ export const Modal: React.FC<ModalProps> = ({
         }}
       >
         <div className={cx(s.container, containerClassName)}>
-          <Card
-            className={cardClassName}
-            contentClassName={cx(contentClassName, s.modalCard)}
-            header={{
+          <Card className={cardClassName}>
+            <CardHeader header={{
               content: <h5>{title}</h5>,
               button: (
                 <Button
@@ -84,10 +84,16 @@ export const Modal: React.FC<ModalProps> = ({
                 </Button>
               ),
             }}
-            additional={header}
-            footer={footer}
-          >
-            {children}
+            />
+            <CardAdditional>
+              {header}
+            </CardAdditional>
+            <CardContent className={cx(contentClassName, s.modalCard)}>
+              {children}
+            </CardContent>
+            <CardFooter>
+              {footer}
+            </CardFooter>
           </Card>
         </div>
       </div>

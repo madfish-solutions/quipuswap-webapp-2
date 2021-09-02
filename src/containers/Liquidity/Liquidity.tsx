@@ -32,7 +32,7 @@ import {
 } from '@utils/helpers';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 
-import { Card } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
@@ -381,123 +381,124 @@ const Header:React.FC<HeaderProps> = ({
   };
 
   return (
-    <Card
-      header={{
-        content: (
-          <Tabs
-            values={TabsContent}
-            activeId={tabsState}
-            setActiveId={(val) => setTabsState(val)}
-            className={s.tabs}
-          />
-        ),
-        button: (
-          <Button
-            theme="quaternary"
-          >
-            <Transactions />
-          </Button>
-        ),
-        className: s.header,
-      }}
-      contentClassName={s.content}
-    >
-      {currentTab.id === 'remove' && (
-      <Field
-        name="balance3"
-      >
-        {({ input }) => (
-          <>
-            <PositionSelect
-              {...input}
-              tokenPair={tokenPair}
-              setTokenPair={(pair) => {
-                const asyncFunc = async () => {
-                  if (!tezos || !accountPkh || !networkId) return;
-                  try {
-                    const secondAsset = {
-                      contract: pair.token2.contractAddress,
-                      id: pair.token2.fa2TokenId,
-                    };
-                    const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-                    const share = await getLiquidityShare(tezos, dex, accountPkh!!);
+    <Card>
+      <CardHeader
+        header={{
+          content: (
+            <Tabs
+              values={TabsContent}
+              activeId={tabsState}
+              setActiveId={(val) => setTabsState(val)}
+              className={s.tabs}
+            />
+          ),
+          button: (
+            <Button
+              theme="quaternary"
+            >
+              <Transactions />
+            </Button>
+          ),
+        }}
+        className={s.header}
+      />
+      <CardContent className={s.content}>
+        {currentTab.id === 'remove' && (
+        <Field
+          name="balance3"
+        >
+          {({ input }) => (
+            <>
+              <PositionSelect
+                {...input}
+                tokenPair={tokenPair}
+                setTokenPair={(pair) => {
+                  const asyncFunc = async () => {
+                    if (!tezos || !accountPkh || !networkId) return;
+                    try {
+                      const secondAsset = {
+                        contract: pair.token2.contractAddress,
+                        id: pair.token2.fa2TokenId,
+                      };
+                      const dex = await findDex(tezos, FACTORIES[networkId], secondAsset);
+                      const share = await getLiquidityShare(tezos, dex, accountPkh!!);
 
-                    // const lpTokenValue = share.total;
-                    const frozenBalance = share.frozen.div(
-                      new BigNumber(10)
-                        .pow(
+                      // const lpTokenValue = share.total;
+                      const frozenBalance = share.frozen.div(
+                        new BigNumber(10)
+                          .pow(
                           // new BigNumber(pair.token2.metadata.decimals),
                           // NOT WORKING - CURRENT XTZ DECIMALS EQUALS 6!
                           // CURRENT METHOD ONLY WORKS FOR XTZ -> TOKEN, so decimals = 6
-                          new BigNumber(6),
-                        ),
-                    ).toString();
-                    const totalBalance = share.total.div(
-                      new BigNumber(10)
-                        .pow(
+                            new BigNumber(6),
+                          ),
+                      ).toString();
+                      const totalBalance = share.total.div(
+                        new BigNumber(10)
+                          .pow(
                           // new BigNumber(pair.token2.metadata.decimals),
-                          new BigNumber(6),
-                        ),
-                    ).toString();
-                    const res = {
-                      ...pair, frozenBalance, balance: totalBalance, dex,
-                    };
-                    setTokenPair(res);
-                  } catch (err) {
-                    console.error(err);
-                  }
-                };
-                asyncFunc();
-              }}
-              handleBalance={(value) => {
-                form.mutators.setValue(
-                  'balance3',
-                  +value,
-                );
-              }}
-              balance={tokenPair.balance}
-              frozenBalance={tokenPair.frozenBalance ?? '0'}
-              id="liquidity-remove-input"
-              label="Select LP"
-              className={s.input}
-            />
-            <ArrowDown className={s.iconButton} />
-          </>
-        )}
-      </Field>
-      )}
-      <Field
-        name="balance1"
-        validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseDecimals(value, 0, Infinity)}
-      >
-        {({ input }) => (
-          <>
-            {currentTab.id !== 'remove' && (
-            <>
-              <TokenSelect
-                {...input}
-                blackListedTokens={[]}
-                onFocus={() => setLastChange('balance1')}
-                token={token1}
-                setToken={setToken1}
+                            new BigNumber(6),
+                          ),
+                      ).toString();
+                      const res = {
+                        ...pair, frozenBalance, balance: totalBalance, dex,
+                      };
+                      setTokenPair(res);
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  };
+                  asyncFunc();
+                }}
                 handleBalance={(value) => {
-                  setLastChange('balance1');
                   form.mutators.setValue(
-                    'balance1',
+                    'balance3',
                     +value,
                   );
                 }}
-                handleChange={(token) => handleTokenChange(token, 'first')}
-                balance={tokensData.first.balance}
-                exchangeRate={tokensData.first.exchangeRate}
-                id="liquidity-token-1"
-                label="Input"
+                balance={tokenPair.balance}
+                frozenBalance={tokenPair.frozenBalance ?? '0'}
+                id="liquidity-remove-input"
+                label="Select LP"
                 className={s.input}
               />
+              <ArrowDown className={s.iconButton} />
             </>
-            )}
-            {currentTab.id === 'remove' && (
+          )}
+        </Field>
+        )}
+        <Field
+          name="balance1"
+          validate={validateMinMax(0, Infinity)}
+          parse={(value) => parseDecimals(value, 0, Infinity)}
+        >
+          {({ input }) => (
+            <>
+              {currentTab.id !== 'remove' && (
+              <>
+                <TokenSelect
+                  {...input}
+                  blackListedTokens={[]}
+                  onFocus={() => setLastChange('balance1')}
+                  token={token1}
+                  setToken={setToken1}
+                  handleBalance={(value) => {
+                    setLastChange('balance1');
+                    form.mutators.setValue(
+                      'balance1',
+                      +value,
+                    );
+                  }}
+                  handleChange={(token) => handleTokenChange(token, 'first')}
+                  balance={tokensData.first.balance}
+                  exchangeRate={tokensData.first.exchangeRate}
+                  id="liquidity-token-1"
+                  label="Input"
+                  className={s.input}
+                />
+              </>
+              )}
+              {currentTab.id === 'remove' && (
               <ComplexInput
                 {...input}
                 token1={tokenPair.token1}
@@ -508,44 +509,44 @@ const Header:React.FC<HeaderProps> = ({
                 className={cx(s.input, s.mb24)}
                 readOnly
               />
-            )}
-          </>
-        )}
-
-      </Field>
-      <Plus className={s.iconButton} />
-      <Field
-        name="balance2"
-        validate={validateMinMax(0, Infinity)}
-        parse={(value) => parseDecimals(value, 0, Infinity)}
-      >
-        {({ input }) => (
-          <>
-            {currentTab.id !== 'remove' && (
-            <>
-              <TokenSelect
-                {...input}
-                blackListedTokens={[]}
-                onFocus={() => setLastChange('balance2')}
-                token={token2}
-                setToken={setToken2}
-                handleBalance={(value) => {
-                  setLastChange('balance2');
-                  form.mutators.setValue(
-                    'balance2',
-                    +value,
-                  );
-                }}
-                handleChange={(token) => handleTokenChange(token, 'second')}
-                balance={tokensData.second.balance}
-                exchangeRate={tokensData.second.exchangeRate}
-                id="liquidity-token-2"
-                label="Input"
-                className={cx(s.input, s.mb24)}
-              />
+              )}
             </>
-            )}
-            {currentTab.id === 'remove' && (
+          )}
+
+        </Field>
+        <Plus className={s.iconButton} />
+        <Field
+          name="balance2"
+          validate={validateMinMax(0, Infinity)}
+          parse={(value) => parseDecimals(value, 0, Infinity)}
+        >
+          {({ input }) => (
+            <>
+              {currentTab.id !== 'remove' && (
+              <>
+                <TokenSelect
+                  {...input}
+                  blackListedTokens={[]}
+                  onFocus={() => setLastChange('balance2')}
+                  token={token2}
+                  setToken={setToken2}
+                  handleBalance={(value) => {
+                    setLastChange('balance2');
+                    form.mutators.setValue(
+                      'balance2',
+                      +value,
+                    );
+                  }}
+                  handleChange={(token) => handleTokenChange(token, 'second')}
+                  balance={tokensData.second.balance}
+                  exchangeRate={tokensData.second.exchangeRate}
+                  id="liquidity-token-2"
+                  label="Input"
+                  className={cx(s.input, s.mb24)}
+                />
+              </>
+              )}
+              {currentTab.id === 'remove' && (
               <ComplexInput
                 {...input}
                 token1={tokenPair.token2}
@@ -556,63 +557,63 @@ const Header:React.FC<HeaderProps> = ({
                 className={cx(s.input, s.mb24)}
                 readOnly
               />
-            )}
-          </>
-        )}
-      </Field>
-
-      <Field initialValue="0.5 %" name="slippage">
-        {({ input }) => {
-          const slippagePercent = (
-            (
-              (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
-            ).toFixed(tokensData.second.token.decimals)).toString();
-          const minimumReceivedA = (values.balance1 ?? 0) - (+slippagePercent);
-          const minimumReceivedB = (values.balance2 ?? 0) - (+slippagePercent);
-          const maxInvestedA = (values.balance1 ?? 0) - (+slippagePercent);
-          const maxInvestedB = (values.balance2 ?? 0) - (+slippagePercent);
-          return (
-            <>
-              <Slippage handleChange={(value) => input.onChange(value)} />
-              {currentTab.id === 'add' && (
-              <>
-                {!values.switcher ? (
-                  <div className={cx(s.receive, s.mb24)}>
-                    <span className={s.receiveLabel}>
-                      Max invested:
-                    </span>
-                    <CurrencyAmount
-                      currency={`${getWhitelistedTokenSymbol(token1)}/${getWhitelistedTokenSymbol(token2)}`}
-                      amount={values.estimateLP}
-                    />
-                  </div>
-                )
-                  : (
-                    <>
-                      <div className={s.receive}>
-                        <span className={s.receiveLabel}>
-                          Max invested:
-                        </span>
-                        <CurrencyAmount
-                          currency={getWhitelistedTokenSymbol(token1)}
-                          amount={maxInvestedA.toString()}
-                        />
-                      </div>
-                      <div className={cx(s.receive, s.mb24)}>
-                        <span className={s.receiveLabel}>
-                          Max invested:
-                        </span>
-                        <CurrencyAmount
-                          currency={getWhitelistedTokenSymbol(token2)}
-                          amount={maxInvestedB.toString()}
-                        />
-                      </div>
-                    </>
-                  )}
-              </>
               )}
+            </>
+          )}
+        </Field>
 
-              {currentTab.id === 'remove' && (
+        <Field initialValue="0.5 %" name="slippage">
+          {({ input }) => {
+            const slippagePercent = (
+              (
+                (values.balance2 ?? 0) * (+slippageToBignum(values.slippage))
+              ).toFixed(tokensData.second.token.decimals)).toString();
+            const minimumReceivedA = (values.balance1 ?? 0) - (+slippagePercent);
+            const minimumReceivedB = (values.balance2 ?? 0) - (+slippagePercent);
+            const maxInvestedA = (values.balance1 ?? 0) - (+slippagePercent);
+            const maxInvestedB = (values.balance2 ?? 0) - (+slippagePercent);
+            return (
+              <>
+                <Slippage handleChange={(value) => input.onChange(value)} />
+                {currentTab.id === 'add' && (
+                <>
+                  {!values.switcher ? (
+                    <div className={cx(s.receive, s.mb24)}>
+                      <span className={s.receiveLabel}>
+                        Max invested:
+                      </span>
+                      <CurrencyAmount
+                        currency={`${getWhitelistedTokenSymbol(token1)}/${getWhitelistedTokenSymbol(token2)}`}
+                        amount={values.estimateLP}
+                      />
+                    </div>
+                  )
+                    : (
+                      <>
+                        <div className={s.receive}>
+                          <span className={s.receiveLabel}>
+                            Max invested:
+                          </span>
+                          <CurrencyAmount
+                            currency={getWhitelistedTokenSymbol(token1)}
+                            amount={maxInvestedA.toString()}
+                          />
+                        </div>
+                        <div className={cx(s.receive, s.mb24)}>
+                          <span className={s.receiveLabel}>
+                            Max invested:
+                          </span>
+                          <CurrencyAmount
+                            currency={getWhitelistedTokenSymbol(token2)}
+                            amount={maxInvestedB.toString()}
+                          />
+                        </div>
+                      </>
+                    )}
+                </>
+                )}
+
+                {currentTab.id === 'remove' && (
                 <>
                   <div className={s.receive}>
                     <span className={s.receiveLabel}>
@@ -636,13 +637,13 @@ const Header:React.FC<HeaderProps> = ({
                     Remove & Unvote
                   </Button>
                 </>
-              )}
-            </>
-          );
-        }}
+                )}
+              </>
+            );
+          }}
 
-      </Field>
-      {currentTab.id === 'add' && (
+        </Field>
+        {currentTab.id === 'add' && (
         <>
           <Field name="switcher">
             {({ input }) => (
@@ -662,8 +663,8 @@ const Header:React.FC<HeaderProps> = ({
             {currentTab.label}
           </Button>
         </>
-      )}
-
+        )}
+      </CardContent>
     </Card>
   );
 };
@@ -812,120 +813,121 @@ export const Liquidity: React.FC<LiquidityProps> = ({
           />
         )}
       />
-      <Card
-        header={{
+      <Card>
+        <CardHeader header={{
           content: `${currentTab.label} Liquidity Details`,
         }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
-            <>
-              {t('common:Sell Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency="tez" />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('common:Buy Price')}
-              <Tooltip
-                sizeT="small"
-                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
-              />
-            </>
-        )}
-          className={s.cell}
-        >
-          <div className={s.cellAmount}>
-            <CurrencyAmount amount="1" currency="QPSP" />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
-          </div>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Token A Locked')}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="10000" currency="tez" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Token B Locked')}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="10000" currency="QPSP" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Your Total LP')}
-              <Tooltip
-                sizeT="small"
-                content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="1000000" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('liquidity:Your Frozen LP')}
-              <Tooltip
-                sizeT="small"
-                content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="100" />
-        </CardCell>
-        <div className={s.detailsButtons}>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
+        />
+        <CardContent className={s.content}>
+          <CardCell
+            header={(
+              <>
+                {t('common:Sell Price')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+                />
+              </>
+            )}
+            className={s.cell}
           >
-            View Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
+            <div className={s.cellAmount}>
+              <CurrencyAmount amount="1" currency="tez" />
+              <span className={s.equal}>=</span>
+              <CurrencyAmount amount="100000.11" currency="QPSP" dollarEquivalent="400" />
+            </div>
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('common:Buy Price')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+                />
+              </>
+        )}
+            className={s.cell}
           >
-            View Pair Contract
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-        </div>
+            <div className={s.cellAmount}>
+              <CurrencyAmount amount="1" currency="QPSP" />
+              <span className={s.equal}>=</span>
+              <CurrencyAmount amount="1000000000.000011" currency="tez" dollarEquivalent="0.00004" />
+            </div>
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('liquidity:Token A Locked')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('liquidity:The amount of token A that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+                />
+              </>
+          )}
+            className={s.cell}
+          >
+            <CurrencyAmount amount="10000" currency="tez" />
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('liquidity:Token B Locked')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('liquidity:The amount of token B that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.')}
+                />
+              </>
+          )}
+            className={s.cell}
+          >
+            <CurrencyAmount amount="10000" currency="QPSP" />
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('liquidity:Your Total LP')}
+                <Tooltip
+                  sizeT="small"
+                  content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
+                />
+              </>
+          )}
+            className={s.cell}
+          >
+            <CurrencyAmount amount="1000000" />
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('liquidity:Your Frozen LP')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
+                />
+              </>
+          )}
+            className={s.cell}
+          >
+            <CurrencyAmount amount="100" />
+          </CardCell>
+          <div className={s.detailsButtons}>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              View Pair Analytics
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+            <Button
+              className={s.detailsButton}
+              theme="inverse"
+            >
+              View Pair Contract
+              <ExternalLink className={s.linkIcon} />
+            </Button>
+          </div>
+        </CardContent>
       </Card>
     </StickyBlock>
 
