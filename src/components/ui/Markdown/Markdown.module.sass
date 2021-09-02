@@ -1,0 +1,53 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.pre
+  border-radius: 8px
+  padding: 16px
+  overflow-x: scroll
+
+.code
+  padding: 4px 8px
+  border-radius: 8px
+  font-weight: 400
+  word-wrap: break-word
+
+.blockquote
+  border-left-width: 8px
+  border-left-style: solid
+  margin-left: 0px
+  padding: 16px
+
+.p, .pre, .ol, .ul, .table
+  line-height: 1.5
+  margin-bottom: 16px
+
+.h1, .h2, .h3, .h4, .h5, .h6
+  margin-top: 24px
+  margin-bottom: 16px
+  &:first-child
+    margin-top: 0px
+
+.ul
+  list-style-type: disc
+  margin-left: 2em
+  
+
+.li
+  line-height: 1.5
+  &:not(:first-child)
+    margin-top: 4px
+
+.light
+  .blockquote
+    border-left-color: $ui-04
+  .code, .pre
+    background-color: $ui-03
+    color: $text-02
+
+.dark
+  .blockquote
+    border-left-color: $ui-05
+  .code, .pre
+    background-color: $ui-06
+    color: $text-inverse

@@ -65,7 +65,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     name: 'Add USDs/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
     status: 'PENDING',
-    description: 'https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md',
+    description: 'https://gist.githubusercontent.com/rt2zz/e0a1d6ab2682d2c47746950b84c0b6ee/raw/83b8b4814c3417111b9b9bef86a552608506603e/markdown-sample.md',
     shortDescription: `Lorem ipsum dolor sit amet, consectetur
     adipiscing elit. Sit adipiscing placerat
     augue gravida nunc. Enim sit volutpat ut amet, viverra.`,
@@ -93,6 +93,23 @@ export const Governance: React.FC<GovernanceProps> = ({
     votes: '0',
     claimable: '0',
     id: '1',
+    currency: 'QNOT',
+    author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+  }, {
+    name: 'Add USDs/QNOT pool',
+    workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
+    status: 'PENDING',
+    description: 'https://gist.githubusercontent.com/Jekins/2bf2d0638163f1294637/raw/9f93ad0b8b70ab5070ff96e54c4ee23d25a8798e/Markdown-docs.md',
+    shortDescription: `Lorem ipsum dolor sit amet, consectetur
+    adipiscing elit. Sit adipiscing placerat
+    augue gravida nunc. Enim sit volutpat ut amet, viverra.`,
+    remaining: new Date(Date.now() + (3600 * 24000 * 3) + 4500000),
+    voted: '100,000.00',
+    support: '100,000.00',
+    reject: '100,000.00',
+    votes: '0',
+    claimable: '0',
+    id: '2',
     currency: 'QNOT',
     author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   }];
