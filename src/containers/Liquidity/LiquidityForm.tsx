@@ -283,20 +283,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           token2.metadata.decimals,
         );
         const exA = new BigNumber(1);
-        const initialAto$ = bal1;
-        const initialBto$ = estimateTokenInTez(
-          dex.storage, bal2,
-        );
-        const notParsedValue = initialAto$
+        const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
+        const initialBto$ = estimateTezInToken(dex.storage,
+          toDecimals(bal2, token2.metadata.decimals));
+        const total$ = initialAto$
           .plus(initialBto$)
-          .div(2);
-        const parsedValue = parseDecimals(
-          notParsedValue.toString(),
-          0,
-          Infinity,
-          TEZOS_TOKEN.metadata.decimals,
-        );
-        const total$ = new BigNumber(parsedValue);
+          .div(2)
+          .integerValue(BigNumber.ROUND_DOWN);
         let inputValue:BigNumber;
         const val1 = initialAto$.minus(total$);
         const val2 = initialBto$.minus(estimateTokenInTez(dex.storage, total$));
@@ -778,20 +771,16 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
               const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
               try {
-                const initialAto$ = bal1;
-                const initialBto$ = estimateTokenInTez(dex.storage, bal2);
-                const notParsedValue = initialAto$
+                const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
+                const initialBto$ = estimateTezInToken(dex.storage,
+                  toDecimals(bal2, token2.metadata.decimals));
+                const total$ = initialAto$
                   .plus(initialBto$)
-                  .div(2);
-                const parsedValue = parseDecimals(
-                  notParsedValue.toString(),
-                  0,
-                  Infinity,
-                  TEZOS_TOKEN.metadata.decimals,
-                );
-                const total$ = new BigNumber(parsedValue);
-                const totalA = total$;
-                const totalB = estimateTokenInTez(dex.storage, total$);
+                  .div(2)
+                  .integerValue(BigNumber.ROUND_DOWN);
+                const totalA = fromDecimals(total$, TEZOS_TOKEN.metadata.decimals);
+                const totalB = fromDecimals(estimateTokenInTez(dex.storage, total$),
+                  token2.metadata.decimals);
                 maxInvestedA = totalA
                   .minus(slippageToBignum(values.slippage).multipliedBy(totalA));
                 maxInvestedB = totalB
