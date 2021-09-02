@@ -10,7 +10,7 @@ import { STABLE_TOKEN } from '@utils/defaults';
 import {
   SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
@@ -56,99 +56,99 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       .div(new BigNumber(tokensData.first.exchangeRate ?? 1)))
     .toString();
   return (
-    <Card
-      header={{
+    <Card>
+      <CardHeader header={{
         content: `${currentTab} Details`,
       }}
-      contentClassName={s.content}
-    >
-      <CardCell
-        header={(
-          <>
-            {t('common:Sell Price')}
-            <Tooltip
-              sizeT="small"
-              content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
-            />
-          </>
+      />
+      <CardContent className={s.content}>
+        <CardCell
+          header={(
+            <>
+              {t('common:Sell Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              />
+            </>
           )}
-        className={s.cell}
-      >
-        <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={sellRate}
-            currency={token2
-              ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-            dollarEquivalent={`${tokensData.first.exchangeRate}`}
-          />
-        </div>
-      </CardCell>
-      <CardCell
-        header={(
-          <>
-            {t('common:Buy Price')}
-            <Tooltip
-              sizeT="small"
-              content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+          className={s.cell}
+        >
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount
+              amount={sellRate}
+              currency={token2
+                ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
+              dollarEquivalent={`${tokensData.first.exchangeRate}`}
             />
-          </>
+          </div>
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Buy Price')}
+              <Tooltip
+                sizeT="small"
+                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              />
+            </>
           )}
-        className={s.cell}
-      >
-        <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={buyRate}
-            currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
-          />
-        </div>
-      </CardCell>
-      <CardCell
-        header={(
-          <>
-            {t('common:Price impact')}
-            <Tooltip
-              sizeT="small"
-              content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+          className={s.cell}
+        >
+          <div className={s.cellAmount}>
+            <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
+            <span className={s.equal}>=</span>
+            <CurrencyAmount
+              amount={buyRate}
+              currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
+              dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
             />
-          </>
+          </div>
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Price impact')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+              />
+            </>
           )}
-        className={s.cell}
-      >
-        <CurrencyAmount amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)} currency="%" />
-      </CardCell>
-      <CardCell
-        header={(
-          <>
-            {t('common:Fee')}
-            <Tooltip
-              sizeT="small"
-              content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
-            />
-          </>
+          className={s.cell}
+        >
+          <CurrencyAmount amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)} currency="%" />
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Fee')}
+              <Tooltip
+                sizeT="small"
+                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+              />
+            </>
           )}
-        className={s.cell}
-      >
-        <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="XTZ" />
-      </CardCell>
-      <CardCell
-        header={(
-          <>
-            {t('common:Route')}
-            <Tooltip
-              sizeT="small"
-              content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
-            />
-          </>
+          className={s.cell}
+        >
+          <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="XTZ" />
+        </CardCell>
+        <CardCell
+          header={(
+            <>
+              {t('common:Route')}
+              <Tooltip
+                sizeT="small"
+                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+              />
+            </>
           )}
-        className={s.cell}
-      >
-        <Route
-          routes={
+          className={s.cell}
+        >
+          <Route
+            routes={
                 [{
                   id: 0,
                   name: token1 ? getWhitelistedTokenSymbol(token1) : '',
@@ -165,20 +165,21 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                   link: `https://analytics.quipuswap.com/tokens/${tokensData.second.token.address}`,
                 }]
               }
-        />
-      </CardCell>
-      {dex && (
-      <Button
-        className={s.detailsButton}
-        theme="inverse"
-        target="_blank"
-        href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
-        external
-      >
-        View Pair Analytics
-        <ExternalLink className={s.linkIcon} />
-      </Button>
-      )}
+          />
+        </CardCell>
+        {dex && (
+        <Button
+          className={s.detailsButton}
+          theme="inverse"
+          target="_blank"
+          href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+          external
+        >
+          View Pair Analytics
+          <ExternalLink className={s.linkIcon} />
+        </Button>
+        )}
+      </CardContent>
     </Card>
   );
 };
