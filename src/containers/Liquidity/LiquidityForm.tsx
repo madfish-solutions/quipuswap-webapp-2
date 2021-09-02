@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import router from 'next/router';
 import React, {
   useEffect, useMemo, useRef, useState,
@@ -122,6 +123,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   setAddLiquidityParams,
   removeLiquidityParams,
 }) => {
+  const { t } = useTranslation(['common', 'liquidity']);
   const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
@@ -271,10 +273,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             lp1.plus(lp2),
           );
         } catch (err) {
-          console.error(err);
+          handleErrorToast(err);
         }
       } else {
-        // if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
         if (!dex) return;
         if ((val.balance1 && val.balance1.toString() === '.') || (val.balance2 && val.balance2.toString() === '.')) return;
         const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
@@ -800,7 +801,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   {!values.switcher ? (
                     <div className={cx(s.receive, s.mb24)}>
                       <span className={s.receiveLabel}>
-                        Max invested:
+                        {t('liquidity:Max invested')}
+                        :
                       </span>
                       <CurrencyAmount
                         currency={`${tokenAName}/${tokenBName}`}
@@ -812,7 +814,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       <>
                         <div className={s.receive}>
                           <span className={s.receiveLabel}>
-                            Max invested:
+                            {t('liquidity:Max invested')}
+                            :
                           </span>
                           <CurrencyAmount
                             currency={tokenAName}
@@ -821,7 +824,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                         </div>
                         <div className={cx(s.receive, s.mb24)}>
                           <span className={s.receiveLabel}>
-                            Max invested:
+                            {t('liquidity:Max invested')}
+                            :
                           </span>
                           <CurrencyAmount
                             currency={tokenBName}
@@ -837,7 +841,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 <>
                   <div className={s.receive}>
                     <span className={s.receiveLabel}>
-                      Minimum received:
+                      {t('liquidity:Minimum received:')}
                     </span>
                     <CurrencyAmount
                       currency={tokenAName}
@@ -846,7 +850,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   </div>
                   <div className={s.receive}>
                     <span className={s.receiveLabel}>
-                      Minimum received:
+                      {t('liquidity:Minimum received:')}
                     </span>
                     <CurrencyAmount
                       currency={tokenBName}
@@ -858,7 +862,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     className={s.button}
                     disabled={removeLiquidityParams.length < 1}
                   >
-                    Remove & Unvote
+                    {t('liquidity:Remove & Unvote')}
                   </Button>
                 </>
                 )}
@@ -879,7 +883,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     className={s.switcherInput}
                     disabled={!dex}
                   />
-                  Rebalance Liquidity
+                  {t('liquidity:Rebalance Liquidity')}
                   <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
                 </div>
               )}

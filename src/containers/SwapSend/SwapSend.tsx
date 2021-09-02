@@ -2,6 +2,7 @@ import React, {
   useMemo, useState, useEffect, useCallback,
 } from 'react';
 import { withTypes } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -46,6 +47,7 @@ type SwapSendProps = {
 export const SwapSend: React.FC<SwapSendProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
@@ -90,14 +92,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: 'Loading',
+      render: t('common:Loading'),
     });
   }, [updateToast]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: 'Swap completed!',
+      render: t('swap:Swap completed!'),
     });
   }, [updateToast]);
 

@@ -182,7 +182,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          View Pair Analytics
+          {t('liquidity:View Pair Analytics')}
         </Button>
         <Button
           className={s.detailsButton}
@@ -191,7 +191,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          View Pair Contract
+          {t('liquidity:View Pair Contract')}
         </Button>
       </div>
       )}
