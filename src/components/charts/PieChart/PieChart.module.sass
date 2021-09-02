@@ -1,0 +1,105 @@
+@import '@styles/variables'
+@import '@styles/breakpoints'
+
+.container
+  padding: 16px 16px 12px 24px
+  position: relative
+  display: flex
+  justify-content: center
+  flex-direction: column
+  align-items: center
+
+.center
+  align-items: center
+
+.pieChart
+  width: 200px
+  height: 200px
+
+.chart
+  width: 200px
+  height: 200px
+  position: relative
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+
+.total
+  display: flex
+  align-items: center
+  width: 100%
+  flex-direction: column
+  position: absolute
+  top: 68px
+
+.left
+  display: flex
+  align-items: center
+  flex-wrap: wrap
+
+.left
+  margin-right: 0px
+  margin-bottom: 16px
+
+.right
+  order: 2
+  margin-left: 0px
+  margin-top: 16px
+
+.legendLabel
+  margin-bottom: 16px
+  width: 100%
+
+.legendRow
+  display: flex
+  align-items: center
+  padding: 8px
+
+.legendColor
+  width: 16px
+  height: 16px
+  border-radius: 4px
+  margin-right: 8px
+
+.legendText
+  font-size: 0.857rem
+
+.legendMark
+  margin-left: 8px
+  font-weight: bold
+
+.bold
+  font-weight: bold
+
+.label
+  font-size: 0.857rem
+  font-weight: bold
+  color: $text-03
+
+.light
+  .legendMark
+    color: $text-01
+
+.dark
+  .legendMark
+    color: $text-inverse
+
+@include media('>Ltablet')
+  .container
+    flex-direction: row
+    align-items: normal
+  .legendRow
+    padding: 0px
+    display: flex
+    align-items: center
+    &:not(:last-child)
+      margin-bottom: 16px
+  .left, .right
+    display: block
+  .left
+    margin-right: 16px
+    margin-bottom: 0px
+  .right
+    order: 2
+    margin-left: 16px
+    margin-top: 0px

@@ -26,6 +26,8 @@ export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const MAX_ITEMS_PER_PAGE = 5;
+
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const TEZOS_TOKEN: WhitelistedToken = {

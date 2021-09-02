@@ -1,0 +1,265 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.floatingPicker
+  position: absolute
+  z-index: 1
+  right: 2px
+  top: 2px
+
+.formInput
+  position: relative
+
+.govGroup
+  display: flex
+  align-items: center
+  order: -1
+  justify-content: space-between
+  width: 100%
+
+.submitCost
+  white-space: nowrap
+
+.submitFlex
+  width: 100%
+  display: flex
+  justify-content: space-between
+  align-items: center
+
+.desktopFlex, .desktopBlock
+  display: none
+
+.govSubmitGroup
+  color: $text-03
+  font-weight: bold
+  line-height: 1.14
+  order: 2
+
+.submitCurrency
+  color: $text-03
+  
+.proposalSidebar
+  position: relative
+  width: 100%
+  margin-left: 0px
+
+.proposal
+  .proposalInfo
+    flex: 1
+
+.proposalDetails
+  &:not(:last-child) 
+    margin-bottom: 32px
+
+.proposalVotes 
+  max-height: 600px
+  overflow-y: scroll
+
+.proposalVotes::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.proposalVotes::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.proposalVotes::-webkit-scrollbar-thumb
+  border-radius: 10px
+
+.content
+  padding: 40px 24px 24px
+  display: flex
+  flex-direction: column
+
+.cellHeader
+  margin-bottom: 0px
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.detailsButton
+  display: flex
+  align-items: center
+
+.linkIcon
+  margin-left: 8px
+
+.voteIcon
+  margin-left: 8px
+
+.cellAmount, .cellDate
+  font-weight: 600
+  display: flex
+  justify-content: flex-start
+  align-items: center
+
+.proposalHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.proposalBackIcon
+  margin-right: 8px
+  
+.tabContent
+  padding: 0px 24px
+
+.govHeaderWrapper
+  padding: 24px
+
+.proposalHeader
+  font-size: 1.143rem
+  line-height: 1.5
+  font-weight: 600
+
+.govHeader
+  width: 100%
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+
+.submitHeader
+  display: flex
+  justify-content: space-between
+  flex-wrap: wrap
+
+.submitDates
+  color: $text-03
+  flex: 50%
+.govDates
+  flex: 50%
+  font-size: 1rem
+  color: $text-03
+
+.govContent
+  padding: 24px
+  display: flex
+  flex-direction: column
+
+.govBody
+  font-size: 1.143rem
+  
+.fullWidth
+  width: 100% !important
+
+.govName
+  flex: 100%
+
+.govBage
+  color: $text-03
+
+.mt40
+  margin-top: 40px
+
+.mb24
+  margin-bottom: 24px
+
+.mb24i
+  margin-bottom: 24px !important
+
+.govDescription
+  margin-bottom: 24px
+
+.govButton
+  display: none
+
+.govBlockHeader
+  font-size: 1rem
+  margin-bottom: 8px
+  color: $text-03
+  font-weight: 600
+
+.govBlockLabel
+  font-size: 1.286rem
+  font-weight: bold
+
+.govBlock
+  margin-bottom: 16px
+
+.govBlockSpan
+  color: $text-03
+
+.govButtonButtom
+  max-width: inherit
+  width: 100%
+
+
+.light
+  .cellDate
+    color: $text-01
+  .proposalHeader
+    color: $text-01
+  .govDescription
+    color: $text-02
+  .govBlockLabel
+    color: $text-01
+  .proposalVotes::-webkit-scrollbar-thumb
+    background-color: $hover-light-row
+
+.dark
+  .cellDate
+    color: $text-inverse
+  .proposalHeader
+    color: $text-inverse
+  .govDescription
+    color: $text-03
+  .govBlockLabel
+    color: $text-inverse
+  .proposalVotes::-webkit-scrollbar-thumb
+    background-color:  $hover-dark-row
+
+
+@include media('>Ltablet')
+  .formInputs
+    display: flex
+    align-items: center
+  .formInput
+    flex: 1
+    &:not(:last-child)
+      margin-right: 24px
+  .proposalSidebar
+    position: relative
+    width: min-content
+    min-width: 424px
+    margin-left: 32px
+  .govBlocks
+    display: flex
+    justify-content: space-between
+  .govBlock
+    margin-bottom: 0px
+  .govButton
+    display: block
+    max-width: 180px
+  .govButtonButtom
+    display: none
+  .govGroup
+    justify-content: flex-start
+    width: auto
+    order: 1
+  .desktopFlex
+    display: flex
+  .desktopBlock
+    display: block
+  .submitDates
+    flex: initial
+  .govDates
+    flex: initial
+    font-size: 1.143rem
+  .govBage
+    flex: initial
+    margin-left: 16px
+  .govName
+    margin-right: 16px
+    flex: initial
+  .govHeader
+    width: inherit
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    flex-wrap: wrap
+  .submitHeader
+    display: flex
+    justify-content: flex-start
+    align-items: center
+    flex-wrap: wrap
+  .submitFlex
+    margin-right: 32px
