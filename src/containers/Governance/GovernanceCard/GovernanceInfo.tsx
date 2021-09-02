@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
+import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
@@ -24,18 +25,6 @@ import { GovernanceCardProps } from './GovernanceCard';
 const DonutChart = dynamic(() => import('@components/ui/DonutChart'), {
   ssr: false,
 });
-
-const convertDateToDDMMYYYY = (date:Date) => `${
-  (date.getDate() > 9)
-    ? date.getDate()
-    : (`0${date.getDate()}`)
-} 
-  ${
-  (date.getMonth() > 8)
-    ? (date.getMonth() + 1)
-    : (`0${date.getMonth() + 1}`)
-} 
-    ${date.getFullYear()}`;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -116,9 +105,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 </div>
                 <div className={s.govGroup}>
                   <div className={s.govDates}>
-                    <span>{convertDateToDDMMYYYY(workDates[0])}</span>
+                    <span>{moment(workDates[0]).format('DD MMM YYYY')}</span>
                     <span> - </span>
-                    <span>{convertDateToDDMMYYYY(workDates[1])}</span>
+                    <span>{moment(workDates[1]).format('DD MMM YYYY')}</span>
                   </div>
                   <Bage
                     className={s.govBage}
@@ -171,7 +160,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               className={s.cell}
             >
               <div className={s.cellDate}>
-                {convertDateToDDMMYYYY(workDates[0])}
+                {moment(workDates[0]).format('DD MMM YYYY')}
               </div>
             </CardCell>
             <CardCell
@@ -180,7 +169,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               className={s.cell}
             >
               <div className={s.cellDate}>
-                {convertDateToDDMMYYYY(workDates[1])}
+                {moment(workDates[1]).format('DD MMM YYYY')}
               </div>
             </CardCell>
             <CardCell
