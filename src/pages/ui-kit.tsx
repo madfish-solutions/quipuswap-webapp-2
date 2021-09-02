@@ -18,13 +18,14 @@ import { Modal } from '@components/ui/Modal';
 import {
   BakerCell,
   ChooseListCell,
-  // PositionCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
-// import { DonutChartSampleData } from '@components/ui/DonutChart/content';
+import {
+  LineChartSampleData,
+  CandleChartSampleData,
+} from '@components/charts/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -43,11 +44,13 @@ import { MenuOpened } from '@components/svg/MenuOpened';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
-// import DateIcon from '@icons/DateIcon.svg';
 
 import s from '@styles/UiKit.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const LineChart = dynamic(() => import('@components/charts/LineChart'), {
+  ssr: false,
+});
+const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
   ssr: false,
 });
 
@@ -434,14 +437,6 @@ const UiKit: React.FC = () => {
             inputSize="small"
           />
         </div>
-        {/* <Input
-          EndAdornment={DateIcon}
-          className={s.formInput}
-          label="Voting period"
-          id="votingperiod"
-          value={votingDates}
-          onChange={(e:any) => setVotingDates(e.target.value)}
-        /> */}
         <DateRangePicker
           startDateId="startDate"
           endDateId="endDate"
@@ -515,6 +510,7 @@ const UiKit: React.FC = () => {
           Open tokens modal
         </Button>
         <TokensModal
+          blackListedTokens={[]}
           isOpen={tokensModal}
           onRequestClose={() => setTokensModal(false)}
           onChange={() => {}}
@@ -802,7 +798,14 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Graphics</h1>
-        <LineChart data={LineChartSampleData} />
+        <LineChart
+          data={LineChartSampleData}
+          className={s.chart}
+        />
+        <CandleChart
+          data={CandleChartSampleData}
+          className={s.chart}
+        />
 
         <Card>
           <CardHeader header={{ content: <h5>Donut Chart</h5> }} />
@@ -893,12 +896,12 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Slippage</h1>
-        <Slippage />
+        <Slippage handleChange={() => {}} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Routes</h1>
         <Route
-          routes={['qpsp', 'usd', 'xtz']}
+          routes={[{ name: 'qpsp', link: '', id: 1 }, { name: 'usd', link: '', id: 2 }, { name: 'xtz', link: '', id: 3 }]}
         />
       </section>
     </BaseLayout>

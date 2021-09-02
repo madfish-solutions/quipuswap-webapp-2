@@ -19,6 +19,7 @@ export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
 
+export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
@@ -27,6 +28,8 @@ export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const SAVED_BAKERS_KEY = 'savedCustomBakers';
+export const SAVED_TERMS_KEY = 'savedTerms';
+export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 export const TEZOS_TOKEN: WhitelistedToken = {
   type: 'fa1.2',
   contractAddress: 'tez',
@@ -37,6 +40,42 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };
+
+export const STABLE_TOKEN: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
+export const FACTORIES = {
+  florencenet: {
+    fa1_2Factory: [
+      'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
+      'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY',
+    ],
+    fa2Factory: [
+      'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
+      'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
+    ],
+  },
+  mainnet: {
+    fa1_2Factory: [
+      'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
+      'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD',
+    ],
+    fa2Factory: [
+      'KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ',
+      'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
+    ],
+  },
+};
+
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;

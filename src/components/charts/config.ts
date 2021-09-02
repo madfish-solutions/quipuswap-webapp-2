@@ -1,23 +1,25 @@
-import { ChartOptions, DeepPartial } from 'lightweight-charts';
+import {
+  AreaSeriesOptions,
+  CandlestickSeriesOptions,
+  ChartOptions,
+  DeepPartial,
+} from 'lightweight-charts';
 
 export const GraphicHeight = 300;
-
-export const GraphicDimensions = {
-  width: 256,
-  height: 184,
-};
 
 export const GraphicColors = {
   light: {
     primary1: '#232735',
     primary2: '#F0F1F3',
     background: '#ffffff',
+    labelBackground: '#14171E',
     accent: '#1770E4',
   },
   dark: {
     primary1: '#FFFFFF',
     primary2: '#14171E',
     background: '#070C12',
+    labelBackground: '#FAFAFC',
     accent: '#F9A305',
   },
 };
@@ -57,14 +59,31 @@ export const GraphOptions: DeepPartial<ChartOptions> = {
   },
   crosshair: {
     horzLine: {
-      visible: false,
-      labelVisible: false,
+      visible: true,
+      labelVisible: true,
+      style: 3,
+      width: 1,
     },
     vertLine: {
       visible: true,
-      labelVisible: false,
+      labelVisible: true,
       style: 3,
       width: 1,
     },
   },
+};
+
+export const LineGraphOptions: DeepPartial<AreaSeriesOptions> = {
+  lineWidth: 1,
+  priceLineVisible: false,
+  crosshairMarkerRadius: 6,
+};
+
+export const CandleGraphOptions: DeepPartial<CandlestickSeriesOptions> = {
+  upColor: '#2ED33E',
+  wickUpColor: '#2ED33E',
+  borderUpColor: '#2ED33E',
+  downColor: '#EA2424',
+  wickDownColor: '#EA2424',
+  borderDownColor: '#EA2424',
 };

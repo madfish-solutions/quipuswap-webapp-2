@@ -11,14 +11,15 @@ import { createChart, IChartApi } from 'lightweight-charts';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { Card } from '@components/ui/Card';
 
 import {
+  CandleGraphOptions,
   GraphicColors,
   GraphicHeight,
   GraphOptions,
-} from './config';
-import s from './LineChart.module.sass';
+} from '../config';
+import s from './CandleChart.module.sass';
 
 type LineChartProps = {
   data: any[]
@@ -30,7 +31,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const LineChart: React.FC<LineChartProps> = ({
+export const CandleChart: React.FC<LineChartProps> = ({
   data,
   className,
 }) => {
@@ -45,8 +46,17 @@ export const LineChart: React.FC<LineChartProps> = ({
   // for reseting value on hover exit
   const currenValue = data[data.length - 1];
 
-  const [value, setValue] = useState<{ price: number, time: number }>({
-    price: parseFloat(currenValue.value),
+  const [value, setValue] = useState<{
+    open: number,
+    high: number,
+    low: number,
+    close: number,
+    time: number
+  }>({
+    open: parseFloat(currenValue.open),
+    high: parseFloat(currenValue.high),
+    low: parseFloat(currenValue.low),
+    close: parseFloat(currenValue.close),
     time: parseFloat(currenValue.time),
   });
 
@@ -90,10 +100,15 @@ export const LineChart: React.FC<LineChartProps> = ({
         watermark: GraphOptions.watermark,
         grid: GraphOptions.grid,
         crosshair: {
-          horzLine: GraphOptions.crosshair?.horzLine,
+          horzLine: {
+            ...GraphOptions.crosshair?.horzLine,
+            color: GraphicColors[colorThemeMode].primary1,
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
+          },
           vertLine: {
             ...GraphOptions.crosshair?.vertLine,
             color: GraphicColors[colorThemeMode].primary1,
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
           },
         },
         localization: {
@@ -101,17 +116,9 @@ export const LineChart: React.FC<LineChartProps> = ({
         },
       });
 
-      const series = chart.addAreaSeries({
-        lineColor: GraphicColors[colorThemeMode].primary1,
-        topColor: GraphicColors[colorThemeMode].accent,
-        bottomColor: GraphicColors[colorThemeMode].background,
-        lineWidth: 1,
+      const series = chart.addCandlestickSeries({
         priceLineVisible: false,
-        crosshairMarkerRadius: 6,
-        crosshairMarkerBorderColor: GraphicColors[colorThemeMode].primary1,
-        crosshairMarkerBackgroundColor: GraphicColors[
-          colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light
-        ].primary1,
+        ...CandleGraphOptions,
       });
 
       series.setData(data);
@@ -129,15 +136,43 @@ export const LineChart: React.FC<LineChartProps> = ({
         ) {
           if (setValue) {
             setValue({
-              price: parseFloat(currenValue.value),
+              open: parseFloat(currenValue.open),
+              high: parseFloat(currenValue.high),
+              low: parseFloat(currenValue.low),
+              close: parseFloat(currenValue.close),
               time: parseFloat(currenValue.time),
             });
           }
         } else if (setValue) {
-          const price = parseFloat(param.seriesPrices.get(series)?.toString() ?? currenValue.value);
-          const time = parseFloat(param.time ?? currenValue.time);
+          const open = parseFloat(
+            // @ts-ignore
+            param.seriesPrices.get(series)?.open.toString()
+            ?? currenValue.open,
+          );
+          const high = parseFloat(
+            // @ts-ignore
+            param.seriesPrices.get(series)?.high.toString()
+            ?? currenValue.high,
+          );
+          const low = parseFloat(
+            // @ts-ignore
+            param.seriesPrices.get(series)?.low.toString()
+            ?? currenValue.low,
+          );
+          const close = parseFloat(
+            // @ts-ignore
+            param.seriesPrices.get(series)?.close.toString()
+            ?? currenValue.close,
+          );
+          const time = parseFloat(
+            param.time
+            ?? currenValue.time,
+          );
           setValue({
-            price,
+            open,
+            high,
+            low,
+            close,
             time,
           });
         }
@@ -157,31 +192,63 @@ export const LineChart: React.FC<LineChartProps> = ({
 
   return (
     <Card
+      header={{ content: 'Graphic' }}
       className={className}
+      contentClassName={s.container}
     >
-      <CardHeader header={{ content: 'Graphic' }} />
-      <CardContent className={s.container}>
-        <div className={cx(s.info, modeClass[colorThemeMode])}>
-          <p className={s.caption}>
-            Price:
-          </p>
-          <p className={s.token}>
-            {prettyPrice(value.price, 3)}
+      <div className={cx(s.info, modeClass[colorThemeMode])}>
+        <span className={s.prices}>
+          <span className={s.tokenPrice}>
+            {prettyPrice(value.close, 2, 10)}
             {' '}
             TOKEN
-          </p>
-          <p className={s.dollar}>
+          </span>
+          <span className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
             $
             {' '}
-            {prettyPrice(value.price, 3)}
-          </p>
-          <p className={s.date}>
-            {new Date(value.time * 1000).toISOString()}
-          </p>
+            {prettyPrice(value.close, 2, 10)}
+          </span>
+        </span>
+        <div className={s.details}>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                Open
+              </span>
+              <span className={s.value}>
+                {value.open}
+              </span>
+            </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                Close
+              </span>
+              <span className={s.value}>
+                {value.close}
+              </span>
+            </div>
+          </div>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                Max
+              </span>
+              <span className={s.value}>
+                {value.high}
+              </span>
+            </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                Min
+              </span>
+              <span className={s.value}>
+                {value.low}
+              </span>
+            </div>
+          </div>
         </div>
-        <div ref={chartRef} className={s.chart} />
-
-      </CardContent>
+      </div>
+      <div ref={chartRef} className={s.chart} />
     </Card>
   );
 };

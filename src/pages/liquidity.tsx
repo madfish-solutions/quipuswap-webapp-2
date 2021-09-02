@@ -5,11 +5,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Liquidity } from '@containers/Liquidity';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import { LineChartSampleData } from '@components/charts/content';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
 });
 

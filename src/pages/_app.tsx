@@ -10,6 +10,7 @@ import { DAppProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
+import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
 import '@styles/globals.sass';
 
@@ -136,7 +137,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 
       <DAppProvider>
         <ColorThemeProvider>
-          <Component {...pageProps} />
+          <ExchangeRatesProvider>
+            <Component {...pageProps} />
+          </ExchangeRatesProvider>
         </ColorThemeProvider>
       </DAppProvider>
     </>

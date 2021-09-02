@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Switcher } from '@components/ui/Switcher';
-import Token from '@icons/Token.svg';
+import { QuipuToken } from '@components/svg/QuipuToken';
 
 import s from './ModalCell.module.sass';
 
@@ -34,7 +34,7 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   return (
     <div className={compoundClassName}>
       <div className={s.joinRow}>
-        <Token />
+        <QuipuToken />
         <div className={s.mleft8}>
           <h6>
             {tokenList?.name}
