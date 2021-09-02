@@ -7,9 +7,7 @@ import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  SwapFormValues, TokenDataMap, WhitelistedToken,
-} from '@utils/types';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -26,7 +24,6 @@ type SwapDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData: TokenDataMap
-  values: SwapFormValues
   priceImpact: BigNumber
   rate1: BigNumber
   rate2: BigNumber

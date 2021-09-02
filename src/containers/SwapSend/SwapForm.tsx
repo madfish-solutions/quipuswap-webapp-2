@@ -6,12 +6,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import {
   estimateSwap,
-  findDex,
   FoundDex,
-  swap,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
-import { TransferParams } from '@taquito/taquito';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -28,13 +25,13 @@ import {
 } from '@utils/validators';
 import {
   fromDecimals,
-  getValueForSDK,
   getWhitelistedTokenSymbol,
+  isDexEqual,
+  isTokenEqual,
   parseDecimals,
   slippageToBignum,
   toDecimals,
   transformTokenDataToAsset,
-  transformWhitelistedTokenToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
@@ -49,6 +46,7 @@ import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 import { SwapDetails } from './SwapDetails';
+import { getDex } from './swapHelpers';
 
 const TabsContent = [
   {
@@ -112,13 +110,14 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [fee, setFee] = useState<BigNumber>();
-  const [, setSwapParams] = useState<TransferParams[]>([]);
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
   const [rate1, setRate1] = useState<BigNumber>(new BigNumber(0));
   const [rate2, setRate2] = useState<BigNumber>(new BigNumber(0));
   const [[dex, dex2], setDex] = useState<FoundDex[]>([]);
+  const [[oldDex, oldDex2], setOldDex] = useState<FoundDex[]>([]);
   const [[dexstorage, dexstorage2], setDexstorage] = useState<any>([]);
+  const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -133,7 +132,8 @@ const RealForm:React.FC<SwapFormProps> = ({
   const handleInputChange = async (val: SwapFormValues) => {
     if (!tezos) return;
     if (Object.keys(val).length < 1) return;
-    if (!val[lastChange]) {
+    if (!val[lastChange] || val[lastChange].toString() === '.') {
+      if (!val.balance1 && !val.balance2) return;
       form.mutators.setValue(
         'balance1', undefined,
       );
@@ -142,18 +142,27 @@ const RealForm:React.FC<SwapFormProps> = ({
       );
       return;
     }
-    if (!dex || !dexstorage || (tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' && !dex2)) return;
+    const isTokenToToken = token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez';
+    if (!dex || !dexstorage || (isTokenToToken && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
-    const lastChangeMod = lastChange;
+    let lastChangeMod = lastChange;
+    const isTokensSame = isTokenEqual(token1, oldToken1)
+      && isTokenEqual(token2, oldToken2);
     const isValuesSame = val[lastChange] === formValues[lastChange];
-    if (isValuesSame) return;
+    const isDex1Same = dex && oldDex && isDexEqual(dex, oldDex);
+    const isDex2Same = dex2 && oldDex2 && isDexEqual(dex2, oldDex2);
+    const isDexSame = isDex1Same || (isTokenToToken && isDex1Same && isDex2Same);
+    if (isValuesSame && isTokensSame && isDexSame) return;
     if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+    if (isValuesSame && !isTokensSame) {
+      lastChangeMod = 'balance1';
+    }
     const decimals1 = lastChangeMod === 'balance1'
-      ? tokensData.first.token.decimals
-      : tokensData.second.token.decimals;
+      ? token1.metadata.decimals
+      : token2.metadata.decimals;
     const decimals2 = lastChangeMod !== 'balance1'
-      ? tokensData.first.token.decimals
-      : tokensData.second.token.decimals;
+      ? token1.metadata.decimals
+      : token2.metadata.decimals;
 
     const inputWrapper = new BigNumber(lastChangeMod === 'balance1' ? val.balance1 : val.balance2);
     const inputValueInner = toDecimals(inputWrapper, decimals1);
@@ -164,7 +173,7 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     let retValue = new BigNumber(0);
     try {
-      if (tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' && dex2) {
+      if (isTokenToToken && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
         retValue = await estimateSwap(
           tezos,
@@ -175,7 +184,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           sendDex,
         );
       } else {
-        const sendDex = tokensData.second.token.address === 'tez' ? { outputDex: dex } : { inputDex: dex };
+        const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -218,27 +227,11 @@ const RealForm:React.FC<SwapFormProps> = ({
       lastChangeMod === 'balance1' ? 'balance2' : 'balance1', result,
     );
 
+    setOldTokens([token1, token2]);
+    setOldDex([dex, dex2]);
+
     const feeVal = fromDecimals(result, 6);
     setFee(feeVal.multipliedBy(new BigNumber(FEE_RATE)));
-  };
-
-  const asyncGetSwapParams = async () => {
-    if (!tezos || !values.balance1) return;
-    try {
-      const fromAsset = transformWhitelistedTokenToAsset(token1);
-      const toAsset = transformWhitelistedTokenToAsset(token2);
-      const inputValue = getValueForSDK(tokensData.first, new BigNumber(values.balance1), tezos);
-      const paramsValue = await swap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        inputValue,
-      );
-      setSwapParams(paramsValue);
-    } catch (e) {
-      handleErrorToast(e);
-    }
   };
 
   const saveFunc = async () => {
@@ -248,7 +241,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     setVal(values);
     setSubm(true);
     handleInputChange(values);
-    if (tezos && accountPkh && token1 && token2) { asyncGetSwapParams(); }
     promise = save(values);
     await promise;
     setSubm(false);
@@ -265,6 +257,8 @@ const RealForm:React.FC<SwapFormProps> = ({
       }
     };
   }, [
+    token1,
+    token2,
     values,
     tokensData,
     tezos,
@@ -273,107 +267,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     dex2,
     dexstorage,
   ]);
-
-  useEffect(() => {
-    const localSaveFunc = async () => {
-      if (!tezos) return;
-      if (Object.keys(values).length < 1) return;
-      if (!values[lastChange]) {
-        form.mutators.setValue(
-          'balance1', undefined,
-        );
-        form.mutators.setValue(
-          'balance2', undefined,
-        );
-        return;
-      }
-
-      if (!dex || !dexstorage || (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && !dex2)) return;
-      if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-      const decimals1 = token1.metadata.decimals;
-      const decimals2 = token2.metadata.decimals;
-
-      let retValue = new BigNumber(0);
-      try {
-        const inputWrapper = new BigNumber(values.balance1);
-        const inputValueInner = toDecimals(inputWrapper, decimals1);
-
-        const fromAsset = transformWhitelistedTokenToAsset(token1);
-        const toAsset = transformWhitelistedTokenToAsset(token2);
-
-        const valuesInner = { inputValue: inputValueInner };
-
-        if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez' && dex2) {
-          const sendDex = { inputDex: dex, outputDex: dex2 };
-          retValue = await estimateSwap(
-            tezos,
-            FACTORIES[networkId],
-            fromAsset,
-            toAsset,
-            valuesInner,
-            sendDex,
-          );
-        } else {
-          const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex } : { inputDex: dex };
-          retValue = await estimateSwap(
-            tezos,
-            FACTORIES[networkId],
-            fromAsset,
-            toAsset,
-            valuesInner,
-            sendDex,
-          );
-        }
-        retValue = fromDecimals(retValue, decimals2);
-      } catch (e) {
-        handleErrorToast(e);
-      }
-
-      const result = new BigNumber(parseDecimals(
-        retValue.toFixed(),
-        0,
-        Infinity,
-        decimals2,
-      ));
-
-      const rate1buf = new BigNumber(values.balance1)
-        .div(result);
-      const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate)
-        .div(tokensData.second.exchangeRate);
-      const priceImp = new BigNumber(1)
-        .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
-        .multipliedBy(100);
-      setRate1(rate1buf);
-      setRate2(rate1buf.exponentiatedBy(-1));
-      setPriceImpact(priceImp);
-
-      form.mutators.setValue(
-        'balance2', result,
-      );
-
-      const feeVal = fromDecimals(result, 6);
-      setFee(feeVal.multipliedBy(new BigNumber(FEE_RATE)));
-
-      if (tezos && accountPkh && token1 && token2) { asyncGetSwapParams(); }
-      promise = save(values);
-    };
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(localSaveFunc, debounce);
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, [
-    token1,
-    token2,
-    tezos,
-    accountPkh,
-    dex,
-    dex2,
-    dexstorage]);
 
   useEffect(() => {
     form.mutators.setValue('recipient', accountPkh);
@@ -396,32 +289,18 @@ const RealForm:React.FC<SwapFormProps> = ({
   };
 
   useEffect(() => {
-    const getDex = async () => {
-      if (!tezos || !token2 || !token1) return;
-      const fromAsset = {
-        contract: token1.contractAddress,
-        id: token1.fa2TokenId ?? undefined,
-      };
-      const toAsset = {
-        contract: token2.contractAddress,
-        id: token2.fa2TokenId ?? undefined,
-      };
-
-      if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
-        const dexbuf1 = await findDex(tezos, FACTORIES[networkId], fromAsset);
-        const dexStorageBuf1:any = await dexbuf1.contract.storage();
-        const dexbuf2 = await findDex(tezos, FACTORIES[networkId], toAsset);
-        const dexStorageBuf2:any = await dexbuf2.contract.storage();
-        setDex([dexbuf1, dexbuf2]);
-        setDexstorage([dexStorageBuf1, dexStorageBuf2]);
-      } else {
-        const dexbuf = await findDex(tezos, FACTORIES[networkId], token2.contractAddress === 'tez' ? fromAsset : toAsset);
-        const dexStorageBuf:any = await dexbuf.contract.storage();
-        setDex([dexbuf]);
-        setDexstorage([dexStorageBuf, undefined]);
-      }
+    if (!tezos || !token2 || !token1) return;
+    const asyncFunc = async () => {
+      const { dexes, storages } = await getDex({
+        tezos,
+        networkId,
+        token1,
+        token2,
+      });
+      setDex(dexes);
+      setDexstorage(storages);
     };
-    getDex();
+    asyncFunc();
   }, [token2, token1, tezos, networkId]);
 
   const handleSwapButton = useCallback(() => {
@@ -495,7 +374,10 @@ const RealForm:React.FC<SwapFormProps> = ({
                 }
               }}
               noBalanceButtons={!accountPkh}
-              handleChange={(token) => handleTokenChange(token, 'first')}
+              handleChange={(token) => {
+                handleTokenChange(token, 'first');
+                setDex([]);
+              }}
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="swap-send-from"
@@ -519,7 +401,10 @@ const RealForm:React.FC<SwapFormProps> = ({
               setToken={setToken2}
               handleBalance={() => {}}
               noBalanceButtons
-              handleChange={(token) => handleTokenChange(token, 'second')}
+              handleChange={(token) => {
+                handleTokenChange(token, 'second');
+                setDex([]);
+              }}
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="swap-send-to"
@@ -595,7 +480,6 @@ const RealForm:React.FC<SwapFormProps> = ({
         token2={token2}
         fee={(fee ?? 0).toString()}
         tokensData={tokensData}
-        values={values}
         priceImpact={priceImpact}
         rate1={rate1}
         rate2={rate2}
