@@ -118,7 +118,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   handleTokenChange,
   currentTab,
   setAddLiquidityParams,
-  addLiquidityParams,
   removeLiquidityParams,
 }) => {
   const { openConnectWalletModal } = useConnectModalsState();
@@ -165,7 +164,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     const isRemValuesSame = val.balance3 === formValues.balance3;
     const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
     if (val.switcher !== formValues.switcher) setAddLiquidityParams([]);
-    if (tezos && accountPkh && token1 && token2) {
+    if (tezos && token1 && token2) {
       if (isDexSame && isTokensSame && ((currentTab.id === 'remove' ? isRemValuesSame : isValuesSame))) return;
       try {
         asyncGetLiquidityShare({
@@ -218,7 +217,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         if (isTokensSame && isValuesSame && isDexSame) return;
         if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
 
-        if (values.balance1) {
+        if (values.balance1 && accountPkh) {
           const tezValue = toDecimals(new BigNumber(values.balance1), 6);
           const addParams = await addLiquidity(
             tezos,
@@ -867,7 +866,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             <Button
               onClick={handleAddLiquidity}
               className={s.button}
-              disabled={addLiquidityParams.length < 1}
             >
               {currentTab.label}
             </Button>
