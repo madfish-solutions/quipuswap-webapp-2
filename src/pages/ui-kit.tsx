@@ -4,6 +4,9 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import BigNumber from 'bignumber.js';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import { DateRangePicker } from 'react-dates';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -40,6 +43,7 @@ import { MenuOpened } from '@components/svg/MenuOpened';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+// import DateIcon from '@icons/DateIcon.svg';
 
 import s from '@styles/UiKit.module.sass';
 
@@ -125,6 +129,8 @@ const UiKit: React.FC = () => {
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
   const [tabsBigState, setTabsBigState] = useState(TabsBig[0].id);
+  const [[votingStart, votingEnd], setVotingDates] = useState<any[]>([]);
+  const [votingInput, setVotingInput] = useState<any>();
 
   const [selectState, setSelectState] = useState(selectValues[0]);
   const [selectTopState, setSelectTopState] = useState(selectValuesTop[0]);
@@ -428,6 +434,34 @@ const UiKit: React.FC = () => {
             inputSize="small"
           />
         </div>
+        {/* <Input
+          EndAdornment={DateIcon}
+          className={s.formInput}
+          label="Voting period"
+          id="votingperiod"
+          value={votingDates}
+          onChange={(e:any) => setVotingDates(e.target.value)}
+        /> */}
+        <DateRangePicker
+          startDateId="startDate"
+          endDateId="endDate"
+          startDate={votingStart}
+          endDate={votingEnd}
+          onDatesChange={(
+            {
+              startDate,
+              endDate,
+            },
+          ) => {
+            let res:any[] = [];
+            if (startDate) res = [startDate];
+            if (endDate) res = [...res, endDate];
+            setVotingDates(res);
+          }}
+          focusedInput={votingInput}
+          onFocusChange={(focusedInput) => setVotingInput(focusedInput)}
+        />
+
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Toggle Color theme</h1>

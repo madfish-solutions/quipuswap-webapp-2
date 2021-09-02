@@ -1,5 +1,11 @@
 import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
+import {
+  DayPickerRangeController,
+} from 'react-dates';
+import moment, { Moment } from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
@@ -18,24 +24,14 @@ type GovernanceFormProps = {
   handleUnselect?: () => void
 };
 
-const convertDateToDDMMYYYY = (date:Date) => `${
-  (date.getDate() > 9)
-    ? date.getDate()
-    : (`0${date.getDate()}`)
-} 
-  ${
-  (date.getMonth() > 8)
-    ? (date.getMonth() + 1)
-    : (`0${date.getMonth() + 1}`)
-} 
-    ${date.getFullYear()}`;
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
 const PROPOSAL_COST = '1000000';
+
+const initialDates = [moment(Date.now()), moment(Date.now() + 48 * 3600000)];
 
 export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   className,
@@ -44,8 +40,11 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [description, setDescription] = useState<string>(''); // TODO: change to form values
   const [forumLink, setForumLink] = useState<string>(''); // TODO: change to form values
-  const [votingDates, setVotingDates] = useState<string>(''); // TODO: change to form values
+  // const [votingDates, setVotingDates] = useState<string>(''); // TODO: change to form values
+  const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
+  const [votingInput, setVotingInput] = useState<any>(initialDates);
   const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
+  const [isPicker, showPicker] = useState<boolean>(false);
   useEffect(() => {
     const loadDescription = () => {
       fetch('https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md').then((x) => x.text()).then((x) => {
@@ -85,9 +84,9 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                 </h3>
                 <div className={cx(s.govGroup, s.desktopFlex)}>
                   <h3 className={s.submitDates}>
-                    <span>{convertDateToDDMMYYYY(new Date())}</span>
+                    <span>{moment().format('DD MMM YYYY')}</span>
                     <span> - </span>
-                    <span>{convertDateToDDMMYYYY(new Date(Date.now() + 3600000 * 24 * 4))}</span>
+                    <span>{moment().add(4, 'd').format('DD MMM YYYY')}</span>
                   </h3>
                   <Bage
                     className={s.govBage}
@@ -136,12 +135,75 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             value={forumLink}
             onChange={(e:any) => setForumLink(e.target.value)}
           />
+          {/* <div className={s.formInput}>
+            <DateRangePicker
+              startDateId="startDate"
+              endDateId="endDate"
+              startDate={votingStart}
+              endDate={votingEnd}
+              customInputIcon={<DateIcon />}
+              inputIconPosition="after"
+              customArrowIcon="-"
+              onDatesChange={(
+                {
+                  startDate,
+                  endDate,
+                },
+              ) => {
+                let res:any[] = [];
+                if (startDate) res = [startDate];
+                if (endDate) res = [...res, endDate];
+                setVotingDates(res);
+              }}
+              focusedInput={votingInput}
+              onFocusChange={(focusedInput) => setVotingInput(focusedInput)}
+            />
+
+          </div> */}
+          {isPicker && (
+            <div className={s.floatingPicker}>
+              <DayPickerRangeController
+                startDate={votingStart}
+                endDate={votingEnd}
+                onDatesChange={(
+                  {
+                    startDate,
+                    endDate,
+                  },
+                ) => {
+                  // console.log(startDate, endDate);
+                  let res:Moment[] = [];
+                  if (startDate) res = [startDate];
+                  if (endDate) res = [...res, endDate];
+                  setVotingDates(res);
+
+                  // showPicker(false);
+                }}
+                onFocusChange={(focusedInput) => {
+                  console.log('focusedInput', focusedInput);
+                  if (focusedInput === null) { showPicker(false); }
+                  return setVotingInput(focusedInput);
+                }}
+                focusedInput={votingInput}
+                initialVisibleMonth={null}
+              />
+            </div>
+          )}
           <Input
             EndAdornment={DateIcon}
             className={s.formInput}
             label="Voting period"
             id="votingperiod"
-            value={votingDates}
+            value={`${votingStart.format('DD/MM/YYYY')} - ${votingEnd.format('DD/MM/YYYY')}`}
+            readOnly
+            onClick={() => {
+              if (!isPicker) {
+                setVotingInput('startDate');
+                // setVotingDates(initialDates);
+                // setVotingInput('endDate')
+              }
+              showPicker(!isPicker);
+            }}
             onChange={(e:any) => setVotingDates(e.target.value)}
           />
 
