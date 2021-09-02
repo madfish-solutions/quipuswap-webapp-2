@@ -4,59 +4,102 @@
 .container
   padding: 16px 16px 12px 24px
   position: relative
+  display: flex
+  justify-content: center
+  flex-direction: column
+  align-items: center
+
+.center
+  align-items: center
+
+.pieChart
+  width: 200px
+  height: 200px
 
 .chart
-  min-height: 300px
+  width: 200px
+  height: 200px
+  position: relative
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
 
-.info
-  font-weight: 600
-  line-height: 1.14
-  margin-bottom: 12px
+.total
+  display: flex
+  align-items: center
+  width: 100%
+  flex-direction: column
+  position: absolute
+  top: 68px
 
-.caption
-  margin-bottom: 4px
+.left
+  display: flex
+  align-items: center
+  flex-wrap: wrap
 
-.token
-  font-size: 2.286rem
-  line-height: 1.5
-  margin-bottom: 4px
+.left
+  margin-right: 0px
+  margin-bottom: 16px
 
-.dollar
-  color: $support-success
-  margin-bottom: 4px
+.right
+  order: 2
+  margin-left: 0px
+  margin-top: 16px
 
-.date
+.legendLabel
+  margin-bottom: 16px
+  width: 100%
+
+.legendRow
+  display: flex
+  align-items: center
+  padding: 8px
+
+.legendColor
+  width: 16px
+  height: 16px
+  border-radius: 4px
+  margin-right: 8px
+
+.legendText
   font-size: 0.857rem
-  font-weight: 400
+
+.legendMark
+  margin-left: 8px
+  font-weight: bold
+
+.bold
+  font-weight: bold
+
+.label
+  font-size: 0.857rem
+  font-weight: bold
+  color: $text-03
 
 .light
-  .token
+  .legendMark
     color: $text-01
 
 .dark
-  .token
+  .legendMark
     color: $text-inverse
 
-@include media('>tablet')
-  .info
-    position: absolute
-    top: 16px
-    left: 24px
-    bottom: 38px
-    margin-bottom: 0
-    z-index: 3
-    pointer-events: none
-    &::before
-      content: ''
-      height: 100%
-      width: 500px
-      position: absolute
-      top: 0
-      left: 0
-      z-index: -1
-  .light
-    &::before
-      background: linear-gradient(270deg, rgba($ui-01, 0) 0%, $ui-01 100%)
-  .dark
-    &::before
-      background: linear-gradient(270deg, rgba($ui-07, 0) 0%, $ui-07 100%)
+@include media('>Ltablet')
+  .container
+    flex-direction: row
+    align-items: normal
+  .legendRow
+    padding: 0px
+    display: flex
+    align-items: center
+    &:not(:last-child)
+      margin-bottom: 16px
+  .left, .right
+    display: block
+  .left
+    margin-right: 16px
+    margin-bottom: 0px
+  .right
+    order: 2
+    margin-left: 16px
+    margin-top: 0px

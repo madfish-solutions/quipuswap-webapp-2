@@ -3,7 +3,6 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { DonutChartSampleData } from '@components/ui/DonutChart/content';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -158,50 +157,56 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
           />
           <CardContent className={s.content}>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:IPFS')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <Button theme="underlined">
                   #Qmexv71
                 </Button>
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Start Date')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 {convertDateToDDMMYYYY(workDates[0])}
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:End Date')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 {convertDateToDDMMYYYY(workDates[1])}
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Author')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <Button href={`https://tzkt.io/${author}`} theme="underlined">
                   {shortize(author)}
                 </Button>
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Participants')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 <CurrencyAmount amount="1000000" />
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Quorum')}
               className={s.cell}
             >
@@ -210,6 +215,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Total Votes')}
               className={s.cell}
             >
@@ -218,6 +224,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Your Votes')}
               className={s.cell}
             >
@@ -226,16 +233,17 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </div>
             </CardCell>
             <CardCell
+              headerClassName={s.cellHeader}
               header={t('governance:Option')}
               className={s.cell}
             >
-              <div className={s.cellAmount}>
+              <div className={s.cellDate}>
                 For
                 {' '}
                 <For className={s.voteIcon} />
               </div>
             </CardCell>
-            <DonutChart data={DonutChartSampleData} />
+            <DonutChart votes={105000} vetos={120000} />
           </CardContent>
         </Card>
         <Card className={cx(s.proposalDetails)}>
