@@ -80,7 +80,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             amount={sellRate}
             currency={token2
               ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-            dollarEquivalent={`${tokensData.first.exchangeRate}`}
+            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -102,7 +102,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount
             amount={buyRate}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
+            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>

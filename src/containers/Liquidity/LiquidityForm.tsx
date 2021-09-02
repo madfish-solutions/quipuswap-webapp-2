@@ -11,7 +11,9 @@ import {
   estimateSharesInTez,
   estimateSharesInToken,
   estimateTezInShares,
+  estimateTezInToken,
   estimateTokenInShares,
+  estimateTokenInTez,
   findDex,
   FoundDex,
   getLiquidityShare,
@@ -272,20 +274,33 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           console.error(err);
         }
       } else {
-        if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-        const bal1 = new BigNumber(values.balance1);
-        const bal2 = new BigNumber(values.balance2);
-        const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
-        const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
-        const initialAto$ = bal1.multipliedBy(exA);
-        const initialBto$ = bal2.multipliedBy(exB);
-        const total$ = initialAto$
+        // if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+        if (!dex) return;
+        if ((val.balance1 && val.balance1.toString() === '.') || (val.balance2 && val.balance2.toString() === '.')) return;
+        const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
+        const bal2 = toDecimals(
+          new BigNumber(values.balance2 ? values.balance2 : 0),
+          token2.metadata.decimals,
+        );
+        const exA = new BigNumber(1);
+        const initialAto$ = bal1;
+        const initialBto$ = estimateTokenInTez(
+          dex.storage, bal2,
+        );
+        const notParsedValue = initialAto$
           .plus(initialBto$)
-          .div(2); // Total amount of Tokens pool in USD
-        const $toA = total$.div(exA); // represents Token A in equal portion (50-50) in USD
+          .div(2);
+        const parsedValue = parseDecimals(
+          notParsedValue.toString(),
+          0,
+          Infinity,
+          TEZOS_TOKEN.metadata.decimals,
+        );
+        const total$ = new BigNumber(parsedValue);
         let inputValue:BigNumber;
         const val1 = initialAto$.minus(total$);
-        const val2 = initialBto$.minus(total$);
+        const val2 = initialBto$.minus(estimateTokenInTez(dex.storage, total$));
+
         const whichTokenPoolIsGreater = val1
           .gt(val2);
         if (whichTokenPoolIsGreater) {
@@ -297,7 +312,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         } else {
           inputValue = getValueForSDK(
             tokensData.second,
-            val2.div(exB),
+            estimateTezInToken(dex.storage, val2),
             tezos,
           );
         }
@@ -316,7 +331,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             inputValue,
             slippage,
           );
-          const tezValue = toDecimals($toA, 6);
+          const tezValue = toDecimals(total$, 6);
           const addParams = await addLiquidity(
             tezos,
             dex,
@@ -757,19 +772,36 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               .multipliedBy(new BigNumber(values.balanceB ?? 0));
             const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
             const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
-            const bal1 = new BigNumber(values.balance1);
-            const bal2 = new BigNumber(values.balance2);
-            const exA = new BigNumber(tokensData.first.exchangeRate ?? '1');
-            const exB = new BigNumber(tokensData.second.exchangeRate ?? '1');
-            const initialAto$ = bal1.multipliedBy(exA);
-            const initialBto$ = bal2.multipliedBy(exB);
-            const total$ = initialAto$
-              .plus(initialBto$)
-              .div(2); // Total amount of Tokens pool in USD
-            const maxInvestedA = total$
-              .minus(slippageToBignum(values.slippage).multipliedBy(total$)).div(exA);
-            const maxInvestedB = total$
-              .minus(slippageToBignum(values.slippage).multipliedBy(total$)).div(exB);
+            let maxInvestedA = new BigNumber(0);
+            let maxInvestedB = new BigNumber(0);
+            if (dex) {
+              const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
+              const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
+              try {
+                const initialAto$ = bal1;
+                const initialBto$ = estimateTokenInTez(dex.storage, bal2);
+                const notParsedValue = initialAto$
+                  .plus(initialBto$)
+                  .div(2);
+                const parsedValue = parseDecimals(
+                  notParsedValue.toString(),
+                  0,
+                  Infinity,
+                  TEZOS_TOKEN.metadata.decimals,
+                );
+                const total$ = new BigNumber(parsedValue);
+                const totalA = total$;
+                const totalB = estimateTokenInTez(dex.storage, total$);
+                maxInvestedA = totalA
+                  .minus(slippageToBignum(values.slippage).multipliedBy(totalA));
+                maxInvestedB = totalB
+                  .minus(slippageToBignum(values.slippage)
+                    .multipliedBy(totalB));
+              } catch (e) {
+                maxInvestedA = bal1;
+                maxInvestedB = bal2;
+              }
+            }
             const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
             return (
               <>

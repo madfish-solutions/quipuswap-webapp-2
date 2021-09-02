@@ -14,12 +14,11 @@ export const [
   const getExchangeRates = async () => fetch('https://api.templewallet.com/api/exchange-rates')
     .then((res) => res.json())
     .then((json) => json)
-    .catch((err) => {
+    .catch(() => {
       updateToast({
         type: 'error',
-        render: `${err.name}: ${err.message}`,
+        render: 'Exchange Rates not loaded',
       });
-      return [];
     });
 
   const { data: exchangeRates, revalidate } = useSWR(

@@ -38,6 +38,7 @@ const themeClass = {
 
 type PositionsModalProps = {
   onChange: (tokenPair: WhitelistedTokenPair) => void
+  initialPair?: WhitelistedTokenPair
   notSelectable1?: WhitelistedToken
   notSelectable2?: WhitelistedToken
 } & ReactModal.Props;
@@ -156,6 +157,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   onRequestClose,
   notSelectable1 = undefined,
   notSelectable2 = undefined,
+  initialPair,
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
@@ -219,6 +221,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
         setValue: ([field, value], state, { changeValue }) => {
           changeValue(state, field, () => value);
         },
+      }}
+      initialValues={{
+        token1: initialPair?.token1,
+        token2: initialPair?.token2,
       }}
       render={({ form, values }) => (
         <Modal

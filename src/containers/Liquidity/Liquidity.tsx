@@ -127,7 +127,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   });
 
   useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+    if (from && to && !initialLoad && tokens.length > 0) {
       handleSearchToken({
         tokens,
         tezos: tezos!,
@@ -155,7 +155,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       );
     }
-  }, [tezos, accountPkh, network.id]);
+  }, [tezos, accountPkh, network.id, token1, token2]);
 
   useEffect(() => {
     getBalance();
@@ -169,6 +169,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         onSubmit={() => {
           if (!tezos) return;
           handleLoader();
+          console.log(addLiquidityParams);
           submitForm(
             tezos,
             currentTab.id === 'remove'

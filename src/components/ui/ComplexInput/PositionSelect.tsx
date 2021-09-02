@@ -83,6 +83,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           if (handleChange) handleChange(selectedToken);
           setTokensModal(false);
         }}
+        initialPair={tokenPair}
         notSelectable1={notSelectable1}
         notSelectable2={notSelectable2}
       />
