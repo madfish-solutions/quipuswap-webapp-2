@@ -1,15 +1,47 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-export const useRouterPair = () => {
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+
+type RouterPairType = {
+  page: string,
+  urlLoaded:boolean,
+  initialLoad:boolean,
+  token1:WhitelistedToken,
+  token2:WhitelistedToken,
+};
+
+const pairString = '[from-to]';
+const pairLength = pairString.length;
+
+export const useRouterPair = ({
+  page, urlLoaded, initialLoad, token1, token2,
+}:RouterPairType) => {
   const router = useRouter();
   let urlSearchParams;
+  const actualUrl = router.pathname.indexOf(pairString)
+    ? router.pathname
+    : router.pathname.slice(0, -pairLength);
   if (!router.query['from-to'] || typeof router.query['from-to'] !== 'string') {
-    const pos = window.location.pathname.indexOf('/swap/');
-    urlSearchParams = window.location.pathname.slice(pos + 6).split('-');
+    const lastSlash = window.location.pathname.indexOf(actualUrl);
+    const sliceIndex = lastSlash + actualUrl.length;
+    urlSearchParams = window.location.pathname.slice(sliceIndex).split('-');
   } else {
     urlSearchParams = router.query['from-to'].split('-');
   }
   const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
   const { from, to } = params;
+  useEffect(() => {
+    if (urlLoaded && initialLoad) {
+      if (token1 && token2) {
+        const fromToken = getWhitelistedTokenSymbol(token1, 36);
+        const toToken = getWhitelistedTokenSymbol(token2, 36);
+        const url = `/${page}/${fromToken}-${toToken}`;
+        router.replace(url, undefined, { shallow: true });
+      }
+    }
+  }, [token1, token2]);
+
   return { from, to };
 };

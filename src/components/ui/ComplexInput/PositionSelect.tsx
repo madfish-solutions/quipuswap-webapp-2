@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { WhitelistedTokenPair } from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -17,17 +17,20 @@ import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
-  type PositionSelectProps = {
-    className?: string
-    balance?: string
-    frozenBalance?: string
-    label: string
-    error?: string
-    handleChange?: (tokenPair:WhitelistedTokenPair) => void
-    handleBalance: (value: string) => void
-    tokenPair?: WhitelistedTokenPair,
-    setTokenPair: (tokenPair:WhitelistedTokenPair) => void
-  } & React.HTMLProps<HTMLInputElement>;
+type PositionSelectProps = {
+  noBalanceButtons?: boolean
+  className?: string
+  balance?: string
+  frozenBalance?: string
+  label: string
+  error?: string
+  notSelectable1?: WhitelistedToken
+  notSelectable2?: WhitelistedToken
+  handleChange?: (tokenPair:WhitelistedTokenPair) => void
+  handleBalance: (value: string) => void
+  tokenPair?: WhitelistedTokenPair,
+  setTokenPair: (tokenPair:WhitelistedTokenPair) => void
+} & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -37,6 +40,7 @@ const themeClass = {
 export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
+  noBalanceButtons = false,
   frozenBalance = '10.00',
   label,
   handleBalance,
@@ -44,6 +48,8 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   error,
   id,
   handleChange,
+  notSelectable1 = undefined,
+  notSelectable2 = undefined,
   tokenPair,
   setTokenPair,
   ...props
@@ -77,6 +83,9 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           if (handleChange) handleChange(selectedToken);
           setTokensModal(false);
         }}
+        initialPair={tokenPair}
+        notSelectable1={notSelectable1}
+        notSelectable2={notSelectable2}
       />
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
@@ -119,7 +128,12 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               value={value}
               {...props}
             />
-            <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
+            <Button
+              onClick={() => setTokensModal(true)}
+              theme="quaternary"
+              className={s.item4}
+              textClassName={s.item4Inner}
+            >
               <TokensLogos
                 token1={tokenPair?.token1 ?? TEZOS_TOKEN}
                 token2={tokenPair?.token2 ?? TEZOS_TOKEN}
@@ -131,7 +145,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        <PercentSelector value={balance} handleBalance={handleBalance} />
+        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
         <ComplexError error={error} />
       </div>
     </>
