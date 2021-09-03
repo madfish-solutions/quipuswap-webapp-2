@@ -107,6 +107,16 @@ export const NavigationData: NavigationDataProps = [
         href: 'https://www.google.com',
         label: 'Blog',
       },
+      {
+        id: 6,
+        href: 'https://www.google.com',
+        label: 'Terms of Usage',
+      },
+      {
+        id: 7,
+        href: 'https://www.google.com',
+        label: 'Privacy Policy',
+      },
     ],
   },
 ];
