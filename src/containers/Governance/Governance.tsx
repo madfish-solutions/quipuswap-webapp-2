@@ -207,7 +207,7 @@ export const Governance: React.FC<GovernanceProps> = ({
                   activeId={tabsState}
                   setActiveId={(val) => {
                     setTabsState(val);
-                    router.replace(`${router.asPath}?status=${val}`, undefined, { shallow: true });
+                    router.replace(`/governance?status=${val}`, undefined, { shallow: true });
                   }}
                   className={s.govTabs}
                 />

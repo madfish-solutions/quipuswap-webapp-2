@@ -183,7 +183,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
             </div>
           </div>
         </div>
-        <Button onClick={onClick} href={href} className={s.govButtonButtom}>
+        <Button onClick={onClick} href={href} className={s.govButtonBottom}>
           View Details
         </Button>
       </CardContent>

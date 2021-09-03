@@ -80,7 +80,7 @@
   flex-wrap: wrap
 
 .governTabs
-  width: max-content
+  width: auto
   margin-bottom: 0px !important
   margin-left: -24px
   margin-right: -24px
@@ -206,6 +206,10 @@
       margin-bottom: 0px
 
 @include media('>Lphone', '<=tablet')
+  .voteButtons
+    flex-direction: row
+  .voteButton
+    max-width: 200px
   .button
     margin-left: auto
     width: 180px
@@ -227,6 +231,10 @@
 @include media('>tablet')
   .governTabs
     width: 100% !important
+  .voteButtons
+    flex-direction: row
+  .voteButton
+    max-width: 280px
 
 @include media('>Ltablet')
   .deviceRow

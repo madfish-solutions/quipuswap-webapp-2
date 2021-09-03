@@ -180,7 +180,7 @@
 .govBlockSpan
   color: $text-03
 
-.govButtonButtom
+.govButtonBottom
   max-width: inherit
   width: 100%
 
@@ -209,6 +209,16 @@
   .proposalVotes::-webkit-scrollbar-thumb
     background-color:  $hover-dark-row
 
+@include media('>Lphone')
+  .govBlocks
+    display: flex
+    flex-wrap: wrap
+  .govBlock
+    width: 50%
+  .govButtonBottom
+    width: 50%
+    margin-left: auto
+    margin-right: auto
 
 @include media('>Ltablet')
   .sticky
@@ -234,7 +244,7 @@
   .govButton
     display: block
     max-width: 180px
-  .govButtonButtom
+  .govButtonBottom
     display: none
   .govGroup
     justify-content: flex-start
