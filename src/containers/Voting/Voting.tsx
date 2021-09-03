@@ -140,7 +140,6 @@ export const Voting: React.FC<VotingProps> = ({
         tokens,
         tezos: tezos!,
         network,
-        accountPkh: accountPkh!,
         from,
         to,
         fixTokenFrom: TEZOS_TOKEN,
