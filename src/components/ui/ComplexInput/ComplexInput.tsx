@@ -11,6 +11,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
@@ -59,7 +60,9 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const dollarEquivalent = useMemo(() => (exchangeRate
-    ? (parseFloat(value ? value.toString() : '0') * (+exchangeRate)).toString()
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
     : ''
   ), [exchangeRate, value]);
 
@@ -77,7 +80,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     }
   };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  let equivalentContent = '';
+  if (mode === 'input') {
+    equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
+  }
 
   return (
     // eslint-disable-next-line max-len

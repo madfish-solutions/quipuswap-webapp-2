@@ -7,11 +7,11 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { SwapSend } from '@containers/SwapSend';
-import { LineChartSampleData } from '@components/charts/content';
+import { CandleChartSampleData } from '@components/charts/content';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
-const LineChart = dynamic(() => import('@components/charts/LineChart'), {
+const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
   ssr: false,
 });
 
@@ -25,7 +25,10 @@ const SwapSendPage: React.FC = () => {
       className={s.wrapper}
     >
       <SwapSend />
-      <LineChart className={s.chart} data={LineChartSampleData} />
+      <CandleChart
+        data={CandleChartSampleData}
+        className={s.chart}
+      />
     </BaseLayout>
   );
 };
@@ -46,7 +49,7 @@ export const getServerSideProps = async (props:any) => {
     return {
       redirect: {
         destination: `/swap/${from}-${to}`,
-        permanent: false,
+        permanent: true,
       },
     };
   }

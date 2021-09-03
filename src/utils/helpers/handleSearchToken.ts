@@ -8,12 +8,12 @@ import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
 
 import { isTokenEqual } from './isTokenEqual';
 import { localSearchToken } from './localSearchToken';
+import { localSearchSortSymbol } from './localSearchSortSymbol';
 
 type SearchTokenType = {
   tokens: WhitelistedToken[]
   tezos?: TezosToolkit
   network: QSNetwork
-  accountPkh: string
   from: string
   to: string
   fixTokenFrom?: WhitelistedToken
@@ -52,6 +52,7 @@ export const handleSearchToken = async ({
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
+      .sort((a, b) => localSearchSortSymbol(b, a, inputValue))
       .filter(
         (token:any) => localSearchToken(
           token,

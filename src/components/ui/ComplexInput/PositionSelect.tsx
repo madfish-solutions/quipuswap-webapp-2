@@ -17,20 +17,21 @@ import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
-  type PositionSelectProps = {
-    className?: string
-    balance?: string
-    frozenBalance?: string
-    label: string
-    error?: string
-    notFrozen?:boolean
-    notSelectable1?: WhitelistedToken
-    notSelectable2?: WhitelistedToken
-    handleChange?: (tokenPair:WhitelistedTokenPair) => void
-    handleBalance: (value: string) => void
-    tokenPair?: WhitelistedTokenPair,
-    setTokenPair: (tokenPair:WhitelistedTokenPair) => void
-  } & React.HTMLProps<HTMLInputElement>;
+type PositionSelectProps = {
+  noBalanceButtons?: boolean
+  className?: string
+  balance?: string
+  frozenBalance?: string
+  notFrozen?:boolean
+  label: string
+  error?: string
+  notSelectable1?: WhitelistedToken
+  notSelectable2?: WhitelistedToken
+  handleChange?: (tokenPair:WhitelistedTokenPair) => void
+  handleBalance: (value: string) => void
+  tokenPair?: WhitelistedTokenPair,
+  setTokenPair: (tokenPair:WhitelistedTokenPair) => void
+} & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -40,6 +41,7 @@ const themeClass = {
 export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
+  noBalanceButtons = false,
   frozenBalance = '10.00',
   label,
   handleBalance,
@@ -83,6 +85,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           if (handleChange) handleChange(selectedToken);
           setTokensModal(false);
         }}
+        initialPair={tokenPair}
         notSelectable1={notSelectable1}
         notSelectable2={notSelectable2}
       />
@@ -146,7 +149,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        <PercentSelector value={balance} handleBalance={handleBalance} />
+        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
         <ComplexError error={error} />
       </div>
     </>

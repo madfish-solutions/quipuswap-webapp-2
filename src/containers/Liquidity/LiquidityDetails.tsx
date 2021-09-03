@@ -82,7 +82,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={sellPrice}
             currency={tokenBName}
-            dollarEquivalent={`${tokensData.first.exchangeRate ?? 1}`}
+            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -107,7 +107,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={buyPrice}
             currency={tokenAName}
-            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
+            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -182,7 +182,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          View Pair Analytics
+          {t('liquidity:View Pair Analytics')}
         </Button>
         <Button
           className={s.detailsButton}
@@ -191,7 +191,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          View Pair Contract
+          {t('liquidity:View Pair Contract')}
         </Button>
       </div>
       )}

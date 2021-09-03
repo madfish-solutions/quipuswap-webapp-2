@@ -7,9 +7,7 @@ import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  SwapFormValues, TokenDataMap, WhitelistedToken,
-} from '@utils/types';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -26,7 +24,6 @@ type SwapDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData: TokenDataMap
-  values: SwapFormValues
   priceImpact: BigNumber
   rate1: BigNumber
   rate2: BigNumber
@@ -83,7 +80,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             amount={sellRate}
             currency={token2
               ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-            dollarEquivalent={`${tokensData.first.exchangeRate}`}
+            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -105,7 +102,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <CurrencyAmount
             amount={buyRate}
             currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-            dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
+            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -178,7 +175,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         external
         icon={<ExternalLink className={s.linkIcon} />}
       >
-        {`View ${getWhitelistedTokenSymbol(token1)}/${TEZOS_TOKEN.metadata.symbol} Pair Analytics`}
+        { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+          {
+            tokenA: getWhitelistedTokenSymbol(token1),
+            tokenB: TEZOS_TOKEN.metadata.symbol,
+          })}
       </Button>
       )}
       {dex && (
@@ -190,7 +191,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         external
         icon={<ExternalLink className={s.linkIcon} />}
       >
-        {dex2 ? `View ${TEZOS_TOKEN.metadata.symbol}/${getWhitelistedTokenSymbol(token2)} Pair Analytics` : 'View Pair Analytics'}
+        {dex2
+          ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+            {
+              tokenA: TEZOS_TOKEN.metadata.symbol,
+              tokenB: getWhitelistedTokenSymbol(token2),
+            })
+          : t('common:View Pair Analytics')}
       </Button>
       )}
     </Card>

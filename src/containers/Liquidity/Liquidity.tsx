@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next';
 import React, {
   useCallback,
   useEffect, useMemo, useState,
@@ -54,6 +55,7 @@ const fallbackTokenPair = {
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
@@ -103,7 +105,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: 'Loading',
+      render: t('common:Loading'),
     });
   }, [updateToast]);
 
@@ -127,12 +129,11 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   });
 
   useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+    if (from && to && !initialLoad && tokens.length > 0) {
       handleSearchToken({
         tokens,
         tezos: tezos!,
         network,
-        accountPkh: accountPkh!,
         from,
         to,
         fixTokenFrom: TEZOS_TOKEN,
@@ -156,7 +157,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       );
     }
-  }, [tezos, accountPkh, network.id]);
+  }, [tezos, accountPkh, network.id, token1, token2]);
 
   useEffect(() => {
     getBalance();
@@ -170,6 +171,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         onSubmit={() => {
           if (!tezos) return;
           handleLoader();
+          console.log(addLiquidityParams);
           submitForm(
             tezos,
             currentTab.id === 'remove'

@@ -30,8 +30,9 @@ export const asyncFindPairDex = async (
   pair:WhitelistedTokenPair,
   setTokenPair:(pair:WhitelistedTokenPair) => void,
   tezos:TezosToolkit,
-  accountPkh:any,
+  accountPkh: string,
   networkId: QSMainNet,
+  updateToast: (err:Error) => void,
 ) => {
   try {
     const secondAsset = {
@@ -48,7 +49,7 @@ export const asyncFindPairDex = async (
     setTokenPair(res);
     return res;
   } catch (err) {
-    console.error(err);
+    updateToast(err);
     return pair;
   }
 };
@@ -63,8 +64,9 @@ export const asyncGetShares = async (
   values: any,
   currentTab: any,
   tezos: TezosToolkit,
-  accountPkh: any,
+  accountPkh: string,
   networkId: QSMainNet,
+  updateToast: (err:Error) => void,
 ) => {
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
@@ -74,6 +76,7 @@ export const asyncGetShares = async (
       tezos,
       accountPkh,
       networkId,
+      updateToast,
     );
     if (attempt) {
       tokenPairValue = attempt;
@@ -111,7 +114,7 @@ export const asyncGetShares = async (
       balA2,
     );
   } catch (err) {
-    console.error(err);
+    updateToast(err);
   }
 };
 
@@ -124,6 +127,7 @@ type GetShareType = {
   dex: FoundDex,
   tezos: TezosToolkit,
   networkId: QSMainNet,
+  updateToast: (err:Error) => void,
 };
 
 export const asyncGetLiquidityShare = async ({
@@ -135,6 +139,7 @@ export const asyncGetLiquidityShare = async ({
   dex,
   tezos,
   networkId,
+  updateToast,
 } : GetShareType) => {
   try {
     if (!dex) {
@@ -169,19 +174,19 @@ export const asyncGetLiquidityShare = async ({
             }
             return;
           }
-          console.error(e);
+          updateToast(e);
         }
       }
     }
   } catch (e) {
-    console.error(e);
+    updateToast(e);
   }
 };
 
 export const submitForm = async (
   tezos:TezosToolkit,
   liquidityParams: TransferParams[],
-  updateToast: (err:string) => void,
+  updateToast: (err:Error) => void,
   handleSuccessToast: any,
 ) => {
   try {

@@ -15,6 +15,7 @@ type ButtonProps = {
   innerClassName?: string
   textClassName?: string
   icon?:React.ReactNode
+  control?:React.ReactNode
 } & (
   | React.HTMLProps<HTMLButtonElement>
   | LinkProps
@@ -45,6 +46,7 @@ export const Button: React.FC<ButtonProps> = ({
   textClassName,
   children,
   icon,
+  control,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -83,6 +85,7 @@ export const Button: React.FC<ButtonProps> = ({
           className={compoundClassName}
           {...(props as React.HTMLProps<HTMLAnchorElement>)}
         >
+          {control}
           {content}
           {icon}
         </a>
@@ -91,6 +94,7 @@ export const Button: React.FC<ButtonProps> = ({
     return (
       <Link {...(props as LinkProps)}>
         <a className={compoundClassName}>
+          {control}
           {content}
           {icon}
         </a>
@@ -105,6 +109,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...(props as React.HTMLProps<HTMLButtonElement>)}
       className={compoundClassName}
     >
+      {control}
       {content}
       {icon}
     </button>

@@ -84,7 +84,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     }
   };
 
-  const equivalentContent = `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`;
+  const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
   return (
     <>
