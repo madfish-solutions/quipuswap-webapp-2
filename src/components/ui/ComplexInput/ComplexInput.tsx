@@ -60,7 +60,9 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const dollarEquivalent = useMemo(() => (exchangeRate
-    ? new BigNumber(value ? value.toString() : '').multipliedBy(new BigNumber(exchangeRate)).toString()
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
     : ''
   ),
   [exchangeRate, value]);
@@ -79,7 +81,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     }
   };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  let equivalentContent = '';
+  if (mode === 'input') {
+    equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
+  }
 
   return (
     // eslint-disable-next-line max-len

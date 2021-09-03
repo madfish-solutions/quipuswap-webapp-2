@@ -160,6 +160,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         );
         return;
       }
+    } else if (!val.balance3 || val.balance3.toString() === '.') {
+      form.mutators.setValue(
+        'balanceA', undefined,
+      );
+      form.mutators.setValue(
+        'balanceB', undefined,
+      );
+      return;
     }
     if (!dex) return;
     const isTokensSame = isTokenEqual(token1, oldToken1)
