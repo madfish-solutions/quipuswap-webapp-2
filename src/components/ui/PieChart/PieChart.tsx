@@ -1,14 +1,7 @@
-// import * as d3 from 'd3';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { PieChart as PieChartLib } from 'react-minimal-pie-chart';
 import cx from 'classnames';
-// import { createChart, IChartApi } from 'lightweight-charts';
-
-// import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-// import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-// import { usePrevious } from '@hooks/usePrevious';
-// import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import s from './PieChart.module.sass';
 
@@ -34,8 +27,6 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-// data = [{ value: votes, color: '#2ED33E' }, { value: vetos, color: '#EA2424' }]
-
 const getDataTotalValue = (data:ChartData[]) => data.reduce((acc, cur) => cur.value + acc, 0);
 
 export const PieChart: React.FC<PieChartProps> = ({
@@ -49,6 +40,7 @@ export const PieChart: React.FC<PieChartProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const [hovered, setHovered] = useState<number | undefined>(undefined);
   const total = getDataTotalValue(data);
 
   const composeLegendClass = cx(
@@ -91,11 +83,16 @@ export const PieChart: React.FC<PieChartProps> = ({
           lineWidth={20}
           viewBoxSize={[100, 100]}
           className={s.pieChart}
+          // @ts-ignore
+          onMouseOver={(_, index:any) => setHovered(index)}
+          onMouseOut={() => {
+            setHovered(undefined);
+          }}
         />
         {showTotal && (
         <div className={s.total}>
           <h1 className={s.bold}>
-            {total}
+            {hovered ? data[hovered].value : total}
           </h1>
         </div>
         )}

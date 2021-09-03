@@ -1,10 +1,11 @@
-import React, { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  GovernanceCard, GovernanceCardProps, GovernanceInfo, GovernanceForm,
+  GovernanceCard, GovernanceCardProps, GovernanceInfo,
 } from '@containers/Governance/GovernanceCard';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent } from '@components/ui/Card';
@@ -56,9 +57,9 @@ type GovernanceProps = {
 export const Governance: React.FC<GovernanceProps> = ({
   className,
 }) => {
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
+  const router = useRouter();
+  const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [proposal, selectProposal] = useState<string>('');
-  const [submitProposal, setSubmitProposal] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const content: GovernanceCardProps[] = [{
@@ -79,7 +80,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     currency: 'QNOT',
     author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   }, {
-    name: 'Add USDs/QNOT pool',
+    name: 'Add USDC/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
     status: 'PENDING',
     description: 'https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md',
@@ -96,7 +97,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     currency: 'QNOT',
     author: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   }, {
-    name: 'Add USDs/QNOT pool',
+    name: 'Add PLENTY/QNOT pool',
     workDates: [new Date('1 JUN 2021'), new Date('1 JUN 2022')],
     status: 'PENDING',
     description: 'https://gist.githubusercontent.com/Jekins/2bf2d0638163f1294637/raw/9f93ad0b8b70ab5070ff96e54c4ee23d25a8798e/Markdown-docs.md',
@@ -116,25 +117,26 @@ export const Governance: React.FC<GovernanceProps> = ({
 
   const handleUnselect = () => selectProposal('');
 
+  useEffect(() => {
+    if (router.query.status
+      && router.query.status !== tabsState
+      && TabsContent.some((tab) => tab.id === router.query.status)) {
+      setTabsState(router.query.status.toString());
+    }
+    if (router.query.proposal) {
+      const proposalObj = content.find((x) => x.name.split(' ').join('-').split('/')[0] === router.query.proposal);
+      if (proposalObj) {
+        selectProposal(proposalObj.id);
+      }
+    }
+  }, [router.query]);
+
   const proposalObj = content.find((x) => x.id === proposal);
   if (proposal && proposalObj) {
     return (
       <div className={cx(className, s.proposal)}>
         <GovernanceInfo
           {...proposalObj}
-          onClick={() => {
-            // TODO
-          }}
-          handleUnselect={handleUnselect}
-        />
-      </div>
-    );
-  }
-
-  if (submitProposal === true) {
-    return (
-      <div className={cx(className, s.proposal)}>
-        <GovernanceForm
           handleUnselect={handleUnselect}
         />
       </div>
@@ -180,9 +182,7 @@ export const Governance: React.FC<GovernanceProps> = ({
             </div>
             <div className={s.voteButtons}>
               <Button
-                onClick={() => {
-                  setSubmitProposal(true);
-                }}
+                href="/governance-submit"
                 theme="secondary"
                 className={s.voteButton}
               >
@@ -203,7 +203,10 @@ export const Governance: React.FC<GovernanceProps> = ({
             <Tabs
               values={TabsContent}
               activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
+              setActiveId={(val) => {
+                setTabsState(val);
+                router.replace(`${router.pathname}?status=${val}`, undefined, { shallow: true });
+              }}
               className={s.govTabs}
             />
           </CardContent>
@@ -213,7 +216,7 @@ export const Governance: React.FC<GovernanceProps> = ({
           <GovernanceCard
             key={x.id}
             {...x}
-            onClick={() => selectProposal(x.id)}
+            href={typeof x.name === 'string' ? `/governance/${x.name.split(' ').join('-').split('/')[0]}` : '#'}
           />
         ))}
 

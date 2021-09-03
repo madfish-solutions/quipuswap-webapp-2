@@ -16,12 +16,12 @@ import { Back } from '@components/svg/Back';
 import { Markdown } from '@components/ui/Markdown';
 import DateIcon from '@icons/DateIcon.svg';
 
+import { prettyPrice } from '@utils/helpers';
 import s from './GovernanceCard.module.sass';
 
 type GovernanceFormProps = {
   className?: string
   onClick?: () => void
-  handleUnselect?: () => void
 };
 
 const modeClass = {
@@ -29,18 +29,16 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const PROPOSAL_COST = '1000000';
+const PROPOSAL_COST = 1000000;
 
 const initialDates = [moment(Date.now()), moment(Date.now() + 48 * 3600000)];
 
 export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   className,
-  handleUnselect,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [description, setDescription] = useState<string>(''); // TODO: change to form values
-  const [forumLink, setForumLink] = useState<string>(''); // TODO: change to form values
-  // const [votingDates, setVotingDates] = useState<string>(''); // TODO: change to form values
+  const [description, setDescription] = useState<string>('');
+  const [forumLink, setForumLink] = useState<string>('');
   const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
   const [votingInput, setVotingInput] = useState<any>(initialDates);
   const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
@@ -67,7 +65,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     >
       <CardHeader header={{
         content: (
-          <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
+          <Button href="/governance" theme="quaternary" className={s.proposalHeader}>
             <Back className={s.proposalBackIcon} />
             Back
           </Button>
@@ -101,7 +99,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                   Proposal Stake
                 </div>
                 <h3 className={s.submitCost}>
-                  {PROPOSAL_COST}
+                  {prettyPrice(PROPOSAL_COST)}
                   {' '}
                   <span className={s.submitCurrency}>QPSP</span>
                 </h3>

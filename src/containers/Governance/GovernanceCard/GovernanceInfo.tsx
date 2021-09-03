@@ -230,7 +230,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 <For className={s.voteIcon} />
               </div>
             </CardCell>
-            <DonutChart votes={105000} vetos={120000} />
+            <DonutChart votes={155000} vetos={120000} />
           </CardContent>
         </Card>
         <Card className={cx(s.proposalDetails)}>

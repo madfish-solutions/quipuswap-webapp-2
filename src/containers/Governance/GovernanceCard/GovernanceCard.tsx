@@ -10,7 +10,7 @@ import { Button } from '@components/ui/Button';
 import s from './GovernanceCard.module.sass';
 
 export type GovernanceCardProps = {
-  name: React.ReactNode
+  name: string
   workDates: Date[]
   status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
   description: string
@@ -27,6 +27,7 @@ export type GovernanceCardProps = {
   className?: string
   onClick?: () => void
   handleUnselect?: () => void
+  href?: string
 };
 
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
@@ -65,7 +66,8 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   claimable,
   currency,
   className,
-  onClick,
+  onClick = () => {},
+  href = '',
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
@@ -100,7 +102,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
             </div>
           ),
           button: (
-            <Button onClick={() => (onClick ? onClick() : null)} className={s.govButton}>
+            <Button onClick={onClick} href={href} className={s.govButton}>
               View Details
             </Button>
           ),
@@ -181,7 +183,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
             </div>
           </div>
         </div>
-        <Button onClick={() => (onClick ? onClick() : null)} className={s.govButtonButtom}>
+        <Button onClick={onClick} href={href} className={s.govButtonButtom}>
           View Details
         </Button>
       </CardContent>

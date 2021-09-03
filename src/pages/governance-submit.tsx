@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@layouts/BaseLayout';
-import { Governance } from '@containers/Governance';
+import { GovernanceForm } from '@containers/Governance/GovernanceCard';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -16,12 +16,12 @@ const GovernancePage: React.FC = () => {
       description={t('swap:Governance page description. Couple sentences...')}
       className={s.wrapper}
     >
-      <Governance />
+      <GovernanceForm className={s.proposal} />
     </BaseLayout>
   );
 };
 
-export const getStaticProps = async ({ locale }: { locale: string }) => ({
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
     ...await serverSideTranslations(locale, ['common', 'governance']),
   },

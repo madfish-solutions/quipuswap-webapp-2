@@ -1,14 +1,8 @@
-// import * as d3 from 'd3';
 import React, { useContext } from 'react';
 import { PieChart } from 'react-minimal-pie-chart';
 import cx from 'classnames';
-// import { createChart, IChartApi } from 'lightweight-charts';
 
-// import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-// import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-// import { usePrevious } from '@hooks/usePrevious';
-// import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import For from '@icons/For.svg';
 import NotFor from '@icons/NotFor.svg';
 
@@ -34,7 +28,10 @@ export const DonutChart: React.FC<DonutChartProps> = ({
     <div className={cx(s.container, themeClass[colorThemeMode])}>
       <div className={s.chart}>
         <PieChart
-          data={[{ value: votes, color: '#2ED33E' }, { value: vetos, color: '#EA2424' }]}
+          data={[
+            { value: votes, color: '#2ED33E' },
+            { value: vetos, color: '#EA2424' },
+          ]}
           lineWidth={32}
           rounded
           startAngle={180}
