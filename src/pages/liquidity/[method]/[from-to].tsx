@@ -7,11 +7,11 @@ import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Liquidity } from '@containers/Liquidity';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import { LineChartSampleData } from '@components/charts/content';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
 });
 
