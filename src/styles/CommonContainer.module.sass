@@ -20,8 +20,6 @@
 
 .govTabs
   margin-bottom: -1px
-  white-space: nowrap
-  overflow-x: scroll
   position: relative
   display: inline-block
   width: 100%
@@ -70,9 +68,27 @@
 
 .unsticky
   flex-direction: column
-  .govCard
-    margin: 24px 0px
-    width: 100%
+.govCard
+  width: max-content
+
+.govCardInner
+  margin: 24px
+
+.governTabs
+  margin-bottom: 0px !important
+  margin-left: -24px
+  margin-right: -24px
+  overflow: hidden
+  overflow-x: auto
+
+.governTabs::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.governTabs::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.governTabs::-webkit-scrollbar-thumb
+  border-radius: 10px
 
 .proposal
   display: flex
@@ -176,10 +192,6 @@
   .voteNum
       color: $text-inverse
 
-@include media('>Lphone')
-  .govTabs
-    overflow-x: hidden
-
 @include media('>Lphone', '<=tablet')
   .button
     margin-left: auto
@@ -200,6 +212,13 @@
         margin-left: 32px
 
 @include media('>Ltablet')
+  .govCardInner
+    margin-left: 0px
+    margin-right: 0px
+  .governTabs
+    margin-left: 0px
+    margin-right: 0px
+    overflow: visible
   .container
     display: flex
     justify-content: space-between

@@ -44,16 +44,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   workDates,
   status = 'PENDING',
   description,
-  // remaining,
   voted,
-  // support,
-  // reject,
   votes,
-  // claimable,
   currency,
   className,
   author,
-  handleUnselect,
 }) => {
   const { t } = useTranslation(['common', 'governance']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -89,7 +84,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
       >
         <CardHeader header={{
           content: (
-            <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
+            <Button href="/governance" theme="quaternary" className={s.proposalHeader}>
               <Back className={s.proposalBackIcon} />
               Back
             </Button>
@@ -137,155 +132,157 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
         </CardContent>
       </Card>
       <div className={cx(modeClass[colorThemeMode], s.proposalSidebar)}>
-        <Card className={s.proposalDetails}>
-          <CardHeader header={{
-            content: <h5>Details</h5>,
-          }}
-          />
-          <CardContent className={s.content}>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:IPFS')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                <Button theme="underlined">
-                  #Qmexv71
-                </Button>
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Start Date')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                {moment(workDates[0]).format('DD MMM YYYY')}
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:End Date')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                {moment(workDates[1]).format('DD MMM YYYY')}
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Author')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                <Button href={`https://tzkt.io/${author}`} theme="underlined">
-                  {shortize(author)}
-                </Button>
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Participants')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                <CurrencyAmount amount="1000000" />
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Quorum')}
-              className={s.cell}
-            >
-              <div className={s.cellAmount}>
-                <CurrencyAmount amount="1000000" currency={currency} />
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Total Votes')}
-              className={s.cell}
-            >
-              <div className={s.cellAmount}>
-                <CurrencyAmount amount={voted} currency={currency} />
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Your Votes')}
-              className={s.cell}
-            >
-              <div className={s.cellAmount}>
-                <CurrencyAmount amount={votes} currency={currency} />
-              </div>
-            </CardCell>
-            <CardCell
-              headerClassName={s.cellHeader}
-              header={t('governance:Option')}
-              className={s.cell}
-            >
-              <div className={s.cellDate}>
-                For
-                {' '}
-                <For className={s.voteIcon} />
-              </div>
-            </CardCell>
-            <DonutChart votes={155000} vetos={120000} />
-          </CardContent>
-        </Card>
-        <Card className={cx(s.proposalDetails)}>
-          <CardHeader header={{
-            content: <h5>Votes</h5>,
-          }}
-          />
-          <CardContent className={s.proposalVotes}>
-            {votesData.map((x) => <VoteCell key={x.id} vote={x} currency={currency} />)}
-          </CardContent>
-        </Card>
-        <Card className={s.proposalDetails}>
-          <CardHeader header={{
-            content: <h5>References</h5>,
-          }}
-          />
-          <CardContent className={s.content}>
-            <CardCell
-              className={s.cell}
-              header={(
-                <Button
-                  className={s.detailsButton}
-                  theme="inverse"
-                >
-                  The proposal on forum
-                  <ExternalLink className={s.linkIcon} />
-                </Button>
+        <div className={s.sticky}>
+          <Card className={s.proposalDetails}>
+            <CardHeader header={{
+              content: <h5>Details</h5>,
+            }}
+            />
+            <CardContent className={s.content}>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:IPFS')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  <Button theme="underlined">
+                    #Qmexv71
+                  </Button>
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Start Date')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  {moment(workDates[0]).format('DD MMM YYYY')}
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:End Date')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  {moment(workDates[1]).format('DD MMM YYYY')}
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Author')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  <Button href={`https://tzkt.io/${author}`} theme="underlined">
+                    {shortize(author)}
+                  </Button>
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Participants')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  <CurrencyAmount amount="1000000" />
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Quorum')}
+                className={s.cell}
+              >
+                <div className={s.cellAmount}>
+                  <CurrencyAmount amount="1000000" currency={currency} />
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Total Votes')}
+                className={s.cell}
+              >
+                <div className={s.cellAmount}>
+                  <CurrencyAmount amount={voted} currency={currency} />
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Your Votes')}
+                className={s.cell}
+              >
+                <div className={s.cellAmount}>
+                  <CurrencyAmount amount={votes} currency={currency} />
+                </div>
+              </CardCell>
+              <CardCell
+                headerClassName={s.cellHeader}
+                header={t('governance:Option')}
+                className={s.cell}
+              >
+                <div className={s.cellDate}>
+                  For
+                  {' '}
+                  <For className={s.voteIcon} />
+                </div>
+              </CardCell>
+              <DonutChart votes={155000} vetos={120000} />
+            </CardContent>
+          </Card>
+          <Card className={cx(s.proposalDetails)}>
+            <CardHeader header={{
+              content: <h5>Votes</h5>,
+            }}
+            />
+            <CardContent className={s.proposalVotes}>
+              {votesData.map((x) => <VoteCell key={x.id} vote={x} currency={currency} />)}
+            </CardContent>
+          </Card>
+          <Card className={s.proposalDetails}>
+            <CardHeader header={{
+              content: <h5>References</h5>,
+            }}
+            />
+            <CardContent className={s.content}>
+              <CardCell
+                className={s.cell}
+                header={(
+                  <Button
+                    className={s.detailsButton}
+                    theme="inverse"
+                  >
+                    The proposal on forum
+                    <ExternalLink className={s.linkIcon} />
+                  </Button>
              )}
-            />
-            <CardCell
-              className={s.cell}
-              header={(
-                <Button
-                  className={s.detailsButton}
-                  theme="inverse"
-                >
-                  The QIP on Github
-                  <ExternalLink className={s.linkIcon} />
-                </Button>
+              />
+              <CardCell
+                className={s.cell}
+                header={(
+                  <Button
+                    className={s.detailsButton}
+                    theme="inverse"
+                  >
+                    The QIP on Github
+                    <ExternalLink className={s.linkIcon} />
+                  </Button>
               )}
-            />
-            <CardCell
-              className={s.cell}
-              header={(
-                <Button
-                  className={s.detailsButton}
-                  theme="inverse"
-                >
-                  Governance FAQs
-                  <ExternalLink className={s.linkIcon} />
-                </Button>
+              />
+              <CardCell
+                className={s.cell}
+                header={(
+                  <Button
+                    className={s.detailsButton}
+                    theme="inverse"
+                  >
+                    Governance FAQs
+                    <ExternalLink className={s.linkIcon} />
+                  </Button>
               )}
-            />
-          </CardContent>
-        </Card>
+              />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </>
   );

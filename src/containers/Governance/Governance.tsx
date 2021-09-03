@@ -196,21 +196,25 @@ export const Governance: React.FC<GovernanceProps> = ({
         </CardContent>
       </Card>
       <StickyBlock className={cx(className, s.unsticky)}>
-        <Card
-          className={cx(s.govCard, s.mb24i)}
-        >
-          <CardContent className={s.tabContent}>
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => {
-                setTabsState(val);
-                router.replace(`${router.pathname}?status=${val}`, undefined, { shallow: true });
-              }}
-              className={s.govTabs}
-            />
-          </CardContent>
-        </Card>
+        <div className={s.governTabs}>
+          <div className={cx(s.govCard)}>
+            <Card
+              className={cx(s.govCardInner)}
+            >
+              <CardContent className={s.tabContent}>
+                <Tabs
+                  values={TabsContent}
+                  activeId={tabsState}
+                  setActiveId={(val) => {
+                    setTabsState(val);
+                    router.replace(`${router.asPath}?status=${val}`, undefined, { shallow: true });
+                  }}
+                  className={s.govTabs}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         {content.map((x) => (
           <GovernanceCard
