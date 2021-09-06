@@ -23,7 +23,7 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair
   dex?: FoundDex
-  voter: VoterType
+  voter?: VoterType
 };
 
 export const VotingDetails: React.FC<VotingDetailsProps> = ({
