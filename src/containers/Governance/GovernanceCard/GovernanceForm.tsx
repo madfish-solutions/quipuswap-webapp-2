@@ -114,10 +114,19 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
 
           ),
         }}
-        className={s.proposalHeader}
+        className={cx(s.proposalHeader, s.formHeader)}
       />
       <CardContent className={s.govContent}>
         {/* TODO: here inputs */}
+        <div className={s.formHeaderMob}>
+          <div className={s.submitFlex}>
+            <div className={s.submitHeader}>
+              <h3 className={s.govName}>
+                Submit proposal
+              </h3>
+            </div>
+          </div>
+        </div>
         <div className={s.formInputs}>
           <Input
             className={s.formInput}
@@ -133,31 +142,6 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             value={forumLink}
             onChange={(e:any) => setForumLink(e.target.value)}
           />
-          {/* <div className={s.formInput}>
-            <DateRangePicker
-              startDateId="startDate"
-              endDateId="endDate"
-              startDate={votingStart}
-              endDate={votingEnd}
-              customInputIcon={<DateIcon />}
-              inputIconPosition="after"
-              customArrowIcon="-"
-              onDatesChange={(
-                {
-                  startDate,
-                  endDate,
-                },
-              ) => {
-                let res:any[] = [];
-                if (startDate) res = [startDate];
-                if (endDate) res = [...res, endDate];
-                setVotingDates(res);
-              }}
-              focusedInput={votingInput}
-              onFocusChange={(focusedInput) => setVotingInput(focusedInput)}
-            />
-
-          </div> */}
           {isPicker && (
             <div className={s.floatingPicker}>
               <DayPickerRangeController
@@ -206,10 +190,22 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
           />
 
         </div>
+        {description && (
         <div className={cx(s.mt40, s.govDescription)}>
-          {description && (<Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />)}
+          <Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />
         </div>
-        <Button className={s.govButtonButtom}>
+        )}
+        <div className={cx(s.mobSubmitGroup)}>
+          <div>
+            Proposal Stake
+          </div>
+          <h3 className={s.submitCost}>
+            {prettyPrice(PROPOSAL_COST)}
+            {' '}
+            <span className={s.submitCurrency}>QPSP</span>
+          </h3>
+        </div>
+        <Button className={s.govButtonBottom}>
           Submit
         </Button>
       </CardContent>

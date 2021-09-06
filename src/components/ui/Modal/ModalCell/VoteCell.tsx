@@ -35,12 +35,17 @@ export const VoteCell: React.FC<VoteCellProps> = ({
   return (
     <div className={compoundClassName}>
       <div>
-        <Button href={`https://tzkt.io/${vote.address}`} theme="colored" className={cx(s.joinRow, s.centerRow)}>
+        <Button
+          external
+          href={`https://tzkt.io/${vote.address}`}
+          theme="colored"
+          className={cx(s.joinRow, s.centerRow)}
+        >
           {shortize(vote.address, 10)}
           {' '}
           <ExternalLink className={s.mleft8} />
         </Button>
-        <div className={s.bakerFlexCell}>
+        <div className={s.voteFlexCell}>
           <div className={s.bakerBlock}>
             <div className={s.caption}>
               {t('common:Value')}

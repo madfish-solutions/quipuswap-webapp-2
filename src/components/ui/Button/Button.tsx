@@ -29,6 +29,7 @@ const themeClass = {
   underlined: s.underlined,
   colored: s.colored,
   clean: s.clean,
+  radio: s.radio,
 };
 
 const modeClass = {

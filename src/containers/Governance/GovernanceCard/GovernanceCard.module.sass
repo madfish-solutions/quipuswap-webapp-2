@@ -9,6 +9,7 @@
 
 .formInput
   position: relative
+  margin-top: 24px
 
 .govGroup
   display: flex
@@ -34,6 +35,13 @@
   font-weight: bold
   line-height: 1.14
   order: 2
+
+.mobSubmitGroup
+  color: $text-03
+  font-weight: bold
+  line-height: 1.14
+  margin-top: 24px
+  margin-bottom: 40px
 
 .submitCurrency
   color: $text-03
@@ -98,6 +106,16 @@
   display: flex
   align-items: center
   justify-content: space-between
+  font-size: 1.143rem
+  line-height: 1.5
+  font-weight: 600
+  padding: 24px
+
+.formHeader
+  display: none
+
+.formHeaderMob
+  display: flex
 
 .proposalBackIcon
   margin-right: 8px
@@ -107,11 +125,6 @@
 
 .govHeaderWrapper
   padding: 24px
-
-.proposalHeader
-  font-size: 1.143rem
-  line-height: 1.5
-  font-weight: 600
 
 .govHeader
   width: 100%
@@ -182,7 +195,6 @@
   color: $text-03
 
 .govButtonBottom
-  margin-top: 40px
   max-width: inherit
   width: 100%
 
@@ -223,6 +235,12 @@
     margin-right: auto
 
 @include media('>Ltablet')
+  .mobSubmitGroup
+    display: none
+  .formHeader
+    display: flex
+  .formHeaderMob
+    display: none
   .sticky
     position: sticky
     top: -100%
@@ -230,6 +248,7 @@
     display: flex
     align-items: center
   .formInput
+    margin-top: 0px
     flex: 1
     &:not(:last-child)
       margin-right: 24px

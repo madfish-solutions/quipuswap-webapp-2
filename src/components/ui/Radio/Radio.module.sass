@@ -23,17 +23,21 @@
   align-items: center
 
 .label
+  font-weight: normal
   margin-left: 8px
 
+.active .label
+  font-weight: bold
+
 .light
-  .input
+  .input, .radioButton
     color: $text-02
   .active
     .input
       font-weight: bold
 
 .dark
-  .input
+  .input, .radioButton
     color: $text-03
   .active
     .input
