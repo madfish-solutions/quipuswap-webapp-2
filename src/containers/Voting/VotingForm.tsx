@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useState, useCallback,
+  useEffect, useRef, useState, useCallback, useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
@@ -9,9 +9,6 @@ import {
   findDex,
   FoundDex,
   Token,
-  TransferParams,
-  vetoCurrentBaker,
-  voteForBaker,
 } from '@quipuswap/sdk';
 
 import {
@@ -29,7 +26,7 @@ import {
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import {
-  getWhitelistedTokenSymbol, isAssetEqual, parseDecimals, toDecimals,
+  getWhitelistedTokenSymbol, isAssetEqual, parseDecimals,
 } from '@utils/helpers';
 import {
   composeValidators, required, validateBalance, validateMinMax,
@@ -59,7 +56,6 @@ const TabsContent = [
 
 type VotingFormProps = {
   handleSubmit: () => void,
-  setVoteParams: (params: TransferParams[]) => void,
   debounce: number,
   save: any,
   values: VoteFormValues,
@@ -99,7 +95,6 @@ const RealForm:React.FC<VotingFormProps> = ({
   tokensData,
   currentTab,
   setTabsState,
-  setVoteParams,
 }) => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
@@ -130,7 +125,7 @@ const RealForm:React.FC<VotingFormProps> = ({
     if (!tezos) return;
     const currentTokenA = tokenDataToToken(tokensData.first);
     if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
-    if (tezos && accountPkh && tokenPair) {
+    if (tezos && tokenPair) {
       const toAsset = {
         contract: tokenPair.token2.contractAddress,
         id: tokenPair.token2.fa2TokenId ?? undefined,
@@ -168,7 +163,8 @@ const RealForm:React.FC<VotingFormProps> = ({
       }
     };
   }, [
-    values,
+    values.balance1,
+    values.selectedBaker,
     tokenPair,
     dex,
     currentTab]);
@@ -186,19 +182,7 @@ const RealForm:React.FC<VotingFormProps> = ({
       openConnectWalletModal();
       return;
     }
-    try {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
-        setVoteParams(params);
-        console.log(params);
-      } else {
-        const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
-        setVoteParams(params);
-        console.log(params);
-      }
-    } catch (e) {
-      handleErrorToast(e);
-    }
+    form.mutators.setValue('method', 'first');
     handleSubmit();
   };
 
@@ -209,35 +193,22 @@ const RealForm:React.FC<VotingFormProps> = ({
       openConnectWalletModal();
       return;
     }
+    form.mutators.setValue('method', 'second');
     if (!values.balance1) {
       // throw form validation error
       handleSubmit();
       return;
     }
-    try {
-      if (currentTab.id === 'vote') {
-        const params = await voteForBaker(
-          tezos,
-          dex,
-          values.selectedBaker,
-          toDecimals(new BigNumber(values.balance1), TEZOS_TOKEN.metadata.decimals),
-        );
-        console.log(params);
-        setVoteParams(params);
-      } else {
-        const params = await vetoCurrentBaker(
-          tezos,
-          dex,
-          toDecimals(new BigNumber(values.balance1), TEZOS_TOKEN.metadata.decimals),
-        );
-        console.log(params);
-        setVoteParams(params);
-      }
-    } catch (e) {
-      handleErrorToast(e);
-    }
     handleSubmit();
   };
+
+  const availBalance:BigNumber = useMemo(
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(tokenPair.frozenBalance))
+        .plus(new BigNumber(voter.vote))
+      : new BigNumber(0)), [tokenPair, voter],
+  );
 
   return (
     <>
@@ -269,12 +240,16 @@ const RealForm:React.FC<VotingFormProps> = ({
         }}
         contentClassName={s.content}
       >
+        <Field name="method" initialValue="first">
+          {() => <></>}
+        </Field>
         <Field
           name="balance1"
           validate={composeValidators(
-            required,
             validateMinMax(0, Infinity),
-            validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
+            accountPkh
+              ? validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity))
+              : () => undefined,
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
@@ -284,11 +259,9 @@ const RealForm:React.FC<VotingFormProps> = ({
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
-                setVoteParams([]);
                 handleTokenChange(pair.token1, 'first');
                 handleTokenChange(pair.token2, 'second');
                 setTokens([pair.token1, pair.token2]);
-                console.log('hanldeTokenPairSelect setTokenPair', pair);
                 hanldeTokenPairSelect(
                   pair,
                   setTokenPair,
@@ -301,12 +274,7 @@ const RealForm:React.FC<VotingFormProps> = ({
                   networkId,
                 );
               }}
-              balance={tokenPair.balance && tokenPair.frozenBalance && voter
-                ? new BigNumber(tokenPair.balance)
-                  .minus(new BigNumber(tokenPair.frozenBalance))
-                  .plus(new BigNumber(voter.vote))
-                  .toString()
-                : '0'}
+              balance={availBalance.isNaN() ? '0' : availBalance.toString()}
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance1',
@@ -349,6 +317,7 @@ const RealForm:React.FC<VotingFormProps> = ({
           <Button
             onClick={handleVoteOrVeto}
             className={s.button}
+            disabled={!values.balance1}
           >
             {currentTab.label}
           </Button>

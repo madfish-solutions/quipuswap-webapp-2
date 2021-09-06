@@ -76,7 +76,6 @@ export const Voting: React.FC<VotingProps> = ({
   );
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
   const [dex, setDex] = useState<FoundDex>();
   const { Form } = withTypes<VoteFormValues>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
@@ -183,22 +182,28 @@ export const Voting: React.FC<VotingProps> = ({
     <>
       <VotingStats
         pendingReward={rewards}
-        amounts={[tokenPair.balance ?? '', voter?.vote ?? '', voter?.veto ?? '']}
+        amounts={[tokenPair.balance ?? '0', voter?.vote ?? '0', voter?.veto ?? '0']}
         className={s.votingStats}
         dex={dex}
         handleSubmit={(params:TransferParams[]) => {
           if (!tezos) return;
-          console.log(params);
           handleLoader();
           submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast);
         }}
       />
       <StickyBlock className={className}>
         <Form
-          onSubmit={() => {
+          onSubmit={(values) => {
             if (!tezos) return;
             handleLoader();
-            submitForm(tezos, voteParams, handleErrorToast, handleSuccessToast);
+            submitForm({
+              tezos,
+              values,
+              dex,
+              tab: currentTab.id,
+              handleSuccessToast,
+              handleErrorToast,
+            });
           }}
           mutators={{
             setValue: ([field, value], state, { changeValue }) => {
@@ -225,7 +230,6 @@ export const Voting: React.FC<VotingProps> = ({
               tokensData={tokensData}
               handleTokenChange={handleTokenChange}
               currentTab={currentTab}
-              setVoteParams={setVoteParams}
             />
           )}
         />

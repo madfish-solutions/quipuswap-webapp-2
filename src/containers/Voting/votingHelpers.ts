@@ -1,12 +1,15 @@
 import {
   batchify,
-  estimateReward, findDex, FoundDex, getLiquidityShare,
+  estimateReward, findDex, FoundDex, getLiquidityShare, vetoCurrentBaker, voteForBaker,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 
-import { QSMainNet, VoterType, WhitelistedTokenPair } from '@utils/types';
+import {
+  QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair,
+} from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, toDecimals } from '@utils/helpers';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
@@ -61,7 +64,6 @@ export const hanldeTokenPairSelect = (
       const res = {
         ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
       };
-      console.log(res);
       setTokenPair(res);
     } catch (err) {
       updateToast(err);
@@ -70,21 +72,65 @@ export const hanldeTokenPairSelect = (
   asyncFunc();
 };
 
-export const submitForm = async (
+type SubmitProps = {
   tezos:TezosToolkit,
-  voteParams:TransferParams[],
-  updateToast: (err:any) => void,
+  values:VoteFormValues,
+  dex?: FoundDex,
+  tab: string,
   handleSuccessToast:any,
-) => {
+  handleErrorToast:(e:any) => void,
+};
+
+export const submitForm = async ({
+  tezos,
+  values,
+  dex,
+  tab,
+  handleErrorToast,
+  handleSuccessToast,
+}:SubmitProps) => {
+  let params:TransferParams[] = [];
+  const { method, balance1, selectedBaker } = values;
+  if (!dex) return;
+  if (method === 'first') {
+    try {
+      if (tab === 'vote') {
+        params = await voteForBaker(
+          tezos,
+          dex,
+          selectedBaker,
+          toDecimals(new BigNumber(balance1), TEZOS_TOKEN.metadata.decimals),
+        );
+      } else {
+        params = await vetoCurrentBaker(
+          tezos,
+          dex,
+          toDecimals(new BigNumber(balance1), TEZOS_TOKEN.metadata.decimals),
+        );
+      }
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  } else {
+    try {
+      if (tab === 'vote') {
+        params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
+      } else {
+        params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
+      }
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  }
   try {
     const op = await batchify(
       tezos.wallet.batch([]),
-      voteParams,
+      params,
     ).send();
     await op.confirmation();
     handleSuccessToast();
   } catch (e) {
-    updateToast(e);
+    handleErrorToast(e);
   }
 };
 

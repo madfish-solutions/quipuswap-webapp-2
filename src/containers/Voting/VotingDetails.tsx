@@ -6,7 +6,7 @@ import {
 } from '@quipuswap/sdk';
 
 import { useBakers } from '@utils/dapp';
-import { getWhitelistedBakerName, toDecimals } from '@utils/helpers';
+import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import {
   VoterType, WhitelistedBaker, WhitelistedTokenPair,
 } from '@utils/types';
@@ -62,23 +62,23 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
 
   const totalVotes = useMemo(() => {
     if (dex?.storage?.storage) {
-      return toDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
+      return fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
     }
     return '';
   }, [dex, bakers]);
 
   const totalVeto = useMemo(() => {
     if (dex?.storage?.storage) {
-      return toDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
+      return fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
     }
     return '';
   }, [dex]);
 
   const votesToVeto = useMemo(() => {
     if (dex?.storage?.storage) {
-      return toDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals)
+      return fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals)
         .div(3)
-        .minus(toDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals))
+        .minus(fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals))
         .toFixed(6);
     }
     return '';

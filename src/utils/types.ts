@@ -113,4 +113,5 @@ export type PoolShare = {
 export type VoteFormValues = {
   balance1: number
   selectedBaker: string
+  method:'first' | 'second'
 };

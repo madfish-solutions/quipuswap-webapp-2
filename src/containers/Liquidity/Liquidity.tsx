@@ -171,7 +171,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         onSubmit={() => {
           if (!tezos) return;
           handleLoader();
-          console.log(addLiquidityParams);
           submitForm(
             tezos,
             currentTab.id === 'remove'
