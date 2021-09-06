@@ -31,10 +31,13 @@ export const getServerSideProps = async (props:any) => {
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 
+  const isQueryMethod = query.method === 'vote' || query.method === 'veto';
+  const method = isQueryMethod ? query.method : 'vote';
+
   if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
     return {
       redirect: {
-        destination: `/voting/${query.method}/${from}-${to}`,
+        destination: `/voting/${method}/${from}-${to}`,
         permanent: false,
       },
     };
@@ -47,7 +50,7 @@ export const getServerSideProps = async (props:any) => {
   ) {
     return {
       redirect: {
-        destination: `/voting/${query.method}/${from}-${to}`,
+        destination: `/voting/${method}/${from}-${to}`,
         permanent: false,
       },
     };

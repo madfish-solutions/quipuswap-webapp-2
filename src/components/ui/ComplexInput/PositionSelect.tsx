@@ -116,7 +116,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               )}
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Total Balance')}
+                  {t('common:Available Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>

@@ -2,10 +2,9 @@ import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
-import { getWhitelistedBakerName } from '@utils/helpers';
+import { WhitelistedBaker } from '@utils/types';
 import { Button } from '@components/ui/Button';
-import { TokensLogos } from '@components/ui/TokensLogos';
+import { BakerLogo } from '@components/ui/BakerLogo';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
 import { Shevron } from '@components/svg/Shevron';
@@ -75,22 +74,12 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
             className={s.baker}
             textClassName={s.bakerInner}
           >
-            <TokensLogos token1={
-              {
-                metadata:
-                {
-                  thumbnailUri: baker?.logo,
-                  name: getWhitelistedBakerName((baker ?? { name: '' }) as WhitelistedBaker, 1000),
-                  symbol: '',
-                },
-              } as WhitelistedToken
-            }
-            />
+            <BakerLogo baker={baker || {} as WhitelistedBaker} />
             <h6
               className={cx(s.token, s.bakerLabel)}
-              title={baker ? baker.name : 'BAKER NAME'}
+              title={baker ? baker.name : 'Choose Baker'}
             >
-              {baker ? baker.name : 'BAKER NAME'}
+              {baker ? baker.name : 'Choose Baker'}
             </h6>
             <Shevron />
           </Button>

@@ -163,6 +163,7 @@ export const Voting: React.FC<VotingProps> = ({
         setDex,
         setRewards,
         setVoter,
+        handleErrorToast,
         tezos,
         accountPkh,
         network.id as QSMainNet,

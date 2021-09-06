@@ -15,6 +15,7 @@ export const hanldeTokenPairSelect = (
   setDex: (dex: FoundDex) => void,
   setRewards: (reward: string) => void,
   setVoter: (voter: VoterType) => any,
+  updateToast: (err:any) => void,
   tezos: TezosToolkit | null,
   accountPkh: string | null,
   networkId?: QSMainNet,
@@ -63,7 +64,7 @@ export const hanldeTokenPairSelect = (
       };
       setTokenPair(res);
     } catch (err) {
-      console.error(err);
+      updateToast(err);
     }
   };
   asyncFunc();
@@ -72,7 +73,7 @@ export const hanldeTokenPairSelect = (
 export const submitForm = async (
   tezos:TezosToolkit,
   voteParams:TransferParams[],
-  updateToast: (err:string) => void,
+  updateToast: (err:any) => void,
   handleSuccessToast:any,
 ) => {
   try {
@@ -90,7 +91,7 @@ export const submitForm = async (
 export const submitWithdraw = async (
   tezos:TezosToolkit,
   voteParams:TransferParams[],
-  updateToast: (err:string) => void,
+  updateToast: (err:any) => void,
   handleSuccessToast:any,
 ) => {
   try {

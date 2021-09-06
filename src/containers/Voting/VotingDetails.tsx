@@ -17,6 +17,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { shortize } from '@utils/helpers';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair
@@ -112,7 +113,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         className={s.cell}
       >
         <Button href={currentCandidate ? `https://tzkt.io/${currentCandidate.address}` : '#'} theme="underlined">
-          {currentCandidate?.name}
+          {shortize(currentCandidate?.name || '', 12)}
         </Button>
       </CardCell>
       <CardCell
@@ -128,7 +129,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         className={s.cell}
       >
         <Button href={secondCandidate ? `https://tzkt.io/${secondCandidate.address}` : '#'} theme="underlined">
-          {secondCandidate?.name}
+          {shortize(secondCandidate?.name || '', 12)}
         </Button>
       </CardCell>
       <CardCell
@@ -168,12 +169,14 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote:The candidate you voted for.')}
             />
           </>
-            )}
+        )}
         className={s.cell}
       >
-        <Button href={myCandidate ? `https://tzkt.io/${myCandidate.address}` : '#'} theme="underlined">
-          {myCandidate?.name}
-        </Button>
+        {myCandidate ? (
+          <Button external href={`https://tzkt.io/${myCandidate.address}`} theme="underlined">
+            {shortize(myCandidate.name || myCandidate.address)}
+          </Button>
+        ) : '-'}
       </CardCell>
       <CardCell
         header={(
@@ -199,14 +202,14 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         >
           Pair Analytics
         </Button>
-        <Button
+        {/* <Button
           className={s.detailsButton}
           theme="inverse"
           href="#"
           icon={<ExternalLink className={s.linkIcon} />}
         >
           Delegation Analytics
-        </Button>
+        </Button> */}
       </div>
     </Card>
   );

@@ -1,27 +1,26 @@
 import React, {
   useEffect, useRef, useState,
 } from 'react';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { Field, FormSpy } from 'react-final-form';
 import {
-  findDex,
   FoundDex,
-  Token,
   TransferParams,
   vetoCurrentBaker,
   voteForBaker,
 } from '@quipuswap/sdk';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  useAccountPkh, useTezos,
 } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
 import {
   composeValidators, required, validateBalance, validateMinMax,
@@ -32,16 +31,10 @@ import { Button } from '@components/ui/Button';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';
-import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
-import { usePrevious } from '@hooks/usePrevious';
-import { useRouter } from 'next/router';
 import { VotingDetails } from './VotingDetails';
-import { hanldeTokenPairSelect } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -84,60 +77,25 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   values,
   form,
   tabsState,
-  setRewards,
-  setDex,
   dex,
-  setTokens,
-  setVoter,
   voter,
   tokenPair,
   setTokenPair,
-  handleTokenChange,
-  tokensData,
   currentTab,
   setTabsState,
   setVoteParams,
 }) => {
   const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
   const accountPkh = useAccountPkh();
-  const prevDex = usePrevious(dex);
 
   const timeout = useRef(setTimeout(() => { }, 0));
   let promise: any;
 
-  const handleInputChange = async () => {
-    if (!tezos) return;
-    const currentTokenA = tokenDataToToken(tokensData.first);
-    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
-    if (dex
-      && prevDex
-      && ((prevDex ?? ({ contract: { address: '' } })).contract?.address) === dex.contract.address) return;
-    if (tezos && accountPkh && tokenPair) {
-      let toAsset:any = {
-        contract: 'tez',
-      };
-      if (tokenPair.token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
-        toAsset = {
-          contract: tokenPair.token2.contractAddress,
-        };
-        if (!tokenPair.token2.fa2TokenId) {
-          toAsset = {
-            contract: tokenPair.token2.contractAddress,
-            id: 0,
-          };
-        }
-      }
-      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
-      if (tempDex && tempDex !== dex) {
-        setDex(tempDex);
-      }
-    }
-  };
+  const handleInputChange = async () => {};
 
   const saveFunc = async () => {
     if (promise) {
@@ -247,47 +205,32 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance1"
           validate={composeValidators(
+            required,
             validateMinMax(0, Infinity),
             validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
           {({ input, meta }) => (
-            <>
-              <PositionSelect
-                {...input}
-                notSelectable1={TEZOS_TOKEN}
-                tokenPair={tokenPair}
-                setTokenPair={(pair) => {
-                  handleTokenChange(pair.token1, 'first');
-                  handleTokenChange(pair.token2, 'second');
-                  setTokens([pair.token1, pair.token2]);
-                  hanldeTokenPairSelect(
-                    pair,
-                    setTokenPair,
-                    setDex,
-                    setRewards,
-                    setVoter,
-                    tezos,
-                    accountPkh,
-                    networkId,
-                  );
-                }}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'balance1',
-                    +value,
-                  );
-                }}
-                balance={tokenPair.balance ?? '0'}
-                notFrozen
-                id="liquidity-remove-input"
-                label="Select LP"
-                className={s.input}
-                error={(meta.error) || meta.submitError}
-              />
-              <ArrowDown className={s.iconButton} />
-            </>
+            <PositionSelect
+              {...input}
+              notSelectable1={TEZOS_TOKEN}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
+              handleBalance={(value) => {
+                form.mutators.setValue(
+                  'balance1',
+                  +value,
+                );
+              }}
+              noBalanceButtons={!accountPkh}
+              balance={tokenPair.balance ?? '0'}
+              notFrozen
+              id="liquidity-remove-input"
+              label={currentTab.label}
+              className={s.input}
+              error={(meta.touched && meta.error) || meta.submitError}
+            />
           )}
         </Field>
         {currentTab.id === 'vote' && (
@@ -297,6 +240,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 {...input}
                 label="Baker"
                 id="voting-baker"
+                className={s.mt12}
                 handleChange={(baker) => input.onChange(baker.address)}
                 error={(meta.touched && meta.error) || meta.submitError}
               />
