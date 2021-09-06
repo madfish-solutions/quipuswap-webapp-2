@@ -1,27 +1,33 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useRef, useState, useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
+import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 import {
+  findDex,
   FoundDex,
+  Token,
   TransferParams,
   vetoCurrentBaker,
   voteForBaker,
 } from '@quipuswap/sdk';
 
 import {
-  useAccountPkh, useTezos,
+  useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
+  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
+import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol, isDexEqual, parseDecimals } from '@utils/helpers';
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
@@ -35,6 +41,7 @@ import { Transactions } from '@components/svg/Transactions';
 import s from '@styles/CommonContainer.module.sass';
 
 import { VotingDetails } from './VotingDetails';
+import { hanldeTokenPairSelect } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -77,25 +84,69 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   values,
   form,
   tabsState,
+  setRewards,
+  setDex,
   dex,
+  setTokens,
+  setVoter,
   voter,
   tokenPair,
   setTokenPair,
+  handleTokenChange,
+  tokensData,
   currentTab,
   setTabsState,
   setVoteParams,
 }) => {
+  const { t } = useTranslation(['common']);
+  const updateToast = useUpdateToast();
   const { openConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
   const accountPkh = useAccountPkh();
+  const [oldDex, setOldDex] = useState<FoundDex>();
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
 
   const timeout = useRef(setTimeout(() => { }, 0));
   let promise: any;
 
-  const handleInputChange = async () => {};
+  const handleInputChange = async () => {
+    if (!tezos) return;
+    const currentTokenA = tokenDataToToken(tokensData.first);
+    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
+    const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
+    if (isDexSame) return;
+    if (tezos && accountPkh && tokenPair) {
+      let toAsset:any = {
+        contract: 'tez',
+      };
+      if (tokenPair.token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
+        toAsset = {
+          contract: tokenPair.token2.contractAddress,
+        };
+        if (!tokenPair.token2.fa2TokenId) {
+          toAsset = {
+            contract: tokenPair.token2.contractAddress,
+            id: 0,
+          };
+        }
+      }
+      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+      if (tempDex && tempDex !== dex) {
+        setDex(tempDex);
+        setOldDex(tempDex);
+      }
+    }
+  };
 
   const saveFunc = async () => {
     if (promise) {
@@ -216,7 +267,22 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               {...input}
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
-              setTokenPair={setTokenPair}
+              setTokenPair={(pair) => {
+                handleTokenChange(pair.token1, 'first');
+                handleTokenChange(pair.token2, 'second');
+                setTokens([pair.token1, pair.token2]);
+                hanldeTokenPairSelect(
+                  pair,
+                  setTokenPair,
+                  setDex,
+                  setRewards,
+                  setVoter,
+                  handleErrorToast,
+                  tezos,
+                  accountPkh,
+                  networkId,
+                );
+              }}
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance1',
@@ -224,7 +290,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 );
               }}
               noBalanceButtons={!accountPkh}
-              balance={tokenPair.balance ?? '0'}
+              balanceLabel={t('vote:Available Balance')}
               notFrozen
               id="liquidity-remove-input"
               label={currentTab.label}

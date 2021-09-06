@@ -16,8 +16,8 @@ export const hanldeTokenPairSelect = (
   setRewards: (reward: string) => void,
   setVoter: (voter: VoterType) => any,
   updateToast: (err:any) => void,
-  tezos: TezosToolkit | null,
-  accountPkh: string | null,
+  tezos?: TezosToolkit | null,
+  accountPkh?: string | null,
   networkId?: QSMainNet,
 ) => {
   const asyncFunc = async () => {

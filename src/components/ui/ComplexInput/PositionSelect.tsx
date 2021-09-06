@@ -21,6 +21,7 @@ type PositionSelectProps = {
   noBalanceButtons?: boolean
   className?: string
   balance?: string
+  balanceLabel?: string
   frozenBalance?: string
   notFrozen?:boolean
   label: string
@@ -44,6 +45,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   noBalanceButtons = false,
   frozenBalance = '10.00',
   label,
+  balanceLabel,
   handleBalance,
   value,
   error,
@@ -116,7 +118,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               )}
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Available Balance')}
+                  {balanceLabel ?? t('common:Total Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>

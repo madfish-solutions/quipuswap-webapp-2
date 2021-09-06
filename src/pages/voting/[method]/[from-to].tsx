@@ -34,7 +34,7 @@ export const getServerSideProps = async (props:any) => {
   const isQueryMethod = query.method === 'vote' || query.method === 'veto';
   const method = isQueryMethod ? query.method : 'vote';
 
-  if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
+  if (isNoTokens || isSoleToken || splittedTokens[1] === '' || !isQueryMethod) {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
