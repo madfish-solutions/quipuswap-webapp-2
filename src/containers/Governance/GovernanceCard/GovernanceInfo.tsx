@@ -1,6 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
-import dynamic from 'next/dynamic';
 import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -16,15 +15,12 @@ import { useTranslation } from 'next-i18next';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { shortize } from '@utils/helpers';
 import { ExternalLink } from '@components/svg/ExternalLink';
+import { VoteProgress } from '@components/svg/VoteProgress';
 import For from '@icons/For.svg';
 
 import s from './GovernanceCard.module.sass';
 
 import { GovernanceCardProps } from './GovernanceCard';
-
-const DonutChart = dynamic(() => import('@components/ui/DonutChart'), {
-  ssr: false,
-});
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -64,6 +60,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
     };
     loadDescription();
   }, []);
+
+  const totalVotes = 155000;
+  const totalVetos = 120000;
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -226,7 +225,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <For className={s.voteIcon} />
                 </div>
               </CardCell>
-              <DonutChart votes={155000} vetos={120000} />
+              {/* <DonutChart votes={totalVotes} vetos={totalVetos} /> */}
+              <VoteProgress progress={totalVotes / (totalVetos + totalVotes)} />
+
             </CardContent>
           </Card>
           <Card className={cx(s.proposalDetails)}>
