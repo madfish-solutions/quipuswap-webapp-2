@@ -56,17 +56,7 @@ module.exports = withReactSvg({
       },
       {
         source: '/voting',
-        destination: `/voting/${process.env.DEFAULT_SWAP_URI}`,
-        permanent: true,
-      },
-      {
-        source: '/voting',
         destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
-        permanent: true,
-      },
-      {
-        source: '/voting/:slug',
-        destination: `/voting/vote/:slug`,
         permanent: true,
       },
       {

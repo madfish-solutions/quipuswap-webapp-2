@@ -24,10 +24,13 @@ import {
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken, WhitelistedTokenPair,
+  VoterType,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, isDexEqual, parseDecimals } from '@utils/helpers';
+import {
+  getWhitelistedTokenSymbol, isAssetEqual, parseDecimals, toDecimals,
+} from '@utils/helpers';
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
@@ -54,7 +57,7 @@ const TabsContent = [
   },
 ];
 
-type LiquidityFormProps = {
+type VotingFormProps = {
   handleSubmit: () => void,
   setVoteParams: (params: TransferParams[]) => void,
   debounce: number,
@@ -66,7 +69,7 @@ type LiquidityFormProps = {
   setRewards: (reward: string) => void,
   dex?: FoundDex,
   setDex: (dex:FoundDex) => void,
-  voter: any,
+  voter?: VoterType,
   setVoter: (voter: any) => void,
   setTokens: (tokens: WhitelistedToken[]) => void,
   tokenPair: WhitelistedTokenPair,
@@ -77,7 +80,7 @@ type LiquidityFormProps = {
   setTabsState: (val: any) => void
 };
 
-const RealForm:React.FC<LiquidityFormProps> = ({
+const RealForm:React.FC<VotingFormProps> = ({
   handleSubmit,
   debounce,
   save,
@@ -100,14 +103,18 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
-  const { openConnectWalletModal } = useConnectModalsState();
+  const {
+    openConnectWalletModal,
+    connectWalletModalOpen,
+    closeConnectWalletModal,
+  } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
   const accountPkh = useAccountPkh();
-  const [oldDex, setOldDex] = useState<FoundDex>();
+  const [oldAsset, setOldAsset] = useState<Token>();
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -123,28 +130,18 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     if (!tezos) return;
     const currentTokenA = tokenDataToToken(tokensData.first);
     if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
-    const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
-    if (isDexSame) return;
     if (tezos && accountPkh && tokenPair) {
-      let toAsset:any = {
-        contract: 'tez',
+      const toAsset = {
+        contract: tokenPair.token2.contractAddress,
+        id: tokenPair.token2.fa2TokenId ?? undefined,
       };
-      if (tokenPair.token2.contractAddress !== TEZOS_TOKEN.contractAddress) {
-        toAsset = {
-          contract: tokenPair.token2.contractAddress,
-        };
-        if (!tokenPair.token2.fa2TokenId) {
-          toAsset = {
-            contract: tokenPair.token2.contractAddress,
-            id: 0,
-          };
-        }
-      }
-      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset as Token);
+      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
+      if (isAssetSame) return;
+      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
       if (tempDex && tempDex !== dex) {
         setDex(tempDex);
-        setOldDex(tempDex);
       }
+      setOldAsset(toAsset);
     }
   };
 
@@ -176,7 +173,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     dex,
     currentTab]);
 
-  const handleFirstButton = async () => {
+  useEffect(() => {
+    if (connectWalletModalOpen && accountPkh) {
+      closeConnectWalletModal();
+    }
+  }, [accountPkh]);
+
+  const handleUnvoteOrRemoveveto = async () => {
     if (!tezos) return;
     if (!dex) return;
     if (!accountPkh) {
@@ -187,17 +190,19 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       if (currentTab.id === 'vote') {
         const params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
         setVoteParams(params);
+        console.log(params);
       } else {
         const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
         setVoteParams(params);
+        console.log(params);
       }
     } catch (e) {
-      console.error(e);
+      handleErrorToast(e);
     }
     handleSubmit();
   };
 
-  const handleSecondButton = async () => {
+  const handleVoteOrVeto = async () => {
     if (!tezos) return;
     if (!dex) return;
     if (!accountPkh) {
@@ -211,14 +216,25 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     }
     try {
       if (currentTab.id === 'vote') {
-        const params = await voteForBaker(tezos, dex, values.selectedBaker, values.balance1);
+        const params = await voteForBaker(
+          tezos,
+          dex,
+          values.selectedBaker,
+          toDecimals(new BigNumber(values.balance1), TEZOS_TOKEN.metadata.decimals),
+        );
+        console.log(params);
         setVoteParams(params);
       } else {
-        const params = await vetoCurrentBaker(tezos, dex, values.balance1);
+        const params = await vetoCurrentBaker(
+          tezos,
+          dex,
+          toDecimals(new BigNumber(values.balance1), TEZOS_TOKEN.metadata.decimals),
+        );
+        console.log(params);
         setVoteParams(params);
       }
     } catch (e) {
-      console.error(e);
+      handleErrorToast(e);
     }
     handleSubmit();
   };
@@ -268,9 +284,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
+                setVoteParams([]);
                 handleTokenChange(pair.token1, 'first');
                 handleTokenChange(pair.token2, 'second');
                 setTokens([pair.token1, pair.token2]);
+                console.log('hanldeTokenPairSelect setTokenPair', pair);
                 hanldeTokenPairSelect(
                   pair,
                   setTokenPair,
@@ -283,6 +301,12 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   networkId,
                 );
               }}
+              balance={tokenPair.balance && tokenPair.frozenBalance && voter
+                ? new BigNumber(tokenPair.balance)
+                  .minus(new BigNumber(tokenPair.frozenBalance))
+                  .plus(new BigNumber(voter.vote))
+                  .toString()
+                : '0'}
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance1',
@@ -316,14 +340,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         )}
         <div className={s.buttons}>
           <Button
-            onClick={handleFirstButton}
+            onClick={handleUnvoteOrRemoveveto}
             className={s.button}
             theme="secondary"
           >
             {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
           </Button>
           <Button
-            onClick={handleSecondButton}
+            onClick={handleVoteOrVeto}
             className={s.button}
           >
             {currentTab.label}

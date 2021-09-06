@@ -7,7 +7,7 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Voting } from '@containers/Voting';
 
-import s from '@styles/SwapLiquidity.module.sass';
+import s from '@styles/Voting.module.sass';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);

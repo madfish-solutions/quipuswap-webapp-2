@@ -3,10 +3,9 @@ import {
   estimateReward, findDex, FoundDex, getLiquidityShare,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
-import BigNumber from 'bignumber.js';
 
 import { QSMainNet, VoterType, WhitelistedTokenPair } from '@utils/types';
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 
 export const hanldeTokenPairSelect = (
@@ -35,7 +34,7 @@ export const hanldeTokenPairSelect = (
       const asyncRewards = async () => {
         if (!accountPkh) return;
         const res = await estimateReward(tezos, foundDex, accountPkh);
-        const rewards = res.div(new BigNumber(10).pow(new BigNumber(6))).toString();
+        const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
         setRewards(rewards);
       };
       asyncRewards();
@@ -44,9 +43,9 @@ export const hanldeTokenPairSelect = (
         const voter = await foundDex.storage.storage.voters.get(accountPkh);
         if (voter) {
           setVoter({
-            veto: voter.veto.div(new BigNumber(10).pow(new BigNumber(6))).toString(),
+            veto: fromDecimals(voter.veto, TEZOS_TOKEN.metadata.decimals).toString(),
             candidate: voter.candidate,
-            vote: voter.vote.div(new BigNumber(10).pow(new BigNumber(6))).toString(),
+            vote: fromDecimals(voter.vote, TEZOS_TOKEN.metadata.decimals).toString(),
           });
         } else setVoter({} as VoterType);
       };
@@ -56,12 +55,13 @@ export const hanldeTokenPairSelect = (
       if (accountPkh) {
         const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
-        frozenBalance = fromDecimals(share.frozen, 6).toString();
-        totalBalance = fromDecimals(share.total, 6).toString();
+        frozenBalance = fromDecimals(share.frozen, TEZOS_TOKEN.metadata.decimals).toString();
+        totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
       }
       const res = {
         ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
       };
+      console.log(res);
       setTokenPair(res);
     } catch (err) {
       updateToast(err);

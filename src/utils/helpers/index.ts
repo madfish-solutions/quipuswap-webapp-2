@@ -29,3 +29,4 @@ export * from './handleTokenChange';
 export * from './handleSearchToken';
 export * from './localSearchSortSymbol';
 export * from './isDexEqual';
+export * from './isAssetEqual';

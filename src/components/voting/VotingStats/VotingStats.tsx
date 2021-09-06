@@ -15,21 +15,21 @@ import s from './VotingStats.module.sass';
 const content = [
   {
     id: 0,
-    header: 'Your LP',
+    header: 'vote:Your LP',
     amount: '0',
     tooltip: 'vote:Total number of LP tokens you own.',
   },
   {
     id: 1,
-    header: 'Your votes',
+    header: 'vote:Your votes',
     amount: '0',
-    tooltip: 'The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
+    tooltip: 'vote:The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
   },
   {
     id: 2,
-    header: 'Your vetos',
+    header: 'vote:Your vetos',
     amount: '0',
-    tooltip: 'The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
+    tooltip: 'vote:The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
   },
 ];
 
@@ -63,7 +63,8 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       <div className={s.reward}>
         <div className={s.rewardContent}>
           <span className={s.rewardHeader}>
-            Your Pending Rewards:
+            {t('vote:Your Pending Rewards')}
+            :
           </span>
           <span className={s.rewardAmount}>
             {pendingReward}
@@ -77,12 +78,12 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       }) => (
         <div key={id} className={s.item}>
           <span className={s.header}>
-            {header}
+            {t(header)}
             :
 
             <Tooltip content={t(tooltip)} />
           </span>
-          <span className={s.amount}>{amounts[id] ? amounts[id] : amount}</span>
+          <span className={s.amount}>{amounts[id] ?? amount}</span>
         </div>
       ))}
       <Button
@@ -97,7 +98,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         }}
         className={s.button}
       >
-        Claim Reward
+        {t('vote:Claim Reward')}
 
       </Button>
     </Card>

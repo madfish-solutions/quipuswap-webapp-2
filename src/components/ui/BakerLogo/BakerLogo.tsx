@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { prepareTokenLogo, getWhitelistedBakerName } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
-import Baker from '@icons/Baker.svg';
+import { Baker } from '@components/svg/Baker';
 
 import s from './BakerLogo.module.sass';
 

@@ -74,7 +74,7 @@ export const Voting: React.FC<VotingProps> = ({
       second: fallbackTokenToTokenData(STABLE_TOKEN),
     },
   );
-  const [, setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [voteParams, setVoteParams] = useState<TransferParams[]>([]);
   const [dex, setDex] = useState<FoundDex>();
@@ -172,7 +172,9 @@ export const Voting: React.FC<VotingProps> = ({
   }, [tezos, accountPkh, network.id, tokenPair]);
 
   useEffect(() => {
-    getBalance();
+    if (initialLoad && token1 && token2) {
+      getBalance();
+    }
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
@@ -186,6 +188,7 @@ export const Voting: React.FC<VotingProps> = ({
         dex={dex}
         handleSubmit={(params:TransferParams[]) => {
           if (!tezos) return;
+          console.log(params);
           handleLoader();
           submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast);
         }}
