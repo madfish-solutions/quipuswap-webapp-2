@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
@@ -11,27 +11,6 @@ import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
 
 import s from './VotingStats.module.sass';
-
-const content = [
-  {
-    id: 0,
-    header: 'vote:Your LP',
-    amount: '0',
-    tooltip: 'vote:Total number of LP tokens you own.',
-  },
-  {
-    id: 1,
-    header: 'vote:Your votes',
-    amount: '0',
-    tooltip: 'vote:The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
-  },
-  {
-    id: 2,
-    header: 'vote:Your vetos',
-    amount: '0',
-    tooltip: 'vote:The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
-  },
-];
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -58,6 +37,27 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
+  const content = useMemo(() => [
+    {
+      id: 0,
+      header: 'vote:Your LP',
+      amount: amounts[0] ?? '0',
+      tooltip: 'vote:Total number of LP tokens you own.',
+    },
+    {
+      id: 1,
+      header: 'vote:Your votes',
+      amount: amounts[1] ?? '0',
+      tooltip: 'vote:The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
+    },
+    {
+      id: 2,
+      header: 'vote:Your vetos',
+      amount: amounts[2] ?? '0',
+      tooltip: 'vote:The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
+    },
+  ], [amounts]);
+
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
       <div className={s.reward}>
@@ -83,7 +83,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
 
             <Tooltip content={t(tooltip)} />
           </span>
-          <span className={s.amount}>{amounts[id] ?? amount}</span>
+          <span className={s.amount}>{amount}</span>
         </div>
       ))}
       <Button
