@@ -166,39 +166,41 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               }
         />
       </CardCell>
-      {dex2 && (
-      <Button
-        className={s.detailsButton}
-        theme="inverse"
-        target="_blank"
-        href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
-        external
-        icon={<ExternalLink className={s.linkIcon} />}
-      >
-        { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
-          {
-            tokenA: getWhitelistedTokenSymbol(token1),
-            tokenB: TEZOS_TOKEN.metadata.symbol,
-          })}
-      </Button>
-      )}
-      {dex && (
-      <Button
-        className={s.detailsButton}
-        theme="inverse"
-        target="_blank"
-        href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
-        external
-        icon={<ExternalLink className={s.linkIcon} />}
-      >
-        {dex2
-          ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+      {(dex || dex2) && (
+      <div className={s.detailsButtons}>
+        {dex2 && (
+        <Button
+          className={s.detailsButton}
+          theme="inverse"
+          href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
+          external
+          icon={<ExternalLink className={s.linkIcon} />}
+        >
+          { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
             {
-              tokenA: TEZOS_TOKEN.metadata.symbol,
-              tokenB: getWhitelistedTokenSymbol(token2),
-            })
-          : t('common:View Pair Analytics')}
-      </Button>
+              tokenA: getWhitelistedTokenSymbol(token1),
+              tokenB: TEZOS_TOKEN.metadata.symbol,
+            })}
+        </Button>
+        )}
+        {dex && (
+        <Button
+          className={s.detailsButton}
+          theme="inverse"
+          href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+          external
+          icon={<ExternalLink className={s.linkIcon} />}
+        >
+          {dex2
+            ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+              {
+                tokenA: TEZOS_TOKEN.metadata.symbol,
+                tokenB: getWhitelistedTokenSymbol(token2),
+              })
+            : t('common:View Pair Analytics')}
+        </Button>
+        )}
+      </div>
       )}
     </Card>
   );
