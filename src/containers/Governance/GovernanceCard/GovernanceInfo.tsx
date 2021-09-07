@@ -227,6 +227,8 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               </CardCell>
               {/* <DonutChart votes={totalVotes} vetos={totalVetos} /> */}
               <VoteProgress progress={totalVotes / (totalVetos + totalVotes)} />
+              {/* <VoteProgress progress={0.5} /> */}
+              {/* <VoteProgress progress={1} /> */}
 
             </CardContent>
           </Card>
