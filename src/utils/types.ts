@@ -58,6 +58,12 @@ export type WhitelistedTokenMetadata = {
   thumbnailUri: string
 };
 
+export type VoterType = {
+  vote: string,
+  veto: string,
+  candidate: string
+};
+
 export type TokenDataType = {
   token: {
     address: string,
@@ -102,4 +108,10 @@ export type PoolShare = {
   unfrozen:BigNumber,
   frozen:BigNumber,
   total:BigNumber
+};
+
+export type VoteFormValues = {
+  balance1: number
+  selectedBaker: string
+  method:'first' | 'second'
 };

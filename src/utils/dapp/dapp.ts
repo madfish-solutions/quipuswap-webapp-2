@@ -20,7 +20,6 @@ import {
 import {
   getContractInfo, getTokens, saveCustomToken,
 } from '@utils/dapp/tokens';
-
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';

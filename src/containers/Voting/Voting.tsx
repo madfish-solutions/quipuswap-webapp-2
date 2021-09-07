@@ -1,20 +1,42 @@
-import React, { useMemo, useState } from 'react';
-import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo, useState,
+} from 'react';
+import { withTypes } from 'react-final-form';
+import {
+  FoundDex,
+  TransferParams,
+} from '@quipuswap/sdk';
+import { useRouter } from 'next/router';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
-import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useRouterPair } from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import {
+  fallbackTokenToTokenData, handleSearchToken, handleTokenChange,
+} from '@utils/helpers';
+import {
+  useAccountPkh,
+  useNetwork,
+  useOnBlock,
+  useSearchCustomTokens,
+  useTezos,
+  useTokens,
+} from '@utils/dapp';
+import {
+  QSMainNet,
+  TokenDataMap,
+  VoteFormValues,
+  VoterType, WhitelistedToken, WhitelistedTokenPair,
+} from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { VotingStats } from '@components/voting/VotingStats';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Transactions } from '@components/svg/Transactions';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { VotingForm } from './VotingForm';
+import { hanldeTokenPairSelect, submitForm, submitWithdraw } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -31,182 +53,187 @@ type VotingProps = {
   className?: string
 };
 
+const fallbackTokenPair = {
+  token1: TEZOS_TOKEN,
+  token2: STABLE_TOKEN,
+} as WhitelistedTokenPair;
+
 export const Voting: React.FC<VotingProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['vote']);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id); // TODO: Change to routes
-  const [inputValue, setInputValue] = useState<string>(''); // TODO: Delete when lib added
-  const handleInputChange = (state: any) => {
-    setInputValue(state.target.value);
-  }; // TODO: Delete when lib added
+  const updateToast = useUpdateToast();
+  const tezos = useTezos();
+  const network = useNetwork();
+  const exchangeRates = useExchangeRates();
+  const { data: tokens } = useTokens();
+  const accountPkh = useAccountPkh();
+  const searchCustomToken = useSearchCustomTokens();
+  const [tokensData, setTokensData] = useState<TokenDataMap>(
+    {
+      first: fallbackTokenToTokenData(TEZOS_TOKEN),
+      second: fallbackTokenToTokenData(STABLE_TOKEN),
+    },
+  );
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
+  const [dex, setDex] = useState<FoundDex>();
+  const { Form } = withTypes<VoteFormValues>();
+  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
+  const [rewards, setRewards] = useState('0');
+  const [voter, setVoter] = useState<VoterType>();
+  const [
+    tokenPair,
+    setTokenPair,
+  ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const router = useRouter();
+  const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
+  const { from, to } = useRouterPair({
+    page: `voting/${router.query.method}`,
+    urlLoaded,
+    initialLoad,
+    token1: tokenPair.token1,
+    token2: tokenPair.token2,
+  });
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
 
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: 'Loading',
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+    });
+  }, [updateToast]);
+
+  const handleTokenChangeWrapper = (
+    token: WhitelistedToken,
+    tokenNumber: 'first' | 'second',
+  ) => handleTokenChange({
+    token,
+    tokenNumber,
+    exchangeRates,
+    tezos: tezos!,
+    accountPkh: accountPkh!,
+    setTokensData,
+  });
+
+  useEffect(() => {
+    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+      handleSearchToken({
+        tokens,
+        tezos: tezos!,
+        network,
+        from,
+        to,
+        fixTokenFrom: TEZOS_TOKEN,
+        setInitialLoad,
+        setUrlLoaded,
+        setTokens,
+        setTokenPair,
+        searchCustomToken,
+        handleTokenChangeWrapper,
+      });
+    }
+  }, [from, to, initialLoad, tokens, exchangeRates]);
+
+  const getBalance = useCallback(() => {
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      handleTokenChangeWrapper(tokenPair.token1, 'first');
+      handleTokenChangeWrapper(tokenPair.token2, 'second');
+      hanldeTokenPairSelect(
+        tokenPair,
+        setTokenPair,
+        setDex,
+        setRewards,
+        setVoter,
+        handleErrorToast,
+        tezos,
+        accountPkh,
+        network.id as QSMainNet,
+      );
+    }
+  }, [tezos, accountPkh, network.id, tokenPair]);
+
+  useEffect(() => {
+    if (initialLoad && token1 && token2) {
+      getBalance();
+    }
+  }, [tezos, accountPkh, network.id]);
+
+  useOnBlock(tezos, getBalance);
+
   return (
-    <StickyBlock className={className}>
-      <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
-              className={s.tabs}
+    <>
+      <VotingStats
+        pendingReward={rewards}
+        amounts={[tokenPair.balance ?? '0', voter?.vote ?? '0', voter?.veto ?? '0']}
+        className={s.votingStats}
+        dex={dex}
+        handleSubmit={(params:TransferParams[]) => {
+          if (!tezos) return;
+          handleLoader();
+          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast);
+        }}
+      />
+      <StickyBlock className={className}>
+        <Form
+          onSubmit={(values) => {
+            if (!tezos) return;
+            handleLoader();
+            submitForm({
+              tezos,
+              values,
+              dex,
+              tab: currentTab.id,
+              handleSuccessToast,
+              handleErrorToast,
+            });
+          }}
+          mutators={{
+            setValue: ([field, value], state, { changeValue }) => {
+              changeValue(state, field, () => value);
+            },
+          }}
+          render={({ handleSubmit, form }) => (
+            <VotingForm
+              form={form}
+              handleSubmit={handleSubmit}
+              debounce={100}
+              save={() => { }}
+              setTabsState={setTabsState}
+              tabsState={tabsState}
+              rewards={rewards}
+              setRewards={setRewards}
+              voter={voter}
+              dex={dex}
+              setDex={setDex}
+              setVoter={setVoter}
+              setTokens={setTokens}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
+              tokensData={tokensData}
+              handleTokenChange={handleTokenChange}
+              currentTab={currentTab}
             />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
-        }}
-        contentClassName={s.content}
-      >
-        <ComplexInput
-          token1={TEZOS_TOKEN}
-          value={inputValue}
-          onChange={handleInputChange}
-          handleBalance={(value) => setInputValue(value)}
-          id="voting-input"
-          label="Votes"
-          className={cx(s.input, s.mb24)}
-          mode="votes"
+          )}
         />
-        {currentTab.id === 'vote' && (
-          <ComplexBaker
-            label="Baker"
-            id="voting-baker"
-          />
-        )}
-        <div className={s.buttons}>
-          <Button className={s.button} theme="secondary">
-            {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
-          </Button>
-          <Button className={s.button}>
-            {currentTab.label}
-          </Button>
-        </div>
-      </Card>
-      <Card
-        header={{
-          content: 'Voting Details',
-        }}
-        contentClassName={s.content}
-      >
-        <CardCell
-          header={(
-            <>
-              {t('vote:Delegated To')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:Current baker elected by simple majority of votes.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button theme="underlined">
-            Everstake
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('vote:Second Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button theme="underlined">
-            Bake’n’Roll
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Votes')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of votes cast to elect a baker in the pool.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="1000000" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Vetos')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of shares cast so far to veto the current baker.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="1000000" />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Your Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate you voted for.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <Button theme="underlined">
-            Bake’n’Roll
-          </Button>
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('Votes To Veto Left')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:This much more votes needed to veto a delegate.')}
-              />
-            </>
-          )}
-          className={s.cell}
-        >
-          <CurrencyAmount amount="1000000" />
-        </CardCell>
-        <div className={s.detailsButtons}>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-          >
-            View Pair Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-          <Button
-            className={s.detailsButton}
-            theme="inverse"
-          >
-            View Delegation Analytics
-            <ExternalLink className={s.linkIcon} />
-          </Button>
-        </div>
-      </Card>
-    </StickyBlock>
+      </StickyBlock>
+    </>
   );
 };
