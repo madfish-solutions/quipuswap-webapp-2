@@ -4,6 +4,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Logo } from '@components/svg/Logo';
+import { LogoSmall } from '@components/svg/LogoSmall';
 
 import s from './LogoButton.module.sass';
 
@@ -18,7 +19,8 @@ export const LogoButton: React.FC = () => {
   return (
     <Link href="/">
       <a className={cx(modeClass[colorThemeMode], s.logo)}>
-        <Logo />
+        <LogoSmall className={s.logoImg} />
+        <Logo className={s.logoText} />
       </a>
     </Link>
   );

@@ -75,7 +75,7 @@
   flex-wrap: wrap
 
 .cellCenter
-  align-items: center
+  align-items: flex-start
 
 .cell
   &:not(:last-child)
@@ -146,6 +146,8 @@
       margin-bottom: 16px
 
 @include media('>Lphone', '<=tablet')
+  .cellCenter
+    align-items: center
   .button
     margin-left: auto
     width: 180px
@@ -187,11 +189,3 @@
       &:not(:last-child)
         margin-bottom: 0
         margin-right: 24px
-
-@include media('>1060px')
-  .detailsButtons
-    flex-direction: row
-    .detailsButton
-      &:not(:first-child)
-        margin-top: 0
-        margin-left: 32px

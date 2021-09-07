@@ -66,14 +66,13 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         </label>
       )}
       <div className={s.background}>
-        <div className={s.shape}>
+        <Button
+          onClick={() => setTokensModal(true)}
+          theme="quaternary"
+          className={s.shape}
+        >
           <input {...props} ref={inputRef} value={value} hidden />
-          <Button
-            onClick={() => setTokensModal(true)}
-            theme="quaternary"
-            className={s.baker}
-            textClassName={s.bakerInner}
-          >
+          <div className={s.bakerInner}>
             <BakerLogo baker={baker || {} as WhitelistedBaker} />
             <h6
               className={cx(s.token, s.bakerLabel)}
@@ -82,8 +81,8 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
               {baker ? baker.name : 'Choose Baker'}
             </h6>
             <Shevron />
-          </Button>
-        </div>
+          </div>
+        </Button>
       </div>
       <ComplexError error={error} />
     </div>
