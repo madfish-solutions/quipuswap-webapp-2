@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { Button } from '@components/ui/Button';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
@@ -35,6 +36,8 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  const updateToast = useUpdateToast();
+
   const compoundClassName = cx(
     { [s.focused]: focused },
     modeClass[colorThemeMode],
@@ -49,7 +52,18 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
     }
   };
 
-  const handlePaste = async () => handleInput(await navigator.clipboard.readText());
+  const handlePaste = async () => {
+    try {
+      handleInput(
+        await navigator.clipboard.readText(),
+      );
+    } catch (err) {
+      updateToast({
+        type: 'error',
+        render: `${err.name}: ${err.message}`,
+      });
+    }
+  };
 
   return (
     // eslint-disable-next-line max-len
@@ -69,7 +83,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           <TextareaAutosize
             minRows={1}
             maxRows={6}
-            className={cx(s.recipient, s.item1, s.input)}
+            className={cx(s.recipient, s.item1, s.unitem1, s.input)}
             onFocus={() => setActive(true)}
             onBlur={() => setActive(false)}
             readOnly={readOnly}

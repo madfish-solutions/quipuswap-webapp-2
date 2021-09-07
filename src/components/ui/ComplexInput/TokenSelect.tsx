@@ -14,16 +14,23 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
+  noBalanceButtons?: boolean
   className?: string
-  balance?: string
+  balance: string
+  exchangeRate?: string
   label: string
   error?: string
+  notSelectable?: boolean
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
-  token: WhitelistedToken,
+  token?: WhitelistedToken,
+  blackListedTokens: WhitelistedToken[],
   setToken: (token:WhitelistedToken) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -35,14 +42,18 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
+  noBalanceButtons = false,
   label,
   handleBalance,
+  exchangeRate = null,
+  notSelectable = false,
   value,
   error,
   id,
   handleChange,
   token,
   setToken,
+  blackListedTokens,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -50,9 +61,15 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const account = useAccountPkh();
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
+  const dollarEquivalent = useMemo(() => (exchangeRate
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
+    : ''
+  ),
+  [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -67,11 +84,12 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     }
   };
 
-  const equivalentContent = `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`;
+  const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
   return (
     <>
       <TokensModal
+        blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={(selectedToken) => {
@@ -95,15 +113,17 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {equivalentContent}
             </div>
             <div className={s.item2}>
+              {account && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Total Balance')}
+                  {t('common:Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+                  {prettyPrice(parseFloat(balance), 3)}
                 </div>
               </div>
+              )}
             </div>
             <input
               className={cx(s.item3, s.input)}
@@ -113,17 +133,23 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               value={value}
               {...props}
             />
-            <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
-              <TokensLogos token1={token} />
+            <Button
+              disabled={notSelectable}
+              onClick={() => !notSelectable && setTokensModal(true)}
+              theme="quaternary"
+              className={s.item4}
+              textClassName={s.item4Inner}
+            >
+              <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
-                {getWhitelistedTokenSymbol(token)}
+                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>
-              <Shevron />
+              {!notSelectable && (<Shevron />)}
             </Button>
           </div>
         </div>
-        <PercentSelector value={balance} handleBalance={handleBalance} />
+        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
         <ComplexError error={error} />
       </div>
     </>

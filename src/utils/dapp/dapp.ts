@@ -188,10 +188,15 @@ function useDApp() {
 
           if (lastUsedConnection === 'temple') {
             const pkh = wlt.connected ? await wlt.getPKH() : null;
+            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkit;
+            if (wlt.connected && pkh) {
+              const { publicKey } = wlt.permission!;
+              tk.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
+            }
             setState((prevState) => ({
               ...prevState,
               templeWallet: wlt,
-              tezos: wlt.connected ? wlt.toTezos() : fallbackToolkit,
+              tezos: tk,
               accountPkh: pkh,
               connectionType: wlt.connected ? 'temple' : null,
             }));
@@ -229,6 +234,7 @@ function useDApp() {
         const toolkit = new TezosToolkit(net.rpcBaseURL);
         toolkit.setPackerProvider(michelEncoder);
         toolkit.setWalletProvider(beaconWallet);
+
         setState((prevState) => ({
           ...prevState,
           templeWallet: null,
@@ -261,7 +267,7 @@ function useDApp() {
   useEffect(() => {
     setState((prevState) => ({
       ...prevState,
-      tokens: { loading: false, data: tokensData ?? [] },
+      tokens: { loading: !tokensData, data: tokensData ?? [] },
     }));
   }, [tokensData]);
 
@@ -301,7 +307,11 @@ function useDApp() {
   }, [network]);
 
   const searchCustomToken = useCallback(
-    async (address: string, tokenId?: number) => {
+    async (
+      address: string,
+      tokenId?: number,
+      saveAfterSearch?:boolean,
+    ): Promise<WhitelistedToken | null> => {
       if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
@@ -318,7 +328,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] },
           }));
-          return;
+          return null;
         }
         const isFa2 = !!type.methods.update_operators;
         const customToken = await getTokenMetadata(network, address, tokenId);
@@ -327,7 +337,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] },
           }));
-          return;
+          return null;
         }
         const token : WhitelistedToken = {
           contractAddress: address,
@@ -340,7 +350,10 @@ function useDApp() {
           ...prevState,
           searchTokens: { loading: false, data: [token] },
         }));
+        if (saveAfterSearch) saveCustomToken(token);
+        return token;
       }
+      return null;
     },
     [tezos, network],
   );
@@ -424,6 +437,7 @@ function useDApp() {
   const connectWithBeacon = useCallback(
     async (forcePermission: boolean) => {
       const { pkh, toolkit } = await connectWalletBeacon(forcePermission, network);
+
       setState((prevState) => ({
         ...prevState,
         connectionType: 'beacon',

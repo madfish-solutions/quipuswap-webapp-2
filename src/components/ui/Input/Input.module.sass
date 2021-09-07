@@ -28,6 +28,7 @@
   line-height: 1.72
   outline: none
   border: none
+  margin: 0
 
 .adornment
   position: absolute
@@ -100,8 +101,11 @@
     color: $text-01
     &::placeholder
       color: $text-03
-  &.focused .background
-    background: $brand-01
+  &.focused
+    .adornment
+      color: $text-01
+    .background
+      background: $brand-01
   &.small .input::placeholder 
       color: $text-01
 
@@ -117,8 +121,11 @@
     color: $text-inverse
     &::placeholder
       color: $text-03
-  &.focused .background
-    background: $brand-02
+  &.focused
+    .adornment
+      color: $text-inverse
+    .background
+      background: $brand-02
   &.small .input
     background-color: $ui-07
     &::placeholder

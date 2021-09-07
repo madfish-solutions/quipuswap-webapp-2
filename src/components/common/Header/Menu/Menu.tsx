@@ -8,6 +8,7 @@ import { Button } from '@components/ui/Button';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
+import { Madfish } from '@components/svg/Madfish';
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';
 import { QPToken } from '../QPToken';
@@ -43,12 +44,21 @@ export const Menu: React.FC<MenuProps> = ({
         </div>
         <div className={s.row}>
           <NetworkSelect menuPlacement="top" className={s.select} />
-          <Button href="https://quipuswap.com/" theme="secondary" className={s.button}>
+          <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common:Old version')}
           </Button>
 
         </div>
         <div className={s.row}>
+          <Button
+            href="https://www.madfish.solutions/"
+            external
+            theme="clean"
+            className={s.madfish}
+          >
+            <Madfish />
+          </Button>
+
           <Socials />
         </div>
       </footer>

@@ -16,7 +16,7 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { localSearchToken, isTokensEqual } from '@utils/helpers';
+import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Checkbox } from '@components/ui/Checkbox';
@@ -38,6 +38,9 @@ const themeClass = {
 
 type PositionsModalProps = {
   onChange: (tokenPair: WhitelistedTokenPair) => void
+  initialPair?: WhitelistedTokenPair
+  notSelectable1?: WhitelistedToken
+  notSelectable2?: WhitelistedToken
 } & ReactModal.Props;
 
 type HeaderProps = {
@@ -152,6 +155,9 @@ const AutoSave = (props:any) => (
 export const PositionsModal: React.FC<PositionsModalProps> = ({
   onChange,
   onRequestClose,
+  notSelectable1 = undefined,
+  notSelectable2 = undefined,
+  initialPair,
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
@@ -216,6 +222,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           changeValue(state, field, () => value);
         },
       }}
+      initialValues={{
+        token1: initialPair?.token1,
+        token2: initialPair?.token2,
+      }}
       render={({ form, values }) => (
         <Modal
           title={t('common:Your Positions')}
@@ -229,7 +239,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           )}
           footer={(
             <Button
-              onClick={() => onChange({ token1: values.token1, token2: values.token2, dex: '' })}
+              onClick={() => onChange({
+                token1: values.token1,
+                token2: values.token2,
+              } as WhitelistedTokenPair)}
               disabled={!values.token2 || !values.token1}
               className={s.modalButton}
               theme="primary"
@@ -244,13 +257,13 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           onRequestClose={(e) => {
             if (values.token1 && values.token2) {
-              onChange({ token1: values.token1, token2: values.token2, dex: '' });
+              onChange({ token1: values.token1, token2: values.token2 } as WhitelistedTokenPair);
             }
             if (onRequestClose) onRequestClose(e);
           }}
           {...props}
         >
-          <Field name="token1">
+          <Field name="token1" initialValue={notSelectable1}>
             {({ input }) => {
               const token = input.value;
               if (!token) return '';
@@ -260,13 +273,15 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                   tabIndex={0}
                   onClick={() => {
                   // onChange(token);
-                    if (values.token2 && values.token1) {
-                      form.mutators.setValue('token1', values.token2);
-                      form.mutators.setValue('token2', undefined);
-                    } else if (!values.token1) {
-                      form.mutators.setValue('token1', token);
-                    } else {
-                      form.mutators.setValue('token1', undefined);
+                    if (!notSelectable1) {
+                      if (values.token2 && values.token1) {
+                        form.mutators.setValue('token1', values.token2);
+                        form.mutators.setValue('token2', undefined);
+                      } else if (!values.token1) {
+                        form.mutators.setValue('token1', token);
+                      } else {
+                        form.mutators.setValue('token1', undefined);
+                      }
                     }
                   }}
                 >
@@ -283,7 +298,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             </div>
           </div>
           )}
-          <Field name="token2">
+          <Field initialValue={notSelectable2} name="token2">
             {({ input }) => {
               const token = input.value;
               if (!token) return '';
@@ -292,10 +307,12 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                   token={token}
                   tabIndex={0}
                   onClick={() => {
-                    if (!values.token2) {
-                      form.mutators.setValue('token2', token);
-                    } else {
-                      form.mutators.setValue('token2', undefined);
+                    if (!notSelectable2) {
+                      if (!values.token2) {
+                        form.mutators.setValue('token2', token);
+                      } else {
+                        form.mutators.setValue('token2', undefined);
+                      }
                     }
                   }}
                 >
@@ -314,7 +331,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
           )}
           {!values.token2 && allTokens
-            .filter((x) => !values.token1 || !isTokensEqual(x, values.token1))
+            .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
             .map((token) => {
               const {
                 contractAddress, fa2TokenId,
