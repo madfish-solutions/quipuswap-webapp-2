@@ -58,6 +58,12 @@ export type WhitelistedTokenMetadata = {
   thumbnailUri: string
 };
 
+export type VoterType = {
+  vote: string,
+  veto: string,
+  candidate: string
+};
+
 export type TokenDataType = {
   token: {
     address: string,
@@ -118,4 +124,10 @@ export type WhitelistedFarm = {
   farmContract: string
   projectLink: string
   analyticsLink: string
+};
+
+export type VoteFormValues = {
+  balance1: number
+  selectedBaker: string
+  method:'first' | 'second'
 };

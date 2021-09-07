@@ -23,7 +23,7 @@ export const CardCell: React.FC<CardCellProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(s.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(className, s.root, modeClass[colorThemeMode])}>
       <h6 className={s.header}>
         {header}
       </h6>

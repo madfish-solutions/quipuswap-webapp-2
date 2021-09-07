@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { prepareTokenLogo, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import FallbackLogo from '@icons/FallbackLogo.svg';
+import { FallbackLogo } from '@components/svg/FallbackLogo';
 
 import s from './TokensLogos.module.sass';
 
