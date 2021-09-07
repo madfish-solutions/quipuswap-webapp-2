@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import VotingReward from '@icons/VotingReward.svg';
 
-import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
-import { useAccountPkh, useTezos } from '@utils/dapp';
 import s from './VotingStats.module.sass';
 
 const content = [
