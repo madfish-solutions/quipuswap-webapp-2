@@ -96,7 +96,7 @@ const RealForm:React.FC<VotingFormProps> = ({
   currentTab,
   setTabsState,
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'vote']);
   const updateToast = useUpdateToast();
   const {
     openConnectWalletModal,
@@ -110,6 +110,7 @@ const RealForm:React.FC<VotingFormProps> = ({
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
+  const [isBanned, setIsBanned] = useState<boolean>(false);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -299,7 +300,15 @@ const RealForm:React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt12}
-                handleChange={(baker) => input.onChange(baker.address)}
+                handleChange={(bakerObj) => {
+                  input.onChange(bakerObj.address);
+                  const asyncisBanned = async () => {
+                    if (!dex) return;
+                    const tempBaker = await dex.storage.storage.vetos.get(bakerObj.address);
+                    setIsBanned(!!tempBaker);
+                  };
+                  asyncisBanned();
+                }}
                 error={(meta.touched && meta.error) || meta.submitError}
               />
             )}
@@ -317,9 +326,9 @@ const RealForm:React.FC<VotingFormProps> = ({
           <Button
             onClick={handleVoteOrVeto}
             className={s.button}
-            disabled={!values.balance1}
+            disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
           >
-            {currentTab.label}
+            {currentTab.id === 'vote' && isBanned ? t('vote:Baker under Veto') : currentTab.label}
           </Button>
         </div>
 
