@@ -101,8 +101,14 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         contentClassName={s.topContent}
         header={{
           content: (
-            <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
-              <Back className={s.proposalBackIcon} />
+            <Button
+              onClick={() => (handleUnselect ? handleUnselect() : null)}
+              theme="quaternary"
+              className={s.proposalHeader}
+              control={
+                <Back className={s.proposalBackIcon} />
+            }
+            >
               Back to Vaults
             </Button>
           ),
@@ -391,32 +397,40 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Pair Analytics
-              <ExternalLink className={s.linkIcon} />
             </Button>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Farm Contract
-              <ExternalLink className={s.linkIcon} />
             </Button>
           </div>
           <div className={s.detailsButtons}>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Token Contract
-              <ExternalLink className={s.linkIcon} />
             </Button>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Project
-              <ExternalLink className={s.linkIcon} />
             </Button>
           </div>
         </Card>
