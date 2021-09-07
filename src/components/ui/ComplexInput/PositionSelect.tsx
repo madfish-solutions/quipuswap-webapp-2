@@ -116,15 +116,17 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
 
                 </div>
               )}
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {balanceLabel ?? t('common:Total Balance')}
-                  :
+              {!noBalanceButtons ? (
+                <div className={s.item2Line}>
+                  <div className={s.caption}>
+                    {balanceLabel ?? t('common:Total Balance')}
+                    :
+                  </div>
+                  <div className={cx(s.label2, s.price)}>
+                    {prettyPrice(parseFloat(balance))}
+                  </div>
                 </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
-                </div>
-              </div>
+              ) : (<div className={s.item2Line} />)}
             </div>
             <input
               className={cx(s.item3, s.input)}
