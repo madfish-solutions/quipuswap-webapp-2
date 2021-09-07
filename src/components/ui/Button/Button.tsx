@@ -93,7 +93,10 @@ export const Button: React.FC<ButtonProps> = ({
     }
     return (
       <Link {...(props as LinkProps)}>
-        <a className={compoundClassName}>
+        <a
+          className={compoundClassName}
+          title={(props as React.HTMLProps<HTMLAnchorElement>).title}
+        >
           {control}
           {content}
           {icon}
