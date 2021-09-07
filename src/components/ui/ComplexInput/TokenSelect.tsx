@@ -26,6 +26,7 @@ type TokenSelectProps = {
   exchangeRate?: string
   label: string
   error?: string
+  notSelectable?: boolean
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
   token?: WhitelistedToken,
@@ -45,6 +46,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   label,
   handleBalance,
   exchangeRate = null,
+  notSelectable = false,
   value,
   error,
   id,
@@ -82,7 +84,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
     }
   };
 
-  const equivalentContent = `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}`;
+  const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
   return (
     <>
@@ -131,13 +133,19 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               value={value}
               {...props}
             />
-            <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.item4}>
+            <Button
+              disabled={notSelectable}
+              onClick={() => !notSelectable && setTokensModal(true)}
+              theme="quaternary"
+              className={s.item4}
+              textClassName={s.item4Inner}
+            >
               <TokensLogos token1={token ?? TEZOS_TOKEN} />
               <h6 className={cx(s.token)}>
 
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>
-              <Shevron />
+              {!notSelectable && (<Shevron />)}
             </Button>
           </div>
         </div>

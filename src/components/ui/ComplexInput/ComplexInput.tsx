@@ -11,11 +11,13 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
   className?: string
   balance?: string
+  exchangeRate?: string
   label: string
   error?: string
   onClick?: () => void
@@ -41,6 +43,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   balance = '10.00',
   label,
   handleBalance,
+  exchangeRate = null,
   value,
   readOnly,
   error,
@@ -56,8 +59,13 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
+  const dollarEquivalent = useMemo(() => (exchangeRate
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
+    : ''
+  ),
+  [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -73,7 +81,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     }
   };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  let equivalentContent = '';
+  if (mode === 'input') {
+    equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
+  }
 
   return (
     // eslint-disable-next-line max-len
@@ -122,7 +133,13 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             value={value}
             {...props}
           />
-          <Button onClick={onClick} theme="quaternary" className={s.item4} disabled={readOnly}>
+          <Button
+            onClick={onClick}
+            theme="quaternary"
+            className={s.item4}
+            textClassName={s.item4Inner}
+            disabled={readOnly}
+          >
             <TokensLogos token1={token1} token2={token2} />
             <h6 className={cx(s.token)}>
               {mode === 'input' && getWhitelistedTokenSymbol(token1)}
