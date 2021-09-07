@@ -9,7 +9,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
-import { LineChartSampleData } from '@components/ui/LineChart/content';
+import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
@@ -25,7 +25,7 @@ import { TokensLogos } from '@components/ui/TokensLogos';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import s from './FarmingInfo.module.sass';
 
-const LineChart = dynamic(() => import('@components/ui/LineChart'), {
+const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
 });
 
@@ -101,8 +101,14 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         contentClassName={s.topContent}
         header={{
           content: (
-            <Button onClick={() => (handleUnselect ? handleUnselect() : null)} theme="quaternary" className={s.proposalHeader}>
-              <Back className={s.proposalBackIcon} />
+            <Button
+              onClick={() => (handleUnselect ? handleUnselect() : null)}
+              theme="quaternary"
+              className={s.proposalHeader}
+              control={
+                <Back className={s.proposalBackIcon} />
+            }
+            >
               Back to Vaults
             </Button>
           ),
@@ -391,32 +397,40 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Pair Analytics
-              <ExternalLink className={s.linkIcon} />
             </Button>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Farm Contract
-              <ExternalLink className={s.linkIcon} />
             </Button>
           </div>
           <div className={s.detailsButtons}>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Token Contract
-              <ExternalLink className={s.linkIcon} />
             </Button>
             <Button
               className={s.detailsButton}
               theme="inverse"
+              icon={
+                <ExternalLink className={s.linkIcon} />
+              }
             >
               Project
-              <ExternalLink className={s.linkIcon} />
             </Button>
           </div>
         </Card>

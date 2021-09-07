@@ -43,11 +43,10 @@ const content:ContentType = [
   },
 ];
 
-const fallbackPair:WhitelistedTokenPair = {
+const fallbackPair = {
   token1: TEZOS_TOKEN,
   token2: TEZOS_TOKEN,
-  dex: '',
-};
+} as WhitelistedTokenPair;
 
 const farms:WhitelistedFarm[] = [
   {
