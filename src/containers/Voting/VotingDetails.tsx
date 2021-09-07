@@ -5,6 +5,7 @@ import {
   FoundDex,
 } from '@quipuswap/sdk';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import {
@@ -18,7 +19,6 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { TEZOS_TOKEN } from '@utils/defaults';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair
