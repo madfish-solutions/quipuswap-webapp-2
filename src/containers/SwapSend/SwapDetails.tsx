@@ -172,7 +172,6 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <Button
           className={s.detailsButton}
           theme="inverse"
-          target="_blank"
           href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
           external
           icon={<ExternalLink className={s.linkIcon} />}
@@ -188,7 +187,6 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <Button
           className={s.detailsButton}
           theme="inverse"
-          target="_blank"
           href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
           external
           icon={<ExternalLink className={s.linkIcon} />}

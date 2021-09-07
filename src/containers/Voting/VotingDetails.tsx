@@ -108,6 +108,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         {currentCandidate ? (
           <Button
             href={`https://tzkt.io/${currentCandidate.address}`}
+            external
             theme="underlined"
             title={getWhitelistedBakerName(currentCandidate)}
           >
@@ -130,6 +131,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         {secondCandidate ? (
           <Button
             href={`https://tzkt.io/${secondCandidate.address}`}
+            external
             theme="underlined"
             title={getWhitelistedBakerName(secondCandidate)}
           >
@@ -179,8 +181,8 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       >
         {myCandidate ? (
           <Button
-            external
             href={`https://tzkt.io/${myCandidate.address}`}
+            external
             theme="underlined"
             title={getWhitelistedBakerName(myCandidate)}
           >
