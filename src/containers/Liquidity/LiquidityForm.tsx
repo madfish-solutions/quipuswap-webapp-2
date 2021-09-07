@@ -122,6 +122,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   currentTab,
   setAddLiquidityParams,
   removeLiquidityParams,
+  addLiquidityParams,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const {
@@ -162,6 +163,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         form.mutators.setValue(
           'balance2', undefined,
         );
+        setAddLiquidityParams([]);
         return;
       }
     } else if (!val.balance3 || val.balance3.toString() === '.') {
@@ -171,6 +173,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       form.mutators.setValue(
         'balanceB', undefined,
       );
+      setAddLiquidityParams([]);
       return;
     }
     if (!dex) return;
@@ -253,7 +256,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           lastChange === 'balance1' ? 'balance2' : 'balance1',
           res,
         );
-        if (!dex) return;
+        if (!dex || !val.balance1 || !val.balance2) return;
         try {
           const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
             ? tezos!!.format('tz', 'mutez', balance) as any
@@ -472,43 +475,39 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               decimals,
             ),
           );
-          if (!dex) return;
+          if (!dex || !values.balance1 || !values.balance2) return;
           try {
-            try {
-              const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
-                ? tezos!!.format('tz', 'mutez', balance) as any
-                : toNat(balance, token.token.decimals));
+            const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
+              ? tezos!!.format('tz', 'mutez', balance) as any
+              : toNat(balance, token.token.decimals));
 
-              const getMethod = async (
-                token:TokenDataType,
-                foundDex:FoundDex,
-                value:BigNumber,
-              ) => (isTez(token)
-                ? estimateSharesInTez(foundDex.storage, getInputValue(token, value.toString()))
-                : estimateSharesInToken(foundDex.storage, getInputValue(token, value.toString())));
-              const sharesA = await getMethod(
-                tokensData.first,
-                dex,
-                new BigNumber(values.balance1),
-              );
-              const sharesB = await getMethod(
-                tokensData.second,
-                dex,
-                lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
-              );
+            const getMethod = async (
+              token:TokenDataType,
+              foundDex:FoundDex,
+              value:BigNumber,
+            ) => (isTez(token)
+              ? estimateSharesInTez(foundDex.storage, getInputValue(token, value.toString()))
+              : estimateSharesInToken(foundDex.storage, getInputValue(token, value.toString())));
+            const sharesA = await getMethod(
+              tokensData.first,
+              dex,
+              new BigNumber(values.balance1),
+            );
+            const sharesB = await getMethod(
+              tokensData.second,
+              dex,
+              lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
+            );
 
-              const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
-              const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
+            const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
+            const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
 
-              form.mutators.setValue(
-                'estimateLP',
-                lp1.plus(lp2),
-              );
-            } catch (e) {
-              handleErrorToast(e);
-            }
-          } catch (err) {
-            handleErrorToast(err);
+            form.mutators.setValue(
+              'estimateLP',
+              lp1.plus(lp2),
+            );
+          } catch (e) {
+            handleErrorToast(e);
           }
         }
       }
@@ -909,6 +908,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             <Button
               onClick={handleAddLiquidity}
               className={s.button}
+              disabled={addLiquidityParams.length < 1}
             >
               {currentTab.label}
             </Button>

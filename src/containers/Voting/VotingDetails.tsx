@@ -211,7 +211,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          Pair Analytics
+          {t('vote:Pair Analytics')}
         </Button>
         {/* <Button
           className={s.detailsButton}

@@ -7,19 +7,17 @@
   font-size: 1.125rem
   font-weight: bold
 
+.logoImg
+  max-height: 40px
+  display: block
+
 .logoText
   display: none
 
 @include media('>SDesktop')
   .logo
     margin-right: auto
+  .logoImg
+    display: none
   .logoText
     display: block
-    font-size: 1.286rem
-    transition: color $colorChangeAnimationTime
-  .light
-    .logoText
-      color: $ui-07
-  .dark
-    .logoText
-      color: $ui-01
