@@ -54,6 +54,31 @@ module.exports = withReactSvg({
         destination: `/liquidity/remove/TEZ-:slug`,
         permanent: true,
       },
+      {
+        source: '/voting',
+        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+      {
+        source: '/governance/vote-baker/:slug',
+        destination: `/voting/vote/TEZ-:slug`,
+        permanent: true,
+      },
+      {
+        source: '/voting/vote',
+        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+      {
+        source: '/voting/veto',
+        destination: `/voting/veto/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true,
+      },
+      {
+        source: '/governance/veto/:slug',
+        destination: `/voting/veto/TEZ-:slug`,
+        permanent: true,
+      },
     ]
   },
 });

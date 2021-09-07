@@ -21,7 +21,9 @@ type PositionSelectProps = {
   noBalanceButtons?: boolean
   className?: string
   balance?: string
+  balanceLabel?: string
   frozenBalance?: string
+  notFrozen?:boolean
   label: string
   error?: string
   notSelectable1?: WhitelistedToken
@@ -43,6 +45,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   noBalanceButtons = false,
   frozenBalance = '10.00',
   label,
+  balanceLabel,
   handleBalance,
   value,
   error,
@@ -52,6 +55,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   notSelectable2 = undefined,
   tokenPair,
   setTokenPair,
+  notFrozen,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -100,25 +104,29 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common:Frozen Balance')}
-                  :
-                </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(frozenBalance))}
-                </div>
+              {notFrozen ? '' : (
+                <div className={s.item2Line}>
+                  <div className={s.caption}>
+                    {t('common:Frozen Balance')}
+                    :
+                  </div>
+                  <div className={cx(s.label2, s.price)}>
+                    {prettyPrice(parseFloat(frozenBalance))}
+                  </div>
 
-              </div>
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common:Total Balance')}
-                  :
                 </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+              )}
+              {!noBalanceButtons ? (
+                <div className={s.item2Line}>
+                  <div className={s.caption}>
+                    {balanceLabel ?? t('common:Total Balance')}
+                    :
+                  </div>
+                  <div className={cx(s.label2, s.price)}>
+                    {prettyPrice(parseFloat(balance))}
+                  </div>
                 </div>
-              </div>
+              ) : (<div className={s.item2Line} />)}
             </div>
             <input
               className={cx(s.item3, s.input)}

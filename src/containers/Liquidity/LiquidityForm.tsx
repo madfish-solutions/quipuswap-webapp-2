@@ -124,7 +124,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   removeLiquidityParams,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
-  const { openConnectWalletModal } = useConnectModalsState();
+  const {
+    openConnectWalletModal,
+    connectWalletModalOpen,
+    closeConnectWalletModal,
+  } = useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
@@ -522,6 +526,12 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       }
     };
   }, [values.switcher]);
+
+  useEffect(() => {
+    if (connectWalletModalOpen && accountPkh) {
+      closeConnectWalletModal();
+    }
+  }, [accountPkh]);
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;
