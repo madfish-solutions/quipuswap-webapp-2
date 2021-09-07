@@ -1,9 +1,111 @@
-query GetPairPlotLiquidity($id: String!) {
-    pair (id: $id) {
-        plotLiquidity {
-            time
-            value
-            xtzUsdQuoteHistorical
-        }
+enum AssetType {
+  FA12
+  FA2
+  XTZ
+}
+enum Action {
+  Swap
+  Add
+  Remove
+  Vote
+  Ban
+  Stake
+  Unstake
+}
+
+type Value {
+  xtz: Int!
+  usd: Int!
+}
+
+type Asset {
+  type: AssetType! #filter
+  address: String! #sort #filter
+  token_id: Int
+  name: String! #sort #filter
+  symbol: String! #sort #filter
+  price: Value! #sort
+  liquidity: Value! #sort
+  volume_24h: Value! #sort
+  fees_24h: Value! #sort
+  transactions_24h: Int! #sort
+  pairs: [Pair]
+  farms: [Farm]
+  trxs: [Transaction]
+}
+
+
+type AssetValue {
+  amount: Int!
+  token: Asset!
+}
+
+
+type Transaction {
+  action: Action! #filter
+  value: Value!
+  assets: [AssetValue]! #filter
+  account: User! #filter
+  time: String!
+}
+
+type Delegate {
+  address: String! #sort
+  name: String #sort
+  staking: Value! #sort
+  free_space: Value! #sort
+  roi: Value! #sort
+  health: Value!
+}
+
+type VotingInfo {
+  delegate: Delegate!
+  votes: Int!
+}
+
+type Farm {
+  address: String! #sort #filter
+  token_id: Int! #sort #filter
+  interface_fee: Int! #filter
+  withdrawal_fee: Int #filter
+  withdrawal_timelock: Int #filter
+  total_deposit: AssetValue! #sort #filter
+  daily_reward: AssetValue! #sort #filter
+  apr: Int! #sort #filter
+  daily_apr: Int! #sort #filter
+  transactions_24h: Int! #sort
+  liquidity: Value! #sort
+  total_votes: Value!
+  delegate: Delegate
+  candidate: Delegate
+  votes: [VotingInfo]
+  trxs: [Transaction]
+}
+
+type User {
+  address: String! #filter
+  value: Value!
+  baker_rewards: Value!
+  farm_rewards: Value!
+  tokens: [Asset] #count
+  pairs: [Pair] #count
+  farms: [Farm] #count
+  trxs: [Transaction]
+}
+
+query GetPairPlotLiquidity($address: String!) {
+  user (address: $address) {
+    address
+    trxs: [Transaction]
+  }
+}
+
+query GetUserTransactions($id: String!) {
+  pair (id: $id) {
+    plotLiquidity {
+      time
+      value
+      xtzUsdQuoteHistorical
     }
+  }
 }
