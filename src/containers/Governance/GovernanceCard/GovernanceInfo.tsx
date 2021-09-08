@@ -3,6 +3,7 @@ import cx from 'classnames';
 import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { shortize } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -13,12 +14,10 @@ import { VoteCell } from '@components/ui/Modal/ModalCell/VoteCell';
 import { VoteModal } from '@components/modals/VoteModal';
 import { useTranslation } from 'next-i18next';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { shortize } from '@utils/helpers';
+import DonutChart from '@components/ui/DonutChart';
 import { ExternalLink } from '@components/svg/ExternalLink';
-import { VoteProgress } from '@components/svg/VoteProgress';
 import For from '@icons/For.svg';
 
-import DonutChart from '@components/ui/DonutChart';
 import s from './GovernanceCard.module.sass';
 
 import { GovernanceCardProps } from './GovernanceCard';
@@ -227,11 +226,6 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 </div>
               </CardCell>
               <DonutChart votes={totalVotes} vetos={totalVetos} />
-              <VoteProgress progress={totalVotes / (totalVetos + totalVotes)} />
-              <VoteProgress progress={0.5} />
-              <VoteProgress progress={0.75} />
-              <VoteProgress progress={1} />
-
             </CardContent>
           </Card>
           <Card className={cx(s.proposalDetails)}>

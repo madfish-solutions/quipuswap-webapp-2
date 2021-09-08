@@ -8,6 +8,7 @@ import {
 import moment, { Moment } from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { prettyPrice } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -16,7 +17,6 @@ import { Back } from '@components/svg/Back';
 import { Markdown } from '@components/ui/Markdown';
 import DateIcon from '@icons/DateIcon.svg';
 
-import { prettyPrice } from '@utils/helpers';
 import s from './GovernanceCard.module.sass';
 
 type GovernanceFormProps = {
