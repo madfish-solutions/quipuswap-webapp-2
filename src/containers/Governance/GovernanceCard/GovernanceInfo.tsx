@@ -18,6 +18,7 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 import { VoteProgress } from '@components/svg/VoteProgress';
 import For from '@icons/For.svg';
 
+import DonutChart from '@components/ui/DonutChart';
 import s from './GovernanceCard.module.sass';
 
 import { GovernanceCardProps } from './GovernanceCard';
@@ -225,10 +226,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <For className={s.voteIcon} />
                 </div>
               </CardCell>
-              {/* <DonutChart votes={totalVotes} vetos={totalVetos} /> */}
+              <DonutChart votes={totalVotes} vetos={totalVetos} />
               <VoteProgress progress={totalVotes / (totalVetos + totalVotes)} />
-              {/* <VoteProgress progress={0.5} /> */}
-              {/* <VoteProgress progress={1} /> */}
+              <VoteProgress progress={0.5} />
+              <VoteProgress progress={0.75} />
+              <VoteProgress progress={1} />
 
             </CardContent>
           </Card>
