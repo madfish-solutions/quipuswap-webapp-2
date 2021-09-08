@@ -345,6 +345,51 @@ const UiKit: React.FC = () => {
             Quaternary
           </Button>
         </div>
+        <div className={s.buttonsBlock}>
+          <Button
+            className={s.button}
+            theme="inverse"
+          >
+            Inverse
+          </Button>
+          <Button
+            className={s.button}
+            disabled
+            theme="inverse"
+          >
+            Inverse
+          </Button>
+        </div>
+        <div className={s.buttonsBlock}>
+          <Button
+            className={s.button}
+            theme="underlined"
+          >
+            Underlined
+          </Button>
+          <Button
+            className={s.button}
+            disabled
+            theme="underlined"
+          >
+            Underlined
+          </Button>
+        </div>
+        <div className={s.buttonsBlock}>
+          <Button
+            className={s.button}
+            theme="clean"
+          >
+            Clean
+          </Button>
+          <Button
+            className={s.button}
+            disabled
+            theme="clean"
+          >
+            Clean
+          </Button>
+        </div>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Inputs</h1>

@@ -7,6 +7,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 
+import { Tooltip } from '@components/ui/Tooltip';
 import s from './ModalCell.module.sass';
 
 const modeClass = {
@@ -24,7 +25,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
   onClick,
   tabIndex,
 }) => {
-  const { t } = useTranslation(['baker']);
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(
     modeClass[colorThemeMode],
@@ -67,19 +68,19 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
           <div className={s.caption}>
-            {t('baker:Fee')}
-            :
+            {t('common:Fee')}
+            <Tooltip sizeT="small" content="The fee this baker will charge on your baking reward." />
           </div>
           <div className={s.label1}>
-            {baker.fee}
+            {prettyPrice(baker.fee * 100)}
             {' '}
             %
           </div>
         </div>
         <div className={s.bakerBlock}>
           <div className={s.caption}>
-            {t('baker:Space')}
-            :
+            {t('common:Space')}
+            <Tooltip sizeT="small" content="The max amount you can delegate to a specific baker." />
           </div>
           <div>
             <span className={s.label1}>

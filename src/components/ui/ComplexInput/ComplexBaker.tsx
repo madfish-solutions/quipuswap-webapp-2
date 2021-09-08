@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
-import { getWhitelistedBakerName } from '@utils/helpers';
+import { WhitelistedBaker } from '@utils/types';
 import { Button } from '@components/ui/Button';
-import { TokensLogos } from '@components/ui/TokensLogos';
+import { BakerLogo } from '@components/ui/BakerLogo';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
 import { Shevron } from '@components/svg/Shevron';
 
@@ -13,11 +13,11 @@ import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {
   className?: string,
-  label?:string,
-  error?:string,
-  id?:string,
-  handleChange?: (baker:WhitelistedBaker) => void
-};
+  label?: string,
+  error?: string,
+  id?: string,
+  handleChange?: (baker: WhitelistedBaker) => void
+} & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -28,14 +28,19 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
   className,
   label,
   id,
+  error,
   handleChange,
+  value,
+  ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = React.useState<boolean>(false);
   const [baker, setBaker] = React.useState<WhitelistedBaker>();
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const compoundClassName = cx(
     modeClass[colorThemeMode],
+    { [s.error]: !!error },
     className,
   );
 
@@ -49,6 +54,9 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         onChange={(selectedBaker) => {
           setBaker(selectedBaker);
           if (handleChange) handleChange(selectedBaker);
+          if (inputRef.current) {
+            inputRef.current.value = selectedBaker.name;
+          }
           setTokensModal(false);
         }}
       />
@@ -58,30 +66,25 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         </label>
       )}
       <div className={s.background}>
-        <div className={s.shape}>
-          {/* TODO: add hidden input w/ selected baker */}
-          <Button onClick={() => setTokensModal(true)} theme="quaternary" className={s.baker}>
-            <TokensLogos token1={
-              {
-                metadata:
-                {
-                  thumbnailUri: baker?.logo,
-                  name: getWhitelistedBakerName((baker ?? { name: '' }) as WhitelistedBaker, 1000),
-                  symbol: '',
-                },
-              } as WhitelistedToken
-            }
-            />
+        <Button
+          onClick={() => setTokensModal(true)}
+          theme="quaternary"
+          className={s.shape}
+        >
+          <input {...props} ref={inputRef} value={value} hidden />
+          <div className={s.bakerInner}>
+            <BakerLogo baker={baker || {} as WhitelistedBaker} />
             <h6
               className={cx(s.token, s.bakerLabel)}
-              title={baker ? baker.name : 'BAKER NAME'}
+              title={baker ? baker.name : 'Choose Baker'}
             >
-              {baker ? baker.name : 'BAKER NAME'}
+              {baker ? baker.name : 'Choose Baker'}
             </h6>
             <Shevron />
-          </Button>
-        </div>
+          </div>
+        </Button>
       </div>
+      <ComplexError error={error} />
     </div>
   );
 };

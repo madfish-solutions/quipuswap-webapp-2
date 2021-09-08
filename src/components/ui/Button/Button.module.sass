@@ -68,6 +68,7 @@
   &.secondary
     .inner
       background-color: $ui-01
+  &.secondary, &.tertiary, &.quaternary, &.clean
     .text
       color: $text-01
     &:not(:disabled)
@@ -77,20 +78,36 @@
           background: $hover-primary-01
           -webkit-background-clip: text
           -webkit-text-fill-color: transparent
+          > *
+            color: $hover-primary-01-fallback
+            background: $hover-primary-01
+            -webkit-background-clip: text
+            -webkit-text-fill-color: transparent
       &:active
         .text
           color: $text-01
           background: none
           -webkit-background-clip: initial
           -webkit-text-fill-color: $text-01
+          > *
+            color: $text-01
+            background: none
+            -webkit-background-clip: initial
+            -webkit-text-fill-color: $text-01
     &:disabled
       .text
         color: $ui-04
-  &.tertiary, &.quaternary, &.clean
-    &:not(:disabled)
-      &:hover, &:focus
+        > *
+          color: $ui-04
+  &.inverse, &.underlined
+    .text
+      color: $hover-primary-01-fallback
+      background: $brand-01
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+      > *
         color: $hover-primary-01-fallback
-        background: $hover-primary-01
+        background: $brand-01
         -webkit-background-clip: text
         -webkit-text-fill-color: transparent
       &:active
@@ -126,6 +143,7 @@
   &.secondary
     .inner
       background-color: $ui-06
+  &.secondary, &.tertiary, &.quaternary, &.clean
     &:not(:disabled)
       &:hover, &:focus
         .text
@@ -133,20 +151,36 @@
           background: $hover-primary-02
           -webkit-background-clip: text
           -webkit-text-fill-color: transparent
+          > *
+            color: $hover-primary-02-fallback
+            background: $hover-primary-02
+            -webkit-background-clip: text
+            -webkit-text-fill-color: transparent
       &:active
         .text
           color: $text-inverse
           background: none
           -webkit-background-clip: initial
           -webkit-text-fill-color: $text-inverse
+          > *
+            color: $text-inverse
+            background: none
+            -webkit-background-clip: initial
+            -webkit-text-fill-color: $text-inverse
     &:disabled
       .text
         color: $ui-04
-  &.tertiary, &.quaternary, &.clean
-    &:not(:disabled)
-      &:hover, &:focus
+        > *
+          color: $ui-04
+  &.inverse, &.underlined
+    .text
+      color: $hover-primary-02-fallback
+      background: $brand-02
+      -webkit-background-clip: text
+      -webkit-text-fill-color: transparent
+      > *
         color: $hover-primary-02-fallback
-        background: $hover-primary-02
+        background: $brand-02
         -webkit-background-clip: text
         -webkit-text-fill-color: transparent
       &:active

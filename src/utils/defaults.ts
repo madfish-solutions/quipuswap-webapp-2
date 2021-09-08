@@ -23,8 +23,18 @@ export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 
+export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
+
+export const READ_ONLY_SIGNER_PK = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK!;
+export const READ_ONLY_SIGNER_PK_HASH = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH!;
+export const KNOWN_LAMBDA_CONTRACTS = new Map([
+  ['NetXdQprcVkpaWU', 'KT1CPuTzwC7h7uLXd5WQmpMFso1HxrLBUtpE'],
+  ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
+  ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
+  ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
+]);
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
 export const SAVED_BAKERS_KEY = 'savedCustomBakers';
@@ -76,7 +86,6 @@ export const FACTORIES = {
   },
 };
 
-export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 // NETWORKS

@@ -119,6 +119,9 @@
 .mb24
   margin-bottom: 24px
 
+.mt12
+  margin-top: 12px
+
 .info
   cursor: pointer
   user-select: none
@@ -130,6 +133,9 @@
 .receive
   margin-top: 16px
 
+.votingStats
+  margin-bottom: 24px
+
 .receiveLabel
   margin-right: 8px
   font-size: 0.857rem
@@ -137,6 +143,9 @@
 .button
   margin-top: 40px
   max-width: 280px
+
+.cellCenter
+  align-items: flex-start
 
 .cell
   &:not(:last-child)
@@ -160,7 +169,7 @@
   display: flex
   flex-direction: column
   align-items: flex-end
-  margin-top: 32px
+  margin-top: 26px
   margin-left: auto
   .detailsButton
     margin-left: 0
@@ -210,6 +219,8 @@
     flex-direction: row
   .voteButton
     max-width: 200px
+  .cellCenter
+    align-items: center
   .button
     margin-left: auto
     width: 180px
@@ -286,6 +297,8 @@
   .button
     margin-left: auto
     width: 180px
+  .votingStats
+    margin-bottom: 32px
   .buttons
     flex-direction: row
     justify-content: flex-end
@@ -294,11 +307,3 @@
       &:not(:last-child)
         margin-bottom: 0
         margin-right: 24px
-
-@include media('>1060px')
-  .detailsButtons
-    flex-direction: row
-    .detailsButton
-      &:not(:first-child)
-        margin-top: 0
-        margin-left: 32px

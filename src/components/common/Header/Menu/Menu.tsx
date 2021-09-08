@@ -44,7 +44,7 @@ export const Menu: React.FC<MenuProps> = ({
         </div>
         <div className={s.row}>
           <NetworkSelect menuPlacement="top" className={s.select} />
-          <Button href="https://quipuswap.com/" theme="secondary" className={s.button}>
+          <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common:Old version')}
           </Button>
 

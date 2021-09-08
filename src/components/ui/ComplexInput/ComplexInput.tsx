@@ -11,11 +11,13 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
+import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
   className?: string
   balance?: string
+  exchangeRate?: string
   label: string
   error?: string
   onClick?: () => void
@@ -43,6 +45,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   balance = '10.00',
   label,
   handleBalance,
+  exchangeRate = null,
   value,
   readOnly,
   error,
@@ -60,8 +63,12 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // TODO: Change logic of buttons and dollar during connection to SDK
-  const dollarEquivalent = useMemo(() => (parseFloat(value ? value.toString() : '0') * 3).toString(), [value]);
+  const dollarEquivalent = useMemo(() => (exchangeRate
+    ? new BigNumber(value ? value.toString() : 0)
+      .multipliedBy(new BigNumber(exchangeRate))
+      .toString()
+    : ''
+  ), [exchangeRate, value]);
 
   const compoundClassName = cx(
     { [s.focused]: focused },
@@ -77,7 +84,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
     }
   };
 
-  const equivalentContent = mode === 'input' ? `= $ ${prettyPrice(parseFloat(dollarEquivalent || '0'))}` : '';
+  let equivalentContent = '';
+  if (mode === 'input') {
+    equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
+  }
 
   return (
     // eslint-disable-next-line max-len
@@ -96,16 +106,16 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
           </div>
           <div className={s.item2}>
             {mode === 'select' && (
-            <div className={s.item2Line}>
-              <div className={s.caption}>
-                {t('common:Frozen Balance')}
-                :
-              </div>
-              <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance))}
-              </div>
+              <div className={s.item2Line}>
+                <div className={s.caption}>
+                  {t('common:Frozen Balance')}
+                  :
+                </div>
+                <div className={cx(s.label2, s.price)}>
+                  {prettyPrice(parseFloat(balance))}
+                </div>
 
-            </div>
+              </div>
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>

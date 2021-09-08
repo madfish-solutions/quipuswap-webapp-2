@@ -1,5 +1,5 @@
-import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
 export type QSMainNet = 'mainnet' | 'florencenet';
 
@@ -58,6 +58,12 @@ export type WhitelistedTokenMetadata = {
   thumbnailUri: string
 };
 
+export type VoterType = {
+  vote: string,
+  veto: string,
+  candidate: string
+};
+
 export type TokenDataType = {
   token: {
     address: string,
@@ -80,4 +86,32 @@ export type SwapFormValues = {
   balance2: BigNumber
   recipient: string
   slippage: string
+};
+
+export type LiquidityFormValues = {
+  switcher: boolean
+  balance1: BigNumber
+  balance2: BigNumber
+  balance3: BigNumber
+  balanceA: BigNumber
+  balanceB: BigNumber
+  balanceTotalA: BigNumber
+  balanceTotalB: BigNumber
+  lpBalance: BigNumber
+  frozenBalance: BigNumber
+  lastChange: string
+  estimateLP: BigNumber
+  slippage: string
+};
+
+export type PoolShare = {
+  unfrozen:BigNumber,
+  frozen:BigNumber,
+  total:BigNumber
+};
+
+export type VoteFormValues = {
+  balance1: number
+  selectedBaker: string
+  method:'first' | 'second'
 };
