@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Back } from '@components/svg/Back';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-// import { ExternalLink } from '@components/svg/ExternalLink';
+import { ExternalLink } from '@components/svg/ExternalLink';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
@@ -58,7 +58,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
     <div className={cx(s.links, s.cardCellItem)}>
       <Button
         theme="inverse"
-        // icon={<ExternalLink />}
+        icon={<ExternalLink />}
       >
         5/25/2021 3:00:51 PM
       </Button>
