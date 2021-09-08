@@ -44,7 +44,7 @@ import {
 } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { Switcher } from '@components/ui/Switcher';
@@ -569,35 +569,36 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   return (
     <>
-      <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => {
-                router.replace(
-                  `/liquidity/${val}/${getWhitelistedTokenSymbol(token1)}-${getWhitelistedTokenSymbol(token2)}`,
-                  undefined,
-                  { shallow: true },
-                );
-                setTabsState(val);
-              }}
-              className={s.tabs}
-            />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
-        }}
-        contentClassName={s.content}
-      >
-        {currentTab.id === 'remove' && (
+      <Card>
+        <CardHeader
+          header={{
+            content: (
+              <Tabs
+                values={TabsContent}
+                activeId={tabsState}
+                setActiveId={(val) => {
+                  router.replace(
+                    `/liquidity/${val}/${getWhitelistedTokenSymbol(token1)}-${getWhitelistedTokenSymbol(token2)}`,
+                    undefined,
+                    { shallow: true },
+                  );
+                  setTabsState(val);
+                }}
+                className={s.tabs}
+              />
+            ),
+            button: (
+              <Button
+                theme="quaternary"
+              >
+                <Transactions />
+              </Button>
+            ),
+          }}
+          className={s.header}
+        />
+        <CardContent className={s.content}>
+          {currentTab.id === 'remove' && (
           <Field
             name="balance3"
             validate={composeValidators(
@@ -640,255 +641,259 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               </>
             )}
           </Field>
-        )}
-        {currentTab.id === 'remove' && (
-        <Field
-          name="balanceA"
-        >
-          {({ input }) => (
-            <ComplexInput
-              {...input}
-              token1={tokenPair.token1}
-              handleBalance={() => {}}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
-              id="liquidity-token-A"
-              label="Output"
-              className={cx(s.input, s.mb24)}
-              readOnly
-            />
-
           )}
-        </Field>
-        )}
+          {currentTab.id === 'remove' && (
+          <Field
+            name="balanceA"
+          >
+            {({ input }) => (
+              <ComplexInput
+                {...input}
+                token1={tokenPair.token1}
+                handleBalance={() => {}}
+                balance={tokensData.first.balance}
+                exchangeRate={tokensData.first.exchangeRate}
+                id="liquidity-token-A"
+                label="Output"
+                className={cx(s.input, s.mb24)}
+                readOnly
+              />
 
-        {currentTab.id !== 'remove' && (
-        <Field
-          name="balance1"
-          validate={composeValidators(
-            validateMinMax(0, Infinity),
-            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
-          )}
-          parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
-        >
-          {({ input, meta }) => (
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance1')}
-              token={token1}
-              setToken={() => {}}
-              notSelectable
-              handleBalance={(value) => {
-                setLastChange('balance1');
-                form.mutators.setValue(
-                  'balance1',
-                  +parseDecimals(
-                    value,
-                    0,
-                    Infinity,
-                    token1 ? token1.metadata.decimals : undefined,
-                  ),
-                );
-              }}
-              noBalanceButtons={!accountPkh}
-              handleChange={(token) => {
-                setLastChange('balance1');
-                handleTokenChange(token, 'first');
-                setDex(undefined);
-              }}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
-              id="liquidity-token-1"
-              label="Input"
-              className={s.input}
-              error={((meta.error) || meta.submitError)}
-            />
+            )}
+          </Field>
           )}
 
-        </Field>
-        )}
-        <Plus className={s.iconButton} />
-        {currentTab.id === 'remove' && (
-        <Field
-          name="balanceB"
-        >
-          {({ input }) => (
-            <ComplexInput
-              {...input}
-              token1={tokenPair.token2}
-              handleBalance={() => {}}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
-              id="liquidity-token-B"
-              label="Output"
-              className={cx(s.input, s.mb24)}
-              readOnly
-            />
+          {currentTab.id !== 'remove' && (
+          <Field
+            name="balance1"
+            validate={composeValidators(
+              validateMinMax(0, Infinity),
+              accountPkh
+                ? validateBalance(new BigNumber(tokensData.first.balance))
+                : () => undefined,
+            )}
+            parse={(v) => token1?.metadata
+              && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+          >
+            {({ input, meta }) => (
+              <TokenSelect
+                {...input}
+                blackListedTokens={blackListedTokens}
+                onFocus={() => setLastChange('balance1')}
+                token={token1}
+                setToken={() => {}}
+                notSelectable
+                handleBalance={(value) => {
+                  setLastChange('balance1');
+                  form.mutators.setValue(
+                    'balance1',
+                    +parseDecimals(
+                      value,
+                      0,
+                      Infinity,
+                      token1 ? token1.metadata.decimals : undefined,
+                    ),
+                  );
+                }}
+                noBalanceButtons={!accountPkh}
+                handleChange={(token) => {
+                  setLastChange('balance1');
+                  handleTokenChange(token, 'first');
+                  setDex(undefined);
+                }}
+                balance={tokensData.first.balance}
+                exchangeRate={tokensData.first.exchangeRate}
+                id="liquidity-token-1"
+                label="Input"
+                className={s.input}
+                error={((meta.error) || meta.submitError)}
+              />
+            )}
+
+          </Field>
           )}
-        </Field>
-        )}
-        {currentTab.id !== 'remove' && (
-        <Field
-          name="balance2"
-          validate={composeValidators(
-            validateMinMax(0, Infinity),
-            accountPkh
-              ? validateBalance(new BigNumber(tokensData.second.balance))
-              : () => undefined,
+          <Plus className={s.iconButton} />
+          {currentTab.id === 'remove' && (
+          <Field
+            name="balanceB"
+          >
+            {({ input }) => (
+              <ComplexInput
+                {...input}
+                token1={tokenPair.token2}
+                handleBalance={() => {}}
+                balance={tokensData.second.balance}
+                exchangeRate={tokensData.second.exchangeRate}
+                id="liquidity-token-B"
+                label="Output"
+                className={cx(s.input, s.mb24)}
+                readOnly
+              />
+            )}
+          </Field>
           )}
-          parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
-        >
-          {({ input, meta }) => (
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance2')}
-              token={token2}
-              setToken={setToken2}
-              handleBalance={(value) => {
-                setLastChange('balance2');
-                form.mutators.setValue(
-                  'balance2',
-                  +parseDecimals(
-                    value,
-                    0,
-                    Infinity,
-                    token2 ? token2.metadata.decimals : undefined,
-                  ),
-                );
-              }}
-              noBalanceButtons={!accountPkh}
-              handleChange={(token) => {
-                handleTokenChange(token, 'second');
-                setDex(undefined);
-              }}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
-              id="liquidity-token-2"
-              label="Input"
-              className={cx(s.input, s.mb24)}
-              error={((meta.error) || meta.submitError)}
-            />
+          {currentTab.id !== 'remove' && (
+          <Field
+            name="balance2"
+            validate={composeValidators(
+              validateMinMax(0, Infinity),
+              accountPkh
+                ? validateBalance(new BigNumber(tokensData.second.balance))
+                : () => undefined,
+            )}
+            parse={(v) => token2?.metadata
+              && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+          >
+            {({ input, meta }) => (
+              <TokenSelect
+                {...input}
+                blackListedTokens={blackListedTokens}
+                onFocus={() => setLastChange('balance2')}
+                token={token2}
+                setToken={setToken2}
+                handleBalance={(value) => {
+                  setLastChange('balance2');
+                  form.mutators.setValue(
+                    'balance2',
+                    +parseDecimals(
+                      value,
+                      0,
+                      Infinity,
+                      token2 ? token2.metadata.decimals : undefined,
+                    ),
+                  );
+                }}
+                noBalanceButtons={!accountPkh}
+                handleChange={(token) => {
+                  handleTokenChange(token, 'second');
+                  setDex(undefined);
+                }}
+                balance={tokensData.second.balance}
+                exchangeRate={tokensData.second.exchangeRate}
+                id="liquidity-token-2"
+                label="Input"
+                className={cx(s.input, s.mb24)}
+                error={((meta.error) || meta.submitError)}
+              />
+            )}
+          </Field>
           )}
-        </Field>
-        )}
-        <Field initialValue="0.5 %" name="slippage">
-          {({ input }) => {
-            const slipPerc = slippageToBignum(values.slippage)
-              .multipliedBy(new BigNumber(values.estimateLP ?? 0));
-            const slipPercA = slippageToBignum(values.slippage)
-              .multipliedBy(new BigNumber(values.balanceA ?? 0));
-            const slipPercB = slippageToBignum(values.slippage)
-              .multipliedBy(new BigNumber(values.balanceB ?? 0));
-            const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
-            const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
-            let maxInvestedA = new BigNumber(0);
-            let maxInvestedB = new BigNumber(0);
-            if (dex) {
-              const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
-              const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
-              try {
-                const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
-                const initialBto$ = estimateTezInToken(dex.storage,
-                  toDecimals(bal2, token2.metadata.decimals));
-                const total$ = initialAto$
-                  .plus(initialBto$)
-                  .div(2)
-                  .integerValue(BigNumber.ROUND_DOWN);
-                const totalA = fromDecimals(total$, TEZOS_TOKEN.metadata.decimals);
-                const totalB = fromDecimals(estimateTokenInTez(dex.storage, total$),
-                  token2.metadata.decimals);
-                maxInvestedA = totalA
-                  .minus(slippageToBignum(values.slippage).multipliedBy(totalA));
-                maxInvestedB = totalB
-                  .minus(slippageToBignum(values.slippage)
-                    .multipliedBy(totalB));
-              } catch (e) {
-                maxInvestedA = bal1;
-                maxInvestedB = bal2;
+          <Field initialValue="0.5 %" name="slippage">
+            {({ input }) => {
+              const slipPerc = slippageToBignum(values.slippage)
+                .multipliedBy(new BigNumber(values.estimateLP ?? 0));
+              const slipPercA = slippageToBignum(values.slippage)
+                .multipliedBy(new BigNumber(values.balanceA ?? 0));
+              const slipPercB = slippageToBignum(values.slippage)
+                .multipliedBy(new BigNumber(values.balanceB ?? 0));
+              const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
+              const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
+              let maxInvestedA = new BigNumber(0);
+              let maxInvestedB = new BigNumber(0);
+              if (dex) {
+                const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
+                const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
+                try {
+                  const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
+                  const initialBto$ = estimateTezInToken(dex.storage,
+                    toDecimals(bal2, token2.metadata.decimals));
+                  const total$ = initialAto$
+                    .plus(initialBto$)
+                    .div(2)
+                    .integerValue(BigNumber.ROUND_DOWN);
+                  const totalA = fromDecimals(total$, TEZOS_TOKEN.metadata.decimals);
+                  const totalB = fromDecimals(estimateTokenInTez(dex.storage, total$),
+                    token2.metadata.decimals);
+                  maxInvestedA = totalA
+                    .minus(slippageToBignum(values.slippage).multipliedBy(totalA));
+                  maxInvestedB = totalB
+                    .minus(slippageToBignum(values.slippage)
+                      .multipliedBy(totalB));
+                } catch (e) {
+                  maxInvestedA = bal1;
+                  maxInvestedB = bal2;
+                }
               }
-            }
-            const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
-            return (
-              <>
-                <Slippage handleChange={(value) => input.onChange(value)} />
-                {currentTab.id === 'add' && (
+              const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
+              return (
                 <>
-                  {!values.switcher ? (
-                    <div className={cx(s.receive, s.mb24)}>
+                  <Slippage handleChange={(value) => input.onChange(value)} />
+                  {currentTab.id === 'add' && (
+                  <>
+                    {!values.switcher ? (
+                      <div className={cx(s.receive, s.mb24)}>
+                        <span className={s.receiveLabel}>
+                          {t('liquidity:Max invested')}
+                          :
+                        </span>
+                        <CurrencyAmount
+                          currency={`${tokenAName}/${tokenBName}`}
+                          amount={maxInvestedLp.isNaN() ? '0' : maxInvestedLp.toString()}
+                        />
+                      </div>
+                    )
+                      : (
+                        <>
+                          <div className={s.receive}>
+                            <span className={s.receiveLabel}>
+                              {t('liquidity:Max invested')}
+                              :
+                            </span>
+                            <CurrencyAmount
+                              currency={tokenAName}
+                              amount={maxInvestedA.isNaN() ? '0' : maxInvestedA.toString()}
+                            />
+                          </div>
+                          <div className={cx(s.receive, s.mb24)}>
+                            <span className={s.receiveLabel}>
+                              {t('liquidity:Max invested')}
+                              :
+                            </span>
+                            <CurrencyAmount
+                              currency={tokenBName}
+                              amount={maxInvestedB.isNaN() ? '0' : maxInvestedB.toString()}
+                            />
+                          </div>
+                        </>
+                      )}
+                  </>
+                  )}
+
+                  {currentTab.id === 'remove' && (
+                  <>
+                    <div className={s.receive}>
                       <span className={s.receiveLabel}>
-                        {t('liquidity:Max invested')}
-                        :
+                        {t('liquidity:Minimum received:')}
                       </span>
                       <CurrencyAmount
-                        currency={`${tokenAName}/${tokenBName}`}
-                        amount={maxInvestedLp.isNaN() ? '0' : maxInvestedLp.toString()}
+                        currency={tokenAName}
+                        amount={minimumReceivedA.isNaN() ? '0' : minimumReceivedA.toString()}
                       />
                     </div>
-                  )
-                    : (
-                      <>
-                        <div className={s.receive}>
-                          <span className={s.receiveLabel}>
-                            {t('liquidity:Max invested')}
-                            :
-                          </span>
-                          <CurrencyAmount
-                            currency={tokenAName}
-                            amount={maxInvestedA.isNaN() ? '0' : maxInvestedA.toString()}
-                          />
-                        </div>
-                        <div className={cx(s.receive, s.mb24)}>
-                          <span className={s.receiveLabel}>
-                            {t('liquidity:Max invested')}
-                            :
-                          </span>
-                          <CurrencyAmount
-                            currency={tokenBName}
-                            amount={maxInvestedB.isNaN() ? '0' : maxInvestedB.toString()}
-                          />
-                        </div>
-                      </>
-                    )}
+                    <div className={s.receive}>
+                      <span className={s.receiveLabel}>
+                        {t('liquidity:Minimum received:')}
+                      </span>
+                      <CurrencyAmount
+                        currency={tokenBName}
+                        amount={minimumReceivedB.isNaN() ? '0' : minimumReceivedB.toString()}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleRemoveLiquidity}
+                      className={s.button}
+                      disabled={removeLiquidityParams.length < 1}
+                    >
+                      {t('liquidity:Remove & Unvote')}
+                    </Button>
+                  </>
+                  )}
                 </>
-                )}
+              );
+            }}
 
-                {currentTab.id === 'remove' && (
-                <>
-                  <div className={s.receive}>
-                    <span className={s.receiveLabel}>
-                      {t('liquidity:Minimum received:')}
-                    </span>
-                    <CurrencyAmount
-                      currency={tokenAName}
-                      amount={minimumReceivedA.isNaN() ? '0' : minimumReceivedA.toString()}
-                    />
-                  </div>
-                  <div className={s.receive}>
-                    <span className={s.receiveLabel}>
-                      {t('liquidity:Minimum received:')}
-                    </span>
-                    <CurrencyAmount
-                      currency={tokenBName}
-                      amount={minimumReceivedB.isNaN() ? '0' : minimumReceivedB.toString()}
-                    />
-                  </div>
-                  <Button
-                    onClick={handleRemoveLiquidity}
-                    className={s.button}
-                    disabled={removeLiquidityParams.length < 1}
-                  >
-                    {t('liquidity:Remove & Unvote')}
-                  </Button>
-                </>
-                )}
-              </>
-            );
-          }}
-
-        </Field>
-        {currentTab.id === 'add' && (
+          </Field>
+          {currentTab.id === 'add' && (
           <>
             <Field name="switcher">
               {({ input }) => (
@@ -913,8 +918,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               {currentTab.label}
             </Button>
           </>
-        )}
-
+          )}
+        </CardContent>
       </Card>
       <LiquidityDetails
         currentTab={currentTab.label}
