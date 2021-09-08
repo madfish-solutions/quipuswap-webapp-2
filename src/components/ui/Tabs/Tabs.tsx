@@ -72,7 +72,9 @@ export const Tabs: React.FC<TabsProps> = ({
           onClick={() => setActiveId(id)}
           ref={(el) => addToRefs(id, el)}
         >
-          {label}
+          <span className={s.inner}>
+            {label}
+          </span>
         </button>
       ))}
       <span

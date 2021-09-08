@@ -14,6 +14,8 @@ type ButtonProps = {
   className?: string
   innerClassName?: string
   textClassName?: string
+  icon?:React.ReactNode
+  control?:React.ReactNode
 } & (
   | React.HTMLProps<HTMLButtonElement>
   | LinkProps
@@ -43,6 +45,8 @@ export const Button: React.FC<ButtonProps> = ({
   innerClassName,
   textClassName,
   children,
+  icon,
+  control,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -54,13 +58,23 @@ export const Button: React.FC<ButtonProps> = ({
     className,
   );
 
-  const content = theme === 'secondary' ? (
-    <span className={cx(s.inner, innerClassName)}>
+  let content = theme === 'primary'
+    ? children
+    : (
       <span className={cx(s.text, textClassName)}>
         {children}
       </span>
-    </span>
-  ) : children;
+    );
+
+  if (theme === 'secondary') {
+    content = (
+      <span className={cx(s.inner, innerClassName)}>
+        <span className={cx(s.text, textClassName)}>
+          {children}
+        </span>
+      </span>
+    );
+  }
 
   if ('href' in props) {
     if (external) {
@@ -71,13 +85,22 @@ export const Button: React.FC<ButtonProps> = ({
           className={compoundClassName}
           {...(props as React.HTMLProps<HTMLAnchorElement>)}
         >
+          {control}
           {content}
+          {icon}
         </a>
       );
     }
     return (
       <Link {...(props as LinkProps)}>
-        <a className={compoundClassName}>{content}</a>
+        <a
+          className={compoundClassName}
+          title={(props as React.HTMLProps<HTMLAnchorElement>).title}
+        >
+          {control}
+          {content}
+          {icon}
+        </a>
       </Link>
     );
   }
@@ -89,7 +112,9 @@ export const Button: React.FC<ButtonProps> = ({
       {...(props as React.HTMLProps<HTMLButtonElement>)}
       className={compoundClassName}
     >
+      {control}
       {content}
+      {icon}
     </button>
   );
 };

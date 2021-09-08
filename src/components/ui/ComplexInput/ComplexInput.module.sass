@@ -2,6 +2,9 @@
 @import "@styles/breakpoints"
   
 .baker
+  max-width: 100%
+
+.bakerInner
   display: flex
   align-items: center
   max-width: 100%
@@ -32,6 +35,8 @@
   box-sizing: border-box
   border-radius: 8px
   padding: 15px
+  width: 100%
+  margin: 0px
 
 .tokenGroup
   display: flex
@@ -55,9 +60,12 @@
   flex-grow: 0
   flex-basis: 100%
 .item4
+  order: 1
+  &:disabled:hover
+    cursor: default
+.item4Inner
   display: flex
   align-items: center
-  order: 1
   &:disabled:hover
     cursor: default
 

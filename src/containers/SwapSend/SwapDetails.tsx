@@ -6,10 +6,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { STABLE_TOKEN } from '@utils/defaults';
-import {
-  SwapFormValues, TokenDataMap, WhitelistedToken,
-} from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -26,11 +24,11 @@ type SwapDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData: TokenDataMap
-  values: SwapFormValues
   priceImpact: BigNumber
   rate1: BigNumber
   rate2: BigNumber
   dex?: FoundDex
+  dex2?: FoundDex
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
@@ -43,6 +41,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   rate1,
   rate2,
   dex,
+  dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
@@ -81,7 +80,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               amount={sellRate}
               currency={token2
                 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-              dollarEquivalent={`${tokensData.first.exchangeRate}`}
+              dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
             />
           </div>
         </CardCell>
@@ -103,7 +102,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             <CurrencyAmount
               amount={buyRate}
               currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-              dollarEquivalent={`${tokensData.second.exchangeRate ?? 1}`}
+              dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
             />
           </div>
         </CardCell>
@@ -167,17 +166,41 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               }
           />
         </CardCell>
-        {dex && (
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          target="_blank"
-          href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
-          external
-        >
-          View Pair Analytics
-          <ExternalLink className={s.linkIcon} />
-        </Button>
+        {(dex || dex2) && (
+        <div className={s.detailsButtons}>
+          {dex2 && (
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+              {
+                tokenA: getWhitelistedTokenSymbol(token1),
+                tokenB: TEZOS_TOKEN.metadata.symbol,
+              })}
+          </Button>
+          )}
+          {dex && (
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {dex2
+              ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+                {
+                  tokenA: TEZOS_TOKEN.metadata.symbol,
+                  tokenB: getWhitelistedTokenSymbol(token2),
+                })
+              : t('common:View Pair Analytics')}
+          </Button>
+          )}
+        </div>
         )}
       </CardContent>
     </Card>

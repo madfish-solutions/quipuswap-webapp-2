@@ -32,7 +32,7 @@ export const Route: React.FC<RouteProps> = ({
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {routes.map((route, index) => (
         <React.Fragment key={route.id}>
-          <Button href={route.link} className={s.route} theme="quaternary">
+          <Button external href={route.link} className={s.route} theme="quaternary">
             {route.name}
           </Button>
           {index !== routes.length - 1 && (
