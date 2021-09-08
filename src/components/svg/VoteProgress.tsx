@@ -45,7 +45,7 @@ export const VoteProgress: React.FC<VoteProgressProps> = ({
   const bigArcPreLineX = x2 - Math.cos(progressToPi) * x1;
   const bigArcPreLineY = y2 - Math.sin(progressToPi) * x1;
   return (
-    <svg width="256" height="136" viewBox="0 -8 256 128" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg width="256" height="128" viewBox="0 -12 256 140" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <path
         d="M 248 128 A 1 1 0 0 0 248 112 L 256 120 A 1 1 0 0 0 0 120 A 1 1 0 0 0 16 120 L 8 128 L 28 128 A 1 1 0 0 0 28 112 L 36 120 A 1 1 0 1 1 220 120 A 1 1 0 1 0 236 120 L 228 128 L 248 128 Z"
         fill="#EA2424"
