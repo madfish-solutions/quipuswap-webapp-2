@@ -3,24 +3,24 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  WhitelistedToken,
+  TransactionType,
 } from '@utils/types';
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Back } from '@components/svg/Back';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+// import { ExternalLink } from '@components/svg/ExternalLink';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
 
-type PortfolioTableProps = {
+type TransactionTableProps = {
   outerHeader?: boolean
   header: string
   handleUnselect?: () => void
-  data: WhitelistedToken[]
+  data: any[]
 };
 
 const themeClass = {
@@ -28,49 +28,45 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-type TokenItemProps = {
-  token: WhitelistedToken
+type TransactionItemProps = {
+  transaction: TransactionType
 };
 
-const TokenItem: React.FC<TokenItemProps> = ({
-  token,
+const TransactionItem: React.FC<TransactionItemProps> = ({
+  transaction,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem)}>
-      <TokensLogos token1={token} className={s.tokenLogo} />
-      {getWhitelistedTokenName(token)}
+    <div className={cx(s.links, s.cardCellItem, s.maxWidth)}>
+      {transaction.action}
+      <Button className={s.currency} theme="underlined">
+        {getWhitelistedTokenSymbol(transaction.from)}
+      </Button>
+      to
+      <Button className={s.currency} theme="underlined">
+        {getWhitelistedTokenSymbol(transaction.to)}
+      </Button>
     </div>
     <div className={s.cardCellItem}>
       <CurrencyAmount amount="888888888888888.00" />
     </div>
     <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency="$" />
+      <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.from)} />
     </div>
     <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency="$" />
+      <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.to)} />
     </div>
     <div className={cx(s.links, s.cardCellItem)}>
       <Button
-        href={`https://analytics.quipuswap.com/tokens/${token.contractAddress === TEZOS_TOKEN.contractAddress
-          ? TEZOS_TOKEN.contractAddress
-          : `${token.contractAddress}_${token.fa2TokenId ?? 0}`}`}
-        external
-        theme="secondary"
-        className={s.button}
+        theme="inverse"
+        // icon={<ExternalLink />}
       >
-        Analytics
-      </Button>
-      <Button
-        href={`/swap/${TEZOS_TOKEN.contractAddress}-${getWhitelistedTokenSymbol(token)}`}
-        className={s.button}
-      >
-        Trade
+        5/25/2021 3:00:51 PM
       </Button>
     </div>
   </div>
 );
 
-export const PortfolioTable: React.FC<PortfolioTableProps> = ({
+export const TransactionTable: React.FC<TransactionTableProps> = ({
   outerHeader = false,
   header,
   handleUnselect = () => {},
@@ -112,27 +108,29 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           header={{
             content: (
               <div className={s.tableRow}>
-                <div className={s.label}>
-                  Name
-                </div>
-                <div className={s.label}>
-                  Your Balance
-                </div>
-                <div className={s.label}>
-                  Price
+                <div className={cx(s.label)}>
+                  Action
                 </div>
                 <div className={s.label}>
                   Total Value
                 </div>
-                <div className={s.label} />
+                <div className={s.label}>
+                  Token A Amount
+                </div>
+                <div className={s.label}>
+                  Token B Amount
+                </div>
+                <div className={s.label}>
+                  Time
+                </div>
               </div>),
           }}
         />
         <CardContent className={s.container}>
-          {data.slice(startIndex, endIndex).map((token) => (
-            <TokenItem
-              key={`${token.contractAddress}:${token.fa2TokenId}`}
-              token={token}
+          {data.slice(startIndex, endIndex).map((transaction) => (
+            <TransactionItem
+              key={transaction.id}
+              transaction={transaction}
             />
           ))}
           <div className={s.cardCellSmall}>

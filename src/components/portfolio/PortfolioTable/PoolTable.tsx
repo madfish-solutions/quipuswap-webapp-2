@@ -2,11 +2,9 @@ import React, { useContext, useMemo, useState } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import {
-  WhitelistedToken,
-} from '@utils/types';
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedTokenPair } from '@utils/types';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -16,11 +14,11 @@ import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
 
-type PortfolioTableProps = {
+type PoolTableProps = {
   outerHeader?: boolean
   header: string
   handleUnselect?: () => void
-  data: WhitelistedToken[]
+  data: WhitelistedTokenPair[]
 };
 
 const themeClass = {
@@ -28,17 +26,19 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-type TokenItemProps = {
-  token: WhitelistedToken
+type PoolItemProps = {
+  pair: WhitelistedTokenPair
 };
 
-const TokenItem: React.FC<TokenItemProps> = ({
-  token,
+const PoolItem: React.FC<PoolItemProps> = ({
+  pair,
 }) => (
   <div className={s.cardCell}>
     <div className={cx(s.links, s.cardCellItem)}>
-      <TokensLogos token1={token} className={s.tokenLogo} />
-      {getWhitelistedTokenName(token)}
+      <TokensLogos token1={pair.token1} token2={pair.token2} className={s.tokenLogo} />
+      {getWhitelistedTokenSymbol(pair.token1)}
+      /
+      {getWhitelistedTokenSymbol(pair.token2)}
     </div>
     <div className={s.cardCellItem}>
       <CurrencyAmount amount="888888888888888.00" />
@@ -51,26 +51,23 @@ const TokenItem: React.FC<TokenItemProps> = ({
     </div>
     <div className={cx(s.links, s.cardCellItem)}>
       <Button
-        href={`https://analytics.quipuswap.com/tokens/${token.contractAddress === TEZOS_TOKEN.contractAddress
-          ? TEZOS_TOKEN.contractAddress
-          : `${token.contractAddress}_${token.fa2TokenId ?? 0}`}`}
-        external
+        href={`/liquidity/remove/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token1)}`}
         theme="secondary"
         className={s.button}
       >
-        Analytics
+        Remove
       </Button>
       <Button
-        href={`/swap/${TEZOS_TOKEN.contractAddress}-${getWhitelistedTokenSymbol(token)}`}
+        href={`/liquidity/add/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token1)}`}
         className={s.button}
       >
-        Trade
+        Add
       </Button>
     </div>
   </div>
 );
 
-export const PortfolioTable: React.FC<PortfolioTableProps> = ({
+export const PoolTable: React.FC<PoolTableProps> = ({
   outerHeader = false,
   header,
   handleUnselect = () => {},
@@ -112,7 +109,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           header={{
             content: (
               <div className={s.tableRow}>
-                <div className={s.label}>
+                <div className={cx(s.label, s.shortLabel)}>
                   Name
                 </div>
                 <div className={s.label}>
@@ -129,10 +126,10 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           }}
         />
         <CardContent className={s.container}>
-          {data.slice(startIndex, endIndex).map((token) => (
-            <TokenItem
-              key={`${token.contractAddress}:${token.fa2TokenId}`}
-              token={token}
+          {data.slice(startIndex, endIndex).map((pair) => (
+            <PoolItem
+              key={`${pair.token1.contractAddress}_${pair.token1.fa2TokenId}:${pair.token2.contractAddress}_${pair.token2.fa2TokenId}`}
+              pair={pair}
             />
           ))}
           <div className={s.cardCellSmall}>

@@ -3,24 +3,25 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  WhitelistedToken,
+  WhitelistedFarm,
 } from '@utils/types';
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE, STABLE_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ArrowDown } from '@components/svg/ArrowDown';
 import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
 
-type PortfolioTableProps = {
+type FarmTableProps = {
   outerHeader?: boolean
   header: string
   handleUnselect?: () => void
-  data: WhitelistedToken[]
+  data: WhitelistedFarm[]
 };
 
 const themeClass = {
@@ -28,17 +29,29 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-type TokenItemProps = {
-  token: WhitelistedToken
+type FarmItemProps = {
+  farm: WhitelistedFarm
 };
 
-const TokenItem: React.FC<TokenItemProps> = ({
-  token,
+const FarmItem: React.FC<FarmItemProps> = ({
+  farm,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem)}>
-      <TokensLogos token1={token} className={s.tokenLogo} />
-      {getWhitelistedTokenName(token)}
+    <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.wideItem)}>
+      <TokensLogos
+        token1={farm.tokenPair.token1}
+        token2={farm.tokenPair.token2}
+        className={s.tokenLogo}
+      />
+      {getWhitelistedTokenSymbol(farm.tokenPair.token1)}
+      /
+      {getWhitelistedTokenSymbol(farm.tokenPair.token2)}
+      <ArrowDown className={s.arrow} />
+      <TokensLogos
+        token1={STABLE_TOKEN}
+        className={s.tokenLogo}
+      />
+      {getWhitelistedTokenSymbol(STABLE_TOKEN)}
     </div>
     <div className={s.cardCellItem}>
       <CurrencyAmount amount="888888888888888.00" />
@@ -51,26 +64,22 @@ const TokenItem: React.FC<TokenItemProps> = ({
     </div>
     <div className={cx(s.links, s.cardCellItem)}>
       <Button
-        href={`https://analytics.quipuswap.com/tokens/${token.contractAddress === TEZOS_TOKEN.contractAddress
-          ? TEZOS_TOKEN.contractAddress
-          : `${token.contractAddress}_${token.fa2TokenId ?? 0}`}`}
-        external
         theme="secondary"
         className={s.button}
       >
-        Analytics
+        Harvest
       </Button>
       <Button
-        href={`/swap/${TEZOS_TOKEN.contractAddress}-${getWhitelistedTokenSymbol(token)}`}
+        href="/stake"
         className={s.button}
       >
-        Trade
+        Stake
       </Button>
     </div>
   </div>
 );
 
-export const PortfolioTable: React.FC<PortfolioTableProps> = ({
+export const FarmTable: React.FC<FarmTableProps> = ({
   outerHeader = false,
   header,
   handleUnselect = () => {},
@@ -112,7 +121,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           header={{
             content: (
               <div className={s.tableRow}>
-                <div className={s.label}>
+                <div className={cx(s.label, s.wideItem)}>
                   Name
                 </div>
                 <div className={s.label}>
@@ -129,10 +138,10 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           }}
         />
         <CardContent className={s.container}>
-          {data.slice(startIndex, endIndex).map((token) => (
-            <TokenItem
-              key={`${token.contractAddress}:${token.fa2TokenId}`}
-              token={token}
+          {data.slice(startIndex, endIndex).map((farm) => (
+            <FarmItem
+              key={`${farm.tokenPair.token1.contractAddress}_${farm.tokenPair.token1.fa2TokenId}:${farm.tokenPair.token2.contractAddress}_${farm.tokenPair.token2.fa2TokenId}`}
+              farm={farm}
             />
           ))}
           <div className={s.cardCellSmall}>

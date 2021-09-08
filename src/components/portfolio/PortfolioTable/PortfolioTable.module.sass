@@ -9,14 +9,35 @@
   width: 100%
   padding: 20px 24px
   display: flex
+  justify-content: space-between
 
 .links
   display: flex
   align-items: center
 
+.header
+  justify-content: flex-end
+
+.tableRow
+  width: 100%
+  display: flex
+  justify-content: space-between
+
 .h1
   margin-bottom: 40px
   margin-top: 64px
+
+.arrow
+  margin-right: 8px
+  transform: rotate(-90deg)
+
+.currency
+  margin: 0px
+
+.button
+  max-width: 120px
+  &:not(:last-child)
+    margin-right: 24px
 
 .proposalHeader
   display: flex
@@ -37,6 +58,55 @@
   align-items: center
   justify-content: center
 
+.cardCellItem
+  display: flex
+  align-items: center
+  max-width: 140px
+  flex: 1
+  justify-content: flex-end
+  &:not(:last-child)
+    justify-content: normal
+  &:not(:first-child)
+    max-width: none
+
+.label
+  flex: 1
+  min-width: 60px
+  display: flex
+  justify-content: flex-end
+  &:not(:last-child)
+    display: block
+
+.shortLabel
+  max-width: 140px
+
+.wideItem
+  flex: 1.5
+
+.maxWidth
+  max-width: none
+
+.tokenLogo
+  margin-right: 8px
+
+.paginationPage
+  font-weight: bold
+  color: $text-01
+  margin: 0px 4px
+
 .pagination
   display: flex
   margin: 0px 16px
+
+.light
+  .cardCell
+    font-weight: bold
+    color: $text-01
+  .tableRow
+    color: $text-03
+.dark
+  .tableRow
+    color: $text-02
+  .cardCell
+    font-weight: bold
+    color: $text-inverse

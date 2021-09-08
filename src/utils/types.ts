@@ -113,3 +113,10 @@ export type WhitelistedStake = {
   projectLink: string
   analyticsLink: string
 };
+
+export type TransactionType = {
+  from: WhitelistedToken,
+  to: WhitelistedToken,
+  id: string,
+  action: 'swap' | 'send' | 'invest' | 'divest'
+};

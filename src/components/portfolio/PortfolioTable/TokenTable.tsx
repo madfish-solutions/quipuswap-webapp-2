@@ -6,7 +6,7 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -16,7 +16,7 @@ import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
 
-type PortfolioTableProps = {
+type TokenTableProps = {
   outerHeader?: boolean
   header: string
   handleUnselect?: () => void
@@ -38,7 +38,7 @@ const TokenItem: React.FC<TokenItemProps> = ({
   <div className={s.cardCell}>
     <div className={cx(s.links, s.cardCellItem)}>
       <TokensLogos token1={token} className={s.tokenLogo} />
-      {getWhitelistedTokenName(token)}
+      {getWhitelistedTokenSymbol(token)}
     </div>
     <div className={s.cardCellItem}>
       <CurrencyAmount amount="888888888888888.00" />
@@ -70,7 +70,7 @@ const TokenItem: React.FC<TokenItemProps> = ({
   </div>
 );
 
-export const PortfolioTable: React.FC<PortfolioTableProps> = ({
+export const TokenTable: React.FC<TokenTableProps> = ({
   outerHeader = false,
   header,
   handleUnselect = () => {},
@@ -112,7 +112,7 @@ export const PortfolioTable: React.FC<PortfolioTableProps> = ({
           header={{
             content: (
               <div className={s.tableRow}>
-                <div className={s.label}>
+                <div className={cx(s.label, s.shortLabel)}>
                   Name
                 </div>
                 <div className={s.label}>
