@@ -2,20 +2,23 @@ import React, { useContext, useMemo, useState } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedTokenPair } from '@utils/types';
-import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { MAX_ITEMS_PER_PAGE_MOBILE } from '@utils/defaults';
+import {
+  WhitelistedToken, TransactionType, WhitelistedFarm, WhitelistedTokenPair,
+} from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
-import { PoolItem } from '@components/portfolio/PortfolioTable/PortfolioItem';
 import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
-import s from './PortfolioTable.module.sass';
+import s from './PortfolioCardTable.module.sass';
 
-type PoolTableProps = {
+type PortfolioCardTableProps = {
   outerHeader?: boolean
-  header: string
-  data: WhitelistedTokenPair[]
+  header: string[]
+  label: string
+  href?: string
+  data: WhitelistedToken[] | WhitelistedFarm[] | WhitelistedTokenPair[] | TransactionType[]
 };
 
 const themeClass = {
@@ -23,22 +26,30 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const PoolTable: React.FC<PoolTableProps> = ({
+export const PortfolioCardTable: React.FC<PortfolioCardTableProps> = ({
   outerHeader = false,
   header,
-  data,
+  label,
+  children,
+  href = '#',
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [page, setPage] = useState<number>(1);
-  const pageMax = useMemo(() => Math.ceil(data.length / MAX_ITEMS_PER_PAGE), [data.length]);
-  const startIndex = (page - 1) * MAX_ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + MAX_ITEMS_PER_PAGE - 1, data.length - 1);
+  const childrenCount = children && Array.isArray(children) ? children.length : 0;
+  const pageMax = useMemo(
+    () => Math.ceil(childrenCount / MAX_ITEMS_PER_PAGE_MOBILE), [childrenCount],
+  );
+  const startIndex = (page - 1) * MAX_ITEMS_PER_PAGE_MOBILE;
+  const endIndex = Math.min(startIndex + MAX_ITEMS_PER_PAGE_MOBILE - 1, childrenCount - 1);
+  const renderChildren = Array.isArray(children)
+    ? children.slice(startIndex, endIndex)
+    : [children];
 
   return (
     <>
       {outerHeader && (
       <h1 className={s.h1}>
-        {header}
+        {label}
       </h1>
       )}
       <Card
@@ -49,22 +60,22 @@ export const PoolTable: React.FC<PoolTableProps> = ({
           header={{
             content: (
               <Button
+                href="/portfolio"
                 theme="quaternary"
                 className={s.proposalHeader}
                 control={
                   <Back className={s.proposalBackIcon} />
                 }
-                href="/portfolio"
               >
                 Back
               </Button>),
           }}
         />
         )}
-        {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{header}</h2> }} />)}
+        {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{label}</h2> }} />)}
         {outerHeader && (
         <CardHeader
-          header={{ content: '', button: <Button href="/portfolio/pools" theme="inverse">View All</Button> }}
+          header={{ content: '', button: <Button href={href} theme="inverse">View All</Button> }}
           className={s.header}
         />
         )}
@@ -75,30 +86,17 @@ export const PoolTable: React.FC<PoolTableProps> = ({
                 <table className={s.table}>
                   <thead>
                     <tr>
-                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader, s.tableHeaderBorder)}>
-                        <div className={cx(s.label, s.shortLabel)}>
-                          Name
-                        </div>
-                        <div className={s.label}>
-                          Your Balance
-                        </div>
-                        <div className={s.label}>
-                          Price
-                        </div>
-                        <div className={s.label}>
-                          Total Value
-                        </div>
-                        <div className={s.label} />
+                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader)}>
+                        {header.map((x) => (
+                          <div key={x} className={s.label}>
+                            {x}
+                          </div>
+                        ))}
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {data.slice(startIndex, endIndex).map((pair) => (
-                      <PoolItem
-                        key={`${pair.token1.contractAddress}_${pair.token1.fa2TokenId}:${pair.token2.contractAddress}_${pair.token2.fa2TokenId}`}
-                        pair={pair}
-                      />
-                    ))}
+                    {renderChildren}
                   </tbody>
                 </table>
               </div>
@@ -125,7 +123,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
                 disabled={page > pageMax - 1}
               >
                 {page < (pageMax)
-                  ? (<Back id="Pool" className={s.forward} />)
+                  ? (<Back id="PortfolioCard" className={s.forward} />)
                   : <DisabledBack className={s.forward} />}
               </Button>
 

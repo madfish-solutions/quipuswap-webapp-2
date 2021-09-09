@@ -74,7 +74,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 <table className={s.table}>
                   <thead>
                     <tr>
-                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader)}>
+                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader, s.tableHeaderBorder)}>
                         <div className={cx(s.label)}>
                           Action
                         </div>
@@ -127,7 +127,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                 disabled={page > pageMax - 1}
               >
                 {page < (pageMax)
-                  ? (<Back className={s.forward} />)
+                  ? (<Back id="Transaction" className={s.forward} />)
                   : <DisabledBack className={s.forward} />}
               </Button>
 

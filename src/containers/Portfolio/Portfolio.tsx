@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 
@@ -12,6 +12,9 @@ import {
   FarmTable, PoolTable, TokenTable, TransactionTable,
 } from '@components/portfolio/PortfolioTable';
 
+import {
+  FarmCardTable, PoolCardTable, TokenCardTable, TransactionCardTable,
+} from '@components/portfolio/PortfolioCardTable';
 import s from './Portfolio.module.sass';
 import { PortfolioData } from './content';
 import { PortfolioCard } from './PortfolioCard';
@@ -35,6 +38,25 @@ const TabsContent = [
   },
 ];
 
+const MobTabsContent = [
+  {
+    id: 'tokens',
+    label: 'Tokens',
+  },
+  {
+    id: 'pools',
+    label: 'Pools',
+  },
+  {
+    id: 'farms',
+    label: 'Farms',
+  },
+  {
+    id: 'transactions',
+    label: 'Transactions',
+  },
+];
+
 const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
@@ -42,6 +64,7 @@ const themeClass = {
 
 export const Portfolio: React.FC<{}> = () => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
+  const [mobTabsState, setMobTabsState] = useState(MobTabsContent[0].id);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { data: tokens } = useTokens();
 
@@ -69,6 +92,11 @@ export const Portfolio: React.FC<{}> = () => {
       from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '4', action: 'swap',
     },
   ];
+
+  const currentTab = useMemo(
+    () => (MobTabsContent.find(({ id }) => id === mobTabsState)!),
+    [mobTabsState],
+  );
 
   return (
     <>
@@ -98,7 +126,7 @@ export const Portfolio: React.FC<{}> = () => {
             />
           </CardContent>
         </Card>
-        <Card>
+        <Card className={s.portfolioCard}>
           <CardContent className={s.content}>
             {
             PortfolioData.map(({
@@ -116,8 +144,9 @@ export const Portfolio: React.FC<{}> = () => {
           </CardContent>
         </Card>
       </div>
-      {tokens.length > 0 && (<TokenTable header="Your Tokens" outerHeader data={tokens} />)}
-      {/* {tokens.length > 0 && (
+      <div className={s.notMobile}>
+        {tokens.length > 0 && (<TokenTable header="Your Tokens" outerHeader data={tokens} />)}
+        {/* {tokens.length > 0 && (
       <PortfolioTable
       href="/portfolio/tokens"
       header={['Name', 'Your Balance', 'Price', 'Total Value', '']}
@@ -132,23 +161,56 @@ export const Portfolio: React.FC<{}> = () => {
         ))}
       </PortfolioTable>
       )} */}
-      {pools.length > 0 && (
+        {pools.length > 0 && (
         <PoolTable
           header="Pools Invested"
           outerHeader
           data={pools as WhitelistedTokenPair[]}
         />
-      )}
-      {farms.length > 0 && (<FarmTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
-      {transactions.length > 0 && (<TransactionTable header="Transactions History" outerHeader data={transactions} />)}
+        )}
+        {farms.length > 0 && (<FarmTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
+        {transactions.length > 0 && (<TransactionTable header="Transactions History" outerHeader data={transactions} />)}
+      </div>
+      {/* MOBILE */}
+      <div className={s.mobile}>
+        <div className={cx(s.fullWidth, s.governTabs)}>
+          <div className={cx(s.govCard)}>
+            <Card
+              className={cx(s.govCardInner)}
+            >
+              <CardContent className={s.tabContent}>
+                <Tabs
+                  values={MobTabsContent}
+                  activeId={mobTabsState}
+                  setActiveId={(val) => setMobTabsState(val)}
+                  className={s.govTabs}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        {currentTab.id === 'tokens' && (<TokenCardTable header="Your Tokens" outerHeader data={tokens} />)}
+        {currentTab.id === 'pools' && (<PoolCardTable header="Pools Invested" outerHeader data={pools as WhitelistedTokenPair[]} />)}
+        {currentTab.id === 'farms' && (<FarmCardTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
+        {currentTab.id === 'transactions' && (<TransactionCardTable header="Transactions History" outerHeader data={transactions} />)}
+      </div>
     </>
   );
 };
 
+// for single-table pages
+
 export const PortfolioTokens: React.FC<{}> = () => {
   const { data: tokens } = useTokens();
   return (
-    <TokenTable header="Your Tokens" data={tokens} />
+    <>
+      <div className={s.notMobile}>
+        <TokenTable header="Your Tokens" data={tokens} />
+      </div>
+      <div className={s.mobile}>
+        <TokenCardTable header="Your Tokens" data={tokens} />
+      </div>
+    </>
   );
 };
 
@@ -158,10 +220,20 @@ export const PortfolioPools: React.FC<{}> = () => {
     ? { token1: x, token2: STABLE_TOKEN }
     : { token1: x, token2: TEZOS_TOKEN }));
   return (
-    <PoolTable
-      header="Pools Invested"
-      data={pools as WhitelistedTokenPair[]}
-    />
+    <>
+      <div className={s.notMobile}>
+        <PoolTable
+          header="Pools Invested"
+          data={pools as WhitelistedTokenPair[]}
+        />
+      </div>
+      <div className={s.mobile}>
+        <PoolCardTable
+          header="Pools Invested"
+          data={pools as WhitelistedTokenPair[]}
+        />
+      </div>
+    </>
   );
 };
 
@@ -171,7 +243,14 @@ export const PortfolioFarms: React.FC<{}> = () => {
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
   return (
-    <FarmTable header="Joined Farms" data={farms as WhitelistedFarm[]} />
+    <>
+      <div className={s.notMobile}>
+        <FarmTable header="Joined Farms" data={farms as WhitelistedFarm[]} />
+      </div>
+      <div className={s.mobile}>
+        <FarmCardTable header="Joined Farms" data={farms as WhitelistedFarm[]} />
+      </div>
+    </>
   );
 };
 
@@ -194,6 +273,13 @@ export const PortfolioTransactions: React.FC<{}> = () => {
     },
   ];
   return (
-    <TransactionTable header="Transactions History" data={transactions} />
+    <>
+      <div className={s.notMobile}>
+        <TransactionTable header="Transactions History" data={transactions} />
+      </div>
+      <div className={s.mobile}>
+        <TransactionCardTable header="Transactions History" data={transactions} />
+      </div>
+    </>
   );
 };

@@ -77,7 +77,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
                 <table className={s.table}>
                   <thead>
                     <tr>
-                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader)}>
+                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader, s.tableHeaderBorder)}>
                         <div className={cx(s.label, s.shortLabel)}>
                           Name
                         </div>
@@ -128,7 +128,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
                 disabled={page > pageMax - 1}
               >
                 {page < (pageMax)
-                  ? (<Back className={s.forward} />)
+                  ? (<Back id="Token" className={s.forward} />)
                   : <DisabledBack className={s.forward} />}
               </Button>
 

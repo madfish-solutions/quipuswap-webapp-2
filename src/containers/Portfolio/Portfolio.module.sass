@@ -1,13 +1,21 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.mobile
+  display: block
+
+.notMobile
+  display: none
+
 .portfolio
-  display: flex
+  display: block
 
 .portfolioCard
   flex: 1
+  margin-top: 24px
   &:not(:last-child)
-    margin-right: 32px
+    margin-top: 0px
+    margin-right: 0px
 
 .content
   display: grid
@@ -18,6 +26,33 @@
 
 .card
   box-sizing: border-box
+
+.tabContent
+  padding: 0px 24px
+
+.govCardInner
+  margin: 24px
+
+.governTabs
+  width: auto
+  margin-bottom: 0px !important
+  margin-left: -24px
+  margin-right: -24px
+  overflow: hidden
+  overflow-x: auto
+
+.governTabs::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.governTabs::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.governTabs::-webkit-scrollbar-thumb
+  border-radius: 10px
+
+.portfolioTabs
+  margin-top: 24px
+  margin-bottom: 24px
 
 .light
   &:not(:last-child)
@@ -40,8 +75,22 @@
     &:not(:nth-child(2n))
       border-right: 1px solid $ui-06
 
+@include media('>tablet')
+  .mobile
+    display: none
+  .notMobile
+    display: block
+  .portfolioTabs
+    display: none
 
 @include media('>Ltablet')
+  .portfolioCard
+    flex: 1
+    margin-top: 0px
+    &:not(:last-child)
+      margin-right: 32px
+  .portfolio
+    display: flex
   .content
     grid-template-columns: repeat(2, 1fr)
   .light

@@ -77,7 +77,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
                 <table className={s.table}>
                   <thead>
                     <tr>
-                      <th className={cx(s.tableRow, s.farmRow, s.tableHeader)}>
+                      <th className={cx(s.tableRow, s.farmRow, s.tableHeader, s.tableHeaderBorder)}>
                         <div className={s.label}>
                           Name
                         </div>
@@ -127,7 +127,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
                 disabled={page > pageMax - 1}
               >
                 {page < (pageMax)
-                  ? (<Back className={s.forward} />)
+                  ? (<Back id="Farm" className={s.forward} />)
                   : <DisabledBack className={s.forward} />}
               </Button>
 
