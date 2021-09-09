@@ -24,6 +24,7 @@ type ComplexInputProps = {
   token1: WhitelistedToken
   token2?: WhitelistedToken
   mode?: keyof typeof modeClass
+  decimals?:number,
   handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -52,6 +53,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   onClick,
   token1,
   token2,
+  decimals = 6,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -108,7 +110,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+                  {prettyPrice(parseFloat(balance), decimals)}
                 </div>
 
               </div>
@@ -119,7 +121,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
                 :
               </div>
               <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance))}
+                {prettyPrice(parseFloat(balance), decimals)}
               </div>
             </div>
           </div>

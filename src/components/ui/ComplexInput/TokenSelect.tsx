@@ -120,7 +120,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance), 3)}
+                  {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
                 </div>
               </div>
               )}

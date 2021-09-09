@@ -54,7 +54,10 @@ export const Modal: React.FC<ModalProps> = ({
           : undefined
       }
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={(...e:any) => {
+        console.log(e);
+        if (onRequestClose) onRequestClose(e);
+      }}
       overlayClassName={cx(s.overlay, modeClass[colorThemeMode], overlayClassName)}
       portalClassName={cx(s.portal, { [s.hidden]: !isOpen }, portalClassName)}
       {...props}
