@@ -1,0 +1,184 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+  
+.container
+  margin-left: -24px
+  margin-right: -24px
+  overflow: hidden
+  overflow-x: auto
+
+.container::-webkit-scrollbar-track
+    border-radius: 1px
+    background-color: transparent
+.container::-webkit-scrollbar
+  width: 2px
+  height: 0px
+  background-color: transparent
+.container::-webkit-scrollbar-thumb
+  border-radius: 1px
+  background-color: $hover-dark-row
+
+.wrapper
+  width: max-content
+
+.innerWrapper
+  margin-left: 24px
+  margin-right: 24px
+
+.cardCellSmall
+  width: 100%
+  padding: 12px 20px
+
+.cardCell
+  width: 100%
+  padding: 20px 24px
+  display: flex
+  justify-content: space-between
+
+.links
+  display: flex
+  align-items: center
+
+.bage
+  margin-left: 8px
+
+.linkIcon
+  width: 100%
+  margin: 0px
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.header
+  justify-content: flex-end
+
+.table
+  width: 1148px
+  border-collapse: collapse
+
+.tableHeader
+  display: grid
+
+.farmRow
+  grid-template-columns: 1.5fr 1fr 1fr 1.5fr
+  padding: 16px 24px
+
+.poolRow
+  grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 2fr
+  padding: 16px 24px
+
+.h1
+  margin-bottom: 40px
+  margin-top: 64px
+  display: none
+
+.arrow
+  margin-right: 8px
+  transform: rotate(-90deg)
+
+.currency
+  margin: 0px
+
+.button
+  max-width: 120px
+  &:not(:last-child)
+    margin-right: 24px
+
+.proposalHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  font-size: 1.143rem
+  line-height: 1.5
+  font-weight: 600
+
+.proposalBackIcon
+  margin-right: 8px
+  
+.forward
+  transform: rotate(180deg)
+
+.footer
+  display: flex
+  align-items: center
+  justify-content: center
+
+.cardCellItem
+  display: flex
+  align-items: center
+  max-width: 140px
+  flex: 1
+  justify-content: flex-end
+  &:not(:last-child)
+    justify-content: normal
+  &:not(:first-child)
+    max-width: none
+
+.label
+  flex: 1
+  min-width: 60px
+  display: flex
+  justify-content: flex-end
+  &:not(:last-child)
+    justify-content: flex-start
+
+.shortLabel
+  max-width: 140px
+
+.wideItem
+  flex: 1.5
+
+.maxWidth
+  max-width: none
+
+.tokenLogo
+  margin-right: 8px
+
+.paginationPage
+  font-weight: bold
+  color: $text-01
+  margin: 0px 4px
+
+.pagination
+  display: flex
+  margin: 0px 16px
+
+.blockItem
+  display: block
+
+.light
+  .tableHeaderBorder
+    border-bottom: 1px solid $hover-light-row
+  .container::-webkit-scrollbar-thumb
+    background-color: $hover-light-row
+  .tableRow
+    color: $text-03
+  .cardCellText
+    font-weight: bold
+    color: $text-01
+.dark
+  .tableHeaderBorder
+    border-bottom: 1px solid $hover-dark-row
+  .container::-webkit-scrollbar-thumb
+    background-color: $hover-dark-row
+  .tableRow
+    color: $text-02
+  .cardCellText
+    font-weight: bold
+    color: $text-inverse
+
+@include media('>Ltablet')
+  .h1
+    display: block
+  .container
+    overflow: visible
+  .wrapper
+    width: auto
+  .table
+    width: 100%
+
+@include media('>LDesktop')
+  .table
+    width: 100%
+  .wrapper
+    width: auto

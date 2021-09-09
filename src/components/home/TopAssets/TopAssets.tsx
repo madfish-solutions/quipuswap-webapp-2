@@ -1,11 +1,15 @@
-import React, { useContext } from 'react';
-import cx from 'classnames';
+import React from 'react';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 import { Section, SectionProps } from '@components/home/Section';
-import { TopAssetsCard } from '@components/home/TopAssets/TopAssetsCard';
+import { FarmTable } from '@components/common/FarmTable';
 
+import { useTokens } from '@utils/dapp';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { FarmCardTable } from '@components/common/FarmTable/FarmCardTable';
+
+import { PoolTable } from '@components/common/PoolTable';
+import { PoolCardTable } from '@components/common/PoolTable/PoolCardTable';
 import s from './TopAssets.module.sass';
 
 type TopAssetsProps = Omit<SectionProps, 'className'> & {
@@ -17,45 +21,35 @@ type TopAssetsProps = Omit<SectionProps, 'className'> & {
     external?: boolean
   }
   className?: string
-};
-
-const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  isFarm?: boolean
 };
 
 export const TopAssets: React.FC<TopAssetsProps> = ({
   header,
   description,
-  data,
-  button,
   className,
+  isFarm = false,
 }) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-
+  const { data: tokens } = useTokens();
+  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
+    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
   return (
     <Section
       header={header}
       description={description}
       className={className}
     >
-      <div className={cx(s.cards, modeClass[colorThemeMode])}>
-        {data.map((item:any) => (
-          <TopAssetsCard
-            key={item.id}
-            {...item}
-            className={s.card}
-          />
-        ))}
+      <div className={s.notMobile}>
+        {isFarm
+          ? (<FarmTable data={farms as WhitelistedFarm[]} />)
+          : (<PoolTable data={farms as WhitelistedFarm[]} />)}
       </div>
-      <Button
-        theme="inverse"
-        href={button.href}
-        external={button.external}
-        className={s.button}
-      >
-        {button.label}
-      </Button>
+      <div className={s.mobile}>
+        {isFarm
+          ? (<FarmCardTable data={farms as WhitelistedFarm[]} />)
+          : (<PoolCardTable data={farms as WhitelistedFarm[]} />)}
+      </div>
     </Section>
   );
 };

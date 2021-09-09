@@ -20,5 +20,6 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
       label: 'View All Farms',
     }}
     className={className}
+    isFarm
   />
 );
