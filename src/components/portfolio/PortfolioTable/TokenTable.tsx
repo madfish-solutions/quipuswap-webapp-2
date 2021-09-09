@@ -5,12 +5,10 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
   WhitelistedToken,
 } from '@utils/types';
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { TokenItem } from '@components/portfolio/PortfolioTable/PortfolioItem';
 import { Button } from '@components/ui/Button';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
@@ -26,48 +24,6 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
-
-type TokenItemProps = {
-  token: WhitelistedToken
-};
-
-const TokenItem: React.FC<TokenItemProps> = ({
-  token,
-}) => (
-  <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem, s.cardCellText)}>
-      <TokensLogos token1={token} className={s.tokenLogo} />
-      {getWhitelistedTokenSymbol(token)}
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" />
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency="$" />
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency="$" />
-    </div>
-    <div className={cx(s.links, s.cardCellItem)}>
-      <Button
-        href={`https://analytics.quipuswap.com/tokens/${token.contractAddress === TEZOS_TOKEN.contractAddress
-          ? TEZOS_TOKEN.contractAddress
-          : `${token.contractAddress}_${token.fa2TokenId ?? 0}`}`}
-        external
-        theme="secondary"
-        className={s.button}
-      >
-        Analytics
-      </Button>
-      <Button
-        href={`/swap/${TEZOS_TOKEN.contractAddress}-${getWhitelistedTokenSymbol(token)}`}
-        className={s.button}
-      >
-        Trade
-      </Button>
-    </div>
-  </div>
-);
 
 export const TokenTable: React.FC<TokenTableProps> = ({
   outerHeader = false,
@@ -114,33 +70,43 @@ export const TokenTable: React.FC<TokenTableProps> = ({
           className={s.header}
         />
         )}
-        <CardHeader
-          header={{
-            content: (
-              <div className={s.tableRow}>
-                <div className={cx(s.label, s.shortLabel)}>
-                  Name
-                </div>
-                <div className={s.label}>
-                  Your Balance
-                </div>
-                <div className={s.label}>
-                  Price
-                </div>
-                <div className={s.label}>
-                  Total Value
-                </div>
-                <div className={s.label} />
-              </div>),
-          }}
-        />
-        <CardContent className={s.container}>
-          {data.slice(startIndex, endIndex).map((token) => (
-            <TokenItem
-              key={`${token.contractAddress}:${token.fa2TokenId}`}
-              token={token}
-            />
-          ))}
+        <CardContent>
+          <div className={s.container}>
+            <div className={s.wrapper}>
+              <div className={s.innerWrapper}>
+                <table className={s.table}>
+                  <thead>
+                    <tr>
+                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader)}>
+                        <div className={cx(s.label, s.shortLabel)}>
+                          Name
+                        </div>
+                        <div className={s.label}>
+                          Your Balance
+                        </div>
+                        <div className={s.label}>
+                          Price
+                        </div>
+                        <div className={s.label}>
+                          Total Value
+                        </div>
+                        <div className={s.label} />
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.slice(startIndex, endIndex).map((token) => (
+                      <TokenItem
+                        key={`${token.contractAddress}:${token.fa2TokenId}`}
+                        token={token}
+                      />
+                    ))}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           <div className={s.cardCellSmall}>
             <div className={s.footer}>
               <Button

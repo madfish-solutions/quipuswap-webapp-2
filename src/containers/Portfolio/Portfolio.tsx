@@ -117,6 +117,21 @@ export const Portfolio: React.FC<{}> = () => {
         </Card>
       </div>
       {tokens.length > 0 && (<TokenTable header="Your Tokens" outerHeader data={tokens} />)}
+      {/* {tokens.length > 0 && (
+      <PortfolioTable
+      href="/portfolio/tokens"
+      header={['Name', 'Your Balance', 'Price', 'Total Value', '']}
+      label="Your Tokens"
+      outerHeader
+      data={tokens}>
+        {tokens.map((token) => (
+          <TokenItem
+            key={`${token.contractAddress}:${token.fa2TokenId}`}
+            token={token}
+          />
+        ))}
+      </PortfolioTable>
+      )} */}
       {pools.length > 0 && (
         <PoolTable
           header="Pools Invested"

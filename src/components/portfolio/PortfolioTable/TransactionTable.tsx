@@ -2,16 +2,11 @@ import React, { useContext, useMemo, useState } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import {
-  TransactionType,
-} from '@utils/types';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { TransactionItem } from '@components/portfolio/PortfolioTable/PortfolioItem';
 import { Button } from '@components/ui/Button';
 import { Back } from '@components/svg/Back';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { ExternalLink } from '@components/svg/ExternalLink';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from './PortfolioTable.module.sass';
@@ -26,45 +21,6 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
-
-type TransactionItemProps = {
-  transaction: TransactionType
-};
-
-const TransactionItem: React.FC<TransactionItemProps> = ({
-  transaction,
-}) => (
-  <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.cardCellText)}>
-      {transaction.action}
-      <Button className={s.currency} theme="underlined">
-        {getWhitelistedTokenSymbol(transaction.from)}
-      </Button>
-      to
-      <Button className={s.currency} theme="underlined">
-        {getWhitelistedTokenSymbol(transaction.to)}
-      </Button>
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" />
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.from)} />
-    </div>
-    <div className={s.cardCellItem}>
-      <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.to)} />
-    </div>
-    <div className={cx(s.links, s.cardCellItem, s.blockItem)}>
-      <Button
-        theme="inverse"
-        icon={<ExternalLink />}
-        className={s.linkIcon}
-      >
-        5/25/2021 3:00:51 PM
-      </Button>
-    </div>
-  </div>
-);
 
 export const TransactionTable: React.FC<TransactionTableProps> = ({
   outerHeader = false,
@@ -111,35 +67,45 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           className={s.header}
         />
         )}
-        <CardHeader
-          header={{
-            content: (
-              <div className={s.tableRow}>
-                <div className={cx(s.label)}>
-                  Action
-                </div>
-                <div className={s.label}>
-                  Total Value
-                </div>
-                <div className={s.label}>
-                  Token A Amount
-                </div>
-                <div className={s.label}>
-                  Token B Amount
-                </div>
-                <div className={s.label}>
-                  Time
-                </div>
-              </div>),
-          }}
-        />
-        <CardContent className={s.container}>
-          {data.slice(startIndex, endIndex).map((transaction) => (
-            <TransactionItem
-              key={transaction.id}
-              transaction={transaction}
-            />
-          ))}
+        <CardContent>
+          <div className={s.container}>
+            <div className={s.wrapper}>
+              <div className={s.innerWrapper}>
+                <table className={s.table}>
+                  <thead>
+                    <tr>
+                      <th className={cx(s.tableRow, s.poolRow, s.tableHeader)}>
+                        <div className={cx(s.label)}>
+                          Action
+                        </div>
+                        <div className={s.label}>
+                          Total Value
+                        </div>
+                        <div className={s.label}>
+                          Token A Amount
+                        </div>
+                        <div className={s.label}>
+                          Token B Amount
+                        </div>
+                        <div className={s.label}>
+                          Time
+                        </div>
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.slice(startIndex, endIndex).map((transaction) => (
+                      <TransactionItem
+                        key={transaction.id}
+                        transaction={transaction}
+                      />
+                    ))}
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
           <div className={s.cardCellSmall}>
             <div className={s.footer}>
               <Button
