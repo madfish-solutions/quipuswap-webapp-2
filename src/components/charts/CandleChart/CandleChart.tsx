@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
+import { useTranslation } from 'next-i18next';
 
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -36,6 +37,7 @@ export const CandleChart: React.FC<LineChartProps> = ({
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { i18n } = useTranslation('home');
 
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
@@ -112,6 +114,7 @@ export const CandleChart: React.FC<LineChartProps> = ({
           },
         },
         localization: {
+          locale: i18n.language,
           priceFormatter: (price: number) => prettyPrice(price!, 3, 3),
         },
       });
