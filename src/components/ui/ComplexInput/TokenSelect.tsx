@@ -131,6 +131,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               onBlur={() => setActive(false)}
               ref={inputRef}
               value={value}
+              autoComplete="off"
               {...props}
             />
             <Button
