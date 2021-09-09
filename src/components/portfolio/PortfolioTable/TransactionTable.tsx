@@ -19,7 +19,6 @@ import s from './PortfolioTable.module.sass';
 type TransactionTableProps = {
   outerHeader?: boolean
   header: string
-  handleUnselect?: () => void
   data: any[]
 };
 
@@ -36,7 +35,7 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
   transaction,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem, s.maxWidth)}>
+    <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.cardCellText)}>
       {transaction.action}
       <Button className={s.currency} theme="underlined">
         {getWhitelistedTokenSymbol(transaction.from)}
@@ -55,10 +54,11 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
     <div className={s.cardCellItem}>
       <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.to)} />
     </div>
-    <div className={cx(s.links, s.cardCellItem)}>
+    <div className={cx(s.links, s.cardCellItem, s.blockItem)}>
       <Button
         theme="inverse"
         icon={<ExternalLink />}
+        className={s.linkIcon}
       >
         5/25/2021 3:00:51 PM
       </Button>
@@ -69,7 +69,6 @@ const TransactionItem: React.FC<TransactionItemProps> = ({
 export const TransactionTable: React.FC<TransactionTableProps> = ({
   outerHeader = false,
   header,
-  handleUnselect = () => {},
   data,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -92,18 +91,26 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         <CardHeader
           header={{
             content: (
-              <Button onClick={handleUnselect} theme="quaternary" className={s.proposalHeader}>
-                <Back className={s.proposalBackIcon} />
+              <Button
+                theme="quaternary"
+                className={s.proposalHeader}
+                href="/portfolio"
+                control={
+                  <Back className={s.proposalBackIcon} />
+                }
+              >
                 Back
               </Button>),
           }}
         />
         )}
         {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{header}</h2> }} />)}
+        {outerHeader && (
         <CardHeader
-          header={{ content: '', button: <Button theme="inverse">View All</Button> }}
+          header={{ content: '', button: <Button href="/portfolio/transactions" theme="inverse">View All</Button> }}
           className={s.header}
         />
+        )}
         <CardHeader
           header={{
             content: (

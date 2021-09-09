@@ -20,7 +20,6 @@ import s from './PortfolioTable.module.sass';
 type FarmTableProps = {
   outerHeader?: boolean
   header: string
-  handleUnselect?: () => void
   data: WhitelistedFarm[]
 };
 
@@ -37,7 +36,7 @@ const FarmItem: React.FC<FarmItemProps> = ({
   farm,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.wideItem)}>
+    <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.wideItem, s.cardCellText)}>
       <TokensLogos
         token1={farm.tokenPair.token1}
         token2={farm.tokenPair.token2}
@@ -82,7 +81,6 @@ const FarmItem: React.FC<FarmItemProps> = ({
 export const FarmTable: React.FC<FarmTableProps> = ({
   outerHeader = false,
   header,
-  handleUnselect = () => {},
   data,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -105,18 +103,26 @@ export const FarmTable: React.FC<FarmTableProps> = ({
         <CardHeader
           header={{
             content: (
-              <Button onClick={handleUnselect} theme="quaternary" className={s.proposalHeader}>
-                <Back className={s.proposalBackIcon} />
+              <Button
+                theme="quaternary"
+                className={s.proposalHeader}
+                href="/portfolio"
+                control={
+                  <Back className={s.proposalBackIcon} />
+                }
+              >
                 Back
               </Button>),
           }}
         />
         )}
         {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{header}</h2> }} />)}
+        {outerHeader && (
         <CardHeader
-          header={{ content: '', button: <Button theme="inverse">View All</Button> }}
+          header={{ content: '', button: <Button href="/portfolio/farms" theme="inverse">View All</Button> }}
           className={s.header}
         />
+        )}
         <CardHeader
           header={{
             content: (

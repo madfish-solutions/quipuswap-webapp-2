@@ -12,14 +12,14 @@ import { shortize } from '@utils/helpers';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from './PortfolioInfo.module.sass';
-import { PortfolioCardProps } from '../PortfolioCard';
+import { PortfolioDetailsProps } from '../PortfolioDetails';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const PortfolioInfo: React.FC<PortfolioCardProps> = ({
+export const PortfolioInfo: React.FC<PortfolioDetailsProps> = ({
   name,
   voted,
   votes,

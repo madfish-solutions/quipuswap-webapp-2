@@ -19,7 +19,6 @@ import s from './PortfolioTable.module.sass';
 type TokenTableProps = {
   outerHeader?: boolean
   header: string
-  handleUnselect?: () => void
   data: WhitelistedToken[]
 };
 
@@ -36,7 +35,7 @@ const TokenItem: React.FC<TokenItemProps> = ({
   token,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem)}>
+    <div className={cx(s.links, s.cardCellItem, s.cardCellText)}>
       <TokensLogos token1={token} className={s.tokenLogo} />
       {getWhitelistedTokenSymbol(token)}
     </div>
@@ -73,7 +72,6 @@ const TokenItem: React.FC<TokenItemProps> = ({
 export const TokenTable: React.FC<TokenTableProps> = ({
   outerHeader = false,
   header,
-  handleUnselect = () => {},
   data,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -96,18 +94,26 @@ export const TokenTable: React.FC<TokenTableProps> = ({
         <CardHeader
           header={{
             content: (
-              <Button onClick={handleUnselect} theme="quaternary" className={s.proposalHeader}>
-                <Back className={s.proposalBackIcon} />
+              <Button
+                href="/portfolio"
+                theme="quaternary"
+                className={s.proposalHeader}
+                control={
+                  <Back className={s.proposalBackIcon} />
+                }
+              >
                 Back
               </Button>),
           }}
         />
         )}
         {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{header}</h2> }} />)}
+        {outerHeader && (
         <CardHeader
-          header={{ content: '', button: <Button theme="inverse">View All</Button> }}
+          header={{ content: '', button: <Button href="/portfolio/tokens" theme="inverse">View All</Button> }}
           className={s.header}
         />
+        )}
         <CardHeader
           header={{
             content: (

@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
 
-import s from './PortfolioCard.module.sass';
+import s from './PortfolioDetails.module.sass';
 
-export type PortfolioCardProps = {
+export type PortfolioDetailsProps = {
   name: React.ReactNode
   workDates: Date[]
   status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
@@ -51,7 +51,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const PortfolioCard: React.FC<PortfolioCardProps> = ({
+export const PortfolioDetails: React.FC<PortfolioDetailsProps> = ({
   name,
   status = 'PENDING',
   shortDescription,

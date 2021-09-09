@@ -17,7 +17,6 @@ import s from './PortfolioTable.module.sass';
 type PoolTableProps = {
   outerHeader?: boolean
   header: string
-  handleUnselect?: () => void
   data: WhitelistedTokenPair[]
 };
 
@@ -34,7 +33,7 @@ const PoolItem: React.FC<PoolItemProps> = ({
   pair,
 }) => (
   <div className={s.cardCell}>
-    <div className={cx(s.links, s.cardCellItem)}>
+    <div className={cx(s.links, s.cardCellItem, s.cardCellText)}>
       <TokensLogos token1={pair.token1} token2={pair.token2} className={s.tokenLogo} />
       {getWhitelistedTokenSymbol(pair.token1)}
       /
@@ -51,14 +50,14 @@ const PoolItem: React.FC<PoolItemProps> = ({
     </div>
     <div className={cx(s.links, s.cardCellItem)}>
       <Button
-        href={`/liquidity/remove/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token1)}`}
+        href={`/liquidity/remove/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token2)}`}
         theme="secondary"
         className={s.button}
       >
         Remove
       </Button>
       <Button
-        href={`/liquidity/add/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token1)}`}
+        href={`/liquidity/add/${getWhitelistedTokenSymbol(pair.token1)}-${getWhitelistedTokenSymbol(pair.token2)}`}
         className={s.button}
       >
         Add
@@ -70,7 +69,6 @@ const PoolItem: React.FC<PoolItemProps> = ({
 export const PoolTable: React.FC<PoolTableProps> = ({
   outerHeader = false,
   header,
-  handleUnselect = () => {},
   data,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -93,18 +91,26 @@ export const PoolTable: React.FC<PoolTableProps> = ({
         <CardHeader
           header={{
             content: (
-              <Button onClick={handleUnselect} theme="quaternary" className={s.proposalHeader}>
-                <Back className={s.proposalBackIcon} />
+              <Button
+                theme="quaternary"
+                className={s.proposalHeader}
+                control={
+                  <Back className={s.proposalBackIcon} />
+                }
+                href="/portfolio"
+              >
                 Back
               </Button>),
           }}
         />
         )}
         {!outerHeader && (<CardHeader header={{ content: <h2 className={s.h2}>{header}</h2> }} />)}
+        {outerHeader && (
         <CardHeader
-          header={{ content: '', button: <Button theme="inverse">View All</Button> }}
+          header={{ content: '', button: <Button href="/portfolio/pools" theme="inverse">View All</Button> }}
           className={s.header}
         />
+        )}
         <CardHeader
           header={{
             content: (

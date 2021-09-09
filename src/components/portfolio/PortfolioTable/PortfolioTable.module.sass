@@ -15,6 +15,13 @@
   display: flex
   align-items: center
 
+.linkIcon
+  width: 100%
+  margin: 0px
+  display: flex
+  align-items: center
+  justify-content: space-between
+
 .header
   justify-content: flex-end
 
@@ -98,15 +105,18 @@
   display: flex
   margin: 0px 16px
 
+.blockItem
+  display: block
+
 .light
-  .cardCell
-    font-weight: bold
-    color: $text-01
   .tableRow
     color: $text-03
+  .cardCellText
+    font-weight: bold
+    color: $text-01
 .dark
   .tableRow
     color: $text-02
-  .cardCell
+  .cardCellText
     font-weight: bold
     color: $text-inverse

@@ -1,0 +1,50 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.portfolio
+  display: flex
+
+.portfolioCard
+  flex: 1
+  &:not(:last-child)
+    margin-right: 32px
+
+.content
+  display: grid
+  align-items: center
+  justify-items: stretch
+  grid-template-columns: 1fr
+  padding-top: 0
+
+.card
+  box-sizing: border-box
+
+.light
+  &:not(:last-child)
+    border-bottom: 1px solid $ui-03
+
+.dark
+  &:not(:last-child)
+    border-bottom: 1px solid $ui-06
+
+@include media('>Lphone')
+  .content
+    grid-template-columns: repeat(2, 1fr)
+    .card
+      &:nth-last-child(2)
+        border-bottom: none
+  .light
+    &:not(:nth-child(2n))
+      border-right: 1px solid $ui-03
+  .dark
+    &:not(:nth-child(2n))
+      border-right: 1px solid $ui-06
+
+
+@include media('>Ltablet')
+  .content
+    grid-template-columns: repeat(2, 1fr)
+  .light
+    border-right: 1px solid $ui-03
+  .dark
+    border-right: 1px solid $ui-06
