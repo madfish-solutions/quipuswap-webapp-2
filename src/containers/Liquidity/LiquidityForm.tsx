@@ -24,7 +24,7 @@ import {
 } from '@quipuswap/sdk';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  useAccountPkh, useNetwork, useOnBlock, useTezos,
 } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -257,21 +257,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           );
           setAddLiquidityParams(addParams);
         }
-        const retValue = lastChange === 'balance1'
-          ? await estimateTokenInTez(
-            dex,
-            toDecimals(new BigNumber(val.balance1), token1.metadata.decimals),
-          )
-          : await estimateTezInToken(
-            dex,
-            toDecimals(new BigNumber(val.balance2), token2.metadata.decimals),
+
+        const rate = toDecimals(dex.storage.storage.token_pool, TEZOS_TOKEN.metadata.decimals)
+          .dividedBy(
+            toDecimals(dex.storage.storage.tez_pool, token2.metadata.decimals),
           );
-        console.log(val.balance2,
-          toDecimals(new BigNumber(val.balance2), token2.metadata.decimals).toString(),
-          retValue.toString());
+        const retValue = lastChange === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).div(rate);
         const decimals = lastChange === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
 
-        const res = fromDecimals(retValue, decimals);
+        const res = retValue.toFixed(decimals);
         form.mutators.setValue(
           lastChange === 'balance1' ? 'balance2' : 'balance1',
           res,
@@ -379,6 +373,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const getDex = useCallback(async () => {
     if (!tezos || !token2 || !token1) return;
+    setDex(undefined);
+    setOldDex(undefined);
     const toAsset = {
       contract: token2.contractAddress,
       id: token2.fa2TokenId ?? undefined,
@@ -587,6 +583,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     }
   }, [tezos, accountPkh, networkId, token1]);
 
+  useOnBlock(tezos, getDex);
+
   return (
     <>
       <Card
@@ -633,6 +631,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   notSelectable1={TEZOS_TOKEN}
                   tokenPair={tokenPair}
                   setTokenPair={(pair) => {
+                    setDex(undefined);
                     setTokens([pair.token1, pair.token2]);
                     handleTokenChange(pair.token1, 'first');
                     handleTokenChange(pair.token2, 'second');
@@ -713,9 +712,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               }}
               noBalanceButtons={!accountPkh}
               handleChange={(token) => {
+                setDex(undefined);
+                setAddLiquidityParams([]);
                 setLastChange('balance1');
                 handleTokenChange(token, 'first');
-                setDex(undefined);
               }}
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
@@ -780,8 +780,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               }}
               noBalanceButtons={!accountPkh}
               handleChange={(token) => {
-                handleTokenChange(token, 'second');
                 setDex(undefined);
+                setAddLiquidityParams([]);
+                handleTokenChange(token, 'second');
               }}
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
