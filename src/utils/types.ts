@@ -1,4 +1,5 @@
 import { FoundDex } from '@quipuswap/sdk';
+import { BigMapAbstraction } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 export type QSMainNet = 'mainnet' | 'florencenet';
@@ -115,3 +116,51 @@ export type VoteFormValues = {
   selectedBaker: string
   method:'first' | 'second'
 };
+
+export type GovernanceStorageInfo = {
+  accuracy: BigNumber,
+  expected_sender?: string,
+  id_count: BigNumber,
+  locked_balances: {
+    balances: BigMapAbstraction,
+    proposals: BigMapAbstraction
+  }
+  owner: string
+  pending_owner: null
+  proposal_config: {
+    proposal_stake: BigNumber,
+    voting_quorum: BigNumber,
+    support_quorum: BigNumber
+  }
+  proposals: BigMapAbstraction // {id: BigNumber, schema: Schema, provider: RpcContractProvider}
+  temp_proposal_cache?: any
+  token_address: string
+  token_id: BigNumber,
+  votes: BigMapAbstraction
+};
+
+export type ProposalType = {
+  id: number,
+  collateral: BigNumber,
+  config: {
+    proposalStake: BigNumber,
+    votingQuorum: BigNumber,
+    supportQuorum: BigNumber,
+  },
+  creator: string,
+  endDate: string,
+  forumLink: string,
+  ipfsLink: string,
+  startDate: string,
+  status: ProposalStatus,
+  votesAgainst: BigNumber,
+  votesFor: BigNumber,
+};
+
+export type ProposalStatus = 'activated' |
+'approved' |
+'banned' |
+'pending' |
+'rejected' |
+'underrated' |
+'voting';

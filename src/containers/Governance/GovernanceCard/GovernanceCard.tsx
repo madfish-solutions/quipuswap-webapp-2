@@ -15,7 +15,6 @@ export type GovernanceCardProps = {
   status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
   description: string
   shortDescription: React.ReactNode
-  remaining: Date
   voted: string
   support: string
   reject: string
@@ -58,7 +57,6 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   workDates,
   status = 'PENDING',
   shortDescription,
-  remaining,
   voted,
   support,
   reject,
@@ -70,7 +68,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   href = '',
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
+  const { days, hours, minutes } = timeDiffCalc(Date.now(), workDates[1].getTime());
   const compountClassName = cx(
     modeClass[colorThemeMode],
     s.fullWidth,
