@@ -8,6 +8,7 @@ import s from './PieChart.module.sass';
 type ChartData = {
   value: number,
   color: string,
+  opacity?: number,
   label?: string
 };
 
@@ -30,7 +31,7 @@ const themeClass = {
 const getDataTotalValue = (data:ChartData[]) => data.reduce((acc, cur) => cur.value + acc, 0);
 
 export const PieChart: React.FC<PieChartProps> = ({
-  data,
+  data: dataWrapper,
   label,
   legend,
   legendMarks,
@@ -41,7 +42,17 @@ export const PieChart: React.FC<PieChartProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [hovered, setHovered] = useState<number | undefined>(undefined);
-  const total = getDataTotalValue(data);
+  const total = getDataTotalValue(dataWrapper);
+
+  const data = dataWrapper.map((entry, i) => {
+    if (hovered !== undefined && hovered !== i) {
+      return {
+        ...entry,
+        opacity: 0.5,
+      };
+    }
+    return entry;
+  });
 
   const composeLegendClass = cx(
     s.legend,
@@ -60,8 +71,15 @@ export const PieChart: React.FC<PieChartProps> = ({
       {legend && (
       <div className={composeLegendClass}>
         {label && (<h5 className={s.legendLabel}>{label}</h5>)}
-        {data.map((x) => (
-          <div className={s.legendRow} key={x.label}>
+        {data.map((x, idx) => (
+          <div
+            onMouseEnter={() => setHovered(idx)}
+            onMouseLeave={() => {
+              setHovered(undefined);
+            }}
+            className={s.legendRow}
+            key={x.label}
+          >
             <div className={s.legendColor} style={{ backgroundColor: x.color }} />
             <div className={s.legendText}>
               {x.label}
@@ -80,6 +98,7 @@ export const PieChart: React.FC<PieChartProps> = ({
       <div className={s.chart}>
         <PieChartLib
           data={data}
+          segmentsStyle={(index) => ({ transition: 'opacity .3s', opacity: data[index].opacity })}
           lineWidth={20}
           viewBoxSize={[100, 100]}
           className={s.pieChart}

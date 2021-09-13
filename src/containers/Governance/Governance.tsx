@@ -211,7 +211,7 @@ export const Governance: React.FC<GovernanceProps> = ({
               { value: 4, color: '#2ED33E', label: 'Approved' },
               { value: 6, color: '#F9A605', label: 'Pending' },
               { value: 8, color: '#EA2424', label: 'Failed' },
-              { value: 10, color: '#A1A4B1', label: 'Activated' },
+              { value: 10, color: '#8B90A0', label: 'Activated' },
             ]}
             legend
             label="Proposals summary"
