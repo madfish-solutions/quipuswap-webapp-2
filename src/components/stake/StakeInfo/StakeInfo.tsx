@@ -19,7 +19,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
-import VotingReward from '@icons/VotingReward.svg';
+import { VotingReward } from '@components/svg/VotingReward';
 
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
