@@ -81,14 +81,21 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
       <Card
         className={compountClassName}
       >
-        <CardHeader header={{
-          content: (
-            <Button href="/governance" theme="quaternary" className={s.proposalHeader}>
-              <Back className={s.proposalBackIcon} />
-              Back
-            </Button>
-          ),
-        }}
+        <CardHeader
+          header={{
+            content: (
+              <Button
+                href="/governance"
+                theme="quaternary"
+                className={s.proposalHeader}
+                control={
+                  <Back className={s.proposalBackIcon} />
+              }
+              >
+                Back
+              </Button>
+            ),
+          }}
         />
         <CardHeader
           header={{
@@ -119,7 +126,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
 
             ),
           }}
-          className={s.proposalHeader}
+          className={s.proposalSubHeader}
         />
         <CardContent className={s.govContent}>
           <div className={s.govDescription}>

@@ -2,10 +2,11 @@ import { FoundDex } from '@quipuswap/sdk';
 import { BigMapAbstraction } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'granadanet';
 
 type QSNetworkType =
   | 'mainnet'
+  | 'granadanet'
   | 'florencenet'
   | 'edo2net'
   | 'edonet'

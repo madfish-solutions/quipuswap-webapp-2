@@ -1,4 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useCallback,
+} from 'react';
 import cx from 'classnames';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
@@ -6,11 +8,21 @@ import {
   DayPickerRangeController,
 } from 'react-dates';
 import moment, { Moment } from 'moment';
+import { TezosToolkit } from '@taquito/taquito';
+import {
+  batchify, fromOpOpts, Token, withTokenApprove,
+} from '@quipuswap/sdk';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import {
+  getContract, useAccountPkh, useNetwork, useTezos,
+} from '@utils/dapp';
+import {
+  GOVERNANCE_CONTRACT, GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET,
+} from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
-import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Back } from '@components/svg/Back';
@@ -33,12 +45,70 @@ const PROPOSAL_COST = 1000000;
 
 const initialDates = [moment(Date.now()), moment(Date.now() + 48 * 3600000)];
 
+type SubmitType = {
+  tezos: TezosToolkit,
+  fromAsset: Token
+  accountPkh: string,
+  govContract: any,
+  ipfsLink: string,
+  forumLink: string,
+  votingPeriod: number,
+  deferral: number
+};
+
+const submitProposal = async ({
+  tezos,
+  fromAsset,
+  accountPkh,
+  govContract,
+  ipfsLink,
+  forumLink,
+  votingPeriod,
+  deferral,
+}: SubmitType) => {
+  const govParams = await withTokenApprove(
+    tezos,
+    fromAsset,
+    accountPkh,
+    govContract.address,
+    0,
+    [
+      govContract.methods
+        .new_proposal(ipfsLink, forumLink, votingPeriod, deferral)
+        .toTransferParams(fromOpOpts(undefined, undefined)),
+    ],
+  );
+  const op = await batchify(
+    tezos.wallet.batch([]),
+    govParams,
+  ).send();
+  await op.confirmation();
+// TODO:
+};
+
+const ASCIItoHex = (str:string) => {
+  const arr1 = [];
+  for (let n = 0, l = str.length; n < l; n++) {
+    const hex = Number(str.charCodeAt(n)).toString(16);
+    arr1.push(hex);
+  }
+  return arr1.join('');
+};
+
 export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   className,
 }) => {
+  const tezos = useTezos();
+  const network = useNetwork();
+  const accountPkh = useAccountPkh();
+
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [description, setDescription] = useState<string>('');
   const [forumLink, setForumLink] = useState<string>('');
+  const [govContract, setGovContract] = useState<any>();
   const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
   const [votingInput, setVotingInput] = useState<any>(initialDates);
   const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
@@ -51,6 +121,39 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     };
     if (description !== '' && description.startsWith('https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md')) { loadDescription(); }
   }, [description]);
+
+  // new_proposal
+  // ipfs link: ipfs://QmR5bRvdgRhmeDNKtEKeC4raj9MSLgKXaCzkA86t78mQGe/QS2_MAINNET_TOKENS
+
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      if (!network) return;
+      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      console.log(contract);
+      setGovContract(contract);
+    };
+    loadDex();
+  }, [tezos, network]);
+
+  const handleSubmit = useCallback(() => {
+    if (!tezos) return;
+    if (!govContract) return;
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    const fromAsset = network.type === 'test' ? GOVERNANCE_TOKEN_TESTNET : GOVERNANCE_TOKEN_MAINNET;
+    submitProposal({
+      tezos,
+      accountPkh,
+      fromAsset,
+      govContract,
+      ipfsLink: ASCIItoHex(description),
+      forumLink: ASCIItoHex(forumLink),
+      deferral: votingStart.toDate().getTime() - Date.now(),
+      votingPeriod: votingEnd.toDate().getTime() - Date.now(),
+    });
+  }, [tezos, accountPkh, network]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -80,19 +183,6 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                 <h3 className={s.govName}>
                   Submit proposal
                 </h3>
-                <div className={cx(s.govGroup, s.desktopFlex)}>
-                  <h3 className={s.submitDates}>
-                    <span>{moment().format('DD MMM YYYY')}</span>
-                    <span> - </span>
-                    <span>{moment().add(4, 'd').format('DD MMM YYYY')}</span>
-                  </h3>
-                  <Bage
-                    className={s.govBage}
-                    text="ON-GOING"
-                    variant="primary"
-                  />
-
-                </div>
               </div>
               <div className={cx(s.govSubmitGroup, s.desktopBlock)}>
                 <div>
@@ -108,7 +198,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             </div>
           ),
           button: (
-            <Button className={s.govButton}>
+            <Button onClick={handleSubmit} className={s.govButton}>
               Submit
             </Button>
 
