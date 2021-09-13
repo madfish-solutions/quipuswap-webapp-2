@@ -79,6 +79,15 @@ export const Markdown: React.FC<MarkdownProps> = ({
               </p>
             );
           },
+          ol({
+            node, className, children, ...props
+          }) {
+            return (
+              <ol className={cx(className, s.ol)} {...props}>
+                {children}
+              </ol>
+            );
+          },
           ul({
             node, className, children, ...props
           }) {

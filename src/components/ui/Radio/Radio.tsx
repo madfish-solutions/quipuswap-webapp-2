@@ -44,10 +44,14 @@ export const Radio: React.FC<RadioProps> = ({
   return (
     <div className={compoundClassName}>
       <div className={s.input}>
-        <Button onClick={onClick} theme="radio" className={s.radioButton}>
-          {active
+        <Button
+          onClick={onClick}
+          theme="radio"
+          className={s.radioButton}
+          control={active
             ? <RadioSelected className={s.clickable} />
             : <RadioUnselected className={s.clickable} />}
+        >
           <span className={s.label}>
             {label}
           </span>

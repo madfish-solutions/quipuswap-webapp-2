@@ -4,6 +4,7 @@ import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { shortize } from '@utils/helpers';
+import { GovernanceCardProps } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -19,8 +20,6 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 import For from '@icons/For.svg';
 
 import s from './GovernanceCard.module.sass';
-
-import { GovernanceCardProps } from './GovernanceCard';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -45,6 +44,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   currency,
   className,
   author,
+  ipfsLink,
 }) => {
   const { t } = useTranslation(['common', 'governance']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -151,8 +151,16 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 className={s.cell}
               >
                 <div className={s.cellDate}>
-                  <Button theme="underlined">
-                    #Qmexv71
+                  <Button
+                    theme="inverse"
+                    icon={
+                      <ExternalLink className={s.linkIcon} />
+                    }
+                    className={s.detailsButton}
+                    external
+                    href={ipfsLink}
+                  >
+                    {shortize(ipfsLink, 20)}
                   </Button>
                 </div>
               </CardCell>
@@ -180,7 +188,15 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                 className={s.cell}
               >
                 <div className={s.cellDate}>
-                  <Button href={`https://tzkt.io/${author}`} theme="underlined">
+                  <Button
+                    className={s.detailsButton}
+                    icon={
+                      <ExternalLink className={s.linkIcon} />
+                    }
+                    external
+                    href={`https://tzkt.io/${author}`}
+                    theme="inverse"
+                  >
                     {shortize(author)}
                   </Button>
                 </div>
@@ -256,9 +272,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <Button
                     className={s.detailsButton}
                     theme="inverse"
+                    icon={
+                      <ExternalLink className={s.linkIcon} />
+                    }
                   >
                     The proposal on forum
-                    <ExternalLink className={s.linkIcon} />
                   </Button>
              )}
               />
@@ -268,9 +286,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <Button
                     className={s.detailsButton}
                     theme="inverse"
+                    icon={
+                      <ExternalLink className={s.linkIcon} />
+                    }
                   >
                     The QIP on Github
-                    <ExternalLink className={s.linkIcon} />
                   </Button>
               )}
               />
@@ -280,9 +300,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <Button
                     className={s.detailsButton}
                     theme="inverse"
+                    icon={
+                      <ExternalLink className={s.linkIcon} />
+                    }
                   >
                     Governance FAQs
-                    <ExternalLink className={s.linkIcon} />
                   </Button>
               )}
               />

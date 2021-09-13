@@ -3,31 +3,12 @@ import cx from 'classnames';
 import moment from 'moment';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { GovernanceCardProps } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
 
 import s from './GovernanceCard.module.sass';
-
-export type GovernanceCardProps = {
-  name: string
-  workDates: Date[]
-  status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
-  description: string
-  shortDescription: React.ReactNode
-  voted: string
-  support: string
-  reject: string
-  votes: string
-  claimable: string
-  currency: string
-  id:string
-  author:string
-  className?: string
-  onClick?: () => void
-  handleUnselect?: () => void
-  href?: string
-};
 
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;

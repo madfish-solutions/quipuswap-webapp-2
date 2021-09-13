@@ -64,6 +64,18 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
+export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT19VvavoJj11gyJP9LUmPQVLCqbatwpBC4t',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QSGOV',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
 export const FACTORIES = {
   granadanet: {
     fa1_2Factory: [

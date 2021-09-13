@@ -1,13 +1,15 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState, useCallback,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { WhitelistedToken } from '@utils/types';
-import { composeValidators, validateMinMax } from '@utils/validators';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  composeValidators, required, validateBalance, validateMinMax,
+} from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
@@ -19,6 +21,23 @@ import NotFor from '@icons/NotFor.svg';
 import NotForInactive from '@icons/NotForInactive.svg';
 
 import { Radio } from '@components/ui/Radio';
+import {
+  fallbackTokenToTokenData, handleTokenChange, parseDecimals, toDecimals,
+} from '@utils/helpers';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import {
+  getContract,
+  useAccountPkh, useNetwork, useOnBlock, useTezos,
+} from '@utils/dapp';
+import { GOVERNANCE_CONTRACT, STABLE_TOKEN, STABLE_TOKEN_GRANADA } from '@utils/defaults';
+import BigNumber from 'bignumber.js';
+import { TezosToolkit } from '@taquito/taquito';
+import {
+  batchify, fromOpOpts, Token, withTokenApprove,
+} from '@quipuswap/sdk';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useRouter } from 'next/router';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from './VoteModal.module.sass';
 
 const themeClass = {
@@ -35,6 +54,7 @@ type HeaderProps = {
   save:any,
   values:FormValues,
   form:any,
+  tokensData: TokenDataMap,
 };
 
 type FormValues = {
@@ -43,9 +63,60 @@ type FormValues = {
   voteAgainst:boolean
 };
 
+type SubmitType = {
+  tezos: TezosToolkit,
+  fromAsset: Token
+  accountPkh: string,
+  govContract: any,
+  proposalId: number,
+  voteFor: boolean,
+  voteAmount: BigNumber
+  handleErrorToast: (error:any) => void
+  handleSuccessToast: () => void
+};
+
+const submitProposal = async ({
+  tezos,
+  fromAsset,
+  accountPkh,
+  govContract,
+  proposalId,
+  voteFor,
+  voteAmount,
+  handleSuccessToast,
+  handleErrorToast,
+}: SubmitType) => {
+  try {
+    console.log(proposalId,
+      voteFor,
+      voteAmount);
+    const govParams = await withTokenApprove(
+      tezos,
+      fromAsset,
+      accountPkh,
+      govContract.address,
+      0,
+      [
+        govContract.methods
+          .vote(proposalId, voteFor ? 'for' : 'against', voteAmount)
+          .toTransferParams(fromOpOpts(undefined, undefined)),
+      ],
+    );
+    const op = await batchify(
+      tezos.wallet.batch([]),
+      govParams,
+    ).send();
+    await op.confirmation();
+    handleSuccessToast();
+  } catch (e) {
+    handleErrorToast(e);
+  }
+};
+
 const Header:React.FC<HeaderProps> = ({
-  debounce, save, values, form,
+  debounce, save, values, form, tokensData,
 }) => {
+  const accountPkh = useAccountPkh();
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
@@ -83,16 +154,18 @@ const Header:React.FC<HeaderProps> = ({
       <Field
         name="balance"
         validate={composeValidators(
-          // reqired
+          required,
           validateMinMax(0, Infinity),
-          // validateBalance
+          accountPkh
+            ? validateBalance(new BigNumber(tokensData.first.balance))
+            : () => undefined,
         )}
-        // parse={(v) => parseDecimals(v, 0, Infinity)}
+        parse={(v) => parseDecimals(v, 0, Infinity, tokensData.first.token.decimals)}
       >
         {({ input, meta }) => (
           <ComplexInput
             withoutSelect
-            balance="10"
+            balance={tokensData.first.balance}
             token1={{} as WhitelistedToken}
             id="voteModal-1"
             label="Vote"
@@ -168,8 +241,80 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'governance']);
+  const updateToast = useUpdateToast();
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
+  const router = useRouter();
+  const exchangeRates = useExchangeRates();
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const network = useNetwork();
+  const currentToken = network.id === 'granadanet' ? STABLE_TOKEN_GRANADA : STABLE_TOKEN;
   const { Form } = withTypes<FormValues>();
+  const [govContract, setGovContract] = useState<any>();
+  const [tokensData, setTokensData] = useState<TokenDataMap>(
+    {
+      first: fallbackTokenToTokenData(currentToken),
+      second: fallbackTokenToTokenData(STABLE_TOKEN),
+    },
+  );
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common:Loading'),
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('governance:Proposal submitted!'),
+    });
+  }, [updateToast]);
+
+  const handleTokenChangeWrapper = (
+    token: WhitelistedToken,
+    tokenNumber: 'first' | 'second',
+  ) => handleTokenChange({
+    token,
+    tokenNumber,
+    exchangeRates,
+    tezos: tezos!,
+    accountPkh: accountPkh!,
+    setTokensData,
+  });
+
+  const getBalance = useCallback(() => {
+    if (tezos) {
+      handleTokenChangeWrapper(currentToken, 'first');
+    }
+  }, [tezos, accountPkh, network.id]);
+
+  useEffect(() => {
+    getBalance();
+  }, [tezos, accountPkh, network.id]);
+
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      if (!network) return;
+      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      setGovContract(contract);
+    };
+    loadDex();
+  }, [tezos, network]);
+
+  useOnBlock(tezos, getBalance);
 
   const handleInput = (values:FormValues) => {
     // TODO
@@ -181,9 +326,23 @@ export const VoteModal: React.FC<VoteModalProps> = ({
       initialValues={{
         voteFor: true,
       }}
-      onSubmit={(values:FormValues) => {
-        // TODO
-        console.log(values, 'submit');
+      onSubmit={(values) => {
+        if (!tezos || !accountPkh) return;
+        handleLoader();
+        submitProposal({
+          tezos,
+          accountPkh,
+          fromAsset: {
+            contract: currentToken.contractAddress,
+            id: 0,
+          },
+          govContract,
+          proposalId: Number(router.query.proposal),
+          voteFor: values.voteFor,
+          voteAmount: toDecimals(new BigNumber(values.balance), tokensData.first.token.decimals),
+          handleErrorToast,
+          handleSuccessToast,
+        });
       }}
       mutators={{
         setValue: ([field, value], state, { changeValue }) => {
@@ -196,6 +355,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
           header={(
             <AutoSave
               form={form}
+              tokensData={tokensData}
               debounce={1000}
               save={handleInput}
             />
@@ -205,7 +365,16 @@ export const VoteModal: React.FC<VoteModalProps> = ({
           contentClassName={cx(s.content, s.tokenModal)}
           {...props}
         >
-          <Button className={s.button} onClick={handleSubmit}>
+          <Button
+            className={s.button}
+            onClick={() => {
+              if (!tezos) return;
+              if (!accountPkh) {
+                openConnectWalletModal(); return;
+              }
+              handleSubmit();
+            }}
+          >
             Vote
           </Button>
         </Modal>

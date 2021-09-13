@@ -12,7 +12,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import {
   batchify, fromOpOpts, Token, withTokenApprove,
 } from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
 
+import useUpdateToast from '@hooks/useUpdateToast';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
@@ -21,7 +23,7 @@ import {
 import {
   GOVERNANCE_CONTRACT, GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET,
 } from '@utils/defaults';
-import { prettyPrice } from '@utils/helpers';
+import { prepareIpfsLink, prettyPrice } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
@@ -53,7 +55,9 @@ type SubmitType = {
   ipfsLink: string,
   forumLink: string,
   votingPeriod: number,
-  deferral: number
+  deferral: number,
+  handleErrorToast: (error:any) => void
+  handleSuccessToast: () => void
 };
 
 const submitProposal = async ({
@@ -65,25 +69,31 @@ const submitProposal = async ({
   forumLink,
   votingPeriod,
   deferral,
+  handleErrorToast,
+  handleSuccessToast,
 }: SubmitType) => {
-  const govParams = await withTokenApprove(
-    tezos,
-    fromAsset,
-    accountPkh,
-    govContract.address,
-    0,
-    [
-      govContract.methods
-        .new_proposal(ipfsLink, forumLink, votingPeriod, deferral)
-        .toTransferParams(fromOpOpts(undefined, undefined)),
-    ],
-  );
-  const op = await batchify(
-    tezos.wallet.batch([]),
-    govParams,
-  ).send();
-  await op.confirmation();
-// TODO:
+  try {
+    const govParams = await withTokenApprove(
+      tezos,
+      fromAsset,
+      accountPkh,
+      govContract.address,
+      0,
+      [
+        govContract.methods
+          .new_proposal(ipfsLink, forumLink, votingPeriod, deferral)
+          .toTransferParams(fromOpOpts(undefined, undefined)),
+      ],
+    );
+    const op = await batchify(
+      tezos.wallet.batch([]),
+      govParams,
+    ).send();
+    await op.confirmation();
+    handleSuccessToast();
+  } catch (e) {
+    handleErrorToast(e);
+  }
 };
 
 const ASCIItoHex = (str:string) => {
@@ -98,9 +108,32 @@ const ASCIItoHex = (str:string) => {
 export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['common', 'governance']);
   const tezos = useTezos();
   const network = useNetwork();
   const accountPkh = useAccountPkh();
+  const updateToast = useUpdateToast();
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common:Loading'),
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('governance:Proposal submitted!'),
+    });
+  }, [updateToast]);
 
   const {
     openConnectWalletModal,
@@ -115,34 +148,49 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const [isPicker, showPicker] = useState<boolean>(false);
   useEffect(() => {
     const loadDescription = () => {
-      fetch('https://raw.githubusercontent.com/ethereum/EIPs/master/EIPS/eip-1155.md').then((x) => x.text()).then((x) => {
+      const url = prepareIpfsLink(description);
+      if (!url) return;
+      fetch(url).then((x) => x.text()).then((x) => {
         setLoadedDescription({ loadedDescription: x, isLoaded: true });
       });
     };
-    if (description !== '' && description.startsWith('https://github.com/ethereum/EIPs/blob/master/EIPS/eip-1155.md')) { loadDescription(); }
+    if (description !== '' && description.startsWith('ipfs://')) { loadDescription(); }
   }, [description]);
-
-  // new_proposal
-  // ipfs link: ipfs://QmR5bRvdgRhmeDNKtEKeC4raj9MSLgKXaCzkA86t78mQGe/QS2_MAINNET_TOKENS
 
   useEffect(() => {
     const loadDex = async () => {
       if (!tezos) return;
       if (!network) return;
       const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
-      console.log(contract);
       setGovContract(contract);
     };
     loadDex();
   }, [tezos, network]);
 
   const handleSubmit = useCallback(() => {
-    if (!tezos) return;
-    if (!govContract) return;
+    if (!tezos) {
+      updateToast({
+        type: 'error',
+        render: t('governance: Tezos not loaded'),
+      });
+      return;
+    }
+    if (!govContract) {
+      updateToast({
+        type: 'error',
+        render: t('governance: Contract not loaded'),
+      });
+      return;
+    }
     if (!accountPkh) {
       openConnectWalletModal(); return;
     }
     const fromAsset = network.type === 'test' ? GOVERNANCE_TOKEN_TESTNET : GOVERNANCE_TOKEN_MAINNET;
+    handleLoader();
+    const deferral = votingStart.toDate().getTime() - Date.now() < 0
+      ? 0
+      : Math.round((votingStart.toDate().getTime() - Date.now()) / 1000);
+    const votingPeriod = Math.round((votingEnd.toDate().getTime() - Date.now()) / 1000);
     submitProposal({
       tezos,
       accountPkh,
@@ -150,10 +198,21 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
       govContract,
       ipfsLink: ASCIItoHex(description),
       forumLink: ASCIItoHex(forumLink),
-      deferral: votingStart.toDate().getTime() - Date.now(),
-      votingPeriod: votingEnd.toDate().getTime() - Date.now(),
+      deferral,
+      votingPeriod,
+      handleErrorToast,
+      handleSuccessToast,
     });
-  }, [tezos, accountPkh, network]);
+  }, [
+    tezos,
+    accountPkh,
+    network,
+    govContract,
+    description,
+    forumLink,
+    votingStart,
+    votingEnd,
+  ]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -168,8 +227,14 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     >
       <CardHeader header={{
         content: (
-          <Button href="/governance" theme="quaternary" className={s.proposalHeader}>
-            <Back className={s.proposalBackIcon} />
+          <Button
+            href="/governance"
+            theme="quaternary"
+            className={s.proposalHeader}
+            control={
+              <Back className={s.proposalBackIcon} />
+            }
+          >
             Back
           </Button>
         ),
@@ -243,16 +308,12 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
                     endDate,
                   },
                 ) => {
-                  // console.log(startDate, endDate);
                   let res:Moment[] = [];
                   if (startDate) res = [startDate];
                   if (endDate) res = [...res, endDate];
                   setVotingDates(res);
-
-                  // showPicker(false);
                 }}
                 onFocusChange={(focusedInput) => {
-                  console.log('focusedInput', focusedInput);
                   if (focusedInput === null) { showPicker(false); }
                   return setVotingInput(focusedInput);
                 }}
@@ -266,13 +327,11 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             className={s.formInput}
             label="Voting period"
             id="votingperiod"
-            value={`${votingStart.format('DD/MM/YYYY')} - ${votingEnd.format('DD/MM/YYYY')}`}
+            value={`${votingStart.format('DD/MM/YYYY')} - ${votingEnd ? votingEnd.format('DD/MM/YYYY') : initialDates[1].format('DD/MM/YYYY')}`}
             readOnly
             onClick={() => {
               if (!isPicker) {
                 setVotingInput('startDate');
-                // setVotingDates(initialDates);
-                // setVotingInput('endDate')
               }
               showPicker(!isPicker);
             }}

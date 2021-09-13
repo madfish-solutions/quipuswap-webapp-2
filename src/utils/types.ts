@@ -141,6 +141,7 @@ export type GovernanceStorageInfo = {
 };
 
 export type ProposalType = {
+  name: string,
   id: number,
   collateral: BigNumber,
   config: {
@@ -165,3 +166,24 @@ export type ProposalStatus = 'activated' |
 'rejected' |
 'underrated' |
 'voting';
+
+export type GovernanceCardProps = {
+  name: string
+  workDates: Date[]
+  status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
+  description: string
+  ipfsLink: string
+  shortDescription: React.ReactNode
+  voted: string
+  support: string
+  reject: string
+  votes: string
+  claimable: string
+  currency: string
+  id:string
+  author:string
+  className?: string
+  onClick?: () => void
+  handleUnselect?: () => void
+  href?: string
+};
