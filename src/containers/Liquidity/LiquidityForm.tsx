@@ -905,7 +905,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     disabled={!dex}
                   />
                   {t('liquidity:Rebalance Liquidity')}
-                  <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
+                  <Tooltip content="Automatically adjust your token balance to a 50%-50% ratio. If you don't have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion." />
                 </div>
               )}
             </Field>
