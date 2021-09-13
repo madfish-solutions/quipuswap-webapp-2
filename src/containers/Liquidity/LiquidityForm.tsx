@@ -305,7 +305,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           handleErrorToast(err);
         }
       } else {
-        if (!dex) return;
+        if (!dex || !accountPkh || !tezos) return;
         if ((val.balance1 && val.balance1.toString() === '.') || (val.balance2 && val.balance2.toString() === '.')) return;
         const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
         const bal2 = toDecimals(
