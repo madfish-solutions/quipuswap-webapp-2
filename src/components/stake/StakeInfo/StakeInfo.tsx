@@ -14,15 +14,15 @@ import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { WhitelistedStake } from '@utils/types';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
+import { TokensLogos } from '@components/ui/TokensLogos';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import s from './StakeInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
