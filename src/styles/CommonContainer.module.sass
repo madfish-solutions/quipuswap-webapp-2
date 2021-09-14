@@ -51,29 +51,6 @@
   margin-top: 40px
   max-width: 280px
 
-.farmingStats
-  display: flex
-  align-items: center
-
-.farmingStatsBlock
-  font-size: 1.143rem
-  font-weight: 600
-  line-height: 1.5
-  flex: 1
-
-
-.farmingCard
-  padding: 24px
-  text-align: center
-  &:not(:last-child)
-    margin-bottom: 32px
-
-.farmingControllerCard
-  padding: 0px 24px 16px 24px
-
-.farmingControllerContent
-  flex-wrap: wrap
-
 .cellCenter
   align-items: flex-start
 
@@ -81,19 +58,10 @@
   &:not(:last-child)
     margin-bottom: 16px
 
-.switcherWrap
-  display: flex
-  align-items: center
-
 .cellAmount
   display: flex
   justify-content: flex-start
   align-items: flex-start
-
-.sortItem
-  flex: 1
-  display: flex
-  justify-content: flex-end
 
 .equal
   margin: 0 8px
@@ -123,15 +91,6 @@
   display: flex
   align-items: center
   font-weight: 600
-
-.searchInput
-  margin-top: 16px
-  order: 2
-  width: 100%
-  flex-basis: 100%
-
-.switcherInput
-  margin-right: 8px
 
 .buttons
   display: flex
@@ -167,15 +126,6 @@
         margin-left: 32px
 
 @include media('>Ltablet')
-  .farmingControllerContent
-    flex-wrap: nowrap
-  .searchInput
-    margin-top: 0px
-    order: 0
-    width: auto
-    flex-basis: auto
-  .switcherWrap
-    margin-left: 24px
   .button
     margin-left: auto
     width: 180px

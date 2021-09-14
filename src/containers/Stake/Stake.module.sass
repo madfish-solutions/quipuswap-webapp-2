@@ -1,0 +1,84 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.card
+  padding: 0px
+
+.name
+  margin-bottom: 8px
+
+.shevron
+  margin-left: 8px
+
+.sortItem
+  flex: 1
+  display: flex
+  justify-content: flex-end
+  .select
+    min-width: 140px
+
+.searchInput
+  margin-top: 16px
+  order: 2
+  width: 100%
+  flex-basis: 100%
+
+.switcher
+  display: flex
+  align-items: center
+  font-weight: 600
+
+.switcherInput
+  margin-right: 8px
+
+.switcherWrap
+  display: flex
+  align-items: center
+
+.farmingStats
+  padding: 0px
+  display: flex
+  align-items: center
+
+.farmingStatsBlock
+  padding: 24px 0px
+  font-size: 1.143rem
+  font-weight: 600
+  line-height: 1.5
+  flex: 1
+
+.farmingCard
+  overflow: visible
+  padding: 0px
+  text-align: center
+  &:not(:last-child)
+    margin-bottom: 32px
+
+.farmingControllerCard
+  padding: 16px 24px
+
+.farmingControllerContent
+  flex-wrap: wrap
+
+@include media('>Ltablet')
+  .searchInput
+    margin-top: 0px
+    order: 0
+    width: auto
+    flex-basis: auto
+  .switcherWrap
+    margin-left: 24px
+  .farmingControllerContent
+    flex-wrap: nowrap
+  .cards
+    border-radius: 8px
+    box-shadow: $elevation-03
+    margin-bottom: 32px
+  .light
+    .farmingStatsBlock
+      &:not(:last-child)
+        border-right: 1px solid $ui-03
+  .dark
+    .farmingStatsBlock
+      &:not(:last-child)
+        border-right: 1px solid $ui-06

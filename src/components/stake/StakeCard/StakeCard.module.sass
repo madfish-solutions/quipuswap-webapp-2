@@ -4,6 +4,10 @@
 .card
   margin-bottom: 32px
 
+.tokenLogos
+  display: flex
+  align-items: center
+
 .flex
   display: block
 
@@ -78,6 +82,12 @@
   margin-left: 4px
   font-size: 1rem
   line-height: 1.33
+  font-weight: 600
+
+.tvl
+  color: $text-02
+
+.bold600
   font-weight: 600
 
 .links
@@ -213,12 +223,10 @@
     margin-top: auto
   .footer
     flex-direction: row
-    margin-top: 32px
+    margin-top: 16px
     display: flex
     align-items: flex-end
     justify-content: space-between
-
-@include media('>desktop')
   .arrow
     transform: none
   .header

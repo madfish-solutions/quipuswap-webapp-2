@@ -1,25 +1,50 @@
-import React, { useState } from 'react';
+import React, {
+  useState, useContext, useMemo, useCallback,
+} from 'react';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
+import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
-import { Shevron } from '@components/svg/Shevron';
 import Search from '@icons/Search.svg';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Stake.module.sass';
 
 type StakeProps = {
   className?: string
 };
 
 type ContentType = { name:string, value:string, currency?:string }[];
+
+const SortContent = [
+  {
+    id: 'default',
+    label: 'Sorted By',
+  },
+  {
+    id: 'asc:token',
+    label: 'Deposit token',
+  },
+  {
+    id: 'asc:tvl',
+    label: 'TVL',
+  },
+  {
+    id: 'asc:apy',
+    label: 'APY',
+  },
+  {
+    id: 'asc:deposit',
+    label: 'Deposit',
+  },
+];
 
 const content:ContentType = [
   {
@@ -125,20 +150,47 @@ const stakes:WhitelistedStake[] = [
   },
 ];
 
+const modeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
+
 export const Stake: React.FC<StakeProps> = () => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedStake, selectStake] = useState<WhitelistedStake>();
+  const [sort, setSort] = useState(SortContent[0].id);
+
+  const currentSort = useMemo(
+    () => (SortContent.find(({ id }) => id === sort)!),
+    [sort],
+  );
+  const selectValues = useMemo(
+    () => SortContent.map((el) => ({ value: el.id, label: el.label })),
+    [],
+  );
+
+  const handleChangeSort = useCallback(({ value, label }) => {
+    const selectedSort = SortContent.find((sorting) => (
+      sorting.id === value && sorting.label === label
+    ));
+    if (!selectedSort) return;
+    setSort(sort);
+  }, [sort]);
   if (selectedStake) {
-    // TODO
+    // TODO: add routes
     return (
       <StakeInfo handleUnselect={() => selectStake(undefined)} stake={selectedStake} />
     );
   }
   return (
     <>
-      <Card className={s.farmingCard} contentClassName={s.farmingStats}>
+      <Card
+        className={cx(modeClass[colorThemeMode], s.farmingCard)}
+        contentClassName={s.farmingStats}
+      >
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
-            <div>{x.name}</div>
+            <div className={s.name}>{x.name}</div>
             <CurrencyAmount amount={x.value} currency={x.currency} />
           </div>
         ))}
@@ -162,10 +214,16 @@ export const Stake: React.FC<StakeProps> = () => {
             Staked Only
           </div>
         </div>
-        <Button theme="quaternary" className={s.sortItem}>
-          Sorted By
-          <Shevron />
-        </Button>
+        <div
+          className={s.sortItem}
+        >
+          <SelectUI
+            className={s.select}
+            options={selectValues}
+            value={{ value: currentSort.id, label: currentSort.label }}
+            onChange={handleChangeSort}
+          />
+        </div>
       </Card>
       {stakes.map((x) => (
         <StakeCard

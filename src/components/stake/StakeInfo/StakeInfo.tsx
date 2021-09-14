@@ -52,6 +52,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+// TODO: change to timeago.js
 const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
 

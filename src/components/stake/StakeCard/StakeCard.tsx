@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedStake } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -11,7 +12,6 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { APY } from '@components/svg/APY';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import s from './StakeCard.module.sass';
 
@@ -53,12 +53,11 @@ export const StakeCard: React.FC<StakeCardProps> = ({
       contentClassName={cx(s.content, modeClass[colorThemeMode])}
     >
       <div className={s.header}>
-        <div className={s.tokens}>
+        <div className={s.tokenLogos}>
           <TokensLogos
             token1={tokenPair.token1}
             token2={tokenPair.token2}
             width={48}
-            className={s.tokenLogos}
           />
           <h3 className={s.title}>
             {getWhitelistedTokenSymbol(tokenPair.token1)}
@@ -91,59 +90,57 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <ArrowDown className={s.arrow} />
           <div className={s.tokenItem}>
             <TokensLogos token1={TEZOS_TOKEN} className={s.tokens} />
-            Earn
+            <span className={s.bold600}>Earn</span>
             {' '}
             <span className={s.earn}>{earn}</span>
           </div>
         </div>
-        <div className={s.details}>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>TVL</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={totalValueLocked} />
-            </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>TVL</div>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>
-              APY
-              {' '}
-              <APY />
-            </div>
-            <div className={s.detailsValue}>
-              {apy}
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>
+            APY
+            {' '}
+            <APY />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Daily</div>
-            <div className={s.detailsValue}>
-              {daily}
-            </div>
+          <div className={s.detailsValue}>
+            {apy}
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Balance</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={balance} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Daily</div>
+          <div className={s.detailsValue}>
+            {daily}
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Deposit</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={deposit} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Balance</div>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={balance} />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Earned</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={earned} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Deposit</div>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={deposit} />
+          </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Earned</div>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={earned} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
