@@ -22,13 +22,13 @@ const modeClass = {
 
 export type StakeCardProps = {
   stake:WhitelistedStake
+  openModal: () => void
   className?: string
-  onClick?:(farm:WhitelistedStake) => void
 };
 
 export const StakeCard: React.FC<StakeCardProps> = ({
   stake,
-  onClick = () => {},
+  openModal,
   className,
 }) => {
   const {
@@ -55,6 +55,8 @@ export const StakeCard: React.FC<StakeCardProps> = ({
       <div className={s.header}>
         <div className={s.tokenLogos}>
           <TokensLogos
+            imageClassName={s.image}
+            layout="fill"
             token1={tokenPair.token1}
             token2={tokenPair.token2}
             width={48}
@@ -107,7 +109,9 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <div className={s.detailsHeader}>
             APY
             {' '}
-            <APY />
+            <Button theme="quaternary" onClick={openModal}>
+              <APY />
+            </Button>
           </div>
           <div className={s.detailsValue}>
             {apy}
@@ -165,8 +169,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button onClick={() => onClick(stake)} className={s.button}>Select</Button>
-
+        <Button href={`/stake/${stake.id}`} className={s.button}>Select</Button>
       </div>
     </Card>
   );

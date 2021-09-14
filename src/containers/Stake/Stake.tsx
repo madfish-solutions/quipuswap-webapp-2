@@ -1,7 +1,8 @@
 import React, {
-  useState, useContext, useMemo, useCallback,
+  useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
 import cx from 'classnames';
+import Slider from 'react-slick';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -15,7 +16,11 @@ import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import Search from '@icons/Search.svg';
 
+import { useRouter } from 'next/router';
+import { ApyModal } from '@components/modals/ApyModal';
 import s from './Stake.module.sass';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 type StakeProps = {
   className?: string
@@ -24,10 +29,6 @@ type StakeProps = {
 type ContentType = { name:string, value:string, currency?:string }[];
 
 const SortContent = [
-  {
-    id: 'default',
-    label: 'Sorted By',
-  },
   {
     id: 'asc:token',
     label: 'Deposit token',
@@ -74,6 +75,7 @@ const fallbackPair = {
 
 const stakes:WhitelistedStake[] = [
   {
+    id: 0,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '888%',
@@ -89,6 +91,7 @@ const stakes:WhitelistedStake[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 1,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '887%',
@@ -104,6 +107,7 @@ const stakes:WhitelistedStake[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 2,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '886%',
@@ -119,6 +123,7 @@ const stakes:WhitelistedStake[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 3,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '885%',
@@ -134,6 +139,7 @@ const stakes:WhitelistedStake[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 4,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '884%',
@@ -156,9 +162,11 @@ const modeClass = {
 };
 
 export const Stake: React.FC<StakeProps> = () => {
+  const router = useRouter();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedStake, selectStake] = useState<WhitelistedStake>();
-  const [sort, setSort] = useState(SortContent[0].id);
+  const [sort, setSort] = useState('Sorted By');
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -174,19 +182,44 @@ export const Stake: React.FC<StakeProps> = () => {
       sorting.id === value && sorting.label === label
     ));
     if (!selectedSort) return;
-    setSort(sort);
-  }, [sort]);
+    setSort(selectedSort.id);
+  }, []);
+
+  useEffect(() => {
+    if (router.query.slug) {
+      const stakeObj = stakes.find((x) => `${x.id}` === router.query.slug);
+      if (stakeObj) {
+        selectStake(stakeObj);
+      }
+    }
+  }, [router.query, selectedStake]);
+
   if (selectedStake) {
-    // TODO: add routes
     return (
-      <StakeInfo handleUnselect={() => selectStake(undefined)} stake={selectedStake} />
+      <StakeInfo stake={selectedStake} />
     );
   }
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    customPaging: () => (
+      <div className={modeClass[colorThemeMode]}>
+        <div className={s.dot} />
+
+      </div>
+    ),
+  };
+
   return (
     <>
+      <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
       <Card
-        className={cx(modeClass[colorThemeMode], s.farmingCard)}
-        contentClassName={s.farmingStats}
+        className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
+        contentClassName={cx(s.farmingStats)}
       >
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
@@ -196,7 +229,20 @@ export const Stake: React.FC<StakeProps> = () => {
         ))}
       </Card>
       <Card
-        className={cx(s.farmingCard, s.farmingControllerCard)}
+        className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
+        contentClassName={s.farmingMobileStats}
+      >
+        <Slider {...settings}>
+          {content.map((x) => (
+            <div key={x.name} className={s.farmingMobileStatsBlock}>
+              <div className={s.name}>{x.name}</div>
+              <CurrencyAmount amount={x.value} currency={x.currency} />
+            </div>
+          ))}
+        </Slider>
+      </Card>
+      <Card
+        className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
       >
         <Input
@@ -220,7 +266,9 @@ export const Stake: React.FC<StakeProps> = () => {
           <SelectUI
             className={s.select}
             options={selectValues}
-            value={{ value: currentSort.id, label: currentSort.label }}
+            value={currentSort
+              ? { value: currentSort.id, label: currentSort.label }
+              : { value: 'Sorted By', label: 'Sorted By' }}
             onChange={handleChangeSort}
           />
         </div>
@@ -229,7 +277,7 @@ export const Stake: React.FC<StakeProps> = () => {
         <StakeCard
           key={x.earn}
           stake={x}
-          onClick={(e) => selectStake(e)}
+          openModal={() => setModalOpen(true)}
         />
       ))}
     </>

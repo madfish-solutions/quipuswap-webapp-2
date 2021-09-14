@@ -127,6 +127,7 @@ export type WhitelistedFarm = {
 };
 
 export type WhitelistedStake = {
+  id: number,
   remaining: Date
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string

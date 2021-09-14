@@ -43,7 +43,6 @@ const TabsContent = [
 type StakeInfoProps = {
   stake:WhitelistedStake
   className?: string
-  handleUnselect: () => void
   onClick?:(stake:WhitelistedStake) => void
 };
 
@@ -74,7 +73,6 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
 export const StakeInfo: React.FC<StakeInfoProps> = ({
   className,
   stake,
-  handleUnselect,
 }) => {
   const {
     remaining,
@@ -103,7 +101,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         header={{
           content: (
             <Button
-              onClick={() => (handleUnselect ? handleUnselect() : null)}
+              href="/stake"
               theme="quaternary"
               className={s.proposalHeader}
               control={
@@ -140,7 +138,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                 <span className={s.header}>
                   Your Delegate
                 </span>
-                <Button theme="quaternary" className={s.amount}>Everstake</Button>
+                <Button theme="inverse" className={s.amount}>Everstake</Button>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
