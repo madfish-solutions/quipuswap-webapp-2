@@ -1,6 +1,12 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.mobile
+  display: block
+
+.notMobile
+  display: none
+
 .cards
   margin-bottom: 16px
 
@@ -15,6 +21,12 @@
   margin-left: auto
   margin-right: auto
   display: block
+
+@include media('>tablet')
+  .mobile
+    display: none
+  .notMobile
+    display: block
 
 @include media('>Ltablet')
   .cards

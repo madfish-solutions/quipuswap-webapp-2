@@ -7,7 +7,9 @@ import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { useTokens } from '@utils/dapp';
+import { WhitelistedFarm } from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
@@ -32,6 +34,8 @@ import {
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
+import { FarmTable } from '@components/tables/FarmTable';
+import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
@@ -109,6 +113,10 @@ const UiKit: React.FC = () => {
   const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
+  const { data: tokens } = useTokens();
+  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
+    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -153,6 +161,11 @@ const UiKit: React.FC = () => {
       title={t('ui-kit:Home page')}
       description={t('ui-kit:Home page description. Couple sentences...')}
     >
+      <section className={s.section}>
+        <h1 className={s.header}>Tables</h1>
+        <FarmTable data={farms as WhitelistedFarm[]} />
+        <PoolTable data={farms as WhitelistedFarm[]} />
+      </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>
         <h2 className={s.sectionHeader}>Brand colors</h2>

@@ -120,7 +120,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance), 3)}
+                  {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
                 </div>
               </div>
               )}
@@ -131,6 +131,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               onBlur={() => setActive(false)}
               ref={inputRef}
               value={value}
+              autoComplete="off"
               {...props}
             />
             <Button

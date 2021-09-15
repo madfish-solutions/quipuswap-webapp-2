@@ -187,7 +187,8 @@ export const submitForm = async (
   tezos:TezosToolkit,
   liquidityParams: TransferParams[],
   updateToast: (err:Error) => void,
-  handleSuccessToast: any,
+  handleSuccessToast: (text:string) => void,
+  currentTab: string,
 ) => {
   try {
     const op = await batchify(
@@ -195,7 +196,11 @@ export const submitForm = async (
       liquidityParams,
     ).send();
     await op.confirmation();
-    handleSuccessToast();
+    if (currentTab === 'remove') {
+      handleSuccessToast('liquidity:Divest completed!');
+    } else {
+      handleSuccessToast('liquidity:Invest completed!');
+    }
   } catch (e) {
     updateToast(e);
   }

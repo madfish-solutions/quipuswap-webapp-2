@@ -1,0 +1,58 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+  
+.container
+  margin-left: -24px
+  margin-right: -24px
+  overflow: hidden
+  overflow-x: auto
+
+.container::-webkit-scrollbar-track
+    border-radius: 1px
+    background-color: transparent
+.container::-webkit-scrollbar
+  width: 2px
+  height: 0px
+  background-color: transparent
+.container::-webkit-scrollbar-thumb
+  border-radius: 1px
+  background-color: $hover-dark-row
+
+.wrapper
+  width: max-content
+
+.innerWrapper
+  margin-left: 24px
+  margin-right: 24px
+.mobile
+  display: block
+
+.notMobile
+  display: none
+
+.light
+  .container::-webkit-scrollbar-thumb
+    background-color: $hover-light-row
+.dark
+  .container::-webkit-scrollbar-thumb
+    background-color: $hover-dark-row
+
+@include media('>tablet')
+  .mobile
+    display: none
+  .notMobile
+    display: block
+
+@include media('>Ltablet')
+  .container
+    overflow: visible
+  .wrapper
+    width: auto
+  .table
+    width: 100%
+
+@include media('>LDesktop')
+  .table
+    width: 100%
+  .wrapper
+    width: auto

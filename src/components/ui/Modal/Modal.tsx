@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
@@ -46,6 +46,7 @@ export const Modal: React.FC<ModalProps> = ({
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const [start, setStart] = useState<any>();
 
   return (
     <ReactModal
@@ -64,13 +65,20 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         aria-hidden="true"
         className={cx(s.wrapper, modalClassName)}
-        onClick={(e) => {
-          if (e.target === e.currentTarget && onRequestClose) {
+        onMouseUp={(e) => {
+          if (!start && e.target === e.currentTarget && onRequestClose) {
             onRequestClose(e);
           }
+          setStart(undefined);
         }}
       >
-        <div className={cx(s.container, containerClassName)}>
+        <div
+          aria-hidden="true"
+          onMouseDown={(e) => {
+            setStart(e.target);
+          }}
+          className={cx(s.container, containerClassName)}
+        >
           <Card className={cardClassName}>
             <CardHeader header={{
               content: <h5>{title}</h5>,

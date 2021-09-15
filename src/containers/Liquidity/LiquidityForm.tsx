@@ -18,12 +18,13 @@ import {
   findDex,
   FoundDex,
   getLiquidityShare,
+  removeLiquidity,
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  useAccountPkh, useNetwork, useOnBlock, useTezos,
 } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -122,6 +123,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   currentTab,
   setAddLiquidityParams,
   removeLiquidityParams,
+  setRemoveLiquidityParams,
   addLiquidityParams,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
@@ -226,6 +228,16 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           const bal1 = fromDecimals(sharesA, token1.metadata.decimals);
           const bal2 = fromDecimals(sharesB, token2.metadata.decimals);
 
+          const slippage = slippageToBignum(values.slippage).div(100);
+
+          const params = await removeLiquidity(
+            tezos,
+            dex,
+            balance,
+            slippage,
+          );
+          setRemoveLiquidityParams(params);
+
           form.mutators.setValue('balanceA', bal1);
           form.mutators.setValue('balanceB', bal2);
         } catch (err) {
@@ -246,9 +258,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           setAddLiquidityParams(addParams);
         }
 
-        const rate = new BigNumber(tokensData.first.exchangeRate)
-          .dividedBy(new BigNumber(tokensData.second.exchangeRate));
-        const retValue = lastChange === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).dividedBy(rate);
+        const rate = toDecimals(dex.storage.storage.token_pool, TEZOS_TOKEN.metadata.decimals)
+          .dividedBy(
+            toDecimals(dex.storage.storage.tez_pool, token2.metadata.decimals),
+          );
+        const retValue = lastChange === 'balance1' ? new BigNumber(val.balance1).multipliedBy(rate) : new BigNumber(val.balance2).div(rate);
         const decimals = lastChange === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
 
         const res = retValue.toFixed(decimals);
@@ -291,7 +305,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           handleErrorToast(err);
         }
       } else {
-        if (!dex) return;
+        if (!dex || !accountPkh || !tezos) return;
         if ((val.balance1 && val.balance1.toString() === '.') || (val.balance2 && val.balance2.toString() === '.')) return;
         const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
         const bal2 = toDecimals(
@@ -359,6 +373,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const getDex = useCallback(async () => {
     if (!tezos || !token2 || !token1) return;
+    setDex(undefined);
+    setOldDex(undefined);
     const toAsset = {
       contract: token2.contractAddress,
       id: token2.fa2TokenId ?? undefined,
@@ -567,9 +583,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     }
   }, [tezos, accountPkh, networkId, token1]);
 
+  useOnBlock(tezos, getDex);
+
   return (
     <>
-      <Card>
+      <Card isV2>
         <CardHeader
           header={{
             content: (
@@ -603,7 +621,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             name="balance3"
             validate={composeValidators(
               validateMinMax(0, Infinity),
-              validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity)),
+              validateBalance(new BigNumber(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString())),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity, 6)}
           >
@@ -614,6 +632,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   notSelectable1={TEZOS_TOKEN}
                   tokenPair={tokenPair}
                   setTokenPair={(pair) => {
+                    setDex(undefined);
                     setTokens([pair.token1, pair.token2]);
                     handleTokenChange(pair.token1, 'first');
                     handleTokenChange(pair.token2, 'second');
@@ -697,9 +716,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 }}
                 noBalanceButtons={!accountPkh}
                 handleChange={(token) => {
+                  setDex(undefined);
+                  setAddLiquidityParams([]);
                   setLastChange('balance1');
                   handleTokenChange(token, 'first');
-                  setDex(undefined);
                 }}
                 balance={tokensData.first.balance}
                 exchangeRate={tokensData.first.exchangeRate}
@@ -765,8 +785,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 }}
                 noBalanceButtons={!accountPkh}
                 handleChange={(token) => {
-                  handleTokenChange(token, 'second');
                   setDex(undefined);
+                  setAddLiquidityParams([]);
+                  handleTokenChange(token, 'second');
                 }}
                 balance={tokensData.second.balance}
                 exchangeRate={tokensData.second.exchangeRate}
@@ -780,8 +801,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           )}
           <Field initialValue="0.5 %" name="slippage">
             {({ input }) => {
-              const slipPerc = slippageToBignum(values.slippage)
-                .multipliedBy(new BigNumber(values.estimateLP ?? 0));
               const slipPercA = slippageToBignum(values.slippage)
                 .multipliedBy(new BigNumber(values.balanceA ?? 0));
               const slipPercB = slippageToBignum(values.slippage)
@@ -814,48 +833,32 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   maxInvestedB = bal2;
                 }
               }
-              const maxInvestedLp = new BigNumber(values.estimateLP ?? 0).minus(slipPerc);
+
               return (
                 <>
-                  <Slippage handleChange={(value) => input.onChange(value)} />
-                  {currentTab.id === 'add' && (
+                  {(currentTab.id === 'remove' || values.switcher) && (<Slippage handleChange={(value) => input.onChange(value)} />)}
+                  {currentTab.id === 'add' && values.switcher && (
                   <>
-                    {!values.switcher ? (
-                      <div className={cx(s.receive, s.mb24)}>
-                        <span className={s.receiveLabel}>
-                          {t('liquidity:Max invested')}
-                          :
-                        </span>
-                        <CurrencyAmount
-                          currency={`${tokenAName}/${tokenBName}`}
-                          amount={maxInvestedLp.isNaN() ? '0' : maxInvestedLp.toString()}
-                        />
-                      </div>
-                    )
-                      : (
-                        <>
-                          <div className={s.receive}>
-                            <span className={s.receiveLabel}>
-                              {t('liquidity:Max invested')}
-                              :
-                            </span>
-                            <CurrencyAmount
-                              currency={tokenAName}
-                              amount={maxInvestedA.isNaN() ? '0' : maxInvestedA.toString()}
-                            />
-                          </div>
-                          <div className={cx(s.receive, s.mb24)}>
-                            <span className={s.receiveLabel}>
-                              {t('liquidity:Max invested')}
-                              :
-                            </span>
-                            <CurrencyAmount
-                              currency={tokenBName}
-                              amount={maxInvestedB.isNaN() ? '0' : maxInvestedB.toString()}
-                            />
-                          </div>
-                        </>
-                      )}
+                    <div className={s.receive}>
+                      <span className={s.receiveLabel}>
+                        {t('liquidity:Max invested')}
+                        :
+                      </span>
+                      <CurrencyAmount
+                        currency={tokenAName}
+                        amount={maxInvestedA.isNaN() ? '0' : maxInvestedA.toString()}
+                      />
+                    </div>
+                    <div className={cx(s.receive, s.mb24)}>
+                      <span className={s.receiveLabel}>
+                        {t('liquidity:Max invested')}
+                        :
+                      </span>
+                      <CurrencyAmount
+                        currency={tokenBName}
+                        amount={maxInvestedB.isNaN() ? '0' : maxInvestedB.toString()}
+                      />
+                    </div>
                   </>
                   )}
 
@@ -863,7 +866,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   <>
                     <div className={s.receive}>
                       <span className={s.receiveLabel}>
-                        {t('liquidity:Minimum received:')}
+                        {t('liquidity:Minimum received')}
+                        :
                       </span>
                       <CurrencyAmount
                         currency={tokenAName}
@@ -872,7 +876,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     </div>
                     <div className={s.receive}>
                       <span className={s.receiveLabel}>
-                        {t('liquidity:Minimum received:')}
+                        {t('liquidity:Minimum received')}
+                        :
                       </span>
                       <CurrencyAmount
                         currency={tokenBName}
@@ -882,7 +887,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     <Button
                       onClick={handleRemoveLiquidity}
                       className={s.button}
-                      disabled={removeLiquidityParams.length < 1}
+                      disabled={accountPkh ? removeLiquidityParams.length < 1 : false}
                     >
                       {t('liquidity:Remove & Unvote')}
                     </Button>
@@ -891,7 +896,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 </>
               );
             }}
-
           </Field>
           {currentTab.id === 'add' && (
           <>
@@ -906,14 +910,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     disabled={!dex}
                   />
                   {t('liquidity:Rebalance Liquidity')}
-                  <Tooltip content="Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through." />
+                  <Tooltip content="Automatically adjust your token balance to a 50%-50% ratio. If you don't have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion." />
                 </div>
               )}
             </Field>
             <Button
               onClick={handleAddLiquidity}
               className={s.button}
-              disabled={addLiquidityParams.length < 1}
+              disabled={accountPkh ? addLiquidityParams.length < 1 : false}
             >
               {currentTab.label}
             </Button>

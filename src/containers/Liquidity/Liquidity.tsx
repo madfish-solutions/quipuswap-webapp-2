@@ -55,7 +55,7 @@ const fallbackTokenPair = {
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = useTranslation(['common', 'swap', 'liquidity']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
@@ -109,10 +109,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     });
   }, [updateToast]);
 
-  const handleSuccessToast = useCallback(() => {
+  const handleSuccessToast = useCallback((text:string) => {
     updateToast({
       type: 'success',
-      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+      render: t(text),
     });
   }, [updateToast]);
 
@@ -178,6 +178,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
               : addLiquidityParams,
             handleErrorToast,
             handleSuccessToast,
+            currentTab.id,
           );
         }}
         mutators={{

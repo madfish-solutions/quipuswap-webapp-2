@@ -55,7 +55,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       .div(new BigNumber(tokensData.first.exchangeRate ?? 1)))
     .toString();
   return (
-    <Card>
+    <Card isV2>
       <CardHeader header={{
         content: `${currentTab} Details`,
       }}
@@ -168,11 +168,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         </CardCell>
         {(dex || dex2) && (
         <div className={s.detailsButtons}>
-          {dex2 && (
+          {dex2 && dex && (
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
+            href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
@@ -187,7 +187,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+            href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
