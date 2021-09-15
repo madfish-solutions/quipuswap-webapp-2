@@ -38,7 +38,7 @@ export const TableCard: React.FC<TableCardProps> = ({
         isV2
         className={cx(themeClass[colorThemeMode])}
       >
-        <CardContent>
+        <CardContent className={s.card}>
           {data.slice(startIndex, endIndex).map(renderData)}
           <Pagination page={page} pageMax={pageMax} setPage={setPage} />
         </CardContent>
@@ -72,7 +72,7 @@ const TableInner: React.FC<RealTableProps> = ({
         isV2
         className={cx(themeClass[colorThemeMode])}
       >
-        <CardContent>
+        <CardContent className={s.card}>
           <div className={s.container}>
             <div className={s.wrapper}>
               <div className={s.innerWrapper}>
