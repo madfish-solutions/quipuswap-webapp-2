@@ -26,9 +26,16 @@ export const PoolItem: React.FC<PoolItemProps> = ({
   isSponsored = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    s.tableRow,
+    s.farmRow,
+    s.tableHeader,
+    modeClass[colorThemeMode],
+    s.tableHeaderBorder,
+  );
   return (
     <tr>
-      <td className={cx(s.tableRow, s.farmRow, s.tableHeader, modeClass[colorThemeMode])}>
+      <td className={compoundClassName}>
         <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.wideItem, s.cardCellText)}>
           <TokensLogos
             token1={farm.tokenPair.token1}

@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import cx from 'classnames';
 
 import {
   WhitelistedFarm,
 } from '@utils/types';
-
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Table } from '@components/ui/Table';
 import { TEZOS_TOKEN } from '@utils/defaults';
 
@@ -16,20 +16,35 @@ type PoolTableProps = {
   data: WhitelistedFarm[]
 };
 
-const Header = () => (
-  <th className={cx(s.tableRow, s.farmRow, s.tableHeader, s.tableHeaderBorder)}>
-    <div className={s.label}>
-      Name
-    </div>
-    <div className={s.label}>
-      Total staked
-    </div>
-    <div className={s.label}>
-      APR
-    </div>
-    <div className={s.label} />
-  </th>
-);
+const themeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
+
+const Header = () => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const compoundClassName = cx(
+    themeClass[colorThemeMode],
+    s.tableRow,
+    s.farmRow,
+    s.tableHeader,
+    s.tableHeaderBorder,
+  );
+  return (
+    <th className={compoundClassName}>
+      <div className={s.label}>
+        Name
+      </div>
+      <div className={s.label}>
+        Total staked
+      </div>
+      <div className={s.label}>
+        APR
+      </div>
+      <div className={s.label} />
+    </th>
+  );
+};
 
 const poolTableItem = (farm:WhitelistedFarm) => {
   const { tokenPair } = farm;

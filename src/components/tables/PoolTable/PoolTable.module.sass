@@ -98,9 +98,6 @@
 .forward
   transform: rotate(180deg)
 
-.cardAmount
-  margin-left: 4px
-
 .footer
   display: flex
   align-items: center
@@ -113,7 +110,6 @@
   flex: 1
   justify-content: flex-end
   &:not(:last-child)
-    margin-right: 40px
     justify-content: normal
   &:not(:first-child)
     max-width: none
@@ -151,7 +147,7 @@
   display: block
 
 .light
-  .tableHeaderBorder
+  .tableHeaderBorder, &.tableHeaderBorder
     border-bottom: 1px solid $hover-light-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-light-row
@@ -161,7 +157,7 @@
     font-weight: bold
     color: $text-01
 .dark
-  .tableHeaderBorder
+  .tableHeaderBorder, &.tableHeaderBorder
     border-bottom: 1px solid $hover-dark-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
