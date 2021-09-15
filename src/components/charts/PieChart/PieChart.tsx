@@ -20,6 +20,8 @@ type PieChartProps = {
   showTotal?: boolean
   alignCenter?: boolean
   className?: string
+  chartClassName?: string
+  legendClassName?: string
 };
 
 const themeClass = {
@@ -37,6 +39,9 @@ export const PieChart: React.FC<PieChartProps> = ({
   legendPlacement = 'left',
   showTotal = false,
   alignCenter = false,
+  className,
+  chartClassName,
+  legendClassName,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -46,12 +51,14 @@ export const PieChart: React.FC<PieChartProps> = ({
     s.legend,
     { [s.left]: legendPlacement === 'left' },
     { [s.right]: legendPlacement === 'right' },
+    legendClassName,
   );
 
   const compoundClassName = cx(
     s.container,
     themeClass[colorThemeMode],
     { [s.center]: alignCenter },
+    className,
   );
 
   return (
@@ -76,7 +83,7 @@ export const PieChart: React.FC<PieChartProps> = ({
         ))}
       </div>
       )}
-      <div className={s.chart}>
+      <div className={cx(s.chart, chartClassName)}>
         <PieChartLib
           data={data}
           lineWidth={20}

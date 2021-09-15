@@ -7,7 +7,7 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TransactionType, WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { useTokens } from '@utils/dapp';
 import { Tabs } from '@components/ui/Tabs';
-import { Card, CardContent } from '@components/ui/Card';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import {
   FarmTable, PoolTable, TokenTable, TransactionTable,
 } from '@components/portfolio/PortfolioTable';
@@ -104,14 +104,21 @@ export const Portfolio: React.FC<{}> = () => {
         <Card
           className={cx(s.portfolioCard, themeClass[colorThemeMode])}
         >
+          <CardHeader
+            header={{
+              content: (<Tabs
+                values={TabsContent}
+                activeId={tabsState}
+                setActiveId={(val) => setTabsState(val)}
+                className={s.govTabs}
+              />),
+            }}
+            className={s.header}
+          />
           <CardContent className={s.container}>
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
-              className={s.govTabs}
-            />
             <PieChart
+              className={s.chart}
+              legendClassName={s.chartPad}
               alignCenter
               data={[
                 { value: 2, color: '#1373E4', label: 'Token A' },
