@@ -2,6 +2,7 @@
 @import "@styles/breakpoints"
 
 .priceAmount
+  font-size: 1rem
   font-weight: 600
 
 .cell
@@ -26,6 +27,10 @@
 
 .fullWidth
   width: 100%
+
+.details
+  padding: 0px 24px 24px 24px
+  margin-top: 40px
 
 .content, .topContent
   padding: 24px
@@ -67,6 +72,7 @@
   display: block
 
 .header
+  margin-bottom: 8px
   text-align: left
 
 .reward
@@ -81,6 +87,7 @@
 .rewardHeader
   display: flex
   flex-direction: column
+  font-weight: 600
 
 .rewardAmount, .amount
   font-size: 1.143rem
@@ -99,11 +106,11 @@
 .button
   width: 100%
   max-width: 280px
-  margin-top: 40px
 
 .statButton 
   width: 100%
   max-width: none
+  margin-top: 40px
 
 .buttons
   display: flex
@@ -131,17 +138,21 @@
       margin-top: 16px
 
 .light
+  .rewardHeader, .rewardCurrency
+    color: $text-02
   .reward
     border: 2px dashed $hover-primary-01-fallback
     color: $text-01
-  .amount, govBlockLabel, .priceAmount
+  .amount, .govBlockLabel, .priceAmount
     color: $text-01
 
 .dark
+  .rewardHeader, .rewardCurrency
+    color: $text-03
   .reward
     border: 2px dashed $hover-primary-02-fallback
     color: $text-inverse
-  .amount, govBlockLabel, .priceAmount
+  .amount, .govBlockLabel, .priceAmount
     color: $text-inverse
 
 @include media('>phone')
@@ -160,6 +171,11 @@
     margin-right: 32px
   .amount
     font-size: 1.429rem
+  .itemsRows
+    display: flex
+    justify-content: space-between
+    width: 100%
+
 
 
 @include media('>Lphone', '<=Ltablet')

@@ -6,18 +6,17 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedStake } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
-import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
-import { WhitelistedStake } from '@utils/types';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { Timeleft } from '@components/ui/Timeleft';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
-import { TokensLogos } from '@components/ui/TokensLogos';
+import { LineChartSampleData } from '@components/charts/content';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
@@ -51,36 +50,15 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-// TODO: change to timeago.js
-const timeDiffCalc = (dateFuture:number, dateNow:number) => {
-  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-  // calculate days
-  const days = Math.floor(diffInMilliSeconds / 86400);
-  diffInMilliSeconds -= days * 86400;
-
-  // calculate hours
-  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-  diffInMilliSeconds -= hours * 3600;
-
-  // calculate minutes
-  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-  diffInMilliSeconds -= minutes * 60;
-
-  return { days, hours, minutes };
-};
-
 export const StakeInfo: React.FC<StakeInfoProps> = ({
   className,
   stake,
 }) => {
   const {
     remaining,
-    tokenPair,
   } = stake;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
@@ -129,31 +107,22 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <div className={s.notRewards}>
             <div className={s.itemsRows}>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Your Share
-                </span>
+                </header>
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Your Delegate
-                </span>
+                </header>
                 <Button theme="inverse" className={s.amount}>Everstake</Button>
               </div>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Lock ends in
-                </span>
-                <div className={cx(s.govBlockLabel, s.amount)}>
-                  {days}
-                  <span className={s.govBlockSpan}>D</span>
-                  {' '}
-                  {hours}
-                  <span className={s.govBlockSpan}>H</span>
-                  {' '}
-                  {minutes}
-                  <span className={s.govBlockSpan}>M</span>
-                </div>
+                </header>
+                <Timeleft remaining={remaining} />
               </div>
 
             </div>
@@ -164,23 +133,6 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
       <LineChart
         className={s.chart}
         data={LineChartSampleData}
-        headerContent={(
-          <div className={s.tokens}>
-            <TokensLogos
-              token1={tokenPair.token1}
-              token2={tokenPair.token2}
-              width={32}
-              className={s.tokenLogos}
-            />
-            <h3 className={s.title}>
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-              {' '}
-              /
-              {' '}
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-            </h3>
-          </div>
-          )}
       />
       <StickyBlock>
         <Card
@@ -244,9 +196,9 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         </Card>
         <Card
           header={{
-            content: 'Farm Details',
+            content: 'Stake Details',
           }}
-          contentClassName={cx(modeClass[colorThemeMode], s.content)}
+          contentClassName={cx(modeClass[colorThemeMode], s.details)}
         >
           <CardCell
             header={(
@@ -280,10 +232,8 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               )}
             className={s.cell}
           >
-            <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                888 %
-              </span>
+            <div className={cx(s.cellAmount, s.priceAmount)}>
+              888 %
             </div>
           </CardCell>
           <CardCell
@@ -339,6 +289,20 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
+                {t('common:Ends in')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:TOOLTIP TODO')}
+                />
+              </>
+              )}
+            className={s.cell}
+          >
+            <Timeleft remaining={remaining} className={s.priceAmount} />
+          </CardCell>
+          <CardCell
+            header={(
+              <>
                 {t('common:Lock Period')}
                 <Tooltip
                   sizeT="small"
@@ -348,13 +312,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               )}
             className={s.cell}
           >
-            <div className={s.cellAmount}>
-              <div className={cx(s.govBlockLabel, s.priceAmount)}>
-                1
-                {' '}
-                <span className={s.govBlockSpan}>D</span>
-              </div>
-            </div>
+            <Timeleft remaining={remaining} className={s.priceAmount} />
           </CardCell>
           <CardCell
             header={(
