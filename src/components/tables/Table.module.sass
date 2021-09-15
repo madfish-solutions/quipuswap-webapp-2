@@ -21,16 +21,6 @@
 .wrapper
   width: max-content
 
-.card
-  padding: 16px 24px
-
-.cardAmount
-  margin-left: 4px
-
-.tokenLogoBlock
-  width: 100%
-  margin-bottom: 16px
-
 .innerWrapper
   margin-left: 24px
   margin-right: 24px
@@ -46,9 +36,11 @@
   justify-content: space-between
 
 .links
-  font-weight: 600
   display: flex
   align-items: center
+
+.bage
+  margin-left: 8px
 
 .linkIcon
   width: 100%
@@ -68,7 +60,7 @@
   display: grid
 
 .farmRow
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr
+  grid-template-columns: 1.5fr 1fr 1fr 1.5fr
   padding: 16px 24px
 
 .poolRow
@@ -114,14 +106,13 @@
 .cardCellItem
   display: flex
   align-items: center
-  justify-content: space-between
-
-.buttons
-  margin-top: 16px
-
-.textItem
+  max-width: 140px
+  flex: 1
+  justify-content: flex-end
   &:not(:last-child)
-    margin-bottom: 8px
+    justify-content: normal
+  &:not(:first-child)
+    max-width: none
 
 .label
   flex: 1
@@ -155,35 +146,39 @@
 .blockItem
   display: block
 
-.bold
-  font-weight: 600
-
-.time
-  font-weight: 600
-
 .light
-  .time, .links
-    color: $text-01
+  .tableHeaderBorder, &.tableHeaderBorder
+    border-bottom: 1px solid $hover-light-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-light-row
-  .card
-    &:not(:last-child)
-      border-bottom: 1px solid $hover-light-row
   .tableRow
     color: $text-03
   .cardCellText
-    line-height: 1.71
-    color: $text-02
+    font-weight: bold
+    color: $text-01
 .dark
-  .time, .links
-    color: $text-inverse
+  .tableHeaderBorder, &.tableHeaderBorder
+    border-bottom: 1px solid $hover-dark-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
-  .card
-    &:not(:last-child)
-      border-bottom: 1px solid $hover-dark-row
   .tableRow
     color: $text-02
   .cardCellText
-    line-height: 1.71
-    color: $text-03
+    font-weight: bold
+    color: $text-inverse
+
+@include media('>Ltablet')
+  .h1
+    display: block
+  .container
+    overflow: visible
+  .wrapper
+    width: auto
+  .table
+    width: 100%
+
+@include media('>LDesktop')
+  .table
+    width: 100%
+  .wrapper
+    width: auto

@@ -20,6 +20,11 @@
     margin-top: 0px
     margin-right: 0px
 
+.h1
+  margin-bottom: 40px
+  margin-top: 64px
+  display: none
+
 .content
   display: grid
   align-items: center
@@ -87,6 +92,8 @@
     display: none
 
 @include media('>Ltablet')
+  .h1
+    display: block
   .chart
     align-items: center
   .chartPad

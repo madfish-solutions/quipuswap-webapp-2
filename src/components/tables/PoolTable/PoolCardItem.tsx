@@ -9,7 +9,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 
-import s from './PoolCardTable.module.sass';
+import s from '../Card.module.sass';
 
 type PoolCardItemProps = {
   farm: WhitelistedFarm

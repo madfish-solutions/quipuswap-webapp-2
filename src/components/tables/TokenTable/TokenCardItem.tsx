@@ -1,19 +1,18 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { WhitelistedFarm } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
-import { Bage } from '@components/ui/Bage';
 
 import s from '../Card.module.sass';
 
-type FarmCardItemProps = {
-  farm: WhitelistedFarm
-  isSponsored?: boolean
+type TokenCardItemProps = {
+  token: WhitelistedToken
 };
 
 const modeClass = {
@@ -21,54 +20,52 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const FarmCardItem: React.FC<FarmCardItemProps> = ({
-  farm,
-  isSponsored,
+export const TokenCardItem: React.FC<TokenCardItemProps> = ({
+  token,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
-      <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
+      <div className={cx(s.cardCellItem, s.cardCellText, s.tokenLogoBlock)}>
         <div className={s.links}>
-          <TokensLogos
-            token1={farm.tokenPair.token1}
-            token2={farm.tokenPair.token2}
-            className={s.tokenLogo}
-          />
-          {getWhitelistedTokenSymbol(farm.tokenPair.token1)}
-          /
-          {getWhitelistedTokenSymbol(farm.tokenPair.token2)}
+          <TokensLogos token1={token} className={s.tokenLogo} />
+          {getWhitelistedTokenSymbol(token)}
         </div>
-        {isSponsored && (<Bage text="Sponsored" />)}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>Volume 24h</div>
+        <div className={s.cardCellText}>Your Balance</div>
+        <CurrencyAmount amount="888888888888888.00" />
+      </div>
+      <div className={cx(s.textItem, s.cardCellItem)}>
+        <div className={s.cardCellText}>Price</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount amount="888888.00" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>TVL</div>
+        <div className={s.cardCellText}>Total Value</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
           <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
-
         <Button
+          href={`https://analytics.quipuswap.com/tokens/${token.contractAddress === TEZOS_TOKEN.contractAddress
+            ? TEZOS_TOKEN.contractAddress
+            : `${token.contractAddress}_${token.fa2TokenId ?? 0}`}`}
+          external
           theme="secondary"
           className={s.button}
-          href="#"
         >
-          Get LP
+          Analytics
         </Button>
         <Button
-          href="/swap"
+          href={`/swap/${TEZOS_TOKEN.contractAddress}-${getWhitelistedTokenSymbol(token)}`}
           className={s.button}
         >
-          Farm
+          Trade
         </Button>
       </div>
     </div>

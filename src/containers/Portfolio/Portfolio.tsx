@@ -4,17 +4,20 @@ import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { TransactionType, WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
+import {
+  TransactionType, WhitelistedFarm, WhitelistedToken, WhitelistedTokenPair,
+} from '@utils/types';
 import { useTokens } from '@utils/dapp';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
-import {
-  FarmTable, PoolTable, TokenTable, TransactionTable,
-} from '@components/portfolio/PortfolioTable';
 
 import {
   FarmCardTable, PoolCardTable, TokenCardTable, TransactionCardTable,
 } from '@components/portfolio/PortfolioCardTable';
+import { PoolTable } from '@components/tables/PoolTable';
+import { FarmTable } from '@components/tables/FarmTable';
+import { TokenTable } from '@components/tables/TokenTable';
+import { TransactionTable } from '@components/tables/TransactionTable';
 import s from './Portfolio.module.sass';
 import { PortfolioData } from './content';
 import { PortfolioCard } from './PortfolioCard';
@@ -152,31 +155,38 @@ export const Portfolio: React.FC<{}> = () => {
         </Card>
       </div>
       <div className={s.notMobile}>
-        {tokens.length > 0 && (<TokenTable header="Your Tokens" outerHeader data={tokens} />)}
-        {/* {tokens.length > 0 && (
-      <PortfolioTable
-      href="/portfolio/tokens"
-      header={['Name', 'Your Balance', 'Price', 'Total Value', '']}
-      label="Your Tokens"
-      outerHeader
-      data={tokens}>
-        {tokens.map((token) => (
-          <TokenItem
-            key={`${token.contractAddress}:${token.fa2TokenId}`}
-            token={token}
-          />
-        ))}
-      </PortfolioTable>
-      )} */}
-        {pools.length > 0 && (
-        <PoolTable
-          header="Pools Invested"
-          outerHeader
-          data={pools as WhitelistedTokenPair[]}
-        />
+        {tokens.length > 0 && (
+          <>
+            <h1 className={s.h1}>
+              Your Tokens
+            </h1>
+            <TokenTable data={tokens as WhitelistedToken[]} />
+          </>
         )}
-        {farms.length > 0 && (<FarmTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
-        {transactions.length > 0 && (<TransactionTable header="Transactions History" outerHeader data={transactions} />)}
+        {pools.length > 0 && (
+          <>
+            <h1 className={s.h1}>
+              Pools Invested
+            </h1>
+            <PoolTable data={farms as WhitelistedFarm[]} />
+          </>
+        )}
+        {farms.length > 0 && (
+          <>
+            <h1 className={s.h1}>
+              Joined Farms
+            </h1>
+            <FarmTable data={farms as WhitelistedFarm[]} />
+          </>
+        )}
+        {transactions.length > 0 && (
+          <>
+            <h1 className={s.h1}>
+              Transactions History
+            </h1>
+            <TransactionTable data={transactions} />
+          </>
+        )}
       </div>
       {/* MOBILE */}
       <div className={s.mobile}>
@@ -200,92 +210,6 @@ export const Portfolio: React.FC<{}> = () => {
         {currentTab.id === 'pools' && (<PoolCardTable header="Pools Invested" outerHeader data={pools as WhitelistedTokenPair[]} />)}
         {currentTab.id === 'farms' && (<FarmCardTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
         {currentTab.id === 'transactions' && (<TransactionCardTable header="Transactions History" outerHeader data={transactions} />)}
-      </div>
-    </>
-  );
-};
-
-// for single-table pages
-
-export const PortfolioTokens: React.FC<{}> = () => {
-  const { data: tokens } = useTokens();
-  return (
-    <>
-      <div className={s.notMobile}>
-        <TokenTable header="Your Tokens" data={tokens} />
-      </div>
-      <div className={s.mobile}>
-        <TokenCardTable header="Your Tokens" data={tokens} />
-      </div>
-    </>
-  );
-};
-
-export const PortfolioPools: React.FC<{}> = () => {
-  const { data: tokens } = useTokens();
-  const pools = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { token1: x, token2: STABLE_TOKEN }
-    : { token1: x, token2: TEZOS_TOKEN }));
-  return (
-    <>
-      <div className={s.notMobile}>
-        <PoolTable
-          header="Pools Invested"
-          data={pools as WhitelistedTokenPair[]}
-        />
-      </div>
-      <div className={s.mobile}>
-        <PoolCardTable
-          header="Pools Invested"
-          data={pools as WhitelistedTokenPair[]}
-        />
-      </div>
-    </>
-  );
-};
-
-export const PortfolioFarms: React.FC<{}> = () => {
-  const { data: tokens } = useTokens();
-  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
-    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
-  return (
-    <>
-      <div className={s.notMobile}>
-        <FarmTable header="Joined Farms" data={farms as WhitelistedFarm[]} />
-      </div>
-      <div className={s.mobile}>
-        <FarmCardTable header="Joined Farms" data={farms as WhitelistedFarm[]} />
-      </div>
-    </>
-  );
-};
-
-export const PortfolioTransactions: React.FC<{}> = () => {
-  const transactions : TransactionType[] = [
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '0', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '1', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '2', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '3', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '4', action: 'swap',
-    },
-  ];
-  return (
-    <>
-      <div className={s.notMobile}>
-        <TransactionTable header="Transactions History" data={transactions} />
-      </div>
-      <div className={s.mobile}>
-        <TransactionCardTable header="Transactions History" data={transactions} />
       </div>
     </>
   );
