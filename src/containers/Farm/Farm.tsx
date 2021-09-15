@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
@@ -12,9 +13,10 @@ import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { Shevron } from '@components/svg/Shevron';
+import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Farm.module.sass';
 
 type FarmProps = {
   className?: string
@@ -126,8 +128,14 @@ const farms:WhitelistedFarm[] = [
   },
 ];
 
+const modeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
+
 export const Farm: React.FC<FarmProps> = () => {
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
+  const { colorThemeMode } = useContext(ColorThemeContext);
   if (selectedFarming) {
     // TODO
     return (
@@ -136,15 +144,31 @@ export const Farm: React.FC<FarmProps> = () => {
   }
   return (
     <>
-      <Card className={s.farmingCard} contentClassName={s.farmingStats}>
+      <Card
+        className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
+        contentClassName={cx(s.farmingStats)}
+      >
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
-            <div>{x.name}</div>
+            <div className={s.name}>{x.name}</div>
             <CurrencyAmount amount={x.value} currency={x.currency} />
           </div>
         ))}
       </Card>
-      <FarmingStats className={s.farmingCard} />
+      <Card
+        className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
+        contentClassName={s.farmingMobileStats}
+      >
+        <SliderUI>
+          {content.map((x) => (
+            <div key={x.name} className={s.farmingMobileStatsBlock}>
+              <div className={s.name}>{x.name}</div>
+              <CurrencyAmount amount={x.value} currency={x.currency} />
+            </div>
+          ))}
+        </SliderUI>
+      </Card>
+      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} />
       <Card
         className={cx(s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}

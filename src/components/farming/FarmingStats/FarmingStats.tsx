@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
-import VotingReward from '@icons/VotingReward.svg';
+import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './FarmingStats.module.sass';
 

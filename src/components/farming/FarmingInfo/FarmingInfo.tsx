@@ -6,6 +6,8 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
@@ -19,10 +21,8 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
-import VotingReward from '@icons/VotingReward.svg';
+import { VotingReward } from '@components/svg/VotingReward';
 
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {

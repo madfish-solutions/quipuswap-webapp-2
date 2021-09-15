@@ -17,7 +17,8 @@
   display: flex
   align-items: flex-start
   justify-content: flex-start
-  flex-direction: column
+  flex-direction: row
+  flex-wrap: wrap
 
 .details
   margin-bottom: 24px
@@ -41,6 +42,18 @@
   margin-bottom: 8px
   &:not(:last-child)
     margin-right: 0px
+  &:nth-child(2) 
+    order: 1
+  &:nth-child(5) 
+    order: 2
+  &:nth-child(3) 
+    order: 3
+  &:nth-child(6) 
+    order: 4
+  &:nth-child(4) 
+    order: 5
+  &:nth-child(7) 
+    order: 6
 
 .tokens
   display: flex
@@ -48,6 +61,11 @@
 
 .title
   margin-left: 16px
+
+.row
+  width: 100%
+  display: flex
+  justify-content: flex-start
 
 .multiplierWrap
   margin-top: 24px
@@ -60,6 +78,7 @@
   font-weight: 600
 
 .links
+  order: 8
   align-items: flex-start
   width: 100%
   flex-wrap: wrap
@@ -101,6 +120,7 @@
     margin-bottom: 16px
 
 .button
+  order: 9
   width: 100%
   max-width: 100%
   margin-top: 40px
@@ -158,6 +178,8 @@
     display: none !important
   .onlyDesktop
     display: flex !important
+  .row
+    width: auto
   .multiplierWrap
     margin-top: 0px
     margin-bottom: 0px
@@ -172,6 +194,18 @@
   .detailsBlock
     width: auto
     margin-bottom: 0px
+    &:nth-child(2) 
+      order: 1
+    &:nth-child(3) 
+      order: 2
+    &:nth-child(4) 
+      order: 3
+    &:nth-child(5) 
+      order: 4
+    &:nth-child(6) 
+      order: 5
+    &:nth-child(7) 
+      order: 6
     &:not(:last-child)
       margin-right: 24px
   .details

@@ -86,55 +86,56 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
 
       </div>
       <div className={s.footer}>
-        <Bage className={s.multiplierWrap} innerClassName={s.multiplier} text={`X ${multiplier}`} />
-        <div className={s.details}>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>TVL</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={totalValueLocked} />
-            </div>
+        <div className={s.row}>
+          <Bage className={s.multiplierWrap} innerClassName={s.multiplier} text={`X ${multiplier}`} />
+
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>TVL</div>
+          <div className={s.detailsValue}>
+            $
+            {' '}
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>
-              APY
-              {' '}
-              <APY />
-            </div>
-            <div className={s.detailsValue}>
-              {apy}
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>
+            APY
+            {' '}
+            <APY />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Daily</div>
-            <div className={s.detailsValue}>
-              {daily}
-            </div>
+          <div className={s.detailsValue}>
+            {apy}
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Balance</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={balance} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Daily</div>
+          <div className={s.detailsValue}>
+            {daily}
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Deposit</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={deposit} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Balance</div>
+          <div className={s.detailsValue}>
+            $
+            {' '}
+            <CurrencyAmount amount={balance} />
           </div>
-          <div className={s.detailsBlock}>
-            <div className={s.detailsHeader}>Earned</div>
-            <div className={s.detailsValue}>
-              $
-              {' '}
-              <CurrencyAmount amount={earned} />
-            </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Deposit</div>
+          <div className={s.detailsValue}>
+            $
+            {' '}
+            <CurrencyAmount amount={deposit} />
+          </div>
+        </div>
+        <div className={s.detailsBlock}>
+          <div className={s.detailsHeader}>Earned</div>
+          <div className={s.detailsValue}>
+            $
+            {' '}
+            <CurrencyAmount amount={earned} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
