@@ -51,15 +51,16 @@ export const PoolItem: React.FC<PoolItemProps> = ({
           <Button
             theme="secondary"
             className={s.button}
-            href="#"
+            href={`https://analytics.quipuswap.com/tokens/${farm.tokenPair.token1}`}
+            external
           >
-            Get LP
+            Analytics
           </Button>
           <Button
             href="/swap"
             className={s.button}
           >
-            Farm
+            Trade
           </Button>
         </div>
       </td>

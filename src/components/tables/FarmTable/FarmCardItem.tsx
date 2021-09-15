@@ -56,19 +56,19 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
+
         <Button
           theme="secondary"
           className={s.button}
-          href={`https://analytics.quipuswap.com/tokens/${farm.tokenPair.token1}`}
-          external
+          href="#"
         >
-          Analytics
+          Get LP
         </Button>
         <Button
           href="/swap"
           className={s.button}
         >
-          Trade
+          Farm
         </Button>
       </div>
     </div>
