@@ -19,6 +19,7 @@
     "@taquito/utils": "^9.2.0",
     "@temple-wallet/dapp": "^4.0.0",
     "@tippyjs/react": "^4.2.5",
+    "@types/react-slick": "^0.23.5",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "constate": "^3.3.0",
@@ -36,9 +37,11 @@
     "react-final-form-listeners": "^1.0.3",
     "react-modal": "^3.14.3",
     "react-select": "^4.3.1",
+    "react-slick": "^0.28.1",
     "react-textarea-autosize": "^8.3.3",
     "react-toastify": "^7.0.4",
     "sass": "^1.35.1",
+    "slick-carousel": "^1.8.1",
     "swr": "^0.5.6"
   },
   "devDependencies": {

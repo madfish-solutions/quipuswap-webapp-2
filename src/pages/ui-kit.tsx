@@ -41,6 +41,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { Timeleft } from '@components/ui/Timeleft';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -153,6 +154,10 @@ const UiKit: React.FC = () => {
       title={t('ui-kit:Home page')}
       description={t('ui-kit:Home page description. Couple sentences...')}
     >
+      <section className={s.section}>
+        <h1 className={s.header}>Timeleft</h1>
+        <Timeleft remaining={new Date(Date.now() + 132056789)} />
+      </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>
         <h2 className={s.sectionHeader}>Brand colors</h2>
