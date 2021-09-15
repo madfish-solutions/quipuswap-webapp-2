@@ -2,7 +2,7 @@ import React, {
   useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
 import cx from 'classnames';
-import Slider from 'react-slick';
+import { useRouter } from 'next/router';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -14,13 +14,11 @@ import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
+import { ApyModal } from '@components/modals/ApyModal';
+import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
-import { useRouter } from 'next/router';
-import { ApyModal } from '@components/modals/ApyModal';
 import s from './Stake.module.sass';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 type StakeProps = {
   className?: string
@@ -199,21 +197,6 @@ export const Stake: React.FC<StakeProps> = () => {
       <StakeInfo stake={selectedStake} />
     );
   }
-
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    customPaging: () => (
-      <div className={modeClass[colorThemeMode]}>
-        <div className={s.dot} />
-
-      </div>
-    ),
-  };
-
   return (
     <>
       <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
@@ -232,14 +215,14 @@ export const Stake: React.FC<StakeProps> = () => {
         className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
         contentClassName={s.farmingMobileStats}
       >
-        <Slider {...settings}>
+        <SliderUI>
           {content.map((x) => (
             <div key={x.name} className={s.farmingMobileStatsBlock}>
               <div className={s.name}>{x.name}</div>
               <CurrencyAmount amount={x.value} currency={x.currency} />
             </div>
           ))}
-        </Slider>
+        </SliderUI>
       </Card>
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
