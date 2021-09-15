@@ -25,7 +25,7 @@ const Header = () => {
   const compoundClassName = cx(
     themeClass[colorThemeMode],
     s.tableRow,
-    s.poolRow,
+    s.transactionRow,
     s.tableHeader,
     s.tableHeaderBorder,
   );

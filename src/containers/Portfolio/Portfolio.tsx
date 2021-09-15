@@ -4,16 +4,10 @@ import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  TransactionType, WhitelistedFarm, WhitelistedToken, WhitelistedTokenPair,
-} from '@utils/types';
+import { TransactionType, WhitelistedFarm } from '@utils/types';
 import { useTokens } from '@utils/dapp';
 import { Tabs } from '@components/ui/Tabs';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
-
-import {
-  FarmCardTable, PoolCardTable, TokenCardTable, TransactionCardTable,
-} from '@components/portfolio/PortfolioCardTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { FarmTable } from '@components/tables/FarmTable';
 import { TokenTable } from '@components/tables/TokenTable';
@@ -160,7 +154,7 @@ export const Portfolio: React.FC<{}> = () => {
             <h1 className={s.h1}>
               Your Tokens
             </h1>
-            <TokenTable data={tokens as WhitelistedToken[]} />
+            <TokenTable data={tokens} />
           </>
         )}
         {pools.length > 0 && (
@@ -206,10 +200,10 @@ export const Portfolio: React.FC<{}> = () => {
             </Card>
           </div>
         </div>
-        {currentTab.id === 'tokens' && (<TokenCardTable header="Your Tokens" outerHeader data={tokens} />)}
-        {currentTab.id === 'pools' && (<PoolCardTable header="Pools Invested" outerHeader data={pools as WhitelistedTokenPair[]} />)}
-        {currentTab.id === 'farms' && (<FarmCardTable header="Joined Farms" outerHeader data={farms as WhitelistedFarm[]} />)}
-        {currentTab.id === 'transactions' && (<TransactionCardTable header="Transactions History" outerHeader data={transactions} />)}
+        {currentTab.id === 'tokens' && (<TokenTable data={tokens} />)}
+        {currentTab.id === 'pools' && (<PoolTable data={farms as WhitelistedFarm[]} />)}
+        {currentTab.id === 'farms' && (<FarmTable data={farms as WhitelistedFarm[]} />)}
+        {currentTab.id === 'transactions' && (<TransactionTable data={transactions} />)}
       </div>
     </>
   );

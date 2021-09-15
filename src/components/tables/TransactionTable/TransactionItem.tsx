@@ -25,7 +25,7 @@ export const TransactionItem: React.FC<TransactionItemProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <tr>
-      <td className={cx(s.tableRow, s.poolRow, s.tableHeader, modeClass[colorThemeMode])}>
+      <td className={cx(s.tableRow, s.transactionRow, s.tableHeader, modeClass[colorThemeMode])}>
         <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.cardCellText)}>
           {transaction.action}
           <Button className={s.currency} theme="underlined">

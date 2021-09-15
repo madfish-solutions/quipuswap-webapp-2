@@ -67,6 +67,10 @@
   grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 2fr
   padding: 16px 24px
 
+.transactionRow
+  grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 1.2fr
+  padding: 16px 24px
+
 .h1
   margin-bottom: 40px
   margin-top: 64px
@@ -98,6 +102,9 @@
 .forward
   transform: rotate(180deg)
 
+.cardAmount
+  margin-left: 4px
+
 .footer
   display: flex
   align-items: center
@@ -110,6 +117,7 @@
   flex: 1
   justify-content: flex-end
   &:not(:last-child)
+    margin-right: 40px
     justify-content: normal
   &:not(:first-child)
     max-width: none
