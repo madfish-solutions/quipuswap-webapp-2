@@ -21,6 +21,16 @@
 .wrapper
   width: max-content
 
+.card
+  padding: 16px 24px
+
+.cardAmount
+  margin-left: 4px
+
+.tokenLogoBlock
+  width: 100%
+  margin-bottom: 16px
+
 .innerWrapper
   margin-left: 24px
   margin-right: 24px
@@ -36,11 +46,9 @@
   justify-content: space-between
 
 .links
+  font-weight: 600
   display: flex
   align-items: center
-
-.bage
-  margin-left: 8px
 
 .linkIcon
   width: 100%
@@ -60,7 +68,7 @@
   display: grid
 
 .farmRow
-  grid-template-columns: 1.5fr 1fr 1fr 1.5fr
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr
   padding: 16px 24px
 
 .poolRow
@@ -106,13 +114,14 @@
 .cardCellItem
   display: flex
   align-items: center
-  max-width: 140px
-  flex: 1
-  justify-content: flex-end
+  justify-content: space-between
+
+.buttons
+  margin-top: 16px
+
+.textItem
   &:not(:last-child)
-    justify-content: normal
-  &:not(:first-child)
-    max-width: none
+    margin-bottom: 8px
 
 .label
   flex: 1
@@ -146,39 +155,35 @@
 .blockItem
   display: block
 
+.bold
+  font-weight: 600
+
+.time
+  font-weight: 600
+
 .light
-  .tableHeaderBorder
-    border-bottom: 1px solid $hover-light-row
+  .time, .links
+    color: $text-01
   .container::-webkit-scrollbar-thumb
     background-color: $hover-light-row
+  .card
+    &:not(:last-child)
+      border-bottom: 1px solid $hover-light-row
   .tableRow
     color: $text-03
   .cardCellText
-    font-weight: bold
-    color: $text-01
+    line-height: 1.71
+    color: $text-02
 .dark
-  .tableHeaderBorder
-    border-bottom: 1px solid $hover-dark-row
+  .time, .links
+    color: $text-inverse
   .container::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
+  .card
+    &:not(:last-child)
+      border-bottom: 1px solid $hover-dark-row
   .tableRow
     color: $text-02
   .cardCellText
-    font-weight: bold
-    color: $text-inverse
-
-@include media('>Ltablet')
-  .h1
-    display: block
-  .container
-    overflow: visible
-  .wrapper
-    width: auto
-  .table
-    width: 100%
-
-@include media('>LDesktop')
-  .table
-    width: 100%
-  .wrapper
-    width: auto
+    line-height: 1.71
+    color: $text-03

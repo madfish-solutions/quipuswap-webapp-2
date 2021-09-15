@@ -1,19 +1,15 @@
 import React from 'react';
 
 import { Section, SectionProps } from '@components/home/Section';
-import { FarmTable } from '@components/common/FarmTable';
+import { FarmTable } from '@components/tables/FarmTable';
 
 import { useTokens } from '@utils/dapp';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
-import { FarmCardTable } from '@components/common/FarmTable/FarmCardTable';
 
-import { PoolTable } from '@components/common/PoolTable';
-import { PoolCardTable } from '@components/common/PoolTable/PoolCardTable';
-import s from './TopAssets.module.sass';
+import { PoolTable } from '@components/tables/PoolTable';
 
 type TopAssetsProps = Omit<SectionProps, 'className'> & {
-  // data: Omit<TopAssetsCardProps, 'className'>[]
   data: any
   button: {
     label: string
@@ -40,16 +36,9 @@ export const TopAssets: React.FC<TopAssetsProps> = ({
       description={description}
       className={className}
     >
-      <div className={s.notMobile}>
-        {isFarm
-          ? (<FarmTable data={farms as WhitelistedFarm[]} />)
-          : (<PoolTable data={farms as WhitelistedFarm[]} />)}
-      </div>
-      <div className={s.mobile}>
-        {isFarm
-          ? (<FarmCardTable data={farms as WhitelistedFarm[]} />)
-          : (<PoolCardTable data={farms as WhitelistedFarm[]} />)}
-      </div>
+      {isFarm
+        ? (<FarmTable data={farms as WhitelistedFarm[]} />)
+        : (<PoolTable data={farms as WhitelistedFarm[]} />)}
     </Section>
   );
 };
