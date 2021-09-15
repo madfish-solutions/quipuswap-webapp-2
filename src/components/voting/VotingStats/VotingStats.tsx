@@ -8,7 +8,7 @@ import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
-import VotingReward from '@icons/VotingReward.svg';
+import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './VotingStats.module.sass';
 
