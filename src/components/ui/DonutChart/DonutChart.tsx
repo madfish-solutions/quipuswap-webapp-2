@@ -25,13 +25,14 @@ const MAX = 1;
 export const DonutChart: React.FC<DonutChartProps> = ({
   votes,
   vetos,
+  className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   let value = votes / (votes + vetos);
   if (value < MIN) value = MIN;
   if (value > MAX) value = MAX;
   return (
-    <div className={cx(s.container, themeClass[colorThemeMode])}>
+    <div className={cx(s.container, themeClass[colorThemeMode], className)}>
       <div className={s.chart}>
         <VoteProgress progress={value < 0.1 ? 0.1 : value} />
         <div className={s.for}>

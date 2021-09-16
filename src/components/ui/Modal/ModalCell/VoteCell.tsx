@@ -55,7 +55,7 @@ export const VoteCell: React.FC<VoteCellProps> = ({
             <div className={s.label1}>
               {vote.value}
               {' '}
-              %
+              <span className={s.captionText}>%</span>
             </div>
           </div>
           <div className={s.bakerBlock}>

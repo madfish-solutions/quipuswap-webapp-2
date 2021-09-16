@@ -21,6 +21,8 @@ type PieChartProps = {
   showTotal?: boolean
   alignCenter?: boolean
   className?: string
+  chartClassName?: string
+  legendClassName?: string
 };
 
 const themeClass = {
@@ -38,6 +40,9 @@ export const PieChart: React.FC<PieChartProps> = ({
   legendPlacement = 'left',
   showTotal = false,
   alignCenter = false,
+  className,
+  chartClassName,
+  legendClassName,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -58,12 +63,14 @@ export const PieChart: React.FC<PieChartProps> = ({
     s.legend,
     { [s.left]: legendPlacement === 'left' },
     { [s.right]: legendPlacement === 'right' },
+    legendClassName,
   );
 
   const compoundClassName = cx(
     s.container,
     themeClass[colorThemeMode],
     { [s.center]: alignCenter },
+    className,
   );
 
   return (
@@ -95,23 +102,18 @@ export const PieChart: React.FC<PieChartProps> = ({
         ))}
       </div>
       )}
-      <div className={s.chart}>
+      <div className={cx(s.chart, chartClassName)}>
         <PieChartLib
           data={data}
           segmentsStyle={(index) => ({ transition: 'opacity .3s', opacity: data[index].opacity })}
           lineWidth={20}
           viewBoxSize={[100, 100]}
           className={s.pieChart}
-          // @ts-ignore
-          onMouseOver={(_, index:any) => setHovered(index)}
-          onMouseOut={() => {
-            setHovered(undefined);
-          }}
         />
         {showTotal && (
         <div className={s.total}>
           <h1 className={s.bold}>
-            {hovered ? data[hovered].value : total}
+            {total}
           </h1>
         </div>
         )}

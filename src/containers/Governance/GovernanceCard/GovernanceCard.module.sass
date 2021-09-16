@@ -63,6 +63,7 @@
 
 .proposalVotes 
   max-height: 600px
+  min-height: 600px
   overflow-y: scroll
 
 .proposalVotes::-webkit-scrollbar-track
@@ -74,17 +75,29 @@
 .proposalVotes::-webkit-scrollbar-thumb
   border-radius: 10px
 
-.content
-  padding: 40px 24px 24px
+.donut
+  padding: 0px
+  margin-top: 24px
+
+.detailsContent
+  padding: 40px 24px
   display: flex
   flex-direction: column
 
-.cellHeader
-  margin-bottom: 0px
+.content
+  padding: 24px 24px 40px 24px
+  display: flex
+  flex-direction: column
+
+.linkCell
+  &:not(:last-child)
+    margin-bottom: 8px
 
 .cell
   &:not(:last-child)
     margin-bottom: 16px
+  .cellHeader
+    margin-bottom: 0px
 
 .detailsButton
   display: flex
@@ -120,6 +133,10 @@
   font-size: 1.143rem
   line-height: 1.5
   font-weight: 600
+  padding: 12px 24px
+
+.cardHeader
+  height: 48px
   padding: 12px 24px
 
 .formHeader
@@ -163,6 +180,9 @@
 
 .govBody
   font-size: 1.143rem
+
+.zeroPad
+  padding: 0px
   
 .fullWidth
   width: 100% !important
@@ -184,6 +204,8 @@
   margin-bottom: 24px !important
 
 .govDescription
+  line-height: 1.5
+  font-size: 1.143rem
   margin-bottom: 24px
 
 .govButton
@@ -195,20 +217,30 @@
   color: $text-03
   font-weight: 600
 
-.govBlockLabel
-  font-size: 1.286rem
-  font-weight: bold
 
 .govBlock
   margin-bottom: 16px
+  .govBlockLabel
+    font-size: 1.286rem
+    line-height: 1.33
+    font-weight: bold
 
 .govBlockSpan
   color: $text-03
 
-.govButtonBottom
-  max-width: inherit
+.button
+  margin: 16px 24px 24px 24px
+
+.govButtonBottom, .govButtonButtom
+  max-width: none
+  margin-top: 24px
   width: 100%
 
+.desktop
+  display: none
+
+.mobile
+  display: block
 
 .light
   .cellDate
@@ -241,11 +273,19 @@
   .govBlock
     width: 50%
   .govButtonBottom
+    max-width: auto
     width: 50%
-    margin-left: auto
+    margin-left: 0px
     margin-right: auto
 
 @include media('>Ltablet')
+  .desktop
+    display: block
+  .mobile
+    display: none
+  .proposalHeader
+    flex-direction: column
+    align-items: flex-start
   .govButtonButtom
     display: none
   .mobSubmitGroup
@@ -256,7 +296,7 @@
     display: none
   .sticky
     position: sticky
-    top: -100%
+    top: calc(-1644px + 100vh)
   .formInputs
     display: flex
     align-items: center
@@ -314,3 +354,8 @@
     flex-wrap: wrap
   .submitFlex
     margin-right: 32px
+
+@include media('>SDesktop')
+  .proposalHeader
+    flex-direction: row
+    align-items: center

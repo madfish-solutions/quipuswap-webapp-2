@@ -189,6 +189,7 @@ export const Governance: React.FC<GovernanceProps> = ({
             legend
             label="Proposals summary"
             showTotal
+            className={s.chart}
           />
           <div className={s.voteInfo}>
             <div className={s.deviceRow}>
@@ -225,7 +226,7 @@ export const Governance: React.FC<GovernanceProps> = ({
         </CardContent>
       </Card>
       <StickyBlock className={cx(className, s.unsticky)}>
-        <div className={cx(s.fullWidth, s.governTabs)}>
+        <div className={cx(s.governTabs)}>
           <div className={cx(s.govCard)}>
             <Card
               className={cx(s.govCardInner)}

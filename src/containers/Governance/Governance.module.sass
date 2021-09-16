@@ -1,0 +1,172 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+    
+.govTabs
+  margin-bottom: -1px
+  position: relative
+  display: inline-block
+  width: 100%
+
+.container  
+  padding: 24px
+
+.voteInfo
+  margin-top: 24px
+  width: 100%
+
+.chart
+  padding: 0px !important
+
+.voteButton
+  max-width: none
+  margin-top: 16px
+  margin-left: auto
+  margin-right: auto
+
+.voteButtons 
+  margin-top: 24px
+  align-items: center
+
+.voteRow, .voteButtons
+  min-width: 100%
+  display: flex
+  justify-content: space-between
+  flex-direction: column
+  &:not(:last-child)
+    margin-bottom: 16px
+    
+.voteRow
+  align-items: flex-start
+
+.voteCat
+  font-size: 1rem
+  font-weight: bold
+
+.voteNum
+  margin-top: 8px
+  font-weight: bold
+  font-size: 1.143rem
+  line-height: 1.33
+
+.tabContent
+  padding: 0px 24px
+
+.unsticky
+  flex-direction: column
+
+.govCard
+  width: max-content
+
+.govCardInner
+  margin: 24px
+
+.deviceRow
+  display: flex
+  flex-wrap: wrap
+
+.governTabs
+  width: auto
+  margin-bottom: 0px !important
+  margin-left: -24px
+  margin-right: -24px
+  overflow: hidden
+  overflow-x: auto
+
+.governTabs::-webkit-scrollbar-track
+  border-radius: 10px
+  background-color: transparent
+.governTabs::-webkit-scrollbar
+  width: 8px
+  background-color: transparent
+.governTabs::-webkit-scrollbar-thumb
+  border-radius: 10px
+
+.proposal
+  display: flex
+  flex-direction: column
+
+.light
+  .voteNum
+      color: $text-01
+.dark
+  .voteNum
+      color: $text-inverse
+
+@include media('>Lphone')
+  .voteRow
+    align-items: center
+  .voteRow, .voteButtons
+    min-width: 50%
+    margin-top: 16px
+    &:not(:last-child)
+      margin-bottom: 0px
+
+@include media('>Lphone', '<=tablet')
+  .voteButtons
+    flex-direction: row
+  .voteButton
+    max-width: 200px
+
+@include media('>tablet')
+  .governTabs
+    width: 100% !important
+  .voteButtons
+    flex-direction: row
+  .voteButton
+    max-width: 280px
+
+@include media('>Ltablet')
+  .chart
+    margin-left: 64px
+    padding: 0px
+    align-items: center
+  .govCard
+    width: auto
+  .deviceRow
+    display: block
+  .govCardInner
+    margin-left: 0px
+    margin-right: 0px
+  .governTabs
+    margin-left: 0px
+    margin-right: 0px
+    overflow: visible
+  .container
+    display: flex
+    justify-content: space-between
+  .voteButtons
+    margin-top: 0px
+  .voteRow, .voteButtons
+    display: flex
+    align-items: center
+    justify-content: space-between
+    flex-direction: row
+    &:not(:last-child)
+      margin-bottom: 16px
+  .voteRow
+    margin-top: 0px
+  .voteButtons
+    margin-top: 64px
+  .voteInfo
+    margin-top: 0px
+    flex: 1
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    max-width: 384px
+  .voteCat
+    font-weight: bold
+  .voteNum
+    margin-top: 0px
+    font-weight: bold
+    font-size: 1.714rem
+    line-height: 1.33
+  .voteButton
+    max-width: 180px
+  .proposal
+    flex-direction: row
+  .button
+    margin-left: auto
+    width: 180px
+  .votingStats
+    margin-bottom: 32px

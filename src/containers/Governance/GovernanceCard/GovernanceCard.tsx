@@ -8,25 +8,8 @@ import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
 
+import { Timeleft } from '@components/ui/Timeleft';
 import s from './GovernanceCard.module.sass';
-
-const timeDiffCalc = (dateFuture:number, dateNow:number) => {
-  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-  // calculate days
-  const days = Math.floor(diffInMilliSeconds / 86400);
-  diffInMilliSeconds -= days * 86400;
-
-  // calculate hours
-  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-  diffInMilliSeconds -= hours * 3600;
-
-  // calculate minutes
-  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-  diffInMilliSeconds -= minutes * 60;
-
-  return { days, hours, minutes };
-};
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -49,10 +32,8 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   href = '',
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), workDates[1].getTime());
   const compountClassName = cx(
     modeClass[colorThemeMode],
-    s.fullWidth,
     s.mb24i,
     s.govBody,
     className,
@@ -98,16 +79,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
             <div className={s.govBlockHeader}>
               Remaining
             </div>
-            <div className={s.govBlockLabel}>
-              {days}
-              <span className={s.govBlockSpan}>D</span>
-              {' '}
-              {hours}
-              <span className={s.govBlockSpan}>H</span>
-              {' '}
-              {minutes}
-              <span className={s.govBlockSpan}>M</span>
-            </div>
+            <Timeleft className={s.govBlockLabel} remaining={workDates[1]} />
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
