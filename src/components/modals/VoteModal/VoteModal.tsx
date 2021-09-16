@@ -78,8 +78,10 @@ const Header:React.FC<HeaderProps> = ({
   return (
     <div className={s.inputs}>
       <Vote className={s.icon} />
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Aenean purus posuere dolor posuere. In tortor ac varius amet malesuada tellus.
+      <div className={s.tac}>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Aenean purus posuere dolor posuere. In tortor ac varius amet malesuada tellus.
+      </div>
       <Field
         name="balance"
         validate={composeValidators(
@@ -95,7 +97,7 @@ const Header:React.FC<HeaderProps> = ({
             balance="10"
             token1={{} as WhitelistedToken}
             id="voteModal-1"
-            label="Vote"
+            label="Votes"
             className={cx(s.input, s.mb24)}
             handleBalance={(value) => {
               form.mutators.setValue(
@@ -119,11 +121,11 @@ const Header:React.FC<HeaderProps> = ({
             onClick={() => {
               form.mutators.setValue(
                 'voteAgainst',
-                !!values.voteFor,
+                false,
               );
               form.mutators.setValue(
                 'voteFor',
-                !values.voteFor,
+                true,
               );
             }}
             active={values.voteFor ?? false}
@@ -141,11 +143,11 @@ const Header:React.FC<HeaderProps> = ({
             onClick={() => {
               form.mutators.setValue(
                 'voteFor',
-                !!values.voteAgainst,
+                false,
               );
               form.mutators.setValue(
                 'voteAgainst',
-                !values.voteAgainst,
+                true,
               );
             }}
             active={values.voteAgainst ?? false}

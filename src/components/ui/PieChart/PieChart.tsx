@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { PieChart as PieChartLib } from 'react-minimal-pie-chart';
 import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -20,6 +20,8 @@ type PieChartProps = {
   showTotal?: boolean
   alignCenter?: boolean
   className?: string
+  chartClassName?: string
+  legendClassName?: string
 };
 
 const themeClass = {
@@ -37,22 +39,26 @@ export const PieChart: React.FC<PieChartProps> = ({
   legendPlacement = 'left',
   showTotal = false,
   alignCenter = false,
+  className,
+  chartClassName,
+  legendClassName,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const [hovered, setHovered] = useState<number | undefined>(undefined);
   const total = getDataTotalValue(data);
 
   const composeLegendClass = cx(
     s.legend,
     { [s.left]: legendPlacement === 'left' },
     { [s.right]: legendPlacement === 'right' },
+    legendClassName,
   );
 
   const compoundClassName = cx(
     s.container,
     themeClass[colorThemeMode],
     { [s.center]: alignCenter },
+    className,
   );
 
   return (
@@ -77,22 +83,17 @@ export const PieChart: React.FC<PieChartProps> = ({
         ))}
       </div>
       )}
-      <div className={s.chart}>
+      <div className={cx(s.chart, chartClassName)}>
         <PieChartLib
           data={data}
           lineWidth={20}
           viewBoxSize={[100, 100]}
           className={s.pieChart}
-          // @ts-ignore
-          onMouseOver={(_, index:any) => setHovered(index)}
-          onMouseOut={() => {
-            setHovered(undefined);
-          }}
         />
         {showTotal && (
         <div className={s.total}>
           <h1 className={s.bold}>
-            {hovered ? data[hovered].value : total}
+            {total}
           </h1>
         </div>
         )}

@@ -12,7 +12,7 @@ import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Governance.module.sass';
 
 const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
@@ -160,6 +160,7 @@ export const Governance: React.FC<GovernanceProps> = ({
             legend
             label="Proposals summary"
             showTotal
+            className={s.chart}
           />
           <div className={s.voteInfo}>
             <div className={s.deviceRow}>
@@ -196,7 +197,7 @@ export const Governance: React.FC<GovernanceProps> = ({
         </CardContent>
       </Card>
       <StickyBlock className={cx(className, s.unsticky)}>
-        <div className={cx(s.fullWidth, s.governTabs)}>
+        <div className={cx(s.governTabs)}>
           <div className={cx(s.govCard)}>
             <Card
               className={cx(s.govCardInner)}

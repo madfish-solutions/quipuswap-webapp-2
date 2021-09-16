@@ -40,10 +40,11 @@ export const VoteCell: React.FC<VoteCellProps> = ({
           href={`https://tzkt.io/${vote.address}`}
           theme="colored"
           className={cx(s.joinRow, s.centerRow)}
+          icon={
+            <ExternalLink className={s.mleft8} />
+          }
         >
           {shortize(vote.address, 10)}
-          {' '}
-          <ExternalLink className={s.mleft8} />
         </Button>
         <div className={s.voteFlexCell}>
           <div className={s.bakerBlock}>
@@ -54,7 +55,7 @@ export const VoteCell: React.FC<VoteCellProps> = ({
             <div className={s.label1}>
               {vote.value}
               {' '}
-              %
+              <span className={s.captionText}>%</span>
             </div>
           </div>
           <div className={s.bakerBlock}>
