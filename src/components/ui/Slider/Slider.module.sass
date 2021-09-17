@@ -7,6 +7,11 @@
   height: 4px
 
 .light
+  \:global(.slick-dots)
+    margin-top: 16px
+    display: flex !important
+  \:global(.slick-arrow)
+    display: none !important
   \:global(.slick-arrow)
     display: none
   \:global(.slick-active)
@@ -19,6 +24,9 @@
   \:global(.customSelect__single-value)
     color: $hover-primary-01-fallback
 .dark
+  \:global(.slick-dots)
+    margin-top: 16px
+    display: flex !important
   \:global(.slick-arrow)
     display: none !important
   \:global(.slick-active)

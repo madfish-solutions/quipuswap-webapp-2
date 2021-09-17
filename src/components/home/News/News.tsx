@@ -36,7 +36,7 @@ export const News: React.FC<NewsProps> = ({
     >
       <SliderUI items={4}>
         {NewsData.map(({ id, sponsored }) => (
-          <Card key={id} contentClassName={s.content}>
+          <Card key={id} className={s.root} contentClassName={s.content}>
             <NewsCard
               id={id}
               className={cx(s.card, modeClass[colorThemeMode])}
