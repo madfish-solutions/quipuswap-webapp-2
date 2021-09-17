@@ -6,6 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
 import { Card } from '@components/ui/Card';
 
+import { SliderUI } from '@components/ui/Slider';
 import { NewsCard } from './NewsCard';
 import { NewsData } from './content';
 
@@ -29,27 +30,22 @@ export const News: React.FC<NewsProps> = ({
 
   return (
     <Section
-      header={t('home:DEX Dashboard')}
-      description={t('home:The short overview of the most relevant DEX information.')}
+      header={t('home:Our latest news')}
+      description={t('home:Never miss important updates. Check what has happened in the QuickSwap ecosystem recently..')}
       className={cx(className)}
     >
-      <Card contentClassName={s.content}>
-        {
-          NewsData.map(({
-            id, volume, label, currency, tooltip,
-          }, idx) => (
+      <SliderUI items={4}>
+        {NewsData.map(({ id, sponsored }) => (
+          <Card key={id} contentClassName={s.content}>
             <NewsCard
-              key={id}
+              id={id}
               className={cx(s.card, modeClass[colorThemeMode])}
-              size={idx < 4 ? 'extraLarge' : 'large'}
-              volume={volume}
-              tooltip={tooltip}
-              label={label}
-              currency={currency}
+              sponsored={sponsored}
             />
-          ))
-        }
-      </Card>
+          </Card>
+        ))}
+      </SliderUI>
+
     </Section>
   );
 };

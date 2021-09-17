@@ -1,0 +1,32 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.dot
+  border-radius: 2px
+  width: 24px
+  height: 4px
+
+.light
+  \:global(.slick-arrow)
+    display: none
+  \:global(.slick-active)
+    .dot
+      background-color: $ui-05
+  .dot
+    background-color: $ui-04
+  \:global(.customSelect__control)
+    background: inherit
+  \:global(.customSelect__single-value)
+    color: $hover-primary-01-fallback
+.dark
+  \:global(.slick-arrow)
+    display: none !important
+  \:global(.slick-active)
+    .dot
+      background-color: $text-02
+  .dot
+    background-color: $text-01
+  \:global(.customSelect__control)
+    background: inherit
+  \:global(.customSelect__single-value)
+    color: $hover-primary-02-fallback
