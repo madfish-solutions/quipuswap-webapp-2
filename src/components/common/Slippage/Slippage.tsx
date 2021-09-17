@@ -7,6 +7,7 @@ import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
 
+import { parseDecimals } from '@utils/helpers';
 import s from './Slippage.module.sass';
 
 const slippagePercents = ['0.5 %', '1 %', '3 %'];
@@ -36,10 +37,11 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
-    const validValue = validateMinMax(0, 30)(val);
+    const valWrapper = parseDecimals(val, 0, 30, 3);
+    const validValue = validateMinMax(0, 30)(valWrapper);
     if (!validValue) {
-      setCustomValue(val);
-      handleChange(val);
+      setCustomValue(valWrapper);
+      handleChange(valWrapper);
     }
   }, []);
 
