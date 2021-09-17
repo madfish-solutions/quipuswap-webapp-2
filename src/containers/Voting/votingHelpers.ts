@@ -77,8 +77,9 @@ type SubmitProps = {
   values:VoteFormValues,
   dex?: FoundDex,
   tab: string,
-  handleSuccessToast:any,
+  updateToast:any,
   handleErrorToast:(e:any) => void,
+  getBalance:() => void,
 };
 
 export const submitForm = async ({
@@ -87,14 +88,17 @@ export const submitForm = async ({
   dex,
   tab,
   handleErrorToast,
-  handleSuccessToast,
+  updateToast,
+  getBalance,
 }:SubmitProps) => {
   let params:TransferParams[] = [];
   const { method, balance1, selectedBaker } = values;
   if (!dex) return;
-  if (method === 'first') {
+  let updateToastText = '';
+  if (method !== 'first') {
     try {
       if (tab === 'vote') {
+        updateToastText = 'Vote completed!';
         params = await voteForBaker(
           tezos,
           dex,
@@ -102,6 +106,7 @@ export const submitForm = async ({
           toDecimals(new BigNumber(balance1), TEZOS_TOKEN.metadata.decimals),
         );
       } else {
+        updateToastText = 'Veto completed!';
         params = await vetoCurrentBaker(
           tezos,
           dex,
@@ -114,8 +119,10 @@ export const submitForm = async ({
   } else {
     try {
       if (tab === 'vote') {
+        updateToastText = 'Unvote completed!';
         params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
       } else {
+        updateToastText = 'Remove veto completed!';
         params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
       }
     } catch (e) {
@@ -128,7 +135,12 @@ export const submitForm = async ({
       params,
     ).send();
     await op.confirmation();
-    handleSuccessToast();
+    // handleSuccessToast();
+    updateToast({
+      type: 'success',
+      render: updateToastText,
+    });
+    getBalance();
   } catch (e) {
     handleErrorToast(e);
   }
@@ -139,6 +151,7 @@ export const submitWithdraw = async (
   voteParams:TransferParams[],
   updateToast: (err:any) => void,
   handleSuccessToast:any,
+  getBalance:() => void,
 ) => {
   try {
     const op = await batchify(
@@ -147,6 +160,7 @@ export const submitWithdraw = async (
     ).send();
     await op.confirmation();
     handleSuccessToast();
+    getBalance();
   } catch (e) {
     updateToast(e);
   }
