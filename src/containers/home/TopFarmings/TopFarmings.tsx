@@ -12,7 +12,7 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
   className,
 }) => (
   <TopAssets
-    header="Top Farming pools"
+    header="Top Farms"
     description="The most popular Farming pools by APR"
     data={TopFarmingsData}
     button={{

@@ -52,7 +52,8 @@ export const PoolItem: React.FC<PoolItemProps> = ({
           <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
         </div>
         <div className={s.cardCellItem}>
-          <CurrencyAmount amount="888888888888888.00" currency="%" />
+          $
+          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
         </div>
         <div className={cx(s.links, s.cardCellItem)}>
           <Button

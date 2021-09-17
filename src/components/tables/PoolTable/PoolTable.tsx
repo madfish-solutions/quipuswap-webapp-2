@@ -36,10 +36,10 @@ const Header = () => {
         Name
       </div>
       <div className={s.label}>
-        Total staked
+        TVL
       </div>
       <div className={s.label}>
-        APR
+        Volume 24h
       </div>
       <div className={s.label} />
     </th>
