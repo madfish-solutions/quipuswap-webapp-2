@@ -1,6 +1,13 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.mobContent
+  padding-bottom: 24px
+
+.mobSlider
+  \:global(.slick-dots)
+    bottom: -31px
+
 .content
   display: grid
   align-items: center
@@ -19,7 +26,17 @@
   &:not(:last-child)
     border-bottom: 1px solid $ui-06
 
+.mobile
+  display: block
+
+.desktop
+  display: none
+
 @include media('>Lphone')
+  .mobile
+    display: none
+  .desktop
+    display: block
   .content
     grid-template-columns: repeat(2, 1fr)
     .card
