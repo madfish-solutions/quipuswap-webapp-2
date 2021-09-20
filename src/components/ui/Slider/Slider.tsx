@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import cx from 'classnames';
 import Slider, { ResponsiveObject } from 'react-slick';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -14,10 +15,18 @@ const modeClass = {
 
 type SliderProps = {
   items?: number
+  unCenter?: boolean
   responsive?: ResponsiveObject[]
+  className?: string
 };
 
-export const SliderUI: React.FC<SliderProps> = ({ children, items = 1, responsive = [] }) => {
+export const SliderUI: React.FC<SliderProps> = ({
+  children,
+  items = 1,
+  responsive = [],
+  unCenter = false,
+  className,
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const settings = {
     dots: true,
@@ -34,7 +43,13 @@ export const SliderUI: React.FC<SliderProps> = ({ children, items = 1, responsiv
   };
 
   return (
-    <div className={modeClass[colorThemeMode]}>
+    <div className={cx(
+      s.root,
+      className,
+      modeClass[colorThemeMode],
+      { [s.unCenter]: unCenter },
+    )}
+    >
       <Slider {...settings}>
         {children}
       </Slider>
