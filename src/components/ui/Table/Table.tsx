@@ -27,7 +27,9 @@ export const TableCard: React.FC<TableCardProps> = ({
   data,
   renderData,
   itemsPerPage,
+  disabled,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [page, setPage] = useState<number>(1);
   const pageMax = useMemo(() => Math.ceil(data.length / itemsPerPage), [data.length]);
@@ -42,7 +44,13 @@ export const TableCard: React.FC<TableCardProps> = ({
       >
         <CardContent className={s.card}>
           {data.slice(startIndex, endIndex).map(renderData)}
-          <Pagination page={page} pageMax={pageMax} setPage={setPage} />
+          {disabled && (
+          <div className={s.disabled}>
+            <div className={s.disabledBg} />
+            <h1 className={s.h1}>{t('common:Coming soon!')}</h1>
+          </div>
+          )}
+          {!disabled && <Pagination page={page} pageMax={pageMax} setPage={setPage} />}
         </CardContent>
       </Card>
     </>
