@@ -25,6 +25,7 @@ import s from './CandleChart.module.sass';
 type LineChartProps = {
   data: any[]
   className?: string
+  disabled?: boolean
 };
 
 const modeClass = {
@@ -35,7 +36,9 @@ const modeClass = {
 export const CandleChart: React.FC<LineChartProps> = ({
   data,
   className,
+  disabled = true,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
 
@@ -252,6 +255,16 @@ export const CandleChart: React.FC<LineChartProps> = ({
         </div>
       </div>
       <div ref={chartRef} className={s.chart} />
+      {disabled && (
+        <div className={s.disabled}>
+          <div className={cx(s.disabledBg, {
+            [s.disabledBgDark]: colorThemeMode === 'dark',
+            [s.disabledBgLight]: colorThemeMode === 'light',
+          })}
+          />
+          <h1 className={s.h1}>{t('common:Coming soon!')}</h1>
+        </div>
+      )}
     </Card>
   );
 };

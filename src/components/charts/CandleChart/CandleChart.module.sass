@@ -1,5 +1,29 @@
-@import '@styles/variables'
-@import '@styles/breakpoints'
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.h1
+  z-index: 10
+
+.disabled, .disabledBg
+  position: absolute
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  z-index: 10
+  opacity: 1
+  display: flex
+  align-items: center
+  justify-content: center
+
+.disabledBg
+  opacity: 0.9
+
+.disabledBgDark
+  background: $skeleton-dark
+
+.disabledBgLight
+    background: $skeleton-light
 
 .container
   padding-top: 0
@@ -51,6 +75,8 @@
   margin-left: 24px
 
 .light
+  .disabledBg
+    background: $skeleton-light
   .tokenPrice
     color: $text-01
   &.info
@@ -96,3 +122,4 @@
 @include media('>tablet')
   .info
     padding: 12px 24px
+
