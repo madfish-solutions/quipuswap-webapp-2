@@ -163,7 +163,7 @@ const UiKit: React.FC = () => {
     >
       <section className={s.section}>
         <h1 className={s.header}>Tables</h1>
-        <FarmTable data={farms as WhitelistedFarm[]} />
+        <FarmTable disabled data={farms as WhitelistedFarm[]} />
         <PoolTable data={farms as WhitelistedFarm[]} />
       </section>
       <section className={s.section}>

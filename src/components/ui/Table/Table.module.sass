@@ -3,6 +3,24 @@
   
 .card
   padding-top: 0px
+  position: relative
+
+.h1
+  z-index: 10
+
+.disabled, .disabledBg
+  position: absolute
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  opacity: 1
+  display: flex
+  align-items: center
+  justify-content: center
+
+.disabledBg
+  opacity: 0.9
 
 .container
   margin-left: -24px
@@ -34,9 +52,13 @@
   display: none
 
 .light
+  .disabledBg
+    background: $skeleton-light
   .container::-webkit-scrollbar-thumb
     background-color: $hover-light-row
 .dark
+  .disabledBg
+    background: $skeleton-dark
   .container::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
 

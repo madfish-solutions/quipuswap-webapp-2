@@ -2,6 +2,7 @@ import React, {
   useContext, useMemo, useState,
 } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { MAX_ITEMS_PER_PAGE, MAX_ITEMS_PER_PAGE_MOBILE } from '@utils/defaults';
@@ -14,6 +15,7 @@ type TableCardProps = {
   data: any
   renderData: any
   itemsPerPage: number
+  disabled: boolean
 };
 
 const themeClass = {
@@ -52,6 +54,7 @@ type RealTableProps = {
   renderData: any
   header: any
   itemsPerPage: number
+  disabled: boolean
 };
 
 const TableInner: React.FC<RealTableProps> = ({
@@ -59,7 +62,9 @@ const TableInner: React.FC<RealTableProps> = ({
   renderData,
   header,
   itemsPerPage,
+  disabled,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [page, setPage] = useState<number>(1);
   const pageMax = useMemo(() => Math.ceil(data.length / itemsPerPage), [data.length]);
@@ -89,7 +94,13 @@ const TableInner: React.FC<RealTableProps> = ({
               </div>
             </div>
           </div>
-          <Pagination page={page} pageMax={pageMax} setPage={setPage} />
+          {disabled && (
+          <div className={s.disabled}>
+            <div className={s.disabledBg} />
+            <h1 className={s.h1}>{t('common:Coming soon!')}</h1>
+          </div>
+          )}
+          {!disabled && <Pagination page={page} pageMax={pageMax} setPage={setPage} />}
         </CardContent>
       </Card>
     </>
@@ -104,9 +115,11 @@ type TableProps = {
   className?: string
   itemsPerPage?: number
   itemsPerPageMobile?: number
+  disabled: boolean
 };
 
 export const Table: React.FC<TableProps> = ({
+  disabled,
   header,
   renderTableData,
   renderMobileData,
@@ -117,6 +130,7 @@ export const Table: React.FC<TableProps> = ({
   <>
     <div className={s.notMobile}>
       <TableInner
+        disabled={disabled}
         data={data}
         renderData={renderTableData}
         header={header}
@@ -125,6 +139,7 @@ export const Table: React.FC<TableProps> = ({
     </div>
     <div className={s.mobile}>
       <TableCard
+        disabled={disabled}
         data={data}
         renderData={renderMobileData}
         itemsPerPage={itemsPerPageMobile}

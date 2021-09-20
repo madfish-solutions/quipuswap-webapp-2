@@ -37,7 +37,7 @@ export const TopAssets: React.FC<TopAssetsProps> = ({
       className={className}
     >
       {isFarm
-        ? (<FarmTable data={farms as WhitelistedFarm[]} />)
+        ? (<FarmTable disabled data={farms as WhitelistedFarm[]} />)
         : (<PoolTable data={farms as WhitelistedFarm[]} />)}
     </Section>
   );
