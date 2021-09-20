@@ -123,11 +123,11 @@ type TableProps = {
   className?: string
   itemsPerPage?: number
   itemsPerPageMobile?: number
-  disabled: boolean
+  disabled?: boolean
 };
 
 export const Table: React.FC<TableProps> = ({
-  disabled,
+  disabled = false,
   header,
   renderTableData,
   renderMobileData,
