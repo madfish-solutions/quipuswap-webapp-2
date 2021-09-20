@@ -14,13 +14,25 @@ export const TopPairs: React.FC<TopPairsProps> = ({
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetTokensPairsQuery();
 
-  if (error || (!loading && !data) || data === undefined) {
-    return <></>;
+  if (error || (!loading && !data) || data === undefined || !data.pairs) {
+    return (
+      <TopAssets
+        data={[]}
+        header={t('home:Top Pairs')}
+        description={t('home:The most popular Trading Pairs by trading volume')}
+        loading
+        button={{
+          href: 'https://analytics.quipuswap.com/pairs',
+          label: t('home:View All Pairs'),
+          external: true,
+        }}
+        className={className}
+      />
+    );
   }
 
-  if (!data.pairs) return <></>;
-
   const pairData = data.pairs.edges.map((x) => ({
+    xtzUsdQuote: data.overview.xtzUsdQuote,
     pair: {
       name: `${x?.node?.token1.symbol} / ${x?.node?.token2.symbol}`,
       token1: x?.node?.token1,

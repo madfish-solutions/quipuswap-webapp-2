@@ -2,8 +2,10 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import { PoolTableType, WhitelistedToken } from '@utils/types';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { fromDecimals } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
@@ -54,6 +56,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
       symbol: pool.pair.token2.symbol ?? '',
     },
   };
+
   return (
     <tr>
       <td className={compoundClassName}>
@@ -68,11 +71,23 @@ export const PoolItem: React.FC<PoolItemProps> = ({
         </div>
         <div className={s.cardCellItem}>
           $
-          <CurrencyAmount className={s.cardAmount} amount={`${pool.data.tvl}`} />
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
         </div>
         <div className={s.cardCellItem}>
           $
-          <CurrencyAmount className={s.cardAmount} amount={`${pool.data.volume24}`} />
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.volume24h), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
         </div>
         <div className={cx(s.links, s.cardCellItem)}>
           <Button

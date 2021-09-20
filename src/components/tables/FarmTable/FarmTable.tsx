@@ -17,6 +17,7 @@ import { FarmCardItem } from './FarmCardItem';
 type FarmTableProps = {
   data: WhitelistedFarm[]
   disabled?: boolean
+  loading: boolean
 };
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -80,12 +81,26 @@ const farmMobileItem = (farm:WhitelistedFarm) => {
 export const FarmTable: React.FC<FarmTableProps> = ({
   data,
   disabled = false,
-}) => (
-  <Table
-    disabled={disabled}
-    data={data}
-    renderTableData={farmTableItem}
-    renderMobileData={farmMobileItem}
-    header={<Header />}
-  />
-);
+  loading,
+}) => {
+  if (loading) {
+    return (
+      <Table
+        disabled={disabled}
+        data={data}
+        renderTableData={farmTableItem}
+        renderMobileData={farmMobileItem}
+        header={<Header />}
+      />
+    );
+  }
+  return (
+    <Table
+      disabled={disabled}
+      data={data}
+      renderTableData={farmTableItem}
+      renderMobileData={farmMobileItem}
+      header={<Header />}
+    />
+  );
+};

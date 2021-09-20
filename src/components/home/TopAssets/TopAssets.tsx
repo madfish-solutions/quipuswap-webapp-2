@@ -12,6 +12,7 @@ type TopAssetsProps = Omit<SectionProps, 'className'> & {
     href: string
     external?: boolean
   }
+  loading?: boolean
   className?: string
   isFarm?: boolean
 };
@@ -20,6 +21,7 @@ export const TopAssets: React.FC<TopAssetsProps> = ({
   header,
   description,
   className,
+  loading = false,
   isFarm = false,
   data,
 }) => (
@@ -29,7 +31,7 @@ export const TopAssets: React.FC<TopAssetsProps> = ({
     className={className}
   >
     {isFarm
-      ? (<FarmTable disabled data={data} />)
-      : (<PoolTable data={data} />)}
+      ? (<FarmTable loading={loading} disabled data={data} />)
+      : (<PoolTable loading={loading} data={data} />)}
   </Section>
 );

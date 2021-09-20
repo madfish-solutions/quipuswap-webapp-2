@@ -1,15 +1,17 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PoolTableType, WhitelistedToken } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Tooltip } from '@components/ui/Tooltip';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 
-import { Tooltip } from '@components/ui/Tooltip';
 import s from './PoolCardTable.module.sass';
 
 type PoolCardItemProps = {
@@ -68,7 +70,13 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount className={s.cardAmount} amount={`${pool.data.tvl}`} />
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
@@ -78,7 +86,13 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount className={s.cardAmount} amount={`${pool.data.volume24}`} />
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.volume24h), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>

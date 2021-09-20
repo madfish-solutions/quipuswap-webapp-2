@@ -134,6 +134,7 @@ export type WhitelistedFarm = {
 
 export type PoolTableType = {
   id: number,
+  xtzUsdQuote: string,
   pair: {
     name: string,
     token1: {
@@ -147,7 +148,7 @@ export type PoolTableType = {
   },
   data: {
     tvl: number,
-    volume24: number,
+    volume24h: number,
   },
   buttons: {
     first: {

@@ -15,6 +15,7 @@ import { PoolCardItem } from './PoolCardItem';
 
 type PoolTableProps = {
   data: PoolTableType[]
+  loading: boolean
 };
 
 const themeClass = {
@@ -52,25 +53,39 @@ const Header = () => {
 
 const poolTableItem = (pool:PoolTableType) => (
   <PoolItem
-    key={pool.id}
+    key={pool.pair.name}
     pool={pool}
   />
 );
 
 const poolMobileItem = (pool:PoolTableType) => (
   <PoolCardItem
-    key={pool.id}
+    key={pool.pair.name}
     pool={pool}
   />
 );
 
 export const PoolTable: React.FC<PoolTableProps> = ({
   data,
-}) => (
-  <Table
-    data={data}
-    renderTableData={poolTableItem}
-    renderMobileData={poolMobileItem}
-    header={<Header />}
-  />
-);
+  loading,
+}) => {
+  if (loading) {
+    // TODO: loading
+    return (
+      <Table
+        data={[]}
+        renderTableData={poolTableItem}
+        renderMobileData={poolMobileItem}
+        header={<Header />}
+      />
+    );
+  }
+  return (
+    <Table
+      data={data}
+      renderTableData={poolTableItem}
+      renderMobileData={poolMobileItem}
+      header={<Header />}
+    />
+  );
+};

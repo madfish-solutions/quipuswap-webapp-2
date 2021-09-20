@@ -458,7 +458,10 @@ export type GetTokensPairsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTokensPairsQuery = (
   { __typename?: 'Query' }
-  & { pairs?: Maybe<(
+  & { overview: (
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'xtzUsdQuote'>
+  ), pairs?: Maybe<(
     { __typename?: 'PairConnection' }
     & { edges: Array<Maybe<(
       { __typename?: 'PairEdge' }
@@ -509,8 +512,7 @@ export const GetPairPlotLiquidityDocument = gql`
  */
 export function useGetPairPlotLiquidityQuery(
   baseOptions: Apollo.QueryHookOptions<
-  GetPairPlotLiquidityQuery,
-  GetPairPlotLiquidityQueryVariables>,
+  GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
@@ -518,7 +520,8 @@ export function useGetPairPlotLiquidityQuery(
   GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
 }
 export function useGetPairPlotLiquidityLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery,
+  baseOptions?: Apollo.LazyQueryHookOptions<
+  GetPairPlotLiquidityQuery,
   GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
@@ -528,12 +531,17 @@ export function useGetPairPlotLiquidityLazyQuery(
 }
 export type GetPairPlotLiquidityQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityQuery>;
 export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<
-typeof useGetPairPlotLiquidityLazyQuery
+  typeof useGetPairPlotLiquidityLazyQuery
 >;
 export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<
-GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>;
+GetPairPlotLiquidityQuery,
+GetPairPlotLiquidityQueryVariables
+>;
 export const GetTokensPairsDocument = gql`
     query GetTokensPairs {
+  overview {
+    xtzUsdQuote
+  }
   pairs {
     edges {
       node {
@@ -572,22 +580,20 @@ export const GetTokensPairsDocument = gql`
  * });
  */
 export function useGetTokensPairsQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetTokensPairsQuery,
-  GetTokensPairsQueryVariables>,
+  baseOptions?: Apollo.QueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<
-  GetTokensPairsQuery,
-  GetTokensPairsQueryVariables>(GetTokensPairsDocument, options);
+  GetTokensPairsQuery, GetTokensPairsQueryVariables>(GetTokensPairsDocument, options);
 }
 export function useGetTokensPairsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetTokensPairsQuery,
-  GetTokensPairsQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<
   GetTokensPairsQuery,
-  GetTokensPairsQueryVariables>(GetTokensPairsDocument, options);
+  GetTokensPairsQueryVariables
+  >(GetTokensPairsDocument, options);
 }
 export type GetTokensPairsQueryHookResult = ReturnType<typeof useGetTokensPairsQuery>;
 export type GetTokensPairsLazyQueryHookResult = ReturnType<typeof useGetTokensPairsLazyQuery>;
