@@ -42,7 +42,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
 
   return (
     <div className={compoundClassName}>
-      <div className={imageClassName}>
+      <div className={cx(s.imageWrapper, imageClassName)}>
         {prepareToken1.icon ? (
           <Image
             {...layout === 'fill' ? { layout } : { layout, width, height: width }}
@@ -55,7 +55,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
         )}
       </div>
       {prepareToken2?.icon && (
-        <div className={cx(s.secondImage, imageClassName)}>
+        <div className={cx(s.imageWrapper, s.secondImage, imageClassName)}>
           <Image
             {...layout === 'fill' ? { layout } : { layout, width, height: width }}
             src={prepareToken2.icon}
