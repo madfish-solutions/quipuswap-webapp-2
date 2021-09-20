@@ -1,0 +1,246 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.priceAmount
+  font-size: 1rem
+  font-weight: 600
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.chart
+  margin-bottom: 24px
+
+.tokens
+  display: flex
+  align-items: center
+
+.linkIcon
+  margin-left: 8px
+
+.title
+  margin-left: 16px
+
+.govBody
+  font-size: 1.143rem
+
+.fullWidth
+  width: 100%
+
+.details
+  padding: 0px 24px 24px 24px
+  margin-top: 40px
+
+.content, .topContent
+  padding: 24px
+  font-weight: 600
+
+.baker
+  margin-top: 24px
+
+.tradeControls
+  margin-top: 24px
+
+.tradeBtn
+  &:not(:last-child)
+    margin-right: 24px
+
+.govBlockSpan
+  color: $text-03
+
+.proposalHeader
+  display: flex
+  align-items: center
+
+.proposalBackIcon
+  margin-right: 12px
+
+.notRewards
+  flex: 1
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+
+.itemsRows
+  display: block  
+
+.mb24i
+  margin-bottom: 24px !important
+
+.flex
+  display: block
+
+.header
+  margin-bottom: 8px
+  text-align: left
+
+.reward
+  margin-bottom: 24px
+  display: flex
+  justify-content: space-between
+  padding: 32px 24px
+  border-radius: 8px
+  align-items: center
+  margin-bottom: 24px
+
+.rewardHeader
+  display: flex
+  flex-direction: column
+  font-weight: 600
+
+.rewardAmount, .amount
+  font-size: 1.143rem
+  line-height: 1.5
+
+.rewardCurrency
+  margin-left: 8px
+
+.item
+  display: flex
+  flex-direction: column
+  align-items: flex-start
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.button
+  width: 100%
+  max-width: 280px
+
+.statButton 
+  width: 100%
+  max-width: none
+  margin-top: 40px
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+
+.detailsButton
+  display: flex
+  align-items: center
+  margin-left: auto
+  margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-left: auto
+  margin-top: 12px
+  &:not(:last-child)
+    margin-top: 32px
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+    &:not(:first-child)
+      margin-top: 16px
+
+.light
+  .rewardHeader, .rewardCurrency
+    color: $text-02
+  .reward
+    border: 2px dashed $hover-primary-01-fallback
+    color: $text-01
+  .amount, .govBlockLabel, .priceAmount
+    color: $text-01
+
+.dark
+  .rewardHeader, .rewardCurrency
+    color: $text-03
+  .reward
+    border: 2px dashed $hover-primary-02-fallback
+    color: $text-inverse
+  .amount, .govBlockLabel, .priceAmount
+    color: $text-inverse
+
+@include media('>phone')
+  .rewardAmount
+    font-size: 1.714rem
+
+@include media('>Lphone')
+  .detailsButtons
+    justify-content: flex-end
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+  .rewardContent
+    margin-right: 32px
+  .amount
+    font-size: 1.429rem
+  .itemsRows
+    display: flex
+    justify-content: space-between
+    width: 100%
+
+
+
+@include media('>Lphone', '<=Ltablet')
+  .detailsButtons
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+    margin-left: auto
+    margin-top: 12px
+  .rewardAmount
+    font-size: 2.286rem
+
+
+@include media('>Ltablet')
+  .detailsButtons
+    justify-content: flex-end
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+  .chart
+    margin-bottom: 32px
+  .header
+    text-align: left
+  .notRewards
+    flex: 1
+    display: flex
+    flex-direction: column
+    align-items: flex-end
+  .itemsRows
+    justify-content: space-between
+    display: flex
+  .flex
+    display: flex
+    align-items: center
+  .topContent
+    display: flex
+    align-items: center
+    justify-content: space-between
+  .reward
+    margin-bottom: 0px
+    margin-right: 32px
+  .item
+    align-items: flex-start
+    &:not(:last-child)
+      margin-bottom: 16px
+      margin-right: 32px
+  .rewardAmount
+    font-size: 1.714rem
+  .amount
+    font-size: 1.429rem
+  .button
+    width: 160px
+    max-width: 160px
+    margin-top: auto
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+  .statButton
+    margin-top: 32px
+
+@include media('>desktop')
+  .rewardAmount
+    font-size: 2.286rem
+  .amount
+    font-size: 1.714rem
+    line-height: 1.33
