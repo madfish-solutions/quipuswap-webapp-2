@@ -34,8 +34,8 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
     metadata: {
       decimals: 6,
       thumbnailUri: pool.pair.token1.icon,
-      name: pool.pair.token1.name ?? '',
-      symbol: pool.pair.token1.name ?? '',
+      name: pool.pair.token1.symbol ?? '',
+      symbol: pool.pair.token1.symbol ?? '',
     },
   };
   const token2: WhitelistedToken = {
@@ -44,8 +44,8 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
     metadata: {
       decimals: 6,
       thumbnailUri: pool.pair.token2.icon,
-      name: pool.pair.token2.name ?? '',
-      symbol: pool.pair.token2.name ?? '',
+      name: pool.pair.token2.symbol ?? '',
+      symbol: pool.pair.token2.symbol ?? '',
     },
   };
   return (
@@ -57,9 +57,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
             token2={token2}
             className={s.tokenLogo}
           />
-          {pool.pair.token1.name}
-          /
-          {pool.pair.token2.name}
+          {pool.pair.name}
         </div>
         {isSponsored && (<Bage text={t('home:Sponsored')} />)}
       </div>

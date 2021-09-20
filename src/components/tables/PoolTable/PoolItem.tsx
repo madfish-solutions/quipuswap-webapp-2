@@ -40,8 +40,8 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     metadata: {
       decimals: 6,
       thumbnailUri: pool.pair.token1.icon,
-      name: pool.pair.token1.name ?? '',
-      symbol: pool.pair.token1.name ?? '',
+      name: pool.pair.token1.symbol ?? '',
+      symbol: pool.pair.token1.symbol ?? '',
     },
   };
   const token2: WhitelistedToken = {
@@ -50,8 +50,8 @@ export const PoolItem: React.FC<PoolItemProps> = ({
     metadata: {
       decimals: 6,
       thumbnailUri: pool.pair.token2.icon,
-      name: pool.pair.token2.name ?? '',
-      symbol: pool.pair.token2.name ?? '',
+      name: pool.pair.token2.symbol ?? '',
+      symbol: pool.pair.token2.symbol ?? '',
     },
   };
   return (
@@ -63,9 +63,7 @@ export const PoolItem: React.FC<PoolItemProps> = ({
             token2={token2}
             className={s.tokenLogo}
           />
-          {pool.pair.token1.name}
-          /
-          {pool.pair.token2.name}
+          {pool.pair.name}
           {isSponsored && (<Bage className={s.bage} text={t('home:Sponsored')} />)}
         </div>
         <div className={s.cardCellItem}>

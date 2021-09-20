@@ -138,11 +138,11 @@ export type PoolTableType = {
     name: string,
     token1: {
       icon: string,
-      name: string,
+      symbol: string,
     },
     token2: {
       icon: string,
-      name: string,
+      symbol: string,
     },
   },
   data: {
