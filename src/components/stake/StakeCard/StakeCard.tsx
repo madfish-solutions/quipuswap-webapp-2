@@ -109,7 +109,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <div className={s.detailsHeader}>
             APY
             {' '}
-            <Button theme="quaternary" onClick={openModal}>
+            <Button theme="quaternary" className={s.apyIcon} onClick={openModal}>
               <APY />
             </Button>
           </div>

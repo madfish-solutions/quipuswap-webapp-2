@@ -10,8 +10,8 @@
 
 .image
   position: relative
-  width: 24px
-  height: 24px
+  width: 32px
+  height: 32px
 
 .flex
   display: block
@@ -74,7 +74,8 @@
   align-items: center
 
 .title
-  margin-left: 16px
+  margin-left: 8px
+  font-size: 1.143rem
 
 .multiplierWrap
   margin-top: 24px
@@ -90,23 +91,23 @@
   margin-bottom: 24px
 
 .tokenItem
-  line-height: 1.71
-  font-size: 0.857rem
+  font-size: 1rem
   display: flex
   align-items: center
-  margin-top: 0px
+  margin-top: 0
 
 .tokens
   margin-right: 8px
 
 .earn
   margin-left: 4px
-  font-size: 1rem
-  line-height: 1.33
   font-weight: 600
 
 .tvl
   color: $text-02
+
+.apyIcon
+  margin-left: -2px
 
 .bold600
   font-weight: 600
@@ -204,6 +205,9 @@
     width: calc(100% / 3)
   .link
     width: 25%
+  .title
+    margin-left: 12px
+    font-size: 1.429rem
 
 @include media('>Ltablet')
   .card
@@ -213,6 +217,9 @@
   .image
     width: 48px
     height: 48px
+  .title
+    margin-left: 16px
+    font-size: 1.714rem
   .onlyMobile
     display: none !important
   .onlyDesktop
@@ -290,9 +297,7 @@
   .firstBlock
     width: auto
     display: block
-    margin-left: 32px
-    margin-top: 0px
-    margin-bottom: 0px
+    margin: 0 16px 0 32px
   .tokenItem
     margin-top: 16px
   .tokens

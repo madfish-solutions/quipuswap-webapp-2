@@ -207,12 +207,16 @@ export const Stake: React.FC<StakeProps> = () => {
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
             <div className={s.name}>{x.name}</div>
-            <CurrencyAmount amount={x.value} currency={x.currency} />
+            <CurrencyAmount
+              amount={x.value}
+              currency={x.currency}
+              labelSize="large"
+            />
           </div>
         ))}
       </Card>
       <Card
-        className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
+        className={cx(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
         contentClassName={s.farmingMobileStats}
       >
         <SliderUI>
