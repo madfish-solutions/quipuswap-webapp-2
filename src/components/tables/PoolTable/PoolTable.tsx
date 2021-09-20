@@ -1,19 +1,20 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
-import {
-  WhitelistedFarm,
-} from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import {
+  PoolTableType,
+} from '@utils/types';
 import { Table } from '@components/ui/Table';
-import { TEZOS_TOKEN } from '@utils/defaults';
 
+import { Tooltip } from '@components/ui/Tooltip';
 import s from './PoolTable.module.sass';
 import { PoolItem } from './PoolItem';
 import { PoolCardItem } from './PoolCardItem';
 
 type PoolTableProps = {
-  data: WhitelistedFarm[]
+  data: PoolTableType[]
 };
 
 const themeClass = {
@@ -23,6 +24,7 @@ const themeClass = {
 
 const Header = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['home']);
   const compoundClassName = cx(
     themeClass[colorThemeMode],
     s.tableRow,
@@ -33,40 +35,34 @@ const Header = () => {
   return (
     <th className={compoundClassName}>
       <div className={s.label}>
-        Name
+        {t('home:Name')}
       </div>
       <div className={s.label}>
-        TVL
+        {t('home:TVL')}
+        <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
       </div>
       <div className={s.label}>
-        Volume 24h
+        {t('home:Volume 24h')}
+        <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
       </div>
       <div className={s.label} />
     </th>
   );
 };
 
-const poolTableItem = (farm:WhitelistedFarm) => {
-  const { tokenPair } = farm;
-  return (
-    <PoolItem
-      key={`${tokenPair.token1.contractAddress}_${tokenPair.token1.fa2TokenId}:${tokenPair.token2.contractAddress}_${tokenPair.token2.fa2TokenId}`}
-      farm={farm}
-      isSponsored={tokenPair.token1.contractAddress === TEZOS_TOKEN.contractAddress}
-    />
-  );
-};
+const poolTableItem = (pool:PoolTableType) => (
+  <PoolItem
+    key={pool.id}
+    pool={pool}
+  />
+);
 
-const poolMobileItem = (farm:WhitelistedFarm) => {
-  const { tokenPair } = farm;
-  return (
-    <PoolCardItem
-      key={`${tokenPair.token1.contractAddress}_${tokenPair.token1.fa2TokenId}:${tokenPair.token2.contractAddress}_${tokenPair.token2.fa2TokenId}`}
-      farm={farm}
-      isSponsored={tokenPair.token1.contractAddress === TEZOS_TOKEN.contractAddress}
-    />
-  );
-};
+const poolMobileItem = (pool:PoolTableType) => (
+  <PoolCardItem
+    key={pool.id}
+    pool={pool}
+  />
+);
 
 export const PoolTable: React.FC<PoolTableProps> = ({
   data,

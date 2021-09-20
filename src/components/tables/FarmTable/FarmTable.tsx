@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
   WhitelistedFarm,
 } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Table } from '@components/ui/Table';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
+import { Tooltip } from '@components/ui/Tooltip';
 import s from './FarmTable.module.sass';
 import { FarmItem } from './FarmItem';
 import { FarmCardItem } from './FarmCardItem';
@@ -23,6 +25,7 @@ const themeClass = {
 
 const Header = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['home']);
   const compoundClassName = cx(
     themeClass[colorThemeMode],
     s.tableRow,
@@ -33,13 +36,15 @@ const Header = () => {
   return (
     <th className={compoundClassName}>
       <div className={s.label}>
-        Name
+        {t('home:Name')}
       </div>
       <div className={s.label}>
-        Total staked
+        {t('home:Total staked')}
+        <Tooltip sizeT="small" content={t('home:Total funds locked in the farming contract for each pool.')} />
       </div>
       <div className={s.label}>
-        APR
+        {t('home:APR')}
+        <Tooltip sizeT="small" content={t('home:Expected APR (annual percentage rate) earned through an investment.')} />
       </div>
       <div className={s.label} />
     </th>

@@ -1,0 +1,19 @@
+query GetTokensPairs {
+    pairs {
+        edges {
+            node {
+                id
+                token1 {
+                    symbol
+                    icon
+                }
+                token2 {
+                    symbol
+                    icon
+                }
+                volume24h
+                liquidity
+            }
+        }
+    }
+}
