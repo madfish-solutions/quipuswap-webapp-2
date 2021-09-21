@@ -159,7 +159,18 @@ export const Farm: React.FC<FarmProps> = () => {
         className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
         contentClassName={s.farmingMobileStats}
       >
-        <SliderUI>
+        <SliderUI
+          items={2}
+          responsive={[{
+            breakpoint: 620,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              infinite: true,
+              dots: true,
+            },
+          }]}
+        >
           {content.map((x) => (
             <div key={x.name} className={s.farmingMobileStatsBlock}>
               <div className={s.name}>{x.name}</div>
