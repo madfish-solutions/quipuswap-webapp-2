@@ -2,7 +2,7 @@
 @import "@styles/breakpoints"
 
 .h1
-  z-index: 10
+  z-index: 5
 
 .disabled, .disabledBg
   position: absolute
@@ -10,7 +10,7 @@
   left: 0px
   right: 0px
   bottom: 0px
-  z-index: 10
+  z-index: 5
   opacity: 1
   display: flex
   align-items: center
@@ -18,12 +18,6 @@
 
 .disabledBg
   opacity: 0.9
-
-.disabledBgDark
-  background: $skeleton-dark
-
-.disabledBgLight
-    background: $skeleton-light
 
 .container
   padding-top: 0
@@ -74,6 +68,9 @@
   margin-right: 16px
   margin-left: 24px
 
+.cardHeader
+  padding-top: 0
+
 .light
   .disabledBg
     background: $skeleton-light
@@ -88,6 +85,8 @@
     color: $text-01
 
 .dark
+  .disabledBg
+    background: $skeleton-dark
   .tokenPrice
     color: $text-inverse
   &.info
