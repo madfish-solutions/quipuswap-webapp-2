@@ -17,23 +17,23 @@ export const FarmIcon: React.FC<IconProps> = ({
       <path d="M18 19C19.1046 19 20 18.1046 20 17C20 15.8954 19.1046 15 18 15C16.8954 15 16 15.8954 16 17C16 18.1046 16.8954 19 18 19Z" stroke={`url(#FarmIcon-${id}paint4_linear)`} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
       <defs>
         <linearGradient id={`FarmIcon-${id}paint0_linear`} x1="0.75" y1="3" x2="14.2415" y2="4.62623" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
         <linearGradient id={`FarmIcon-${id}paint1_linear`} x1="1.5" y1="9" x2="5.36163" y2="14.2947" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
         <linearGradient id={`FarmIcon-${id}paint2_linear`} x1="11.25" y1="9" x2="23.5991" y2="11.4421" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
         <linearGradient id={`FarmIcon-${id}paint3_linear`} x1="3" y1="12" x2="11.3888" y2="13.1797" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
         <linearGradient id={`FarmIcon-${id}paint4_linear`} x1="16" y1="15" x2="20.474" y2="15.6292" gradientUnits="userSpaceOnUse">
-          <stop stopColor={themeColors.fill2} />
+          <stop stopColor={themeColors.fill1} />
           <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
       </defs>

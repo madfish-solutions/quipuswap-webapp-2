@@ -16,8 +16,8 @@ import { Shevron } from '@components/svg/Shevron';
 import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
+import { ApyModal } from '@components/modals/ApyModal';
 import s from './Farm.module.sass';
-import { ApyModal } from "@components/modals/ApyModal";
 
 type FarmProps = {
   className?: string
