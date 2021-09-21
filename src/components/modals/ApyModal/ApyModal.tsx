@@ -45,7 +45,7 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
             </th>
           </tr>
         </thead>
-        <tbody>
+        <tbody className={cx(s.headerBold, s.tableBody)}>
           <tr>
             <td>
               1D
@@ -94,7 +94,9 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
       </table>
       <div className={s.footer}>
         Calculated based on current rates.
+        <br />
         Compounding 1x daily.
+        <br />
         All figures are estimates provided for your convenience
         only, and by no means represent guaranteed returns.
       </div>
