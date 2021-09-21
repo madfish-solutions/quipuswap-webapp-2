@@ -23,12 +23,14 @@ export type FarmingCardProps = {
   farm:WhitelistedFarm
   className?: string
   onClick?:(farm:WhitelistedFarm) => void
+  openModal?:() => void
 };
 
 export const FarmingCard: React.FC<FarmingCardProps> = ({
   farm,
   onClick = () => {},
   className,
+  openModal,
 }) => {
   const {
     tokenPair,
@@ -102,7 +104,9 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsHeader}>
             APY
             {' '}
-            <APY />
+            <Button theme="quaternary" className={s.apyIcon} onClick={openModal}>
+              <APY />
+            </Button>
           </div>
           <div className={s.detailsValue}>
             {apy}

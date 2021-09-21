@@ -17,6 +17,7 @@ import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
 import s from './Farm.module.sass';
+import { ApyModal } from "@components/modals/ApyModal";
 
 type FarmProps = {
   className?: string
@@ -135,6 +136,7 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
   if (selectedFarming) {
     // TODO
@@ -144,6 +146,7 @@ export const Farm: React.FC<FarmProps> = () => {
   }
   return (
     <>
+      <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
         contentClassName={cx(s.farmingStats)}
@@ -209,6 +212,7 @@ export const Farm: React.FC<FarmProps> = () => {
           key={x.multiplier}
           farm={x}
           onClick={(e) => selectFarm(e)}
+          openModal={() => setModalOpen(true)}
         />
       ))}
     </>
