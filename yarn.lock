@@ -1122,10 +1122,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.9.2.tgz#adea7b6953cbb34651766b0548468e743c6a2353"
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
-"@quipuswap/sdk@^2.0.3":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-2.1.0.tgz#e7a71eea12ace9c0b5b163253fbbe3d76719dc03"
-  integrity sha512-HUm7DxjmfbS1TocN1Ml0ya9MdRYUgc0XaAlULyI9QCxx3KwuNmvE91YV7LXQpR0crcbJ43xyIQo80bypqIea4w==
+"@quipuswap/sdk@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-2.2.1.tgz#b1bba16d70fb93c2c8683d8d3087194994552132"
+  integrity sha512-EvOevelNRLg9CK/65rA8BVYGPWw/0B2HTXTCvoBZR7SPk4JOMuwiz2tpqMnSp7oBpuXdEfaF4d6GBTGbE5uSyw==
   dependencies:
     bignumber.js "^9.0.1"
 
@@ -1400,6 +1400,13 @@
   version "0.23.5"
   resolved "https://registry.yarnpkg.com/@types/react-slick/-/react-slick-0.23.5.tgz#e55fdc79bf19022ef77a6f22e9d64fd0f7463cc4"
   integrity sha512-dQ/HwsLpnWXD5d+52WwXIQTfNCRpgd+0CKb+aA8g2CaIpA9T9COdjVYb9KI40Osb4rIgqR7u2AqtL2/HGbBMpg==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-table@^7.7.4":
+  version "7.7.4"
+  resolved "https://registry.yarnpkg.com/@types/react-table/-/react-table-7.7.4.tgz#7d01b3a9516e8dcb7152858271210ef08c6cc32a"
+  integrity sha512-CIBJJx9iid8k+kN1/WD8vSXnM1Qc6zX3ihrMnt3ilZxLSrFJSw4wc1u9WeT4dWjbECEO1wJBGVHfSknR4nzFiQ==
   dependencies:
     "@types/react" "*"
 
@@ -6309,6 +6316,11 @@ react-slick@^0.28.1:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
+
+react-table@^7.7.0:
+  version "7.7.0"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.7.0.tgz#e2ce14d7fe3a559f7444e9ecfe8231ea8373f912"
+  integrity sha512-jBlj70iBwOTvvImsU9t01LjFjy4sXEtclBovl3mTiqjz23Reu0DKnRza4zlLtOPACx6j2/7MrQIthIK1Wi+LIA==
 
 react-textarea-autosize@^8.3.3:
   version "8.3.3"

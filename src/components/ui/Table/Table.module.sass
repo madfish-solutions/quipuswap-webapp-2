@@ -1,83 +1,89 @@
-@import "@styles/variables"
-@import "@styles/breakpoints"
-  
-.card
-  padding-top: 0px
-  position: relative
+@import '@styles/variables'
+@import '@styles/breakpoints'
 
-.h1
-  z-index: 10
-
-.disabled, .disabledBg
-  position: absolute
-  top: 0px
-  left: 0px
-  right: 0px
-  bottom: 0px
-  opacity: 1
-  display: flex
-  align-items: center
-  justify-content: center
-
-.disabledBg
-  opacity: 0.9
-
-.container
+.root
   margin-left: -24px
   margin-right: -24px
   overflow: hidden
   overflow-x: auto
-
-.container::-webkit-scrollbar-track
-    border-radius: 1px
-    background-color: transparent
-.container::-webkit-scrollbar
-  width: 2px
-  height: 0px
-  background-color: transparent
-.container::-webkit-scrollbar-thumb
-  border-radius: 1px
-  background-color: $hover-dark-row
+  padding-bottom: 20px
+  margin-bottom: -20px
+  -ms-overflow-style: none
+  scrollbar-width: none
+  &::-webkit-scrollbar
+    display: none
 
 .wrapper
-  width: max-content
+  width: 100%
+  min-width: max-content
 
 .innerWrapper
   margin-left: 24px
   margin-right: 24px
-.mobile
-  display: block
 
-.notMobile
-  display: none
+.table
+  width: 100%
+  min-width: max-content
+  border-collapse: collapse
+  font-size: 1rem
+  line-height: 1
+  box-shadow: $elevation-02
+  border-radius: 8px
+  overflow: hidden
+  transition: background-color $colorChangeAnimationTime
+
+.isLinked
+  cursor: pointer
+  transition: background-color $animationTime
+
+.td, .th
+  &:first-child
+    padding-left: 16px
+  &:last-child
+    padding-right: 16px
+
+.td
+  padding: 20px 8px
+  transition: color $colorChangeAnimationTime
+
+.th
+  padding: 16px 8px 12px
+  font-size: 0.857rem
+  font-weight: 700
+  color: $text-03
+
+.tbodyLoading
+  height: 65px * 5 - .5px
+  position: relative
+
+.trContent, .tbodyLoading
+  transition: border-color $colorChangeAnimationTime
 
 .light
-  .disabledBg
-    background: $skeleton-light
-  .container::-webkit-scrollbar-thumb
-    background-color: $hover-light-row
+  .table
+    background-color: $ui-01
+  .trContent, .tbodyLoading
+    border-top: 0.5px solid $ui-03
+  .isLinked
+    &:hover, &:focus
+      background-color: $hover-light-row
+  .td
+    color: $text-01
+
 .dark
-  .disabledBg
-    background: $skeleton-dark
-  .container::-webkit-scrollbar-thumb
-    background-color: $hover-dark-row
-
-@include media('>tablet')
-  .mobile
-    display: none
-  .notMobile
-    display: block
-
-@include media('>Ltablet')
-  .container
-    overflow: visible
-  .wrapper
-    width: auto
   .table
-    width: 100%
+    background-color: $ui-07
+  .trContent, .tbodyLoading
+    border-top: 0.5px solid $ui-06
+  .isLinked
+    &:hover
+      background-color: $hover-dark-row
+  .td
+    color: $text-inverse
 
-@include media('>LDesktop')
-  .table
-    width: 100%
-  .wrapper
-    width: auto
+@include media('>Lphone')
+  .td, .th
+    &:first-child
+      padding-left: 24px
+    &:last-child
+      padding-right: 24px
