@@ -7,11 +7,13 @@ import {
   PoolTableType,
 } from '@utils/types';
 import { Table } from '@components/ui/Table';
-
 import { Tooltip } from '@components/ui/Tooltip';
+
 import s from './PoolTable.module.sass';
 import { PoolItem } from './PoolItem';
 import { PoolCardItem } from './PoolCardItem';
+import { PoolItemSkeleton } from './PoolItemSkeleton';
+import { PoolCardItemSkeleton } from './PoolCardItemSkeleton';
 
 type PoolTableProps = {
   data: PoolTableType[]
@@ -40,11 +42,11 @@ const Header = () => {
       </div>
       <div className={s.label}>
         {t('home:TVL')}
-        <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+        <Tooltip sizeT="small" content={t('home:TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
       </div>
       <div className={s.label}>
         {t('home:Volume 24h')}
-        <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+        <Tooltip sizeT="small" content={t('home:A total amount of funds that were swapped via each pool today.')} />
       </div>
       <div className={s.label} />
     </th>
@@ -65,27 +67,26 @@ const poolMobileItem = (pool:PoolTableType) => (
   />
 );
 
+const poolTableItemSkeleton = (id: number) => (
+  <PoolItemSkeleton
+    key={id}
+  />
+);
+
+const poolMobileItemSkeleton = (id: number) => (
+  <PoolCardItemSkeleton
+    key={id}
+  />
+);
+
 export const PoolTable: React.FC<PoolTableProps> = ({
   data,
   loading,
-}) => {
-  if (loading) {
-    // TODO: loading
-    return (
-      <Table
-        data={[]}
-        renderTableData={poolTableItem}
-        renderMobileData={poolMobileItem}
-        header={<Header />}
-      />
-    );
-  }
-  return (
-    <Table
-      data={data}
-      renderTableData={poolTableItem}
-      renderMobileData={poolMobileItem}
-      header={<Header />}
-    />
-  );
-};
+}) => (
+  <Table
+    data={loading ? [1, 2, 3, 4, 5] : data}
+    renderTableData={loading ? poolTableItemSkeleton : poolTableItem}
+    renderMobileData={loading ? poolMobileItemSkeleton : poolMobileItem}
+    header={<Header />}
+  />
+);

@@ -7,10 +7,12 @@ query GetTokensPairs {
             node {
                 id
                 token1 {
+                    id
                     symbol
                     icon
                 }
                 token2 {
+                    id
                     symbol
                     icon
                 }

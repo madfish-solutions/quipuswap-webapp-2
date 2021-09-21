@@ -30,3 +30,4 @@ export * from './handleSearchToken';
 export * from './localSearchSortSymbol';
 export * from './isDexEqual';
 export * from './isAssetEqual';
+export * from './transformTokenDataToAnalyticsLink';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { useTokens } from '@utils/dapp';
@@ -14,9 +14,9 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
 }) => {
   const { t } = useTranslation(['home']);
   const { data: tokens } = useTokens();
-  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
+  const farms = useMemo(() => tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
-    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
+    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } })), [tokens]);
   return (
     <TopAssets
       header={t('home:Top Farms')}

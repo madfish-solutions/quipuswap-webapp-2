@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 
 import {
-  getWhitelistedTokenSymbol,
+  getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
@@ -151,7 +151,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 [{
                   id: 0,
                   name: token1 ? getWhitelistedTokenSymbol(token1) : '',
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.first.token.address}${tokensData.first.token.id !== undefined ? `_${tokensData.first.token.id}` : ''}`,
+                  link: transformTokenDataToAnalyticsLink(tokensData.first),
                 },
                 ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
                   id: 1,
@@ -161,7 +161,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 {
                   id: 2,
                   name: token2 ? getWhitelistedTokenSymbol(token2) : '',
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.second.token.address}${tokensData.second.token.id !== undefined ? `_${tokensData.second.token.id}` : ''}`,
+                  link: transformTokenDataToAnalyticsLink(tokensData.second),
                 }]
               }
         />

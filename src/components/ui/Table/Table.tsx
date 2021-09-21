@@ -105,7 +105,7 @@ const TableInner: React.FC<RealTableProps> = ({
           {disabled && (
           <div className={s.disabled}>
             <div className={s.disabledBg} />
-            <h1 className={s.h1}>{t('common:Coming soon!')}</h1>
+            <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
           </div>
           )}
           {!disabled && <Pagination page={page} pageMax={pageMax} setPage={setPage} />}

@@ -470,10 +470,10 @@ export type GetTokensPairsQuery = (
         & Pick<Pair, 'id' | 'volume24h' | 'liquidity'>
         & { token1: (
           { __typename?: 'Token' }
-          & Pick<Token, 'symbol' | 'icon'>
+          & Pick<Token, 'id' | 'symbol' | 'icon'>
         ), token2: (
           { __typename?: 'Token' }
-          & Pick<Token, 'symbol' | 'icon'>
+          & Pick<Token, 'id' | 'symbol' | 'icon'>
         ) }
       )> }
     )>> }
@@ -547,10 +547,12 @@ export const GetTokensPairsDocument = gql`
       node {
         id
         token1 {
+          id
           symbol
           icon
         }
         token2 {
+          id
           symbol
           icon
         }

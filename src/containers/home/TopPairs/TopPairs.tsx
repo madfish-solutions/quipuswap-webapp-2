@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useGetTokensPairsQuery } from '@graphql';
 import { useTranslation } from 'next-i18next';
 
@@ -14,25 +14,8 @@ export const TopPairs: React.FC<TopPairsProps> = ({
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetTokensPairsQuery();
 
-  if (error || (!loading && !data) || data === undefined || !data.pairs) {
-    return (
-      <TopAssets
-        data={[]}
-        header={t('home:Top Pairs')}
-        description={t('home:The most popular Trading Pairs by trading volume')}
-        loading
-        button={{
-          href: 'https://analytics.quipuswap.com/pairs',
-          label: t('home:View All Pairs'),
-          external: true,
-        }}
-        className={className}
-      />
-    );
-  }
-
-  const pairData = data.pairs.edges.map((x) => ({
-    xtzUsdQuote: data.overview.xtzUsdQuote,
+  const pairData = useMemo(() => data?.pairs?.edges.map((x) => ({
+    xtzUsdQuote: data?.overview.xtzUsdQuote,
     pair: {
       name: `${x?.node?.token1.symbol} / ${x?.node?.token2.symbol}`,
       token1: x?.node?.token1,
@@ -44,27 +27,30 @@ export const TopPairs: React.FC<TopPairsProps> = ({
     },
     buttons: {
       first: {
-        label: 'Analytics',
+        label: t('home:Analytics'),
         href: `https://analytics.quipuswap.com/pairs/${x?.node?.id}`,
         external: true,
       },
       second: {
-        label: 'Trade',
-        href: '/swap',
+        label: t('home:Trade'),
+        href: `/swap/${x?.node?.token1.id}-${x?.node?.token2.id}`,
       },
     },
-  }));
+  })), [data]);
+
+  const isNotLoaded = error || (!loading && !data) || data === undefined || !data.pairs;
 
   return (
     <TopAssets
       header={t('home:Top Pairs')}
       description={t('home:The most popular Trading Pairs by trading volume')}
-      data={pairData}
+      data={isNotLoaded ? [] : pairData}
       button={{
         href: 'https://analytics.quipuswap.com/pairs',
         label: t('home:View All Pairs'),
         external: true,
       }}
+      loading={!!isNotLoaded}
       className={className}
     />
   );

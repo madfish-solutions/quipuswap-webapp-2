@@ -96,13 +96,13 @@ export const PoolItem: React.FC<PoolItemProps> = ({
             href={pool.buttons.first.href}
             external
           >
-            {t('home:Analytics')}
+            {pool.buttons.first.label}
           </Button>
           <Button
-            href="/swap"
+            href={pool.buttons.second.href}
             className={s.button}
           >
-            {t('home:Trade')}
+            {pool.buttons.second.label}
           </Button>
         </div>
       </td>
