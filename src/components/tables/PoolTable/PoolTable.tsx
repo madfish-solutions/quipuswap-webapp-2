@@ -14,7 +14,7 @@ import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
 import s from './PoolTable.module.sass';
 
-type TokensTableProps = {
+type PoolTableProps = {
   data?: PoolTableType
   totalCount?: number
   exchangeRate?: string
@@ -25,7 +25,7 @@ type TokensTableProps = {
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
-export const PoolTable: React.FC<TokensTableProps> = ({
+export const PoolTable: React.FC<PoolTableProps> = ({
   data,
   totalCount,
   loading = true,

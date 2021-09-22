@@ -1,9 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
 
+import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from '@components/ui/Table/Table.module.sass';
+import { getUniqueKey } from '@utils/helpers';
 
 type TFooterProps = {
   isShowPagination: boolean
@@ -33,7 +35,9 @@ export const TFooter: React.FC<TFooterProps> = ({
         onClick={previousPage}
         disabled={!canPreviousPage}
       >
-        <DisabledBack className={cx(s.paginationArrow)} />
+        {canPreviousPage
+          ? (<Back id={`Backward${getUniqueKey()}`} className={s.paginationArrow} />)
+          : <DisabledBack className={s.paginationArrow} />}
       </button>
       Page
       &nbsp;
@@ -52,7 +56,9 @@ export const TFooter: React.FC<TFooterProps> = ({
         onClick={nextPage}
         disabled={!canNextPage}
       >
-        <DisabledBack className={cx(s.paginationArrow)} />
+        {canNextPage
+          ? (<Back id={`Forward${getUniqueKey()}`} className={s.paginationArrow} />)
+          : <DisabledBack className={s.paginationArrow} />}
       </button>
     </div>
     )}

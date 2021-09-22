@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import cx from 'classnames';
 import { usePagination, useSortBy, useTable } from 'react-table';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
@@ -27,6 +28,7 @@ type TablePropsT = {
   manualPagination?: boolean
   setOffset?: (arg: number) => void
   pageCount?: number
+  disabled?: boolean
 };
 
 const modeClass = {
@@ -62,7 +64,9 @@ export const Table: React.FC<TablePropsT> = ({
   setOffset,
   pageCount = 0,
   className,
+  disabled = false,
 }) => {
+  const { t } = useTranslation(['common']);
   const {
     getTableProps,
     getTableBodyProps,
@@ -114,12 +118,10 @@ export const Table: React.FC<TablePropsT> = ({
     className,
   );
 
-  console.log(pageCount, pageSize, pageIndex);
-
   const isShowPagination = true;
 
   return (
-    <>
+    <div className={s.table}>
       <div className={compoundClassName}>
         <div className={s.wrapper}>
           <div className={s.innerWrapper}>
@@ -233,6 +235,12 @@ export const Table: React.FC<TablePropsT> = ({
           canNextPage={canNextPage}
         />
       </div>
-    </>
+      {disabled && (
+      <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+        <div className={s.disabledBg} />
+        <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+      </div>
+      )}
+    </div>
   );
 };

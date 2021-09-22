@@ -1,6 +1,9 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
-  
+
+.table
+  position: relative
+
 .card
   padding-top: 0px
   position: relative
@@ -85,6 +88,10 @@
   display: flex
 
 .light
+  .disabledBg
+    background: $skeleton-light
+  .page
+    color: $text-01
   .cell
     color: $text-03
   .table, .footer
@@ -103,6 +110,10 @@
 //     color: $text-01
 
 .dark
+  .disabledBg
+    background: $skeleton-dark
+  .page
+    color: $text-inverse
   .cell
     color: $text-02
   .table, .footer
@@ -325,11 +336,9 @@
   &:hover
     .paginationArrow
       fill: $ui-01
-  &:active, &:focus
 
   &
     fill: $hover-primary-02
-  &:disabled
 
   &
     fill: $ui-03
@@ -337,11 +346,11 @@
 
 .arrowLeft
   .paginationArrow
-    transform: rotate(90deg)
+    transform: rotate(0deg)
 
 .arrowRight
   .paginationArrow
-    transform: rotate(270deg)
+    transform: rotate(180deg)
 
 .mobileFooter
   display: none
