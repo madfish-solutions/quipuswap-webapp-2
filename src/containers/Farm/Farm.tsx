@@ -1,5 +1,5 @@
 import React, {
-  useState, useContext, useMemo, useCallback,
+  useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
 import cx from 'classnames';
 
@@ -159,6 +159,18 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const tezos = useTezos();
+  const network = useNetwork();
+
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      if (!network) return;
+      const contract = await getStorageInfo(tezos, FARM_CONTRACT);
+      console.log(await contract.storage.farms.get('0'));
+    };
+    loadDex();
+  }, [tezos, network]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
