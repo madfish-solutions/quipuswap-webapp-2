@@ -131,3 +131,34 @@ export type WhitelistedFarm = {
   projectLink: string
   analyticsLink: string
 };
+
+export type PoolTableType = {
+  id: number,
+  xtzUsdQuote: string,
+  pair: {
+    name: string,
+    token1: {
+      icon: string,
+      symbol: string,
+    },
+    token2: {
+      icon: string,
+      symbol: string,
+    },
+  },
+  data: {
+    tvl: number,
+    volume24h: number,
+  },
+  buttons: {
+    first: {
+      label: string,
+      href: string,
+      external: boolean,
+    },
+    second: {
+      label: string,
+      href: string,
+    },
+  },
+};

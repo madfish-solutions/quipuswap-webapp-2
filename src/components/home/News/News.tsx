@@ -34,11 +34,51 @@ export const News: React.FC<NewsProps> = ({
       description={t('home:Never miss important updates. Check what has happened in the QuickSwap ecosystem recently..')}
       className={cx(className)}
     >
-      <SliderUI items={4}>
+      <SliderUI
+        unCenter
+        items={4}
+        responsive={[
+          {
+            breakpoint: 1224,
+            settings: {
+              slidesToShow: 4,
+              slidesToScroll: 4,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 900,
+            settings: {
+              slidesToShow: 3,
+              slidesToScroll: 3,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 700,
+            settings: {
+              slidesToShow: 2,
+              slidesToScroll: 2,
+              infinite: true,
+              dots: true,
+            },
+          },
+          {
+            breakpoint: 500,
+            settings: {
+              slidesToShow: 1,
+              slidesToScroll: 1,
+              infinite: true,
+              dots: true,
+            },
+          },
+        ]}
+      >
         {NewsData.map(({ id, sponsored }) => (
           <Card key={id} className={s.root} contentClassName={s.content}>
             <NewsCard
-              id={id}
               className={cx(s.card, modeClass[colorThemeMode])}
               sponsored={sponsored}
             />

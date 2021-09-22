@@ -9,6 +9,7 @@ import BigNumber from 'bignumber.js';
 import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
+  // Dex,
   estimateSharesInTez,
   estimateSharesInToken,
   estimateTezInShares,
@@ -36,7 +37,7 @@ import {
 } from '@utils/types';
 
 import {
-  composeValidators, validateBalance, validateMinMax,
+  composeValidators, validateBalance, validateMinMax, validateMinMaxNonStrict,
 } from '@utils/validators';
 import {
   fromDecimals,
@@ -255,7 +256,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             dex,
             { tezValue },
           );
+          // const tokenValue = estimateTokenInTez(dex.storage, tezValue);
+          // const addParams = await Dex.investLiquidity(dex.contract, tokenValue, tezValue);
+          // setAddLiquidityParams([addParams]);
           setAddLiquidityParams(addParams);
+          console.log(addParams);
         }
 
         const rate = toDecimals(dex.storage.storage.token_pool, TEZOS_TOKEN.metadata.decimals)
@@ -307,59 +312,69 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       } else {
         if (!dex || !accountPkh || !tezos) return;
         if ((val.balance1 && val.balance1.toString() === '.') || (val.balance2 && val.balance2.toString() === '.')) return;
-        const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
-        const bal2 = toDecimals(
-          new BigNumber(values.balance2 ? values.balance2 : 0),
-          token2.metadata.decimals,
-        );
-        const exA = new BigNumber(1);
-        const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
-        const initialBto$ = estimateTezInToken(dex.storage,
-          toDecimals(bal2, token2.metadata.decimals));
-        const total$ = initialAto$
-          .plus(initialBto$)
-          .div(2)
-          .integerValue(BigNumber.ROUND_DOWN);
-        let inputValue:BigNumber;
-        const val1 = initialAto$.minus(total$);
-        const val2 = initialBto$.minus(estimateTokenInTez(dex.storage, total$));
-
-        const whichTokenPoolIsGreater = val1
-          .gt(val2);
-        if (whichTokenPoolIsGreater) {
-          inputValue = getValueForSDK(
-            tokensData.first,
-            val1.div(exA),
-            tezos,
-          );
-        } else {
-          inputValue = getValueForSDK(
-            tokensData.second,
-            estimateTezInToken(dex.storage, val2),
-            tezos,
-          );
-        }
-        const fromAsset = 'tez';
-        const toAsset = {
-          contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ?? undefined,
-        };
-        const slippage = slippageToBignum(values.slippage).div(100);
         try {
+          const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
+          const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
+          const exA = new BigNumber(1);
+          const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
+          const initialBto$ = estimateTezInToken(dex.storage,
+            toDecimals(bal2, token2.metadata.decimals));
+          const total$ = initialAto$
+            .plus(initialBto$)
+            .div(2)
+            .integerValue(BigNumber.ROUND_DOWN);
+          let inputValue:BigNumber;
+          const val1 = initialAto$.minus(total$);
+          const val2 = toDecimals(bal2, token2.metadata.decimals)
+            .minus(estimateTokenInTez(dex.storage, total$));
+
+          const whichTokenPoolIsGreater = val1
+            .gt(val2);
+          if (whichTokenPoolIsGreater) {
+            inputValue = val1.div(exA);
+          } else {
+            inputValue = getValueForSDK(
+              tokensData.second,
+              fromDecimals(val2, token2.metadata.decimals),
+              tezos,
+            );
+          }
+          const fromAsset = 'tez';
+          const toAsset = {
+            contract: tokensData.second.token.address,
+            id: tokensData.second.token.id ?? undefined,
+          };
+          const slippage = slippageToBignum(values.slippage).div(100);
           const swapParams = await swap(
             tezos,
             FACTORIES[networkId],
-            fromAsset,
-            toAsset,
+            !whichTokenPoolIsGreater ? toAsset : fromAsset,
+            whichTokenPoolIsGreater ? toAsset : fromAsset,
             inputValue,
             slippage,
           );
-          const tezValue = toDecimals(total$, 6);
+          // console.log(swapParams);
+          // const tezValue = toDecimals(total$, 6);
+          const tezValue = total$;
+          // console.log(fromDecimals(total$, 6)
+          //   .toString(),
+          // fromDecimals(estimateTokenInTez(dex.storage, total$), token2.metadata.decimals)
+          //   .toString(),
+          // fromDecimals(inputValue, token2.metadata.decimals).toString());
           const addParams = await addLiquidity(
             tezos,
             dex,
-            { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
+            // { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
+            { tezValue },
+            // {
+            //   tezValue: new BigNumber(
+            //     swapParams[1].parameter!.value!.args[0]?.args[!whichTokenPoolIsGreater
+            // ? 1
+            // : 0].int,
+            //   ),
+            // },
           );
+          // const params = [...swapParams, ...addParams];
           const params = [...swapParams, ...addParams];
           setAddLiquidityParams(params);
         } catch (e) {
@@ -685,7 +700,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance1"
           validate={composeValidators(
-            validateMinMax(0, Infinity),
+            !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
             accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
           )}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
@@ -752,7 +767,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance2"
           validate={composeValidators(
-            validateMinMax(0, Infinity),
+            !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
             accountPkh
               ? validateBalance(new BigNumber(tokensData.second.balance))
               : () => undefined,

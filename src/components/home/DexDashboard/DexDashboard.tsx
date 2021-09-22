@@ -6,6 +6,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
 import { Card } from '@components/ui/Card';
 
+import { SliderUI } from '@components/ui/Slider';
 import { DashboardCard } from './DashboardCard';
 import { DEXDashboardData } from './content';
 
@@ -33,7 +34,29 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       description={t('home:The short overview of the most relevant DEX information.')}
       className={cx(className)}
     >
-      <Card contentClassName={s.content}>
+      <Card
+        className={(s.mobile)}
+        contentClassName={s.mobContent}
+      >
+        <SliderUI className={s.mobSlider}>
+          {
+          DEXDashboardData.map(({
+            id, volume, label, currency, tooltip,
+          }, idx) => (
+            <DashboardCard
+              key={id}
+              className={cx(s.card, modeClass[colorThemeMode])}
+              size={idx < 4 ? 'extraLarge' : 'large'}
+              volume={volume}
+              tooltip={tooltip}
+              label={label}
+              currency={currency}
+            />
+          ))
+        }
+        </SliderUI>
+      </Card>
+      <Card className={s.desktop} contentClassName={s.content}>
         {
           DEXDashboardData.map(({
             id, volume, label, currency, tooltip,

@@ -1,4 +1,5 @@
 import { QSNetwork, WhitelistedToken } from '@utils/types';
+import BigNumber from 'bignumber.js';
 
 type WhitelistedOrCustomToken = WhitelistedToken & { network: string };
 
@@ -14,7 +15,7 @@ network:QSNetwork, oldInput:string, oldInputToken:number) => {
   const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
   let res = false;
   if (fa2TokenId) {
-    let isFa2 = fa2TokenId === oldInputToken;
+    let isFa2 = new BigNumber(fa2TokenId).eq(new BigNumber(oldInputToken));
     if (!oldInputToken) isFa2 = true;
     res = ((isName
           || isSymbol

@@ -1,5 +1,5 @@
 overwrite: true
-schema: "https://api.quipuswap.com/"
+schema: "https://granada-api.quipuswap.com/"
 documents: "src/**/*.graphql"
 generates:
   src/graphql.ts:

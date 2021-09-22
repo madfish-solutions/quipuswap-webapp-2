@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { WhitelistedFarm } from '@utils/types';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -25,6 +26,7 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
   farm,
   isSponsored,
 }) => {
+  const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
@@ -42,14 +44,14 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
         {isSponsored && (<Bage text="Sponsored" />)}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>Volume 24h</div>
+        <div className={s.cardCellText}>{t('home:Total Staked')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
           <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>TVL</div>
+        <div className={s.cardCellText}>{t('home:APR')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
           <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
