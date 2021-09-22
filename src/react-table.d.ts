@@ -48,6 +48,8 @@ import {
   UseSortByState,
 } from 'react-table';
 
+export { useTable, usePagination, useSortBy } from 'react-table';
+
 declare module 'react-table' {
   // take this file as-is, or comment out the sections that don't apply to your plugin configuration
 
