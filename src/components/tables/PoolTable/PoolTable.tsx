@@ -13,6 +13,7 @@ import { Button } from '@components/ui/Button';
 import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
 import s from './PoolTable.module.sass';
+import { PoolCardItem } from './PoolCardItem';
 
 type PoolTableProps = {
   data?: PoolTableType
@@ -24,6 +25,13 @@ type PoolTableProps = {
 };
 
 const pageSize = MAX_ITEMS_PER_PAGE;
+
+const poolMobileItem = (pool:PoolTableType) => (
+  <PoolCardItem
+    key={pool.pair.name}
+    pool={pool}
+  />
+);
 
 export const PoolTable: React.FC<PoolTableProps> = ({
   data,
@@ -136,6 +144,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       theme="pools"
       className={className}
       tableClassName={s.table}
+      renderMobile={poolMobileItem}
       data={data ?? []}
       loading={loading}
       columns={columns}

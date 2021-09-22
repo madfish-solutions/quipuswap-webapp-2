@@ -5,8 +5,8 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { prepareTokenLogo } from '@utils/helpers';
 import { Bage } from '@components/ui/Bage';
-
 import { FallbackLogo } from '@components/svg/FallbackLogo';
+
 import s from './NewsCard.module.sass';
 
 type NewsCardProps = {

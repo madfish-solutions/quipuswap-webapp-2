@@ -24,6 +24,10 @@
 .wrapper
   width: max-content
 
+.cardCellText
+  display: flex
+  align-items: center
+
 .card
   padding: 16px 24px
 
@@ -165,6 +169,8 @@
   font-weight: 600
 
 .light
+  &.card
+    border-bottom: 1px solid $ui-03
   .time, .links
     color: $text-01
   .container::-webkit-scrollbar-thumb
@@ -178,6 +184,8 @@
     line-height: 1.71
     color: $text-02
 .dark
+  &.card
+    border-bottom: 1px solid $text-01
   .time, .links
     color: $text-inverse
   .container::-webkit-scrollbar-thumb

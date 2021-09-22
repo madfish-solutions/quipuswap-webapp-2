@@ -8,11 +8,13 @@ query GetTokensPairs($limit: Int, $offset: Int) {
       node {
         id
         token1 {
+          tokenId
           id
           symbol
           icon
         }
         token2 {
+          tokenId
           id
           symbol
           icon

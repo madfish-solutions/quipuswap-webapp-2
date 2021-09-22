@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { PoolTableType, WhitelistedToken } from '@utils/types';
+import { PoolTableType } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -30,33 +30,13 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
 }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const token1: WhitelistedToken = {
-    contractAddress: '',
-    type: 'fa1.2',
-    metadata: {
-      decimals: 6,
-      thumbnailUri: pool.pair.token1.icon,
-      name: pool.pair.token1.symbol ?? '',
-      symbol: pool.pair.token1.symbol ?? '',
-    },
-  };
-  const token2: WhitelistedToken = {
-    contractAddress: '',
-    type: 'fa1.2',
-    metadata: {
-      decimals: 6,
-      thumbnailUri: pool.pair.token2.icon,
-      name: pool.pair.token2.symbol ?? '',
-      symbol: pool.pair.token2.symbol ?? '',
-    },
-  };
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
         <div className={s.links}>
           <TokensLogos
-            token1={token1}
-            token2={token2}
+            token1={pool.token1}
+            token2={pool.token2}
             className={s.tokenLogo}
           />
           {pool.pair.name}

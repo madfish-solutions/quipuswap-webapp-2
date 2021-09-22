@@ -7,10 +7,9 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
 import { TFooter } from '@components/ui/TFooter';
 import { Button } from '@components/ui/Button';
-import { Skeleton } from '@components/ui/Skeleton';
+import { Preloader } from '@components/common/Preloader';
 
 import s from './Table.module.sass';
-import { Loader } from './Loader';
 
 type TablePropsT = {
   theme?: keyof typeof themeClass
@@ -29,6 +28,7 @@ type TablePropsT = {
   setOffset?: (arg: number) => void
   pageCount?: number
   disabled?: boolean
+  renderMobile?: any
 };
 
 const modeClass = {
@@ -37,34 +37,24 @@ const modeClass = {
 };
 
 const themeClass = {
-  primary: s.primary,
-  secondary: s.secondary,
   pools: s.pools,
   farms: s.farms,
-  topPairs: s.topPairs,
-  pairsAndBakers: s.pairsAndBakers,
-  informationOfAChosenPair: s.informationOfAChosenPair,
-  accounts: s.accounts,
-  bakingRewards: s.bakingRewards,
-  rewardsHistory: s.rewardsHistory,
-  topLiquidityPositions: s.topLiquidityPositions,
-  pairs: s.pairs,
 };
 
 export const Table: React.FC<TablePropsT> = ({
-  theme = 'primary',
+  theme = 'pools',
   columns,
   data,
   fieldsToSorting,
   loading,
   tableClassName,
   pageSize = 10,
-  // nameOfTable,
   manualPagination = true,
   setOffset,
   pageCount = 0,
   className,
   disabled = false,
+  renderMobile,
 }) => {
   const { t } = useTranslation(['common']);
   const {
@@ -107,10 +97,6 @@ export const Table: React.FC<TablePropsT> = ({
 
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  if (loading) {
-    return <Loader />;
-  }
-
   const compoundClassName = cx(
     s.root,
     modeClass[colorThemeMode],
@@ -121,9 +107,9 @@ export const Table: React.FC<TablePropsT> = ({
   const isShowPagination = true;
 
   return (
-    <div className={s.table}>
+    <>
       <div className={compoundClassName}>
-        <div className={s.wrapper}>
+        <div className={cx(s.wrapper, s.notMobile)}>
           <div className={s.innerWrapper}>
             <table {...getTableProps()} className={cx(s.table, tableClassName)}>
               <thead>
@@ -171,7 +157,7 @@ export const Table: React.FC<TablePropsT> = ({
               </thead>
               {data.length === 0 || loading ? (
                 <div className={s.preloaderWrapper}>
-                  <Skeleton className={s.preloader} />
+                  <Preloader className={s.preloader} />
                 </div>
               ) : (
                 <tbody {...getTableBodyProps()}>
@@ -218,29 +204,45 @@ export const Table: React.FC<TablePropsT> = ({
             </div>
           </div>
         </div>
+        <div className={cx(s.mobile, modeClass[colorThemeMode], s.table)}>
+          {data.length === 0 || loading ? (
+            <div className={s.preloaderWrapper}>
+              <Preloader className={s.preloader} />
+            </div>
+          ) : (
+
+            page.map((row:any) => {
+              prepareRow(row);
+              return renderMobile && renderMobile(row.original);
+            })
+          )}
+        </div>
+        {disabled && (
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+        </div>
+        )}
       </div>
-      <div className={cx(
-        s.footer,
-        s.mobileFooter,
-        { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+      {!disabled && (
+        <div className={cx(
+          s.footer,
+          s.mobileFooter,
+          modeClass[colorThemeMode],
+          { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+        )}
+        >
+          <TFooter
+            isShowPagination={isShowPagination}
+            previousPage={previousPage}
+            canPreviousPage={canPreviousPage}
+            pageIndex={pageIndex}
+            pageOptions={pageOptions}
+            nextPage={nextPage}
+            canNextPage={canNextPage}
+          />
+        </div>
       )}
-      >
-        <TFooter
-          isShowPagination={isShowPagination}
-          previousPage={previousPage}
-          canPreviousPage={canPreviousPage}
-          pageIndex={pageIndex}
-          pageOptions={pageOptions}
-          nextPage={nextPage}
-          canNextPage={canNextPage}
-        />
-      </div>
-      {disabled && (
-      <div className={cx(s.disabled, modeClass[colorThemeMode])}>
-        <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
-      </div>
-      )}
-    </div>
+    </>
   );
 };

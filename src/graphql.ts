@@ -474,10 +474,10 @@ export type GetTokensPairsQuery = (
         & Pick<Pair, 'id' | 'volume24h' | 'liquidity'>
         & { token1: (
           { __typename?: 'Token' }
-          & Pick<Token, 'id' | 'symbol' | 'icon'>
+          & Pick<Token, 'tokenId' | 'id' | 'symbol' | 'icon'>
         ), token2: (
           { __typename?: 'Token' }
-          & Pick<Token, 'id' | 'symbol' | 'icon'>
+          & Pick<Token, 'tokenId' | 'id' | 'symbol' | 'icon'>
         ) }
       )> }
     )>> }
@@ -541,7 +541,7 @@ GetPairPlotLiquidityQuery,
 GetPairPlotLiquidityQueryVariables
 >;
 export const GetTokensPairsDocument = gql`
-query GetTokensPairs($limit: Int, $offset: Int) {
+    query GetTokensPairs($limit: Int, $offset: Int) {
   overview {
     xtzUsdQuote
   }
@@ -551,11 +551,13 @@ query GetTokensPairs($limit: Int, $offset: Int) {
       node {
         id
         token1 {
+          tokenId
           id
           symbol
           icon
         }
         token2 {
+          tokenId
           id
           symbol
           icon

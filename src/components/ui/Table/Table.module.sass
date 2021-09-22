@@ -22,64 +22,6 @@
   align-items: center
   justify-content: center
 
-// .root
-//   margin-left: -24px
-//   margin-right: -24px
-//   overflow: hidden
-//   overflow-x: auto
-//   padding-bottom: 20px
-//   margin-bottom: -20px
-//   -ms-overflow-style: none
-//   scrollbar-width: none
-//   &::-webkit-scrollbar
-//     display: none
-
-// .wrapper
-//   width: 100%
-//   min-width: max-content
-
-// .innerWrapper
-//   margin-left: 24px
-//   margin-right: 24px
-
-// .table
-//   width: 100%
-//   min-width: max-content
-//   border-collapse: collapse
-//   font-size: 1rem
-//   line-height: 1
-//   box-shadow: $elevation-02
-//   border-radius: 8px
-//   overflow: hidden
-//   transition: background-color $colorChangeAnimationTime
-
-// .isLinked
-//   cursor: pointer
-//   transition: background-color $animationTime
-
-// .td, .th
-//   &:first-child
-//     padding-left: 16px
-//   &:last-child
-//     padding-right: 16px
-
-// .td
-//   padding: 20px 8px
-//   transition: color $colorChangeAnimationTime
-
-// .th
-//   padding: 16px 8px 12px
-//   font-size: 0.857rem
-//   font-weight: 700
-//   color: $text-03
-
-// .tbodyLoading
-//   height: 65px * 5 - .5px
-//   position: relative
-
-// .trContent, .tbodyLoading
-//   transition: border-color $colorChangeAnimationTime
-
 .cell
   font-size: 1.143rem
   line-height: 1.5
@@ -87,64 +29,8 @@
   align-items: center
   display: flex
 
-.light
-  .disabledBg
-    background: $skeleton-light
-  .page
-    color: $text-01
-  .cell
-    color: $text-03
-  .table, .footer
-    background-color: $ui-01
-  .table
-    tr
-      td
-        border-top: 1px solid $ui-03
-        color: $text-01
-//   .trContent, .tbodyLoading
-//     border-top: 0.5px solid $ui-03
-//   .isLinked
-//     &:hover, &:focus
-//       background-color: $hover-light-row
-//   .td
-//     color: $text-01
-
-.dark
-  .disabledBg
-    background: $skeleton-dark
-  .page
-    color: $text-inverse
-  .cell
-    color: $text-02
-  .table, .footer
-    background-color: $ui-07
-  .table
-    tr
-      td
-        border-top: 1px solid $text-01
-        color: $text-inverse
-//   .trContent, .tbodyLoading
-//     border-top: 0.5px solid $ui-06
-//   .isLinked
-//     &:hover
-//       background-color: $hover-dark-row
-//   .td
-//     color: $text-inverse
-
-// @include media('>Lphone')
-//   .td, .th
-//     &:first-child
-//       padding-left: 24px
-//     &:last-child
-//       padding-right: 24px
-
-// imported from analytics
-
-// @import 'app/static/styles/variables'
-
 .root
-  margin-left: -24px
-  margin-right: -24px
+  position: relative
   overflow: hidden
   overflow-x: auto
   -ms-overflow-style: none
@@ -153,53 +39,15 @@
   &::-webkit-scrollbar
     display: none
 
-.innerWrapper
-  margin-left: 24px
-  margin-right: 24px
-
 .wrapper
   width: max-content
 
-.primary
-  .row
-    grid-template-columns: repeat(4, 1fr)
-.secondary
-  .row
-    grid-template-columns: .25fr 1.1fr repeat(5, 1fr) .6fr .19fr
 .pools
   .row
     grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
 .farms
   .row
     grid-template-columns: 1.5fr 1fr 1fr 1.5fr
-.historyOfVote
-  .row
-    grid-template-columns: 1.75fr repeat(5, 1fr)
-.topPairs
-  .row
-    grid-template-columns: .38fr repeat(5, 1fr) .85fr .35fr
-.pairsAndBakers
-  .row
-    grid-template-columns: 2.25fr repeat(4, 1fr) .35fr
-.informationOfAChosenPair
-  .row
-    grid-template-columns: repeat(7, 1fr)
-.accounts
-  .row
-    grid-template-columns: repeat(2, 1fr)
-  table
-    width: 100%
-.bakingRewards
-  .row
-    grid-template-columns: repeat(3, 1fr)
-  table
-    width: 100%
-.rewardsHistory
-  .row
-    grid-template-columns: repeat(5, 1fr)
-.topLiquidityPositions
-  .row
-    grid-template-columns: .5fr 2fr repeat(3, 1fr)
 
 .root
   table
@@ -217,7 +65,6 @@
         th
           display: grid
           padding: 16px 24px 12px 24px
-          // background-color: green
           &:first-child
             border-top-left-radius: 4px
           &:last-child
@@ -229,31 +76,20 @@
           padding: 16px 24px
 
 .preloaderWrapper
-  background-color: cyan
+  min-height: 915px
+  display: flex
+  justify-content: center
+  flex-direction: column
 
 .footer
   display: flex
   justify-content: center
   padding: 0px
-  // background-color: magenta
   border-bottom-left-radius: 4px
   border-bottom-right-radius: 4px
   &.smallFooter
     min-height: initial
     height: 16px
-
-.voteCell
-  overflow: hidden
-  justify-content: space-between
-  margin: 0 30px
-
-.bookmark
-  cursor: pointer
-
-.link
-  & > a
-    color: yellow
-    font-weight: 700
 
 .blue
   color: orange
@@ -265,37 +101,6 @@
 
 .sortingButton
   width: 100%
-
-.pairsBaker
-  display: flex
-  justify-content: space-between
-  width: 100%
-  padding: 8px 16px
-  border: 1px solid yellow
-  border-radius: 4px
-  transition: border-color $animationTime
-  &:hover
-    border-color: blue
-
-.pairsWrapper
-  display: flex
-  align-items: center
-
-.tokenLogoOffset
-  margin-right: 8px
-
-.plus
-  margin: 0 16px
-
-.close
-  margin-left: 24px
-
-.yellow
-  > path
-    fill: yellow
-
-.tezos
-  margin-right: 5px
 
 .alignLeft
   justify-content: flex-start
@@ -313,7 +118,6 @@
 .version
   margin-left: 16px
 
-// PAGINATION
 .pagination
   display: flex
   justify-content: center
@@ -355,6 +159,43 @@
 .mobileFooter
   display: none
 
+.mobile
+  display: block
+
+.notMobile
+  display: none
+
+.light
+  .disabledBg
+    background: $skeleton-light
+  .page
+    color: $text-01
+  .cell
+    color: $text-03
+  .table, .footer
+    background-color: $ui-01
+  .table
+    tr
+      td
+        border-top: 1px solid $ui-03
+        color: $text-01
+
+.dark
+  .disabledBg
+    background: $skeleton-dark
+  .page
+    color: $text-inverse
+  .cell
+    color: $text-02
+  .table, .footer
+    background-color: $ui-07
+  .table
+    tr
+      td
+        border-top: 1px solid $text-01
+        color: $text-inverse
+        
+
 @media all and (max-width: 1440px)
   .root
     table
@@ -375,12 +216,6 @@
     border-bottom-right-radius: 4px
 
 @media all and (max-width: 1238px)
-  .root
-    margin-left: -24px
-    margin-right: -24px
-  .innerWrapper
-    margin-left: 24px
-    margin-right: 24px
   .preloader
     max-width: calc(100vw - 24px)
 
@@ -389,17 +224,15 @@
     table
       width: 800px
 
-@media all and (max-width: 720px)
-  .accounts
-    table
-      width: 600px
-
 @media all and (max-width: 560px)
-  .root
-    margin-left: -16px
-    margin-right: -16px
-  .innerWrapper
-    margin-left: 16px
-    margin-right: 16px
   .preloader
     max-width: calc(100vw - 16px)
+
+
+@include media('>tablet')
+  .preloaderWrapper
+    min-height: 417px
+  .mobile
+    display: none
+  .notMobile
+    display: block

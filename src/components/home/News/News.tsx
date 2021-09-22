@@ -35,8 +35,8 @@ export const News: React.FC<NewsProps> = ({
       className={cx(className)}
     >
       <SliderUI
-        unCenter
         items={4}
+        className={s.uncenter}
         responsive={[
           {
             breakpoint: 1224,
