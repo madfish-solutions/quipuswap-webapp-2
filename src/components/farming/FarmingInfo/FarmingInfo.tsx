@@ -139,7 +139,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <span className={s.header}>
                   Your Delegate
                 </span>
-                <Button theme="quaternary" className={s.amount}>Everstake</Button>
+                <Button theme="inverse" className={s.amount}>Everstake</Button>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
