@@ -8,11 +8,14 @@ import React, {
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 
-import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { Card } from '@components/ui/Card';
+import { prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { PairChartInfo } from '@components/common/PairChartInfo';
 
+import { Preloader } from '@components/common/Preloader';
 import {
   GraphicColors,
   GraphicHeight,
@@ -23,6 +26,9 @@ import s from './LineChart.module.sass';
 
 type LineChartProps = {
   data: any[]
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
+  loading?: boolean
   className?: string
 };
 
@@ -34,6 +40,9 @@ const modeClass = {
 export const LineChart: React.FC<LineChartProps> = ({
   data,
   className,
+  loading = false,
+  token1,
+  token2,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -160,27 +169,35 @@ export const LineChart: React.FC<LineChartProps> = ({
   ]);
 
   return (
-    <Card
-      header={{ content: 'Graphic' }}
-      className={className}
-      contentClassName={s.container}
-    >
-      <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <span className={s.header}>
-          Total Liquidity:
-        </span>
-        <span className={s.date}>
-          {new Date(value.time * 1000).toISOString()}
-        </span>
-        <p className={s.value}>
-          <span className={s.dollar}>
-            $
+    <Card className={className}>
+      <CardHeader
+        header={{
+          content: (
+            <PairChartInfo hidePeriods token1={token1} token2={token2} />
+          ),
+        }}
+        className={s.cardHeader}
+      />
+      <CardContent className={cx(s.container, s.cardContent)}>
+        <div className={cx(s.info, modeClass[colorThemeMode])}>
+          <h4>
+            Total Liquidity:
+          </h4>
+          <span className={s.date}>
+            {new Date(value.time * 1000).toISOString()}
           </span>
-          {' '}
-          {prettyPrice(value.price, 2, 22)}
-        </p>
-      </div>
-      <div ref={chartRef} className={s.chart} />
+          <h4 className={s.value}>
+            <span className={s.dollar}>
+              $
+            </span>
+            {' '}
+            {prettyPrice(value.price, 2, 22)}
+          </h4>
+        </div>
+        {loading || !data || data.length === 0
+          ? (<Preloader style={{ minHeight: '315px' }} />)
+          : (<div ref={chartRef} className={s.chart} />)}
+      </CardContent>
     </Card>
   );
 };

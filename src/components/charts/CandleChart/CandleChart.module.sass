@@ -1,5 +1,23 @@
-@import '@styles/variables'
-@import '@styles/breakpoints'
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.h1
+  z-index: 5
+
+.disabled, .disabledBg
+  position: absolute
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  z-index: 5
+  opacity: 1
+  display: flex
+  align-items: center
+  justify-content: center
+
+.disabledBg
+  opacity: 0.9
 
 .container
   padding-top: 0
@@ -17,9 +35,6 @@
   align-items: flex-start
 
 .prices
-  font-weight: 600
-  font-size: 1.286rem
-  line-height: 1.33
   display: flex
 
 .dollarPrice
@@ -50,7 +65,12 @@
   margin-right: 16px
   margin-left: 24px
 
+.cardHeader
+  padding-top: 0
+
 .light
+  .disabledBg
+    background: $skeleton-light
   .tokenPrice
     color: $text-01
   &.info
@@ -62,6 +82,8 @@
     color: $text-01
 
 .dark
+  .disabledBg
+    background: $skeleton-dark
   .tokenPrice
     color: $text-inverse
   &.info
@@ -73,8 +95,6 @@
     color: $text-inverse
 
 @include media('>phone')
-  .prices
-    font-size: 2rem
   .item
     font-size: 0.857rem
 
@@ -96,3 +116,4 @@
 @include media('>tablet')
   .info
     padding: 12px 24px
+

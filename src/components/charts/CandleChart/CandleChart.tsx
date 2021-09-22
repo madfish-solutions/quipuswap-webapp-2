@@ -12,8 +12,8 @@ import { useTranslation } from 'next-i18next';
 import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { Card } from '@components/ui/Card';
-
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
 import {
   CandleGraphOptions,
   GraphicColors,
@@ -25,6 +25,7 @@ import s from './CandleChart.module.sass';
 type LineChartProps = {
   data: any[]
   className?: string
+  disabled?: boolean
 };
 
 const modeClass = {
@@ -35,7 +36,9 @@ const modeClass = {
 export const CandleChart: React.FC<LineChartProps> = ({
   data,
   className,
+  disabled = true,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
 
@@ -195,63 +198,70 @@ export const CandleChart: React.FC<LineChartProps> = ({
 
   return (
     <Card
-      header={{ content: 'Graphic' }}
       className={className}
-      contentClassName={s.container}
     >
-      <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <span className={s.prices}>
-          <span className={s.tokenPrice}>
-            {prettyPrice(value.close, 2, 10)}
-            {' '}
-            TOKEN
+      <CardHeader header={{ content: <PairChartInfo /> }} className={s.cardHeader} />
+      <CardContent className={cx(s.container, s.cardContent)}>
+        <div className={cx(s.info, modeClass[colorThemeMode])}>
+          <span className={s.prices}>
+            <h4 className={s.tokenPrice}>
+              {prettyPrice(value.close, 2, 10)}
+              {' '}
+              TOKEN
+            </h4>
+            <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
+              $
+              {' '}
+              {prettyPrice(value.close, 2, 10)}
+            </h4>
           </span>
-          <span className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
-            $
-            {' '}
-            {prettyPrice(value.close, 2, 10)}
-          </span>
-        </span>
-        <div className={s.details}>
-          <div className={s.column}>
-            <div className={s.item}>
-              <span className={s.label}>
-                Open
-              </span>
-              <span className={s.value}>
-                {value.open}
-              </span>
+          <div className={s.details}>
+            <div className={s.column}>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Open
+                </span>
+                <span className={s.value}>
+                  {value.open}
+                </span>
+              </div>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Close
+                </span>
+                <span className={s.value}>
+                  {value.close}
+                </span>
+              </div>
             </div>
-            <div className={s.item}>
-              <span className={s.label}>
-                Close
-              </span>
-              <span className={s.value}>
-                {value.close}
-              </span>
-            </div>
-          </div>
-          <div className={s.column}>
-            <div className={s.item}>
-              <span className={s.label}>
-                Max
-              </span>
-              <span className={s.value}>
-                {value.high}
-              </span>
-            </div>
-            <div className={s.item}>
-              <span className={s.label}>
-                Min
-              </span>
-              <span className={s.value}>
-                {value.low}
-              </span>
+            <div className={s.column}>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Max
+                </span>
+                <span className={s.value}>
+                  {value.high}
+                </span>
+              </div>
+              <div className={s.item}>
+                <span className={s.label}>
+                  Min
+                </span>
+                <span className={s.value}>
+                  {value.low}
+                </span>
+              </div>
             </div>
           </div>
         </div>
+        <div ref={chartRef} className={s.chart} />
+      </CardContent>
+      {disabled && (
+      <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+        <div className={s.disabledBg} />
+        <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
       </div>
-      <div ref={chartRef} className={s.chart} />
+      )}
     </Card>
   );
 };
