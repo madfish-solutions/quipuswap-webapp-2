@@ -17,6 +17,7 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { WhitelistedFarm } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
@@ -45,6 +46,7 @@ type FarmingInfoProps = {
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
+  amount?: string
 };
 
 const modeClass = {
@@ -74,6 +76,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
   handleUnselect,
+  amount = '1000000',
 }) => {
   const {
     remaining,
@@ -265,7 +268,25 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               $
               {' '}
               <span className={s.priceAmount}>
-                1000000
+                <CurrencyAmount amount={amount} />
+              </span>
+            </div>
+          </CardCell>
+          <CardCell
+            header={(
+              <>
+                {t('common:Daily Distribution')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common:TOOLTIP TODO')}
+                />
+              </>
+            )}
+            className={s.cell}
+          >
+            <div className={s.cellAmount}>
+              <span className={s.priceAmount}>
+                <CurrencyAmount amount={amount} />
               </span>
             </div>
           </CardCell>
