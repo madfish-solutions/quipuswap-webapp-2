@@ -156,7 +156,6 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
-  const [selectedToSort, setSelectedToSort] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
