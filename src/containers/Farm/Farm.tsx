@@ -1,22 +1,23 @@
-import React, { useState, useContext } from 'react';
+import React, {
+  useState, useContext, useMemo, useCallback,
+} from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
-import { Shevron } from '@components/svg/Shevron';
 import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
 import { ApyModal } from '@components/modals/ApyModal';
+import { SelectUI } from '@components/ui/Select';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -25,11 +26,30 @@ type FarmProps = {
 
 type ContentType = { name:string, value:string, currency?:string }[];
 
+const SortContent = [
+  {
+    id: 'asc:token',
+    label: 'Deposit token',
+  },
+  {
+    id: 'asc:tvl',
+    label: 'TVL',
+  },
+  {
+    id: 'asc:apy',
+    label: 'APY',
+  },
+  {
+    id: 'asc:deposit',
+    label: 'Deposit',
+  },
+];
+
 const content:ContentType = [
   {
     name: 'Total Value Locked',
     value: '888888888888888.00',
-    currency: 'QPSP',
+    currency: STABLE_TOKEN.metadata.symbol,
   },
   {
     name: 'Total Daily Reward',
@@ -42,7 +62,7 @@ const content:ContentType = [
   {
     name: 'Total Claimed Reward',
     value: '888888888888888.00',
-    currency: 'QPSP',
+    currency: STABLE_TOKEN.metadata.symbol,
   },
 ];
 
@@ -136,8 +156,27 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
+  const [selectedToSort, setSelectedToSort] = useState<WhitelistedFarm>();
+  const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const currentSort = useMemo(
+    () => (SortContent.find(({ id }) => id === sort)!),
+    [sort],
+  );
+  const selectValues = useMemo(
+    () => SortContent.map((el) => ({ value: el.id, label: el.label })),
+    [],
+  );
+  const handleChangeSort = useCallback(({ value, label }) => {
+    const selectedSort = SortContent.find((sorting) => (
+      sorting.id === value && sorting.label === label
+    ));
+    if (!selectedSort) return;
+    setSort(selectedSort.id);
+  }, []);
+
   if (selectedFarming) {
     // TODO
     return (
@@ -159,7 +198,7 @@ export const Farm: React.FC<FarmProps> = () => {
         ))}
       </Card>
       <Card
-        className={(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
+        className={cx(modeClass[colorThemeMode], s.farmingMobileCard, s.mobile)}
         contentClassName={s.farmingMobileStats}
       >
         <SliderUI
@@ -177,14 +216,18 @@ export const Farm: React.FC<FarmProps> = () => {
           {content.map((x) => (
             <div key={x.name} className={s.farmingMobileStatsBlock}>
               <div className={s.name}>{x.name}</div>
-              <CurrencyAmount amount={x.value} currency={x.currency} />
+              <CurrencyAmount
+                amount={x.value}
+                currency={x.currency}
+                labelSize="large"
+              />
             </div>
           ))}
         </SliderUI>
       </Card>
       <FarmingStats className={cx(s.farmingCard, s.farmingContent)} />
       <Card
-        className={cx(s.farmingCard, s.farmingControllerCard)}
+        className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
       >
         <Input
@@ -202,10 +245,16 @@ export const Farm: React.FC<FarmProps> = () => {
             Staked Only
           </div>
         </div>
-        <Button theme="quaternary" className={s.sortItem}>
-          Sorted By
-          <Shevron />
-        </Button>
+        <div className={s.sortItem}>
+          <SelectUI
+            className={s.select}
+            options={selectValues}
+            value={currentSort
+              ? { value: currentSort.id, label: currentSort.label }
+              : { value: 'Sorted By', label: 'Sorted By' }}
+            onChange={handleChangeSort}
+          />
+        </div>
       </Card>
       {farms.map((x) => (
         <FarmingCard
