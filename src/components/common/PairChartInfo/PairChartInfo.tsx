@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Button } from '@components/ui/Button';
 import { Tabs } from '@components/ui/Tabs';
@@ -29,16 +30,24 @@ const TimeFrameTabs = [
   },
 ];
 
-export const PairChartInfo = () => {
+type PairChartType = {
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
+};
+
+export const PairChartInfo: React.FC<PairChartType> = ({
+  token1 = TEZOS_TOKEN,
+  token2 = STABLE_TOKEN,
+}) => {
   const [timeFrame, setTimeFrame] = useState(TimeFrameTabs[0].id);
   const { t } = useTranslation(['common']);
   return (
     <div className={s.headerContent}>
       <div className={s.tokensInfo}>
-        <TokensLogos token1={STABLE_TOKEN} token2={STABLE_TOKEN} />
-        { getWhitelistedTokenSymbol(TEZOS_TOKEN) }
+        <TokensLogos token1={token1} token2={token2} />
+        { getWhitelistedTokenSymbol(token1) }
         /
-        { getWhitelistedTokenSymbol(STABLE_TOKEN) }
+        { getWhitelistedTokenSymbol(token2) }
         <Button theme="quaternary">
           <Refresh />
         </Button>

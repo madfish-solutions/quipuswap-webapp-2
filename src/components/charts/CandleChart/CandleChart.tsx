@@ -204,16 +204,16 @@ export const CandleChart: React.FC<LineChartProps> = ({
       <CardContent className={cx(s.container, s.cardContent)}>
         <div className={cx(s.info, modeClass[colorThemeMode])}>
           <span className={s.prices}>
-            <span className={s.tokenPrice}>
+            <h4 className={s.tokenPrice}>
               {prettyPrice(value.close, 2, 10)}
               {' '}
               TOKEN
-            </span>
-            <span className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
+            </h4>
+            <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
               $
               {' '}
               {prettyPrice(value.close, 2, 10)}
-            </span>
+            </h4>
           </span>
           <div className={s.details}>
             <div className={s.column}>

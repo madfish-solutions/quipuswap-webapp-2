@@ -13,7 +13,7 @@ export const Refresh: React.FC<IconProps> = ({
       <defs>
         <linearGradient id="Refresh-paint0_linear" x1="1" y1="4" x2="25.1894" y2="8.67724" gradientUnits="userSpaceOnUse">
           <stop stopColor={themeColors.fill1} />
-          <stop offset="1" stopColor={themeColors.fill1} />
+          <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
       </defs>
     </svg>
