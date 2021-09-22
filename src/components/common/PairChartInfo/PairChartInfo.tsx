@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { STABLE_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
-import { Refresh } from '@components/svg/Refresh';
 import { Tabs } from '@components/ui/Tabs';
+import { Refresh } from '@components/svg/Refresh';
 
 import s from './PairChartInfo.module.sass';
 
@@ -34,9 +36,9 @@ export const PairChartInfo = () => {
     <div className={s.headerContent}>
       <div className={s.tokensInfo}>
         <TokensLogos token1={STABLE_TOKEN} token2={STABLE_TOKEN} />
-        TOKEN
+        { getWhitelistedTokenSymbol(TEZOS_TOKEN) }
         /
-        TOKEN
+        { getWhitelistedTokenSymbol(STABLE_TOKEN) }
         <Button theme="quaternary">
           <Refresh />
         </Button>
