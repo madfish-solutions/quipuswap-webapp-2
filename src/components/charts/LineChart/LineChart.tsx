@@ -173,7 +173,7 @@ export const LineChart: React.FC<LineChartProps> = ({
       <CardHeader
         header={{
           content: (
-            <PairChartInfo token1={token1} token2={token2} />
+            <PairChartInfo hidePeriods token1={token1} token2={token2} />
           ),
         }}
         className={s.cardHeader}

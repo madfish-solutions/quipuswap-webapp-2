@@ -38,7 +38,7 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
-      data={loadingProp ? LineChartSampleData : data?.pair.plotLiquidity}
+      data={!loadingProp && data ? data.pair.plotLiquidity : LineChartSampleData}
     />
   );
 };

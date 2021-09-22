@@ -33,11 +33,13 @@ const TimeFrameTabs = [
 type PairChartType = {
   token1?: WhitelistedToken
   token2?: WhitelistedToken
+  hidePeriods?: boolean
 };
 
 export const PairChartInfo: React.FC<PairChartType> = ({
   token1 = TEZOS_TOKEN,
   token2 = STABLE_TOKEN,
+  hidePeriods = false,
 }) => {
   const [timeFrame, setTimeFrame] = useState(TimeFrameTabs[0].id);
   const { t } = useTranslation(['common']);
@@ -52,6 +54,7 @@ export const PairChartInfo: React.FC<PairChartType> = ({
           <Refresh />
         </Button>
       </div>
+      {!hidePeriods && (
       <div className={s.timeFrames}>
         <Tabs
           values={TimeFrameTabs.map((tab) => ({ ...tab, label: t(tab.label) }))}
@@ -60,6 +63,7 @@ export const PairChartInfo: React.FC<PairChartType> = ({
           withUnderline={false}
         />
       </div>
+      )}
     </div>
   );
 };
