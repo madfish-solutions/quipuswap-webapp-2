@@ -29,6 +29,7 @@ type LineChartProps = {
   token1?: WhitelistedToken
   token2?: WhitelistedToken
   loading?: boolean
+  headerContent?: React.ReactNode
   className?: string
 };
 

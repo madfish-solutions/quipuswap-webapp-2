@@ -5,8 +5,6 @@ import Slider, { ResponsiveObject } from 'react-slick';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Slider.module.sass';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

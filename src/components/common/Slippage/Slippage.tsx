@@ -3,11 +3,11 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { parseDecimals } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
 
-import { parseDecimals } from '@utils/helpers';
 import s from './Slippage.module.sass';
 
 const slippagePercents = ['0.5 %', '1 %', '3 %'];

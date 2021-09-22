@@ -45,6 +45,7 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
+import { Timeleft } from '@components/ui/Timeleft';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -165,6 +166,10 @@ const UiKit: React.FC = () => {
         <h1 className={s.header}>Tables</h1>
         <FarmTable loading={false} disabled data={farms as WhitelistedFarm[]} />
         <PoolTable loading={false} fetch={() => {}} />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Timeleft</h1>
+        <Timeleft remaining={new Date(Date.now() + 132056789)} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>
