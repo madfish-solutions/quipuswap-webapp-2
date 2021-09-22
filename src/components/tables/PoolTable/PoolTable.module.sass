@@ -1,8 +1,43 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
-  
+
 .skeleton
   height: 40px
+
+.table
+  min-width: 400px
+
+.tooltip
+  padding-right: 0px
+
+.td, .th
+  &:nth-child(2)
+    padding-right: 24px
+  &:first-child, &:nth-child(2)
+    text-align: left
+  &:last-child, &:nth-last-child(2)
+    text-align: right
+
+.th:last-child
+  display: flex
+  align-items: center
+  justify-content: flex-end
+
+.td
+  font-weight: 600
+  &:last-child
+    font-weight: 400
+
+.tr
+  position: sticky
+
+.link
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  opacity: 0
 
 .container
   margin-left: -24px
@@ -11,8 +46,8 @@
   overflow-x: auto
 
 .container::-webkit-scrollbar-track
-    border-radius: 1px
-    background-color: transparent
+  border-radius: 1px
+  background-color: transparent
 .container::-webkit-scrollbar
   width: 2px
   height: 0px
@@ -97,12 +132,13 @@
 
 .proposalBackIcon
   margin-right: 8px
-  
+
 .forward
   transform: rotate(180deg)
 
 .cardAmount
   margin-left: 4px
+  line-height: inherit
 
 .footer
   display: flex

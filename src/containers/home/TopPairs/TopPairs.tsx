@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react';
-import { useGetTokensPairsQuery } from '@graphql';
+import { useGetTokensPairsLazyQuery } from '@graphql';
 import { useTranslation } from 'next-i18next';
 
-import { TopAssets } from '@components/home/TopAssets';
+import { Token } from 'graphql';
+import { transformNodeToWhitelistedToken } from '@utils/helpers';
+import { Section } from '@components/home/Section';
+import { PoolTable } from '@components/tables/PoolTable';
 
 type TopPairsProps = {
   className?: string
@@ -12,9 +15,11 @@ export const TopPairs: React.FC<TopPairsProps> = ({
   className,
 }) => {
   const { t } = useTranslation(['home']);
-  const { loading, data, error } = useGetTokensPairsQuery();
+  const [fetchPairsData, { loading, data, error }] = useGetTokensPairsLazyQuery();
 
   const pairData = useMemo(() => data?.pairs?.edges.map((x) => ({
+    token1: transformNodeToWhitelistedToken((x && x.node && x.node.token1) as Token),
+    token2: transformNodeToWhitelistedToken((x && x.node && x.node.token2) as Token),
     xtzUsdQuote: data?.overview.xtzUsdQuote,
     pair: {
       name: `${x?.node?.token1.symbol} / ${x?.node?.token2.symbol}`,
@@ -41,17 +46,17 @@ export const TopPairs: React.FC<TopPairsProps> = ({
   const isNotLoaded = error || (!loading && !data) || data === undefined || !data.pairs;
 
   return (
-    <TopAssets
+    <Section
       header={t('home:Top Pairs')}
       description={t('home:The most popular Trading Pairs by trading volume')}
-      data={isNotLoaded ? [] : pairData}
-      button={{
-        href: 'https://analytics.quipuswap.com/pairs',
-        label: t('home:View All Pairs'),
-        external: true,
-      }}
-      loading={!!isNotLoaded}
       className={className}
-    />
+    >
+      <PoolTable
+        fetch={fetchPairsData}
+        loading={!!isNotLoaded}
+        totalCount={data?.pairs?.totalCount ?? 0}
+        data={isNotLoaded ? [] : pairData as any}
+      />
+    </Section>
   );
 };

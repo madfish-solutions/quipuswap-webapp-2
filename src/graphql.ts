@@ -454,7 +454,10 @@ export type GetPairPlotLiquidityQuery = (
   ) }
 );
 
-export type GetTokensPairsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetTokensPairsQueryVariables = Exact<{
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
 
 export type GetTokensPairsQuery = (
   { __typename?: 'Query' }
@@ -463,6 +466,7 @@ export type GetTokensPairsQuery = (
     & Pick<Overview, 'xtzUsdQuote'>
   ), pairs?: Maybe<(
     { __typename?: 'PairConnection' }
+    & Pick<PairConnection, 'totalCount'>
     & { edges: Array<Maybe<(
       { __typename?: 'PairEdge' }
       & { node?: Maybe<(
@@ -491,7 +495,6 @@ export const GetPairPlotLiquidityDocument = gql`
   }
 }
     `;
-
 /**
  * __useGetPairPlotLiquidityQuery__
  *
@@ -538,11 +541,12 @@ GetPairPlotLiquidityQuery,
 GetPairPlotLiquidityQueryVariables
 >;
 export const GetTokensPairsDocument = gql`
-    query GetTokensPairs {
+query GetTokensPairs($limit: Int, $offset: Int) {
   overview {
     xtzUsdQuote
   }
-  pairs {
+  pairs(limit: $limit, offset: $offset) {
+    totalCount
     edges {
       node {
         id

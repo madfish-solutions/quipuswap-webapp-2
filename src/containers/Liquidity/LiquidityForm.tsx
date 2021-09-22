@@ -256,11 +256,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             dex,
             { tezValue },
           );
-          // const tokenValue = estimateTokenInTez(dex.storage, tezValue);
-          // const addParams = await Dex.investLiquidity(dex.contract, tokenValue, tezValue);
-          // setAddLiquidityParams([addParams]);
           setAddLiquidityParams(addParams);
-          console.log(addParams);
         }
 
         const rate = toDecimals(dex.storage.storage.token_pool, TEZOS_TOKEN.metadata.decimals)
@@ -353,28 +349,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             inputValue,
             slippage,
           );
-          // console.log(swapParams);
           // const tezValue = toDecimals(total$, 6);
           const tezValue = total$;
-          // console.log(fromDecimals(total$, 6)
-          //   .toString(),
-          // fromDecimals(estimateTokenInTez(dex.storage, total$), token2.metadata.decimals)
-          //   .toString(),
-          // fromDecimals(inputValue, token2.metadata.decimals).toString());
           const addParams = await addLiquidity(
             tezos,
             dex,
-            // { tezValue: tezValue.minus(tezValue.multipliedBy(slippage)) },
             { tezValue },
-            // {
-            //   tezValue: new BigNumber(
-            //     swapParams[1].parameter!.value!.args[0]?.args[!whichTokenPoolIsGreater
-            // ? 1
-            // : 0].int,
-            //   ),
-            // },
           );
-          // const params = [...swapParams, ...addParams];
           const params = [...swapParams, ...addParams];
           setAddLiquidityParams(params);
         } catch (e) {

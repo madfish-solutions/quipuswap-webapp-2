@@ -51,7 +51,6 @@ export const handleSearchToken = async ({
     const strStr = Array.isArray(str) ? str[0] : str;
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
-    console.log(inputToken, inputValue);
     const isTokens = tokens
       .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
       .filter(
@@ -62,7 +61,6 @@ export const handleSearchToken = async ({
           +inputToken,
         ),
       );
-    console.log(isTokens);
     if (isTokens.length === 0) {
       return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
         if (x) {

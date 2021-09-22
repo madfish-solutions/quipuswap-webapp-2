@@ -2,10 +2,7 @@ query GetTokensPairs($limit: Int, $offset: Int) {
   overview {
     xtzUsdQuote
   }
-  pairs(
-    limit: $limit
-    offset: $offset
-  ) {
+  pairs(limit: $limit, offset: $offset) {
     totalCount
     edges {
       node {

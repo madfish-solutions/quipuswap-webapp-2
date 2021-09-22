@@ -1,16 +1,21 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import cx from 'classnames';
-import { useTable } from 'react-table';
+import { usePagination, useSortBy, useTable } from 'react-table';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
+import { TFooter } from '@components/ui/TFooter';
+import { Button } from '@components/ui/Button';
+import { Skeleton } from '@components/ui/Skeleton';
 
-import { Loader } from './Loader';
 import s from './Table.module.sass';
+import { Loader } from './Loader';
 
 type TablePropsT = {
+  theme?: keyof typeof themeClass
   columns: any
   data: any
+  fieldsToSorting?: string[]
   loading?: boolean
   tableClassName?: string
   trClassName?: string
@@ -18,6 +23,10 @@ type TablePropsT = {
   tdClassName?: string
   isLinked?: boolean
   className?: string
+  pageSize?: number
+  manualPagination?: boolean
+  setOffset?: (arg: number) => void
+  pageCount?: number
 };
 
 const modeClass = {
@@ -25,90 +34,204 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+const themeClass = {
+  primary: s.primary,
+  secondary: s.secondary,
+  pools: s.pools,
+  farms: s.farms,
+  topPairs: s.topPairs,
+  pairsAndBakers: s.pairsAndBakers,
+  informationOfAChosenPair: s.informationOfAChosenPair,
+  accounts: s.accounts,
+  bakingRewards: s.bakingRewards,
+  rewardsHistory: s.rewardsHistory,
+  topLiquidityPositions: s.topLiquidityPositions,
+  pairs: s.pairs,
+};
+
 export const Table: React.FC<TablePropsT> = ({
+  theme = 'primary',
   columns,
   data,
+  fieldsToSorting,
   loading,
   tableClassName,
-  trClassName,
-  thClassName,
-  tdClassName,
-  isLinked = false,
+  pageSize = 10,
+  // nameOfTable,
+  manualPagination = true,
+  setOffset,
+  pageCount = 0,
   className,
 }) => {
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
+    // pagination
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
   } = useTable(
     {
       columns,
       data,
+      initialState: {
+        pageIndex: 0,
+        pageSize,
+      },
+      pageCount: Math.ceil(pageCount / (pageSize)),
+      manualPagination,
+      disableSortRemove: true,
+      autoResetPage: false,
+      disableSortBy: true,
     },
+    useSortBy,
+    usePagination,
   );
+
+  useEffect(() => {
+    if (setOffset) {
+      const offset = pageIndex === 0 ? pageIndex : pageIndex * (pageSize);
+      setOffset(offset);
+    }
+  }, [pageIndex, pageSize, setOffset]);
+
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   if (loading) {
     return <Loader />;
   }
 
+  const compoundClassName = cx(
+    s.root,
+    modeClass[colorThemeMode],
+    themeClass[theme],
+    className,
+  );
+
+  console.log(pageCount, pageSize, pageIndex);
+
+  const isShowPagination = true;
+
   return (
     <>
-      <div className={cx(s.root, modeClass[colorThemeMode], className)}>
+      <div className={compoundClassName}>
         <div className={s.wrapper}>
           <div className={s.innerWrapper}>
             <table {...getTableProps()} className={cx(s.table, tableClassName)}>
-              <thead className={s.thead}>
+              <thead>
                 {
-                  headerGroups.map((headerGroup) => (
-                    <tr
-                      {...headerGroup.getHeaderGroupProps()}
-                      key={getUniqueKey()}
-                      className={s.tr}
-                    >
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps()}
+              headerGroups.map((headerGroup:any) => (
+                <tr key={getUniqueKey()}>
+                  <th className={cx(s.row)}>
+                    {headerGroup.headers.map((column:any) => {
+                      const { id } = column;
+
+                      if (
+                        fieldsToSorting
+                          && fieldsToSorting.length
+                          && fieldsToSorting.includes(id)
+                      ) {
+                        return (
+                          <div
+                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                            key={getUniqueKey()}
+                            className={cx(s.cell)}
+                          >
+                            <Button
+                              className={cx(s.sortingButton)}
+                              theme="quaternary"
+                            >
+                              {column.render('Header')}
+                            </Button>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <div
                           key={getUniqueKey()}
-                          className={cx(s.th, thClassName)}
+                          className={cx(s.cell)}
                         >
                           {column.render('Header')}
-                        </th>
-                      ))}
-                    </tr>
-                  ))
-                }
+                        </div>
+                      );
+                    })}
+                  </th>
+                </tr>
+              ))
+            }
               </thead>
-              <tbody
-                {...getTableBodyProps()}
-                className={cx(s.tbody, { [s.tbodyLoading]: loading })}
-              >
-                {rows.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr
-                      {...row.getRowProps()}
-                      key={getUniqueKey()}
-                      className={cx(s.trContent, trClassName, { [s.isLinked]: isLinked })}
-                    >
-                      {row.cells.map((cell) => (
-                        <td
-                          {...cell.getCellProps()}
-                          key={getUniqueKey()}
-                          className={cx(s.td, tdClassName)}
-                        >
-                          {cell.render('Cell')}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
+              {data.length === 0 || loading ? (
+                <div className={s.preloaderWrapper}>
+                  <Skeleton className={s.preloader} />
+                </div>
+              ) : (
+                <tbody {...getTableBodyProps()}>
+                  {
+                    page.map((row:any) => {
+                      prepareRow(row);
+                      return (
+                        <tr {...row.getRowProps()} key={getUniqueKey()}>
+                          <td className={cx(s.row)}>
+                            {
+                              row.cells.map((cell:any) => (
+                                <div
+                                  {...cell.getCellProps()}
+                                  key={getUniqueKey()}
+                                  className={cx(s.cell)}
+                                >
+                                  {cell.render('Cell')}
+                                </div>
+                              ))
+                            }
+                          </td>
+                        </tr>
+                      );
+                    })
+                  }
+                </tbody>
+              )}
             </table>
+            <div className={cx(
+              s.footer,
+              s.desktop,
+              { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+            )}
+            >
+              <TFooter
+                isShowPagination={isShowPagination}
+                previousPage={previousPage}
+                canPreviousPage={canPreviousPage}
+                pageIndex={pageIndex}
+                pageOptions={pageOptions}
+                nextPage={nextPage}
+                canNextPage={canNextPage}
+              />
+            </div>
           </div>
         </div>
+      </div>
+      <div className={cx(
+        s.footer,
+        s.mobileFooter,
+        { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+      )}
+      >
+        <TFooter
+          isShowPagination={isShowPagination}
+          previousPage={previousPage}
+          canPreviousPage={canPreviousPage}
+          pageIndex={pageIndex}
+          pageOptions={pageOptions}
+          nextPage={nextPage}
+          canNextPage={canNextPage}
+        />
       </div>
     </>
   );

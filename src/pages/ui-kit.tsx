@@ -164,7 +164,7 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Tables</h1>
         <FarmTable loading={false} disabled data={farms as WhitelistedFarm[]} />
-        <PoolTable loading={false} data={[]} />
+        <PoolTable loading={false} fetch={() => {}} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>

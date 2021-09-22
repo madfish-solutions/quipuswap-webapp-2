@@ -135,6 +135,8 @@ export type WhitelistedFarm = {
 export type PoolTableType = {
   id: number,
   xtzUsdQuote: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
   pair: {
     name: string,
     token1: {
