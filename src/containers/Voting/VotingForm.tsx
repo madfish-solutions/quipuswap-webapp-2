@@ -205,12 +205,21 @@ const RealForm:React.FC<VotingFormProps> = ({
     handleSubmit();
   };
 
-  const availBalance:BigNumber = useMemo(
+  const availVoteBalance:string = useMemo(
     () => (tokenPair.balance && tokenPair.frozenBalance && voter
       ? new BigNumber(tokenPair.balance)
         .minus(new BigNumber(tokenPair.frozenBalance))
-        .plus(new BigNumber(voter.vote))
-      : new BigNumber(0)), [tokenPair, voter],
+        .plus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
+  );
+
+  const availVetoBalance:string = useMemo(
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
   );
 
   return (
@@ -277,7 +286,7 @@ const RealForm:React.FC<VotingFormProps> = ({
                   networkId,
                 );
               }}
-              balance={availBalance.isNaN() ? '0' : availBalance.toString()}
+              balance={currentTab.id === 'vote' ? availVoteBalance : availVetoBalance}
               handleBalance={(value) => {
                 form.mutators.setValue(
                   'balance1',
@@ -322,6 +331,7 @@ const RealForm:React.FC<VotingFormProps> = ({
             onClick={handleUnvoteOrRemoveveto}
             className={s.button}
             theme="secondary"
+            disabled={currentTab.id === 'vote' ? new BigNumber(voter?.vote ?? '0').eq(0) : new BigNumber(voter?.veto ?? '0').eq(0)}
           >
             {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
           </Button>
