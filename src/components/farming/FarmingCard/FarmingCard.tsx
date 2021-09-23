@@ -131,7 +131,11 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             $
             {' '}
-            <CurrencyAmount amount={deposit} />
+            {deposit ? (
+              <CurrencyAmount amount={deposit.toString()} />
+            ) : (
+              '--===--'
+            )}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -139,7 +143,11 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             $
             {' '}
-            <CurrencyAmount amount={earned} />
+            {earned ? (
+              <CurrencyAmount amount={earned.toString()} />
+            ) : (
+              '--===--'
+            )}
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>

@@ -1,5 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { BigMapAbstraction } from "@taquito/taquito";
 
 export type QSMainNet = 'mainnet' | 'florencenet';
 
@@ -111,14 +112,15 @@ export type PoolShare = {
 };
 
 export type WhitelistedFarm = {
+  id: number
   remaining: Date
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string
   apy: string
   daily: string
   balance: string
-  deposit: string
-  earned: string
+  deposit?: BigNumber
+  earned?: BigNumber
   multiplier: string
   tokenContract: string
   farmContract: string
@@ -147,4 +149,32 @@ export type VoteFormValues = {
   balance1: number
   selectedBaker: string
   method:'first' | 'second'
+};
+
+export type FarmingContractInfo = {
+  storage: {
+    farms: BigMapAbstraction
+    referrers: BigMapAbstraction
+    users_info: BigMapAbstraction
+    votes: BigMapAbstraction
+    candidates: BigMapAbstraction
+    qsgov_lp: string
+    admin: string
+    pending_admin: string
+    burner: string
+    proxy_minter: string
+    baker_registry: string
+    farms_count: BigNumber
+    deposit?: BigNumber
+    earned?: BigNumber
+  }
+};
+
+export type FarmingUsersInfo = {
+  earned?: BigNumber
+  last_staked?: Date
+  prev_earned?: BigNumber
+  staked?: BigNumber
+  used_votes?: BigNumber
+  farmId?: number
 };

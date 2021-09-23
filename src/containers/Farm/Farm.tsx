@@ -5,7 +5,12 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { FARM_CONTRACT, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
+import {
+  FarmingContractInfo, FarmingUsersInfo,
+  WhitelistedFarm,
+  WhitelistedTokenPair,
+} from '@utils/types';
+import { prettyPrice } from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -22,7 +27,7 @@ import {
   getStorageInfo,
   useAccountPkh,
   useNetwork,
-  useTezos
+  useTezos,
 } from '@utils/dapp';
 import s from './Farm.module.sass';
 
@@ -89,49 +94,95 @@ export const Farm: React.FC<FarmProps> = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const network = useNetwork();
-  const [totalFarms, setTotalFarms] = useState<WhitelistedFarm[]>([]);
   const accountPkh = useAccountPkh();
+  const [totalFarms, setTotalFarms] = useState<WhitelistedFarm[]>([]);
+  const [contract, setContract] = useState<FarmingContractInfo>();
+  const [userInfo, setUserInfo] = useState<FarmingUsersInfo[]>();
+  const [allFarms, setAllFarms] = useState<WhitelistedFarm[]>([]);
+
+  const mergeUserAndFarmsInfo = (
+    userInfoArr: FarmingUsersInfo[] | undefined,
+    totalFarmsArr: WhitelistedFarm[],
+  ):WhitelistedFarm[] => {
+    if (userInfoArr) {
+      const mergedInfo:WhitelistedFarm[] = [];
+
+      for (let i = 0; i < totalFarmsArr.length; i++) {
+        if (totalFarmsArr[i].id === userInfoArr[i]?.farmId) {
+          mergedInfo.push({
+            ...totalFarmsArr[i],
+            deposit: userInfoArr[i].staked,
+            earned: userInfoArr[i].earned,
+          });
+        }
+      }
+
+      return mergedInfo;
+    }
+
+    return totalFarmsArr;
+  };
 
   useEffect(() => {
-    const loadDex = async () => {
-      if (!tezos) return;
-      if (!network) return;
-      const contract = await getStorageInfo(tezos, FARM_CONTRACT);
-      console.log({ contract });
-      const possibleFarms = new Array(+contract?.storage.farms_count.toString())
-        .fill(0)
-        .map(async (x, id) => (contract?.storage.farms.get(id)));
-      const tempFarms = await Promise.all(possibleFarms);
-      console.log({ tempFarms });
-      console.log('users-info', await contract.storage.users_info.get({ '@nat_57': tempFarms[0].fid.toString(), '@address_58': accountPkh }));
-      if (tempFarms) {
-        const totalFarmsWrapper = tempFarms
-          .filter((x) => !!x)
-          .map((x, id) => {
-            console.log({ x });
-            return {
+    const start = async () => {
+      const loadFarms = async () => {
+        if (!tezos) return;
+        if (!network) return;
+        const contractInfo = await getStorageInfo(tezos, FARM_CONTRACT);
+        setContract(contractInfo);
+        const possibleFarms = new Array(+contractInfo?.storage.farms_count.toString())
+          .fill(0)
+          .map(async (x, id) => (contractInfo?.storage.farms.get(id)));
+        const tempFarms = await Promise.all(possibleFarms);
+        if (tempFarms) {
+          const totalFarmsWrapper = tempFarms
+            .filter((x) => !!x)
+            .map((x, id) => ({
               id,
               tokenPair: fallbackPair,
-              totalValueLocked: x.staked,
+              totalValueLocked: prettyPrice(x.staked),
               apy: '888%',
               daily: '0.008%',
               balance: '1000000.00',
-              deposit: '1000000.00',
-              earned: '1000000.00',
               multiplier: '888',
               tokenContract: '#',
               farmContract: '#',
               projectLink: '#',
               analyticsLink: '#',
               remaining: new Date(Date.now() + 48 * 3600000),
-            }
-          });
-        console.log({ totalFarmsWrapper });
-        setTotalFarms(totalFarmsWrapper);
+            }));
+          setTotalFarms(totalFarmsWrapper);
+        }
+      };
+      await loadFarms();
+
+      console.log('contract', contract);
+      console.log('totalFarms', totalFarms);
+
+      const loadUserInfo = async () => {
+        const usersInfoArray = totalFarms.map(
+          (farm): Promise<FarmingUsersInfo | undefined> | undefined => (
+            contract?.storage.users_info.get([farm.id, accountPkh])
+          ),
+        );
+        const resolvedUserInfo = await Promise.all(usersInfoArray);
+        const userInFarms:FarmingUsersInfo[] = [];
+        for (let i = 0; i < totalFarms.length; i++) {
+          userInFarms.push({ ...resolvedUserInfo[i], farmId: totalFarms[i].id });
+        }
+        setUserInfo(userInFarms);
+      };
+
+      if (accountPkh && contract) {
+        await loadUserInfo();
       }
+
+      console.log('userInfo', userInfo);
+
+      setAllFarms(mergeUserAndFarmsInfo(userInfo, totalFarms));
     };
-    loadDex();
-  }, [tezos, network, accountPkh]);
+    start();
+  }, [accountPkh, tezos, network]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -228,7 +279,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {totalFarms.map((x) => (
+      {allFarms.map((x) => (
         <FarmingCard
           key={x.multiplier}
           farm={x}
