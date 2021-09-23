@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { FARM_CONTRACT, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
@@ -18,6 +18,12 @@ import Search from '@icons/Search.svg';
 
 import { ApyModal } from '@components/modals/ApyModal';
 import { SelectUI } from '@components/ui/Select';
+import {
+  getStorageInfo,
+  useAccountPkh,
+  useNetwork,
+  useTezos
+} from '@utils/dapp';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -71,84 +77,6 @@ const fallbackPair = {
   token2: TEZOS_TOKEN,
 } as WhitelistedTokenPair;
 
-const farms:WhitelistedFarm[] = [
-  {
-    tokenPair: fallbackPair,
-    totalValueLocked: '1000000.00',
-    apy: '888%',
-    daily: '0.008%',
-    balance: '1000000.00',
-    deposit: '1000000.00',
-    earned: '1000000.00',
-    multiplier: '888',
-    tokenContract: '#',
-    farmContract: '#',
-    projectLink: '#',
-    analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
-  {
-    tokenPair: fallbackPair,
-    totalValueLocked: '1000000.00',
-    apy: '887%',
-    daily: '0.008%',
-    balance: '1000000.00',
-    deposit: '1000000.00',
-    earned: '1000000.00',
-    multiplier: '887',
-    tokenContract: '#',
-    farmContract: '#',
-    projectLink: '#',
-    analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
-  {
-    tokenPair: fallbackPair,
-    totalValueLocked: '1000000.00',
-    apy: '886%',
-    daily: '0.008%',
-    balance: '1000000.00',
-    deposit: '1000000.00',
-    earned: '1000000.00',
-    multiplier: '886',
-    tokenContract: '#',
-    farmContract: '#',
-    projectLink: '#',
-    analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
-  {
-    tokenPair: fallbackPair,
-    totalValueLocked: '1000000.00',
-    apy: '885%',
-    daily: '0.008%',
-    balance: '1000000.00',
-    deposit: '1000000.00',
-    earned: '1000000.00',
-    multiplier: '885',
-    tokenContract: '#',
-    farmContract: '#',
-    projectLink: '#',
-    analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
-  {
-    tokenPair: fallbackPair,
-    totalValueLocked: '1000000.00',
-    apy: '884%',
-    daily: '0.008%',
-    balance: '1000000.00',
-    deposit: '1000000.00',
-    earned: '1000000.00',
-    multiplier: '884',
-    tokenContract: '#',
-    farmContract: '#',
-    projectLink: '#',
-    analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
-];
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
@@ -161,16 +89,49 @@ export const Farm: React.FC<FarmProps> = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const network = useNetwork();
+  const [totalFarms, setTotalFarms] = useState<WhitelistedFarm[]>([]);
+  const accountPkh = useAccountPkh();
 
   useEffect(() => {
     const loadDex = async () => {
       if (!tezos) return;
       if (!network) return;
       const contract = await getStorageInfo(tezos, FARM_CONTRACT);
-      console.log(await contract.storage.farms.get('0'));
+      console.log({ contract });
+      const possibleFarms = new Array(+contract?.storage.farms_count.toString())
+        .fill(0)
+        .map(async (x, id) => (contract?.storage.farms.get(id)));
+      const tempFarms = await Promise.all(possibleFarms);
+      console.log({ tempFarms });
+      console.log('users-info', await contract.storage.users_info.get({ '@nat_57': tempFarms[0].fid.toString(), '@address_58': accountPkh }));
+      if (tempFarms) {
+        const totalFarmsWrapper = tempFarms
+          .filter((x) => !!x)
+          .map((x, id) => {
+            console.log({ x });
+            return {
+              id,
+              tokenPair: fallbackPair,
+              totalValueLocked: x.staked,
+              apy: '888%',
+              daily: '0.008%',
+              balance: '1000000.00',
+              deposit: '1000000.00',
+              earned: '1000000.00',
+              multiplier: '888',
+              tokenContract: '#',
+              farmContract: '#',
+              projectLink: '#',
+              analyticsLink: '#',
+              remaining: new Date(Date.now() + 48 * 3600000),
+            }
+          });
+        console.log({ totalFarmsWrapper });
+        setTotalFarms(totalFarmsWrapper);
+      }
     };
     loadDex();
-  }, [tezos, network]);
+  }, [tezos, network, accountPkh]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -267,7 +228,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {farms.map((x) => (
+      {totalFarms.map((x) => (
         <FarmingCard
           key={x.multiplier}
           farm={x}
