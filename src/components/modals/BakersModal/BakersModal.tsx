@@ -125,6 +125,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
 
   const isEmptyBakers = filteredBakers.length === 0;
 
+  // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
   return (
