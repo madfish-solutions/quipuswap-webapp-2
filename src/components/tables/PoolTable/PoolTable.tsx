@@ -3,6 +3,8 @@ import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import { fromDecimals } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
+import { PoolTableType } from '@utils/types';
 import { Table } from '@components/ui/Table';
 import { Tooltip } from '@components/ui/Tooltip';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -10,8 +12,6 @@ import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
 
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { PoolTableType } from '@utils/types';
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';
 
@@ -57,10 +57,10 @@ export const PoolTable: React.FC<PoolTableProps> = ({
         offset,
       },
     });
-  }, [fetch, offset, pageSize]);
+  }, [fetch, offset]);
   const columns = useMemo(() => [
     {
-      Header: t('home:Name'),
+      Header: t('home|Name'),
       id: 'name',
       accessor: ({ token1, token2, pair }:PoolTableType) => (
         <>
@@ -70,14 +70,14 @@ export const PoolTable: React.FC<PoolTableProps> = ({
             className={s.tokenLogo}
           />
           {pair.name}
-          {/* {isSponsored && (<Bage className={s.bage} text={t('home:Sponsored')} />)} */}
+          {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </>
       ),
     },
     {
       Header: (
         <>
-          {t('home:TVL')}
+          {t('home|TVL')}
           <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
         </>
       ),
@@ -98,7 +98,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
     {
       Header: (
         <>
-          {t('home:Volume 24h')}
+          {t('home|Volume 24h')}
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
         </>
       ),
@@ -137,6 +137,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
         </>
       ),
     },
+    // eslint-disable-next-line
   ], [data, offset, t]);
 
   return (

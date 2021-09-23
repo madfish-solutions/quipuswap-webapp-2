@@ -92,16 +92,16 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('swap:Swap completed!'),
+      render: t('swap|Swap completed!'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
@@ -134,6 +134,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens]);
 
   const getBalance = useCallback(() => {
@@ -141,10 +142,12 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, networkId, token1, token2]);
 
   useEffect(() => {
     getBalance();
+    // eslint-disable-next-line
   }, [tezos, accountPkh, networkId]);
 
   useOnBlock(tezos, getBalance);

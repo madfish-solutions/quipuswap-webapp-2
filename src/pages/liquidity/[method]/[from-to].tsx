@@ -13,8 +13,8 @@ const LiquidityPage: React.FC = () => {
   const { t } = useTranslation(['common', 'liquidity']);
   return (
     <BaseLayout
-      title={t('liquidity:Liquidity page')}
-      description={t('liquidity:Liquidity page description. Couple sentences...')}
+      title={t('liquidity|Liquidity page')}
+      description={t('liquidity|Liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Liquidity />

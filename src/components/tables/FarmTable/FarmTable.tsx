@@ -37,7 +37,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
 }) => {
   const { t } = useTranslation(['home']);
   const [pageCount, setPageCount] = useState<number>(0);
-  const [offset, setOffset] = useState(0);
+  const [, setOffset] = useState(0);
 
   useEffect(() => {
     if (totalCount) {
@@ -55,7 +55,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
   // }, [fetch, offset, pageSize]);
   const columns = useMemo(() => [
     {
-      Header: t('home:Name'),
+      Header: t('home|Name'),
       id: 'name',
       accessor: ({ tokenPair }:WhitelistedFarm) => (
         <>
@@ -67,15 +67,15 @@ export const FarmTable: React.FC<FarmTableProps> = ({
           {getWhitelistedTokenSymbol(tokenPair.token1)}
           /
           {getWhitelistedTokenSymbol(tokenPair.token2)}
-          {/* {isSponsored && (<Bage className={s.bage} text={t('home:Sponsored')} />)} */}
+          {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </>
       ),
     },
     {
       Header: (
         <>
-          {t('home:Total staked')}
-          <Tooltip sizeT="small" content={t('home:Total funds locked in the farming contract for each pool.')} />
+          {t('home|Total staked')}
+          <Tooltip sizeT="small" content={t('home|Total funds locked in the farming contract for each pool.')} />
         </>
       ),
       id: 'staked',
@@ -89,8 +89,8 @@ export const FarmTable: React.FC<FarmTableProps> = ({
     {
       Header: (
         <>
-          {t('home:APR')}
-          <Tooltip sizeT="small" content={t('home:Expected APR (annual percentage rate) earned through an investment.')} />
+          {t('home|APR')}
+          <Tooltip sizeT="small" content={t('home|Expected APR (annual percentage rate) earned through an investment.')} />
         </>
       ),
       id: 'apr',
@@ -118,7 +118,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
         </>
       ),
     },
-  ], [data, offset, t]);
+  ], [t]);
 
   return (
     <>

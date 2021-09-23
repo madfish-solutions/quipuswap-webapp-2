@@ -105,16 +105,16 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleSuccessToast = useCallback((text:string) => {
     updateToast({
       type: 'success',
       render: t(text),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
@@ -145,6 +145,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
@@ -157,10 +158,12 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       );
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, token1, token2]);
 
   useEffect(() => {
     getBalance();
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);

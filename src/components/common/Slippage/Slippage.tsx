@@ -43,13 +43,14 @@ export const Slippage: React.FC<StickyBlockProps> = ({
       setCustomValue(valWrapper);
       handleChange(valWrapper);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <span className={s.header}>
         Slippage
-        <Tooltip content={t('common:Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')} />
+        <Tooltip content={t('common|Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')} />
       </span>
       <div className={s.buttons}>
         {slippagePercents.map((percent, index) => (

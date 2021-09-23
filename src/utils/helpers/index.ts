@@ -32,3 +32,4 @@ export * from './isDexEqual';
 export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
+export * from './preparePairName';

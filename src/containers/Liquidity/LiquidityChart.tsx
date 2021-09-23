@@ -11,7 +11,6 @@ import { FACTORIES, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import {
   useNetwork, useSearchCustomTokens, useTezos, useTokens,
 } from '@utils/dapp';
-import { LineChartSampleData } from '@components/charts/content';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -38,7 +37,7 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
-      data={!loadingProp && data ? data.pair.plotLiquidity : LineChartSampleData}
+      data={!loadingProp && data ? data.pair.plotLiquidity : []}
     />
   );
 };
@@ -86,6 +85,7 @@ export const LiquidityChart: React.FC = () => {
         },
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, networkId]);
 
   if (!dex) {
@@ -93,7 +93,7 @@ export const LiquidityChart: React.FC = () => {
       <LineChart
         className={s.chart}
         loading
-        data={LineChartSampleData}
+        data={[]}
       />
     );
   }

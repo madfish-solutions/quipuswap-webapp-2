@@ -220,7 +220,7 @@ export const Table: React.FC<TablePropsT> = ({
         {disabled && (
         <div className={cx(s.disabled, modeClass[colorThemeMode])}>
           <div className={s.disabledBg} />
-          <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
         </div>
         )}
       </div>

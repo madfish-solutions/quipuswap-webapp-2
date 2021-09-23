@@ -20,8 +20,8 @@ const SwapSendPage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('swap:Swap page')}
-      description={t('swap:Swap page description. Couple sentences...')}
+      title={t('swap|Swap page')}
+      description={t('swap|Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
       <SwapSend />

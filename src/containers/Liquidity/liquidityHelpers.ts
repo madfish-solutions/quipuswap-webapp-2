@@ -197,9 +197,9 @@ export const submitForm = async (
     ).send();
     await op.confirmation();
     if (currentTab === 'remove') {
-      handleSuccessToast('liquidity:Divest completed!');
+      handleSuccessToast('liquidity|Divest completed!');
     } else {
-      handleSuccessToast('liquidity:Invest completed!');
+      handleSuccessToast('liquidity|Invest completed!');
     }
   } catch (e) {
     updateToast(e);

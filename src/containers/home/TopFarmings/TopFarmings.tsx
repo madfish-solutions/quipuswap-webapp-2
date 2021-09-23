@@ -22,8 +22,8 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
     .filter((x, i) => i < 5), [tokens]);
   return (
     <Section
-      header={t('home:Top Farms')}
-      description={t('home:The most popular Farming pools by APR')}
+      header={t('home|Top Farms')}
+      description={t('home|The most popular Farming pools by APR')}
       className={className}
     >
       <FarmTable loading={false} disabled data={farms as WhitelistedFarm[]} />

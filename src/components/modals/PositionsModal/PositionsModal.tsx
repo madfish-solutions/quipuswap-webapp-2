@@ -90,6 +90,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [values]);
 
   return (
@@ -103,7 +104,7 @@ const Header:React.FC<HeaderProps> = ({
               {...input}
               StartAdornment={Search}
               className={s.modalInput}
-              placeholder={t('common:Search')}
+              placeholder={t('common|Search')}
               error={meta.error}
               readOnly={values.token1 && values.token2}
             />
@@ -121,7 +122,7 @@ const Header:React.FC<HeaderProps> = ({
             <NumberInput
               {...input}
               className={s.modalInput}
-              placeholder={t('common:Token ID')}
+              placeholder={t('common|Token ID')}
               step={1}
               min={0}
               max={100}
@@ -200,7 +201,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
     && searchTokens.length === 0,
     [searchTokens, filteredTokens],
   );
-
+  // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
 
   const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
@@ -228,7 +229,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
       }}
       render={({ form, values }) => (
         <Modal
-          title={t('common:Your Positions')}
+          title={t('common|Your Positions')}
           header={(
             <AutoSave
               form={form}
@@ -324,7 +325,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           {isEmptyTokens && !searchLoading && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
             </div>
           )}
           {isEmptyTokens && searchLoading && (

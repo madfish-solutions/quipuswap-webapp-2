@@ -163,6 +163,7 @@ const RealForm:React.FC<VotingFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [
     values.balance1,
     values.selectedBaker,
@@ -174,7 +175,8 @@ const RealForm:React.FC<VotingFormProps> = ({
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
-  }, [accountPkh]);
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
 
   const handleUnvoteOrRemoveveto = async () => {
     if (!tezos) return;
@@ -283,7 +285,7 @@ const RealForm:React.FC<VotingFormProps> = ({
                 );
               }}
               noBalanceButtons={!accountPkh}
-              balanceLabel={t('vote:Available Balance')}
+              balanceLabel={t('vote|Available Balance')}
               notFrozen
               id="liquidity-remove-input"
               label={currentTab.label}
@@ -328,7 +330,7 @@ const RealForm:React.FC<VotingFormProps> = ({
             className={s.button}
             disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
           >
-            {currentTab.id === 'vote' && isBanned ? t('vote:Baker under Veto') : currentTab.label}
+            {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
           </Button>
         </div>
 

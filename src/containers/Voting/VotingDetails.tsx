@@ -65,7 +65,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       return fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
     }
     return '';
-  }, [dex, bakers]);
+  }, [dex]);
 
   const totalVeto = useMemo(() => {
     if (dex?.storage?.storage) {
@@ -96,10 +96,10 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('vote:Delegated To')}
+            {t('vote|Delegated To')}
             <Tooltip
               sizeT="small"
-              content={t('vote:Current baker elected by simple majority of votes.')}
+              content={t('vote|Current baker elected by simple majority of votes.')}
             />
           </>
             )}
@@ -119,10 +119,10 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('vote:Second Candidate')}
+            {t('vote|Second Candidate')}
             <Tooltip
               sizeT="small"
-              content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
+              content={t('vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
             />
           </>
             )}
@@ -145,7 +145,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             {t('veto:Total Votes')}
             <Tooltip
               sizeT="small"
-              content={t('vote:The total amount of votes cast to elect a baker in the pool.')}
+              content={t('vote|The total amount of votes cast to elect a baker in the pool.')}
             />
           </>
             )}
@@ -159,7 +159,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             {t('veto:Total Vetos')}
             <Tooltip
               sizeT="small"
-              content={t('vote:The total amount of shares cast so far to veto the current baker.')}
+              content={t('vote|The total amount of shares cast so far to veto the current baker.')}
             />
           </>
             )}
@@ -173,7 +173,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             {t('veto:Your Candidate')}
             <Tooltip
               sizeT="small"
-              content={t('vote:The candidate you voted for.')}
+              content={t('vote|The candidate you voted for.')}
             />
           </>
         )}
@@ -196,7 +196,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             {t('Votes To Veto Left')}
             <Tooltip
               sizeT="small"
-              content={t('vote:This much more votes needed to veto a delegate.')}
+              content={t('vote|This much more votes needed to veto a delegate.')}
             />
           </>
             )}
@@ -213,7 +213,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('vote:Pair Analytics')}
+          {t('vote|Pair Analytics')}
         </Button>
         {/* <Button
           className={s.detailsButton}

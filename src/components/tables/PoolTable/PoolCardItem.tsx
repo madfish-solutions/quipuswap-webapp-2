@@ -41,11 +41,11 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
           />
           {pool.pair.name}
         </div>
-        {isSponsored && (<Bage text={t('home:Sponsored')} />)}
+        {isSponsored && (<Bage text={t('home|Sponsored')} />)}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
-          {t('home:TVL')}
+          {t('home|TVL')}
           <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
@@ -61,7 +61,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
-          {t('home:Volume 24h')}
+          {t('home|Volume 24h')}
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
@@ -82,13 +82,13 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
           href={pool.buttons.first.href}
           external
         >
-          {t('home:Analytics')}
+          {t('home|Analytics')}
         </Button>
         <Button
           href="/swap"
           className={s.button}
         >
-          {t('home:Trade')}
+          {t('home|Trade')}
         </Button>
       </div>
     </div>

@@ -106,7 +106,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             {mode === 'select' && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Frozen Balance')}
+                  {t('common|Frozen Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
@@ -117,7 +117,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>
-                {t('common:Total Balance')}
+                {t('common|Total Balance')}
                 :
               </div>
               <div className={cx(s.label2, s.price)}>

@@ -98,7 +98,7 @@ const Header:React.FC<HeaderProps> = ({
               {...input}
               StartAdornment={Search}
               className={s.modalInput}
-              placeholder={t('common:Search')}
+              placeholder={t('common|Search')}
               error={meta.error}
             />
           </>
@@ -116,7 +116,7 @@ const Header:React.FC<HeaderProps> = ({
             <NumberInput
               {...input}
               className={s.modalInput}
-              placeholder={t('common:Token ID')}
+              placeholder={t('common|Token ID')}
               step={1}
               min={0}
               max={100}
@@ -193,6 +193,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
+  // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
 
   const allTokens = useMemo(() => (
@@ -221,7 +222,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       }}
       render={({ form }) => (
         <Modal
-          title={t('common:Search token')}
+          title={t('common|Search token')}
           header={(
             <AutoSave
               form={form}
@@ -247,7 +248,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           {isEmptyTokens && (!searchLoading && !tokensLoading) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
               {' '}
             </div>
           )}

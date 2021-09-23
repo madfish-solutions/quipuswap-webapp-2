@@ -194,6 +194,7 @@ export const CandleChart: React.FC<LineChartProps> = ({
     height,
     prevColorThemeModeState,
     setValue,
+    i18n,
   ]);
 
   return (
@@ -259,7 +260,7 @@ export const CandleChart: React.FC<LineChartProps> = ({
       {disabled && (
       <div className={cx(s.disabled, modeClass[colorThemeMode])}>
         <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+        <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
       </div>
       )}
     </Card>
