@@ -142,7 +142,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('veto:Total Votes')}
+            {t('vote|Total Votes')}
             <Tooltip
               sizeT="small"
               content={t('vote|The total amount of votes cast to elect a baker in the pool.')}
@@ -156,7 +156,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('veto:Total Vetos')}
+            {t('vote|Total Vetos')}
             <Tooltip
               sizeT="small"
               content={t('vote|The total amount of shares cast so far to veto the current baker.')}
@@ -170,7 +170,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('veto:Your Candidate')}
+            {t('vote|Your Candidate')}
             <Tooltip
               sizeT="small"
               content={t('vote|The candidate you voted for.')}

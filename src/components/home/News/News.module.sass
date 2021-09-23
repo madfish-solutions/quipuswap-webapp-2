@@ -1,5 +1,8 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+  
 .root
-  margin: 16px 32px 16px 0px
+  margin: 0px 16px 16px 0px
 
 .content
   padding: 0px
@@ -7,3 +10,7 @@
 .uncenter
   \:global(.slick-dots)
     display: flex !important
+
+@include media('>phone')
+  .root
+    margin: 0px 32px 16px 0px

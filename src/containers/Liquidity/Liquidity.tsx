@@ -30,6 +30,7 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import { LiquidityForm } from './LiquidityForm';
+import { LiquidityChart } from './LiquidityChart';
 import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
 const TabsContent = [
@@ -169,50 +170,52 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   useOnBlock(tezos, getBalance);
 
   return (
-    <StickyBlock className={className}>
-      <Form
-        onSubmit={() => {
-          if (!tezos) return;
-          handleLoader();
-          submitForm(
-            tezos,
-            currentTab.id === 'remove'
-              ? removeLiquidityParams
-              : addLiquidityParams,
-            handleErrorToast,
-            handleSuccessToast,
-            currentTab.id,
-          );
-        }}
-        mutators={{
-          setValue: ([field, value], state, { changeValue }) => {
-            changeValue(state, field, () => value);
-          },
-        }}
-        render={({ handleSubmit, form }) => (
-          <LiquidityForm
-            form={form}
-            handleSubmit={handleSubmit}
-            debounce={100}
-            save={() => {}}
-            setTabsState={setTabsState}
-            tabsState={tabsState}
-            token1={token1}
-            token2={token2}
-            setTokens={setTokens}
-            tokenPair={tokenPair}
-            setTokenPair={setTokenPair}
-            tokensData={tokensData}
-            handleTokenChange={handleTokenChangeWrapper}
-            currentTab={currentTab}
-            setRemoveLiquidityParams={setRemoveLiquidityParams}
-            removeLiquidityParams={removeLiquidityParams}
-            setAddLiquidityParams={setAddLiquidityParams}
-            addLiquidityParams={addLiquidityParams}
-          />
-        )}
-      />
-    </StickyBlock>
-
+    <>
+      <LiquidityChart token1={token1} token2={token2} />
+      <StickyBlock className={className}>
+        <Form
+          onSubmit={() => {
+            if (!tezos) return;
+            handleLoader();
+            submitForm(
+              tezos,
+              currentTab.id === 'remove'
+                ? removeLiquidityParams
+                : addLiquidityParams,
+              handleErrorToast,
+              handleSuccessToast,
+              currentTab.id,
+            );
+          }}
+          mutators={{
+            setValue: ([field, value], state, { changeValue }) => {
+              changeValue(state, field, () => value);
+            },
+          }}
+          render={({ handleSubmit, form }) => (
+            <LiquidityForm
+              form={form}
+              handleSubmit={handleSubmit}
+              debounce={100}
+              save={() => {}}
+              setTabsState={setTabsState}
+              tabsState={tabsState}
+              token1={token1}
+              token2={token2}
+              setTokens={setTokens}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
+              tokensData={tokensData}
+              handleTokenChange={handleTokenChangeWrapper}
+              currentTab={currentTab}
+              setRemoveLiquidityParams={setRemoveLiquidityParams}
+              removeLiquidityParams={removeLiquidityParams}
+              setAddLiquidityParams={setAddLiquidityParams}
+              addLiquidityParams={addLiquidityParams}
+            />
+          )}
+        />
+      </StickyBlock>
+    </>
   );
 };

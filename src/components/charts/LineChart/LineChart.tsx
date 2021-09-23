@@ -209,7 +209,7 @@ export const LineChart: React.FC<LineChartProps> = ({
     />
     <CardContent className={cx(s.container, s.cardContent)}>
       {loading || !data || data.length === 0
-        ? (<Preloader style={{ minHeight: '315px' }} />)
+        ? (<Preloader style={{ minHeight: '360px' }} />)
         : (
           <ChartInstance data={data} />
         )}

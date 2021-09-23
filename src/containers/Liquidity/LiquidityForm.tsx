@@ -59,7 +59,7 @@ import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Liquidity.module.sass';
 
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
@@ -894,8 +894,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     className={s.switcherInput}
                     disabled={!dex}
                   />
-                  {t('liquidity|Rebalance Liquidity')}
-                  <Tooltip content="Automatically adjust your token balance to a 50%-50% ratio. If you don't have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion." />
+                  <span className={s.rebalance}>
+                    {t('liquidity|Rebalance Liquidity')}
+                  </span>
+                  <Tooltip content={t('liquidity|Automatically adjust your token balance to a 50%-50% ratio. If you don\'t have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion.')} />
                 </div>
               )}
             </Field>

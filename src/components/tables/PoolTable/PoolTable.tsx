@@ -1,7 +1,11 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, {
+  useMemo, useState, useEffect, useContext,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { fromDecimals } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
@@ -33,6 +37,11 @@ const poolMobileItem = (pool:PoolTableType) => (
   />
 );
 
+const modeClass = {
+  [ColorModes.Light]: s.light,
+  [ColorModes.Dark]: s.dark,
+};
+
 export const PoolTable: React.FC<PoolTableProps> = ({
   data,
   totalCount,
@@ -43,6 +52,8 @@ export const PoolTable: React.FC<PoolTableProps> = ({
   const { t } = useTranslation(['home']);
   const [pageCount, setPageCount] = useState<number>(0);
   const [offset, setOffset] = useState(0);
+
+  const { colorThemeMode } = useContext(ColorThemeContext);
 
   useEffect(() => {
     if (totalCount) {
@@ -69,7 +80,9 @@ export const PoolTable: React.FC<PoolTableProps> = ({
             token2={token2}
             className={s.tokenLogo}
           />
-          {pair.name}
+          <span className={s.cardCellText}>
+            {pair.name}
+          </span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </>
       ),
@@ -84,7 +97,9 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'tvl',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
-          $
+          <span className={s.dollar}>
+            $
+          </span>
           <CurrencyAmount
             className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
@@ -105,7 +120,9 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'volume24h',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
-          $
+          <span className={s.dollar}>
+            $
+          </span>
           <CurrencyAmount
             className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.volume24h), 6)
@@ -143,7 +160,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
   return (
     <Table
       theme="pools"
-      className={className}
+      className={cx(className, modeClass[colorThemeMode])}
       tableClassName={s.table}
       renderMobile={poolMobileItem}
       data={data ?? []}

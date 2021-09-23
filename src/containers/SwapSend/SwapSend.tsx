@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
+import dynamic from 'next/dynamic';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -25,9 +26,16 @@ import {
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
+import { CandleChartSampleData } from '@components/charts/content';
+
+import s from '@styles/SwapLiquidity.module.sass';
 
 import { SwapForm } from './SwapForm';
 import { submitForm } from './swapHelpers';
+
+const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
+  ssr: false,
+});
 
 const TabsContent = [
   {
@@ -157,49 +165,58 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [networkId]);
 
   return (
-    <StickyBlock className={className}>
-      <Form
-        onSubmit={(values, form) => {
-          if (!tezos) return;
-          handleLoader();
-          submitForm(values,
-            tezos,
-            tokensData,
-            tabsState,
-            networkId,
-            form,
-            (err) => handleErrorToast(err),
-            handleSuccessToast);
-        }}
-        mutators={{
-          setValue: ([field, value], state, { changeValue }) => {
-            changeValue(state, field, () => value);
-          },
-          setValues: (fields, state, { changeValue }) => {
-            fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
-          },
-        }}
-        render={({
-          handleSubmit, form,
-        }) => (
-          <SwapForm
-            handleSubmit={handleSubmit}
-            form={form}
-            debounce={100}
-            save={() => {}}
-            setTabsState={setTabsState}
-            tabsState={tabsState}
-            token1={token1}
-            token2={token2}
-            setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
-            setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
-            tokensData={tokensData}
-            handleSwapTokens={handleSwapTokens}
-            handleTokenChange={handleTokenChangeWrapper}
-            currentTab={currentTab}
-          />
-        )}
+    <>
+      <CandleChart
+        data={CandleChartSampleData}
+        disabled
+        token1={token1}
+        token2={token2}
+        className={s.chart}
       />
-    </StickyBlock>
+      <StickyBlock className={className}>
+        <Form
+          onSubmit={(values, form) => {
+            if (!tezos) return;
+            handleLoader();
+            submitForm(values,
+              tezos,
+              tokensData,
+              tabsState,
+              networkId,
+              form,
+              (err) => handleErrorToast(err),
+              handleSuccessToast);
+          }}
+          mutators={{
+            setValue: ([field, value], state, { changeValue }) => {
+              changeValue(state, field, () => value);
+            },
+            setValues: (fields, state, { changeValue }) => {
+              fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
+            },
+          }}
+          render={({
+            handleSubmit, form,
+          }) => (
+            <SwapForm
+              handleSubmit={handleSubmit}
+              form={form}
+              debounce={100}
+              save={() => {}}
+              setTabsState={setTabsState}
+              tabsState={tabsState}
+              token1={token1}
+              token2={token2}
+              setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
+              setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
+              tokensData={tokensData}
+              handleSwapTokens={handleSwapTokens}
+              handleTokenChange={handleTokenChangeWrapper}
+              currentTab={currentTab}
+            />
+          )}
+        />
+      </StickyBlock>
+    </>
   );
 };

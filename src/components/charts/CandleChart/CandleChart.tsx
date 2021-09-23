@@ -14,6 +14,8 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
+import { WhitelistedToken } from '@utils/types';
+import { Preloader } from '@components/common/Preloader';
 import {
   CandleGraphOptions,
   GraphicColors,
@@ -22,10 +24,13 @@ import {
 } from '../config';
 import s from './CandleChart.module.sass';
 
-type LineChartProps = {
+type CandleChartProps = {
   data: any[]
   className?: string
   disabled?: boolean
+  loading?: boolean
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
 };
 
 const modeClass = {
@@ -33,12 +38,9 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const CandleChart: React.FC<LineChartProps> = ({
+const ChartInstance: React.FC<{ data:any[] }> = ({
   data,
-  className,
-  disabled = true,
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
 
@@ -198,64 +200,90 @@ export const CandleChart: React.FC<LineChartProps> = ({
   ]);
 
   return (
-    <Card
-      className={className}
-    >
-      <CardHeader header={{ content: <PairChartInfo /> }} className={s.cardHeader} />
-      <CardContent className={cx(s.container, s.cardContent)}>
-        <div className={cx(s.info, modeClass[colorThemeMode])}>
-          <span className={s.prices}>
-            <h4 className={s.tokenPrice}>
-              {prettyPrice(value.close, 2, 10)}
-              {' '}
-              TOKEN
-            </h4>
-            <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
-              $
-              {' '}
-              {prettyPrice(value.close, 2, 10)}
-            </h4>
-          </span>
-          <div className={s.details}>
-            <div className={s.column}>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Open
-                </span>
-                <span className={s.value}>
-                  {value.open}
-                </span>
-              </div>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Close
-                </span>
-                <span className={s.value}>
-                  {value.close}
-                </span>
-              </div>
+    <>
+      <div className={cx(s.info, modeClass[colorThemeMode])}>
+        <span className={s.prices}>
+          <h4 className={s.tokenPrice}>
+            {prettyPrice(value.close, 2, 10)}
+            {' '}
+            TOKEN
+          </h4>
+          <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
+            $
+            {' '}
+            {prettyPrice(value.close, 2, 10)}
+          </h4>
+        </span>
+        <div className={s.details}>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                Open
+              </span>
+              <span className={s.value}>
+                {value.open}
+              </span>
             </div>
-            <div className={s.column}>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Max
-                </span>
-                <span className={s.value}>
-                  {value.high}
-                </span>
-              </div>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Min
-                </span>
-                <span className={s.value}>
-                  {value.low}
-                </span>
-              </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                Close
+              </span>
+              <span className={s.value}>
+                {value.close}
+              </span>
+            </div>
+          </div>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                Max
+              </span>
+              <span className={s.value}>
+                {value.high}
+              </span>
+            </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                Min
+              </span>
+              <span className={s.value}>
+                {value.low}
+              </span>
             </div>
           </div>
         </div>
-        <div ref={chartRef} className={s.chart} />
+      </div>
+      <div ref={chartRef} className={s.chart} />
+    </>
+  );
+};
+
+export const CandleChart: React.FC<CandleChartProps> = ({
+  data,
+  className,
+  loading = false,
+  token1,
+  token2,
+  disabled,
+}) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
+  return (
+    <Card className={className}>
+      <CardHeader
+        header={{
+          content: (
+            <PairChartInfo hidePeriods token1={token1} token2={token2} />
+          ),
+        }}
+        className={s.cardHeader}
+      />
+      <CardContent className={cx(s.container, s.cardContent)}>
+        {loading || !data || data.length === 0
+          ? (<Preloader style={{ minHeight: '360px' }} />)
+          : (
+            <ChartInstance data={data} />
+          )}
       </CardContent>
       {disabled && (
       <div className={cx(s.disabled, modeClass[colorThemeMode])}>
