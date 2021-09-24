@@ -13,6 +13,7 @@ import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
@@ -31,7 +32,7 @@ type CandleChartProps = {
   className?: string
   disabled?: boolean
   loading?: boolean
-  token1: WhitelistedToken
+  token1?: WhitelistedToken
   token2?: WhitelistedToken
 };
 
@@ -264,7 +265,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
   data,
   className,
   loading = false,
-  token1,
+  token1 = TEZOS_TOKEN,
   token2,
   disabled,
 }) => {

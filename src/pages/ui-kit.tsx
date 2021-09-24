@@ -31,6 +31,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -45,7 +46,6 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { Timeleft } from '@components/ui/Timeleft';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
