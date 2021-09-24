@@ -119,8 +119,6 @@ export type WhitelistedFarm = {
   apy: string
   daily: string
   balance: string
-  deposit?: BigNumber
-  earned?: BigNumber
   multiplier: string
   tokenContract: string
   farmContract: string
@@ -149,6 +147,36 @@ export type VoteFormValues = {
   balance1: number
   selectedBaker: string
   method:'first' | 'second'
+};
+
+type FA2 = {
+  id: BigNumber
+  token: string
+};
+
+export type FarmingInfoType = {
+  current_candidate: string
+  current_delegated: string
+  fees: {
+    harvest_fee: BigNumber,
+    withdrawal_fee: BigNumber,
+    burn_reward: BigNumber,
+  }
+  fid: BigNumber
+  paused: boolean
+  reward_per_second: BigNumber
+  reward_per_share: BigNumber
+  reward_token: FA2
+  stake_params: {
+    is_lp_staked_token: boolean,
+    qs_pool: string
+    staked_token: { fA2: FA2 }
+    token: { fA2: FA2 }
+  }
+  staked: BigNumber
+  start_time: Date
+  timelock: BigNumber
+  upd: Date
 };
 
 export type FarmingContractInfo = {

@@ -1,34 +1,24 @@
 import React, {
-  useState, useContext, useMemo, useCallback, useEffect,
+  useState, useContext, useMemo, useCallback,
 } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { FARM_CONTRACT, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  FarmingContractInfo, FarmingUsersInfo,
-  WhitelistedFarm,
-  WhitelistedTokenPair,
-} from '@utils/types';
-import { prettyPrice } from '@utils/helpers';
+import { STABLE_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { useFarms } from '@hooks/useFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
+import { SliderUI } from '@components/ui/Slider';
+import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
-import { SliderUI } from '@components/ui/Slider';
+import { ApyModal } from '@components/modals/ApyModal';
 import Search from '@icons/Search.svg';
 
-import { ApyModal } from '@components/modals/ApyModal';
-import { SelectUI } from '@components/ui/Select';
-import {
-  getStorageInfo,
-  useAccountPkh,
-  useNetwork,
-  useTezos,
-} from '@utils/dapp';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -77,11 +67,6 @@ const content:ContentType = [
   },
 ];
 
-const fallbackPair = {
-  token1: TEZOS_TOKEN,
-  token2: TEZOS_TOKEN,
-} as WhitelistedTokenPair;
-
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
@@ -92,97 +77,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const tezos = useTezos();
-  const network = useNetwork();
-  const accountPkh = useAccountPkh();
-  const [totalFarms, setTotalFarms] = useState<WhitelistedFarm[]>([]);
-  const [contract, setContract] = useState<FarmingContractInfo>();
-  const [userInfo, setUserInfo] = useState<FarmingUsersInfo[]>();
-  const [allFarms, setAllFarms] = useState<WhitelistedFarm[]>([]);
-
-  const mergeUserAndFarmsInfo = (
-    userInfoArr: FarmingUsersInfo[] | undefined,
-    totalFarmsArr: WhitelistedFarm[],
-  ):WhitelistedFarm[] => {
-    if (userInfoArr) {
-      const mergedInfo:WhitelistedFarm[] = [];
-
-      for (let i = 0; i < totalFarmsArr.length; i++) {
-        if (totalFarmsArr[i].id === userInfoArr[i]?.farmId) {
-          mergedInfo.push({
-            ...totalFarmsArr[i],
-            deposit: userInfoArr[i].staked,
-            earned: userInfoArr[i].earned,
-          });
-        }
-      }
-
-      return mergedInfo;
-    }
-
-    return totalFarmsArr;
-  };
-
-  useEffect(() => {
-    const start = async () => {
-      const loadFarms = async () => {
-        if (!tezos) return;
-        if (!network) return;
-        const contractInfo = await getStorageInfo(tezos, FARM_CONTRACT);
-        setContract(contractInfo);
-        const possibleFarms = new Array(+contractInfo?.storage.farms_count.toString())
-          .fill(0)
-          .map(async (x, id) => (contractInfo?.storage.farms.get(id)));
-        const tempFarms = await Promise.all(possibleFarms);
-        if (tempFarms) {
-          const totalFarmsWrapper = tempFarms
-            .filter((x) => !!x)
-            .map((x, id) => ({
-              id,
-              tokenPair: fallbackPair,
-              totalValueLocked: prettyPrice(x.staked),
-              apy: '888%',
-              daily: '0.008%',
-              balance: '1000000.00',
-              multiplier: '888',
-              tokenContract: '#',
-              farmContract: '#',
-              projectLink: '#',
-              analyticsLink: '#',
-              remaining: new Date(Date.now() + 48 * 3600000),
-            }));
-          setTotalFarms(totalFarmsWrapper);
-        }
-      };
-      await loadFarms();
-
-      console.log('contract', contract);
-      console.log('totalFarms', totalFarms);
-
-      const loadUserInfo = async () => {
-        const usersInfoArray = totalFarms.map(
-          (farm): Promise<FarmingUsersInfo | undefined> | undefined => (
-            contract?.storage.users_info.get([farm.id, accountPkh])
-          ),
-        );
-        const resolvedUserInfo = await Promise.all(usersInfoArray);
-        const userInFarms:FarmingUsersInfo[] = [];
-        for (let i = 0; i < totalFarms.length; i++) {
-          userInFarms.push({ ...resolvedUserInfo[i], farmId: totalFarms[i].id });
-        }
-        setUserInfo(userInFarms);
-      };
-
-      if (accountPkh && contract) {
-        await loadUserInfo();
-      }
-
-      console.log('userInfo', userInfo);
-
-      setAllFarms(mergeUserAndFarmsInfo(userInfo, totalFarms));
-    };
-    start();
-  }, [accountPkh, tezos, network]);
+  const allFarms = useFarms();
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -279,7 +174,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {allFarms.map((x) => (
+      {allFarms?.map((x) => (
         <FarmingCard
           key={x.multiplier}
           farm={x}

@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  useCallback, useEffect, useState,
+} from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
@@ -9,12 +11,13 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 
 import {
   APP_NAME,
-  BASE_URL,
+  BASE_URL, FARM_CONTRACT,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
+  FarmingContractInfo,
   QSNetwork, WhitelistedBaker, WhitelistedToken,
 } from '@utils/types';
 import {
@@ -23,6 +26,7 @@ import {
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
+import { getStorageInfo } from '@utils/dapp/getStorageInfo';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -120,6 +124,7 @@ export type DAppType = {
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
+  farmingContract: FarmingContractInfo | undefined
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -136,6 +141,7 @@ function useDApp() {
     searchTokens,
     bakers,
     searchBakers,
+    farmingContract,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
@@ -146,7 +152,22 @@ function useDApp() {
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
+    farmingContract: undefined,
   });
+
+  useEffect(() => {
+    const loadContractStorage = async () => {
+      if (!tezos) return;
+      const contract:FarmingContractInfo = await getStorageInfo(tezos, FARM_CONTRACT);
+      setState((prevState) => ({
+        ...prevState,
+        farmingContract: contract,
+      }));
+    };
+    if (network && tezos) {
+      loadContractStorage();
+    }
+  }, [network, tezos]);
 
   const setFallbackState = useCallback(
     () => setState((prevState) => ({
@@ -492,6 +513,7 @@ function useDApp() {
     searchCustomToken,
     addCustomBaker,
     searchCustomBaker,
+    farmingContract,
   };
 }
 
@@ -515,6 +537,7 @@ export const [
   useSearchCustomTokens,
   useAddCustomBaker,
   useSearchCustomBaker,
+  useFarmingContract,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -535,4 +558,5 @@ export const [
   (v) => v.searchCustomToken,
   (v) => v.addCustomBaker,
   (v) => v.searchCustomBaker,
+  (v) => v.farmingContract,
 );

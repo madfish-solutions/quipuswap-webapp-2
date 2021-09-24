@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -12,6 +12,8 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
 
+import BigNumber from 'bignumber.js';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import s from './FarmingCard.module.sass';
 
 const modeClass = {
@@ -33,13 +35,12 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   openModal,
 }) => {
   const {
+    id,
     tokenPair,
     totalValueLocked,
     apy,
     daily,
     balance,
-    deposit,
-    earned,
     multiplier,
     tokenContract,
     farmContract,
@@ -47,6 +48,19 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     analyticsLink,
   } = farm;
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const [deposit, setDeposit] = useState<BigNumber>();
+  const [earned, setEarned] = useState<BigNumber>();
+  const userInfoInAllFarms = useUserInfoInAllFarms();
+
+  useEffect(() => {
+    if (userInfoInAllFarms && userInfoInAllFarms[id]) {
+      setDeposit(fromDecimals(userInfoInAllFarms[id].staked ?? new BigNumber(0), 6));
+      setEarned(fromDecimals(userInfoInAllFarms[id].earned ?? new BigNumber(0), 6));
+    } else {
+      setDeposit(undefined);
+      setEarned(undefined);
+    }
+  }, [userInfoInAllFarms, id]);
 
   return (
     <Card
