@@ -4,6 +4,7 @@
 .table
   border-top-left-radius: 8px
   border-top-right-radius: 8px
+  width: 100%
   position: relative
 
 .card
@@ -25,45 +26,33 @@
   justify-content: center
 
 .cell
-  font-size: 1.143rem
+  font-size: 1rem
   line-height: 1.5
   font-weight: 600
-  align-items: center
-  display: flex
 
 .root
   position: relative
 
-.pools
-  .row
-    grid-template-columns: 1.5fr 1.5fr 1.5fr 1fr
-.farms
-  .row
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr
-
 .root
   .table
     border-collapse: collapse
-    font-size: 0.875rem
-    line-height: 1.026rem
+    font-size: 1rem
+    line-height: 1.7
     tr
-      display: grid
       td
         border-bottom: none
     thead
       tr
         background-color: transparent
         th
-          display: grid
           padding: 16px 24px 12px 24px
     tbody
       tr
         td
-          display: grid
           padding: 16px 24px
 
 .preloaderWrapper
-  min-height: 915px
+  min-height: 973px
   display: flex
   justify-content: center
   flex-direction: column
@@ -190,12 +179,18 @@
         color: $text-inverse
 
 @include media('>tablet')
+  .root
+    .table
+      border-collapse: collapse
+      font-size: 0.875rem
+
+@include media('>tablet')
   .desktop
     display: flex
   .mobileFooter
     display: none
   .preloaderWrapper
-    min-height: 365px
+    min-height: 475px
   .mobile
     display: none
   .notMobile
@@ -204,4 +199,4 @@
 @include media('>Ltablet')
   .pools
     .row
-      grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
+      grid-template-columns: 1.1fr 1fr 1fr 1fr

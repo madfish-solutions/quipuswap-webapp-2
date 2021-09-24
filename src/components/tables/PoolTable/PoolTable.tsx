@@ -74,7 +74,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       Header: t('home|Name'),
       id: 'name',
       accessor: ({ token1, token2, pair }:PoolTableType) => (
-        <>
+        <div className={s.links}>
           <TokensLogos
             token1={token1 || TEZOS_TOKEN}
             token2={token2}
@@ -84,19 +84,19 @@ export const PoolTable: React.FC<PoolTableProps> = ({
             {pair.name}
           </span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
-        </>
+        </div>
       ),
     },
     {
       Header: (
-        <>
+        <div className={s.links}>
           {t('home|TVL')}
           <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
-        </>
+        </div>
       ),
       id: 'tvl',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
-        <>
+        <div className={s.links}>
           <span className={s.dollar}>
             $
           </span>
@@ -107,15 +107,15 @@ export const PoolTable: React.FC<PoolTableProps> = ({
               .integerValue()
               .toString()}
           />
-        </>
+        </div>
       ),
     },
     {
       Header: (
-        <>
+        <div className={s.links}>
           {t('home|Volume 24h')}
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
-        </>
+        </div>
       ),
       id: 'volume24h',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
@@ -136,7 +136,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
     {
       id: 'poolButton',
       accessor: ({ buttons }:PoolTableType) => (
-        <>
+        <div className={s.last}>
           <Button
             theme="secondary"
             className={s.button}
@@ -151,7 +151,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
           >
             {buttons.second.label}
           </Button>
-        </>
+        </div>
       ),
     },
     // eslint-disable-next-line

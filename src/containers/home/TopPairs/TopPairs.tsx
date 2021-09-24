@@ -60,9 +60,6 @@ export const TopPairs: React.FC<TopPairsProps> = ({
         loading={!!isNotLoaded}
         totalCount={data?.pairs?.totalCount ?? 0}
         data={isNotLoaded ? [] : pairData as any}
-        // data={isNotLoaded ? [] : pairData?.
-        //   filter(x => pairData
-        //     .filter(y => x.pair.name === y.pair.name).length < 2) as any}
       />
     </Section>
   );

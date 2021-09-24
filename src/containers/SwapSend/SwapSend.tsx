@@ -3,7 +3,6 @@ import React, {
 } from 'react';
 import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import dynamic from 'next/dynamic';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -26,16 +25,10 @@ import {
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { CandleChartSampleData } from '@components/charts/content';
-
-import s from '@styles/SwapLiquidity.module.sass';
 
 import { SwapForm } from './SwapForm';
 import { submitForm } from './swapHelpers';
-
-const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
-  ssr: false,
-});
+import { SwapChart } from './SwapChart';
 
 const TabsContent = [
   {
@@ -166,12 +159,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
 
   return (
     <>
-      <CandleChart
-        data={CandleChartSampleData}
-        disabled
+      <SwapChart
         token1={token1}
         token2={token2}
-        className={s.chart}
       />
       <StickyBlock className={className}>
         <Form

@@ -9,13 +9,15 @@ import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 
-import { prettyPrice } from '@utils/helpers';
+import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
+import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
-import { WhitelistedToken } from '@utils/types';
 import { Preloader } from '@components/common/Preloader';
+
 import {
   CandleGraphOptions,
   GraphicColors,
@@ -25,11 +27,11 @@ import {
 import s from './CandleChart.module.sass';
 
 type CandleChartProps = {
-  data: any[]
+  data: CandlePlotPoint[]
   className?: string
   disabled?: boolean
   loading?: boolean
-  token1?: WhitelistedToken
+  token1: WhitelistedToken
   token2?: WhitelistedToken
 };
 
@@ -38,11 +40,13 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const ChartInstance: React.FC<{ data:any[] }> = ({
+const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken }> = ({
   data,
+  token,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
+  const { t } = useTranslation(['common']);
 
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
@@ -60,11 +64,11 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
     close: number,
     time: number
   }>({
-    open: parseFloat(currenValue.open),
-    high: parseFloat(currenValue.high),
-    low: parseFloat(currenValue.low),
-    close: parseFloat(currenValue.close),
-    time: parseFloat(currenValue.time),
+    open: currenValue.open,
+    high: currenValue.high,
+    low: currenValue.low,
+    close: currenValue.close,
+    time: currenValue.time,
   });
 
   const handleResize = useCallback(() => {
@@ -129,6 +133,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
         ...CandleGraphOptions,
       });
 
+      // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
@@ -144,11 +149,11 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
         ) {
           if (setValue) {
             setValue({
-              open: parseFloat(currenValue.open),
-              high: parseFloat(currenValue.high),
-              low: parseFloat(currenValue.low),
-              close: parseFloat(currenValue.close),
-              time: parseFloat(currenValue.time),
+              open: currenValue.open,
+              high: currenValue.high,
+              low: currenValue.low,
+              close: currenValue.close,
+              time: currenValue.time,
             });
           }
         } else if (setValue) {
@@ -172,16 +177,13 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
             param.seriesPrices.get(series)?.close.toString()
             ?? currenValue.close,
           );
-          const time = parseFloat(
-            param.time
-            ?? currenValue.time,
-          );
+          const time = param.time ?? currenValue.time;
           setValue({
             open,
             high,
             low,
             close,
-            time,
+            time: time as number,
           });
         }
       });
@@ -206,7 +208,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
           <h4 className={s.tokenPrice}>
             {prettyPrice(value.close, 2, 10)}
             {' '}
-            TOKEN
+            {getWhitelistedTokenName(token)}
           </h4>
           <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
             $
@@ -218,7 +220,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
           <div className={s.column}>
             <div className={s.item}>
               <span className={s.label}>
-                Open
+                {t('common|Open')}
               </span>
               <span className={s.value}>
                 {value.open}
@@ -226,7 +228,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
             </div>
             <div className={s.item}>
               <span className={s.label}>
-                Close
+                {t('common|Close')}
               </span>
               <span className={s.value}>
                 {value.close}
@@ -236,7 +238,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
           <div className={s.column}>
             <div className={s.item}>
               <span className={s.label}>
-                Max
+                {t('common|Max')}
               </span>
               <span className={s.value}>
                 {value.high}
@@ -244,7 +246,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
             </div>
             <div className={s.item}>
               <span className={s.label}>
-                Min
+                {t('common|Min')}
               </span>
               <span className={s.value}>
                 {value.low}
@@ -279,10 +281,10 @@ export const CandleChart: React.FC<CandleChartProps> = ({
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || !data || data.length === 0
+        {loading || !data || !token2 || data.length === 0
           ? (<Preloader style={{ minHeight: '360px' }} />)
           : (
-            <ChartInstance data={data} />
+            <ChartInstance token={token2} data={data} />
           )}
       </CardContent>
       {disabled && (

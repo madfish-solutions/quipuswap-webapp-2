@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { findDex, FoundDex } from '@quipuswap/sdk';
 
-import { useGetPairPlotLiquidityQuery } from '@graphql';
+import { PlotPoint, useGetPairPlotLiquidityQuery } from '@graphql';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
 import {
@@ -39,7 +39,7 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
-      data={!loadingProp && data ? data.pair.plotLiquidity : []}
+      data={!loadingProp && data ? data.pair.plotLiquidity as PlotPoint[] : []}
     />
   );
 };

@@ -227,13 +227,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
           const slippage = slippageToBignum(values.slippage).div(100);
 
-          const params = await removeLiquidity(
-            tezos,
-            dex,
-            balance,
-            slippage,
-          );
-          setRemoveLiquidityParams(params);
+          if (accountPkh) {
+            const params = await removeLiquidity(
+              tezos,
+              dex,
+              balance,
+              slippage,
+            );
+            setRemoveLiquidityParams(params);
+          }
 
           form.mutators.setValue('balanceA', bal1);
           form.mutators.setValue('balanceB', bal2);
@@ -406,8 +408,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     } catch (err) {
       handleErrorToast(err);
     }
-    // eslint-disable-next-line
-  }, [token2, token1, tezos, networkId, accountPkh]);
+  }, [token2, token1, tezos, networkId, accountPkh, form.mutators, handleErrorToast]);
 
   useEffect(() => {
     setPoolShare(undefined);
@@ -421,8 +422,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       0,
     );
     getDex();
-    // eslint-disable-next-line
-  }, [token2, token1, tezos, networkId, accountPkh]);
+  }, [token2, token1, tezos, networkId, accountPkh, form.mutators, getDex]);
 
   const saveFunc = async () => {
     if (promise) {

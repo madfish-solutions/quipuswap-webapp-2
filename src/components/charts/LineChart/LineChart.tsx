@@ -9,6 +9,7 @@ import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 
+import { PlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { prettyPrice } from '@utils/helpers';
@@ -26,7 +27,7 @@ import {
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
-  data: any[]
+  data: PlotPoint[]
   token1?: WhitelistedToken
   token2?: WhitelistedToken
   loading?: boolean
@@ -39,7 +40,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const ChartInstance: React.FC<{ data:any[] }> = ({
+const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   data,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -55,8 +56,8 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
   const currenValue = data[data.length - 1];
 
   const [value, setValue] = useState<{ price: number, time: number }>({
-    price: parseFloat(currenValue.value),
-    time: parseFloat(currenValue.time),
+    price: currenValue.value,
+    time: currenValue.time,
   });
 
   const handleResize = useCallback(() => {
@@ -127,6 +128,7 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
         ...LineGraphOptions,
       });
 
+      // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
@@ -142,16 +144,16 @@ const ChartInstance: React.FC<{ data:any[] }> = ({
         ) {
           if (setValue) {
             setValue({
-              price: parseFloat(currenValue.value),
-              time: parseFloat(currenValue.time),
+              price: currenValue.value,
+              time: currenValue.time,
             });
           }
         } else if (setValue) {
-          const price = parseFloat(param.seriesPrices.get(series)?.toString() ?? currenValue.value);
-          const time = parseFloat(param.time ?? currenValue.time);
+          const price = param.seriesPrices.get(series) ?? currenValue.value;
+          const time = param.time ?? currenValue.time;
           setValue({
-            price,
-            time,
+            price: price as number,
+            time: time as number,
           });
         }
       });
