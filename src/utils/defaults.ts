@@ -66,7 +66,7 @@ export const STABLE_TOKEN: WhitelistedToken = {
 
 export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
   type: 'fa2',
-  contractAddress: 'KT19VvavoJj11gyJP9LUmPQVLCqbatwpBC4t',
+  contractAddress: process.env.NEXT_PUBLIC_GOVERNANCE_TESTNET_TOKEN!,
   fa2TokenId: 0,
   metadata: {
     decimals: 6,

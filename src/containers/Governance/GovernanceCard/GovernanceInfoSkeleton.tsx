@@ -43,7 +43,7 @@ export const GovernanceInfoSkeleton: React.FC<{
               <Button
                 href="/governance"
                 theme="quaternary"
-                className={s.proposalHeader}
+                className={s.proposalButton}
                 control={
                   <Back className={s.proposalBackIcon} />
                 }

@@ -105,8 +105,9 @@ export const PieChart: React.FC<PieChartProps> = ({
       <div className={cx(s.chart, chartClassName)}>
         <PieChartLib
           data={data}
-          segmentsStyle={(index) => ({ transition: 'opacity .3s', opacity: data[index].opacity })}
+          segmentsStyle={(index:any) => ({ transition: 'opacity .3s', opacity: data[index].opacity })}
           lineWidth={20}
+          startAngle={-90}
           viewBoxSize={[100, 100]}
           className={s.pieChart}
         />

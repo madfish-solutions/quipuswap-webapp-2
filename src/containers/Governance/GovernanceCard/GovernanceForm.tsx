@@ -230,7 +230,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
           <Button
             href="/governance"
             theme="quaternary"
-            className={s.proposalHeader}
+            className={s.proposalButton}
             control={
               <Back className={s.proposalBackIcon} />
             }

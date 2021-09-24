@@ -1,11 +1,14 @@
 import { useRouter } from 'next/router';
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useMemo,
+} from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getStorageInfo, useNetwork, useTezos } from '@utils/dapp';
-import { GOVERNANCE_CONTRACT } from '@utils/defaults';
+import { GOVERNANCE_CONTRACT, STABLE_TOKEN } from '@utils/defaults';
 import { GovernanceStorageInfo, ProposalType } from '@utils/types';
 import { prepareIpfsLink, transformProposalToGovernanceProps } from '@utils/helpers';
 import {
@@ -16,25 +19,22 @@ import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Governance.module.sass';
 import { GovernanceInfoSkeleton } from './GovernanceCard/GovernanceInfoSkeleton';
+import { GovernanceCardLoader } from './GovernanceCard/GovernanceCardLoader';
 
 const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
 });
 
-const TabsContent = [
-  {
-    id: 'all',
-    label: 'All',
-  },
+const PROPOSAL_STATUSES = [
   {
     id: 'pending',
     label: 'Pending',
   },
   {
-    id: 'ongoing',
-    label: 'On-going',
+    id: 'banned',
+    label: 'Banned',
   },
   {
     id: 'approved',
@@ -45,10 +45,27 @@ const TabsContent = [
     label: 'Activated',
   },
   {
-    id: 'failed',
-    label: 'Failed',
+    id: 'rejected',
+    label: 'Rejected',
+  },
+  {
+    id: 'underrated',
+    label: 'Underrated',
+  },
+  {
+    id: 'voting',
+    label: 'Voting',
   },
 ];
+
+const TabsContent = [
+  {
+    id: 'all',
+    label: 'All',
+  }, ...PROPOSAL_STATUSES.map((x) => ({ id: x.id, label: x.label })),
+];
+
+const TOP_COLORS = ['#1373E4', '#2ED33E', '#F9A605', '#EA2424'];
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -71,6 +88,7 @@ const hexToASCII = (str1:string) => {
 export const Governance: React.FC<GovernanceProps> = ({
   className,
 }) => {
+  const { t } = useTranslation(['governance']);
   const router = useRouter();
   const tezos = useTezos();
   const network = useNetwork();
@@ -110,6 +128,7 @@ export const Governance: React.FC<GovernanceProps> = ({
             votesFor: x.votes_for,
           }
         ));
+        // totalsupply = 1000000000000
         const loadDescription = async (x:any) => {
           const url = prepareIpfsLink(x.ipfsLink);
           if (!url) return null;
@@ -153,6 +172,27 @@ export const Governance: React.FC<GovernanceProps> = ({
 
   const proposalObj = proposals.find((x) => `${x.id}` === proposal);
 
+  const realProposals = useMemo(() => proposals.map((x) => {
+    let { status } = x;
+    if (x.status !== 'underrated' && new Date(x.endDate).getTime() < Date.now()) {
+      status = 'underrated';
+      if (x.status !== 'pending') {
+        // if(x.votesAgainst < x.)
+      }
+      // underrated if was pending
+      // aproved or rejected if quorum on 'voting' status
+      // else underrated
+    }
+    return {
+      ...x,
+      status,
+    };
+  }), [proposals]);
+
+  const renderProposals = useMemo(() => proposals
+    .filter((x) => tabsState === 'all' || x.status === tabsState)
+    .map(transformProposalToGovernanceProps), [proposals, tabsState]);
+
   if (router.query.proposal && !proposalsLoaded) {
     return (
       <div className={cx(className, s.proposal)}>
@@ -172,6 +212,20 @@ export const Governance: React.FC<GovernanceProps> = ({
     );
   }
 
+  const statusesOfProposals = realProposals
+    .reduce(
+      (prev, cur) => ({ ...prev, [cur.status]: prev[cur.status] + 1 }), Object
+        .fromEntries(PROPOSAL_STATUSES.map((x) => [x.id, 0])),
+    );
+  const reducedChartData = Object.keys(statusesOfProposals)
+    .map((x) => ({ key: x, value: statusesOfProposals[x] })) // gather array of summ equal statuses
+    .sort((b, a) => a.value - b.value) // sort by count DESC
+    .reduce((prev:any, cur, i) => (
+      i < 4
+        ? [...prev, { label: cur.key, value: cur.value, color: TOP_COLORS[i] }]
+        : [...prev.slice(0, 4), { label: 'Other', value: prev[4] ? prev[4].value + cur.value : cur.value, color: '#8B90A0' }]
+    ), []); // element > 5 to element#4 and label 'Other'
+
   return (
     <>
       <Card
@@ -179,13 +233,7 @@ export const Governance: React.FC<GovernanceProps> = ({
       >
         <CardContent className={s.container}>
           <PieChart
-            data={[
-              { value: 2, color: '#1373E4', label: 'On-going' },
-              { value: 4, color: '#2ED33E', label: 'Approved' },
-              { value: 6, color: '#F9A605', label: 'Pending' },
-              { value: 8, color: '#EA2424', label: 'Failed' },
-              { value: 10, color: '#8B90A0', label: 'Activated' },
-            ]}
+            data={reducedChartData}
             legend
             label="Proposals summary"
             showTotal
@@ -194,19 +242,31 @@ export const Governance: React.FC<GovernanceProps> = ({
           <div className={s.voteInfo}>
             <div className={s.deviceRow}>
               <div className={s.voteRow}>
-                <div className={s.voteCat}>Total vetoed QNOTs:</div>
+                <div className={s.voteCat}>
+                  {t('governance:Total vetoed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  :
+                </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
-                <div className={s.voteCat}>Total QNOTs balance:</div>
+                <div className={s.voteCat}>
+                  {t('governance:Total {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
+                  :
+                </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
-                <div className={s.voteCat}>Your Voted QNOTs:</div>
+                <div className={s.voteCat}>
+                  {t('governance:Your Voted {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  :
+                </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
-                <div className={s.voteCat}>Total Climable QNOTs:</div>
+                <div className={s.voteCat}>
+                  {t('governance:Total Climable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  :
+                </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
             </div>
@@ -216,10 +276,10 @@ export const Governance: React.FC<GovernanceProps> = ({
                 theme="secondary"
                 className={s.voteButton}
               >
-                Submit proposal
+                {t('governance:Submit proposal')}
               </Button>
               <Button className={s.voteButton}>
-                Claim unlocked
+                {t('governance:Claim unlocked')}
               </Button>
             </div>
           </div>
@@ -246,26 +306,20 @@ export const Governance: React.FC<GovernanceProps> = ({
           </div>
         </div>
 
-        {proposals
-          .filter((x) => tabsState === 'all' || x.status === tabsState)
-          .map(transformProposalToGovernanceProps)
-          .map((x) => (
+        {renderProposals.length < 1 ? (
+          <>
+            <GovernanceCardLoader />
+            <GovernanceCardLoader />
+            <GovernanceCardLoader />
+          </>
+        )
+          : renderProposals.map((x) => (
             <GovernanceCard
               key={x.id}
               {...x}
               href={`/governance/${x.id}`}
             />
           ))}
-
-        {/* {content.map((x) => (
-          <GovernanceCard
-            key={x.id}
-            {...x}
-            href={typeof x.name === 'string'
-            ? `/governance/${x.name.split(' ').join('-').split('/')[0]}`
-            : '#'}
-          />
-        ))} */}
 
       </StickyBlock>
     </>

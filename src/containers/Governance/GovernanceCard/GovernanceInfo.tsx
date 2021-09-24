@@ -80,10 +80,10 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               <Button
                 href="/governance"
                 theme="quaternary"
-                className={cx(s.proposalHeader, s.zeroPad)}
+                className={s.proposalButton}
                 control={
                   <Back className={s.proposalBackIcon} />
-              }
+                }
               >
                 Back
               </Button>
@@ -123,7 +123,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
           className={s.proposalSubHeader}
         />
         <div className={cx(s.mobile, s.button)}>
-          <Button onClick={() => setVoteModal(true)} className={s.govButtonButtom}>
+          <Button onClick={() => setVoteModal(true)} className={s.govButtonBottom}>
             Vote
           </Button>
         </div>
@@ -142,7 +142,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
           <div className={s.govDescription}>
             <Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />
           </div>
-          <Button onClick={() => setVoteModal(true)} className={s.govButtonButtom}>
+          <Button onClick={() => setVoteModal(true)} className={s.govButtonBottom}>
             Vote
           </Button>
         </CardContent>

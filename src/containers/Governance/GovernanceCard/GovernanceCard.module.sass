@@ -1,6 +1,10 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.proposalButton
+  display: flex
+  align-items: center
+
 .floatingPicker
   position: absolute
   z-index: 1
@@ -187,6 +191,16 @@
 .fullWidth
   width: 100% !important
 
+.skeletonText
+  margin-right: 16px
+  margin-bottom: 8px
+  width: 100px
+  height: 24px
+
+.skeletonDescription
+  width: 200px
+  height: 24px
+
 .govName
   order: 3
   flex: 100%
@@ -217,6 +231,10 @@
   color: $text-03
   font-weight: 600
 
+.govBlocks
+  .skeletonBlock
+    height: 48px
+    width: 100%
 
 .govBlock
   margin-bottom: 16px
@@ -231,7 +249,9 @@
 .button
   margin: 16px 24px 24px 24px
 
-.govButtonBottom, .govButtonButtom
+.govButtonBottom
+  display: flex
+  justify-content: center
   max-width: none
   margin-top: 24px
   width: 100%
@@ -270,15 +290,19 @@
   .govBlocks
     display: flex
     flex-wrap: wrap
+    .skeletonBlock
+      height: 48px
+      min-width: 60px
+      flex: initial
+      width: calc(50% - 16px)
+      margin-right: 16px
   .govBlock
     width: 50%
   .govButtonBottom
     max-width: auto
-    width: 50%
-    margin-left: 0px
-    margin-right: auto
+    width: 100%
 
-@include media('>Ltablet')
+@include media('>tablet')
   .desktop
     display: block
   .mobile
@@ -286,7 +310,7 @@
   .proposalHeader
     flex-direction: column
     align-items: flex-start
-  .govButtonButtom
+  .govButtonBottom
     display: none
   .mobSubmitGroup
     display: none
@@ -313,11 +337,15 @@
   .govBlocks
     display: flex
     justify-content: space-between
+    .skeletonBlock
+      flex: 1
+      width: auto
   .govBlock
     width: auto
     margin-bottom: 0px
   .govButton
-    display: block
+    display: flex
+    justify-content: center
     max-width: 180px
   .govButtonBottom
     display: none
