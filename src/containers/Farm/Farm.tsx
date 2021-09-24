@@ -9,15 +9,15 @@ import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
+import { SelectUI } from '@components/ui/Select';
+import { SliderUI } from '@components/ui/Slider';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
-import { SliderUI } from '@components/ui/Slider';
+import { ApyModal } from '@components/modals/ApyModal';
 import Search from '@icons/Search.svg';
 
-import { ApyModal } from '@components/modals/ApyModal';
-import { SelectUI } from '@components/ui/Select';
 import s from './Farm.module.sass';
 
 type FarmProps = {
