@@ -26,7 +26,7 @@ export const QPToken: React.FC<QPTokenProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const exchangeRates = useExchangeRates();
 
-  const price = new BigNumber(exchangeRates
+  const price = new BigNumber(exchangeRates && exchangeRates.find
     ? exchangeRates
       .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
     : NaN);

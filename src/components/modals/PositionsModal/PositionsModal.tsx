@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState, useMemo,
+  useContext, useEffect, useRef, useState, useMemo, useCallback,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
@@ -67,18 +67,18 @@ const Header:React.FC<HeaderProps> = ({
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  const promise = useRef();
 
-  const saveFunc = async () => {
+  const saveFunc = useCallback(async () => {
     if (promise) {
       await promise;
     }
     setVal(values);
     setSubm(true);
-    promise = save(values);
+    promise.current = save(values);
     await promise;
     setSubm(false);
-  };
+  }, [save, values]);
 
   useEffect(() => {
     if (timeout.current) {
@@ -90,7 +90,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+  }, [values, debounce, saveFunc]);
 
   return (
     <div className={s.inputs}>
@@ -103,7 +103,7 @@ const Header:React.FC<HeaderProps> = ({
               {...input}
               StartAdornment={Search}
               className={s.modalInput}
-              placeholder={t('common:Search')}
+              placeholder={t('common|Search')}
               error={meta.error}
               readOnly={values.token1 && values.token2}
             />
@@ -121,7 +121,7 @@ const Header:React.FC<HeaderProps> = ({
             <NumberInput
               {...input}
               className={s.modalInput}
-              placeholder={t('common:Token ID')}
+              placeholder={t('common|Token ID')}
               step={1}
               min={0}
               max={100}
@@ -179,7 +179,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
     setInputToken(isSoleFa2Token ? values.tokenId : '');
   };
 
-  const handleTokenSearch = () => {
+  const handleTokenSearch = useCallback(() => {
     const isTokens = tokens
       .filter(
         (token:any) => localSearchToken(
@@ -193,15 +193,14 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, +inputToken);
     }
-  };
+  }, [inputToken, inputValue, network, tokens, searchCustomToken]);
 
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0
     && searchTokens.length === 0,
     [searchTokens, filteredTokens],
   );
-
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
   const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
     ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
@@ -228,7 +227,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
       }}
       render={({ form, values }) => (
         <Modal
-          title={t('common:Your Positions')}
+          title={t('common|Your Positions')}
           header={(
             <AutoSave
               form={form}
@@ -324,7 +323,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           {isEmptyTokens && !searchLoading && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
             </div>
           )}
           {isEmptyTokens && searchLoading && (

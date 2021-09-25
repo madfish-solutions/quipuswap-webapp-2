@@ -27,12 +27,12 @@ export const SwapCell: React.FC<SwapCellProps> = ({
       <div>
         <div className={s.caption}>{new Date(transaction?.date).toISOString()}</div>
         <div className={cx(s.joinRow, s.centerRow, s.swapFrom)}>
-          <div className={cx(s.label1, s.swapLabel)}>{t('common:Swap')}</div>
+          <div className={cx(s.label1, s.swapLabel)}>{t('common|Swap')}</div>
           <div className={cx(s.centerLabel, s.label1)}>{transaction?.fromValue}</div>
           <div className={s.swapLink}>{transaction?.fromCurrency}</div>
         </div>
         <div className={cx(s.joinRow, s.centerRow, s.swapTo)}>
-          <div className={cx(s.label1, s.swapLabel)}>{t('common:to')}</div>
+          <div className={cx(s.label1, s.swapLabel)}>{t('common|to')}</div>
           <div className={cx(s.centerLabel, s.label1)}>{transaction?.toValue}</div>
           <div className={s.swapLink}>{transaction?.toCurrency}</div>
         </div>

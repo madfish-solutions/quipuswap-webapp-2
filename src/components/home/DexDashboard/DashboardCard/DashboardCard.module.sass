@@ -2,7 +2,7 @@
 @import "@styles/breakpoints"
 
 .root
-  padding: 24px
+  padding: 24px 24px 0px 24px
   display: flex
   flex-direction: column
   align-items: center
@@ -12,3 +12,7 @@
   color: $text-03 !important
   font-size: 1.15rem
   margin-bottom: 8px
+
+@include media('>Lphone')
+  .root
+    padding: 24px

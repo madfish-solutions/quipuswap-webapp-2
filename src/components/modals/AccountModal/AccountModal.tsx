@@ -62,7 +62,7 @@ export const AccountModal: React.FC = () => {
   return (
     <Modal
       contentClassName={compoundClassName}
-      title={t('common:Account')}
+      title={t('common|Account')}
       isOpen={accountInfoModalOpen}
       onRequestClose={closeAccountInfoModal}
     >
@@ -76,7 +76,7 @@ export const AccountModal: React.FC = () => {
           className={s.buttonCopy}
           control={copied ? <CheckMark className={s.icon} /> : (<Copy className={s.icon} />)}
         >
-          {copied ? t('swap:Copied') : t('swap:Copy')}
+          {copied ? t('swap|Copied') : t('swap|Copy')}
         </Button>
       </div>
       <Button
@@ -84,7 +84,7 @@ export const AccountModal: React.FC = () => {
         theme="secondary"
         onClick={handleLogout}
       >
-        {t('common:Log Out')}
+        {t('common|Log Out')}
       </Button>
     </Modal>
   );
