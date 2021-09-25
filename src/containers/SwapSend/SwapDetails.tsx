@@ -64,10 +64,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Sell Price')}
+            {t('common|Sell Price')}
             <Tooltip
               sizeT="small"
-              content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              content={t('common|The amount of token B you receive for 1 token A, according to the current exchange rate.')}
             />
           </>
           )}
@@ -87,10 +87,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Buy Price')}
+            {t('common|Buy Price')}
             <Tooltip
               sizeT="small"
-              content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              content={t('common|The amount of token A you receive for 1 token B, according to the current exchange rate.')}
             />
           </>
           )}
@@ -109,10 +109,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Price impact')}
+            {t('common|Price impact')}
             <Tooltip
               sizeT="small"
-              content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+              content={t('swap|The impact your transaction is expected to make on the exchange rate.')}
             />
           </>
           )}
@@ -123,10 +123,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Fee')}
+            {t('common|Fee')}
             <Tooltip
               sizeT="small"
-              content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+              content={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
             />
           </>
           )}
@@ -137,10 +137,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Route')}
+            {t('common|Route')}
             <Tooltip
               sizeT="small"
-              content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+              content={t("swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
             />
           </>
           )}
@@ -176,7 +176,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+          { t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
             {
               tokenA: getWhitelistedTokenSymbol(token1),
               tokenB: TEZOS_TOKEN.metadata.symbol,
@@ -192,12 +192,12 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           icon={<ExternalLink className={s.linkIcon} />}
         >
           {dex2
-            ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+            ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
               {
                 tokenA: TEZOS_TOKEN.metadata.symbol,
                 tokenB: getWhitelistedTokenSymbol(token2),
               })
-            : t('common:View Pair Analytics')}
+            : t('common|View Pair Analytics')}
         </Button>
         )}
       </div>

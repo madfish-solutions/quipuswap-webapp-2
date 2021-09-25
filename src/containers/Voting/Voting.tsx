@@ -150,6 +150,7 @@ export const Voting: React.FC<VotingProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
@@ -168,12 +169,14 @@ export const Voting: React.FC<VotingProps> = ({
         network.id as QSMainNet,
       );
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
       getBalance();
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);

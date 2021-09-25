@@ -9,11 +9,16 @@ import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 
-import { prettyPrice } from '@utils/helpers';
+import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
+import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedToken } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
+import { Preloader } from '@components/common/Preloader';
+
 import {
   CandleGraphOptions,
   GraphicColors,
@@ -22,10 +27,13 @@ import {
 } from '../config';
 import s from './CandleChart.module.sass';
 
-type LineChartProps = {
-  data: any[]
+type CandleChartProps = {
+  data: CandlePlotPoint[]
   className?: string
   disabled?: boolean
+  loading?: boolean
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
 };
 
 const modeClass = {
@@ -33,14 +41,13 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const CandleChart: React.FC<LineChartProps> = ({
+const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken }> = ({
   data,
-  className,
-  disabled = true,
+  token,
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
+  const { t } = useTranslation(['common']);
 
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
@@ -58,11 +65,11 @@ export const CandleChart: React.FC<LineChartProps> = ({
     close: number,
     time: number
   }>({
-    open: parseFloat(currenValue.open),
-    high: parseFloat(currenValue.high),
-    low: parseFloat(currenValue.low),
-    close: parseFloat(currenValue.close),
-    time: parseFloat(currenValue.time),
+    open: currenValue.open,
+    high: currenValue.high,
+    low: currenValue.low,
+    close: currenValue.close,
+    time: currenValue.time,
   });
 
   const handleResize = useCallback(() => {
@@ -127,6 +134,7 @@ export const CandleChart: React.FC<LineChartProps> = ({
         ...CandleGraphOptions,
       });
 
+      // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
@@ -142,11 +150,11 @@ export const CandleChart: React.FC<LineChartProps> = ({
         ) {
           if (setValue) {
             setValue({
-              open: parseFloat(currenValue.open),
-              high: parseFloat(currenValue.high),
-              low: parseFloat(currenValue.low),
-              close: parseFloat(currenValue.close),
-              time: parseFloat(currenValue.time),
+              open: currenValue.open,
+              high: currenValue.high,
+              low: currenValue.low,
+              close: currenValue.close,
+              time: currenValue.time,
             });
           }
         } else if (setValue) {
@@ -170,16 +178,13 @@ export const CandleChart: React.FC<LineChartProps> = ({
             param.seriesPrices.get(series)?.close.toString()
             ?? currenValue.close,
           );
-          const time = parseFloat(
-            param.time
-            ?? currenValue.time,
-          );
+          const time = param.time ?? currenValue.time;
           setValue({
             open,
             high,
             low,
             close,
-            time,
+            time: time as number,
           });
         }
       });
@@ -194,72 +199,99 @@ export const CandleChart: React.FC<LineChartProps> = ({
     height,
     prevColorThemeModeState,
     setValue,
+    i18n,
   ]);
 
   return (
-    <Card
-      className={className}
-    >
-      <CardHeader header={{ content: <PairChartInfo /> }} className={s.cardHeader} />
-      <CardContent className={cx(s.container, s.cardContent)}>
-        <div className={cx(s.info, modeClass[colorThemeMode])}>
-          <span className={s.prices}>
-            <h4 className={s.tokenPrice}>
-              {prettyPrice(value.close, 2, 10)}
-              {' '}
-              TOKEN
-            </h4>
-            <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
-              $
-              {' '}
-              {prettyPrice(value.close, 2, 10)}
-            </h4>
-          </span>
-          <div className={s.details}>
-            <div className={s.column}>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Open
-                </span>
-                <span className={s.value}>
-                  {value.open}
-                </span>
-              </div>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Close
-                </span>
-                <span className={s.value}>
-                  {value.close}
-                </span>
-              </div>
+    <>
+      <div className={cx(s.info, modeClass[colorThemeMode])}>
+        <span className={s.prices}>
+          <h4 className={s.tokenPrice}>
+            {prettyPrice(value.close, 2, 10)}
+            {' '}
+            {getWhitelistedTokenName(token)}
+          </h4>
+          <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
+            $
+            {' '}
+            {prettyPrice(value.close, 2, 10)}
+          </h4>
+        </span>
+        <div className={s.details}>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                {t('common|Open')}
+              </span>
+              <span className={s.value}>
+                {value.open}
+              </span>
             </div>
-            <div className={s.column}>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Max
-                </span>
-                <span className={s.value}>
-                  {value.high}
-                </span>
-              </div>
-              <div className={s.item}>
-                <span className={s.label}>
-                  Min
-                </span>
-                <span className={s.value}>
-                  {value.low}
-                </span>
-              </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                {t('common|Close')}
+              </span>
+              <span className={s.value}>
+                {value.close}
+              </span>
+            </div>
+          </div>
+          <div className={s.column}>
+            <div className={s.item}>
+              <span className={s.label}>
+                {t('common|Max')}
+              </span>
+              <span className={s.value}>
+                {value.high}
+              </span>
+            </div>
+            <div className={s.item}>
+              <span className={s.label}>
+                {t('common|Min')}
+              </span>
+              <span className={s.value}>
+                {value.low}
+              </span>
             </div>
           </div>
         </div>
-        <div ref={chartRef} className={s.chart} />
+      </div>
+      <div ref={chartRef} className={s.chart} />
+    </>
+  );
+};
+
+export const CandleChart: React.FC<CandleChartProps> = ({
+  data,
+  className,
+  loading = false,
+  token1 = TEZOS_TOKEN,
+  token2,
+  disabled,
+}) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
+  return (
+    <Card className={className}>
+      <CardHeader
+        header={{
+          content: (
+            <PairChartInfo hidePeriods token1={token1} token2={token2} />
+          ),
+        }}
+        className={s.cardHeader}
+      />
+      <CardContent className={cx(s.container, s.cardContent)}>
+        {loading || !data || !token2 || data.length === 0
+          ? (<Preloader style={{ minHeight: '360px' }} />)
+          : (
+            <ChartInstance token={token2} data={data} />
+          )}
       </CardContent>
       {disabled && (
       <div className={cx(s.disabled, modeClass[colorThemeMode])}>
         <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+        <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
       </div>
       )}
     </Card>

@@ -2,6 +2,9 @@
 @import "@styles/breakpoints"
 
 .table
+  border-top-left-radius: 8px
+  border-top-right-radius: 8px
+  width: 100%
   position: relative
 
 .card
@@ -23,60 +26,33 @@
   justify-content: center
 
 .cell
-  font-size: 1.143rem
+  font-size: 1rem
   line-height: 1.5
   font-weight: 600
-  align-items: center
-  display: flex
 
 .root
   position: relative
-  overflow: hidden
-  overflow-x: auto
-  -ms-overflow-style: none
-  scrollbar-width: none
-  border-radius: 4px
-  &::-webkit-scrollbar
-    display: none
-
-.wrapper
-  width: max-content
-
-.pools
-  .row
-    grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
-.farms
-  .row
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr
 
 .root
-  table
-    width: 1148px
+  .table
     border-collapse: collapse
-    font-size: 0.875rem
-    line-height: 1.026rem
+    font-size: 1rem
+    line-height: 1.7
     tr
-      display: grid
       td
         border-bottom: none
     thead
       tr
         background-color: transparent
         th
-          display: grid
           padding: 16px 24px 12px 24px
-          &:first-child
-            border-top-left-radius: 4px
-          &:last-child
-            border-top-right-radius: 4px
     tbody
       tr
         td
-          display: grid
           padding: 16px 24px
 
 .preloaderWrapper
-  min-height: 915px
+  min-height: 973px
   display: flex
   justify-content: center
   flex-direction: column
@@ -85,8 +61,8 @@
   display: flex
   justify-content: center
   padding: 0px
-  border-bottom-left-radius: 4px
-  border-bottom-right-radius: 4px
+  border-bottom-right-radius: 8px
+  border-bottom-left-radius: 8px
   &.smallFooter
     min-height: initial
     height: 16px
@@ -157,6 +133,13 @@
     transform: rotate(180deg)
 
 .mobileFooter
+  display: flex
+  justify-content: center
+  width: 100%
+  min-height: 49px
+  margin: 0
+
+.desktop
   display: none
 
 .mobile
@@ -172,7 +155,7 @@
     color: $text-01
   .cell
     color: $text-03
-  .table, .footer
+  .table, .footer, &.footer
     background-color: $ui-01
   .table
     tr
@@ -187,52 +170,33 @@
     color: $text-inverse
   .cell
     color: $text-02
-  .table, .footer
+  .table, .footer, &.footer
     background-color: $ui-07
   .table
     tr
       td
         border-top: 1px solid $text-01
         color: $text-inverse
-        
-
-@media all and (max-width: 1440px)
-  .root
-    table
-      tr
-        padding: 0
-        &:first-child, &:last-child
-          border-radius: initial
-  .desktop
-    display: none
-  .mobileFooter
-    display: flex
-    justify-content: center
-    width: 100%
-    min-height: 49px
-    margin: 0
-    background-color: $ui-01
-    border-bottom-left-radius: 4px
-    border-bottom-right-radius: 4px
-
-@media all and (max-width: 1238px)
-  .preloader
-    max-width: calc(100vw - 24px)
-
-@media all and (max-width: 850px)
-  .bakingRewards, .primary
-    table
-      width: 800px
-
-@media all and (max-width: 560px)
-  .preloader
-    max-width: calc(100vw - 16px)
-
 
 @include media('>tablet')
+  .root
+    .table
+      border-collapse: collapse
+      font-size: 0.875rem
+
+@include media('>tablet')
+  .desktop
+    display: flex
+  .mobileFooter
+    display: none
   .preloaderWrapper
-    min-height: 417px
+    min-height: 475px
   .mobile
     display: none
   .notMobile
     display: block
+
+@include media('>Ltablet')
+  .pools
+    .row
+      grid-template-columns: 1.1fr 1fr 1fr 1fr

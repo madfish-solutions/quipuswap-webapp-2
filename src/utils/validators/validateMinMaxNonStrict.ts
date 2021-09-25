@@ -7,5 +7,5 @@ export const validateMinMaxNonStrict = (min: number, max: number) => (value: str
     && new BigNumber(value).lte(new BigNumber(max))
   )
     ? undefined
-    : i18n?.t('common:Value has to be a number between {{min}} and {{max}}', { min, max })
+    : i18n?.t('common|Value has to be a number between {{min}} and {{max}}', { min, max })
 );

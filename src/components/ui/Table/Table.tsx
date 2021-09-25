@@ -8,6 +8,7 @@ import { getUniqueKey } from '@utils/helpers';
 import { TFooter } from '@components/ui/TFooter';
 import { Button } from '@components/ui/Button';
 import { Preloader } from '@components/common/Preloader';
+import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './Table.module.sass';
 
@@ -106,6 +107,12 @@ export const Table: React.FC<TablePropsT> = ({
 
   const isShowPagination = true;
 
+  if (loading || data.length === 0) {
+    return (
+      <Skeleton className={s.preloaderWrapper} />
+    );
+  }
+
   return (
     <>
       <div className={compoundClassName}>
@@ -115,76 +122,67 @@ export const Table: React.FC<TablePropsT> = ({
               <thead>
                 {
               headerGroups.map((headerGroup:any) => (
-                <tr key={getUniqueKey()}>
-                  <th className={cx(s.row)}>
-                    {headerGroup.headers.map((column:any) => {
-                      const { id } = column;
+                <tr className={cx(s.row)} key={getUniqueKey()}>
+                  {headerGroup.headers.map((column:any) => {
+                    const { id } = column;
 
-                      if (
-                        fieldsToSorting
+                    if (
+                      fieldsToSorting
                           && fieldsToSorting.length
                           && fieldsToSorting.includes(id)
-                      ) {
-                        return (
-                          <div
-                            {...column.getHeaderProps(column.getSortByToggleProps())}
-                            key={getUniqueKey()}
-                            className={cx(s.cell)}
-                          >
-                            <Button
-                              className={cx(s.sortingButton)}
-                              theme="quaternary"
-                            >
-                              {column.render('Header')}
-                            </Button>
-                          </div>
-                        );
-                      }
-
+                    ) {
                       return (
-                        <div
+                        <th
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
                           key={getUniqueKey()}
                           className={cx(s.cell)}
                         >
-                          {column.render('Header')}
-                        </div>
+                          <Button
+                            className={cx(s.sortingButton)}
+                            theme="quaternary"
+                          >
+                            {column.render('Header')}
+                          </Button>
+                        </th>
                       );
-                    })}
-                  </th>
+                    }
+
+                    return (
+                      <th
+                        key={getUniqueKey()}
+                        className={cx(s.cell)}
+                      >
+                        {column.render('Header')}
+                      </th>
+                    );
+                  })}
                 </tr>
               ))
             }
               </thead>
-              {data.length === 0 || loading ? (
-                <div className={s.preloaderWrapper}>
-                  <Preloader className={s.preloader} />
-                </div>
-              ) : (
-                <tbody {...getTableBodyProps()}>
-                  {
+
+              <tbody {...getTableBodyProps()}>
+                {
                     page.map((row:any) => {
                       prepareRow(row);
                       return (
-                        <tr {...row.getRowProps()} key={getUniqueKey()}>
-                          <td className={cx(s.row)}>
-                            {
+                        <tr {...row.getRowProps()} key={getUniqueKey()} className={cx(s.row)}>
+                          {
                               row.cells.map((cell:any) => (
-                                <div
+                                <td
                                   {...cell.getCellProps()}
                                   key={getUniqueKey()}
                                   className={cx(s.cell)}
                                 >
                                   {cell.render('Cell')}
-                                </div>
+                                </td>
                               ))
                             }
-                          </td>
                         </tr>
                       );
                     })
                   }
-                </tbody>
-              )}
+              </tbody>
             </table>
             <div className={cx(
               s.footer,
@@ -220,7 +218,7 @@ export const Table: React.FC<TablePropsT> = ({
         {disabled && (
         <div className={cx(s.disabled, modeClass[colorThemeMode])}>
           <div className={s.disabledBg} />
-          <h2 className={s.h1}>{t('common:Coming soon!')}</h2>
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
         </div>
         )}
       </div>

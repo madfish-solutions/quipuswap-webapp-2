@@ -1,11 +1,11 @@
 import React from 'react';
 import cx from 'classnames';
 
+import { getUniqueKey } from '@utils/helpers';
 import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from '@components/ui/Table/Table.module.sass';
-import { getUniqueKey } from '@utils/helpers';
 
 type TFooterProps = {
   isShowPagination: boolean

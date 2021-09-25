@@ -59,7 +59,7 @@ import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Liquidity.module.sass';
 
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
@@ -97,10 +97,6 @@ type LiquidityFormProps = {
   currentTab:any,
   setTabsState:(val:any) => void
 };
-
-const toNat = (amount: any, decimals: number) => new BigNumber(amount)
-  .times(10 ** decimals)
-  .integerValue(BigNumber.ROUND_DOWN);
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
@@ -231,13 +227,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
           const slippage = slippageToBignum(values.slippage).div(100);
 
-          const params = await removeLiquidity(
-            tezos,
-            dex,
-            balance,
-            slippage,
-          );
-          setRemoveLiquidityParams(params);
+          if (accountPkh) {
+            const params = await removeLiquidity(
+              tezos,
+              dex,
+              balance,
+              slippage,
+            );
+            setRemoveLiquidityParams(params);
+          }
 
           form.mutators.setValue('balanceA', bal1);
           form.mutators.setValue('balanceB', bal2);
@@ -273,17 +271,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         );
         if (!dex || !val.balance1 || !val.balance2) return;
         try {
-          const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
-            ? tezos!!.format('tz', 'mutez', balance) as any
-            : toNat(balance, token.token.decimals));
-
           const getMethod = async (
             token:TokenDataType,
             foundDex:FoundDex,
             value:BigNumber,
           ) => (isTez(token)
-            ? estimateSharesInTez(foundDex.storage, getInputValue(token, value.toString()))
-            : estimateSharesInToken(foundDex.storage, getInputValue(token, value.toString())));
+            ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
+            : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!)));
           const sharesA = await getMethod(
             tokensData.first,
             dex,
@@ -414,7 +408,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     } catch (err) {
       handleErrorToast(err);
     }
-  }, [token2, token1, tezos, networkId, accountPkh]);
+  }, [token2, token1, tezos, networkId, accountPkh, form.mutators, handleErrorToast]);
 
   useEffect(() => {
     setPoolShare(undefined);
@@ -428,7 +422,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       0,
     );
     getDex();
-  }, [token2, token1, tezos, networkId, accountPkh]);
+  }, [token2, token1, tezos, networkId, accountPkh, form.mutators, getDex]);
 
   const saveFunc = async () => {
     if (promise) {
@@ -452,6 +446,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [
     values.balance1,
     values.balance2,
@@ -489,17 +484,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           );
           if (!dex || !values.balance1 || !values.balance2) return;
           try {
-            const getInputValue = (token:TokenDataType, balance:string) => (isTez(token)
-              ? tezos!!.format('tz', 'mutez', balance) as any
-              : toNat(balance, token.token.decimals));
-
             const getMethod = async (
               token:TokenDataType,
               foundDex:FoundDex,
               value:BigNumber,
             ) => (isTez(token)
-              ? estimateSharesInTez(foundDex.storage, getInputValue(token, value.toString()))
-              : estimateSharesInToken(foundDex.storage, getInputValue(token, value.toString())));
+              ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
+              : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!)));
             const sharesA = await getMethod(
               tokensData.first,
               dex,
@@ -523,6 +514,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           }
         }
       }
+      // eslint-disable-next-line
       promise = save(values);
       await promise;
       setSubm(false);
@@ -542,7 +534,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
-  }, [accountPkh]);
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
 
   const handleAddLiquidity = async () => {
     if (!tezos) return;
@@ -577,6 +570,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         handleTokenChange,
       );
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, networkId, token1]);
 
   useOnBlock(tezos, getDex);
@@ -832,7 +826,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   <>
                     <div className={s.receive}>
                       <span className={s.receiveLabel}>
-                        {t('liquidity:Max invested')}
+                        {t('liquidity|Max invested')}
                         :
                       </span>
                       <CurrencyAmount
@@ -842,7 +836,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     </div>
                     <div className={cx(s.receive, s.mb24)}>
                       <span className={s.receiveLabel}>
-                        {t('liquidity:Max invested')}
+                        {t('liquidity|Max invested')}
                         :
                       </span>
                       <CurrencyAmount
@@ -857,7 +851,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 <>
                   <div className={s.receive}>
                     <span className={s.receiveLabel}>
-                      {t('liquidity:Minimum received')}
+                      {t('liquidity|Minimum received')}
                       :
                     </span>
                     <CurrencyAmount
@@ -867,7 +861,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   </div>
                   <div className={s.receive}>
                     <span className={s.receiveLabel}>
-                      {t('liquidity:Minimum received')}
+                      {t('liquidity|Minimum received')}
                       :
                     </span>
                     <CurrencyAmount
@@ -880,7 +874,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     className={s.button}
                     disabled={accountPkh ? removeLiquidityParams.length < 1 : false}
                   >
-                    {t('liquidity:Remove & Unvote')}
+                    {t('liquidity|Remove & Unvote')}
                   </Button>
                 </>
                 )}
@@ -900,8 +894,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     className={s.switcherInput}
                     disabled={!dex}
                   />
-                  {t('liquidity:Rebalance Liquidity')}
-                  <Tooltip content="Automatically adjust your token balance to a 50%-50% ratio. If you don't have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion." />
+                  <span className={s.rebalance}>
+                    {t('liquidity|Rebalance Liquidity')}
+                  </span>
+                  <Tooltip content={t('liquidity|Automatically adjust your token balance to a 50%-50% ratio. If you don\'t have enough token 1, this feature will convert token 2 to token 1 to receive an equal proportion.')} />
                 </div>
               )}
             </Field>

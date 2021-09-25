@@ -19,7 +19,7 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
     <Modal
       containerClassName={cx(themeClass[colorThemeMode], s.modalWrap)}
       contentClassName={s.modal}
-      title={t('common:APY')}
+      title={t('common|APY')}
       isOpen={isOpen}
       onRequestClose={close}
     >

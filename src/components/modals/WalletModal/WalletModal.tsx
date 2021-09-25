@@ -81,7 +81,7 @@ export const WalletModal: React.FC = () => {
         if (!authenticationWasRejected) {
           updateToast({
             type: 'error',
-            render: t('common:errorWhileConnectingWallet', {
+            render: t('common|errorWhileConnectingWallet', {
               walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
               error: e.message,
             }),
@@ -90,6 +90,7 @@ export const WalletModal: React.FC = () => {
       }
     }
   }, [
+    closeAccountInfoModal,
     closeConnectWalletModal,
     connectWithBeacon,
     connectWithTemple,
@@ -112,7 +113,7 @@ export const WalletModal: React.FC = () => {
     <Modal
       containerClassName={s.modalWrap}
       contentClassName={s.modal}
-      title={t('common:Connect wallet')}
+      title={t('common|Connect wallet')}
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
@@ -126,9 +127,9 @@ export const WalletModal: React.FC = () => {
             theme="quaternary"
             className={s.btn}
           >
-            <div className={s.btnText}>{t('common:Accept terms')}</div>
+            <div className={s.btnText}>{t('common|Accept terms')}</div>
           </Button>
-          {t('common:I have read and agree to the')}
+          {t('common|I have read and agree to the')}
           {' '}
           <Button
             className={s.defText}
@@ -136,10 +137,10 @@ export const WalletModal: React.FC = () => {
             href="#"
             external
           >
-            {t('common:Terms of Usage')}
+            {t('common|Terms of Usage')}
           </Button>
           {' '}
-          {t('common:and')}
+          {t('common|and')}
           {' '}
           <Button
             className={s.defText}
@@ -147,7 +148,7 @@ export const WalletModal: React.FC = () => {
             href="#"
             external
           >
-            {t('common:Privacy Policy')}
+            {t('common|Privacy Policy')}
           </Button>
         </div>
         <div className={s.def}>
@@ -159,9 +160,9 @@ export const WalletModal: React.FC = () => {
             theme="quaternary"
             className={s.btn}
           >
-            <div className={s.btnText}>{t('common:Analytics')}</div>
+            <div className={s.btnText}>{t('common|Analytics')}</div>
           </Button>
-          {t('common:I agree to the')}
+          {t('common|I agree to the')}
           {' '}
           <Button
             className={s.defText}
@@ -169,7 +170,7 @@ export const WalletModal: React.FC = () => {
             href="#"
             external
           >
-            {t('common:anonymous information collecting')}
+            {t('common|anonymous information collecting')}
           </Button>
 
         </div>

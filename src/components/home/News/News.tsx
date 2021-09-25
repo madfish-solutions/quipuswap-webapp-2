@@ -30,8 +30,8 @@ export const News: React.FC<NewsProps> = ({
 
   return (
     <Section
-      header={t('home:Our latest news')}
-      description={t('home:Never miss important updates. Check what has happened in the QuickSwap ecosystem recently..')}
+      header={t('home|Our latest news')}
+      description={t('home|Never miss important updates. Check what has happened in the QuickSwap ecosystem recently..')}
       className={cx(className)}
     >
       <SliderUI

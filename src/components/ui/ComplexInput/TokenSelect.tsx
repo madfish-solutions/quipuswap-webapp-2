@@ -116,7 +116,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {account && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Balance')}
+                  {t('common|Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>

@@ -49,7 +49,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   metadata: {
     decimals: 6,
     name: 'Tezos',
-    symbol: 'XTZ',
+    symbol: 'TEZ',
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };

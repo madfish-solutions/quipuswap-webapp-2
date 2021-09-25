@@ -4,9 +4,6 @@
 .skeleton
   height: 40px
 
-.table
-  min-width: 400px
-
 .tooltip
   padding-right: 0px
 
@@ -77,6 +74,11 @@
   display: flex
   align-items: center
 
+.last
+  justify-content: flex-end
+  display: flex
+  align-items: center
+
 .bage
   margin-left: 8px
 
@@ -91,7 +93,6 @@
   justify-content: flex-end
 
 .table
-  width: 1148px
   border-collapse: collapse
 
 .tableHeader
@@ -102,7 +103,7 @@
   padding: 16px 24px
 
 .poolRow
-  grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 2fr
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 1fr
   padding: 16px 24px
 
 .h1
@@ -171,6 +172,9 @@
 .wideItem
   flex: 1.5
 
+.dollar
+  color: $text-03
+
 .maxWidth
   max-width: none
 
@@ -211,6 +215,8 @@
     color: $text-inverse
 
 @include media('>Ltablet')
+  .poolRow
+    grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
   .h1
     display: block
   .container

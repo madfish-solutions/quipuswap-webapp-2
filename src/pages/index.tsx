@@ -14,8 +14,8 @@ const Home: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('home:Home page')}
-      description={t('home:Home page description. Couple sentences...')}
+      title={t('home|Home page')}
+      description={t('home|Home page description. Couple sentences...')}
     >
       <News />
       <DexDashboard />

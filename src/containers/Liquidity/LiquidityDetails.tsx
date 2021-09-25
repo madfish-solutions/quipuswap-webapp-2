@@ -64,10 +64,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Sell Price')}
+            {t('common|Sell Price')}
             <Tooltip
               sizeT="small"
-              content={t('common:The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
+              content={t('common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
           </>
           )}
@@ -89,10 +89,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('common:Buy Price')}
+            {t('common|Buy Price')}
             <Tooltip
               sizeT="small"
-              content={t('common:The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
+              content={t('common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
           </>
           )}
@@ -114,10 +114,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('liquidity:{{tokenAName}} Locked', { tokenAName })}
+            {t('liquidity|{{tokenAName}} Locked', { tokenAName })}
             <Tooltip
               sizeT="small"
-              content={t('liquidity:The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
+              content={t('liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
             />
           </>
       )}
@@ -131,10 +131,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('liquidity:{{tokenBName}} Locked', { tokenBName })}
+            {t('liquidity|{{tokenBName}} Locked', { tokenBName })}
             <Tooltip
               sizeT="small"
-              content={t('liquidity:The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
+              content={t('liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
             />
           </>
       )}
@@ -148,10 +148,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('liquidity:Your Total LP')}
+            {t('liquidity|Your Total LP')}
             <Tooltip
               sizeT="small"
-              content={t("liquidity:Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
+              content={t("liquidity|Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.")}
             />
           </>
       )}
@@ -162,10 +162,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={(
           <>
-            {t('liquidity:Your Frozen LP')}
+            {t('liquidity|Your Frozen LP')}
             <Tooltip
               sizeT="small"
-              content={t('liquidity:Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
+              content={t('liquidity|Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.')}
             />
           </>
       )}
@@ -182,7 +182,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('liquidity:View Pair Analytics')}
+          {t('liquidity|View Pair Analytics')}
         </Button>
         <Button
           className={s.detailsButton}
@@ -191,7 +191,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('liquidity:View Pair Contract')}
+          {t('liquidity|View Pair Contract')}
         </Button>
       </div>
       )}

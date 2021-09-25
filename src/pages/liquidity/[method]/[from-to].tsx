@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { Liquidity, LiquidityChart } from '@containers/Liquidity';
+import { Liquidity } from '@containers/Liquidity';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -13,12 +13,11 @@ const LiquidityPage: React.FC = () => {
   const { t } = useTranslation(['common', 'liquidity']);
   return (
     <BaseLayout
-      title={t('liquidity:Liquidity page')}
-      description={t('liquidity:Liquidity page description. Couple sentences...')}
+      title={t('liquidity|Liquidity page')}
+      description={t('liquidity|Liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Liquidity />
-      <LiquidityChart />
     </BaseLayout>
   );
 };

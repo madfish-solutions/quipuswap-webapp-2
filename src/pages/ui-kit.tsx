@@ -31,6 +31,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -45,7 +46,6 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { Timeleft } from '@components/ui/Timeleft';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -135,21 +135,21 @@ const UiKit: React.FC = () => {
   const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
-      render: `${t('common:errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
+      render: `${t('common|errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
     });
   }, [t, updateToast]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common:Success'),
+      render: t('common|Success'),
     });
   }, [t, updateToast]);
 
   const handleLoadToast = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
   }, [t, updateToast]);
 
@@ -584,7 +584,7 @@ const UiKit: React.FC = () => {
           {/* <PositionCell
             token1={{
               name: 'Token',
-              vote: '2.868',
+              vote| '2.868',
               veto: '3.868',
               balance: '1.868',
             }}
