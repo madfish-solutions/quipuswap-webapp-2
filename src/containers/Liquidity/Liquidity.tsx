@@ -30,6 +30,7 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import { LiquidityForm } from './LiquidityForm';
+import { LiquidityChart } from './LiquidityChart';
 import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
 const TabsContent = [
@@ -55,7 +56,7 @@ const fallbackTokenPair = {
 export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = useTranslation(['common', 'swap', 'liquidity']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
@@ -105,16 +106,16 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
-  const handleSuccessToast = useCallback(() => {
+  const handleSuccessToast = useCallback((text:string) => {
     updateToast({
       type: 'success',
-      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+      render: t(text),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
@@ -145,6 +146,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
@@ -157,58 +159,63 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         handleTokenChangeWrapper,
       );
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, token1, token2]);
 
   useEffect(() => {
     getBalance();
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
 
   return (
-    <StickyBlock className={className}>
-      <Form
-        onSubmit={() => {
-          if (!tezos) return;
-          handleLoader();
-          submitForm(
-            tezos,
-            currentTab.id === 'remove'
-              ? removeLiquidityParams
-              : addLiquidityParams,
-            handleErrorToast,
-            handleSuccessToast,
-          );
-        }}
-        mutators={{
-          setValue: ([field, value], state, { changeValue }) => {
-            changeValue(state, field, () => value);
-          },
-        }}
-        render={({ handleSubmit, form }) => (
-          <LiquidityForm
-            form={form}
-            handleSubmit={handleSubmit}
-            debounce={100}
-            save={() => {}}
-            setTabsState={setTabsState}
-            tabsState={tabsState}
-            token1={token1}
-            token2={token2}
-            setTokens={setTokens}
-            tokenPair={tokenPair}
-            setTokenPair={setTokenPair}
-            tokensData={tokensData}
-            handleTokenChange={handleTokenChangeWrapper}
-            currentTab={currentTab}
-            setRemoveLiquidityParams={setRemoveLiquidityParams}
-            removeLiquidityParams={removeLiquidityParams}
-            setAddLiquidityParams={setAddLiquidityParams}
-            addLiquidityParams={addLiquidityParams}
-          />
-        )}
-      />
-    </StickyBlock>
-
+    <>
+      <LiquidityChart token1={token1} token2={token2} />
+      <StickyBlock className={className}>
+        <Form
+          onSubmit={() => {
+            if (!tezos) return;
+            handleLoader();
+            submitForm(
+              tezos,
+              currentTab.id === 'remove'
+                ? removeLiquidityParams
+                : addLiquidityParams,
+              handleErrorToast,
+              handleSuccessToast,
+              currentTab.id,
+            );
+          }}
+          mutators={{
+            setValue: ([field, value], state, { changeValue }) => {
+              changeValue(state, field, () => value);
+            },
+          }}
+          render={({ handleSubmit, form }) => (
+            <LiquidityForm
+              form={form}
+              handleSubmit={handleSubmit}
+              debounce={100}
+              save={() => {}}
+              setTabsState={setTabsState}
+              tabsState={tabsState}
+              token1={token1}
+              token2={token2}
+              setTokens={setTokens}
+              tokenPair={tokenPair}
+              setTokenPair={setTokenPair}
+              tokensData={tokensData}
+              handleTokenChange={handleTokenChangeWrapper}
+              currentTab={currentTab}
+              setRemoveLiquidityParams={setRemoveLiquidityParams}
+              removeLiquidityParams={removeLiquidityParams}
+              setAddLiquidityParams={setAddLiquidityParams}
+              addLiquidityParams={addLiquidityParams}
+            />
+          )}
+        />
+      </StickyBlock>
+    </>
   );
 };

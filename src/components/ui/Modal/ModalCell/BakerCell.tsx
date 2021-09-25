@@ -66,7 +66,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
       <div className={s.bakerFlexCell}>
         <div className={s.bakerBlock}>
           <div className={s.caption}>
-            {t('common:Fee')}
+            {t('common|Fee')}
             <Tooltip sizeT="small" content="The fee this baker will charge on your baking reward." />
           </div>
           <div className={s.label1}>
@@ -77,7 +77,7 @@ export const BakerCell: React.FC<BakerCellProps> = ({
         </div>
         <div className={s.bakerBlock}>
           <div className={s.caption}>
-            {t('common:Space')}
+            {t('common|Space')}
             <Tooltip sizeT="small" content="The max amount you can delegate to a specific baker." />
           </div>
           <div>

@@ -7,7 +7,9 @@ import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { useTokens } from '@utils/dapp';
+import { WhitelistedFarm } from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
@@ -29,9 +31,12 @@ import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
+import { FarmTable } from '@components/tables/FarmTable';
+import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
@@ -41,7 +46,6 @@ import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
 
 import s from '@styles/UiKit.module.sass';
-import { Timeleft } from '@components/ui/Timeleft';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -110,6 +114,10 @@ const UiKit: React.FC = () => {
   const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
+  const { data: tokens } = useTokens();
+  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
+    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -127,21 +135,21 @@ const UiKit: React.FC = () => {
   const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
-      render: `${t('common:errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
+      render: `${t('common|errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
     });
   }, [t, updateToast]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common:Success'),
+      render: t('common|Success'),
     });
   }, [t, updateToast]);
 
   const handleLoadToast = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
   }, [t, updateToast]);
 
@@ -154,6 +162,11 @@ const UiKit: React.FC = () => {
       title={t('ui-kit:Home page')}
       description={t('ui-kit:Home page description. Couple sentences...')}
     >
+      <section className={s.section}>
+        <h1 className={s.header}>Tables</h1>
+        <FarmTable loading={false} disabled data={farms as WhitelistedFarm[]} />
+        <PoolTable loading={false} fetch={() => {}} />
+      </section>
       <section className={s.section}>
         <h1 className={s.header}>Timeleft</h1>
         <Timeleft remaining={new Date(Date.now() + 132056789)} />
@@ -571,7 +584,7 @@ const UiKit: React.FC = () => {
           {/* <PositionCell
             token1={{
               name: 'Token',
-              vote: '2.868',
+              vote| '2.868',
               veto: '3.868',
               balance: '1.868',
             }}

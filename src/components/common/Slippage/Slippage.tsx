@@ -3,6 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { parseDecimals } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -36,18 +37,20 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
-    const validValue = validateMinMax(0, 30)(val);
+    const valWrapper = parseDecimals(val, 0, 30, 3);
+    const validValue = validateMinMax(0, 30)(valWrapper);
     if (!validValue) {
-      setCustomValue(val);
-      handleChange(val);
+      setCustomValue(valWrapper);
+      handleChange(valWrapper);
     }
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <span className={s.header}>
         Slippage
-        <Tooltip content={t('common:Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')} />
+        <Tooltip content={t('common|Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.')} />
       </span>
       <div className={s.buttons}>
         {slippagePercents.map((percent, index) => (

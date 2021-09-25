@@ -5,11 +5,23 @@ import {
   NormalizedCacheObject,
   HttpLink,
   InMemoryCache,
+  defaultDataIdFromObject,
 } from '@apollo/client';
 
 import { APOLLO_CLIENT_ENDPOINT } from '@utils/defaults';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
+
+const cache = new InMemoryCache({
+  dataIdFromObject(responseObject) {
+    // eslint-disable-next-line no-underscore-dangle
+    switch (responseObject.__typename) {
+      // @ts-ignore
+      case 'Token': return `Token:${responseObject.id}:${responseObject.tokenId}`;
+      default: return defaultDataIdFromObject(responseObject);
+    }
+  },
+});
 
 function createApolloClient() {
   return new ApolloClient({
@@ -17,7 +29,7 @@ function createApolloClient() {
     link: new HttpLink({
       uri: APOLLO_CLIENT_ENDPOINT,
     }),
-    cache: new InMemoryCache(),
+    cache,
   });
 }
 

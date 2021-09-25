@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "https://api.quipuswap.com/",
+        "url": "https://granada-api.quipuswap.com/",
         "headers": {
           "user-agent": "JS GraphQL"
         },

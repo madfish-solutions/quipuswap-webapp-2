@@ -14,6 +14,7 @@ type CardProps = {
   additional?: React.ReactNode
   footer?: React.ReactNode
   contentClassName?: string
+  isV2?: boolean,
 };
 
 const modeClass = {
@@ -28,9 +29,17 @@ export const Card: React.FC<CardProps> = ({
   contentClassName,
   footer,
   children,
+  isV2 = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  if (isV2) {
+    return (
+      <div className={cx(s.root, modeClass[colorThemeMode], className)}>
+        {children}
+      </div>
+    );
+  }
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {header && (
