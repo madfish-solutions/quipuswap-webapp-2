@@ -162,7 +162,6 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
-  console.log('router', router);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -171,7 +170,6 @@ export const Farm: React.FC<FarmProps> = () => {
   useEffect(() => {
     if (router.query.slug) {
       const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
-      console.log('farmObj', farmObj);
       if (farmObj) {
         selectFarm(farmObj);
       }
