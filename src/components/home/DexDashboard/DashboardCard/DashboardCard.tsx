@@ -46,6 +46,8 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
           amount={volume}
           currency={currency}
           isRightCurrency={currency === '$'}
+          decimals={currency === '$' ? 3 : undefined}
+          length={currency === '$' ? 6 : undefined}
           labelSize={size}
         />
       )}
