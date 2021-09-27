@@ -94,10 +94,8 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
-          <div className={s.detailsValue}>
-            $
-            {' '}
-            <CurrencyAmount amount={totalValueLocked} />
+          <div className={cx(s.detailsValue, s.dollar)}>
+            <CurrencyAmount className={s.farmingDigits} amount={totalValueLocked} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -120,25 +118,19 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
-          <div className={s.detailsValue}>
-            $
-            {' '}
+          <div className={cx(s.detailsValue, s.dollar)}>
             <CurrencyAmount amount={balance} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
-          <div className={s.detailsValue}>
-            $
-            {' '}
+          <div className={cx(s.detailsValue, s.dollar)}>
             <CurrencyAmount amount={deposit} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
-          <div className={s.detailsValue}>
-            $
-            {' '}
+          <div className={cx(s.detailsValue, s.dollar)}>
             <CurrencyAmount amount={earned} />
           </div>
         </div>
