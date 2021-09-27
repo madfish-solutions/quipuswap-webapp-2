@@ -6,6 +6,14 @@ import s from './Card.module.sass';
 
 type CardProps = {
   className?: string
+  header?: {
+    content: React.ReactNode
+    button?: React.ReactNode
+    className?: string
+  }
+  additional?: React.ReactNode
+  footer?: React.ReactNode
+  contentClassName?: string
 };
 
 const modeClass = {
@@ -18,7 +26,6 @@ export const Card: React.FC<CardProps> = ({
   children,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {children}

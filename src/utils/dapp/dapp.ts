@@ -177,6 +177,7 @@ function useDApp() {
           try {
             perm = await TempleWallet.getCurrentPermission();
           } catch (error) {
+            // eslint-disable-next-line
             console.log(error);
           }
 
@@ -209,6 +210,7 @@ function useDApp() {
 
           return;
         } catch (e) {
+          // eslint-disable-next-line
           console.error(e);
         }
       }
@@ -243,6 +245,7 @@ function useDApp() {
           network: net,
         }));
       }).catch((e) => {
+        // eslint-disable-next-line
         console.error(e);
         setFallbackState();
       });
@@ -303,6 +306,7 @@ function useDApp() {
         connectionType: null,
       }));
     }
+    // eslint-disable-next-line
   }, [network]);
 
   const searchCustomToken = useCallback(
@@ -390,7 +394,7 @@ function useDApp() {
         }
       }
     },
-    [getContractInfo],
+    [],
   );
 
   const addCustomBaker = useCallback((baker:WhitelistedBaker) => {

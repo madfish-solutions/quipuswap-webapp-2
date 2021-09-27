@@ -39,6 +39,7 @@ export const handleTokenChange = async ({
         finalBalance = fromDecimals(balance, token.metadata.decimals).toString();
       }
     } catch (e) {
+      // eslint-disable-next-line
       console.error(e);
     }
   }

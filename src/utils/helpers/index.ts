@@ -32,3 +32,6 @@ export * from './isDexEqual';
 export * from './isAssetEqual';
 export * from './prepareIpfsLink';
 export * from './transformProposalToGovernanceProps';
+export * from './transformTokenDataToAnalyticsLink';
+export * from './transformNodeToWhitelistedToken';
+export * from './preparePairName';

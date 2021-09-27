@@ -119,6 +119,7 @@ const Header:React.FC<HeaderProps> = ({
   const accountPkh = useAccountPkh();
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
+  const { t } = useTranslation(['vote']);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -150,8 +151,7 @@ const Header:React.FC<HeaderProps> = ({
     <div className={s.inputs}>
       <Vote className={s.icon} />
       <div className={s.tac}>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Aenean purus posuere dolor posuere. In tortor ac varius amet malesuada tellus.
+        {t('vote|Stake your QUIPU to vote for or against the governance proposal. During the voting process, all tokens will be frozen. You may claim your QUIPU back only after the voting is finished.')}
       </div>
       <Field
         name="balance"

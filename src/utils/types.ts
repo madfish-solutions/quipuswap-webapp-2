@@ -112,6 +112,39 @@ export type PoolShare = {
   total:BigNumber
 };
 
+export type WhitelistedFarm = {
+  remaining: Date
+  tokenPair: WhitelistedTokenPair
+  totalValueLocked: string
+  apy: string
+  daily: string
+  balance: string
+  deposit: string
+  earned: string
+  multiplier: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+};
+
+export type WhitelistedStake = {
+  id: number,
+  remaining: Date
+  tokenPair: WhitelistedTokenPair
+  totalValueLocked: string
+  apy: string
+  daily: string
+  balance: string
+  deposit: string
+  earned: string
+  earn: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+};
+
 export type VoteFormValues = {
   balance1: number
   selectedBaker: string
@@ -133,7 +166,7 @@ export type GovernanceStorageInfo = {
     voting_quorum: BigNumber,
     support_quorum: BigNumber
   }
-  proposals: BigMapAbstraction // {id: BigNumber, schema: Schema, provider: RpcContractProvider}
+  proposals: BigMapAbstraction
   temp_proposal_cache?: any
   token_address: string
   token_id: BigNumber,
@@ -186,4 +219,37 @@ export type GovernanceCardProps = {
   onClick?: () => void
   handleUnselect?: () => void
   href?: string
+};
+
+export type PoolTableType = {
+  id: number,
+  xtzUsdQuote: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  pair: {
+    name: string,
+    token1: {
+      icon: string,
+      symbol: string,
+    },
+    token2: {
+      icon: string,
+      symbol: string,
+    },
+  },
+  data: {
+    tvl: number,
+    volume24h: number,
+  },
+  buttons: {
+    first: {
+      label: string,
+      href: string,
+      external: boolean,
+    },
+    second: {
+      label: string,
+      href: string,
+    },
+  },
 };

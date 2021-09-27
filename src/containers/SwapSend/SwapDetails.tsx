@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 
 import {
-  getWhitelistedTokenSymbol,
+  getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
@@ -56,18 +56,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
     .toString();
   return (
     <Card>
-      <CardHeader header={{
-        content: `${currentTab} Details`,
-      }}
-      />
+      <CardHeader header={{ content: `${currentTab} Details` }} />
       <CardContent className={s.content}>
         <CardCell
           header={(
             <>
-              {t('common:Sell Price')}
+              {t('common|Sell Price')}
               <Tooltip
                 sizeT="small"
-                content={t('common:The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+                content={t('common|The amount of token B you receive for 1 token A, according to the current exchange rate.')}
               />
             </>
           )}
@@ -87,10 +84,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <CardCell
           header={(
             <>
-              {t('common:Buy Price')}
+              {t('common|Buy Price')}
               <Tooltip
                 sizeT="small"
-                content={t('common:The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+                content={t('common|The amount of token A you receive for 1 token B, according to the current exchange rate.')}
               />
             </>
           )}
@@ -109,10 +106,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <CardCell
           header={(
             <>
-              {t('common:Price impact')}
+              {t('common|Price impact')}
               <Tooltip
                 sizeT="small"
-                content={t('swap:The impact your transaction is expected to make on the exchange rate.')}
+                content={t('swap|The impact your transaction is expected to make on the exchange rate.')}
               />
             </>
           )}
@@ -123,10 +120,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <CardCell
           header={(
             <>
-              {t('common:Fee')}
+              {t('common|Fee')}
               <Tooltip
                 sizeT="small"
-                content={t('swap:Expected fee for this transaction charged by the Tezos blockchain.')}
+                content={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
               />
             </>
           )}
@@ -137,10 +134,10 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <CardCell
           header={(
             <>
-              {t('common:Route')}
+              {t('common|Route')}
               <Tooltip
                 sizeT="small"
-                content={t("swap:When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
+                content={t("swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.")}
               />
             </>
           )}
@@ -151,7 +148,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 [{
                   id: 0,
                   name: token1 ? getWhitelistedTokenSymbol(token1) : '',
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.first.token.address}`,
+                  link: transformTokenDataToAnalyticsLink(tokensData.first),
                 },
                 ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
                   id: 1,
@@ -161,22 +158,22 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 {
                   id: 2,
                   name: token2 ? getWhitelistedTokenSymbol(token2) : '',
-                  link: `https://analytics.quipuswap.com/tokens/${tokensData.second.token.address}`,
+                  link: transformTokenDataToAnalyticsLink(tokensData.second),
                 }]
               }
           />
         </CardCell>
         {(dex || dex2) && (
         <div className={s.detailsButtons}>
-          {dex2 && (
+          {dex2 && dex && (
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${dex2.contract.address}`}
+            href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
-            { t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+            { t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
               {
                 tokenA: getWhitelistedTokenSymbol(token1),
                 tokenB: TEZOS_TOKEN.metadata.symbol,
@@ -187,17 +184,17 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+            href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
             {dex2
-              ? t('common:View {{tokenA}}/{{tokenB}} Pair Analytics',
+              ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
                 {
                   tokenA: TEZOS_TOKEN.metadata.symbol,
                   tokenB: getWhitelistedTokenSymbol(token2),
                 })
-              : t('common:View Pair Analytics')}
+              : t('common|View Pair Analytics')}
           </Button>
           )}
         </div>

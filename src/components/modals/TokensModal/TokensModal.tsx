@@ -1,5 +1,5 @@
 import React, {
-  useContext, useEffect, useRef, useState, useMemo,
+  useContext, useEffect, useRef, useState, useMemo, useCallback,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
@@ -98,7 +98,7 @@ const Header:React.FC<HeaderProps> = ({
               {...input}
               StartAdornment={Search}
               className={s.modalInput}
-              placeholder={t('common:Search')}
+              placeholder={t('common|Search')}
               error={meta.error}
             />
           </>
@@ -116,7 +116,7 @@ const Header:React.FC<HeaderProps> = ({
             <NumberInput
               {...input}
               className={s.modalInput}
-              placeholder={t('common:Token ID')}
+              placeholder={t('common|Token ID')}
               step={1}
               min={0}
               max={100}
@@ -170,7 +170,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     setInputToken(isSoleFa2Token ? values.tokenId : 0);
   };
 
-  const handleTokenSearch = () => {
+  const handleTokenSearch = useCallback(() => {
     if (!network || !tezos) return;
     const isTokens = tokens
       .filter(
@@ -185,7 +185,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, inputToken);
     }
-  };
+  }, [inputValue, inputToken, network, tezos, searchCustomToken, tokens]);
 
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0
@@ -193,7 +193,13 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     [searchTokens, filteredTokens],
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network]);
+  useEffect(() => handleTokenSearch(), [
+    tokens,
+    inputValue,
+    inputToken,
+    network,
+    handleTokenSearch,
+  ]);
 
   const allTokens = useMemo(() => (
     inputValue.length > 0 && filteredTokens.length === 0
@@ -221,7 +227,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       }}
       render={({ form }) => (
         <Modal
-          title={t('common:Search token')}
+          title={t('common|Search token')}
           header={(
             <AutoSave
               form={form}
@@ -247,7 +253,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           {isEmptyTokens && (!searchLoading && !tokensLoading) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No tokens found')}</div>
+              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
               {' '}
             </div>
           )}
