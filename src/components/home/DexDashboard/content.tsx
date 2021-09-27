@@ -41,49 +41,11 @@ export const DEXDashboardData: DEXDashboardDataProps = [
   },
   {
     id: 3,
-    volume: '888888888888888',
-    currency: '$',
-    tooltip: 'The amount of fee rewards generated on QuipuSwap today and spread between the LP owners. (Directly pegged to Daily Volume).',
-    label: (
-      <Trans ns="home">
-        Daily Reward
-      </Trans>),
-  },
-  {
-    id: 4,
     volume: '888888888888',
     tooltip: 'The current number of available Quipu tokens.',
     label: (
       <Trans ns="home">
         Total supply
-      </Trans>),
-    currency: 'QPSP',
-  },
-  {
-    id: 5,
-    volume: '888888888888',
-    tooltip: 'The number of unique addresses that currently provide liquidity on QuipuSwap.',
-    label: (
-      <Trans ns="home">
-        LP Providers
-      </Trans>),
-  },
-  {
-    id: 6,
-    volume: '888888888888',
-    tooltip: 'The number of liquidity pools currently active on QuipuSwap.',
-    label: (
-      <Trans ns="home">
-        Pairs listed
-      </Trans>),
-  },
-  {
-    id: 7,
-    volume: '888888888888',
-    tooltip: 'The final number of Quipu tokens. (There will never be more Quipu tokens than that)',
-    label: (
-      <Trans ns="home">
-        Max Supply
       </Trans>),
     currency: 'QPSP',
   },

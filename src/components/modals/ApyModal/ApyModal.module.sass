@@ -1,0 +1,48 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  width: 100%
+  margin-bottom: 24px
+  font-size: 0.857rem
+
+.headerPercentage
+  font-weight: 600
+  font-size: 1rem
+
+.table
+  width: 100%
+  margin-bottom: 40px
+  text-align: left
+  & th:last-child, & td:last-child
+    text-align: right
+
+.tableHead
+  line-height: 1.7
+  font-weight: 600
+
+.modal
+  padding: 40px 24px
+
+.footer
+  font-size: 0.857rem
+  line-height: 1.33
+  
+.light
+  .headerBold
+    color: $text-01
+  .headerPercentage
+    color: $text-03
+  .header, .tableHead, .footer
+    color: $text-02
+
+.dark
+  .headerBold
+    color: $text-inverse
+  .headerPercentage
+    color: $text-03
+  .header, .tableHead, .footer
+    color: $text-03

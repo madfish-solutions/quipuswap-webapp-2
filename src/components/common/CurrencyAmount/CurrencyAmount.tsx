@@ -42,6 +42,7 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
       { [s.isRightCurrency]: isRightCurrency },
       sizeClass[labelSize],
       modeClass[colorThemeMode],
+      className,
     )}
     >
       {currency && isRightCurrency && (<span className={s.currency}>{currency}</span>)}

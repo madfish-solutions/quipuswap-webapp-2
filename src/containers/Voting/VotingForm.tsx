@@ -163,6 +163,7 @@ const RealForm:React.FC<VotingFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [
     values.balance1,
     values.selectedBaker,
@@ -174,7 +175,8 @@ const RealForm:React.FC<VotingFormProps> = ({
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
-  }, [accountPkh]);
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
 
   const handleUnvoteOrRemoveveto = async () => {
     if (!tezos) return;
@@ -203,12 +205,21 @@ const RealForm:React.FC<VotingFormProps> = ({
     handleSubmit();
   };
 
-  const availBalance:BigNumber = useMemo(
+  const availVoteBalance:string = useMemo(
     () => (tokenPair.balance && tokenPair.frozenBalance && voter
       ? new BigNumber(tokenPair.balance)
         .minus(new BigNumber(tokenPair.frozenBalance))
-        .plus(new BigNumber(voter.vote))
-      : new BigNumber(0)), [tokenPair, voter],
+        .plus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
+  );
+
+  const availVetoBalance:string = useMemo(
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
   );
 
   return (
@@ -276,7 +287,7 @@ const RealForm:React.FC<VotingFormProps> = ({
                     networkId,
                   );
                 }}
-                balance={availBalance.isNaN() ? '0' : availBalance.toString()}
+                balance={currentTab.id === 'vote' ? availVoteBalance : availVetoBalance}
                 handleBalance={(value) => {
                   form.mutators.setValue(
                     'balance1',
@@ -284,7 +295,7 @@ const RealForm:React.FC<VotingFormProps> = ({
                   );
                 }}
                 noBalanceButtons={!accountPkh}
-                balanceLabel={t('vote:Available Balance')}
+                balanceLabel={t('vote|Available Balance')}
                 notFrozen
                 id="liquidity-remove-input"
                 label={currentTab.label}
@@ -321,6 +332,7 @@ const RealForm:React.FC<VotingFormProps> = ({
               onClick={handleUnvoteOrRemoveveto}
               className={s.button}
               theme="secondary"
+              disabled={currentTab.id === 'vote' ? new BigNumber(voter?.vote ?? '0').eq(0) : new BigNumber(voter?.veto ?? '0').eq(0)}
             >
               {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
             </Button>
@@ -329,7 +341,7 @@ const RealForm:React.FC<VotingFormProps> = ({
               className={s.button}
               disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
             >
-              {currentTab.id === 'vote' && isBanned ? t('vote:Baker under Veto') : currentTab.label}
+              {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
             </Button>
           </div>
         </CardContent>

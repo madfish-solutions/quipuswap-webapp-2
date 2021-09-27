@@ -26,6 +26,7 @@ type ComplexInputProps = {
   mode?: keyof typeof modeClass
   withoutSelect?: boolean
   noDollar?: boolean
+  decimals?:number,
   handleBalance?: (value: string) => void
 } & React.HTMLProps<HTMLInputElement>;
 
@@ -56,6 +57,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   onClick,
   token1,
   token2,
+  decimals = 6,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -108,22 +110,22 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             {mode === 'select' && (
               <div className={s.item2Line}>
                 <div className={s.caption}>
-                  {t('common:Frozen Balance')}
+                  {t('common|Frozen Balance')}
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance))}
+                  {prettyPrice(parseFloat(balance), decimals)}
                 </div>
 
               </div>
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>
-                {t('common:Total Balance')}
+                {t('common|Total Balance')}
                 :
               </div>
               <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance))}
+                {prettyPrice(parseFloat(balance), decimals)}
               </div>
             </div>
           </div>

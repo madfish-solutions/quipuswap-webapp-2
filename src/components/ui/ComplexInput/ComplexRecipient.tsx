@@ -100,7 +100,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           theme="inverse"
           className={s.btn}
         >
-          {t('swap:Paste')}
+          {t('common|Paste')}
         </Button>
       </div>
       {!readOnly && (<ComplexError error={error} />)}
