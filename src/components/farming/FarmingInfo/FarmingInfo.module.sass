@@ -67,6 +67,7 @@
   padding-top: 0
   padding-bottom: 0
   text-align: left
+  line-height: 1.143
 
 .linkIcon
   margin-left: 8px
@@ -138,6 +139,9 @@
     color: $text-01
   .amount, govBlockLabel, .priceAmount
     color: $text-01
+  .rewardHeader, .rewardCurrency
+    color: $text-02
+
 
 .dark
   .reward
@@ -145,6 +149,8 @@
     color: $text-inverse
   .amount, govBlockLabel, .priceAmount
     color: $text-inverse
+  .rewardHeader, .rewardCurrency
+    color: $text-03
 
 @include media('>phone')
   .rewardAmount
