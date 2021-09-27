@@ -22,17 +22,16 @@ const modeClass = {
 export type FarmingCardProps = {
   farm:WhitelistedFarm
   className?: string
-  onClick?:(farm:WhitelistedFarm) => void
   openModal?:() => void
 };
 
 export const FarmingCard: React.FC<FarmingCardProps> = ({
   farm,
-  onClick = () => {},
   className,
   openModal,
 }) => {
   const {
+    id,
     tokenPair,
     totalValueLocked,
     apy,
@@ -156,7 +155,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button onClick={() => onClick(farm)} className={s.button}>Select</Button>
+        <Button href={`/farm/${id}`} className={s.button}>Select</Button>
 
       </div>
     </Card>

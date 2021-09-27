@@ -1,6 +1,7 @@
 import React, {
-  useState, useContext, useMemo, useCallback,
+  useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
+import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -73,6 +74,7 @@ const fallbackPair = {
 
 const farms:WhitelistedFarm[] = [
   {
+    id: 0,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '888%',
@@ -88,6 +90,7 @@ const farms:WhitelistedFarm[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 1,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '887%',
@@ -103,6 +106,7 @@ const farms:WhitelistedFarm[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 2,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '886%',
@@ -118,6 +122,7 @@ const farms:WhitelistedFarm[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 3,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '885%',
@@ -133,6 +138,7 @@ const farms:WhitelistedFarm[] = [
     remaining: new Date(Date.now() + 48 * 3600000),
   },
   {
+    id: 4,
     tokenPair: fallbackPair,
     totalValueLocked: '1000000.00',
     apy: '884%',
@@ -155,10 +161,22 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
+  const router = useRouter();
+  console.log('router', router);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  useEffect(() => {
+    if (router.query.slug) {
+      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
+      console.log('farmObj', farmObj);
+      if (farmObj) {
+        selectFarm(farmObj);
+      }
+    }
+  }, [router.query, selectedFarming]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -259,7 +277,6 @@ export const Farm: React.FC<FarmProps> = () => {
         <FarmingCard
           key={x.multiplier}
           farm={x}
-          onClick={(e) => selectFarm(e)}
           openModal={() => setModalOpen(true)}
         />
       ))}
