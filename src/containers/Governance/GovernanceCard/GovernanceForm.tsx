@@ -131,7 +131,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('governance:Proposal submitted!'),
+      render: t('governance|Proposal submitted!'),
     });
   }, [updateToast]);
 
@@ -171,14 +171,14 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     if (!tezos) {
       updateToast({
         type: 'error',
-        render: t('governance: Tezos not loaded'),
+        render: t('governance|Tezos not loaded'),
       });
       return;
     }
     if (!govContract) {
       updateToast({
         type: 'error',
-        render: t('governance: Contract not loaded'),
+        render: t('governance|Contract not loaded'),
       });
       return;
     }

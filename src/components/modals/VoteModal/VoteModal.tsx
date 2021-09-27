@@ -280,7 +280,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('governance:Proposal submitted!'),
+      render: t('governance|Proposal submitted!'),
     });
   }, [updateToast]);
 

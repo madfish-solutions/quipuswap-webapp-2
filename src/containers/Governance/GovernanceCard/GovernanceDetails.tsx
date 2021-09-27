@@ -46,7 +46,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
       <CardContent className={s.detailsContent}>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:IPFS')}
+          header={t('governance|IPFS')}
           className={s.cell}
         >
           <div className={s.cellDate}>
@@ -65,7 +65,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Start Date')}
+          header={t('governance|Start Date')}
           className={s.cell}
         >
           <div className={s.cellDate}>
@@ -74,7 +74,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:End Date')}
+          header={t('governance|End Date')}
           className={s.cell}
         >
           <div className={s.cellDate}>
@@ -83,7 +83,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Author')}
+          header={t('governance|Author')}
           className={s.cell}
         >
           <div className={s.cellDate}>
@@ -102,7 +102,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Participants')}
+          header={t('governance|Participants')}
           className={s.cell}
         >
           <div className={s.cellDate}>
@@ -111,7 +111,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Quorum')}
+          header={t('governance|Quorum')}
           className={s.cell}
         >
           <div className={s.cellAmount}>
@@ -120,7 +120,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Total Votes')}
+          header={t('governance|Total Votes')}
           className={s.cell}
         >
           <div className={s.cellAmount}>
@@ -129,7 +129,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Your Votes')}
+          header={t('governance|Your Votes')}
           className={s.cell}
         >
           <div className={s.cellAmount}>
@@ -138,7 +138,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <CardCell
           headerClassName={s.cellHeader}
-          header={t('governance:Option')}
+          header={t('governance|Option')}
           className={s.cell}
         >
           <div className={s.cellDate}>

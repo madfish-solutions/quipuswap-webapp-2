@@ -243,28 +243,28 @@ export const Governance: React.FC<GovernanceProps> = ({
             <div className={s.deviceRow}>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance:Total vetoed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Total vetoed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance:Total {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Total {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance:Your Voted {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Your Voted {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance:Total Climable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Total Climable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
@@ -276,10 +276,10 @@ export const Governance: React.FC<GovernanceProps> = ({
                 theme="secondary"
                 className={s.voteButton}
               >
-                {t('governance:Submit proposal')}
+                {t('governance|Submit proposal')}
               </Button>
               <Button className={s.voteButton}>
-                {t('governance:Claim unlocked')}
+                {t('governance|Claim unlocked')}
               </Button>
             </div>
           </div>

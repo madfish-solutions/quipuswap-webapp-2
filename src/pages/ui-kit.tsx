@@ -873,14 +873,14 @@ const UiKit: React.FC = () => {
         <Card>
           <CardHeader header={{ content: <h5>Donut Chart</h5> }} />
           <CardContent>
-            <CardCell header={t('governance:IPFS')}>
+            <CardCell header={t('governance|IPFS')}>
               <div>
                 <Button theme="underlined">
                   #Qmexv71
                 </Button>
               </div>
             </CardCell>
-            <CardCell header={t('governance:Your Votes')}>
+            <CardCell header={t('governance|Your Votes')}>
               <div>
                 <CurrencyAmount amount="100" currency="XTZ" />
               </div>
@@ -892,14 +892,14 @@ const UiKit: React.FC = () => {
         <Card>
           <CardHeader header={{ content: <h5>Pie Chart</h5> }} />
           <CardContent>
-            <CardCell header={t('governance:IPFS')}>
+            <CardCell header={t('governance|IPFS')}>
               <div>
                 <Button theme="underlined">
                   #Qmexv71
                 </Button>
               </div>
             </CardCell>
-            <CardCell header={t('governance:Your Votes')}>
+            <CardCell header={t('governance|Your Votes')}>
               <div>
                 <CurrencyAmount amount="100" currency="XTZ" />
               </div>
@@ -922,14 +922,14 @@ const UiKit: React.FC = () => {
         <Card>
           <CardHeader header={{ content: <h5>Pie Chart</h5> }} />
           <CardContent>
-            <CardCell header={t('governance:IPFS')}>
+            <CardCell header={t('governance|IPFS')}>
               <div>
                 <Button theme="underlined">
                   #Qmexv71
                 </Button>
               </div>
             </CardCell>
-            <CardCell header={t('governance:Your Votes')}>
+            <CardCell header={t('governance|Your Votes')}>
               <div>
                 <CurrencyAmount amount="100" currency="XTZ" />
               </div>
