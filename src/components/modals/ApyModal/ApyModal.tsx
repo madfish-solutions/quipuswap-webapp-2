@@ -32,7 +32,7 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
         </div>
       </div>
       <table className={s.table}>
-        <thead>
+        <thead className={s.thead}>
           <tr className={s.tableHead}>
             <th>
               Timeframe
