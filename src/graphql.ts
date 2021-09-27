@@ -471,6 +471,16 @@ export type GetTokenPlotPriceQuery = (
   ) }
 );
 
+export type GetHomeOverviewQueryVariables = Exact<{ [key: string]: never; }>;
+
+export type GetHomeOverviewQuery = (
+  { __typename?: 'Query' }
+  & { overview: (
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'xtzUsdQuote' | 'totalLiquidity' | 'volume24h' | 'trasactionsCount24h'>
+  ) }
+);
+
 export type GetTokensPairsQueryVariables = Exact<{
   limit?: Maybe<Scalars['Int']>;
   offset?: Maybe<Scalars['Int']>;
@@ -611,6 +621,52 @@ export type GetTokenPlotPriceQueryHookResult = ReturnType<typeof useGetTokenPlot
 export type GetTokenPlotPriceLazyQueryHookResult = ReturnType<typeof useGetTokenPlotPriceLazyQuery>;
 export type GetTokenPlotPriceQueryResult = Apollo.QueryResult<
 GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>;
+export const GetHomeOverviewDocument = gql`
+    query GetHomeOverview {
+  overview {
+    xtzUsdQuote
+    totalLiquidity
+    volume24h
+    trasactionsCount24h
+  }
+}
+    `;
+
+/**
+ * __useGetHomeOverviewQuery__
+ *
+ * To run a query within a React component,
+ * call `useGetHomeOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHomeOverviewQuery`
+ * returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHomeOverviewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHomeOverviewQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+  GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
+}
+export function useGetHomeOverviewLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+  GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
+}
+export type GetHomeOverviewQueryHookResult = ReturnType<typeof useGetHomeOverviewQuery>;
+export type GetHomeOverviewLazyQueryHookResult = ReturnType<typeof useGetHomeOverviewLazyQuery>;
+export type GetHomeOverviewQueryResult = Apollo.QueryResult<
+GetHomeOverviewQuery, GetHomeOverviewQueryVariables>;
 export const GetTokensPairsDocument = gql`
     query GetTokensPairs($limit: Int, $offset: Int) {
   overview {
