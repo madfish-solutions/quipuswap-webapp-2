@@ -255,10 +255,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Value Locked')}
+                {t('common|Value Locked')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -275,10 +275,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Daily Distribution')}
+                {t('common|Daily Distribution')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -293,10 +293,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:APR')}
+                {t('common|APR')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -311,10 +311,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Daily')}
+                {t('common|Daily')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -329,10 +329,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Current Delegate')}
+                {t('common|Current Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -345,10 +345,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Next Delegate')}
+                {t('common|Next Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -361,10 +361,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Lock Period')}
+                {t('common|Lock Period')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -381,10 +381,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Withdrawal Fee')}
+                {t('common|Withdrawal Fee')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
@@ -399,10 +399,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Interface Fee')}
+                {t('common|Interface Fee')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
             )}
