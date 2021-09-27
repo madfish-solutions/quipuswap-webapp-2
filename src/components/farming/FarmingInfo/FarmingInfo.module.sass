@@ -114,6 +114,7 @@
 .statButton 
   width: 100%
   max-width: none
+  margin-top: 40px
 
 .buttons
   display: flex
@@ -175,7 +176,10 @@
     margin-right: 32px
   .amount
     font-size: 1.429rem
-
+  .itemsRows
+    display: flex
+    justify-content: space-between
+    width: 100%
 
 @include media('>Lphone', '<=Ltablet')
   .detailsButtons
@@ -186,7 +190,6 @@
     margin-top: 12px
   .rewardAmount
     font-size: 2.286rem
-
 
 @include media('>Ltablet')
   .detailsButtons
@@ -206,8 +209,8 @@
     flex-direction: column
     align-items: flex-end
   .itemsRows
-    justify-content: space-between
     display: flex
+    justify-content: space-between
   .flex
     display: flex
     align-items: center
