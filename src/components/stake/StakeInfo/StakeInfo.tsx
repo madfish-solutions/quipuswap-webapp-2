@@ -209,7 +209,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
