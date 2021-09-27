@@ -10,11 +10,13 @@ export const transformProposalToGovernanceProps = (x:ProposalType) => ({
   workDates: [new Date(x.startDate), new Date(x.endDate)],
   status: x.status.toUpperCase(),
   currency: STABLE_TOKEN.metadata.symbol,
-  voted: x.votesFor.toString(),
-  support: '100,000.00',
+  voted: x.votesAgainst.plus(x.votesFor).toString(),
+  support: x.votesFor.toString(),
   reject: x.votesAgainst.toString(),
-  votes: '0',
-  claimable: '0',
+  participants: x.votesAgainst.toString(),
+  quorum: x.votesAgainst.toString(),
+  votes: '0', // user votes
+  claimable: '0', // user votes after status pending
   id: `${x.id}`,
   author: x.creator,
 }) as GovernanceCardProps;

@@ -1,17 +1,20 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { VoteProgress } from '@components/svg/VoteProgress';
 import For from '@icons/For.svg';
 import NotFor from '@icons/NotFor.svg';
 
-import { VoteProgress } from '@components/svg/VoteProgress';
+import { STABLE_TOKEN } from '@utils/defaults';
 import s from './DonutChart.module.sass';
 
 type DonutChartProps = {
   votes: number
   vetos: number
   className?: string
+  symbol?: string
 };
 
 const themeClass = {
@@ -19,14 +22,16 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const MIN = 0.1;
+const MIN = 0;
 const MAX = 1;
 
 export const DonutChart: React.FC<DonutChartProps> = ({
   votes,
   vetos,
   className,
+  symbol = STABLE_TOKEN.metadata.symbol,
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   let value = votes / (votes + vetos);
   if (value < MIN) value = MIN;
@@ -34,14 +39,14 @@ export const DonutChart: React.FC<DonutChartProps> = ({
   return (
     <div className={cx(s.container, themeClass[colorThemeMode], className)}>
       <div className={s.chart}>
-        <VoteProgress progress={value < 0.1 ? 0.1 : value} />
+        <VoteProgress progress={value < 0 ? 0 : value} />
         <div className={s.for}>
           <For />
           <div className={s.count}>
             {votes}
           </div>
           <div>
-            QNTOT
+            {symbol}
           </div>
         </div>
         <div className={s.notfor}>
@@ -50,7 +55,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
             {vetos}
           </div>
           <div>
-            QNTOT
+            {symbol}
           </div>
         </div>
         <div className={s.result}>
@@ -58,7 +63,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({
             {((votes / (vetos + votes)) * 100).toFixed(2)}
             %
           </h2>
-          <div className={s.label}>Current Result</div>
+          <div className={s.label}>{t('common|Current Result')}</div>
         </div>
 
       </div>

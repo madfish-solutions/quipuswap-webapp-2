@@ -173,6 +173,31 @@ export type GovernanceStorageInfo = {
   votes: BigMapAbstraction
 };
 
+export type GovernanceProposalType = {
+  creator: string,
+  ipfs_link: string,
+  forum_link: string,
+  votes_for: BigNumber,
+  votes_against: BigNumber,
+  start_date: string,
+  end_date: string,
+  status: {
+    activated: number,
+    approved: number,
+    banned: number,
+    pending: number,
+    rejected: number,
+    underrated: number,
+    voting: number,
+  },
+  config: {
+    proposal_stake: BigNumber,
+    voting_quorum: BigNumber,
+    support_quorum: BigNumber,
+  },
+  collateral: BigNumber
+};
+
 export type ProposalType = {
   name: string,
   id: number,
@@ -203,7 +228,7 @@ export type ProposalStatus = 'activated' |
 export type GovernanceCardProps = {
   name: string
   workDates: Date[]
-  status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
+  status: ProposalStatus
   description: string
   ipfsLink: string
   shortDescription: React.ReactNode
@@ -212,6 +237,8 @@ export type GovernanceCardProps = {
   reject: string
   votes: string
   claimable: string
+  participants: string
+  quorum: string
   currency: string
   id:string
   author:string
@@ -252,4 +279,10 @@ export type PoolTableType = {
       href: string,
     },
   },
+};
+
+export type GovernanceUserInfo = {
+  against: BigNumber
+} | {
+  for: BigNumber
 };

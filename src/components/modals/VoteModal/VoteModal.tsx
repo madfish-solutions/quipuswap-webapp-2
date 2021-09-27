@@ -87,9 +87,6 @@ const submitProposal = async ({
   handleErrorToast,
 }: SubmitType) => {
   try {
-    console.log(proposalId,
-      voteFor,
-      voteAmount);
     const govParams = await withTokenApprove(
       tezos,
       fromAsset,
@@ -318,9 +315,8 @@ export const VoteModal: React.FC<VoteModalProps> = ({
 
   useOnBlock(tezos, getBalance);
 
-  const handleInput = (values:FormValues) => {
+  const handleInput = () => {
     // TODO
-    console.log(values);
   };
 
   return (

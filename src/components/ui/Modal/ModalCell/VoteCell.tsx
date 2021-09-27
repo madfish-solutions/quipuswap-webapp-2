@@ -49,7 +49,7 @@ export const VoteCell: React.FC<VoteCellProps> = ({
         <div className={s.voteFlexCell}>
           <div className={s.bakerBlock}>
             <div className={s.caption}>
-              {t('common:Value')}
+              {t('common|Value')}
               :
             </div>
             <div className={s.label1}>
@@ -60,7 +60,7 @@ export const VoteCell: React.FC<VoteCellProps> = ({
           </div>
           <div className={s.bakerBlock}>
             <div className={s.caption}>
-              {t('common:Votes')}
+              {t('common|Votes')}
               :
             </div>
             <div>

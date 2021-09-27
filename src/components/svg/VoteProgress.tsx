@@ -50,6 +50,7 @@ export const VoteProgress: React.FC<VoteProgressProps> = ({
         d="M 248 128 A 1 1 0 0 0 248 112 L 256 120 A 1 1 0 0 0 0 120 A 1 1 0 0 0 16 120 L 8 128 L 28 128 A 1 1 0 0 0 28 112 L 36 120 A 1 1 0 1 1 220 120 A 1 1 0 1 0 236 120 L 228 128 L 248 128 Z"
         fill="#EA2424"
       />
+      {progress !== 0 && (
       <path
         d={`M 
               ${arcEndX}
@@ -82,6 +83,7 @@ export const VoteProgress: React.FC<VoteProgressProps> = ({
         stroke="#2ED33E"
         fill="#2ED33E"
       />
+      )}
     </svg>
   );
 };

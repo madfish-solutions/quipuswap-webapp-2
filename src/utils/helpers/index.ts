@@ -35,3 +35,5 @@ export * from './transformProposalToGovernanceProps';
 export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
+export * from './transformGovernanceStatus';
+export * from './hexToASCII';

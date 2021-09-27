@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
 import moment from 'moment';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { GovernanceCardProps } from '@utils/types';
@@ -34,7 +35,7 @@ const votesData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map((x
 export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   name,
   workDates,
-  status = 'PENDING',
+  status = 'pending',
   description,
   voted,
   votes,
@@ -42,8 +43,11 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   className,
   author,
   ipfsLink,
+  reject,
+  participants,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['governance']);
 
   const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
   const [voteModal, setVoteModal] = useState<boolean>(false);
@@ -85,7 +89,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <Back className={s.proposalBackIcon} />
                 }
               >
-                Back
+                {t('governance|Back')}
               </Button>
             ),
           }}
@@ -107,7 +111,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                   <Bage
                     className={s.govBage}
                     text={status}
-                    variant={status === 'PENDING' || status === 'FAILED' ? 'inverse' : 'primary'}
+                    variant={status === 'pending' || status === 'underrated' || status === 'rejected' ? 'inverse' : 'primary'}
                   />
 
                 </div>
@@ -115,7 +119,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
             ),
             button: (
               <Button onClick={() => setVoteModal(true)} className={s.govButton}>
-                Vote
+                {t('governance|Vote')}
               </Button>
 
             ),
@@ -124,7 +128,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
         />
         <div className={cx(s.mobile, s.button)}>
           <Button onClick={() => setVoteModal(true)} className={s.govButtonBottom}>
-            Vote
+            {t('governance|Vote')}
           </Button>
         </div>
         <div className={s.mobile}>
@@ -136,6 +140,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
             author={author}
             ipfsLink={ipfsLink}
             status={status}
+            reject={reject}
+            participants={participants}
+            quorum="1"
           />
         </div>
         <CardContent className={s.govContent}>
@@ -143,7 +150,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
             <Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />
           </div>
           <Button onClick={() => setVoteModal(true)} className={s.govButtonBottom}>
-            Vote
+            {t('governance|Vote')}
           </Button>
         </CardContent>
       </Card>
@@ -158,11 +165,14 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               author={author}
               ipfsLink={ipfsLink}
               status={status}
+              reject={reject}
+              participants={participants}
+              quorum="1"
             />
           </Card>
           <Card className={cx(s.proposalDetails)}>
             <CardHeader header={{
-              content: <h5>Votes</h5>,
+              content: (<h5>{t('governance|Votes')}</h5>),
             }}
             />
             <CardContent className={s.proposalVotes}>
@@ -171,7 +181,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
           </Card>
           <Card className={s.proposalDetails}>
             <CardHeader header={{
-              content: <h5>References</h5>,
+              content: (<h5>{t('governance|References')}</h5>),
             }}
             />
             <CardContent className={s.content}>
@@ -185,7 +195,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                       <ExternalLink className={s.linkIcon} />
                     }
                   >
-                    The proposal on forum
+                    {t('governance|The proposal on forum')}
                   </Button>
              )}
               />
@@ -198,8 +208,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                     icon={
                       <ExternalLink className={s.linkIcon} />
                     }
+                    href={description}
                   >
-                    The QIP on Github
+                    {t('governance|The QIP on Github')}
                   </Button>
               )}
               />
@@ -212,8 +223,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                     icon={
                       <ExternalLink className={s.linkIcon} />
                     }
+                    href="/"
                   >
-                    Governance FAQs
+                    {t('governance|Governance FAQs')}
                   </Button>
               )}
               />

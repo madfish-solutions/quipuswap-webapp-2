@@ -3,6 +3,7 @@ import moment from 'moment';
 import { useTranslation } from 'next-i18next';
 
 import { shortize } from '@utils/helpers';
+import { ProposalStatus } from '@utils/types';
 import { CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
@@ -15,12 +16,15 @@ import s from './GovernanceCard.module.sass';
 
 export type GovernanceDetailsProps = {
   workDates: Date[]
-  status: 'PENDING' | 'ON-GOING' | 'APPROVED' | 'ACTIVATED' | 'FAILED'
+  status: ProposalStatus
   voted: string
   votes: string
   currency: string
   author:string
   ipfsLink: string
+  reject: string,
+  participants: string,
+  quorum: string,
   className?: string
 };
 
@@ -30,17 +34,17 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
   votes,
   currency,
   author,
+  reject,
+  participants,
+  quorum,
   ipfsLink,
 }) => {
   const { t } = useTranslation(['common', 'governance']);
 
-  const totalVotes = 155000;
-  const totalVetos = 120000;
-
   return (
     <>
       <CardHeader header={{
-        content: <h5>Details</h5>,
+        content: <h5>{t('governance|Details')}</h5>,
       }}
       />
       <CardContent className={s.detailsContent}>
@@ -106,7 +110,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
           className={s.cell}
         >
           <div className={s.cellDate}>
-            <CurrencyAmount amount="1000000" />
+            <CurrencyAmount amount={participants} />
           </div>
         </CardCell>
         <CardCell
@@ -115,7 +119,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
           className={s.cell}
         >
           <div className={s.cellAmount}>
-            <CurrencyAmount amount="1000000" currency={currency} />
+            <CurrencyAmount amount={quorum} currency={currency} />
           </div>
         </CardCell>
         <CardCell
@@ -149,8 +153,8 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
         </CardCell>
         <DonutChart
           className={s.donut}
-          votes={totalVotes}
-          vetos={totalVetos}
+          votes={+votes}
+          vetos={+reject}
         />
       </CardContent>
     </>

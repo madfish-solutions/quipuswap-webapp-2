@@ -1,14 +1,15 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import moment from 'moment';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { GovernanceCardProps } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
-
 import { Timeleft } from '@components/ui/Timeleft';
+
 import s from './GovernanceCard.module.sass';
 
 const modeClass = {
@@ -31,6 +32,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   onClick = () => {},
   href = '',
 }) => {
+  const { t } = useTranslation(['governance']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -63,7 +65,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           ),
           button: (
             <Button onClick={onClick} href={href} className={s.govButton}>
-              View Details
+              {t('governance|View Details')}
             </Button>
           ),
         }}
@@ -77,13 +79,13 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
         <div className={s.govBlocks}>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Remaining
+              {t('governance|Remaining')}
             </div>
             <Timeleft className={s.govBlockLabel} remaining={workDates[1]} />
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Voted
+              {t('governance|Voted')}
             </div>
             <div className={s.govBlockLabel}>
               {voted}
@@ -95,7 +97,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Support
+              {t('governance|Support')}
             </div>
             <div className={s.govBlockLabel}>
               {support}
@@ -107,7 +109,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Reject
+              {t('governance|Reject')}
             </div>
             <div className={s.govBlockLabel}>
               {reject}
@@ -119,7 +121,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Your Votes
+              {t('governance|Your Votes')}
             </div>
             <div className={s.govBlockLabel}>
               {votes}
@@ -127,7 +129,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
           <div className={s.govBlock}>
             <div className={s.govBlockHeader}>
-              Claimable Votes
+              {t('governance|Claimable Votes')}
             </div>
             <div className={s.govBlockLabel}>
               {claimable}
@@ -135,7 +137,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
           </div>
         </div>
         <Button onClick={onClick} href={href} className={s.govButtonBottom}>
-          View Details
+          {t('governance|View Details')}
         </Button>
       </CardContent>
     </Card>

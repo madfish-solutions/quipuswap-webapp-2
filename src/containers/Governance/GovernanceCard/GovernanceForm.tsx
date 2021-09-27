@@ -1,5 +1,5 @@
 import React, {
-  useContext, useState, useEffect, useCallback,
+  useContext, useState, useEffect, useCallback, useMemo,
 } from 'react';
 import cx from 'classnames';
 import 'react-dates/initialize';
@@ -15,15 +15,14 @@ import {
 import { useTranslation } from 'next-i18next';
 
 import useUpdateToast from '@hooks/useUpdateToast';
+import { useGovernance } from '@hooks/useGovernance';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
-  getContract, useAccountPkh, useNetwork, useTezos,
+  useAccountPkh, useGovernanceContract, useNetwork, useTezos,
 } from '@utils/dapp';
-import {
-  GOVERNANCE_CONTRACT, GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET,
-} from '@utils/defaults';
-import { prepareIpfsLink, prettyPrice } from '@utils/helpers';
+import { GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET, STABLE_TOKEN } from '@utils/defaults';
+import { prepareIpfsLink } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
@@ -42,8 +41,6 @@ const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
-
-const PROPOSAL_COST = 1000000;
 
 const initialDates = [moment(Date.now()), moment(Date.now() + 48 * 3600000)];
 
@@ -113,6 +110,8 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const network = useNetwork();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
+  const governanceContract = useGovernanceContract();
+  const { totalSupply } = useGovernance();
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -139,9 +138,9 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const govContract = useGovernanceContract();
   const [description, setDescription] = useState<string>('');
   const [forumLink, setForumLink] = useState<string>('');
-  const [govContract, setGovContract] = useState<any>();
   const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
   const [votingInput, setVotingInput] = useState<any>(initialDates);
   const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
@@ -156,16 +155,6 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     };
     if (description !== '' && description.startsWith('ipfs://')) { loadDescription(); }
   }, [description]);
-
-  useEffect(() => {
-    const loadDex = async () => {
-      if (!tezos) return;
-      if (!network) return;
-      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
-      setGovContract(contract);
-    };
-    loadDex();
-  }, [tezos, network]);
 
   const handleSubmit = useCallback(() => {
     if (!tezos) {
@@ -214,6 +203,14 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     votingEnd,
   ]);
 
+  const PROPOSAL_COST = useMemo(() => (governanceContract && totalSupply
+    ? governanceContract.proposal_config.proposal_stake
+      .dividedBy(governanceContract.accuracy)
+      .multipliedBy(totalSupply)
+      .toString()
+    : '—.—'),
+  [governanceContract, totalSupply]);
+
   const compountClassName = cx(
     modeClass[colorThemeMode],
     s.fullWidth,
@@ -235,7 +232,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
               <Back className={s.proposalBackIcon} />
             }
           >
-            Back
+            {t('governance|Back')}
           </Button>
         ),
       }}
@@ -246,17 +243,17 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             <div className={s.submitFlex}>
               <div className={s.submitHeader}>
                 <h3 className={s.govName}>
-                  Submit proposal
+                  {t('governance|Submit proposal')}
                 </h3>
               </div>
               <div className={cx(s.govSubmitGroup, s.desktopBlock)}>
                 <div>
-                  Proposal Stake
+                  {t('governance|Proposal Stake')}
                 </div>
                 <h3 className={s.submitCost}>
-                  {prettyPrice(PROPOSAL_COST)}
+                  {PROPOSAL_COST}
                   {' '}
-                  <span className={s.submitCurrency}>QPSP</span>
+                  <span className={s.submitCurrency}>{STABLE_TOKEN.metadata.symbol}</span>
                 </h3>
               </div>
 
@@ -264,7 +261,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
           ),
           button: (
             <Button onClick={handleSubmit} className={s.govButton}>
-              Submit
+              {t('governance|Submit')}
             </Button>
 
           ),
@@ -272,12 +269,11 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
         className={cx(s.proposalHeader, s.formHeader)}
       />
       <CardContent className={s.govContent}>
-        {/* TODO: here inputs */}
         <div className={s.formHeaderMob}>
           <div className={s.submitFlex}>
             <div className={s.submitHeader}>
               <h3 className={s.govName}>
-                Submit proposal
+                {t('governance|Submit proposal')}
               </h3>
             </div>
           </div>
@@ -285,14 +281,14 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
         <div className={s.formInputs}>
           <Input
             className={s.formInput}
-            label="QIP Link"
+            label={t('governance|QIP Link')}
             id="qipLink"
             value={description}
             onChange={(e:any) => setDescription(e.target.value)}
           />
           <Input
             className={s.formInput}
-            label="Forum link"
+            label={t('governance|Forum link')}
             id="forumlink"
             value={forumLink}
             onChange={(e:any) => setForumLink(e.target.value)}
@@ -325,7 +321,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
           <Input
             EndAdornment={DateIcon}
             className={s.formInput}
-            label="Voting period"
+            label={t('governance|Voting period')}
             id="votingperiod"
             value={`${votingStart.format('DD/MM/YYYY')} - ${votingEnd ? votingEnd.format('DD/MM/YYYY') : initialDates[1].format('DD/MM/YYYY')}`}
             readOnly
@@ -346,16 +342,16 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
         )}
         <div className={cx(s.mobSubmitGroup)}>
           <div>
-            Proposal Stake
+            {t('governance|Proposal Stake')}
           </div>
           <h3 className={s.submitCost}>
-            {prettyPrice(PROPOSAL_COST)}
+            {PROPOSAL_COST}
             {' '}
-            <span className={s.submitCurrency}>QPSP</span>
+            <span className={s.submitCurrency}>{STABLE_TOKEN.metadata.symbol}</span>
           </h3>
         </div>
         <Button className={s.govButtonBottom}>
-          Submit
+          {t('governance|Submit')}
         </Button>
       </CardContent>
     </Card>

@@ -12,9 +12,11 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
+  GOVERNANCE_CONTRACT,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
+  GovernanceStorageInfo,
   QSNetwork, WhitelistedBaker, WhitelistedToken,
 } from '@utils/types';
 import {
@@ -29,6 +31,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getStorageInfo } from './getStorageInfo';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -115,6 +118,7 @@ export type DAppType = {
   tezos: TezosToolkit | null
   accountPkh: string | null
   templeWallet: TempleWallet | null
+  governanceContract: GovernanceStorageInfo | null
   network: QSNetwork
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
@@ -136,16 +140,19 @@ function useDApp() {
     searchTokens,
     bakers,
     searchBakers,
+    governanceContract,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
     accountPkh: null,
+    governanceContract: null,
     templeWallet: null,
     network: net,
     tokens: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
+
   });
 
   const setFallbackState = useCallback(
@@ -167,6 +174,20 @@ function useDApp() {
   );
 
   const ready = Boolean(tezos) || (templeInitialAvailable === false);
+
+  useEffect(() => {
+    const loadContractStorage = async () => {
+      if (!tezos) return;
+      const contract:GovernanceStorageInfo = await getStorageInfo(tezos, GOVERNANCE_CONTRACT);
+      setState((prevState) => ({
+        ...prevState,
+        governanceContract: contract,
+      }));
+    };
+    if (network && tezos) {
+      loadContractStorage();
+    }
+  }, [network, tezos]);
 
   useEffect(() => {
     TempleWallet.onAvailabilityChange(async (available) => {
@@ -484,6 +505,7 @@ function useDApp() {
     templeWallet,
     ready,
     network,
+    governanceContract,
     tokens,
     searchTokens,
     bakers,
@@ -511,7 +533,7 @@ export const [
   useTokens,
   useSearchTokens,
   useBakers,
-  // usefarming,
+  useGovernanceContract,
   useSearchBakers,
   useConnectWithBeacon,
   useConnectWithTemple,
@@ -532,7 +554,7 @@ export const [
   (v) => v.tokens,
   (v) => v.searchTokens,
   (v) => v.bakers,
-  // (v) => v.farmingCo,
+  (v) => v.governanceContract,
   (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,

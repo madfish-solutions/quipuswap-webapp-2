@@ -93,8 +93,6 @@
       color: $text-inverse
 
 @include media('>Lphone')
-  .govCard
-    width: auto
   .govCardInner
     margin-left: 0px
     margin-right: 0px
@@ -117,6 +115,8 @@
     max-width: 200px
 
 @include media('>tablet')
+  .govCard
+    width: auto
   .unsticky > div
     width: 100%
   .governTabs

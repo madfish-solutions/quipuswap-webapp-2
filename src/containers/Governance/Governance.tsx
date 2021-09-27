@@ -5,12 +5,12 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { getStorageInfo, useNetwork, useTezos } from '@utils/dapp';
-import { GOVERNANCE_CONTRACT, STABLE_TOKEN } from '@utils/defaults';
-import { GovernanceStorageInfo, ProposalType } from '@utils/types';
-import { prepareIpfsLink, transformProposalToGovernanceProps } from '@utils/helpers';
+import { useGovernance } from '@hooks/useGovernance';
+import { STABLE_TOKEN } from '@utils/defaults';
+import { transformProposalToGovernanceProps } from '@utils/helpers';
 import {
   GovernanceCard, GovernanceInfo,
 } from '@containers/Governance/GovernanceCard';
@@ -19,6 +19,7 @@ import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
 
+import { useUsersVotes } from '@hooks/useUsersVotes';
 import s from './Governance.module.sass';
 import { GovernanceInfoSkeleton } from './GovernanceCard/GovernanceInfoSkeleton';
 import { GovernanceCardLoader } from './GovernanceCard/GovernanceCardLoader';
@@ -76,82 +77,20 @@ type GovernanceProps = {
   className?: string
 };
 
-const hexToASCII = (str1:string) => {
-  const hex = str1.toString();
-  let str = '';
-  for (let n = 0; n < hex.length; n += 2) {
-    str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
-  }
-  return str;
-};
-
 export const Governance: React.FC<GovernanceProps> = ({
   className,
 }) => {
   const { t } = useTranslation(['governance']);
   const router = useRouter();
-  const tezos = useTezos();
-  const network = useNetwork();
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [proposal, selectProposal] = useState<string>('');
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [, setGovContract] = useState<GovernanceStorageInfo>();
-  const [proposals, setProposals] = useState<ProposalType[]>([]);
-  const [proposalsLoaded, setLoaded] = useState<boolean>(false);
-
-  useEffect(() => {
-    const loadDex = async () => {
-      if (!tezos) return;
-      if (!network) return;
-      const contract = await getStorageInfo(tezos, GOVERNANCE_CONTRACT);
-      setGovContract(contract);
-      const possibleProposals = new Array(+contract?.id_count.toString())
-        .fill(0)
-        .map(async (x, id) => (contract?.proposals.get(id)));
-      const tempProposals = await Promise.all(possibleProposals);
-      if (tempProposals) {
-        const proposalsWrapper = tempProposals.filter((x) => !!x).map((x:any, id) => (
-          {
-            id,
-            creator: x.creator,
-            config: {
-              proposalStake: x.config.proposal_stake,
-              votingQuorum: x.config.voting_quorum,
-              supportQuorum: x.config.support_quorum,
-            },
-            status: Object.keys(x.status)[0],
-            forumLink: hexToASCII(x.forum_link),
-            ipfsLink: hexToASCII(x.ipfs_link),
-            endDate: x.end_date,
-            startDate: x.start_date,
-            votesAgainst: x.votes_against,
-            votesFor: x.votes_for,
-          }
-        ));
-        // totalsupply = 1000000000000
-        const loadDescription = async (x:any) => {
-          const url = prepareIpfsLink(x.ipfsLink);
-          if (!url) return null;
-          const resp = await (fetch(url));
-          const text = await (resp.text());
-          return {
-            ...x,
-            name: text && text.split('title:').length > 1
-              ? text.split('title:')[1].split('\r\nauthor:')[0]
-              : '<WRONG PROPOSAL NAME>',
-          };
-        };
-        const promisesFullProposals = proposalsWrapper.map(loadDescription);
-        const proposalsWithName = await Promise.all(promisesFullProposals);
-        console.log(proposalsWithName);
-        setProposals(proposalsWithName as ProposalType[]);
-      }
-      setLoaded(true);
-    };
-    loadDex();
-  }, [tezos, network]);
+  const userVotes = useUsersVotes();
+  const { data: proposals, loaded: proposalsLoaded } = useGovernance();
 
   const handleUnselect = () => selectProposal('');
+
+  console.log(userVotes, proposals, proposalsLoaded);
 
   useEffect(() => {
     if (router.query.status
@@ -170,24 +109,16 @@ export const Governance: React.FC<GovernanceProps> = ({
     }
   }, [router.query, proposals, proposalsLoaded]);
 
-  const proposalObj = proposals.find((x) => `${x.id}` === proposal);
+  const totalVetos = useMemo(() => proposals
+    .reduce((prev, cur) => cur.votesAgainst.plus(prev), new BigNumber(0)), [proposals]);
+  // const totalVotes = useMemo(() => proposals
+  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
+  // const totalBalance = useMemo(() => proposals
+  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
+  // const totalClaim = useMemo(() => proposals
+  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
 
-  const realProposals = useMemo(() => proposals.map((x) => {
-    let { status } = x;
-    if (x.status !== 'underrated' && new Date(x.endDate).getTime() < Date.now()) {
-      status = 'underrated';
-      if (x.status !== 'pending') {
-        // if(x.votesAgainst < x.)
-      }
-      // underrated if was pending
-      // aproved or rejected if quorum on 'voting' status
-      // else underrated
-    }
-    return {
-      ...x,
-      status,
-    };
-  }), [proposals]);
+  const proposalObj = proposals.find((x) => `${x.id}` === proposal);
 
   const renderProposals = useMemo(() => proposals
     .filter((x) => tabsState === 'all' || x.status === tabsState)
@@ -212,7 +143,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     );
   }
 
-  const statusesOfProposals = realProposals
+  const statusesOfProposals = proposals
     .reduce(
       (prev, cur) => ({ ...prev, [cur.status]: prev[cur.status] + 1 }), Object
         .fromEntries(PROPOSAL_STATUSES.map((x) => [x.id, 0])),
@@ -246,11 +177,11 @@ export const Governance: React.FC<GovernanceProps> = ({
                   {t('governance|Total vetoed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
-                <div className={s.voteNum}>1,000,000.00</div>
+                <div className={s.voteNum}>{totalVetos.toString()}</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance|Total {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Your {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
@@ -264,7 +195,7 @@ export const Governance: React.FC<GovernanceProps> = ({
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
-                  {t('governance|Total Climable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
+                  {t('governance|Total Claimable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
                 <div className={s.voteNum}>1,000,000.00</div>
