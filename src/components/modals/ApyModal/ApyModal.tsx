@@ -34,13 +34,13 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
       <table className={s.table}>
         <thead className={s.thead}>
           <tr className={s.tableHead}>
-            <th>
+            <th className={s.th}>
               Timeframe
             </th>
-            <th>
+            <th className={s.th}>
               ROI
             </th>
-            <th>
+            <th className={s.th}>
               QUIPU per $ 1,000
             </th>
           </tr>
