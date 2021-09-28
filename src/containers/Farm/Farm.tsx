@@ -176,7 +176,7 @@ export const Farm: React.FC<FarmProps> = () => {
       </Card>
       {allFarms?.map((x) => (
         <FarmingCard
-          key={x.multiplier}
+          key={x.id}
           farm={x}
           onClick={(e) => selectFarm(e)}
           openModal={() => setModalOpen(true)}

@@ -3,7 +3,11 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
-import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import {
+  fromDecimals,
+  getWhitelistedTokenSymbol,
+  prettyPrice,
+} from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -11,9 +15,10 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
-
 import BigNumber from 'bignumber.js';
 import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
+import { useBalance } from '@hooks/useBalance';
+
 import s from './FarmingCard.module.sass';
 
 const modeClass = {
@@ -40,7 +45,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     totalValueLocked,
     apy,
     daily,
-    balance,
     multiplier,
     tokenContract,
     farmContract,
@@ -50,7 +54,9 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [deposit, setDeposit] = useState<BigNumber>();
   const [earned, setEarned] = useState<BigNumber>();
+  const [balance, setBalance] = useState<number>();
   const userInfoInAllFarms = useUserInfoInAllFarms();
+  const balances = useBalance();
 
   useEffect(() => {
     if (userInfoInAllFarms && userInfoInAllFarms[id]) {
@@ -61,6 +67,14 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       setEarned(undefined);
     }
   }, [userInfoInAllFarms, id]);
+
+  useEffect(() => {
+    if (balances && balances[id]) {
+      setBalance(+prettyPrice(balances[id], 2, 6));
+    } else {
+      setBalance(undefined);
+    }
+  }, [balances, id]);
 
   return (
     <Card
@@ -137,7 +151,11 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             $
             {' '}
-            <CurrencyAmount amount={balance} />
+            {balance ? (
+              <CurrencyAmount amount={balance.toString()} />
+            ) : (
+              '--===--'
+            )}
           </div>
         </div>
         <div className={s.detailsBlock}>
