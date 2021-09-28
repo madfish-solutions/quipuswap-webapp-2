@@ -22,3 +22,12 @@ query GetTokenPlotPrice($id: String!, $tokenId: String) {
     }
   }
 }
+
+query GetHomeOverview {
+  overview {
+    xtzUsdQuote
+    totalLiquidity
+    volume24h
+    trasactionsCount24h
+  }
+}
