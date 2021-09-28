@@ -51,6 +51,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
         <>
           <SliderUI className={s.mobSlider}>
             <DexDashboardInner
+              volume24={data?.overview?.volume24h}
               totalLiquidity={data?.overview?.totalLiquidity}
               xtzUsdQuote={data?.overview?.xtzUsdQuote}
               trasactionsCount24h={data?.overview?.trasactionsCount24h}
@@ -62,6 +63,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       </Card>
       <Card className={s.desktop} contentClassName={s.content}>
         <DexDashboardInner
+          volume24={data?.overview?.volume24h}
           totalLiquidity={data?.overview?.totalLiquidity}
           xtzUsdQuote={data?.overview?.xtzUsdQuote}
           trasactionsCount24h={data?.overview?.trasactionsCount24h}

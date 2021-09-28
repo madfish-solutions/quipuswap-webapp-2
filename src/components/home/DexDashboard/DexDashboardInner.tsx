@@ -15,6 +15,7 @@ import s from './DexDashboard.module.sass';
   type DexDashboardInnerProps = {
     totalLiquidity: Maybe<string> | undefined,
     xtzUsdQuote: Maybe<string> | undefined,
+    volume24: Maybe<string> | undefined,
     trasactionsCount24h: number | undefined,
     totalSupply?: BigNumber,
     loading?: boolean
@@ -29,6 +30,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   totalLiquidity,
   xtzUsdQuote,
   totalSupply,
+  volume24,
   trasactionsCount24h,
   loading = false,
 }) => {
@@ -42,7 +44,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
     .toFixed(0)), [totalLiquidity, xtzUsdQuote, loading]);
 
   const volume24h:string = useMemo(() => (loading ? '0' : fromDecimals(
-    new BigNumber(volume24h ?? '0'), 6,
+    new BigNumber(volume24 ?? '0'), 6,
   )
     .multipliedBy(new BigNumber(xtzUsdQuote ?? '0'))
     .toFixed(0)), [xtzUsdQuote, loading]);
