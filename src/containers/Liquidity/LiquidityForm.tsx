@@ -102,7 +102,7 @@ const toNat = (amount: any, decimals: number) => new BigNumber(amount)
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
-type QSMainNet = 'mainnet' | 'florencenet';
+type QSMainNet = 'mainnet' | 'granadanet';
 
 const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
