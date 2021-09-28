@@ -240,8 +240,9 @@ export type GovernanceCardProps = {
   participants: string
   quorum: string
   currency: string
-  id:string
-  author:string
+  id: string
+  author: string
+  totalVotes: string
   className?: string
   onClick?: () => void
   handleUnselect?: () => void
@@ -282,7 +283,6 @@ export type PoolTableType = {
 };
 
 export type GovernanceUserInfo = {
-  against: BigNumber
-} | {
-  for: BigNumber
+  against?: BigNumber
+  for?: BigNumber
 };

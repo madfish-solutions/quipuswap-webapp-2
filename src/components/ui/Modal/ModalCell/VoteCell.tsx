@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { shortize } from '@utils/helpers';
+import { getUniqueKey, shortize } from '@utils/helpers';
 import { Button } from '@components/ui/Button';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import For from '@icons/For.svg';
@@ -41,7 +41,7 @@ export const VoteCell: React.FC<VoteCellProps> = ({
           theme="colored"
           className={cx(s.joinRow, s.centerRow)}
           icon={
-            <ExternalLink className={s.mleft8} />
+            <ExternalLink id={`${getUniqueKey()}`} className={s.mleft8} />
           }
         >
           {shortize(vote.address, 10)}

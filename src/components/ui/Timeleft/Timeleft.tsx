@@ -1,4 +1,6 @@
-import React, { useContext } from 'react';
+import React, {
+  useContext, useState, useMemo, useEffect,
+} from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -8,6 +10,7 @@ import s from './Timeleft.module.sass';
 type TimeleftProps = {
   remaining: Date
   className?: string
+  showSeconds?: boolean
 };
 
 const modeClass = {
@@ -31,20 +34,41 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
   diffInMilliSeconds -= minutes * 60;
 
-  return { days, hours, minutes };
+  // calculate minutes
+  const seconds = Math.floor(diffInMilliSeconds / 1) % 60;
+  diffInMilliSeconds -= minutes * 60;
+
+  return {
+    days, hours, minutes, seconds,
+  };
 };
 
 export const Timeleft: React.FC<TimeleftProps> = ({
   remaining,
   className,
+  showSeconds = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
+  const [currentDate, setDate] = useState<Date>(remaining);
+  const {
+    days, hours, minutes, seconds,
+  } = useMemo(
+    () => timeDiffCalc(Date.now(), currentDate.getTime()),
+    [currentDate],
+  );
   const compoundClassName = cx(
     s.label,
     modeClass[colorThemeMode],
     className,
   );
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const diff = currentDate.getTime() - 1;
+      setDate(new Date(diff < Date.now() ? Date.now() : diff));
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [currentDate]);
 
   return (
     <div className={compoundClassName}>
@@ -55,7 +79,13 @@ export const Timeleft: React.FC<TimeleftProps> = ({
       <span className={s.span}>H</span>
       {' '}
       {minutes}
-      <span className={s.span}>M</span>
+      {showSeconds && (
+      <>
+        {' '}
+        {seconds}
+        <span className={s.span}>S</span>
+      </>
+      )}
     </div>
   );
 };

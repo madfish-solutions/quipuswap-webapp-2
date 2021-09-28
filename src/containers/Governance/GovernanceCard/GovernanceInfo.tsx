@@ -1,10 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, {
+  useContext, useState, useEffect, useMemo,
+} from 'react';
 import cx from 'classnames';
 import moment from 'moment';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { GovernanceCardProps } from '@utils/types';
+import { GovernanceCardProps, ProposalType } from '@utils/types';
+import { getUniqueKey } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -15,6 +18,8 @@ import { VoteModal } from '@components/modals/VoteModal';
 import { Back } from '@components/svg/Back';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
+import { useGovernance } from '@hooks/useGovernance';
+import { useGovernanceContract } from '@utils/dapp';
 import s from './GovernanceCard.module.sass';
 
 import { GovernanceDetails } from './GovernanceDetails';
@@ -32,7 +37,11 @@ const votesData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map((x
   for: Math.random() > 0.5,
 }));
 
-export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
+export const GovernanceInfo: React.FC<GovernanceCardProps & {
+  proposal: ProposalType,
+  isFor: boolean,
+  isAgainst: boolean
+}> = ({
   name,
   workDates,
   status = 'pending',
@@ -45,9 +54,15 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
   ipfsLink,
   reject,
   participants,
+  proposal,
+  isAgainst,
+  isFor,
+  support,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['governance']);
+  const { totalSupply } = useGovernance();
+  const governanceContract = useGovernanceContract();
 
   const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
   const [voteModal, setVoteModal] = useState<boolean>(false);
@@ -59,7 +74,14 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
       });
     };
     loadDescription();
-  }, []);
+  }, [description]);
+
+  const quorum = useMemo(() => (governanceContract && totalSupply
+    ? proposal.config.votingQuorum
+      .dividedBy(governanceContract.accuracy)
+      .multipliedBy(totalSupply)
+      .toString()
+    : '—.—'), [governanceContract, totalSupply]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -142,7 +164,10 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
             status={status}
             reject={reject}
             participants={participants}
-            quorum="1"
+            quorum={quorum}
+            isFor={isFor}
+            isAgainst={isAgainst}
+            support={support}
           />
         </div>
         <CardContent className={s.govContent}>
@@ -167,7 +192,10 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
               status={status}
               reject={reject}
               participants={participants}
-              quorum="1"
+              quorum={quorum}
+              isFor={isFor}
+              isAgainst={isAgainst}
+              support={support}
             />
           </Card>
           <Card className={cx(s.proposalDetails)}>
@@ -192,7 +220,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                     className={s.detailsButton}
                     theme="inverse"
                     icon={
-                      <ExternalLink className={s.linkIcon} />
+                      <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
                   >
                     {t('governance|The proposal on forum')}
@@ -206,7 +234,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                     className={s.detailsButton}
                     theme="inverse"
                     icon={
-                      <ExternalLink className={s.linkIcon} />
+                      <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
                     href={description}
                   >
@@ -221,7 +249,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps> = ({
                     className={s.detailsButton}
                     theme="inverse"
                     icon={
-                      <ExternalLink className={s.linkIcon} />
+                      <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
                     href="/"
                   >

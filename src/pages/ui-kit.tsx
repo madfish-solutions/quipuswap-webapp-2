@@ -184,7 +184,8 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Timeleft</h1>
-        <Timeleft remaining={new Date(Date.now() + 132056789)} />
+        <Timeleft remaining={new Date(Date.now() + 15000)} showSeconds />
+        <Timeleft remaining={new Date(Date.now() + 15000)} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>

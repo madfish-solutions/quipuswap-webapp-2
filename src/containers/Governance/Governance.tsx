@@ -9,8 +9,11 @@ import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useGovernance } from '@hooks/useGovernance';
-import { STABLE_TOKEN } from '@utils/defaults';
-import { transformProposalToGovernanceProps } from '@utils/helpers';
+import { useUsersVotes } from '@hooks/useUsersVotes';
+import { useTokenBalance } from '@hooks/useTokenBalance';
+import { STABLE_TOKEN, STABLE_TOKEN_GRANADA } from '@utils/defaults';
+import { useAccountPkh, useNetwork } from '@utils/dapp';
+import { prettyPrice, transformProposalToGovernanceProps } from '@utils/helpers';
 import {
   GovernanceCard, GovernanceInfo,
 } from '@containers/Governance/GovernanceCard';
@@ -19,7 +22,6 @@ import { Card, CardContent } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { StickyBlock } from '@components/common/StickyBlock';
 
-import { useUsersVotes } from '@hooks/useUsersVotes';
 import s from './Governance.module.sass';
 import { GovernanceInfoSkeleton } from './GovernanceCard/GovernanceInfoSkeleton';
 import { GovernanceCardLoader } from './GovernanceCard/GovernanceCardLoader';
@@ -82,15 +84,17 @@ export const Governance: React.FC<GovernanceProps> = ({
 }) => {
   const { t } = useTranslation(['governance']);
   const router = useRouter();
+  const network = useNetwork();
+  const accountPkh = useAccountPkh();
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [proposal, selectProposal] = useState<string>('');
   const { colorThemeMode } = useContext(ColorThemeContext);
   const userVotes = useUsersVotes();
+  const currentToken = network.id === 'granadanet' ? STABLE_TOKEN_GRANADA : STABLE_TOKEN;
+  const balance = useTokenBalance(currentToken);
   const { data: proposals, loaded: proposalsLoaded } = useGovernance();
 
   const handleUnselect = () => selectProposal('');
-
-  console.log(userVotes, proposals, proposalsLoaded);
 
   useEffect(() => {
     if (router.query.status
@@ -111,12 +115,26 @@ export const Governance: React.FC<GovernanceProps> = ({
 
   const totalVetos = useMemo(() => proposals
     .reduce((prev, cur) => cur.votesAgainst.plus(prev), new BigNumber(0)), [proposals]);
-  // const totalVotes = useMemo(() => proposals
-  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
-  // const totalBalance = useMemo(() => proposals
-  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
-  // const totalClaim = useMemo(() => proposals
-  //   .reduce((prev, cur) => cur.votesFor.plus(prev), new BigNumber(0)), [proposals]);
+  const totalVotes = useMemo(() => (!userVotes
+    ? new BigNumber(0)
+    : Object.values(userVotes)
+      .filter((x) => !!x)
+      .reduce((prev, cur) => {
+        if (cur.for) return cur.for.plus(prev);
+        if (cur.against) return cur.against.plus(prev);
+        return prev;
+      }, new BigNumber(0))), [userVotes]);
+  const totalClaim = useMemo(() => (!userVotes
+    ? new BigNumber(0)
+    : Object.keys(userVotes)
+      .reduce((prev, cur:string) => {
+        const currentVote = userVotes[+cur];
+        if (proposals[+cur].status !== 'voting' && proposals[+cur].status !== 'pending' && currentVote) {
+          if (currentVote.for !== undefined) return currentVote.for.plus(prev);
+          if (currentVote.against) return currentVote.against.plus(prev);
+        }
+        return prev;
+      }, new BigNumber(0))), [userVotes, proposals]);
 
   const proposalObj = proposals.find((x) => `${x.id}` === proposal);
 
@@ -133,10 +151,30 @@ export const Governance: React.FC<GovernanceProps> = ({
   }
 
   if (proposal && proposalObj) {
+    let votesOfUser = new BigNumber(0);
+    let isFor = false;
+    let isAgainst = false;
+    if (userVotes && userVotes[+proposal]) {
+      const currentVote = userVotes[+proposal];
+      if (currentVote.for) {
+        isFor = true;
+        votesOfUser = currentVote.for;
+      }
+      if (currentVote.against) {
+        isAgainst = true;
+        votesOfUser = currentVote.against;
+      }
+    }
+    const governanceCardObj = transformProposalToGovernanceProps(proposalObj);
+    console.log(governanceCardObj, proposalObj);
     return (
       <div className={cx(className, s.proposal)}>
         <GovernanceInfo
-          {...(transformProposalToGovernanceProps(proposalObj))}
+          {...(governanceCardObj)}
+          votes={votesOfUser.toString()}
+          proposal={proposalObj}
+          isFor={isFor}
+          isAgainst={isAgainst}
           handleUnselect={handleUnselect}
         />
       </div>
@@ -177,28 +215,28 @@ export const Governance: React.FC<GovernanceProps> = ({
                   {t('governance|Total vetoed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
-                <div className={s.voteNum}>{totalVetos.toString()}</div>
+                <div className={s.voteNum}>{prettyPrice(+totalVetos.toString())}</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
                   {t('governance|Your {{token}} balance', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
-                <div className={s.voteNum}>1,000,000.00</div>
+                <div className={s.voteNum}>{prettyPrice(+balance)}</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
                   {t('governance|Your Voted {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
-                <div className={s.voteNum}>1,000,000.00</div>
+                <div className={s.voteNum}>{prettyPrice(+totalVotes.toString())}</div>
               </div>
               <div className={s.voteRow}>
                 <div className={s.voteCat}>
                   {t('governance|Total Claimable {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
                   :
                 </div>
-                <div className={s.voteNum}>1,000,000.00</div>
+                <div className={s.voteNum}>{prettyPrice(+totalClaim.toString())}</div>
               </div>
             </div>
             <div className={s.voteButtons}>
@@ -209,7 +247,7 @@ export const Governance: React.FC<GovernanceProps> = ({
               >
                 {t('governance|Submit proposal')}
               </Button>
-              <Button className={s.voteButton}>
+              <Button disabled={!accountPkh} className={s.voteButton}>
                 {t('governance|Claim unlocked')}
               </Button>
             </div>
@@ -244,13 +282,26 @@ export const Governance: React.FC<GovernanceProps> = ({
             <GovernanceCardLoader />
           </>
         )
-          : renderProposals.map((x) => (
-            <GovernanceCard
-              key={x.id}
-              {...x}
-              href={`/governance/${x.id}`}
-            />
-          ))}
+          : renderProposals.map((x) => {
+            let votesOfUser = new BigNumber(0);
+            if (userVotes && userVotes[+x.id]) {
+              const currentVote = userVotes[+x.id];
+              if (currentVote.for) {
+                votesOfUser = currentVote.for;
+              }
+              if (currentVote.against) {
+                votesOfUser = currentVote.against;
+              }
+            }
+            return (
+              <GovernanceCard
+                key={x.id}
+                {...x}
+                votes={votesOfUser.toString()}
+                href={`/governance/${x.id}`}
+              />
+            );
+          })}
 
       </StickyBlock>
     </>

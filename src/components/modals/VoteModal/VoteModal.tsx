@@ -5,12 +5,29 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
+import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
+import {
+  batchify, fromOpOpts, Token, withTokenApprove,
+} from '@quipuswap/sdk';
+import { TezosToolkit } from '@taquito/taquito';
 
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { STABLE_TOKEN, STABLE_TOKEN_GRANADA } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  useAccountPkh, useGovernanceContract, useNetwork, useOnBlock, useTezos,
+} from '@utils/dapp';
+import {
+  fallbackTokenToTokenData, handleTokenChange, parseDecimals, toDecimals,
+} from '@utils/helpers';
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Radio } from '@components/ui/Radio';
 import { Modal } from '@components/ui/Modal';
 import { Button } from '@components/ui/Button';
 import { ComplexInput } from '@components/ui/ComplexInput';
@@ -20,24 +37,6 @@ import ForInactive from '@icons/ForInactive.svg';
 import NotFor from '@icons/NotFor.svg';
 import NotForInactive from '@icons/NotForInactive.svg';
 
-import { Radio } from '@components/ui/Radio';
-import {
-  fallbackTokenToTokenData, handleTokenChange, parseDecimals, toDecimals,
-} from '@utils/helpers';
-import { useExchangeRates } from '@hooks/useExchangeRate';
-import {
-  getContract,
-  useAccountPkh, useNetwork, useOnBlock, useTezos,
-} from '@utils/dapp';
-import { GOVERNANCE_CONTRACT, STABLE_TOKEN, STABLE_TOKEN_GRANADA } from '@utils/defaults';
-import BigNumber from 'bignumber.js';
-import { TezosToolkit } from '@taquito/taquito';
-import {
-  batchify, fromOpOpts, Token, withTokenApprove,
-} from '@quipuswap/sdk';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useRouter } from 'next/router';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from './VoteModal.module.sass';
 
 const themeClass = {
@@ -252,7 +251,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   const network = useNetwork();
   const currentToken = network.id === 'granadanet' ? STABLE_TOKEN_GRANADA : STABLE_TOKEN;
   const { Form } = withTypes<FormValues>();
-  const [govContract, setGovContract] = useState<any>();
+  const govContract = useGovernanceContract();
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
       first: fallbackTokenToTokenData(currentToken),
@@ -302,16 +301,6 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   useEffect(() => {
     getBalance();
   }, [tezos, accountPkh, network.id]);
-
-  useEffect(() => {
-    const loadDex = async () => {
-      if (!tezos) return;
-      if (!network) return;
-      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
-      setGovContract(contract);
-    };
-    loadDex();
-  }, [tezos, network]);
 
   useOnBlock(tezos, getBalance);
 

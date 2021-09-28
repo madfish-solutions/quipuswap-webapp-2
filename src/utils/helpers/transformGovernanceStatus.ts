@@ -17,19 +17,19 @@ export const transformGovernanceStatus = ({
     votesAgainst, votesFor, config, endDate,
   } = proposal;
   if ((status === 'voting' || status === 'pending') && new Date(endDate).getTime() < Date.now()) {
-    if (status === 'voting') {
-      if (votesAgainst
-        .plus(votesFor)
-        .lt(config.votingQuorum
-          .dividedBy(govContract.accuracy)
-          .multipliedBy(totalSupply))) {
-        status = 'underrated';
-      } else if (votesFor
-        .lt(config.supportQuorum
-          .dividedBy(govContract.accuracy)
-          .multipliedBy(totalSupply))) {
-        status = 'rejected';
-      }
+    if (votesAgainst
+      .plus(votesFor)
+      .lt(config.votingQuorum
+        .dividedBy(govContract.accuracy)
+        .multipliedBy(totalSupply))) {
+      status = 'underrated';
+    } else if (votesFor
+      .lt(config.supportQuorum
+        .dividedBy(govContract.accuracy)
+        .multipliedBy(totalSupply))) {
+      status = 'rejected';
+    } else {
+      status = 'approved';
     }
   }
   return {

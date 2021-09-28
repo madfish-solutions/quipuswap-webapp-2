@@ -26,7 +26,6 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
   support,
   reject,
   votes,
-  claimable,
   currency,
   className,
   onClick = () => {},
@@ -124,7 +123,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
               {t('governance|Your Votes')}
             </div>
             <div className={s.govBlockLabel}>
-              {votes}
+              {status === 'pending' || status === 'voting' ? votes : '0'}
             </div>
           </div>
           <div className={s.govBlock}>
@@ -132,7 +131,7 @@ export const GovernanceCard: React.FC<GovernanceCardProps> = ({
               {t('governance|Claimable Votes')}
             </div>
             <div className={s.govBlockLabel}>
-              {claimable}
+              {status === 'pending' || status === 'voting' ? '0' : votes}
             </div>
           </div>
         </div>

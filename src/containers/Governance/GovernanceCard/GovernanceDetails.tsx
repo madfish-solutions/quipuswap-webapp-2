@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { useTranslation } from 'next-i18next';
 
-import { shortize } from '@utils/helpers';
+import { getUniqueKey, shortize } from '@utils/helpers';
 import { ProposalStatus } from '@utils/types';
 import { CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -11,6 +11,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import DonutChart from '@components/ui/DonutChart';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import For from '@icons/For.svg';
+import NotFor from '@icons/NotFor.svg';
 
 import s from './GovernanceCard.module.sass';
 
@@ -18,6 +19,7 @@ export type GovernanceDetailsProps = {
   workDates: Date[]
   status: ProposalStatus
   voted: string
+  support: string
   votes: string
   currency: string
   author:string
@@ -25,12 +27,15 @@ export type GovernanceDetailsProps = {
   reject: string,
   participants: string,
   quorum: string,
+  isAgainst: boolean,
+  isFor: boolean,
   className?: string
 };
 
 export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
   workDates,
   voted,
+  support,
   votes,
   currency,
   author,
@@ -38,6 +43,8 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
   participants,
   quorum,
   ipfsLink,
+  isFor,
+  isAgainst,
 }) => {
   const { t } = useTranslation(['common', 'governance']);
 
@@ -57,7 +64,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
             <Button
               theme="inverse"
               icon={
-                <ExternalLink className={s.linkIcon} />
+                <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
               className={s.detailsButton}
               external
@@ -94,7 +101,7 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
             <Button
               className={s.detailsButton}
               icon={
-                <ExternalLink className={s.linkIcon} />
+                <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
               external
               href={`https://tzkt.io/${author}`}
@@ -145,15 +152,24 @@ export const GovernanceDetails: React.FC<GovernanceDetailsProps> = ({
           header={t('governance|Option')}
           className={s.cell}
         >
+          {isFor && (
           <div className={s.cellDate}>
-            For
+            {t('governance|For')}
             {' '}
             <For className={s.voteIcon} />
           </div>
+          )}
+          {isAgainst && (
+          <div className={s.cellDate}>
+            {t('governance|Against')}
+            {' '}
+            <NotFor className={s.voteIcon} />
+          </div>
+          )}
         </CardCell>
         <DonutChart
           className={s.donut}
-          votes={+votes}
+          votes={+support}
           vetos={+reject}
         />
       </CardContent>
