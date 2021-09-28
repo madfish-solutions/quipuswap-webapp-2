@@ -41,6 +41,7 @@ export const useRouterPair = ({
         router.replace(url, undefined, { shallow: true });
       }
     }
+    // eslint-disable-next-line
   }, [token1, token2]);
 
   return { from, to };

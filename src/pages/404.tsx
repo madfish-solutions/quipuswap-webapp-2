@@ -19,15 +19,15 @@ const NotFound: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('common:Page Not Found')}
-      description={t('common:Page not found description. Couple sentences...')}
+      title={t('common|Page Not Found')}
+      description={t('common|Page not found description. Couple sentences...')}
       className={cx(s.wrapper404, modeClass[colorThemeMode])}
     >
       <div className={s.statusCode}>
         404
       </div>
       <div className={s.status}>
-        {t('common:Page Not Found')}
+        {t('common|Page Not Found')}
         !
       </div>
     </BaseLayout>

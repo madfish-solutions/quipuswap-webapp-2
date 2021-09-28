@@ -12,8 +12,8 @@ const StakePage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('swap:Stake page')}
-      description={t('swap:Stake page description. Couple sentences...')}
+      title={t('swap|Stake page')}
+      description={t('swap|Stake page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Stake />

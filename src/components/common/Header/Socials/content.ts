@@ -7,31 +7,31 @@ import { RedditIcon } from '@components/svg/Socials/RedditIcon';
 export const SocialLinksData = [
   {
     id: 0,
-    href: 'https://www.twitter.com',
+    href: 'https://twitter.com/madfishofficial',
     label: 'Twitter',
     Icon: TwitterIcon,
   },
   {
     id: 1,
-    href: 'https://www.twitter.com',
+    href: 'https://t.me/MadFishCommunity',
     label: 'Telegram',
     Icon: TelegramIcon,
   },
   {
     id: 2,
-    href: 'https://www.twitter.com',
+    href: 'https://discord.com/invite/qFRZ8kVzkv',
     label: 'Discord',
     Icon: DiscordIcon,
   },
   {
     id: 3,
-    href: 'https://www.twitter.com',
+    href: 'https://github.com/madfish-solutions/',
     label: 'Github',
     Icon: GithubIcon,
   },
   {
     id: 4,
-    href: 'https://www.twitter.com',
+    href: 'https://www.reddit.com/r/MadFishCommunity/',
     label: 'Reddit',
     Icon: RedditIcon,
   },

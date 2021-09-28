@@ -41,7 +41,6 @@ export const SliderUI: React.FC<SliderProps> = ({
       </div>
     ),
   };
-
   return (
     <div className={cx(
       s.root,

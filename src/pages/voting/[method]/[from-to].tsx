@@ -14,8 +14,8 @@ const VotePage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('vote:Vote page')}
-      description={t('vote:Vote page description. Couple sentences...')}
+      title={t('vote|Vote page')}
+      description={t('vote|Vote page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Voting />

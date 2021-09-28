@@ -454,6 +454,63 @@ export type GetPairPlotLiquidityQuery = (
   ) }
 );
 
+export type GetTokenPlotPriceQueryVariables = Exact<{
+  id: Scalars['String'];
+  tokenId?: Maybe<Scalars['String']>;
+}>;
+
+export type GetTokenPlotPriceQuery = (
+  { __typename?: 'Query' }
+  & { token: (
+    { __typename?: 'Token' }
+    & Pick<Token, 'id' | 'tokenId'>
+    & { plotPrice: Array<Maybe<(
+      { __typename?: 'CandlePlotPoint' }
+      & Pick<CandlePlotPoint, 'time' | 'open' | 'close' | 'high' | 'low' | 'xtzUsdQuoteHistorical'>
+    )>> }
+  ) }
+);
+
+export type GetHomeOverviewQueryVariables = Exact<{ [key: string]: never; }>;
+
+export type GetHomeOverviewQuery = (
+  { __typename?: 'Query' }
+  & { overview: (
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'xtzUsdQuote' | 'totalLiquidity' | 'volume24h' | 'trasactionsCount24h'>
+  ) }
+);
+
+export type GetTokensPairsQueryVariables = Exact<{
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+export type GetTokensPairsQuery = (
+  { __typename?: 'Query' }
+  & { overview: (
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'xtzUsdQuote'>
+  ), pairs?: Maybe<(
+    { __typename?: 'PairConnection' }
+    & Pick<PairConnection, 'totalCount'>
+    & { edges: Array<Maybe<(
+      { __typename?: 'PairEdge' }
+      & { node?: Maybe<(
+        { __typename?: 'Pair' }
+        & Pick<Pair, 'id' | 'volume24h' | 'liquidity'>
+        & { token1: (
+          { __typename?: 'Token' }
+          & Pick<Token, 'name' | 'tokenId' | 'id' | 'symbol' | 'icon'>
+        ), token2: (
+          { __typename?: 'Token' }
+          & Pick<Token, 'name' | 'tokenId' | 'id' | 'symbol' | 'icon'>
+        ) }
+      )> }
+    )>> }
+  )> }
+);
+
 export const GetPairPlotLiquidityDocument = gql`
     query GetPairPlotLiquidity($id: String!) {
   pair(id: $id) {
@@ -485,24 +542,198 @@ export const GetPairPlotLiquidityDocument = gql`
  * });
  */
 export function useGetPairPlotLiquidityQuery(
-  baseOptions: Apollo.QueryHookOptions<GetPairPlotLiquidityQuery,
-  GetPairPlotLiquidityQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<
+  GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetPairPlotLiquidityQuery,
-  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
+  return Apollo.useQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(
+    GetPairPlotLiquidityDocument, options,
+  );
 }
 export function useGetPairPlotLiquidityLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery,
-  GetPairPlotLiquidityQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<
+  GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetPairPlotLiquidityQuery,
-  GetPairPlotLiquidityQueryVariables>(GetPairPlotLiquidityDocument, options);
+  return Apollo.useLazyQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(
+    GetPairPlotLiquidityDocument, options,
+  );
 }
 export type GetPairPlotLiquidityQueryHookResult = ReturnType<typeof useGetPairPlotLiquidityQuery>;
 export type GetPairPlotLiquidityLazyQueryHookResult = ReturnType<
-typeof useGetPairPlotLiquidityLazyQuery
->;
-export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery,
-GetPairPlotLiquidityQueryVariables>;
+typeof useGetPairPlotLiquidityLazyQuery>;
+export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<
+GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>;
+export const GetTokenPlotPriceDocument = gql`
+    query GetTokenPlotPrice($id: String!, $tokenId: String) {
+  token(id: $id, tokenId: $tokenId) {
+    id
+    tokenId
+    plotPrice {
+      time
+      open
+      close
+      high
+      low
+      xtzUsdQuoteHistorical
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTokenPlotPriceQuery__
+ *
+ * To run a query within a React component,
+ * call `useGetTokenPlotPriceQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTokenPlotPriceQuery`
+ * returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTokenPlotPriceQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      tokenId: // value for 'tokenId'
+ *   },
+ * });
+ */
+export function useGetTokenPlotPriceQuery(
+  baseOptions: Apollo.QueryHookOptions<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>(
+    GetTokenPlotPriceDocument, options,
+  );
+}
+export function useGetTokenPlotPriceLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+  GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>(
+    GetTokenPlotPriceDocument, options,
+  );
+}
+export type GetTokenPlotPriceQueryHookResult = ReturnType<typeof useGetTokenPlotPriceQuery>;
+export type GetTokenPlotPriceLazyQueryHookResult = ReturnType<typeof useGetTokenPlotPriceLazyQuery>;
+export type GetTokenPlotPriceQueryResult = Apollo.QueryResult<
+GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>;
+export const GetHomeOverviewDocument = gql`
+    query GetHomeOverview {
+  overview {
+    xtzUsdQuote
+    totalLiquidity
+    volume24h
+    trasactionsCount24h
+  }
+}
+    `;
+
+/**
+ * __useGetHomeOverviewQuery__
+ *
+ * To run a query within a React component,
+ * call `useGetHomeOverviewQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHomeOverviewQuery`
+ * returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHomeOverviewQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHomeOverviewQuery(
+  baseOptions?: Apollo.QueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+  GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
+}
+export function useGetHomeOverviewLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+  GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
+}
+export type GetHomeOverviewQueryHookResult = ReturnType<typeof useGetHomeOverviewQuery>;
+export type GetHomeOverviewLazyQueryHookResult = ReturnType<typeof useGetHomeOverviewLazyQuery>;
+export type GetHomeOverviewQueryResult = Apollo.QueryResult<
+GetHomeOverviewQuery, GetHomeOverviewQueryVariables>;
+export const GetTokensPairsDocument = gql`
+    query GetTokensPairs($limit: Int, $offset: Int) {
+  overview {
+    xtzUsdQuote
+  }
+  pairs(limit: $limit, offset: $offset) {
+    totalCount
+    edges {
+      node {
+        id
+        token1 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        token2 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        volume24h
+        liquidity
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetTokensPairsQuery__
+ *
+ * To run a query within a React component,
+ * call `useGetTokensPairsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetTokensPairsQuery`
+ * returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetTokensPairsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetTokensPairsQuery(baseOptions?: Apollo.QueryHookOptions<
+GetTokensPairsQuery, GetTokensPairsQueryVariables>) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetTokensPairsQuery, GetTokensPairsQueryVariables>(
+    GetTokensPairsDocument, options,
+  );
+}
+export function useGetTokensPairsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTokensPairsQuery, GetTokensPairsQueryVariables>(
+    GetTokensPairsDocument, options,
+  );
+}
+export type GetTokensPairsQueryHookResult = ReturnType<typeof useGetTokensPairsQuery>;
+export type GetTokensPairsLazyQueryHookResult = ReturnType<typeof useGetTokensPairsLazyQuery>;
+export type GetTokensPairsQueryResult = Apollo.QueryResult<
+GetTokensPairsQuery, GetTokensPairsQueryVariables>;

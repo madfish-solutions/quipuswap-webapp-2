@@ -40,21 +40,21 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const content = useMemo(() => [
     {
       id: 0,
-      header: 'vote:Your LP',
+      header: 'vote|Your LP',
       amount: amounts[0] ?? '0',
-      tooltip: 'vote:Total number of LP tokens you own.',
+      tooltip: 'vote|Total number of LP tokens you own.',
     },
     {
       id: 1,
-      header: 'vote:Your votes',
+      header: 'vote|Your votes',
       amount: amounts[1] ?? '0',
-      tooltip: 'vote:The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
+      tooltip: 'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
     },
     {
       id: 2,
-      header: 'vote:Your vetos',
+      header: 'vote|Your vetos',
       amount: amounts[2] ?? '0',
-      tooltip: 'vote:The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
+      tooltip: 'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
     },
   ], [amounts]);
 
@@ -63,7 +63,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       <div className={s.reward}>
         <div className={s.rewardContent}>
           <span className={s.rewardHeader}>
-            {t('vote:Your Pending Rewards')}
+            {t('vote|Your Pending Rewards')}
             :
           </span>
           <span className={s.rewardAmount}>
@@ -98,7 +98,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         }}
         className={s.button}
       >
-        {t('vote:Claim Reward')}
+        {t('vote|Claim Reward')}
 
       </Button>
     </Card>
