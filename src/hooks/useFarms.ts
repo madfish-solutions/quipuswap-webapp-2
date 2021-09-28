@@ -4,6 +4,7 @@ import {
   WhitelistedFarm, WhitelistedTokenPair,
 } from '@utils/types';
 import {
+  useAccountPkh,
   useFarmingContract,
   useNetwork,
   useTezos,
@@ -20,6 +21,7 @@ export const useFarms = () => {
   const tezos = useTezos();
   const network = useNetwork();
   const farmingContract = useFarmingContract();
+  const accountPkh = useAccountPkh();
   const [allFarms, setAllFarms] = useState<WhitelistedFarm[]>([]);
 
   useEffect(() => {
@@ -27,6 +29,7 @@ export const useFarms = () => {
       if (!tezos) return;
       if (!network) return;
       if (!farmingContract) return;
+      if (!accountPkh) return;
 
       const possibleFarms:Promise<FarmingInfoType | undefined>[] = new Array(
         +farmingContract?.storage.farms_count.toString(),
@@ -37,21 +40,26 @@ export const useFarms = () => {
       const tempFarms = await Promise.all(possibleFarms);
 
       if (tempFarms) {
-        const whitelistedFarms:WhitelistedFarm[] = tempFarms
-          .filter((x) => !!x)
+        const clearfarms = (tempFarms
+          .filter((farm) => !!farm) as FarmingInfoType[]
+        );
+
+        const whitelistedFarms:WhitelistedFarm[] = clearfarms
           .map((x, id) => ({
             id,
             tokenPair: fallbackPair,
             totalValueLocked: prettyPrice(Number(x?.staked)),
             apy: '888%',
             daily: '0.008%',
-            balance: '1000000.00',
             multiplier: '888',
             tokenContract: '#',
             farmContract: '#',
             projectLink: '#',
             analyticsLink: '#',
             remaining: new Date(Date.now() + 48 * 3600000),
+            claimed: x.claimed.toString(),
+            isLpTokenStaked: x.stake_params.is_lp_staked_token,
+            stakedToken: x.stake_params.staked_token,
           }));
 
         setAllFarms(whitelistedFarms);
@@ -59,7 +67,7 @@ export const useFarms = () => {
     };
 
     loadFarms();
-  }, [tezos, network, farmingContract]);
+  }, [tezos, network, farmingContract, accountPkh]);
 
   return allFarms;
 };

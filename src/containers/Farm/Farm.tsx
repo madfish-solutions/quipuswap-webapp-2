@@ -11,12 +11,12 @@ import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SliderUI } from '@components/ui/Slider';
-import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
+import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
 
 import s from './Farm.module.sass';
@@ -176,7 +176,7 @@ export const Farm: React.FC<FarmProps> = () => {
       </Card>
       {allFarms?.map((x) => (
         <FarmingCard
-          key={x.multiplier}
+          key={x.id}
           farm={x}
           onClick={(e) => selectFarm(e)}
           openModal={() => setModalOpen(true)}
