@@ -14,8 +14,8 @@ export const useUsersVotes = () => {
       const usersInfo:(
         Promise<GovernanceUserInfo | undefined> | undefined
       )[] = allProposals.map((currentProposal) => (
-        governanceContract?.votes.get({
-          voter: accountPkh,
+        governanceContract?.locked_balances.balances.get({
+          account: accountPkh,
           proposal: currentProposal.id,
         })));
 

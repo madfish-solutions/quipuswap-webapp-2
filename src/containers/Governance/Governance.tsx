@@ -215,8 +215,11 @@ export const Governance: React.FC<GovernanceProps> = ({
     });
   }, [
     tezos,
-    network,
     accountPkh,
+    currentToken,
+    t,
+    openConnectWalletModal,
+    updateToast,
     govContract,
     handleErrorToast,
     handleSuccessToast,
