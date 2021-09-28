@@ -19,9 +19,12 @@ import { useGovernance } from '@hooks/useGovernance';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
+  getContract,
   useAccountPkh, useGovernanceContract, useNetwork, useTezos,
 } from '@utils/dapp';
-import { GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET, STABLE_TOKEN } from '@utils/defaults';
+import {
+  GOVERNANCE_CONTRACT, GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET, STABLE_TOKEN,
+} from '@utils/defaults';
 import { prepareIpfsLink } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -112,6 +115,17 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const updateToast = useUpdateToast();
   const governanceContract = useGovernanceContract();
   const { totalSupply } = useGovernance();
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const [govContract, setGovContract] = useState<any>();
+  const [description, setDescription] = useState<string>('');
+  const [forumLink, setForumLink] = useState<string>('');
+  const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
+  const [votingInput, setVotingInput] = useState<any>(initialDates);
+  const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
+  const [isPicker, showPicker] = useState<boolean>(false);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -123,28 +137,17 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
       render: t('governance|Proposal submitted!'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
-  const {
-    openConnectWalletModal,
-  } = useConnectModalsState();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const govContract = useGovernanceContract();
-  const [description, setDescription] = useState<string>('');
-  const [forumLink, setForumLink] = useState<string>('');
-  const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
-  const [votingInput, setVotingInput] = useState<any>(initialDates);
-  const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
-  const [isPicker, showPicker] = useState<boolean>(false);
   useEffect(() => {
     const loadDescription = () => {
       const url = prepareIpfsLink(description);
@@ -155,6 +158,16 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     };
     if (description !== '' && description.startsWith('ipfs://')) { loadDescription(); }
   }, [description]);
+
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      if (!network) return;
+      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      setGovContract(contract);
+    };
+    loadDex();
+  }, [tezos, network]);
 
   const handleSubmit = useCallback(() => {
     if (!tezos) {

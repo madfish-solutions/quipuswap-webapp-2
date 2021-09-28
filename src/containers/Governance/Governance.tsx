@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, {
-  useContext, useState, useEffect, useMemo,
+  useContext, useState, useEffect, useMemo, useCallback,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
@@ -8,11 +8,20 @@ import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { useGovernance } from '@hooks/useGovernance';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useUsersVotes } from '@hooks/useUsersVotes';
 import { useTokenBalance } from '@hooks/useTokenBalance';
-import { STABLE_TOKEN, STABLE_TOKEN_GRANADA } from '@utils/defaults';
-import { useAccountPkh, useNetwork } from '@utils/dapp';
+import {
+  GOVERNANCE_CONTRACT, STABLE_TOKEN, STABLE_TOKEN_GRANADA,
+} from '@utils/defaults';
+import {
+  getContract,
+  useAccountPkh,
+  useNetwork,
+  useTezos,
+} from '@utils/dapp';
 import { prettyPrice, transformProposalToGovernanceProps } from '@utils/helpers';
 import {
   GovernanceCard, GovernanceInfo,
@@ -25,6 +34,7 @@ import { StickyBlock } from '@components/common/StickyBlock';
 import s from './Governance.module.sass';
 import { GovernanceInfoSkeleton } from './GovernanceCard/GovernanceInfoSkeleton';
 import { GovernanceCardLoader } from './GovernanceCard/GovernanceCardLoader';
+import { claimVotes } from './governanceHelpers';
 
 const PieChart = dynamic(() => import('@components/ui/PieChart'), {
   ssr: false,
@@ -82,12 +92,16 @@ type GovernanceProps = {
 export const Governance: React.FC<GovernanceProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['governance']);
+  const { t } = useTranslation(['common', 'governance']);
   const router = useRouter();
   const network = useNetwork();
+  const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
+  const updateToast = useUpdateToast();
+  const { openConnectWalletModal } = useConnectModalsState();
   const [proposal, selectProposal] = useState<string>('');
+  const [govContract, setGovContract] = useState<any>();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const userVotes = useUsersVotes();
   const currentToken = network.id === 'granadanet' ? STABLE_TOKEN_GRANADA : STABLE_TOKEN;
@@ -95,6 +109,37 @@ export const Governance: React.FC<GovernanceProps> = ({
   const { data: proposals, loaded: proposalsLoaded } = useGovernance();
 
   const handleUnselect = () => selectProposal('');
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common|Loading'),
+    });
+  }, [updateToast, t]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('governance|Claim completed!'),
+    });
+  }, [updateToast, t]);
+
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      if (!network) return;
+      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      setGovContract(contract);
+    };
+    loadDex();
+  }, [tezos, network]);
 
   useEffect(() => {
     if (router.query.status
@@ -142,6 +187,42 @@ export const Governance: React.FC<GovernanceProps> = ({
     .filter((x) => tabsState === 'all' || x.status === tabsState)
     .map(transformProposalToGovernanceProps), [proposals, tabsState]);
 
+  const handleClaim = useCallback(() => {
+    if (!tezos) {
+      updateToast({
+        type: 'error',
+        render: t('governance|Tezos not loaded'),
+      });
+      return;
+    }
+    if (!govContract) {
+      updateToast({
+        type: 'error',
+        render: t('governance|Contract not loaded'),
+      });
+      return;
+    }
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    handleLoader();
+    const fromAsset = {
+      contract: currentToken.contractAddress,
+      id: 0,
+    };
+    claimVotes({
+      tezos, fromAsset, accountPkh, govContract, handleErrorToast, handleSuccessToast,
+    });
+  }, [
+    tezos,
+    network,
+    accountPkh,
+    govContract,
+    handleErrorToast,
+    handleSuccessToast,
+    handleLoader,
+  ]);
+
   if (router.query.proposal && !proposalsLoaded) {
     return (
       <div className={cx(className, s.proposal)}>
@@ -166,7 +247,6 @@ export const Governance: React.FC<GovernanceProps> = ({
       }
     }
     const governanceCardObj = transformProposalToGovernanceProps(proposalObj);
-    console.log(governanceCardObj, proposalObj);
     return (
       <div className={cx(className, s.proposal)}>
         <GovernanceInfo
@@ -247,7 +327,11 @@ export const Governance: React.FC<GovernanceProps> = ({
               >
                 {t('governance|Submit proposal')}
               </Button>
-              <Button disabled={!accountPkh} className={s.voteButton}>
+              <Button
+                disabled={!accountPkh || totalClaim.eq(0)}
+                onClick={handleClaim}
+                className={s.voteButton}
+              >
                 {t('governance|Claim unlocked')}
               </Button>
             </div>

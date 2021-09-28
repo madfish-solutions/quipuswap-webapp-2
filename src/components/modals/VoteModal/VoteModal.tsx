@@ -269,16 +269,16 @@ export const VoteModal: React.FC<VoteModalProps> = ({
   const handleLoader = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('governance|Proposal submitted!'),
+      render: t('governance|Vote submitted!'),
     });
-  }, [updateToast]);
+  }, [updateToast, t]);
 
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
@@ -362,7 +362,7 @@ export const VoteModal: React.FC<VoteModalProps> = ({
               handleSubmit();
             }}
           >
-            Vote
+            {t('governance|Vote')}
           </Button>
         </Modal>
 

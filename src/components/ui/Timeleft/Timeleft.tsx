@@ -79,6 +79,7 @@ export const Timeleft: React.FC<TimeleftProps> = ({
       <span className={s.span}>H</span>
       {' '}
       {minutes}
+      <span className={s.span}>M</span>
       {showSeconds && (
       <>
         {' '}
