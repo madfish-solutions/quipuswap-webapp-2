@@ -172,9 +172,11 @@ const RealForm:React.FC<SwapFormProps> = ({
     const valuesInner = lastChangeMod === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
     let retValue = new BigNumber(0);
+    let feeType = 'single';
     try {
       if (isTokenToToken && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
+        feeType = 'double';
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -229,8 +231,8 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     setOldTokens([token1, token2]);
     setOldDex([dex, dex2]);
-
-    const feeVal = fromDecimals(result, 6);
+    let feeVal = result;
+    if (feeType === 'double') { feeVal = result.multipliedBy(2); }
     setFee(feeVal.multipliedBy(new BigNumber(FEE_RATE)));
   };
 
@@ -256,6 +258,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [
     token1,
     token2,
@@ -273,11 +276,13 @@ const RealForm:React.FC<SwapFormProps> = ({
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
-  }, [accountPkh]);
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
 
   useEffect(() => {
     form.mutators.setValue('balance1', undefined);
     form.mutators.setValue('balance2', undefined);
+    // eslint-disable-next-line
   }, [networkId]);
 
   const handleSwapSubmit = async () => {
@@ -320,6 +325,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         ['balance2', new BigNumber(values.balance1)],
       );
     }
+    // eslint-disable-next-line
   }, [token1, token2, dex, dex2, lastChange, values, form, dexstorage, dexstorage2]);
 
   const blackListedTokens = useMemo(

@@ -15,7 +15,7 @@ export const parseDecimals = (value: string, min: number, max: number, decimals?
   }
   let onlyNums = val;
   if (val.endsWith('.') && match.length > 1) {
-    onlyNums = numVal.toString();
+    onlyNums = numVal.toFixed();
   }
   if (onlyNums === '') return '';
   let res = onlyNums;

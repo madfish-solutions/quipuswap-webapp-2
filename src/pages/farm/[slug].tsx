@@ -21,7 +21,7 @@ const FarmPage: React.FC = () => {
   );
 };
 
-export const getStaticProps = async ({ locale }: { locale: string }) => ({
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
     ...await serverSideTranslations(locale, ['common', 'swap']),
   },

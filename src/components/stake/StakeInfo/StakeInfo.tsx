@@ -203,13 +203,13 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Value Locked')}
+                {t('common|Value Locked')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
@@ -223,10 +223,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:APR')}
+                {t('common|APR')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -239,10 +239,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Daily')}
+                {t('common|Daily')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -257,10 +257,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Current Delegate')}
+                {t('common|Current Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -273,10 +273,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Next Delegate')}
+                {t('common|Next Delegate')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -289,10 +289,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Ends in')}
+                {t('common|Ends in')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -303,10 +303,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Lock Period')}
+                {t('common|Lock Period')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -317,10 +317,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Withdrawal Fee')}
+                {t('common|Withdrawal Fee')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}
@@ -335,10 +335,10 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common:Interface Fee')}
+                {t('common|Interface Fee')}
                 <Tooltip
                   sizeT="small"
-                  content={t('common:TOOLTIP TODO')}
+                  content={t('common|TOOLTIP TODO')}
                 />
               </>
               )}

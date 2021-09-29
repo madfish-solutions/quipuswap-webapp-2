@@ -107,7 +107,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               {notFrozen ? '' : (
                 <div className={s.item2Line}>
                   <div className={s.caption}>
-                    {t('common:Frozen Balance')}
+                    {t('common|Frozen Balance')}
                     :
                   </div>
                   <div className={cx(s.label2, s.price)}>
@@ -119,7 +119,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               {!noBalanceButtons ? (
                 <div className={s.item2Line}>
                   <div className={s.caption}>
-                    {balanceLabel ?? t('common:Total Balance')}
+                    {balanceLabel ?? t('common|Total Balance')}
                     :
                   </div>
                   <div className={cx(s.label2, s.price)}>

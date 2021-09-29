@@ -1,6 +1,7 @@
 import React, {
-  useState, useContext, useMemo, useCallback,
+  useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
+import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -73,11 +74,21 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
+  const router = useRouter();
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const allFarms = useFarms();
+
+  useEffect(() => {
+    if (router.query.slug) {
+      const farmObj = allFarms.find((x) => `${x.id}` === router.query.slug);
+      if (farmObj) {
+        selectFarm(farmObj);
+      }
+    }
+  }, [router.query, selectedFarming]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -178,7 +189,6 @@ export const Farm: React.FC<FarmProps> = () => {
         <FarmingCard
           key={x.id}
           farm={x}
-          onClick={(e) => selectFarm(e)}
           openModal={() => setModalOpen(true)}
         />
       ))}

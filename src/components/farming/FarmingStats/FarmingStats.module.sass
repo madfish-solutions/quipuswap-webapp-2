@@ -20,10 +20,12 @@
   border-radius: 8px
   align-items: center
   margin-bottom: 24px
+  max-height: 128px
 
 .rewardHeader
   display: flex
   flex-direction: column
+  text-align: left
 
 .rewardAmount, .amount
   font-size: 1.143rem
@@ -50,6 +52,8 @@
     color: $text-01
   .amount
     color: $text-01
+  .rewardHeader
+    color: $text-02
 
 .dark
   .reward
@@ -57,6 +61,8 @@
     color: $text-inverse
   .amount
     color: $text-inverse
+  .rewardHeader
+    color: $text-03
 
 
 @include media('>phone')
@@ -84,6 +90,7 @@
   .reward
     margin-bottom: 0px
     margin-right: 32px
+    min-width: 432px
   .item
     align-items: flex-start
     &:not(:last-child)
