@@ -75,11 +75,13 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
+  const allFarms = useFarms();
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
+  const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [searchedFarms, setSearchedfarms] = useState(allFarms);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const allFarms = useFarms();
 
   useEffect(() => {
     if (router.query.slug) {
@@ -88,7 +90,17 @@ export const Farm: React.FC<FarmProps> = () => {
         selectFarm(farmObj);
       }
     }
-  }, [router.query, selectedFarming]);
+  }, [allFarms, router.query, selectedFarming]);
+
+  useEffect(() => {
+    const searched = allFarms.filter((farm) => ((
+      farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
+    ) || (
+      farm.tokenPair.token2.metadata.name.toLowerCase().includes(search.toLowerCase())
+    )));
+
+    setSearchedfarms(searched);
+  }, [search]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -163,6 +175,8 @@ export const Farm: React.FC<FarmProps> = () => {
           StartAdornment={Search}
           className={s.searchInput}
           placeholder="Search"
+          value={search}
+          onChange={(event:any) => setSearch(event.target.value)}
         />
         <div className={s.switcherWrap}>
           <Switcher
@@ -185,7 +199,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {allFarms?.map((x) => (
+      {searchedFarms?.map((x) => (
         <FarmingCard
           key={x.multiplier}
           farm={x}
