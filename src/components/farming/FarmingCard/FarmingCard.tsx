@@ -93,8 +93,10 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
-            <CurrencyAmount className={s.farmingDigits} amount={totalValueLocked} />
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -117,19 +119,23 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
+          <div className={s.detailsValue}>
             <CurrencyAmount amount={balance} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
             <CurrencyAmount amount={deposit} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
             <CurrencyAmount amount={earned} />
           </div>
         </div>
