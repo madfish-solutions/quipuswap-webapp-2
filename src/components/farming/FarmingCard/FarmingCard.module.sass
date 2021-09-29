@@ -2,7 +2,7 @@
 @import "@styles/breakpoints"
 
 .card
-  margin-bottom: 32px
+  margin-bottom: 24px
 
 .flex
   display: block
@@ -36,6 +36,7 @@
 .detailsValue
   white-space: nowrap
   font-weight: 600
+  line-height: 1.7
 
 .detailsBlock
   width: 50%
@@ -72,6 +73,9 @@
   margin-bottom: 24px
   padding: 2px
 
+.farmingDigits
+  font-size: 1rem
+
 .multiplier
   font-size: 1.714rem
   line-height: 1.33
@@ -82,12 +86,15 @@
   align-items: flex-start
   width: 100%
   flex-wrap: wrap
+  margin-top: 24px
 
 .link
   width: 50%
-  margin-bottom: 24px
   &:not(:last-child)
     margin-right: 0px
+  &:nth-child(1),
+  &:nth-child(2)
+    margin-bottom: 24px
 
 .content
   padding: 24px
@@ -127,6 +134,13 @@
 
 .apyIcon
   margin-left: -2px
+
+.dollar
+  &:before
+    content: '$'
+    display: inline-block
+    margin-right: 4px
+    color: $text-02
 
 .light
   .detailsValue
@@ -175,8 +189,14 @@
     margin-right: 32px
   .amount
     font-size: 1.429rem
+  .detailsBlock
+    width: calc(100% / 3)
+  .link
+    width: 25%
 
 @include media('>Ltablet')
+  .card
+    margin-bottom: 32px
   .onlyMobile
     display: none !important
   .onlyDesktop
