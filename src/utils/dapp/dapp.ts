@@ -10,9 +10,10 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
+  GOVERNANCE_CONTRACT_MAINNET,
+  GOVERNANCE_CONTRACT_TESTNET,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
-  GOVERNANCE_CONTRACT,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
@@ -178,7 +179,7 @@ function useDApp() {
   useEffect(() => {
     const loadContractStorage = async () => {
       if (!tezos) return;
-      const contract:GovernanceStorageInfo = await getStorageInfo(tezos, GOVERNANCE_CONTRACT);
+      const contract:GovernanceStorageInfo = await getStorageInfo(tezos, network.id === 'mainnet' ? GOVERNANCE_CONTRACT_MAINNET : GOVERNANCE_CONTRACT_TESTNET);
       setState((prevState) => ({
         ...prevState,
         governanceContract: contract,

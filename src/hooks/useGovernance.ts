@@ -66,6 +66,8 @@ export const useGovernance = () => {
               status: Object.keys(x.status)[0] as ProposalStatus,
               forumLink: hexToASCII(x.forum_link),
               ipfsLink: hexToASCII(x.ipfs_link),
+              githubLink: hexToASCII(x.github_link),
+              voters: x.voters,
               endDate: x.end_date,
               startDate: x.start_date,
               votesAgainst: x.votes_against,

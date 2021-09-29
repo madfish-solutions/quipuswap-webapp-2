@@ -23,7 +23,9 @@ import {
   useAccountPkh, useGovernanceContract, useNetwork, useTezos,
 } from '@utils/dapp';
 import {
-  GOVERNANCE_CONTRACT, GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET, STABLE_TOKEN,
+  GOVERNANCE_CONTRACT_MAINNET,
+  GOVERNANCE_CONTRACT_TESTNET,
+  GOVERNANCE_TOKEN_MAINNET, GOVERNANCE_TOKEN_TESTNET, STABLE_TOKEN,
 } from '@utils/defaults';
 import { prepareIpfsLink } from '@utils/helpers';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
@@ -54,6 +56,7 @@ type SubmitType = {
   govContract: any,
   ipfsLink: string,
   forumLink: string,
+  githubLink: string,
   votingPeriod: number,
   deferral: number,
   handleErrorToast: (error:any) => void
@@ -67,6 +70,7 @@ const submitProposal = async ({
   govContract,
   ipfsLink,
   forumLink,
+  githubLink,
   votingPeriod,
   deferral,
   handleErrorToast,
@@ -81,7 +85,7 @@ const submitProposal = async ({
       0,
       [
         govContract.methods
-          .new_proposal(ipfsLink, forumLink, votingPeriod, deferral)
+          .new_proposal(ipfsLink, forumLink, githubLink, votingPeriod, deferral)
           .toTransferParams(fromOpOpts(undefined, undefined)),
       ],
     );
@@ -122,6 +126,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
   const [govContract, setGovContract] = useState<any>();
   const [description, setDescription] = useState<string>('');
   const [forumLink, setForumLink] = useState<string>('');
+  const [githubLink, setGithubLink] = useState<string>('');
   const [[votingStart, votingEnd], setVotingDates] = useState<Moment[]>(initialDates);
   const [votingInput, setVotingInput] = useState<any>(initialDates);
   const [{ loadedDescription, isLoaded }, setLoadedDescription] = useState({ loadedDescription: '', isLoaded: false });
@@ -163,7 +168,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     const loadDex = async () => {
       if (!tezos) return;
       if (!network) return;
-      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      const contract = await getContract(tezos, network.id === 'mainnet' ? GOVERNANCE_CONTRACT_MAINNET : GOVERNANCE_CONTRACT_TESTNET);
       setGovContract(contract);
     };
     loadDex();
@@ -200,6 +205,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
       govContract,
       ipfsLink: ASCIItoHex(description),
       forumLink: ASCIItoHex(forumLink),
+      githubLink: ASCIItoHex(githubLink),
       deferral,
       votingPeriod,
       handleErrorToast,
@@ -212,6 +218,7 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
     govContract,
     description,
     forumLink,
+    githubLink,
     votingStart,
     votingEnd,
   ]);
@@ -305,6 +312,13 @@ export const GovernanceForm: React.FC<GovernanceFormProps> = ({
             id="forumlink"
             value={forumLink}
             onChange={(e:any) => setForumLink(e.target.value)}
+          />
+          <Input
+            className={s.formInput}
+            label={t('governance|Github link')}
+            id="githubLink"
+            value={githubLink}
+            onChange={(e:any) => setGithubLink(e.target.value)}
           />
           {isPicker && (
             <div className={s.floatingPicker}>

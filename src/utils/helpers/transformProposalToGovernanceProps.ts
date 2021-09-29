@@ -6,6 +6,7 @@ export const transformProposalToGovernanceProps = (x:ProposalType) => ({
   name: x.name,
   description: prepareIpfsLink(x.ipfsLink),
   ipfsLink: prepareIpfsLink(x.ipfsLink),
+  githubLink: prepareIpfsLink(x.githubLink),
   shortDescription: x.name,
   workDates: [new Date(x.startDate), new Date(x.endDate)],
   status: x.status.toUpperCase(),
@@ -13,7 +14,7 @@ export const transformProposalToGovernanceProps = (x:ProposalType) => ({
   voted: x.votesAgainst.plus(x.votesFor).toString(),
   support: x.votesFor.toString(),
   reject: x.votesAgainst.toString(),
-  participants: x.votesAgainst.toString(),
+  participants: x.voters.toString(),
   quorum: x.votesAgainst.toString(),
   votes: '0', // user votes
   claimable: '0', // user votes after status pending

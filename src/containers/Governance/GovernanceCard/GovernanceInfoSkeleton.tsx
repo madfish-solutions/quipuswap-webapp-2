@@ -57,10 +57,10 @@ export const GovernanceInfoSkeleton: React.FC<{
           header={{
             content: (
               <div className={s.govHeader}>
-                <Skeleton className={s.govName} />
+                <Skeleton className={cx(s.govNameSkel, s.govName)} />
                 <div className={s.govGroup}>
-                  <Skeleton className={s.govDates} />
-                  <Skeleton className={s.govBage} />
+                  <Skeleton className={cx(s.govNameSkel, s.govDates)} />
+                  <Skeleton className={cx(s.govNameSkel, s.govBage)} />
                 </div>
               </div>
             ),
@@ -74,7 +74,7 @@ export const GovernanceInfoSkeleton: React.FC<{
           className={s.proposalSubHeader}
         />
         <CardContent className={s.govContent}>
-          <Skeleton className={s.govDescription} />
+          <Skeleton className={cx(s.govDescription, s.govDescriptionSkeleton)} />
         </CardContent>
       </Card>
       <div className={cx(modeClass[colorThemeMode], s.proposalSidebar)}>
@@ -90,65 +90,83 @@ export const GovernanceInfoSkeleton: React.FC<{
                 header={t('governance|IPFS')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Start Date')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|End Date')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Author')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Participants')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Quorum')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Total Votes')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Your Votes')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               <CardCell
                 headerClassName={s.cellHeader}
                 header={t('governance|Option')}
                 className={s.cell}
               >
-                <Skeleton className={s.cellDate} />
+                <Skeleton className={cx(s.cellSkel, s.cellDate)} />
               </CardCell>
               {/* <DonutChart votes={totalVotes} vetos={totalVetos} /> */}
+            </CardContent>
+          </Card>
+          <Card className={s.proposalDetails}>
+            <CardHeader header={{
+              content: (<h5>{t('governance|Votes')}</h5>),
+            }}
+            />
+            <CardContent className={s.proposalVotes}>
+              <Skeleton className={cx(s.govDescription, s.govDetailsSkeleton)} />
+            </CardContent>
+          </Card>
+          <Card className={s.proposalDetails}>
+            <CardHeader header={{
+              content: (<h5>{t('governance|References')}</h5>),
+            }}
+            />
+            <CardContent className={s.content}>
+              <Skeleton className={cx(s.govDescription, s.govDetailsSkeleton)} />
             </CardContent>
           </Card>
         </div>

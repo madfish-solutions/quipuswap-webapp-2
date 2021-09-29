@@ -14,7 +14,7 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useUsersVotes } from '@hooks/useUsersVotes';
 import { useTokenBalance } from '@hooks/useTokenBalance';
 import {
-  GOVERNANCE_CONTRACT, STABLE_TOKEN, STABLE_TOKEN_GRANADA,
+  GOVERNANCE_CONTRACT_TESTNET, GOVERNANCE_CONTRACT_MAINNET, STABLE_TOKEN, STABLE_TOKEN_GRANADA,
 } from '@utils/defaults';
 import {
   getContract,
@@ -135,7 +135,7 @@ export const Governance: React.FC<GovernanceProps> = ({
     const loadDex = async () => {
       if (!tezos) return;
       if (!network) return;
-      const contract = await getContract(tezos, GOVERNANCE_CONTRACT);
+      const contract = await getContract(tezos, network.id === 'mainnet' ? GOVERNANCE_CONTRACT_MAINNET : GOVERNANCE_CONTRACT_TESTNET);
       setGovContract(contract);
     };
     loadDex();
@@ -362,7 +362,7 @@ export const Governance: React.FC<GovernanceProps> = ({
           </div>
         </div>
 
-        {renderProposals.length < 1 ? (
+        {!proposalsLoaded ? (
           <>
             <GovernanceCardLoader />
             <GovernanceCardLoader />

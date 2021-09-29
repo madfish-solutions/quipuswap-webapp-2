@@ -9,6 +9,7 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 import For from '@icons/For.svg';
 import NotFor from '@icons/NotFor.svg';
 
+import BigNumber from 'bignumber.js';
 import s from './ModalCell.module.sass';
 
 const modeClass = {
@@ -18,11 +19,13 @@ const modeClass = {
 
 type VoteCellProps = {
   vote?: any,
+  value?: any,
   currency?: string
 };
 
 export const VoteCell: React.FC<VoteCellProps> = ({
   vote,
+  value,
   currency = '',
 }) => {
   const { t } = useTranslation(['common']);
@@ -53,7 +56,10 @@ export const VoteCell: React.FC<VoteCellProps> = ({
               :
             </div>
             <div className={s.label1}>
-              {vote.value}
+              {new BigNumber(vote.value)
+                .dividedBy(new BigNumber(value))
+                .multipliedBy(100)
+                .toString()}
               {' '}
               <span className={s.captionText}>%</span>
             </div>

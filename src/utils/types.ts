@@ -177,6 +177,7 @@ export type GovernanceProposalType = {
   creator: string,
   ipfs_link: string,
   forum_link: string,
+  github_link: string,
   votes_for: BigNumber,
   votes_against: BigNumber,
   start_date: string,
@@ -195,6 +196,7 @@ export type GovernanceProposalType = {
     voting_quorum: BigNumber,
     support_quorum: BigNumber,
   },
+  voters: BigNumber
   collateral: BigNumber
 };
 
@@ -207,6 +209,7 @@ export type ProposalType = {
     votingQuorum: BigNumber,
     supportQuorum: BigNumber,
   },
+  githubLink: string,
   creator: string,
   endDate: string,
   forumLink: string,
@@ -214,6 +217,7 @@ export type ProposalType = {
   startDate: string,
   status: ProposalStatus,
   votesAgainst: BigNumber,
+  voters: BigNumber,
   votesFor: BigNumber,
 };
 
@@ -231,6 +235,7 @@ export type GovernanceCardProps = {
   status: ProposalStatus
   description: string
   ipfsLink: string
+  githubLink: string
   shortDescription: React.ReactNode
   voted: string
   support: string

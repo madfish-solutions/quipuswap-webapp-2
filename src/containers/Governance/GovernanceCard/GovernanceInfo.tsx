@@ -1,13 +1,17 @@
 import React, {
-  useContext, useState, useEffect, useMemo,
+  useContext, useState, useMemo,
 } from 'react';
 import cx from 'classnames';
 import moment from 'moment';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { GovernanceCardProps, ProposalType } from '@utils/types';
+import { useGovernanceContract } from '@utils/dapp';
 import { getUniqueKey } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useGovernance } from '@hooks/useGovernance';
+import { useProposalDescription } from '@hooks/useProposalDescription';
+import { useProposalVotes } from '@hooks/useProposalVotes';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Bage } from '@components/ui/Bage';
 import { Button } from '@components/ui/Button';
@@ -17,25 +21,15 @@ import { VoteCell } from '@components/ui/Modal/ModalCell/VoteCell';
 import { VoteModal } from '@components/modals/VoteModal';
 import { Back } from '@components/svg/Back';
 import { ExternalLink } from '@components/svg/ExternalLink';
+import { Skeleton } from '@components/ui/Skeleton';
 
-import { useGovernance } from '@hooks/useGovernance';
-import { useGovernanceContract } from '@utils/dapp';
 import s from './GovernanceCard.module.sass';
-
 import { GovernanceDetails } from './GovernanceDetails';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
-
-const votesData = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16].map((x) => ({
-  id: x,
-  address: 'tz1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-  value: '10.00',
-  votes: '1000000',
-  for: Math.random() > 0.5,
-}));
 
 export const GovernanceInfo: React.FC<GovernanceCardProps & {
   proposal: ProposalType,
@@ -64,17 +58,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
   const { totalSupply } = useGovernance();
   const governanceContract = useGovernanceContract();
 
-  const [{ loadedDescription, isLoaded }, setDescription] = useState({ loadedDescription: '', isLoaded: false });
+  const { loadedDescription, isLoaded } = useProposalDescription(description);
   const [voteModal, setVoteModal] = useState<boolean>(false);
-
-  useEffect(() => {
-    const loadDescription = () => {
-      fetch(description).then((x) => x.text()).then((x) => {
-        setDescription({ loadedDescription: x, isLoaded: true });
-      });
-    };
-    loadDescription();
-  }, [description]);
+  const { loadedVotes: votesData, isLoaded: isLoadedVotes } = useProposalVotes(`${proposal.id}`);
 
   const quorum = useMemo(() => (governanceContract && totalSupply
     ? proposal.config.votingQuorum
@@ -172,7 +158,9 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
         </div>
         <CardContent className={s.govContent}>
           <div className={s.govDescription}>
-            <Markdown markdown={!isLoaded ? 'Loading...' : loadedDescription} />
+            {!isLoaded
+              ? <Skeleton className={cx(s.govDescription, s.govDescriptionSkeleton)} />
+              : <Markdown markdown={loadedDescription} />}
           </div>
           <Button onClick={() => setVoteModal(true)} className={s.govButtonBottom}>
             {t('governance|Vote')}
@@ -198,13 +186,22 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
               support={support}
             />
           </Card>
-          <Card className={cx(s.proposalDetails)}>
+          <Card className={s.proposalDetails}>
             <CardHeader header={{
               content: (<h5>{t('governance|Votes')}</h5>),
             }}
             />
             <CardContent className={s.proposalVotes}>
-              {votesData.map((x) => <VoteCell key={x.id} vote={x} currency={currency} />)}
+              {isLoadedVotes
+                ? votesData.map((x) => (
+                  <VoteCell
+                    key={x.id}
+                    value={voted}
+                    vote={x}
+                    currency={currency}
+                  />
+                ))
+                : <Skeleton className={cx(s.govDescription, s.govDetailsSkeleton)} />}
             </CardContent>
           </Card>
           <Card className={s.proposalDetails}>
