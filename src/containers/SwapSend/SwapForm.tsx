@@ -42,7 +42,7 @@ import { Button } from '@components/ui/Button';
 import { SwapButton } from '@components/common/SwapButton';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Transactions } from '@components/svg/Transactions';
+// import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 import { SwapDetails } from './SwapDetails';
@@ -345,13 +345,14 @@ const RealForm:React.FC<SwapFormProps> = ({
               className={s.tabs}
             />
           ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
+          // TODO: wait untill implemented API
+          // button: (
+          //   <Button
+          //     theme="quaternary"
+          //   >
+          //     <Transactions />
+          //   </Button>
+          // ),
           className: s.header,
         }}
         contentClassName={s.content}

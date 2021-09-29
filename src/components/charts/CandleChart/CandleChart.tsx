@@ -28,6 +28,7 @@ import {
 import s from './CandleChart.module.sass';
 
 type CandleChartProps = {
+  error?: any
   data: CandlePlotPoint[]
   className?: string
   disabled?: boolean
@@ -267,7 +268,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
   loading = false,
   token1 = TEZOS_TOKEN,
   token2,
-  disabled,
+  error,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
@@ -282,16 +283,16 @@ export const CandleChart: React.FC<CandleChartProps> = ({
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || !data || !token2 || data.length === 0
+        {loading || error || !data || !token2 || data.length === 0
           ? (<Preloader style={{ minHeight: '360px' }} />)
           : (
             <ChartInstance token={token2} data={data} />
           )}
       </CardContent>
-      {disabled && (
+      {token1?.contractAddress !== TEZOS_TOKEN.contractAddress && (
       <div className={cx(s.disabled, modeClass[colorThemeMode])}>
         <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        <h2 className={s.h1}>{t('common|No data!')}</h2>
       </div>
       )}
     </Card>

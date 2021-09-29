@@ -32,13 +32,14 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       id: dex.contract.address,
     },
   });
-  const loadingProp = loading || error || !data || !data?.pair;
+  const loadingProp = loading || !data || !data?.pair;
   return (
     <LineChart
       token1={token1}
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
+      error={error}
       data={!loadingProp && data ? data.pair.plotLiquidity as PlotPoint[] : []}
     />
   );

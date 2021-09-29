@@ -25,14 +25,14 @@ export const SwapChart: React.FC<SwapChartProps> = ({
       tokenId: token2.fa2TokenId !== undefined ? `${token2.fa2TokenId}` : undefined,
     },
   });
-  const loadingProp = loading || error || !data || !data?.token;
+  const loadingProp = loading || !data || !data?.token;
   return (
     <CandleChart
       token1={token1}
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
-      disabled
+      error={error}
       data={!loadingProp && data ? data.token.plotPrice as CandlePlotPoint[] : []}
     />
   );

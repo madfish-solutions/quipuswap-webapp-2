@@ -55,7 +55,7 @@ import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Transactions } from '@components/svg/Transactions';
+// import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
@@ -594,13 +594,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               className={s.tabs}
             />
           ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
+          // TODO:
+          // button: (
+          //   <Button
+          //     theme="quaternary"
+          //   >
+          //     <Transactions />
+          //   </Button>
+          // ),
           className: s.header,
         }}
         contentClassName={s.content}

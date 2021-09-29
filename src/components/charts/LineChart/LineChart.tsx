@@ -27,6 +27,7 @@ import {
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
+  error?: any
   data: PlotPoint[]
   token1?: WhitelistedToken
   token2?: WhitelistedToken
@@ -195,6 +196,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
 
 export const LineChart: React.FC<LineChartProps> = ({
   data,
+  error,
   className,
   loading = false,
   token1,
@@ -210,7 +212,7 @@ export const LineChart: React.FC<LineChartProps> = ({
       className={s.cardHeader}
     />
     <CardContent className={cx(s.container, s.cardContent)}>
-      {loading || !data || data.length === 0
+      {loading || error || !data || data.length === 0
         ? (<Preloader style={{ minHeight: '360px' }} />)
         : (
           <ChartInstance data={data} />
