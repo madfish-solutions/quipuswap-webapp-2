@@ -206,3 +206,36 @@ export type FarmingUsersInfo = {
   used_votes?: BigNumber
   farmId?: number
 };
+
+export type PoolTableType = {
+  id: number,
+  xtzUsdQuote: string,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  pair: {
+    name: string,
+    token1: {
+      icon: string,
+      symbol: string,
+    },
+    token2: {
+      icon: string,
+      symbol: string,
+    },
+  },
+  data: {
+    tvl: number,
+    volume24h: number,
+  },
+  buttons: {
+    first: {
+      label: string,
+      href: string,
+      external: boolean,
+    },
+    second: {
+      label: string,
+      href: string,
+    },
+  },
+};

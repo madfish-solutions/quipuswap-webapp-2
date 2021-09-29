@@ -18,6 +18,7 @@ type TabsProps = {
   activeId: string
   setActiveId: (id: string) => void
   className?: string
+  withUnderline?: boolean
 };
 
 const modeClass = {
@@ -30,6 +31,7 @@ export const Tabs: React.FC<TabsProps> = ({
   activeId,
   setActiveId,
   className,
+  withUnderline = true,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -77,13 +79,15 @@ export const Tabs: React.FC<TabsProps> = ({
           </span>
         </button>
       ))}
-      <span
-        className={s.stripe}
-        style={{
-          width: stripeState.width,
-          transform: `translateX(${stripeState.transform}px)`,
-        }}
-      />
+      {withUnderline && (
+        <span
+          className={s.stripe}
+          style={{
+            width: stripeState.width,
+            transform: `translateX(${stripeState.transform}px)`,
+          }}
+        />
+      )}
     </div>
   );
 };

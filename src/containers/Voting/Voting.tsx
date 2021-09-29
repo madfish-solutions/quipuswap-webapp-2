@@ -117,7 +117,7 @@ export const Voting: React.FC<VotingProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: currentTab.id === 'remove' ? 'Divest completed!' : 'Invest completed!',
+      render: 'Withdrawal completed!',
     });
   }, [updateToast]);
 
@@ -150,6 +150,7 @@ export const Voting: React.FC<VotingProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
@@ -168,12 +169,14 @@ export const Voting: React.FC<VotingProps> = ({
         network.id as QSMainNet,
       );
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
       getBalance();
     }
+    // eslint-disable-next-line
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
@@ -188,7 +191,7 @@ export const Voting: React.FC<VotingProps> = ({
         handleSubmit={(params:TransferParams[]) => {
           if (!tezos) return;
           handleLoader();
-          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast);
+          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast, getBalance);
         }}
       />
       <StickyBlock className={className}>
@@ -201,8 +204,9 @@ export const Voting: React.FC<VotingProps> = ({
               values,
               dex,
               tab: currentTab.id,
-              handleSuccessToast,
+              updateToast,
               handleErrorToast,
+              getBalance,
             });
           }}
           mutators={{

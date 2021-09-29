@@ -52,7 +52,7 @@ export const handleSearchToken = async ({
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
-      .sort((a, b) => localSearchSortSymbol(b, a, inputValue))
+      .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
       .filter(
         (token:any) => localSearchToken(
           token,

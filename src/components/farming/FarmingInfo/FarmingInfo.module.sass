@@ -7,6 +7,8 @@
 .cell
   &:not(:last-child)
     margin-bottom: 16px
+  &:nth-child(9)
+    margin-bottom: 0
 
 .chart
   margin-bottom: 24px
@@ -25,8 +27,13 @@
   width: 100%
 
 .content, .topContent
-  padding: 24px
   font-weight: 600
+
+.topContent
+  padding: 24px
+
+.content
+  padding: 40px 24px 24px 24px
 
 .baker
   margin-top: 24px
@@ -66,7 +73,9 @@
 .header
   padding-top: 0
   padding-bottom: 0
+  margin-bottom: 8px
   text-align: left
+  line-height: 1.143
 
 .linkIcon
   margin-left: 8px
@@ -101,11 +110,11 @@
 .button
   width: 100%
   max-width: 280px
-  margin-top: 40px
 
 .statButton 
   width: 100%
   max-width: none
+  margin-top: 40px
 
 .buttons
   display: flex
@@ -138,6 +147,9 @@
     color: $text-01
   .amount, govBlockLabel, .priceAmount
     color: $text-01
+  .rewardHeader, .rewardCurrency
+    color: $text-02
+
 
 .dark
   .reward
@@ -145,6 +157,8 @@
     color: $text-inverse
   .amount, govBlockLabel, .priceAmount
     color: $text-inverse
+  .rewardHeader, .rewardCurrency
+    color: $text-03
 
 @include media('>phone')
   .rewardAmount
@@ -162,18 +176,14 @@
     margin-right: 32px
   .amount
     font-size: 1.429rem
-
+  .itemsRows
+    display: flex
+    justify-content: space-between
+    width: 100%
 
 @include media('>Lphone', '<=Ltablet')
-  .detailsButtons
-    display: flex
-    flex-direction: column
-    align-items: flex-end
-    margin-left: auto
-    margin-top: 12px
   .rewardAmount
     font-size: 2.286rem
-
 
 @include media('>Ltablet')
   .detailsButtons
@@ -193,8 +203,8 @@
     flex-direction: column
     align-items: flex-end
   .itemsRows
-    justify-content: space-between
     display: flex
+    justify-content: space-between
   .flex
     display: flex
     align-items: center

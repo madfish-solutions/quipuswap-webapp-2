@@ -1,0 +1,29 @@
+query GetTokensPairs($limit: Int, $offset: Int) {
+  overview {
+    xtzUsdQuote
+  }
+  pairs(limit: $limit, offset: $offset) {
+    totalCount
+    edges {
+      node {
+        id
+        token1 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        token2 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        volume24h
+        liquidity
+      }
+    }
+  }
+}

@@ -6,5 +6,5 @@ export const isAddress = async (value: string) => {
   const isContract = await validateContractAddress(value) === 3;
   return isAddr && !isContract
     ? undefined
-    : i18n?.t('common:You entered not a valid address');
+    : i18n?.t('common|You entered not a valid address');
 };

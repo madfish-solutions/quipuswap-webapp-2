@@ -22,6 +22,7 @@ export const useOnBlock = (tezos: TezosToolkit | null, callback: (hash: string) 
       });
       sub.on('error', (err: Error) => {
         if (process.env.NODE_ENV === 'development') {
+          // eslint-disable-next-line
           console.error(err);
         }
         sub.close();

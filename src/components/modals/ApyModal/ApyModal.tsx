@@ -19,7 +19,7 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
     <Modal
       containerClassName={cx(themeClass[colorThemeMode], s.modalWrap)}
       contentClassName={s.modal}
-      title={t('common:APY')}
+      title={t('common|APY')}
       isOpen={isOpen}
       onRequestClose={close}
     >
@@ -32,15 +32,15 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
         </div>
       </div>
       <table className={s.table}>
-        <thead>
+        <thead className={s.thead}>
           <tr className={s.tableHead}>
-            <th>
+            <th className={s.th}>
               Timeframe
             </th>
-            <th>
+            <th className={s.th}>
               ROI
             </th>
-            <th>
+            <th className={s.th}>
               QUIPU per $ 1,000
             </th>
           </tr>
