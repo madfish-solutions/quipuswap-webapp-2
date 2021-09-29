@@ -119,6 +119,8 @@ export type WhitelistedFarm = {
   apy: string
   daily: string
   balance: string
+  deposit?: string
+  earned?: string
   multiplier: string
   tokenContract: string
   farmContract: string

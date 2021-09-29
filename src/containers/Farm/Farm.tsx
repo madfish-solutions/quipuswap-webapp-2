@@ -5,9 +5,11 @@ import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { prettyPrice } from '@utils/helpers';
 import { STABLE_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
 import { useFarms } from '@hooks/useFarms';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -29,10 +31,6 @@ type FarmProps = {
 type ContentType = { name:string, value:string, currency?:string }[];
 
 const SortContent = [
-  {
-    id: 'asc:token',
-    label: 'Deposit token',
-  },
   {
     id: 'asc:tvl',
     label: 'TVL',
@@ -76,11 +74,12 @@ const modeClass = {
 export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
   const allFarms = useFarms();
+  const userInfoInAllFarms = useUserInfoInAllFarms();
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [searchedFarms, setSearchedfarms] = useState(allFarms);
+  const [farms, setFarms] = useState<WhitelistedFarm[] | undefined>();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   useEffect(() => {
@@ -93,13 +92,65 @@ export const Farm: React.FC<FarmProps> = () => {
   }, [allFarms, router.query, selectedFarming]);
 
   useEffect(() => {
+    const mergedFarms:WhitelistedFarm[] = allFarms.map((farm) => {
+      if (userInfoInAllFarms && userInfoInAllFarms[farm.id]) {
+        return {
+          ...farm,
+          deposit: prettyPrice(Number(userInfoInAllFarms[farm.id].staked)),
+          earned: prettyPrice(Number(userInfoInAllFarms[farm.id].earned)),
+        };
+      }
+
+      return { ...farm };
+    });
+
+    setFarms(mergedFarms);
+  }, [userInfoInAllFarms, allFarms]);
+
+  useEffect(() => {
+    let sortingParam: keyof WhitelistedFarm;
+
+    switch (sort) {
+      case 'asc:token':
+        return;
+      case 'asc:tvl':
+        sortingParam = 'totalValueLocked';
+        break;
+      case 'asc:apy':
+        sortingParam = 'apy';
+        break;
+      case 'asc:deposit':
+        sortingParam = 'deposit';
+        break;
+      default:
+        return;
+    }
+
+    if (farms) {
+      farms.sort((a, b) => {
+        if ((a[sortingParam] ?? '') < (b[sortingParam] ?? '')) {
+          return 1;
+        }
+
+        if ((a[sortingParam] ?? '') > (b[sortingParam] ?? '')) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      setFarms([...farms]);
+    }
+  }, [sort]);
+
+  useEffect(() => {
     const searched = allFarms.filter((farm) => ((
       farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
     ) || (
       farm.tokenPair.token2.metadata.name.toLowerCase().includes(search.toLowerCase())
     )));
 
-    setSearchedfarms(searched);
+    setFarms(searched);
   }, [allFarms, search]);
 
   const currentSort = useMemo(
@@ -199,9 +250,9 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {searchedFarms?.map((x) => (
+      {farms?.map((x) => (
         <FarmingCard
-          key={x.multiplier}
+          key={x.id}
           farm={x}
           openModal={() => setModalOpen(true)}
         />
