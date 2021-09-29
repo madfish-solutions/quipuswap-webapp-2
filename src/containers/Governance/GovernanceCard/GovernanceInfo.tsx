@@ -40,6 +40,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
   workDates,
   status = 'pending',
   description,
+  githubLink,
   voted,
   votes,
   currency,
@@ -219,6 +220,8 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
                     icon={
                       <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
+                    href={githubLink}
+                    external
                   >
                     {t('governance|The proposal on forum')}
                   </Button>
@@ -234,6 +237,7 @@ export const GovernanceInfo: React.FC<GovernanceCardProps & {
                       <ExternalLink id={`${getUniqueKey()}`} className={s.linkIcon} />
                     }
                     href={description}
+                    external
                   >
                     {t('governance|The QIP on Github')}
                   </Button>
