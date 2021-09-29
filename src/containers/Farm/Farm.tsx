@@ -100,7 +100,7 @@ export const Farm: React.FC<FarmProps> = () => {
     )));
 
     setSearchedfarms(searched);
-  }, [search]);
+  }, [allFarms, search]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
