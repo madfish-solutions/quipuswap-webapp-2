@@ -24,6 +24,7 @@ import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { Timeleft } from '@components/ui/Timeleft';
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -75,7 +76,6 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
-  handleUnselect,
   amount = '1000000',
 }) => {
   const {
@@ -105,7 +105,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         header={{
           content: (
             <Button
-              onClick={() => (handleUnselect ? handleUnselect() : null)}
+              href="/farm"
               theme="quaternary"
               className={s.proposalHeader}
               control={
@@ -133,9 +133,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <div className={s.notRewards}>
             <div className={s.itemsRows}>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Your Share
-                </span>
+                </header>
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
@@ -275,24 +275,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
-                {t('common|Daily Distribution')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                <CurrencyAmount amount={amount} />
-              </span>
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
                 {t('common|APR')}
                 <Tooltip
                   sizeT="small"
@@ -361,6 +343,20 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <CardCell
             header={(
               <>
+                {t('common|Ends in')}
+                <Tooltip
+                  sizeT="small"
+                  content={t('common|TOOLTIP TODO')}
+                />
+              </>
+            )}
+            className={s.cell}
+          >
+            <Timeleft remaining={remaining} className={s.priceAmount} />
+          </CardCell>
+          <CardCell
+            header={(
+              <>
                 {t('common|Lock Period')}
                 <Tooltip
                   sizeT="small"
@@ -370,13 +366,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             )}
             className={s.cell}
           >
-            <div className={s.cellAmount}>
-              <div className={cx(s.govBlockLabel, s.priceAmount)}>
-                1
-                {' '}
-                <span className={s.govBlockSpan}>D</span>
-              </div>
-            </div>
+            <Timeleft remaining={remaining} className={s.priceAmount} />
           </CardCell>
           <CardCell
             header={(
