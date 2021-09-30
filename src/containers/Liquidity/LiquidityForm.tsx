@@ -37,7 +37,7 @@ import {
 } from '@utils/types';
 
 import {
-  composeValidators, validateBalance, validateMinMax, validateMinMaxNonStrict,
+  composeValidators, validateBalance, validateMinMax, validateRebalance,
 } from '@utils/validators';
 import {
   fromDecimals,
@@ -140,6 +140,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   const updateToast = useUpdateToast();
   const [poolShare, setPoolShare] = useState<PoolShare>();
   const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
+  const [[localSwap, localInvest], setRebalance] = useState<BigNumber[]>([
+    new BigNumber(0), new BigNumber(0),
+  ]);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -350,6 +353,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             dex,
             { tezValue },
           );
+          console.log(tezValue.toString(), inputValue.toString());
+          setRebalance([tezValue, inputValue]);
           const params = [...swapParams, ...addParams];
           setAddLiquidityParams(params);
         } catch (e) {
@@ -557,6 +562,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     [token1, token2],
   );
 
+  const field1Validator = useMemo(() => {
+    if (values.switcher) {
+      return composeValidators(validateRebalance(localSwap.toString(), localInvest.toString()),
+        () => (new BigNumber(values.balance1).eq(0) && new BigNumber(values.balance2).eq(0) ? t('liquidity|Value has to be a greater than zero') : undefined));
+    }
+    return validateMinMax(0, Infinity);
+  }, [values.switcher, localSwap, localInvest, t, values.balance1, values.balance2]);
+
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
   const frozenBalance = useMemo(() => (fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString()), [poolShare]);
@@ -647,7 +660,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   frozenBalance={frozenBalance}
                   totalBalance={totalBalance}
                   id="liquidity-remove-input"
-                  label="Select LP"
+                  label={t('liquidity|Select LP')}
                   className={s.input}
                   error={((meta.touched && meta.error) || meta.submitError)}
                 />
@@ -669,7 +682,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="liquidity-token-A"
-              label="Output"
+              label={t('liquidity|Output')}
               className={cx(s.input, s.mb24)}
               readOnly
               error={((meta.touched && meta.error) || meta.submitError)}
@@ -683,7 +696,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance1"
           validate={composeValidators(
-            !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
+            field1Validator,
             accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
           )}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
@@ -718,7 +731,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="liquidity-token-1"
-              label="Input"
+              label={t('liquidity|Input')}
               className={s.input}
               error={((meta.error) || meta.submitError)}
             />
@@ -740,7 +753,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="liquidity-token-B"
-              label="Output"
+              label={t('liquidity|Output')}
               className={cx(s.input, s.mb24)}
               readOnly
               error={((meta.touched && meta.error) || meta.submitError)}
@@ -752,7 +765,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         <Field
           name="balance2"
           validate={composeValidators(
-            !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
+            field1Validator,
             accountPkh
               ? validateBalance(new BigNumber(tokensData.second.balance))
               : () => undefined,
@@ -787,7 +800,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="liquidity-token-2"
-              label="Input"
+              label={t('liquidity|Input')}
               className={cx(s.input, s.mb24)}
               error={((meta.error) || meta.submitError)}
             />
