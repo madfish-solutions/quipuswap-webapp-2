@@ -1,14 +1,16 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Switcher } from '@components/ui/Switcher';
-import { QuipuToken } from '@components/svg/QuipuToken';
+import { ListLogo } from '@components/ui/ListLogo';
 
 import s from './ModalCell.module.sass';
 
 type ChooseListCellProps = {
-  tokenList?: any,
+  tokenList: WhitelistedTokenList,
   isActive: boolean,
   onChange: (state:boolean) => void
 };
@@ -24,16 +26,22 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   onChange,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation('common');
   return (
     <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
       <div className={s.joinRow}>
-        <QuipuToken />
+        <ListLogo
+          list={tokenList}
+        />
         <div className={s.mleft8}>
           <h6>
             {tokenList?.name}
           </h6>
           <span className={s.caption}>
-            {tokenList?.label}
+            {t('common:Tokens Count')}
+            :
+            {' '}
+            {tokenList.tokens.length}
           </span>
         </div>
       </div>

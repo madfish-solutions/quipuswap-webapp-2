@@ -42,6 +42,13 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
+export interface WhitelistedTokenList {
+  keywords: string[],
+  logoURI: string,
+  name: string,
+  tokens: WhitelistedToken[]
+}
+
 export interface WhitelistedBaker {
   name: string,
   address: string,

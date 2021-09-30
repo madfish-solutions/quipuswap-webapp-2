@@ -47,10 +47,6 @@ export const SwapChart: React.FC<SwapChartProps> = ({
     },
   });
   const loadingProp = loading || !data || !data?.token;
-  // console.log(data);
-  // if (!loadingProp && data) {
-  //   console.log(uniqBy(data.token.plotPrice, (x) => x.time) as CandlePlotPoint[]);
-  // }
   return (
     <CandleChart
       token1={token1}

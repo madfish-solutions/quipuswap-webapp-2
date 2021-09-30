@@ -309,9 +309,6 @@ export const CandleChart: React.FC<CandleChartProps> = ({
     }
     setReloading(false);
   }, [data, switcher]);
-
-  // console.log(usdData);
-  // console.log(loading, error, !usdData, !token2, usdData.length === 0, usdData.length, usdData);
   return (
     <Card className={className}>
       <CardHeader

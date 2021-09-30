@@ -78,6 +78,7 @@ const PrivacyPolicy: React.FC = () => {
             </span>
             {' '}
             {t('privacy|decides “why” and “how” your Personal Data is processed in connection with the Interface. If you have additional questions or require more information about this Privacy Policy, do not hesitate to contact')}
+            {' '}
             <Button theme="inverse" href="info@madfish.solutions" external>
               info@madfish.solutions
             </Button>

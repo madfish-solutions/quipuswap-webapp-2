@@ -568,8 +568,10 @@ const UiKit: React.FC = () => {
             onChange={() => {}}
             isActive={false}
             tokenList={{
-              name: 'Token',
-              symbol: 'Token',
+              keywords: [],
+              logoURI: '',
+              tokens: [STABLE_TOKEN, TEZOS_TOKEN],
+              name: 'temp name',
             }}
           />
           <SwapCell
