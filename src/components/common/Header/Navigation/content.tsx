@@ -109,12 +109,12 @@ export const NavigationData: NavigationDataProps = [
       },
       {
         id: 6,
-        href: 'https://www.google.com',
+        href: '/terms',
         label: 'Terms of Usage',
       },
       {
         id: 7,
-        href: 'https://www.google.com',
+        href: '/privacy',
         label: 'Privacy Policy',
       },
     ],

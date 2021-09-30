@@ -12,6 +12,9 @@ import {
   BASE_URL,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
+  MAINNET_NETWORK,
+  METADATA_API_MAINNET,
+  METADATA_API_TESTNET,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
@@ -334,7 +337,9 @@ function useDApp() {
           return null;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(network, address, tokenId);
+        const customToken = await getTokenMetadata(network.id === MAINNET_NETWORK.id
+          ? METADATA_API_MAINNET
+          : METADATA_API_TESTNET, address, tokenId);
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
