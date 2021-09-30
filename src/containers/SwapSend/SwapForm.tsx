@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import {
   estimateSwap,
+  estimateTokenToTez,
   FoundDex,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
@@ -33,7 +34,7 @@ import {
   toDecimals,
   transformTokenDataToAsset,
 } from '@utils/helpers';
-import { FACTORIES, FEE_RATE } from '@utils/defaults';
+import { FACTORIES, FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
@@ -109,7 +110,6 @@ const RealForm:React.FC<SwapFormProps> = ({
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [fee, setFee] = useState<BigNumber>();
   const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [priceImpact, setPriceImpact] = useState<BigNumber>(new BigNumber(0));
   const [rate1, setRate1] = useState<BigNumber>(new BigNumber(0));
@@ -172,11 +172,9 @@ const RealForm:React.FC<SwapFormProps> = ({
     const valuesInner = lastChangeMod === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
     let retValue = new BigNumber(0);
-    let feeType = 'single';
     try {
       if (isTokenToToken && dex2) {
         const sendDex = { inputDex: dex, outputDex: dex2 };
-        feeType = 'double';
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -231,9 +229,6 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     setOldTokens([token1, token2]);
     setOldDex([dex, dex2]);
-    let feeVal = result;
-    if (feeType === 'double') { feeVal = result.multipliedBy(2); }
-    setFee(feeVal.multipliedBy(new BigNumber(FEE_RATE)));
   };
 
   const saveFunc = async () => {
@@ -332,6 +327,16 @@ const RealForm:React.FC<SwapFormProps> = ({
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
   );
+  let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
+  if (token1.contractAddress !== TEZOS_TOKEN.contractAddress && values.balance1) {
+    feeVal = fromDecimals(estimateTokenToTez(
+      dex.storage,
+      toDecimals(new BigNumber(values.balance1), token1.metadata.decimals),
+    ), 6);
+  }
+  if (token1.contractAddress !== TEZOS_TOKEN.contractAddress
+    && token2.contractAddress !== TEZOS_TOKEN.contractAddress) { feeVal = feeVal.multipliedBy(2); }
+  const fee = feeVal.multipliedBy(new BigNumber(FEE_RATE));
 
   return (
     <>
