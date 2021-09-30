@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
@@ -12,6 +13,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { Skeleton } from '@components/ui/Skeleton';
 import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
@@ -166,7 +168,6 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               }
         />
       </CardCell>
-      {(dex || dex2) && (
       <div className={s.detailsButtons}>
         {dex2 && dex && (
         <Button
@@ -183,25 +184,24 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             })}
         </Button>
         )}
-        {dex && (
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {dex2
-            ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
-              {
-                tokenA: TEZOS_TOKEN.metadata.symbol,
-                tokenB: getWhitelistedTokenSymbol(token2),
-              })
-            : t('common|View Pair Analytics')}
-        </Button>
-        )}
+        {dex ? (
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {dex2
+              ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
+                {
+                  tokenA: TEZOS_TOKEN.metadata.symbol,
+                  tokenB: getWhitelistedTokenSymbol(token2),
+                })
+              : t('common|View Pair Analytics')}
+          </Button>
+        ) : <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />}
       </div>
-      )}
     </Card>
   );
 };

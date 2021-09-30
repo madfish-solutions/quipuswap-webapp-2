@@ -4,6 +4,10 @@
 .rebalance
   margin-left: 8px
 
+.buttonSkel 
+  height: 36px
+  width: 200px
+
 .header
   padding-top: 0
   padding-bottom: 0
@@ -36,10 +40,46 @@
   margin-top: 40px
   max-width: 280px
 
+.cellCenter
+  align-items: flex-start
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.cellAmount
+  display: flex
+  justify-content: flex-start
+  align-items: flex-start
+
 .switcher
   display: flex
   align-items: center
   font-weight: 600
+
+.equal
+  margin: 0 8px
+
+.detailsButton
+  display: flex
+  align-items: center
+  margin-left: auto
+  margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-top: 26px
+  margin-left: auto
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+    &:not(:first-child)
+      margin-top: 16px
+
+.linkIcon
+  margin-left: 8px
 
 .buttons
   display: flex

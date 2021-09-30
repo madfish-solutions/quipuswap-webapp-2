@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import {
@@ -14,10 +15,11 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
+import { Skeleton } from '@components/ui/Skeleton';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
-import s from '@styles/CommonContainer.module.sass';
+import s from './Liquidity.module.sass';
 
 type LiquidityDetailsProps = {
   currentTab: string
@@ -173,28 +175,32 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       >
         <CurrencyAmount amount={frozenShare} />
       </CardCell>
-      {dex && (
       <div className={s.detailsButtons}>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={pairLink}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {t('liquidity|View Pair Analytics')}
-        </Button>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={contractLink}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {t('liquidity|View Pair Contract')}
-        </Button>
+        {dex ? (
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={pairLink}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {t('liquidity|View Pair Analytics')}
+          </Button>
+        )
+          : <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />}
+        {dex ? (
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={contractLink}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {t('liquidity|View Pair Contract')}
+          </Button>
+        )
+          : <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />}
       </div>
-      )}
     </Card>
   );
 };
