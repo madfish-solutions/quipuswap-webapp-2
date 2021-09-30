@@ -77,6 +77,7 @@ type SubmitProps = {
   values:VoteFormValues,
   dex?: FoundDex,
   tab: string,
+  voter?:VoterType,
   updateToast:any,
   handleErrorToast:(e:any) => void,
   getBalance:() => void,
@@ -87,6 +88,7 @@ export const submitForm = async ({
   values,
   dex,
   tab,
+  voter,
   handleErrorToast,
   updateToast,
   getBalance,
@@ -119,8 +121,9 @@ export const submitForm = async ({
   } else {
     try {
       if (tab === 'vote') {
+        if (!voter) return;
         updateToastText = 'Unvote completed!';
-        params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
+        params = await voteForBaker(tezos, dex, voter.candidate, new BigNumber(0));
       } else {
         updateToastText = 'Remove veto completed!';
         params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));

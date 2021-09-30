@@ -203,6 +203,7 @@ export const Voting: React.FC<VotingProps> = ({
               tezos,
               values,
               dex,
+              voter,
               tab: currentTab.id,
               updateToast,
               handleErrorToast,

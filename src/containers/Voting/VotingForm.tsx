@@ -29,7 +29,7 @@ import {
   getWhitelistedTokenSymbol, isAssetEqual, parseDecimals,
 } from '@utils/helpers';
 import {
-  composeValidators, required, validateBalance, validateMinMax,
+  composeValidators, validateBalance, validateMinMax,
 } from '@utils/validators';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
@@ -304,7 +304,7 @@ const RealForm:React.FC<VotingFormProps> = ({
           )}
         </Field>
         {currentTab.id === 'vote' && (
-          <Field name="selectedBaker" validate={required}>
+          <Field name="selectedBaker">
             {({ input, meta }) => (
               <ComplexBaker
                 {...input}
@@ -338,7 +338,7 @@ const RealForm:React.FC<VotingFormProps> = ({
           <Button
             onClick={handleVoteOrVeto}
             className={s.button}
-            disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
+            disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned) || !values.selectedBaker}
           >
             {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
           </Button>
