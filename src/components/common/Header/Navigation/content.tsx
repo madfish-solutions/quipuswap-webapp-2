@@ -79,38 +79,38 @@ export const NavigationData: NavigationDataProps = [
     links: [
       {
         id: 0,
-        href: 'https://www.google.com',
+        href: 'https://analytics.quipuswap.com/',
         label: 'Analytics',
       },
       {
         id: 1,
-        href: 'https://www.google.com',
+        href: 'https://story.madfish.solutions/category/quipuswap/',
         label: 'About',
       },
       {
         id: 2,
-        href: 'https://www.google.com',
+        href: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
         label: 'Audit',
       },
       {
         id: 3,
-        href: 'https://www.google.com',
+        href: 'https://madfish.crunch.help/quipu-swap',
         label: 'Help',
       },
       {
         id: 4,
-        href: 'https://www.google.com',
+        href: 'https://docs.quipuswap.com/',
         label: 'Docs',
       },
       {
         id: 5,
-        href: 'https://www.google.com',
+        href: 'https://story.madfish.solutions/',
         label: 'Blog',
       },
       {
         id: 6,
-        href: '/terms',
-        label: 'Terms of Usage',
+        href: '/terms-of-service',
+        label: 'Terms of Service',
       },
       {
         id: 7,
