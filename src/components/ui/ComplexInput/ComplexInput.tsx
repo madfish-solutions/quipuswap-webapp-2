@@ -70,7 +70,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 
   const compoundClassName = cx(
     { [s.focused]: focused },
-    { [s.error]: !readOnly && !!error },
+    { [s.error]: !!error },
     { [s.readOnly]: readOnly },
     themeClass[colorThemeMode],
     className,
@@ -155,7 +155,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
         !readOnly
         && handleBalance && (<PercentSelector value={balance} handleBalance={handleBalance} />)
       }
-      {!readOnly && (<ComplexError error={error} />)}
+      <ComplexError error={error} />
     </div>
   );
 };

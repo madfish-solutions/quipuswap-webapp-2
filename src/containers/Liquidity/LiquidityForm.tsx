@@ -659,8 +659,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         {currentTab.id === 'remove' && (
         <Field
           name="balanceA"
+          validate={validateMinMax(0, Infinity)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <ComplexInput
               {...input}
               token1={tokenPair.token1}
@@ -671,6 +672,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               label="Output"
               className={cx(s.input, s.mb24)}
               readOnly
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
 
           )}
@@ -728,8 +730,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         {currentTab.id === 'remove' && (
         <Field
           name="balanceB"
+          validate={validateMinMax(0, Infinity)}
         >
-          {({ input }) => (
+          {({ input, meta }) => (
             <ComplexInput
               {...input}
               token1={tokenPair.token2}
@@ -740,6 +743,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               label="Output"
               className={cx(s.input, s.mb24)}
               readOnly
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
           )}
         </Field>
