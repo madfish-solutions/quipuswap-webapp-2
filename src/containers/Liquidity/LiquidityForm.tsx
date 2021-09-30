@@ -52,6 +52,7 @@ import { Button } from '@components/ui/Button';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { Loader } from '@components/ui/Loader';
 import { ComplexInput } from '@components/ui/ComplexInput';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -155,6 +156,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: LiquidityFormValues) => {
+    setAddLiquidityParams([]);
     if (token1.contractAddress !== TEZOS_TOKEN.contractAddress) return;
     if (currentTab.id !== 'remove') {
       if (!val[lastChange] || val[lastChange].toString() === '.') {
@@ -813,8 +815,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               .multipliedBy(new BigNumber(values.balanceA ?? 0));
             const slipPercB = slippageToBignum(values.slippage)
               .multipliedBy(new BigNumber(values.balanceB ?? 0));
-            const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
-            const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
+            const minimumReceivedA = parseDecimals(new BigNumber(values.balanceA ?? 0).minus(slipPercA).toString() ?? '0', 0, Infinity, 6);
+            const minimumReceivedB = parseDecimals(new BigNumber(values.balanceB ?? 0).minus(slipPercB).toString() ?? '0', 0, Infinity, 6);
             let maxInvestedA = new BigNumber(0);
             let maxInvestedB = new BigNumber(0);
             if (dex) {
@@ -879,7 +881,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     </span>
                     <CurrencyAmount
                       currency={tokenAName}
-                      amount={minimumReceivedA.isNaN() ? '0' : minimumReceivedA.toString()}
+                      amount={minimumReceivedA}
                     />
                   </div>
                   <div className={s.receive}>
@@ -889,7 +891,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     </span>
                     <CurrencyAmount
                       currency={tokenBName}
-                      amount={minimumReceivedB.isNaN() ? '0' : minimumReceivedB.toString()}
+                      amount={minimumReceivedB}
                     />
                   </div>
                   <Button
@@ -929,7 +931,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               className={s.button}
               disabled={accountPkh ? addLiquidityParams.length < 1 : false}
             >
-              {currentTab.label}
+              {addLiquidityParams.length > 0 ? currentTab.label : <Loader />}
             </Button>
           </>
         )}
