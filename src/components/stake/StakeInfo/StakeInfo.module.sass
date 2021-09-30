@@ -137,14 +137,14 @@
   flex-direction: column
   align-items: flex-end
   margin-left: auto
-  margin-top: 12px
+  margin-top: 10px
   &:not(:last-child)
-    margin-top: 32px
+    margin-top: 40px
   .detailsButton
     margin-left: 0
     margin-top: 0
     &:not(:first-child)
-      margin-top: 16px
+      margin-top: 10px
 
 .light
   .rewardHeader, .rewardCurrency
@@ -188,6 +188,14 @@
 @include media('>Lphone', '<=Ltablet')
   .rewardAmount
     font-size: 2.286rem
+
+@include media('>tablet')
+  .detailsButtons
+    flex-direction: column
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 10px
+        margin-left: 0
 
 
 @include media('>Ltablet')
