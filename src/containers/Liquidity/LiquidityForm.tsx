@@ -843,6 +843,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 maxInvestedB = bal2;
               }
             }
+            const maxA = parseDecimals(maxInvestedA.toString(), 0, Infinity, 6);
+            const maxB = parseDecimals(maxInvestedB.toString(), 0, Infinity, 6);
 
             return (
               <>
@@ -856,7 +858,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       </span>
                       <CurrencyAmount
                         currency={tokenAName}
-                        amount={maxInvestedA.isNaN() ? '0' : maxInvestedA.toString()}
+                        amount={maxA}
                       />
                     </div>
                     <div className={cx(s.receive, s.mb24)}>
@@ -866,7 +868,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                       </span>
                       <CurrencyAmount
                         currency={tokenBName}
-                        amount={maxInvestedB.isNaN() ? '0' : maxInvestedB.toString()}
+                        amount={maxB}
                       />
                     </div>
                   </>
