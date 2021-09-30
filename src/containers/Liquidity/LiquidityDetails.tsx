@@ -27,8 +27,6 @@ type LiquidityDetailsProps = {
   token2: WhitelistedToken
   tokensData:TokenDataMap
   poolShare?: PoolShare
-  balanceTotalA: string
-  balanceTotalB: string
   dex?: FoundDex
 };
 
@@ -38,8 +36,6 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   token2,
   tokensData,
   poolShare,
-  balanceTotalA,
-  balanceTotalB,
   dex,
 }) => {
   const { t } = useTranslation(['common', 'liquidity']);
@@ -48,6 +44,13 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
+
+  const balanceTotalA = useMemo(() => (dex
+    ? new BigNumber(dex.storage.storage.tez_pool).toString()
+    : new BigNumber(0).toString()), [dex]);
+  const balanceTotalB = useMemo(() => (dex
+    ? new BigNumber(dex.storage.storage.token_pool).toString()
+    : new BigNumber(0).toString()), [dex]);
   const totalShare = useMemo(() => (fromDecimals(poolShare?.total || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
   const frozenShare = useMemo(() => (fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
   const sellPrice = useMemo(() => new BigNumber(tokensData.first.exchangeRate ?? 1)

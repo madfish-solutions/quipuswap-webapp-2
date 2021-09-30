@@ -363,7 +363,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const getDex = useCallback(async () => {
     if (!tezos || !token2 || !token1) return;
-    setDex(undefined);
     setOldDex(undefined);
     const toAsset = {
       contract: token2.contractAddress,
@@ -925,8 +924,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         token2={token2}
         tokensData={tokensData}
         poolShare={poolShare}
-        balanceTotalA={(values.balanceTotalA ?? 0).toString()}
-        balanceTotalB={(values.balanceTotalB ?? 0).toString()}
         dex={dex}
       />
     </>
