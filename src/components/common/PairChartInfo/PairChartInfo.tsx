@@ -5,9 +5,8 @@ import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Button } from '@components/ui/Button';
 import { Tabs } from '@components/ui/Tabs';
-import { Refresh } from '@components/svg/Refresh';
+import { RefreshToggle } from '@components/common/RefreshToggle';
 
 import s from './PairChartInfo.module.sass';
 
@@ -34,12 +33,14 @@ type PairChartType = {
   token1?: WhitelistedToken
   token2?: WhitelistedToken
   hidePeriods?: boolean
+  toggle?: () => void
 };
 
 export const PairChartInfo: React.FC<PairChartType> = ({
   token1 = TEZOS_TOKEN,
   token2 = STABLE_TOKEN,
   hidePeriods = false,
+  toggle = () => {},
 }) => {
   const [timeFrame, setTimeFrame] = useState(TimeFrameTabs[0].id);
   const { t } = useTranslation(['common']);
@@ -50,9 +51,7 @@ export const PairChartInfo: React.FC<PairChartType> = ({
         { getWhitelistedTokenSymbol(token1) }
         /
         { getWhitelistedTokenSymbol(token2) }
-        <Button theme="quaternary">
-          <Refresh />
-        </Button>
+        <RefreshToggle onClick={toggle} />
       </div>
       {!hidePeriods && (
       <div className={s.timeFrames}>

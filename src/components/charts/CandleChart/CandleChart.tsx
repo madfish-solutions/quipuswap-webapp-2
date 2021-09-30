@@ -64,13 +64,15 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
     high: number,
     low: number,
     close: number,
-    time: number
+    time: number,
+    xtzUsd: string,
   }>({
     open: currenValue.open,
     high: currenValue.high,
     low: currenValue.low,
     close: currenValue.close,
     time: currenValue.time,
+    xtzUsd: currenValue.xtzUsdQuoteHistorical,
   });
 
   const handleResize = useCallback(() => {
@@ -156,6 +158,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
               low: currenValue.low,
               close: currenValue.close,
               time: currenValue.time,
+              xtzUsd: currenValue.xtzUsdQuoteHistorical,
             });
           }
         } else if (setValue) {
@@ -180,12 +183,15 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
             ?? currenValue.close,
           );
           const time = param.time ?? currenValue.time;
+          const xtzUsd = data.find((x) => x.time === time)?.xtzUsdQuoteHistorical
+          ?? currenValue.xtzUsdQuoteHistorical;
           setValue({
             open,
             high,
             low,
             close,
             time: time as number,
+            xtzUsd,
           });
         }
       });
@@ -208,14 +214,16 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
       <div className={cx(s.info, modeClass[colorThemeMode])}>
         <span className={s.prices}>
           <h4 className={s.tokenPrice}>
-            {prettyPrice(value.close, 2, 10)}
+            {prettyPrice(1 / value.close, 2, 10)}
             {' '}
             {getWhitelistedTokenName(token)}
           </h4>
           <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
             $
             {' '}
-            {prettyPrice(value.close, 2, 10)}
+            {token.contractAddress === TEZOS_TOKEN.contractAddress
+              ? prettyPrice((+value.xtzUsd), 2, 10)
+              : prettyPrice(value.close, 2, 10)}
           </h4>
         </span>
         <div className={s.details}>
@@ -272,24 +280,62 @@ export const CandleChart: React.FC<CandleChartProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
+  const [usdData, setUsdData] = useState<CandlePlotPoint[]>(data);
+  const [switcher, toggle] = useState<boolean>(false);
+  const [reloading, setReloading] = useState<boolean>(false);
+
+  const handleToggle = useCallback(() => {
+    toggle(!switcher);
+    setReloading(true);
+  }, [switcher]);
+
+  useEffect(() => {
+    if (switcher) {
+      setUsdData(data.map((x) => ({
+        ...x,
+        close: 1 / x.close,
+        open: 1 / x.open,
+        high: 1 / x.high,
+        low: 1 / x.low,
+      })));
+    } else {
+      setUsdData(data.map((x) => ({
+        ...x,
+        close: x.close * (+x.xtzUsdQuoteHistorical),
+        open: x.open * (+x.xtzUsdQuoteHistorical),
+        high: x.high * (+x.xtzUsdQuoteHistorical),
+        low: x.low * (+x.xtzUsdQuoteHistorical),
+      })));
+    }
+    setReloading(false);
+  }, [data, switcher]);
+
+  // console.log(usdData);
+  // console.log(loading, error, !usdData, !token2, usdData.length === 0, usdData.length, usdData);
   return (
     <Card className={className}>
       <CardHeader
         header={{
           content: (
-            <PairChartInfo hidePeriods token1={token1} token2={token2} />
+            <PairChartInfo
+              toggle={handleToggle}
+              hidePeriods
+              token1={switcher ? token2 : token1}
+              token2={!switcher ? token2 : token1}
+            />
           ),
         }}
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || error || !data || !token2 || data.length === 0
+        {loading || error || !usdData || !token2 || usdData.length === 0 || reloading
           ? (<Preloader style={{ minHeight: '360px' }} />)
           : (
-            <ChartInstance token={token2} data={data} />
+            <ChartInstance token={!switcher ? token2 : token1} data={usdData} />
           )}
       </CardContent>
-      {token1?.contractAddress !== TEZOS_TOKEN.contractAddress && (
+      {(token1?.contractAddress !== TEZOS_TOKEN.contractAddress
+      && token2?.contractAddress !== TEZOS_TOKEN.contractAddress) && (
       <div className={cx(s.disabled, modeClass[colorThemeMode])}>
         <div className={s.disabledBg} />
         <h2 className={s.h1}>{t('common|No data!')}</h2>
