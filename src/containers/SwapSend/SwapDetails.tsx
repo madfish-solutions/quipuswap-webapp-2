@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
