@@ -21,6 +21,7 @@ type PositionSelectProps = {
   noBalanceButtons?: boolean
   className?: string
   balance?: string
+  totalBalance?: string
   balanceLabel?: string
   frozenBalance?: string
   notFrozen?:boolean
@@ -42,6 +43,7 @@ const themeClass = {
 export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
+  totalBalance = '10.00',
   noBalanceButtons = false,
   frozenBalance = '10.00',
   label,
@@ -153,7 +155,13 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
+        {!noBalanceButtons && (
+        <PercentSelector
+          value={totalBalance || balance}
+          handleBalance={handleBalance}
+          decimals={(tokenPair?.token1 ?? TEZOS_TOKEN).metadata.decimals}
+        />
+        )}
         <ComplexError error={error} />
       </div>
     </>

@@ -560,6 +560,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
+  const frozenBalance = useMemo(() => (fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString()), [poolShare]);
+  const unfrozenBalance = useMemo(() => (fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()), [poolShare]);
+  const totalBalance = useMemo(() => (fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)
+    .plus(fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6))
+    .toString()), [poolShare]);
 
   const setToken2 = useCallback((token:WhitelistedToken) => {
     setTokens([(token1 || undefined), token]);
@@ -611,7 +616,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             name="balance3"
             validate={composeValidators(
               validateMinMax(0, Infinity),
-              validateBalance(new BigNumber(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString())),
+              validateBalance(new BigNumber(totalBalance)),
             )}
             parse={(v) => parseDecimals(v, 0, Infinity, 6)}
           >
@@ -639,8 +644,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                     );
                   }}
                   noBalanceButtons={!accountPkh}
-                  balance={fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()}
-                  frozenBalance={fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString()}
+                  balance={unfrozenBalance}
+                  frozenBalance={frozenBalance}
+                  totalBalance={totalBalance}
                   id="liquidity-remove-input"
                   label="Select LP"
                   className={s.input}

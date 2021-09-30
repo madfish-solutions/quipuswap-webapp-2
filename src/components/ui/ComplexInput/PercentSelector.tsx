@@ -1,22 +1,46 @@
 import React from 'react';
+import BigNumber from 'bignumber.js';
 
+import { parseDecimals } from '@utils/helpers';
 import { Button } from '@components/ui/Button';
 
 import s from './ComplexInput.module.sass';
 
 type PercentSelectorProps = {
   handleBalance: (state:string) => void,
+  decimals?: number
   value: string,
 };
 
 export const PercentSelector: React.FC<PercentSelectorProps> = ({
   handleBalance,
+  decimals = 0,
   value,
 }) => {
-  const handle25 = () => handleBalance((parseFloat(value) * 0.25).toString());
-  const handle50 = () => handleBalance((parseFloat(value) * 0.5).toString());
-  const handle75 = () => handleBalance((parseFloat(value) * 0.75).toString());
-  const handleMAX = () => handleBalance(value);
+  const handle25 = () => handleBalance(parseDecimals(
+    new BigNumber(value).multipliedBy(0.25).toString(),
+    0,
+    Infinity,
+    decimals,
+  ));
+  const handle50 = () => handleBalance(parseDecimals(
+    new BigNumber(value).multipliedBy(0.5).toString(),
+    0,
+    Infinity,
+    decimals,
+  ));
+  const handle75 = () => handleBalance(parseDecimals(
+    new BigNumber(value).multipliedBy(0.75).toString(),
+    0,
+    Infinity,
+    decimals,
+  ));
+  const handleMAX = () => handleBalance(parseDecimals(
+    new BigNumber(value).multipliedBy(1).toString(),
+    0,
+    Infinity,
+    decimals,
+  ));
 
   return (
     <div className={s.controls}>
