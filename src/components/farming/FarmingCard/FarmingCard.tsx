@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedFarm } from '@utils/types';
+import { WhitelistedFarmOptional } from '@utils/types';
 import {
   fromDecimals,
   getWhitelistedTokenSymbol,
@@ -27,7 +27,7 @@ const modeClass = {
 };
 
 export type FarmingCardProps = {
-  farm:WhitelistedFarm
+  farm:WhitelistedFarmOptional
   className?: string
   openModal?:() => void
 };
@@ -92,7 +92,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {' '}
             /
             {' '}
-            {getWhitelistedTokenSymbol(tokenPair.token2)}
+            {getWhitelistedTokenSymbol(tokenPair.token2 ?? tokenPair.token1)}
           </h5>
           <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
 

@@ -15,7 +15,7 @@ import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
-import { WhitelistedFarm } from '@utils/types';
+import { WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -42,7 +42,7 @@ const TabsContent = [
 ];
 
 type FarmingInfoProps = {
-  farm:WhitelistedFarm
+  farm:WhitelistedFarmOptional
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void

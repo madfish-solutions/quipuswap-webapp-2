@@ -52,12 +52,12 @@ export const useBalance = () => {
         ? exchangeRates[exchangeRates.length - 1]?.exchangeRate
         : NaN);
 
-      const balanc = sharesResolved.map((share) => {
+      const balancesArray = sharesResolved.map((share) => {
         const shareTotal = +share.total.toString() / 1_000_000;
         return shareTotal * +price;
       });
 
-      setBalances(balanc);
+      setBalances(balancesArray);
     };
 
     if (accountPkh) {
@@ -65,6 +65,8 @@ export const useBalance = () => {
     } else {
       setBalances([]);
     }
+
+    return () => setBalances([]);
   }, [accountPkh, allFarms, tezos, exchangeRates, networkId]);
 
   return balances;

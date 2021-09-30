@@ -5,8 +5,8 @@ import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { STABLE_TOKEN } from '@utils/defaults';
-import { WhitelistedFarm } from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarmOptional } from '@utils/types';
 import { useFarms } from '@hooks/useFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
@@ -20,6 +20,7 @@ import { ApyModal } from '@components/modals/ApyModal';
 import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
 
+import { useTokenMetadata } from '@hooks/useTokenMetadata';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -75,20 +76,36 @@ const modeClass = {
 
 export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
+  const allFarms = useFarms();
+  const tokenMetadata = useTokenMetadata();
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const allFarms = useFarms();
+  const [farms, setFarms] = useState<WhitelistedFarmOptional[]>(allFarms);
+
+  useEffect(() => {
+    if (tokenMetadata) {
+      setFarms(allFarms.map((farm, index) => ({
+        ...farm,
+        tokenPair: {
+          token1: TEZOS_TOKEN,
+          token2: tokenMetadata[index],
+        },
+      })));
+    } else {
+      setFarms([...allFarms]);
+    }
+  }, [allFarms, tokenMetadata]);
 
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = allFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
     }
-  }, [router.query, selectedFarming]);
+  }, [router.query, selectedFarming, farms]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -185,7 +202,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {allFarms?.map((x) => (
+      {farms?.map((x) => (
         <FarmingCard
           key={x.id}
           farm={x}

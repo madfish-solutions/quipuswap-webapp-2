@@ -128,6 +128,25 @@ export type WhitelistedFarm = {
   isLpTokenStaked: boolean
   stakedToken: { fA2?: FA2, fA12?: string }
 };
+export type WhitelistedFarmOptional = {
+  id: number
+  remaining: Date
+  tokenPair: {
+    token1: WhitelistedToken,
+    token2?: WhitelistedToken,
+  }
+  totalValueLocked: string
+  apy: string
+  daily: string
+  multiplier: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+  claimed?: string
+  isLpTokenStaked: boolean
+  stakedToken: { fA2?: FA2, fA12?: string }
+};
 
 export type WhitelistedStake = {
   id: number,

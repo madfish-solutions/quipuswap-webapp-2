@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   FarmingInfoType,
-  WhitelistedFarm, WhitelistedTokenPair,
+  WhitelistedFarmOptional,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -15,21 +15,20 @@ import { prettyPrice } from '@utils/helpers';
 const fallbackPair = {
   token1: TEZOS_TOKEN,
   token2: TEZOS_TOKEN,
-} as WhitelistedTokenPair;
+};
 
 export const useFarms = () => {
   const tezos = useTezos();
   const network = useNetwork();
   const farmingContract = useFarmingContract();
   const accountPkh = useAccountPkh();
-  const [allFarms, setAllFarms] = useState<WhitelistedFarm[]>([]);
+  const [allFarms, setAllFarms] = useState<WhitelistedFarmOptional[]>([]);
 
   useEffect(() => {
     const loadFarms = async () => {
       if (!tezos) return;
       if (!network) return;
       if (!farmingContract) return;
-      if (!accountPkh) return;
 
       const possibleFarms:Promise<FarmingInfoType | undefined>[] = new Array(
         +farmingContract?.storage.farms_count.toString(),
@@ -44,7 +43,7 @@ export const useFarms = () => {
           .filter((farm) => !!farm) as FarmingInfoType[]
         );
 
-        const whitelistedFarms:WhitelistedFarm[] = clearfarms
+        const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms
           .map((x, id) => ({
             id,
             tokenPair: fallbackPair,
