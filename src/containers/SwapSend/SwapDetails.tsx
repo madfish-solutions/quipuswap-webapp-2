@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
@@ -7,7 +7,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import {
   getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -46,6 +46,8 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
+  const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
+  const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
     ? rate2
     : new BigNumber(tokensData.first.exchangeRate ?? 1)
@@ -69,19 +71,18 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             {t('common|Sell Price')}
             <Tooltip
               sizeT="small"
-              content={t('common|The amount of token B you receive for 1 token A, according to the current exchange rate.')}
+              content={t('common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.', { tokenA: tokenAName, tokenB: tokenBName })}
             />
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
+          <CurrencyAmount amount="1" currency={tokenAName} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
             amount={sellRate}
-            currency={token2
-              ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
+            currency={tokenBName}
             dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
           />
         </div>
@@ -92,18 +93,18 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             {t('common|Buy Price')}
             <Tooltip
               sizeT="small"
-              content={t('common|The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              content={t('common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.', { tokenA: tokenAName, tokenB: tokenBName })}
             />
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
+          <CurrencyAmount amount="1" currency={tokenBName} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
             amount={buyRate}
-            currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
+            currency={tokenAName}
             dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
           />
         </div>
@@ -152,7 +153,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           routes={
                 [{
                   id: 0,
-                  name: token1 ? getWhitelistedTokenSymbol(token1) : '',
+                  name: tokenAName,
                   link: transformTokenDataToAnalyticsLink(tokensData.first),
                 },
                 ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
@@ -162,7 +163,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 }] : []),
                 {
                   id: 2,
-                  name: token2 ? getWhitelistedTokenSymbol(token2) : '',
+                  name: tokenBName,
                   link: transformTokenDataToAnalyticsLink(tokensData.second),
                 }]
               }
@@ -179,7 +180,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         >
           { t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
             {
-              tokenA: getWhitelistedTokenSymbol(token1),
+              tokenA: tokenAName,
               tokenB: TEZOS_TOKEN.metadata.symbol,
             })}
         </Button>
@@ -196,7 +197,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
                 {
                   tokenA: TEZOS_TOKEN.metadata.symbol,
-                  tokenB: getWhitelistedTokenSymbol(token2),
+                  tokenB: tokenBName,
                 })
               : t('common|View Pair Analytics')}
           </Button>
