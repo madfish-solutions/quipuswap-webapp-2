@@ -3,12 +3,12 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { BaseLayout } from '@layouts/BaseLayout';
+import { Card, CardContent } from '@components/ui/Card';
+import { Button } from '@components/ui/Button';
 
 import s from '@styles/Terms.module.sass';
-import { Card, CardContent } from '@components/ui/Card';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 
 const modeClass = {
   [ColorModes.Light]: s.light,

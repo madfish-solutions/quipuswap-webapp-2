@@ -114,7 +114,7 @@ export const NavigationData: NavigationDataProps = [
       },
       {
         id: 7,
-        href: '/privacy',
+        href: '/privacy-policy',
         label: 'Privacy Policy',
       },
     ],
