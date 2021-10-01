@@ -13,6 +13,7 @@ type ChooseListCellProps = {
   tokenList: WhitelistedTokenList,
   isActive: boolean,
   onChange: (state:boolean) => void
+  tabIndex?: number
 };
 
 const modeClass = {
@@ -24,11 +25,12 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   tokenList,
   isActive,
   onChange,
+  tabIndex,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation('common');
   return (
-    <div className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
+    <div tabIndex={tabIndex} className={cx(modeClass[colorThemeMode], s.listItem, s.splitRow)}>
       <div className={s.joinRow}>
         <ListLogo
           list={tokenList}

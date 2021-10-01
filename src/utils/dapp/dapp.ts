@@ -334,7 +334,17 @@ function useDApp() {
     // eslint-disable-next-line
   }, [network]);
 
-  const searchCustomToken = useCallback(
+  const addCustomList = useCallback((list:WhitelistedTokenList) => {
+    saveCustomList(list);
+    setState((prevState) => ({
+      ...prevState,
+      // tokens: { ...tokens, data: [...tokens.data, ...list.tokens] },
+      lists: { ...lists, data: [...lists.data, list] },
+      searchList: { loading: false, data: [] },
+    }));
+  }, [lists]);
+
+  const searchCustomList = useCallback(
     async (
       address: string,
       tokenId?: number,
@@ -343,7 +353,7 @@ function useDApp() {
       if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
-          searchTokens: { loading: true, data: [] },
+          searchList: { loading: true, data: [] },
         }));
         let type;
         try {
@@ -354,7 +364,7 @@ function useDApp() {
         if (!type) {
           setState((prevState) => ({
             ...prevState,
-            searchTokens: { loading: false, data: [] },
+            searchList: { loading: false, data: [] },
           }));
           return null;
         }
@@ -365,7 +375,7 @@ function useDApp() {
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
-            searchTokens: { loading: false, data: [] },
+            searchList: { loading: false, data: [] },
           }));
           return null;
         }
@@ -378,7 +388,7 @@ function useDApp() {
         } as WhitelistedToken;
         setState((prevState) => ({
           ...prevState,
-          searchTokens: { loading: false, data: [token] },
+          searchList: { loading: false, data: [token] },
         }));
         if (saveAfterSearch) saveCustomToken(token);
         return token;
@@ -388,17 +398,7 @@ function useDApp() {
     [tezos, network],
   );
 
-  const addCustomList = useCallback((list:WhitelistedTokenList) => {
-    saveCustomList(list);
-    setState((prevState) => ({
-      ...prevState,
-      // tokens: { ...tokens, data: [...tokens.data, ...list.tokens] },
-      lists: { ...lists, data: [...lists.data, list] },
-      searchTokens: { loading: false, data: [] },
-    }));
-  }, [lists]);
-
-  const searchCustomList = useCallback(
+  const searchCustomToken = useCallback(
     async (
       address: string,
       tokenId?: number,
@@ -604,6 +604,8 @@ export const [
   useNetwork,
   useTokens,
   useSearchTokens,
+  useLists,
+  useSearchLists,
   useBakers,
   useSearchBakers,
   useConnectWithBeacon,
@@ -612,6 +614,8 @@ export const [
   useChangeNetwork,
   useAddCustomToken,
   useSearchCustomTokens,
+  useAddCustomLists,
+  useSearchCustomLists,
   useAddCustomBaker,
   useSearchCustomBaker,
 ] = constate(

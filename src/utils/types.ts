@@ -44,6 +44,7 @@ export interface WhitelistedToken {
 }
 
 export interface WhitelistedTokenList {
+  url: string,
   keywords: string[],
   logoURI: string,
   name: string,
