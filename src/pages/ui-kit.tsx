@@ -8,7 +8,7 @@ import BigNumber from 'bignumber.js';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { useTokens } from '@utils/dapp';
-import { WhitelistedFarm } from '@utils/types';
+import { WhitelistedFarm, WhitelistedTokenList } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
@@ -572,7 +572,8 @@ const UiKit: React.FC = () => {
               logoURI: '',
               tokens: [STABLE_TOKEN, TEZOS_TOKEN],
               name: 'temp name',
-            }}
+              url: '#',
+            } as WhitelistedTokenList}
           />
           <SwapCell
             transaction={{
