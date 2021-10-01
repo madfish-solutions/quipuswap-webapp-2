@@ -18,7 +18,7 @@ import {
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSNetwork, WhitelistedBaker, WhitelistedToken,
+  QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenList,
 } from '@utils/types';
 import {
   getContractInfo, getTokens, saveCustomToken,
@@ -32,6 +32,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getLists, saveCustomList } from './lists';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -120,7 +121,9 @@ export type DAppType = {
   templeWallet: TempleWallet | null
   network: QSNetwork
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  lists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
+  searchLists: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
@@ -136,7 +139,9 @@ function useDApp() {
     templeWallet,
     network,
     tokens,
+    lists,
     searchTokens,
+    searchLists,
     bakers,
     searchBakers,
   }, setState] = useState<DAppType>({
@@ -146,7 +151,9 @@ function useDApp() {
     templeWallet: null,
     network: net,
     tokens: { loading: true, data: [] },
+    lists: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
+    searchLists: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
   });
@@ -261,6 +268,21 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
+  const getListsData = useCallback(() => getLists(network), [network]);
+  const {
+    data: listsData,
+  } = useSWR(
+    ['lists-initial-data', network],
+    getListsData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      lists: { loading: !listsData, data: listsData ?? [] },
+    }));
+  }, [listsData]);
+
   const getTokensData = useCallback(() => getTokens(network, true), [network]);
   const {
     data: tokensData,
@@ -313,6 +335,70 @@ function useDApp() {
   }, [network]);
 
   const searchCustomToken = useCallback(
+    async (
+      address: string,
+      tokenId?: number,
+      saveAfterSearch?:boolean,
+    ): Promise<WhitelistedToken | null> => {
+      if (await isContractAddress(address) === true) {
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: true, data: [] },
+        }));
+        let type;
+        try {
+          type = await getContractInfo(address, tezos!!);
+        } catch (e) {
+          type = null;
+        }
+        if (!type) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return null;
+        }
+        const isFa2 = !!type.methods.update_operators;
+        const customToken = await getTokenMetadata(network.id === MAINNET_NETWORK.id
+          ? METADATA_API_MAINNET
+          : METADATA_API_TESTNET, address, tokenId);
+        if (!customToken) {
+          setState((prevState) => ({
+            ...prevState,
+            searchTokens: { loading: false, data: [] },
+          }));
+          return null;
+        }
+        const token : WhitelistedToken = {
+          contractAddress: address,
+          metadata: customToken,
+          type: !isFa2 ? 'fa1.2' : 'fa2',
+          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
+          network: network.id,
+        } as WhitelistedToken;
+        setState((prevState) => ({
+          ...prevState,
+          searchTokens: { loading: false, data: [token] },
+        }));
+        if (saveAfterSearch) saveCustomToken(token);
+        return token;
+      }
+      return null;
+    },
+    [tezos, network],
+  );
+
+  const addCustomList = useCallback((list:WhitelistedTokenList) => {
+    saveCustomList(list);
+    setState((prevState) => ({
+      ...prevState,
+      // tokens: { ...tokens, data: [...tokens.data, ...list.tokens] },
+      lists: { ...lists, data: [...lists.data, list] },
+      searchTokens: { loading: false, data: [] },
+    }));
+  }, [lists]);
+
+  const searchCustomList = useCallback(
     async (
       address: string,
       tokenId?: number,
@@ -491,6 +577,8 @@ function useDApp() {
     network,
     tokens,
     searchTokens,
+    lists,
+    searchLists,
     bakers,
     searchBakers,
     connectWithBeacon,
@@ -499,6 +587,8 @@ function useDApp() {
     changeNetwork,
     addCustomToken,
     searchCustomToken,
+    addCustomList,
+    searchCustomList,
     addCustomBaker,
     searchCustomBaker,
   };
@@ -534,6 +624,8 @@ export const [
   (v) => v.network,
   (v) => v.tokens,
   (v) => v.searchTokens,
+  (v) => v.lists,
+  (v) => v.searchLists,
   (v) => v.bakers,
   (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
@@ -542,6 +634,8 @@ export const [
   (v) => v.changeNetwork,
   (v) => v.addCustomToken,
   (v) => v.searchCustomToken,
+  (v) => v.addCustomList,
+  (v) => v.searchCustomList,
   (v) => v.addCustomBaker,
   (v) => v.searchCustomBaker,
 );

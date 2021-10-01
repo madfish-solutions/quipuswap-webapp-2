@@ -638,6 +638,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               <>
                 <PositionSelect
                   {...input}
+                  autoComplete="off"
                   notSelectable1={TEZOS_TOKEN}
                   tokenPair={tokenPair}
                   setTokenPair={(pair) => {
