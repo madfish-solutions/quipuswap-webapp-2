@@ -4,7 +4,12 @@ import {
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
-import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import {
+  ContractAbstraction,
+  ContractProvider,
+  MichelCodecPacker,
+  TezosToolkit,
+} from '@taquito/taquito';
 import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
 import { BeaconWallet } from '@taquito/beacon-wallet';
@@ -17,7 +22,7 @@ import {
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  FarmingContractInfo,
+  FarmingStorageInfo,
   QSNetwork, WhitelistedBaker, WhitelistedToken,
 } from '@utils/types';
 import {
@@ -26,7 +31,7 @@ import {
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
-import { getStorageInfo } from '@utils/dapp/getStorageInfo';
+import { getContract, getStorageInfo } from '@utils/dapp/getStorageInfo';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -124,7 +129,8 @@ export type DAppType = {
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
-  farmingContract: FarmingContractInfo | undefined
+  farmingStorage: FarmingStorageInfo | undefined
+  farmingContract: ContractAbstraction<ContractProvider> | undefined
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -141,6 +147,7 @@ function useDApp() {
     searchTokens,
     bakers,
     searchBakers,
+    farmingStorage,
     farmingContract,
   }, setState] = useState<DAppType>({
     connectionType: null,
@@ -152,16 +159,33 @@ function useDApp() {
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
+    farmingStorage: undefined,
     farmingContract: undefined,
   });
 
   useEffect(() => {
-    const loadContractStorage = async () => {
+    const loadContract = async () => {
       if (!tezos) return;
-      const contract:FarmingContractInfo = await getStorageInfo(tezos, FARM_CONTRACT);
+      const contract:ContractAbstraction<
+      ContractProvider
+      > = await getContract(tezos, FARM_CONTRACT);
       setState((prevState) => ({
         ...prevState,
         farmingContract: contract,
+      }));
+    };
+    if (network && tezos) {
+      loadContract();
+    }
+  }, [network, tezos]);
+
+  useEffect(() => {
+    const loadContractStorage = async () => {
+      if (!tezos) return;
+      const contractStorage:FarmingStorageInfo = await getStorageInfo(tezos, FARM_CONTRACT);
+      setState((prevState) => ({
+        ...prevState,
+        farmingStorage: contractStorage,
       }));
     };
     if (network && tezos) {
@@ -518,6 +542,7 @@ function useDApp() {
     addCustomBaker,
     searchCustomBaker,
     farmingContract,
+    farmingStorage,
   };
 }
 
@@ -542,6 +567,7 @@ export const [
   useAddCustomBaker,
   useSearchCustomBaker,
   useFarmingContract,
+  useFarmingStorage,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -563,4 +589,5 @@ export const [
   (v) => v.addCustomBaker,
   (v) => v.searchCustomBaker,
   (v) => v.farmingContract,
+  (v) => v.farmingStorage,
 );

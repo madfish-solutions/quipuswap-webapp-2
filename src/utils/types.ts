@@ -10,7 +10,8 @@ type QSNetworkType =
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+  | 'granadanet';
 
 export interface QSNetwork {
   id: QSNetworkType
@@ -126,6 +127,9 @@ export type WhitelistedFarm = {
   farmContract: string
   projectLink: string
   analyticsLink: string
+  claimed?: string
+  startTime?: string,
+  rewardPerSecond?: BigNumber,
 };
 
 export type WhitelistedStake = {
@@ -179,9 +183,10 @@ export type FarmingInfoType = {
   start_time: Date
   timelock: BigNumber
   upd: Date
+  claimed: BigNumber
 };
 
-export type FarmingContractInfo = {
+export type FarmingStorageInfo = {
   storage: {
     farms: BigMapAbstraction
     referrers: BigMapAbstraction
