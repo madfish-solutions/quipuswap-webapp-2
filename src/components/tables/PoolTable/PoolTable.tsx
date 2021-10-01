@@ -91,7 +91,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       Header: (
         <div className={s.links}>
           {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+          <Tooltip sizeT="small" content={t('TVL is the sum of all assets deposited into the pool')} />
         </div>
       ),
       id: 'tvl',
