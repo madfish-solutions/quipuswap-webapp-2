@@ -129,7 +129,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             {t('common|Fee')}
             <Tooltip
               sizeT="small"
-              content={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
+              content={t('swap|This fee is split by liquidity providers proportional to their contribution to liquidity reserves.')}
             />
           </>
           )}
