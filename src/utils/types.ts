@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { BigMapAbstraction } from '@taquito/taquito';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'florencenet' | 'granadanet';
 
 type QSNetworkType =
   | 'mainnet'
