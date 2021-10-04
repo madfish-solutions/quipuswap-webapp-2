@@ -14,7 +14,9 @@ export const getLists = async (
   network:QSNetwork,
 ) => {
   const initialList = network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS;
-  const objArr = [...initialList.split(' '), ...Object.keys(getSavedLists())];
+  const savedList = getSavedLists();
+  const savedKeys = Object.keys(savedList);
+  const objArr = [...(initialList.split(' ')), ...savedKeys];
   const reqArr = objArr.map((x:string) => fetch(ipfsToHttps(x))
     .then((res) => res.json())
     .then((json) => {
@@ -26,15 +28,26 @@ export const getLists = async (
     })
     .catch(() => ([])));
   const result = await Promise.allSettled(reqArr);
-  return result.map((x, i) => ({
-    error: x.status === 'rejected',
-    loading: false,
-    keywords: x.status === 'fulfilled' ? x.value.keywords : [],
-    logoURI: x.status === 'fulfilled' ? x.value.logoURI : '',
-    name: x.status === 'fulfilled' ? x.value.name : objArr[i],
-    tokens: x.status === 'fulfilled' ? x.value.tokens : [],
-    url: objArr[i],
-  }));
+  const transformedResult = result.map((x, i) => {
+    const url = objArr[i];
+    let enabled = !!savedList[url];
+    if (savedList[url] === undefined && initialList.split(' ').find((y:string) => y === url)) {
+      enabled = true;
+    }
+    return ({
+      error: x.status === 'rejected',
+      loading: false,
+      keywords: x.status === 'fulfilled' ? x.value.keywords : [],
+      logoURI: x.status === 'fulfilled' ? x.value.logoURI : '',
+      name: x.status === 'fulfilled' ? x.value.name : objArr[i],
+      tokens: x.status === 'fulfilled' ? x.value.tokens : [],
+      enabled,
+      url,
+    });
+  });
+  console.log('[load lists]', result);
+  console.log('[load transformedResult]', transformedResult);
+  return transformedResult;
 };
 
 export const saveCustomList = ({ key, val }: { key:string, val:boolean }) => {

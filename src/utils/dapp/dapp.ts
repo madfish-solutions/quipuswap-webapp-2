@@ -21,7 +21,7 @@ import {
   QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenList,
 } from '@utils/types';
 import {
-  getContractInfo, getTokens, saveCustomToken,
+  getContractInfo, saveCustomToken,
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
@@ -123,7 +123,7 @@ export type DAppType = {
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   lists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
-  searchLists: { data:WhitelistedToken[], loading:boolean, error?:string },
+  searchLists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
@@ -283,7 +283,24 @@ function useDApp() {
     }));
   }, [listsData]);
 
-  const getTokensData = useCallback(() => getTokens(network, true), [network]);
+  const toggleList = useCallback((url:string) => {
+    let isEnabled = false;
+    const newData = (lists.data ?? [])
+      .map((x:WhitelistedTokenList) => {
+        if (x.url === url) {
+          isEnabled = !x.enabled;
+        }
+        return (x.url === url ? ({ ...x, enabled: isEnabled }) : x);
+      });
+    saveCustomList({ key: url, val: isEnabled });
+    setState((prevState) => ({
+      ...prevState,
+      lists: { loading: false, data: newData },
+    }));
+  }, [lists]);
+
+  // const getTokensData = useCallback(() => getTokens(network, true), [network]);
+  const getTokensData = useCallback(() => [], [network]);
   const {
     data: tokensData,
   } = useSWR(
@@ -581,6 +598,7 @@ function useDApp() {
     searchLists,
     bakers,
     searchBakers,
+    toggleList,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
@@ -608,6 +626,7 @@ export const [
   useSearchLists,
   useBakers,
   useSearchBakers,
+  useToggleList,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
@@ -632,6 +651,7 @@ export const [
   (v) => v.searchLists,
   (v) => v.bakers,
   (v) => v.searchBakers,
+  (v) => v.toggleList,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,

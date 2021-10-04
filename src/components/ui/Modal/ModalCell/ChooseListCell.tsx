@@ -12,7 +12,7 @@ import s from './ModalCell.module.sass';
 type ChooseListCellProps = {
   tokenList: WhitelistedTokenList,
   isActive: boolean,
-  onChange: (state:boolean) => void
+  onChange?: (state:boolean) => void
   tabIndex?: number
 };
 
@@ -24,7 +24,7 @@ const modeClass = {
 export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   tokenList,
   isActive,
-  onChange,
+  onChange = () => {},
   tabIndex,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -40,7 +40,7 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
             {tokenList?.name}
           </h6>
           <span className={s.caption}>
-            {t('common:Tokens Count')}
+            {t('common|Tokens Count')}
             :
             {' '}
             {tokenList.tokens.length}

@@ -7,25 +7,21 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import {
-  // useSearchCustomTokens,
-  // useSearchTokens,
   useTezos,
-  // useTokens,
+  useToggleList,
   useNetwork,
   useLists,
   useSearchLists,
   useSearchCustomLists,
 } from '@utils/dapp';
-// import { parseNumber, localSearchToken, localSearchList } from '@utils/helpers';
-import { localSearchList } from '@utils/helpers';
+import {
+  localSearchList,
+} from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
-// import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-// import { ChooseListCell, LoadingTokenCell } from '@components/ui/Modal/ModalCell';
-import { LoadingTokenCell } from '@components/ui/Modal/ModalCell';
+import { ChooseListCell, LoadingTokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
-// import { NumberInput } from '@components/ui/NumberInput';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -38,7 +34,6 @@ const themeClass = {
 
 type ListModalProps = {
   onChange: (token: WhitelistedToken) => void,
-  blackListedTokens: WhitelistedToken[],
 } & ReactModal.Props;
 
 type HeaderProps = {
@@ -118,17 +113,16 @@ export const ListModal: React.FC<ListModalProps> = ({
   onChange,
   ...props
 }) => {
-  // const addCustomToken = useAddCustomToken();
-  // const searchCustomToken = useSearchCustomTokens();
   const searchCustomList = useSearchCustomLists();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
+  const toggle = useToggleList();
   const tezos = useTezos();
   const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: lists, loading: listsLoading } = useLists();
-  const { data: searchTokens, loading: searchLoading } = useSearchLists();
-  const [filteredTokens] = useState<WhitelistedToken[]>([]);
+  const { data: searchLists, loading: searchLoading } = useSearchLists();
+  const [filteredLists, setFilteredLists] = useState<WhitelistedTokenList[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleInput = (values:FormValues) => {
@@ -136,7 +130,7 @@ export const ListModal: React.FC<ListModalProps> = ({
   };
 
   const handleTokenSearch = useCallback(() => {
-    if (!network || !tezos) return;
+    if (!tezos) return;
     const isList = lists
       .filter(
         (list:WhitelistedTokenList) => localSearchList(
@@ -144,15 +138,16 @@ export const ListModal: React.FC<ListModalProps> = ({
           inputValue,
         ),
       );
+    setFilteredLists(isList);
     if (inputValue.length > 0 && isList.length === 0) {
       searchCustomList(inputValue);
     }
   }, [inputValue, network, tezos, searchCustomList, lists]);
 
-  const isEmptyTokens = useMemo(
-    () => filteredTokens.length === 0
-      && searchTokens.length === 0,
-    [searchTokens, filteredTokens],
+  const isEmptyLists = useMemo(
+    () => filteredLists.length === 0
+      && searchLists.length === 0,
+    [searchLists, filteredLists],
   );
 
   useEffect(() => handleTokenSearch(), [
@@ -162,12 +157,14 @@ export const ListModal: React.FC<ListModalProps> = ({
     handleTokenSearch,
   ]);
 
-  // const allLists = useMemo(() => (
-  //   inputValue.length > 0 && filteredTokens.length === 0
-  //     ? searchTokens
-  //     : filteredTokens
-  // ),
-  // [inputValue, filteredTokens, searchTokens]);
+  const allLists = useMemo(() => (
+    inputValue.length > 0 && filteredLists.length === 0
+      ? searchLists
+      : filteredLists
+  ),
+  [inputValue, filteredLists, searchLists]);
+
+  console.log(isEmptyLists, filteredLists, searchLists, lists, listsLoading);
 
   return (
     <Form
@@ -194,33 +191,30 @@ export const ListModal: React.FC<ListModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {isEmptyTokens && (!searchLoading && !listsLoading) && (
+          {isEmptyLists && (!searchLoading && !listsLoading) && (
           <div className={s.tokenNotFound}>
             <TokenNotFound />
-            <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
+            <div className={s.notFoundLabel}>{t('common|No lists found')}</div>
             {' '}
           </div>
           )}
-          {isEmptyTokens && (searchLoading || listsLoading) && (
+          {isEmptyLists && (searchLoading || listsLoading) && (
             [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
           )}
-          {/* {allLists.map((list:WhitelistedTokenList) => {
+          {allLists.map((list:WhitelistedTokenList, i) => {
             const {
-              name, url,
+              url, enabled,
             } = list;
             return (
               <ChooseListCell
-                key={`${name}_${url}`}
+                key={url}
                 tokenList={list}
-                tabIndex={0}
-                onClick={() => {
-                  if (searchTokens.length > 0) {
-                    addCustomToken(token);
-                  }
-                }}
+                tabIndex={i}
+                isActive={!!enabled}
+                onChange={() => toggle(url)}
               />
             );
-          })} */}
+          })}
         </Modal>
 
       )}

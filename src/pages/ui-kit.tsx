@@ -38,6 +38,7 @@ import { Route } from '@components/common/Route';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
+import { ListModal } from '@components/modals/ListModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
@@ -114,6 +115,7 @@ const UiKit: React.FC = () => {
   const updateToast = useUpdateToast();
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
+  const [listsModal, setListsModal] = useState<boolean>(false);
   const { data: tokens } = useTokens();
   const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
@@ -537,6 +539,17 @@ const UiKit: React.FC = () => {
         >
           Open tokens modal
         </Button>
+        <Button
+          className={s.button}
+          onClick={() => setListsModal(true)}
+        >
+          Open lists modal
+        </Button>
+        <ListModal
+          isOpen={listsModal}
+          onRequestClose={() => setListsModal(false)}
+          onChange={() => {}}
+        />
         <TokensModal
           blackListedTokens={[]}
           isOpen={tokensModal}
