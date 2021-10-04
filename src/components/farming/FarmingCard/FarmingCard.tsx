@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 
@@ -8,6 +8,7 @@ import {
   getWhitelistedTokenSymbol,
   prettyPrice,
 } from '@utils/helpers';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { useBalance } from '@hooks/useBalance';
