@@ -55,18 +55,18 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       <div className={s.header}>
         <div className={s.tokens}>
           <TokensLogos
+            imageClassName={s.image}
             token1={tokenPair.token1}
             token2={tokenPair.token2}
-            width={32}
-            className={s.tokenLogos}
+            width={48}
           />
-          <h5 className={s.title}>
+          <h3 className={s.title}>
             {getWhitelistedTokenSymbol(tokenPair.token1)}
             {' '}
             /
             {' '}
             {getWhitelistedTokenSymbol(tokenPair.token1)}
-          </h5>
+          </h3>
           <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
 
         </div>
@@ -93,8 +93,10 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
-            <CurrencyAmount className={s.farmingDigits} amount={totalValueLocked} />
+          <div className={s.detailsValue}>
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -117,7 +119,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
-          <div className={cx(s.detailsValue, s.dollar)}>
+          <div className={s.detailsValue}>
             <CurrencyAmount amount={balance} />
           </div>
         </div>
