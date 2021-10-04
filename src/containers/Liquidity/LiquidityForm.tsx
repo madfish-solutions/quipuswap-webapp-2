@@ -355,7 +355,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             dex,
             { tezValue },
           );
-          console.log(tezValue.toString(), inputValue.toString());
           setRebalance([tezValue, inputValue]);
           const params = [...swapParams, ...addParams];
           setAddLiquidityParams(params);

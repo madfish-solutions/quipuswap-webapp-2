@@ -46,8 +46,6 @@ export const getLists = async (
       url,
     });
   });
-  console.log('[load lists]', result);
-  console.log('[load transformedResult]', transformedResult);
   return transformedResult;
 };
 
