@@ -12,6 +12,10 @@
   align-items: center
   justify-content: space-between
 
+.image
+  width: 32px
+  height: 32px
+
 .footer
   margin-top: 0px
   display: flex
@@ -62,7 +66,8 @@
   align-items: center
 
 .title
-  margin-left: 16px
+  margin-left: 8px
+  font-size: 1.143rem
 
 .row
   width: 100%
@@ -136,12 +141,8 @@
 .apyIcon
   margin-left: -2px
 
-.dollar
-  &:before
-    content: '$'
-    display: inline-block
-    margin-right: 4px
-    color: $text-02
+.tvl
+  color: $text-02
 
 .light
   .detailsValue
@@ -184,6 +185,9 @@
 @include media('>Lphone', '<=Ltablet')
   .rewardAmount
     font-size: 2.286rem
+  .title
+    margin-left: 12px
+    font-size: 1.429rem
 
 @include media('>Lphone')
   .rewardContent
@@ -202,6 +206,12 @@
     display: none !important
   .onlyDesktop
     display: flex !important
+  .image
+    width: 48px
+    height: 48px
+  .title
+    margin-left: 16px
+    font-size: 1.714rem
   .row
     width: auto
   .multiplierWrap

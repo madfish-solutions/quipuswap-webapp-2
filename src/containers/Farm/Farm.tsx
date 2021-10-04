@@ -7,8 +7,10 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarmOptional } from '@utils/types';
-import { useFarms } from '@hooks/useFarms';
 import { useTokenMetadata } from '@hooks/useTokenMetadata';
+import { prettyPrice } from '@utils/helpers';
+import { useFarms } from '@hooks/useFarms';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -30,10 +32,6 @@ type FarmProps = {
 type ContentType = { name:string, value:string, currency?:string }[];
 
 const SortContent = [
-  {
-    id: 'asc:token',
-    label: 'Deposit token',
-  },
   {
     id: 'asc:tvl',
     label: 'TVL',
@@ -80,7 +78,9 @@ export const Farm: React.FC<FarmProps> = () => {
   const tokenMetadata = useTokenMetadata();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
+  const userInfoInAllFarms = useUserInfoInAllFarms();
   const [sort, setSort] = useState('Sorted By');
+  const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [farms, setFarms] = useState<WhitelistedFarmOptional[]>(allFarms);
 
@@ -106,6 +106,68 @@ export const Farm: React.FC<FarmProps> = () => {
       }
     }
   }, [router.query, farms]);
+
+  useEffect(() => {
+    const mergedFarms:WhitelistedFarm[] = allFarms.map((farm) => {
+      if (userInfoInAllFarms && userInfoInAllFarms[farm.id]) {
+        return {
+          ...farm,
+          deposit: prettyPrice(Number(userInfoInAllFarms[farm.id].staked)),
+          earned: prettyPrice(Number(userInfoInAllFarms[farm.id].earned)),
+        };
+      }
+
+      return { ...farm };
+    });
+
+    setFarms(mergedFarms);
+  }, [userInfoInAllFarms, allFarms]);
+
+  useEffect(() => {
+    let sortingParam: keyof WhitelistedFarm;
+
+    switch (sort) {
+      case 'asc:token':
+        return;
+      case 'asc:tvl':
+        sortingParam = 'totalValueLocked';
+        break;
+      case 'asc:apy':
+        sortingParam = 'apy';
+        break;
+      case 'asc:deposit':
+        sortingParam = 'deposit';
+        break;
+      default:
+        return;
+    }
+
+    if (farms) {
+      farms.sort((a, b) => {
+        if ((a[sortingParam] ?? '') < (b[sortingParam] ?? '')) {
+          return 1;
+        }
+
+        if ((a[sortingParam] ?? '') > (b[sortingParam] ?? '')) {
+          return -1;
+        }
+
+        return 0;
+      });
+
+      setFarms([...farms]);
+    }
+  }, [sort]);
+
+  useEffect(() => {
+    const searched = allFarms.filter((farm) => ((
+      farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
+    ) || (
+      farm.tokenPair.token2.metadata.name.toLowerCase().includes(search.toLowerCase())
+    )));
+
+    setFarms(searched);
+  }, [allFarms, search]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -180,6 +242,8 @@ export const Farm: React.FC<FarmProps> = () => {
           StartAdornment={Search}
           className={s.searchInput}
           placeholder="Search"
+          value={search}
+          onChange={(event:any) => setSearch(event.target.value)}
         />
         <div className={s.switcherWrap}>
           <Switcher
