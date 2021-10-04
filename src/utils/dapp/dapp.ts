@@ -334,8 +334,8 @@ function useDApp() {
     // eslint-disable-next-line
   }, [network]);
 
-  const addCustomList = useCallback((list:WhitelistedTokenList) => {
-    saveCustomList(list);
+  const addCustomList = useCallback((list:WhitelistedTokenList, url:string) => {
+    saveCustomList({ key: url, val: true });
     setState((prevState) => ({
       ...prevState,
       // tokens: { ...tokens, data: [...tokens.data, ...list.tokens] },
