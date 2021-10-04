@@ -1,7 +1,9 @@
 import { useEffect, useState, useMemo } from 'react';
+import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
 import {
   FarmingInfoType,
+  QSMainNet,
   WhitelistedFarmOptional,
 } from '@utils/types';
 import {
@@ -15,8 +17,8 @@ import {
   STABLE_TOKEN,
   FARM_CONTRACT,
   TZKT_LINK_TESTNET,
-  TZKT_LINK_MAINNET,
   OPERATIONS,
+  FACTORIES,
 } from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
 
@@ -30,10 +32,11 @@ export const useFarms = () => {
   const network = useNetwork();
   const farmingContract = useFarmingContract();
   const accountPkh = useAccountPkh();
+  const networkId:QSMainNet = useNetwork().id as QSMainNet;
   const [allFarms, setAllFarms] = useState<WhitelistedFarmOptional[]>([]);
   const farmContractUrl = useMemo(() => (FARM_CONTRACT
     ? `${TZKT_LINK_TESTNET}/${FARM_CONTRACT}/${OPERATIONS}`
-    : `${TZKT_LINK_MAINNET}/${FARM_CONTRACT}/${OPERATIONS}`
+    : '#'
   ), [FARM_CONTRACT]);
 
   useEffect(() => {
@@ -55,25 +58,50 @@ export const useFarms = () => {
           .filter((farm) => !!farm) as FarmingInfoType[]
         );
 
-        const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms
-          .map((x, id) => ({
+        const tokenContracts = clearfarms.map((farm) => {
+          let asset:Token = { contract: '' };
+
+          if (farm.stake_params.staked_token.fA2) {
+            asset = {
+              contract: farm.stake_params.staked_token.fA2.token,
+              id: farm.stake_params.staked_token.fA2.id,
+            };
+          }
+
+          if (farm.stake_params.staked_token.fA12) {
+            asset = { contract: farm.stake_params.staked_token.fA12 };
+          }
+
+          if (!farm.stake_params.is_lp_staked_token) {
+            return findDex(tezos, FACTORIES[networkId], asset);
+          }
+
+          return asset.contract.toString();
+        });
+
+        const tokenContractsResolved = await Promise
+          .all<(string | Promise<FoundDex>)>(tokenContracts);
+
+        if (tokenContractsResolved) {
+          const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms.map((farm, id) => ({
             id,
             tokenPair: fallbackPair,
-            totalValueLocked: prettyPrice(Number(x?.staked)),
+            totalValueLocked: prettyPrice(Number(farm?.staked)),
             apy: '888%',
             daily: '0.008%',
             multiplier: '888',
-            tokenContract: `${TZKT_LINK_TESTNET}/${x.stake_params.staked_token.fA2?.token}/${OPERATIONS}`,
+            tokenContract: `${TZKT_LINK_TESTNET}/${tokenContractsResolved[id]}/${OPERATIONS}`,
             farmContract: farmContractUrl,
             projectLink: '#',
             analyticsLink: '#',
             remaining: new Date(Date.now() + 48 * 3600000),
-            claimed: x.claimed.toString(),
-            isLpTokenStaked: x.stake_params.is_lp_staked_token,
-            stakedToken: x.stake_params.staked_token,
+            claimed: farm.claimed.toString(),
+            isLpTokenStaked: farm.stake_params.is_lp_staked_token,
+            stakedToken: farm.stake_params.staked_token,
           }));
 
-        setAllFarms(whitelistedFarms);
+          setAllFarms(whitelistedFarms);
+        }
       }
     };
 
