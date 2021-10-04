@@ -10,12 +10,19 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
-import { TEZOS_TOKEN, FARM_CONTRACT, TZKT_LINK_TESTNET, OPERATIONS, TZKT_LINK_MAINNET } from '@utils/defaults';
+import {
+  TEZOS_TOKEN,
+  STABLE_TOKEN,
+  FARM_CONTRACT,
+  TZKT_LINK_TESTNET,
+  TZKT_LINK_MAINNET,
+  OPERATIONS,
+} from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
 
 const fallbackPair = {
   token1: TEZOS_TOKEN,
-  token2: TEZOS_TOKEN,
+  token2: STABLE_TOKEN,
 };
 
 export const useFarms = () => {
@@ -48,6 +55,8 @@ export const useFarms = () => {
           .filter((farm) => !!farm) as FarmingInfoType[]
         );
 
+        console.log({clearfarms});
+
         const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms
           .map((x, id) => ({
             id,
@@ -56,7 +65,7 @@ export const useFarms = () => {
             apy: '888%',
             daily: '0.008%',
             multiplier: '888',
-            tokenContract: '#',
+            tokenContract: `${TZKT_LINK_TESTNET}/${x.stake_params.staked_token.fA2?.token}/${OPERATIONS}`,
             farmContract: farmContractUrl,
             projectLink: '#',
             analyticsLink: '#',
