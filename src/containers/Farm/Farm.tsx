@@ -153,6 +153,16 @@ export const Farm: React.FC<FarmProps> = () => {
     setFarms(searched);
   }, [allFarms, search]);
 
+  useEffect(() => {
+    let totalValueLocked = 0;
+
+    for (let i = 0; i < allFarms.length; i++) {
+      totalValueLocked += parseFloat(allFarms[i].totalValueLocked);
+    }
+
+    content[0].value = totalValueLocked.toString();
+  }, [allFarms]);
+
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
     [sort],
