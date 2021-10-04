@@ -55,8 +55,6 @@ export const useFarms = () => {
           .filter((farm) => !!farm) as FarmingInfoType[]
         );
 
-        console.log({clearfarms});
-
         const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms
           .map((x, id) => ({
             id,
