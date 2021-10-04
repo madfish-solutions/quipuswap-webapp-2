@@ -164,8 +164,6 @@ export const ListModal: React.FC<ListModalProps> = ({
   ),
   [inputValue, filteredLists, searchLists]);
 
-  console.log(isEmptyLists, filteredLists, searchLists, lists, listsLoading);
-
   return (
     <Form
       onSubmit={handleInput}
@@ -189,6 +187,7 @@ export const ListModal: React.FC<ListModalProps> = ({
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
           contentClassName={cx(s.tokenModal)}
+          portalClassName={s.zind}
           {...props}
         >
           {isEmptyLists && (!searchLoading && !listsLoading) && (
@@ -211,7 +210,9 @@ export const ListModal: React.FC<ListModalProps> = ({
                 tokenList={list}
                 tabIndex={i}
                 isActive={!!enabled}
-                onChange={() => toggle(url)}
+                onChange={() => {
+                  toggle(url);
+                }}
               />
             );
           })}

@@ -20,6 +20,7 @@ import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
+import { ListModal } from '@components/modals/ListModal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import { NumberInput } from '@components/ui/NumberInput';
@@ -164,6 +165,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const [inputValue, setInputValue] = useState<string>('');
   const [inputToken, setInputToken] = useState<number>(0);
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
+  const [listsModal, setListsModal] = useState<boolean>(false);
 
   const handleInput = (values:FormValues) => {
     setInputValue(values.search ?? '');
@@ -218,73 +220,85 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   }, [inputValue, tezos]);
 
   return (
-    <Form
-      onSubmit={handleInput}
-      mutators={{
-        setValue: ([field, value], state, { changeValue }) => {
-          changeValue(state, field, () => value);
-        },
-      }}
-      render={({ form }) => (
-        <Modal
-          title={t('common|Search token')}
-          header={(
-            <AutoSave
-              form={form}
-              debounce={1000}
-              save={handleInput}
-              isSecondInput={isSoleFa2Token}
-            />
+    <>
+      <ListModal
+        isOpen={listsModal}
+        onRequestClose={() => setListsModal(false)}
+        onChange={() => {}}
+      />
+      <Form
+        onSubmit={handleInput}
+        mutators={{
+          setValue: ([field, value], state, { changeValue }) => {
+            changeValue(state, field, () => value);
+          },
+        }}
+        render={({ form }) => (
+          <Modal
+            title={t('common|Search token')}
+            header={(
+              <AutoSave
+                form={form}
+                debounce={1000}
+                save={handleInput}
+                isSecondInput={isSoleFa2Token}
+              />
           )}
-          footer={(
-            <Button className={s.modalButton} theme="inverse">
-              Manage Lists
-              <Pen className={s.penIcon} />
-
-            </Button>
+            footer={(
+              <Button
+                className={s.modalButton}
+                theme="inverse"
+                icon={
+                  <Pen className={s.penIcon} />
+                }
+                onClick={() => setListsModal(true)}
+              >
+                Manage Lists
+              </Button>
           )}
-          className={themeClass[colorThemeMode]}
-          modalClassName={s.tokenModal}
-          containerClassName={s.tokenModal}
-          cardClassName={cx(s.tokenModal, s.maxHeight)}
-          contentClassName={cx(s.tokenModal)}
-          {...props}
-        >
-          {isEmptyTokens && (!searchLoading && !tokensLoading) && (
+            className={themeClass[colorThemeMode]}
+            modalClassName={s.tokenModal}
+            containerClassName={s.tokenModal}
+            cardClassName={cx(s.tokenModal, s.maxHeight)}
+            contentClassName={cx(s.tokenModal)}
+            {...props}
+          >
+            {isEmptyTokens && (!searchLoading && !tokensLoading) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
               {' '}
             </div>
-          )}
-          {isEmptyTokens && (searchLoading || tokensLoading) && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
-          )}
-          {allTokens.map((token) => {
-            const {
-              contractAddress, fa2TokenId,
-            } = token;
-            return (
-              <TokenCell
-                key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                token={token}
-                tabIndex={0}
-                onClick={() => {
-                  onChange(token);
-                  if (searchTokens.length > 0) {
-                    addCustomToken(token);
-                  }
-                  form.mutators.setValue('search', '');
-                  form.mutators.setValue('tokenId', 0);
-                  setInputValue('');
-                  setInputToken(0);
-                }}
-              />
-            );
-          })}
-        </Modal>
+            )}
+            {isEmptyTokens && (searchLoading || tokensLoading) && (
+              [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+            )}
+            {allTokens.map((token) => {
+              const {
+                contractAddress, fa2TokenId,
+              } = token;
+              return (
+                <TokenCell
+                  key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                  token={token}
+                  tabIndex={0}
+                  onClick={() => {
+                    onChange(token);
+                    if (searchTokens.length > 0) {
+                      addCustomToken(token);
+                    }
+                    form.mutators.setValue('search', '');
+                    form.mutators.setValue('tokenId', 0);
+                    setInputValue('');
+                    setInputToken(0);
+                  }}
+                />
+              );
+            })}
+          </Modal>
 
-      )}
-    />
+        )}
+      />
+    </>
   );
 };

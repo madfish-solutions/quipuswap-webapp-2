@@ -16,7 +16,8 @@ export const getLists = async (
   const initialList = network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS;
   const savedList = getSavedLists();
   const savedKeys = Object.keys(savedList);
-  const objArr = [...(initialList.split(' ')), ...savedKeys];
+  const objArr = [...(initialList.split(' ')), ...savedKeys]
+    .filter((value, index, self) => self.indexOf(value) === index); // get only unique
   const reqArr = objArr.map((x:string) => fetch(ipfsToHttps(x))
     .then((res) => res.json())
     .then((json) => {

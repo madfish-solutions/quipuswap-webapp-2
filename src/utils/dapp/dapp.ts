@@ -21,11 +21,12 @@ import {
   QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenList,
 } from '@utils/types';
 import {
-  getContractInfo, saveCustomToken,
+  getContractInfo, findTokensByList, saveCustomToken,
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
+import { ipfsToHttps } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -280,40 +281,32 @@ function useDApp() {
     setState((prevState) => ({
       ...prevState,
       lists: { loading: !listsData, data: listsData ?? [] },
+      tokens: { loading: false, data: findTokensByList(listsData ?? []) },
     }));
   }, [listsData]);
 
   const toggleList = useCallback((url:string) => {
     let isEnabled = false;
-    const newData = (lists.data ?? [])
+    const newData = (lists.data ?? []).concat(searchLists.data)
       .map((x:WhitelistedTokenList) => {
         if (x.url === url) {
-          isEnabled = !x.enabled;
+          if (searchLists.data.length > 0) {
+            isEnabled = true;
+          } else {
+            isEnabled = !x.enabled;
+          }
         }
         return (x.url === url ? ({ ...x, enabled: isEnabled }) : x);
       });
     saveCustomList({ key: url, val: isEnabled });
+
     setState((prevState) => ({
       ...prevState,
       lists: { loading: false, data: newData },
+      tokens: { loading: false, data: findTokensByList(newData) },
+      searchLists: { loading: false, data: [] },
     }));
-  }, [lists]);
-
-  // const getTokensData = useCallback(() => getTokens(network, true), [network]);
-  const getTokensData = useCallback(() => [], [network]);
-  const {
-    data: tokensData,
-  } = useSWR(
-    ['tokens-initial-data', network],
-    getTokensData,
-  );
-
-  useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      tokens: { loading: !tokensData, data: tokensData ?? [] },
-    }));
-  }, [tokensData]);
+  }, [lists, searchLists]);
 
   const getBakersData = useCallback(() => getBakers(), []);
   const {
@@ -355,64 +348,58 @@ function useDApp() {
     saveCustomList({ key: url, val: true });
     setState((prevState) => ({
       ...prevState,
-      // tokens: { ...tokens, data: [...tokens.data, ...list.tokens] },
       lists: { ...lists, data: [...lists.data, list] },
-      searchList: { loading: false, data: [] },
     }));
   }, [lists]);
 
   const searchCustomList = useCallback(
-    async (
-      address: string,
-      tokenId?: number,
-      saveAfterSearch?:boolean,
-    ): Promise<WhitelistedToken | null> => {
-      if (await isContractAddress(address) === true) {
+    async (url: string): Promise<WhitelistedTokenList | null> => {
+      const httpUrl = ipfsToHttps(url);
+      if (!httpUrl.startsWith('https://ipfs.io/ipfs/')) {
         setState((prevState) => ({
           ...prevState,
-          searchList: { loading: true, data: [] },
+          searchLists: { loading: false, data: [] },
         }));
-        let type;
-        try {
-          type = await getContractInfo(address, tezos!!);
-        } catch (e) {
-          type = null;
-        }
-        if (!type) {
-          setState((prevState) => ({
-            ...prevState,
-            searchList: { loading: false, data: [] },
-          }));
-          return null;
-        }
-        const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(network.id === MAINNET_NETWORK.id
-          ? METADATA_API_MAINNET
-          : METADATA_API_TESTNET, address, tokenId);
-        if (!customToken) {
-          setState((prevState) => ({
-            ...prevState,
-            searchList: { loading: false, data: [] },
-          }));
-          return null;
-        }
-        const token : WhitelistedToken = {
-          contractAddress: address,
-          metadata: customToken,
-          type: !isFa2 ? 'fa1.2' : 'fa2',
-          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
-          network: network.id,
-        } as WhitelistedToken;
-        setState((prevState) => ({
-          ...prevState,
-          searchList: { loading: false, data: [token] },
-        }));
-        if (saveAfterSearch) saveCustomToken(token);
-        return token;
+        return null;
       }
-      return null;
+      setState((prevState) => ({
+        ...prevState,
+        searchLists: { loading: true, data: [] },
+      }));
+      const result = await fetch(httpUrl)
+        .then((res) => res.json())
+        .then((json) => {
+          if (json) {
+            return { value: json, status: 'fulfilled' };
+          }
+          return { value: [], status: 'fulfilled' };
+        })
+        .catch(() => ({ value: 'error', status: 'rejected' }));
+
+      if (result.status === 'rejected') {
+        setState((prevState) => ({
+          ...prevState,
+          searchLists: { loading: false, data: [] },
+        }));
+        return null;
+      }
+      const transformedResult = {
+        error: result.status === 'rejected',
+        loading: false,
+        keywords: result.status === 'fulfilled' ? result.value.keywords : [],
+        logoURI: result.status === 'fulfilled' ? result.value.logoURI : '',
+        name: result.status === 'fulfilled' ? result.value.name : url,
+        tokens: result.status === 'fulfilled' ? result.value.tokens : [],
+        enabled: false,
+        url,
+      };
+      setState((prevState) => ({
+        ...prevState,
+        searchLists: { loading: false, data: [transformedResult] },
+      }));
+      return transformedResult;
     },
-    [tezos, network],
+    [],
   );
 
   const searchCustomToken = useCallback(

@@ -5,7 +5,7 @@ import {
   TESTNET_TOKENS,
 } from '@utils/defaults';
 import {
-  WhitelistedToken, WhitelistedTokenPair, QSNetwork,
+  WhitelistedToken, WhitelistedTokenPair, QSNetwork, WhitelistedTokenList,
 } from '@utils/types';
 
 import { isContractAddress } from '@utils/validators';
@@ -66,4 +66,17 @@ export const mergeTokensToPair = (
 ):WhitelistedTokenPair[] => {
   const res = { token1: tokens1[0], token2: tokens2[0] } as WhitelistedTokenPair;
   return [res];
+};
+
+export const findTokensByList = (lists:WhitelistedTokenList[]) => {
+  const newTokens = lists
+    .filter((x) => x.enabled)
+    .map((x) => x.tokens)
+    .flat();
+  const savedTokens: WhitelistedToken[] = getSavedTokens();
+  const unionTokens: WhitelistedToken[] = [...savedTokens, ...newTokens];
+  const distinctTokens = [...new Map(unionTokens.map(
+    (item) => [`${item.contractAddress}_${item.fa2TokenId ?? '0'}`, item],
+  )).values()];
+  return distinctTokens;
 };
