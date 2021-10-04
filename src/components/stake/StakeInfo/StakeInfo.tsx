@@ -216,7 +216,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               $
               {' '}
               <span className={s.priceAmount}>
-                1000000
+                1,000,000
               </span>
             </div>
           </CardCell>
