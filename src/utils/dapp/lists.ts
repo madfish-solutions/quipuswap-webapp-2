@@ -1,22 +1,20 @@
 import {
   MAINNET_TOKENS,
   SAVED_LISTS_KEY,
-  SAVED_LISTS_STATE,
   TESTNET_TOKENS,
 } from '@utils/defaults';
 import {
-  QSNetwork, WhitelistedTokenList,
+  QSNetwork,
 } from '@utils/types';
 import { ipfsToHttps } from '@utils/helpers';
 
-export const getSavedLists = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_KEY) || '[]') : []);
-export const getSavedState = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_STATE) || '{}') : []);
+export const getSavedLists = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_KEY) || '{}') : []);
 
 export const getLists = async (
   network:QSNetwork,
 ) => {
   const initialList = network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS;
-  const objArr = [...initialList.split(' '), ...getSavedLists()];
+  const objArr = [...initialList.split(' '), ...Object.keys(getSavedLists())];
   const reqArr = objArr.map((x:string) => fetch(ipfsToHttps(x))
     .then((res) => res.json())
     .then((json) => {
@@ -35,21 +33,13 @@ export const getLists = async (
     logoURI: x.status === 'fulfilled' ? x.value.logoURI : '',
     name: x.status === 'fulfilled' ? x.value.name : objArr[i],
     tokens: x.status === 'fulfilled' ? x.value.tokens : [],
-    url: objArr[i] && objArr[i].url ? objArr[i].url : objArr[i],
+    url: objArr[i],
   }));
 };
 
-export const saveCustomList = (list:WhitelistedTokenList) => {
+export const saveCustomList = ({ key, val }: { key:string, val:boolean }) => {
   window.localStorage.setItem(
     SAVED_LISTS_KEY,
-    JSON.stringify([list, ...getSavedLists()
-      .filter((x:WhitelistedTokenList) => x.name !== list.name)]),
-  );
-};
-
-export const savedListsState = ({ key, val }: { key:string, val:boolean }) => {
-  window.localStorage.setItem(
-    SAVED_LISTS_STATE,
-    JSON.stringify({ ...getSavedState(), [key]: val }),
+    JSON.stringify({ ...getSavedLists(), [key]: val }),
   );
 };
