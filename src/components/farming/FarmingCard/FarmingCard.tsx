@@ -1,23 +1,23 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
+import BigNumber from 'bignumber.js';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarmOptional } from '@utils/types';
 import {
   fromDecimals,
   getWhitelistedTokenSymbol,
   prettyPrice,
 } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
+import { useBalance } from '@hooks/useBalance';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Tooltip } from '@components/ui/Tooltip';
 import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
-import BigNumber from 'bignumber.js';
-import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
-import { useBalance } from '@hooks/useBalance';
 
 import s from './FarmingCard.module.sass';
 

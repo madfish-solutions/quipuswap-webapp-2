@@ -5,8 +5,8 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';

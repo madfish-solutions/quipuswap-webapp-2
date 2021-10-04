@@ -8,6 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarmOptional } from '@utils/types';
 import { useFarms } from '@hooks/useFarms';
+import { useTokenMetadata } from '@hooks/useTokenMetadata';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -20,7 +21,6 @@ import { ApyModal } from '@components/modals/ApyModal';
 import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
 
-import { useTokenMetadata } from '@hooks/useTokenMetadata';
 import s from './Farm.module.sass';
 
 type FarmProps = {
