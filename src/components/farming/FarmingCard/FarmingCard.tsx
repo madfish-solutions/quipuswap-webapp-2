@@ -75,8 +75,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     }
   }, [balances, id]);
 
-  console.log({ balances });
-
   return (
     <Card
       className={cx(className, s.card)}

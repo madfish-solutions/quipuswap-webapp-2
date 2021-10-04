@@ -146,6 +146,8 @@ export type WhitelistedFarmOptional = {
   claimed?: string
   isLpTokenStaked: boolean
   stakedToken: { fA2?: FA2, fA12?: string }
+  deposit?: string
+  earned?: string
 };
 
 export type WhitelistedStake = {

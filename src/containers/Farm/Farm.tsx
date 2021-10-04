@@ -86,8 +86,8 @@ export const Farm: React.FC<FarmProps> = () => {
 
   useEffect(() => {
     if (tokenMetadata) {
-      setFarms(allFarms.map((farm, index) => ({
-        ...farm,
+      setFarms((prevState) => allFarms.map((farm, index) => ({
+        ...prevState[index],
         tokenPair: {
           token1: TEZOS_TOKEN,
           token2: tokenMetadata[index],
@@ -99,16 +99,7 @@ export const Farm: React.FC<FarmProps> = () => {
   }, [allFarms, tokenMetadata]);
 
   useEffect(() => {
-    if (router.query.slug) {
-      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
-      if (farmObj) {
-        selectFarm(farmObj);
-      }
-    }
-  }, [router.query, farms]);
-
-  useEffect(() => {
-    const mergedFarms:WhitelistedFarm[] = allFarms.map((farm) => {
+    const mergedFarms:WhitelistedFarmOptional[] = allFarms.map((farm) => {
       if (userInfoInAllFarms && userInfoInAllFarms[farm.id]) {
         return {
           ...farm,
@@ -121,10 +112,19 @@ export const Farm: React.FC<FarmProps> = () => {
     });
 
     setFarms(mergedFarms);
-  }, [userInfoInAllFarms, allFarms]);
+  }, [userInfoInAllFarms]);
 
   useEffect(() => {
-    let sortingParam: keyof WhitelistedFarm;
+    if (router.query.slug) {
+      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
+      if (farmObj) {
+        selectFarm(farmObj);
+      }
+    }
+  }, [router.query, farms]);
+
+  useEffect(() => {
+    let sortingParam: keyof WhitelistedFarmOptional;
 
     switch (sort) {
       case 'asc:token':
@@ -163,7 +163,7 @@ export const Farm: React.FC<FarmProps> = () => {
     const searched = allFarms.filter((farm) => ((
       farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
     ) || (
-      farm.tokenPair.token2.metadata.name.toLowerCase().includes(search.toLowerCase())
+      farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
     )));
 
     setFarms(searched);

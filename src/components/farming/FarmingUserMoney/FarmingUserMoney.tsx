@@ -16,13 +16,20 @@ export const FarmingUserMoney:FC<FarmingUserMoneyProps> = ({ money }) => {
   if (!accountPkh) {
     return (
       <div>
-        $ 0
+        <span className={s.dollarSign}>$</span>
+        0
       </div>
     );
   }
 
   if (money) {
-    return (<CurrencyAmount amount={money} />);
+    return (
+      <div>
+        <span className={s.dollarSign}>$</span>
+        {' '}
+        <CurrencyAmount amount={money} />
+      </div>
+    );
   }
 
   return (<Skeleton className={s.skeleton} />);
