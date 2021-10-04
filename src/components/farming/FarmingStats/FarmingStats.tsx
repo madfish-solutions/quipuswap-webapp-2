@@ -1,9 +1,8 @@
 import React, { useCallback, useContext } from 'react';
 import cx from 'classnames';
 import {
-  batchify, fromOpOpts, withTokenApprove, Token,
+  batchify, fromOpOpts, withTokenApprove,
 } from '@quipuswap/sdk';
-import { TezosToolkit } from '@taquito/taquito';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
@@ -13,6 +12,7 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
+import { SubmitType } from '@utils/types';
 import { FARM_CONTRACT } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -31,15 +31,6 @@ const modeClass = {
 
 type FarmingStatsProps = {
   className?: string
-};
-
-type SubmitType = {
-  tezos: TezosToolkit
-  fromAsset: Token
-  accountPkh: string
-  farmContract: any
-  farmId: BigNumber
-  handleErrorToast: (error:any) => void
 };
 
 const getAllHarvest = async ({
