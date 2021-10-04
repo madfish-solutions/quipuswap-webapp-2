@@ -64,7 +64,7 @@ export const useBalance = () => {
     if (accountPkh) {
       loadBalance();
     } else {
-      setBalances([]);
+      setBalances(undefined);
     }
 
     return () => setBalances([]);

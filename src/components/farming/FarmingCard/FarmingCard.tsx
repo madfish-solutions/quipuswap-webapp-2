@@ -18,6 +18,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
+import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
 
@@ -73,6 +74,8 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       setBalance(undefined);
     }
   }, [balances, id]);
+
+  console.log({ balances });
 
   return (
     <Card
@@ -145,37 +148,19 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
           <div className={s.detailsValue}>
-            $
-            {' '}
-            {balance ? (
-              <CurrencyAmount amount={balance.toString()} />
-            ) : (
-              '0'
-            )}
+            <FarmingUserMoney money={balance?.toString()} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
           <div className={s.detailsValue}>
-            $
-            {' '}
-            {deposit ? (
-              <CurrencyAmount amount={deposit.toString()} />
-            ) : (
-              '0'
-            )}
+            <FarmingUserMoney money={deposit?.toString()} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            $
-            {' '}
-            {earned ? (
-              <CurrencyAmount amount={earned.toString()} />
-            ) : (
-              '0'
-            )}
+            <FarmingUserMoney money={earned?.toString()} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>

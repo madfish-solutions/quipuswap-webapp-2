@@ -32,7 +32,7 @@ export const useUserInfoInAllFarms = () => {
     if (accountPkh) {
       loadAmountOfTokensInFarms();
     } else {
-      setUserInfoInFarms([]);
+      setUserInfoInFarms(undefined);
     }
   }, [allFarms, accountPkh, farmingContract]);
 
