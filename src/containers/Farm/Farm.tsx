@@ -105,7 +105,7 @@ export const Farm: React.FC<FarmProps> = () => {
         selectFarm(farmObj);
       }
     }
-  }, [router.query, selectedFarming, farms]);
+  }, [router.query, farms]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),

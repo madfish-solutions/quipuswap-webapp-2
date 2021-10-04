@@ -18,6 +18,9 @@ export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
 export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
+export const OPERATIONS = 'operations';
+export const TZKT_LINK_TESTNET = 'https://granadanet.tzkt.io';
+export const TZKT_LINK_MAINNET = 'https://tzkt.io';
 
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;

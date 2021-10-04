@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
+
 import {
   FarmingInfoType,
   WhitelistedFarmOptional,
@@ -9,7 +10,7 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN, FARM_CONTRACT, TZKT_LINK_TESTNET, OPERATIONS, TZKT_LINK_MAINNET } from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
 
 const fallbackPair = {
@@ -23,6 +24,10 @@ export const useFarms = () => {
   const farmingContract = useFarmingContract();
   const accountPkh = useAccountPkh();
   const [allFarms, setAllFarms] = useState<WhitelistedFarmOptional[]>([]);
+  const farmContractUrl = useMemo(() => (FARM_CONTRACT
+    ? `${TZKT_LINK_TESTNET}/${FARM_CONTRACT}/${OPERATIONS}`
+    : `${TZKT_LINK_MAINNET}/${FARM_CONTRACT}/${OPERATIONS}`
+  ), [FARM_CONTRACT]);
 
   useEffect(() => {
     const loadFarms = async () => {
@@ -52,7 +57,7 @@ export const useFarms = () => {
             daily: '0.008%',
             multiplier: '888',
             tokenContract: '#',
-            farmContract: '#',
+            farmContract: farmContractUrl,
             projectLink: '#',
             analyticsLink: '#',
             remaining: new Date(Date.now() + 48 * 3600000),

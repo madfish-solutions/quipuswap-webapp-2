@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
+import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
+import {
+  findDex, FoundDex, getLiquidityShare, Token,
+} from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
+
 import {
   getContract, useAccountPkh, useNetwork, useTezos,
 } from '@utils/dapp';
 import { FACTORIES } from '@utils/defaults';
-import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
 import { QSMainNet } from '@utils/types';
-import BigNumber from 'bignumber.js';
-import {
-  findDex, FoundDex, getLiquidityShare, Token,
-} from '@quipuswap/sdk';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useFarms } from '@hooks/useFarms';
 

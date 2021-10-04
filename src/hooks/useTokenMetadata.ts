@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react';
 import {
+  findDex, FoundDex, Token,
+} from '@quipuswap/sdk';
+import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
+
+import {
   getStorageInfo,
   useNetwork, useSearchCustomTokens,
   useTezos, useTokens,
 } from '@utils/dapp';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
-import {
-  findDex, FoundDex, Token,
-} from '@quipuswap/sdk';
-import { useFarms } from '@hooks/useFarms';
 import { localSearchToken } from '@utils/helpers';
-import BigNumber from 'bignumber.js';
+import { useFarms } from '@hooks/useFarms';
 
 export const useTokenMetadata = () => {
   const network = useNetwork();
