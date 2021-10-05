@@ -1,19 +1,18 @@
 import { useEffect, useState } from 'react';
 import { FarmingUsersInfo } from '@utils/types';
-import {
-  useAccountPkh,
-  useFarmingStorage,
-} from '@utils/dapp';
-import { useFarms } from '@hooks/useFarms';
+import { useAccountPkh, useAllFarms, useFarmingStorage } from '@utils/dapp';
 
 export const useUserInfoInAllFarms = () => {
-  const allFarms = useFarms();
+  const allFarms = useAllFarms();
   const farmingStorage = useFarmingStorage();
   const accountPkh = useAccountPkh();
   const [userInfoInFarms, setUserInfoInFarms] = useState<FarmingUsersInfo[]>();
 
   useEffect(() => {
     const loadAmountOfTokensInFarms = async () => {
+      if (!allFarms) return;
+      if (!farmingStorage) return;
+
       const usersInfo:(
         Promise<FarmingUsersInfo | undefined> | undefined
       )[] = allFarms.map((currentFarm) => (
@@ -35,7 +34,7 @@ export const useUserInfoInAllFarms = () => {
     if (accountPkh) {
       loadAmountOfTokensInFarms();
     } else {
-      setUserInfoInFarms([]);
+      setUserInfoInFarms(undefined);
     }
   }, [allFarms, accountPkh, farmingStorage]);
 

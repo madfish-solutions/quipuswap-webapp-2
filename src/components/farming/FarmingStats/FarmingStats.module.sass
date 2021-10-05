@@ -22,9 +22,16 @@
   margin-bottom: 24px
   max-height: 128px
 
+.rewardContent
+  text-align: left
+
 .rewardHeader
   display: flex
   flex-direction: column
+  text-align: left
+  font-size: 0.857rem
+
+.amount
   text-align: left
 
 .rewardAmount, .amount
@@ -37,7 +44,7 @@
 .item
   display: flex
   flex-direction: column
-  align-items: center
+  justify-content: flex-end
   &:not(:last-child)
     margin-bottom: 16px
 
@@ -66,18 +73,18 @@
 
 
 @include media('>phone')
-  .rewardAmount
+  .rewardAmount, .amount
     font-size: 1.714rem
+  .rewardHeader
+    font-size: 1rem
 
 @include media('>Lphone', '<=Ltablet')
-  .rewardAmount
+  .rewardAmount, .amount
     font-size: 2.286rem
 
 @include media('>Lphone')
   .rewardContent
     margin-right: 32px
-  .amount
-    font-size: 1.429rem
 
 @include media('>Ltablet')
   .flex
@@ -95,10 +102,8 @@
     align-items: flex-start
     &:not(:last-child)
       margin-bottom: 0px
-  .rewardAmount
+  .rewardAmount, .amount
     font-size: 1.714rem
-  .amount
-    font-size: 1.429rem
   .button
     width: 160px
     margin-top: auto
@@ -106,11 +111,8 @@
 @include media('>desktop')
   .header
     text-align: left
-  .rewardAmount
+  .rewardAmount, .amount
     font-size: 2.286rem
-  .amount
-    font-size: 1.714rem
-    line-height: 1.33
   .button
     width: 160px
     margin-top: auto
