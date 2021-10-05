@@ -2,6 +2,7 @@ import React, {
   useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -79,6 +80,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
   const userInfoInAllFarms = useUserInfoInAllFarms();
+  const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
@@ -252,7 +254,7 @@ export const Farm: React.FC<FarmProps> = () => {
             className={s.switcherInput}
           />
           <div className={s.switcher}>
-            Staked Only
+            {t('common|Staked Only')}
           </div>
         </div>
         <div className={s.sortItem}>

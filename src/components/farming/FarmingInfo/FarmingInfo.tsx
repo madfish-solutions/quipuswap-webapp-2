@@ -112,7 +112,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <Back className={s.proposalBackIcon} />
             }
             >
-              Back to Vaults
+              {t('common|Back to Vaults')}
             </Button>
           ),
         }}
@@ -121,11 +121,13 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <div className={s.reward}>
             <div className={s.rewardContent}>
               <span className={s.rewardHeader}>
-                Your Pending Reward
+                {t('common|Your Pending Reward')}
               </span>
               <span className={s.rewardAmount}>
                 100,000,000
-                <span className={s.rewardCurrency}>QUIPU</span>
+                <span className={s.rewardCurrency}>
+                  {t('common|QUIPU')}
+                </span>
               </span>
             </div>
             <VotingReward />
@@ -134,34 +136,44 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             <div className={s.itemsRows}>
               <div className={s.item}>
                 <header className={s.header}>
-                  Your Share
+                  {t('common|Your Share')}
                 </header>
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
-                  Your Delegate
+                  {t('common|Your Delegate')}
                 </span>
-                <Button theme="inverse" className={s.amount}>Everstake</Button>
+                <Button theme="inverse" className={s.amount}>
+                  {t('common|Everstake')}
+                </Button>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
-                  Lock ends in
+                  {t('common|Lock ends in')}
                 </span>
                 <div className={cx(s.govBlockLabel, s.amount)}>
                   {days}
-                  <span className={s.govBlockSpan}>D</span>
+                  <span className={s.govBlockSpan}>
+                    {t('common|D')}
+                  </span>
                   {' '}
                   {hours}
-                  <span className={s.govBlockSpan}>H</span>
+                  <span className={s.govBlockSpan}>
+                    {t('common|H')}
+                  </span>
                   {' '}
                   {minutes}
-                  <span className={s.govBlockSpan}>M</span>
+                  <span className={s.govBlockSpan}>
+                    {t('common|M')}
+                  </span>
                 </div>
               </div>
 
             </div>
-            <Button className={cx(s.statButton, s.button)}>Harvest</Button>
+            <Button className={cx(s.statButton, s.button)}>
+              {t('common|Harvest')}
+            </Button>
           </div>
         </div>
       </Card>
@@ -227,15 +239,15 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           )}
           <div className={s.tradeControls}>
             <Button theme="underlined" className={s.tradeBtn}>
-              Trade
+              {t('common|Trade')}
             </Button>
             {currentTab.id === 'stake' ? (
               <Button theme="underlined" className={s.tradeBtn}>
-                Invest
+                {t('common|Invest')}
               </Button>
             ) : (
               <Button theme="underlined" className={s.tradeBtn}>
-                Divest
+                {t('common|Divest')}
               </Button>
             )}
 
@@ -321,7 +333,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             className={s.cell}
           >
             <Button href="#" theme="underlined">
-              Bake&Bake
+              {t('common|Bake&Bake')}
             </Button>
           </CardCell>
           <CardCell
@@ -337,7 +349,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             className={s.cell}
           >
             <Button href="#" theme="underlined">
-              Everstake
+              {t('common|Everstake')}
             </Button>
           </CardCell>
           <CardCell
@@ -412,7 +424,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Pair Analytics
+              {t('common|Pair Analytics')}
             </Button>
             <Button
               className={s.detailsButton}
@@ -421,7 +433,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Farm Contract
+              {t('common|Farm Contract')}
             </Button>
           </div>
           <div className={s.detailsButtons}>
@@ -432,7 +444,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Token Contract
+              {t('common|Token Contract')}
             </Button>
             <Button
               className={s.detailsButton}
@@ -441,7 +453,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Project
+              {t('common|Project')}
             </Button>
           </div>
         </Card>
