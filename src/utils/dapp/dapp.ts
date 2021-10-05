@@ -417,7 +417,7 @@ function useDApp() {
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
-      if (isContractAddress(address)) {
+      if (await isContractAddress(address)) {
         setState((prevState) => ({
           ...prevState,
           searchBakers: { loading: true, data: [] },
