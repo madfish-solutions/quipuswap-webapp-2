@@ -95,7 +95,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {' '}
             /
             {' '}
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
+            {tokenPair.token2 && getWhitelistedTokenSymbol(tokenPair.token2)}
           </h3>
           <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
 

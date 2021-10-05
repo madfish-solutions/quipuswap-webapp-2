@@ -7,21 +7,20 @@ import BigNumber from 'bignumber.js';
 
 import {
   getStorageInfo,
+  useAllFarms,
   useNetwork, useSearchCustomTokens,
   useTezos, useTokens,
 } from '@utils/dapp';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
 import { localSearchToken } from '@utils/helpers';
-import { useFarms } from '@hooks/useFarms';
 
 export const useTokenMetadata = () => {
   const network = useNetwork();
   const tezos = useTezos();
-  const allFarms = useFarms();
+  const allFarms = useAllFarms();
   const { data: tokens } = useTokens();
   const searchCustomToken = useSearchCustomTokens();
-  const networkId:QSMainNet = useNetwork().id as QSMainNet;
   const [tokensMetadata, setTokensMetadata] = useState<WhitelistedToken[]>();
 
   const searchPart = async (address:string, id:BigNumber):Promise<WhitelistedToken> => {
@@ -49,6 +48,8 @@ export const useTokenMetadata = () => {
     const loadTokenMetadata = async () => {
       if (!tezos) return;
       if (!network) return;
+      if (!allFarms) return;
+
       const dexs = allFarms.map((farm) => {
         let asset:Token = { contract: '' };
 
@@ -67,7 +68,7 @@ export const useTokenMetadata = () => {
           return getStorageInfo(tezos, <string>asset.contract);
         }
 
-        return findDex(tezos, FACTORIES[networkId], asset);
+        return findDex(tezos, FACTORIES[network.id as QSMainNet], asset);
       });
       const dexbufsArr = await Promise.all<ContractAbstraction<ContractProvider> | FoundDex>(dexs);
       const tokenMetadata = dexbufsArr.map((dexbuf) => (
@@ -89,7 +90,7 @@ export const useTokenMetadata = () => {
     };
 
     loadTokenMetadata();
-  }, [allFarms, tezos, networkId]);
+  }, [allFarms, tezos, network]);
 
   return tokensMetadata;
 };

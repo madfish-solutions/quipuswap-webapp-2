@@ -23,8 +23,8 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
-
 import { Timeleft } from '@components/ui/Timeleft';
+
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -55,24 +55,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const timeDiffCalc = (dateFuture:number, dateNow:number) => {
-  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-  // calculate days
-  const days = Math.floor(diffInMilliSeconds / 86400);
-  diffInMilliSeconds -= days * 86400;
-
-  // calculate hours
-  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-  diffInMilliSeconds -= hours * 3600;
-
-  // calculate minutes
-  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-  diffInMilliSeconds -= minutes * 60;
-
-  return { days, hours, minutes };
-};
-
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
@@ -84,7 +66,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   } = farm;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
@@ -110,7 +91,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               className={s.proposalHeader}
               control={
                 <Back className={s.proposalBackIcon} />
-            }
+              }
             >
               {t('common|Back to Vaults')}
             </Button>
@@ -153,20 +134,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                   {t('common|Lock ends in')}
                 </span>
                 <div className={cx(s.govBlockLabel, s.amount)}>
-                  {days}
-                  <span className={s.govBlockSpan}>
-                    {t('common|D')}
-                  </span>
-                  {' '}
-                  {hours}
-                  <span className={s.govBlockSpan}>
-                    {t('common|H')}
-                  </span>
-                  {' '}
-                  {minutes}
-                  <span className={s.govBlockSpan}>
-                    {t('common|M')}
-                  </span>
+                  <Timeleft remaining={remaining} />
                 </div>
               </div>
 
