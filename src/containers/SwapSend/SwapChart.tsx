@@ -3,9 +3,9 @@ import dynamic from 'next/dynamic';
 
 import { CandlePlotPoint, useGetTokenPlotPriceQuery } from '@graphql';
 import { WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 
 import s from '@styles/SwapLiquidity.module.sass';
-import { TEZOS_TOKEN } from '@utils/defaults';
 
 const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
   ssr: false,
@@ -14,21 +14,6 @@ const CandleChart = dynamic(() => import('@components/charts/CandleChart'), {
 type SwapChartProps = {
   token1:WhitelistedToken
   token2:WhitelistedToken
-};
-
-// @ts-ignore
-const uniqBy = (a:any, key:(obj:any) => any) => {
-  const seen = {};
-  return a.filter((item:any) => {
-    const k = key(item);
-    let result = false;
-    if (!Object.prototype.hasOwnProperty.call(seen, k)) {
-      // @ts-ignore
-      seen[k] = true;
-      result = true;
-    }
-    return result;
-  });
 };
 
 export const SwapChart: React.FC<SwapChartProps> = ({
@@ -55,7 +40,7 @@ export const SwapChart: React.FC<SwapChartProps> = ({
       loading={!!loadingProp}
       error={error}
       data={!loadingProp && data
-        ? uniqBy(data.token.plotPrice, (x) => x.time) as CandlePlotPoint[]
+        ? data.token.plotPrice as CandlePlotPoint[]
         : []}
     />
   );

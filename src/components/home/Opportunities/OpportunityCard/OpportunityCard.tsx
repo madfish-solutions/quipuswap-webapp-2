@@ -34,7 +34,7 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
       <Button
-        {...href ? { href } : undefined}
+        href={href}
         external={external}
         className={s.button}
         disabled={disabled}

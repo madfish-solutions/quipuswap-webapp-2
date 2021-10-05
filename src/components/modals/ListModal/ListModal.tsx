@@ -20,7 +20,7 @@ import {
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-import { ChooseListCell, LoadingTokenCell } from '@components/ui/Modal/ModalCell';
+import { ChooseListCell, LoadingChooseListCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -198,9 +198,9 @@ export const ListModal: React.FC<ListModalProps> = ({
           </div>
           )}
           {isEmptyLists && (searchLoading || listsLoading) && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingChooseListCell key={x} />))
           )}
-          {allLists.map((list:WhitelistedTokenList, i) => {
+          {allLists.map((list:WhitelistedTokenList) => {
             const {
               url, enabled,
             } = list;
@@ -208,7 +208,6 @@ export const ListModal: React.FC<ListModalProps> = ({
               <ChooseListCell
                 key={url}
                 tokenList={list}
-                tabIndex={i}
                 isActive={!!enabled}
                 onChange={() => {
                   toggle(url);

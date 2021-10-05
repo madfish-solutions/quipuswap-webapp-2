@@ -40,7 +40,7 @@ export const PairChartInfo: React.FC<PairChartType> = ({
   token1 = TEZOS_TOKEN,
   token2 = STABLE_TOKEN,
   hidePeriods = false,
-  toggle = () => {},
+  toggle,
 }) => {
   const [timeFrame, setTimeFrame] = useState(TimeFrameTabs[0].id);
   const { t } = useTranslation(['common']);
@@ -51,7 +51,7 @@ export const PairChartInfo: React.FC<PairChartType> = ({
         { getWhitelistedTokenSymbol(token1) }
         /
         { getWhitelistedTokenSymbol(token2) }
-        <RefreshToggle onClick={toggle} />
+        {toggle && (<RefreshToggle onClick={toggle} />)}
       </div>
       {!hidePeriods && (
       <div className={s.timeFrames}>

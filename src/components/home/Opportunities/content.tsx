@@ -38,7 +38,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
       // TODO
       // label: <Trans ns="home">Start Farming</Trans>,
       label: <Trans ns="home">Coming soon</Trans>,
-      // href: '/farm',
+      href: '#',
       disabled: true,
     },
   },

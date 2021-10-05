@@ -22,7 +22,6 @@ export const RefreshToggle:React.FC<RefreshToggleProps> = ({
 
   const compoundClassName = cx(
     { [s.rotate]: rotateChevron },
-    { [s.norotate]: !rotateChevron },
     s.iconButton,
   );
 

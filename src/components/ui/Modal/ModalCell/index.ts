@@ -5,3 +5,4 @@ export * from './BakerCell';
 export * from './ChooseListCell';
 export * from './LoadingTokenCell';
 export * from './LoadingBakerCell';
+export * from './LoadingChooseListCell';

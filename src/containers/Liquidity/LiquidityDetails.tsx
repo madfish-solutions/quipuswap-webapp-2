@@ -41,7 +41,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   const { t } = useTranslation(['common', 'liquidity']);
   const pairLink = useMemo(() => (!dex ? '#' : `https://analytics.quipuswap.com/pairs/${dex.contract.address}`), [dex]);
   const contractLink = useMemo(() => (!dex ? '#' : `https://tzkt.io/${dex.contract.address}`), [dex]);
-
+  const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
 
@@ -70,85 +70,95 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         header={(
           <>
             {t('common|Sell Price')}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
+            )}
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount
-            amount="1"
-            currency={tokenAName}
-          />
+          {loading ? <Skeleton className={s.currency} /> : (<CurrencyAmount amount="1" currency={tokenAName} />)}
           <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={sellPrice}
-            currency={tokenBName}
-            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
-          />
+          {loading ? <Skeleton className={s.currency2} /> : (
+            <CurrencyAmount
+              amount={sellPrice}
+              currency={tokenBName}
+              dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
+            />
+          )}
         </div>
       </CardCell>
       <CardCell
         header={(
           <>
             {t('common|Buy Price')}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
+            )}
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount
-            amount="1"
-            currency={tokenBName}
-          />
+          {loading ? <Skeleton className={s.currency} /> : (<CurrencyAmount amount="1" currency={tokenBName} />)}
           <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={buyPrice}
-            currency={tokenAName}
-            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
-          />
+          {loading ? <Skeleton className={s.currency2} /> : (
+            <CurrencyAmount
+              amount={buyPrice}
+              currency={tokenAName}
+              dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
+            />
+          )}
         </div>
       </CardCell>
       <CardCell
         header={(
           <>
             {t('liquidity|{{tokenAName}} Locked', { tokenAName })}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
             />
+            )}
           </>
       )}
         className={s.cell}
       >
-        <CurrencyAmount
-          amount={balanceTotalA}
-          currency={tokenAName}
-        />
+        {loading ? <Skeleton className={s.currency2} /> : (
+          <CurrencyAmount
+            amount={balanceTotalA}
+            currency={tokenAName}
+          />
+        )}
       </CardCell>
       <CardCell
         header={(
           <>
             {t('liquidity|{{tokenBName}} Locked', { tokenBName })}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
             />
+            )}
           </>
       )}
         className={s.cell}
       >
-        <CurrencyAmount
-          amount={balanceTotalB}
-          currency={tokenBName}
-        />
+        {loading ? <Skeleton className={s.currency2} /> : (
+          <CurrencyAmount
+            amount={balanceTotalB}
+            currency={tokenBName}
+          />
+        )}
       </CardCell>
       <CardCell
         header={(

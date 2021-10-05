@@ -159,7 +159,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
         <PercentSelector
           value={totalBalance || balance}
           handleBalance={handleBalance}
-          decimals={(tokenPair?.token1 ?? TEZOS_TOKEN).metadata.decimals}
+          decimals={TEZOS_TOKEN.metadata.decimals}
         />
         )}
         <ComplexError error={error} />

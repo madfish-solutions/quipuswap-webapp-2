@@ -76,7 +76,7 @@ export const Button: React.FC<ButtonProps> = ({
     );
   }
 
-  if ('href' in props) {
+  if ('href' in props && !('disabled' in props)) {
     if (external) {
       return (
         <a

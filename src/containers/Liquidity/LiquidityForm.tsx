@@ -53,7 +53,6 @@ import { Button } from '@components/ui/Button';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
-import { Loader } from '@components/ui/Loader';
 import { ComplexInput } from '@components/ui/ComplexInput';
 import { Slippage } from '@components/common/Slippage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -155,7 +154,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
   let promise:any;
 
   const handleInputChange = async (val: LiquidityFormValues) => {
-    setAddLiquidityParams([]);
     if (token1.contractAddress !== TEZOS_TOKEN.contractAddress) return;
     if (currentTab.id !== 'remove') {
       if (!val[lastChange] || val[lastChange].toString() === '.') {
@@ -166,7 +164,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         form.mutators.setValue(
           'balance2', undefined,
         );
-        setAddLiquidityParams([]);
         return;
       }
     } else if (!val.balance3 || val.balance3.toString() === '.') {
@@ -176,7 +173,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       form.mutators.setValue(
         'balanceB', undefined,
       );
-      setAddLiquidityParams([]);
       return;
     }
     if (!dex) return;
@@ -932,7 +928,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               className={s.button}
               disabled={accountPkh ? addLiquidityParams.length < 1 : false}
             >
-              {addLiquidityParams.length > 0 ? currentTab.label : <Loader />}
+              {currentTab.label}
             </Button>
           </>
         )}

@@ -46,6 +46,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
+  const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
@@ -69,44 +70,52 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         header={(
           <>
             {t('common|Sell Price')}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.', { tokenA: tokenAName, tokenB: tokenBName })}
             />
+            )}
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={tokenAName} />
+          {loading ? <Skeleton className={s.currency} /> : (<CurrencyAmount amount="1" currency={tokenAName} />)}
           <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={sellRate}
-            currency={tokenBName}
-            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
-          />
+          {loading ? <Skeleton className={s.currency2} /> : (
+            <CurrencyAmount
+              amount={sellRate}
+              currency={tokenBName}
+              dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
+            />
+          )}
         </div>
       </CardCell>
       <CardCell
         header={(
           <>
             {t('common|Buy Price')}
+            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.', { tokenA: tokenAName, tokenB: tokenBName })}
             />
+            )}
           </>
           )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={tokenBName} />
+          {loading ? <Skeleton className={s.currency} /> : (<CurrencyAmount amount="1" currency={tokenBName} />)}
           <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={buyRate}
-            currency={tokenAName}
-            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
-          />
+          {loading ? <Skeleton className={s.currency2} /> : (
+            <CurrencyAmount
+              amount={buyRate}
+              currency={tokenAName}
+              dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
+            />
+          )}
         </div>
       </CardCell>
       <CardCell
@@ -135,7 +144,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="XTZ" />
+        <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="TEZ" />
       </CardCell>
       <CardCell
         header={(
@@ -149,8 +158,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        <Route
-          routes={
+        {loading ? <Skeleton className={s.routes} /> : (
+          <Route
+            routes={
                 [{
                   id: 0,
                   name: tokenAName,
@@ -158,7 +168,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 },
                 ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
                   id: 1,
-                  name: 'XTZ',
+                  name: 'TEZ',
                   link: 'https://analytics.quipuswap.com/tokens/tez',
                 }] : []),
                 {
@@ -167,10 +177,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                   link: transformTokenDataToAnalyticsLink(tokensData.second),
                 }]
               }
-        />
+          />
+        )}
       </CardCell>
       <div className={s.detailsButtons}>
-        {dex2 && dex && (
+        {!loading && dex2 && dex && (
         <Button
           className={s.detailsButton}
           theme="inverse"
@@ -185,7 +196,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             })}
         </Button>
         )}
-        {dex ? (
+        {!loading && dex ? (
           <Button
             className={s.detailsButton}
             theme="inverse"
