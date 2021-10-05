@@ -212,9 +212,17 @@ function useDApp() {
   }, [network, tezos]);
 
   useEffect(() => {
-    const contract = getContract(tezos ?? fallbackToolkit, FARM_CONTRACT);
-    console.log(contract);
-  }, []);
+    const loadFarmingContract = async () => {
+      const contract = await getContract(tezos ?? fallbackToolkit, FARM_CONTRACT);
+
+      setState((prevState) => ({
+        ...prevState,
+        farmingContract: contract,
+      }));
+    };
+
+    loadFarmingContract();
+  }, [network, tezos]);
 
   const loadFarms = useCallback(async () => {
     const farmingStorageLoaded = await loadFaringStorage();

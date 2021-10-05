@@ -8,6 +8,7 @@ import BigNumber from 'bignumber.js';
 
 import {
   useAccountPkh,
+  useAllFarms,
   useFarmingContract,
   useNetwork,
   useTezos,
@@ -16,7 +17,6 @@ import { SubmitType } from '@utils/types';
 import { FARM_CONTRACT } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { useFarms } from '@hooks/useFarms';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -64,12 +64,12 @@ const getAllHarvest = async ({
 export const FarmingStats: React.FC<FarmingStatsProps> = ({
   className,
 }) => {
+  const allFarms = useAllFarms();
   const farmContract = useFarmingContract();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
   const network = useNetwork();
-  const allFarms = useFarms();
   const { t } = useTranslation(['common']);
   const {
     openConnectWalletModal,
@@ -115,7 +115,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     if (!accountPkh) {
       openConnectWalletModal(); return;
     }
-    if (allFarms.length === 0) return;
+    if (!allFarms) return;
     handleLoader();
     const harvestInfo = allFarms.map((farm) => {
       const fromAsset = {
