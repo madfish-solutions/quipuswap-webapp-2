@@ -1,0 +1,182 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.rotation 
+  -webkit-transition: all 2s ease  
+  -moz-transition: all 2s ease  
+  -o-transition: all 2s ease  
+  -ms-transition: all 2s ease  
+  transition: all 2s ease
+
+.rotation-active 
+  transform: rotate(180deg)
+
+.header
+  padding-top: 0
+  padding-bottom: 0
+  
+.tabs
+  margin-bottom: -1px
+
+.content
+  padding: 40px 24px 24px
+  display: flex
+  flex-direction: column
+
+.mb24
+  margin-bottom: 24px
+
+.mt12
+  margin-top: 12px
+
+.info
+  cursor: pointer
+  user-select: none
+  margin-left: 6px
+
+.iconButton
+  margin: 11px auto
+
+.receive
+  margin-top: 16px
+
+.votingStats
+  margin-bottom: 24px
+
+.receiveLabel
+  margin-right: 8px
+  font-size: 0.857rem
+
+.button
+  margin-top: 40px
+  max-width: 280px
+
+.farmingStats
+  display: flex
+  align-items: center
+
+.farmingStatsBlock
+  font-size: 1.143rem
+  font-weight: 600
+  line-height: 1.5
+  flex: 1
+
+
+.farmingCard
+  padding: 24px
+  text-align: center
+  &:not(:last-child)
+    margin-bottom: 32px
+
+.farmingControllerCard
+  padding: 0px 24px 16px 24px
+
+.farmingControllerContent
+  flex-wrap: wrap
+
+.cellCenter
+  align-items: flex-start
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.switcherWrap
+  display: flex
+  align-items: center
+
+.cellAmount
+  display: flex
+  justify-content: flex-start
+  align-items: flex-start
+
+.sortItem
+  flex: 1
+  display: flex
+  justify-content: flex-end
+
+.equal
+  margin: 0 8px
+
+.detailsButton
+  display: flex
+  align-items: center
+  margin-left: auto
+  margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-top: 26px
+  margin-left: auto
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+    &:not(:first-child)
+      margin-top: 16px
+
+.linkIcon
+  margin-left: 8px
+
+.switcher
+  display: flex
+  align-items: center
+  font-weight: 600
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+  .button
+    margin-top: 0
+    margin-left: 0
+    width: 100%
+    max-width: 280px
+    &:not(:last-child)
+      margin-bottom: 16px
+
+@include media('>Lphone', '<=tablet')
+  .cellCenter
+    align-items: center
+  .button
+    margin-left: auto
+    width: 180px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+  .detailsButtons
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+
+@include media('>Ltablet')
+  .farmingControllerContent
+    flex-wrap: nowrap
+  .searchInput
+    margin-top: 0px
+    order: 0
+    width: auto
+    flex-basis: auto
+  .switcherWrap
+    margin-left: 24px
+  .button
+    margin-left: auto
+    width: 180px
+  .votingStats
+    margin-bottom: 32px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
