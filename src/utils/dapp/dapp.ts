@@ -245,8 +245,6 @@ function useDApp() {
         .filter((farm) => !!farm) as FarmingInfoType[]
       );
 
-      console.log({clearfarms});
-
       const tokenContracts = clearfarms.map((farm) => {
         let asset:Token = { contract: '' };
 
