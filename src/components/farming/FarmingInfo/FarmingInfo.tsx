@@ -4,20 +4,21 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { withTypes } from 'react-final-form';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { STABLE_TOKEN } from '@utils/defaults';
+import { FarmingFormValues, WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { LineChartSampleData } from '@components/charts/content';
 import { FarmingForm } from '@components/farming/FarmingForm';
-import { WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
+import { Timeleft } from '@components/ui/Timeleft';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
-import { STABLE_TOKEN } from '@utils/defaults';
-import { Timeleft } from '@components/ui/Timeleft';
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -47,6 +48,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     tokenPair,
   } = farm;
   const { t } = useTranslation(['common', 'farms']);
+  const { Form } = withTypes<FarmingFormValues>();
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compountClassName = cx(
@@ -131,7 +133,59 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           </div>
         )}
       />
-      <FarmingForm remaining={remaining} amount={amount} />
+      <Form
+        onSubmit={() => {
+          // if (!tezos) return;
+          // handleLoader();
+          // submitForm(
+          //   tezos,
+          //   currentTab.id === 'remove'
+          //     ? removeLiquidityParams
+          //     : addLiquidityParams,
+          //   handleErrorToast,
+          //   handleSuccessToast,
+          //   currentTab.id,
+          // );
+        }}
+        mutators={{
+          setValue: ([field, value], state, { changeValue }) => {
+            changeValue(state, field, () => value);
+          },
+        }}
+        render={({ handleSubmit, form }) => (
+          // <LiquidityForm
+          //   form={form}
+          //   handleSubmit={handleSubmit}
+          //   debounce={100}
+          //   save={() => {}}
+          //   setTabsState={setTabsState}
+          //   tabsState={tabsState}
+          //   token1={token1}
+          //   token2={token2}
+          //   setTokens={setTokens}
+          //   tokenPair={tokenPair}
+          //   setTokenPair={setTokenPair}
+          //   tokensData={tokensData}
+          //   handleTokenChange={handleTokenChangeWrapper}
+          //   currentTab={currentTab}
+          //   setRemoveLiquidityParams={setRemoveLiquidityParams}
+          //   removeLiquidityParams={removeLiquidityParams}
+          //   setAddLiquidityParams={setAddLiquidityParams}
+          //   addLiquidityParams={addLiquidityParams}
+          // />
+
+          <FarmingForm
+            form={form}
+            handleSubmit={handleSubmit}
+            debounce={100}
+            save={() => {}}
+            remaining={remaining}
+            amount={amount}
+            token1={tokenPair.token1}
+            token2={tokenPair.token2}
+          />
+        )}
+      />
     </>
   );
 };
