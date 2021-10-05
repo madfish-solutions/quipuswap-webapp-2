@@ -4,7 +4,7 @@ import {
   WhitelistedFarm, WhitelistedTokenPair,
 } from '@utils/types';
 import {
-  useFarmingContract,
+  useFarmingStorage,
   useNetwork,
   useTezos,
 } from '@utils/dapp';
@@ -19,20 +19,20 @@ const fallbackPair = {
 export const useFarms = () => {
   const tezos = useTezos();
   const network = useNetwork();
-  const farmingContract = useFarmingContract();
+  const farmingStorage = useFarmingStorage();
   const [allFarms, setAllFarms] = useState<WhitelistedFarm[]>([]);
 
   useEffect(() => {
     const loadFarms = async () => {
       if (!tezos) return;
       if (!network) return;
-      if (!farmingContract) return;
+      if (!farmingStorage) return;
 
       const possibleFarms:Promise<FarmingInfoType | undefined>[] = new Array(
-        +farmingContract?.storage.farms_count.toString(),
+        +farmingStorage?.storage.farms_count.toString(),
       )
         .fill(0)
-        .map(async (x, id) => (farmingContract?.storage.farms.get(id)));
+        .map(async (x, id) => (farmingStorage?.storage.farms.get(id)));
 
       const tempFarms = await Promise.all(possibleFarms);
 
@@ -52,6 +52,9 @@ export const useFarms = () => {
             projectLink: '#',
             analyticsLink: '#',
             remaining: new Date(Date.now() + 48 * 3600000),
+            claimed: x?.claimed.toString(),
+            startTime: x?.start_time.toString(),
+            rewardPerSecond: x?.reward_per_second,
           }));
 
         setAllFarms(whitelistedFarms);
@@ -59,7 +62,7 @@ export const useFarms = () => {
     };
 
     loadFarms();
-  }, [tezos, network, farmingContract]);
+  }, [tezos, network, farmingStorage]);
 
   return allFarms;
 };

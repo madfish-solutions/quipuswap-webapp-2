@@ -1,8 +1,8 @@
-import { FoundDex } from '@quipuswap/sdk';
+import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import { BigMapAbstraction } from '@taquito/taquito';
+import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'granadanet';
 
 type QSNetworkType =
   | 'mainnet'
@@ -10,7 +10,8 @@ type QSNetworkType =
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+  | 'granadanet';
 
 export interface QSNetwork {
   id: QSNetworkType
@@ -126,6 +127,9 @@ export type WhitelistedFarm = {
   farmContract: string
   projectLink: string
   analyticsLink: string
+  claimed?: string
+  startTime?: string,
+  rewardPerSecond?: BigNumber,
 };
 
 export type WhitelistedStake = {
@@ -179,9 +183,10 @@ export type FarmingInfoType = {
   start_time: Date
   timelock: BigNumber
   upd: Date
+  claimed: BigNumber
 };
 
-export type FarmingContractInfo = {
+export type FarmingStorageInfo = {
   storage: {
     farms: BigMapAbstraction
     referrers: BigMapAbstraction
@@ -240,4 +245,13 @@ export type PoolTableType = {
       href: string,
     },
   },
+};
+
+export type SubmitType = {
+  tezos: TezosToolkit
+  fromAsset: Token
+  accountPkh: string
+  farmContract: any
+  farmId: BigNumber
+  handleErrorToast: (error:any) => void
 };

@@ -79,17 +79,17 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
-  const [farms, setFarms] = useState<WhitelistedFarm[] | undefined>();
+  const [farms, setFarms] = useState<WhitelistedFarm[]>(allFarms);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = allFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
     }
-  }, [allFarms, router.query, selectedFarming]);
+  }, [farms, router.query, selectedFarming]);
 
   useEffect(() => {
     const mergedFarms:WhitelistedFarm[] = allFarms.map((farm) => {

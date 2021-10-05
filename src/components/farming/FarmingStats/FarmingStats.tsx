@@ -1,6 +1,22 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import cx from 'classnames';
+import {
+  batchify, fromOpOpts, withTokenApprove,
+} from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
+import {
+  useAccountPkh,
+  useFarmingContract,
+  useNetwork,
+  useTezos,
+} from '@utils/dapp';
+import { SubmitType } from '@utils/types';
+import { FARM_CONTRACT } from '@utils/defaults';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useFarms } from '@hooks/useFarms';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -17,10 +33,127 @@ type FarmingStatsProps = {
   className?: string
 };
 
+const getAllHarvest = async ({
+  tezos,
+  fromAsset,
+  accountPkh,
+  farmContract,
+  handleErrorToast,
+  farmId,
+}: SubmitType) => {
+  try {
+    const farmParams = await withTokenApprove(
+      tezos,
+      fromAsset,
+      accountPkh,
+      farmContract.address,
+      0,
+      [
+        farmContract.methods
+          .harvest(farmId, accountPkh)
+          .toTransferParams(fromOpOpts(undefined, undefined)),
+      ],
+    );
+    return farmParams;
+  } catch (e) {
+    handleErrorToast(e);
+    return [];
+  }
+};
+
 export const FarmingStats: React.FC<FarmingStatsProps> = ({
   className,
 }) => {
+  const farmContract = useFarmingContract();
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const updateToast = useUpdateToast();
+  const network = useNetwork();
+  const allFarms = useFarms();
+  const { t } = useTranslation(['common']);
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common|Loading'),
+    });
+  }, [updateToast, t]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('common|Proposal submitted!'),
+    });
+  }, [updateToast, t]);
+
+  const handleHarvest = useCallback(async () => {
+    if (!tezos) {
+      updateToast({
+        type: 'error',
+        render: t('common|Tezos not loaded'),
+      });
+      return;
+    }
+    if (!farmContract) {
+      updateToast({
+        type: 'error',
+        render: t('common|Contract not loaded'),
+      });
+      return;
+    }
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    if (allFarms.length === 0) return;
+    handleLoader();
+    const harvestInfo = allFarms.map((farm) => {
+      const fromAsset = {
+        contract: FARM_CONTRACT,
+        id: new BigNumber(0),
+      };
+
+      const farmId = new BigNumber(farm.id);
+
+      return getAllHarvest({
+        tezos,
+        accountPkh,
+        fromAsset,
+        farmContract,
+        handleErrorToast,
+        farmId,
+      });
+    });
+
+    try {
+      const harvestInfoResolved = await Promise.all(harvestInfo);
+
+      const op = await batchify(
+        tezos.wallet.batch([]),
+        harvestInfoResolved.flat(),
+      ).send();
+      await op.confirmation();
+      handleSuccessToast();
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  }, [
+    tezos,
+    accountPkh,
+    network,
+    farmContract,
+    allFarms,
+  ]);
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
@@ -43,7 +176,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
           <span className={s.amount}>1,000,000.00</span>
         </div>
       </div>
-      <Button className={s.button}>Harvest All</Button>
+      <Button className={s.button} onClick={handleHarvest}>Harvest All</Button>
     </Card>
   );
 };

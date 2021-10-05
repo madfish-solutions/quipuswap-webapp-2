@@ -1,21 +1,28 @@
 import React, {
-  useContext, useState, useMemo,
+  useContext, useState, useMemo, useCallback,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { batchify, fromOpOpts, withTokenApprove } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import {
+  useFarmingContract, useTezos, useAccountPkh, useNetwork,
+} from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm, SubmitType } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
-import { WhitelistedFarm } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -72,6 +79,34 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
   return { days, hours, minutes };
 };
 
+const getHarvest = async ({
+  tezos,
+  fromAsset,
+  accountPkh,
+  farmContract,
+  handleErrorToast,
+  farmId,
+}: SubmitType) => {
+  try {
+    const farmParams = await withTokenApprove(
+      tezos,
+      fromAsset,
+      accountPkh,
+      farmContract.address,
+      0,
+      [
+        farmContract.methods
+          .harvest(farmId, accountPkh)
+          .toTransferParams(fromOpOpts(undefined, undefined)),
+      ],
+    );
+    return farmParams;
+  } catch (e) {
+    handleErrorToast(e);
+    return [];
+  }
+};
+
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
@@ -82,7 +117,15 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     remaining,
     tokenPair,
   } = farm;
+  const farmContract = useFarmingContract();
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const network = useNetwork();
+  const updateToast = useUpdateToast();
   const { t } = useTranslation(['common', 'swap']);
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
@@ -91,6 +134,84 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common|Loading'),
+    });
+  }, [updateToast, t]);
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('common|Proposal submitted!'),
+    });
+  }, [updateToast, t]);
+
+  const handleHarvest = useCallback(async () => {
+    if (!tezos) {
+      updateToast({
+        type: 'error',
+        render: t('common|Tezos not loaded'),
+      });
+      return;
+    }
+    if (!farmContract) {
+      updateToast({
+        type: 'error',
+        render: t('common|Contract not loaded'),
+      });
+      return;
+    }
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    if (!farm) return;
+
+    handleLoader();
+
+    const fromAsset = {
+      contract: FARM_CONTRACT,
+      id: new BigNumber(0),
+    };
+    const farmId = new BigNumber(farm.id);
+
+    const harvestInfo = getHarvest({
+      tezos,
+      accountPkh,
+      fromAsset,
+      farmContract,
+      handleErrorToast,
+      farmId,
+    });
+
+    try {
+      const harvestInfoResolved = await Promise.resolve(harvestInfo);
+
+      const op = await batchify(
+        tezos.wallet.batch([]),
+        harvestInfoResolved,
+      ).send();
+      await op.confirmation();
+      handleSuccessToast();
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  }, [
+    tezos,
+    accountPkh,
+    network,
+    farmContract,
+    farm,
+  ]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -161,7 +282,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               </div>
 
             </div>
-            <Button className={cx(s.statButton, s.button)}>Harvest</Button>
+            <Button className={cx(s.statButton, s.button)} onClick={handleHarvest}>
+              Harvest
+            </Button>
           </div>
         </div>
       </Card>
