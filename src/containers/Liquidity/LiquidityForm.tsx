@@ -32,6 +32,7 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   LiquidityFormValues,
   PoolShare,
+  QSMainNet,
   TokenDataMap, TokenDataType,
   WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
@@ -100,8 +101,6 @@ type LiquidityFormProps = {
 };
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
-
-type QSMainNet = 'mainnet' | 'florencenet';
 
 const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
