@@ -49,7 +49,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
       }}
       className={compoundClassName}
     >
-      <div className={s.splitRow}>
+      <div className={cx(s.splitRow, s.start)}>
         <TokensLogos
           token1={token}
         />
@@ -69,6 +69,10 @@ export const TokenCell: React.FC<TokenCellProps> = ({
 
           <span className={cx(s.caption)}>
             {getWhitelistedTokenName(token, 100)}
+          </span>
+
+          <span className={cx(s.caption)}>
+            {token.contractAddress}
           </span>
 
         </div>
