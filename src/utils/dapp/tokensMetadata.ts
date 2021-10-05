@@ -1,7 +1,5 @@
-import { QSNetwork } from '@utils/types';
-
-export const getTokenMetadata = async (network: QSNetwork, address:string, tokenId?:number) => {
-  const data = await fetch(`${network.id}/${address}/${tokenId || 0}`)
+export const getTokenMetadata = async (network: string, address:string, tokenId?:number) => {
+  const data = await fetch(`${network}/${address}/${tokenId || 0}`)
     .then((res) => res.json())
     .catch(() => (null));
 

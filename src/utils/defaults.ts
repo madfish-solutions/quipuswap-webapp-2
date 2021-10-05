@@ -18,6 +18,9 @@ export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
 export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
 export const IPFS_IO = 'https://ipfs.io/ipfs/';
+export const OPERATIONS = 'operations';
+export const TZKT_LINK_TESTNET = 'https://granadanet.tzkt.io';
+export const TZKT_LINK_MAINNET = 'https://tzkt.io';
 
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
@@ -68,14 +71,12 @@ export const STABLE_TOKEN: WhitelistedToken = {
 };
 
 export const FACTORIES = {
-  florencenet: {
+  granadanet: {
     fa1_2Factory: [
-      'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
-      'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY',
+      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
     ],
     fa2Factory: [
-      'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
-      'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
+      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
     ],
   },
   mainnet: {
@@ -96,14 +97,14 @@ export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
-export const FLORENCENET_NETWORK: QSNetwork = {
-  id: 'florencenet',
+export const GRANADA_NETWORK: QSNetwork = {
+  id: 'granadanet',
   connectType: 'default',
-  name: 'Florence Testnet',
+  name: 'Granada Testnet',
   type: 'test',
-  rpcBaseURL: 'https://testnet-tezos.giganode.io',
+  rpcBaseURL: 'https://granadanet.smartpy.io/',
   metadata: METADATA_API_TESTNET,
-  description: 'Florence testnet',
+  description: 'Granada testnet',
   disabled: false,
 };
 export const MAINNET_NETWORK: QSNetwork = {
@@ -116,7 +117,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   description: 'Tezos mainnet',
   disabled: false,
 };
-export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK];
+export const ALL_NETWORKS = [MAINNET_NETWORK, GRANADA_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
   ['florencenet', 'NetXxkAx4woPLyu'],

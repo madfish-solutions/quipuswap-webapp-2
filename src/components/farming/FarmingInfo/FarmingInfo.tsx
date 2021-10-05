@@ -5,8 +5,8 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -15,7 +15,7 @@ import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
-import { WhitelistedFarm } from '@utils/types';
+import { WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -23,8 +23,8 @@ import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
-
 import { Timeleft } from '@components/ui/Timeleft';
+
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -43,7 +43,7 @@ const TabsContent = [
 ];
 
 type FarmingInfoProps = {
-  farm:WhitelistedFarm
+  farm:WhitelistedFarmOptional
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
@@ -53,24 +53,6 @@ type FarmingInfoProps = {
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
-};
-
-const timeDiffCalc = (dateFuture:number, dateNow:number) => {
-  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-  // calculate days
-  const days = Math.floor(diffInMilliSeconds / 86400);
-  diffInMilliSeconds -= days * 86400;
-
-  // calculate hours
-  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-  diffInMilliSeconds -= hours * 3600;
-
-  // calculate minutes
-  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-  diffInMilliSeconds -= minutes * 60;
-
-  return { days, hours, minutes };
 };
 
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
@@ -84,7 +66,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   } = farm;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
@@ -110,9 +91,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               className={s.proposalHeader}
               control={
                 <Back className={s.proposalBackIcon} />
-            }
+              }
             >
-              Back to Vaults
+              {t('common|Back to Vaults')}
             </Button>
           ),
         }}
@@ -121,11 +102,13 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           <div className={s.reward}>
             <div className={s.rewardContent}>
               <span className={s.rewardHeader}>
-                Your Pending Reward
+                {t('common|Your Pending Reward')}
               </span>
               <span className={s.rewardAmount}>
                 100,000,000
-                <span className={s.rewardCurrency}>QUIPU</span>
+                <span className={s.rewardCurrency}>
+                  {t('common|QUIPU')}
+                </span>
               </span>
             </div>
             <VotingReward />
@@ -134,34 +117,31 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             <div className={s.itemsRows}>
               <div className={s.item}>
                 <header className={s.header}>
-                  Your Share
+                  {t('common|Your Share')}
                 </header>
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
-                  Your Delegate
+                  {t('common|Your Delegate')}
                 </span>
-                <Button theme="inverse" className={s.amount}>Everstake</Button>
+                <Button theme="inverse" className={s.amount}>
+                  {t('common|Everstake')}
+                </Button>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
-                  Lock ends in
+                  {t('common|Lock ends in')}
                 </span>
                 <div className={cx(s.govBlockLabel, s.amount)}>
-                  {days}
-                  <span className={s.govBlockSpan}>D</span>
-                  {' '}
-                  {hours}
-                  <span className={s.govBlockSpan}>H</span>
-                  {' '}
-                  {minutes}
-                  <span className={s.govBlockSpan}>M</span>
+                  <Timeleft remaining={remaining} />
                 </div>
               </div>
 
             </div>
-            <Button className={cx(s.statButton, s.button)}>Harvest</Button>
+            <Button className={cx(s.statButton, s.button)}>
+              {t('common|Harvest')}
+            </Button>
           </div>
         </div>
       </Card>
@@ -227,15 +207,15 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           )}
           <div className={s.tradeControls}>
             <Button theme="underlined" className={s.tradeBtn}>
-              Trade
+              {t('common|Trade')}
             </Button>
             {currentTab.id === 'stake' ? (
               <Button theme="underlined" className={s.tradeBtn}>
-                Invest
+                {t('common|Invest')}
               </Button>
             ) : (
               <Button theme="underlined" className={s.tradeBtn}>
-                Divest
+                {t('common|Divest')}
               </Button>
             )}
 
@@ -321,7 +301,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             className={s.cell}
           >
             <Button href="#" theme="underlined">
-              Bake&Bake
+              {t('common|Bake&Bake')}
             </Button>
           </CardCell>
           <CardCell
@@ -337,7 +317,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             className={s.cell}
           >
             <Button href="#" theme="underlined">
-              Everstake
+              {t('common|Everstake')}
             </Button>
           </CardCell>
           <CardCell
@@ -412,7 +392,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Pair Analytics
+              {t('common|Pair Analytics')}
             </Button>
             <Button
               className={s.detailsButton}
@@ -421,7 +401,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Farm Contract
+              {t('common|Farm Contract')}
             </Button>
           </div>
           <div className={s.detailsButtons}>
@@ -432,7 +412,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Token Contract
+              {t('common|Token Contract')}
             </Button>
             <Button
               className={s.detailsButton}
@@ -441,7 +421,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <ExternalLink className={s.linkIcon} />
               }
             >
-              Project
+              {t('common|Project')}
             </Button>
           </div>
         </Card>

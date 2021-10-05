@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { BigMapAbstraction } from '@taquito/taquito';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'granadanet';
 
 type QSNetworkType =
   | 'mainnet'
@@ -10,7 +10,8 @@ type QSNetworkType =
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+  | 'granadanet';
 
 export interface QSNetwork {
   id: QSNetworkType
@@ -118,14 +119,35 @@ export type WhitelistedFarm = {
   totalValueLocked: string
   apy: string
   daily: string
-  balance: string
-  deposit?: string
-  earned?: string
   multiplier: string
   tokenContract: string
   farmContract: string
   projectLink: string
   analyticsLink: string
+  claimed?: string
+  isLpTokenStaked: boolean
+  stakedToken: { fA2?: FA2, fA12?: string }
+};
+export type WhitelistedFarmOptional = {
+  id: number
+  remaining: Date
+  tokenPair: {
+    token1: WhitelistedToken,
+    token2?: WhitelistedToken,
+  }
+  totalValueLocked: string
+  apy: string
+  daily: string
+  multiplier: string
+  tokenContract: string
+  farmContract: string
+  projectLink: string
+  analyticsLink: string
+  claimed?: string
+  isLpTokenStaked: boolean
+  stakedToken: { fA2?: FA2, fA12?: string }
+  deposit?: string
+  earned?: string
 };
 
 export type WhitelistedStake = {
@@ -172,13 +194,14 @@ export type FarmingInfoType = {
   stake_params: {
     is_lp_staked_token: boolean,
     qs_pool: string
-    staked_token: { fA2: FA2 }
+    staked_token: { fA2?: FA2, fA12?: string }
     token: { fA2: FA2 }
   }
   staked: BigNumber
   start_time: Date
   timelock: BigNumber
   upd: Date
+  claimed: BigNumber
 };
 
 export type FarmingContractInfo = {
