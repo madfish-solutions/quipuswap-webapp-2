@@ -245,6 +245,8 @@ function useDApp() {
         .filter((farm) => !!farm) as FarmingInfoType[]
       );
 
+      console.log({clearfarms});
+
       const tokenContracts = clearfarms.map((farm) => {
         let asset:Token = { contract: '' };
 
@@ -285,6 +287,8 @@ function useDApp() {
           claimed: farm.claimed.toString(),
           isLpTokenStaked: farm.stake_params.is_lp_staked_token,
           stakedToken: farm.stake_params.staked_token,
+          startTime: farm.start_time,
+          rewardPerSecond: farm.reward_per_second,
         }));
 
         return whitelistedFarms;

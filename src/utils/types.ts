@@ -149,6 +149,8 @@ export type WhitelistedFarmOptional = {
   stakedToken: { fA2?: FA2, fA12?: string }
   deposit?: string
   earned?: string
+  startTime: Date
+  rewardPerSecond: BigNumber
 };
 
 export type WhitelistedStake = {
