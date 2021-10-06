@@ -6,16 +6,15 @@ import {
 import BigNumber from 'bignumber.js';
 
 import {
-  getContract, useAccountPkh, useNetwork, useTezos,
+  getContract, useAccountPkh, useAllFarms, useNetwork, useTezos,
 } from '@utils/dapp';
 import { FACTORIES } from '@utils/defaults';
 import { QSMainNet } from '@utils/types';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { useFarms } from '@hooks/useFarms';
 
 export const useBalance = () => {
   const tezos = useTezos();
-  const allFarms = useFarms();
+  const allFarms = useAllFarms();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const networkId:QSMainNet = useNetwork().id as QSMainNet;
@@ -25,6 +24,8 @@ export const useBalance = () => {
     const loadBalance = async () => {
       if (!tezos) return;
       if (!accountPkh) return;
+      if (!allFarms) return;
+
       const dexs = allFarms.map((farm) => {
         let asset:Token = { contract: '' };
 

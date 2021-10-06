@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 
@@ -50,6 +51,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     projectLink,
     analyticsLink,
   } = farm;
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [deposit, setDeposit] = useState<BigNumber>();
   const [earned, setEarned] = useState<BigNumber>();
@@ -93,23 +95,23 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {' '}
             /
             {' '}
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
+            {tokenPair.token2 && getWhitelistedTokenSymbol(tokenPair.token2)}
           </h3>
           <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
 
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>
           <Button className={s.link} href={tokenContract} theme="underlined">
-            Token Contract
+            {t('common|Token Contract')}
           </Button>
           <Button className={s.link} href={farmContract} theme="underlined">
-            Farm Contract
+            {t('common|Farm Contract')}
           </Button>
           <Button className={s.link} href={projectLink} theme="underlined">
-            Project Link
+            {t('common|Project Link')}
           </Button>
           <Button className={s.link} href={analyticsLink} theme="underlined">
-            Analytics
+            {t('common|Analytics')}
           </Button>
         </div>
 
@@ -120,7 +122,10 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
 
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>TVL</div>
+
+          <div className={s.detailsHeader}>
+            {t('common|TVL')}
+          </div>
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
@@ -129,7 +134,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>
-            APY
+            {t('common|APY')}
             {' '}
             <Button theme="quaternary" className={s.apyIcon} onClick={openModal}>
               <APY />
@@ -140,19 +145,25 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           </div>
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>Daily</div>
+          <div className={s.detailsHeader}>
+            {t('common|Daily')}
+          </div>
           <div className={s.detailsValue}>
             {daily}
           </div>
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>Balance</div>
+          <div className={s.detailsHeader}>
+            {t('common|Balance')}
+          </div>
           <div className={s.detailsValue}>
             <FarmingUserMoney money={balance?.toString()} />
           </div>
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>Deposit</div>
+          <div className={s.detailsHeader}>
+            {t('common|Deposit')}
+          </div>
           <div className={s.detailsValue}>
             <FarmingUserMoney money={deposit?.toString()} />
           </div>
@@ -166,27 +177,28 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={cx(s.links, s.onlyMobile)}>
           <div className={s.link}>
             <Button href={tokenContract} theme="underlined">
-              Token Contract
+              {t('common|Token Contract')}
             </Button>
           </div>
           <div className={s.link}>
             <Button href={farmContract} theme="underlined">
-              Farm Contract
+              {t('common|Farm Contract')}
             </Button>
           </div>
           <div className={s.link}>
             <Button href={projectLink} theme="underlined">
-              Project Link
+              {t('common|Project Link')}
             </Button>
           </div>
           <div className={s.link}>
             <Button href={analyticsLink} theme="underlined">
-              Analytics
+              {t('common|Analytics')}
             </Button>
           </div>
         </div>
-        <Button href={`/farm/${id}`} className={s.button}>Select</Button>
-
+        <Button href={`/farm/${id}`} className={s.button}>
+          {t('common|Select')}
+        </Button>
       </div>
     </Card>
   );

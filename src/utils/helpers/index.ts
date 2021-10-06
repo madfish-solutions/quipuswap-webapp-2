@@ -34,3 +34,4 @@ export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
 export * from './getWhitelistedTokenAddress';
+export * from './sortFarms';

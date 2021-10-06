@@ -1,6 +1,6 @@
-import { FoundDex } from '@quipuswap/sdk';
+import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import { BigMapAbstraction } from '@taquito/taquito';
+import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
 
 export type QSMainNet = 'mainnet' | 'granadanet';
 
@@ -144,6 +144,7 @@ export type WhitelistedFarm = {
   isLpTokenStaked: boolean
   stakedToken: { fA2?: FA2, fA12?: string }
 };
+
 export type WhitelistedFarmOptional = {
   id: number
   remaining: Date
@@ -164,6 +165,8 @@ export type WhitelistedFarmOptional = {
   stakedToken: { fA2?: FA2, fA12?: string }
   deposit?: string
   earned?: string
+  startTime: Date
+  rewardPerSecond: BigNumber
 };
 
 export type WhitelistedStake = {
@@ -220,7 +223,7 @@ export type FarmingInfoType = {
   claimed: BigNumber
 };
 
-export type FarmingContractInfo = {
+export type FarmingStorageInfo = {
   storage: {
     farms: BigMapAbstraction
     referrers: BigMapAbstraction
@@ -279,4 +282,13 @@ export type PoolTableType = {
       href: string,
     },
   },
+};
+
+export type SubmitType = {
+  tezos: TezosToolkit
+  fromAsset: Token
+  accountPkh: string
+  farmContract: any
+  farmId: BigNumber
+  handleErrorToast: (error:any) => void
 };
