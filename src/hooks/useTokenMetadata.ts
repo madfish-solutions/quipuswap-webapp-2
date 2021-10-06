@@ -49,8 +49,6 @@ export const useTokenMetadata = () => {
       if (!network) return;
       if (!allFarms) return;
 
-      console.log({ allFarms });
-
       const dexs:Promise<FoundDex>[] = allFarms.map((farm) => {
         let asset:Token = { contract: '' };
 
@@ -72,13 +70,9 @@ export const useTokenMetadata = () => {
         return findDex(tezos, FACTORIES[network.id as QSMainNet], asset);
       });
       const dexbufsArr = await Promise.all<FoundDex>(dexs);
-      const tokenMetadata = dexbufsArr.map((dexbuf) => {
-        if (dexbuf?.storage?.token_address && dexbuf?.storage?.token_id) {
-          return searchPart(dexbuf.storage.token_address, dexbuf.storage.token_id);
-        }
-
-        return TEZOS_TOKEN;
-      });
+      const tokenMetadata = dexbufsArr.map((dexbuf) => (
+        searchPart(dexbuf.storage.token_address, dexbuf.storage.token_id)
+      ));
       const tokenMetadataResolved = await Promise.all(tokenMetadata);
 
       for (let i = 0; i < tokenMetadataResolved.length; i++) {

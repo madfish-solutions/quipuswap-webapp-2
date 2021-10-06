@@ -93,8 +93,10 @@ export const Farm: React.FC<FarmProps> = () => {
   ))), [search, sortedFarms]);
 
   const switchedFarms = useMemo(() => filteredFarms.filter((farm) => (
-    parseInt(farm.deposit ?? '0', 10) > 0)
-  ), [filteredFarms]);
+    isSwitcherActive
+      ? parseInt(farm.deposit ?? '0', 10) > 0
+      : farm
+  )), [filteredFarms, isSwitcherActive]);
 
   useEffect(() => {
     if (router.query.slug) {
@@ -131,10 +133,8 @@ export const Farm: React.FC<FarmProps> = () => {
     setSort(selectedSort.id);
   }, []);
 
-  const handleChangeSwitcher = useCallback(
-    () => setIsSwitcherActive(!isSwitcherActive),
-    [isSwitcherActive],
-  );
+  const handleChangeSwitcher = useCallback(() => setIsSwitcherActive(!isSwitcherActive),
+    [isSwitcherActive]);
 
   if (selectedFarming) {
     // TODO
