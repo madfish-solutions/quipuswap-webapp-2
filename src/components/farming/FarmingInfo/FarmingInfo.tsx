@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { batchify, fromOpOpts, withTokenApprove } from '@quipuswap/sdk';
+import { batchify } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -15,7 +15,8 @@ import {
 } from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedFarm, SubmitType, WhitelistedFarmOptional } from '@utils/types';
+import { getHarvest } from '@utils/helpers/getHarvest';
+import { WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -60,34 +61,6 @@ type FarmingInfoProps = {
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
-};
-
-const getHarvest = async ({
-  tezos,
-  fromAsset,
-  accountPkh,
-  farmContract,
-  handleErrorToast,
-  farmId,
-}: SubmitType) => {
-  try {
-    const farmParams = await withTokenApprove(
-      tezos,
-      fromAsset,
-      accountPkh,
-      farmContract.address,
-      0,
-      [
-        farmContract.methods
-          .harvest(farmId, accountPkh)
-          .toTransferParams(fromOpOpts(undefined, undefined)),
-      ],
-    );
-    return farmParams;
-  } catch (e) {
-    handleErrorToast(e);
-    return [];
-  }
 };
 
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
