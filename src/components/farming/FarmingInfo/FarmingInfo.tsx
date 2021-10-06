@@ -315,8 +315,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             save={() => {}}
             remaining={remaining}
             amount={amount}
-            token1={tokenPair.token1}
-            token2={tokenPair.token2}
+            tokenPair={tokenPair}
           />
         )}
       />

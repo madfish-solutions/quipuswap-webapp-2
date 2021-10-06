@@ -12,6 +12,7 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
 import BigNumber from 'bignumber.js';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
@@ -19,6 +20,7 @@ type ComplexInputProps = {
   balance?: string
   exchangeRate?: string
   label: string
+  balanceLabel?: string
   error?: string
   onClick?: () => void
   token1: WhitelistedToken
@@ -31,6 +33,7 @@ type ComplexInputProps = {
 const modeClass = {
   input: s.inputMode,
   select: s.selectMode,
+  farm: s.selectMode,
   votes: s.votesMode,
 };
 
@@ -54,6 +57,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   token1,
   token2,
   decimals = 6,
+  balanceLabel,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -117,7 +121,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>
-                {t('common|Total Balance')}
+                {balanceLabel || t('common|Total Balance')}
                 :
               </div>
               <div className={cx(s.label2, s.price)}>
@@ -145,9 +149,10 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             <h6 className={cx(s.token)}>
               {mode === 'input' && getWhitelistedTokenSymbol(token1)}
               {mode === 'select' && 'TOKEN / TOKEN'}
+              {mode === 'farm' && `${getWhitelistedTokenSymbol(token1)} / ${getWhitelistedTokenSymbol(token2 ?? TEZOS_TOKEN)}`}
               {mode === 'votes' && 'SELECT LP'}
             </h6>
-            {!readOnly && (<Shevron />)}
+            {(!readOnly || mode !== 'farm') && (<Shevron />)}
           </Button>
         </div>
       </div>

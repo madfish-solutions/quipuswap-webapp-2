@@ -108,18 +108,8 @@ export type LiquidityFormValues = {
 
 export type FarmingFormValues = {
   switcher: boolean
-  balance1: BigNumber
-  balance2: BigNumber
   balance3: BigNumber
-  balanceA: BigNumber
-  balanceB: BigNumber
-  balanceTotalA: BigNumber
-  balanceTotalB: BigNumber
-  lpBalance: BigNumber
-  frozenBalance: BigNumber
-  lastChange: string
-  estimateLP: BigNumber
-  slippage: string
+  selectedBaker: string
 };
 
 export type PoolShare = {

@@ -71,21 +71,10 @@ export const useTokenMetadata = () => {
         return findDex(tezos, FACTORIES[network.id as QSMainNet], asset);
       });
       const dexbufsArr = await Promise.all<ContractAbstraction<ContractProvider> | FoundDex>(dexs);
-      const tokenMetadata = dexbufsArr.map((dexbuf) => (
+      const tokenMetadata = dexbufsArr.filter((x) => x.storage).map((dexbuf) => (
         searchPart(dexbuf.storage.token_address, dexbuf.storage.token_id)
       ));
       const tokenMetadataResolved = await Promise.all(tokenMetadata);
-
-      for (let i = 0; i < tokenMetadataResolved.length; i++) {
-        if (tokenMetadataResolved[i].metadata.name === 'Quipuswap Governance Token') {
-          tokenMetadataResolved[i].metadata.thumbnailUri = 'https://quipuswap.com/tokens/quipu.png';
-        } else {
-          tokenMetadataResolved[i].metadata.thumbnailUri = `https://ipfs.io/ipfs/${
-            tokenMetadataResolved[i].metadata.thumbnailUri.slice(7)
-          }`;
-        }
-      }
-
       setTokensMetadata(tokenMetadataResolved);
     };
 
