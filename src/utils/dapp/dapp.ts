@@ -243,7 +243,7 @@ function useDApp() {
     if (tempFarms) {
       const clearfarms = (tempFarms
         .filter((farm) => !!farm) as FarmingInfoType[]
-      );
+      ).slice(0, 3);
 
       const tokenContracts = clearfarms.map((farm) => {
         let asset:Token = { contract: '' };
