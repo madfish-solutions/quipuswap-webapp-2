@@ -48,7 +48,6 @@ import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
 import { getContract, getStorageInfo } from '@utils/dapp/getStorageInfo';
-import { prettyPrice } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -272,7 +271,7 @@ function useDApp() {
       if (tokenContractsResolved) {
         const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms.map((farm, id) => ({
           id,
-          totalValueLocked: prettyPrice(Number(farm?.staked)),
+          totalValueLocked: farm?.staked,
           tokenPair: fallbackPair,
           apy: '888%',
           daily: '0.008%',
@@ -282,7 +281,7 @@ function useDApp() {
           projectLink: '#',
           analyticsLink: '#',
           remaining: new Date(Date.now() + 48 * 3600000),
-          claimed: farm.claimed.toString(),
+          claimed: farm.claimed,
           isLpTokenStaked: farm.stake_params.is_lp_staked_token,
           stakedToken: farm.stake_params.staked_token,
           startTime: farm.start_time,

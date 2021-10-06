@@ -88,12 +88,20 @@
 .desktop
   display: none
 
+.currency
+  margin-right: 4px
+
 .light
+  .currency
+    color: $text-01
   \:global(.customSelect__control)
     background: inherit
   \:global(.customSelect__single-value)
     color: $hover-primary-01-fallback
+
 .dark
+  .currency
+    color: $text-inverse
   \:global(.customSelect__control)
     background: inherit
   \:global(.customSelect__single-value)

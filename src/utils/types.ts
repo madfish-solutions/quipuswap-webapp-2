@@ -136,7 +136,7 @@ export type WhitelistedFarmOptional = {
     token1: WhitelistedToken,
     token2?: WhitelistedToken,
   }
-  totalValueLocked: string
+  totalValueLocked: BigNumber
   apy: string
   daily: string
   multiplier: string
@@ -144,7 +144,7 @@ export type WhitelistedFarmOptional = {
   farmContract: string
   projectLink: string
   analyticsLink: string
-  claimed?: string
+  claimed: BigNumber
   isLpTokenStaked: boolean
   stakedToken: { fA2?: FA2, fA12?: string }
   deposit?: string
