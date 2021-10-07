@@ -560,8 +560,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 
   const field1Validator = useMemo(() => {
     if (values.switcher) {
-      return composeValidators(validateRebalance(localSwap.toString(), localInvest.toString()),
-        () => (new BigNumber(values.balance1).eq(0) && new BigNumber(values.balance2).eq(0) ? t('liquidity|Value has to be a greater than zero') : undefined));
+      return composeValidators(
+        validateRebalance(localSwap.toString(), localInvest.toString()),
+        () => (new BigNumber(values.balance1).eq(0) && new BigNumber(values.balance2).eq(0) ? t('liquidity|Value has to be a greater than zero') : undefined),
+      );
     }
     return validateMinMax(0, Infinity);
   }, [values.switcher, localSwap, localInvest, t, values.balance1, values.balance2]);

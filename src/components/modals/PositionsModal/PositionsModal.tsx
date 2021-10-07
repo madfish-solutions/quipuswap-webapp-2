@@ -320,7 +320,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               );
             }}
           </Field>
-          {isEmptyTokens && !searchLoading && (
+          {isEmptyTokens && !searchLoading && (!values.token1 && !values.token2) && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
               <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>

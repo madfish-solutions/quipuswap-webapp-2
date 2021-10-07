@@ -19,6 +19,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
+import { Skeleton } from '@components/ui/Skeleton';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair
@@ -86,6 +87,19 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
 
   const pairLink = useMemo(() => (tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`), [tokenPair.dex]);
 
+  const DexLoader = !dex ? <Skeleton className={s.currency2} /> : '-';
+
+  const MyCandidateButton = myCandidate ? (
+    <Button
+      href={`https://tzkt.io/${myCandidate.address}`}
+      external
+      theme="underlined"
+      title={getWhitelistedBakerName(myCandidate)}
+    >
+      {getWhitelistedBakerName(myCandidate)}
+    </Button>
+  ) : DexLoader;
+
   return (
     <Card
       header={{
@@ -114,7 +128,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           >
             {getWhitelistedBakerName(currentCandidate)}
           </Button>
-        ) : '—'}
+        ) : DexLoader}
       </CardCell>
       <CardCell
         header={(
@@ -128,7 +142,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             )}
         className={cx(s.cellCenter, s.cell)}
       >
-        {secondCandidate ? (
+        {secondCandidate && dex ? (
           <Button
             href={`https://tzkt.io/${secondCandidate.address}`}
             external
@@ -137,7 +151,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           >
             {getWhitelistedBakerName(secondCandidate)}
           </Button>
-        ) : '—'}
+        ) : DexLoader}
       </CardCell>
       <CardCell
         header={(
@@ -151,7 +165,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             )}
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={totalVotes} />
+        {dex ? (<CurrencyAmount amount={totalVotes} />) : <Skeleton className={s.currency2} />}
       </CardCell>
       <CardCell
         header={(
@@ -165,7 +179,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             )}
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={totalVeto} />
+        {dex ? (<CurrencyAmount amount={totalVeto} />) : <Skeleton className={s.currency2} />}
       </CardCell>
       <CardCell
         header={(
@@ -179,16 +193,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
         className={cx(s.cellCenter, s.cell)}
       >
-        {myCandidate ? (
-          <Button
-            href={`https://tzkt.io/${myCandidate.address}`}
-            external
-            theme="underlined"
-            title={getWhitelistedBakerName(myCandidate)}
-          >
-            {getWhitelistedBakerName(myCandidate)}
-          </Button>
-        ) : '—'}
+        {MyCandidateButton}
       </CardCell>
       <CardCell
         header={(
@@ -202,20 +207,20 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
             )}
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={votesToVeto} />
+        {dex ? (<CurrencyAmount amount={votesToVeto} />) : <Skeleton className={s.currency2} />}
       </CardCell>
-      {tokenPair.dex && (
-      <div className={s.detailsButtons}>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={pairLink}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {t('vote|Pair Analytics')}
-        </Button>
-        {/* <Button
+      {tokenPair.dex ? (
+        <div className={s.detailsButtons}>
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={pairLink}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {t('vote|Pair Analytics')}
+          </Button>
+          {/* <Button
           className={s.detailsButton}
           theme="inverse"
           href="#"
@@ -223,8 +228,8 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         >
           Delegation Analytics
         </Button> */}
-      </div>
-      )}
+        </div>
+      ) : <Skeleton className={s.currency2} />}
     </Card>
   );
 };

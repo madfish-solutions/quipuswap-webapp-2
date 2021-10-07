@@ -64,7 +64,7 @@ type VotingFormProps = {
   rewards: string,
   setRewards: (reward: string) => void,
   dex?: FoundDex,
-  setDex: (dex:FoundDex) => void,
+  setDex: (dex:FoundDex | undefined) => void,
   voter?: VoterType,
   setVoter: (voter: any) => void,
   setTokens: (tokens: WhitelistedToken[]) => void,
@@ -133,6 +133,7 @@ const RealForm:React.FC<VotingFormProps> = ({
       };
       const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
       if (isAssetSame) return;
+      setDex(undefined);
       const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
       if (tempDex && tempDex !== dex) {
         setDex(tempDex);
