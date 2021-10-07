@@ -126,7 +126,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
           <div className={s.detailsValue}>
-            {apy}
+            {apy.toString()}
           </div>
         </div>
         <div className={s.detailsBlock}>
