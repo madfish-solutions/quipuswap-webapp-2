@@ -3,9 +3,14 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { WhitelistedTokenList } from '@utils/types';
+import { shortize } from '@utils/helpers';
+import { MAINNET_TOKENS, TESTNET_TOKENS } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Switcher } from '@components/ui/Switcher';
 import { ListLogo } from '@components/ui/ListLogo';
+import { Button } from '@components/ui/Button';
+import { DeleteList } from '@components/svg/DeleteList';
+import { WarnList } from '@components/svg/WarnList';
 
 import s from './ModalCell.module.sass';
 
@@ -14,6 +19,7 @@ type ChooseListCellProps = {
   isActive: boolean,
   onChange?: (state:boolean) => void
   tabIndex?: number
+  onRemove?: () => void
 };
 
 const modeClass = {
@@ -26,7 +32,9 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   isActive,
   onChange = () => {},
   tabIndex,
+  onRemove = () => {},
 }) => {
+  const initialList = [...(TESTNET_TOKENS.split(' ')), ...(MAINNET_TOKENS.split(' '))];
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation('common');
   return (
@@ -37,7 +45,7 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
         />
         <div className={s.mleft8}>
           <h6>
-            {tokenList?.name}
+            {tokenList?.name.length > 20 ? shortize(tokenList?.name, 20) : tokenList?.name}
           </h6>
           <span className={s.caption}>
             {t('common|Tokens Count')}
@@ -48,10 +56,21 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
         </div>
       </div>
 
-      <Switcher
-        isActive={isActive}
-        onChange={onChange}
-      />
+      {tokenList.error && !initialList.some((list) => list === tokenList.url) ? (
+        <div className={s.joinRow}>
+          <Button theme="quaternary" onClick={onRemove}>
+            <DeleteList />
+          </Button>
+          <Button className={s.mleft8} theme="quaternary">
+            <WarnList />
+          </Button>
+        </div>
+      ) : (
+        <Switcher
+          isActive={isActive}
+          onChange={onChange}
+        />
+      )}
     </div>
   );
 };

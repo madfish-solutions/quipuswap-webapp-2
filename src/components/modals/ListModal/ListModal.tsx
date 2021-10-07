@@ -9,10 +9,10 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import {
   useTezos,
   useToggleList,
-  useNetwork,
   useLists,
   useSearchLists,
   useSearchCustomLists,
+  useRemoveList,
 } from '@utils/dapp';
 import {
   localSearchList,
@@ -117,8 +117,8 @@ export const ListModal: React.FC<ListModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const toggle = useToggleList();
+  const removeList = useRemoveList();
   const tezos = useTezos();
-  const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: lists, loading: listsLoading } = useLists();
   const { data: searchLists, loading: searchLoading } = useSearchLists();
@@ -129,7 +129,7 @@ export const ListModal: React.FC<ListModalProps> = ({
     setInputValue(values.search ?? '');
   };
 
-  const handleTokenSearch = useCallback(() => {
+  const handleListSearch = useCallback(() => {
     if (!tezos) return;
     const isList = lists
       .filter(
@@ -142,7 +142,7 @@ export const ListModal: React.FC<ListModalProps> = ({
     if (inputValue.length > 0 && isList.length === 0) {
       searchCustomList(inputValue);
     }
-  }, [inputValue, network, tezos, searchCustomList, lists]);
+  }, [inputValue, tezos, searchCustomList, lists]);
 
   const isEmptyLists = useMemo(
     () => filteredLists.length === 0
@@ -150,11 +150,11 @@ export const ListModal: React.FC<ListModalProps> = ({
     [searchLists, filteredLists],
   );
 
-  useEffect(() => handleTokenSearch(), [
+  useEffect(() => handleListSearch(), [
     lists,
     inputValue,
-    network,
-    handleTokenSearch,
+    tezos,
+    handleListSearch,
   ]);
 
   const allLists = useMemo(() => (
@@ -212,6 +212,7 @@ export const ListModal: React.FC<ListModalProps> = ({
                 onChange={() => {
                   toggle(url);
                 }}
+                onRemove={() => removeList(url)}
               />
             );
           })}

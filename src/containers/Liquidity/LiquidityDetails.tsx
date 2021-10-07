@@ -70,12 +70,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         header={(
           <>
             {t('common|Sell Price')}
-            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
-            )}
           </>
           )}
         className={s.cell}
@@ -96,12 +94,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         header={(
           <>
             {t('common|Buy Price')}
-            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.', { tokenAName, tokenBName })}
             />
-            )}
           </>
           )}
         className={s.cell}
@@ -122,12 +118,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         header={(
           <>
             {t('liquidity|{{tokenAName}} Locked', { tokenAName })}
-            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenAName })}
             />
-            )}
           </>
       )}
         className={s.cell}
@@ -143,12 +137,10 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         header={(
           <>
             {t('liquidity|{{tokenBName}} Locked', { tokenBName })}
-            {!loading && (
             <Tooltip
               sizeT="small"
               content={t('liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.', { tokenBName })}
             />
-            )}
           </>
       )}
         className={s.cell}

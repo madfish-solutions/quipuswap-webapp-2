@@ -328,7 +328,10 @@ const RealForm:React.FC<SwapFormProps> = ({
     [token1, token2],
   );
   let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
-  if (token1.contractAddress !== TEZOS_TOKEN.contractAddress && values.balance1) {
+  if (token1.contractAddress !== TEZOS_TOKEN.contractAddress
+    && values.balance1
+    && dex
+    && dex.storage) {
     feeVal = fromDecimals(estimateTokenToTez(
       dex.storage,
       toDecimals(new BigNumber(values.balance1), token1.metadata.decimals),

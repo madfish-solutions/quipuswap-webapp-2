@@ -33,7 +33,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
-import { getLists, saveCustomList } from './lists';
+import { getLists, removeCustomList, saveCustomList } from './lists';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -269,21 +269,25 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getListsData = useCallback(() => getLists(network), [network]);
-  const {
-    data: listsData,
-  } = useSWR(
-    ['lists-initial-data', network],
-    getListsData,
-  );
+  const getListsData = useCallback(() => getLists(network, setState), [network]);
+  // const {
+  //   data: listsData,
+  // } = useSWR(
+  //   ['lists-initial-data', network],
+  //   getListsData,
+  // );
+
+  // useEffect(() => {
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     lists: { loading: !listsData, data: listsData ?? [] },
+  //     tokens: { loading: false, data: findTokensByList(listsData ?? []) },
+  //   }));
+  // }, [listsData]);
 
   useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      lists: { loading: !listsData, data: listsData ?? [] },
-      tokens: { loading: false, data: findTokensByList(listsData ?? []) },
-    }));
-  }, [listsData]);
+    getListsData();
+  }, [network, getListsData]);
 
   const toggleList = useCallback((url:string) => {
     let isEnabled = false;
@@ -299,6 +303,19 @@ function useDApp() {
         return (x.url === url ? ({ ...x, enabled: isEnabled }) : x);
       });
     saveCustomList({ key: url, val: isEnabled });
+
+    setState((prevState) => ({
+      ...prevState,
+      lists: { loading: false, data: newData },
+      tokens: { loading: false, data: findTokensByList(newData) },
+      searchLists: { loading: false, data: [] },
+    }));
+  }, [lists, searchLists]);
+
+  const removeList = useCallback((url:string) => {
+    const newData = (lists.data ?? [])
+      .filter((x:WhitelistedTokenList) => x.url !== url);
+    removeCustomList(url);
 
     setState((prevState) => ({
       ...prevState,
@@ -586,6 +603,7 @@ function useDApp() {
     bakers,
     searchBakers,
     toggleList,
+    removeList,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
@@ -614,6 +632,7 @@ export const [
   useBakers,
   useSearchBakers,
   useToggleList,
+  useRemoveList,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
@@ -639,6 +658,7 @@ export const [
   (v) => v.bakers,
   (v) => v.searchBakers,
   (v) => v.toggleList,
+  (v) => v.removeList,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
