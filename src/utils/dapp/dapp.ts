@@ -270,21 +270,6 @@ function useDApp() {
   }, [setFallbackState, templeInitialAvailable]);
 
   const getListsData = useCallback(() => getLists(network, setState), [network]);
-  // const {
-  //   data: listsData,
-  // } = useSWR(
-  //   ['lists-initial-data', network],
-  //   getListsData,
-  // );
-
-  // useEffect(() => {
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     lists: { loading: !listsData, data: listsData ?? [] },
-  //     tokens: { loading: false, data: findTokensByList(listsData ?? []) },
-  //   }));
-  // }, [listsData]);
-
   useEffect(() => {
     getListsData();
   }, [network, getListsData]);
