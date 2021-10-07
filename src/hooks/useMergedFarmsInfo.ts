@@ -11,6 +11,7 @@ export const useMergedFarmsInfo = () => {
   const tokenMetadata = useTokenMetadata();
   const userInfoInAllFarms = useUserInfoInAllFarms();
   const [farms, setFarms] = useState(allFarms);
+  const [isFarmsLoaded, setFarmsLoaded] = useState(false);
 
   useEffect(() => {
     const mergeFarmsInfo = async () => {
@@ -37,10 +38,11 @@ export const useMergedFarmsInfo = () => {
       });
 
       setFarms(mergedFarms);
+      setFarmsLoaded(true);
     };
 
     mergeFarmsInfo();
   }, [allFarms, tokenMetadata, userInfoInAllFarms]);
 
-  return farms;
+  return { farms, isFarmsLoaded };
 };
