@@ -166,7 +166,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
               Your Pending QNOTs
             </span>
             <span className={s.rewardAmount}>
-              {pending && prettyPrice(+pending?.toString(), 2).slice(0, -1)}
+              {pending && prettyPrice(Number(pending), 2).slice(0, -1)}
             </span>
           </div>
           <VotingReward />

@@ -25,8 +25,8 @@ export const useMergedFarmsInfo = () => {
         let deposit = '0'; let
           earned = '0';
         if (userInfoInAllFarms) {
-          deposit = prettyPrice(Number(userInfoInAllFarms[farm.id]?.staked));
-          earned = prettyPrice(Number(userInfoInAllFarms[farm.id]?.earned));
+          deposit = prettyPrice(Number(userInfoInAllFarms[farm.id].staked));
+          earned = prettyPrice(Number(userInfoInAllFarms[farm.id].earned));
         }
         return {
           ...farm,
