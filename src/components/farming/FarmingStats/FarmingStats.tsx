@@ -22,6 +22,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { prettyPrice } from '@utils/helpers';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -31,6 +32,7 @@ const modeClass = {
 
 type FarmingStatsProps = {
   className?: string
+  pending?: BigNumber
 };
 
 const getAllHarvest = async ({
@@ -62,7 +64,7 @@ const getAllHarvest = async ({
 };
 
 export const FarmingStats: React.FC<FarmingStatsProps> = ({
-  className,
+  className, pending,
 }) => {
   const allFarms = useAllFarms();
   const farmContract = useFarmingContract();
@@ -164,7 +166,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
               Your Pending QNOTs
             </span>
             <span className={s.rewardAmount}>
-              100,000,000
+              {pending && prettyPrice(+pending?.toString(), 2).slice(0, -1)}
             </span>
           </div>
           <VotingReward />

@@ -12,6 +12,7 @@ import { WhitelistedFarmOptional } from '@utils/types';
 import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -77,6 +78,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const mergedFarms = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
+  const userInfoInAllFarms = useUserInfoInAllFarms();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
   const { t } = useTranslation(['common']);
@@ -84,6 +86,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [search, setSearch] = useState('');
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [pending, setPending] = useState<BigNumber>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -107,6 +110,18 @@ export const Farm: React.FC<FarmProps> = () => {
       }
     }
   }, [router.query, filteredFarms]);
+
+  useEffect(() => {
+    if (userInfoInAllFarms) {
+      let earned:BigNumber = new BigNumber(0);
+
+      for (let index = 0; index < Object.keys(userInfoInAllFarms).length; index++) {
+        earned = earned.plus(userInfoInAllFarms[index].earned ?? 0);
+      }
+
+      setPending(earned);
+    }
+  }, [userInfoInAllFarms]);
 
   useEffect(() => {
     let totalValueLocked:BigNumber = new BigNumber(0);
@@ -210,7 +225,7 @@ export const Farm: React.FC<FarmProps> = () => {
           ))}
         </SliderUI>
       </Card>
-      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} />
+      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} pending={pending} />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
