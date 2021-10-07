@@ -42,10 +42,10 @@ const themeClass = {
 
 export const PositionSelect: React.FC<PositionSelectProps> = ({
   className,
-  balance = '10.00',
-  totalBalance = '10.00',
+  balance = '0',
+  totalBalance = '0',
   noBalanceButtons = false,
-  frozenBalance = '10.00',
+  frozenBalance = '0',
   label,
   balanceLabel,
   handleBalance,

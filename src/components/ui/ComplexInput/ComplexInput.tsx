@@ -41,7 +41,7 @@ const themeClass = {
 
 export const ComplexInput: React.FC<ComplexInputProps> = ({
   className,
-  balance = '10.00',
+  balance = '0',
   label,
   handleBalance,
   exchangeRate = null,
