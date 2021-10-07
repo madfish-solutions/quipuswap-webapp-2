@@ -20,8 +20,10 @@
 .header, .date
   margin-top: 0
   font-weight: 500
-  line-height: 1.6
-  font-size: 0.714rem
+  line-height: 1.33
+  font-size: 0.857rem
+
+.header
   color: $text-03
 
 .date
@@ -42,6 +44,8 @@
   margin-left: 24px
 
 .light
+  .date
+    color: $text-02
   .value
     color: $text-01
   &.info
@@ -49,6 +53,8 @@
     border-bottom: 1px solid $ui-03
 
 .dark
+  .date
+    color: $text-03
   .value
     color: $text-inverse
   &.info

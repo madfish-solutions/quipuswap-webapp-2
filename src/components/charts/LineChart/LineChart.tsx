@@ -41,6 +41,39 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
+const formatDate = (date: Date) => {
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const dt = date.getDate();
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  let ampm = 'AM';
+
+  let monString = `${minutes}`;
+  let dayString = `${dt}`;
+  let minString = `${minutes}`;
+
+  if (month < 10) {
+    monString = `0${month}`;
+  }
+  if (dt < 10) {
+    dayString = `0${dt}`;
+  }
+  if (hours >= 12) {
+    ampm = 'PM';
+    hours -= 12;
+  }
+  let hourString = `${hours}`;
+  if (hours < 10) {
+    hourString = `0${hours}`;
+  }
+  if (minutes < 10) {
+    minString = `0${minutes}`;
+  }
+  // dd.mm.yyyy HH:MM PM
+  return `${dayString}.${monString}.${year} ${hourString}:${minString} ${ampm}`;
+};
+
 const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   data,
 }) => {
@@ -179,7 +212,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
           {t('common|Total liquidity:')}
         </h4>
         <span className={s.date}>
-          {new Date(value.time * 1000).toISOString()}
+          {formatDate(new Date(value.time * 1000))}
         </span>
         <h4 className={s.value}>
           <span className={s.dollar}>
