@@ -126,7 +126,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        {loading ? <Skeleton className={s.currency2} /> : (
+        {loading || !dex ? <Skeleton className={s.currency2} /> : (
           <CurrencyAmount
             amount={balanceTotalA}
             currency={tokenAName}
@@ -145,7 +145,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       )}
         className={s.cell}
       >
-        {loading ? <Skeleton className={s.currency2} /> : (
+        {loading || !dex ? <Skeleton className={s.currency2} /> : (
           <CurrencyAmount
             amount={balanceTotalB}
             currency={tokenBName}
