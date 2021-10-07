@@ -31,9 +31,10 @@ export const LoadingTokenCell: React.FC<{}> = () => {
           <div className={s.joinRow}>
             <Skeleton className={s.loadingSymbol} />
             <Skeleton className={s.loadingBage} />
+            <Skeleton className={s.loadingBage} />
           </div>
           <Skeleton className={s.loadingName} />
-          <Skeleton className={s.loadingName} />
+          <Skeleton className={s.loadingContract} />
         </div>
       </div>
     </div>
