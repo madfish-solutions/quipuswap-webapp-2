@@ -83,7 +83,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<WhitelistedFarmOptional>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -165,7 +165,11 @@ export const Farm: React.FC<FarmProps> = () => {
   }
   return (
     <>
-      <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
+      <ApyModal
+        isOpen={!!modalOpen}
+        close={() => setModalOpen(undefined)}
+        farm={modalOpen}
+      />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
         contentClassName={cx(s.farmingStats)}
@@ -248,7 +252,7 @@ export const Farm: React.FC<FarmProps> = () => {
         <FarmingCard
           key={x.id}
           farm={x}
-          openModal={() => setModalOpen(true)}
+          openModal={() => setModalOpen(x)}
         />
       ))}
     </>

@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WhitelistedFarmOptional } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
 
 import s from './ApyModal.module.sass';
@@ -12,7 +13,11 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpen, close }) => {
+export const ApyModal: React.FC<{
+  isOpen:boolean,
+  close:() => void,
+  farm?:WhitelistedFarmOptional
+}> = ({ isOpen, close, farm }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
@@ -26,9 +31,7 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
       <div className={s.header}>
         <div>APR</div>
         <div className={s.headerPercentage}>
-          <span className={s.headerBold}>52.99</span>
-          {' '}
-          %
+          <span className={s.headerBold}>{farm?.apy}</span>
         </div>
       </div>
       <table className={s.table}>
@@ -51,10 +54,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1D
             </td>
             <td>
-              0.14%
+              {farm?.daily}
             </td>
             <td>
-              0.08
+              {farm?.daily && 1000 * parseFloat(farm?.daily)}
             </td>
           </tr>
           <tr>
@@ -62,10 +65,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1W
             </td>
             <td>
-              0.97%
+              {farm?.daily}
             </td>
             <td>
-              0.64
+              {farm?.daily && 1000 * parseFloat(farm?.daily)}
             </td>
           </tr>
           <tr>
@@ -73,10 +76,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1M
             </td>
             <td>
-              4.32%
+              {farm?.daily}
             </td>
             <td>
-              2.56
+              {farm?.daily && 1000 * parseFloat(farm?.daily)}
             </td>
           </tr>
           <tr>
@@ -84,10 +87,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1Y(APY)
             </td>
             <td>
-              65%
+              {farm?.daily}
             </td>
             <td>
-              64
+              {farm?.daily && 1000 * parseFloat(farm?.daily)}
             </td>
           </tr>
         </tbody>
