@@ -10,7 +10,9 @@ import BigNumber from 'bignumber.js';
 import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
 import { getHarvest } from '@utils/helpers/getHarvest';
 import { WhitelistedStake } from '@utils/types';
-import { useAccountPkh, useFarmingContract, useNetwork, useTezos } from '@utils/dapp';
+import {
+  useAccountPkh, useFarmingContract, useNetwork, useTezos,
+} from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -97,7 +99,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Proposal submitted!'),
+      render: t('common|Harvested! Your earnings have been sent to your wallet!'),
     });
   }, [updateToast, t]);
 

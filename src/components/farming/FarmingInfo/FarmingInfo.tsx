@@ -106,7 +106,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Proposal submitted!'),
+      render: t('common|Harvested! Your earnings have been sent to your wallet!'),
     });
   }, [updateToast, t]);
 

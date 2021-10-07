@@ -1,6 +1,6 @@
-import { withTokenApprove, fromOpOpts } from "@quipuswap/sdk";
+import { withTokenApprove, fromOpOpts } from '@quipuswap/sdk';
 
-import { SubmitType } from "@utils/types";
+import { SubmitType } from '@utils/types';
 
 export const getHarvest = async ({
   tezos,
