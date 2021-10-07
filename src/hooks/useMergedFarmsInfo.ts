@@ -21,25 +21,35 @@ export const useMergedFarmsInfo = () => {
       if (!dexbufs) return;
 
       const APRs = allFarms.map((farm, index) => {
+        const resultAprDaily:{ apr:string, daily:string } = {
+          apr: '0',
+          daily: '0',
+        };
         const secondsInYear = 31536000; // 365 * 24 * 60 * 60
 
         const total = estimateTezInShares(dexbufs[index], farm.totalValueLocked);
         const perSecond = estimateTezToToken(dexbufs[index], farm.rewardPerSecond);
 
         if (perSecond.eq(0)) {
-          return '<0.01%';
+          resultAprDaily.apr = '<0.01%';
+          resultAprDaily.daily = '<0.01%';
         }
 
-        const prettiedAPR = prettyPrice(
-          +total.dividedBy(perSecond.multipliedBy(secondsInYear)).multipliedBy(100).toString(),
-          2,
-        );
+        const APR = total.dividedBy(perSecond.multipliedBy(secondsInYear)).multipliedBy(100);
+        const daily = APR.multipliedBy(365);
+
+        const prettiedAPR = prettyPrice(+APR.toString(), 2);
+        const prettiedDaily = prettyPrice(+daily.toString(), 2);
 
         if (prettiedAPR === '0') {
-          return '<0.01%';
+          resultAprDaily.apr = '<0.01%';
         }
 
-        return prettiedAPR;
+        if (prettiedDaily === '0') {
+          resultAprDaily.daily = '<0.01%';
+        }
+
+        return resultAprDaily;
       });
 
       const mergedFarms = allFarms.map((farm, index) => {
@@ -62,7 +72,8 @@ export const useMergedFarmsInfo = () => {
           tokenPair,
           deposit,
           earned,
-          apy: APRs[index],
+          apy: APRs[index].apr,
+          daily: APRs[index].daily,
         };
       });
 
