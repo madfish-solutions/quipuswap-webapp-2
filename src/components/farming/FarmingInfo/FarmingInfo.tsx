@@ -266,27 +266,35 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           </div>
         </div>
       </Card>
-      <LineChart
-        className={s.chart}
-        data={LineChartSampleData}
-        headerContent={(
-          <div className={s.tokens}>
-            <TokensLogos
-              token1={tokenPair.token1}
-              token2={tokenPair.token2}
-              width={32}
-              className={s.tokenLogos}
-            />
-            <h3 className={s.title}>
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-              {' '}
-              /
-              {' '}
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-            </h3>
-          </div>
-        )}
-      />
+
+      <Card className={compountClassName}>
+        <LineChart
+          className={s.chart}
+          data={LineChartSampleData}
+          headerContent={(
+            <div className={s.tokens}>
+              <TokensLogos
+                token1={tokenPair.token1}
+                token2={tokenPair.token2}
+                width={32}
+                className={s.tokenLogos}
+              />
+              <h3 className={s.title}>
+                {getWhitelistedTokenSymbol(tokenPair.token1)}
+                {' '}
+                /
+                {' '}
+                {getWhitelistedTokenSymbol(tokenPair.token1)}
+              </h3>
+            </div>
+          )}
+        />
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
+      </Card>
+
       <StickyBlock>
         <Card
           header={{
