@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
-import BigNumber from 'bignumber.js';
 
 import {
-  fromDecimals,
   getWhitelistedTokenSymbol,
   prettyPrice,
 } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { useBalance } from '@hooks/useBalance';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -48,24 +45,13 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     farmContract = '#',
     projectLink = '#',
     analyticsLink = '#',
+    deposit,
+    earned,
   } = farm;
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [deposit, setDeposit] = useState<BigNumber>();
-  const [earned, setEarned] = useState<BigNumber>();
   const [balance, setBalance] = useState<number>();
-  const userInfoInAllFarms = useUserInfoInAllFarms();
   const balances = useBalance();
-
-  useEffect(() => {
-    if (userInfoInAllFarms && userInfoInAllFarms[+farmId]) {
-      setDeposit(fromDecimals(userInfoInAllFarms[+farmId].staked ?? new BigNumber(0), 6));
-      setEarned(fromDecimals(userInfoInAllFarms[+farmId].earned ?? new BigNumber(0), 6));
-    } else {
-      setDeposit(undefined);
-      setEarned(undefined);
-    }
-  }, [userInfoInAllFarms, farmId]);
 
   useEffect(() => {
     if (balances && balances[+farmId]) {
