@@ -8,7 +8,6 @@ import BigNumber from 'bignumber.js';
 
 import {
   useAccountPkh,
-  useAllFarms,
   useFarmingContract,
   useNetwork,
   useTezos,
@@ -16,6 +15,7 @@ import {
 import { SubmitType } from '@utils/types';
 import { FARM_CONTRACT } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
+import { useFarms } from '@hooks/useFarms';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
@@ -64,7 +64,7 @@ const getAllHarvest = async ({
 export const FarmingStats: React.FC<FarmingStatsProps> = ({
   className,
 }) => {
-  const allFarms = useAllFarms();
+  const farms = useFarms();
   const farmContract = useFarmingContract();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -115,15 +115,15 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     if (!accountPkh) {
       openConnectWalletModal(); return;
     }
-    if (!allFarms) return;
+    if (!farms) return;
     handleLoader();
-    const harvestInfo = allFarms.map((farm) => {
+    const harvestInfo = farms.map((farm) => {
       const fromAsset = {
         contract: FARM_CONTRACT,
         id: new BigNumber(0),
       };
 
-      const farmId = new BigNumber(farm.id);
+      const farmId = new BigNumber(farm.fid);
 
       return getAllHarvest({
         tezos,
@@ -152,7 +152,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     accountPkh,
     network,
     farmContract,
-    allFarms,
+    farms,
   ]);
 
   return (

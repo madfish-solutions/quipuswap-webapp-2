@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN } from '@utils/defaults';
-import { WhitelistedFarmOptional } from '@utils/types';
+import { FarmsType } from '@utils/types';
 import { sortFarms } from '@utils/helpers';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { Card } from '@components/ui/Card';
@@ -75,7 +75,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const mergedFarms = useMergedFarmsInfo();
   const router = useRouter();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
+  const [selectedFarming, selectFarm] = useState<FarmsType>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
@@ -89,9 +89,11 @@ export const Farm: React.FC<FarmProps> = () => {
     farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
   ))), [search, sortedFarms]);
 
+  console.log({ filteredFarms });
+
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = filteredFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = filteredFarms.find((x) => `${x.fid}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
@@ -102,7 +104,7 @@ export const Farm: React.FC<FarmProps> = () => {
     let totalValueLocked = 0;
 
     for (let i = 0; i < filteredFarms.length; i++) {
-      totalValueLocked += parseFloat(filteredFarms[i].totalValueLocked);
+      totalValueLocked += parseFloat(filteredFarms[i].staked);
     }
 
     content[0].value = totalValueLocked.toString();
@@ -205,10 +207,10 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {filteredFarms.map((x) => (
+      {filteredFarms.map((farm) => (
         <FarmingCard
-          key={x.id}
-          farm={x}
+          key={farm.fid}
+          farm={farm}
           openModal={() => setModalOpen(true)}
         />
       ))}

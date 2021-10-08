@@ -1,46 +1,48 @@
 import { useState, useEffect } from 'react';
 
-import { useAllFarms } from '@utils/dapp';
 import { TEZOS_TOKEN, STABLE_TOKEN } from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
-import { useTokenMetadata } from './useTokenMetadata';
+import { FarmsType } from '@utils/types';
 import { useUserInfoInAllFarms } from './useUserInfoInAllFarms';
+import { useFarms } from './useFarms';
+
+const tokenPair = {
+  token1: TEZOS_TOKEN,
+  token2: STABLE_TOKEN,
+};
 
 export const useMergedFarmsInfo = () => {
-  const allFarms = useAllFarms();
-  const tokenMetadata = useTokenMetadata();
+  const farms = useFarms();
   const userInfoInAllFarms = useUserInfoInAllFarms();
-  const [farms, setFarms] = useState(allFarms);
+  const [mergedFarms, setMergedFarms] = useState<FarmsType[]>();
 
   useEffect(() => {
     const mergeFarmsInfo = async () => {
-      if (!allFarms) return;
+      if (!farms) return;
 
-      const mergedFarms = allFarms.map((farm, index) => {
-        let tokenPair = { token1: TEZOS_TOKEN, token2: STABLE_TOKEN };
-        if (tokenMetadata) {
-          tokenPair = { token1: TEZOS_TOKEN, token2: tokenMetadata[index] };
-        }
-
+      const merged = farms.map((farm) => {
         let deposit = '0'; let
           earned = '0';
         if (userInfoInAllFarms) {
-          deposit = prettyPrice(Number(userInfoInAllFarms[farm.id]?.staked));
-          earned = prettyPrice(Number(userInfoInAllFarms[farm.id]?.earned));
+          deposit = prettyPrice(Number(userInfoInAllFarms[+farm.fid]?.staked));
+          earned = prettyPrice(Number(userInfoInAllFarms[+farm.fid]?.earned));
         }
         return {
           ...farm,
-          tokenPair,
           deposit,
           earned,
+          tokenPair,
+          remaining: new Date(),
         };
       });
 
-      setFarms(mergedFarms);
+      console.log({ merged });
+
+      setMergedFarms(merged);
     };
 
     mergeFarmsInfo();
-  }, [allFarms, tokenMetadata, userInfoInAllFarms]);
+  }, [farms, userInfoInAllFarms]);
 
-  return farms;
+  return mergedFarms;
 };

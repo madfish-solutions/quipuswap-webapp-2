@@ -1,23 +1,25 @@
 import { useEffect, useState } from 'react';
 import { FarmingUsersInfo } from '@utils/types';
-import { useAccountPkh, useAllFarms, useFarmingStorage } from '@utils/dapp';
+import { useAccountPkh, useFarmingStorage } from '@utils/dapp';
+import { useFarms } from './useFarms';
 
 export const useUserInfoInAllFarms = () => {
-  const allFarms = useAllFarms();
+  const farms = useFarms();
   const farmingStorage = useFarmingStorage();
+
   const accountPkh = useAccountPkh();
   const [userInfoInFarms, setUserInfoInFarms] = useState<FarmingUsersInfo[]>();
 
   useEffect(() => {
     const loadAmountOfTokensInFarms = async () => {
-      if (!allFarms) return;
+      if (!farms) return;
       if (!farmingStorage) return;
 
       const usersInfo:(
         Promise<FarmingUsersInfo | undefined> | undefined
-      )[] = allFarms.map((currentFarm) => (
+      )[] = farms.map((farm) => (
         farmingStorage?.storage.users_info.get([
-          currentFarm.id,
+          +farm.fid,
           accountPkh,
         ])));
 
@@ -25,8 +27,8 @@ export const useUserInfoInAllFarms = () => {
       if (resolvedUserInfo) {
         const resultUserInfo:any = {};
 
-        for (let i = 0; i < allFarms.length; i++) {
-          resultUserInfo[allFarms[i].id] = resolvedUserInfo[i];
+        for (let i = 0; i < farms.length; i++) {
+          resultUserInfo[farms[i].fid] = resolvedUserInfo[i];
         }
         setUserInfoInFarms(resultUserInfo);
       }
@@ -36,7 +38,7 @@ export const useUserInfoInAllFarms = () => {
     } else {
       setUserInfoInFarms(undefined);
     }
-  }, [allFarms, accountPkh, farmingStorage]);
+  }, [farms, accountPkh, farmingStorage]);
 
   return userInfoInFarms;
 };

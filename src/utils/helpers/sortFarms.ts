@@ -1,11 +1,11 @@
-import { WhitelistedFarmOptional } from '@utils/types';
+import { FarmsType } from '@utils/types';
 
-export const sortFarms = (sort:string, farms:WhitelistedFarmOptional[]) => {
-  let sortingParam: keyof WhitelistedFarmOptional;
+export const sortFarms = (sort:string, farms:FarmsType[]) => {
+  let sortingParam: keyof FarmsType;
 
   switch (sort) {
     case 'asc:tvl':
-      sortingParam = 'totalValueLocked';
+      sortingParam = 'staked';
       break;
     case 'asc:apy':
       sortingParam = 'apy';
