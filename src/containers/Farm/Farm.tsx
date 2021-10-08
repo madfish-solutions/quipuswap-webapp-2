@@ -22,6 +22,7 @@ import { ApyModal } from '@components/modals/ApyModal';
 import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
 
+import { useAccountPkh } from '@utils/dapp';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -74,11 +75,13 @@ const modeClass = {
 export const Farm: React.FC<FarmProps> = () => {
   const mergedFarms = useMergedFarmsInfo();
   const router = useRouter();
+  const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
+  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
@@ -88,6 +91,12 @@ export const Farm: React.FC<FarmProps> = () => {
   ) || (
     farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
   ))), [search, sortedFarms]);
+
+  const switchedFarms = useMemo(() => filteredFarms.filter((farm) => (
+    isSwitcherActive
+      ? parseInt(farm.deposit ?? '0', 10) > 0
+      : farm
+  )), [filteredFarms, isSwitcherActive]);
 
   useEffect(() => {
     if (router.query.slug) {
@@ -123,6 +132,9 @@ export const Farm: React.FC<FarmProps> = () => {
     if (!selectedSort) return;
     setSort(selectedSort.id);
   }, []);
+
+  const handleChangeSwitcher = useCallback(() => setIsSwitcherActive(!isSwitcherActive),
+    [isSwitcherActive]);
 
   if (selectedFarming) {
     // TODO
@@ -186,9 +198,10 @@ export const Farm: React.FC<FarmProps> = () => {
         />
         <div className={s.switcherWrap}>
           <Switcher
-            isActive
-            onChange={() => {}}
+            isActive={isSwitcherActive}
+            onChange={handleChangeSwitcher}
             className={s.switcherInput}
+            disabled={!accountPkh}
           />
           <div className={s.switcher}>
             {t('common|Staked Only')}
@@ -205,7 +218,7 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {filteredFarms.map((x) => (
+      {switchedFarms.map((x) => (
         <FarmingCard
           key={x.id}
           farm={x}

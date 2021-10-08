@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import {
   findDex, FoundDex, Token,
 } from '@quipuswap/sdk';
-import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -50,7 +49,7 @@ export const useTokenMetadata = () => {
       if (!network) return;
       if (!allFarms) return;
 
-      const dexs = allFarms.map((farm) => {
+      const dexs:Promise<FoundDex>[] = allFarms.map((farm) => {
         let asset:Token = { contract: '' };
 
         if (farm.stakedToken.fA2) {
@@ -70,7 +69,7 @@ export const useTokenMetadata = () => {
 
         return findDex(tezos, FACTORIES[network.id as QSMainNet], asset);
       });
-      const dexbufsArr = await Promise.all<ContractAbstraction<ContractProvider> | FoundDex>(dexs);
+      const dexbufsArr = await Promise.all<FoundDex>(dexs);
       const tokenMetadata = dexbufsArr.map((dexbuf) => (
         searchPart(dexbuf.storage.token_address, dexbuf.storage.token_id)
       ));
