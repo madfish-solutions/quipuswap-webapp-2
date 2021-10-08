@@ -15,7 +15,7 @@ import {
 } from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedFarm, SubmitType, FarmsType } from '@utils/types';
+import { WhitelistedFarm, SubmitType } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -50,7 +50,7 @@ const TabsContent = [
 ];
 
 type FarmingInfoProps = {
-  farm:FarmsType
+  farm:WhitelistedFarm
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
@@ -96,7 +96,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   amount = '1000000',
 }) => {
   const {
-    remaining,
+    remaining = new Date(),
     tokenPair,
   } = farm;
   const farmContract = useFarmingContract();
@@ -163,7 +163,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
       contract: FARM_CONTRACT,
       id: new BigNumber(0),
     };
-    const farmId = new BigNumber(farm.fid);
+    const farmId = new BigNumber(farm.farmId);
 
     const harvestInfo = getHarvest({
       tezos,

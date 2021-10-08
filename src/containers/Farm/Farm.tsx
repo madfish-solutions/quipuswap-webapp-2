@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN } from '@utils/defaults';
-import { FarmsType } from '@utils/types';
+import { WhitelistedFarm } from '@utils/types';
 import { sortFarms } from '@utils/helpers';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { Card } from '@components/ui/Card';
@@ -75,7 +75,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const mergedFarms = useMergedFarmsInfo();
   const router = useRouter();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<FarmsType>();
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
@@ -89,11 +89,9 @@ export const Farm: React.FC<FarmProps> = () => {
     farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
   ))), [search, sortedFarms]);
 
-  console.log({ filteredFarms });
-
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = filteredFarms.find((x) => `${x.fid}` === router.query.slug);
+      const farmObj = filteredFarms.find((x) => `${x.farmId}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
@@ -104,7 +102,7 @@ export const Farm: React.FC<FarmProps> = () => {
     let totalValueLocked = 0;
 
     for (let i = 0; i < filteredFarms.length; i++) {
-      totalValueLocked += parseFloat(filteredFarms[i].staked);
+      totalValueLocked += parseFloat(filteredFarms[i].totalValueLocked);
     }
 
     content[0].value = totalValueLocked.toString();
@@ -209,7 +207,7 @@ export const Farm: React.FC<FarmProps> = () => {
       </Card>
       {filteredFarms.map((farm) => (
         <FarmingCard
-          key={farm.fid}
+          key={farm.farmId}
           farm={farm}
           openModal={() => setModalOpen(true)}
         />

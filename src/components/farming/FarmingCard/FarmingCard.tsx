@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 
-import { FarmsType } from '@utils/types';
 import {
   fromDecimals,
   getWhitelistedTokenSymbol,
@@ -18,6 +17,7 @@ import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
+import { WhitelistedFarm } from '@utils/types';
 import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
@@ -28,7 +28,7 @@ const modeClass = {
 };
 
 export type FarmingCardProps = {
-  farm:FarmsType
+  farm:WhitelistedFarm
   className?: string
   openModal?:() => void
 };
@@ -39,9 +39,9 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   openModal,
 }) => {
   const {
-    fid,
+    farmId,
     tokenPair,
-    staked,
+    totalValueLocked,
     apy,
     daily,
     tokenContract = '#',
@@ -58,22 +58,22 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   const balances = useBalance();
 
   useEffect(() => {
-    if (userInfoInAllFarms && userInfoInAllFarms[+fid]) {
-      setDeposit(fromDecimals(userInfoInAllFarms[+fid].staked ?? new BigNumber(0), 6));
-      setEarned(fromDecimals(userInfoInAllFarms[+fid].earned ?? new BigNumber(0), 6));
+    if (userInfoInAllFarms && userInfoInAllFarms[+farmId]) {
+      setDeposit(fromDecimals(userInfoInAllFarms[+farmId].staked ?? new BigNumber(0), 6));
+      setEarned(fromDecimals(userInfoInAllFarms[+farmId].earned ?? new BigNumber(0), 6));
     } else {
       setDeposit(undefined);
       setEarned(undefined);
     }
-  }, [userInfoInAllFarms, fid]);
+  }, [userInfoInAllFarms, farmId]);
 
   useEffect(() => {
-    if (balances && balances[+fid]) {
-      setBalance(+prettyPrice(balances[+fid], 2, 6));
+    if (balances && balances[+farmId]) {
+      setBalance(+prettyPrice(balances[+farmId], 2, 6));
     } else {
       setBalance(undefined);
     }
-  }, [balances, fid]);
+  }, [balances, farmId]);
 
   return (
     <Card
@@ -123,7 +123,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={staked} />
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -190,7 +190,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button href={`/farm/${fid}`} className={s.button}>
+        <Button href={`/farm/${farmId}`} className={s.button}>
           {t('common|Select')}
         </Button>
       </div>

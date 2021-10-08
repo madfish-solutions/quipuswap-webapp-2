@@ -1,21 +1,17 @@
 import { useEffect, useState } from 'react';
 import { ContractAbstraction, ContractProvider } from '@taquito/taquito';
-import {
-  findDex, FoundDex, getLiquidityShare, Token,
-} from '@quipuswap/sdk';
+import { getLiquidityShare, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
-  getContract, useAccountPkh, useNetwork, useTezos,
+  getContract, useAccountPkh, useFarms, useNetwork, useTezos,
 } from '@utils/dapp';
-import { FACTORIES } from '@utils/defaults';
 import { QSMainNet } from '@utils/types';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { useFarms } from './useFarms';
 
 export const useBalance = () => {
   const tezos = useTezos();
-  const farms = useFarms();
+  const { data: farms } = useFarms();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const networkId:QSMainNet = useNetwork().id as QSMainNet;
@@ -33,13 +29,10 @@ export const useBalance = () => {
           id: farm.stakedToken.fa2TokenId,
         };
 
-        if (farm.stakedToken.isLp) {
-          return getContract(tezos, <string>asset.contract);
-        }
-
-        return findDex(tezos, FACTORIES[networkId], asset);
+        return getContract(tezos, <string>asset.contract);
       });
-      const dexbufs = await Promise.all<ContractAbstraction<ContractProvider> | FoundDex>(dexs);
+
+      const dexbufs = await Promise.all<ContractAbstraction<ContractProvider>>(dexs);
       const shares = dexbufs.map((dexbuf) => getLiquidityShare(tezos, dexbuf, accountPkh));
       const sharesResolved = await Promise.all(shares);
 

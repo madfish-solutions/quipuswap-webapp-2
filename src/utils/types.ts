@@ -112,45 +112,82 @@ export type PoolShare = {
   total:BigNumber
 };
 
-export type WhitelistedFarm = {
-  id: number
-  remaining: Date
-  tokenPair: WhitelistedTokenPair
+export interface Farms {
+  farmId: string
   totalValueLocked: string
-  apy: string
-  daily: string
-  multiplier: string
-  tokenContract: string
-  farmContract: string
-  projectLink: string
-  analyticsLink: string
-  claimed?: string
-  isLpTokenStaked: boolean
-  stakedToken: { fA2?: FA2, fA12?: string }
-};
-
-export type WhitelistedFarmOptional = {
-  id: number
-  remaining: Date
-  tokenPair: {
-    token1: WhitelistedToken,
-    token2?: WhitelistedToken,
+  startTime: string
+  claimed: string
+  rewardPerSecond: string
+  stakedToken: {
+    contractAddress: string
+    decimals: number
+    fa2TokenId: string
+    isLp: boolean
+    name: string
+    symbol: string
+    thumbnailUri: string
+  },
+  fees: {
+    burn_reward: string
+    harvest_fee: string
+    withdrawal_fee: string
   }
-  totalValueLocked: string
+  upd: string
+  timelock: string
+  currentDelegated: string
+  nextCandidate: string
+  paused: boolean
+  rewardPerShare: string
+  rewardToken: {
+    decimals: number
+    name: string
+    symbol: string
+    thumbnailUri: string
+    contractAddress: string
+    fa2TokenId: string
+  },
+  dex: string
+}
+
+export interface FarmsFromServer extends Farms {
+  tokenPair: {
+    token1: {
+      contractAddress: string
+      decimals: number
+      name: string
+      symbol: string
+      thumbnailUri: string
+      fa2TokenId?: string
+    },
+    token2: {
+      contractAddress: string
+      decimals: number
+      name: string
+      symbol: string
+      thumbnailUri: string
+      fa2TokenId?: string
+    }
+  }
+}
+
+export interface FarmsFromServerWithWhitelistedPair extends Farms {
+  tokenPair: {
+    token1: WhitelistedToken
+    token2: WhitelistedToken
+  }
+}
+
+export interface WhitelistedFarm extends FarmsFromServerWithWhitelistedPair {
   apy: string
   daily: string
   tokenContract: string
   farmContract: string
   projectLink: string
   analyticsLink: string
-  claimed?: string
-  isLpTokenStaked: boolean
-  stakedToken: { fA2?: FA2, fA12?: string }
-  deposit?: string
-  earned?: string
-  startTime: Date
-  rewardPerSecond: BigNumber
-};
+  deposit: string
+  earned: string
+  remaining: Date
+}
 
 export type WhitelistedStake = {
   id: number,
@@ -173,60 +210,6 @@ export type VoteFormValues = {
   balance1: number
   selectedBaker: string
   method:'first' | 'second'
-};
-
-type FA2 = {
-  id: string
-  token: string
-};
-
-export type FarmsType = {
-  claimed: string
-  currentDelegated: string
-  fees: {
-    burn_reward: string
-    harvest_fee: string
-    withdrawal_fee: string
-  }
-  fid: string
-  nextCandidate: string
-  paused: boolean
-  rewardPerSecond: string
-  rewardPerShare: string
-  rewardToken: {
-    contractAddress: string
-    decimals: number
-    fa2TokenId: string
-    name: string
-    symbol: string
-    thumbnailUri: string
-  }
-  staked: string
-  stakedToken: {
-    contractAddress: string
-    decimals: number
-    fa2TokenId: string
-    isLp: boolean
-    name: string
-    symbol: string
-    thumbnailUri: string
-  }
-  startTime: Date
-  timelock: string
-  upd: Date
-  deposit: string
-  earned: string
-  tokenPair: {
-    token1: WhitelistedToken,
-    token2?: WhitelistedToken,
-  }
-  apy: string
-  daily: string
-  remaining: Date
-  tokenContract: string
-  farmContract: string
-  projectLink: string
-  analyticsLink: string
 };
 
 export type FarmingStorageInfo = {

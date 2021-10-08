@@ -26,6 +26,7 @@ import {
 } from '@utils/defaults';
 import {
   FarmingStorageInfo,
+  FarmsFromServerWithWhitelistedPair,
   QSNetwork,
   WhitelistedBaker,
   WhitelistedToken,
@@ -45,6 +46,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getFarms } from './farms';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -135,6 +137,7 @@ export type DAppType = {
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
+  farms: { data:FarmsFromServerWithWhitelistedPair[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   farmingStorage: FarmingStorageInfo | undefined,
   farmingContract: ContractAbstraction<ContractProvider> | undefined,
@@ -153,6 +156,7 @@ function useDApp() {
     tokens,
     searchTokens,
     bakers,
+    farms,
     searchBakers,
     farmingStorage,
     farmingContract,
@@ -165,6 +169,7 @@ function useDApp() {
     tokens: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
+    farms: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
     farmingStorage: undefined,
     farmingContract: undefined,
@@ -346,6 +351,21 @@ function useDApp() {
       bakers: { loading: false, data: bakersData ?? [] },
     }));
   }, [bakersData]);
+
+  const getFarmsData = useCallback(() => getFarms(), []);
+  const {
+    data: farmsData,
+  } = useSWR(
+    ['farms-initial-data'],
+    getFarmsData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      farms: { loading: false, data: farmsData ?? [] },
+    }));
+  }, [farmsData]);
 
   useEffect(() => {
     if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
@@ -548,6 +568,7 @@ function useDApp() {
     tokens,
     searchTokens,
     bakers,
+    farms,
     searchBakers,
     connectWithBeacon,
     connectWithTemple,
@@ -573,6 +594,7 @@ export const [
   useTokens,
   useSearchTokens,
   useBakers,
+  useFarms,
   useSearchBakers,
   useConnectWithBeacon,
   useConnectWithTemple,
@@ -595,6 +617,7 @@ export const [
   (v) => v.tokens,
   (v) => v.searchTokens,
   (v) => v.bakers,
+  (v) => v.farms,
   (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
