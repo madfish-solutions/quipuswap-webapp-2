@@ -15,6 +15,8 @@ export const useMergedFarmsInfo = () => {
     const mergeFarmsInfo = async () => {
       if (!farms) return;
 
+      // TODO: calculate APR/APY and Daily, add tokenContract farmContract projectLink analyticsLink
+      // @ts-ignore
       const merged:WhitelistedFarm[] = farms.map((farm) => {
         let deposit = '0'; let earned = '0';
         if (userInfoInAllFarms) {
