@@ -39,7 +39,5 @@ export const useUserInfoInAllFarms = () => {
     }
   }, [farms, accountPkh, farmingStorage]);
 
-  console.log({ userInfoInFarms });
-
   return userInfoInFarms;
 };
