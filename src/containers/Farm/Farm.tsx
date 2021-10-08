@@ -8,9 +8,9 @@ import BigNumber from 'bignumber.js';
 
 import { useAccountPkh } from '@utils/dapp';
 import { STABLE_TOKEN } from '@utils/defaults';
-import { WhitelistedFarmOptional } from '@utils/types';
 import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WhitelistedFarm } from '@utils/types';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
@@ -78,12 +78,12 @@ export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
-  const [modalOpen, setModalOpen] = useState<WhitelistedFarmOptional>();
+  const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -101,7 +101,7 @@ export const Farm: React.FC<FarmProps> = () => {
 
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = filteredFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = filteredFarms.find((x) => `${x.farmId}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
@@ -248,11 +248,12 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {switchedFarms.map((x) => (
+
+      {switchedFarms.map((farm) => (
         <FarmingCard
-          key={x.id}
-          farm={x}
-          openModal={() => setModalOpen(x)}
+          key={farm.farmId}
+          farm={farm}
+          openModal={() => setModalOpen(farm)}
         />
       ))}
     </>
