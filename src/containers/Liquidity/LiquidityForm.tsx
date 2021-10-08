@@ -466,6 +466,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       setVal(values);
       setSubm(true);
       if (values.switcher !== formValues.switcher) {
+        form.mutators.setValue('switcher1', !values.switcher1);
         if (!values.switcher) {
           if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
           const rate = new BigNumber(tokensData.first.exchangeRate)
@@ -732,7 +733,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               id="liquidity-token-1"
               label={t('liquidity|Input')}
               className={s.input}
-              error={((meta.error) || meta.submitError)}
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
           )}
 
@@ -801,7 +802,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               id="liquidity-token-2"
               label={t('liquidity|Input')}
               className={cx(s.input, s.mb24)}
-              error={((meta.error) || meta.submitError)}
+              error={((meta.touched && meta.error) || meta.submitError)}
             />
           )}
         </Field>
