@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { WhitelistedFarmOptional } from '@utils/types';
+import { WhitelistedFarm } from '@utils/types';
 import { Modal } from '@components/ui/Modal';
 
 import s from './ApyModal.module.sass';
@@ -16,7 +16,7 @@ const themeClass = {
 export const ApyModal: React.FC<{
   isOpen:boolean,
   close:() => void,
-  farm?:WhitelistedFarmOptional
+  farm?:WhitelistedFarm
 }> = ({ isOpen, close, farm }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -31,7 +31,7 @@ export const ApyModal: React.FC<{
       <div className={s.header}>
         <div>APR</div>
         <div className={s.headerPercentage}>
-          <span className={s.headerBold}>{farm?.apy}</span>
+          <span className={s.headerBold}>{farm?.apy.toString()}</span>
         </div>
       </div>
       <table className={s.table}>
@@ -57,7 +57,7 @@ export const ApyModal: React.FC<{
               {farm?.daily}
             </td>
             <td>
-              {farm?.daily && 1000 * parseFloat(farm?.daily)}
+              {farm?.daily}
             </td>
           </tr>
           <tr>
@@ -68,7 +68,7 @@ export const ApyModal: React.FC<{
               {farm?.daily}
             </td>
             <td>
-              {farm?.daily && 1000 * parseFloat(farm?.daily)}
+              {farm?.daily}
             </td>
           </tr>
           <tr>
@@ -79,7 +79,7 @@ export const ApyModal: React.FC<{
               {farm?.daily}
             </td>
             <td>
-              {farm?.daily && 1000 * parseFloat(farm?.daily)}
+              {farm?.daily}
             </td>
           </tr>
           <tr>
@@ -90,7 +90,7 @@ export const ApyModal: React.FC<{
               {farm?.daily}
             </td>
             <td>
-              {farm?.daily && 1000 * parseFloat(farm?.daily)}
+              {farm?.daily}
             </td>
           </tr>
         </tbody>

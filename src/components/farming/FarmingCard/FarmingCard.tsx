@@ -40,7 +40,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     tokenPair,
     totalValueLocked,
     apy,
-    daily,
     tokenContract = '#',
     farmContract = '#',
     projectLink = '#',
@@ -129,7 +128,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            {daily}
+            {}
           </div>
         </div>
         <div className={s.detailsBlock}>
