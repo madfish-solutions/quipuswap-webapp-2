@@ -34,30 +34,19 @@ type FarmingStatsProps = {
 };
 
 const getAllHarvest = async ({
-  tezos,
-  fromAsset,
   accountPkh,
   farmContract,
   handleErrorToast,
   farmId,
 }: SubmitType) => {
   try {
-    const farmParams = await withTokenApprove(
-      tezos,
-      fromAsset,
-      accountPkh,
-      farmContract.address,
-      0,
-      [
-        farmContract.methods
-          .harvest(farmId, accountPkh)
-          .toTransferParams(fromOpOpts(undefined, undefined)),
-      ],
-    );
+    const farmParams = farmContract.methods
+      .harvest(farmId, accountPkh)
+      .toTransferParams(fromOpOpts(undefined, undefined));
     return farmParams;
   } catch (e) {
     handleErrorToast(e);
-    return [];
+    return undefined;
   }
 };
 
@@ -117,18 +106,15 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     }
     if (!farms) return;
     handleLoader();
+    const fromAsset = {
+      contract: FARM_CONTRACT,
+      id: new BigNumber(0),
+    };
     const harvestInfo = farms.map((farm) => {
-      const fromAsset = {
-        contract: FARM_CONTRACT,
-        id: new BigNumber(0),
-      };
-
       const farmId = new BigNumber(farm.farmId);
 
       return getAllHarvest({
-        tezos,
         accountPkh,
-        fromAsset,
         farmContract,
         handleErrorToast,
         farmId,
@@ -138,9 +124,18 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     try {
       const harvestInfoResolved = await Promise.all(harvestInfo);
 
+      const harvestParams = await withTokenApprove(
+        tezos,
+        fromAsset,
+        accountPkh,
+        farmContract.address,
+        0,
+        [...harvestInfoResolved],
+      );
+
       const op = await batchify(
         tezos.wallet.batch([]),
-        harvestInfoResolved.flat(),
+        harvestParams.flat(),
       ).send();
       await op.confirmation();
       handleSuccessToast();

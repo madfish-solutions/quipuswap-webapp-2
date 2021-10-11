@@ -33,7 +33,6 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
   amount,
   dex,
 }) => {
-  console.log(dex);
   const { t } = useTranslation(['common', 'farms']);
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {

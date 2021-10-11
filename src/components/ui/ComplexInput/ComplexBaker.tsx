@@ -1,5 +1,6 @@
 import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
@@ -33,6 +34,7 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
   value,
   ...props
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = React.useState<boolean>(false);
   const [baker, setBaker] = React.useState<WhitelistedBaker>();
@@ -76,9 +78,9 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
             <BakerLogo baker={baker || {} as WhitelistedBaker} />
             <h6
               className={cx(s.token, s.bakerLabel)}
-              title={baker ? baker.name : 'Choose Baker'}
+              title={baker ? baker.name : t('common|Choose Baker')}
             >
-              {baker ? baker.name : 'Choose Baker'}
+              {baker ? baker.name : t('common|Choose Baker')}
             </h6>
             <Shevron />
           </div>

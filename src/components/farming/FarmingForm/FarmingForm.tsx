@@ -1,10 +1,13 @@
 import React, {
-  useMemo, useState, useCallback, useEffect, useRef,
+  useState, useCallback, useEffect, useRef,
 } from 'react';
 import cx from 'classnames';
 import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
+import {
+  estimateTezInShares, estimateTokenInShares, findDex, FoundDex, getLiquidityShare,
+} from '@quipuswap/sdk';
 
 import {
   useAccountPkh, useNetwork, useOnBlock, useTezos,
@@ -16,6 +19,9 @@ import { fromDecimals, getWhitelistedTokenAddress, parseDecimals } from '@utils/
 import {
   FarmingFormValues, PoolShare, QSMainNet, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
+import { FACTORIES } from '@utils/defaults';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
@@ -24,23 +30,7 @@ import { StickyBlock } from '@components/common/StickyBlock';
 import { FarmingDetails } from '@components/farming/FarmingDetails';
 // import { Transactions } from '@components/svg/Transactions';
 
-import {
-  estimateTezInShares, estimateTokenInShares, findDex, FoundDex, getLiquidityShare,
-} from '@quipuswap/sdk';
-import { FACTORIES } from '@utils/defaults';
-import useUpdateToast from '@hooks/useUpdateToast';
 import s from './FarmingForm.module.sass';
-
-const TabsContent = [
-  {
-    id: 'stake',
-    label: 'Stake',
-  },
-  {
-    id: 'unstake',
-    label: 'Unstake',
-  },
-];
 
 type FarmingFormProps = {
   form:any
@@ -51,7 +41,22 @@ type FarmingFormProps = {
   values: FarmingFormValues
   save:any
   debounce:number
+  currentTab: any
+  tabsState: any
+  setTabsState: (val: any) => void
+  handleSubmit: () => void
 };
+
+export const TabsContent = [
+  {
+    id: 'stake',
+    label: 'Stake',
+  },
+  {
+    id: 'unstake',
+    label: 'Unstake',
+  },
+];
 
 const RealForm:React.FC<FarmingFormProps> = ({
   remaining,
@@ -61,6 +66,10 @@ const RealForm:React.FC<FarmingFormProps> = ({
   values,
   save,
   debounce,
+  handleSubmit,
+  currentTab,
+  setTabsState,
+  tabsState,
 }) => {
   const { t } = useTranslation(['common', 'farms']);
   const tezos = useTezos();
@@ -68,10 +77,15 @@ const RealForm:React.FC<FarmingFormProps> = ({
   const accountPkh = useAccountPkh();
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [dex, setDex] = useState<FoundDex>();
   const [, setOldDex] = useState<FoundDex>();
   const [poolShare, setPoolShare] = useState<PoolShare>();
+
+  const {
+    openConnectWalletModal,
+    connectWalletModalOpen,
+    closeConnectWalletModal,
+  } = useConnectModalsState();
 
   const updateToast = useUpdateToast();
   const handleErrorToast = useCallback((err) => {
@@ -80,11 +94,6 @@ const RealForm:React.FC<FarmingFormProps> = ({
       render: `${err.name}: ${err.message}`,
     });
   }, [updateToast]);
-
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
-  );
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise:any;
@@ -179,6 +188,21 @@ const RealForm:React.FC<FarmingFormProps> = ({
   };
 
   useEffect(() => {
+    if (connectWalletModalOpen && accountPkh) {
+      closeConnectWalletModal();
+    }
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
+
+  const handleSwapSubmit = async () => {
+    if (!tezos) return;
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    handleSubmit();
+  };
+
+  useEffect(() => {
     if (timeout.current) {
       clearTimeout(timeout.current);
     }
@@ -226,41 +250,13 @@ const RealForm:React.FC<FarmingFormProps> = ({
           name="balance3"
           validate={composeValidators(
             validateMinMax(0, Infinity),
+            required,
             validateBalance(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)),
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, 6)}
         >
           {({ input, meta }) => (
             <>
-              {/* <PositionSelect
-                {...input}
-                notSelectable1={tokenPair.token1}
-                notSelectable2={tokenPair.token2}
-                tokenPair={tokenPair}
-                setTokenPair={() => {
-                  // setDex(undefined);
-                  // setTokens([pair.token1, pair.token2]);
-                  // handleTokenChange(pair.token1, 'first');
-                  // handleTokenChange(pair.token2, 'second');
-                  // hanldeTokenPairSelect(
-                  //   pair,
-                  //   setTokenPair,
-                  //   handleTokenChange,
-                  // );
-                }}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'balance3',
-                    +value,
-                  );
-                }}
-                noBalanceButtons={!accountPkh}
-                balance={fromDecimals(new BigNumber(balance ?? '0'), 6).toString()}
-                id="liquidity-remove-input"
-                label="Select LP"
-                className={s.input}
-                error={((meta.touched && meta.error) || meta.submitError)}
-              /> */}
               <ComplexInput
                 {...input}
                 token1={tokenPair.token1}
@@ -305,7 +301,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
             className={s.tradeBtn}
             href={`/swap/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
           >
-            Trade
+            {t('farms|Trade')}
           </Button>
           {currentTab.id === 'stake' ? (
             <Button
@@ -313,7 +309,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
               className={s.tradeBtn}
               href={`/liquidity/add/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
             >
-              Invest
+              {t('farms|Invest')}
             </Button>
           ) : (
             <Button
@@ -321,19 +317,16 @@ const RealForm:React.FC<FarmingFormProps> = ({
               className={s.tradeBtn}
               href={`/liquidity/remove/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
             >
-              Divest
+              {t('farms|Divest')}
             </Button>
           )}
-
         </div>
         <div className={s.buttons}>
-          <Button className={s.button}>
+          <Button onClick={handleSwapSubmit} className={s.button}>
             {currentTab.label}
           </Button>
         </div>
       </Card>
-
-      {/* FARM */}
       <FarmingDetails
         remaining={remaining}
         amount={amount}

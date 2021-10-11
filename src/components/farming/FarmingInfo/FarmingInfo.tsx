@@ -1,10 +1,12 @@
 import React, {
-  useContext, useCallback,
+  useContext, useCallback, useState, useMemo,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { batchify, fromOpOpts, withTokenApprove } from '@quipuswap/sdk';
+import {
+  batchify, fromOpOpts, Token, withTokenApprove,
+} from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
@@ -12,24 +14,24 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
-  useFarmingContract, useTezos, useAccountPkh, useNetwork,
+  useFarmingContract, useTezos, useAccountPkh,
 } from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { FARM_CONTRACT } from '@utils/defaults';
 import {
   WhitelistedFarm, SubmitType, FarmingFormValues,
 } from '@utils/types';
-
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { LineChartSampleData } from '@components/charts/content';
 import { Timeleft } from '@components/ui/Timeleft';
-import { FarmingForm } from '@components/farming/FarmingForm';
+import { FarmingForm, TabsContent } from '@components/farming/FarmingForm';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './FarmingInfo.module.sass';
+import { submitForm } from './farmingHelpers';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -49,26 +51,16 @@ const modeClass = {
 };
 
 const getHarvest = async ({
-  tezos,
-  fromAsset,
   accountPkh,
   farmContract,
   handleErrorToast,
   farmId,
 }: SubmitType) => {
   try {
-    const farmParams = await withTokenApprove(
-      tezos,
-      fromAsset,
-      accountPkh,
-      farmContract.address,
-      0,
-      [
-        farmContract.methods
-          .harvest(farmId, accountPkh)
-          .toTransferParams(fromOpOpts(undefined, undefined)),
-      ],
-    );
+    const farmParams = [
+      farmContract.methods
+        .harvest(farmId, accountPkh)
+        .toTransferParams(fromOpOpts(undefined, undefined))];
     return farmParams;
   } catch (e) {
     handleErrorToast(e);
@@ -88,7 +80,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   const farmContract = useFarmingContract();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const network = useNetwork();
   const updateToast = useUpdateToast();
   const { t } = useTranslation(['common', 'farms']);
   const { Form } = withTypes<FarmingFormValues>();
@@ -96,6 +87,13 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const [tabsState, setTabsState] = useState(TabsContent[0].id);
+
+  const currentTab = useMemo(
+    () => (TabsContent.find(({ id }) => id === tabsState)!),
+    [tabsState],
+  );
 
   const handleLoader = useCallback(() => {
     updateToast({
@@ -114,9 +112,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Proposal submitted!'),
+      render: currentTab.id === 'stake' ? t('common|Stake completed!') : t('common|Unstake completed!'),
     });
-  }, [updateToast, t]);
+  }, [updateToast, t, currentTab]);
 
   const handleHarvest = useCallback(async () => {
     if (!tezos) {
@@ -147,9 +145,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     const farmId = new BigNumber(farm.farmId);
 
     const harvestInfo = getHarvest({
-      tezos,
       accountPkh,
-      fromAsset,
       farmContract,
       handleErrorToast,
       farmId,
@@ -158,9 +154,18 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     try {
       const harvestInfoResolved = await Promise.resolve(harvestInfo);
 
+      const harvestParams = await withTokenApprove(
+        tezos,
+        fromAsset,
+        accountPkh,
+        farmContract.address,
+        0,
+        harvestInfoResolved,
+      );
+
       const op = await batchify(
         tezos.wallet.batch([]),
-        harvestInfoResolved,
+        harvestParams,
       ).send();
       await op.confirmation();
       handleSuccessToast();
@@ -170,9 +175,14 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   }, [
     tezos,
     accountPkh,
-    network,
     farmContract,
     farm,
+    t,
+    updateToast,
+    handleErrorToast,
+    handleLoader,
+    handleSuccessToast,
+    openConnectWalletModal,
   ]);
 
   const compountClassName = cx(
@@ -275,18 +285,25 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         </div>
       </Card>
       <Form
-        onSubmit={() => {
-          // if (!tezos) return;
-          // handleLoader();
-          // submitForm(
-          //   tezos,
-          //   currentTab.id === 'remove'
-          //     ? removeLiquidityParams
-          //     : addLiquidityParams,
-          //   handleErrorToast,
-          //   handleSuccessToast,
-          //   currentTab.id,
-          // );
+        onSubmit={(values) => {
+          if (!tezos) return;
+          handleLoader();
+          const fromAsset: Token = {
+            contract: farm.stakedToken.contractAddress,
+            id: farm.stakedToken.fa2TokenId ?? undefined,
+          };
+          submitForm(
+            tezos,
+            accountPkh!,
+            handleErrorToast,
+            handleSuccessToast,
+            farmContract,
+            currentTab.id,
+            new BigNumber(farm.farmId),
+            new BigNumber(values.balance3),
+            values.selectedBaker,
+            fromAsset,
+          );
         }}
         mutators={{
           setValue: ([field, value], state, { changeValue }) => {
@@ -294,26 +311,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           },
         }}
         render={({ handleSubmit, form }) => (
-          // <LiquidityForm
-          //   form={form}
-          //   handleSubmit={handleSubmit}
-          //   debounce={100}
-          //   save={() => {}}
-          //   setTabsState={setTabsState}
-          //   tabsState={tabsState}
-          //   token1={token1}
-          //   token2={token2}
-          //   setTokens={setTokens}
-          //   tokenPair={tokenPair}
-          //   setTokenPair={setTokenPair}
-          //   tokensData={tokensData}
-          //   handleTokenChange={handleTokenChangeWrapper}
-          //   currentTab={currentTab}
-          //   setRemoveLiquidityParams={setRemoveLiquidityParams}
-          //   removeLiquidityParams={removeLiquidityParams}
-          //   setAddLiquidityParams={setAddLiquidityParams}
-          //   addLiquidityParams={addLiquidityParams}
-          // />
           <FarmingForm
             form={form}
             handleSubmit={handleSubmit}
@@ -322,6 +319,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             remaining={remaining}
             amount={amount}
             tokenPair={tokenPair}
+            currentTab={currentTab}
+            setTabsState={setTabsState}
+            tabsState={tabsState}
           />
         )}
       />

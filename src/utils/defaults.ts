@@ -29,6 +29,7 @@ export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 export const FARM_CONTRACT = process.env.NEXT_PUBLIC_FARM_CONTRACT!;
 
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
+export const BAKERS_API_TESTNET = process.env.NEXT_PUBLIC_BAKERS_API_TESTNET_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
