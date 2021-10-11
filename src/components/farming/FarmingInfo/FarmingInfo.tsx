@@ -5,25 +5,25 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { LineChartSampleData } from '@components/charts/content';
-import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
 import { WhitelistedFarm } from '@utils/types';
-import { StickyBlock } from '@components/common/StickyBlock';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { CardCell } from '@components/ui/Card/CardCell';
+import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
+import { LineChartSampleData } from '@components/charts/content';
+import { StickyBlock } from '@components/common/StickyBlock';
+import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
-import { VotingReward } from '@components/svg/VotingReward';
 
-import { Timeleft } from '@components/ui/Timeleft';
 import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -54,24 +54,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const timeDiffCalc = (dateFuture:number, dateNow:number) => {
-  let diffInMilliSeconds = Math.abs(dateFuture - dateNow) / 1000;
-
-  // calculate days
-  const days = Math.floor(diffInMilliSeconds / 86400);
-  diffInMilliSeconds -= days * 86400;
-
-  // calculate hours
-  const hours = Math.floor(diffInMilliSeconds / 3600) % 24;
-  diffInMilliSeconds -= hours * 3600;
-
-  // calculate minutes
-  const minutes = Math.floor(diffInMilliSeconds / 60) % 60;
-  diffInMilliSeconds -= minutes * 60;
-
-  return { days, hours, minutes };
-};
-
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
@@ -82,7 +64,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   } = farm;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
@@ -147,14 +128,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                   Lock ends in
                 </header>
                 <div className={cx(s.govBlockLabel, s.amount)}>
-                  {days}
-                  <span className={s.govBlockSpan}>D</span>
-                  {' '}
-                  {hours}
-                  <span className={s.govBlockSpan}>H</span>
-                  {' '}
-                  {minutes}
-                  <span className={s.govBlockSpan}>M</span>
+                  <Timeleft remaining={remaining} />
                 </div>
               </div>
 
