@@ -18,8 +18,6 @@ export const useMergedFarmsInfo = () => {
       if (!farms) return;
       if (dexbufs.length < 1) return;
 
-      // TODO: calculate APR/APY and Daily, add tokenContract farmContract projectLink analyticsLink
-      // @ts-ignore
       const merged:WhitelistedFarm[] = farms.map((farm, index) => {
         let deposit = '0'; let earned = '0';
         if (userInfoInAllFarms) {
@@ -40,6 +38,10 @@ export const useMergedFarmsInfo = () => {
           earned,
           apr,
           apyDaily,
+          tokenContract: '#',
+          farmContract: '#',
+          projectLink: '#',
+          analyticsLink: '#',
           remaining: new Date(),
         };
       });

@@ -15,6 +15,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
 import { WhitelistedFarm } from '@utils/types';
+import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
@@ -59,8 +60,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       setBalance(undefined);
     }
   }, [balances, farmId]);
-
-  const daily = apyDaily.dividedBy(365);
 
   return (
     <Card
@@ -122,7 +121,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
           <div className={s.detailsValue}>
-            {apyDaily.gte(100000) ? `${apyDaily.toExponential(2)}%` : `${apyDaily.toString()}%`}
+            {prettyPercentage(apyDaily)}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -130,7 +129,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            {daily.lte(0.01) ? '0.01%' : `${daily.toExponential(2)}%`}
+            {prettyPercentage(apyDaily.dividedBy(365))}
           </div>
         </div>
         <div className={s.detailsBlock}>

@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 import { STABLE_TOKEN } from '@utils/defaults';
 import { useExchangeRates } from './useExchangeRate';
 
-export const useAmountOfQuipuPer1000 = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [amountOfQuipuPer1000, setAmountOfQuipuPer1000] = useState<BigNumber[]>([]);
+export const useAmountOfQuipuPer1000 = (percentage: BigNumber, isOpen: boolean) => {
+  const [amountOfQuipuPer1000, setAmountOfQuipuPer1000] = useState<BigNumber[]>();
   const exchangeRates = useExchangeRates();
+  const oneThousand = new BigNumber(1000);
 
   const price = useMemo(() => (
     new BigNumber(exchangeRates && exchangeRates.find
@@ -17,8 +17,32 @@ export const useAmountOfQuipuPer1000 = () => {
   ), [exchangeRates]);
 
   useEffect(() => {
-    // setAmountOfQuipuPer1000(1000 * percentage / 100 / price);
-  }, [price]);
+    if (!percentage) return;
+    if (!isOpen) return;
+
+    const daily = percentage.multipliedBy(365);
+    const weekly = percentage.multipliedBy(52);
+    const monthly = percentage.multipliedBy(12);
+
+    setAmountOfQuipuPer1000([
+      oneThousand
+        .multipliedBy(daily)
+        .dividedBy(100)
+        .dividedBy(price),
+      oneThousand
+        .multipliedBy(weekly)
+        .dividedBy(100)
+        .dividedBy(price),
+      oneThousand
+        .multipliedBy(monthly)
+        .dividedBy(100)
+        .dividedBy(price),
+      oneThousand
+        .multipliedBy(percentage)
+        .dividedBy(100)
+        .dividedBy(price),
+    ]);
+  }, [price, isOpen]);
 
   return amountOfQuipuPer1000;
 };

@@ -12,8 +12,8 @@ export const calculatingAPR = (
   rewardPerSecond:string,
 ):AprAndApy => {
   const aprAndApy: AprAndApy = {
-    apr: new BigNumber(0.01),
-    apyDaily: new BigNumber(0.01),
+    apr: new BigNumber(0),
+    apyDaily: new BigNumber(0),
   };
 
   if (rewardPerSecond === '0') {
