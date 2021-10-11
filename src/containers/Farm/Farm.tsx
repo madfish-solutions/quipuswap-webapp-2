@@ -14,13 +14,14 @@ import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SliderUI } from '@components/ui/Slider';
+import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
-import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
+import { FarmCardLoader } from '../../components/farming/FarmingCard/FarmCardLoader/FarmCardLoader';
 
 import { useAccountPkh } from '@utils/dapp';
 import s from './Farm.module.sass';
@@ -73,7 +74,7 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const mergedFarms = useMergedFarmsInfo();
+  const { farms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -84,7 +85,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
+  const sortedFarms = useMemo(() => sortFarms(sort, farms ?? []), [sort, farms]);
 
   const filteredFarms = useMemo(() => sortedFarms.filter((farm) => ((
     farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
@@ -219,13 +220,20 @@ export const Farm: React.FC<FarmProps> = () => {
         </div>
       </Card>
 
-      {switchedFarms.map((farm) => (
-        <FarmingCard
-          key={farm.farmId}
-          farm={farm}
-          openModal={() => setModalOpen(true)}
-        />
-      ))}
+      {isFarmsLoaded ? (
+        switchedFarms.map((farm) => (
+          <FarmingCard
+            key={farm.id}
+            farm={farm}
+            openModal={() => setModalOpen(true)}
+          />
+        ))) : (
+          <>
+            <FarmCardLoader />
+            <FarmCardLoader />
+            <FarmCardLoader />
+          </>
+      )}
     </>
   );
 };
