@@ -289,10 +289,10 @@ export const CandleChart: React.FC<CandleChartProps> = ({
           )}
       </CardContent>
       {disabled && (
-      <div className={cx(s.disabled, modeClass[colorThemeMode])}>
-        <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
-      </div>
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
       )}
     </Card>
   );
