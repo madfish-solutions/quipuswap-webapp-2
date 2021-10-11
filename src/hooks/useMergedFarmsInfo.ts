@@ -11,7 +11,7 @@ export const useMergedFarmsInfo = () => {
   const { data: farms } = useFarms();
   const userInfoInAllFarms = useUserInfoInAllFarms();
   const dexbufs = useDexufs();
-  const [farms, setFarms] = useState(allFarms);
+  const [mergedFarms, setMergedFarms] = useState<WhitelistedFarm[]>();
   const [isFarmsLoaded, setFarmsLoaded] = useState(false);
 
   useEffect(() => {
@@ -47,12 +47,12 @@ export const useMergedFarmsInfo = () => {
         };
       });
 
-      setFarms(mergedFarms);
+      setMergedFarms(merged);
       setFarmsLoaded(true);
     };
 
     mergeFarmsInfo();
   }, [farms, userInfoInAllFarms, dexbufs]);
 
-  return { farms, isFarmsLoaded };
+  return { mergedFarms, isFarmsLoaded };
 };

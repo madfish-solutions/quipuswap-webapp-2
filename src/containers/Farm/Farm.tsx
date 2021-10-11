@@ -75,7 +75,7 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const { farms, isFarmsLoaded } = useMergedFarmsInfo();
+  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -86,7 +86,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
 
-  const sortedFarms = useMemo(() => sortFarms(sort, farms ?? []), [sort, farms]);
+  const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
   const filteredFarms = useMemo(() => sortedFarms.filter((farm) => ((
     farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
@@ -253,9 +253,9 @@ export const Farm: React.FC<FarmProps> = () => {
       {isFarmsLoaded ? (
         switchedFarms.map((farm) => (
           <FarmingCard
-            key={farm.id}
+            key={farm.farmId}
             farm={farm}
-            openModal={() => setModalOpen(true)}
+            openModal={() => setModalOpen(farm)}
           />
         ))) : (
           <>

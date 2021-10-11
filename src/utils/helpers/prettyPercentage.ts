@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 import { prettyPrice } from '.';
 
 export const prettyPercentage = (percentage: BigNumber) => {
-  const oneTrillion = 1_000_000_000_000;
+  const prettyPriceMaxValue = 999_999_999_999_999;
 
-  if (percentage.gte(oneTrillion)) {
+  if (percentage.gte(prettyPriceMaxValue)) {
     return Infinity;
   }
 
