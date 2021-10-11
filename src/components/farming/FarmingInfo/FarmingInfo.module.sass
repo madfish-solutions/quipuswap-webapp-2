@@ -1,6 +1,24 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
+.h1
+  z-index: 5
+
+.disabled, .disabledBg
+  position: absolute
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  z-index: 5
+  opacity: 1
+  display: flex
+  align-items: center
+  justify-content: center
+
+.disabledBg
+  opacity: 0.9
+
 .priceAmount
   font-size: 1rem
   font-weight: 600
@@ -143,6 +161,8 @@
       margin-top: 10px
 
 .light
+  .disabledBg
+    background: $skeleton-light
   .reward
     border: 2px dashed $hover-primary-01-fallback
     color: $text-01
@@ -153,6 +173,8 @@
 
 
 .dark
+  .disabledBg
+    background: $skeleton-dark
   .reward
     border: 2px dashed $hover-primary-02-fallback
     color: $text-inverse

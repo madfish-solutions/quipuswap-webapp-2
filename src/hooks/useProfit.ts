@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import {
   useAccountPkh,
-  useAllFarms,
+  useFarms,
   useFarmingStorage,
   useNetwork,
   useTezos,
@@ -13,7 +13,7 @@ export const useProfit = () => {
   const tezos = useTezos();
   const farmimgStorage = useFarmingStorage();
   const accountPkh = useAccountPkh();
-  const allFarms = useAllFarms();
+  const { data: farms } = useFarms();
 
   const [profits, setProfits] = useState<number[]>([]);
 
@@ -22,9 +22,9 @@ export const useProfit = () => {
       if (!tezos) return;
       if (!network) return;
       if (!farmimgStorage) return;
-      if (!allFarms) return;
+      if (!farms) return;
 
-      const profitsArray = allFarms.map((farm) => {
+      const profitsArray = farms.map((farm) => {
         if ((typeof farm.startTime === 'string') && farm.claimed) {
           return (
             Date.now() - Date.parse(farm.startTime)
@@ -40,7 +40,7 @@ export const useProfit = () => {
     if (accountPkh) {
       calculateProfit();
     }
-  }, [allFarms, network, tezos, farmimgStorage, accountPkh]);
+  }, [farms, network, tezos, farmimgStorage, accountPkh]);
 
   return profits;
 };

@@ -8,9 +8,9 @@ import BigNumber from 'bignumber.js';
 
 import { useAccountPkh } from '@utils/dapp';
 import { STABLE_TOKEN } from '@utils/defaults';
-import { WhitelistedFarmOptional } from '@utils/types';
 import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WhitelistedFarm } from '@utils/types';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
@@ -80,7 +80,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const accountPkh = useAccountPkh();
   const userInfoInAllFarms = useUserInfoInAllFarms();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
@@ -104,7 +104,7 @@ export const Farm: React.FC<FarmProps> = () => {
 
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = filteredFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = filteredFarms.find((x) => `${x.farmId}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
@@ -259,10 +259,11 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
-      {switchedFarms.map((x) => (
+
+      {switchedFarms.map((farm) => (
         <FarmingCard
-          key={x.id}
-          farm={x}
+          key={farm.farmId}
+          farm={farm}
           openModal={() => setModalOpen(true)}
         />
       ))}
