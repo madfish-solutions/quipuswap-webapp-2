@@ -61,7 +61,7 @@ export const ApyModal: React.FC<{
               {farm && `${prettyPrice(+farm.apr.dividedBy(365).toString(), 2)}%`}
             </td>
             <td>
-              {prettyPrice(+price.toString(), 2)}
+              {}
             </td>
           </tr>
           <tr>
@@ -72,7 +72,7 @@ export const ApyModal: React.FC<{
               {farm && `${prettyPrice(+farm.apr.dividedBy(52).toString(), 2)}%`}
             </td>
             <td>
-              {prettyPrice(+price.toString(), 2)}
+              {}
             </td>
           </tr>
           <tr>
@@ -83,7 +83,7 @@ export const ApyModal: React.FC<{
               {farm && `${prettyPrice(+farm.apr.dividedBy(12).toString(), 2)}%`}
             </td>
             <td>
-              {prettyPrice(+price.toString(), 2)}
+              {}
             </td>
           </tr>
           <tr>
@@ -100,7 +100,7 @@ export const ApyModal: React.FC<{
               }%`)}
             </td>
             <td>
-              {prettyPrice(+price.toString(), 2)}
+              {}
             </td>
           </tr>
         </tbody>
