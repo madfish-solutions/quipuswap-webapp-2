@@ -17,7 +17,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { Tabs } from '@components/ui/Tabs';
 import { WhitelistedFarm } from '@utils/types';
 import { StickyBlock } from '@components/common/StickyBlock';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
@@ -76,7 +75,6 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
-  amount = '1000000',
 }) => {
   const {
     remaining,
@@ -139,15 +137,15 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Your Delegate
-                </span>
+                </header>
                 <Button theme="inverse" className={s.amount}>Everstake</Button>
               </div>
               <div className={s.item}>
-                <span className={s.header}>
+                <header className={s.header}>
                   Lock ends in
-                </span>
+                </header>
                 <div className={cx(s.govBlockLabel, s.amount)}>
                   {days}
                   <span className={s.govBlockSpan}>D</span>
@@ -268,7 +266,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               $
               {' '}
               <span className={s.priceAmount}>
-                <CurrencyAmount amount={amount} />
+                1,000,000
               </span>
             </div>
           </CardCell>

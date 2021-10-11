@@ -47,17 +47,19 @@
   margin-bottom: 8px
   &:not(:last-child)
     margin-right: 0px
-  &:nth-child(2) 
+  &:nth-child(2)
     order: 1
-  &:nth-child(5) 
+  &:nth-child(5)
     order: 2
-  &:nth-child(3) 
+  &:nth-child(3)
     order: 3
-  &:nth-child(6) 
+  &:nth-child(6)
     order: 4
-  &:nth-child(4) 
+  &:nth-child(4)
+    margin-bottom: 0
     order: 5
-  &:nth-child(7) 
+  &:nth-child(7)
+    margin-bottom: 0
     order: 6
 
 .tokens
@@ -91,15 +93,10 @@
   align-items: flex-start
   width: 100%
   flex-wrap: wrap
-  margin-top: 24px
 
 .link
   width: 50%
-  &:not(:last-child)
-    margin-right: 0px
-  &:nth-child(1),
-  &:nth-child(2)
-    margin-bottom: 24px
+  margin-top: 24px
 
 .content
   padding: 24px
@@ -195,6 +192,8 @@
     font-size: 1.429rem
   .detailsBlock
     width: calc(100% / 3)
+    &:nth-child(6)
+      margin-bottom: 0
   .link
     width: 25%
 
@@ -221,9 +220,10 @@
     flex-wrap: nowrap
   .link
     width: auto
-    margin-bottom: 24px
-    &:not(:last-child)
-      margin-right: 24px
+    margin-right: 24px
+    margin-top: 0px
+    &:last-child
+      margin-right: 0px
   .detailsBlock
     width: auto
     margin-bottom: 0px
