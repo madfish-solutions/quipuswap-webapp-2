@@ -39,7 +39,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     farmId,
     tokenPair,
     totalValueLocked,
-    apy,
+    apyDaily,
     tokenContract = '#',
     farmContract = '#',
     projectLink = '#',
@@ -59,6 +59,8 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
       setBalance(undefined);
     }
   }, [balances, farmId]);
+
+  const daily = apyDaily.dividedBy(365);
 
   return (
     <Card
@@ -120,7 +122,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
           <div className={s.detailsValue}>
-            {apy.toString()}
+            {apyDaily.gte(100000) ? `${apyDaily.toExponential(2)}%` : `${apyDaily.toString()}%`}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -128,7 +130,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            {}
+            {daily.lte(0.01) ? '0.01%' : `${daily.toExponential(2)}%`}
           </div>
         </div>
         <div className={s.detailsBlock}>

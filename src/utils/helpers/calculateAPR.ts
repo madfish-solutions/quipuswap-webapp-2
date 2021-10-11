@@ -1,10 +1,9 @@
 import { estimateTezInShares, estimateTezToToken, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import { prettyPrice } from '.';
 
 interface AprAndApy {
-  apr: string
-  apy: string
+  apr: BigNumber
+  apyDaily: BigNumber
 }
 
 export const calculatingAPR = (
@@ -13,8 +12,8 @@ export const calculatingAPR = (
   rewardPerSecond:string,
 ):AprAndApy => {
   const aprAndApy: AprAndApy = {
-    apr: '<0.01%',
-    apy: '<0.01%',
+    apr: new BigNumber(0.01),
+    apyDaily: new BigNumber(0.01),
   };
 
   if (rewardPerSecond === '0') {
@@ -22,8 +21,8 @@ export const calculatingAPR = (
   }
 
   if (totalValueLocked === '0') {
-    aprAndApy.apr = 'Infinity';
-    aprAndApy.apy = 'Infinity';
+    aprAndApy.apr = new BigNumber(Infinity);
+    aprAndApy.apyDaily = new BigNumber(Infinity);
 
     return aprAndApy;
   }
@@ -33,28 +32,21 @@ export const calculatingAPR = (
   const secondsInYear = 31536000; // 365 * 24 * 60 * 60
   const daysInYear = 365;
   const one = new BigNumber(1);
-  const apr = perSecond
+
+  aprAndApy.apr = perSecond
     .multipliedBy(secondsInYear)
     .dividedBy(total)
     .multipliedBy(100);
 
-  const apy = one
+  aprAndApy.apyDaily = one
     .plus(
-      apr
+      aprAndApy.apr
         .dividedBy(100)
         .dividedBy(daysInYear),
     )
     .pow(daysInYear)
     .minus(one)
     .multipliedBy(100);
-
-  const apy2 = ((1 + 2.51 / 365) ** 365 - 1) * 100;
-  console.log({ apy2 });
-
-  console.log({ apy });
-
-  aprAndApy.apr = `${prettyPrice(+apr.toString(), 2)}%`;
-  aprAndApy.apy = `${prettyPrice(+apy.toString(), 2)}%`;
 
   return aprAndApy;
 };

@@ -2,8 +2,9 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
+import { prettyPrice } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 
 import s from './ApyModal.module.sass';
@@ -20,6 +21,7 @@ export const ApyModal: React.FC<{
 }> = ({ isOpen, close, farm }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <Modal
       containerClassName={cx(themeClass[colorThemeMode], s.modalWrap)}
@@ -31,7 +33,9 @@ export const ApyModal: React.FC<{
       <div className={s.header}>
         <div>APR</div>
         <div className={s.headerPercentage}>
-          <span className={s.headerBold}>{farm?.apy.toString()}</span>
+          <span className={s.headerBold}>
+            {farm && `${prettyPrice(+farm.apr.toString(), 2)}%`}
+          </span>
         </div>
       </div>
       <table className={s.table}>
@@ -54,10 +58,10 @@ export const ApyModal: React.FC<{
               1D
             </td>
             <td>
-              {farm?.daily}
+              {farm && `${prettyPrice(+farm.apr.dividedBy(365).toString(), 2)}%`}
             </td>
             <td>
-              {farm?.daily}
+              {prettyPrice(+price.toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -65,10 +69,10 @@ export const ApyModal: React.FC<{
               1W
             </td>
             <td>
-              {farm?.daily}
+              {farm && `${prettyPrice(+farm.apr.dividedBy(52).toString(), 2)}%`}
             </td>
             <td>
-              {farm?.daily}
+              {prettyPrice(+price.toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -76,10 +80,10 @@ export const ApyModal: React.FC<{
               1M
             </td>
             <td>
-              {farm?.daily}
+              {farm && `${prettyPrice(+farm.apr.dividedBy(12).toString(), 2)}%`}
             </td>
             <td>
-              {farm?.daily}
+              {prettyPrice(+price.toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -87,10 +91,16 @@ export const ApyModal: React.FC<{
               1Y(APY)
             </td>
             <td>
-              {farm?.daily}
+              {farm && (`${
+                farm.apyDaily.gte(100000) ? (
+                  farm.apyDaily.toExponential(2)
+                ) : (
+                  prettyPrice(+farm.apyDaily.toString(), 2)
+                )
+              }%`)}
             </td>
             <td>
-              {farm?.daily}
+              {prettyPrice(+price.toString(), 2)}
             </td>
           </tr>
         </tbody>

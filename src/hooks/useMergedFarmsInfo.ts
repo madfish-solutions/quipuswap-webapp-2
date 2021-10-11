@@ -26,7 +26,9 @@ export const useMergedFarmsInfo = () => {
           deposit = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.staked));
           earned = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.earned));
         }
-        const { apr, apy } = calculatingAPR(
+        const {
+          apr, apyDaily,
+        } = calculatingAPR(
           dexbufs[index],
           farm.totalValueLocked,
           farm.rewardPerSecond,
@@ -37,7 +39,7 @@ export const useMergedFarmsInfo = () => {
           deposit,
           earned,
           apr,
-          apy,
+          apyDaily,
           remaining: new Date(),
         };
       });
