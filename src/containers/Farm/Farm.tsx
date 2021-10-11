@@ -208,7 +208,11 @@ export const Farm: React.FC<FarmProps> = () => {
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
             <div className={s.name}>{x.name}</div>
-            <CurrencyAmount amount={x.value} currency={x.currency} />
+            <CurrencyAmount
+              amount={x.value}
+              currency={x.currency}
+              labelSize="large"
+            />
           </div>
         ))}
       </Card>
@@ -273,7 +277,7 @@ export const Farm: React.FC<FarmProps> = () => {
       </Card>
       {farms.map((x) => (
         <FarmingCard
-          key={x.multiplier}
+          key={x.id}
           farm={x}
           openModal={() => setModalOpen(true)}
         />
