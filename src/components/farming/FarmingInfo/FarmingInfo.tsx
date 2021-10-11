@@ -16,7 +16,7 @@ import {
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
 import { getHarvest } from '@utils/helpers/getHarvest';
-import { WhitelistedFarm, WhitelistedFarmOptional } from '@utils/types';
+import { WhitelistedFarm, SubmitType } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -51,7 +51,7 @@ const TabsContent = [
 ];
 
 type FarmingInfoProps = {
-  farm:WhitelistedFarmOptional
+  farm:WhitelistedFarm
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
@@ -69,7 +69,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   amount = '1000000',
 }) => {
   const {
-    remaining,
+    remaining = new Date(),
     tokenPair,
   } = farm;
   const farmContract = useFarmingContract();
@@ -136,7 +136,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
       contract: FARM_CONTRACT,
       id: new BigNumber(0),
     };
-    const farmId = new BigNumber(farm.id);
+    const farmId = new BigNumber(farm.farmId);
 
     const harvestInfo = getHarvest({
       tezos,
@@ -239,27 +239,35 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
           </div>
         </div>
       </Card>
-      <LineChart
-        className={s.chart}
-        data={LineChartSampleData}
-        headerContent={(
-          <div className={s.tokens}>
-            <TokensLogos
-              token1={tokenPair.token1}
-              token2={tokenPair.token2}
-              width={32}
-              className={s.tokenLogos}
-            />
-            <h3 className={s.title}>
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-              {' '}
-              /
-              {' '}
-              {getWhitelistedTokenSymbol(tokenPair.token1)}
-            </h3>
-          </div>
-        )}
-      />
+
+      <Card className={compountClassName}>
+        <LineChart
+          className={s.chart}
+          data={LineChartSampleData}
+          headerContent={(
+            <div className={s.tokens}>
+              <TokensLogos
+                token1={tokenPair.token1}
+                token2={tokenPair.token2}
+                width={32}
+                className={s.tokenLogos}
+              />
+              <h3 className={s.title}>
+                {getWhitelistedTokenSymbol(tokenPair.token1)}
+                {' '}
+                /
+                {' '}
+                {getWhitelistedTokenSymbol(tokenPair.token1)}
+              </h3>
+            </div>
+          )}
+        />
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
+      </Card>
+
       <StickyBlock>
         <Card
           header={{

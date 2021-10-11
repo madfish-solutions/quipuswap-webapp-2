@@ -13,30 +13,22 @@ import {
 import { NetworkType } from '@airgap/beacon-sdk';
 import useSWR from 'swr';
 import { BeaconWallet } from '@taquito/beacon-wallet';
-import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
 import {
   APP_NAME,
   BASE_URL,
-  FACTORIES,
   FARM_CONTRACT,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK,
   METADATA_API_MAINNET,
   METADATA_API_TESTNET,
-  OPERATIONS,
-  STABLE_TOKEN,
-  TEZOS_TOKEN,
-  TZKT_LINK_TESTNET,
 } from '@utils/defaults';
 import {
   FarmingStorageInfo,
-  FarmingInfoType,
-  QSMainNet,
+  FarmsFromServerWithWhitelistedPair,
   QSNetwork,
   WhitelistedBaker,
-  WhitelistedFarmOptional,
   WhitelistedToken,
 } from '@utils/types';
 import { getBakers } from '@utils/dapp/bakers';
@@ -48,13 +40,13 @@ import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
 import { getContract, getStorageInfo } from '@utils/dapp/getStorageInfo';
-import { prettyPrice } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getFarms } from './farms';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -63,11 +55,6 @@ const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWalle
 });
 
 export const TEMPLE_WALLET_NOT_INSTALLED_MESSAGE = 'Temple wallet not installed';
-
-const fallbackPair = {
-  token1: TEZOS_TOKEN,
-  token2: STABLE_TOKEN,
-};
 
 const net = getNetwork();
 
@@ -150,10 +137,10 @@ export type DAppType = {
   tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
+  farms: { data:FarmsFromServerWithWhitelistedPair[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   farmingStorage: FarmingStorageInfo | undefined,
   farmingContract: ContractAbstraction<ContractProvider> | undefined,
-  allFarms: WhitelistedFarmOptional[] | undefined,
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -169,10 +156,10 @@ function useDApp() {
     tokens,
     searchTokens,
     bakers,
+    farms,
     searchBakers,
     farmingStorage,
     farmingContract,
-    allFarms,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
@@ -182,11 +169,12 @@ function useDApp() {
     tokens: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
+    farms: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
     farmingStorage: undefined,
     farmingContract: undefined,
-    allFarms: undefined,
   });
+
   const loadFaringStorage = useCallback(async () => {
     const contract:FarmingStorageInfo = await getStorageInfo(
       tezos ?? fallbackToolkit,
@@ -223,92 +211,6 @@ function useDApp() {
 
     loadFarmingContract();
   }, [network, tezos]);
-
-  const loadFarms = useCallback(async () => {
-    const farmingStorageLoaded = await loadFaringStorage();
-    if (!farmingStorageLoaded) return [];
-
-    const possibleFarms:Promise<FarmingInfoType | undefined>[] = new Array(
-      +farmingStorageLoaded?.storage.farms_count.toString(),
-    )
-      .fill(0)
-      .map(async (x, id) => (farmingStorageLoaded?.storage.farms.get(id)));
-
-    const tempFarms = await Promise.all(possibleFarms);
-
-    const farmContractUrl = FARM_CONTRACT
-      ? `${TZKT_LINK_TESTNET}/${FARM_CONTRACT}/${OPERATIONS}`
-      : '#';
-
-    if (tempFarms) {
-      const clearfarms = (tempFarms
-        .filter((farm) => !!farm) as FarmingInfoType[]
-      ).slice(0, 3);
-
-      const tokenContracts = clearfarms.map((farm) => {
-        let asset:Token = { contract: '' };
-
-        if (farm.stake_params.staked_token.fA2) {
-          asset = {
-            contract: farm.stake_params.staked_token.fA2.token,
-            id: farm.stake_params.staked_token.fA2.id,
-          };
-        }
-
-        if (farm.stake_params.staked_token.fA12) {
-          asset = { contract: farm.stake_params.staked_token.fA12 };
-        }
-
-        if (!farm.stake_params.is_lp_staked_token) {
-          return findDex(tezos ?? fallbackToolkit, FACTORIES[network.id as QSMainNet], asset);
-        }
-
-        return asset.contract.toString();
-      });
-
-      const tokenContractsResolved = await Promise
-        .all<(string | Promise<FoundDex>)>(tokenContracts);
-
-      if (tokenContractsResolved) {
-        const whitelistedFarms:WhitelistedFarmOptional[] = clearfarms.map((farm, id) => ({
-          id,
-          totalValueLocked: prettyPrice(Number(farm?.staked)),
-          tokenPair: fallbackPair,
-          apy: '888%',
-          daily: '0.008%',
-          multiplier: '888',
-          tokenContract: `${TZKT_LINK_TESTNET}/${tokenContractsResolved[id]}/${OPERATIONS}`,
-          farmContract: farmContractUrl,
-          projectLink: '#',
-          analyticsLink: '#',
-          remaining: new Date(Date.now() + 48 * 3600000),
-          claimed: farm.claimed.toString(),
-          isLpTokenStaked: farm.stake_params.is_lp_staked_token,
-          stakedToken: farm.stake_params.staked_token,
-          startTime: farm.start_time,
-          rewardPerSecond: farm.reward_per_second,
-        }));
-
-        return whitelistedFarms;
-      }
-    }
-
-    return [];
-  }, [tezos, network, farmingStorage, accountPkh]);
-  const {
-    data: farms,
-  } = useSWR(
-    ['all-farms-loaded', network],
-    loadFarms,
-    { revalidateOnFocus: false, revalidateOnReconnect: false },
-  );
-
-  useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      allFarms: farms,
-    }));
-  }, [farms]);
 
   const setFallbackState = useCallback(
     () => setState((prevState) => ({
@@ -449,6 +351,21 @@ function useDApp() {
       bakers: { loading: false, data: bakersData ?? [] },
     }));
   }, [bakersData]);
+
+  const getFarmsData = useCallback(() => getFarms(), []);
+  const {
+    data: farmsData,
+  } = useSWR(
+    ['farms-initial-data'],
+    getFarmsData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      farms: { loading: false, data: farmsData ?? [] },
+    }));
+  }, [farmsData]);
 
   useEffect(() => {
     if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
@@ -651,6 +568,7 @@ function useDApp() {
     tokens,
     searchTokens,
     bakers,
+    farms,
     searchBakers,
     connectWithBeacon,
     connectWithTemple,
@@ -662,7 +580,6 @@ function useDApp() {
     searchCustomBaker,
     farmingStorage,
     farmingContract,
-    allFarms,
   };
 }
 
@@ -677,6 +594,7 @@ export const [
   useTokens,
   useSearchTokens,
   useBakers,
+  useFarms,
   useSearchBakers,
   useConnectWithBeacon,
   useConnectWithTemple,
@@ -688,7 +606,6 @@ export const [
   useSearchCustomBaker,
   useFarmingStorage,
   useFarmingContract,
-  useAllFarms,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -700,6 +617,7 @@ export const [
   (v) => v.tokens,
   (v) => v.searchTokens,
   (v) => v.bakers,
+  (v) => v.farms,
   (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
@@ -711,5 +629,4 @@ export const [
   (v) => v.searchCustomBaker,
   (v) => v.farmingStorage,
   (v) => v.farmingContract,
-  (v) => v.allFarms,
 );

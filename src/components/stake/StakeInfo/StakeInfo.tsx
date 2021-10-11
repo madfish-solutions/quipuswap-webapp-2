@@ -225,10 +225,16 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           </div>
         </div>
       </Card>
-      <LineChart
-        className={s.chart}
-        data={LineChartSampleData}
-      />
+      <Card className={compountClassName}>
+        <LineChart
+          className={s.chart}
+          data={LineChartSampleData}
+        />
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
+      </Card>
       <StickyBlock>
         <Card
           header={{
