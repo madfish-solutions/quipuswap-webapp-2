@@ -1,39 +1,34 @@
 import { useState, useEffect } from 'react';
 
-import { useAllFarms } from '@utils/dapp';
-import { TEZOS_TOKEN, STABLE_TOKEN } from '@utils/defaults';
 import { prettyPrice } from '@utils/helpers';
-import { useTokenMetadata } from './useTokenMetadata';
+import { useFarms } from '@utils/dapp';
+import { WhitelistedFarm } from '@utils/types';
 import { useUserInfoInAllFarms } from './useUserInfoInAllFarms';
 
 export const useMergedFarmsInfo = () => {
-  const allFarms = useAllFarms();
-  const tokenMetadata = useTokenMetadata();
+  const { data: farms } = useFarms();
+
   const userInfoInAllFarms = useUserInfoInAllFarms();
   const [farms, setFarms] = useState(allFarms);
   const [isFarmsLoaded, setFarmsLoaded] = useState(false);
 
   useEffect(() => {
     const mergeFarmsInfo = async () => {
-      if (!allFarms) return;
+      if (!farms) return;
 
-      const mergedFarms = allFarms.map((farm, index) => {
-        let tokenPair = { token1: TEZOS_TOKEN, token2: STABLE_TOKEN };
-        if (tokenMetadata) {
-          tokenPair = { token1: TEZOS_TOKEN, token2: tokenMetadata[index] };
-        }
-
-        let deposit = '0'; let
-          earned = '0';
+      // TODO: calculate APR/APY and Daily, add tokenContract farmContract projectLink analyticsLink
+      // @ts-ignore
+      const merged:WhitelistedFarm[] = farms.map((farm) => {
+        let deposit = '0'; let earned = '0';
         if (userInfoInAllFarms) {
-          deposit = prettyPrice(Number(userInfoInAllFarms[farm.id]?.staked));
-          earned = prettyPrice(Number(userInfoInAllFarms[farm.id]?.earned));
+          deposit = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.staked));
+          earned = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.earned));
         }
         return {
           ...farm,
-          tokenPair,
           deposit,
           earned,
+          remaining: new Date(),
         };
       });
 
@@ -42,7 +37,7 @@ export const useMergedFarmsInfo = () => {
     };
 
     mergeFarmsInfo();
-  }, [allFarms, tokenMetadata, userInfoInAllFarms]);
+  }, [farms, userInfoInAllFarms]);
 
   return { farms, isFarmsLoaded };
 };

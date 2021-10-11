@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { STABLE_TOKEN } from '@utils/defaults';
-import { WhitelistedFarmOptional } from '@utils/types';
+import { WhitelistedFarm } from '@utils/types';
 import { sortFarms } from '@utils/helpers';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { Card } from '@components/ui/Card';
@@ -23,6 +23,7 @@ import { ApyModal } from '@components/modals/ApyModal';
 import Search from '@icons/Search.svg';
 import { FarmCardLoader } from '../../components/farming/FarmingCard/FarmCardLoader/FarmCardLoader';
 
+import { useAccountPkh } from '@utils/dapp';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -75,11 +76,13 @@ const modeClass = {
 export const Farm: React.FC<FarmProps> = () => {
   const { farms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
+  const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarmOptional>();
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
+  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
   const sortedFarms = useMemo(() => sortFarms(sort, farms ?? []), [sort, farms]);
@@ -90,9 +93,15 @@ export const Farm: React.FC<FarmProps> = () => {
     farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
   ))), [search, sortedFarms]);
 
+  const switchedFarms = useMemo(() => filteredFarms.filter((farm) => (
+    isSwitcherActive
+      ? parseInt(farm.deposit ?? '0', 10) > 0
+      : farm
+  )), [filteredFarms, isSwitcherActive]);
+
   useEffect(() => {
     if (router.query.slug) {
-      const farmObj = filteredFarms.find((x) => `${x.id}` === router.query.slug);
+      const farmObj = filteredFarms.find((x) => `${x.farmId}` === router.query.slug);
       if (farmObj) {
         selectFarm(farmObj);
       }
@@ -124,6 +133,9 @@ export const Farm: React.FC<FarmProps> = () => {
     if (!selectedSort) return;
     setSort(selectedSort.id);
   }, []);
+
+  const handleChangeSwitcher = useCallback(() => setIsSwitcherActive(!isSwitcherActive),
+    [isSwitcherActive]);
 
   if (selectedFarming) {
     // TODO
@@ -187,9 +199,10 @@ export const Farm: React.FC<FarmProps> = () => {
         />
         <div className={s.switcherWrap}>
           <Switcher
-            isActive
-            onChange={() => {}}
+            isActive={isSwitcherActive}
+            onChange={handleChangeSwitcher}
             className={s.switcherInput}
+            disabled={!accountPkh}
           />
           <div className={s.switcher}>
             {t('common|Staked Only')}
@@ -206,11 +219,12 @@ export const Farm: React.FC<FarmProps> = () => {
           />
         </div>
       </Card>
+
       {isFarmsLoaded ? (
-        filteredFarms.map((x) => (
+        switchedFarms.map((farm) => (
           <FarmingCard
-            key={x.id}
-            farm={x}
+            key={farm.id}
+            farm={farm}
             openModal={() => setModalOpen(true)}
           />
         ))) : (
