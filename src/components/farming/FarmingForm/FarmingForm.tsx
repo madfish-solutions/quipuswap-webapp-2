@@ -337,6 +337,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
       <FarmingDetails
         remaining={remaining}
         amount={amount}
+        dex={dex}
       />
     </StickyBlock>
   );

@@ -1,7 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { FoundDex } from '@quipuswap/sdk';
 
+import { WhitelistedBaker } from '@utils/types';
+import { getWhitelistedBakerName } from '@utils/helpers';
+import { useBakers } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
@@ -16,6 +20,7 @@ import s from './FarmingDetails.module.sass';
 type FarmingDetailsProps = {
   amount: string,
   remaining: Date
+  dex?: FoundDex
 };
 
 const modeClass = {
@@ -26,8 +31,32 @@ const modeClass = {
 export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
   remaining,
   amount,
+  dex,
 }) => {
+  console.log(dex);
   const { t } = useTranslation(['common', 'farms']);
+  const { data: bakers } = useBakers();
+  const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
+    if (dex?.storage?.storage) {
+      if (!dex.storage.storage.current_candidate) return undefined;
+      return bakers.find((x) => x.address === dex.storage.storage.current_candidate)
+      || {
+        address: dex.storage.storage.current_candidate ?? '',
+      } as WhitelistedBaker;
+    }
+    return undefined;
+  }, [dex, bakers]);
+
+  const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
+    if (dex?.storage?.storage) {
+      if (!dex.storage.storage.current_delegated) return undefined;
+      return bakers.find((x) => x.address === dex.storage.storage.current_delegated)
+      || {
+        address: dex.storage.storage.current_delegated,
+      } as WhitelistedBaker;
+    }
+    return undefined;
+  }, [dex, bakers]);
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <Card
@@ -104,9 +133,16 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
             )}
         className={s.cell}
       >
-        <Button href="#" theme="underlined">
-          Bake&Bake
-        </Button>
+        {currentCandidate ? (
+          <Button
+            href={`https://tzkt.io/${currentCandidate.address}`}
+            external
+            theme="underlined"
+            title={getWhitelistedBakerName(currentCandidate)}
+          >
+            {getWhitelistedBakerName(currentCandidate)}
+          </Button>
+        ) : '—'}
       </CardCell>
       <CardCell
         header={(
@@ -120,9 +156,16 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
             )}
         className={s.cell}
       >
-        <Button href="#" theme="underlined">
-          Everstake
-        </Button>
+        {secondCandidate ? (
+          <Button
+            href={`https://tzkt.io/${secondCandidate.address}`}
+            external
+            theme="underlined"
+            title={getWhitelistedBakerName(secondCandidate)}
+          >
+            {getWhitelistedBakerName(secondCandidate)}
+          </Button>
+        ) : '—'}
       </CardCell>
       <CardCell
         header={(
