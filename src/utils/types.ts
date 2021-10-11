@@ -111,6 +111,7 @@ export type PoolShare = {
 };
 
 export type WhitelistedFarm = {
+  id: number
   remaining: Date
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string

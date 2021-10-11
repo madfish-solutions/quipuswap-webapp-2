@@ -1,26 +1,27 @@
 import React, {
   useState, useContext, useMemo, useCallback, useEffect,
 } from 'react';
-import cx from 'classnames';
 import { useRouter } from 'next/router';
+import cx from 'classnames';
 
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SelectUI } from '@components/ui/Select';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { StakeInfo } from '@components/stake/StakeInfo';
-import { StakeCard } from '@components/stake/StakeCard';
-import { ApyModal } from '@components/modals/ApyModal';
 import { SliderUI } from '@components/ui/Slider';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { FarmingInfo } from '@components/farming/FarmingInfo';
+import { FarmingStats } from '@components/farming/FarmingStats';
+import { FarmingCard } from '@components/farming/FarmingCard';
+import { ApyModal } from '@components/modals/ApyModal';
 import Search from '@icons/Search.svg';
 
-import s from './Stake.module.sass';
+import s from './Farm.module.sass';
 
-type StakeProps = {
+type FarmProps = {
   className?: string
 };
 
@@ -49,7 +50,7 @@ const content:ContentType = [
   {
     name: 'Total Value Locked',
     value: '888888888888888.00',
-    currency: 'QPSP',
+    currency: STABLE_TOKEN.metadata.symbol,
   },
   {
     name: 'Total Daily Reward',
@@ -62,7 +63,7 @@ const content:ContentType = [
   {
     name: 'Total Claimed Reward',
     value: '888888888888888.00',
-    currency: 'QPSP',
+    currency: STABLE_TOKEN.metadata.symbol,
   },
 ];
 
@@ -71,7 +72,7 @@ const fallbackPair = {
   token2: TEZOS_TOKEN,
 } as WhitelistedTokenPair;
 
-const stakes:WhitelistedStake[] = [
+const farms:WhitelistedFarm[] = [
   {
     id: 0,
     tokenPair: fallbackPair,
@@ -81,7 +82,7 @@ const stakes:WhitelistedStake[] = [
     balance: '1000000.00',
     deposit: '1000000.00',
     earned: '1000000.00',
-    earn: 'CRUNCH',
+    multiplier: '888',
     tokenContract: '#',
     farmContract: '#',
     projectLink: '#',
@@ -97,7 +98,7 @@ const stakes:WhitelistedStake[] = [
     balance: '1000000.00',
     deposit: '1000000.00',
     earned: '1000000.00',
-    earn: 'PAUL',
+    multiplier: '887',
     tokenContract: '#',
     farmContract: '#',
     projectLink: '#',
@@ -113,7 +114,7 @@ const stakes:WhitelistedStake[] = [
     balance: '1000000.00',
     deposit: '1000000.00',
     earned: '1000000.00',
-    earn: 'MAG',
+    multiplier: '886',
     tokenContract: '#',
     farmContract: '#',
     projectLink: '#',
@@ -129,7 +130,7 @@ const stakes:WhitelistedStake[] = [
     balance: '1000000.00',
     deposit: '1000000.00',
     earned: '1000000.00',
-    earn: 'QUIPU',
+    multiplier: '885',
     tokenContract: '#',
     farmContract: '#',
     projectLink: '#',
@@ -145,7 +146,7 @@ const stakes:WhitelistedStake[] = [
     balance: '1000000.00',
     deposit: '1000000.00',
     earned: '1000000.00',
-    earn: 'TEZ',
+    multiplier: '884',
     tokenContract: '#',
     farmContract: '#',
     projectLink: '#',
@@ -159,12 +160,21 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const Stake: React.FC<StakeProps> = () => {
+export const Farm: React.FC<FarmProps> = () => {
   const router = useRouter();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedStake, selectStake] = useState<WhitelistedStake>();
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const { colorThemeMode } = useContext(ColorThemeContext);
+
+  useEffect(() => {
+    if (router.query.slug) {
+      const farmObj = farms.find((x) => `${x.id}` === router.query.slug);
+      if (farmObj) {
+        selectFarm(farmObj);
+      }
+    }
+  }, [router.query, selectedFarming]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -174,7 +184,6 @@ export const Stake: React.FC<StakeProps> = () => {
     () => SortContent.map((el) => ({ value: el.id, label: el.label })),
     [],
   );
-
   const handleChangeSort = useCallback(({ value, label }) => {
     const selectedSort = SortContent.find((sorting) => (
       sorting.id === value && sorting.label === label
@@ -183,18 +192,10 @@ export const Stake: React.FC<StakeProps> = () => {
     setSort(selectedSort.id);
   }, []);
 
-  useEffect(() => {
-    if (router.query.slug) {
-      const stakeObj = stakes.find((x) => `${x.id}` === router.query.slug);
-      if (stakeObj) {
-        selectStake(stakeObj);
-      }
-    }
-  }, [router.query, selectedStake]);
-
-  if (selectedStake) {
+  if (selectedFarming) {
+    // TODO
     return (
-      <StakeInfo stake={selectedStake} />
+      <FarmingInfo handleUnselect={() => selectFarm(undefined)} farm={selectedFarming} />
     );
   }
   return (
@@ -243,6 +244,7 @@ export const Stake: React.FC<StakeProps> = () => {
           ))}
         </SliderUI>
       </Card>
+      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
@@ -262,9 +264,7 @@ export const Stake: React.FC<StakeProps> = () => {
             Staked Only
           </div>
         </div>
-        <div
-          className={s.sortItem}
-        >
+        <div className={s.sortItem}>
           <SelectUI
             className={s.select}
             options={selectValues}
@@ -275,10 +275,10 @@ export const Stake: React.FC<StakeProps> = () => {
           />
         </div>
       </Card>
-      {stakes.map((x) => (
-        <StakeCard
-          key={x.earn}
-          stake={x}
+      {farms.map((x) => (
+        <FarmingCard
+          key={x.id}
+          farm={x}
           openModal={() => setModalOpen(true)}
         />
       ))}

@@ -69,8 +69,12 @@
   padding: 0px
   text-align: center
   &:not(:last-child)
-    margin-top: 24px
     margin-bottom: 24px
+  &:nth-child(4)
+    margin-bottom: 48px
+
+.farmingContent
+  padding: 24px
 
 .farmingControllerCard
   padding: 16px 24px
@@ -101,6 +105,8 @@
     &:not(:last-child)
       margin-top: 0px
       margin-bottom: 32px
+    &:nth-child(4)
+      margin-bottom: 64px
   .searchInput
     margin-top: 0px
     order: 0
@@ -118,7 +124,6 @@
     display: none
   .desktop
     display: block
-    margin-bottom: 64px !important
   .light
     .farmingStatsBlock
       &:not(:last-child)

@@ -15,6 +15,7 @@ const modeClass = {
 
 type SliderProps = {
   items?: number
+  unCenter?: boolean
   responsive?: ResponsiveObject[]
   className?: string
 };
@@ -23,6 +24,7 @@ export const SliderUI: React.FC<SliderProps> = ({
   children,
   items = 1,
   responsive = [],
+  unCenter = false,
   className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -39,11 +41,13 @@ export const SliderUI: React.FC<SliderProps> = ({
       </div>
     ),
   };
+
   return (
     <div className={cx(
       s.root,
       className,
       modeClass[colorThemeMode],
+      { [s.unCenter]: unCenter },
     )}
     >
       <Slider {...settings}>

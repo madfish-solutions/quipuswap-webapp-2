@@ -5,24 +5,26 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedStake } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
-import { CardCell } from '@components/ui/Card/CardCell';
+import { WhitelistedFarm } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { Tabs } from '@components/ui/Tabs';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { CardCell } from '@components/ui/Card/CardCell';
 import { Timeleft } from '@components/ui/Timeleft';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
+import { StickyBlock } from '@components/common/StickyBlock';
+import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
-import { VotingReward } from '@components/svg/VotingReward';
 
-import s from './StakeInfo.module.sass';
+import s from './FarmingInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false,
@@ -39,10 +41,12 @@ const TabsContent = [
   },
 ];
 
-type StakeInfoProps = {
-  stake:WhitelistedStake
+type FarmingInfoProps = {
+  farm:WhitelistedFarm
   className?: string
-  onClick?:(stake:WhitelistedStake) => void
+  handleUnselect: () => void
+  onClick?:(farm:WhitelistedFarm) => void
+  amount?: string
 };
 
 const modeClass = {
@@ -50,13 +54,14 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const StakeInfo: React.FC<StakeInfoProps> = ({
+export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
-  stake,
+  farm,
 }) => {
   const {
     remaining,
-  } = stake;
+    tokenPair,
+  } = farm;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
@@ -79,7 +84,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         header={{
           content: (
             <Button
-              href="/stake"
+              href="/farm"
               theme="quaternary"
               className={s.proposalHeader}
               control={
@@ -122,7 +127,9 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                 <header className={s.header}>
                   Lock ends in
                 </header>
-                <Timeleft remaining={remaining} />
+                <div className={cx(s.govBlockLabel, s.amount)}>
+                  <Timeleft remaining={remaining} />
+                </div>
               </div>
 
             </div>
@@ -133,6 +140,23 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
       <LineChart
         className={s.chart}
         data={LineChartSampleData}
+        headerContent={(
+          <div className={s.tokens}>
+            <TokensLogos
+              token1={tokenPair.token1}
+              token2={tokenPair.token2}
+              width={32}
+              className={s.tokenLogos}
+            />
+            <h3 className={s.title}>
+              {getWhitelistedTokenSymbol(tokenPair.token1)}
+              {' '}
+              /
+              {' '}
+              {getWhitelistedTokenSymbol(tokenPair.token1)}
+            </h3>
+          </div>
+        )}
       />
       <StickyBlock>
         <Card
@@ -167,11 +191,11 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             mode="votes"
           />
           {currentTab.id === 'stake' && (
-            <ComplexBaker
-              className={s.baker}
-              label="Baker"
-              id="voting-baker"
-            />
+          <ComplexBaker
+            className={s.baker}
+            label="Baker"
+            id="voting-baker"
+          />
           )}
           <div className={s.tradeControls}>
             <Button theme="underlined" className={s.tradeBtn}>
@@ -196,9 +220,9 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         </Card>
         <Card
           header={{
-            content: 'Stake Details',
+            content: 'Farm Details',
           }}
-          contentClassName={cx(modeClass[colorThemeMode], s.details)}
+          contentClassName={cx(modeClass[colorThemeMode], s.content)}
         >
           <CardCell
             header={(
@@ -229,11 +253,13 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
-            <div className={cx(s.cellAmount, s.priceAmount)}>
-              888 %
+            <div className={s.cellAmount}>
+              <span className={s.priceAmount}>
+                888 %
+              </span>
             </div>
           </CardCell>
           <CardCell
@@ -245,7 +271,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
@@ -263,7 +289,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <Button href="#" theme="underlined">
@@ -279,7 +305,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <Button href="#" theme="underlined">
@@ -295,7 +321,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <Timeleft remaining={remaining} className={s.priceAmount} />
@@ -309,7 +335,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <Timeleft remaining={remaining} className={s.priceAmount} />
@@ -323,7 +349,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>
@@ -341,7 +367,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                   content={t('common|TOOLTIP TODO')}
                 />
               </>
-              )}
+            )}
             className={s.cell}
           >
             <div className={s.cellAmount}>

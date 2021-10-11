@@ -4,15 +4,6 @@
 .card
   margin-bottom: 24px
 
-.tokenLogos
-  display: flex
-  align-items: center
-
-.image
-  position: relative
-  width: 32px
-  height: 32px
-
 .flex
   display: block
 
@@ -21,6 +12,10 @@
   align-items: center
   justify-content: space-between
 
+.image
+  width: 32px
+  height: 32px
+
 .footer
   margin-top: 0px
   display: flex
@@ -28,9 +23,6 @@
   justify-content: flex-start
   flex-direction: row
   flex-wrap: wrap
-
-.arrow
-  transform: rotate(-90deg)
 
 .details
   margin-bottom: 24px
@@ -48,28 +40,29 @@
 .detailsValue
   white-space: nowrap
   font-weight: 600
+  line-height: 1.7
 
 .detailsBlock
-  line-height: 1.71
   width: 50%
   margin-bottom: 8px
-  &:nth-child(2) 
-    order: 1
-  &:nth-child(5) 
-    order: 2
-  &:nth-child(3) 
-    order: 3
-  &:nth-child(6) 
-    order: 4
-  &:nth-child(4) 
-    order: 5
-  &:nth-child(7) 
-    order: 6
   &:not(:last-child)
     margin-right: 0px
+  &:nth-child(2)
+    order: 1
+  &:nth-child(5)
+    order: 2
+  &:nth-child(3)
+    order: 3
+  &:nth-child(6)
+    order: 4
+  &:nth-child(4)
+    margin-bottom: 0
+    order: 5
+  &:nth-child(7)
+    margin-bottom: 0
+    order: 6
 
 .tokens
-  margin-left: 16px
   display: flex
   align-items: center
 
@@ -77,44 +70,26 @@
   margin-left: 8px
   font-size: 1.143rem
 
+.row
+  width: 100%
+  display: flex
+  justify-content: flex-start
+
 .multiplierWrap
   margin-top: 24px
   margin-bottom: 24px
   padding: 2px
 
-.firstBlock
-  width: 100%
-  display: flex
-  align-items: center
-  margin-left: 0px
-  margin-top: 24px
-  margin-bottom: 24px
-
-.tokenItem
+.farmingDigits
   font-size: 1rem
-  display: flex
-  align-items: center
-  margin-top: 0
 
-.tokens
-  margin-right: 8px
-
-.earn
-  margin-left: 4px
-  font-weight: 600
-
-.tvl
-  color: $text-02
-
-.apyIcon
-  margin-left: -2px
-
-.bold600
+.multiplier
+  font-size: 1.714rem
+  line-height: 1.33
   font-weight: 600
 
 .links
-  margin-top: 24px
-  order: 7
+  order: 8
   align-items: flex-start
   width: 100%
   flex-wrap: wrap
@@ -124,7 +99,7 @@
   margin-top: 24px
 
 .content
-  padding: 16px 24px
+  padding: 24px
 
 .reward
   margin-bottom: 24px
@@ -154,26 +129,39 @@
     margin-bottom: 16px
 
 .button
-  order: 8
+  order: 9
   width: 100%
   max-width: 100%
   margin-top: 40px
 
+.apyIcon
+  margin-left: -2px
+
+.tvl
+  color: $text-02
+
 .light
-  .earn, .reward, .amount, .detailsValue
+  .detailsValue
     color: $text-01
-  .tokenItem
-    color: $text-03
+  .multiplier
+    color: $text-01
   .reward
     border: 2px dashed $hover-primary-01-fallback
+    color: $text-01
+  .amount
+    color: $text-01
 
 .dark
-  .earn, .reward, .amount, .detailsValue
+  .detailsValue
     color: $text-inverse
-  .tokenItem
-    color: $text-02
+  .multiplier
+    color: $text-inverse
   .reward
     border: 2px dashed $hover-primary-02-fallback
+    color: $text-inverse
+  .amount
+    color: $text-inverse
+
 
 .onlyMobile
   display: flex !important
@@ -193,6 +181,9 @@
 @include media('>Lphone', '<=Ltablet')
   .rewardAmount
     font-size: 2.286rem
+  .title
+    margin-left: 12px
+    font-size: 1.429rem
 
 @include media('>Lphone')
   .rewardContent
@@ -201,32 +192,30 @@
     font-size: 1.429rem
   .detailsBlock
     width: calc(100% / 3)
+    &:nth-child(6)
+      margin-bottom: 0
   .link
     width: 25%
-  .title
-    margin-left: 12px
-    font-size: 1.429rem
 
 @include media('>Ltablet')
   .card
     margin-bottom: 32px
-  .content
-    padding: 24px
+  .onlyMobile
+    display: none !important
+  .onlyDesktop
+    display: flex !important
   .image
     width: 48px
     height: 48px
   .title
     margin-left: 16px
     font-size: 1.714rem
-  .onlyMobile
-    display: none !important
-  .onlyDesktop
-    display: flex !important
+  .row
+    width: auto
   .multiplierWrap
     margin-top: 0px
     margin-bottom: 0px
   .links
-    margin-top: 0px
     width: auto
     flex-wrap: nowrap
   .link
@@ -238,17 +227,18 @@
   .detailsBlock
     width: auto
     margin-bottom: 0px
-    &:nth-child(2) 
+    &:nth-child(2)
       order: 1
-    &:nth-child(3) 
+    &:nth-child(3)
+      max-height: 48px
       order: 2
-    &:nth-child(4) 
+    &:nth-child(4)
       order: 3
-    &:nth-child(5) 
+    &:nth-child(5)
       order: 4
-    &:nth-child(6) 
+    &:nth-child(6)
       order: 5
-    &:nth-child(7) 
+    &:nth-child(7)
       order: 6
     &:not(:last-child)
       margin-right: 24px
@@ -277,12 +267,12 @@
     margin-top: auto
   .footer
     flex-direction: row
-    margin-top: 16px
+    margin-top: 32px
     display: flex
-    align-items: flex-end
+    align-items: center
     justify-content: space-between
-  .arrow
-    transform: none
+
+@include media('>desktop')
   .header
     text-align: left
   .rewardAmount
@@ -293,11 +283,3 @@
   .button
     width: 160px
     margin-top: auto
-  .firstBlock
-    width: auto
-    display: block
-    margin: 0 16px 0 32px
-  .tokenItem
-    margin-top: 12px
-  .tokens
-    margin-left: 0px

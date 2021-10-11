@@ -1,0 +1,120 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.flex
+  display: block
+
+.header
+  display: flex
+  align-items: center
+  margin-bottom: 8px
+  line-height: 1.143
+
+.content
+  padding-top: 0px
+  font-weight: 600
+
+.reward
+  margin-bottom: 24px
+  display: flex
+  justify-content: space-between
+  padding: 32px 24px
+  border-radius: 8px
+  align-items: center
+  margin-bottom: 24px
+  max-height: 128px
+
+.rewardContent
+  text-align: left
+
+.rewardHeader
+  display: flex
+  flex-direction: column
+  text-align: left
+  font-size: 0.857rem
+
+.amount
+  text-align: left
+
+.rewardAmount, .amount
+  font-size: 1.143rem
+  line-height: 1.5
+
+.rewardCurrency
+  margin-left: 8px
+
+.item
+  display: flex
+  flex-direction: column
+  justify-content: flex-end
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.button
+  width: 100%
+  max-width: 280px
+  margin-top: 40px
+
+.light
+  .reward
+    border: 2px dashed $hover-primary-01-fallback
+    color: $text-01
+  .amount
+    color: $text-01
+  .rewardHeader
+    color: $text-02
+
+.dark
+  .reward
+    border: 2px dashed $hover-primary-02-fallback
+    color: $text-inverse
+  .amount
+    color: $text-inverse
+  .rewardHeader
+    color: $text-03
+
+
+@include media('>phone')
+  .rewardAmount, .amount
+    font-size: 1.714rem
+  .rewardHeader
+    font-size: 1rem
+
+@include media('>Lphone', '<=Ltablet')
+  .rewardAmount, .amount
+    font-size: 2.286rem
+
+@include media('>Lphone')
+  .rewardContent
+    margin-right: 32px
+
+@include media('>Ltablet')
+  .flex
+    display: flex
+    align-items: center
+  .content
+    display: flex
+    align-items: center
+    justify-content: space-between
+  .reward
+    margin-bottom: 0px
+    margin-right: 32px
+    min-width: 432px
+  .item
+    align-items: flex-start
+    &:not(:last-child)
+      margin-bottom: 0px
+  .rewardAmount, .amount
+    font-size: 1.714rem
+  .button
+    width: 160px
+    margin-top: auto
+
+@include media('>desktop')
+  .header
+    text-align: left
+  .rewardAmount, .amount
+    font-size: 2.286rem
+  .button
+    width: 160px
+    margin-top: auto
