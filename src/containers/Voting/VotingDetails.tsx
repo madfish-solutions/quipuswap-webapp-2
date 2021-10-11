@@ -36,6 +36,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
+      if (!dex.storage.storage.current_candidate) return undefined;
       return bakers.find((x) => x.address === dex.storage.storage.current_candidate)
       || {
         address: dex.storage.storage.current_candidate,
@@ -46,6 +47,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
 
   const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
+      if (!dex.storage.storage.current_delegated) return undefined;
       return bakers.find((x) => x.address === dex.storage.storage.current_delegated)
       || {
         address: dex.storage.storage.current_delegated,
