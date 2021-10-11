@@ -87,10 +87,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
 
       </div>
       <div className={s.footer}>
-        <div className={s.row}>
-          <Bage className={s.multiplierWrap} innerClassName={s.multiplier} text={`X ${multiplier}`} />
-
-        </div>
+        <Bage className={s.multiplierWrap} innerClassName={s.multiplier} text={`X ${multiplier}`} />
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
           <div className={s.detailsValue}>
