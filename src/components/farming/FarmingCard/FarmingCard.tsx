@@ -15,6 +15,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
 import { WhitelistedFarm } from '@utils/types';
+import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
@@ -39,8 +40,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     farmId,
     tokenPair,
     totalValueLocked,
-    apy,
-    daily,
+    apyDaily,
     tokenContract = '#',
     farmContract = '#',
     projectLink = '#',
@@ -109,7 +109,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={totalValueLocked} />
+            <CurrencyAmount amount={prettyPrice(+totalValueLocked.toString())} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -121,7 +121,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
           <div className={s.detailsValue}>
-            {apy}
+            {prettyPercentage(apyDaily)}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -129,7 +129,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            {daily}
+            {prettyPercentage(apyDaily.dividedBy(365))}
           </div>
         </div>
         <div className={s.detailsBlock}>
