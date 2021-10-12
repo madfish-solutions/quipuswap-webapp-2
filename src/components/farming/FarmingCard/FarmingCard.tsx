@@ -50,16 +50,16 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   } = farm;
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [balance, setBalance] = useState<number>();
-  const balances = useBalance();
+  const [balance, setBalance] = useState<string>();
+  const balanceFromFarm = useBalance(farm);
 
   useEffect(() => {
-    if (balances && balances[+farmId]) {
-      setBalance(+prettyPrice(balances[+farmId], 2, 6));
+    if (balanceFromFarm !== undefined) {
+      setBalance(prettyPrice(+balanceFromFarm.toString(), 2, 6));
     } else {
       setBalance(undefined);
     }
-  }, [balances, farmId]);
+  }, [balanceFromFarm, farmId]);
 
   return (
     <Card

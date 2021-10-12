@@ -212,7 +212,7 @@ export type VoteFormValues = {
   method:'first' | 'second'
 };
 
-export type FarmingStorageInfo = {
+export interface FarmingStorageInfo extends BigMapAbstraction {
   storage: {
     farms: BigMapAbstraction
     referrers: BigMapAbstraction
@@ -229,7 +229,7 @@ export type FarmingStorageInfo = {
     deposit?: BigNumber
     earned?: BigNumber
   }
-};
+}
 
 export type FarmingUsersInfo = {
   earned?: BigNumber
