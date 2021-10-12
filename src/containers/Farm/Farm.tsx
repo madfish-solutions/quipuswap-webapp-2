@@ -4,25 +4,27 @@ import React, {
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useAccountPkh } from '@utils/dapp';
 import { STABLE_TOKEN } from '@utils/defaults';
+import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
-import { sortFarms } from '@utils/helpers';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SliderUI } from '@components/ui/Slider';
+import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
-import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
+import { FarmCardLoader } from '../../components/farming/FarmingCard/FarmCardLoader/FarmCardLoader';
 
-import { useAccountPkh } from '@utils/dapp';
 import s from './Farm.module.sass';
 
 type FarmProps = {
@@ -73,7 +75,7 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const mergedFarms = useMergedFarmsInfo();
+  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -82,7 +84,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -108,13 +110,33 @@ export const Farm: React.FC<FarmProps> = () => {
   }, [router.query, filteredFarms]);
 
   useEffect(() => {
-    let totalValueLocked = 0;
+    let totalValueLocked:BigNumber = new BigNumber(0);
+    let totalDailyReward:BigNumber = new BigNumber(0);
+    let totalPendingReward:BigNumber = new BigNumber(0);
+    let totalClaimedReward:BigNumber = new BigNumber(0);
+    let farmingLifetime:number;
+
+    const countSecondsInDay = 24 * 60 * 60;
 
     for (let i = 0; i < filteredFarms.length; i++) {
-      totalValueLocked += parseFloat(filteredFarms[i].totalValueLocked);
+      totalValueLocked = totalValueLocked.plus(new BigNumber(filteredFarms[i].totalValueLocked));
+      totalDailyReward = totalDailyReward.plus(new BigNumber(filteredFarms[i].rewardPerSecond));
+      totalClaimedReward = totalClaimedReward.plus(new BigNumber(filteredFarms[i].claimed));
+
+      farmingLifetime = Date.now() - new Date(filteredFarms[i].startTime).getTime();
+      totalPendingReward = totalPendingReward.plus(
+        new BigNumber(farmingLifetime)
+          .multipliedBy(new BigNumber(filteredFarms[i].rewardPerSecond))
+          .minus(new BigNumber(filteredFarms[i].claimed)),
+      );
     }
 
-    content[0].value = totalValueLocked.toString();
+    totalDailyReward = totalDailyReward.multipliedBy(countSecondsInDay);
+
+    content[0].value = fromDecimals(totalValueLocked, 6).toString();
+    content[1].value = fromDecimals(totalDailyReward, 6).toString();
+    content[2].value = fromDecimals(totalPendingReward, 6).toString();
+    content[3].value = fromDecimals(totalClaimedReward, 6).toString();
   }, [filteredFarms]);
 
   const currentSort = useMemo(
@@ -144,7 +166,11 @@ export const Farm: React.FC<FarmProps> = () => {
   }
   return (
     <>
-      <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
+      <ApyModal
+        isOpen={!!modalOpen}
+        close={() => setModalOpen(undefined)}
+        farm={modalOpen}
+      />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
         contentClassName={cx(s.farmingStats)}
@@ -152,7 +178,12 @@ export const Farm: React.FC<FarmProps> = () => {
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>
             <div className={s.name}>{x.name}</div>
-            <CurrencyAmount amount={x.value} currency={x.currency} />
+            <span className={s.currency}>
+              {prettyPrice(+x.value)}
+            </span>
+            {x.currency && (
+              <span>{x.currency}</span>
+            )}
           </div>
         ))}
       </Card>
@@ -219,13 +250,20 @@ export const Farm: React.FC<FarmProps> = () => {
         </div>
       </Card>
 
-      {switchedFarms.map((farm) => (
-        <FarmingCard
-          key={farm.farmId}
-          farm={farm}
-          openModal={() => setModalOpen(true)}
-        />
-      ))}
+      {isFarmsLoaded ? (
+        switchedFarms.map((farm) => (
+          <FarmingCard
+            key={farm.farmId}
+            farm={farm}
+            openModal={() => setModalOpen(farm)}
+          />
+        ))) : (
+          <>
+            <FarmCardLoader />
+            <FarmCardLoader />
+            <FarmCardLoader />
+          </>
+      )}
     </>
   );
 };

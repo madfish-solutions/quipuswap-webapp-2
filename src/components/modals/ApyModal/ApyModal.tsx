@@ -1,8 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { WhitelistedFarm } from '@utils/types';
+import { prettyPrice } from '@utils/helpers';
+import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useAmountOfQuipuPer1000 } from '@hooks/useAmountOfQuipuPer1000';
 import { Modal } from '@components/ui/Modal';
 
 import s from './ApyModal.module.sass';
@@ -12,9 +17,21 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpen, close }) => {
+export const ApyModal: React.FC<{
+  isOpen:boolean,
+  close:() => void,
+  farm?:WhitelistedFarm
+}> = ({ isOpen, close, farm }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const amountOfQuipuPer1000 = useAmountOfQuipuPer1000(farm?.apr ?? new BigNumber(0), isOpen);
+  const [quipuPer1000, setQuipuPer1000] = useState<BigNumber[]>();
+
+  useEffect(() => {
+    setQuipuPer1000(amountOfQuipuPer1000);
+  }, [amountOfQuipuPer1000, farm]);
+
   return (
     <Modal
       containerClassName={cx(themeClass[colorThemeMode], s.modalWrap)}
@@ -26,9 +43,9 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
       <div className={s.header}>
         <div>APR</div>
         <div className={s.headerPercentage}>
-          <span className={s.headerBold}>52.99</span>
-          {' '}
-          %
+          <span className={s.headerBold}>
+            {farm && prettyPercentage(farm.apr)}
+          </span>
         </div>
       </div>
       <table className={s.table}>
@@ -51,10 +68,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1D
             </td>
             <td>
-              0.14%
+              {farm && prettyPercentage(farm.apr.dividedBy(365))}
             </td>
             <td>
-              0.08
+              {quipuPer1000 && prettyPrice(+quipuPer1000[0].toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -62,10 +79,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1W
             </td>
             <td>
-              0.97%
+              {farm && prettyPercentage(farm.apr.dividedBy(52))}
             </td>
             <td>
-              0.64
+              {quipuPer1000 && prettyPrice(+quipuPer1000[1].toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -73,10 +90,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1M
             </td>
             <td>
-              4.32%
+              {farm && prettyPercentage(farm.apr.dividedBy(12))}
             </td>
             <td>
-              2.56
+              {quipuPer1000 && prettyPrice(+quipuPer1000[2].toString(), 2)}
             </td>
           </tr>
           <tr>
@@ -84,10 +101,10 @@ export const ApyModal: React.FC<{ isOpen:boolean, close:() => void }> = ({ isOpe
               1Y(APY)
             </td>
             <td>
-              65%
+              {farm && prettyPercentage(farm.apyDaily)}
             </td>
             <td>
-              64
+              {quipuPer1000 && prettyPrice(+quipuPer1000[3].toString(), 2)}
             </td>
           </tr>
         </tbody>

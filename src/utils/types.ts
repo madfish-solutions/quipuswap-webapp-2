@@ -178,8 +178,8 @@ export interface FarmsFromServerWithWhitelistedPair extends Farms {
 }
 
 export interface WhitelistedFarm extends FarmsFromServerWithWhitelistedPair {
-  apy: string
-  daily: string
+  apr: BigNumber
+  apyDaily: BigNumber
   tokenContract: string
   farmContract: string
   projectLink: string
