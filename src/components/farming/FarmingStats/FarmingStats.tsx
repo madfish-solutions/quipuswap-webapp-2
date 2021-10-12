@@ -16,7 +16,7 @@ import {
   useTezos,
 } from '@utils/dapp';
 import { SubmitType } from '@utils/types';
-import { FARM_CONTRACT, FARM_PRECISION } from '@utils/defaults';
+import { FARM_CONTRACT, FARM_PRECISION, STABLE_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -25,6 +25,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { fromDecimals } from '@utils/helpers';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -90,18 +91,25 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
 
     let userClaimed = new BigNumber(0);
     let userPending = new BigNumber(0);
+    // console.log(userInfoInAllFarmsArray);
     for (let index = 0; index < userInfoInAllFarmsArray.length; index++) {
+      const rps = new BigNumber(Date.now() - new Date(farms[index].upd).getTime())
+        .dividedBy(1000)
+        .multipliedBy(farms[index].rewardPerSecond);
       userClaimed = userClaimed.plus(userInfoInAllFarmsArray[index]?.claimed ?? 0);
-      userPending = userPending
-        .plus(userInfoInAllFarmsArray[index]?.earned ?? 0)
+      const newPending = new BigNumber(userInfoInAllFarmsArray[index]?.earned ?? 0)
         .multipliedBy(userInfoInAllFarmsArray[index]?.staked ?? 0)
-        .multipliedBy(farms[index]?.rewardPerShare ?? 0)
-        .minus(userInfoInAllFarmsArray[index]?.prev_earned ?? 0)
-        .dividedBy(+FARM_PRECISION);
+        .multipliedBy(new BigNumber(farms[index]?.rewardPerShare ?? 0)
+          .plus(new BigNumber(rps)
+            .dividedBy(new BigNumber(farms[index]?.totalValueLocked ?? 0))))
+        .minus(userInfoInAllFarmsArray[index]?.prev_earned ?? 0);
+      if (!newPending.isNaN()) {
+        userPending = userPending.plus(newPending.abs()).dividedBy(+FARM_PRECISION);
+      }
     }
 
-    setClaimed(userClaimed.toString());
-    setPending(userPending.toString());
+    setClaimed(fromDecimals(userClaimed, 6).toString());
+    setPending(fromDecimals(userPending, 6).toString());
   }, [userInfoInAllFarms, accountPkh]);
 
   const handleErrorToast = useCallback((err) => {
@@ -189,7 +197,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
         <div className={s.reward}>
           <div className={s.rewardContent}>
             <span className={s.rewardHeader}>
-              Your Pending QNOTs
+              {t('farms|Your Pending {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
             </span>
             <span className={s.rewardAmount}>{pending}</span>
           </div>
@@ -197,12 +205,12 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
         </div>
         <div className={s.item}>
           <span className={s.header}>
-            Your claimed QNOTs
+            {t('farms|Your claimed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
           </span>
           <span className={s.amount}>{claimed}</span>
         </div>
       </div>
-      <Button className={s.button} onClick={handleHarvest}>Harvest All</Button>
+      <Button className={s.button} onClick={handleHarvest}>{t('farms|Harvest All')}</Button>
     </Card>
   );
 };
