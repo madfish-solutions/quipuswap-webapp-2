@@ -175,7 +175,7 @@ function useDApp() {
     farmingContract: undefined,
   });
 
-  const loadFaringStorage = useCallback(async () => {
+  const loadFarmingStorage = useCallback(async () => {
     const contract:FarmingStorageInfo = await getStorageInfo(
       tezos ?? fallbackToolkit,
       FARM_CONTRACT,
@@ -186,7 +186,7 @@ function useDApp() {
 
   useEffect(() => {
     const loadStorage = async () => {
-      const contractStorage = await loadFaringStorage();
+      const contractStorage = await loadFarmingStorage();
 
       setState((prevState) => ({
         ...prevState,

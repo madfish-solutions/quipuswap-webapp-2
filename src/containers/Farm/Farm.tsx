@@ -17,13 +17,14 @@ import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SliderUI } from '@components/ui/Slider';
+import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
-import { SelectUI } from '@components/ui/Select';
 import Search from '@icons/Search.svg';
+import { FarmCardLoader } from '../../components/farming/FarmingCard/FarmCardLoader/FarmCardLoader';
 
 import s from './Farm.module.sass';
 
@@ -75,7 +76,7 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const mergedFarms = useMergedFarmsInfo();
+  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const userInfoInAllFarms = useUserInfoInAllFarms();
@@ -85,7 +86,7 @@ export const Farm: React.FC<FarmProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
-  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
   const [pending, setPending] = useState<BigNumber>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
@@ -116,7 +117,7 @@ export const Farm: React.FC<FarmProps> = () => {
       let earned:BigNumber = new BigNumber(0);
 
       for (let index = 0; index < Object.keys(userInfoInAllFarms).length; index++) {
-        earned = earned.plus(userInfoInAllFarms[index].earned ?? 0);
+        earned = earned.plus(userInfoInAllFarms[index]?.earned ?? 0);
       }
 
       setPending(earned);
@@ -180,7 +181,11 @@ export const Farm: React.FC<FarmProps> = () => {
   }
   return (
     <>
-      <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
+      <ApyModal
+        isOpen={!!modalOpen}
+        close={() => setModalOpen(undefined)}
+        farm={modalOpen}
+      />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
         contentClassName={cx(s.farmingStats)}
@@ -260,13 +265,20 @@ export const Farm: React.FC<FarmProps> = () => {
         </div>
       </Card>
 
-      {switchedFarms.map((farm) => (
-        <FarmingCard
-          key={farm.farmId}
-          farm={farm}
-          openModal={() => setModalOpen(true)}
-        />
-      ))}
+      {isFarmsLoaded ? (
+        switchedFarms.map((farm) => (
+          <FarmingCard
+            key={farm.farmId}
+            farm={farm}
+            openModal={() => setModalOpen(farm)}
+          />
+        ))) : (
+          <>
+            <FarmCardLoader />
+            <FarmCardLoader />
+            <FarmCardLoader />
+          </>
+      )}
     </>
   );
 };

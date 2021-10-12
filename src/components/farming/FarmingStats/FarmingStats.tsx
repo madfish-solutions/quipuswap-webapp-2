@@ -15,9 +15,9 @@ import {
 } from '@utils/dapp';
 import { SubmitType } from '@utils/types';
 import { FARM_CONTRACT } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
