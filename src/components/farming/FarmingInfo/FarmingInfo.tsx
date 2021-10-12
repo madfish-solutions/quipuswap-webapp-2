@@ -116,6 +116,13 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     });
   }, [updateToast, t, currentTab]);
 
+  const handleSuccessHarvest = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('common|Harvest completed!'),
+    });
+  }, [updateToast, t]);
+
   const handleHarvest = useCallback(async () => {
     if (!tezos) {
       updateToast({
@@ -168,7 +175,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         harvestParams,
       ).send();
       await op.confirmation();
-      handleSuccessToast();
+      handleSuccessHarvest();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -181,7 +188,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     updateToast,
     handleErrorToast,
     handleLoader,
-    handleSuccessToast,
+    handleSuccessHarvest,
     openConnectWalletModal,
   ]);
 
