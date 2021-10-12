@@ -1,6 +1,9 @@
 import { estimateTezInShares, estimateTezToToken, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { FARM_PRECISION, TEZOS_TOKEN } from '@utils/defaults';
+import { fromDecimals } from '.';
+
 interface AprAndApy {
   apr: BigNumber
   apyDaily: BigNumber
@@ -16,10 +19,6 @@ export const calculatingAPR = (
     apyDaily: new BigNumber(0),
   };
 
-  if (rewardPerSecond === '0') {
-    return aprAndApy;
-  }
-
   if (totalValueLocked === '0') {
     aprAndApy.apr = new BigNumber(Infinity);
     aprAndApy.apyDaily = new BigNumber(Infinity);
@@ -27,14 +26,35 @@ export const calculatingAPR = (
     return aprAndApy;
   }
 
-  const total = estimateTezInShares(dexStorage, new BigNumber(totalValueLocked));
-  const perSecond = estimateTezToToken(dexStorage, new BigNumber(rewardPerSecond));
+  if (rewardPerSecond === '0') {
+    return aprAndApy;
+  }
+
   const secondsInYear = 31536000; // 365 * 24 * 60 * 60
+
+  const correctRewarsPerYear = new BigNumber(rewardPerSecond)
+    .dividedBy(new BigNumber(FARM_PRECISION))
+    .multipliedBy(secondsInYear)
+    .toFixed(0);
+
+  if (correctRewarsPerYear === '0') {
+    return aprAndApy;
+  }
+
   const daysInYear = 365;
   const one = new BigNumber(1);
 
-  aprAndApy.apr = perSecond
-    .multipliedBy(secondsInYear)
+  const total = estimateTezInShares(
+    dexStorage,
+    fromDecimals(new BigNumber(totalValueLocked), TEZOS_TOKEN.metadata.decimals),
+  );
+
+  const perYear = estimateTezToToken(
+    dexStorage,
+    correctRewarsPerYear,
+  );
+
+  aprAndApy.apr = perYear
     .dividedBy(total)
     .multipliedBy(100);
 

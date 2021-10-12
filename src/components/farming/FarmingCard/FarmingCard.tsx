@@ -105,7 +105,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={prettyPrice(+totalValueLocked.toString())} />
+            <CurrencyAmount amount={totalValueLocked} />
           </div>
         </div>
         <div className={s.detailsBlock}>

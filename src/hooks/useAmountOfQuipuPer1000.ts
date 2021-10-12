@@ -20,9 +20,9 @@ export const useAmountOfQuipuPer1000 = (percentage: BigNumber, isOpen: boolean) 
     if (!percentage) return;
     if (!isOpen) return;
 
-    const daily = percentage.multipliedBy(365);
-    const weekly = percentage.multipliedBy(52);
-    const monthly = percentage.multipliedBy(12);
+    const daily = percentage.dividedBy(365);
+    const weekly = percentage.dividedBy(52);
+    const monthly = percentage.dividedBy(12);
 
     setAmountOfQuipuPer1000([
       oneThousand

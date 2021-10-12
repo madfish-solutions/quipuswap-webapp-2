@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
-import BigNumber from 'bignumber.js';
 
 import { prettyPrice } from '@utils/helpers';
 import { useFarms } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
-import { STABLE_TOKEN } from '@utils/defaults';
 import { calculatingAPR } from '@utils/helpers/calculateAPR';
-import { useExchangeRates } from './useExchangeRate';
 import { useUserInfoInAllFarms } from './useUserInfoInAllFarms';
 import { useDexufs } from './useDexbufs';
 
 export const useMergedFarmsInfo = () => {
   const { data: farms } = useFarms();
   const userInfoInAllFarms = useUserInfoInAllFarms();
-  const exchangeRates = useExchangeRates();
   const dexbufs = useDexufs();
   const [mergedFarms, setMergedFarms] = useState<WhitelistedFarm[]>();
   const [isFarmsLoaded, setFarmsLoaded] = useState(false);
@@ -23,11 +19,6 @@ export const useMergedFarmsInfo = () => {
       if (!farms) return;
       if (!userInfoInAllFarms) return;
       if (dexbufs.length < 1) return;
-
-      const price = new BigNumber(exchangeRates && exchangeRates.find
-        ? exchangeRates
-          .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
-        : NaN);
 
       const merged:WhitelistedFarm[] = farms.map((farm, index) => {
         let deposit = '0'; let earned = '0';
@@ -46,7 +37,6 @@ export const useMergedFarmsInfo = () => {
 
         return {
           ...farm,
-          totalValueLocked: prettyPrice(+farm.totalValueLocked * +price.toFixed(2)),
           deposit,
           earned,
           apr,
@@ -64,7 +54,7 @@ export const useMergedFarmsInfo = () => {
     };
 
     mergeFarmsInfo();
-  }, [farms, userInfoInAllFarms, dexbufs, exchangeRates]);
+  }, [farms, userInfoInAllFarms, dexbufs]);
 
   return { mergedFarms, isFarmsLoaded };
 };
