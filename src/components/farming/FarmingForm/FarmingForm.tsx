@@ -105,9 +105,13 @@ const RealForm:React.FC<FarmingFormProps> = ({
         contract: tokenPair.token2.contractAddress,
         id: tokenPair.token2.fa2TokenId ?? undefined,
       };
-      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
-      if (tempDex && tempDex !== dex) {
-        setDex(tempDex);
+      try {
+        const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
+        if (tempDex && tempDex !== dex) {
+          setDex(tempDex);
+        }
+      } catch (e) {
+        handleErrorToast(e);
       }
     }
   };
