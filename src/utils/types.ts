@@ -232,11 +232,12 @@ export interface FarmingStorageInfo extends BigMapAbstraction {
 }
 
 export type FarmingUsersInfo = {
-  earned?: BigNumber
-  last_staked?: Date
-  prev_earned?: BigNumber
-  staked?: BigNumber
-  used_votes?: BigNumber
+  earned: BigNumber
+  last_staked: Date
+  prev_earned: BigNumber
+  staked: BigNumber
+  used_votes: BigNumber
+  claimed: BigNumber
   farmId?: number
 };
 

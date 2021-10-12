@@ -12,7 +12,6 @@ import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
-import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -76,18 +75,16 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
-  const userInfoInAllFarms = useUserInfoInAllFarms();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
-  const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
-  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
+  const [sort, setSort] = useState('Sorted By');
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
-  const [pending, setPending] = useState<BigNumber>();
+  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -113,18 +110,6 @@ export const Farm: React.FC<FarmProps> = () => {
   }, [router.query, filteredFarms]);
 
   useEffect(() => {
-    if (userInfoInAllFarms) {
-      let earned:BigNumber = new BigNumber(0);
-
-      for (let index = 0; index < Object.keys(userInfoInAllFarms).length; index++) {
-        earned = earned.plus(userInfoInAllFarms[index]?.earned ?? 0);
-      }
-
-      setPending(earned);
-    }
-  }, [userInfoInAllFarms]);
-
-  useEffect(() => {
     let totalValueLocked:BigNumber = new BigNumber(0);
     let totalDailyReward:BigNumber = new BigNumber(0);
     let totalPendingReward:BigNumber = new BigNumber(0);
@@ -133,26 +118,26 @@ export const Farm: React.FC<FarmProps> = () => {
 
     const countSecondsInDay = 24 * 60 * 60;
 
-    for (let i = 0; i < filteredFarms.length; i++) {
-      totalValueLocked = totalValueLocked.plus(new BigNumber(filteredFarms[i].totalValueLocked));
-      totalDailyReward = totalDailyReward.plus(new BigNumber(filteredFarms[i].rewardPerSecond));
-      totalClaimedReward = totalClaimedReward.plus(new BigNumber(filteredFarms[i].claimed));
+    for (let i = 0; i < switchedFarms.length; i++) {
+      totalValueLocked = totalValueLocked.plus(new BigNumber(switchedFarms[i].totalValueLocked));
+      totalDailyReward = totalDailyReward.plus(new BigNumber(switchedFarms[i].rewardPerSecond));
+      totalClaimedReward = totalClaimedReward.plus(new BigNumber(switchedFarms[i].claimed));
 
-      farmingLifetime = Date.now() - new Date(filteredFarms[i].startTime).getTime();
+      farmingLifetime = Date.now() - new Date(switchedFarms[i].startTime).getTime();
       totalPendingReward = totalPendingReward.plus(
         new BigNumber(farmingLifetime)
-          .multipliedBy(new BigNumber(filteredFarms[i].rewardPerSecond))
-          .minus(new BigNumber(filteredFarms[i].claimed)),
+          .multipliedBy(new BigNumber(switchedFarms[i].rewardPerSecond))
+          .minus(new BigNumber(switchedFarms[i].claimed)),
       );
     }
 
     totalDailyReward = totalDailyReward.multipliedBy(countSecondsInDay);
 
     content[0].value = fromDecimals(totalValueLocked, 6).toString();
-    content[1].value = fromDecimals(totalDailyReward, 6).toString();
-    content[2].value = fromDecimals(totalPendingReward, 6).toString();
+    content[1].value = fromDecimals(totalDailyReward, 18).toString();
+    content[2].value = fromDecimals(totalPendingReward, 18).toString();
     content[3].value = fromDecimals(totalClaimedReward, 6).toString();
-  }, [filteredFarms]);
+  }, [switchedFarms]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
@@ -230,7 +215,7 @@ export const Farm: React.FC<FarmProps> = () => {
           ))}
         </SliderUI>
       </Card>
-      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} pending={pending} />
+      <FarmingStats className={cx(s.farmingCard, s.farmingContent)} />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}

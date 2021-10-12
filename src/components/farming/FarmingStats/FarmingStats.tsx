@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import cx from 'classnames';
 import {
   batchify, fromOpOpts, withTokenApprove,
@@ -14,15 +16,15 @@ import {
   useTezos,
 } from '@utils/dapp';
 import { SubmitType } from '@utils/types';
-import { FARM_CONTRACT } from '@utils/defaults';
+import { FARM_CONTRACT, FARM_PRECISION } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
-import { prettyPrice } from '@utils/helpers';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -32,7 +34,6 @@ const modeClass = {
 
 type FarmingStatsProps = {
   className?: string
-  pending?: BigNumber
 };
 
 const getAllHarvest = async ({
@@ -64,7 +65,7 @@ const getAllHarvest = async ({
 };
 
 export const FarmingStats: React.FC<FarmingStatsProps> = ({
-  className, pending,
+  className,
 }) => {
   const { data: farms } = useFarms();
   const farmContract = useFarmingContract();
@@ -77,6 +78,31 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const userInfoInAllFarms = useUserInfoInAllFarms();
+  const [claimed, setClaimed] = useState<string>('0');
+  const [pending, setPending] = useState<string>('0');
+
+  useEffect(() => {
+    if (!userInfoInAllFarms) return;
+    if (!accountPkh) return;
+
+    const userInfoInAllFarmsArray = Object.values(userInfoInAllFarms);
+
+    let userClaimed = new BigNumber(0);
+    let userPending = new BigNumber(0);
+    for (let index = 0; index < userInfoInAllFarmsArray.length; index++) {
+      userClaimed = userClaimed.plus(userInfoInAllFarmsArray[index]?.claimed ?? 0);
+      userPending = userPending
+        .plus(userInfoInAllFarmsArray[index]?.earned ?? 0)
+        .multipliedBy(userInfoInAllFarmsArray[index]?.staked ?? 0)
+        .multipliedBy(farms[index]?.rewardPerShare ?? 0)
+        .minus(userInfoInAllFarmsArray[index]?.prev_earned ?? 0)
+        .dividedBy(+FARM_PRECISION);
+    }
+
+    setClaimed(userClaimed.toString());
+    setPending(userPending.toString());
+  }, [userInfoInAllFarms, accountPkh]);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -95,7 +121,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Proposal submitted!'),
+      render: t('common|Harvested!'),
     });
   }, [updateToast, t]);
 
@@ -165,9 +191,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
             <span className={s.rewardHeader}>
               Your Pending QNOTs
             </span>
-            <span className={s.rewardAmount}>
-              {pending && prettyPrice(Number(pending), 2).slice(0, -1)}
-            </span>
+            <span className={s.rewardAmount}>{pending}</span>
           </div>
           <VotingReward />
         </div>
@@ -175,7 +199,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
           <span className={s.header}>
             Your claimed QNOTs
           </span>
-          <span className={s.amount}>1,000,000.00</span>
+          <span className={s.amount}>{claimed}</span>
         </div>
       </div>
       <Button className={s.button} onClick={handleHarvest}>Harvest All</Button>
