@@ -51,15 +51,11 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [balance, setBalance] = useState<string>();
-  const balanceFromFarm = useBalance(farm);
+  const balanceFromWallet = useBalance(farm);
 
   useEffect(() => {
-    if (balanceFromFarm !== undefined) {
-      setBalance(prettyPrice(+balanceFromFarm.toString(), 2, 6));
-    } else {
-      setBalance(undefined);
-    }
-  }, [balanceFromFarm, farmId]);
+    setBalance(prettyPrice(+balanceFromWallet.toString(), 2, 6));
+  }, [balanceFromWallet, farmId]);
 
   return (
     <Card
@@ -137,7 +133,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Balance')}
           </div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={balance?.toString()} />
+            <FarmingUserMoney money={balance} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -145,13 +141,13 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Deposit')}
           </div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={deposit?.toString()} />
+            <FarmingUserMoney money={deposit} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={earned?.toString()} />
+            <FarmingUserMoney money={earned} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
