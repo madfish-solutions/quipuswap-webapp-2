@@ -15,7 +15,7 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
-import { SubmitType } from '@utils/types';
+import { FarmingUsersInfo, SubmitType } from '@utils/types';
 import { FARM_CONTRACT, FARM_PRECISION, STABLE_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -25,7 +25,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, parseDecimals } from '@utils/helpers';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -79,38 +79,43 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const userInfoInAllFarms = useUserInfoInAllFarms();
+  const {
+    userInfoInFarms: userInfoInAllFarms,
+    loadAmountOfTokensInFarms,
+  } = useUserInfoInAllFarms();
   const [claimed, setClaimed] = useState<string>('0');
   const [pending, setPending] = useState<string>('0');
 
-  useEffect(() => {
+  const calculatePendingReward = useCallback(() => {
     if (!userInfoInAllFarms) return;
     if (!accountPkh) return;
 
-    const userInfoInAllFarmsArray = Object.values(userInfoInAllFarms);
+    const generalTotal = Object
+      .values(userInfoInAllFarms)
+      .reduce((userData, cur:FarmingUsersInfo | undefined, index) => (cur ? {
+        claimed: userData.claimed.plus(cur.claimed),
+        pending: userData.pending.plus(new BigNumber(cur.earned
+          .plus(new BigNumber(cur.staked)
+            .multipliedBy(
+              farms[index].totalValueLocked === '0' ? 0
+                : new BigNumber(Date.now() - new Date(farms[index].upd).getTime())
+                  .dividedBy(1000)
+                  .multipliedBy(new BigNumber(farms[index].rewardPerSecond))
+                  .dividedBy(new BigNumber(farms[index].totalValueLocked))
+                  .plus(new BigNumber(farms[index].rewardPerShare)),
+            )
+            .minus(cur.prev_earned)))
+          .dividedBy(+FARM_PRECISION)),
+      } : userData),
+      { claimed: new BigNumber(0), pending: new BigNumber(0) });
 
-    let userClaimed = new BigNumber(0);
-    let userPending = new BigNumber(0);
-    // console.log(userInfoInAllFarmsArray);
-    for (let index = 0; index < userInfoInAllFarmsArray.length; index++) {
-      const rps = new BigNumber(Date.now() - new Date(farms[index].upd).getTime())
-        .dividedBy(1000)
-        .multipliedBy(farms[index].rewardPerSecond);
-      userClaimed = userClaimed.plus(userInfoInAllFarmsArray[index]?.claimed ?? 0);
-      const newPending = new BigNumber(userInfoInAllFarmsArray[index]?.earned ?? 0)
-        .multipliedBy(userInfoInAllFarmsArray[index]?.staked ?? 0)
-        .multipliedBy(new BigNumber(farms[index]?.rewardPerShare ?? 0)
-          .plus(new BigNumber(rps)
-            .dividedBy(new BigNumber(farms[index]?.totalValueLocked ?? 0))))
-        .minus(userInfoInAllFarmsArray[index]?.prev_earned ?? 0);
-      if (!newPending.isNaN()) {
-        userPending = userPending.plus(newPending.abs()).dividedBy(+FARM_PRECISION);
-      }
-    }
+    setClaimed(fromDecimals(generalTotal.claimed, 6).toString());
+    setPending(parseDecimals(fromDecimals(generalTotal.pending, 6).toString(), 0, Infinity, 6));
+  }, [userInfoInAllFarms, accountPkh, farms]);
 
-    setClaimed(fromDecimals(userClaimed, 6).toString());
-    setPending(fromDecimals(userPending, 6).toString());
-  }, [userInfoInAllFarms, accountPkh]);
+  useEffect(() => {
+    calculatePendingReward();
+  }, [calculatePendingReward]);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -180,6 +185,8 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessToast();
+      // TODO: re- calculatePendingReward(), which based on userInfo update
+      loadAmountOfTokensInFarms();
     } catch (e) {
       handleErrorToast(e);
     }

@@ -9,7 +9,7 @@ import { useDexufs } from './useDexbufs';
 
 export const useMergedFarmsInfo = () => {
   const { data: farms } = useFarms();
-  const userInfoInAllFarms = useUserInfoInAllFarms();
+  const { userInfoInFarms: userInfoInAllFarms } = useUserInfoInAllFarms();
   const dexbufs = useDexufs();
   const [mergedFarms, setMergedFarms] = useState<WhitelistedFarm[]>();
   const [isFarmsLoaded, setFarmsLoaded] = useState(false);
