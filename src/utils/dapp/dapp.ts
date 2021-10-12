@@ -47,6 +47,7 @@ import {
   toBeaconNetworkType,
 } from './network';
 import { getFarms } from './farms';
+import { getStakes } from './stakes';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -138,6 +139,7 @@ export type DAppType = {
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   farms: { data:FarmsFromServerWithWhitelistedPair[], loading:boolean, error?:string },
+  stakes: { data:FarmsFromServerWithWhitelistedPair[], loading:boolean, error?:string },
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
   farmingStorage: FarmingStorageInfo | undefined,
   farmingContract: ContractAbstraction<ContractProvider> | undefined,
@@ -157,6 +159,7 @@ function useDApp() {
     searchTokens,
     bakers,
     farms,
+    stakes,
     searchBakers,
     farmingStorage,
     farmingContract,
@@ -170,6 +173,7 @@ function useDApp() {
     searchTokens: { loading: false, data: [] },
     bakers: { loading: true, data: [] },
     farms: { loading: true, data: [] },
+    stakes: { loading: true, data: [] },
     searchBakers: { loading: false, data: [] },
     farmingStorage: undefined,
     farmingContract: undefined,
@@ -182,7 +186,7 @@ function useDApp() {
     );
 
     return contract;
-  }, [network, tezos]);
+  }, [tezos]);
 
   useEffect(() => {
     const loadStorage = async () => {
@@ -366,6 +370,21 @@ function useDApp() {
       farms: { loading: false, data: farmsData ?? [] },
     }));
   }, [farmsData]);
+
+  const getStakesData = useCallback(() => getStakes(), []);
+  const {
+    data: stakesData,
+  } = useSWR(
+    ['stakes-initial-data'],
+    getStakesData,
+  );
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      stakes: { loading: false, data: stakesData ?? [] },
+    }));
+  }, [stakesData]);
 
   useEffect(() => {
     if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
@@ -569,6 +588,7 @@ function useDApp() {
     searchTokens,
     bakers,
     farms,
+    stakes,
     searchBakers,
     connectWithBeacon,
     connectWithTemple,
@@ -595,6 +615,7 @@ export const [
   useSearchTokens,
   useBakers,
   useFarms,
+  useStakes,
   useSearchBakers,
   useConnectWithBeacon,
   useConnectWithTemple,
@@ -618,6 +639,7 @@ export const [
   (v) => v.searchTokens,
   (v) => v.bakers,
   (v) => v.farms,
+  (v) => v.stakes,
   (v) => v.searchBakers,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
