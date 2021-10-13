@@ -2,8 +2,9 @@ import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { getWhitelistedBakerName } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { BakerLogo } from '@components/ui/BakerLogo';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
@@ -78,9 +79,9 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
             <BakerLogo baker={baker || {} as WhitelistedBaker} />
             <h6
               className={cx(s.token, s.bakerLabel)}
-              title={baker ? baker.name : t('common|Choose Baker')}
+              title={baker ? getWhitelistedBakerName(baker) : t('common|Choose Baker')}
             >
-              {baker ? baker.name : t('common|Choose Baker')}
+              {baker ? getWhitelistedBakerName(baker) : t('common|Choose Baker')}
             </h6>
             <Shevron />
           </div>

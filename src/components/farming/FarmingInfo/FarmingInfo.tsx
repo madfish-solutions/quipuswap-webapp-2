@@ -22,6 +22,7 @@ import {
 } from '@utils/dapp';
 import { getHarvest } from '@utils/helpers/getHarvest';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -33,7 +34,6 @@ import { FarmingForm, TabsContent } from '@components/farming/FarmingForm';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
-import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import s from './FarmingInfo.module.sass';
 import { submitForm } from './farmingHelpers';
 
@@ -46,7 +46,7 @@ type FarmingInfoProps = {
   className?: string
   handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
-  amount?: string
+  tezPrice: BigNumber
 };
 
 const modeClass = {
@@ -57,6 +57,7 @@ const modeClass = {
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
+  tezPrice,
 }) => {
   const {
     farmId,
@@ -70,7 +71,6 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     upd,
     deposit,
   } = farm;
-  // console.log(farm);
   const farmContract = useFarmingContract();
   const { data: bakers } = useBakers();
   const tezos = useTezos();
@@ -78,6 +78,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   const updateToast = useUpdateToast();
   const { t } = useTranslation(['common', 'farms']);
   const { Form } = withTypes<FarmingFormValues>();
+
   const {
     openConnectWalletModal,
   } = useConnectModalsState();
@@ -304,7 +305,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <span className={s.amount}>
                   {fromDecimals(deposit, 6).toString()}
                   (
-                  {fromDecimals(estimateTezInShares(dexStorage, deposit), 6).toString()}
+                  {fromDecimals(estimateTezInShares(dexStorage, deposit), 6)
+                    .multipliedBy(tezPrice)
+                    .toFixed(2)}
                   $)
                 </span>
               </div>
@@ -410,6 +413,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             currentTab={currentTab}
             setTabsState={setTabsState}
             tabsState={tabsState}
+            tezPrice={tezPrice}
           />
         )}
       />

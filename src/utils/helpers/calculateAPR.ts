@@ -46,7 +46,7 @@ export const calculatingAPR = (
 
   const total = estimateTezInShares(
     dexStorage,
-    fromDecimals(new BigNumber(totalValueLocked), TEZOS_TOKEN.metadata.decimals),
+    new BigNumber(totalValueLocked),
   );
 
   const perYear = estimateTezToToken(
@@ -55,7 +55,7 @@ export const calculatingAPR = (
   );
 
   aprAndApy.apr = perYear
-    .dividedBy(total)
+    .dividedBy(fromDecimals(total, TEZOS_TOKEN.metadata.decimals))
     .multipliedBy(100);
 
   aprAndApy.apyDaily = one

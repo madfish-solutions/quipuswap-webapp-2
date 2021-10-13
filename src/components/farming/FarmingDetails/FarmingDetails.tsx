@@ -2,9 +2,11 @@ import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
 import { WhitelistedBaker, WhitelistedFarm } from '@utils/types';
-import { getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { fromDecimals, getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
 import { useBakers } from '@utils/dapp';
 import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -20,6 +22,7 @@ import s from './FarmingDetails.module.sass';
 
 type FarmingDetailsProps = {
   farm: WhitelistedFarm
+  tezPrice: BigNumber
   dex?: FoundDex
 };
 
@@ -31,6 +34,7 @@ const modeClass = {
 export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
   farm,
   dex,
+  tezPrice,
 }) => {
   const {
     totalValueLocked,
@@ -40,6 +44,7 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
     analyticsLink,
     startTime,
     timelock,
+    fees,
   } = farm;
   const { t } = useTranslation(['common', 'farms']);
   const { data: bakers } = useBakers();
@@ -91,7 +96,12 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
           $
           {' '}
           <span className={s.priceAmount}>
-            <CurrencyAmount amount={prettyPrice(+totalValueLocked)} />
+            <CurrencyAmount amount={prettyPrice(+fromDecimals(
+              new BigNumber(totalValueLocked), TEZOS_TOKEN.metadata.decimals,
+            )
+              .multipliedBy(tezPrice)
+              .toString())}
+            />
           </span>
         </div>
       </CardCell>
@@ -231,7 +241,9 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            888 %
+            {new BigNumber(fees.withdrawal_fee).dividedBy(100).toFixed(2)}
+            {' '}
+            %
           </span>
         </div>
       </CardCell>
@@ -249,7 +261,9 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            888 %
+            {new BigNumber(fees.harvest_fee).dividedBy(100).toFixed(2)}
+            {' '}
+            %
           </span>
         </div>
       </CardCell>

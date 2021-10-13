@@ -43,6 +43,7 @@ type FarmingFormProps = {
   debounce:number
   currentTab: any
   tabsState: any
+  tezPrice: BigNumber
   setTabsState: (val: any) => void
   handleSubmit: () => void
 };
@@ -68,6 +69,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
   currentTab,
   setTabsState,
   tabsState,
+  tezPrice,
   farm,
 }) => {
   const { t } = useTranslation(['common', 'farms']);
@@ -293,7 +295,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
             {({ input, meta }) => (
               <ComplexBaker
                 {...input}
-                label="Baker"
+                label={t('farms|Baker')}
                 id="voting-baker"
                 className={s.mt12}
                 handleChange={(bakerObj) => {
@@ -340,6 +342,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
       <FarmingDetails
         farm={farm}
         dex={dex}
+        tezPrice={tezPrice}
       />
     </StickyBlock>
   );

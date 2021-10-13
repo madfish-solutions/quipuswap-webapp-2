@@ -12,6 +12,7 @@ import { fromDecimals, prettyPrice, sortFarms } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
 import { useMergedFarmsInfo } from '@hooks/useMergedFarmsInfo';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
@@ -85,6 +86,11 @@ export const Farm: React.FC<FarmProps> = () => {
   const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
+  const exchangeRates = useExchangeRates();
+  const tezPrice = new BigNumber(exchangeRates && exchangeRates.find
+    ? exchangeRates
+      .find((e:any) => !e.tokenAddress)?.exchangeRate
+    : new BigNumber(1));
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -161,7 +167,11 @@ export const Farm: React.FC<FarmProps> = () => {
   if (selectedFarming) {
     // TODO
     return (
-      <FarmingInfo handleUnselect={() => selectFarm(undefined)} farm={selectedFarming} />
+      <FarmingInfo 
+        tezPrice={tezPrice} 
+        handleUnselect={() => selectFarm(undefined)} 
+        farm={selectedFarming} 
+      />
     );
   }
   return (
@@ -253,6 +263,7 @@ export const Farm: React.FC<FarmProps> = () => {
       {isFarmsLoaded ? (
         switchedFarms.map((farm) => (
           <FarmingCard
+            tezPrice={tezPrice}
             key={farm.farmId}
             farm={farm}
             openModal={() => setModalOpen(farm)}

@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
+import BigNumber from 'bignumber.js';
 
 import {
   fromDecimals,
@@ -30,11 +31,13 @@ export type FarmingCardProps = {
   farm:WhitelistedFarm
   className?: string
   openModal?:() => void
+  tezPrice: BigNumber
 };
 
 export const FarmingCard: React.FC<FarmingCardProps> = ({
   farm,
   className,
+  tezPrice,
   openModal,
 }) => {
   const {
@@ -102,7 +105,10 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={prettyPrice(+totalValueLocked)} />
+            <CurrencyAmount amount={prettyPrice(+new BigNumber(totalValueLocked)
+              .multipliedBy(tezPrice)
+              .toFixed(2), 3, 3)}
+            />
           </div>
         </div>
         <div className={s.detailsBlock}>
