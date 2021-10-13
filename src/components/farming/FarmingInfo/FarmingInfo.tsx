@@ -239,7 +239,11 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               .plus(new BigNumber(rewardPerShare)),
         )
         .minus(userData.prev_earned)))
-      .dividedBy(+FARM_PRECISION);
+      .dividedBy(new BigNumber(FARM_PRECISION))
+      .multipliedBy(new BigNumber(farm.fees.harvest_fee)
+        .minus(new BigNumber(FARM_PRECISION))
+        .abs()
+        .dividedBy(new BigNumber(FARM_PRECISION)));
 
     setPending(parseDecimals(fromDecimals(userClaimed, 6).toString(), 0, Infinity, 6));
   }, [

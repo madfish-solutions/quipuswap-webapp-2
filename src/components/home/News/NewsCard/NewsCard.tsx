@@ -38,10 +38,10 @@ export const NewsCard: React.FC<NewsCardProps> = ({
           height={24}
           src={prepimg}
           alt="news"
-          className={cx(s.image)}
+          className={s.image}
         />
       ) : (
-        <FallbackLogo className={cx(s.image)} />
+        <FallbackLogo className={s.image} />
       )}
     </div>
   );

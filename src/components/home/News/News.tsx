@@ -32,7 +32,7 @@ export const News: React.FC<NewsProps> = ({
     <Section
       header={t('home|Our latest news')}
       description={t('home|Never miss important updates. Check what has happened in the QuickSwap ecosystem recently..')}
-      className={cx(className)}
+      className={className}
     >
       <SliderUI
         items={4}

@@ -36,10 +36,10 @@ export const BakerLogo: React.FC<BakerLogoInterface> = ({
           height={24}
           src={prepareBaker.icon}
           alt={getWhitelistedBakerName(prepareBaker)}
-          className={cx(s.image)}
+          className={s.image}
         />
       ) : (
-        <Baker className={cx(s.image)} />
+        <Baker className={s.image} />
       )}
     </div>
   );

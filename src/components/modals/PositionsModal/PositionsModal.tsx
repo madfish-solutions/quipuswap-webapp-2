@@ -253,7 +253,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
-          contentClassName={cx(s.tokenModal)}
+          contentClassName={s.tokenModal}
           onRequestClose={(e) => {
             if (values.token1 && values.token2) {
               onChange({ token1: values.token1, token2: values.token2 } as WhitelistedTokenPair);

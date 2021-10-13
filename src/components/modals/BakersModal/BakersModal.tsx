@@ -150,7 +150,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
           cardClassName={cx(s.tokenModal, s.maxHeight)}
-          contentClassName={cx(s.tokenModal)}
+          contentClassName={s.tokenModal}
           {...props}
         >
           {isEmptyBakers && (

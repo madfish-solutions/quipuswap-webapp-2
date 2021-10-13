@@ -81,7 +81,7 @@ export const Input: React.FC<InputProps> = ({
         )}
       </div>
       <div className={s.errorContainer}>
-        <p className={cx(s.errorLabel)}>
+        <p className={s.errorLabel}>
           {error}
         </p>
       </div>

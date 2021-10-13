@@ -32,7 +32,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
     <Section
       header={t('home|DEX Dashboard')}
       description={t('home|The short overview of the most relevant DEX information.')}
-      className={cx(className)}
+      className={className}
     >
       <Card
         className={(s.mobile)}

@@ -1,7 +1,6 @@
 import React, {
-  useState, useCallback, useEffect, useRef,
+  useState, useCallback, useEffect, useRef, useMemo,
 } from 'react';
-import cx from 'classnames';
 import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
@@ -15,11 +14,13 @@ import {
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
-import { fromDecimals, getWhitelistedTokenAddress, parseDecimals } from '@utils/helpers';
+import {
+  fromDecimals, getWhitelistedTokenAddress, parseDecimals,
+} from '@utils/helpers';
 import {
   FarmingFormValues, PoolShare, QSMainNet, WhitelistedFarm, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES, FARM_PRECISION } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Card } from '@components/ui/Card';
@@ -28,6 +29,7 @@ import { Button } from '@components/ui/Button';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { FarmingDetails } from '@components/farming/FarmingDetails';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from './FarmingForm.module.sass';
@@ -81,6 +83,9 @@ const RealForm:React.FC<FarmingFormProps> = ({
   const [dex, setDex] = useState<FoundDex>();
   const [, setOldDex] = useState<FoundDex>();
   const [poolShare, setPoolShare] = useState<PoolShare>();
+  const {
+    timelock, startTime, fees, deposit, stakedToken,
+  } = farm;
 
   const {
     openConnectWalletModal,
@@ -227,6 +232,25 @@ const RealForm:React.FC<FarmingFormProps> = ({
 
   useOnBlock(tezos, getDex);
 
+  const remaining:Date = useMemo(() => new Date(
+    new Date(startTime).getTime() + new Date(timelock).getTime(),
+  ), [startTime, timelock]);
+
+  const recieved = useMemo(() => {
+    if (!values.balance3) {
+      return '0';
+    }
+    if (timelock === '0' || Date.now() - remaining.getTime() >= 0) {
+      return values.balance3.toString();
+    }
+    return new BigNumber(values.balance3).multipliedBy(
+      new BigNumber(FARM_PRECISION)
+        .minus(fees.withdrawal_fee)
+        .abs()
+        .dividedBy(new BigNumber(FARM_PRECISION)),
+    ).toString();
+  }, [values.balance3, timelock, fees, remaining]);
+
   return (
 
     <StickyBlock>
@@ -258,7 +282,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
             required,
             currentTab.id === 'stake'
               ? validateBalance(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6))
-              : validateBalance(fromDecimals(farm.deposit, 6))
+              : validateBalance(fromDecimals(deposit, 6))
             ,
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, 6)}
@@ -278,12 +302,12 @@ const RealForm:React.FC<FarmingFormProps> = ({
                 balance={
                   currentTab.id === 'stake'
                     ? fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()
-                    : fromDecimals(farm.deposit, 6).toString()
+                    : fromDecimals(deposit, 6).toString()
                 }
                 balanceLabel={t('farms|Available Balance')}
                 id="voting-input"
                 label={t('farms|Amount')}
-                className={cx(s.input, s.mb24)}
+                className={s.input}
                 mode="farm"
                 error={((meta.touched && meta.error) || meta.submitError)}
               />
@@ -333,6 +357,18 @@ const RealForm:React.FC<FarmingFormProps> = ({
             </Button>
           )}
         </div>
+        {currentTab.id !== 'stake' && (
+        <div className={s.receive}>
+          <span className={s.receiveLabel}>
+            {t('farms|Received')}
+            :
+          </span>
+          <CurrencyAmount
+            amount={recieved}
+            currency={stakedToken.name}
+          />
+        </div>
+        )}
         <div className={s.buttons}>
           <Button onClick={handleSwapSubmit} className={s.button}>
             {currentTab.label}

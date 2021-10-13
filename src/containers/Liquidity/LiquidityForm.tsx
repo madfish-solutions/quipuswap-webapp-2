@@ -641,7 +641,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                   balance={fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()}
                   frozenBalance={fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString()}
                   id="liquidity-remove-input"
-                  label="Select LP"
+                  label={t('liquidity|Select LP')}
                   className={s.input}
                   error={((meta.touched && meta.error) || meta.submitError)}
                 />
@@ -662,7 +662,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="liquidity-token-A"
-              label="Output"
+              label={t('liquidity|Output')}
               className={cx(s.input, s.mb24)}
               readOnly
             />
@@ -710,7 +710,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="liquidity-token-1"
-              label="Input"
+              label={t('liquidity|Input')}
               className={s.input}
               error={((meta.error) || meta.submitError)}
             />
@@ -731,7 +731,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="liquidity-token-B"
-              label="Output"
+              label={t('liquidity|Output')}
               className={cx(s.input, s.mb24)}
               readOnly
             />
@@ -777,7 +777,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="liquidity-token-2"
-              label="Input"
+              label={t('liquidity|Input')}
               className={cx(s.input, s.mb24)}
               error={((meta.error) || meta.submitError)}
             />

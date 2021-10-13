@@ -122,7 +122,7 @@ export const Table: React.FC<TablePropsT> = ({
               <thead>
                 {
               headerGroups.map((headerGroup:any) => (
-                <tr className={cx(s.row)} key={getUniqueKey()}>
+                <tr className={s.row} key={getUniqueKey()}>
                   {headerGroup.headers.map((column:any) => {
                     const { id } = column;
 
@@ -135,10 +135,10 @@ export const Table: React.FC<TablePropsT> = ({
                         <th
                           {...column.getHeaderProps(column.getSortByToggleProps())}
                           key={getUniqueKey()}
-                          className={cx(s.cell)}
+                          className={s.cell}
                         >
                           <Button
-                            className={cx(s.sortingButton)}
+                            className={s.sortingButton}
                             theme="quaternary"
                           >
                             {column.render('Header')}
@@ -150,7 +150,7 @@ export const Table: React.FC<TablePropsT> = ({
                     return (
                       <th
                         key={getUniqueKey()}
-                        className={cx(s.cell)}
+                        className={s.cell}
                       >
                         {column.render('Header')}
                       </th>
@@ -166,13 +166,13 @@ export const Table: React.FC<TablePropsT> = ({
                     page.map((row:any) => {
                       prepareRow(row);
                       return (
-                        <tr {...row.getRowProps()} key={getUniqueKey()} className={cx(s.row)}>
+                        <tr {...row.getRowProps()} key={getUniqueKey()} className={s.row}>
                           {
                               row.cells.map((cell:any) => (
                                 <td
                                   {...cell.getCellProps()}
                                   key={getUniqueKey()}
-                                  className={cx(s.cell)}
+                                  className={s.cell}
                                 >
                                   {cell.render('Cell')}
                                 </td>

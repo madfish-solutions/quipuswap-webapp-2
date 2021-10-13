@@ -146,7 +146,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             disabled={readOnly}
           >
             <TokensLogos token1={token1} token2={token2} />
-            <h6 className={cx(s.token)}>
+            <h6 className={s.token}>
               {mode === 'input' && getWhitelistedTokenSymbol(token1)}
               {mode === 'select' && 'TOKEN / TOKEN'}
               {mode === 'farm' && `${getWhitelistedTokenSymbol(token1)} / ${getWhitelistedTokenSymbol(token2 ?? TEZOS_TOKEN)}`}

@@ -146,7 +146,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                 token1={tokenPair?.token1 ?? TEZOS_TOKEN}
                 token2={tokenPair?.token2 ?? TEZOS_TOKEN}
               />
-              <h6 className={cx(s.token)}>
+              <h6 className={s.token}>
                 {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
               </h6>
               <Shevron />

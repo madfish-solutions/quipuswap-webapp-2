@@ -1,5 +1,4 @@
 import React from 'react';
-import cx from 'classnames';
 
 import { getUniqueKey } from '@utils/helpers';
 import { Back } from '@components/svg/Back';
@@ -28,10 +27,10 @@ export const TFooter: React.FC<TFooterProps> = ({
 }) => (
   <>
     {isShowPagination && (
-    <div className={cx(s.pagination)}>
+    <div className={s.pagination}>
       <button
         type="button"
-        className={cx(s.arrowLeft)}
+        className={s.arrowLeft}
         onClick={previousPage}
         disabled={!canPreviousPage}
       >
@@ -41,18 +40,18 @@ export const TFooter: React.FC<TFooterProps> = ({
       </button>
       Page
       &nbsp;
-      <span className={cx(s.page)}>
+      <span className={s.page}>
         {pageIndex + 1}
       </span>
       &nbsp;
       of
       &nbsp;
-      <span className={cx(s.page)}>
+      <span className={s.page}>
         {pageOptions.length}
       </span>
       <button
         type="button"
-        className={cx(s.arrowRight)}
+        className={s.arrowRight}
         onClick={nextPage}
         disabled={!canNextPage}
       >

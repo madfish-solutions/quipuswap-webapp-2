@@ -67,7 +67,7 @@ export const TokenCell: React.FC<TokenCellProps> = ({
             ))}
           </div>
 
-          <span className={cx(s.caption)}>
+          <span className={s.caption}>
             {getWhitelistedTokenName(token, 100)}
           </span>
 

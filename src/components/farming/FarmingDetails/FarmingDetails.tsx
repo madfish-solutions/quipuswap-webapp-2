@@ -5,7 +5,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { WhitelistedBaker, WhitelistedFarm } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { FARM_PRECISION, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
 import { useBakers } from '@utils/dapp';
 import { prettyPercentage } from '@utils/helpers/prettyPercentage';
@@ -241,7 +241,10 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            {new BigNumber(fees.withdrawal_fee).dividedBy(100).toFixed(2)}
+            {new BigNumber(fees.withdrawal_fee)
+              .dividedBy(new BigNumber(FARM_PRECISION))
+              .multipliedBy(100)
+              .toFixed(2)}
             {' '}
             %
           </span>
@@ -261,7 +264,10 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            {new BigNumber(fees.harvest_fee).dividedBy(100).toFixed(2)}
+            {new BigNumber(fees.harvest_fee)
+              .dividedBy(new BigNumber(FARM_PRECISION))
+              .multipliedBy(100)
+              .toFixed(2)}
             {' '}
             %
           </span>

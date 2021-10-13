@@ -308,7 +308,7 @@ const RealForm:React.FC<VotingFormProps> = ({
             {({ input, meta }) => (
               <ComplexBaker
                 {...input}
-                label="Baker"
+                label={t('vote|Baker')}
                 id="voting-baker"
                 className={s.mt12}
                 handleChange={(bakerObj) => {

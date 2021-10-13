@@ -183,7 +183,7 @@ export const Farm: React.FC<FarmProps> = () => {
       />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
-        contentClassName={cx(s.farmingStats)}
+        contentClassName={s.farmingStats}
       >
         {content.map((x) => (
           <div key={x.name} className={s.farmingStatsBlock}>

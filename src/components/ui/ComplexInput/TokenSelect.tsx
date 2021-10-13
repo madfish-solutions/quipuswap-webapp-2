@@ -142,7 +142,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               textClassName={s.item4Inner}
             >
               <TokensLogos token1={token ?? TEZOS_TOKEN} />
-              <h6 className={cx(s.token)}>
+              <h6 className={s.token}>
 
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
               </h6>

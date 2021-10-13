@@ -26,7 +26,7 @@ export const FarmCardLoader: React.FC<{}> = () => {
   return (
     <Card
       className={cx(s.card, compountClassName)}
-      contentClassName={cx(s.content)}
+      contentClassName={s.content}
     >
       <div className={s.header}>
         <div className={s.tokens}>
@@ -37,7 +37,7 @@ export const FarmCardLoader: React.FC<{}> = () => {
           </h3>
 
         </div>
-        <div className={cx(s.onlyDesktop)}>
+        <div className={s.onlyDesktop}>
           <Skeleton className={s.skeletonLink} />
           <Skeleton className={s.skeletonLink} />
           <Skeleton className={s.skeletonLink} />

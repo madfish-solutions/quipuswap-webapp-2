@@ -48,10 +48,10 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             {...layout === 'fill' ? { layout } : { layout, width, height: width }}
             src={prepareToken1.icon}
             alt={getWhitelistedTokenSymbol(prepareToken1)}
-            className={cx(s.image)}
+            className={s.image}
           />
         ) : (
-          <FallbackLogo className={cx(s.image)} />
+          <FallbackLogo className={s.image} />
         )}
       </div>
       {prepareToken2?.icon && (
@@ -60,7 +60,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
             {...layout === 'fill' ? { layout } : { layout, width, height: width }}
             src={prepareToken2.icon}
             alt={getWhitelistedTokenSymbol(prepareToken2)}
-            className={cx(s.image)}
+            className={s.image}
           />
         </div>
       )}
@@ -68,7 +68,7 @@ export const TokensLogos: React.FC<TokensLogosInterface> = ({
       {
         prepareToken2?.icon === null && (
           <div className={cx(s.secondImage, imageClassName)}>
-            <FallbackLogo className={cx(s.image)} />
+            <FallbackLogo className={s.image} />
           </div>
         )
       }

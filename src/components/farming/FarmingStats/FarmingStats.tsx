@@ -94,7 +94,11 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
                   .plus(new BigNumber(farms[index].rewardPerShare)),
             )
             .minus(cur.prev_earned)))
-          .dividedBy(+FARM_PRECISION)),
+          .dividedBy(new BigNumber(FARM_PRECISION)))
+          .multipliedBy(new BigNumber(farms[index].fees.harvest_fee)
+            .minus(new BigNumber(FARM_PRECISION))
+            .abs()
+            .dividedBy(new BigNumber(FARM_PRECISION))),
       } : userData),
       { claimed: new BigNumber(0), pending: new BigNumber(0) });
 
@@ -180,7 +184,6 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessToast();
-      // TODO: re- calculatePendingReward(), which based on userInfo update
       loadAmountOfTokensInFarms();
     } catch (e) {
       handleErrorToast(e);

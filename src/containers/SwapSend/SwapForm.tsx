@@ -9,6 +9,7 @@ import {
   FoundDex,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -99,6 +100,7 @@ const RealForm:React.FC<SwapFormProps> = ({
   handleSubmit,
 }) => {
   const tezos = useTezos();
+  const { t } = useTranslation();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
   const {
@@ -387,7 +389,7 @@ const RealForm:React.FC<SwapFormProps> = ({
               balance={tokensData.first.balance}
               exchangeRate={tokensData.first.exchangeRate}
               id="swap-send-from"
-              label="From"
+              label={t('swap|From')}
               className={s.input}
               error={((meta.error) || meta.submitError)}
             />
@@ -414,7 +416,7 @@ const RealForm:React.FC<SwapFormProps> = ({
               balance={tokensData.second.balance}
               exchangeRate={tokensData.second.exchangeRate}
               id="swap-send-to"
-              label="To"
+              label={t('swap|To')}
               className={cx(s.input, s.mb24)}
               error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
             />
@@ -435,7 +437,7 @@ const RealForm:React.FC<SwapFormProps> = ({
                     value,
                   );
                 }}
-                label="Recipient address"
+                label={t('swap|Recipient address')}
                 id="swap-send-recipient"
                 className={cx(s.input, s.mb24)}
                 error={((meta.touched && meta.error) || meta.submitError)}
@@ -453,7 +455,8 @@ const RealForm:React.FC<SwapFormProps> = ({
                 <Slippage handleChange={(value) => input.onChange(value)} />
                 <div className={s.receive}>
                   <span className={s.receiveLabel}>
-                    Minimum received:
+                    {t('swap|Minimum received')}
+                    :
                   </span>
                   <CurrencyAmount
                     amount={minimumReceived.isNaN() ? '0' : minimumReceived.toString()}
