@@ -5,7 +5,7 @@ import s from './Section.module.sass';
 
 export type SectionProps = {
   header: string
-  description: string
+  description?: string
   className?: string
 };
 
@@ -17,7 +17,7 @@ export const Section: React.FC<SectionProps> = ({
 }) => (
   <section className={cx(s.root, className)}>
     <h2 className={s.header}>{header}</h2>
-    <p className={s.description}>{description}</p>
+    {description && <p className={s.description}>{description}</p>}
     {children}
   </section>
 );

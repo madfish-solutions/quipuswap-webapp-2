@@ -1,18 +1,21 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { WhitelistedFarm } from '@utils/types';
+import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { PoolTableType } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Tooltip } from '@components/ui/Tooltip';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 
-import s from '../Card.module.sass';
+import s from './PoolCardTable.module.sass';
 
 type PoolCardItemProps = {
-  farm: WhitelistedFarm
+  pool: PoolTableType
   isSponsored?: boolean
 };
 
@@ -22,50 +25,70 @@ const modeClass = {
 };
 
 export const PoolCardItem: React.FC<PoolCardItemProps> = ({
-  farm,
+  pool,
   isSponsored,
 }) => {
+  const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
         <div className={s.links}>
           <TokensLogos
-            token1={farm.tokenPair.token1}
-            token2={farm.tokenPair.token2}
+            token1={pool.token1}
+            token2={pool.token2}
             className={s.tokenLogo}
           />
-          {getWhitelistedTokenSymbol(farm.tokenPair.token1)}
-          /
-          {getWhitelistedTokenSymbol(farm.tokenPair.token2)}
+          {pool.pair.name}
         </div>
-        {isSponsored && (<Bage text="Sponsored" />)}
+        {isSponsored && (<Bage text={t('home|Sponsored')} />)}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>Total staked</div>
+        <div className={s.cardCellText}>
+          {t('home|TVL')}
+          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+        </div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>APR</div>
-        <CurrencyAmount amount="888888888888888.00" currency="%" />
+        <div className={s.cardCellText}>
+          {t('home|Volume 24h')}
+          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+        </div>
+        <div className={cx(s.bold, s.cardCellText)}>
+          $
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount={fromDecimals(new BigNumber(pool.data.volume24h), 6)
+              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
+              .integerValue()
+              .toString()}
+          />
+        </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
         <Button
           theme="secondary"
           className={s.button}
-          href={`https://analytics.quipuswap.com/tokens/${farm.tokenPair.token1}`}
+          href={pool.buttons.first.href}
           external
         >
-          Analytics
+          {t('home|Analytics')}
         </Button>
         <Button
           href="/swap"
           className={s.button}
         >
-          Trade
+          {t('home|Trade')}
         </Button>
       </div>
     </div>

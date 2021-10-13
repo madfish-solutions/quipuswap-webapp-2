@@ -19,6 +19,7 @@
     "@taquito/utils": "^9.2.0",
     "@temple-wallet/dapp": "^4.0.0",
     "@tippyjs/react": "^4.2.5",
+    "@types/react-table": "^7.7.4",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "constate": "^3.3.0",
@@ -39,6 +40,7 @@
     "react-select": "^4.3.1",
     "react-textarea-autosize": "^8.3.3",
     "react-toastify": "^7.0.4",
+    "react-table": "^7.7.0",
     "sass": "^1.35.1",
     "swr": "^0.5.6"
   },

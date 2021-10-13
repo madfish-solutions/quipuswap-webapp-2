@@ -454,6 +454,36 @@ export type GetPairPlotLiquidityQuery = (
   ) }
 );
 
+export type GetTokensPairsQueryVariables = Exact<{
+  limit?: Maybe<Scalars['Int']>;
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+export type GetTokensPairsQuery = (
+  { __typename?: 'Query' }
+  & { overview: (
+    { __typename?: 'Overview' }
+    & Pick<Overview, 'xtzUsdQuote'>
+  ), pairs?: Maybe<(
+    { __typename?: 'PairConnection' }
+    & Pick<PairConnection, 'totalCount'>
+    & { edges: Array<Maybe<(
+      { __typename?: 'PairEdge' }
+      & { node?: Maybe<(
+        { __typename?: 'Pair' }
+        & Pick<Pair, 'id' | 'volume24h' | 'liquidity'>
+        & { token1: (
+          { __typename?: 'Token' }
+          & Pick<Token, 'name' | 'tokenId' | 'id' | 'symbol' | 'icon'>
+        ), token2: (
+          { __typename?: 'Token' }
+          & Pick<Token, 'name' | 'tokenId' | 'id' | 'symbol' | 'icon'>
+        ) }
+      )> }
+    )>> }
+  )> }
+);
+
 export const GetPairPlotLiquidityDocument = gql`
     query GetPairPlotLiquidity($id: String!) {
   pair(id: $id) {
@@ -506,3 +536,45 @@ typeof useGetPairPlotLiquidityLazyQuery
 >;
 export type GetPairPlotLiquidityQueryResult = Apollo.QueryResult<GetPairPlotLiquidityQuery,
 GetPairPlotLiquidityQueryVariables>;
+
+export const GetTokensPairsDocument = gql`
+    query GetTokensPairs($limit: Int, $offset: Int) {
+  overview {
+    xtzUsdQuote
+  }
+  pairs(limit: $limit, offset: $offset) {
+    totalCount
+    edges {
+      node {
+        id
+        token1 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        token2 {
+          name
+          tokenId
+          id
+          symbol
+          icon
+        }
+        volume24h
+        liquidity
+      }
+    }
+  }
+}
+    `;
+
+export function useGetTokensPairsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>,
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetTokensPairsQuery, GetTokensPairsQueryVariables>(
+    GetTokensPairsDocument, options,
+  );
+}
+export type GetTokensPairsLazyQueryHookResult = ReturnType<typeof useGetTokensPairsLazyQuery>;

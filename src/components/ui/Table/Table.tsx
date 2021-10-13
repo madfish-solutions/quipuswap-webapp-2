@@ -1,134 +1,246 @@
-import React, {
-  useContext, useMemo, useState,
-} from 'react';
+import React, { useContext, useEffect } from 'react';
 import cx from 'classnames';
+import { usePagination, useSortBy, useTable } from 'react-table';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { MAX_ITEMS_PER_PAGE, MAX_ITEMS_PER_PAGE_MOBILE } from '@utils/defaults';
-import { Card, CardContent } from '@components/ui/Card';
-import { Pagination } from '@components/ui/Pagination';
+import { getUniqueKey } from '@utils/helpers';
+import { TFooter } from '@components/ui/TFooter';
+import { Button } from '@components/ui/Button';
+import { Preloader } from '@components/common/Preloader';
+import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './Table.module.sass';
 
-type TableCardProps = {
+type TablePropsT = {
+  theme?: keyof typeof themeClass
+  columns: any
   data: any
-  renderData: any
-  itemsPerPage: number
+  fieldsToSorting?: string[]
+  loading?: boolean
+  tableClassName?: string
+  trClassName?: string
+  thClassName?: string
+  tdClassName?: string
+  isLinked?: boolean
+  className?: string
+  pageSize?: number
+  manualPagination?: boolean
+  setOffset?: (arg: number) => void
+  pageCount?: number
+  disabled?: boolean
+  renderMobile?: any
 };
 
-const themeClass = {
+const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-export const TableCard: React.FC<TableCardProps> = ({
-  data,
-  renderData,
-  itemsPerPage,
-}) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const [page, setPage] = useState<number>(1);
-  const pageMax = useMemo(() => Math.ceil(data.length / itemsPerPage), [data.length]);
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage - 1, data.length - 1);
+const themeClass = {
+  pools: s.pools,
+  farms: s.farms,
+};
 
-  return (
-    <>
-      <Card
-        isV2
-        className={cx(themeClass[colorThemeMode])}
-      >
-        <CardContent className={s.card}>
-          {data.slice(startIndex, endIndex).map(renderData)}
-          <Pagination page={page} pageMax={pageMax} setPage={setPage} />
-        </CardContent>
-      </Card>
-    </>
+export const Table: React.FC<TablePropsT> = ({
+  theme = 'pools',
+  columns,
+  data,
+  fieldsToSorting,
+  loading,
+  tableClassName,
+  pageSize = 10,
+  manualPagination = true,
+  setOffset,
+  pageCount = 0,
+  className,
+  disabled = false,
+  renderMobile,
+}) => {
+  const { t } = useTranslation(['common']);
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    prepareRow,
+    // pagination
+    page,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    nextPage,
+    previousPage,
+    state: { pageIndex },
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: {
+        pageIndex: 0,
+        pageSize,
+      },
+      pageCount: Math.ceil(pageCount / (pageSize)),
+      manualPagination,
+      disableSortRemove: true,
+      autoResetPage: false,
+      disableSortBy: true,
+    },
+    useSortBy,
+    usePagination,
   );
-};
 
-type RealTableProps = {
-  data: any
-  renderData: any
-  header: any
-  itemsPerPage: number
-};
+  useEffect(() => {
+    if (setOffset) {
+      const offset = pageIndex === 0 ? pageIndex : pageIndex * (pageSize);
+      setOffset(offset);
+    }
+  }, [pageIndex, pageSize, setOffset]);
 
-const TableInner: React.FC<RealTableProps> = ({
-  data,
-  renderData,
-  header,
-  itemsPerPage,
-}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [page, setPage] = useState<number>(1);
-  const pageMax = useMemo(() => Math.ceil(data.length / itemsPerPage), [data.length]);
-  const startIndex = (page - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage - 1, data.length - 1);
+
+  const compoundClassName = cx(
+    s.root,
+    modeClass[colorThemeMode],
+    themeClass[theme],
+    className,
+  );
+
+  const isShowPagination = true;
+
+  if (loading || data.length === 0) {
+    return (
+      <Skeleton className={s.preloaderWrapper} />
+    );
+  }
 
   return (
     <>
-      <Card
-        isV2
-        className={cx(themeClass[colorThemeMode])}
-      >
-        <CardContent className={s.card}>
-          <div className={s.container}>
-            <div className={s.wrapper}>
-              <div className={s.innerWrapper}>
-                <table className={s.table}>
-                  <thead>
-                    <tr>
-                      {header}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {data.slice(startIndex, endIndex).map(renderData)}
-                  </tbody>
-                </table>
-              </div>
+      <div className={compoundClassName}>
+        <div className={cx(s.wrapper, s.notMobile)}>
+          <div className={s.innerWrapper}>
+            <table {...getTableProps()} className={cx(s.table, tableClassName)}>
+              <thead>
+                {
+              headerGroups.map((headerGroup:any) => (
+                <tr className={cx(s.row)} key={getUniqueKey()}>
+                  {headerGroup.headers.map((column:any) => {
+                    const { id } = column;
+
+                    if (
+                      fieldsToSorting
+                          && fieldsToSorting.length
+                          && fieldsToSorting.includes(id)
+                    ) {
+                      return (
+                        <th
+                          {...column.getHeaderProps(column.getSortByToggleProps())}
+                          key={getUniqueKey()}
+                          className={cx(s.cell)}
+                        >
+                          <Button
+                            className={cx(s.sortingButton)}
+                            theme="quaternary"
+                          >
+                            {column.render('Header')}
+                          </Button>
+                        </th>
+                      );
+                    }
+
+                    return (
+                      <th
+                        key={getUniqueKey()}
+                        className={cx(s.cell)}
+                      >
+                        {column.render('Header')}
+                      </th>
+                    );
+                  })}
+                </tr>
+              ))
+            }
+              </thead>
+
+              <tbody {...getTableBodyProps()}>
+                {
+                    page.map((row:any) => {
+                      prepareRow(row);
+                      return (
+                        <tr {...row.getRowProps()} key={getUniqueKey()} className={cx(s.row)}>
+                          {
+                              row.cells.map((cell:any) => (
+                                <td
+                                  {...cell.getCellProps()}
+                                  key={getUniqueKey()}
+                                  className={cx(s.cell)}
+                                >
+                                  {cell.render('Cell')}
+                                </td>
+                              ))
+                            }
+                        </tr>
+                      );
+                    })
+                  }
+              </tbody>
+            </table>
+            <div className={cx(
+              s.footer,
+              s.desktop,
+              { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+            )}
+            >
+              <TFooter
+                isShowPagination={isShowPagination}
+                previousPage={previousPage}
+                canPreviousPage={canPreviousPage}
+                pageIndex={pageIndex}
+                pageOptions={pageOptions}
+                nextPage={nextPage}
+                canNextPage={canNextPage}
+              />
             </div>
           </div>
-          <Pagination page={page} pageMax={pageMax} setPage={setPage} />
-        </CardContent>
-      </Card>
+        </div>
+        <div className={cx(s.mobile, modeClass[colorThemeMode], s.table)}>
+          {data.length === 0 || loading ? (
+            <div className={s.preloaderWrapper}>
+              <Preloader className={s.preloader} />
+            </div>
+          ) : (
+
+            page.map((row:any) => {
+              prepareRow(row);
+              return renderMobile && renderMobile(row.original);
+            })
+          )}
+        </div>
+        {disabled && (
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
+        )}
+      </div>
+      {!disabled && (
+        <div className={cx(
+          s.footer,
+          s.mobileFooter,
+          modeClass[colorThemeMode],
+          { [s.smallFooter]: !isShowPagination && pageCount !== 0 },
+        )}
+        >
+          <TFooter
+            isShowPagination={isShowPagination}
+            previousPage={previousPage}
+            canPreviousPage={canPreviousPage}
+            pageIndex={pageIndex}
+            pageOptions={pageOptions}
+            nextPage={nextPage}
+            canNextPage={canNextPage}
+          />
+        </div>
+      )}
     </>
   );
 };
-
-type TableProps = {
-  data: any
-  renderTableData: any
-  renderMobileData: any
-  header: any,
-  className?: string
-  itemsPerPage?: number
-  itemsPerPageMobile?: number
-};
-
-export const Table: React.FC<TableProps> = ({
-  header,
-  renderTableData,
-  renderMobileData,
-  data,
-  itemsPerPage = MAX_ITEMS_PER_PAGE,
-  itemsPerPageMobile = MAX_ITEMS_PER_PAGE_MOBILE,
-}) => (
-  <>
-    <div className={s.notMobile}>
-      <TableInner
-        data={data}
-        renderData={renderTableData}
-        header={header}
-        itemsPerPage={itemsPerPage}
-      />
-    </div>
-    <div className={s.mobile}>
-      <TableCard
-        data={data}
-        renderData={renderMobileData}
-        itemsPerPage={itemsPerPageMobile}
-      />
-    </div>
-  </>
-);
