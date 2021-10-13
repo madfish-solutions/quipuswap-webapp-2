@@ -320,8 +320,6 @@ export const CandleChart: React.FC<CandleChartProps> = ({
     [loading, error, usdData, reloading],
   );
 
-  console.log('render', isLoaded);
-
   return (
     <Card className={className}>
       <CardHeader
