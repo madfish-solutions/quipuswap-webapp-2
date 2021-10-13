@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import {
+  fromDecimals,
   getWhitelistedTokenSymbol,
   prettyPrice,
 } from '@utils/helpers';
@@ -43,7 +44,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     apyDaily,
     tokenContract,
     farmContract,
-    projectLink,
     analyticsLink,
     deposit,
     earned,
@@ -81,16 +81,13 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
 
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>
-          <Button className={s.link} href={tokenContract} theme="underlined">
+          <Button className={s.link} external href={tokenContract} theme="underlined">
             {t('common|Token Contract')}
           </Button>
-          <Button className={s.link} href={farmContract} theme="underlined">
+          <Button className={s.link} external href={farmContract} theme="underlined">
             {t('common|Farm Contract')}
           </Button>
-          <Button className={s.link} href={projectLink} theme="underlined">
-            {t('common|Project Link')}
-          </Button>
-          <Button className={s.link} href={analyticsLink} theme="underlined">
+          <Button className={s.link} external href={analyticsLink} theme="underlined">
             {t('common|Analytics')}
           </Button>
         </div>
@@ -141,33 +138,32 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Deposit')}
           </div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={deposit} />
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={fromDecimals(deposit, 6).toString()} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>{t('farms|Earned')}</div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={earned} />
+            <span className={s.tvl}>$</span>
+            {' '}
+            <CurrencyAmount amount={fromDecimals(earned, 6).toString()} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
           <div className={s.link}>
-            <Button href={tokenContract} theme="underlined">
+            <Button href={tokenContract} external theme="underlined">
               {t('common|Token Contract')}
             </Button>
           </div>
           <div className={s.link}>
-            <Button href={farmContract} theme="underlined">
+            <Button href={farmContract} external theme="underlined">
               {t('common|Farm Contract')}
             </Button>
           </div>
           <div className={s.link}>
-            <Button href={projectLink} theme="underlined">
-              {t('common|Project Link')}
-            </Button>
-          </div>
-          <div className={s.link}>
-            <Button href={analyticsLink} theme="underlined">
+            <Button href={analyticsLink} external theme="underlined">
               {t('common|Analytics')}
             </Button>
           </div>

@@ -188,16 +188,18 @@ export interface WhitelistedFarm extends FarmsFromServerWithWhitelistedPair {
   apyDaily: BigNumber
   tokenContract: string
   farmContract: string
-  projectLink: string
   analyticsLink: string
-  deposit: string
-  earned: string
-  remaining: Date
+  deposit: BigNumber
+  earned: BigNumber
+  startTime: string
+  timelock: string
+  dexStorage: FoundDex
 }
 
 export type WhitelistedStake = {
   id: number,
-  remaining: Date
+  startTime: string
+  timelock: string
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string
   apy: string
@@ -208,7 +210,6 @@ export type WhitelistedStake = {
   earn: string
   tokenContract: string
   farmContract: string
-  projectLink: string
   analyticsLink: string
 };
 

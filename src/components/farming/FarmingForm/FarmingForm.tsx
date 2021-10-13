@@ -17,7 +17,7 @@ import {
 } from '@utils/validators';
 import { fromDecimals, getWhitelistedTokenAddress, parseDecimals } from '@utils/helpers';
 import {
-  FarmingFormValues, PoolShare, QSMainNet, WhitelistedToken, WhitelistedTokenPair,
+  FarmingFormValues, PoolShare, QSMainNet, WhitelistedFarm, WhitelistedToken, WhitelistedTokenPair,
 } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -34,7 +34,7 @@ import s from './FarmingForm.module.sass';
 
 type FarmingFormProps = {
   form:any
-  remaining: Date
+  farm: WhitelistedFarm
   amount: string
   balance?: string
   tokenPair: WhitelistedTokenPair
@@ -59,8 +59,6 @@ export const TabsContent = [
 ];
 
 const RealForm:React.FC<FarmingFormProps> = ({
-  remaining,
-  amount,
   tokenPair,
   form,
   values,
@@ -70,6 +68,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
   currentTab,
   setTabsState,
   tabsState,
+  farm,
 }) => {
   const { t } = useTranslation(['common', 'farms']);
   const tezos = useTezos();
@@ -255,7 +254,10 @@ const RealForm:React.FC<FarmingFormProps> = ({
           validate={composeValidators(
             validateMinMax(0, Infinity),
             required,
-            validateBalance(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)),
+            currentTab.id === 'stake'
+              ? validateBalance(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6))
+              : validateBalance(fromDecimals(farm.deposit, 6))
+            ,
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, 6)}
         >
@@ -271,10 +273,14 @@ const RealForm:React.FC<FarmingFormProps> = ({
                     +value,
                   );
                 }}
-                balance={fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()}
+                balance={
+                  currentTab.id === 'stake'
+                    ? fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()
+                    : fromDecimals(farm.deposit, 6).toString()
+                }
                 balanceLabel={t('farms|Available Balance')}
                 id="voting-input"
-                label="Amount"
+                label={t('farms|Amount')}
                 className={cx(s.input, s.mb24)}
                 mode="farm"
                 error={((meta.touched && meta.error) || meta.submitError)}
@@ -332,8 +338,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
         </div>
       </Card>
       <FarmingDetails
-        remaining={remaining}
-        amount={amount}
+        farm={farm}
         dex={dex}
       />
     </StickyBlock>

@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { estimateTezInShares } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
-import { prettyPrice } from '@utils/helpers';
 import { useFarms } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 import { calculatingAPR } from '@utils/helpers/calculateAPR';
-import BigNumber from 'bignumber.js';
 import { useUserInfoInAllFarms } from './useUserInfoInAllFarms';
 import { useDexufs } from './useDexbufs';
 import { useExchangeRates } from './useExchangeRate';
@@ -24,10 +23,11 @@ export const useMergedFarmsInfo = () => {
       if (dexbufs.length < 1) return;
 
       const merged:WhitelistedFarm[] = farms.map((farm, index) => {
-        let deposit = '0'; let earned = '0';
+        let deposit = new BigNumber(0);
+        let earned = new BigNumber(0);
         if (userInfoInAllFarms && userInfoInAllFarms[+farm.farmId]) {
-          deposit = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.staked));
-          earned = prettyPrice(Number(userInfoInAllFarms[+farm.farmId]?.earned));
+          deposit = new BigNumber(userInfoInAllFarms[+farm.farmId]?.staked ?? 0);
+          earned = new BigNumber(userInfoInAllFarms[+farm.farmId]?.earned ?? 0);
         }
 
         const totalValueLocked = estimateTezInShares(
@@ -46,16 +46,15 @@ export const useMergedFarmsInfo = () => {
 
         return {
           ...farm,
+          dexStorage: dexbufs[index],
           totalValueLocked,
           deposit,
           earned,
           apr,
           apyDaily,
-          tokenContract: '#',
-          farmContract: '#',
-          projectLink: '#',
-          analyticsLink: '#',
-          remaining: new Date(),
+          tokenContract: `https://tzkt.io/${farm.rewardToken.contractAddress}`,
+          farmContract: `https://tzkt.io/${farm.stakedToken.contractAddress}`,
+          analyticsLink: `https://analytics.quipuswap.com/pairs/${farm.stakedToken.contractAddress}`,
         };
       });
 

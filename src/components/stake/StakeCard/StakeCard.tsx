@@ -42,7 +42,6 @@ export const StakeCard: React.FC<StakeCardProps> = ({
     earn,
     tokenContract,
     farmContract,
-    projectLink,
     analyticsLink,
   } = stake;
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -77,9 +76,6 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           </Button>
           <Button className={s.link} href={farmContract} theme="underlined">
             Farm Contract
-          </Button>
-          <Button className={s.link} href={projectLink} theme="underlined">
-            Project Link
           </Button>
           <Button className={s.link} href={analyticsLink} theme="underlined">
             Analytics
@@ -156,11 +152,6 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <div className={s.link}>
             <Button href={farmContract} theme="underlined">
               Farm Contract
-            </Button>
-          </div>
-          <div className={s.link}>
-            <Button href={projectLink} theme="underlined">
-              Project Link
             </Button>
           </div>
           <div className={s.link}>

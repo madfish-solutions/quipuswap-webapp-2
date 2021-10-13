@@ -495,15 +495,6 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             >
               Token Contract
             </Button>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
-              Project
-            </Button>
           </div>
         </Card>
       </StickyBlock>

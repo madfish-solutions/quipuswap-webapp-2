@@ -3,9 +3,10 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 
-import { WhitelistedBaker } from '@utils/types';
-import { getWhitelistedBakerName } from '@utils/helpers';
+import { WhitelistedBaker, WhitelistedFarm } from '@utils/types';
+import { getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
 import { useBakers } from '@utils/dapp';
+import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
@@ -18,8 +19,7 @@ import { Timeleft } from '@components/ui/Timeleft';
 import s from './FarmingDetails.module.sass';
 
 type FarmingDetailsProps = {
-  amount: string,
-  remaining: Date
+  farm: WhitelistedFarm
   dex?: FoundDex
 };
 
@@ -29,10 +29,18 @@ const modeClass = {
 };
 
 export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
-  remaining,
-  amount,
+  farm,
   dex,
 }) => {
+  const {
+    totalValueLocked,
+    apyDaily,
+    tokenContract,
+    farmContract,
+    analyticsLink,
+    startTime,
+    timelock,
+  } = farm;
   const { t } = useTranslation(['common', 'farms']);
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
@@ -57,6 +65,9 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
     return undefined;
   }, [dex, bakers]);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const remaining:Date = useMemo(() => new Date(
+    new Date(startTime).getTime() + new Date(timelock).getTime(),
+  ), [startTime, timelock]);
   return (
     <Card
       header={{
@@ -80,7 +91,7 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
           $
           {' '}
           <span className={s.priceAmount}>
-            <CurrencyAmount amount={amount} />
+            <CurrencyAmount amount={prettyPrice(+totalValueLocked)} />
           </span>
         </div>
       </CardCell>
@@ -98,7 +109,7 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            888 %
+            {prettyPercentage(apyDaily)}
           </span>
         </div>
       </CardCell>
@@ -116,7 +127,7 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       >
         <div className={s.cellAmount}>
           <span className={s.priceAmount}>
-            0.008 %
+            {prettyPercentage(apyDaily.dividedBy(365))}
           </span>
         </div>
       </CardCell>
@@ -178,7 +189,13 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
             )}
         className={s.cell}
       >
-        <Timeleft remaining={remaining} className={s.priceAmount} />
+        {timelock === '0' ? '—' : (
+          <Timeleft
+            remaining={remaining}
+            disabled
+            className={s.priceAmount}
+          />
+        )}
       </CardCell>
       <CardCell
         header={(
@@ -192,7 +209,13 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
             )}
         className={s.cell}
       >
-        <Timeleft remaining={remaining} className={s.priceAmount} />
+        {timelock === '0' ? '—' : (
+          <Timeleft
+            remaining={new Date(Date.now() + (+timelock.toString()))}
+            disabled
+            className={s.priceAmount}
+          />
+        )}
       </CardCell>
       <CardCell
         header={(
@@ -233,41 +256,38 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
       <div className={s.detailsButtons}>
         <Button
           className={s.detailsButton}
+          href={analyticsLink}
+          external
           theme="inverse"
           icon={
             <ExternalLink className={s.linkIcon} />
               }
         >
-          Pair Analytics
+          {t('common|Pair Analytics')}
         </Button>
         <Button
           className={s.detailsButton}
           theme="inverse"
+          href={farmContract}
+          external
           icon={
             <ExternalLink className={s.linkIcon} />
               }
         >
-          Farm Contract
+          {t('common|Farm Contract')}
         </Button>
       </div>
       <div className={s.detailsButtons}>
         <Button
           className={s.detailsButton}
           theme="inverse"
+          href={tokenContract}
+          external
           icon={
             <ExternalLink className={s.linkIcon} />
               }
         >
-          Token Contract
-        </Button>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          icon={
-            <ExternalLink className={s.linkIcon} />
-              }
-        >
-          Project
+          {t('common|Token Contract')}
         </Button>
       </div>
     </Card>

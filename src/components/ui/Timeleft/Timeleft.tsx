@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -8,6 +8,7 @@ import s from './Timeleft.module.sass';
 type TimeleftProps = {
   remaining: Date
   className?: string
+  disabled?: boolean
 };
 
 const modeClass = {
@@ -37,14 +38,27 @@ const timeDiffCalc = (dateFuture:number, dateNow:number) => {
 export const Timeleft: React.FC<TimeleftProps> = ({
   remaining,
   className,
+  disabled = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const [currentDate, setDate] = useState<Date>(remaining);
   const { days, hours, minutes } = timeDiffCalc(Date.now(), remaining.getTime());
   const compoundClassName = cx(
     s.label,
     modeClass[colorThemeMode],
     className,
   );
+
+  useEffect(() => {
+    if (!disabled) {
+      const timer = setTimeout(() => {
+        const diff = currentDate.getTime() - 1;
+        setDate(new Date(diff < Date.now() ? Date.now() : diff));
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+    return () => {};
+  }, [currentDate]);
 
   return (
     <div className={compoundClassName}>

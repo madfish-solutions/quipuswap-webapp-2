@@ -96,7 +96,7 @@ export const Farm: React.FC<FarmProps> = () => {
 
   const switchedFarms = useMemo(() => filteredFarms.filter((farm) => (
     isSwitcherActive
-      ? parseInt(farm.deposit ?? '0', 10) > 0
+      ? farm.deposit.gt(0)
       : farm
   )), [filteredFarms, isSwitcherActive]);
 

@@ -1,22 +1,24 @@
 import React, {
-  useContext, useCallback, useState, useMemo,
+  useContext, useCallback, useState, useMemo, useEffect,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import {
-  batchify, Token, withTokenApprove,
+  batchify, estimateTezInShares, Token, withTokenApprove,
 } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { FARM_CONTRACT } from '@utils/defaults';
 import {
-  WhitelistedFarm, FarmingFormValues,
+  fromDecimals, getWhitelistedBakerName, getWhitelistedTokenSymbol, parseDecimals,
+} from '@utils/helpers';
+import { FARM_CONTRACT, FARM_PRECISION, TEZOS_TOKEN } from '@utils/defaults';
+import {
+  WhitelistedFarm, FarmingFormValues, VoterType, WhitelistedBaker,
 } from '@utils/types';
 import {
-  useFarmingContract, useTezos, useAccountPkh,
+  useFarmingContract, useTezos, useAccountPkh, useBakers,
 } from '@utils/dapp';
 import { getHarvest } from '@utils/helpers/getHarvest';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -31,6 +33,7 @@ import { FarmingForm, TabsContent } from '@components/farming/FarmingForm';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import s from './FarmingInfo.module.sass';
 import { submitForm } from './farmingHelpers';
 
@@ -54,13 +57,22 @@ const modeClass = {
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({
   className,
   farm,
-  amount = '1000000',
 }) => {
   const {
-    remaining = new Date(),
+    farmId,
     tokenPair,
+    startTime,
+    timelock,
+    dexStorage,
+    totalValueLocked,
+    rewardPerSecond,
+    rewardPerShare,
+    upd,
+    deposit,
   } = farm;
+  // console.log(farm);
   const farmContract = useFarmingContract();
+  const { data: bakers } = useBakers();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
@@ -70,6 +82,12 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const {
+    userInfoInFarms: userInfoInAllFarms,
+    loadAmountOfTokensInFarms,
+  } = useUserInfoInAllFarms();
+  const [pending, setPending] = useState<string>('0');
+  const [voter, setVoter] = useState<VoterType>();
 
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
@@ -77,6 +95,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const remaining:Date = useMemo(() => new Date(
+    new Date(startTime).getTime() + new Date(timelock).getTime(),
+  ), [startTime, timelock]);
 
   const handleLoader = useCallback(() => {
     updateToast({
@@ -132,13 +154,12 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
       contract: FARM_CONTRACT,
       id: new BigNumber(0),
     };
-    const farmId = new BigNumber(farm.farmId);
 
     const harvestInfo = getHarvest({
       accountPkh,
       farmContract,
       handleErrorToast,
-      farmId,
+      farmId: new BigNumber(farmId),
     });
 
     try {
@@ -159,6 +180,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessHarvest();
+      loadAmountOfTokensInFarms();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -174,6 +196,64 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     handleSuccessHarvest,
     openConnectWalletModal,
   ]);
+
+  const myCandidate: WhitelistedBaker | undefined = useMemo(() => {
+    if (voter?.candidate) {
+      return bakers.find((x) => x.address === voter?.candidate);
+    }
+    return undefined;
+  }, [voter, bakers]);
+
+  useEffect(() => {
+    const asyncVoter = async () => {
+      if (!accountPkh) return;
+      const tempVoter = await dexStorage.storage.voters.get(accountPkh);
+      if (tempVoter) {
+        setVoter({
+          veto: fromDecimals(tempVoter.veto, TEZOS_TOKEN.metadata.decimals).toString(),
+          candidate: tempVoter.candidate,
+          vote: fromDecimals(tempVoter.vote, TEZOS_TOKEN.metadata.decimals).toString(),
+        });
+      } else setVoter({} as VoterType);
+    };
+    asyncVoter();
+  }, [accountPkh, dexStorage]);
+
+  const calculatePendingReward = useCallback(() => {
+    if (!userInfoInAllFarms) return;
+    if (!accountPkh) return;
+
+    const userData = userInfoInAllFarms[Number(farmId)];
+
+    if (!userData) return;
+
+    const userClaimed = new BigNumber(userData.earned
+      .plus(new BigNumber(userData.staked)
+        .multipliedBy(
+          totalValueLocked === '0' ? 0
+            : new BigNumber(Date.now() - new Date(upd).getTime())
+              .dividedBy(1000)
+              .multipliedBy(new BigNumber(rewardPerSecond))
+              .dividedBy(new BigNumber(totalValueLocked))
+              .plus(new BigNumber(rewardPerShare)),
+        )
+        .minus(userData.prev_earned)))
+      .dividedBy(+FARM_PRECISION);
+
+    setPending(parseDecimals(fromDecimals(userClaimed, 6).toString(), 0, Infinity, 6));
+  }, [
+    userInfoInAllFarms,
+    accountPkh,
+    farmId,
+    upd,
+    rewardPerSecond,
+    rewardPerShare,
+    totalValueLocked,
+  ]);
+
+  useEffect(() => {
+    calculatePendingReward();
+  }, [calculatePendingReward]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -207,7 +287,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 {t('common|Your Pending Reward')}
               </span>
               <span className={s.rewardAmount}>
-                100,000,000
+                {pending}
                 <span className={s.rewardCurrency}>
                   {t('common|QUIPU')}
                 </span>
@@ -221,22 +301,41 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <header className={s.header}>
                   {t('common|Your Share')}
                 </header>
-                <span className={s.amount}>1,000,000.00(0.001$)</span>
+                <span className={s.amount}>
+                  {fromDecimals(deposit, 6).toString()}
+                  (
+                  {fromDecimals(estimateTezInShares(dexStorage, deposit), 6).toString()}
+                  $)
+                </span>
               </div>
               <div className={s.item}>
                 <span className={s.header}>
                   {t('common|Your Delegate')}
                 </span>
-                <Button theme="inverse" className={s.amount}>
-                  {t('common|Everstake')}
-                </Button>
+                {myCandidate ? (
+                  <Button
+                    href={`https://tzkt.io/${myCandidate.address}`}
+                    external
+                    theme="underlined"
+                    title={getWhitelistedBakerName(myCandidate)}
+                    className={s.amount}
+                  >
+                    {getWhitelistedBakerName(myCandidate)}
+                  </Button>
+                ) : '—'}
               </div>
               <div className={s.item}>
                 <span className={s.header}>
                   {t('common|Lock ends in')}
                 </span>
                 <div className={cx(s.govBlockLabel, s.amount)}>
-                  <Timeleft remaining={remaining} />
+                  {timelock === '0' ? '—' : (
+                    <Timeleft
+                      remaining={remaining}
+                      disabled
+                      className={s.priceAmount}
+                    />
+                  )}
                 </div>
               </div>
 
@@ -306,8 +405,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
             handleSubmit={handleSubmit}
             debounce={100}
             save={() => {}}
-            remaining={remaining}
-            amount={amount}
+            farm={farm}
             tokenPair={tokenPair}
             currentTab={currentTab}
             setTabsState={setTabsState}
