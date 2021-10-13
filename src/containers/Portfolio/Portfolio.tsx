@@ -8,7 +8,6 @@ import { transformNodeToWhitelistedToken } from '@utils/helpers/transformNodeToW
 import { TransactionType, WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { prepareTokenName } from '@utils/helpers';
-import { useTokens } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
@@ -79,13 +78,30 @@ const whitelistedTokens = [
     fa2TokenId: STABLE_TOKEN.fa2TokenId,
     metadata: STABLE_TOKEN.metadata,
   },
+  {
+    type: TEZOS_TOKEN.type,
+    contractAddress: TEZOS_TOKEN.contractAddress,
+    fa2TokenId: TEZOS_TOKEN.fa2TokenId,
+    metadata: TEZOS_TOKEN.metadata,
+  },
+  {
+    type: STABLE_TOKEN.type,
+    contractAddress: STABLE_TOKEN.contractAddress,
+    fa2TokenId: STABLE_TOKEN.fa2TokenId,
+    metadata: STABLE_TOKEN.metadata,
+  },
+  {
+    type: TEZOS_TOKEN.type,
+    contractAddress: TEZOS_TOKEN.contractAddress,
+    fa2TokenId: TEZOS_TOKEN.fa2TokenId,
+    metadata: TEZOS_TOKEN.metadata,
+  },
 ];
 
 export const Portfolio: React.FC<{}> = () => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [mobTabsState, setMobTabsState] = useState(MobTabsContent[0].id);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { data: tokens } = useTokens();
   const [fetchPairsData, { loading, data, error }] = useGetTokensPairsLazyQuery();
   const { t } = useTranslation(['home']);
 
@@ -128,6 +144,9 @@ export const Portfolio: React.FC<{}> = () => {
   const farms = whitelistedTokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
+
+  console.log({ farms });
+
   const transactions : TransactionType[] = [
     {
       from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '0', action: 'swap',
@@ -207,10 +226,9 @@ export const Portfolio: React.FC<{}> = () => {
       <div className={s.notMobile}>
         {whitelistedTokens.length > 0 && (
           <>
-            <h1 className={s.h1}>
-              Your Tokens
-            </h1>
-            <TokenTable data={whitelistedTokens} />
+            <Section className={s.h1} header="Your Tokens">
+              <TokenTable data={whitelistedTokens} />
+            </Section>
           </>
         )}
         {pools.length > 0 && (
@@ -227,18 +245,16 @@ export const Portfolio: React.FC<{}> = () => {
         )}
         {farms.length > 0 && (
           <>
-            <h1 className={s.h1}>
-              Joined Farms
-            </h1>
-            <FarmTable data={farms as WhitelistedFarm[]} />
+            <Section className={s.h1} header="Joined Farms">
+              <FarmTable data={farms as WhitelistedFarm[]} />
+            </Section>
           </>
         )}
         {transactions.length > 0 && (
           <>
-            <h1 className={s.h1}>
-              Transactions History
-            </h1>
-            <TransactionTable data={transactions} />
+            <Section className={s.h1} header="Transactions History">
+              <TransactionTable data={transactions} />
+            </Section>
           </>
         )}
       </div>
@@ -260,7 +276,7 @@ export const Portfolio: React.FC<{}> = () => {
             </Card>
           </div>
         </div>
-        {currentTab.id === 'tokens' && (<TokenTable data={tokens} />)}
+        {currentTab.id === 'tokens' && (<TokenTable data={whitelistedTokens} />)}
         {currentTab.id === 'pools' && (<PoolTable data={farms as WhitelistedFarm[]} />)}
         {currentTab.id === 'farms' && (<FarmTable data={farms as WhitelistedFarm[]} />)}
         {currentTab.id === 'transactions' && (<TransactionTable data={transactions} />)}

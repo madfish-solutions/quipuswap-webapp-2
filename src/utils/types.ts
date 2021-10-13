@@ -187,33 +187,3 @@ export type PoolTableType = {
     },
   },
 };
-
-export interface YourTokensTable {
-  token: WhitelistedToken
-  balance: BigNumber
-  price: BigNumber
-  totalValue: BigNumber
-}
-
-export interface PoolsInvestedTable {
-  tokenPair: WhitelistedTokenPair
-  share: BigNumber
-  balanceLP: BigNumber
-  liquidity: BigNumber
-}
-
-export interface JoinedFarmsTable {
-  tokenPair: WhitelistedToken
-  stake: BigNumber
-  pendingRewards: BigNumber
-  totalValue: BigNumber
-}
-
-export interface TransactionsHistoryTable {
-  fromToken: WhitelistedToken
-  toToken: WhitelistedToken
-  totalValue: BigNumber
-  fromTokenAmount: BigNumber
-  toTokenAmount: BigNumber
-  date: Date
-}

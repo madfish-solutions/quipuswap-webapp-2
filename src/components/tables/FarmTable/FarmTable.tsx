@@ -54,12 +54,13 @@ export const FarmTable: React.FC<FarmTableProps> = ({
   //     },
   //   });
   // }, [fetch, offset, pageSize]);
+
   const columns = useMemo(() => [
     {
       Header: t('home|Name'),
       id: 'name',
       accessor: ({ tokenPair }:WhitelistedFarm) => (
-        <>
+        <div className={s.links}>
           <TokensLogos
             token1={tokenPair.token1}
             token2={tokenPair.token2}
@@ -69,54 +70,87 @@ export const FarmTable: React.FC<FarmTableProps> = ({
           /
           {getWhitelistedTokenSymbol(tokenPair.token2)}
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
-        </>
+        </div>
       ),
     },
     {
       Header: (
-        <>
-          {t('home|Total staked')}
+        <div className={s.links}>
+          {t('home|Your stake')}
           <Tooltip sizeT="small" content={t('home|Total funds locked in the farming contract for each pool.')} />
-        </>
+        </div>
       ),
       id: 'staked',
       accessor: () => (
-        <>
-          $
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
-        </>
+        <div className={s.links}>
+          <span className={s.dollar}>
+            $
+          </span>
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount="888"
+          />
+        </div>
       ),
     },
     {
       Header: (
-        <>
-          {t('home|APR')}
+        <div className={s.links}>
+          {t('home|Pending Rewards')}
           <Tooltip sizeT="small" content={t('home|Expected APR (annual percentage rate) earned through an investment.')} />
-        </>
+        </div>
       ),
-      id: 'apr',
+      id: 'pendingRewards',
       accessor: () => (
-        <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
+        <div className={s.links}>
+          <span className={s.dollar}>
+            $
+          </span>
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount="888"
+          />
+        </div>
+      ),
+    },
+    {
+      Header: (
+        <div className={s.links}>
+          {t('home|Total Value')}
+          <Tooltip sizeT="small" content={t('home|Expected APR (annual percentage rate) earned through an investment.')} />
+        </div>
+      ),
+      id: 'totalValue',
+      accessor: () => (
+        <div className={s.links}>
+          <span className={s.dollar}>
+            $
+          </span>
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount="888"
+          />
+        </div>
       ),
     },
     {
       id: 'poolButton',
       accessor: () => (
-        <>
+        <div className={s.last}>
           <Button
             theme="secondary"
             className={s.button}
             href="#"
           >
-            Get LP
+            Harvest
           </Button>
           <Button
             href="/swap"
             className={s.button}
           >
-            Farm
+            Stake
           </Button>
-        </>
+        </div>
       ),
     },
   ], [t]);
@@ -124,20 +158,15 @@ export const FarmTable: React.FC<FarmTableProps> = ({
   return (
     <>
       <Table
-        theme="farms"
+        theme="pools"
         className={className}
         tableClassName={s.table}
         data={data ?? []}
-        loading={loading}
         columns={columns}
-        trClassName={s.tr}
-        thClassName={s.th}
-        tdClassName={s.td}
         pageCount={pageCount}
         pageSize={pageSize ?? 10}
         setOffset={setOffset}
-        isLinked
-        disabled
+        loading={loading}
       />
     </>
   );

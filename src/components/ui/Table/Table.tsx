@@ -57,8 +57,6 @@ export const Table: React.FC<TablePropsT> = ({
   disabled = false,
   renderMobile,
 }) => {
-  console.log({ columns });
-
   const { t } = useTranslation(['common']);
   const {
     getTableProps,

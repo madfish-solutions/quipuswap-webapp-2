@@ -69,6 +69,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       },
     });
   }, [fetch, offset]);
+
   const columns = useMemo(() => [
     {
       Header: t('home|Name'),
