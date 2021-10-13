@@ -48,7 +48,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     deposit,
     earned,
   } = farm;
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'farms']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [balance, setBalance] = useState<string>();
   const balanceFromWallet = useBalance(farm);
@@ -145,7 +145,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           </div>
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>Earned</div>
+          <div className={s.detailsHeader}>{t('farms|Earned')}</div>
           <div className={s.detailsValue}>
             <FarmingUserMoney money={earned} />
           </div>
