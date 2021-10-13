@@ -23,10 +23,10 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const farmMobileItem = (token) => (
+const farmMobileItem = ({ token }:{ token:WhitelistedToken }) => (
   <TokenCardItem
-    key={`${token.token.contractAddress}:${token.token.fa2TokenId}`}
-    token={token.token}
+    key={`${token.contractAddress}:${token.fa2TokenId}`}
+    token={token}
   />
 );
 
