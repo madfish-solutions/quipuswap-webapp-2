@@ -1,24 +1,27 @@
 import React, { useContext, useState, useMemo } from 'react';
-import cx from 'classnames';
-import dynamic from 'next/dynamic';
 import { useGetTokensPairsLazyQuery } from '@graphql';
+import { useTranslation } from 'next-i18next';
+import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { transformNodeToWhitelistedToken } from '@utils/helpers/transformNodeToWhitelistedToken';
 import { TransactionType, WhitelistedFarm } from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { prepareTokenName } from '@utils/helpers';
 import { useTokens } from '@utils/dapp';
-import { Tabs } from '@components/ui/Tabs';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
+import { TransactionTable } from '@components/tables/TransactionTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { FarmTable } from '@components/tables/FarmTable';
 import { TokenTable } from '@components/tables/TokenTable';
-import { TransactionTable } from '@components/tables/TransactionTable';
 import { Section } from '@components/home/Section';
-import { transformNodeToWhitelistedToken } from '@utils/helpers/transformNodeToWhitelistedToken';
 import { Token } from 'graphql';
-import s from './Portfolio.module.sass';
 import { PortfolioData } from './content';
 import { PortfolioCard } from './PortfolioCard';
+
+import s from './Portfolio.module.sass';
 
 const PieChart = dynamic(() => import('@components/charts/PieChart'), {
   ssr: false,
@@ -84,6 +87,7 @@ export const Portfolio: React.FC<{}> = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { data: tokens } = useTokens();
   const [fetchPairsData, { loading, data, error }] = useGetTokensPairsLazyQuery();
+  const { t } = useTranslation(['home']);
 
   const pairData = useMemo(() => data?.pairs?.edges.map((x) => {
     const t1 = (x && x.node && x.node.token1) as Token;
