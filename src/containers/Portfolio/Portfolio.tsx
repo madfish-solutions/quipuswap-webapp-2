@@ -1,22 +1,16 @@
 import React, { useContext, useState, useMemo } from 'react';
-import { useGetTokensPairsLazyQuery } from '@graphql';
-import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
-import { transformNodeToWhitelistedToken } from '@utils/helpers/transformNodeToWhitelistedToken';
-import { TransactionType, WhitelistedFarm } from '@utils/types';
+import { TransactionType } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { prepareTokenName } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { TransactionTable } from '@components/tables/TransactionTable';
-import { PoolTable } from '@components/tables/PoolTable';
 import { FarmTable } from '@components/tables/FarmTable';
 import { TokenTable } from '@components/tables/TokenTable';
-import { Section } from '@components/home/Section';
-import { Token } from 'graphql';
+import { InvestTable } from '@components/tables/InvestTable';
 import { PortfolioData } from './content';
 import { PortfolioCard } from './PortfolioCard';
 
@@ -65,36 +59,160 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const whitelistedTokens = [
+const tokens = [
   {
-    type: TEZOS_TOKEN.type,
-    contractAddress: TEZOS_TOKEN.contractAddress,
-    fa2TokenId: TEZOS_TOKEN.fa2TokenId,
-    metadata: TEZOS_TOKEN.metadata,
+    token: TEZOS_TOKEN,
+    symbol: TEZOS_TOKEN.metadata.symbol,
   },
   {
-    type: STABLE_TOKEN.type,
-    contractAddress: STABLE_TOKEN.contractAddress,
-    fa2TokenId: STABLE_TOKEN.fa2TokenId,
-    metadata: STABLE_TOKEN.metadata,
+    token: STABLE_TOKEN,
+    symbol: STABLE_TOKEN.metadata.symbol,
   },
   {
-    type: TEZOS_TOKEN.type,
-    contractAddress: TEZOS_TOKEN.contractAddress,
-    fa2TokenId: TEZOS_TOKEN.fa2TokenId,
-    metadata: TEZOS_TOKEN.metadata,
+    token: TEZOS_TOKEN,
+    symbol: TEZOS_TOKEN.metadata.symbol,
   },
   {
-    type: STABLE_TOKEN.type,
-    contractAddress: STABLE_TOKEN.contractAddress,
-    fa2TokenId: STABLE_TOKEN.fa2TokenId,
-    metadata: STABLE_TOKEN.metadata,
+    token: STABLE_TOKEN,
+    symbol: STABLE_TOKEN.metadata.symbol,
   },
   {
-    type: TEZOS_TOKEN.type,
-    contractAddress: TEZOS_TOKEN.contractAddress,
-    fa2TokenId: TEZOS_TOKEN.fa2TokenId,
-    metadata: TEZOS_TOKEN.metadata,
+    token: TEZOS_TOKEN,
+    symbol: TEZOS_TOKEN.metadata.symbol,
+  },
+];
+
+const invests = [
+  {
+    token1: TEZOS_TOKEN,
+    token2: STABLE_TOKEN,
+  },
+  {
+    token1: TEZOS_TOKEN,
+    token2: STABLE_TOKEN,
+  },
+  {
+    token1: TEZOS_TOKEN,
+    token2: STABLE_TOKEN,
+  },
+  {
+    token1: TEZOS_TOKEN,
+    token2: STABLE_TOKEN,
+  },
+  {
+    token1: TEZOS_TOKEN,
+    token2: STABLE_TOKEN,
+  },
+];
+
+const farms = [
+  {
+    remaining: Date.now(),
+    tokenPair: {
+      token1: TEZOS_TOKEN,
+      token2: STABLE_TOKEN,
+    },
+    totalValueLocked: '888',
+    apy: '888',
+    daily: '888',
+    balance: '888',
+    deposit: '888',
+    earned: '888',
+    multiplier: '888',
+    tokenContract: '#',
+    farmContract: '#',
+    projectLink: '#',
+    analyticsLink: '#',
+  },
+  {
+    remaining: Date.now(),
+    tokenPair: {
+      token1: TEZOS_TOKEN,
+      token2: STABLE_TOKEN,
+    },
+    totalValueLocked: '888',
+    apy: '888',
+    daily: '888',
+    balance: '888',
+    deposit: '888',
+    earned: '888',
+    multiplier: '888',
+    tokenContract: '#',
+    farmContract: '#',
+    projectLink: '#',
+    analyticsLink: '#',
+  },
+  {
+    remaining: Date.now(),
+    tokenPair: {
+      token1: TEZOS_TOKEN,
+      token2: STABLE_TOKEN,
+    },
+    totalValueLocked: '888',
+    apy: '888',
+    daily: '888',
+    balance: '888',
+    deposit: '888',
+    earned: '888',
+    multiplier: '888',
+    tokenContract: '#',
+    farmContract: '#',
+    projectLink: '#',
+    analyticsLink: '#',
+  },
+  {
+    remaining: Date.now(),
+    tokenPair: {
+      token1: TEZOS_TOKEN,
+      token2: STABLE_TOKEN,
+    },
+    totalValueLocked: '888',
+    apy: '888',
+    daily: '888',
+    balance: '888',
+    deposit: '888',
+    earned: '888',
+    multiplier: '888',
+    tokenContract: '#',
+    farmContract: '#',
+    projectLink: '#',
+    analyticsLink: '#',
+  },
+  {
+    remaining: Date.now(),
+    tokenPair: {
+      token1: TEZOS_TOKEN,
+      token2: STABLE_TOKEN,
+    },
+    totalValueLocked: '888',
+    apy: '888',
+    daily: '888',
+    balance: '888',
+    deposit: '888',
+    earned: '888',
+    multiplier: '888',
+    tokenContract: '#',
+    farmContract: '#',
+    projectLink: '#',
+    analyticsLink: '#',
+  },
+];
+
+const transactions: TransactionType[] = [
+  {
+    from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '0', action: 'swap',
+  },
+  {
+    from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '1', action: 'swap',
+  },
+  {
+    from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '2', action: 'swap',
+  },
+  {
+    from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '3', action: 'swap',
+  },
+  {
+    from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '4', action: 'swap',
   },
 ];
 
@@ -102,66 +220,6 @@ export const Portfolio: React.FC<{}> = () => {
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [mobTabsState, setMobTabsState] = useState(MobTabsContent[0].id);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [fetchPairsData, { loading, data, error }] = useGetTokensPairsLazyQuery();
-  const { t } = useTranslation(['home']);
-
-  const pairData = useMemo(() => data?.pairs?.edges.map((x) => {
-    const t1 = (x && x.node && x.node.token1) as Token;
-    const t2 = (x && x.node && x.node.token2) as Token;
-    return ({
-      token1: transformNodeToWhitelistedToken(t1),
-      token2: transformNodeToWhitelistedToken(t2),
-      xtzUsdQuote: data?.overview.xtzUsdQuote,
-      pair: {
-        name: `${prepareTokenName(t1)} / ${prepareTokenName(t2)}`,
-        token1: x?.node?.token1,
-        token2: x?.node?.token2,
-      },
-      data: {
-        tvl: x?.node?.liquidity,
-        volume24h: x?.node?.volume24h,
-      },
-      buttons: {
-        first: {
-          label: t('home|Analytics'),
-          href: `https://analytics.quipuswap.com/pairs/${x?.node?.id}`,
-          external: true,
-        },
-        second: {
-          label: t('home|Trade'),
-          href: `/swap/${x?.node?.token1.id}-${x?.node?.token2.id}`,
-        },
-      },
-    });
-  }), [data, t]);
-
-  const isNotLoaded = error || (!loading && !data) || data === undefined || !data.pairs;
-
-  const pools = whitelistedTokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { token1: x, token2: STABLE_TOKEN }
-    : { token1: x, token2: TEZOS_TOKEN }));
-
-  const farms = whitelistedTokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
-    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
-
-  const transactions : TransactionType[] = [
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '0', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '1', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '2', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '3', action: 'swap',
-    },
-    {
-      from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '4', action: 'swap',
-    },
-  ];
 
   const currentTab = useMemo(
     () => (MobTabsContent.find(({ id }) => id === mobTabsState)!),
@@ -222,40 +280,40 @@ export const Portfolio: React.FC<{}> = () => {
         </Card>
       </div>
       <div className={s.notMobile}>
-        {whitelistedTokens.length > 0 && (
+        {tokens.length > 0 && (
           <>
-            <Section className={s.h1} header="Your Tokens">
-              <TokenTable data={whitelistedTokens} />
-            </Section>
+            <h2 className={s.h1}>Your Tokens</h2>
+            <TokenTable
+              data={tokens}
+              loading={false}
+            />
           </>
         )}
-        {pools.length > 0 && (
+        {invests.length > 0 && (
           <>
-            <Section className={s.h1} header="Pools Invested">
-              <PoolTable
-                fetch={fetchPairsData}
-                loading={!!isNotLoaded}
-                totalCount={data?.pairs?.totalCount ?? 0}
-                data={isNotLoaded ? [] : pairData as any}
-              />
-            </Section>
+            <h2 className={s.h1}>Pools Invested</h2>
+            <InvestTable
+              data={invests}
+              loading={false}
+            />
           </>
         )}
         {farms.length > 0 && (
           <>
-            <Section className={s.h1} header="Joined Farms">
-              <FarmTable
-                data={farms as WhitelistedFarm[]}
-                loading={false}
-              />
-            </Section>
+            <h2 className={s.h1}>Joined Farms</h2>
+            <FarmTable
+              data={farms}
+              loading={false}
+            />
           </>
         )}
         {transactions.length > 0 && (
           <>
-            <Section className={s.h1} header="Transactions History">
-              <TransactionTable data={transactions} />
-            </Section>
+            <h2 className={s.h1}>Transactions History</h2>
+            <TransactionTable
+              data={transactions}
+              loading={false}
+            />
           </>
         )}
       </div>
@@ -277,17 +335,10 @@ export const Portfolio: React.FC<{}> = () => {
             </Card>
           </div>
         </div>
-        {currentTab.id === 'tokens' && (<TokenTable data={whitelistedTokens} />)}
-        {currentTab.id === 'pools' && (
-          <PoolTable
-            fetch={fetchPairsData}
-            loading={!!isNotLoaded}
-            totalCount={data?.pairs?.totalCount ?? 0}
-            data={isNotLoaded ? [] : pairData as any}
-          />
-        )}
-        {currentTab.id === 'farms' && (<FarmTable data={farms as WhitelistedFarm[]} />)}
-        {currentTab.id === 'transactions' && (<TransactionTable data={transactions} />)}
+        {currentTab.id === 'tokens' && (<TokenTable data={tokens} loading={false} />)}
+        {currentTab.id === 'pools' && (<InvestTable data={invests} loading={false} />)}
+        {currentTab.id === 'farms' && (<FarmTable data={farms} loading={false} />)}
+        {currentTab.id === 'transactions' && (<TransactionTable data={transactions} loading={false} />)}
       </div>
     </>
   );

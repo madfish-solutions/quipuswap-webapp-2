@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { WhitelistedToken } from '@utils/types';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from '../Card.module.sass';
 

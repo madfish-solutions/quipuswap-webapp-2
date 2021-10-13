@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  TransactionType,
+  TransactionType, WhitelistedToken,
 } from '@utils/types';
 import { Table } from '@components/ui/Table';
 
@@ -12,13 +12,13 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
-import { TEZOS_TOKEN, STABLE_TOKEN } from '@utils/defaults';
 import { TransactionCardItem } from './TransactionCardItem';
 
 import s from '../TokenTable/TokenTable.module.sass';
 
 type TransactionTableProps = {
   data: TransactionType[]
+  loading: boolean
 };
 
 const modeClass = {
@@ -35,6 +35,7 @@ const transactionMobileItem = (transaction:TransactionType) => (
 
 export const TransactionTable: React.FC<TransactionTableProps> = ({
   data,
+  loading,
 }) => {
   const { t } = useTranslation(['profile']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -45,17 +46,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
     {
       Header: t('home|Action'),
       id: 'action',
-      accessor: () => (
+      accessor: ({ from, to }: { from:WhitelistedToken, to:WhitelistedToken }) => (
         <div className={s.links}>
           <TokensLogos
-            token1={TEZOS_TOKEN}
-            token2={STABLE_TOKEN}
+            token1={from}
+            token2={to}
             className={s.tokenLogo}
           />
           <span className={s.cardCellText}>
-            {TEZOS_TOKEN.metadata.symbol}
+            {from.metadata.symbol}
             /
-            {STABLE_TOKEN.metadata.symbol}
+            {to.metadata.symbol}
           </span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </div>
@@ -89,7 +90,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         </div>
       ),
       id: 'tokenAAmount',
-      accessor: () => (
+      accessor: ({ from }) => (
         <>
           <span className={s.dollar}>
             $
@@ -98,6 +99,9 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             className={s.cardAmount}
             amount="888"
           />
+          <span className={s.dollar}>
+            {from.metadata.symbol}
+          </span>
         </>
       ),
     },
@@ -109,15 +113,15 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         </div>
       ),
       id: 'tokenBAmount',
-      accessor: () => (
+      accessor: ({ to }) => (
         <>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
           />
+          <span className={s.dollar}>
+            {to.metadata.symbol}
+          </span>
         </>
       ),
     },
@@ -152,11 +156,13 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       tableClassName={s.table}
       renderMobile={transactionMobileItem}
       data={data ?? []}
+      loading={loading}
       columns={columns}
       trClassName={s.tr}
       thClassName={s.th}
       tdClassName={s.td}
       setOffset={setOffset}
+      isLinked
     />
   );
 };

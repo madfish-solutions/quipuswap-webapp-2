@@ -2,23 +2,20 @@ import React, { useContext, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import {
-  WhitelistedToken,
-} from '@utils/types';
-import { Table } from '@components/ui/Table';
-
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Button } from '@components/ui/Button';
-import { Tooltip } from '@components/ui/Tooltip';
+import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Table } from '@components/ui/Table';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokenCardItem } from './TokenCardItem';
 
 import s from './TokenTable.module.sass';
 
 type TokenTableProps = {
-  data: WhitelistedToken[]
+  data: any[]
+  loading: boolean
 };
 
 const modeClass = {
@@ -26,15 +23,16 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-const farmMobileItem = (token:WhitelistedToken) => (
+const farmMobileItem = (token) => (
   <TokenCardItem
-    key={`${token.contractAddress}:${token.fa2TokenId}`}
-    token={token}
+    key={`${token.token.contractAddress}:${token.token.fa2TokenId}`}
+    token={token.token}
   />
 );
 
 export const TokenTable: React.FC<TokenTableProps> = ({
   data,
+  loading = true,
 }) => {
   const { t } = useTranslation(['profile']);
   const [offset, setOffset] = useState(0);
@@ -44,18 +42,15 @@ export const TokenTable: React.FC<TokenTableProps> = ({
   const columns = useMemo(() => [
     {
       Header: t('home|Name'),
-      id: 'name',
-      accessor: () => (
+      id: 'nameTokenTable',
+      accessor: ({ token, symbol }:{ token:WhitelistedToken, symbol:string }) => (
         <div className={s.links}>
           <TokensLogos
-            token1={TEZOS_TOKEN}
-            token2={STABLE_TOKEN}
+            token1={token}
             className={s.tokenLogo}
           />
           <span className={s.cardCellText}>
-            {TEZOS_TOKEN.metadata.symbol}
-            /
-            {STABLE_TOKEN.metadata.symbol}
+            {symbol}
           </span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </div>
@@ -68,12 +63,9 @@ export const TokenTable: React.FC<TokenTableProps> = ({
           <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
         </div>
       ),
-      id: 'balance',
+      id: 'balanceTokenTable',
       accessor: () => (
         <div className={s.links}>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -88,7 +80,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
       ),
-      id: 'price',
+      id: 'priceTokenTable',
       accessor: () => (
         <>
           <span className={s.dollar}>
@@ -108,7 +100,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
       ),
-      id: 'totalValue',
+      id: 'totalValueTokenTable',
       accessor: () => (
         <>
           <span className={s.dollar}>
@@ -122,7 +114,7 @@ export const TokenTable: React.FC<TokenTableProps> = ({
       ),
     },
     {
-      id: 'poolButton',
+      id: 'poolButtonTokenTable',
       accessor: () => (
         <div className={s.last}>
           <Button
@@ -150,11 +142,17 @@ export const TokenTable: React.FC<TokenTableProps> = ({
       theme="pools"
       className={cx(modeClass[colorThemeMode])}
       renderMobile={farmMobileItem}
-      data={data}
+      tableClassName={s.table}
+      data={data ?? []}
+      loading={loading}
       columns={columns}
-      setOffset={setOffset}
-      pageSize={5}
+      trClassName={s.tr}
+      thClassName={s.th}
+      tdClassName={s.td}
       pageCount={10}
+      pageSize={5}
+      setOffset={setOffset}
+      isLinked
     />
   );
 };
