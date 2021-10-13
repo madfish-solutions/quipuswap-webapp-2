@@ -89,6 +89,7 @@ export type SwapFormValues = {
 };
 
 export type WhitelistedFarm = {
+  id: string
   remaining: Date
   tokenPair: WhitelistedTokenPair
   totalValueLocked: string
