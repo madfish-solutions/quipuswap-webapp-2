@@ -1,6 +1,41 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
-  
+
+.skeleton
+  height: 40px
+
+.tooltip
+  padding-right: 0px
+
+.td, .th
+  &:nth-child(2)
+    padding-right: 24px
+  &:first-child, &:nth-child(2)
+    text-align: left
+  &:last-child, &:nth-last-child(2)
+    text-align: right
+
+.th:last-child
+  display: flex
+  align-items: center
+  justify-content: flex-end
+
+.td
+  font-weight: 600
+  &:last-child
+    font-weight: 400
+
+.tr
+  position: sticky
+
+.link
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  opacity: 0
+
 .container
   margin-left: -24px
   margin-right: -24px
@@ -8,8 +43,8 @@
   overflow-x: auto
 
 .container::-webkit-scrollbar-track
-    border-radius: 1px
-    background-color: transparent
+  border-radius: 1px
+  background-color: transparent
 .container::-webkit-scrollbar
   width: 2px
   height: 0px
@@ -39,6 +74,11 @@
   display: flex
   align-items: center
 
+.last
+  justify-content: flex-end
+  display: flex
+  align-items: center
+
 .bage
   margin-left: 8px
 
@@ -63,7 +103,7 @@
   padding: 16px 24px
 
 .poolRow
-  grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 2fr
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 1fr
   padding: 16px 24px
 
 .h1
@@ -93,12 +133,13 @@
 
 .proposalBackIcon
   margin-right: 8px
-  
+
 .forward
   transform: rotate(180deg)
 
 .cardAmount
   margin-left: 4px
+  line-height: inherit
 
 .footer
   display: flex
@@ -130,6 +171,9 @@
 
 .wideItem
   flex: 1.5
+
+.dollar
+  color: $text-03
 
 .maxWidth
   max-width: none
@@ -171,6 +215,8 @@
     color: $text-inverse
 
 @include media('>Ltablet')
+  .poolRow
+    grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
   .h1
     display: block
   .container

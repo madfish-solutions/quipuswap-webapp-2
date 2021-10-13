@@ -145,8 +145,6 @@ export const Portfolio: React.FC<{}> = () => {
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
 
-  console.log({ farms });
-
   const transactions : TransactionType[] = [
     {
       from: TEZOS_TOKEN, to: STABLE_TOKEN, id: '0', action: 'swap',
@@ -246,7 +244,10 @@ export const Portfolio: React.FC<{}> = () => {
         {farms.length > 0 && (
           <>
             <Section className={s.h1} header="Joined Farms">
-              <FarmTable data={farms as WhitelistedFarm[]} />
+              <FarmTable
+                data={farms as WhitelistedFarm[]}
+                loading={false}
+              />
             </Section>
           </>
         )}
@@ -277,7 +278,14 @@ export const Portfolio: React.FC<{}> = () => {
           </div>
         </div>
         {currentTab.id === 'tokens' && (<TokenTable data={whitelistedTokens} />)}
-        {currentTab.id === 'pools' && (<PoolTable data={farms as WhitelistedFarm[]} />)}
+        {currentTab.id === 'pools' && (
+          <PoolTable
+            fetch={fetchPairsData}
+            loading={!!isNotLoaded}
+            totalCount={data?.pairs?.totalCount ?? 0}
+            data={isNotLoaded ? [] : pairData as any}
+          />
+        )}
         {currentTab.id === 'farms' && (<FarmTable data={farms as WhitelistedFarm[]} />)}
         {currentTab.id === 'transactions' && (<TransactionTable data={transactions} />)}
       </div>
