@@ -1,4 +1,6 @@
-import React, { useCallback, useContext } from 'react';
+import React, {
+  useCallback, useContext, useEffect, useState,
+} from 'react';
 import cx from 'classnames';
 import {
   batchify, fromOpOpts, withTokenApprove,
@@ -13,15 +15,17 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
-import { SubmitType } from '@utils/types';
-import { FARM_CONTRACT } from '@utils/defaults';
+import { FarmingUsersInfo, SubmitType } from '@utils/types';
+import { FARM_CONTRACT, FARM_PRECISION, STABLE_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { fromDecimals, parseDecimals } from '@utils/helpers';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -75,6 +79,43 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     openConnectWalletModal,
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const {
+    userInfoInFarms: userInfoInAllFarms,
+    loadAmountOfTokensInFarms,
+  } = useUserInfoInAllFarms();
+  const [claimed, setClaimed] = useState<string>('0');
+  const [pending, setPending] = useState<string>('0');
+
+  const calculatePendingReward = useCallback(() => {
+    if (!userInfoInAllFarms) return;
+    if (!accountPkh) return;
+
+    const generalTotal = Object
+      .values(userInfoInAllFarms)
+      .reduce((userData, cur:FarmingUsersInfo | undefined, index) => (cur ? {
+        claimed: userData.claimed.plus(cur.claimed),
+        pending: userData.pending.plus(new BigNumber(cur.earned
+          .plus(new BigNumber(cur.staked)
+            .multipliedBy(
+              farms[index].totalValueLocked === '0' ? 0
+                : new BigNumber(Date.now() - new Date(farms[index].upd).getTime())
+                  .dividedBy(1000)
+                  .multipliedBy(new BigNumber(farms[index].rewardPerSecond))
+                  .dividedBy(new BigNumber(farms[index].totalValueLocked))
+                  .plus(new BigNumber(farms[index].rewardPerShare)),
+            )
+            .minus(cur.prev_earned)))
+          .dividedBy(+FARM_PRECISION)),
+      } : userData),
+      { claimed: new BigNumber(0), pending: new BigNumber(0) });
+
+    setClaimed(fromDecimals(generalTotal.claimed, 6).toString());
+    setPending(parseDecimals(fromDecimals(generalTotal.pending, 6).toString(), 0, Infinity, 6));
+  }, [userInfoInAllFarms, accountPkh, farms]);
+
+  useEffect(() => {
+    calculatePendingReward();
+  }, [calculatePendingReward]);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -93,7 +134,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Proposal submitted!'),
+      render: t('common|Harvested!'),
     });
   }, [updateToast, t]);
 
@@ -144,6 +185,8 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessToast();
+      // TODO: re- calculatePendingReward(), which based on userInfo update
+      loadAmountOfTokensInFarms();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -161,22 +204,20 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
         <div className={s.reward}>
           <div className={s.rewardContent}>
             <span className={s.rewardHeader}>
-              Your Pending QNOTs
+              {t('farms|Your Pending {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
             </span>
-            <span className={s.rewardAmount}>
-              100,000,000
-            </span>
+            <span className={s.rewardAmount}>{pending}</span>
           </div>
           <VotingReward />
         </div>
         <div className={s.item}>
           <span className={s.header}>
-            Your claimed QNOTs
+            {t('farms|Your claimed {{token}}', { token: STABLE_TOKEN.metadata.symbol })}
           </span>
-          <span className={s.amount}>1,000,000.00</span>
+          <span className={s.amount}>{claimed}</span>
         </div>
       </div>
-      <Button className={s.button} onClick={handleHarvest}>Harvest All</Button>
+      <Button className={s.button} onClick={handleHarvest}>{t('farms|Harvest All')}</Button>
     </Card>
   );
 };
