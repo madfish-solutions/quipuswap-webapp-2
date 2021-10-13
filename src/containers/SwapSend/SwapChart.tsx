@@ -16,20 +16,20 @@ type SwapChartProps = {
   token2:WhitelistedToken
 };
 
-// @ts-ignore
-const uniqBy = (a:any, key:(obj:any) => any) => {
-  const seen = {};
-  return a.filter((item:any) => {
-    const k = key(item);
-    let result = false;
-    if (!Object.prototype.hasOwnProperty.call(seen, k)) {
-      // @ts-ignore
-      seen[k] = true;
-      result = true;
-    }
-    return result;
-  });
-};
+// // @ts-ignore
+// const uniqBy = (a:any, key:(obj:any) => any) => {
+//   const seen = {};
+//   return a.filter((item:any) => {
+//     const k = key(item);
+//     let result = false;
+//     if (!Object.prototype.hasOwnProperty.call(seen, k)) {
+//       // @ts-ignore
+//       seen[k] = true;
+//       result = true;
+//     }
+//     return result;
+//   });
+// };
 
 export const SwapChart: React.FC<SwapChartProps> = ({
   token1,
@@ -55,7 +55,8 @@ export const SwapChart: React.FC<SwapChartProps> = ({
       loading={!!loadingProp}
       error={error}
       data={!loadingProp && data
-        ? uniqBy(data.token.plotPrice, (x) => x.time) as CandlePlotPoint[]
+        // ? uniqBy(data.token.plotPrice, (x) => x.time) as CandlePlotPoint[]
+        ? data.token.plotPrice as CandlePlotPoint[]
         : []}
     />
   );
