@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { batchify } from '@quipuswap/sdk';
+import { batchify, withTokenApprove } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
@@ -96,12 +96,19 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     });
   }, [updateToast]);
 
-  const handleSuccessToast = useCallback(() => {
+  const handleSuccessHarvest = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common|Harvested! Your earnings have been sent to your wallet!'),
+      render: t('common|Harvest completed!'),
     });
   }, [updateToast, t]);
+
+  // const handleSuccessToast = useCallback(() => {
+  //   updateToast({
+  //     type: 'success',
+  //     render: t('common|Harvested! Your earnings have been sent to your wallet!'),
+  //   });
+  // }, [updateToast, t]);
 
   const handleHarvest = useCallback(async () => {
     if (!tezos) {
@@ -132,9 +139,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     const farmId = new BigNumber(stake.id);
 
     const harvestInfo = getHarvest({
-      tezos,
       accountPkh,
-      fromAsset,
       farmContract,
       handleErrorToast,
       farmId,
@@ -143,12 +148,21 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     try {
       const harvestInfoResolved = await Promise.resolve(harvestInfo);
 
+      const harvestParams = await withTokenApprove(
+        tezos,
+        fromAsset,
+        accountPkh,
+        farmContract.address,
+        0,
+        harvestInfoResolved,
+      );
+
       const op = await batchify(
         tezos.wallet.batch([]),
-        harvestInfoResolved,
+        harvestParams,
       ).send();
       await op.confirmation();
-      handleSuccessToast();
+      handleSuccessHarvest();
     } catch (e) {
       handleErrorToast(e);
     }
