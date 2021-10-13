@@ -133,7 +133,8 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
       contract: FARM_CONTRACT,
       id: new BigNumber(0),
     };
-    const farmId = new BigNumber(stake.id);
+    // const farmId = new BigNumber(stake.id);
+    const farmId = new BigNumber(0);
 
     const harvestInfo = getHarvest({
       accountPkh,
