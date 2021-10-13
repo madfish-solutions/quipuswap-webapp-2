@@ -27,6 +27,7 @@ import {
 import {
   FarmingStorageInfo,
   FarmsFromServerWithWhitelistedPair,
+  QSMainNet,
   QSNetwork,
   WhitelistedBaker,
   WhitelistedToken,
@@ -341,7 +342,7 @@ function useDApp() {
     }));
   }, [tokensData]);
 
-  const getBakersData = useCallback(() => getBakers(), []);
+  const getBakersData = useCallback(() => getBakers(network.id as QSMainNet), [network]);
   const {
     data: bakersData,
   } = useSWR(
@@ -354,7 +355,7 @@ function useDApp() {
       ...prevState,
       bakers: { loading: false, data: bakersData ?? [] },
     }));
-  }, [bakersData]);
+  }, [bakersData, network]);
 
   const getFarmsData = useCallback(() => getFarms(), []);
   const {

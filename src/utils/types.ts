@@ -1,6 +1,6 @@
-import { FoundDex, Token } from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
+import { BigMapAbstraction } from '@taquito/taquito';
 
 export type QSMainNet = 'mainnet' | 'granadanet';
 
@@ -104,6 +104,12 @@ export type LiquidityFormValues = {
   lastChange: string
   estimateLP: BigNumber
   slippage: string
+};
+
+export type FarmingFormValues = {
+  switcher: boolean
+  balance3: BigNumber
+  selectedBaker: string
 };
 
 export type PoolShare = {
@@ -275,8 +281,6 @@ export type PoolTableType = {
 };
 
 export type SubmitType = {
-  tezos: TezosToolkit
-  fromAsset: Token
   accountPkh: string
   farmContract: any
   farmId: BigNumber
