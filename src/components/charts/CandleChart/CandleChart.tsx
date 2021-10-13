@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   useState,
+  useMemo,
 } from 'react';
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
@@ -309,6 +310,18 @@ export const CandleChart: React.FC<CandleChartProps> = ({
     }
     setReloading(false);
   }, [data, switcher]);
+
+  const isLoaded = useMemo(
+    () => !loading
+    && !error
+    && usdData.length > 0
+    && usdData
+    && !reloading,
+    [loading, error, usdData, reloading],
+  );
+
+  console.log('render', isLoaded);
+
   return (
     <Card className={className}>
       <CardHeader
@@ -325,10 +338,12 @@ export const CandleChart: React.FC<CandleChartProps> = ({
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || error || !usdData || !token2 || usdData.length === 0 || reloading
-          ? (<Preloader style={{ minHeight: '360px' }} />)
-          : (
+        {isLoaded && token2
+          ? (
             <ChartInstance token={!switcher ? token2 : token1} data={usdData} />
+          )
+          : (
+            <Preloader style={{ minHeight: '360px' }} />
           )}
       </CardContent>
       {(token1?.contractAddress !== TEZOS_TOKEN.contractAddress

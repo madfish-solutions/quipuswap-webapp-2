@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import dynamic from 'next/dynamic';
 
 import { CandlePlotPoint, useGetTokenPlotPriceQuery } from '@graphql';
@@ -46,18 +46,18 @@ export const SwapChart: React.FC<SwapChartProps> = ({
         : `${token1.fa2TokenId}` ?? undefined,
     },
   });
-  const loadingProp = loading || !data || !data?.token;
+  const loadingProp = useMemo(
+    () => !(loading || !data || !data?.token) && data,
+    [data, loading],
+  );
   return (
     <CandleChart
       token1={token1}
       token2={token2}
       className={s.chart}
-      loading={!!loadingProp}
+      loading={!loadingProp}
       error={error}
-      data={!loadingProp && data
-        // ? uniqBy(data.token.plotPrice, (x) => x.time) as CandlePlotPoint[]
-        ? data.token.plotPrice as CandlePlotPoint[]
-        : []}
+      data={(data || { token: { plotPrice: [] } })!.token.plotPrice as CandlePlotPoint[]}
     />
   );
 };
