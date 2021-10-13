@@ -5,22 +5,23 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import {
-  batchify, fromOpOpts, Token, withTokenApprove,
+  batchify, Token, withTokenApprove,
 } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import {
-  useFarmingContract, useTezos, useAccountPkh,
-} from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { FARM_CONTRACT } from '@utils/defaults';
 import {
-  WhitelistedFarm, SubmitType, FarmingFormValues,
+  WhitelistedFarm, FarmingFormValues,
 } from '@utils/types';
+import {
+  useFarmingContract, useTezos, useAccountPkh,
+} from '@utils/dapp';
+import { getHarvest } from '@utils/helpers/getHarvest';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -48,24 +49,6 @@ type FarmingInfoProps = {
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
-};
-
-const getHarvest = async ({
-  accountPkh,
-  farmContract,
-  handleErrorToast,
-  farmId,
-}: SubmitType) => {
-  try {
-    const farmParams = [
-      farmContract.methods
-        .harvest(farmId, accountPkh)
-        .toTransferParams(fromOpOpts(undefined, undefined))];
-    return farmParams;
-  } catch (e) {
-    handleErrorToast(e);
-    return [];
-  }
 };
 
 export const FarmingInfo: React.FC<FarmingInfoProps> = ({

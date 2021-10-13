@@ -184,8 +184,8 @@ export interface FarmsFromServerWithWhitelistedPair extends Farms {
 }
 
 export interface WhitelistedFarm extends FarmsFromServerWithWhitelistedPair {
-  apy: string
-  daily: string
+  apr: BigNumber
+  apyDaily: BigNumber
   tokenContract: string
   farmContract: string
   projectLink: string
@@ -218,7 +218,7 @@ export type VoteFormValues = {
   method:'first' | 'second'
 };
 
-export type FarmingStorageInfo = {
+export interface FarmingStorageInfo extends BigMapAbstraction {
   storage: {
     farms: BigMapAbstraction
     referrers: BigMapAbstraction
@@ -235,14 +235,15 @@ export type FarmingStorageInfo = {
     deposit?: BigNumber
     earned?: BigNumber
   }
-};
+}
 
 export type FarmingUsersInfo = {
-  earned?: BigNumber
-  last_staked?: Date
-  prev_earned?: BigNumber
-  staked?: BigNumber
-  used_votes?: BigNumber
+  earned: BigNumber
+  last_staked: Date
+  prev_earned: BigNumber
+  staked: BigNumber
+  used_votes: BigNumber
+  claimed: BigNumber
   farmId?: number
 };
 

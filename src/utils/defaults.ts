@@ -10,6 +10,7 @@ export const QUIPUSWAP_INVEST = 'https://quipuswap.com/invest/add-liquidity';
 
 export const APOLLO_CLIENT_ENDPOINT = process.env.NEXT_PUBLIC_APOLLO_CLIENT_ENDPOINT;
 export const FARMS_INFO_ENDPOINT = process.env.NEXT_PUBLIC_FARMS_INFO_ENDPOINT!;
+export const STAKES_INFO_ENDPOINT = process.env.NEXT_PUBLIC_STAKES_INFO_ENDPOINT!;
 
 export const QUIPUSWAP_ANALYTICS_TOKENS = 'https://analytics.quipuswap.com/tokens';
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
@@ -27,6 +28,7 @@ export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
 export const FARM_CONTRACT = process.env.NEXT_PUBLIC_FARM_CONTRACT!;
+export const FARM_PRECISION = process.env.NEXT_PUBLIC_FARM_PRECISION!;
 
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const BAKERS_API_TESTNET = process.env.NEXT_PUBLIC_BAKERS_API_TESTNET_URL!;

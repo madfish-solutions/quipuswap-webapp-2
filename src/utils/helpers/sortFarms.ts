@@ -8,7 +8,7 @@ export const sortFarms = (sort:string, farms:WhitelistedFarm[]) => {
       sortingParam = 'totalValueLocked';
       break;
     case 'asc:apy':
-      sortingParam = 'apy';
+      sortingParam = 'apyDaily';
       break;
     case 'asc:deposit':
       sortingParam = 'deposit';

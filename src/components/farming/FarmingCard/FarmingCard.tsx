@@ -15,6 +15,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
 import { WhitelistedFarm } from '@utils/types';
+import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
@@ -39,27 +40,22 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     farmId,
     tokenPair,
     totalValueLocked,
-    apy,
-    daily,
-    tokenContract = '#',
-    farmContract = '#',
-    projectLink = '#',
-    analyticsLink = '#',
+    apyDaily,
+    tokenContract,
+    farmContract,
+    projectLink,
+    analyticsLink,
     deposit,
     earned,
   } = farm;
-  const { t } = useTranslation(['common']);
+  const { t } = useTranslation(['common', 'farms']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [balance, setBalance] = useState<number>();
-  const balances = useBalance();
+  const [balance, setBalance] = useState<string>();
+  const balanceFromWallet = useBalance(farm);
 
   useEffect(() => {
-    if (balances && balances[+farmId]) {
-      setBalance(+prettyPrice(balances[+farmId], 2, 6));
-    } else {
-      setBalance(undefined);
-    }
-  }, [balances, farmId]);
+    setBalance(prettyPrice(+balanceFromWallet.toString(), 2, 6));
+  }, [balanceFromWallet, farmId]);
 
   return (
     <Card
@@ -109,7 +105,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={totalValueLocked} />
+            <CurrencyAmount amount={prettyPrice(+totalValueLocked)} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -121,7 +117,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
           <div className={s.detailsValue}>
-            {apy}
+            {prettyPercentage(apyDaily)}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -129,7 +125,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            {daily}
+            {prettyPercentage(apyDaily.dividedBy(365))}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -137,7 +133,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Balance')}
           </div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={balance?.toString()} />
+            <FarmingUserMoney money={balance} />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -145,13 +141,13 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Deposit')}
           </div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={deposit?.toString()} />
+            <FarmingUserMoney money={deposit} />
           </div>
         </div>
         <div className={s.detailsBlock}>
-          <div className={s.detailsHeader}>Earned</div>
+          <div className={s.detailsHeader}>{t('farms|Earned')}</div>
           <div className={s.detailsValue}>
-            <FarmingUserMoney money={earned?.toString()} />
+            <FarmingUserMoney money={earned} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>

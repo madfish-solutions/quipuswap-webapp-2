@@ -1,13 +1,21 @@
 import React, {
-  useContext, useState, useMemo,
+  useContext, useState, useMemo, useCallback,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import { batchify } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
+import { getHarvest } from '@utils/helpers/getHarvest';
 import { WhitelistedStake } from '@utils/types';
+import {
+  useAccountPkh, useFarmingContract, useNetwork, useTezos,
+} from '@utils/dapp';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
@@ -57,8 +65,16 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
   const {
     remaining,
   } = stake;
+  const network = useNetwork();
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const farmContract = useFarmingContract();
+  const updateToast = useUpdateToast();
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const {
+    openConnectWalletModal,
+  } = useConnectModalsState();
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
@@ -66,11 +82,90 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     [tabsState],
   );
 
+  const handleLoader = useCallback(() => {
+    updateToast({
+      type: 'info',
+      render: t('common|Loading'),
+    });
+  }, [updateToast, t]);
+
+  const handleErrorToast = useCallback((err) => {
+    updateToast({
+      type: 'error',
+      render: `${err.name}: ${err.message}`,
+    });
+  }, [updateToast]);
+
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: t('common|Harvested! Your earnings have been sent to your wallet!'),
+    });
+  }, [updateToast, t]);
+
+  const handleHarvest = useCallback(async () => {
+    if (!tezos) {
+      updateToast({
+        type: 'error',
+        render: t('common|Tezos not loaded'),
+      });
+      return;
+    }
+    if (!farmContract) {
+      updateToast({
+        type: 'error',
+        render: t('common|Contract not loaded'),
+      });
+      return;
+    }
+    if (!accountPkh) {
+      openConnectWalletModal(); return;
+    }
+    if (!stake) return;
+
+    handleLoader();
+
+    const fromAsset = {
+      contract: FARM_CONTRACT,
+      id: new BigNumber(0),
+    };
+    const farmId = new BigNumber(stake.id);
+
+    const harvestInfo = getHarvest({
+      tezos,
+      accountPkh,
+      fromAsset,
+      farmContract,
+      handleErrorToast,
+      farmId,
+    });
+
+    try {
+      const harvestInfoResolved = await Promise.resolve(harvestInfo);
+
+      const op = await batchify(
+        tezos.wallet.batch([]),
+        harvestInfoResolved,
+      ).send();
+      await op.confirmation();
+      handleSuccessToast();
+    } catch (e) {
+      handleErrorToast(e);
+    }
+  }, [
+    tezos,
+    accountPkh,
+    network,
+    farmContract,
+    stake,
+  ]);
+
   const compountClassName = cx(
     modeClass[colorThemeMode],
     s.mb24i,
     className,
   );
+
   return (
     <>
       <Card
@@ -126,7 +221,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               </div>
 
             </div>
-            <Button className={cx(s.statButton, s.button)}>Harvest</Button>
+            <Button className={cx(s.statButton, s.button)} onClick={handleHarvest}>Harvest</Button>
           </div>
         </div>
       </Card>
