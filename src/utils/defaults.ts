@@ -10,6 +10,7 @@ export const QUIPUSWAP_INVEST = 'https://quipuswap.com/invest/add-liquidity';
 
 export const APOLLO_CLIENT_ENDPOINT = process.env.NEXT_PUBLIC_APOLLO_CLIENT_ENDPOINT;
 export const FARMS_INFO_ENDPOINT = process.env.NEXT_PUBLIC_FARMS_INFO_ENDPOINT!;
+export const STAKES_INFO_ENDPOINT = process.env.NEXT_PUBLIC_STAKES_INFO_ENDPOINT!;
 
 export const QUIPUSWAP_ANALYTICS_TOKENS = 'https://analytics.quipuswap.com/tokens';
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
