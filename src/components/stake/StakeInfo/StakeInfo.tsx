@@ -62,9 +62,6 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
   className,
   stake,
 }) => {
-  const {
-    remaining,
-  } = stake;
   const network = useNetwork();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -231,7 +228,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                 <header className={s.header}>
                   Lock ends in
                 </header>
-                <Timeleft remaining={remaining} />
+                <Timeleft remaining={new Date()} />
               </div>
 
             </div>
@@ -413,7 +410,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               )}
             className={s.cell}
           >
-            <Timeleft remaining={remaining} className={s.priceAmount} />
+            <Timeleft remaining={new Date()} className={s.priceAmount} />
           </CardCell>
           <CardCell
             header={(
@@ -427,7 +424,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               )}
             className={s.cell}
           >
-            <Timeleft remaining={remaining} className={s.priceAmount} />
+            <Timeleft remaining={new Date()} className={s.priceAmount} />
           </CardCell>
           <CardCell
             header={(
