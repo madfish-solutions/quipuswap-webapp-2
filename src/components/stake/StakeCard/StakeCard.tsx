@@ -34,12 +34,12 @@ export const StakeCard: React.FC<StakeCardProps> = ({
   const {
     tokenPair,
     totalValueLocked,
-    apy,
-    daily,
-    balance,
-    deposit,
-    earned,
-    earn,
+    // apy,
+    // daily,
+    // balance,
+    // deposit,
+    // earned,
+    // earn,
     tokenContract,
     farmContract,
     analyticsLink,
@@ -90,7 +90,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             <TokensLogos token1={TEZOS_TOKEN} className={s.tokens} />
             <span className={s.bold600}>Earn</span>
             {' '}
-            <span className={s.earn}>{earn}</span>
+            {/* <span className={s.earn}>{earn}</span> */}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -109,22 +109,22 @@ export const StakeCard: React.FC<StakeCardProps> = ({
               <APY />
             </Button>
           </div>
-          <div className={s.detailsValue}>
+          {/* <div className={s.detailsValue}>
             {apy}
-          </div>
+          </div> */}
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Daily</div>
-          <div className={s.detailsValue}>
+          {/* <div className={s.detailsValue}>
             {daily}
-          </div>
+          </div> */}
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={balance} />
+            {/* <CurrencyAmount amount={balance} /> */}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -132,7 +132,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={deposit} />
+            {/* <CurrencyAmount amount={deposit} /> */}
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -140,7 +140,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={earned} />
+            {/* <CurrencyAmount amount={earned} /> */}
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
@@ -160,7 +160,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button href={`/stake/${stake.id}`} className={s.button}>Select</Button>
+        {/* <Button href={`/stake/${stake.id}`} className={s.button}>Select</Button> */}
       </div>
     </Card>
   );
