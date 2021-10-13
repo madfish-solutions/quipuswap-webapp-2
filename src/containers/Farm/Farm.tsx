@@ -179,7 +179,8 @@ export const Farm: React.FC<FarmProps> = () => {
       <ApyModal
         isOpen={!!modalOpen}
         close={() => setModalOpen(undefined)}
-        farm={modalOpen}
+        apr={modalOpen?.apr}
+        apyDaily={modalOpen?.apyDaily}
       />
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
