@@ -31,6 +31,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
+import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
@@ -134,21 +135,21 @@ const UiKit: React.FC = () => {
   const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
-      render: `${t('common:errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
+      render: `${t('common|errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
     });
   }, [t, updateToast]);
 
   const handleSuccessToast = useCallback(() => {
     updateToast({
       type: 'success',
-      render: t('common:Success'),
+      render: t('common|Success'),
     });
   }, [t, updateToast]);
 
   const handleLoadToast = useCallback(() => {
     updateToast({
       type: 'info',
-      render: t('common:Loading'),
+      render: t('common|Loading'),
     });
   }, [t, updateToast]);
 
@@ -163,8 +164,12 @@ const UiKit: React.FC = () => {
     >
       <section className={s.section}>
         <h1 className={s.header}>Tables</h1>
-        <FarmTable data={farms as WhitelistedFarm[]} />
-        <PoolTable data={farms as WhitelistedFarm[]} />
+        <FarmTable loading={false} disabled data={farms as WhitelistedFarm[]} />
+        <PoolTable loading={false} fetch={() => {}} />
+      </section>
+      <section className={s.section}>
+        <h1 className={s.header}>Timeleft</h1>
+        <Timeleft remaining={new Date(Date.now() + 132056789)} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Colors</h1>
@@ -579,7 +584,7 @@ const UiKit: React.FC = () => {
           {/* <PositionCell
             token1={{
               name: 'Token',
-              vote: '2.868',
+              vote| '2.868',
               veto: '3.868',
               balance: '1.868',
             }}

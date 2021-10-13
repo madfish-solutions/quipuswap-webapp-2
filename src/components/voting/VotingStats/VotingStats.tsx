@@ -6,7 +6,7 @@ import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card, CardContent } from '@components/ui/Card';
+import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
@@ -40,69 +40,67 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const content = useMemo(() => [
     {
       id: 0,
-      header: 'vote:Your LP',
+      header: 'vote|Your LP',
       amount: amounts[0] ?? '0',
-      tooltip: 'vote:Total number of LP tokens you own.',
+      tooltip: 'vote|Total number of LP tokens you own.',
     },
     {
       id: 1,
-      header: 'vote:Your votes',
+      header: 'vote|Your votes',
       amount: amounts[1] ?? '0',
-      tooltip: 'vote:The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
+      tooltip: 'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
     },
     {
       id: 2,
-      header: 'vote:Your vetos',
+      header: 'vote|Your vetos',
       amount: amounts[2] ?? '0',
-      tooltip: 'vote:The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
+      tooltip: 'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
     },
   ], [amounts]);
 
   return (
-    <Card className={className}>
-      <CardContent className={cx(s.content, modeClass[colorThemeMode])}>
-        <div className={s.reward}>
-          <div className={s.rewardContent}>
-            <span className={s.rewardHeader}>
-              {t('vote:Your Pending Rewards')}
-              :
-            </span>
-            <span className={s.rewardAmount}>
-              {pendingReward}
-              <span className={s.rewardCurrency}>TEZ</span>
-            </span>
-          </div>
-          <VotingReward />
+    <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
+      <div className={s.reward}>
+        <div className={s.rewardContent}>
+          <span className={s.rewardHeader}>
+            {t('vote|Your Pending Rewards')}
+            :
+          </span>
+          <span className={s.rewardAmount}>
+            {pendingReward}
+            <span className={s.rewardCurrency}>TEZ</span>
+          </span>
         </div>
-        {content.map(({
-          id, header, amount, tooltip,
-        }) => (
-          <div key={id} className={s.item}>
-            <span className={s.header}>
-              {t(header)}
-              :
+        <VotingReward />
+      </div>
+      {content.map(({
+        id, header, amount, tooltip,
+      }) => (
+        <div key={id} className={s.item}>
+          <span className={s.header}>
+            {t(header)}
+            :
 
-              <Tooltip content={t(tooltip)} />
-            </span>
-            <span className={s.amount}>{amount}</span>
-          </div>
-        ))}
-        <Button
-          disabled={!tezos || !accountPkh || !dex}
-          onClick={() => {
-            const asyncFunc = async () => {
-              if (!tezos || !dex || !accountPkh) return;
-              const params = await withdrawReward(tezos, dex, accountPkh);
-              handleSubmit(params);
-            };
-            asyncFunc();
-          }}
-          className={s.button}
-        >
-          {t('vote:Claim Reward')}
+            <Tooltip content={t(tooltip)} />
+          </span>
+          <span className={s.amount}>{amount}</span>
+        </div>
+      ))}
+      <Button
+        disabled={!tezos || !accountPkh || !dex}
+        onClick={() => {
+          const asyncFunc = async () => {
+            if (!tezos || !dex || !accountPkh) return;
+            const params = await withdrawReward(tezos, dex, accountPkh);
+            handleSubmit(params);
+          };
+          asyncFunc();
+        }}
+        className={s.button}
+      >
+        {t('vote|Claim Reward')}
 
-        </Button>
-      </CardContent>
+      </Button>
     </Card>
   );
 };

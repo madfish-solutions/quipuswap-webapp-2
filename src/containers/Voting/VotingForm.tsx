@@ -31,7 +31,7 @@ import {
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
@@ -163,6 +163,7 @@ const RealForm:React.FC<VotingFormProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [
     values.balance1,
     values.selectedBaker,
@@ -174,7 +175,8 @@ const RealForm:React.FC<VotingFormProps> = ({
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
-  }, [accountPkh]);
+    // eslint-disable-next-line
+  }, [accountPkh, closeConnectWalletModal]);
 
   const handleUnvoteOrRemoveveto = async () => {
     if (!tezos) return;
@@ -203,97 +205,105 @@ const RealForm:React.FC<VotingFormProps> = ({
     handleSubmit();
   };
 
-  const availBalance:BigNumber = useMemo(
+  const availVoteBalance:string = useMemo(
     () => (tokenPair.balance && tokenPair.frozenBalance && voter
       ? new BigNumber(tokenPair.balance)
         .minus(new BigNumber(tokenPair.frozenBalance))
-        .plus(new BigNumber(voter.vote))
-      : new BigNumber(0)), [tokenPair, voter],
+        .plus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
+  );
+
+  const availVetoBalance:string = useMemo(
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()), [tokenPair, voter],
   );
 
   return (
     <>
-      <Card>
-        <CardHeader
-          header={{
-            content: (
-              <Tabs
-                values={TabsContent}
-                activeId={tabsState}
-                setActiveId={(val) => {
-                  router.replace(
-                    `/voting/${val}/${getWhitelistedTokenSymbol(tokenPair.token1)}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
-                    undefined,
-                    { shallow: true },
-                  );
-                  setTabsState(val);
-                }}
-                className={s.tabs}
-              />
-            ),
-            button: (
-              <Button
-                theme="quaternary"
-              >
-                <Transactions />
-              </Button>
-            ),
-          }}
-          className={s.header}
-        />
-        <CardContent className={s.content}>
-          <Field name="method" initialValue="first">
-            {() => <></>}
-          </Field>
-          <Field
-            name="balance1"
-            validate={composeValidators(
-              validateMinMax(0, Infinity),
-              accountPkh
-                ? validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity))
-                : () => undefined,
-            )}
-            parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
-          >
-            {({ input, meta }) => (
-              <PositionSelect
-                {...input}
-                notSelectable1={TEZOS_TOKEN}
-                tokenPair={tokenPair}
-                setTokenPair={(pair) => {
-                  handleTokenChange(pair.token1, 'first');
-                  handleTokenChange(pair.token2, 'second');
-                  setTokens([pair.token1, pair.token2]);
-                  hanldeTokenPairSelect(
-                    pair,
-                    setTokenPair,
-                    setDex,
-                    setRewards,
-                    setVoter,
-                    handleErrorToast,
-                    tezos,
-                    accountPkh,
-                    networkId,
-                  );
-                }}
-                balance={availBalance.isNaN() ? '0' : availBalance.toString()}
-                handleBalance={(value) => {
-                  form.mutators.setValue(
-                    'balance1',
-                    +value,
-                  );
-                }}
-                noBalanceButtons={!accountPkh}
-                balanceLabel={t('vote:Available Balance')}
-                notFrozen
-                id="liquidity-remove-input"
-                label={currentTab.label}
-                className={s.input}
-                error={(meta.touched && meta.error) || meta.submitError}
-              />
-            )}
-          </Field>
-          {currentTab.id === 'vote' && (
+      <Card
+        header={{
+          content: (
+            <Tabs
+              values={TabsContent}
+              activeId={tabsState}
+              setActiveId={(val) => {
+                router.replace(
+                  `/voting/${val}/${getWhitelistedTokenSymbol(tokenPair.token1)}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
+                  undefined,
+                  { shallow: true },
+                );
+                setTabsState(val);
+              }}
+              className={s.tabs}
+            />
+          ),
+          button: (
+            <Button
+              theme="quaternary"
+            >
+              <Transactions />
+            </Button>
+          ),
+          className: s.header,
+        }}
+        contentClassName={s.content}
+      >
+        <Field name="method" initialValue="first">
+          {() => <></>}
+        </Field>
+        <Field
+          name="balance1"
+          validate={composeValidators(
+            validateMinMax(0, Infinity),
+            accountPkh
+              ? validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity))
+              : () => undefined,
+          )}
+          parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
+        >
+          {({ input, meta }) => (
+            <PositionSelect
+              {...input}
+              notSelectable1={TEZOS_TOKEN}
+              tokenPair={tokenPair}
+              setTokenPair={(pair) => {
+                handleTokenChange(pair.token1, 'first');
+                handleTokenChange(pair.token2, 'second');
+                setTokens([pair.token1, pair.token2]);
+                hanldeTokenPairSelect(
+                  pair,
+                  setTokenPair,
+                  setDex,
+                  setRewards,
+                  setVoter,
+                  handleErrorToast,
+                  tezos,
+                  accountPkh,
+                  networkId,
+                );
+              }}
+              balance={currentTab.id === 'vote' ? availVoteBalance : availVetoBalance}
+              handleBalance={(value) => {
+                form.mutators.setValue(
+                  'balance1',
+                  +value,
+                );
+              }}
+              noBalanceButtons={!accountPkh}
+              balanceLabel={t('vote|Available Balance')}
+              notFrozen
+              id="liquidity-remove-input"
+              label={currentTab.label}
+              className={s.input}
+              error={(meta.touched && meta.error) || meta.submitError}
+            />
+          )}
+        </Field>
+        {currentTab.id === 'vote' && (
           <Field name="selectedBaker" validate={required}>
             {({ input, meta }) => (
               <ComplexBaker
@@ -315,24 +325,25 @@ const RealForm:React.FC<VotingFormProps> = ({
             )}
 
           </Field>
-          )}
-          <div className={s.buttons}>
-            <Button
-              onClick={handleUnvoteOrRemoveveto}
-              className={s.button}
-              theme="secondary"
-            >
-              {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
-            </Button>
-            <Button
-              onClick={handleVoteOrVeto}
-              className={s.button}
-              disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
-            >
-              {currentTab.id === 'vote' && isBanned ? t('vote:Baker under Veto') : currentTab.label}
-            </Button>
-          </div>
-        </CardContent>
+        )}
+        <div className={s.buttons}>
+          <Button
+            onClick={handleUnvoteOrRemoveveto}
+            className={s.button}
+            theme="secondary"
+            disabled={currentTab.id === 'vote' ? new BigNumber(voter?.vote ?? '0').eq(0) : new BigNumber(voter?.veto ?? '0').eq(0)}
+          >
+            {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
+          </Button>
+          <Button
+            onClick={handleVoteOrVeto}
+            className={s.button}
+            disabled={!values.balance1 || (currentTab.id === 'vote' && isBanned)}
+          >
+            {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
+          </Button>
+        </div>
+
       </Card>
       <VotingDetails
         tokenPair={tokenPair}

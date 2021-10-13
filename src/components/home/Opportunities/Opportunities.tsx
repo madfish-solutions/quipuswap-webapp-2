@@ -15,13 +15,13 @@ type OpportunitiesProps = {
 export const Opportunities: React.FC<OpportunitiesProps> = ({
   className,
 }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = useTranslation('home');
 
   return (
     <Section
       className={cx(s.root, className)}
-      header={t('home:QuipuSwap opportunities')}
-      description={`${t('home:Start to work with the biggest DEX on Tezos')}: ${t('home:swap, farm, stake.')}`}
+      header={t('QuipuSwap opportunities')}
+      description={`${t('home|Start to work with the biggest DEX on Tezos: swap, farm, stake.')}`}
     >
       <div className={s.cards}>
         {

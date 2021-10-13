@@ -7,3 +7,27 @@ query GetPairPlotLiquidity($id: String!) {
         }
     }
 }
+
+query GetTokenPlotPrice($id: String!, $tokenId: String) {
+  token(id: $id, tokenId: $tokenId) {
+    id
+    tokenId
+    plotPrice {
+      time
+      open
+      close
+      high
+      low
+      xtzUsdQuoteHistorical
+    }
+  }
+}
+
+query GetHomeOverview {
+  overview {
+    xtzUsdQuote
+    totalLiquidity
+    volume24h
+    trasactionsCount24h
+  }
+}

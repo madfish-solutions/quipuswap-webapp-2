@@ -7,11 +7,17 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
+import { useTranslation } from 'next-i18next';
 
-import { prettyPrice } from '@utils/helpers';
+import { PlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
+
+import { prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { PairChartInfo } from '@components/common/PairChartInfo';
+import { Preloader } from '@components/common/Preloader';
 
 import {
   GraphicColors,
@@ -22,7 +28,11 @@ import {
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
-  data: any[]
+  data: PlotPoint[]
+  token1?: WhitelistedToken
+  token2?: WhitelistedToken
+  loading?: boolean
+  headerContent?: React.ReactNode
   className?: string
 };
 
@@ -31,15 +41,15 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const LineChart: React.FC<LineChartProps> = ({
+const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   data,
-  className,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
   const prevColorThemeModeState = usePrevious(colorThemeMode);
+  const { t } = useTranslation(['common']);
+  const { i18n } = useTranslation('home');
 
   const height = GraphicHeight;
 
@@ -47,8 +57,8 @@ export const LineChart: React.FC<LineChartProps> = ({
   const currenValue = data[data.length - 1];
 
   const [value, setValue] = useState<{ price: number, time: number }>({
-    price: parseFloat(currenValue.value),
-    time: parseFloat(currenValue.time),
+    price: currenValue.value,
+    time: currenValue.time,
   });
 
   const handleResize = useCallback(() => {
@@ -103,6 +113,7 @@ export const LineChart: React.FC<LineChartProps> = ({
           },
         },
         localization: {
+          locale: i18n.language,
           priceFormatter: (price: number) => prettyPrice(price!, 3, 3),
         },
       });
@@ -118,6 +129,7 @@ export const LineChart: React.FC<LineChartProps> = ({
         ...LineGraphOptions,
       });
 
+      // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
@@ -133,16 +145,16 @@ export const LineChart: React.FC<LineChartProps> = ({
         ) {
           if (setValue) {
             setValue({
-              price: parseFloat(currenValue.value),
-              time: parseFloat(currenValue.time),
+              price: currenValue.value,
+              time: currenValue.time,
             });
           }
         } else if (setValue) {
-          const price = parseFloat(param.seriesPrices.get(series)?.toString() ?? currenValue.value);
-          const time = parseFloat(param.time ?? currenValue.time);
+          const price = param.seriesPrices.get(series) ?? currenValue.value;
+          const time = param.time ?? currenValue.time;
           setValue({
-            price,
-            time,
+            price: price as number,
+            time: time as number,
           });
         }
       });
@@ -157,29 +169,53 @@ export const LineChart: React.FC<LineChartProps> = ({
     height,
     prevColorThemeModeState,
     setValue,
+    i18n,
   ]);
 
   return (
-    <Card className={className}>
-      <CardHeader header={{ content: 'Graphic' }} />
-      <CardContent className={s.container}>
-        <div className={cx(s.info, modeClass[colorThemeMode])}>
-          <span className={s.header}>
-            Total Liquidity:
+    <>
+      <div className={cx(s.info, modeClass[colorThemeMode])}>
+        <h4>
+          {t('common|Total liquidity:')}
+        </h4>
+        <span className={s.date}>
+          {new Date(value.time * 1000).toISOString()}
+        </span>
+        <h4 className={s.value}>
+          <span className={s.dollar}>
+            $
           </span>
-          <span className={s.date}>
-            {new Date(value.time * 1000).toISOString()}
-          </span>
-          <p className={s.value}>
-            <span className={s.dollar}>
-              $
-            </span>
-            {' '}
-            {prettyPrice(value.price, 2, 22)}
-          </p>
-        </div>
-        <div ref={chartRef} className={s.chart} />
-      </CardContent>
-    </Card>
+          {' '}
+          {prettyPrice(value.price, 2, 22)}
+        </h4>
+      </div>
+      <div ref={chartRef} className={s.chart} />
+    </>
   );
 };
+
+export const LineChart: React.FC<LineChartProps> = ({
+  data,
+  className,
+  loading = false,
+  token1,
+  token2,
+}) => (
+  <Card className={className}>
+    <CardHeader
+      header={{
+        content: (
+          <PairChartInfo hidePeriods token1={token1} token2={token2} />
+        ),
+      }}
+      className={s.cardHeader}
+    />
+    <CardContent className={cx(s.container, s.cardContent)}>
+      {loading || !data || data.length === 0
+        ? (<Preloader style={{ minHeight: '360px' }} />)
+        : (
+          <ChartInstance data={data} />
+        )}
+    </CardContent>
+  </Card>
+);

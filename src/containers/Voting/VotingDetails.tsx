@@ -12,7 +12,7 @@ import {
   VoterType, WhitelistedBaker, WhitelistedTokenPair,
 } from '@utils/types';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -65,7 +65,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       return fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
     }
     return '';
-  }, [dex, bakers]);
+  }, [dex]);
 
   const totalVeto = useMemo(() => {
     if (dex?.storage?.storage) {
@@ -87,135 +87,135 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   const pairLink = useMemo(() => (tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`), [tokenPair.dex]);
 
   return (
-    <Card>
-      <CardHeader header={{
+    <Card
+      header={{
         content: 'Voting Details',
       }}
-      />
-      <CardContent className={s.content}>
-        <CardCell
-          header={(
-            <>
-              {t('vote:Delegated To')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:Current baker elected by simple majority of votes.')}
-              />
-            </>
+      contentClassName={s.content}
+    >
+      <CardCell
+        header={(
+          <>
+            {t('vote|Delegated To')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|Current baker elected by simple majority of votes.')}
+            />
+          </>
             )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          {currentCandidate ? (
-            <Button
-              href={`https://tzkt.io/${currentCandidate.address}`}
-              external
-              theme="underlined"
-              title={getWhitelistedBakerName(currentCandidate)}
-            >
-              {getWhitelistedBakerName(currentCandidate)}
-            </Button>
-          ) : '—'}
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('vote:Second Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
-              />
-            </>
-            )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          {secondCandidate ? (
-            <Button
-              href={`https://tzkt.io/${secondCandidate.address}`}
-              external
-              theme="underlined"
-              title={getWhitelistedBakerName(secondCandidate)}
-            >
-              {getWhitelistedBakerName(secondCandidate)}
-            </Button>
-          ) : '—'}
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Votes')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of votes cast to elect a baker in the pool.')}
-              />
-            </>
-            )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          <CurrencyAmount amount={totalVotes} />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Total Vetos')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The total amount of shares cast so far to veto the current baker.')}
-              />
-            </>
-            )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          <CurrencyAmount amount={totalVeto} />
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('veto:Your Candidate')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:The candidate you voted for.')}
-              />
-            </>
-        )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          {myCandidate ? (
-            <Button
-              href={`https://tzkt.io/${myCandidate.address}`}
-              external
-              theme="underlined"
-              title={getWhitelistedBakerName(myCandidate)}
-            >
-              {getWhitelistedBakerName(myCandidate)}
-            </Button>
-          ) : '—'}
-        </CardCell>
-        <CardCell
-          header={(
-            <>
-              {t('Votes To Veto Left')}
-              <Tooltip
-                sizeT="small"
-                content={t('vote:This much more votes needed to veto a delegate.')}
-              />
-            </>
-            )}
-          className={cx(s.cellCenter, s.cell)}
-        >
-          <CurrencyAmount amount={votesToVeto} />
-        </CardCell>
-        {tokenPair.dex && (
-        <div className={s.detailsButtons}>
+        className={cx(s.cellCenter, s.cell)}
+      >
+        {currentCandidate ? (
           <Button
-            className={s.detailsButton}
-            theme="inverse"
-            href={pairLink}
+            href={`https://tzkt.io/${currentCandidate.address}`}
             external
-            icon={<ExternalLink className={s.linkIcon} />}
+            theme="underlined"
+            title={getWhitelistedBakerName(currentCandidate)}
           >
-            {t('vote:Pair Analytics')}
+            {getWhitelistedBakerName(currentCandidate)}
           </Button>
-          {/* <Button
+        ) : '—'}
+      </CardCell>
+      <CardCell
+        header={(
+          <>
+            {t('vote|Second Candidate')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
+            />
+          </>
+            )}
+        className={cx(s.cellCenter, s.cell)}
+      >
+        {secondCandidate ? (
+          <Button
+            href={`https://tzkt.io/${secondCandidate.address}`}
+            external
+            theme="underlined"
+            title={getWhitelistedBakerName(secondCandidate)}
+          >
+            {getWhitelistedBakerName(secondCandidate)}
+          </Button>
+        ) : '—'}
+      </CardCell>
+      <CardCell
+        header={(
+          <>
+            {t('vote|Total Votes')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|The total amount of votes cast to elect a baker in the pool.')}
+            />
+          </>
+            )}
+        className={cx(s.cellCenter, s.cell)}
+      >
+        <CurrencyAmount amount={totalVotes} />
+      </CardCell>
+      <CardCell
+        header={(
+          <>
+            {t('vote|Total Vetos')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|The total amount of shares cast so far to veto the current baker.')}
+            />
+          </>
+            )}
+        className={cx(s.cellCenter, s.cell)}
+      >
+        <CurrencyAmount amount={totalVeto} />
+      </CardCell>
+      <CardCell
+        header={(
+          <>
+            {t('vote|Your Candidate')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|The candidate you voted for.')}
+            />
+          </>
+        )}
+        className={cx(s.cellCenter, s.cell)}
+      >
+        {myCandidate ? (
+          <Button
+            href={`https://tzkt.io/${myCandidate.address}`}
+            external
+            theme="underlined"
+            title={getWhitelistedBakerName(myCandidate)}
+          >
+            {getWhitelistedBakerName(myCandidate)}
+          </Button>
+        ) : '—'}
+      </CardCell>
+      <CardCell
+        header={(
+          <>
+            {t('Votes To Veto Left')}
+            <Tooltip
+              sizeT="small"
+              content={t('vote|This much more votes needed to veto a delegate.')}
+            />
+          </>
+            )}
+        className={cx(s.cellCenter, s.cell)}
+      >
+        <CurrencyAmount amount={votesToVeto} />
+      </CardCell>
+      {tokenPair.dex && (
+      <div className={s.detailsButtons}>
+        <Button
+          className={s.detailsButton}
+          theme="inverse"
+          href={pairLink}
+          external
+          icon={<ExternalLink className={s.linkIcon} />}
+        >
+          {t('vote|Pair Analytics')}
+        </Button>
+        {/* <Button
           className={s.detailsButton}
           theme="inverse"
           href="#"
@@ -223,9 +223,8 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         >
           Delegation Analytics
         </Button> */}
-        </div>
-        )}
-      </CardContent>
+      </div>
+      )}
     </Card>
   );
 };

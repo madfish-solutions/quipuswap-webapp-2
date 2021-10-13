@@ -34,7 +34,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={s.button} />
         <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
-          {t('common:Old version')}
+          {t('common|Old version')}
         </Button>
       </div>
       <Navigation className={s.navigation} iconId="desktop" />

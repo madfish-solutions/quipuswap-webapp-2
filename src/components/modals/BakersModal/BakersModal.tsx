@@ -70,6 +70,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
+    // eslint-disable-next-line
   }, [values]);
 
   return (
@@ -82,7 +83,7 @@ const Header:React.FC<HeaderProps> = ({
             {...input}
             StartAdornment={Search}
             className={s.modalInput}
-            placeholder={t('common:Search')}
+            placeholder={t('common|Search')}
             error={meta.error}
           />
         )}
@@ -124,6 +125,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
 
   const isEmptyBakers = filteredBakers.length === 0;
 
+  // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
   return (
@@ -136,7 +138,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
       }}
       render={({ form }) => (
         <Modal
-          title={t('common:Bakers List')}
+          title={t('common|Bakers List')}
           header={(
             <AutoSave
               form={form}
@@ -154,7 +156,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           {isEmptyBakers && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common:No bakers found')}</div>
+              <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
           {loading && (

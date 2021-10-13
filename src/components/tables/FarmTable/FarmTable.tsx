@@ -1,83 +1,144 @@
-import React, { useContext } from 'react';
-import cx from 'classnames';
+import React, {
+  useState, useMemo, useEffect,
+} from 'react';
+import { useTranslation } from 'next-i18next';
 
 import {
   WhitelistedFarm,
 } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { Table } from '@components/ui/Table';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
-import s from '../Table.module.sass';
-import { FarmItem } from './FarmItem';
-import { FarmCardItem } from './FarmCardItem';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Table } from '@components/ui/Table';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+
+import s from './FarmTable.module.sass';
 
 type FarmTableProps = {
   data: WhitelistedFarm[]
-};
-const themeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
-};
-
-const Header = () => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const compoundClassName = cx(
-    themeClass[colorThemeMode],
-    s.tableRow,
-    s.farmRow,
-    s.tableHeader,
-    s.tableHeaderBorder,
-  );
-  return (
-    <th className={compoundClassName}>
-      <div className={s.label}>
-        Name
-      </div>
-      <div className={s.label}>
-        TVL
-      </div>
-      <div className={s.label}>
-        Volume 24h
-      </div>
-      <div className={s.label} />
-    </th>
-  );
+  totalCount?: number
+  exchangeRate?: string
+  loading?: boolean
+  disabled?: boolean
+  className?: string
+  // fetch: any
 };
 
-const farmTableItem = (farm:WhitelistedFarm) => {
-  const { tokenPair } = farm;
-  return (
-    <FarmItem
-      key={`${tokenPair.token1.contractAddress}_${tokenPair.token1.fa2TokenId}:${tokenPair.token2.contractAddress}_${tokenPair.token2.fa2TokenId}`}
-      farm={farm}
-      isSponsored={
-      tokenPair.token1.contractAddress === TEZOS_TOKEN.contractAddress
-    }
-    />
-  );
-};
-
-const farmMobileItem = (farm:WhitelistedFarm) => {
-  const { tokenPair } = farm;
-  return (
-    <FarmCardItem
-      key={`${tokenPair.token1.contractAddress}_${tokenPair.token1.fa2TokenId}:${tokenPair.token2.contractAddress}_${tokenPair.token2.fa2TokenId}`}
-      farm={farm}
-      isSponsored={
-      tokenPair.token1.contractAddress === TEZOS_TOKEN.contractAddress
-    }
-    />
-  );
-};
+const pageSize = MAX_ITEMS_PER_PAGE;
 
 export const FarmTable: React.FC<FarmTableProps> = ({
   data,
-}) => (
-  <Table
-    data={data}
-    renderTableData={farmTableItem}
-    renderMobileData={farmMobileItem}
-    header={<Header />}
-  />
-);
+  totalCount,
+  loading = true,
+  className,
+  // fetch,
+}) => {
+  const { t } = useTranslation(['home']);
+  const [pageCount, setPageCount] = useState<number>(0);
+  const [, setOffset] = useState(0);
+
+  useEffect(() => {
+    if (totalCount) {
+      setPageCount(totalCount);
+    }
+  }, [totalCount]);
+
+  // useEffect(() => {
+  //   fetch({
+  //     variables: {
+  //       limit: pageSize ?? 10,
+  //       offset,
+  //     },
+  //   });
+  // }, [fetch, offset, pageSize]);
+  const columns = useMemo(() => [
+    {
+      Header: t('home|Name'),
+      id: 'name',
+      accessor: ({ tokenPair }:WhitelistedFarm) => (
+        <>
+          <TokensLogos
+            token1={tokenPair.token1}
+            token2={tokenPair.token2}
+            className={s.tokenLogo}
+          />
+          {getWhitelistedTokenSymbol(tokenPair.token1)}
+          /
+          {getWhitelistedTokenSymbol(tokenPair.token2)}
+          {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
+        </>
+      ),
+    },
+    {
+      Header: (
+        <>
+          {t('home|Total staked')}
+          <Tooltip sizeT="small" content={t('home|Total funds locked in the farming contract for each pool.')} />
+        </>
+      ),
+      id: 'staked',
+      accessor: () => (
+        <>
+          $
+          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
+        </>
+      ),
+    },
+    {
+      Header: (
+        <>
+          {t('home|APR')}
+          <Tooltip sizeT="small" content={t('home|Expected APR (annual percentage rate) earned through an investment.')} />
+        </>
+      ),
+      id: 'apr',
+      accessor: () => (
+        <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
+      ),
+    },
+    {
+      id: 'poolButton',
+      accessor: () => (
+        <>
+          <Button
+            theme="secondary"
+            className={s.button}
+            href="#"
+          >
+            Get LP
+          </Button>
+          <Button
+            href="/swap"
+            className={s.button}
+          >
+            Farm
+          </Button>
+        </>
+      ),
+    },
+  ], [t]);
+
+  return (
+    <>
+      <Table
+        theme="farms"
+        className={className}
+        tableClassName={s.table}
+        data={data ?? []}
+        loading={loading}
+        columns={columns}
+        trClassName={s.tr}
+        thClassName={s.th}
+        tdClassName={s.td}
+        pageCount={pageCount}
+        pageSize={pageSize ?? 10}
+        setOffset={setOffset}
+        isLinked
+        disabled
+      />
+    </>
+  );
+};

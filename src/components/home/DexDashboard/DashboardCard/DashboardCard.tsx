@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
+import { Skeleton } from '@components/ui/Skeleton';
 
 import s from './DashboardCard.module.sass';
 
@@ -14,6 +15,7 @@ type DashboardCardProps = {
   currency?: string
   tooltip?: string
   className?: string
+  loading?: boolean
 };
 
 const modeClass = {
@@ -28,6 +30,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
   currency,
   tooltip,
   className,
+  loading = false,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -38,12 +41,16 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
         {' '}
         <Tooltip content={tooltip} />
       </h4>
-      <CurrencyAmount
-        amount={volume}
-        currency={currency}
-        isRightCurrency={currency === '$'}
-        labelSize={size}
-      />
+      {loading ? <Skeleton className={s.skeleton} /> : (
+        <CurrencyAmount
+          amount={volume}
+          currency={currency}
+          isRightCurrency={currency === '$'}
+          decimals={currency === '$' ? 3 : undefined}
+          length={currency === '$' ? 6 : undefined}
+          labelSize={size}
+        />
+      )}
     </div>
   );
 };

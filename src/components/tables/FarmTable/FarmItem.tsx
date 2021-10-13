@@ -52,8 +52,7 @@ export const FarmItem: React.FC<FarmItemProps> = ({
           <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
         </div>
         <div className={s.cardCellItem}>
-          $
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
+          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
         </div>
         <div className={cx(s.links, s.cardCellItem)}>
           <Button
