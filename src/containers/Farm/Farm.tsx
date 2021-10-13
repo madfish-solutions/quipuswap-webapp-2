@@ -75,16 +75,16 @@ const modeClass = {
 };
 
 export const Farm: React.FC<FarmProps> = () => {
-  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const router = useRouter();
   const accountPkh = useAccountPkh();
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
   const { t } = useTranslation(['common']);
-  const [sort, setSort] = useState('Sorted By');
   const [search, setSearch] = useState('');
-  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
+  const [sort, setSort] = useState('Sorted By');
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { mergedFarms, isFarmsLoaded } = useMergedFarmsInfo();
   const [modalOpen, setModalOpen] = useState<WhitelistedFarm>();
+  const [isSwitcherActive, setIsSwitcherActive] = useState(false);
+  const [selectedFarming, selectFarm] = useState<WhitelistedFarm>();
 
   const sortedFarms = useMemo(() => sortFarms(sort, mergedFarms ?? []), [sort, mergedFarms]);
 
@@ -118,26 +118,26 @@ export const Farm: React.FC<FarmProps> = () => {
 
     const countSecondsInDay = 24 * 60 * 60;
 
-    for (let i = 0; i < filteredFarms.length; i++) {
-      totalValueLocked = totalValueLocked.plus(new BigNumber(filteredFarms[i].totalValueLocked));
-      totalDailyReward = totalDailyReward.plus(new BigNumber(filteredFarms[i].rewardPerSecond));
-      totalClaimedReward = totalClaimedReward.plus(new BigNumber(filteredFarms[i].claimed));
+    for (let i = 0; i < switchedFarms.length; i++) {
+      totalValueLocked = totalValueLocked.plus(new BigNumber(switchedFarms[i].totalValueLocked));
+      totalDailyReward = totalDailyReward.plus(new BigNumber(switchedFarms[i].rewardPerSecond));
+      totalClaimedReward = totalClaimedReward.plus(new BigNumber(switchedFarms[i].claimed));
 
-      farmingLifetime = Date.now() - new Date(filteredFarms[i].startTime).getTime();
+      farmingLifetime = Date.now() - new Date(switchedFarms[i].startTime).getTime();
       totalPendingReward = totalPendingReward.plus(
         new BigNumber(farmingLifetime)
-          .multipliedBy(new BigNumber(filteredFarms[i].rewardPerSecond))
-          .minus(new BigNumber(filteredFarms[i].claimed)),
+          .multipliedBy(new BigNumber(switchedFarms[i].rewardPerSecond))
+          .minus(new BigNumber(switchedFarms[i].claimed)),
       );
     }
 
     totalDailyReward = totalDailyReward.multipliedBy(countSecondsInDay);
 
     content[0].value = fromDecimals(totalValueLocked, 6).toString();
-    content[1].value = fromDecimals(totalDailyReward, 6).toString();
-    content[2].value = fromDecimals(totalPendingReward, 6).toString();
+    content[1].value = fromDecimals(totalDailyReward, 18).toString();
+    content[2].value = fromDecimals(totalPendingReward, 18).toString();
     content[3].value = fromDecimals(totalClaimedReward, 6).toString();
-  }, [filteredFarms]);
+  }, [switchedFarms]);
 
   const currentSort = useMemo(
     () => (SortContent.find(({ id }) => id === sort)!),
