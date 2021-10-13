@@ -215,7 +215,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
       <div className={cx(s.info, modeClass[colorThemeMode])}>
         <span className={s.prices}>
           <h4 className={s.tokenPrice}>
-            {prettyPrice(1 / value.close, 2, 10)}
+            {prettyPrice(value.close, 2, 10)}
             {' '}
             {getWhitelistedTokenName(token)}
           </h4>
@@ -224,7 +224,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
             {' '}
             {token.contractAddress === TEZOS_TOKEN.contractAddress
               ? prettyPrice((+value.xtzUsd), 2, 10)
-              : prettyPrice(value.close, 2, 10)}
+              : prettyPrice(value.close * +value.xtzUsd, 2, 10)}
           </h4>
         </span>
         <div className={s.details}>
@@ -302,10 +302,10 @@ export const CandleChart: React.FC<CandleChartProps> = ({
     } else {
       setUsdData(data.map((x) => ({
         ...x,
-        close: x.close * (+x.xtzUsdQuoteHistorical),
-        open: x.open * (+x.xtzUsdQuoteHistorical),
-        high: x.high * (+x.xtzUsdQuoteHistorical),
-        low: x.low * (+x.xtzUsdQuoteHistorical),
+        close: x.close,
+        open: x.open,
+        high: x.high,
+        low: x.low,
       })));
     }
     setReloading(false);
