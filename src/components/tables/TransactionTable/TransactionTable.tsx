@@ -18,9 +18,10 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { Button } from '@components/ui/Button';
 import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ExternalLink } from '@components/svg/ExternalLink';
 import { TransactionCardItem } from './TransactionCardItem';
 
-import s from '../TokenTable/TokenTable.module.sass';
+import s from '../PortfolioTablesStyles.module.sass';
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
@@ -101,7 +102,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       ),
       id: 'balance',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <span className={s.dollar}>
             $
           </span>
@@ -109,7 +110,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             className={s.cardAmount}
             amount="888"
           />
-        </div>
+        </>
       ),
     },
     {
@@ -122,9 +123,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       id: 'tokenAAmount',
       accessor: ({ from }) => (
         <>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -156,23 +154,23 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       ),
     },
     {
+      Header: (
+        <div className={s.links}>
+          {t('home|Time')}
+          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+        </div>
+      ),
       id: 'time',
       accessor: () => (
-        <div className={s.last}>
+        <div className={s.timeWrapper}>
+          <div className={s.time}>5/25/2021 3:00:51 PM</div>
           <Button
-            theme="secondary"
-            className={s.button}
+            className={s.detailsButton}
+            theme="inverse"
             href="#"
             external
-          >
-            Analytics
-          </Button>
-          <Button
-            href="#"
-            className={s.button}
-          >
-            Trade
-          </Button>
+            icon={<ExternalLink className={s.linkIcon} />}
+          />
         </div>
       ),
     },

@@ -2,7 +2,46 @@
 @import "@styles/breakpoints"
 
 .skeleton
-  height: 24px
+  height: 40px
+
+.tooltip
+  padding-right: 0px
+
+.timeWrapper
+  display: flex
+  align-items: center
+
+.time
+  margin-right: 24px
+
+.td, .th
+  &:nth-child(2)
+    padding-right: 24px
+  &:first-child, &:nth-child(2)
+    text-align: left
+  &:last-child, &:nth-last-child(2)
+    text-align: right
+
+.th:last-child
+  display: flex
+  align-items: center
+  justify-content: flex-end
+
+.td
+  font-weight: 600
+  &:last-child
+    font-weight: 400
+
+.tr
+  position: sticky
+
+.link
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  opacity: 0
 
 .container
   margin-left: -24px
@@ -11,8 +50,8 @@
   overflow-x: auto
 
 .container::-webkit-scrollbar-track
-    border-radius: 1px
-    background-color: transparent
+  border-radius: 1px
+  background-color: transparent
 .container::-webkit-scrollbar
   width: 2px
   height: 0px
@@ -23,20 +62,6 @@
 
 .wrapper
   width: max-content
-
-.cardCellText
-  display: flex
-  align-items: center
-
-.card
-  padding: 16px 24px
-
-.cardAmount
-  margin-left: 4px
-
-.tokenLogoBlock
-  width: 100%
-  margin-bottom: 16px
 
 .innerWrapper
   margin-left: 24px
@@ -53,9 +78,18 @@
   justify-content: space-between
 
 .links
-  font-weight: 600
   display: flex
   align-items: center
+  font-size: 0.857rem
+  line-height: 1.143rem
+
+.last
+  justify-content: flex-end
+  display: flex
+  align-items: center
+
+.bage
+  margin-left: 8px
 
 .linkIcon
   width: 100%
@@ -68,18 +102,17 @@
   justify-content: flex-end
 
 .table
-  width: 1148px
   border-collapse: collapse
 
 .tableHeader
   display: grid
 
 .farmRow
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr
+  grid-template-columns: 1.5fr 1fr 1fr 1.5fr
   padding: 16px 24px
 
 .poolRow
-  grid-template-columns: 1.1fr 1.5fr 1.5fr 1.5fr 2fr
+  grid-template-columns: 1.5fr 1.5fr 1.5fr 1fr
   padding: 16px 24px
 
 .h1
@@ -109,9 +142,13 @@
 
 .proposalBackIcon
   margin-right: 8px
-  
+
 .forward
   transform: rotate(180deg)
+
+.cardAmount
+  margin-left: 4px
+  line-height: inherit
 
 .footer
   display: flex
@@ -121,14 +158,14 @@
 .cardCellItem
   display: flex
   align-items: center
-  justify-content: space-between
-
-.buttons
-  margin-top: 16px
-
-.textItem
+  max-width: 140px
+  flex: 1
+  justify-content: flex-end
   &:not(:last-child)
-    margin-bottom: 8px
+    margin-right: 40px
+    justify-content: normal
+  &:not(:first-child)
+    max-width: none
 
 .label
   flex: 1
@@ -143,6 +180,9 @@
 
 .wideItem
   flex: 1.5
+
+.dollar
+  color: $text-03
 
 .maxWidth
   max-width: none
@@ -162,39 +202,46 @@
 .blockItem
   display: block
 
-.bold
-  font-weight: 600
+.cardCellText
+  font-size: 1rem
+  line-height: 1.714rem
 
-.time
-  font-weight: 600
 
 .light
-  &.card
-    border-bottom: 1px solid $ui-03
-  .time, .links
-    color: $text-01
+  .tableHeaderBorder, &.tableHeaderBorder
+    border-bottom: 1px solid $hover-light-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-light-row
-  .card
-    &:not(:last-child)
-      border-bottom: 1px solid $hover-light-row
   .tableRow
     color: $text-03
   .cardCellText
-    line-height: 1.71
-    color: $text-02
+    font-weight: bold
+    color: $text-01
 .dark
-  &.card
-    border-bottom: 1px solid $text-01
-  .time, .links
-    color: $text-inverse
+  .tableHeaderBorder, &.tableHeaderBorder
+    border-bottom: 1px solid $hover-dark-row
   .container::-webkit-scrollbar-thumb
     background-color: $hover-dark-row
-  .card
-    &:not(:last-child)
-      border-bottom: 1px solid $hover-dark-row
   .tableRow
     color: $text-02
   .cardCellText
-    line-height: 1.71
-    color: $text-03
+    font-weight: bold
+    color: $text-inverse
+
+@include media('>Ltablet')
+  .poolRow
+    grid-template-columns: 1.1fr 1.5fr 1.5fr 1fr
+  .h1
+    display: block
+  .container
+    overflow: visible
+  .wrapper
+    width: auto
+  .table
+    width: 100%
+
+@include media('>LDesktop')
+  .table
+    width: 100%
+  .wrapper
+    width: auto

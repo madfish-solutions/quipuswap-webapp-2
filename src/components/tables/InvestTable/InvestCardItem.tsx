@@ -9,7 +9,7 @@ import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
-import s from './InvestCardTable.module.sass';
+import s from '../Card.module.sass';
 
 type InvestCardItemProps = {
   isSponsored?: boolean

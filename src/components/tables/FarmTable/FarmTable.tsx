@@ -18,7 +18,7 @@ import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmCardItem } from './FarmCardItem';
 
-import s from './FarmTable.module.sass';
+import s from '../PortfolioTablesStyles.module.sass';
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
@@ -88,9 +88,11 @@ export const FarmTable: React.FC<FarmTableProps> = ({
             token2={tokenPair.token2}
             className={s.tokenLogo}
           />
-          {getWhitelistedTokenSymbol(tokenPair.token1)}
-          /
-          {getWhitelistedTokenSymbol(tokenPair.token2)}
+          <span className={s.cardCellText}>
+            {getWhitelistedTokenSymbol(tokenPair.token1)}
+            /
+            {getWhitelistedTokenSymbol(tokenPair.token2)}
+          </span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </div>
       ),
@@ -104,7 +106,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       ),
       id: 'staked',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -112,7 +114,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
           <span className={s.dollar}>
             LP
           </span>
-        </div>
+        </>
       ),
     },
     {
@@ -124,7 +126,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       ),
       id: 'pendingRewards',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -132,7 +134,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
           <span className={s.dollar}>
             TOKEN
           </span>
-        </div>
+        </>
       ),
     },
     {
@@ -144,7 +146,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       ),
       id: 'totalValue',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <span className={s.dollar}>
             $
           </span>
@@ -152,7 +154,7 @@ export const FarmTable: React.FC<FarmTableProps> = ({
             className={s.cardAmount}
             amount="888"
           />
-        </div>
+        </>
       ),
     },
     {

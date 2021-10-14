@@ -19,7 +19,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { WhitelistedToken } from '@utils/types';
 import { InvestCardItem } from './InvestCardItem';
 
-import s from './InvestTable.module.sass';
+import s from '../PortfolioTablesStyles.module.sass';
 
 type InvestTableProps = {
   data: any[]
@@ -103,7 +103,7 @@ export const InvestTable: React.FC<InvestTableProps> = ({
       ),
       id: 'yourShare',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -111,7 +111,7 @@ export const InvestTable: React.FC<InvestTableProps> = ({
           <span className={s.dollar}>
             %
           </span>
-        </div>
+        </>
       ),
     },
     {
@@ -123,7 +123,7 @@ export const InvestTable: React.FC<InvestTableProps> = ({
       ),
       id: 'yourLPBalance',
       accessor: () => (
-        <div className={s.links}>
+        <>
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
@@ -131,7 +131,7 @@ export const InvestTable: React.FC<InvestTableProps> = ({
           <span className={s.dollar}>
             LP
           </span>
-        </div>
+        </>
       ),
     },
     {

@@ -18,7 +18,7 @@ import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokenCardItem } from './TokenCardItem';
 
-import s from './TokenTable.module.sass';
+import s from '../PortfolioTablesStyles.module.sass';
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
@@ -87,12 +87,10 @@ export const TokenTable: React.FC<TokenTableProps> = ({
       ),
       id: 'balanceTokenTable',
       accessor: () => (
-        <div className={s.links}>
-          <CurrencyAmount
-            className={s.cardAmount}
-            amount="888"
-          />
-        </div>
+        <CurrencyAmount
+          className={s.cardAmount}
+          amount="888"
+        />
       ),
     },
     {
