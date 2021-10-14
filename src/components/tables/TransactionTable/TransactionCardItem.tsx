@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { TransactionType } from '@utils/types';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { TransactionType } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
+import { ExternalLink } from '@components/svg/ExternalLink';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from '../Card.module.sass';
 
@@ -28,14 +29,23 @@ export const TransactionCardItem: React.FC<TransactionCardItemProps> = ({
         className={cx(s.cardCellItem, s.maxWidth, s.cardCellText, s.tokenLogoBlock)}
       >
         <div className={s.links}>
-          {transaction.action}
-          <Button className={s.currency} theme="underlined">
-            {getWhitelistedTokenSymbol(transaction.from)}
-          </Button>
-          to
-          <Button className={s.currency} theme="underlined">
-            {getWhitelistedTokenSymbol(transaction.to)}
-          </Button>
+          <div>
+            {transaction.action}
+            <Button className={s.currency} theme="underlined">
+              {getWhitelistedTokenSymbol(transaction.from)}
+            </Button>
+            to
+            <Button className={s.currency} theme="underlined">
+              {getWhitelistedTokenSymbol(transaction.to)}
+            </Button>
+          </div>
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href="#"
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
