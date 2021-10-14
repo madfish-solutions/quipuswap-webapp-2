@@ -286,6 +286,7 @@ export const Portfolio: React.FC<{}> = () => {
             <TokenTable
               data={tokens}
               loading={false}
+              totalCount={10}
             />
           </>
         )}
@@ -295,6 +296,7 @@ export const Portfolio: React.FC<{}> = () => {
             <InvestTable
               data={invests}
               loading={false}
+              totalCount={10}
             />
           </>
         )}
@@ -304,6 +306,8 @@ export const Portfolio: React.FC<{}> = () => {
             <FarmTable
               data={farms}
               loading={false}
+              totalCount={10}
+
             />
           </>
         )}
@@ -313,6 +317,7 @@ export const Portfolio: React.FC<{}> = () => {
             <TransactionTable
               data={transactions}
               loading={false}
+              totalCount={10}
             />
           </>
         )}
@@ -335,10 +340,36 @@ export const Portfolio: React.FC<{}> = () => {
             </Card>
           </div>
         </div>
-        {currentTab.id === 'tokens' && (<TokenTable data={tokens} loading={false} />)}
-        {currentTab.id === 'pools' && (<InvestTable data={invests} loading={false} />)}
-        {currentTab.id === 'farms' && (<FarmTable data={farms} loading={false} />)}
-        {currentTab.id === 'transactions' && (<TransactionTable data={transactions} loading={false} />)}
+        {currentTab.id === 'tokens' && (
+          <TokenTable
+            data={tokens}
+            loading={false}
+            totalCount={10}
+          />
+        )}
+        {currentTab.id === 'pools' && (
+          <InvestTable
+            data={invests}
+            loading={false}
+            totalCount={10}
+
+          />
+        )}
+        {currentTab.id === 'farms' && (
+          <FarmTable
+            data={farms}
+            loading={false}
+            totalCount={10}
+
+          />
+        )}
+        {currentTab.id === 'transactions' && (
+          <TransactionTable
+            data={transactions}
+            loading={false}
+            totalCount={10}
+          />
+        )}
       </div>
     </>
   );

@@ -1,8 +1,15 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
+import { getUniqueKey } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
@@ -13,9 +20,13 @@ import { TokenCardItem } from './TokenCardItem';
 
 import s from './TokenTable.module.sass';
 
+const pageSize = MAX_ITEMS_PER_PAGE;
+
 type TokenTableProps = {
   data: any[]
   loading: boolean
+  totalCount?: number
+  className?: string
 };
 
 const modeClass = {
@@ -25,7 +36,7 @@ const modeClass = {
 
 const farmMobileItem = ({ token }:{ token:WhitelistedToken }) => (
   <TokenCardItem
-    key={`${token.contractAddress}:${token.fa2TokenId}`}
+    key={getUniqueKey()}
     token={token}
   />
 );
@@ -33,15 +44,26 @@ const farmMobileItem = ({ token }:{ token:WhitelistedToken }) => (
 export const TokenTable: React.FC<TokenTableProps> = ({
   data,
   loading = true,
+  totalCount,
 }) => {
   const { t } = useTranslation(['profile']);
-  const [offset, setOffset] = useState(0);
-
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const [offset, setOffset] = useState(0);
+  const [pageCount, setPageCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (totalCount) {
+      setPageCount(totalCount);
+    }
+  }, [totalCount]);
 
   const columns = useMemo(() => [
     {
-      Header: t('home|Name'),
+      Header: (
+        <div className={s.links}>
+          {t('home|Name')}
+        </div>
+      ),
       id: 'nameTokenTable',
       accessor: ({ token, symbol }:{ token:WhitelistedToken, symbol:string }) => (
         <div className={s.links}>
@@ -149,8 +171,8 @@ export const TokenTable: React.FC<TokenTableProps> = ({
       trClassName={s.tr}
       thClassName={s.th}
       tdClassName={s.td}
-      pageCount={10}
-      pageSize={5}
+      pageCount={pageCount}
+      pageSize={pageSize ?? 10}
       setOffset={setOffset}
       isLinked
     />

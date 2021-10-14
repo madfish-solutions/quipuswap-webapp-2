@@ -44,17 +44,24 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
         {isSponsored && (<Bage text="Sponsored" />)}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>{t('home|Total Staked')}</div>
+        <div className={s.cardCellText}>{t('home|Your Stake')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount amount="888" className={s.cardAmount} />
+          LP
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
-        <div className={s.cardCellText}>{t('home|APR')}</div>
+        <div className={s.cardCellText}>{t('home|Pending Reward')}</div>
+        <div className={cx(s.bold, s.cardCellText)}>
+          <CurrencyAmount amount="888" className={s.cardAmount} />
+          TOKEN
+        </div>
+      </div>
+      <div className={cx(s.textItem, s.cardCellItem)}>
+        <div className={s.cardCellText}>{t('home|Total Value')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount amount="888" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>

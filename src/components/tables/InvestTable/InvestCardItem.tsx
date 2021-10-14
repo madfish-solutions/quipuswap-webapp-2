@@ -5,7 +5,6 @@ import { useTranslation } from 'next-i18next';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
@@ -44,21 +43,31 @@ export const InvestCardItem: React.FC<InvestCardItemProps> = ({
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
-          {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+          {t('home|Your Share')}
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
           <CurrencyAmount
             className={s.cardAmount}
             amount="888"
           />
+          %
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
-          {t('home|Volume 24h')}
-          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+          {t('home|Your LP Balance')}
+        </div>
+        <div className={cx(s.bold, s.cardCellText)}>
+          <CurrencyAmount
+            className={s.cardAmount}
+            amount="888"
+          />
+          LP
+        </div>
+      </div>
+      <div className={cx(s.textItem, s.cardCellItem)}>
+        <div className={s.cardCellText}>
+          {t('home|Your Liquidity')}
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           $

@@ -1,24 +1,33 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
-  TransactionType, WhitelistedToken,
+  TransactionType,
+  WhitelistedToken,
 } from '@utils/types';
-import { Table } from '@components/ui/Table';
-
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Button } from '@components/ui/Button';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Table } from '@components/ui/Table';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TransactionCardItem } from './TransactionCardItem';
 
 import s from '../TokenTable/TokenTable.module.sass';
 
+const pageSize = MAX_ITEMS_PER_PAGE;
+
 type TransactionTableProps = {
   data: TransactionType[]
   loading: boolean
+  totalCount: number
 };
 
 const modeClass = {
@@ -36,15 +45,36 @@ const transactionMobileItem = (transaction:TransactionType) => (
 export const TransactionTable: React.FC<TransactionTableProps> = ({
   data,
   loading,
+  totalCount,
 }) => {
   const { t } = useTranslation(['profile']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
   const [offset, setOffset] = useState(0);
+
+  const [pageCount, setPageCount] = useState<number>(0);
+
+  useEffect(() => {
+    if (totalCount) {
+      setPageCount(totalCount);
+    }
+  }, [totalCount]);
+
+  // useEffect(() => {
+  //   fetch({
+  //     variables: {
+  //       limit: pageSize ?? 10,
+  //       offset,
+  //     },
+  //   });
+  // }, [fetch, offset, pageSize]);
 
   const columns = useMemo(() => [
     {
-      Header: t('home|Action'),
+      Header: (
+        <div className={s.links}>
+          {t('home|Action')}
+        </div>
+      ),
       id: 'action',
       accessor: ({ from, to }: { from:WhitelistedToken, to:WhitelistedToken }) => (
         <div className={s.links}>
@@ -161,6 +191,8 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
       trClassName={s.tr}
       thClassName={s.th}
       tdClassName={s.td}
+      pageCount={pageCount}
+      pageSize={pageSize ?? 10}
       setOffset={setOffset}
       isLinked
     />

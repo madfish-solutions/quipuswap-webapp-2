@@ -6,7 +6,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '../Card.module.sass';
 
@@ -25,11 +24,7 @@ export const TransactionCardItem: React.FC<TransactionCardItemProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
-      <Button
-        icon={
-          <ExternalLink id={transaction.id} />
-        }
-        theme="clean"
+      <div
         className={cx(s.cardCellItem, s.maxWidth, s.cardCellText, s.tokenLogoBlock)}
       >
         <div className={s.links}>
@@ -42,18 +37,18 @@ export const TransactionCardItem: React.FC<TransactionCardItemProps> = ({
             {getWhitelistedTokenSymbol(transaction.to)}
           </Button>
         </div>
-      </Button>
+      </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div>Total Value</div>
-        <CurrencyAmount amount="888888888888888.00" currency="$" />
+        <CurrencyAmount amount="888" currency="$" />
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div>Token A Amount</div>
-        <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.from)} />
+        <CurrencyAmount amount="888" currency={getWhitelistedTokenSymbol(transaction.from)} />
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div>Token B Amount</div>
-        <CurrencyAmount amount="888888888888888.00" currency={getWhitelistedTokenSymbol(transaction.to)} />
+        <CurrencyAmount amount="888" currency={getWhitelistedTokenSymbol(transaction.to)} />
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div>Time</div>

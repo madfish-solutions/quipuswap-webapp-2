@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getUniqueKey, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedFarm, WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
@@ -20,6 +20,8 @@ import { FarmCardItem } from './FarmCardItem';
 
 import s from './FarmTable.module.sass';
 
+const pageSize = MAX_ITEMS_PER_PAGE;
+
 type FarmTableProps = {
   data: any[]
   totalCount?: number
@@ -30,11 +32,9 @@ type FarmTableProps = {
   // fetch: any
 };
 
-const pageSize = MAX_ITEMS_PER_PAGE;
-
 const farmMobileItem = (farm:WhitelistedFarm) => (
   <FarmCardItem
-    key={farm.tokenContract}
+    key={getUniqueKey()}
     farm={farm}
   />
 );
@@ -73,7 +73,11 @@ export const FarmTable: React.FC<FarmTableProps> = ({
 
   const columns = useMemo(() => [
     {
-      Header: t('home|Name'),
+      Header: (
+        <div className={s.links}>
+          {t('home|Name')}
+        </div>
+      ),
       id: 'name',
       accessor: (
         { tokenPair }:{ tokenPair: { token1: WhitelistedToken, token2: WhitelistedToken } },

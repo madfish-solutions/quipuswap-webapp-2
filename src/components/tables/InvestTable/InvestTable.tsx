@@ -72,7 +72,11 @@ export const InvestTable: React.FC<InvestTableProps> = ({
 
   const columns = useMemo(() => [
     {
-      Header: t('home|Name'),
+      Header: (
+        <div className={s.links}>
+          {t('home|Name')}
+        </div>
+      ),
       id: 'name',
       accessor: ({ token1, token2 }:{ token1:WhitelistedToken, token2: WhitelistedToken }) => (
         <div className={s.links}>

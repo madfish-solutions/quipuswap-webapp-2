@@ -34,20 +34,20 @@ export const TokenCardItem: React.FC<TokenCardItemProps> = ({
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>Your Balance</div>
-        <CurrencyAmount amount="888888888888888.00" />
+        <CurrencyAmount amount="888" />
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>Price</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount amount="888888.00" className={s.cardAmount} />
+          <CurrencyAmount amount="888" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>Total Value</div>
         <div className={cx(s.bold, s.cardCellText)}>
           $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount amount="888" className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
