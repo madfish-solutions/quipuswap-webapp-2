@@ -63,22 +63,37 @@ const tokens = [
   {
     token: TEZOS_TOKEN,
     symbol: TEZOS_TOKEN.metadata.symbol,
+    balance: '888',
+    price: '888',
+    totalValue: '888',
   },
   {
     token: STABLE_TOKEN,
     symbol: STABLE_TOKEN.metadata.symbol,
+    balance: '888',
+    price: '888',
+    totalValue: '888',
   },
   {
     token: TEZOS_TOKEN,
     symbol: TEZOS_TOKEN.metadata.symbol,
+    balance: '888',
+    price: '888',
+    totalValue: '888',
   },
   {
     token: STABLE_TOKEN,
     symbol: STABLE_TOKEN.metadata.symbol,
+    balance: '888',
+    price: '888',
+    totalValue: '888',
   },
   {
     token: TEZOS_TOKEN,
     symbol: TEZOS_TOKEN.metadata.symbol,
+    balance: '888',
+    price: '888',
+    totalValue: '888',
   },
 ];
 
@@ -86,22 +101,37 @@ const invests = [
   {
     token1: TEZOS_TOKEN,
     token2: STABLE_TOKEN,
+    share: '888',
+    lpBalance: '888',
+    liquiduty: '888',
   },
   {
     token1: TEZOS_TOKEN,
     token2: STABLE_TOKEN,
+    share: '888',
+    lpBalance: '888',
+    liquiduty: '888',
   },
   {
     token1: TEZOS_TOKEN,
     token2: STABLE_TOKEN,
+    share: '888',
+    lpBalance: '888',
+    liquiduty: '888',
   },
   {
     token1: TEZOS_TOKEN,
     token2: STABLE_TOKEN,
+    share: '888',
+    lpBalance: '888',
+    liquiduty: '888',
   },
   {
     token1: TEZOS_TOKEN,
     token2: STABLE_TOKEN,
+    share: '888',
+    lpBalance: '888',
+    liquiduty: '888',
   },
 ];
 

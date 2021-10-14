@@ -86,10 +86,10 @@ export const TokenTable: React.FC<TokenTableProps> = ({
         </div>
       ),
       id: 'balanceTokenTable',
-      accessor: () => (
+      accessor: ({ balance }:{ balance:string }) => (
         <CurrencyAmount
           className={s.cardAmount}
-          amount="888"
+          amount={balance}
         />
       ),
     },
@@ -101,14 +101,14 @@ export const TokenTable: React.FC<TokenTableProps> = ({
         </div>
       ),
       id: 'priceTokenTable',
-      accessor: () => (
+      accessor: ({ price }:{ price:string }) => (
         <>
           <span className={s.dollar}>
             $
           </span>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={price}
           />
         </>
       ),
@@ -121,14 +121,14 @@ export const TokenTable: React.FC<TokenTableProps> = ({
         </div>
       ),
       id: 'totalValueTokenTable',
-      accessor: () => (
+      accessor: ({ totalValue }:{ totalValue:string }) => (
         <>
           <span className={s.dollar}>
             $
           </span>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={totalValue}
           />
         </>
       ),
@@ -143,13 +143,13 @@ export const TokenTable: React.FC<TokenTableProps> = ({
             href="#"
             external
           >
-            Analytics
+            {t('home|Analytics')}
           </Button>
           <Button
             href="#"
             className={s.button}
           >
-            Trade
+            {t('home|Trade')}
           </Button>
         </div>
       ),

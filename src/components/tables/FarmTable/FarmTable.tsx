@@ -16,6 +16,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { Button } from '@components/ui/Button';
 import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ArrowDown } from '@components/svg/ArrowDown';
 import { FarmCardItem } from './FarmCardItem';
 
 import s from '../PortfolioTablesStyles.module.sass';
@@ -93,6 +94,12 @@ export const FarmTable: React.FC<FarmTableProps> = ({
             /
             {getWhitelistedTokenSymbol(tokenPair.token2)}
           </span>
+          <ArrowDown className={s.arrow} />
+          <TokensLogos
+            token1={tokenPair.token2}
+            className={s.tokenLogo}
+          />
+          <span className={s.cardCellText}>CRUNCH</span>
           {/* {isSponsored && (<Bage className={s.bage} text={t('home|Sponsored')} />)} */}
         </div>
       ),
@@ -105,11 +112,11 @@ export const FarmTable: React.FC<FarmTableProps> = ({
         </div>
       ),
       id: 'staked',
-      accessor: () => (
+      accessor: ({ deposit }:{ deposit:string }) => (
         <>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={deposit}
           />
           <span className={s.dollar}>
             LP
@@ -125,11 +132,11 @@ export const FarmTable: React.FC<FarmTableProps> = ({
         </div>
       ),
       id: 'pendingRewards',
-      accessor: () => (
+      accessor: ({ earned }:{ earned:string }) => (
         <>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={earned}
           />
           <span className={s.dollar}>
             TOKEN
@@ -145,14 +152,14 @@ export const FarmTable: React.FC<FarmTableProps> = ({
         </div>
       ),
       id: 'totalValue',
-      accessor: () => (
+      accessor: ({ totalValueLocked }:{ totalValueLocked:string }) => (
         <>
           <span className={s.dollar}>
             $
           </span>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={totalValueLocked}
           />
         </>
       ),
@@ -166,13 +173,13 @@ export const FarmTable: React.FC<FarmTableProps> = ({
             className={s.button}
             href="#"
           >
-            Harvest
+            {t('home|Harvest')}
           </Button>
           <Button
             href="/swap"
             className={s.button}
           >
-            Stake
+            {t('home|Stake')}
           </Button>
         </div>
       ),

@@ -10,6 +10,7 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 
+import { ArrowDown } from '@components/svg/ArrowDown';
 import s from '../Card.module.sass';
 
 type FarmCardItemProps = {
@@ -40,6 +41,12 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
           {getWhitelistedTokenSymbol(farm.tokenPair.token1)}
           /
           {getWhitelistedTokenSymbol(farm.tokenPair.token2)}
+          <ArrowDown className={s.arrow} />
+          <TokensLogos
+            token1={farm.tokenPair.token2}
+            className={s.tokenLogo}
+          />
+          CRUNCH
         </div>
         {isSponsored && (<Bage text="Sponsored" />)}
       </div>

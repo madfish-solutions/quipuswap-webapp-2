@@ -102,11 +102,11 @@ export const InvestTable: React.FC<InvestTableProps> = ({
         </div>
       ),
       id: 'yourShare',
-      accessor: () => (
+      accessor: ({ share }:{ share:string }) => (
         <>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={share}
           />
           <span className={s.dollar}>
             %
@@ -122,11 +122,11 @@ export const InvestTable: React.FC<InvestTableProps> = ({
         </div>
       ),
       id: 'yourLPBalance',
-      accessor: () => (
+      accessor: ({ lpBalance }:{ lpBalance:string }) => (
         <>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={lpBalance}
           />
           <span className={s.dollar}>
             LP
@@ -142,14 +142,14 @@ export const InvestTable: React.FC<InvestTableProps> = ({
         </div>
       ),
       id: 'yourLiquidity',
-      accessor: () => (
+      accessor: ({ liquiduty }:{ liquiduty:string }) => (
         <>
           <span className={s.dollar}>
             $
           </span>
           <CurrencyAmount
             className={s.cardAmount}
-            amount="888"
+            amount={liquiduty}
           />
         </>
       ),
