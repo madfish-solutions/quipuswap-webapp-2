@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
-import { prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { prettyPrice } from '@utils/helpers';
 
 import s from './CurrencyAmount.module.sass';
 
@@ -13,6 +13,8 @@ type CurrencyAmountProps = {
   labelSize?: keyof typeof sizeClass
   isRightCurrency?: boolean
   dollarEquivalent?: string
+  decimals?: number
+  length?: number
 };
 
 const sizeClass = {
@@ -33,6 +35,8 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
   currency,
   isRightCurrency = false,
   dollarEquivalent,
+  decimals = 8,
+  length = 40,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -47,7 +51,7 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
     >
       {currency && isRightCurrency && (<span className={s.currency}>{currency}</span>)}
       <span className={s.inner}>
-        {parseFloat(amount) ? prettyPrice(parseFloat(amount), 8, 40) : amount}
+        {parseFloat(amount) ? prettyPrice(parseFloat(amount), decimals, length) : amount}
       </span>
       {currency && !isRightCurrency && (<span className={s.currency}>{currency}</span>)}
     </span>
@@ -64,7 +68,7 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
         ≈ $
         {' '}
         <span className={s.dollarEquivalentInner}>
-          {prettyPrice(parseFloat(dollarEquivalent), 8, 40)}
+          {prettyPrice(parseFloat(dollarEquivalent), decimals, length)}
         </span>
       </span>
     </div>
