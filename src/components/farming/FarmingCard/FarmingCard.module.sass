@@ -25,6 +25,14 @@
   height: 24px
   width: 100%
 
+.skeletonSmallText
+  height: 24px
+  width: 40px
+
+.skeletonBigText
+  height: 24px
+  width: 120px
+
 .flex
   display: block
 
@@ -33,11 +41,25 @@
   align-items: center
   justify-content: space-between
 
+.firstBlock
+  width: 100%
+  display: flex
+  align-items: center
+  margin-left: 0px
+  margin-top: 24px
+  margin-bottom: 24px
+
+.tokenItem
+  font-size: 1rem
+  display: flex
+  align-items: center
+  margin-top: 0
+
 .image
   width: 32px
   height: 32px
 
-.footer
+.footer, .footer2
   margin-top: 0px
   display: flex
   align-items: flex-start
@@ -64,7 +86,7 @@
   font-weight: 600
   line-height: 1.7
 
-.detailsBlock
+.detailsBlock, .detailsBlockSkel
   width: 50%
   margin-bottom: 8px
   &:not(:last-child)
@@ -164,6 +186,8 @@
   color: $text-02
 
 .light
+  .tokenItem
+    color: $text-03
   .detailsValue
     color: $text-01
   .multiplier
@@ -175,6 +199,8 @@
     color: $text-01
 
 .dark
+  .tokenItem
+    color: $text-02
   .detailsValue
     color: $text-inverse
   .multiplier
@@ -213,7 +239,7 @@
     margin-right: 32px
   .amount
     font-size: 1.429rem
-  .detailsBlock
+  .detailsBlock, .detailsBlockSkel
     width: calc(100% / 3)
     &:nth-child(6)
       margin-bottom: 0
@@ -245,11 +271,10 @@
     flex-wrap: nowrap
   .link
     width: auto
-    margin-right: 24px
-    margin-top: 0px
-    &:last-child
-      margin-right: 0px
-  .detailsBlock
+    margin-bottom: 24px
+    &:not(:last-child)
+      margin-right: 24px
+  .detailsBlock, .detailsBlockSkel
     width: auto
     margin-bottom: 0px
     &:nth-child(2)
@@ -290,12 +315,15 @@
   .button
     width: 160px
     margin-top: auto
-  .footer
+  .footer, .footer2
     flex-direction: row
     margin-top: 32px
     display: flex
     align-items: center
     justify-content: space-between
+
+  .footer2
+    align-items: flex-end
 
 @include media('>desktop')
   .header
@@ -308,3 +336,10 @@
   .button
     width: 160px
     margin-top: auto
+  .firstBlock
+    width: auto
+    min-width: 100px
+    display: block
+    margin: 0 16px 0 32px
+  .tokenItem
+    margin-top: 16px

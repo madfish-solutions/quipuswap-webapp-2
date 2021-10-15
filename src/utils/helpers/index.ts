@@ -23,6 +23,7 @@ export * from './toDecimals';
 export * from './isTokenDataAddressTez';
 export * from './toNat';
 export * from './transformTokenDataToAsset';
+export * from './transformToken';
 export * from './transformWhitelistedTokenToAsset';
 export * from './getValueForSDK';
 export * from './handleTokenChange';

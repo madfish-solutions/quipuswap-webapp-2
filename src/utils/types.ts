@@ -107,7 +107,6 @@ export type LiquidityFormValues = {
 };
 
 export type FarmingFormValues = {
-  switcher: boolean
   balance3: BigNumber
   selectedBaker: string
 };
@@ -196,22 +195,18 @@ export interface WhitelistedFarm extends FarmsFromServerWithWhitelistedPair {
   dexStorage: FoundDex
 }
 
-export type WhitelistedStake = {
-  id: number,
-  startTime: string
-  timelock: string
-  tokenPair: WhitelistedTokenPair
-  totalValueLocked: string
-  apy: string
-  daily: string
-  balance: string
-  deposit: string
-  earned: string
-  earn: string
+export interface WhitelistedStake extends FarmsFromServerWithWhitelistedPair {
+  apr: BigNumber
+  apyDaily: BigNumber
   tokenContract: string
   farmContract: string
   analyticsLink: string
-};
+  deposit: BigNumber
+  earned: BigNumber
+  startTime: string
+  timelock: string
+  dexStorage: FoundDex
+}
 
 export type VoteFormValues = {
   balance1: number

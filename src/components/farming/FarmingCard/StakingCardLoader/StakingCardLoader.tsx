@@ -7,6 +7,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Skeleton } from '@components/ui/Skeleton';
 import { Loader } from '@components/ui/Loader';
+import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from '../FarmingCard.module.sass';
 
@@ -15,7 +16,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const FarmCardLoader: React.FC<{}> = () => {
+export const StakingCardLoader: React.FC<{}> = () => {
   const { t } = useTranslation(['common', 'farms']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compountClassName = cx(
@@ -31,7 +32,6 @@ export const FarmCardLoader: React.FC<{}> = () => {
       <div className={s.header}>
         <div className={s.tokens}>
           <Skeleton className={s.image} />
-          <Skeleton className={s.image} />
           <h3 className={s.title}>
             <Skeleton className={s.skeletonPairTitle} />
           </h3>
@@ -44,70 +44,78 @@ export const FarmCardLoader: React.FC<{}> = () => {
         </div>
 
       </div>
-      <div className={s.footer}>
-        <div className={s.detailsBlock}>
-
+      <div className={s.footer2}>
+        <div className={s.firstBlock}>
+          <ArrowDown className={s.arrow} />
+          <div className={s.tokenItem}>
+            <Skeleton className={s.image} />
+            <span className={s.bold600}>{t('farms|Earn')}</span>
+            {' '}
+            <Skeleton className={s.skeletonSmallText} />
+          </div>
+        </div>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>
             {t('common|TVL')}
           </div>
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
-        <div className={s.detailsBlock}>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>
             {t('common|APY')}
             {' '}
             <Skeleton className={s.skeletonApyIcon} />
           </div>
           <div className={s.detailsValue}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
-        <div className={s.detailsBlock}>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>
             {t('common|Daily')}
           </div>
           <div className={s.detailsValue}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
-        <div className={s.detailsBlock}>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>
             {t('common|Balance')}
           </div>
           <div className={s.detailsValue}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
-        <div className={s.detailsBlock}>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>
             {t('common|Deposit')}
           </div>
           <div className={s.detailsValue}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
-        <div className={s.detailsBlock}>
+        <div className={s.detailsBlockSkel}>
           <div className={s.detailsHeader}>{t('farms|Earned')}</div>
           <div className={s.detailsValue}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
           <div className={s.link}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
           <div className={s.link}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
           <div className={s.link}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
           <div className={s.link}>
-            <Skeleton className={s.skeletonText} />
+            <Skeleton className={s.skeletonSmallText} />
           </div>
         </div>
         <Button className={s.button}>

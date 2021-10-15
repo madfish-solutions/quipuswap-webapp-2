@@ -17,7 +17,8 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
-  FARM_CONTRACT,
+  FARM_CONTRACT_MAINNET,
+  FARM_CONTRACT_TESTNET,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK,
@@ -183,11 +184,11 @@ function useDApp() {
   const loadFarmingStorage = useCallback(async () => {
     const contract:FarmingStorageInfo = await getStorageInfo(
       tezos ?? fallbackToolkit,
-      FARM_CONTRACT,
+      network.id === 'granadanet' ? FARM_CONTRACT_TESTNET : FARM_CONTRACT_MAINNET,
     );
 
     return contract;
-  }, [tezos]);
+  }, [tezos, network]);
 
   useEffect(() => {
     const loadStorage = async () => {
@@ -202,11 +203,14 @@ function useDApp() {
     if (network && tezos) {
       loadStorage();
     }
-  }, [network, tezos]);
+  }, [network, tezos, loadFarmingStorage]);
 
   useEffect(() => {
     const loadFarmingContract = async () => {
-      const contract = await getContract(tezos ?? fallbackToolkit, FARM_CONTRACT);
+      const contract = await getContract(
+        tezos ?? fallbackToolkit,
+        network.id === 'granadanet' ? FARM_CONTRACT_TESTNET : FARM_CONTRACT_MAINNET,
+      );
 
       setState((prevState) => ({
         ...prevState,

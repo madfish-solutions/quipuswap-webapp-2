@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { WhitelistedFarm } from '@utils/types';
 import { prettyPrice } from '@utils/helpers';
 import { prettyPercentage } from '@utils/helpers/prettyPercentage';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -20,17 +19,20 @@ const themeClass = {
 export const ApyModal: React.FC<{
   isOpen:boolean,
   close:() => void,
-  farm?:WhitelistedFarm
-}> = ({ isOpen, close, farm }) => {
+  apr?: BigNumber
+  apyDaily?: BigNumber
+}> = ({
+  isOpen, close, apr, apyDaily,
+}) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const amountOfQuipuPer1000 = useAmountOfQuipuPer1000(farm?.apr ?? new BigNumber(0), isOpen);
+  const amountOfQuipuPer1000 = useAmountOfQuipuPer1000(apr ?? new BigNumber(0), isOpen);
   const [quipuPer1000, setQuipuPer1000] = useState<BigNumber[]>();
 
   useEffect(() => {
     setQuipuPer1000(amountOfQuipuPer1000);
-  }, [amountOfQuipuPer1000, farm]);
+  }, [amountOfQuipuPer1000]);
 
   return (
     <Modal
@@ -44,7 +46,7 @@ export const ApyModal: React.FC<{
         <div>APR</div>
         <div className={s.headerPercentage}>
           <span className={s.headerBold}>
-            {farm && prettyPercentage(farm.apr)}
+            {apr && prettyPercentage(apr)}
           </span>
         </div>
       </div>
@@ -68,7 +70,7 @@ export const ApyModal: React.FC<{
               1D
             </td>
             <td>
-              {farm && prettyPercentage(farm.apr.dividedBy(365))}
+              {apr && prettyPercentage(apr.dividedBy(365))}
             </td>
             <td>
               {quipuPer1000 && prettyPrice(+quipuPer1000[0].toString(), 2)}
@@ -79,7 +81,7 @@ export const ApyModal: React.FC<{
               1W
             </td>
             <td>
-              {farm && prettyPercentage(farm.apr.dividedBy(52))}
+              {apr && prettyPercentage(apr.dividedBy(52))}
             </td>
             <td>
               {quipuPer1000 && prettyPrice(+quipuPer1000[1].toString(), 2)}
@@ -90,7 +92,7 @@ export const ApyModal: React.FC<{
               1M
             </td>
             <td>
-              {farm && prettyPercentage(farm.apr.dividedBy(12))}
+              {apr && prettyPercentage(apr.dividedBy(12))}
             </td>
             <td>
               {quipuPer1000 && prettyPrice(+quipuPer1000[2].toString(), 2)}
@@ -101,7 +103,7 @@ export const ApyModal: React.FC<{
               1Y(APY)
             </td>
             <td>
-              {farm && prettyPercentage(farm.apyDaily)}
+              {apyDaily && prettyPercentage(apyDaily)}
             </td>
             <td>
               {quipuPer1000 && prettyPrice(+quipuPer1000[3].toString(), 2)}

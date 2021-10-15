@@ -27,7 +27,8 @@ export const TZKT_LINK_MAINNET = 'https://tzkt.io';
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
-export const FARM_CONTRACT = process.env.NEXT_PUBLIC_FARM_CONTRACT!;
+export const FARM_CONTRACT_TESTNET = process.env.NEXT_PUBLIC_FARM_CONTRACT_TESTNET!;
+export const FARM_CONTRACT_MAINNET = process.env.NEXT_PUBLIC_FARM_CONTRACT_MAINNET!;
 export const FARM_PRECISION = process.env.NEXT_PUBLIC_FARM_PRECISION!;
 
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;

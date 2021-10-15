@@ -16,8 +16,14 @@ import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
-import { WhitelistedFarm } from '@utils/types';
+import { QSMainNet, WhitelistedFarm } from '@utils/types';
 import { prettyPercentage } from '@utils/helpers/prettyPercentage';
+import {
+  estimateTezInShares, estimateTezInToken, findDex, FoundDex,
+} from '@quipuswap/sdk';
+import { useNetwork, useTezos } from '@utils/dapp';
+import { Skeleton } from '@components/ui/Skeleton';
+import { FACTORIES } from '@utils/defaults';
 import { FarmingUserMoney } from '../FarmingUserMoney/FarmingUserMoney';
 
 import s from './FarmingCard.module.sass';
@@ -50,15 +56,38 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     analyticsLink,
     deposit,
     earned,
+    dexStorage,
+    rewardToken,
   } = farm;
+  const tezos = useTezos();
   const { t } = useTranslation(['common', 'farms']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [balance, setBalance] = useState<string>();
   const balanceFromWallet = useBalance(farm);
+  const network = useNetwork().id as QSMainNet;
+  const [rewardDex, setRewardDex] = useState<FoundDex>();
 
   useEffect(() => {
+    const loadDexes = async () => {
+      if (!tezos) return;
+
+      const rewardAsset = {
+        contract: rewardToken.contractAddress,
+        id: rewardToken.fa2TokenId ?? undefined,
+      };
+      const dex2 = await findDex(tezos, FACTORIES[network], rewardAsset);
+      setRewardDex(dex2.storage);
+    };
     setBalance(prettyPrice(+balanceFromWallet.toString(), 2, 6));
-  }, [balanceFromWallet, farmId]);
+    loadDexes();
+  }, [
+    balanceFromWallet,
+    farmId,
+    network,
+    tezos,
+    rewardToken.contractAddress,
+    rewardToken.fa2TokenId,
+  ]);
 
   return (
     <Card
@@ -105,9 +134,12 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           <div className={s.detailsValue}>
             <span className={s.tvl}>$</span>
             {' '}
-            <CurrencyAmount amount={prettyPrice(+new BigNumber(totalValueLocked)
-              .multipliedBy(tezPrice)
-              .toFixed(2), 3, 3)}
+            <CurrencyAmount amount={prettyPrice(
+              +(fromDecimals(estimateTezInShares(dexStorage, new BigNumber(totalValueLocked)), 6)
+                .multipliedBy(tezPrice)
+                .toFixed(2)),
+              3, 3,
+            )}
             />
           </div>
         </div>
@@ -144,17 +176,34 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {t('common|Deposit')}
           </div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={fromDecimals(deposit, 6).toString()} />
+            {dexStorage ? (
+              <>
+                <span className={s.tvl}>$</span>
+                {' '}
+                <CurrencyAmount amount={fromDecimals(estimateTezInToken(dexStorage, deposit), 6)
+                  .multipliedBy(tezPrice)
+                  .multipliedBy(2)
+                  .toFixed(2)}
+                />
+              </>
+            ) : <Skeleton className={s.skeletonSmallText} />}
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>{t('farms|Earned')}</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={fromDecimals(earned, 6).toString()} />
+            {rewardDex ? (
+              <>
+                <span className={s.tvl}>$</span>
+                {' '}
+                <CurrencyAmount amount={fromDecimals(
+                  estimateTezInToken(rewardDex, earned), 6,
+                )
+                  .multipliedBy(tezPrice)
+                  .toFixed(2)}
+                />
+              </>
+            ) : <Skeleton className={s.skeletonSmallText} />}
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
