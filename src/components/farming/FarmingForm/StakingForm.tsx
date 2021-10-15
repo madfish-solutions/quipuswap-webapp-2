@@ -5,11 +5,12 @@ import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import {
-  estimateTezInShares,
-  findDex, FoundDex, getLiquidityShare,
+  estimateTezInToken,
+  findDex, FoundDex,
 } from '@quipuswap/sdk';
 
 import {
+  getUserBalance,
   useAccountPkh, useNetwork, useOnBlock, useTezos,
 } from '@utils/dapp';
 import {
@@ -19,7 +20,7 @@ import {
   fromDecimals, getWhitelistedTokenAddress, parseDecimals,
 } from '@utils/helpers';
 import {
-  FarmingFormValues, PoolShare, QSMainNet, WhitelistedFarm, WhitelistedTokenPair,
+  FarmingFormValues, QSMainNet, WhitelistedStake, WhitelistedToken,
 } from '@utils/types';
 import { FACTORIES, FARM_PRECISION } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -35,21 +36,21 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from './FarmingForm.module.sass';
 
-type FarmingFormProps = {
-  form:any
-  farm: WhitelistedFarm
-  amount: string
-  balance?: string
-  tokenPair: WhitelistedTokenPair
-  values: FarmingFormValues
-  save:any
-  debounce:number
-  currentTab: any
-  tabsState: any
-  tezPrice: BigNumber
-  setTabsState: (val: any) => void
-  handleSubmit: () => void
-};
+  type FarmingFormProps = {
+    form:any
+    stake: WhitelistedStake
+    amount: string
+    balance?: string
+    token: WhitelistedToken
+    values: FarmingFormValues
+    save:any
+    debounce:number
+    currentTab: any
+    tabsState: any
+    tezPrice: BigNumber
+    setTabsState: (val: any) => void
+    handleSubmit: () => void
+  };
 
 export const TabsContent = [
   {
@@ -63,7 +64,7 @@ export const TabsContent = [
 ];
 
 const RealForm:React.FC<FarmingFormProps> = ({
-  tokenPair,
+  token,
   form,
   values,
   save,
@@ -73,7 +74,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
   setTabsState,
   tabsState,
   tezPrice,
-  farm,
+  stake,
 }) => {
   const { t } = useTranslation(['common', 'farms']);
   const tezos = useTezos();
@@ -83,10 +84,10 @@ const RealForm:React.FC<FarmingFormProps> = ({
   const [, setSubm] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
   const [, setOldDex] = useState<FoundDex>();
-  const [poolShare, setPoolShare] = useState<PoolShare>();
+  const [balance, setBalance] = useState<BigNumber>(new BigNumber(0));
   const {
     timelock, startTime, fees, deposit, stakedToken, totalValueLocked, dexStorage,
-  } = farm;
+  } = stake;
 
   const {
     openConnectWalletModal,
@@ -107,10 +108,10 @@ const RealForm:React.FC<FarmingFormProps> = ({
 
   const handleInputChange = async () => {
     if (!tezos) return;
-    if (tezos && tokenPair) {
+    if (tezos && token) {
       const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId ?? undefined,
+        contract: token.contractAddress,
+        id: token.fa2TokenId ?? undefined,
       };
       try {
         const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
@@ -124,28 +125,28 @@ const RealForm:React.FC<FarmingFormProps> = ({
   };
 
   const getDex = useCallback(async () => {
-    if (!tezos || !tokenPair) return;
+    if (!tezos || !token || !accountPkh) return;
     setDex(undefined);
     setOldDex(undefined);
     const toAsset = {
-      contract: tokenPair.token2.contractAddress,
-      id: tokenPair.token2.fa2TokenId ?? undefined,
+      contract: token.contractAddress,
+      id: token.fa2TokenId ?? undefined,
     };
     const dexbuf = await findDex(tezos, FACTORIES[networkId], toAsset);
     setDex(dexbuf);
-    try {
-      if (!accountPkh) return;
-      const share = await getLiquidityShare(tezos, dexbuf, accountPkh);
-      setPoolShare(share);
-    } catch (err) {
-      handleErrorToast(err);
-    }
-  }, [tokenPair, tezos, networkId, accountPkh, handleErrorToast]);
+    const amount = await getUserBalance(
+      tezos,
+      accountPkh,
+      token.contractAddress,
+      token.type,
+      token.fa2TokenId ?? undefined,
+    );
+    setBalance(amount ?? new BigNumber(0));
+  }, [tezos, networkId, accountPkh, token]);
 
   useEffect(() => {
-    setPoolShare(undefined);
     getDex();
-  }, [tokenPair, tezos, networkId, accountPkh, form.mutators, getDex]);
+  }, [tezos, networkId, accountPkh, token, getDex]);
 
   const saveFunc = async () => {
     if (promise) {
@@ -164,7 +165,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
       closeConnectWalletModal();
     }
     // eslint-disable-next-line
-  }, [accountPkh, closeConnectWalletModal]);
+    }, [accountPkh, closeConnectWalletModal]);
 
   const handleSwapSubmit = async () => {
     if (!tezos) return;
@@ -185,10 +186,10 @@ const RealForm:React.FC<FarmingFormProps> = ({
       }
     };
     // eslint-disable-next-line
-  }, [
+    }, [
     values.selectedBaker,
     values.balance3,
-    tokenPair,
+    token,
     dex,
     currentTab]);
 
@@ -243,7 +244,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
             validateMinMax(0, Infinity),
             required,
             currentTab.id === 'stake'
-              ? validateBalance(fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6))
+              ? validateBalance(fromDecimals(balance, stakedToken.decimals))
               : validateBalance(fromDecimals(deposit, 6))
             ,
           )}
@@ -253,8 +254,7 @@ const RealForm:React.FC<FarmingFormProps> = ({
             <>
               <ComplexInput
                 {...input}
-                token1={tokenPair.token1}
-                token2={tokenPair.token2}
+                token1={token}
                 handleBalance={(value) => {
                   form.mutators.setValue(
                     'balance3',
@@ -262,74 +262,55 @@ const RealForm:React.FC<FarmingFormProps> = ({
                   );
                 }}
                 balance={
-                  currentTab.id === 'stake'
-                    ? fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString()
-                    : fromDecimals(deposit, 6).toString()
-                }
-                balanceLabel={t('farms|Available Balance')}
+                    currentTab.id === 'stake'
+                      ? fromDecimals(balance, stakedToken.decimals).toString()
+                      : fromDecimals(deposit, 6).toString()
+                  }
                 id="voting-input"
                 label={t('farms|Amount')}
                 className={s.input}
-                mode="farm"
                 error={((meta.touched && meta.error) || meta.submitError)}
               />
             </>
           )}
         </Field>
         {currentTab.id === 'stake' && (
-          <Field name="selectedBaker" validate={required}>
-            {({ input, meta }) => (
-              <ComplexBaker
-                {...input}
-                label={t('farms|Baker')}
-                id="voting-baker"
-                className={s.mt12}
-                handleChange={(bakerObj) => {
-                  input.onChange(bakerObj.address);
-                }}
-                error={(meta.touched && meta.error) || meta.submitError}
-              />
-            )}
+        <Field name="selectedBaker" validate={required}>
+          {({ input, meta }) => (
+            <ComplexBaker
+              {...input}
+              label={t('farms|Baker')}
+              id="voting-baker"
+              className={s.mt12}
+              handleChange={(bakerObj) => {
+                input.onChange(bakerObj.address);
+              }}
+              error={(meta.touched && meta.error) || meta.submitError}
+            />
+          )}
 
-          </Field>
+        </Field>
         )}
         <div className={s.tradeControls}>
           <Button
             theme="underlined"
             className={s.tradeBtn}
-            href={`/swap/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
+            href={`/swap/${getWhitelistedTokenAddress(token)}`}
           >
             {t('farms|Trade')}
           </Button>
-          {currentTab.id === 'stake' ? (
-            <Button
-              theme="underlined"
-              className={s.tradeBtn}
-              href={`/liquidity/add/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
-            >
-              {t('farms|Invest')}
-            </Button>
-          ) : (
-            <Button
-              theme="underlined"
-              className={s.tradeBtn}
-              href={`/liquidity/remove/${getWhitelistedTokenAddress(tokenPair.token1)}-${getWhitelistedTokenAddress(tokenPair.token2)}`}
-            >
-              {t('farms|Divest')}
-            </Button>
-          )}
         </div>
         {currentTab.id !== 'stake' && (
-        <div className={s.receive}>
-          <span className={s.receiveLabel}>
-            {t('farms|Received')}
-            :
-          </span>
-          <CurrencyAmount
-            amount={recieved}
-            currency={stakedToken.symbol}
-          />
-        </div>
+          <div className={s.receive}>
+            <span className={s.receiveLabel}>
+              {t('farms|Received')}
+              :
+            </span>
+            <CurrencyAmount
+              amount={recieved}
+              currency={stakedToken.symbol}
+            />
+          </div>
         )}
         <div className={s.buttons}>
           <Button onClick={handleSwapSubmit} className={s.button}>
@@ -338,15 +319,15 @@ const RealForm:React.FC<FarmingFormProps> = ({
         </div>
       </Card>
       <FarmingDetails
-        farm={farm}
+        farm={stake}
         dex={dex}
         tezPrice={tezPrice}
-        amountInTez={estimateTezInShares(dexStorage, new BigNumber(totalValueLocked))}
+        amountInTez={estimateTezInToken(dexStorage, new BigNumber(totalValueLocked))}
       />
     </StickyBlock>
   );
 };
 
-export const FarmingForm = (props:any) => (
+export const StakingForm = (props:any) => (
   <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

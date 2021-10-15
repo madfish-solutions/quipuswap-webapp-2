@@ -5,7 +5,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { WhitelistedBaker, WhitelistedFarm } from '@utils/types';
-import { FARM_PRECISION, TEZOS_TOKEN } from '@utils/defaults';
+import { FARM_PRECISION } from '@utils/defaults';
 import { fromDecimals, getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
 import { useBakers } from '@utils/dapp';
 import { prettyPercentage } from '@utils/helpers/prettyPercentage';
@@ -24,6 +24,7 @@ type FarmingDetailsProps = {
   farm: WhitelistedFarm
   tezPrice: BigNumber
   dex?: FoundDex
+  amountInTez: BigNumber
 };
 
 const modeClass = {
@@ -35,9 +36,9 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
   farm,
   dex,
   tezPrice,
+  amountInTez,
 }) => {
   const {
-    totalValueLocked,
     apyDaily,
     tokenContract,
     farmContract,
@@ -45,6 +46,7 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
     startTime,
     timelock,
     fees,
+    rewardToken,
   } = farm;
   const { t } = useTranslation(['common', 'farms']);
   const { data: bakers } = useBakers();
@@ -96,11 +98,12 @@ export const FarmingDetails: React.FC<FarmingDetailsProps> = ({
           $
           {' '}
           <span className={s.priceAmount}>
-            <CurrencyAmount amount={prettyPrice(+fromDecimals(
-              new BigNumber(totalValueLocked), TEZOS_TOKEN.metadata.decimals,
-            )
-              .multipliedBy(tezPrice)
-              .toString())}
+            <CurrencyAmount amount={prettyPrice(
+              +(fromDecimals(amountInTez, rewardToken.decimals)
+                .multipliedBy(tezPrice)
+                .toFixed(2)),
+              3, 3,
+            )}
             />
           </span>
         </div>

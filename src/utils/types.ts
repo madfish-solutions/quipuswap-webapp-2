@@ -107,7 +107,6 @@ export type LiquidityFormValues = {
 };
 
 export type FarmingFormValues = {
-  switcher: boolean
   balance3: BigNumber
   selectedBaker: string
 };

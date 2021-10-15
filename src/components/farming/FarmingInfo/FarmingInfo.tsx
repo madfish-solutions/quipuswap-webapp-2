@@ -5,20 +5,22 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import {
-  batchify, estimateTezInShares, Token, withTokenApprove,
+  batchify, estimateTezInToken, Token, withTokenApprove,
 } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { withTypes } from 'react-final-form';
 
 import {
-  fromDecimals, getWhitelistedBakerName, getWhitelistedTokenSymbol, parseDecimals,
+  fromDecimals, getWhitelistedBakerName, getWhitelistedTokenSymbol, parseDecimals, transformToken,
 } from '@utils/helpers';
-import { FARM_CONTRACT, FARM_PRECISION, TEZOS_TOKEN } from '@utils/defaults';
 import {
-  WhitelistedFarm, FarmingFormValues, VoterType, WhitelistedBaker,
+  FARM_CONTRACT_MAINNET, FARM_CONTRACT_TESTNET, FARM_PRECISION, TEZOS_TOKEN,
+} from '@utils/defaults';
+import {
+  WhitelistedFarm, FarmingFormValues, VoterType, WhitelistedBaker, QSMainNet,
 } from '@utils/types';
 import {
-  useFarmingContract, useTezos, useAccountPkh, useBakers,
+  useFarmingContract, useTezos, useAccountPkh, useBakers, useNetwork,
 } from '@utils/dapp';
 import { getHarvest } from '@utils/helpers/getHarvest';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -44,7 +46,6 @@ const LineChart = dynamic(() => import('@components/charts/LineChart'), {
 type FarmingInfoProps = {
   farm:WhitelistedFarm
   className?: string
-  handleUnselect: () => void
   onClick?:(farm:WhitelistedFarm) => void
   tezPrice: BigNumber
 };
@@ -70,12 +71,15 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     rewardPerShare,
     upd,
     deposit,
+    rewardToken,
+    fees,
   } = farm;
   const farmContract = useFarmingContract();
   const { data: bakers } = useBakers();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
+  const network = useNetwork().id as QSMainNet;
   const { t } = useTranslation(['common', 'farms']);
   const { Form } = withTypes<FarmingFormValues>();
 
@@ -152,7 +156,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     handleLoader();
 
     const fromAsset = {
-      contract: FARM_CONTRACT,
+      contract: network === 'granadanet' ? FARM_CONTRACT_TESTNET : FARM_CONTRACT_MAINNET,
       id: new BigNumber(0),
     };
 
@@ -189,6 +193,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     tezos,
     accountPkh,
     farmContract,
+    network,
     farm,
     t,
     updateToast,
@@ -196,6 +201,8 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     handleLoader,
     handleSuccessHarvest,
     openConnectWalletModal,
+    farmId,
+    loadAmountOfTokensInFarms,
   ]);
 
   const myCandidate: WhitelistedBaker | undefined = useMemo(() => {
@@ -240,7 +247,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         )
         .minus(userData.prev_earned)))
       .dividedBy(new BigNumber(FARM_PRECISION))
-      .multipliedBy(new BigNumber(farm.fees.harvest_fee)
+      .multipliedBy(new BigNumber(fees.harvest_fee)
         .minus(new BigNumber(FARM_PRECISION))
         .abs()
         .dividedBy(new BigNumber(FARM_PRECISION)));
@@ -254,6 +261,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     rewardPerSecond,
     rewardPerShare,
     totalValueLocked,
+    fees,
   ]);
 
   useEffect(() => {
@@ -294,7 +302,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               <span className={s.rewardAmount}>
                 {pending}
                 <span className={s.rewardCurrency}>
-                  {t('common|QUIPU')}
+                  {getWhitelistedTokenSymbol(transformToken(rewardToken))}
                 </span>
               </span>
             </div>
@@ -309,8 +317,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 <span className={s.amount}>
                   {fromDecimals(deposit, 6).toString()}
                   (
-                  {fromDecimals(estimateTezInShares(dexStorage, deposit), 6)
+                  {fromDecimals(estimateTezInToken(dexStorage, deposit), 6)
                     .multipliedBy(tezPrice)
+                    .multipliedBy(2)
                     .toFixed(2)}
                   $)
                 </span>

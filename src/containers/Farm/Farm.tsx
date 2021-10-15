@@ -169,7 +169,6 @@ export const Farm: React.FC<FarmProps> = () => {
     return (
       <FarmingInfo
         tezPrice={tezPrice}
-        handleUnselect={() => selectFarm(undefined)}
         farm={selectedFarming}
       />
     );

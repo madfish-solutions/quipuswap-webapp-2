@@ -22,12 +22,12 @@ import {
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { useUserInfoInAllFarms } from '@hooks/useUserInfoInAllFarms';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import { fromDecimals, parseDecimals } from '@utils/helpers';
+import { useUserInfoInAllStake } from '@hooks/useUserInfoInAllStake';
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
@@ -35,7 +35,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-type FarmingStatsProps = {
+type StakeStatsProps = {
   className?: string
 };
 
@@ -56,7 +56,7 @@ const getAllHarvest = async ({
   }
 };
 
-export const FarmingStats: React.FC<FarmingStatsProps> = ({
+export const StakeStats: React.FC<StakeStatsProps> = ({
   className,
 }) => {
   const { data: farms } = useFarms();
@@ -71,18 +71,18 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
   } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const {
-    userInfoInFarms: userInfoInAllFarms,
-    loadAmountOfTokensInFarms,
-  } = useUserInfoInAllFarms();
+    userInfoInStakes: userInfoInAllStake,
+    loadAmountOfTokensInStakes,
+  } = useUserInfoInAllStake();
   const [claimed, setClaimed] = useState<string>('0');
   const [pending, setPending] = useState<string>('0');
 
   const calculatePendingReward = useCallback(() => {
-    if (!userInfoInAllFarms) return;
+    if (!userInfoInAllStake) return;
     if (!accountPkh) return;
 
     const generalTotal = Object
-      .values(userInfoInAllFarms)
+      .values(userInfoInAllStake)
       .reduce((userData, cur:FarmingUsersInfo | undefined, index) => (cur ? {
         claimed: userData.claimed.plus(cur.claimed),
         pending: userData.pending.plus(new BigNumber(cur.earned
@@ -106,7 +106,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
 
     setClaimed(fromDecimals(generalTotal.claimed, 6).toString());
     setPending(parseDecimals(fromDecimals(generalTotal.pending, 6).toString(), 0, Infinity, 6));
-  }, [userInfoInAllFarms, accountPkh, farms]);
+  }, [userInfoInAllStake, accountPkh, farms]);
 
   useEffect(() => {
     calculatePendingReward();
@@ -186,7 +186,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessToast();
-      loadAmountOfTokensInFarms();
+      loadAmountOfTokensInStakes();
     } catch (e) {
       handleErrorToast(e);
     }
@@ -199,7 +199,7 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
     handleErrorToast,
     handleLoader,
     handleSuccessToast,
-    loadAmountOfTokensInFarms,
+    loadAmountOfTokensInStakes,
     openConnectWalletModal,
     t,
     updateToast,

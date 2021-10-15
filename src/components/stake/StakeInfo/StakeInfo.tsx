@@ -1,35 +1,40 @@
 import React, {
-  useContext, useState, useMemo, useCallback,
+  useContext, useState, useMemo, useCallback, useEffect,
 } from 'react';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { batchify, withTokenApprove } from '@quipuswap/sdk';
+import { batchify, estimateTezInToken, withTokenApprove } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { withTypes } from 'react-final-form';
 
-import { FARM_CONTRACT, TEZOS_TOKEN } from '@utils/defaults';
-import { getHarvest } from '@utils/helpers/getHarvest';
-import { WhitelistedStake } from '@utils/types';
 import {
-  useAccountPkh, useFarmingContract, useNetwork, useTezos,
+  FARM_CONTRACT_MAINNET, FARM_CONTRACT_TESTNET, FARM_PRECISION, TEZOS_TOKEN,
+} from '@utils/defaults';
+import { getHarvest } from '@utils/helpers/getHarvest';
+import {
+  FarmingFormValues, QSMainNet, VoterType, WhitelistedBaker, WhitelistedStake,
+} from '@utils/types';
+import {
+  useAccountPkh, useBakers, useFarmingContract, useNetwork, useTezos,
 } from '@utils/dapp';
+import {
+  fromDecimals, getWhitelistedBakerName, getWhitelistedTokenSymbol, parseDecimals, transformToken,
+} from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useUserInfoInAllStake } from '@hooks/useUserInfoInAllStake';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { submitForm } from '@components/farming/FarmingInfo/farmingHelpers';
+import { TokensLogos } from '@components/ui/TokensLogos';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { Tabs } from '@components/ui/Tabs';
 import { Timeleft } from '@components/ui/Timeleft';
-import { StickyBlock } from '@components/common/StickyBlock';
-import { Tooltip } from '@components/ui/Tooltip';
 import { LineChartSampleData } from '@components/charts/content';
-import { ExternalLink } from '@components/svg/ExternalLink';
-import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { StakingForm } from '@components/farming/FarmingForm/StakingForm';
 import s from './StakeInfo.module.sass';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
@@ -51,6 +56,7 @@ type StakeInfoProps = {
   stake:WhitelistedStake
   className?: string
   onClick?:(stake:WhitelistedStake) => void
+  tezPrice: BigNumber
 };
 
 const modeClass = {
@@ -61,23 +67,52 @@ const modeClass = {
 export const StakeInfo: React.FC<StakeInfoProps> = ({
   className,
   stake,
+  tezPrice,
 }) => {
-  const network = useNetwork();
+  const {
+    farmId,
+    startTime,
+    timelock,
+    dexStorage,
+    totalValueLocked,
+    rewardPerSecond,
+    rewardPerShare,
+    upd,
+    deposit,
+    stakedToken,
+    rewardToken,
+    fees,
+  } = stake;
+  const farmContract = useFarmingContract();
+  const { data: bakers } = useBakers();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const farmContract = useFarmingContract();
   const updateToast = useUpdateToast();
-  const { t } = useTranslation(['common', 'swap']);
-  const { colorThemeMode } = useContext(ColorThemeContext);
+  const network = useNetwork().id as QSMainNet;
+  const { t } = useTranslation(['common', 'farms']);
+  const { Form } = withTypes<FarmingFormValues>();
+
   const {
     openConnectWalletModal,
   } = useConnectModalsState();
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const {
+    userInfoInStakes: userInfoInAllStake,
+    loadAmountOfTokensInStakes,
+  } = useUserInfoInAllStake();
+  const [pending, setPending] = useState<string>('0');
+  const [voter, setVoter] = useState<VoterType>();
+
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
   const currentTab = useMemo(
     () => (TabsContent.find(({ id }) => id === tabsState)!),
     [tabsState],
   );
+
+  const remaining:Date = useMemo(() => new Date(
+    new Date(startTime).getTime() + new Date(timelock).getTime(),
+  ), [startTime, timelock]);
 
   const handleLoader = useCallback(() => {
     updateToast({
@@ -93,19 +128,19 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     });
   }, [updateToast]);
 
+  const handleSuccessToast = useCallback(() => {
+    updateToast({
+      type: 'success',
+      render: currentTab.id === 'stake' ? t('common|Stake completed!') : t('common|Unstake completed!'),
+    });
+  }, [updateToast, t, currentTab]);
+
   const handleSuccessHarvest = useCallback(() => {
     updateToast({
       type: 'success',
       render: t('common|Harvest completed!'),
     });
   }, [updateToast, t]);
-
-  // const handleSuccessToast = useCallback(() => {
-  //   updateToast({
-  //     type: 'success',
-  //     render: t('common|Harvested! Your earnings have been sent to your wallet!'),
-  //   });
-  // }, [updateToast, t]);
 
   const handleHarvest = useCallback(async () => {
     if (!tezos) {
@@ -130,17 +165,15 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
     handleLoader();
 
     const fromAsset = {
-      contract: FARM_CONTRACT,
+      contract: network === 'granadanet' ? FARM_CONTRACT_TESTNET : FARM_CONTRACT_MAINNET,
       id: new BigNumber(0),
     };
-    // const farmId = new BigNumber(stake.id);
-    const farmId = new BigNumber(0);
 
     const harvestInfo = getHarvest({
       accountPkh,
       farmContract,
       handleErrorToast,
-      farmId,
+      farmId: new BigNumber(farmId),
     });
 
     try {
@@ -161,16 +194,89 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
       ).send();
       await op.confirmation();
       handleSuccessHarvest();
+      loadAmountOfTokensInStakes();
     } catch (e) {
       handleErrorToast(e);
     }
   }, [
     tezos,
     accountPkh,
-    network,
     farmContract,
     stake,
+    t,
+    updateToast,
+    handleErrorToast,
+    handleLoader,
+    handleSuccessHarvest,
+    openConnectWalletModal,
+    farmId,
+    loadAmountOfTokensInStakes,
   ]);
+
+  const myCandidate: WhitelistedBaker | undefined = useMemo(() => {
+    if (voter?.candidate) {
+      return bakers.find((x) => x.address === voter?.candidate);
+    }
+    return undefined;
+  }, [voter, bakers]);
+
+  useEffect(() => {
+    const asyncVoter = async () => {
+      if (!accountPkh) return;
+      const tempVoter = await dexStorage.storage.voters.get(accountPkh);
+      if (tempVoter) {
+        setVoter({
+          veto: fromDecimals(tempVoter.veto, TEZOS_TOKEN.metadata.decimals).toString(),
+          candidate: tempVoter.candidate,
+          vote: fromDecimals(tempVoter.vote, TEZOS_TOKEN.metadata.decimals).toString(),
+        });
+      } else setVoter({} as VoterType);
+    };
+    asyncVoter();
+  }, [accountPkh, dexStorage]);
+
+  const calculatePendingReward = useCallback(() => {
+    if (!userInfoInAllStake) return;
+    if (!accountPkh) return;
+
+    const userData = userInfoInAllStake[Number(farmId)];
+
+    if (!userData) return;
+
+    const userClaimed = new BigNumber(userData.earned
+      .plus(new BigNumber(userData.staked)
+        .multipliedBy(
+          totalValueLocked === '0' ? 0
+            : new BigNumber(Date.now() - new Date(upd).getTime())
+              .dividedBy(1000)
+              .multipliedBy(new BigNumber(rewardPerSecond))
+              .dividedBy(new BigNumber(totalValueLocked))
+              .plus(new BigNumber(rewardPerShare)),
+        )
+        .minus(userData.prev_earned)))
+      .dividedBy(new BigNumber(FARM_PRECISION))
+      .multipliedBy(new BigNumber(fees.harvest_fee)
+        .minus(new BigNumber(FARM_PRECISION))
+        .abs()
+        .dividedBy(new BigNumber(FARM_PRECISION)));
+
+    setPending(parseDecimals(fromDecimals(userClaimed, 6).toString(), 0, Infinity, 6));
+  }, [
+    userInfoInAllStake,
+    accountPkh,
+    farmId,
+    upd,
+    rewardPerSecond,
+    rewardPerShare,
+    totalValueLocked,
+    fees,
+  ]);
+
+  const transformedReward = useMemo(() => transformToken(rewardToken), [rewardToken]);
+
+  useEffect(() => {
+    calculatePendingReward();
+  }, [calculatePendingReward]);
 
   const compountClassName = cx(
     modeClass[colorThemeMode],
@@ -186,14 +292,14 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         header={{
           content: (
             <Button
-              href="/stake"
+              href="/farm"
               theme="quaternary"
               className={s.proposalHeader}
               control={
                 <Back className={s.proposalBackIcon} />
-            }
+              }
             >
-              Back to Vaults
+              {t('common|Back to Vaults')}
             </Button>
           ),
         }}
@@ -202,11 +308,13 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <div className={s.reward}>
             <div className={s.rewardContent}>
               <span className={s.rewardHeader}>
-                Your Pending Reward
+                {t('common|Your Pending Reward')}
               </span>
               <span className={s.rewardAmount}>
-                100,000,000
-                <span className={s.rewardCurrency}>QUIPU</span>
+                {pending}
+                <span className={s.rewardCurrency}>
+                  {getWhitelistedTokenSymbol(transformedReward)}
+                </span>
               </span>
             </div>
             <VotingReward />
@@ -215,25 +323,52 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             <div className={s.itemsRows}>
               <div className={s.item}>
                 <header className={s.header}>
-                  Your Share
+                  {t('common|Your Share')}
                 </header>
-                <span className={s.amount}>1,000,000.00(0.001$)</span>
+                <span className={s.amount}>
+                  {fromDecimals(deposit, rewardToken.decimals).toString()}
+                  (
+                  {fromDecimals(estimateTezInToken(dexStorage, deposit), 6)
+                    .multipliedBy(tezPrice)
+                    .toFixed(2)}
+                  $)
+                </span>
               </div>
               <div className={s.item}>
-                <header className={s.header}>
-                  Your Delegate
-                </header>
-                <Button theme="inverse" className={s.amount}>Everstake</Button>
+                <span className={s.header}>
+                  {t('common|Your Delegate')}
+                </span>
+                {myCandidate ? (
+                  <Button
+                    href={`https://tzkt.io/${myCandidate.address}`}
+                    external
+                    theme="underlined"
+                    title={getWhitelistedBakerName(myCandidate)}
+                    className={s.amount}
+                  >
+                    {getWhitelistedBakerName(myCandidate)}
+                  </Button>
+                ) : '—'}
               </div>
               <div className={s.item}>
-                <header className={s.header}>
-                  Lock ends in
-                </header>
-                <Timeleft remaining={new Date()} />
+                <span className={s.header}>
+                  {t('common|Lock ends in')}
+                </span>
+                <div className={cx(s.govBlockLabel, s.amount)}>
+                  {timelock === '0' ? '—' : (
+                    <Timeleft
+                      remaining={remaining}
+                      disabled
+                      className={s.priceAmount}
+                    />
+                  )}
+                </div>
               </div>
 
             </div>
-            <Button className={cx(s.statButton, s.button)} onClick={handleHarvest}>Harvest</Button>
+            <Button className={cx(s.statButton, s.button)} onClick={handleHarvest}>
+              {t('common|Harvest')}
+            </Button>
           </div>
         </div>
       </Card>
@@ -241,261 +376,65 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
         <LineChart
           className={s.chart}
           data={LineChartSampleData}
+          headerContent={(
+            <div className={s.tokens}>
+              <TokensLogos
+                token1={transformedReward}
+                width={32}
+                className={s.tokenLogos}
+              />
+              <h3 className={s.title}>
+                {getWhitelistedTokenSymbol(transformedReward)}
+              </h3>
+            </div>
+            )}
         />
         <div className={cx(s.disabled, modeClass[colorThemeMode])}>
           <div className={s.disabledBg} />
           <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
         </div>
       </Card>
-      <StickyBlock>
-        <Card
-          header={{
-            content: (
-              <Tabs
-                values={TabsContent}
-                activeId={tabsState}
-                setActiveId={(val) => setTabsState(val)}
-                className={s.tabs}
-              />
-            ),
-            button: (
-              <Button
-                theme="quaternary"
-              >
-                <Transactions />
-              </Button>
-            ),
-            className: s.header,
-          }}
-          contentClassName={s.content}
-        >
-          <ComplexInput
-            token1={TEZOS_TOKEN}
-            value={100000}
-            onChange={() => {}}
-            handleBalance={() => {}}
-            id="voting-input"
-            label="Amount"
-            className={cx(s.input, s.mb24)}
-            mode="votes"
+      <Form
+        onSubmit={(values) => {
+          if (!tezos) return;
+          handleLoader();
+          const fromAsset = {
+            contract: stakedToken.contractAddress,
+            id: stakedToken.fa2TokenId ?? undefined,
+          };
+          submitForm(
+            tezos,
+            accountPkh!,
+            handleErrorToast,
+            handleSuccessToast,
+            farmContract,
+            currentTab.id,
+            new BigNumber(farmId),
+            new BigNumber(values.balance3),
+            values.selectedBaker,
+            fromAsset,
+          );
+        }}
+        mutators={{
+          setValue: ([field, value], state, { changeValue }) => {
+            changeValue(state, field, () => value);
+          },
+        }}
+        render={({ handleSubmit, form }) => (
+          <StakingForm
+            form={form}
+            handleSubmit={handleSubmit}
+            debounce={100}
+            save={() => {}}
+            stake={stake}
+            token={transformedReward}
+            currentTab={currentTab}
+            setTabsState={setTabsState}
+            tabsState={tabsState}
+            tezPrice={tezPrice}
           />
-          {currentTab.id === 'stake' && (
-            <ComplexBaker
-              className={s.baker}
-              label="Baker"
-              id="voting-baker"
-            />
-          )}
-          <div className={s.tradeControls}>
-            <Button theme="underlined" className={s.tradeBtn}>
-              Trade
-            </Button>
-            {currentTab.id === 'stake' ? (
-              <Button theme="underlined" className={s.tradeBtn}>
-                Invest
-              </Button>
-            ) : (
-              <Button theme="underlined" className={s.tradeBtn}>
-                Divest
-              </Button>
-            )}
-
-          </div>
-          <div className={s.buttons}>
-            <Button className={s.button}>
-              {currentTab.label}
-            </Button>
-          </div>
-        </Card>
-        <Card
-          header={{
-            content: 'Stake Details',
-          }}
-          contentClassName={cx(modeClass[colorThemeMode], s.details)}
-        >
-          <CardCell
-            header={(
-              <>
-                {t('common|Value Locked')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-            )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              $
-              {' '}
-              <span className={s.priceAmount}>
-                1,000,000
-              </span>
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|APR')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <div className={cx(s.cellAmount, s.priceAmount)}>
-              888 %
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Daily')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                0.008 %
-              </span>
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Current Delegate')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <Button href="#" theme="underlined">
-              Bake&Bake
-            </Button>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Next Delegate')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <Button href="#" theme="underlined">
-              Everstake
-            </Button>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Ends in')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <Timeleft remaining={new Date()} className={s.priceAmount} />
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Lock Period')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <Timeleft remaining={new Date()} className={s.priceAmount} />
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Withdrawal Fee')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                888 %
-              </span>
-            </div>
-          </CardCell>
-          <CardCell
-            header={(
-              <>
-                {t('common|Interface Fee')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
-              </>
-              )}
-            className={s.cell}
-          >
-            <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                888 %
-              </span>
-            </div>
-          </CardCell>
-          <div className={s.detailsButtons}>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
-              Pair Analytics
-            </Button>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
-              Farm Contract
-            </Button>
-          </div>
-          <div className={s.detailsButtons}>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
-              Token Contract
-            </Button>
-          </div>
-        </Card>
-      </StickyBlock>
+        )}
+      />
     </>
   );
 };

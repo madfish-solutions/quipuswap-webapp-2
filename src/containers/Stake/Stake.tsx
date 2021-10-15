@@ -12,16 +12,17 @@ import { fromDecimals, sortFarms } from '@utils/helpers';
 import { STABLE_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { useMergedStakesInfo } from '@hooks/useMergedStakesInfo';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
 import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
-// import { StakeCard } from '@components/stake/StakeCard';
+import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
 import { SliderUI } from '@components/ui/Slider';
-import { FarmCardLoader } from '@components/farming/FarmingCard/FarmCardLoader/FarmCardLoader';
+import { StakingCardLoader } from '@components/farming/FarmingCard/StakingCardLoader/StakingCardLoader';
 import Search from '@icons/Search.svg';
 
 import s from './Stake.module.sass';
@@ -77,23 +78,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-// const getAllHarvest = async ({
-//   accountPkh,
-//   farmContract,
-//   handleErrorToast,
-//   farmId,
-// }: SubmitType) => {
-//   try {
-//     const farmParams = farmContract.methods
-//       .harvest(farmId, accountPkh)
-//       .toTransferParams(fromOpOpts(undefined, undefined));
-//     return farmParams;
-//   } catch (e) {
-//     handleErrorToast(e);
-//     return undefined;
-//   }
-// };
-
 export const Stake: React.FC<StakeProps> = () => {
   const router = useRouter();
   const { t } = useTranslation(['common']);
@@ -105,13 +89,16 @@ export const Stake: React.FC<StakeProps> = () => {
   const [isSwitcherActive, setIsSwitcherActive] = useState(false);
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<WhitelistedStake>();
+  const exchangeRates = useExchangeRates();
+  const tezPrice = new BigNumber(exchangeRates && exchangeRates.find
+    ? exchangeRates
+      .find((e:any) => !e.tokenAddress)?.exchangeRate
+    : new BigNumber(1));
 
   const sortedStakes = useMemo(() => sortFarms(sort, mergedStakes ?? []), [sort, mergedStakes]);
 
-  const filteredStakes = useMemo(() => sortedStakes.filter((farm) => ((
-    farm.tokenPair.token1.metadata.name.toLowerCase().includes(search.toLowerCase())
-  ) || (
-    farm.tokenPair.token2?.metadata.name.toLowerCase().includes(search.toLowerCase())
+  const filteredStakes = useMemo(() => sortedStakes.filter((stake) => ((
+    stake.stakedToken.name.toLowerCase().includes(search.toLowerCase())
   ))), [search, sortedStakes]);
 
   const switchedStakes = useMemo(() => filteredStakes.filter((stake) => (
@@ -169,14 +156,6 @@ export const Stake: React.FC<StakeProps> = () => {
   const handleChangeSwitcher = useCallback(() => setIsSwitcherActive(!isSwitcherActive),
     [isSwitcherActive]);
 
-  // const handleChangeSort = useCallback(({ value, label }) => {
-  //   const selectedSort = SortContent.find((sorting) => (
-  //     sorting.id === value && sorting.label === label
-  //   ));
-  //   if (!selectedSort) return;
-  //   setSort(selectedSort.id);
-  // }, []);
-
   useEffect(() => {
     if (router.query.slug) {
       const stakeObj = filteredStakes.find((x) => `${x.farmId}` === router.query.slug);
@@ -184,11 +163,14 @@ export const Stake: React.FC<StakeProps> = () => {
         selectStake(stakeObj);
       }
     }
-  }, [router.query, selectedStake]);
+  }, [router.query, filteredStakes]);
 
   if (selectedStake) {
     return (
-      <StakeInfo stake={selectedStake} />
+      <StakeInfo
+        tezPrice={tezPrice}
+        stake={selectedStake}
+      />
     );
   }
   return (
@@ -242,7 +224,6 @@ export const Stake: React.FC<StakeProps> = () => {
           ))}
         </SliderUI>
       </Card>
-      {/* <FarmingStats className={cx(s.farmingCard, s.farmingContent)} /> */}
       <Card
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
@@ -278,19 +259,18 @@ export const Stake: React.FC<StakeProps> = () => {
       </Card>
 
       {isStakesLoaded ? (
-        switchedStakes.map(() => (
-          <div key={Math.random()}>
-            {`StakeCard
+        switchedStakes.map((stake:WhitelistedStake) => (
+          <StakeCard
             tezPrice={tezPrice}
-            key={farm.farmId}
-            farm={farm}
-            openModal={() => setModalOpen(farm)}`}
-          </div>
+            key={stake.farmId}
+            stake={stake}
+            openModal={() => setModalOpen(stake)}
+          />
         ))) : (
           <>
-            <FarmCardLoader />
-            <FarmCardLoader />
-            <FarmCardLoader />
+            <StakingCardLoader />
+            <StakingCardLoader />
+            <StakingCardLoader />
           </>
       )}
     </>
