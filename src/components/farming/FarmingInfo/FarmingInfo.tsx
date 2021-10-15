@@ -34,6 +34,7 @@ import { FarmingForm, TabsContent } from '@components/farming/FarmingForm';
 import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
+import { transformToken } from '@utils/helpers/transformToken';
 import s from './FarmingInfo.module.sass';
 import { submitForm } from './farmingHelpers';
 
@@ -70,6 +71,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     rewardPerShare,
     upd,
     deposit,
+    rewardToken,
   } = farm;
   const farmContract = useFarmingContract();
   const { data: bakers } = useBakers();
@@ -294,7 +296,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               <span className={s.rewardAmount}>
                 {pending}
                 <span className={s.rewardCurrency}>
-                  {t('common|QUIPU')}
+                  {getWhitelistedTokenSymbol(transformToken(rewardToken))}
                 </span>
               </span>
             </div>
