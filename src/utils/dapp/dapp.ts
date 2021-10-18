@@ -35,7 +35,9 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
-import { getLists, removeCustomList, saveCustomList } from './lists';
+import {
+  removeCustomList, saveCustomList, useGetLists,
+} from './lists';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = !isClient ? undefined : new BeaconWallet({
@@ -268,10 +270,11 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getListsData = useCallback(() => getLists(network, setState), [network]);
+  const listsArr = useGetLists(network);
+
   useEffect(() => {
-    getListsData();
-  }, [network, getListsData]);
+    setState((prev) => ({ ...prev, lists: listsArr }));
+  }, [network, listsArr]);
 
   const toggleList = useCallback((url:string) => {
     let isEnabled = false;
