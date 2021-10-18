@@ -13,6 +13,7 @@ import { useTranslation } from 'next-i18next';
 import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
+import { useClientHeight } from '@hooks/useClientHeight';
 import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
@@ -58,7 +59,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
   const height = GraphicHeight;
 
   // for reseting value on hover exit
-  const currenValue = data[data.length - 1];
+  const currentValue = data[data.length - 1];
 
   const [value, setValue] = useState<{
     open: number,
@@ -68,31 +69,15 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
     time: number,
     xtzUsd: string,
   }>({
-    open: currenValue.open,
-    high: currenValue.high,
-    low: currenValue.low,
-    close: currenValue.close,
-    time: currenValue.time,
-    xtzUsd: currenValue.xtzUsdQuoteHistorical,
+    open: currentValue.open,
+    high: currentValue.high,
+    low: currentValue.low,
+    close: currentValue.close,
+    time: currentValue.time,
+    xtzUsd: currentValue.xtzUsdQuoteHistorical,
   });
 
-  const handleResize = useCallback(() => {
-    if (chartCreated && chartRef?.current?.parentElement) {
-      chartCreated.resize(chartRef.current.parentElement.clientWidth - 32, height);
-      chartCreated.timeScale().fitContent();
-      chartCreated.timeScale().scrollToPosition(0, false);
-    }
-  }, [chartCreated, chartRef, height]);
-
-  // add event listener for resize
-  const isClient = typeof window === 'object';
-  useEffect(() => {
-    if (!isClient) {
-      return () => {};
-    }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isClient, chartRef, handleResize]);
+  useClientHeight({ chartCreated, chartRef, height });
 
   // if chart not instantiated in canvas, create it
   useEffect(() => {
@@ -154,38 +139,38 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
         ) {
           if (setValue) {
             setValue({
-              open: currenValue.open,
-              high: currenValue.high,
-              low: currenValue.low,
-              close: currenValue.close,
-              time: currenValue.time,
-              xtzUsd: currenValue.xtzUsdQuoteHistorical,
+              open: currentValue.open,
+              high: currentValue.high,
+              low: currentValue.low,
+              close: currentValue.close,
+              time: currentValue.time,
+              xtzUsd: currentValue.xtzUsdQuoteHistorical,
             });
           }
         } else if (setValue) {
           const open = parseFloat(
             // @ts-ignore
             param.seriesPrices.get(series)?.open.toString()
-            ?? currenValue.open,
+            ?? currentValue.open,
           );
           const high = parseFloat(
             // @ts-ignore
             param.seriesPrices.get(series)?.high.toString()
-            ?? currenValue.high,
+            ?? currentValue.high,
           );
           const low = parseFloat(
             // @ts-ignore
             param.seriesPrices.get(series)?.low.toString()
-            ?? currenValue.low,
+            ?? currentValue.low,
           );
           const close = parseFloat(
             // @ts-ignore
             param.seriesPrices.get(series)?.close.toString()
-            ?? currenValue.close,
+            ?? currentValue.close,
           );
-          const time = param.time ?? currenValue.time;
+          const time = param.time ?? currentValue.time;
           const xtzUsd = data.find((x) => x.time === time)?.xtzUsdQuoteHistorical
-          ?? currenValue.xtzUsdQuoteHistorical;
+          ?? currentValue.xtzUsdQuoteHistorical;
           setValue({
             open,
             high,
@@ -202,7 +187,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
   }, [
     chartCreated,
     colorThemeMode,
-    currenValue,
+    currentValue,
     data,
     height,
     prevColorThemeModeState,

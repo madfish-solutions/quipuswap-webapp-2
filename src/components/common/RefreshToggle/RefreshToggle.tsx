@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import cx from 'classnames';
 
 import { Refresh } from '@components/svg/Refresh';
@@ -15,10 +15,10 @@ export const RefreshToggle:React.FC<RefreshToggleProps> = ({
 }) => {
   const [rotateChevron, setRotateChevron] = useState(false);
 
-  const handleRotate = () => {
+  const handleRotate = useCallback(() => {
     setRotateChevron(!rotateChevron);
     onClick();
-  };
+  }, [rotateChevron, setRotateChevron, onClick]);
 
   const compoundClassName = cx(
     { [s.rotate]: rotateChevron },

@@ -1,6 +1,6 @@
 import { WhitelistedTokenList } from '@utils/types';
 
-export const localSearchList = ({
+export const localSearchListByNameOrUrl = ({
   name,
   url,
 } : WhitelistedTokenList, input:string) => name.toLowerCase().includes(input.toLowerCase())

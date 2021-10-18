@@ -1,5 +1,4 @@
 import React, {
-  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -11,6 +10,7 @@ import { useTranslation } from 'next-i18next';
 
 import { PlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useClientHeight } from '@hooks/useClientHeight';
 import { usePrevious } from '@hooks/usePrevious';
 import { prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -94,23 +94,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
     time: currenValue.time,
   });
 
-  const handleResize = useCallback(() => {
-    if (chartCreated && chartRef?.current?.parentElement) {
-      chartCreated.resize(chartRef.current.parentElement.clientWidth - 32, height);
-      chartCreated.timeScale().fitContent();
-      chartCreated.timeScale().scrollToPosition(0, false);
-    }
-  }, [chartCreated, chartRef, height]);
-
-  // add event listener for resize
-  const isClient = typeof window === 'object';
-  useEffect(() => {
-    if (!isClient) {
-      return () => {};
-    }
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isClient, chartRef, handleResize]);
+  useClientHeight({ chartCreated, chartRef, height });
 
   // if chart not instantiated in canvas, create it
   useEffect(() => {

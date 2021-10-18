@@ -12,7 +12,7 @@ export const transformMutezToTez = (
   const transformValue = new BigNumber(value).div(10 ** dec);
 
   if (xtzUsdQuote) {
-    return prettyPrice(+transformValue.multipliedBy(xtzUsdQuote), fraction);
+    return prettyPrice(+transformValue.times(xtzUsdQuote), fraction);
   }
 
   return prettyPrice(+transformValue, fraction);

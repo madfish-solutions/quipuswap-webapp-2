@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { parseDecimals } from '@utils/helpers';
@@ -17,57 +17,41 @@ export const PercentSelector: React.FC<PercentSelectorProps> = ({
   decimals = 0,
   value,
 }) => {
-  const handle25 = () => handleBalance(parseDecimals(
-    new BigNumber(value).multipliedBy(0.25).toString(),
-    0,
-    Infinity,
-    decimals,
-  ));
-  const handle50 = () => handleBalance(parseDecimals(
-    new BigNumber(value).multipliedBy(0.5).toString(),
-    0,
-    Infinity,
-    decimals,
-  ));
-  const handle75 = () => handleBalance(parseDecimals(
-    new BigNumber(value).multipliedBy(0.75).toString(),
-    0,
-    Infinity,
-    decimals,
-  ));
-  const handleMAX = () => handleBalance(parseDecimals(
-    new BigNumber(value).multipliedBy(1).toString(),
-    0,
-    Infinity,
-    decimals,
-  ));
+  const handleRatio = useCallback((ratio: BigNumber.Value) => handleBalance(
+    parseDecimals(
+      new BigNumber(value).times(ratio).toString(),
+      0,
+      Infinity,
+      decimals,
+    ),
+  ), [value, decimals, handleBalance]);
 
   return (
     <div className={s.controls}>
       <Button
         theme="inverse"
-        onClick={handle25}
+        onClick={() => handleRatio(new BigNumber(1).dividedBy(4))}
         className={s.btn}
       >
         25%
       </Button>
       <Button
         theme="inverse"
-        onClick={handle50}
+        onClick={() => handleRatio(new BigNumber(2).dividedBy(4))}
         className={s.btn}
       >
         50%
       </Button>
       <Button
         theme="inverse"
-        onClick={handle75}
+        onClick={() => handleRatio(new BigNumber(3).dividedBy(4))}
         className={s.btn}
       >
         75%
       </Button>
       <Button
         theme="inverse"
-        onClick={handleMAX}
+        onClick={() => handleRatio(new BigNumber(4).dividedBy(4))}
         className={s.btn}
       >
         MAX

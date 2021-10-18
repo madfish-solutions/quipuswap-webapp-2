@@ -29,7 +29,7 @@ type SwapDetailsProps = {
   priceImpact: BigNumber
   rate1: BigNumber
   rate2: BigNumber
-  dex?: FoundDex
+  dex1?: FoundDex
   dex2?: FoundDex
 };
 
@@ -42,7 +42,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   priceImpact,
   rate1,
   rate2,
-  dex,
+  dex1,
   dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
@@ -52,12 +52,12 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
     ? rate2
     : new BigNumber(tokensData.first.exchangeRate ?? 1)
-      .div(new BigNumber(tokensData.second.exchangeRate ?? 1)))
+      .div(tokensData.second.exchangeRate ?? 1))
     .toString();
   const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
     ? rate1
     : new BigNumber(tokensData.second.exchangeRate ?? 1)
-      .div(new BigNumber(tokensData.first.exchangeRate ?? 1)))
+      .div(tokensData.first.exchangeRate ?? 1))
     .toString();
   return (
     <Card
@@ -181,11 +181,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         )}
       </CardCell>
       <div className={s.detailsButtons}>
-        {!loading && dex2 && dex && (
+        {!loading && dex2 && dex1 && (
         <Button
           className={s.detailsButton}
           theme="inverse"
-          href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
+          href={`https://analytics.quipuswap.com/pairs/${dex1.contract.address}`}
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
@@ -196,11 +196,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             })}
         </Button>
         )}
-        {!loading && dex ? (
+        {!loading && dex1 ? (
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
+            href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex1.contract.address}`}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >

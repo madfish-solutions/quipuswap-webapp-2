@@ -40,13 +40,13 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   const tvl:string = useMemo(() => (loading ? '0' : fromDecimals(
     new BigNumber(totalLiquidity ?? '0'), 6,
   )
-    .multipliedBy(new BigNumber(xtzUsdQuote ?? '0'))
+    .times(new BigNumber(xtzUsdQuote ?? '0'))
     .toFixed(0)), [totalLiquidity, xtzUsdQuote, loading]);
 
   const volume24h:string = useMemo(() => (loading ? '0' : fromDecimals(
     new BigNumber(volume24 ?? '0'), 6,
   )
-    .multipliedBy(new BigNumber(xtzUsdQuote ?? '0'))
+    .times(new BigNumber(xtzUsdQuote ?? '0'))
     .toFixed(0)), [xtzUsdQuote, loading]);
   const transactions24h:string = useMemo(() => (loading ? '0' : new BigNumber(trasactionsCount24h ?? '0').toString()), [trasactionsCount24h, loading]);
 

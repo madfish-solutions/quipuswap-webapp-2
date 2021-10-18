@@ -26,7 +26,7 @@ import {
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { isContractAddress } from '@utils/validators';
-import { ipfsToHttps } from '@utils/helpers';
+import { ipfsToHttps, isClient } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -36,7 +36,7 @@ import {
 import { getLists, removeCustomList, saveCustomList } from './lists';
 
 const michelEncoder = new MichelCodecPacker();
-const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
+const beaconWallet = !isClient ? undefined : new BeaconWallet({
   name: APP_NAME,
   iconUrl: `${BASE_URL}/favicon.ico`,
 });
@@ -370,15 +370,10 @@ function useDApp() {
       }));
       const result = await fetch(httpUrl)
         .then((res) => res.json())
-        .then((json) => {
-          if (json) {
-            return { value: json, status: 'fulfilled' };
-          }
-          return { value: [], status: 'fulfilled' };
-        })
-        .catch(() => ({ value: 'error', status: 'rejected' }));
+        .then((json) => json || [])
+        .catch(() => null);
 
-      if (result.status === 'rejected') {
+      if (result === null) {
         setState((prevState) => ({
           ...prevState,
           searchLists: { loading: false, data: [] },
@@ -386,12 +381,12 @@ function useDApp() {
         return null;
       }
       const transformedResult = {
-        error: result.status === 'rejected',
+        error: false,
         loading: false,
-        keywords: result.status === 'fulfilled' ? result.value.keywords : [],
-        logoURI: result.status === 'fulfilled' ? result.value.logoURI : '',
-        name: result.status === 'fulfilled' ? result.value.name : url,
-        tokens: result.status === 'fulfilled' ? result.value.tokens : [],
+        keywords: result.keywords || [],
+        logoURI: result.logoURI || '',
+        name: result.name || url,
+        tokens: result.tokens || [],
         enabled: false,
         url,
       };
@@ -469,7 +464,7 @@ function useDApp() {
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
-      if (isContractAddress(address)) {
+      if (await isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
           searchBakers: { loading: true, data: [] },

@@ -9,9 +9,9 @@ import {
 import {
   findTokensByList,
 } from '@utils/dapp/tokens';
-import { ipfsToHttps } from '@utils/helpers';
+import { ipfsToHttps, isClient } from '@utils/helpers';
 
-export const getSavedLists = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_KEY) || '{}') : []);
+export const getSavedLists = () => (isClient ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_KEY) || '{}') : []);
 
 export const getLists = async (
   network:QSNetwork,
@@ -20,22 +20,16 @@ export const getLists = async (
   const initialList = network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS;
   const savedList = getSavedLists();
   const savedKeys = Object.keys(savedList);
-  const objArr = [...(initialList.split(' ')), ...savedKeys]
+  const objArr = (initialList.split(' ')).concat(savedKeys)
     .filter((value, index, self) => self.indexOf(value) === index); // get only unique
   const reqArr = objArr.map((x:string) => fetch(ipfsToHttps(x))
     .then((res) => res.json())
-    .then((json) => {
-      let res = [];
-      if (json) {
-        res = json;
-      }
-      return res;
-    })
+    .then((json) => json || [])
     .catch(() => ([])));
   const lists = objArr.map((x) => {
     const url = x;
     let enabled = !!savedList[url];
-    if (savedList[url] === undefined && initialList.split(' ').find((y:string) => y === url)) {
+    if (savedList[url] === undefined && initialList.split(' ').some((y:string) => y === url)) {
       enabled = true;
     }
     return {
@@ -96,14 +90,14 @@ export const saveCustomList = ({ key, val }: { key:string, val:boolean }) => {
 };
 
 export const removeCustomList = (url: string) => {
-  const newObj = getSavedLists();
+  const savedList = getSavedLists();
   window.localStorage.setItem(
     SAVED_LISTS_KEY,
     JSON.stringify(
       Object.fromEntries(Object
-        .keys(newObj)
+        .keys(savedList)
         .filter((x) => x !== url)
-        .map((x) => [x, newObj[x]])),
+        .map((x) => [x, savedList[x]])),
     ),
   );
 };

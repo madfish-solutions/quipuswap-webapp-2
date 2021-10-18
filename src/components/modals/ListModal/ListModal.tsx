@@ -15,7 +15,7 @@ import {
   useRemoveList,
 } from '@utils/dapp';
 import {
-  localSearchList,
+  localSearchListByNameOrUrl,
 } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -53,23 +53,20 @@ const Header:React.FC<HeaderProps> = ({
   debounce, save, values,
 }) => {
   const { t } = useTranslation(['common']);
-
-  const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  const promise = useRef();
 
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
+  const saveFunc = useCallback(async () => {
+    if (promise.current) {
+      await promise.current;
     }
-    setVal(values);
     setSubm(true);
-    promise = save(values);
-    await promise;
+    promise.current = save(values);
+    await promise.current;
     setSubm(false);
-  };
+  }, [promise, save, values]);
 
   useEffect(() => {
     if (timeout.current) {
@@ -81,7 +78,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+  }, [values, debounce, saveFunc]);
 
   return (
     <div className={s.inputs}>
@@ -125,21 +122,21 @@ export const ListModal: React.FC<ListModalProps> = ({
   const [filteredLists, setFilteredLists] = useState<WhitelistedTokenList[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleInput = (values:FormValues) => {
+  const handleInput = useCallback((values:FormValues) => {
     setInputValue(values.search ?? '');
-  };
+  }, [setInputValue]);
 
   const handleListSearch = useCallback(() => {
     if (!tezos) return;
-    const isList = lists
+    const listArr = lists
       .filter(
-        (list:WhitelistedTokenList) => localSearchList(
+        (list:WhitelistedTokenList) => localSearchListByNameOrUrl(
           list,
           inputValue,
         ),
       );
-    setFilteredLists(isList);
-    if (inputValue.length > 0 && isList.length === 0) {
+    setFilteredLists(listArr);
+    if (inputValue.length > 0 && listArr.length === 0) {
       searchCustomList(inputValue);
     }
   }, [inputValue, tezos, searchCustomList, lists]);

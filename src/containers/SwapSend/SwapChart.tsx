@@ -20,15 +20,11 @@ export const SwapChart: React.FC<SwapChartProps> = ({
   token1,
   token2,
 }) => {
-  const isTokenTez = token1.contractAddress === TEZOS_TOKEN.contractAddress;
+  const isTokenTez = token1.contractAddress === TEZOS_TOKEN.contractAddress ? token1 : token2;
   const { loading, data, error } = useGetTokenPlotPriceQuery({
     variables: {
-      id: isTokenTez
-        ? token2.contractAddress
-        : token1.contractAddress,
-      tokenId: isTokenTez
-        ? `${token2.fa2TokenId}` ?? undefined
-        : `${token1.fa2TokenId}` ?? undefined,
+      id: isTokenTez.contractAddress,
+      tokenId: isTokenTez.fa2TokenId !== undefined ? `${isTokenTez.fa2TokenId}` : undefined,
     },
   });
   const loadingProp = useMemo(

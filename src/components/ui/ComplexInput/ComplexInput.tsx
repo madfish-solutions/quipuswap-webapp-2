@@ -63,7 +63,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 
   const dollarEquivalent = useMemo(() => (exchangeRate
     ? new BigNumber(value ? value.toString() : 0)
-      .multipliedBy(new BigNumber(exchangeRate))
+      .times(new BigNumber(exchangeRate))
       .toString()
     : ''
   ), [exchangeRate, value]);

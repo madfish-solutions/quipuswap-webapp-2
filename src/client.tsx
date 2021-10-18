@@ -9,6 +9,7 @@ import {
 } from '@apollo/client';
 
 import { APOLLO_CLIENT_ENDPOINT } from '@utils/defaults';
+import { isClient } from '@utils/helpers';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -25,7 +26,7 @@ const cache = new InMemoryCache({
 
 function createApolloClient() {
   return new ApolloClient({
-    ssrMode: typeof window === 'undefined', // set to true for SSR
+    ssrMode: !isClient, // set to true for SSR
     link: new HttpLink({
       uri: APOLLO_CLIENT_ENDPOINT,
     }),
@@ -45,7 +46,7 @@ function initializeApollo(initialState: any = null) {
   }
 
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === 'undefined') return localApolloClient;
+  if (!isClient) return localApolloClient;
 
   // Create the Apollo Client once in the client
   if (!globalApolloClient) globalApolloClient = localApolloClient;
@@ -89,7 +90,7 @@ export const withApollo = ({ ssr = true } = {}) => (PageComponent: any) => {
         pageProps = await PageComponent.getInitialProps(ctx);
       }
       // Only on the server:
-      if (typeof window === 'undefined') {
+      if (!isClient) {
         // When redirecting, the response is finished.
         // No point in continuing to render
         if (ctx.res && ctx.res.finished) {

@@ -2,9 +2,9 @@ import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { parseDecimals } from '@utils/helpers';
-import { validateMinMax } from '@utils/validators';
+import { validateMinMaxNonStrict } from '@utils/validators';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
 
@@ -37,8 +37,8 @@ export const Slippage: React.FC<StickyBlockProps> = ({
   const [customValue, setCustomValue] = useState<string>('');
 
   const handleCustomValueChange = useCallback((val) => {
-    const valWrapper = parseDecimals(val, 0, 30, 3);
-    const validValue = validateMinMax(0, 30)(valWrapper);
+    const valWrapper = parseDecimals(val, 0, 100, 3);
+    const validValue = validateMinMaxNonStrict(0, 100)(valWrapper);
     if (!validValue) {
       setCustomValue(valWrapper);
       handleChange(valWrapper);

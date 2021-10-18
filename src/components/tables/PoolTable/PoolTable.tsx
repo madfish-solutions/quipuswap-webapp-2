@@ -103,7 +103,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
           <CurrencyAmount
             className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
-              .multipliedBy(new BigNumber(xtzUsdQuote))
+              .times(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
           />
@@ -126,7 +126,7 @@ export const PoolTable: React.FC<PoolTableProps> = ({
           <CurrencyAmount
             className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.volume24h), 6)
-              .multipliedBy(new BigNumber(xtzUsdQuote))
+              .times(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
           />

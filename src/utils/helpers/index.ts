@@ -33,4 +33,6 @@ export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
-export * from './localSearchList';
+export * from './localSearchListByNameOrUrl';
+export * from './isClient';
+export * from './parseTezDecimals';

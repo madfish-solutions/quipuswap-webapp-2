@@ -100,8 +100,8 @@ export type SwapFormValues = {
 };
 
 export type LiquidityFormValues = {
-  switcher: boolean
-  switcher1: boolean
+  hiddenSwitcher: boolean
+  rebalanceSwitcher: boolean
   balance1: BigNumber
   balance2: BigNumber
   balance3: BigNumber

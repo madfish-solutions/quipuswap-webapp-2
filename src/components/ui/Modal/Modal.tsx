@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
+import { isClient } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
@@ -50,7 +51,7 @@ export const Modal: React.FC<ModalProps> = ({
     <ReactModal
       className={cx(s.root, className)}
       appElement={
-        typeof window !== 'undefined'
+        isClient
           ? document.querySelector('#__next')!
           : undefined
       }

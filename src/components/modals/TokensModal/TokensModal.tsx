@@ -253,7 +253,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
                 }
                 onClick={() => setListsModal(true)}
               >
-                Manage Lists
+                {t('common|Manage Lists')}
               </Button>
           )}
             className={themeClass[colorThemeMode]}
