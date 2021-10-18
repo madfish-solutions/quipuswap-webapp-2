@@ -38,7 +38,8 @@ export const SwapChart: React.FC<SwapChartProps> = ({
       className={s.chart}
       loading={!loadingProp}
       error={error}
-      data={(data || { token: { plotPrice: [] } })!.token.plotPrice as CandlePlotPoint[]}
+      data={((data && data.token ? data : null) || { token: { plotPrice: [] } })!.token
+        .plotPrice as CandlePlotPoint[]}
     />
   );
 };

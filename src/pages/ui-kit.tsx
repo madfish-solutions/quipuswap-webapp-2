@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, {
+  useState, useEffect, useCallback, useMemo,
+} from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -7,7 +9,7 @@ import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { useTokens } from '@utils/dapp';
+import { findTokensByList, useLists } from '@utils/dapp';
 import { WhitelistedFarm, WhitelistedTokenList } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
@@ -116,7 +118,8 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [listsModal, setListsModal] = useState<boolean>(false);
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));

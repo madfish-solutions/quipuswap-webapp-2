@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Section } from '@components/home/Section';
 import { FarmTable } from '@components/tables/FarmTable';
-import { useTokens } from '@utils/dapp';
+import { findTokensByList, useLists } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 
 type TopFarmingsProps = {
@@ -15,7 +15,8 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
   className,
 }) => {
   const { t } = useTranslation(['home']);
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const farms = useMemo(() => tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }))

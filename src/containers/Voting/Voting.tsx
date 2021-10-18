@@ -17,12 +17,13 @@ import {
   fallbackTokenToTokenData, handleSearchToken, handleTokenChange,
 } from '@utils/helpers';
 import {
+  findTokensByList,
   useAccountPkh,
+  useLists,
   useNetwork,
   useOnBlock,
   useSearchCustomTokens,
   useTezos,
-  useTokens,
 } from '@utils/dapp';
 import {
   QSMainNet,
@@ -65,7 +66,8 @@ export const Voting: React.FC<VotingProps> = ({
   const tezos = useTezos();
   const network = useNetwork();
   const exchangeRates = useExchangeRates();
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
   const [tokensData, setTokensData] = useState<TokenDataMap>(

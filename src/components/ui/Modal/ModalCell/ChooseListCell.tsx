@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 
 import { WhitelistedTokenList } from '@utils/types';
 import { shortize } from '@utils/helpers';
-import { MAINNET_TOKENS, TESTNET_TOKENS } from '@utils/defaults';
+import { MAINNET_TOKENS, CUSTOM_SAVED_TOKEN_LIST_KEY, TESTNET_TOKENS } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Switcher } from '@components/ui/Switcher';
 import { ListLogo } from '@components/ui/ListLogo';
@@ -34,7 +34,7 @@ export const ChooseListCell: React.FC<ChooseListCellProps> = ({
   tabIndex,
   onRemove = () => {},
 }) => {
-  const initialList = [...(TESTNET_TOKENS.split(' ')), ...(MAINNET_TOKENS.split(' '))];
+  const initialList = [...(TESTNET_TOKENS.split(' ')), ...(MAINNET_TOKENS.split(' ')), CUSTOM_SAVED_TOKEN_LIST_KEY];
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation('common');
   return (

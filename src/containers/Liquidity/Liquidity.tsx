@@ -13,7 +13,8 @@ import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  useAccountPkh, useNetwork, useOnBlock, useSearchCustomTokens, useTezos, useTokens,
+  findTokensByList,
+  useAccountPkh, useLists, useNetwork, useOnBlock, useSearchCustomTokens, useTezos,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -59,7 +60,8 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const { t } = useTranslation(['common', 'swap', 'liquidity']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const network = useNetwork();

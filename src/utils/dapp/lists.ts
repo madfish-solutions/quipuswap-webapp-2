@@ -6,9 +6,6 @@ import {
 import {
   QSNetwork,
 } from '@utils/types';
-import {
-  findTokensByList,
-} from '@utils/dapp/tokens';
 import { ipfsToHttps, isClient } from '@utils/helpers';
 
 export const getSavedLists = () => (isClient ? JSON.parse(window.localStorage.getItem(SAVED_LISTS_KEY) || '{}') : []);
@@ -20,13 +17,13 @@ export const getLists = async (
   const initialList = network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS;
   const savedList = getSavedLists();
   const savedKeys = Object.keys(savedList);
-  const objArr = (initialList.split(' ')).concat(savedKeys)
-    .filter((value, index, self) => self.indexOf(value) === index); // get only unique
-  const reqArr = objArr.map((x:string) => fetch(ipfsToHttps(x))
+  const uniqTokenList = (initialList.split(' ')).concat(savedKeys)
+    .filter((value, index, self) => self.indexOf(value) === index); // get only unique lists by url
+  const reqArr = uniqTokenList.map((x:string) => fetch(ipfsToHttps(x))
     .then((res) => res.json())
     .then((json) => json || [])
     .catch(() => ([])));
-  const lists = objArr.map((x) => {
+  const lists = uniqTokenList.map((x) => {
     const url = x;
     let enabled = !!savedList[url];
     if (savedList[url] === undefined && initialList.split(' ').some((y:string) => y === url)) {
@@ -53,7 +50,7 @@ export const getLists = async (
       setState((prevState:any) => {
         const listData = prevState.lists.data.map((list:any, j:number) => {
           if (i === j) {
-            const url = objArr[i];
+            const url = uniqTokenList[i];
             let enabled = !!savedList[url];
             if (savedList[url] === undefined && initialList.split(' ').find((y:string) => y === url)) {
               enabled = true;
@@ -74,7 +71,6 @@ export const getLists = async (
         return {
           ...prevState,
           lists: { loading: false, data: listData },
-          tokens: { loading: false, data: findTokensByList(listData) },
         };
       });
       return null;

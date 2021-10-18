@@ -5,7 +5,9 @@ import cx from 'classnames';
 import { isClient } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
+import {
+  Card, CardAdditional, CardContent, CardFooter, CardHeader,
+} from '@components/ui/Card';
 import { PopupClose } from '@components/svg/PopupClose';
 
 import s from './Modal.module.sass';
@@ -16,7 +18,9 @@ type ModalProps = {
   containerClassName?: string
   modalClassName?: string
   contentClassName?:string,
+  headerClassName?:string,
   cardClassName?:string,
+  additional?:React.ReactNode,
   header?:React.ReactNode,
   footer?:React.ReactNode,
   title?:string
@@ -38,9 +42,11 @@ export const Modal: React.FC<ModalProps> = ({
   modalClassName,
   containerClassName,
   contentClassName,
+  headerClassName,
   cardClassName,
   title = '',
   header,
+  additional,
   footer,
   ...props
 }) => {
@@ -78,25 +84,35 @@ export const Modal: React.FC<ModalProps> = ({
           }}
           className={cx(s.container, containerClassName)}
         >
-          <Card
-            className={cardClassName}
-            contentClassName={cx(contentClassName, s.modalCard)}
-            header={{
-              content: <h5>{title}</h5>,
-              button: (
-                <Button
-                  className={s.closeButton}
-                  onClick={onRequestClose}
-                  theme="quaternary"
-                >
-                  <PopupClose />
-                </Button>
-              ),
-            }}
-            additional={header}
-            footer={footer}
-          >
-            {children}
+          <Card isV2 className={cardClassName}>
+            <CardHeader
+              header={{
+                content: <h5>{title}</h5>,
+                button: (
+                  <Button
+                    className={s.closeButton}
+                    onClick={onRequestClose}
+                    theme="quaternary"
+                  >
+                    <PopupClose />
+                  </Button>
+                ),
+              }}
+            />
+            {header && (<CardHeader className={headerClassName} header={{ content: header }} />)}
+            {additional && (
+            <CardAdditional>
+              {additional}
+            </CardAdditional>
+            )}
+            <CardContent className={cx(contentClassName, s.modalCard)}>
+              {children}
+            </CardContent>
+            {footer && (
+            <CardFooter>
+              {footer}
+            </CardFooter>
+            )}
           </Card>
         </div>
       </div>

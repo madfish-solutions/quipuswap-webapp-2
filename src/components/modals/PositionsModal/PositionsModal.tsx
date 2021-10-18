@@ -12,9 +12,10 @@ import {
   useSearchCustomTokens,
   useSearchTokens,
   useTezos,
-  useTokens,
   isTokenFa2,
   useNetwork,
+  findTokensByList,
+  useLists,
 } from '@utils/dapp';
 import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
@@ -166,7 +167,8 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);

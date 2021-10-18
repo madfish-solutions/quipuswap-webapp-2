@@ -14,9 +14,10 @@ import {
   useAccountPkh,
   useTezos,
   useNetwork,
-  useTokens,
   useSearchCustomTokens,
   useOnBlock,
+  useLists,
+  findTokensByList,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -51,7 +52,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const { data: tokens } = useTokens();
+  const { data: lists } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists]);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const network = useNetwork();

@@ -118,7 +118,7 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [rate2, setRate2] = useState<BigNumber>(new BigNumber(0));
   const [[dex1, dex2], setDex] = useState<FoundDex[]>([]);
   const [[oldDex1, oldDex2], setOldDex] = useState<FoundDex[]>([]);
-  const [[dexstorage1, dexstorage2], setDexstorage] = useState<any>([]);
+  const [[dexStorage1, dexStorage2], setDexStorage] = useState<any>([]);
   const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
 
   const timeout = useRef(setTimeout(() => {}, 0));
@@ -145,7 +145,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       return;
     }
     const isTokenToToken = token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez';
-    if (!dex1 || !dexstorage1 || (isTokenToToken && !dex2)) return;
+    if (!dex1 || !dexStorage1 || (isTokenToToken && !dex2)) return;
     if (token1 === undefined || token2 === undefined) return;
     let lastChangeMod = lastChange;
     const isTokensSame = isTokenEqual(token1, oldToken1)
@@ -265,7 +265,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     accountPkh,
     dex1,
     dex2,
-    dexstorage1,
+    dexStorage1,
   ]);
 
   useEffect(() => {
@@ -300,7 +300,7 @@ const RealForm:React.FC<SwapFormProps> = ({
         token2,
       });
       setDex(dexes);
-      setDexstorage(storages);
+      setDexStorage(storages);
     };
     asyncFunc();
   }, [token2, token1, tezos, networkId]);
@@ -309,7 +309,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     handleSwapTokens();
     if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
       setDex([dex2, dex1]);
-      setDexstorage([dexstorage2, dexstorage1]);
+      setDexStorage([dexStorage2, dexStorage1]);
     }
     if (lastChange === 'balance1') {
       setLastChange('balance2');
@@ -323,7 +323,7 @@ const RealForm:React.FC<SwapFormProps> = ({
       );
     }
     // eslint-disable-next-line
-  }, [token1, token2, dex1, dex2, lastChange, values, form, dexstorage1, dexstorage2]);
+  }, [token1, token2, dex1, dex2, lastChange, values, form, dexStorage1, dexStorage2]);
 
   const blackListedTokens = useMemo(
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],

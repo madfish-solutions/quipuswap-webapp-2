@@ -10,18 +10,20 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
+  CUSTOM_SAVED_TOKEN_LIST_KEY,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK,
   METADATA_API_MAINNET,
   METADATA_API_TESTNET,
+  STABLE_TOKEN,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
   QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenList,
 } from '@utils/types';
 import {
-  getContractInfo, findTokensByList, saveCustomToken,
+  getContractInfo, saveCustomToken,
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
@@ -121,7 +123,6 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
-  tokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   lists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
   searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
   searchLists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
@@ -139,7 +140,6 @@ function useDApp() {
     accountPkh,
     templeWallet,
     network,
-    tokens,
     lists,
     searchTokens,
     searchLists,
@@ -151,7 +151,6 @@ function useDApp() {
     accountPkh: null,
     templeWallet: null,
     network: net,
-    tokens: { loading: true, data: [] },
     lists: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
     searchLists: { loading: false, data: [] },
@@ -292,7 +291,6 @@ function useDApp() {
     setState((prevState) => ({
       ...prevState,
       lists: { loading: false, data: newData },
-      tokens: { loading: false, data: findTokensByList(newData) },
       searchLists: { loading: false, data: [] },
     }));
   }, [lists, searchLists]);
@@ -305,7 +303,6 @@ function useDApp() {
     setState((prevState) => ({
       ...prevState,
       lists: { loading: false, data: newData },
-      tokens: { loading: false, data: findTokensByList(newData) },
       searchLists: { loading: false, data: [] },
     }));
   }, [lists, searchLists]);
@@ -455,12 +452,30 @@ function useDApp() {
 
   const addCustomToken = useCallback((token:WhitelistedToken) => {
     saveCustomToken(token);
-    setState((prevState) => ({
-      ...prevState,
-      tokens: { ...tokens, data: [...tokens.data, token] },
-      searchTokens: { loading: false, data: [] },
-    }));
-  }, [tokens]);
+    setState((prevState) => {
+      let listData = prevState.lists.data;
+      const listWithCustomTokens = listData.some((x) => x.url === CUSTOM_SAVED_TOKEN_LIST_KEY);
+      if (!listWithCustomTokens) {
+        listData = listData.map((x) => (
+          x.url === CUSTOM_SAVED_TOKEN_LIST_KEY ? ({ ...x, tokens: [token, ...x.tokens] }) : x
+        ));
+      } else {
+        listData = listData.concat({
+          name: CUSTOM_SAVED_TOKEN_LIST_KEY,
+          tokens: [token],
+          enabled: true,
+          url: CUSTOM_SAVED_TOKEN_LIST_KEY,
+          keywords: [],
+          logoURI: STABLE_TOKEN.metadata.thumbnailUri,
+        });
+      }
+      return {
+        ...prevState,
+        lists: { ...prevState.lists, data: listData },
+        searchTokens: { loading: false, data: [] },
+      };
+    });
+  }, []);
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
@@ -576,7 +591,6 @@ function useDApp() {
     templeWallet,
     ready,
     network,
-    tokens,
     searchTokens,
     lists,
     searchLists,
@@ -605,7 +619,6 @@ export const [
   useTempleWallet,
   useReady,
   useNetwork,
-  useTokens,
   useSearchTokens,
   useLists,
   useSearchLists,
@@ -631,7 +644,6 @@ export const [
   (v) => v.templeWallet,
   (v) => v.ready,
   (v) => v.network,
-  (v) => v.tokens,
   (v) => v.searchTokens,
   (v) => v.lists,
   (v) => v.searchLists,
