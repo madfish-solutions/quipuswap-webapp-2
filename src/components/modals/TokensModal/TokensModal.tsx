@@ -26,12 +26,12 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { Input } from '@components/ui/Input';
 import { NumberInput } from '@components/ui/NumberInput';
+import { ListContent } from '@components/common/ListContent';
 import Search from '@icons/Search.svg';
 
 import { Tabs } from '@components/ui/Tabs';
 import s from './TokensModal.module.sass';
 import { TokenContent } from './TokenContent';
-import { ListContent } from './ListContent';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -322,7 +322,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
                 debounce={0}
                 save={handleInput}
                 isSecondInput={isSoleFa2Token}
-                current
               />
             )}
             className={themeClass[colorThemeMode]}
