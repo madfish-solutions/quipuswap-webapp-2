@@ -8,12 +8,14 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import {
   useTezos,
+} from '@utils/dapp';
+import {
   useToggleList,
   useLists,
   useSearchLists,
   useSearchCustomLists,
   useRemoveList,
-} from '@utils/dapp';
+} from '@utils/tokenLists';
 import {
   localSearchListByNameOrUrl,
 } from '@utils/helpers';

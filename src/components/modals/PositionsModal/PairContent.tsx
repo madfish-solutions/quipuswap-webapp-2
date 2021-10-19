@@ -4,7 +4,7 @@ import { Field } from 'react-final-form';
 
 import {
   useAddCustomToken,
-} from '@utils/dapp';
+} from '@utils/tokenLists';
 import { isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';

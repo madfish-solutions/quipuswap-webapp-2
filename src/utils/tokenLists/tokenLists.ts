@@ -93,6 +93,7 @@ function useTokenLists() {
             enabled,
             url,
           };
+          console.log('setstate');
           return {
             ...prevState,
             lists: { loading: false, data: newState },

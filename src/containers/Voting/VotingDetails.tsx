@@ -6,7 +6,7 @@ import {
 } from '@quipuswap/sdk';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { useBakers } from '@utils/dapp';
+import { useBakers } from '@utils/bakers';
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import {
   VoterType, WhitelistedBaker, WhitelistedTokenPair,

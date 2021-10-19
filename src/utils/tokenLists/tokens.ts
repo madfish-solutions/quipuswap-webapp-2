@@ -47,5 +47,7 @@ export const findTokensByList = (lists:WhitelistedTokenList[]) => {
   const distinctTokens = [...new Map(unionTokens.map(
     (item) => [`${item.contractAddress}_${item.fa2TokenId ?? '0'}`, item],
   )).values()];
+
+  console.log(distinctTokens);
   return distinctTokens;
 };

@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 
 import {
   useAddCustomToken,
-} from '@utils/dapp';
+} from '@utils/tokenLists';
 import { WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import TokenNotFound from '@icons/TokenNotFound.svg';

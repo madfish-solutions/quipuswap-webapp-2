@@ -79,18 +79,18 @@ const Header:React.FC<HeaderProps> = ({
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  const promise = useRef();
 
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
+  const saveFunc = useCallback(async () => {
+    if (promise.current) {
+      await promise.current;
     }
     setVal(values);
     setSubm(true);
-    promise = save(values);
-    await promise;
+    promise.current = save(values);
+    await promise.current;
     setSubm(false);
-  };
+  }, [save, values]);
 
   useEffect(() => {
     if (timeout.current) {
@@ -102,7 +102,7 @@ const Header:React.FC<HeaderProps> = ({
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+  }, [values, debounce, saveFunc]);
 
   return (
     <div className={s.inputs}>
@@ -176,8 +176,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: lists, loading: listsLoading } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
-  // const { data: tokens, loading: tokensLoading } = useTokens();
+  const tokens = useMemo(() => findTokensByList(lists), [lists, listsLoading]);
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);

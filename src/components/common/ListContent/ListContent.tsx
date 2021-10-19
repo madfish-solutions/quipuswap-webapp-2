@@ -3,8 +3,9 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import {
-  useRemoveList, useToggleList,
-} from '@utils/dapp';
+  useToggleList,
+  useRemoveList,
+} from '@utils/tokenLists';
 import { WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import {
