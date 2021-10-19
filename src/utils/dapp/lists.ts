@@ -47,29 +47,24 @@ export const useGetLists = (network: QSNetwork) => {
     reqArr.forEach((p, i) => {
       p.then((res) => {
         setLists((prevState: any) => {
-          const listData = prevState.map((list: any, j: number) => {
-            if (i === j) {
-              const url = uniqTokenList[i];
-              let enabled = !!savedList[url];
-              if (savedList[url] === undefined && initialList.split(' ').find((y: string) => y === url)) {
-                enabled = true;
-              }
-              const errorObj = Array.isArray(res);
-              // setError(errorObj);
-              return {
-                error: errorObj,
-                loading: false,
-                keywords: res.keywords ?? [],
-                logoURI: res.logoURI ?? '',
-                name: res.name ?? url,
-                tokens: res.tokens ?? [],
-                enabled,
-                url,
-              };
-            }
-            return list;
-          });
-          return listData;
+          const newState = prevState;
+          const url = uniqTokenList[i];
+          let enabled = !!savedList[url];
+          if (savedList[url] === undefined && initialList.split(' ').find((y: string) => y === url)) {
+            enabled = true;
+          }
+          const errorObj = Array.isArray(res);
+          newState[i] = {
+            error: errorObj,
+            loading: false,
+            keywords: res.keywords ?? [],
+            logoURI: res.logoURI ?? '',
+            name: res.name ?? url,
+            tokens: res.tokens ?? [],
+            enabled,
+            url,
+          };
+          return newState;
         });
         return null;
       });
