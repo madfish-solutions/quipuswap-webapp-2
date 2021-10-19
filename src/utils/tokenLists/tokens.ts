@@ -7,9 +7,9 @@ import {
 } from '@utils/types';
 
 import { isContractAddress } from '@utils/validators';
-import { isTokenEqual } from '@utils/helpers';
+import { isClient, isTokenEqual } from '@utils/helpers';
 
-export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
+export const getSavedTokens = () => (isClient ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
 export const getContractInfo = (address:string, tz:TezosToolkit) => tz
   ?.contract
