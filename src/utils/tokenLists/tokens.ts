@@ -48,6 +48,5 @@ export const findTokensByList = (lists:WhitelistedTokenList[]) => {
     (item) => [`${item.contractAddress}_${item.fa2TokenId ?? '0'}`, item],
   )).values()];
 
-  console.log(distinctTokens);
   return distinctTokens;
 };
