@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react';
-import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import { TempleWallet } from '@temple-wallet/dapp';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
@@ -10,34 +9,19 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
-  CUSTOM_SAVED_TOKEN_LIST_KEY,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
-  MAINNET_NETWORK,
-  METADATA_API_MAINNET,
-  METADATA_API_TESTNET,
-  STABLE_TOKEN,
 } from '@utils/defaults';
-import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenList,
+  QSNetwork,
 } from '@utils/types';
-import {
-  getContractInfo, saveCustomToken,
-} from '@utils/dapp/tokens';
-import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
-import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
-import { isContractAddress } from '@utils/validators';
-import { ipfsToHttps, isClient } from '@utils/helpers';
+import { isClient } from '@utils/helpers';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
   setNetwork,
   toBeaconNetworkType,
 } from './network';
-import {
-  removeCustomList, saveCustomList, useGetLists,
-} from './lists';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = !isClient ? undefined : new BeaconWallet({
@@ -125,11 +109,6 @@ export type DAppType = {
   accountPkh: string | null
   templeWallet: TempleWallet | null
   network: QSNetwork
-  lists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
-  searchTokens: { data:WhitelistedToken[], loading:boolean, error?:string },
-  searchLists: { data:WhitelistedTokenList[], loading:boolean, error?:string },
-  bakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
-  searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
 
 const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
@@ -142,22 +121,12 @@ function useDApp() {
     accountPkh,
     templeWallet,
     network,
-    lists,
-    searchTokens,
-    searchLists,
-    bakers,
-    searchBakers,
   }, setState] = useState<DAppType>({
     connectionType: null,
     tezos: null,
     accountPkh: null,
     templeWallet: null,
     network: net,
-    lists: { loading: true, data: [] },
-    searchTokens: { loading: false, data: [] },
-    searchLists: { loading: false, data: [] },
-    bakers: { loading: true, data: [] },
-    searchBakers: { loading: false, data: [] },
   });
 
   const setFallbackState = useCallback(
@@ -270,61 +239,6 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const listsArr = useGetLists(network);
-
-  useEffect(() => {
-    setState((prev) => ({ ...prev, lists: listsArr }));
-  }, [network, listsArr]);
-
-  const toggleList = useCallback((url:string) => {
-    let isEnabled = false;
-    const newData = (lists.data ?? []).concat(searchLists.data)
-      .map((x:WhitelistedTokenList) => {
-        if (x.url === url) {
-          if (searchLists.data.length > 0) {
-            isEnabled = true;
-          } else {
-            isEnabled = !x.enabled;
-          }
-        }
-        return (x.url === url ? ({ ...x, enabled: isEnabled }) : x);
-      });
-    saveCustomList({ key: url, val: isEnabled });
-
-    setState((prevState) => ({
-      ...prevState,
-      lists: { loading: false, data: newData },
-      searchLists: { loading: false, data: [] },
-    }));
-  }, [lists, searchLists]);
-
-  const removeList = useCallback((url:string) => {
-    const newData = (lists.data ?? [])
-      .filter((x:WhitelistedTokenList) => x.url !== url);
-    removeCustomList(url);
-
-    setState((prevState) => ({
-      ...prevState,
-      lists: { loading: false, data: newData },
-      searchLists: { loading: false, data: [] },
-    }));
-  }, [lists, searchLists]);
-
-  const getBakersData = useCallback(() => getBakers(), []);
-  const {
-    data: bakersData,
-  } = useSWR(
-    ['bakers-initial-data'],
-    getBakersData,
-  );
-
-  useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      bakers: { loading: false, data: bakersData ?? [] },
-    }));
-  }, [bakersData]);
-
   useEffect(() => {
     if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
       const wlt = new TempleWallet(
@@ -345,175 +259,6 @@ function useDApp() {
     }
     // eslint-disable-next-line
   }, [network]);
-
-  const addCustomList = useCallback((list:WhitelistedTokenList, url:string) => {
-    saveCustomList({ key: url, val: true });
-    setState((prevState) => ({
-      ...prevState,
-      lists: { ...lists, data: [...lists.data, list] },
-    }));
-  }, [lists]);
-
-  const searchCustomList = useCallback(
-    async (url: string): Promise<WhitelistedTokenList | null> => {
-      const httpUrl = ipfsToHttps(url);
-      if (!httpUrl.startsWith('https://ipfs.io/ipfs/')) {
-        setState((prevState) => ({
-          ...prevState,
-          searchLists: { loading: false, data: [] },
-        }));
-        return null;
-      }
-      setState((prevState) => ({
-        ...prevState,
-        searchLists: { loading: true, data: [] },
-      }));
-      const result = await fetch(httpUrl)
-        .then((res) => res.json())
-        .then((json) => json || [])
-        .catch(() => null);
-
-      if (result === null) {
-        setState((prevState) => ({
-          ...prevState,
-          searchLists: { loading: false, data: [] },
-        }));
-        return null;
-      }
-      const transformedResult = {
-        error: false,
-        loading: false,
-        keywords: result.keywords || [],
-        logoURI: result.logoURI || '',
-        name: result.name || url,
-        tokens: result.tokens || [],
-        enabled: false,
-        url,
-      };
-      setState((prevState) => ({
-        ...prevState,
-        searchLists: { loading: false, data: [transformedResult] },
-      }));
-      return transformedResult;
-    },
-    [],
-  );
-
-  const searchCustomToken = useCallback(
-    async (
-      address: string,
-      tokenId?: number,
-      saveAfterSearch?:boolean,
-    ): Promise<WhitelistedToken | null> => {
-      if (await isContractAddress(address) === true) {
-        setState((prevState) => ({
-          ...prevState,
-          searchTokens: { loading: true, data: [] },
-        }));
-        let type;
-        try {
-          type = await getContractInfo(address, tezos!!);
-        } catch (e) {
-          type = null;
-        }
-        if (!type) {
-          setState((prevState) => ({
-            ...prevState,
-            searchTokens: { loading: false, data: [] },
-          }));
-          return null;
-        }
-        const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(network.id === MAINNET_NETWORK.id
-          ? METADATA_API_MAINNET
-          : METADATA_API_TESTNET, address, tokenId);
-        if (!customToken) {
-          setState((prevState) => ({
-            ...prevState,
-            searchTokens: { loading: false, data: [] },
-          }));
-          return null;
-        }
-        const token : WhitelistedToken = {
-          contractAddress: address,
-          metadata: customToken,
-          type: !isFa2 ? 'fa1.2' : 'fa2',
-          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
-          network: network.id,
-        } as WhitelistedToken;
-        setState((prevState) => ({
-          ...prevState,
-          searchTokens: { loading: false, data: [token] },
-        }));
-        if (saveAfterSearch) saveCustomToken(token);
-        return token;
-      }
-      return null;
-    },
-    [tezos, network],
-  );
-
-  const addCustomToken = useCallback((token:WhitelistedToken) => {
-    saveCustomToken(token);
-    setState((prevState) => {
-      let listData = prevState.lists.data;
-      const listWithCustomTokens = listData.some((x) => x.url === CUSTOM_SAVED_TOKEN_LIST_KEY);
-      if (!listWithCustomTokens) {
-        listData = listData.map((x) => (
-          x.url === CUSTOM_SAVED_TOKEN_LIST_KEY ? ({ ...x, tokens: [token, ...x.tokens] }) : x
-        ));
-      } else {
-        listData = listData.concat({
-          name: CUSTOM_SAVED_TOKEN_LIST_KEY,
-          tokens: [token],
-          enabled: true,
-          url: CUSTOM_SAVED_TOKEN_LIST_KEY,
-          keywords: [],
-          logoURI: STABLE_TOKEN.metadata.thumbnailUri,
-        });
-      }
-      return {
-        ...prevState,
-        lists: { ...prevState.lists, data: listData },
-        searchTokens: { loading: false, data: [] },
-      };
-    });
-  }, []);
-
-  const searchCustomBaker = useCallback(
-    async (address: string) => {
-      if (await isContractAddress(address) === true) {
-        setState((prevState) => ({
-          ...prevState,
-          searchBakers: { loading: true, data: [] },
-        }));
-        const customBaker = await getBakerMetadata(address);
-        if (customBaker) {
-          const baker = {
-            address: customBaker.address,
-            name: customBaker.name,
-            logo: customBaker.logo,
-            fee: customBaker.fee,
-            freeSpace: new BigNumber(customBaker.freeSpace),
-            votes: 0,
-          } as WhitelistedBaker;
-          setState((prevState) => ({
-            ...prevState,
-            searchBakers: { loading: false, data: [baker] },
-          }));
-        }
-      }
-    },
-    [],
-  );
-
-  const addCustomBaker = useCallback((baker:WhitelistedBaker) => {
-    setState((prevState) => ({
-      ...prevState,
-      bakers: { ...bakers, data: [...bakers.data, baker] },
-      searchBakers: { loading: false, data: [] },
-    }));
-  }, [bakers]);
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
@@ -594,23 +339,10 @@ function useDApp() {
     templeWallet,
     ready,
     network,
-    searchTokens,
-    lists,
-    searchLists,
-    bakers,
-    searchBakers,
-    toggleList,
-    removeList,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork,
-    addCustomToken,
-    searchCustomToken,
-    addCustomList,
-    searchCustomList,
-    addCustomBaker,
-    searchCustomBaker,
   };
 }
 
@@ -622,23 +354,10 @@ export const [
   useTempleWallet,
   useReady,
   useNetwork,
-  useSearchTokens,
-  useLists,
-  useSearchLists,
-  useBakers,
-  useSearchBakers,
-  useToggleList,
-  useRemoveList,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
-  useAddCustomToken,
-  useSearchCustomTokens,
-  useAddCustomLists,
-  useSearchCustomLists,
-  useAddCustomBaker,
-  useSearchCustomBaker,
 ] = constate(
   useDApp,
   (v) => v.connectionType,
@@ -647,21 +366,8 @@ export const [
   (v) => v.templeWallet,
   (v) => v.ready,
   (v) => v.network,
-  (v) => v.searchTokens,
-  (v) => v.lists,
-  (v) => v.searchLists,
-  (v) => v.bakers,
-  (v) => v.searchBakers,
-  (v) => v.toggleList,
-  (v) => v.removeList,
   (v) => v.connectWithBeacon,
   (v) => v.connectWithTemple,
   (v) => v.disconnect,
   (v) => v.changeNetwork,
-  (v) => v.addCustomToken,
-  (v) => v.searchCustomToken,
-  (v) => v.addCustomList,
-  (v) => v.searchCustomList,
-  (v) => v.addCustomBaker,
-  (v) => v.searchCustomBaker,
 );

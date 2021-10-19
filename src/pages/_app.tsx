@@ -13,6 +13,8 @@ import { ColorThemeProvider } from '@providers/ColorThemeContext';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
 import '@styles/globals.sass';
+import { TokenListsProvider } from '@utils/tokenLists';
+import { BakerListProvider } from '@utils/bakers';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -136,11 +138,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <DAppProvider>
-        <ColorThemeProvider>
-          <ExchangeRatesProvider>
-            <Component {...pageProps} />
-          </ExchangeRatesProvider>
-        </ColorThemeProvider>
+        <TokenListsProvider>
+          <BakerListProvider>
+            <ColorThemeProvider>
+              <ExchangeRatesProvider>
+                <Component {...pageProps} />
+              </ExchangeRatesProvider>
+            </ColorThemeProvider>
+          </BakerListProvider>
+        </TokenListsProvider>
       </DAppProvider>
     </>
   );

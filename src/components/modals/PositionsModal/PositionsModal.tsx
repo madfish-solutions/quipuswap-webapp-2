@@ -7,19 +7,18 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { WhitelistedToken, WhitelistedTokenList, WhitelistedTokenPair } from '@utils/types';
-import {
-  useSearchCustomTokens,
-  useSearchTokens,
-  useTezos,
-  isTokenFa2,
-  useNetwork,
-  findTokensByList,
-  useLists,
-  useSearchLists,
-  useSearchCustomLists,
-} from '@utils/dapp';
 import { localSearchListByNameOrUrl, localSearchToken } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
+import {
+  findTokensByList,
+  isTokenFa2,
+  useLists,
+  useSearchCustomLists,
+  useSearchCustomTokens,
+  useSearchLists,
+  useSearchTokens,
+} from '@utils/tokenLists';
+import { useNetwork, useTezos } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';

@@ -20,7 +20,10 @@ export const SwapChart: React.FC<SwapChartProps> = ({
   token1,
   token2,
 }) => {
-  const isTokenTez = token1.contractAddress === TEZOS_TOKEN.contractAddress ? token1 : token2;
+  const isTokenTez = useMemo(
+    () => (token1.contractAddress === TEZOS_TOKEN.contractAddress ? token1 : token2),
+    [token1, token2],
+  );
   const { loading, data, error } = useGetTokenPlotPriceQuery({
     variables: {
       id: isTokenTez.contractAddress,

@@ -13,8 +13,7 @@ import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  findTokensByList,
-  useAccountPkh, useLists, useNetwork, useOnBlock, useSearchCustomTokens, useTezos,
+  useAccountPkh, useNetwork, useOnBlock, useTezos,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -27,6 +26,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 

@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { findTokensByList, useLists } from '@utils/tokenLists';
+import { WhitelistedFarm } from '@utils/types';
 import { Section } from '@components/home/Section';
 import { FarmTable } from '@components/tables/FarmTable';
-import { findTokensByList, useLists } from '@utils/dapp';
-import { WhitelistedFarm } from '@utils/types';
 
 type TopFarmingsProps = {
   className?: string

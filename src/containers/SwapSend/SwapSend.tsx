@@ -14,10 +14,7 @@ import {
   useAccountPkh,
   useTezos,
   useNetwork,
-  useSearchCustomTokens,
   useOnBlock,
-  useLists,
-  findTokensByList,
 } from '@utils/dapp';
 import {
   fallbackTokenToTokenData,
@@ -25,6 +22,7 @@ import {
   handleSearchToken,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import { SwapForm } from './SwapForm';

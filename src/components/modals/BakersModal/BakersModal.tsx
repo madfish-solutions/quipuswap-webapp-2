@@ -1,14 +1,14 @@
 import React, {
-  useContext, useEffect, useRef, useState,
+  useContext, useEffect, useRef, useState, useCallback,
 } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
+import { useBakers } from '@utils/bakers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
@@ -108,11 +108,11 @@ export const BakersModal: React.FC<BakersModalProps> = ({
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleInput = (values:FormValues) => {
+  const handleInput = useCallback((values:FormValues) => {
     setInputValue(values.search ?? '');
-  };
+  }, []);
 
-  const handleTokenSearch = () => {
+  const handleTokenSearch = useCallback(() => {
     const isBakers = bakers
       .filter(
         (baker) => localSearchBaker(
@@ -121,7 +121,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
         ),
       );
     setFilteredBakers(isBakers);
-  };
+  }, [bakers, inputValue]);
 
   const isEmptyBakers = filteredBakers.length === 0;
 

@@ -7,19 +7,22 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import {
-  useSearchCustomTokens,
-  useSearchTokens,
   useTezos,
-  isTokenFa2,
   useNetwork,
-  findTokensByList,
+} from '@utils/dapp';
+import {
   useLists,
   useSearchCustomLists,
+  useSearchCustomTokens,
   useSearchLists,
-} from '@utils/dapp';
+  useSearchTokens,
+  findTokensByList,
+  isTokenFa2,
+} from '@utils/tokenLists';
 import {
   parseNumber, localSearchToken, isTokenEqual, localSearchListByNameOrUrl,
 } from '@utils/helpers';
+
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -293,11 +296,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   return (
     <>
-      {/* <ListModal
-        isOpen={listsModal}
-        onRequestClose={() => setListsModal(false)}
-        onChange={() => {}}
-      /> */}
       <Form
         onSubmit={handleInput}
         mutators={{

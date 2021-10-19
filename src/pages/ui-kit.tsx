@@ -9,7 +9,7 @@ import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { findTokensByList, useLists } from '@utils/dapp';
+import { findTokensByList, useLists } from '@utils/tokenLists';
 import { WhitelistedFarm, WhitelistedTokenList } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Button } from '@components/ui/Button';
