@@ -51,7 +51,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: lists } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const network = useNetwork();
@@ -104,7 +104,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast, t]);
 
-  const handleTokenChangeWrapper = (
+  const handleTokenChangeWrapper = useCallback((
     token: WhitelistedToken,
     tokenNumber: 'first' | 'second',
   ) => handleTokenChange({
@@ -112,9 +112,13 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     tokenNumber,
     exchangeRates,
     tezos: tezos!,
-    accountPkh: accountPkh!,
+    accountPkh,
     setTokensData,
-  });
+  }), [
+    accountPkh,
+    exchangeRates,
+    tezos,
+  ]);
 
   const handleSwapTokens = () => {
     setTokens([token2, token1]);
@@ -135,8 +139,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         handleTokenChangeWrapper,
       });
     }
+    return () => {};
     // eslint-disable-next-line
-  }, [from, to, initialLoad, tokens]);
+  }, [from, to, initialLoad, tokens, handleTokenChangeWrapper]);
 
   const getBalance = useCallback(() => {
     if (tezos && token1 && token2) {
@@ -144,17 +149,18 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       handleTokenChangeWrapper(token2, 'second');
     }
     // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId, token1, token2]);
+  }, [tezos, accountPkh, networkId, token1, token2, handleTokenChangeWrapper]);
 
   useEffect(() => {
     getBalance();
-    // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId]);
+    return () => {};
+  }, [getBalance]);
 
   useOnBlock(tezos, getBalance);
 
   useEffect(() => {
     setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
+    return () => {};
   }, [networkId]);
 
   return (

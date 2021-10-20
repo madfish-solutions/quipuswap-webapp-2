@@ -118,8 +118,8 @@ const UiKit: React.FC = () => {
   const [showExamplePopup, setShowExamplePopup] = useState<boolean>(false);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [listsModal, setListsModal] = useState<boolean>(false);
-  const { data: lists } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const { data: lists, loading: listsLoading } = useLists();
+  const tokens = useMemo(() => findTokensByList(lists), [lists, listsLoading]);
   const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));

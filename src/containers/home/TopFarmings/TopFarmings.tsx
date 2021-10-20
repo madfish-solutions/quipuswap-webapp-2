@@ -16,7 +16,7 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({
 }) => {
   const { t } = useTranslation(['home']);
   const { data: lists } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const tokens = findTokensByList(lists);
   const farms = useMemo(() => tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
     ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }))

@@ -193,7 +193,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
   const { data: lists, loading: listsLoading } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const tokens = useMemo(() => findTokensByList(lists), [lists, listsLoading]);
   const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);

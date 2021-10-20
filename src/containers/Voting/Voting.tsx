@@ -65,7 +65,7 @@ export const Voting: React.FC<VotingProps> = ({
   const network = useNetwork();
   const exchangeRates = useExchangeRates();
   const { data: lists } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
   const [tokensData, setTokensData] = useState<TokenDataMap>(

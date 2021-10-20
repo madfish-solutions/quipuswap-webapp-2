@@ -12,7 +12,7 @@ type TokenChangeType = {
   tokenNumber: 'first' | 'second'
   exchangeRates: any,
   tezos: TezosToolkit,
-  accountPkh: string
+  accountPkh?: string | null
   setTokensData: React.Dispatch<React.SetStateAction<TokenDataMap>>
 };
 

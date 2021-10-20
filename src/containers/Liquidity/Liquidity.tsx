@@ -61,7 +61,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const { data: lists } = useLists();
-  const tokens = useMemo(() => findTokensByList(lists), [lists]);
+  const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
   const network = useNetwork();
