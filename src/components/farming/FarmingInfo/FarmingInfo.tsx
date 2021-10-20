@@ -268,6 +268,19 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
     calculatePendingReward();
   }, [calculatePendingReward]);
 
+  const rewardCurrency = useMemo(
+    () => getWhitelistedTokenSymbol(transformToken(rewardToken)), [rewardToken],
+  );
+  const depositAmountInShares = useMemo(() => fromDecimals(deposit, 6).toString(), [deposit]);
+  const depositAmountIn$ = useMemo(() => fromDecimals(estimateTezInToken(dexStorage, deposit), 6)
+    .multipliedBy(tezPrice)
+    .multipliedBy(2)
+    .toFixed(2), [deposit, dexStorage, tezPrice]);
+
+  const candidateName = useMemo(() => (myCandidate ? getWhitelistedBakerName(myCandidate) : '—'), [myCandidate]);
+  const token1Name = useMemo(() => getWhitelistedTokenSymbol(tokenPair.token1), [tokenPair.token1]);
+  const token2Name = useMemo(() => getWhitelistedTokenSymbol(tokenPair.token2), [tokenPair.token2]);
+
   const compountClassName = cx(
     modeClass[colorThemeMode],
     s.mb24i,
@@ -302,7 +315,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
               <span className={s.rewardAmount}>
                 {pending}
                 <span className={s.rewardCurrency}>
-                  {getWhitelistedTokenSymbol(transformToken(rewardToken))}
+                  {rewardCurrency}
                 </span>
               </span>
             </div>
@@ -315,12 +328,9 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                   {t('common|Your Share')}
                 </header>
                 <span className={s.amount}>
-                  {fromDecimals(deposit, 6).toString()}
+                  {depositAmountInShares}
                   (
-                  {fromDecimals(estimateTezInToken(dexStorage, deposit), 6)
-                    .multipliedBy(tezPrice)
-                    .multipliedBy(2)
-                    .toFixed(2)}
+                  {depositAmountIn$}
                   $)
                 </span>
               </div>
@@ -333,10 +343,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                     href={`https://tzkt.io/${myCandidate.address}`}
                     external
                     theme="underlined"
-                    title={getWhitelistedBakerName(myCandidate)}
+                    title={candidateName}
                     className={s.amount}
                   >
-                    {getWhitelistedBakerName(myCandidate)}
+                    {candidateName}
                   </Button>
                 ) : '—'}
               </div>
@@ -375,11 +385,11 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
                 className={s.tokenLogos}
               />
               <h3 className={s.title}>
-                {getWhitelistedTokenSymbol(tokenPair.token1)}
+                {token1Name}
                 {' '}
                 /
                 {' '}
-                {getWhitelistedTokenSymbol(tokenPair.token1)}
+                {token2Name}
               </h3>
             </div>
             )}
