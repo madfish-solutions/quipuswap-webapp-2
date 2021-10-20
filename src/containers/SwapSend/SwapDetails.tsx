@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 
 import {
-  getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
+  getWhitelistedTokenSymbol, parseDecimals, transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
@@ -49,16 +49,26 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(() => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'), [token1]);
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
-  const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
+  const sellRate = useMemo(() => parseDecimals((((rate2 && !rate2.isNaN()) && !rate2.eq(0))
     ? rate2
     : new BigNumber(tokensData.first.exchangeRate ?? 1)
       .div(tokensData.second.exchangeRate ?? 1))
-    .toString();
-  const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
+    .toString(), 0, Infinity, token2.metadata.decimals),
+  [
+    rate2,
+    token2.metadata.decimals,
+    tokensData,
+  ]);
+  const buyRate = useMemo(() => parseDecimals((((rate1 && !rate1.isNaN()) && !rate1.eq(0))
     ? rate1
     : new BigNumber(tokensData.second.exchangeRate ?? 1)
       .div(tokensData.first.exchangeRate ?? 1))
-    .toString();
+    .toString(), 0, Infinity, token1.metadata.decimals),
+  [
+    rate1,
+    token1.metadata.decimals,
+    tokensData,
+  ]);
   return (
     <Card
       header={{

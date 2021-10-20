@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { WhitelistedToken } from '@utils/types';
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prettyPrice, prettyPriceThousands } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -120,7 +120,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   :
                 </div>
                 <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
+                  {prettyPriceThousands(parseFloat(balance), token?.metadata.decimals ?? 3, 6)}
                 </div>
               </div>
               )}

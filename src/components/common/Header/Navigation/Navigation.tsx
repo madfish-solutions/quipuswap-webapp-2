@@ -78,8 +78,10 @@ export const Navigation: React.FC<NavigationProps> = ({
                     s.linkInner,
                     modeClass[colorThemeMode],
                   )}
-                  target="_blank"
-                  rel="noreferrer noopener"
+                  {...(!el.notExternal && {
+                    target: '_blank',
+                    rel: 'noreferrer noopener',
+                  })}
                   onFocus={() => setIsInnerMenuOpened(true)}
                 >
                   {el.label}

@@ -20,6 +20,7 @@ type NavigationDataProps = {
     id: number
     href: string
     label: string
+    notExternal?:boolean
   }[]
 }[];
 
@@ -111,11 +112,13 @@ export const NavigationData: NavigationDataProps = [
         id: 6,
         href: '/terms-of-service',
         label: 'Terms of Service',
+        notExternal: true,
       },
       {
         id: 7,
         href: '/privacy-policy',
         label: 'Privacy Policy',
+        notExternal: true,
       },
     ],
   },

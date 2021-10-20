@@ -166,7 +166,9 @@ const RealForm:React.FC<SwapFormProps> = ({
       ? token1.metadata.decimals
       : token2.metadata.decimals;
 
-    const inputWrapper = new BigNumber(lastChangeMod === 'balance1' ? val.balance1 : val.balance2);
+    const inputWrapper = new BigNumber(lastChangeMod === 'balance1'
+      ? parseDecimals(val.balance1.toString(), 0, Infinity, token1.metadata.decimals)
+      : parseDecimals(val.balance2.toString(), 0, Infinity, token2.metadata.decimals));
     const inputValueInner = toDecimals(inputWrapper, decimals1);
     const fromAsset = transformTokenDataToAsset(tokensData.first);
     const toAsset = transformTokenDataToAsset(tokensData.second);
@@ -393,6 +395,17 @@ const RealForm:React.FC<SwapFormProps> = ({
               noBalanceButtons={!accountPkh}
               handleChange={(token) => {
                 handleTokenChange(token, 'first');
+                form.mutators.setValue(
+                  'balance1',
+                  new BigNumber(
+                    parseDecimals(
+                      input.value,
+                      0,
+                      Infinity,
+                      token.metadata.decimals,
+                    ),
+                  ),
+                );
                 setDex([]);
               }}
               balance={tokensData.first.balance}
@@ -420,6 +433,17 @@ const RealForm:React.FC<SwapFormProps> = ({
               noBalanceButtons
               handleChange={(token) => {
                 handleTokenChange(token, 'second');
+                form.mutators.setValue(
+                  'balance2',
+                  new BigNumber(
+                    parseDecimals(
+                      input.value,
+                      0,
+                      Infinity,
+                      token.metadata.decimals,
+                    ),
+                  ),
+                );
                 setDex([]);
               }}
               balance={tokensData.second.balance}

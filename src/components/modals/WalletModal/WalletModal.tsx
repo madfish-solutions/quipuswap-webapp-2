@@ -8,7 +8,7 @@ import {
   useConnectWithBeacon,
   useConnectWithTemple,
 } from '@utils/dapp';
-import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
+import { SAVED_TERMS_KEY } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { Modal } from '@components/ui/Modal';
@@ -53,7 +53,6 @@ export const WalletModal: React.FC = () => {
   const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
-  const [check2, setCheck2] = useState<boolean>(localStorage.getItem(SAVED_ANALYTICS_KEY) === 'true' ?? false);
 
   const {
     connectWalletModalOpen,
@@ -104,11 +103,6 @@ export const WalletModal: React.FC = () => {
     localStorage.setItem(SAVED_TERMS_KEY, `${!check1}`);
   };
 
-  const handleCheck2 = () => {
-    setCheck2(!check2);
-    localStorage.setItem(SAVED_ANALYTICS_KEY, `${!check2}`);
-  };
-
   return (
     <Modal
       containerClassName={s.modalWrap}
@@ -134,7 +128,7 @@ export const WalletModal: React.FC = () => {
           <Button
             className={s.defText}
             theme="underlined"
-            href="#"
+            href="/terms-of-service"
             external
           >
             {t('common|Terms of Usage')}
@@ -145,34 +139,11 @@ export const WalletModal: React.FC = () => {
           <Button
             className={s.defText}
             theme="underlined"
-            href="#"
+            href="/privacy-policy"
             external
           >
             {t('common|Privacy Policy')}
           </Button>
-        </div>
-        <div className={s.def}>
-          <Button
-            control={
-              <Checkbox checked={check2} />
-            }
-            onClick={handleCheck2}
-            theme="quaternary"
-            className={s.btn}
-          >
-            <div className={s.btnText}>{t('common|Analytics')}</div>
-          </Button>
-          {t('common|I agree to the')}
-          {' '}
-          <Button
-            className={s.defText}
-            theme="underlined"
-            href="#"
-            external
-          >
-            {t('common|anonymous information collecting')}
-          </Button>
-
         </div>
       </div>
       <div className={s.wallets}>

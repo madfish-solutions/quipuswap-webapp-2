@@ -10,7 +10,7 @@ import {
   PoolShare,
   TokenDataMap, WhitelistedToken,
 } from '@utils/types';
-import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -55,12 +55,12 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   );
   const totalShare = useMemo(() => (fromDecimals(poolShare?.total || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
   const frozenShare = useMemo(() => (fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
-  const sellPrice = useMemo(() => new BigNumber(tokensData.first.exchangeRate ?? 1)
+  const sellPrice = useMemo(() => parseDecimals(new BigNumber(tokensData.first.exchangeRate ?? 1)
     .div(tokensData.second.exchangeRate ?? 1)
-    .toString(), [tokensData]);
-  const buyPrice = useMemo(() => new BigNumber(tokensData.second.exchangeRate ?? 1)
+    .toString(), 0, Infinity, token2.metadata.decimals), [tokensData, token2.metadata.decimals]);
+  const buyPrice = useMemo(() => parseDecimals(new BigNumber(tokensData.second.exchangeRate ?? 1)
     .div(tokensData.first.exchangeRate ?? 1)
-    .toString(), [tokensData]);
+    .toString(), 0, Infinity, token1.metadata.decimals), [tokensData, token1.metadata.decimals]);
   return (
     <Card
       header={{

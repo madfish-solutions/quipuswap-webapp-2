@@ -36,3 +36,4 @@ export * from './preparePairName';
 export * from './localSearchListByNameOrUrl';
 export * from './isClient';
 export * from './parseTezDecimals';
+export * from './prettyPriceThousands';

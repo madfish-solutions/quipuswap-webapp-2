@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prettyPriceThousands } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { Button } from '@components/ui/Button';
@@ -113,7 +113,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                     :
                   </div>
                   <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(frozenBalance))}
+                    {prettyPriceThousands(parseFloat(frozenBalance))}
                   </div>
 
                 </div>
@@ -125,7 +125,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                     :
                   </div>
                   <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(balance))}
+                    {prettyPriceThousands(parseFloat(balance))}
                   </div>
                 </div>
               ) : (<div className={s.item2Line} />)}
