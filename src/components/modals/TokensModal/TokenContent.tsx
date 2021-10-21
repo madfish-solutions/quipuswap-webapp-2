@@ -1,25 +1,24 @@
 import React from 'react';
-import { useTranslation } from 'next-i18next';
+import {useTranslation} from 'next-i18next';
 
-import {
-  useAddCustomToken,
-} from '@utils/tokenLists';
-import { WhitelistedToken } from '@utils/types';
-import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
+import {useAddCustomToken} from '@utils/tokenLists';
+import {WhitelistedToken} from '@utils/types';
+import {LoadingTokenCell, TokenCell} from '@components/ui/Modal/ModalCell';
+import {MultiLoader} from '@components/ui/MultiLoader';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './TokensModal.module.sass';
 
 type TokenContentProps = {
-  isEmptyTokens: boolean
-  searchLoading: boolean
-  listsLoading: boolean
-  onChange: (token: WhitelistedToken) => void
-  allTokens: WhitelistedToken[]
-  form: any
-  setInputValue: (value: string) => void
-  setInputToken: (value: number) => void
-  searchTokens: WhitelistedToken[]
+  isEmptyTokens: boolean;
+  searchLoading: boolean;
+  listsLoading: boolean;
+  onChange: (token: WhitelistedToken) => void;
+  allTokens: WhitelistedToken[];
+  form: any;
+  setInputValue: (value: string) => void;
+  setInputToken: (value: number) => void;
+  searchTokens: WhitelistedToken[];
 };
 
 export const TokenContent: React.FC<TokenContentProps> = ({
@@ -34,23 +33,20 @@ export const TokenContent: React.FC<TokenContentProps> = ({
   searchTokens,
 }) => {
   const addCustomToken = useAddCustomToken();
-  const { t } = useTranslation(['common']);
+  const {t} = useTranslation(['common']);
   return (
     <>
-      {isEmptyTokens && (!searchLoading && !listsLoading) && (
+      {isEmptyTokens && !searchLoading && !listsLoading && (
         <div className={s.tokenNotFound}>
           <TokenNotFound />
-          <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
-          {' '}
+          <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>{' '}
         </div>
       )}
       {isEmptyTokens && (searchLoading || listsLoading) && (
-        [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
+        <MultiLoader Component={LoadingTokenCell} count={7} />
       )}
       {allTokens.map((token) => {
-        const {
-          contractAddress, fa2TokenId,
-        } = token;
+        const {contractAddress, fa2TokenId} = token;
         return (
           <TokenCell
             key={`${contractAddress}_${fa2TokenId ?? 0}`}
