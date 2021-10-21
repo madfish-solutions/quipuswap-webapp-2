@@ -1,15 +1,21 @@
-import React, {useMemo, useState, useEffect, useRef, useCallback} from 'react';
+import React, {
+  useMemo, useState, useEffect, useRef, useCallback,
+} from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import {estimateSwap, estimateTokenToTez, FoundDex} from '@quipuswap/sdk';
-import {Field, FormSpy} from 'react-final-form';
-import {useTranslation} from 'next-i18next';
+import { estimateSwap, estimateTokenToTez, FoundDex } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 
-import {useConnectModalsState} from '@hooks/useConnectModalsState';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {useAccountPkh, useTezos, useNetwork} from '@utils/dapp';
-import {composeValidators, isAddress, validateBalance, validateMinMax} from '@utils/validators';
+import {
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+} from '@utils/types';
+import { useAccountPkh, useTezos, useNetwork } from '@utils/dapp';
+import {
+  composeValidators, isAddress, validateBalance, validateMinMax,
+} from '@utils/validators';
 import {
   fromDecimals,
   getWhitelistedTokenSymbol,
@@ -20,20 +26,20 @@ import {
   toDecimals,
   transformTokenDataToAsset,
 } from '@utils/helpers';
-import {FACTORIES, FEE_RATE, TEZOS_TOKEN} from '@utils/defaults';
-import {Tabs} from '@components/ui/Tabs';
-import {Card} from '@components/ui/Card';
-import {ComplexRecipient} from '@components/ui/ComplexInput';
-import {TokenSelect} from '@components/ui/ComplexInput/TokenSelect';
-import {Button} from '@components/ui/Button';
-import {SwapButton} from '@components/common/SwapButton';
-import {Slippage} from '@components/common/Slippage';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
+import { FACTORIES, FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
+import { Tabs } from '@components/ui/Tabs';
+import { Card } from '@components/ui/Card';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { Button } from '@components/ui/Button';
+import { SwapButton } from '@components/common/SwapButton';
+import { Slippage } from '@components/common/Slippage';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
-import {SwapDetails} from './SwapDetails';
-import {getDex} from './swapHelpers';
+import { SwapDetails } from './SwapDetails';
+import { getDex } from './swapHelpers';
 
 const TabsContent = [
   {
@@ -88,9 +94,12 @@ const RealForm: React.FC<SwapFormProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
-  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
-    useConnectModalsState();
-  const {t} = useTranslation(['swap']);
+  const {
+    openConnectWalletModal,
+    connectWalletModalOpen,
+    closeConnectWalletModal,
+  } = useConnectModalsState();
+  const { t } = useTranslation(['swap']);
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -141,10 +150,8 @@ const RealForm: React.FC<SwapFormProps> = ({
     if (isValuesSame && !isTokensSame) {
       lastChangeMod = 'balance1';
     }
-    const decimals1 =
-      lastChangeMod === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
-    const decimals2 =
-      lastChangeMod !== 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
+    const decimals1 = lastChangeMod === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
+    const decimals2 = lastChangeMod !== 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
     const inputWrapper = new BigNumber(
       lastChangeMod === 'balance1'
@@ -155,13 +162,12 @@ const RealForm: React.FC<SwapFormProps> = ({
     const fromAsset = transformTokenDataToAsset(tokensData.first);
     const toAsset = transformTokenDataToAsset(tokensData.second);
 
-    const valuesInner =
-      lastChangeMod === 'balance1' ? {inputValue: inputValueInner} : {outputValue: inputValueInner};
+    const valuesInner = lastChangeMod === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
     let retValue = new BigNumber(0);
     try {
       if (isTokenToToken && dex2) {
-        const sendDex = {inputDex: dex1, outputDex: dex2};
+        const sendDex = { inputDex: dex1, outputDex: dex2 };
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -171,7 +177,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           sendDex,
         );
       } else {
-        const sendDex = token2.contractAddress === 'tez' ? {outputDex: dex1} : {inputDex: dex1};
+        const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex1 } : { inputDex: dex1 };
         retValue = await estimateSwap(
           tezos,
           FACTORIES[networkId],
@@ -261,7 +267,7 @@ const RealForm: React.FC<SwapFormProps> = ({
   useEffect(() => {
     if (!tezos || !token2 || !token1) return;
     const asyncFunc = async () => {
-      const {dexes, storages} = await getDex({
+      const { dexes, storages } = await getDex({
         tezos,
         networkId,
         token1,
@@ -299,10 +305,10 @@ const RealForm: React.FC<SwapFormProps> = ({
   );
   let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
   if (
-    token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
-    values.balance1 &&
-    dex1 &&
-    dex1.storage
+    token1.contractAddress !== TEZOS_TOKEN.contractAddress
+    && values.balance1
+    && dex1
+    && dex1.storage
   ) {
     feeVal = fromDecimals(
       estimateTokenToTez(
@@ -313,8 +319,8 @@ const RealForm: React.FC<SwapFormProps> = ({
     );
   }
   if (
-    token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
-    token2.contractAddress !== TEZOS_TOKEN.contractAddress
+    token1.contractAddress !== TEZOS_TOKEN.contractAddress
+    && token2.contractAddress !== TEZOS_TOKEN.contractAddress
   ) {
     feeVal = feeVal.times(2);
   }
@@ -352,7 +358,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
           name="balance1"
         >
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               blackListedTokens={blackListedTokens}
@@ -387,7 +393,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           validate={validateMinMax(0, Infinity)}
           name="balance2"
         >
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               blackListedTokens={blackListedTokens}
@@ -410,7 +416,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           )}
         </Field>
         <Field validate={currentTab.id === 'send' ? isAddress : () => undefined} name="recipient">
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <>
               {currentTab.id === 'send' && (
                 <ComplexRecipient
@@ -428,7 +434,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           )}
         </Field>
         <Field initialValue="0.5 %" name="slippage">
-          {({input}) => {
+          {({ input }) => {
             const slipPerc = slippageToBignum(values.slippage).times(values.balance2 ?? 0);
             const minimumReceived = parseDecimals(
               new BigNumber(values.balance2 ?? 0).minus(slipPerc).toString(),
@@ -476,5 +482,5 @@ const RealForm: React.FC<SwapFormProps> = ({
 };
 
 export const SwapForm = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
+  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

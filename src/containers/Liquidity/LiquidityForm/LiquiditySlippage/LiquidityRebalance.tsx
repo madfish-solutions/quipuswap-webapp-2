@@ -1,8 +1,8 @@
-import {useTranslation} from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import {estimateTezInToken, estimateTokenInTez, FoundDex} from '@quipuswap/sdk';
+import { estimateTezInToken, estimateTokenInTez, FoundDex } from '@quipuswap/sdk';
 
 import {
   fromDecimals,
@@ -11,10 +11,10 @@ import {
   slippageToBignum,
   toDecimals,
 } from '@utils/helpers';
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
-import {LiquidityFormValues, WhitelistedToken} from '@utils/types';
+import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 
 interface LiquidityRebalanceProps {
@@ -36,7 +36,7 @@ export const LiquidityRebalance: React.FC<LiquidityRebalanceProps> = ({
   tokenBName,
   rebalanceSwitcher,
 }) => {
-  const {t} = useTranslation(['liquidity']);
+  const { t } = useTranslation(['liquidity']);
   if (tab !== 'add' || !rebalanceSwitcher) {
     return null;
   }
@@ -69,11 +69,17 @@ export const LiquidityRebalance: React.FC<LiquidityRebalanceProps> = ({
   return (
     <>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>{t('liquidity|Max invested')}:</span>
+        <span className={s.receiveLabel}>
+          {t('liquidity|Max invested')}
+          :
+        </span>
         <CurrencyAmount currency={tokenAName} amount={maxA} />
       </div>
       <div className={cx(s.receive, s.mb24)}>
-        <span className={s.receiveLabel}>{t('liquidity|Max invested')}:</span>
+        <span className={s.receiveLabel}>
+          {t('liquidity|Max invested')}
+          :
+        </span>
         <CurrencyAmount currency={tokenBName} amount={maxB} />
       </div>
     </>

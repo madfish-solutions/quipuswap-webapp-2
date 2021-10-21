@@ -1,12 +1,12 @@
-import {useTranslation} from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import React from 'react';
 import BigNumber from 'bignumber.js';
 
-import {parseTezDecimals, slippageToBignum} from '@utils/helpers';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
-import {Button} from '@components/ui/Button';
+import { parseTezDecimals, slippageToBignum } from '@utils/helpers';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Button } from '@components/ui/Button';
 
-import {LiquidityFormValues} from '@utils/types';
+import { LiquidityFormValues } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 
 interface LiquidityRemoveConfirmProps {
@@ -24,7 +24,7 @@ export const LiquidityRemoveConfirm: React.FC<LiquidityRemoveConfirmProps> = ({
   tokenAName,
   tokenBName,
 }) => {
-  const {t} = useTranslation(['liquidity']);
+  const { t } = useTranslation(['liquidity']);
   if (tab !== 'remove') {
     return null;
   }
@@ -39,11 +39,17 @@ export const LiquidityRemoveConfirm: React.FC<LiquidityRemoveConfirmProps> = ({
   return (
     <>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>{t('liquidity|Minimum received')}:</span>
+        <span className={s.receiveLabel}>
+          {t('liquidity|Minimum received')}
+          :
+        </span>
         <CurrencyAmount currency={tokenAName} amount={minimumReceivedA} />
       </div>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>{t('liquidity|Minimum received')}:</span>
+        <span className={s.receiveLabel}>
+          {t('liquidity|Minimum received')}
+          :
+        </span>
         <CurrencyAmount currency={tokenBName} amount={minimumReceivedB} />
       </div>
       <Button onClick={handleRemoveLiquidity} className={s.button}>

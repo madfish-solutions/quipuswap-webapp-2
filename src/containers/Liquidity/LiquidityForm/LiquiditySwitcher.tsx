@@ -1,12 +1,12 @@
 import React from 'react';
-import {useTranslation} from 'next-i18next';
-import {FoundDex} from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
+import { FoundDex } from '@quipuswap/sdk';
 
-import {Tooltip} from '@components/ui/Tooltip';
-import {Button} from '@components/ui/Button';
+import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
 
-import {Field} from 'react-final-form';
-import {Switcher} from '@components/ui/Switcher';
+import { Field } from 'react-final-form';
+import { Switcher } from '@components/ui/Switcher';
 import s from '../Liquidity.module.sass';
 
 interface LiquiditySwitcherProps {
@@ -20,7 +20,7 @@ export const LiquiditySwitcher: React.FC<LiquiditySwitcherProps> = ({
   handleAddLiquidity,
   dex,
 }) => {
-  const {t} = useTranslation(['liquidity']);
+  const { t } = useTranslation(['liquidity']);
 
   if (currentTab.id !== 'add') {
     return null;
@@ -28,7 +28,7 @@ export const LiquiditySwitcher: React.FC<LiquiditySwitcherProps> = ({
   return (
     <>
       <Field name="rebalanceSwitcher">
-        {({input}) => (
+        {({ input }) => (
           <div className={s.switcher}>
             <Switcher
               {...input}

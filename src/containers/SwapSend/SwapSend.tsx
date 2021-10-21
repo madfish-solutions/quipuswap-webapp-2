@@ -1,20 +1,26 @@
-import React, {useMemo, useState, useEffect, useCallback} from 'react';
-import {withTypes} from 'react-final-form';
-import {useTranslation} from 'next-i18next';
+import React, {
+  useMemo, useState, useEffect, useCallback,
+} from 'react';
+import { withTypes } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 
-import {useExchangeRates} from '@hooks/useExchangeRate';
-import {useRouterPair} from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {useAccountPkh, useTezos, useNetwork, useOnBlock} from '@utils/dapp';
-import {fallbackTokenToTokenData, handleTokenChange, handleSearchToken} from '@utils/helpers';
-import {STABLE_TOKEN, TEZOS_TOKEN} from '@utils/defaults';
-import {findTokensByList, useLists, useSearchCustomTokens} from '@utils/tokenLists';
-import {StickyBlock} from '@components/common/StickyBlock';
+import {
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+} from '@utils/types';
+import {
+  useAccountPkh, useTezos, useNetwork, useOnBlock,
+} from '@utils/dapp';
+import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
+import { StickyBlock } from '@components/common/StickyBlock';
 
-import {SwapForm} from './SwapForm';
-import {submitForm} from './swapHelpers';
-import {SwapChart} from './SwapChart';
+import { SwapForm } from './SwapForm';
+import { submitForm } from './swapHelpers';
+import { SwapChart } from './SwapChart';
 
 const TabsContent = [
   {
@@ -31,11 +37,11 @@ type SwapSendProps = {
   className?: string;
 };
 
-export const SwapSend: React.FC<SwapSendProps> = ({className}) => {
-  const {t} = useTranslation(['common', 'swap']);
+export const SwapSend: React.FC<SwapSendProps> = ({ className }) => {
+  const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const {data: lists} = useLists();
+  const { data: lists } = useLists();
   const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
@@ -46,7 +52,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({className}) => {
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
-  const {from, to} = useRouterPair({
+  const { from, to } = useRouterPair({
     page: 'swap',
     urlLoaded,
     initialLoad,
@@ -59,9 +65,9 @@ export const SwapSend: React.FC<SwapSendProps> = ({className}) => {
     second: fallbackTokenToTokenData(STABLE_TOKEN),
   });
 
-  const {Form} = withTypes<SwapFormValues>();
+  const { Form } = withTypes<SwapFormValues>();
 
-  const currentTab = useMemo(() => TabsContent.find(({id}) => id === tabsState)!, [tabsState]);
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const handleErrorToast = useCallback(
     (err) => {
@@ -88,21 +94,20 @@ export const SwapSend: React.FC<SwapSendProps> = ({className}) => {
   }, [updateToast, t]);
 
   const handleTokenChangeWrapper = useCallback(
-    (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
-      handleTokenChange({
-        token,
-        tokenNumber,
-        exchangeRates,
-        tezos: tezos!,
-        accountPkh,
-        setTokensData,
-      }),
+    (token: WhitelistedToken, tokenNumber: 'first' | 'second') => handleTokenChange({
+      token,
+      tokenNumber,
+      exchangeRates,
+      tezos: tezos!,
+      accountPkh,
+      setTokensData,
+    }),
     [accountPkh, exchangeRates, tezos],
   );
 
   const handleSwapTokens = () => {
     setTokens([token2, token1]);
-    setTokensData({first: tokensData.second, second: tokensData.first});
+    setTokensData({ first: tokensData.second, second: tokensData.first });
   };
 
   useEffect(() => {
@@ -163,14 +168,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({className}) => {
             );
           }}
           mutators={{
-            setValue: ([field, value], state, {changeValue}) => {
+            setValue: ([field, value], state, { changeValue }) => {
               changeValue(state, field, () => value);
             },
-            setValues: (fields, state, {changeValue}) => {
+            setValues: (fields, state, { changeValue }) => {
               fields.forEach((x: any) => changeValue(state, x[0], () => x[1]));
             },
           }}
-          render={({handleSubmit, form}) => (
+          render={({ handleSubmit, form }) => (
             <SwapForm
               handleSubmit={handleSubmit}
               form={form}

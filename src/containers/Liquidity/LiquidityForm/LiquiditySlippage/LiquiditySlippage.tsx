@@ -1,13 +1,13 @@
-import React, {useMemo} from 'react';
-import {Field} from 'react-final-form';
-import {FoundDex} from '@quipuswap/sdk';
+import React, { useMemo } from 'react';
+import { Field } from 'react-final-form';
+import { FoundDex } from '@quipuswap/sdk';
 
-import {LiquidityFormValues, WhitelistedToken} from '@utils/types';
-import {getWhitelistedTokenSymbol} from '@utils/helpers';
+import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 
-import {LiquiditySlippageField} from './LiquiditySlippageField';
-import {LiquidityRebalance} from './LiquidityRebalance';
-import {LiquidityRemoveConfirm} from './LiquidityRemoveConfirm';
+import { LiquiditySlippageField } from './LiquiditySlippageField';
+import { LiquidityRebalance } from './LiquidityRebalance';
+import { LiquidityRemoveConfirm } from './LiquidityRemoveConfirm';
 
 interface LiquiditySlippageProps {
   dex?: FoundDex;
@@ -36,7 +36,7 @@ export const LiquiditySlippage: React.FC<LiquiditySlippageProps> = ({
   );
   return (
     <Field initialValue="0.5 %" name="slippage">
-      {({input}) => (
+      {({ input }) => (
         <>
           <LiquiditySlippageField
             rebalanceSwitcher={values.rebalanceSwitcher}

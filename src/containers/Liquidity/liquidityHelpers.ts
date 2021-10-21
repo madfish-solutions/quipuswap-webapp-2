@@ -5,12 +5,12 @@ import {
   FoundDex,
   getLiquidityShare,
 } from '@quipuswap/sdk';
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import {FACTORIES} from '@utils/defaults';
-import {QSMainNet, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
-import {fromDecimals} from '@utils/helpers';
+import { FACTORIES } from '@utils/defaults';
+import { QSMainNet, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
@@ -70,7 +70,7 @@ export const asyncGetShares = async (
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
     const attempt = await asyncFindPairDex(
-      {token1, token2} as WhitelistedTokenPair,
+      { token1, token2 } as WhitelistedTokenPair,
       setTokenPair,
       tezos,
       accountPkh,
@@ -82,10 +82,9 @@ export const asyncGetShares = async (
     }
   }
   try {
-    const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) =>
-      token.contractAddress === 'tez'
-        ? estimateTezInShares(foundDex.storage, value.toString())
-        : estimateTokenInShares(foundDex.storage, value.toString());
+    const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) => (token.contractAddress === 'tez'
+      ? estimateTezInShares(foundDex.storage, value.toString())
+      : estimateTokenInShares(foundDex.storage, value.toString()));
 
     const balanceAB = shares;
     const sharesTotalA = await getMethod(
@@ -108,28 +107,29 @@ export const asyncGetShares = async (
   }
 };
 
-export const submitForm = async () =>
-  // tezos:TezosToolkit,
-  // values: LiquidityFormValues,
-  // updateToast: (err:Error) => void,
-  // handleSuccessToast: (text:string) => void,
-  // currentTab: string,
-  {
-    // try {
-    //   const dop = await batchify(
-    //     tezos.wallet.batch([]),
-    //     liquidityParams,
-    //   );
-    //   // console.log(dop);
-    //   // dop.operations.filter(rm_first)
-    //   const op = await dop.send();
-    //   await op.confirmation();
-    //   if (currentTab === 'remove') {
-    //     handleSuccessToast('liquidity|Divest completed!');
-    //   } else {
-    //     handleSuccessToast('liquidity|Invest completed!');
-    //   }
-    // } catch (e) {
-    //   updateToast(e);
-    // }
-  };
+export const submitForm = async () => {}
+// export const submitForm = async () =>
+// tezos:TezosToolkit,
+// values: LiquidityFormValues,
+// updateToast: (err:Error) => void,
+// handleSuccessToast: (text:string) => void,
+// currentTab: string,
+// {
+// try {
+//   const dop = await batchify(
+//     tezos.wallet.batch([]),
+//     liquidityParams,
+//   );
+//   // console.log(dop);
+//   // dop.operations.filter(rm_first)
+//   const op = await dop.send();
+//   await op.confirmation();
+//   if (currentTab === 'remove') {
+//     handleSuccessToast('liquidity|Divest completed!');
+//   } else {
+//     handleSuccessToast('liquidity|Invest completed!');
+//   }
+// } catch (e) {
+//   updateToast(e);
+}
+// };

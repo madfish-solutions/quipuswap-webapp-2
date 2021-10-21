@@ -5,6 +5,7 @@ import {
   FoundDex,
   swap,
 } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@utils/defaults';
 import {
@@ -28,7 +29,7 @@ export const submitForm = (
       const fromAsset = transformTokenDataToAsset(tokensData.first);
       const toAsset = transformTokenDataToAsset(tokensData.second);
       const slippage = slippageToBignum(values.slippage).div(100);
-      const inputValue = getValueForSDK(tokensData.first, values.balance1, tezos);
+      const inputValue = getValueForSDK(tokensData.first, new BigNumber(values.balance1), tezos);
       const swapParams = await swap(
         tezos,
         FACTORIES[networkId],

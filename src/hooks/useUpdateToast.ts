@@ -1,7 +1,7 @@
-import {useCallback, useEffect, useRef} from 'react';
-import {UpdateOptions, toast} from 'react-toastify';
-import {useRouter} from 'next/router';
-import {toastContent} from '@components/ui/ToastWrapper';
+import { useCallback, useEffect, useRef } from 'react';
+import { UpdateOptions, toast } from 'react-toastify';
+import { useRouter } from 'next/router';
+import { toastContent } from '@components/ui/ToastWrapper';
 
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();
@@ -16,7 +16,9 @@ export default function useUpdateToast() {
   }, [router.pathname]);
 
   return useCallback(
-    ({type, render, progress, autoClose = 5000, ...restOptions}: UpdateOptions) => {
+    ({
+      type, render, progress, autoClose = 5000, ...restOptions
+    }: UpdateOptions) => {
       const creationFn = type && type !== 'default' ? toast[type] : toast;
 
       const contentRender = toastContent(render, type);

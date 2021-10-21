@@ -1,24 +1,24 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
-import {useTranslation} from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
-import {FoundDex} from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
   parseDecimals,
   transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {TokenDataMap, WhitelistedToken} from '@utils/types';
-import {Card} from '@components/ui/Card';
-import {Button} from '@components/ui/Button';
-import {Tooltip} from '@components/ui/Tooltip';
-import {CardCell} from '@components/ui/Card/CardCell';
-import {Skeleton} from '@components/ui/Skeleton';
-import {Route} from '@components/common/Route';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
-import {ExternalLink} from '@components/svg/ExternalLink';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { Card } from '@components/ui/Card';
+import { Button } from '@components/ui/Button';
+import { Tooltip } from '@components/ui/Tooltip';
+import { CardCell } from '@components/ui/Card/CardCell';
+import { Skeleton } from '@components/ui/Skeleton';
+import { Route } from '@components/common/Route';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -47,7 +47,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex1,
   dex2,
 }) => {
-  const {t} = useTranslation(['common', 'swap']);
+  const { t } = useTranslation(['common', 'swap']);
   const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(
     () => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'),
@@ -58,33 +58,31 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
     [token2],
   );
   const sellRate = useMemo(
-    () =>
-      parseDecimals(
-        (rate2 && !rate2.isNaN() && !rate2.eq(0)
-          ? rate2
-          : new BigNumber(tokensData.first.exchangeRate ?? 1).div(
-              tokensData.second.exchangeRate ?? 1,
-            )
-        ).toString(),
-        0,
-        Infinity,
-        token2.metadata.decimals,
-      ),
+    () => parseDecimals(
+      (rate2 && !rate2.isNaN() && !rate2.eq(0)
+        ? rate2
+        : new BigNumber(tokensData.first.exchangeRate ?? 1).div(
+          tokensData.second.exchangeRate ?? 1,
+        )
+      ).toString(),
+      0,
+      Infinity,
+      token2.metadata.decimals,
+    ),
     [rate2, token2.metadata.decimals, tokensData],
   );
   const buyRate = useMemo(
-    () =>
-      parseDecimals(
-        (rate1 && !rate1.isNaN() && !rate1.eq(0)
-          ? rate1
-          : new BigNumber(tokensData.second.exchangeRate ?? 1).div(
-              tokensData.first.exchangeRate ?? 1,
-            )
-        ).toString(),
-        0,
-        Infinity,
-        token1.metadata.decimals,
-      ),
+    () => parseDecimals(
+      (rate1 && !rate1.isNaN() && !rate1.eq(0)
+        ? rate1
+        : new BigNumber(tokensData.second.exchangeRate ?? 1).div(
+          tokensData.first.exchangeRate ?? 1,
+        )
+      ).toString(),
+      0,
+      Infinity,
+      token1.metadata.decimals,
+    ),
     [rate1, token1.metadata.decimals, tokensData],
   );
   return (
@@ -95,7 +93,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       contentClassName={s.content}
     >
       <CardCell
-        header={
+        header={(
           <>
             {t('common|Sell Price')}
             {!loading && (
@@ -103,12 +101,12 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 sizeT="small"
                 content={t(
                   'common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.',
-                  {tokenA: tokenAName, tokenB: tokenBName},
+                  { tokenA: tokenAName, tokenB: tokenBName },
                 )}
               />
             )}
           </>
-        }
+        )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
@@ -132,7 +130,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         </div>
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('common|Buy Price')}
             {!loading && (
@@ -140,12 +138,12 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 sizeT="small"
                 content={t(
                   'common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.',
-                  {tokenA: tokenAName, tokenB: tokenBName},
+                  { tokenA: tokenAName, tokenB: tokenBName },
                 )}
               />
             )}
           </>
-        }
+        )}
         className={s.cell}
       >
         <div className={s.cellAmount}>
@@ -169,7 +167,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         </div>
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('common|Price impact')}
             <Tooltip
@@ -179,7 +177,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               )}
             />
           </>
-        }
+        )}
         className={s.cell}
       >
         <CurrencyAmount
@@ -192,7 +190,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('common|Fee')}
             <Tooltip
@@ -202,7 +200,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               )}
             />
           </>
-        }
+        )}
         className={s.cell}
       >
         <CurrencyAmount
@@ -211,7 +209,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('common|Route')}
             <Tooltip
@@ -221,7 +219,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               )}
             />
           </>
-        }
+        )}
         className={s.cell}
       >
         {loading ? (
@@ -234,15 +232,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 name: tokenAName,
                 link: transformTokenDataToAnalyticsLink(tokensData.first),
               },
-              ...(tokensData.first.token.address.toLocaleLowerCase() !== 'tez' &&
-              tokensData.second.token.address.toLocaleLowerCase() !== 'tez'
+              ...(tokensData.first.token.address.toLocaleLowerCase() !== 'tez'
+              && tokensData.second.token.address.toLocaleLowerCase() !== 'tez'
                 ? [
-                    {
-                      id: 1,
-                      name: 'TEZ',
-                      link: 'https://analytics.quipuswap.com/tokens/tez',
-                    },
-                  ]
+                  {
+                    id: 1,
+                    name: 'TEZ',
+                    link: 'https://analytics.quipuswap.com/tokens/tez',
+                  },
+                ]
                 : []),
               {
                 id: 2,
@@ -280,9 +278,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           >
             {dex2
               ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
-                  tokenA: TEZOS_TOKEN.metadata.symbol,
-                  tokenB: tokenBName,
-                })
+                tokenA: TEZOS_TOKEN.metadata.symbol,
+                tokenB: tokenBName,
+              })
               : t('common|View Pair Analytics')}
           </Button>
         ) : (
