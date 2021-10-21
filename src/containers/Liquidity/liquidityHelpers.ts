@@ -107,7 +107,7 @@ export const asyncGetShares = async (
   }
 };
 
-export const submitForm = async () => {}
+export const submitForm = async () => {};
 // export const submitForm = async () =>
 // tezos:TezosToolkit,
 // values: LiquidityFormValues,
@@ -131,5 +131,5 @@ export const submitForm = async () => {}
 //   }
 // } catch (e) {
 //   updateToast(e);
-}
+// }
 // };
