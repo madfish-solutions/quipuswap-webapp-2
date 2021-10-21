@@ -1,26 +1,26 @@
-import React, { useMemo } from "react";
-import cx from "classnames";
-import { useTranslation } from "next-i18next";
-import BigNumber from "bignumber.js";
-import { FoundDex } from "@quipuswap/sdk";
+import React, {useMemo} from 'react';
+import cx from 'classnames';
+import {useTranslation} from 'next-i18next';
+import BigNumber from 'bignumber.js';
+import {FoundDex} from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
   parseDecimals,
   transformTokenDataToAnalyticsLink,
-} from "@utils/helpers";
-import { TEZOS_TOKEN } from "@utils/defaults";
-import { TokenDataMap, WhitelistedToken } from "@utils/types";
-import { Card } from "@components/ui/Card";
-import { Button } from "@components/ui/Button";
-import { Tooltip } from "@components/ui/Tooltip";
-import { CardCell } from "@components/ui/Card/CardCell";
-import { Skeleton } from "@components/ui/Skeleton";
-import { Route } from "@components/common/Route";
-import { CurrencyAmount } from "@components/common/CurrencyAmount";
-import { ExternalLink } from "@components/svg/ExternalLink";
+} from '@utils/helpers';
+import {TEZOS_TOKEN} from '@utils/defaults';
+import {TokenDataMap, WhitelistedToken} from '@utils/types';
+import {Card} from '@components/ui/Card';
+import {Button} from '@components/ui/Button';
+import {Tooltip} from '@components/ui/Tooltip';
+import {CardCell} from '@components/ui/Card/CardCell';
+import {Skeleton} from '@components/ui/Skeleton';
+import {Route} from '@components/common/Route';
+import {CurrencyAmount} from '@components/common/CurrencyAmount';
+import {ExternalLink} from '@components/svg/ExternalLink';
 
-import s from "@styles/CommonContainer.module.sass";
+import s from '@styles/CommonContainer.module.sass';
 
 type SwapDetailsProps = {
   currentTab: string;
@@ -47,15 +47,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex1,
   dex2,
 }) => {
-  const { t } = useTranslation(["common", "swap"]);
+  const {t} = useTranslation(['common', 'swap']);
   const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(
-    () => (token1 ? getWhitelistedTokenSymbol(token1) : "Token A"),
-    [token1]
+    () => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'),
+    [token1],
   );
   const tokenBName = useMemo(
-    () => (token2 ? getWhitelistedTokenSymbol(token2) : "Token B"),
-    [token2]
+    () => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'),
+    [token2],
   );
   const sellRate = useMemo(
     () =>
@@ -63,14 +63,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         (rate2 && !rate2.isNaN() && !rate2.eq(0)
           ? rate2
           : new BigNumber(tokensData.first.exchangeRate ?? 1).div(
-              tokensData.second.exchangeRate ?? 1
+              tokensData.second.exchangeRate ?? 1,
             )
         ).toString(),
         0,
         Infinity,
-        token2.metadata.decimals
+        token2.metadata.decimals,
       ),
-    [rate2, token2.metadata.decimals, tokensData]
+    [rate2, token2.metadata.decimals, tokensData],
   );
   const buyRate = useMemo(
     () =>
@@ -78,14 +78,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         (rate1 && !rate1.isNaN() && !rate1.eq(0)
           ? rate1
           : new BigNumber(tokensData.second.exchangeRate ?? 1).div(
-              tokensData.first.exchangeRate ?? 1
+              tokensData.first.exchangeRate ?? 1,
             )
         ).toString(),
         0,
         Infinity,
-        token1.metadata.decimals
+        token1.metadata.decimals,
       ),
-    [rate1, token1.metadata.decimals, tokensData]
+    [rate1, token1.metadata.decimals, tokensData],
   );
   return (
     <Card
@@ -97,13 +97,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Sell Price")}
+            {t('common|Sell Price')}
             {!loading && (
               <Tooltip
                 sizeT="small"
                 content={t(
-                  "common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.",
-                  { tokenA: tokenAName, tokenB: tokenBName }
+                  'common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.',
+                  {tokenA: tokenAName, tokenB: tokenBName},
                 )}
               />
             )}
@@ -125,9 +125,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               amount={sellRate}
               currency={tokenBName}
               dollarEquivalent={
-                tokensData.first.exchangeRate
-                  ? `${tokensData.first.exchangeRate}`
-                  : undefined
+                tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined
               }
             />
           )}
@@ -136,13 +134,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Buy Price")}
+            {t('common|Buy Price')}
             {!loading && (
               <Tooltip
                 sizeT="small"
                 content={t(
-                  "common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.",
-                  { tokenA: tokenAName, tokenB: tokenBName }
+                  'common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.',
+                  {tokenA: tokenAName, tokenB: tokenBName},
                 )}
               />
             )}
@@ -164,9 +162,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               amount={buyRate}
               currency={tokenAName}
               dollarEquivalent={
-                tokensData.second.exchangeRate
-                  ? `${tokensData.second.exchangeRate}`
-                  : undefined
+                tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined
               }
             />
           )}
@@ -175,11 +171,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Price impact")}
+            {t('common|Price impact')}
             <Tooltip
               sizeT="small"
               content={t(
-                "swap|The impact your transaction is expected to make on the exchange rate."
+                'swap|The impact your transaction is expected to make on the exchange rate.',
               )}
             />
           </>
@@ -189,7 +185,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <CurrencyAmount
           amount={
             !priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01)
-              ? "<0.01"
+              ? '<0.01'
               : priceImpact.toFixed(2)
           }
           currency="%"
@@ -198,11 +194,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Fee")}
+            {t('common|Fee')}
             <Tooltip
               sizeT="small"
               content={t(
-                "swap|This fee is split by liquidity providers proportional to their contribution to liquidity reserves."
+                'swap|This fee is split by liquidity providers proportional to their contribution to liquidity reserves.',
               )}
             />
           </>
@@ -210,18 +206,18 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <CurrencyAmount
-          amount={+fee < 0.00000001 || Number.isNaN(+fee) ? "<0.00000001" : fee}
+          amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee}
           currency="TEZ"
         />
       </CardCell>
       <CardCell
         header={
           <>
-            {t("common|Route")}
+            {t('common|Route')}
             <Tooltip
               sizeT="small"
               content={t(
-                "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades."
+                "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades.",
               )}
             />
           </>
@@ -238,14 +234,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 name: tokenAName,
                 link: transformTokenDataToAnalyticsLink(tokensData.first),
               },
-              ...(tokensData.first.token.address.toLocaleLowerCase() !==
-                "tez" &&
-              tokensData.second.token.address.toLocaleLowerCase() !== "tez"
+              ...(tokensData.first.token.address.toLocaleLowerCase() !== 'tez' &&
+              tokensData.second.token.address.toLocaleLowerCase() !== 'tez'
                 ? [
                     {
                       id: 1,
-                      name: "TEZ",
-                      link: "https://analytics.quipuswap.com/tokens/tez",
+                      name: 'TEZ',
+                      link: 'https://analytics.quipuswap.com/tokens/tez',
                     },
                   ]
                 : []),
@@ -267,7 +262,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
-            {t("common|View {{tokenA}}/{{tokenB}} Pair Analytics", {
+            {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
               tokenA: tokenAName,
               tokenB: TEZOS_TOKEN.metadata.symbol,
             })}
@@ -284,11 +279,11 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             icon={<ExternalLink className={s.linkIcon} />}
           >
             {dex2
-              ? t("common|View {{tokenA}}/{{tokenB}} Pair Analytics", {
+              ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
                   tokenA: TEZOS_TOKEN.metadata.symbol,
                   tokenB: tokenBName,
                 })
-              : t("common|View Pair Analytics")}
+              : t('common|View Pair Analytics')}
           </Button>
         ) : (
           <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />

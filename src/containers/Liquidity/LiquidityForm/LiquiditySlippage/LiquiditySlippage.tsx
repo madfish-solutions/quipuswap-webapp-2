@@ -1,19 +1,19 @@
-import React, { useMemo } from "react";
-import { Field } from "react-final-form";
-import { FoundDex } from "@quipuswap/sdk";
+import React, {useMemo} from 'react';
+import {Field} from 'react-final-form';
+import {FoundDex} from '@quipuswap/sdk';
 
-import { LiquidityFormValues, WhitelistedToken } from "@utils/types";
-import { getWhitelistedTokenSymbol } from "@utils/helpers";
+import {LiquidityFormValues, WhitelistedToken} from '@utils/types';
+import {getWhitelistedTokenSymbol} from '@utils/helpers';
 
-import { LiquiditySlippageField } from "./LiquiditySlippageField";
-import { LiquidityRebalance } from "./LiquidityRebalance";
-import { LiquidityRemoveConfirm } from "./LiquidityRemoveConfirm";
+import {LiquiditySlippageField} from './LiquiditySlippageField';
+import {LiquidityRebalance} from './LiquidityRebalance';
+import {LiquidityRemoveConfirm} from './LiquidityRemoveConfirm';
 
 interface LiquiditySlippageProps {
   dex?: FoundDex;
   handleRemoveLiquidity: () => void;
   values: LiquidityFormValues;
-  tab: "remove" | "add";
+  tab: 'remove' | 'add';
   token1: WhitelistedToken;
   token2: WhitelistedToken;
 }
@@ -27,16 +27,16 @@ export const LiquiditySlippage: React.FC<LiquiditySlippageProps> = ({
   handleRemoveLiquidity,
 }) => {
   const tokenAName = useMemo(
-    () => (token1 ? getWhitelistedTokenSymbol(token1) : "Token A"),
-    [token1]
+    () => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'),
+    [token1],
   );
   const tokenBName = useMemo(
-    () => (token2 ? getWhitelistedTokenSymbol(token2) : "Token B"),
-    [token2]
+    () => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'),
+    [token2],
   );
   return (
     <Field initialValue="0.5 %" name="slippage">
-      {({ input }) => (
+      {({input}) => (
         <>
           <LiquiditySlippageField
             rebalanceSwitcher={values.rebalanceSwitcher}

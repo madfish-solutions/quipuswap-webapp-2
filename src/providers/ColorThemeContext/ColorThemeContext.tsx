@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 
-import { COLOR_MODE_STORAGE_KEY } from "@utils/defaults";
+import {COLOR_MODE_STORAGE_KEY} from '@utils/defaults';
 
 export enum ColorModes {
-  Light = "light",
-  Dark = "dark",
+  Light = 'light',
+  Dark = 'dark',
 }
 
 type ThemeColorsPros = {
@@ -20,24 +20,24 @@ type ThemeColorsPros = {
 
 const themeColorsObj = {
   light: {
-    fill1: "#5C1EE0",
-    fill1Inverse: "#FF6B00",
-    fill2: "#1373E4",
-    fill2Inverse: "#F9A605",
-    stroke: "#ffffff",
-    background1: "#F0F1F3",
-    background2: "#FAFAFC",
-    fillLogo: "#232735",
+    fill1: '#5C1EE0',
+    fill1Inverse: '#FF6B00',
+    fill2: '#1373E4',
+    fill2Inverse: '#F9A605',
+    stroke: '#ffffff',
+    background1: '#F0F1F3',
+    background2: '#FAFAFC',
+    fillLogo: '#232735',
   },
   dark: {
-    fill1: "#FF6B00",
-    fill1Inverse: "#5C1EE0",
-    fill2: "#F9A605",
-    fill2Inverse: "#1373E4",
-    stroke: "#14171E",
-    background1: "#070C12",
-    background2: "#14171E",
-    fillLogo: "#FFFFFF",
+    fill1: '#FF6B00',
+    fill1Inverse: '#5C1EE0',
+    fill2: '#F9A605',
+    fill2Inverse: '#1373E4',
+    stroke: '#14171E',
+    background1: '#070C12',
+    background2: '#14171E',
+    fillLogo: '#FFFFFF',
   },
 };
 
@@ -55,14 +55,10 @@ export const defaultDataContext: ColorThemeContextValue = {
   setColorThemeMode: () => {},
 };
 
-export const ColorThemeContext =
-  React.createContext<ColorThemeContextValue>(defaultDataContext);
+export const ColorThemeContext = React.createContext<ColorThemeContextValue>(defaultDataContext);
 
-export const ColorThemeProvider: React.FC<{ initial?: ColorModes }> = ({
-  initial = ColorModes.Light,
-  children,
-}) => {
-  const [colorThemeMode, setColorThemeMode] = useState(initial);
+export const ColorThemeProvider: React.FC = ({children}) => {
+  const [colorThemeMode, setColorThemeMode] = useState(ColorModes.Light);
   const [themeColors, setThemeColors] = useState(themeColorsObj.light);
   const [isComponentDidMount, setIsComponentDidMount] = useState(false);
 
@@ -80,15 +76,10 @@ export const ColorThemeProvider: React.FC<{ initial?: ColorModes }> = ({
   };
 
   useEffect(() => {
-    const localTheme = window.localStorage.getItem(
-      COLOR_MODE_STORAGE_KEY
-    ) as ColorModes;
+    const localTheme = window.localStorage.getItem(COLOR_MODE_STORAGE_KEY) as ColorModes;
     if (localTheme) {
       setColorThemeMode(localTheme);
-    } else if (
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-    ) {
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       setMode(ColorModes.Dark);
     } else {
       setMode(ColorModes.Light);

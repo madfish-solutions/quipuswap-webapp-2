@@ -1,7 +1,7 @@
-import router from "next/router";
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import BigNumber from "bignumber.js";
-import { FormSpy } from "react-final-form";
+import router from 'next/router';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
+import BigNumber from 'bignumber.js';
+import {FormSpy} from 'react-final-form';
 import {
   addLiquidity,
   // Dex,
@@ -17,11 +17,11 @@ import {
   removeLiquidity,
   swap,
   TransferParams,
-} from "@quipuswap/sdk";
+} from '@quipuswap/sdk';
 
-import { useAccountPkh, useNetwork, useOnBlock, useTezos } from "@utils/dapp";
-import useUpdateToast from "@hooks/useUpdateToast";
-import { useConnectModalsState } from "@hooks/useConnectModalsState";
+import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
+import useUpdateToast from '@hooks/useUpdateToast';
+import {useConnectModalsState} from '@hooks/useConnectModalsState';
 import {
   LiquidityFormValues,
   PoolShare,
@@ -30,7 +30,7 @@ import {
   TokenDataType,
   WhitelistedToken,
   WhitelistedTokenPair,
-} from "@utils/types";
+} from '@utils/types';
 import {
   fromDecimals,
   getValueForSDK,
@@ -40,28 +40,28 @@ import {
   parseDecimals,
   slippageToBignum,
   toDecimals,
-} from "@utils/helpers";
-import { FACTORIES, TEZOS_TOKEN } from "@utils/defaults";
-import { Card } from "@components/ui/Card";
-import { Tabs } from "@components/ui/Tabs";
+} from '@utils/helpers';
+import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
+import {Card} from '@components/ui/Card';
+import {Tabs} from '@components/ui/Tabs';
 // import { Transactions } from '@components/svg/Transactions';
 
-import s from "../Liquidity.module.sass";
+import s from '../Liquidity.module.sass';
 
-import { LiquidityDetails } from "./LiquidityDetails";
-import { LiquiditySlippage } from "./LiquiditySlippage";
-import { LiquidityFormRemove } from "./LiquidityFormRemove";
-import { LiquidityFormAdd } from "./LiquidityFormAdd";
-import { LiquiditySwitcher } from "./LiquiditySwitcher";
+import {LiquidityDetails} from './LiquidityDetails';
+import {LiquiditySlippage} from './LiquiditySlippage';
+import {LiquidityFormRemove} from './LiquidityFormRemove';
+import {LiquidityFormAdd} from './LiquidityFormAdd';
+import {LiquiditySwitcher} from './LiquiditySwitcher';
 
 const TabsContent = [
   {
-    id: "add",
-    label: "Add",
+    id: 'add',
+    label: 'Add',
   },
   {
-    id: "remove",
-    label: "Remove",
+    id: 'remove',
+    label: 'Remove',
   },
 ];
 
@@ -83,15 +83,12 @@ type LiquidityFormProps = {
   tokenPair: WhitelistedTokenPair;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
-  handleTokenChange: (
-    token: WhitelistedToken,
-    tokenNumber: "first" | "second"
-  ) => void;
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
   currentTab: any;
   setTabsState: (val: any) => void;
 };
 
-const isTez = (tokensData: TokenDataType) => tokensData.token.address === "tez";
+const isTez = (tokensData: TokenDataType) => tokensData.token.address === 'tez';
 
 const RealForm: React.FC<LiquidityFormProps> = ({
   handleSubmit,
@@ -112,27 +109,19 @@ const RealForm: React.FC<LiquidityFormProps> = ({
   setAddLiquidityParams,
   setRemoveLiquidityParams,
 }) => {
-  const {
-    openConnectWalletModal,
-    connectWalletModalOpen,
-    closeConnectWalletModal,
-  } = useConnectModalsState();
+  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
+    useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
   const accountPkh = useAccountPkh();
-  const [lastChange, setLastChange] = useState<"balance1" | "balance2">(
-    "balance1"
-  );
+  const [lastChange, setLastChange] = useState<'balance1' | 'balance2'>('balance1');
   const [oldDex, setOldDex] = useState<FoundDex>();
   const updateToast = useUpdateToast();
   const [poolShare, setPoolShare] = useState<PoolShare>();
-  const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([
-    token1,
-    token2,
-  ]);
+  const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
   const [[localSwap, localInvest], setRebalance] = useState<BigNumber[]>([
     new BigNumber(0),
     new BigNumber(0),
@@ -141,11 +130,11 @@ const RealForm: React.FC<LiquidityFormProps> = ({
   const handleErrorToast = useCallback(
     (err) => {
       updateToast({
-        type: "error",
+        type: 'error',
         render: `${err.name}: ${err.message}`,
       });
     },
-    [updateToast]
+    [updateToast],
   );
 
   const timeout = useRef(setTimeout(() => {}, 0));
@@ -155,10 +144,11 @@ const RealForm: React.FC<LiquidityFormProps> = ({
     async (val, localTezos, localDex) => {
       if (!localDex || !accountPkh || !localTezos) return;
       if (
-        (val.balance1 && val.balance1.toString() === ".") ||
-        (val.balance2 && val.balance2.toString() === ".")
-      )
+        (val.balance1 && val.balance1.toString() === '.') ||
+        (val.balance2 && val.balance2.toString() === '.')
+      ) {
         return;
+      }
       try {
         const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
         const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
@@ -166,16 +156,13 @@ const RealForm: React.FC<LiquidityFormProps> = ({
         const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
         const initialBto$ = estimateTezInToken(
           localDex.storage,
-          toDecimals(bal2, token2.metadata.decimals)
+          toDecimals(bal2, token2.metadata.decimals),
         );
-        const total$ = initialAto$
-          .plus(initialBto$)
-          .div(2)
-          .integerValue(BigNumber.ROUND_DOWN);
+        const total$ = initialAto$.plus(initialBto$).div(2).integerValue(BigNumber.ROUND_DOWN);
         let inputValue: BigNumber;
         const val1 = initialAto$.minus(total$);
         const val2 = toDecimals(bal2, token2.metadata.decimals).minus(
-          estimateTokenInTez(localDex.storage, total$)
+          estimateTokenInTez(localDex.storage, total$),
         );
 
         const whichTokenPoolIsGreater = val1.gt(val2);
@@ -185,10 +172,10 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           inputValue = getValueForSDK(
             tokensData.second,
             fromDecimals(val2, token2.metadata.decimals),
-            localTezos
+            localTezos,
           );
         }
-        const fromAsset = "tez";
+        const fromAsset = 'tez';
         const toAsset = {
           contract: tokensData.second.token.address,
           id: tokensData.second.token.id ?? undefined,
@@ -200,7 +187,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           !whichTokenPoolIsGreater ? toAsset : fromAsset,
           whichTokenPoolIsGreater ? toAsset : fromAsset,
           inputValue,
-          slippage
+          slippage,
         );
         // const tezValue = toDecimals(total$, 6);
         const tezValue = total$;
@@ -224,22 +211,16 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       values.balance2,
       values.slippage,
       handleErrorToast,
-    ]
+    ],
   );
 
   const addLiquidityHandler = useCallback(
-    async (
-      isTokensSame,
-      isValuesSame,
-      isDexSame,
-      val,
-      localTezos,
-      localDex
-    ) => {
+    async (isTokensSame, isValuesSame, isDexSame, val, localTezos, localDex) => {
       if (!val.balance1 && !val.balance2) return;
       if (isTokensSame && isValuesSame && isDexSame) return;
-      if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate)
+      if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
         return;
+      }
 
       if (values.balance1 && accountPkh) {
         const tezValue = toDecimals(new BigNumber(values.balance1), 6);
@@ -251,55 +232,34 @@ const RealForm: React.FC<LiquidityFormProps> = ({
 
       const rate = toDecimals(
         localDex.storage.storage.token_pool,
-        TEZOS_TOKEN.metadata.decimals
-      ).dividedBy(
-        toDecimals(localDex.storage.storage.tez_pool, token2.metadata.decimals)
-      );
+        TEZOS_TOKEN.metadata.decimals,
+      ).dividedBy(toDecimals(localDex.storage.storage.tez_pool, token2.metadata.decimals));
       const retValue =
-        lastChange === "balance1"
+        lastChange === 'balance1'
           ? new BigNumber(val.balance1).times(rate)
           : new BigNumber(val.balance2).div(rate);
       const decimals =
-        lastChange === "balance1"
-          ? token2.metadata.decimals
-          : token1.metadata.decimals;
+        lastChange === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
 
       const res = retValue.toFixed(decimals);
-      form.mutators.setValue(
-        lastChange === "balance1" ? "balance2" : "balance1",
-        res
-      );
+      form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', res);
       if (!localDex || !val.balance1 || !val.balance2) return;
       try {
-        const getMethod = async (
-          token: TokenDataType,
-          foundDex: FoundDex,
-          value: BigNumber
-        ) =>
+        const getMethod = async (token: TokenDataType, foundDex: FoundDex, value: BigNumber) =>
           isTez(token)
-            ? estimateSharesInTez(
-                foundDex.storage,
-                getValueForSDK(token, value, localTezos)
-              )
-            : estimateSharesInToken(
-                foundDex.storage,
-                getValueForSDK(token, value, localTezos)
-              );
-        const sharesA = await getMethod(
-          tokensData.first,
-          localDex,
-          new BigNumber(values.balance1)
-        );
+            ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, localTezos))
+            : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, localTezos));
+        const sharesA = await getMethod(tokensData.first, localDex, new BigNumber(values.balance1));
         const sharesB = await getMethod(
           tokensData.second,
           localDex,
-          lastChange === "balance2" ? new BigNumber(values.balance2) : retValue
+          lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
         );
 
         const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
         const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
 
-        form.mutators.setValue("estimateLP", lp1.plus(lp2));
+        form.mutators.setValue('estimateLP', lp1.plus(lp2));
       } catch (err) {
         handleErrorToast(err);
       }
@@ -316,24 +276,17 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       values.balance1,
       values.balance2,
       handleErrorToast,
-    ]
+    ],
   );
 
   const removeTabHandler = useCallback(
     async (isTokensSame, isRemValuesSame, isDexSame, localTezos) => {
-      if (
-        (isTokensSame && isRemValuesSame && isDexSame) ||
-        !dex ||
-        !values.balance3
-      )
+      if ((isTokensSame && isRemValuesSame && isDexSame) || !dex || !values.balance3) {
         return;
+      }
       try {
-        const getMethod = async (
-          token: WhitelistedToken,
-          foundDex: FoundDex,
-          value: BigNumber
-        ) =>
-          token.contractAddress === "tez"
+        const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) =>
+          token.contractAddress === 'tez'
             ? estimateTezInShares(foundDex.storage, value.toString())
             : estimateTokenInShares(foundDex.storage, value.toString());
         const balance = toDecimals(new BigNumber(values.balance3), 6);
@@ -345,17 +298,12 @@ const RealForm: React.FC<LiquidityFormProps> = ({
         const slippage = slippageToBignum(values.slippage).div(100);
 
         if (accountPkh) {
-          const params = await removeLiquidity(
-            localTezos,
-            dex,
-            balance,
-            slippage
-          );
+          const params = await removeLiquidity(localTezos, dex, balance, slippage);
           setRemoveLiquidityParams(params);
         }
 
-        form.mutators.setValue("balanceA", bal1);
-        form.mutators.setValue("balanceB", bal2);
+        form.mutators.setValue('balanceA', bal1);
+        form.mutators.setValue('balanceB', bal2);
       } catch (err) {
         handleErrorToast(err);
       }
@@ -370,41 +318,33 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       token2,
       values.balance3,
       values.slippage,
-    ]
+    ],
   );
 
   const handleInputChange = useCallback(
     async (val: LiquidityFormValues) => {
       if (token1.contractAddress !== TEZOS_TOKEN.contractAddress) return;
-      if (currentTab.id !== "remove") {
-        if (!val[lastChange] || val[lastChange].toString() === ".") {
+      if (currentTab.id !== 'remove') {
+        if (!val[lastChange] || val[lastChange].toString() === '.') {
           if (!val.balance1 && !val.balance2) return;
-          form.mutators.setValue("balance1", undefined);
-          form.mutators.setValue("balance2", undefined);
+          form.mutators.setValue('balance1', undefined);
+          form.mutators.setValue('balance2', undefined);
           return;
         }
-      } else if (!val.balance3 || val.balance3.toString() === ".") {
-        form.mutators.setValue("balanceA", undefined);
-        form.mutators.setValue("balanceB", undefined);
+      } else if (!val.balance3 || val.balance3.toString() === '.') {
+        form.mutators.setValue('balanceA', undefined);
+        form.mutators.setValue('balanceB', undefined);
         return;
       }
       if (!dex) return;
-      const isTokensSame =
-        isTokenEqual(token1, oldToken1) && isTokenEqual(token2, oldToken2);
+      const isTokensSame = isTokenEqual(token1, oldToken1) && isTokenEqual(token2, oldToken2);
       const isRemValuesSame = val.balance3 === formValues.balance3;
       const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
       if (!tezos) return;
-      if (currentTab.id === "remove") {
+      if (currentTab.id === 'remove') {
         removeTabHandler(isTokensSame, isRemValuesSame, isDexSame, tezos);
       } else if (!val.rebalanceSwitcher) {
-        addLiquidityHandler(
-          isTokensSame,
-          isRemValuesSame,
-          isDexSame,
-          val,
-          tezos,
-          dex
-        );
+        addLiquidityHandler(isTokensSame, isRemValuesSame, isDexSame, val, tezos, dex);
       } else {
         rebalanceLiquidityHandler(val, tezos, dex);
       }
@@ -426,7 +366,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       oldToken2,
       token1,
       token2,
-    ]
+    ],
   );
 
   const getDex = useCallback(async () => {
@@ -439,12 +379,8 @@ const RealForm: React.FC<LiquidityFormProps> = ({
     const dexbuf = await findDex(tezos, FACTORIES[networkId], toAsset);
     setDex(dexbuf);
     try {
-      const getMethod = async (
-        token: WhitelistedToken,
-        foundDex: FoundDex,
-        value: BigNumber
-      ) =>
-        token.contractAddress === "tez"
+      const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) =>
+        token.contractAddress === 'tez'
           ? estimateTezInShares(foundDex.storage, value.toString())
           : estimateTokenInShares(foundDex.storage, value.toString());
 
@@ -452,39 +388,23 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       const share = await getLiquidityShare(tezos, dexbuf, accountPkh);
       setPoolShare(share);
       const balanceAB = share.total;
-      const sharesTotalA = await getMethod(
-        token1,
-        dexbuf,
-        balanceAB.integerValue()
-      );
-      const sharesTotalB = await getMethod(
-        token2,
-        dexbuf,
-        balanceAB.integerValue()
-      );
+      const sharesTotalA = await getMethod(token1, dexbuf, balanceAB.integerValue());
+      const sharesTotalB = await getMethod(token2, dexbuf, balanceAB.integerValue());
       const balA1 = fromDecimals(sharesTotalA, 6).toString();
       const balA2 = fromDecimals(sharesTotalB, 6).toString();
-      form.mutators.setValue("balanceTotalA", balA1);
+      form.mutators.setValue('balanceTotalA', balA1);
 
-      form.mutators.setValue("balanceTotalB", balA2);
+      form.mutators.setValue('balanceTotalB', balA2);
     } catch (err) {
       handleErrorToast(err);
     }
-  }, [
-    token2,
-    token1,
-    tezos,
-    networkId,
-    accountPkh,
-    form.mutators,
-    handleErrorToast,
-  ]);
+  }, [token2, token1, tezos, networkId, accountPkh, form.mutators, handleErrorToast]);
 
   useEffect(() => {
     setPoolShare(undefined);
-    form.mutators.setValue("balanceTotalA", 0);
+    form.mutators.setValue('balanceTotalA', 0);
 
-    form.mutators.setValue("balanceTotalB", 0);
+    form.mutators.setValue('balanceTotalB', 0);
     getDex();
   }, [token2, token1, tezos, networkId, accountPkh, form.mutators, getDex]);
 
@@ -531,59 +451,42 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       setVal(values);
       setSubm(true);
       if (values.rebalanceSwitcher !== formValues.rebalanceSwitcher) {
-        form.mutators.setValue("hiddenSwitcher", !values.hiddenSwitcher);
+        form.mutators.setValue('hiddenSwitcher', !values.hiddenSwitcher);
         if (!values.rebalanceSwitcher) {
-          if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate)
+          if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
             return;
+          }
           const rate = new BigNumber(tokensData.first.exchangeRate).dividedBy(
-            new BigNumber(tokensData.second.exchangeRate)
+            new BigNumber(tokensData.second.exchangeRate),
           );
           const retValue =
-            lastChange === "balance1"
+            lastChange === 'balance1'
               ? new BigNumber(values.balance1).times(rate)
               : new BigNumber(values.balance2).dividedBy(rate);
           const decimals =
-            lastChange === "balance1"
-              ? token1.metadata.decimals
-              : token2.metadata.decimals;
+            lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
           form.mutators.setValue(
-            lastChange === "balance1" ? "balance2" : "balance1",
-            parseDecimals(retValue.toString(), 0, Infinity, decimals)
+            lastChange === 'balance1' ? 'balance2' : 'balance1',
+            parseDecimals(retValue.toString(), 0, Infinity, decimals),
           );
           if (!dex || !values.balance1 || !values.balance2) return;
           try {
-            const getMethod = async (
-              token: TokenDataType,
-              foundDex: FoundDex,
-              value: BigNumber
-            ) =>
+            const getMethod = async (token: TokenDataType, foundDex: FoundDex, value: BigNumber) =>
               isTez(token)
-                ? estimateSharesInTez(
-                    foundDex.storage,
-                    getValueForSDK(token, value, tezos!)
-                  )
-                : estimateSharesInToken(
-                    foundDex.storage,
-                    getValueForSDK(token, value, tezos!)
-                  );
-            const sharesA = await getMethod(
-              tokensData.first,
-              dex,
-              new BigNumber(values.balance1)
-            );
+                ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
+                : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!));
+            const sharesA = await getMethod(tokensData.first, dex, new BigNumber(values.balance1));
             const sharesB = await getMethod(
               tokensData.second,
               dex,
-              lastChange === "balance2"
-                ? new BigNumber(values.balance2)
-                : retValue
+              lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
             );
 
             const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
             const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
 
-            form.mutators.setValue("estimateLP", lp1.plus(lp2));
+            form.mutators.setValue('estimateLP', lp1.plus(lp2));
           } catch (e) {
             handleErrorToast(e);
           }
@@ -618,7 +521,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       openConnectWalletModal();
       return;
     }
-    handleSubmit("add");
+    handleSubmit('add');
   };
 
   const handleRemoveLiquidity = async () => {
@@ -627,7 +530,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       openConnectWalletModal();
       return;
     }
-    handleSubmit("remove");
+    handleSubmit('remove');
   };
 
   useOnBlock(tezos, getDex);
@@ -643,10 +546,10 @@ const RealForm: React.FC<LiquidityFormProps> = ({
               setActiveId={(val) => {
                 router.replace(
                   `/liquidity/${val}/${getWhitelistedTokenSymbol(
-                    token1
+                    token1,
                   )}-${getWhitelistedTokenSymbol(token2)}`,
                   undefined,
-                  { shallow: true }
+                  {shallow: true},
                 );
                 setTabsState(val);
               }}
@@ -666,7 +569,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
         contentClassName={s.content}
       >
         <LiquidityFormRemove
-          tab={currentTab.id as "remove" | "add"}
+          tab={currentTab.id as 'remove' | 'add'}
           handleTokenChange={handleTokenChange}
           tokenPair={tokenPair}
           tokensData={tokensData}
@@ -677,7 +580,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           form={form}
         />
         <LiquidityFormAdd
-          tab={currentTab.id as "remove" | "add"}
+          tab={currentTab.id as 'remove' | 'add'}
           handleTokenChange={handleTokenChange}
           tokenPair={tokenPair}
           tokensData={tokensData}
@@ -719,5 +622,5 @@ const RealForm: React.FC<LiquidityFormProps> = ({
 };
 
 export const LiquidityForm = (props: any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
+  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
 );

@@ -1,22 +1,22 @@
-import { FoundDex } from "@quipuswap/sdk";
-import BigNumber from "bignumber.js";
+import {FoundDex} from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
-export type QSMainNet = "mainnet" | "granadanet" | "florencenet";
+export type QSMainNet = 'mainnet' | 'granadanet' | 'florencenet';
 
 type QSNetworkType =
-  | "mainnet"
-  | "granadanet"
-  | "florencenet"
-  | "edo2net"
-  | "edonet"
-  | "delphinet"
-  | "carthagenet";
+  | 'mainnet'
+  | 'granadanet'
+  | 'florencenet'
+  | 'edo2net'
+  | 'edonet'
+  | 'delphinet'
+  | 'carthagenet';
 
 export interface QSNetwork {
   id: QSNetworkType;
-  connectType: "default" | "custom";
+  connectType: 'default' | 'custom';
   name: string;
-  type: "main" | "test";
+  type: 'main' | 'test';
   rpcBaseURL: string;
   metadata: string;
   description: string;
@@ -24,8 +24,8 @@ export interface QSNetwork {
 }
 
 export enum WalletType {
-  BEACON = "beacon",
-  TEMPLE = "temple",
+  BEACON = 'beacon',
+  TEMPLE = 'temple',
 }
 
 export interface WhitelistedTokenPair {
@@ -37,7 +37,7 @@ export interface WhitelistedTokenPair {
 }
 
 export interface WhitelistedToken {
-  type: "fa1.2" | "fa2";
+  type: 'fa1.2' | 'fa2';
   contractAddress: string;
   fa2TokenId?: number;
   metadata: WhitelistedTokenMetadata;
@@ -78,7 +78,7 @@ export type VoterType = {
 export type TokenDataType = {
   token: {
     address: string;
-    type: "fa1.2" | "fa2";
+    type: 'fa1.2' | 'fa2';
     id?: number | null;
     decimals: number;
   };
@@ -92,7 +92,7 @@ export type TokenDataMap = {
 };
 
 export type SwapFormValues = {
-  lastChange: "balance1" | "balance2";
+  lastChange: 'balance1' | 'balance2';
   balance1: string;
   balance2: string;
   recipient: string;
@@ -158,7 +158,7 @@ export type WhitelistedStake = {
 export type VoteFormValues = {
   balance1: number;
   selectedBaker: string;
-  method: "first" | "second";
+  method: 'first' | 'second';
 };
 
 export type PoolTableType = {

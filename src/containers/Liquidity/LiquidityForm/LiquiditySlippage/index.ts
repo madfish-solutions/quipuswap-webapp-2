@@ -1,1 +1,1 @@
-export * from "./LiquiditySlippage";
+export * from './LiquiditySlippage';

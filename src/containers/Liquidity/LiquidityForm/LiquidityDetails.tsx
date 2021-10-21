@@ -1,24 +1,20 @@
-import React, { useMemo } from "react";
-import cx from "classnames";
-import BigNumber from "bignumber.js";
-import { useTranslation } from "next-i18next";
-import { FoundDex } from "@quipuswap/sdk";
+import React, {useMemo} from 'react';
+import cx from 'classnames';
+import BigNumber from 'bignumber.js';
+import {useTranslation} from 'next-i18next';
+import {FoundDex} from '@quipuswap/sdk';
 
-import { PoolShare, TokenDataMap, WhitelistedToken } from "@utils/types";
-import {
-  fromDecimals,
-  getWhitelistedTokenSymbol,
-  parseDecimals,
-} from "@utils/helpers";
-import { Tooltip } from "@components/ui/Tooltip";
-import { Card } from "@components/ui/Card";
-import { Button } from "@components/ui/Button";
-import { CardCell } from "@components/ui/Card/CardCell";
-import { Skeleton } from "@components/ui/Skeleton";
-import { CurrencyAmount } from "@components/common/CurrencyAmount";
-import { ExternalLink } from "@components/svg/ExternalLink";
+import {PoolShare, TokenDataMap, WhitelistedToken} from '@utils/types';
+import {fromDecimals, getWhitelistedTokenSymbol, parseDecimals} from '@utils/helpers';
+import {Tooltip} from '@components/ui/Tooltip';
+import {Card} from '@components/ui/Card';
+import {Button} from '@components/ui/Button';
+import {CardCell} from '@components/ui/Card/CardCell';
+import {Skeleton} from '@components/ui/Skeleton';
+import {CurrencyAmount} from '@components/common/CurrencyAmount';
+import {ExternalLink} from '@components/svg/ExternalLink';
 
-import s from "../Liquidity.module.sass";
+import s from '../Liquidity.module.sass';
 
 type LiquidityDetailsProps = {
   currentTab: string;
@@ -37,45 +33,40 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   poolShare,
   dex,
 }) => {
-  const { t } = useTranslation(["common", "liquidity"]);
+  const {t} = useTranslation(['common', 'liquidity']);
   const pairLink = useMemo(
-    () =>
-      !dex
-        ? "#"
-        : `https://analytics.quipuswap.com/pairs/${dex.contract.address}`,
-    [dex]
+    () => (!dex ? '#' : `https://analytics.quipuswap.com/pairs/${dex.contract.address}`),
+    [dex],
   );
   const contractLink = useMemo(
-    () => (!dex ? "#" : `https://tzkt.io/${dex.contract.address}`),
-    [dex]
+    () => (!dex ? '#' : `https://tzkt.io/${dex.contract.address}`),
+    [dex],
   );
   const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(
-    () => (token1 ? getWhitelistedTokenSymbol(token1) : "Token A"),
-    [token1]
+    () => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'),
+    [token1],
   );
   const tokenBName = useMemo(
-    () => (token2 ? getWhitelistedTokenSymbol(token2) : "Token B"),
-    [token2]
+    () => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'),
+    [token2],
   );
 
   const balanceTotalA = useMemo(
     () => new BigNumber(dex ? dex.storage.storage.tez_pool : 0).toString(),
-    [dex]
+    [dex],
   );
   const balanceTotalB = useMemo(
     () => new BigNumber(dex ? dex.storage.storage.token_pool : 0).toString(),
-    [dex]
+    [dex],
   );
   const totalShare = useMemo(
-    () =>
-      fromDecimals(poolShare?.total || new BigNumber(0), 6).toString() ?? "0",
-    [poolShare]
+    () => fromDecimals(poolShare?.total || new BigNumber(0), 6).toString() ?? '0',
+    [poolShare],
   );
   const frozenShare = useMemo(
-    () =>
-      fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString() ?? "0",
-    [poolShare]
+    () => fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString() ?? '0',
+    [poolShare],
   );
   const sellPrice = useMemo(
     () =>
@@ -85,9 +76,9 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           .toString(),
         0,
         Infinity,
-        token2.metadata.decimals
+        token2.metadata.decimals,
       ),
-    [tokensData, token2.metadata.decimals]
+    [tokensData, token2.metadata.decimals],
   );
   const buyPrice = useMemo(
     () =>
@@ -97,9 +88,9 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           .toString(),
         0,
         Infinity,
-        token1.metadata.decimals
+        token1.metadata.decimals,
       ),
-    [tokensData, token1.metadata.decimals]
+    [tokensData, token1.metadata.decimals],
   );
   return (
     <Card
@@ -111,12 +102,12 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Sell Price")}
+            {t('common|Sell Price')}
             <Tooltip
               sizeT="small"
               content={t(
-                "common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.",
-                { tokenAName, tokenBName }
+                'common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.',
+                {tokenAName, tokenBName},
               )}
             />
           </>
@@ -137,9 +128,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               amount={sellPrice}
               currency={tokenBName}
               dollarEquivalent={
-                tokensData.first.exchangeRate
-                  ? `${tokensData.first.exchangeRate}`
-                  : undefined
+                tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined
               }
             />
           )}
@@ -148,12 +137,12 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("common|Buy Price")}
+            {t('common|Buy Price')}
             <Tooltip
               sizeT="small"
               content={t(
-                "common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.",
-                { tokenAName, tokenBName }
+                'common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.',
+                {tokenAName, tokenBName},
               )}
             />
           </>
@@ -174,9 +163,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               amount={buyPrice}
               currency={tokenAName}
               dollarEquivalent={
-                tokensData.second.exchangeRate
-                  ? `${tokensData.second.exchangeRate}`
-                  : undefined
+                tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined
               }
             />
           )}
@@ -185,12 +172,12 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("liquidity|{{tokenAName}} Locked", { tokenAName })}
+            {t('liquidity|{{tokenAName}} Locked', {tokenAName})}
             <Tooltip
               sizeT="small"
               content={t(
-                "liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.",
-                { tokenAName }
+                'liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.',
+                {tokenAName},
               )}
             />
           </>
@@ -206,12 +193,12 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("liquidity|{{tokenBName}} Locked", { tokenBName })}
+            {t('liquidity|{{tokenBName}} Locked', {tokenBName})}
             <Tooltip
               sizeT="small"
               content={t(
-                "liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.",
-                { tokenBName }
+                'liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.',
+                {tokenBName},
               )}
             />
           </>
@@ -227,11 +214,11 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("liquidity|Your Total LP")}
+            {t('liquidity|Your Total LP')}
             <Tooltip
               sizeT="small"
               content={t(
-                "liquidity|Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool."
+                "liquidity|Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool.",
               )}
             />
           </>
@@ -243,11 +230,11 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       <CardCell
         header={
           <>
-            {t("liquidity|Your Frozen LP")}
+            {t('liquidity|Your Frozen LP')}
             <Tooltip
               sizeT="small"
               content={t(
-                "liquidity|Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them."
+                'liquidity|Frozen LPs are LPs you own that are locked in a smart contract (for voting, farming, etc.) and can not be moved or withdrawn until you unlock them.',
               )}
             />
           </>
@@ -265,7 +252,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
-            {t("liquidity|View Pair Analytics")}
+            {t('liquidity|View Pair Analytics')}
           </Button>
         ) : (
           <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />
@@ -278,7 +265,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
-            {t("liquidity|View Pair Contract")}
+            {t('liquidity|View Pair Contract')}
           </Button>
         ) : (
           <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />

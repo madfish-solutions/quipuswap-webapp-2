@@ -4,28 +4,21 @@ import {
   findDex,
   FoundDex,
   getLiquidityShare,
-} from "@quipuswap/sdk";
-import { TezosToolkit } from "@taquito/taquito";
-import BigNumber from "bignumber.js";
+} from '@quipuswap/sdk';
+import {TezosToolkit} from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 
-import { FACTORIES } from "@utils/defaults";
-import {
-  QSMainNet,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-} from "@utils/types";
-import { fromDecimals } from "@utils/helpers";
+import {FACTORIES} from '@utils/defaults';
+import {QSMainNet, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
+import {fromDecimals} from '@utils/helpers';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
-  handleTokenChange: (
-    token: WhitelistedToken,
-    tokenNum: "first" | "second"
-  ) => void
+  handleTokenChange: (token: WhitelistedToken, tokenNum: 'first' | 'second') => void,
 ) => {
-  handleTokenChange(pair.token1, "first");
-  handleTokenChange(pair.token2, "second");
+  handleTokenChange(pair.token1, 'first');
+  handleTokenChange(pair.token2, 'second');
   setTokenPair(pair);
 };
 
@@ -35,7 +28,7 @@ export const asyncFindPairDex = async (
   tezos: TezosToolkit,
   accountPkh: string,
   networkId: QSMainNet,
-  updateToast: (err: Error) => void
+  updateToast: (err: Error) => void,
 ) => {
   try {
     const secondAsset = {
@@ -72,29 +65,25 @@ export const asyncGetShares = async (
   tezos: TezosToolkit,
   accountPkh: string,
   networkId: QSMainNet,
-  updateToast: (err: Error) => void
+  updateToast: (err: Error) => void,
 ) => {
   let tokenPairValue = tokenPair;
-  if (currentTab.id !== "remove") {
+  if (currentTab.id !== 'remove') {
     const attempt = await asyncFindPairDex(
-      { token1, token2 } as WhitelistedTokenPair,
+      {token1, token2} as WhitelistedTokenPair,
       setTokenPair,
       tezos,
       accountPkh,
       networkId,
-      updateToast
+      updateToast,
     );
     if (attempt) {
       tokenPairValue = attempt;
     }
   }
   try {
-    const getMethod = async (
-      token: WhitelistedToken,
-      foundDex: FoundDex,
-      value: BigNumber
-    ) =>
-      token.contractAddress === "tez"
+    const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) =>
+      token.contractAddress === 'tez'
         ? estimateTezInShares(foundDex.storage, value.toString())
         : estimateTokenInShares(foundDex.storage, value.toString());
 
@@ -102,18 +91,18 @@ export const asyncGetShares = async (
     const sharesTotalA = await getMethod(
       tokenPairValue.token1,
       tokenPairValue.dex,
-      balanceAB.integerValue()
+      balanceAB.integerValue(),
     );
     const sharesTotalB = await getMethod(
       tokenPairValue.token2,
       tokenPairValue.dex,
-      balanceAB.integerValue()
+      balanceAB.integerValue(),
     );
     const balA1 = fromDecimals(sharesTotalA, 6).toString();
     const balA2 = fromDecimals(sharesTotalB, 6).toString();
-    setValue("balanceTotalA", balA1);
+    setValue('balanceTotalA', balA1);
 
-    setValue("balanceTotalB", balA2);
+    setValue('balanceTotalB', balA2);
   } catch (err) {
     updateToast(err);
   }
