@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'react-hooks'],
-  extends: ['airbnb-typescript', 'plugin:react/recommended'],
+  extends: ['airbnb-typescript', 'plugin:react/recommended', 'prettier'],
   rules: {
     'react/display-name': 0,
     'react/jsx-props-no-spreading': 0,
@@ -11,7 +11,7 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'warn',
     'react-hooks/exhaustive-deps': 'warn',
     'no-plusplus': 0,
-    "linebreak-style": 0,
+    'linebreak-style': 0,
   },
   parserOptions: {
     project: './tsconfig.json',

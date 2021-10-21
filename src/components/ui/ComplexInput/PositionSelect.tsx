@@ -1,38 +1,36 @@
-import React, {
-  useContext, useRef, useState,
-} from 'react';
+import React, {useContext, useRef, useState} from 'react';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import {useTranslation} from 'next-i18next';
 
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, prettyPriceThousands } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { PositionsModal } from '@components/modals/PositionsModal';
-import { Button } from '@components/ui/Button';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
+import {WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
+import {TEZOS_TOKEN} from '@utils/defaults';
+import {getWhitelistedTokenSymbol, prettyPriceThousands} from '@utils/helpers';
+import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
+import {PositionsModal} from '@components/modals/PositionsModal';
+import {Button} from '@components/ui/Button';
+import {TokensLogos} from '@components/ui/TokensLogos';
+import {PercentSelector} from '@components/ui/ComplexInput/PercentSelector';
+import {ComplexError} from '@components/ui/ComplexInput/ComplexError';
+import {Shevron} from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
 type PositionSelectProps = {
-  noBalanceButtons?: boolean
-  className?: string
-  balance?: string
-  totalBalance?: string
-  balanceLabel?: string
-  frozenBalance?: string
-  notFrozen?:boolean
-  label: string
-  error?: string
-  notSelectable1?: WhitelistedToken
-  notSelectable2?: WhitelistedToken
-  handleChange?: (tokenPair:WhitelistedTokenPair) => void
-  handleBalance: (value: string) => void
-  tokenPair?: WhitelistedTokenPair,
-  setTokenPair: (tokenPair:WhitelistedTokenPair) => void
+  noBalanceButtons?: boolean;
+  className?: string;
+  balance?: string;
+  totalBalance?: string;
+  balanceLabel?: string;
+  frozenBalance?: string;
+  notFrozen?: boolean;
+  label: string;
+  error?: string;
+  notSelectable1?: WhitelistedToken;
+  notSelectable2?: WhitelistedToken;
+  handleChange?: (tokenPair: WhitelistedTokenPair) => void;
+  handleBalance: (value: string) => void;
+  tokenPair?: WhitelistedTokenPair;
+  setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
 } & React.HTMLProps<HTMLInputElement>;
 
 const themeClass = {
@@ -60,15 +58,15 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   notFrozen,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
-  const { colorThemeMode } = useContext(ColorThemeContext);
+  const {t} = useTranslation(['common']);
+  const {colorThemeMode} = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const compoundClassName = cx(
-    { [s.focused]: focused },
-    { [s.error]: !!error },
+    {[s.focused]: focused},
+    {[s.error]: !!error},
     themeClass[colorThemeMode],
     className,
   );
@@ -95,10 +93,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
       />
       {/* eslint-disable-next-line max-len */}
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={compoundClassName}
-        onClick={focusInput}
-      >
+      <div className={compoundClassName} onClick={focusInput}>
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
@@ -106,29 +101,26 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
-              {notFrozen ? '' : (
+              {notFrozen ? (
+                ''
+              ) : (
                 <div className={s.item2Line}>
-                  <div className={s.caption}>
-                    {t('common|Frozen Balance')}
-                    :
-                  </div>
+                  <div className={s.caption}>{t('common|Frozen Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>
                     {prettyPriceThousands(parseFloat(frozenBalance))}
                   </div>
-
                 </div>
               )}
               {!noBalanceButtons ? (
                 <div className={s.item2Line}>
-                  <div className={s.caption}>
-                    {balanceLabel ?? t('common|Total Balance')}
-                    :
-                  </div>
+                  <div className={s.caption}>{balanceLabel ?? t('common|Total Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>
                     {prettyPriceThousands(parseFloat(balance))}
                   </div>
                 </div>
-              ) : (<div className={s.item2Line} />)}
+              ) : (
+                <div className={s.item2Line} />
+              )}
             </div>
             <input
               className={cx(s.item3, s.input)}
@@ -149,18 +141,23 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
                 token2={tokenPair?.token2 ?? TEZOS_TOKEN}
               />
               <h6 className={cx(s.token)}>
-                {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
+                {tokenPair
+                  ? `${getWhitelistedTokenSymbol(
+                      tokenPair.token1,
+                      5,
+                    )} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}`
+                  : 'Select LP'}
               </h6>
               <Shevron />
             </Button>
           </div>
         </div>
         {!noBalanceButtons && (
-        <PercentSelector
-          value={totalBalance || balance}
-          handleBalance={handleBalance}
-          decimals={TEZOS_TOKEN.metadata.decimals}
-        />
+          <PercentSelector
+            value={balance || totalBalance}
+            handleBalance={handleBalance}
+            decimals={TEZOS_TOKEN.metadata.decimals}
+          />
         )}
         <ComplexError error={error} />
       </div>

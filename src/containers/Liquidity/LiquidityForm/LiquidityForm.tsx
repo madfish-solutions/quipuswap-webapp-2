@@ -1,62 +1,47 @@
 import router from 'next/router';
-import React, {
-  useEffect, useRef, useState, useCallback,
-} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import BigNumber from 'bignumber.js';
-import { FormSpy } from 'react-final-form';
+import {FormSpy} from 'react-final-form';
 import {
-  addLiquidity,
   // Dex,
-  estimateSharesInTez,
-  estimateSharesInToken,
   estimateTezInShares,
-  estimateTezInToken,
   estimateTokenInShares,
-  estimateTokenInTez,
   findDex,
   FoundDex,
   getLiquidityShare,
-  removeLiquidity,
-  swap,
   TransferParams,
 } from '@quipuswap/sdk';
 
-import {
-  useAccountPkh, useNetwork, useOnBlock, useTezos,
-} from '@utils/dapp';
+import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import {useConnectModalsState} from '@hooks/useConnectModalsState';
 import {
   LiquidityFormValues,
   PoolShare,
   QSMainNet,
   TokenDataMap,
-  TokenDataType,
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import {
-  fromDecimals,
-  getValueForSDK,
-  getWhitelistedTokenSymbol,
-  isDexEqual,
-  isTokenEqual,
-  parseDecimals,
-  slippageToBignum,
-  toDecimals,
-} from '@utils/helpers';
-import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
+import {fromDecimals, getWhitelistedTokenSymbol, isDexEqual, isTokenEqual} from '@utils/helpers';
+import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
+import {Card} from '@components/ui/Card';
+import {Tabs} from '@components/ui/Tabs';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from '../Liquidity.module.sass';
 
-import { LiquidityDetails } from './LiquidityDetails';
-import { LiquiditySlippage } from './LiquiditySlippage';
-import { LiquidityFormRemove } from './LiquidityFormRemove';
-import { LiquidityFormAdd } from './LiquidityFormAdd';
-import { LiquiditySwitcher } from './LiquiditySwitcher';
+import {LiquidityDetails} from './LiquidityDetails';
+import {LiquiditySlippage} from './LiquiditySlippage';
+import {LiquidityFormRemove} from './LiquidityFormRemove';
+import {LiquidityFormAdd} from './LiquidityFormAdd';
+import {LiquiditySwitcher} from './LiquiditySwitcher';
+import {
+  inputUpdateHandler,
+  addLiquidityHandler,
+  rebalanceLiquidityHandler,
+  removeTabHandler,
+} from './liquidityFormHelpers';
 
 const TabsContent = [
   {
@@ -71,8 +56,6 @@ const TabsContent = [
 
 type LiquidityFormProps = {
   handleSubmit: (str: any) => void;
-  setAddLiquidityParams: (params: TransferParams[]) => void;
-  setRemoveLiquidityParams: (params: TransferParams[]) => void;
   addLiquidityParams: TransferParams[];
   removeLiquidityParams: TransferParams[];
   debounce: number;
@@ -92,8 +75,6 @@ type LiquidityFormProps = {
   setTabsState: (val: any) => void;
 };
 
-const isTez = (tokensData: TokenDataType) => tokensData.token.address === 'tez';
-
 const RealForm: React.FC<LiquidityFormProps> = ({
   handleSubmit,
   debounce,
@@ -110,14 +91,9 @@ const RealForm: React.FC<LiquidityFormProps> = ({
   tokensData,
   handleTokenChange,
   currentTab,
-  setAddLiquidityParams,
-  setRemoveLiquidityParams,
 }) => {
-  const {
-    openConnectWalletModal,
-    connectWalletModalOpen,
-    closeConnectWalletModal,
-  } = useConnectModalsState();
+  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
+    useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
@@ -147,187 +123,6 @@ const RealForm: React.FC<LiquidityFormProps> = ({
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise: any;
 
-  const rebalanceLiquidityHandler = useCallback(
-    async (val, localTezos, localDex) => {
-      if (!localDex || !accountPkh || !localTezos) return;
-      if (
-        (val.balance1 && val.balance1.toString() === '.')
-        || (val.balance2 && val.balance2.toString() === '.')
-      ) {
-        return;
-      }
-      try {
-        const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
-        const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
-        const exA = new BigNumber(1);
-        const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
-        const initialBto$ = estimateTezInToken(
-          localDex.storage,
-          toDecimals(bal2, token2.metadata.decimals),
-        );
-        const total$ = initialAto$.plus(initialBto$).div(2).integerValue(BigNumber.ROUND_DOWN);
-        let inputValue: BigNumber;
-        const val1 = initialAto$.minus(total$);
-        const val2 = toDecimals(bal2, token2.metadata.decimals).minus(
-          estimateTokenInTez(localDex.storage, total$),
-        );
-
-        const whichTokenPoolIsGreater = val1.gt(val2);
-        if (whichTokenPoolIsGreater) {
-          inputValue = val1.div(exA);
-        } else {
-          inputValue = getValueForSDK(
-            tokensData.second,
-            fromDecimals(val2, token2.metadata.decimals),
-            localTezos,
-          );
-        }
-        const fromAsset = 'tez';
-        const toAsset = {
-          contract: tokensData.second.token.address,
-          id: tokensData.second.token.id ?? undefined,
-        };
-        const slippage = slippageToBignum(values.slippage).div(100);
-        const swapParams = await swap(
-          localTezos,
-          FACTORIES[networkId],
-          !whichTokenPoolIsGreater ? toAsset : fromAsset,
-          whichTokenPoolIsGreater ? toAsset : fromAsset,
-          inputValue,
-          slippage,
-        );
-        // const tezValue = toDecimals(total$, 6);
-        const tezValue = total$;
-        const addParams = await addLiquidity(localTezos, localDex, {
-          tezValue,
-        });
-        setRebalance([tezValue, inputValue]);
-        const params = [...swapParams, ...addParams];
-        setAddLiquidityParams(params);
-      } catch (e) {
-        handleErrorToast(e);
-      }
-    },
-    [
-      accountPkh,
-      networkId,
-      setAddLiquidityParams,
-      token2.metadata.decimals,
-      tokensData.second,
-      values.balance1,
-      values.balance2,
-      values.slippage,
-      handleErrorToast,
-    ],
-  );
-
-  const addLiquidityHandler = useCallback(
-    async (isTokensSame, isValuesSame, isDexSame, val, localTezos, localDex) => {
-      if (!val.balance1 && !val.balance2) return;
-      if (isTokensSame && isValuesSame && isDexSame) return;
-      if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
-        return;
-      }
-
-      if (values.balance1 && accountPkh) {
-        const tezValue = toDecimals(new BigNumber(values.balance1), 6);
-        const addParams = await addLiquidity(localTezos, localDex, {
-          tezValue,
-        });
-        setAddLiquidityParams(addParams);
-      }
-
-      const rate = toDecimals(
-        localDex.storage.storage.token_pool,
-        TEZOS_TOKEN.metadata.decimals,
-      ).dividedBy(toDecimals(localDex.storage.storage.tez_pool, token2.metadata.decimals));
-      const retValue = lastChange === 'balance1'
-        ? new BigNumber(val.balance1).times(rate)
-        : new BigNumber(val.balance2).div(rate);
-      const decimals = lastChange === 'balance1' ? token2.metadata.decimals : token1.metadata.decimals;
-
-      const res = retValue.toFixed(decimals);
-      form.mutators.setValue(lastChange === 'balance1' ? 'balance2' : 'balance1', res);
-      if (!localDex || !val.balance1 || !val.balance2) return;
-      try {
-        const getMethod = async (
-          token: TokenDataType,
-          foundDex: FoundDex,
-          value: BigNumber,
-        ) => (isTez(token)
-          ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, localTezos))
-          : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, localTezos)));
-        const sharesA = await getMethod(tokensData.first, localDex, new BigNumber(values.balance1));
-        const sharesB = await getMethod(
-          tokensData.second,
-          localDex,
-          lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
-        );
-
-        const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
-        const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
-
-        form.mutators.setValue('estimateLP', lp1.plus(lp2));
-      } catch (err) {
-        handleErrorToast(err);
-      }
-    },
-    [
-      accountPkh,
-      form.mutators,
-      lastChange,
-      setAddLiquidityParams,
-      token1.metadata.decimals,
-      token2.metadata.decimals,
-      tokensData.first,
-      tokensData.second,
-      values.balance1,
-      values.balance2,
-      handleErrorToast,
-    ],
-  );
-
-  const removeTabHandler = useCallback(
-    async (isTokensSame, isRemValuesSame, isDexSame, localTezos) => {
-      if ((isTokensSame && isRemValuesSame && isDexSame) || !dex || !values.balance3) {
-        return;
-      }
-      try {
-        const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) => (token.contractAddress === 'tez'
-          ? estimateTezInShares(foundDex.storage, value.toString())
-          : estimateTokenInShares(foundDex.storage, value.toString()));
-        const balance = toDecimals(new BigNumber(values.balance3), 6);
-        const sharesA = await getMethod(token1, dex, balance);
-        const sharesB = await getMethod(token2, dex, balance);
-        const bal1 = fromDecimals(sharesA, token1.metadata.decimals);
-        const bal2 = fromDecimals(sharesB, token2.metadata.decimals);
-
-        const slippage = slippageToBignum(values.slippage).div(100);
-
-        if (accountPkh) {
-          const params = await removeLiquidity(localTezos, dex, balance, slippage);
-          setRemoveLiquidityParams(params);
-        }
-
-        form.mutators.setValue('balanceA', bal1);
-        form.mutators.setValue('balanceB', bal2);
-      } catch (err) {
-        handleErrorToast(err);
-      }
-    },
-    [
-      accountPkh,
-      dex,
-      form.mutators,
-      handleErrorToast,
-      setRemoveLiquidityParams,
-      token1,
-      token2,
-      values.balance3,
-      values.slippage,
-    ],
-  );
-
   const handleInputChange = useCallback(
     async (val: LiquidityFormValues) => {
       if (token1.contractAddress !== TEZOS_TOKEN.contractAddress) return;
@@ -349,23 +144,54 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
       if (!tezos) return;
       if (currentTab.id === 'remove') {
-        removeTabHandler(isTokensSame, isRemValuesSame, isDexSame, tezos);
+        removeTabHandler({
+          isTokensSame,
+          isRemValuesSame,
+          isDexSame: !!isDexSame,
+          dex,
+          values,
+          token1,
+          token2,
+          form,
+        });
       } else if (!val.rebalanceSwitcher) {
-        addLiquidityHandler(isTokensSame, isRemValuesSame, isDexSame, val, tezos, dex);
+        addLiquidityHandler({
+          isTokensSame,
+          isValuesSame: isRemValuesSame,
+          isDexSame: !!isDexSame,
+          val,
+          values,
+          token1,
+          token2,
+          tokensData,
+          lastChange,
+          localTezos: tezos,
+          localDex: dex,
+          form,
+        });
       } else {
-        rebalanceLiquidityHandler(val, tezos, dex);
+        rebalanceLiquidityHandler({
+          val,
+          values,
+          localTezos: tezos,
+          localDex: dex,
+          token2,
+          accountPkh,
+          tokensData,
+          setRebalance,
+        });
       }
       setOldTokens([token1, token2]);
       setOldDex(dex);
     },
     [
-      addLiquidityHandler,
-      removeTabHandler,
-      rebalanceLiquidityHandler,
+      accountPkh,
+      form,
+      tokensData,
+      values,
       currentTab.id,
       dex,
       tezos,
-      form.mutators,
       formValues,
       lastChange,
       oldDex,
@@ -386,9 +212,10 @@ const RealForm: React.FC<LiquidityFormProps> = ({
     const dexbuf = await findDex(tezos, FACTORIES[networkId], toAsset);
     setDex(dexbuf);
     try {
-      const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) => (token.contractAddress === 'tez'
-        ? estimateTezInShares(foundDex.storage, value.toString())
-        : estimateTokenInShares(foundDex.storage, value.toString()));
+      const getMethod = async (token: WhitelistedToken, foundDex: FoundDex, value: BigNumber) =>
+        token.contractAddress === 'tez'
+          ? estimateTezInShares(foundDex.storage, value.toString())
+          : estimateTokenInShares(foundDex.storage, value.toString());
 
       if (!accountPkh) return;
       const share = await getLiquidityShare(tezos, dexbuf, accountPkh);
@@ -457,47 +284,16 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       setVal(values);
       setSubm(true);
       if (values.rebalanceSwitcher !== formValues.rebalanceSwitcher) {
-        form.mutators.setValue('hiddenSwitcher', !values.hiddenSwitcher);
-        if (!values.rebalanceSwitcher) {
-          if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
-            return;
-          }
-          const rate = new BigNumber(tokensData.first.exchangeRate).dividedBy(
-            new BigNumber(tokensData.second.exchangeRate),
-          );
-          const retValue = lastChange === 'balance1'
-            ? new BigNumber(values.balance1).times(rate)
-            : new BigNumber(values.balance2).dividedBy(rate);
-          const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
-
-          form.mutators.setValue(
-            lastChange === 'balance1' ? 'balance2' : 'balance1',
-            parseDecimals(retValue.toString(), 0, Infinity, decimals),
-          );
-          if (!dex || !values.balance1 || !values.balance2) return;
-          try {
-            const getMethod = async (
-              token: TokenDataType,
-              foundDex: FoundDex,
-              value: BigNumber,
-            ) => (isTez(token)
-              ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
-              : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!)));
-            const sharesA = await getMethod(tokensData.first, dex, new BigNumber(values.balance1));
-            const sharesB = await getMethod(
-              tokensData.second,
-              dex,
-              lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
-            );
-
-            const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
-            const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
-
-            form.mutators.setValue('estimateLP', lp1.plus(lp2));
-          } catch (e) {
-            handleErrorToast(e);
-          }
-        }
+        inputUpdateHandler({
+          values,
+          tokensData,
+          lastChange,
+          token1,
+          token2,
+          dex,
+          tezos,
+          form,
+        });
       }
       // eslint-disable-next-line
       promise = save(values);
@@ -556,7 +352,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
                     token1,
                   )}-${getWhitelistedTokenSymbol(token2)}`,
                   undefined,
-                  { shallow: true },
+                  {shallow: true},
                 );
                 setTabsState(val);
               }}
@@ -629,5 +425,5 @@ const RealForm: React.FC<LiquidityFormProps> = ({
 };
 
 export const LiquidityForm = (props: any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
+  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
 );
