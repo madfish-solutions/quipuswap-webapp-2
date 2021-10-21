@@ -45,9 +45,6 @@ export const addLiquidityHandler = async ({
 }: AddLiquidityHandlerArgs) => {
   if (!val.balance1 && !val.balance2) return null;
   if (isTokensSame && isValuesSame && isDexSame) return null;
-  if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
-    return null;
-  }
 
   const rate = toDecimals(
     localDex.storage.storage.token_pool,

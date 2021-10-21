@@ -141,6 +141,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       if (!dex) return;
       const isTokensSame = isTokenEqual(token1, oldToken1) && isTokenEqual(token2, oldToken2);
       const isRemValuesSame = val.balance3 === formValues.balance3;
+      const isValuesSame = val[lastChange] === formValues[lastChange];
       const isDexSame = dex && oldDex && isDexEqual(dex, oldDex);
       if (!tezos) return;
       if (currentTab.id === 'remove') {
@@ -157,7 +158,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
       } else if (!val.rebalanceSwitcher) {
         addLiquidityHandler({
           isTokensSame,
-          isValuesSame: isRemValuesSame,
+          isValuesSame,
           isDexSame: !!isDexSame,
           val,
           values,
