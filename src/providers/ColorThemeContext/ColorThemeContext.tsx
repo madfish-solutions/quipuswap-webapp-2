@@ -1,51 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-import { COLOR_MODE_STORAGE_KEY } from '@utils/defaults';
+import { COLOR_MODE_STORAGE_KEY } from "@utils/defaults";
 
 export enum ColorModes {
-  Light = 'light',
-  Dark = 'dark',
+  Light = "light",
+  Dark = "dark",
 }
 
 type ThemeColorsPros = {
-  fill1: string
-  fill1Inverse: string
-  fill2: string
-  fill2Inverse: string
-  stroke: string
-  background1: string
-  background2: string
-  fillLogo: string
+  fill1: string;
+  fill1Inverse: string;
+  fill2: string;
+  fill2Inverse: string;
+  stroke: string;
+  background1: string;
+  background2: string;
+  fillLogo: string;
 };
 
 const themeColorsObj = {
   light: {
-    fill1: '#5C1EE0',
-    fill1Inverse: '#FF6B00',
-    fill2: '#1373E4',
-    fill2Inverse: '#F9A605',
-    stroke: '#ffffff',
-    background1: '#F0F1F3',
-    background2: '#FAFAFC',
-    fillLogo: '#232735',
+    fill1: "#5C1EE0",
+    fill1Inverse: "#FF6B00",
+    fill2: "#1373E4",
+    fill2Inverse: "#F9A605",
+    stroke: "#ffffff",
+    background1: "#F0F1F3",
+    background2: "#FAFAFC",
+    fillLogo: "#232735",
   },
   dark: {
-    fill1: '#FF6B00',
-    fill1Inverse: '#5C1EE0',
-    fill2: '#F9A605',
-    fill2Inverse: '#1373E4',
-    stroke: '#14171E',
-    background1: '#070C12',
-    background2: '#14171E',
-    fillLogo: '#FFFFFF',
+    fill1: "#FF6B00",
+    fill1Inverse: "#5C1EE0",
+    fill2: "#F9A605",
+    fill2Inverse: "#1373E4",
+    stroke: "#14171E",
+    background1: "#070C12",
+    background2: "#14171E",
+    fillLogo: "#FFFFFF",
   },
 };
 
 type ColorThemeContextValue = {
-  colorThemeMode: ColorModes
-  isComponentDidMount: boolean
-  themeColors: ThemeColorsPros
-  setColorThemeMode: () => void
+  colorThemeMode: ColorModes;
+  isComponentDidMount: boolean;
+  themeColors: ThemeColorsPros;
+  setColorThemeMode: () => void;
 };
 
 export const defaultDataContext: ColorThemeContextValue = {
@@ -55,10 +55,14 @@ export const defaultDataContext: ColorThemeContextValue = {
   setColorThemeMode: () => {},
 };
 
-export const ColorThemeContext = React.createContext<ColorThemeContextValue>(defaultDataContext);
+export const ColorThemeContext =
+  React.createContext<ColorThemeContextValue>(defaultDataContext);
 
-export const ColorThemeProvider: React.FC = ({ children }) => {
-  const [colorThemeMode, setColorThemeMode] = useState(ColorModes.Light);
+export const ColorThemeProvider: React.FC<{ initial?: ColorModes }> = ({
+  initial = ColorModes.Light,
+  children,
+}) => {
+  const [colorThemeMode, setColorThemeMode] = useState(initial);
   const [themeColors, setThemeColors] = useState(themeColorsObj.light);
   const [isComponentDidMount, setIsComponentDidMount] = useState(false);
 
@@ -76,12 +80,14 @@ export const ColorThemeProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    const localTheme = window.localStorage.getItem(COLOR_MODE_STORAGE_KEY) as ColorModes;
+    const localTheme = window.localStorage.getItem(
+      COLOR_MODE_STORAGE_KEY
+    ) as ColorModes;
     if (localTheme) {
       setColorThemeMode(localTheme);
     } else if (
-      window.matchMedia
-      && window.matchMedia('(prefers-color-scheme: dark)').matches
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches
     ) {
       setMode(ColorModes.Dark);
     } else {
@@ -99,12 +105,13 @@ export const ColorThemeProvider: React.FC = ({ children }) => {
   }, [colorThemeMode]);
 
   return (
-    <ColorThemeContext.Provider value={{
-      colorThemeMode,
-      isComponentDidMount,
-      themeColors,
-      setColorThemeMode: toggleColorTheme,
-    }}
+    <ColorThemeContext.Provider
+      value={{
+        colorThemeMode,
+        isComponentDidMount,
+        themeColors,
+        setColorThemeMode: toggleColorTheme,
+      }}
     >
       {children}
     </ColorThemeContext.Provider>
