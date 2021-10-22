@@ -136,8 +136,6 @@ export const submitForm = async ({
       }
     }
     const dop = await batchify(tezos.wallet.batch([]), liquidityParams);
-    // console.log(dop);
-    // dop.operations.filter(rm_first)
     const op = await dop.send();
     await op.confirmation();
     if (currentTab === 'remove') {

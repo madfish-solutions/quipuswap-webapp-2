@@ -161,7 +161,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
       <StickyBlock className={className}>
         <Form
           onSubmit={(values: LiquidityFormValues) => {
-            // console.log(values);
             if (!tezos) return;
             handleLoader();
             submitForm({

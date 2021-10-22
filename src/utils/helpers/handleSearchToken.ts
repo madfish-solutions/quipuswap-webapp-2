@@ -77,7 +77,6 @@ export const handleSearchToken = async ({
     handleTokenChangeWrapper(resFrom, 'first');
   }
   setUrlLoaded(true);
-  console.log(res);
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
