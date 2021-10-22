@@ -54,8 +54,12 @@ export const submitForm = async ({
         const balance = toDecimals(new BigNumber(values.balance3), 6);
         const remParams = await removeLiquidity(tezos, dex, balance, slippage);
         const voter = await dex.storage.storage.voters.get(accountPkh);
-        const invoteParams = await voteForBaker(tezos, dex, voter.candidate, new BigNumber(0));
-        liquidityParams = remParams.concat(invoteParams);
+        if (voter) {
+          const invoteParams = await voteForBaker(tezos, dex, voter.candidate, new BigNumber(0));
+          liquidityParams = remParams.concat(invoteParams);
+        } else {
+          liquidityParams = remParams;
+        }
       } else if (currentTab === 'add') {
         if (values.rebalanceSwitcher) {
           if (!dex || !accountPkh || !tezos) return;
