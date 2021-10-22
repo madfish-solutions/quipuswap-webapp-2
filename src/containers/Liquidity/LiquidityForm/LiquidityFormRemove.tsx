@@ -1,23 +1,23 @@
-import { useTranslation } from 'next-i18next';
-import React, { useMemo } from 'react';
+import {useTranslation} from 'next-i18next';
+import React, {useMemo} from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import { Field } from 'react-final-form';
-import { FoundDex } from '@quipuswap/sdk';
+import {Field} from 'react-final-form';
+import {FoundDex} from '@quipuswap/sdk';
 
-import { useAccountPkh } from '@utils/dapp';
-import { TokenDataMap, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
-import { fromDecimals, parseTezDecimals } from '@utils/helpers';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
-import { ComplexInput } from '@components/ui/ComplexInput';
-import { ArrowDown } from '@components/svg/ArrowDown';
-import { Plus } from '@components/svg/Plus';
+import {useAccountPkh} from '@utils/dapp';
+import {TokenDataMap, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
+import {composeValidators, validateBalance, validateMinMax} from '@utils/validators';
+import {fromDecimals, parseTezDecimals} from '@utils/helpers';
+import {TEZOS_TOKEN} from '@utils/defaults';
+import {PositionSelect} from '@components/ui/ComplexInput/PositionSelect';
+import {ComplexInput} from '@components/ui/ComplexInput';
+import {ArrowDown} from '@components/svg/ArrowDown';
+import {Plus} from '@components/svg/Plus';
 
 import s from '../Liquidity.module.sass';
 
-import { hanldeTokenPairSelect } from '../liquidityHelpers';
+import {hanldeTokenPairSelect} from '../liquidityHelpers';
 
 interface LiquidityFormRemoveProps {
   tab: 'remove' | 'add';
@@ -42,20 +42,17 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   poolShare,
   tokensData,
 }) => {
-  const { t } = useTranslation(['liquidity']);
+  const {t} = useTranslation(['liquidity']);
   const accountPkh = useAccountPkh();
   const frozenBalance = useMemo(
     () => fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString(),
     [poolShare],
   );
-  const unfrozenBalance = useMemo(
-    () => fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString(),
-    [poolShare],
-  );
   const totalBalance = useMemo(
-    () => fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)
-      .plus(fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6))
-      .toString(),
+    () =>
+      fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)
+        .plus(fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6))
+        .toString(),
     [poolShare],
   );
 
@@ -73,7 +70,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         )}
         parse={(v) => parseTezDecimals(v)}
       >
-        {({ input, meta }) => (
+        {({input, meta}) => (
           <>
             <PositionSelect
               {...input}
@@ -91,7 +88,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
                 form.mutators.setValue('balance3', +value);
               }}
               noBalanceButtons={!accountPkh}
-              balance={unfrozenBalance}
+              balance={totalBalance}
               frozenBalance={frozenBalance}
               totalBalance={totalBalance}
               balanceLabel={t('common|Liquid Balance')}
@@ -105,7 +102,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         )}
       </Field>
       <Field name="balanceA" validate={validateMinMax(0, Infinity)}>
-        {({ input, meta }) => (
+        {({input, meta}) => (
           <ComplexInput
             {...input}
             token1={tokenPair.token1}
@@ -123,7 +120,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
 
       <Plus className={s.iconButton} />
       <Field name="balanceB" validate={validateMinMax(0, Infinity)}>
-        {({ input, meta }) => (
+        {({input, meta}) => (
           <ComplexInput
             {...input}
             token1={tokenPair.token2}

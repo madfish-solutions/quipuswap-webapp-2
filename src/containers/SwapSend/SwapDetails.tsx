@@ -205,10 +205,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <CurrencyAmount
-          amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.000001' : fee}
-          currency="TEZ"
-        />
+        {loading ? (
+          <Skeleton className={s.currency2} />
+        ) : (
+          <CurrencyAmount
+            amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.000001' : fee}
+            currency={tokenAName}
+          />
+        )}
       </CardCell>
       <CardCell
         header={

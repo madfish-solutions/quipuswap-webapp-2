@@ -1,10 +1,11 @@
 import {
   addLiquidity,
   batchify,
-  estimateTezInToken,
+  estimateTezToToken,
   estimateTokenInTez,
   FA1_2,
   findDex,
+  getLiquidityShare,
   initializeLiquidity,
   removeLiquidity,
   swap,
@@ -51,12 +52,14 @@ export const submitForm = async ({
     try {
       const dex = await findDex(tezos, FACTORIES[networkId], toAsset);
       if (currentTab === 'remove') {
+        if (!accountPkh) return;
+        const share = await getLiquidityShare(tezos, dex, accountPkh);
         const balance = toDecimals(new BigNumber(values.balance3), 6);
         const remParams = await removeLiquidity(tezos, dex, balance, slippage);
         const voter = await dex.storage.storage.voters.get(accountPkh);
-        if (voter) {
+        if (voter && new BigNumber(values.balance3).gt(share.frozen.plus(share.unfrozen))) {
           const invoteParams = await voteForBaker(tezos, dex, voter.candidate, new BigNumber(0));
-          liquidityParams = remParams.concat(invoteParams);
+          liquidityParams = invoteParams.concat(remParams);
         } else {
           liquidityParams = remParams;
         }
@@ -66,22 +69,21 @@ export const submitForm = async ({
           try {
             const bal1 = new BigNumber(values.balance1 ? values.balance1 : 0);
             const bal2 = new BigNumber(values.balance2 ? values.balance2 : 0);
-            const exA = new BigNumber(1);
             const initialAto$ = toDecimals(bal1, TEZOS_TOKEN.metadata.decimals);
-            const initialBto$ = estimateTezInToken(
+            const initialBto$ = estimateTezToToken(
               dex.storage,
               toDecimals(bal2, token2.metadata.decimals),
             );
-            const total$ = initialAto$.plus(initialBto$).div(2).integerValue(BigNumber.ROUND_DOWN);
+            const total$ = initialAto$.plus(initialBto$).idiv(2);
             let inputValue: BigNumber;
-            const val1 = initialAto$.minus(total$);
-            const val2 = toDecimals(bal2, token2.metadata.decimals).minus(
-              estimateTokenInTez(dex.storage, total$),
-            );
+            const val1 = initialAto$.minus(total$).abs();
+            const val2 = toDecimals(bal2, token2.metadata.decimals)
+              .minus(estimateTokenInTez(dex.storage, total$))
+              .abs();
 
             const whichTokenPoolIsGreater = val1.gt(val2);
             if (whichTokenPoolIsGreater) {
-              inputValue = val1.div(exA);
+              inputValue = val1;
             } else {
               inputValue = getValueForSDK(
                 tokensData.second,
@@ -98,8 +100,11 @@ export const submitForm = async ({
               inputValue,
               slippage,
             );
+
             const tezValue = total$;
+
             const addParams = await addLiquidity(tezos, dex, {tezValue});
+
             liquidityParams = swapParams.concat(addParams);
             if (!token2.fa2TokenId) {
               const tokenContract = await toContract(tezos, token2.contractAddress);
@@ -107,6 +112,7 @@ export const submitForm = async ({
               liquidityParams = liquidityParams.concat(approveParams);
             }
           } catch (e: any) {
+            console.info(e);
             updateToast(e);
           }
         } else {

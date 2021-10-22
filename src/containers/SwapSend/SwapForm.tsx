@@ -1,7 +1,7 @@
 import React, {useMemo, useState, useEffect, useRef, useCallback} from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import {estimateSwap, estimateTokenToTez, FoundDex} from '@quipuswap/sdk';
+import {estimateSwap, FoundDex} from '@quipuswap/sdk';
 import {Field, FormSpy} from 'react-final-form';
 import {useTranslation} from 'next-i18next';
 
@@ -149,8 +149,8 @@ const RealForm: React.FC<SwapFormProps> = ({
 
     const inputWrapper = new BigNumber(
       lastChangeMod === 'balance1'
-        ? parseDecimals(val.balance1.toString(), 0, Infinity, token1.metadata.decimals)
-        : parseDecimals(val.balance2.toString(), 0, Infinity, token2.metadata.decimals),
+        ? parseDecimals(val.balance1, 0, Infinity, token1.metadata.decimals)
+        : parseDecimals(val.balance2, 0, Infinity, token2.metadata.decimals),
     );
     const inputValueInner = toDecimals(inputWrapper, decimals1);
     const fromAsset = transformTokenDataToAsset(tokensData.first);
@@ -205,7 +205,10 @@ const RealForm: React.FC<SwapFormProps> = ({
     setRate2(rate1buf.exponentiatedBy(-1));
     setPriceImpact(priceImp);
 
-    form.mutators.setValue(lastChangeMod === 'balance1' ? 'balance2' : 'balance1', result);
+    form.mutators.setValue(
+      lastChangeMod === 'balance1' ? 'balance2' : 'balance1',
+      result.toFixed(),
+    );
 
     setOldTokens([token1, token2]);
     setOldDex([dex1, dex2]);
@@ -301,26 +304,12 @@ const RealForm: React.FC<SwapFormProps> = ({
   let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
   if (
     token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
-    values.balance1 &&
-    dex1 &&
-    dex1.storage
-  ) {
-    feeVal = fromDecimals(
-      estimateTokenToTez(
-        dex1.storage,
-        toDecimals(new BigNumber(values.balance1), token1.metadata.decimals),
-      ),
-      6,
-    );
-  }
-  if (
-    token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
     token2.contractAddress !== TEZOS_TOKEN.contractAddress
   ) {
     feeVal = feeVal.times(2);
   }
   const fee = parseDecimals(
-    feeVal.times(FEE_RATE).toString(),
+    feeVal.times(FEE_RATE).toFixed(),
     0,
     Infinity,
     getWhitelistedTokenDecimals(TEZOS_TOKEN),
@@ -435,9 +424,11 @@ const RealForm: React.FC<SwapFormProps> = ({
         </Field>
         <Field initialValue="0.5 %" name="slippage">
           {({input}) => {
-            const slipPerc = slippageToBignum(values.slippage).times(values.balance2 ?? 0);
+            const slipPerc = slippageToBignum(values.slippage).times(
+              new BigNumber(values.balance2 ?? 0),
+            );
             const minimumReceived = parseDecimals(
-              new BigNumber(values.balance2 ?? 0).minus(slipPerc).toString(),
+              new BigNumber(values.balance2 ?? 0).minus(slipPerc).toFixed(),
               0,
               Infinity,
               token2.metadata.decimals,

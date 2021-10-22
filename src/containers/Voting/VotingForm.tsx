@@ -260,6 +260,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           {({input, meta}) => (
             <PositionSelect
               {...input}
+              autoComplete="off"
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
