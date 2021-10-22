@@ -1,17 +1,16 @@
-import React, { useContext } from 'react';
+import React, {useContext} from 'react';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import {useTranslation} from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Button } from '@components/ui/Button';
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
-import { NetworkSelect } from '@components/common/NetworkSelect';
+import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
+import {ColorModeSwitcher} from '@components/ui/ColorModeSwitcher';
+import {Button} from '@components/ui/Button';
+import {NetworkSelect} from '@components/common/NetworkSelect';
 
-import { Madfish } from '@components/svg/Madfish';
-import { Navigation } from '../Navigation';
-import { Socials } from '../Socials';
-import { QPToken } from '../QPToken';
+import {Madfish} from '@components/svg/Madfish';
+import {Navigation} from '../Navigation';
+import {Socials} from '../Socials';
+import {QPToken} from '../QPToken';
 import s from './Menu.module.sass';
 
 const modeClass = {
@@ -20,14 +19,12 @@ const modeClass = {
 };
 
 type MenuProps = {
-  className?: string
+  className?: string;
 };
 
-export const Menu: React.FC<MenuProps> = ({
-  className,
-}) => {
-  const { t } = useTranslation(['common']);
-  const { colorThemeMode } = useContext(ColorThemeContext);
+export const Menu: React.FC<MenuProps> = ({className}) => {
+  const {t} = useTranslation(['common']);
+  const {colorThemeMode} = useContext(ColorThemeContext);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
@@ -36,7 +33,6 @@ export const Menu: React.FC<MenuProps> = ({
         <div className={s.row}>
           <QPToken />
           <div className={cx(s.mb0, s.row)}>
-            <LanguageSwitcher direction="up" />
             <div className={s.ml24}>
               <ColorModeSwitcher id="mobile" />
             </div>
@@ -47,7 +43,6 @@ export const Menu: React.FC<MenuProps> = ({
           <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common|Old version')}
           </Button>
-
         </div>
         <div className={s.row}>
           <Button
