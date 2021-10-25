@@ -154,7 +154,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
         </div>
         {!noBalanceButtons && (
           <PercentSelector
-            value={balance || totalBalance}
+            value={totalBalance === undefined ? balance : totalBalance}
             handleBalance={handleBalance}
             decimals={TEZOS_TOKEN.metadata.decimals}
           />
