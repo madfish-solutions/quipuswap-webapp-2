@@ -17,7 +17,6 @@ import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 
-// This is a test commit
 interface LiquidityRebalanceProps {
   dex?: FoundDex;
   values: LiquidityFormValues;
