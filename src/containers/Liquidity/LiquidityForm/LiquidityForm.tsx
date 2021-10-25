@@ -171,7 +171,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           form,
         });
       } else {
-        rebalanceLiquidityHandler({
+        const data = rebalanceLiquidityHandler({
           val,
           values,
           localTezos: tezos,
@@ -179,8 +179,10 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           token2,
           accountPkh,
           tokensData,
-          setRebalance,
         });
+        if (data) {
+          setRebalance(data);
+        }
       }
       setOldTokens([token1, token2]);
       setOldDex(dex);

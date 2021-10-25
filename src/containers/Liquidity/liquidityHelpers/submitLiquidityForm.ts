@@ -17,7 +17,13 @@ import BigNumber from 'bignumber.js';
 
 import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
 import {LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {fromDecimals, getValueForSDK, slippageToBignum, toDecimals} from '@utils/helpers';
+import {
+  fromDecimals,
+  getValueForSDK,
+  getWhitelistedTokenDecimals,
+  slippageToBignum,
+  toDecimals,
+} from '@utils/helpers';
 
 interface SubmitFormArgs {
   tezos: TezosToolkit;
@@ -98,15 +104,25 @@ export const submitForm = async ({
               !whichTokenPoolIsGreater ? toAsset : fromAsset,
               whichTokenPoolIsGreater ? toAsset : fromAsset,
               inputValue,
-              slippage,
+              0,
             );
 
-            const tezValue = total$;
+            const swapValue = total$;
+            const rate = toDecimals(
+              swapValue.plus(new BigNumber(dex.storage.storage.token_pool)),
+              getWhitelistedTokenDecimals(TEZOS_TOKEN),
+            ).dividedBy(
+              toDecimals(dex.storage.storage.tez_pool, getWhitelistedTokenDecimals(token2)),
+            );
+            const investValue = (
+              whichTokenPoolIsGreater ? inputValue.times(rate) : inputValue.idiv(rate)
+            ).minus(1);
 
-            const addParams = await addLiquidity(tezos, dex, {tezValue});
+            const investParams = await addLiquidity(tezos, dex, {tezValue: investValue});
 
-            liquidityParams = swapParams.concat(addParams);
-            if (!token2.fa2TokenId) {
+            liquidityParams = swapParams.concat(investParams);
+            // liquidityParams = investParams;
+            if (token2.fa2TokenId === undefined) {
               const tokenContract = await toContract(tezos, token2.contractAddress);
               const approveParams = await FA1_2.approve(tokenContract, dex.contract.address, 0);
               liquidityParams = liquidityParams.concat(approveParams);

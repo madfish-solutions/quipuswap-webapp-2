@@ -14,13 +14,7 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 
-import {
-  composeValidators,
-  required,
-  validateBalance,
-  validateMinMax,
-  validateRebalance,
-} from '@utils/validators';
+import {composeValidators, required, validateBalance, validateMinMax} from '@utils/validators';
 import {parseDecimals} from '@utils/helpers';
 import {TokenSelect} from '@components/ui/ComplexInput/TokenSelect';
 import {Plus} from '@components/svg/Plus';
@@ -58,8 +52,6 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
   token1,
   token2,
   tokensData,
-  localSwap,
-  localInvest,
 }) => {
   const {t} = useTranslation(['liquidity']);
   const accountPkh = useAccountPkh();
@@ -69,18 +61,9 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
   );
-  const balanceValidator = useMemo(() => {
-    if (values.rebalanceSwitcher) {
-      return composeValidators(
-        validateRebalance(localSwap.toString(), localInvest.toString()),
-        () =>
-          new BigNumber(values.balance1).eq(0) && new BigNumber(values.balance2).eq(0)
-            ? t('liquidity|Value has to be a greater than zero')
-            : undefined,
-      );
-    }
-    return composeValidators(required, validateMinMax(0, Infinity));
-  }, [values.rebalanceSwitcher, localSwap, localInvest, t, values.balance1, values.balance2]);
+  const balanceValidator = values.rebalanceSwitcher
+    ? composeValidators(required)
+    : composeValidators(required, validateMinMax(0, Infinity));
 
   const setToken2 = useCallback(
     (token: WhitelistedToken) => {
