@@ -1,19 +1,19 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ModalCell.module.sass';
 
 type TokenCellProps = {
-  token: WhitelistedToken,
-  onClick?: () => void,
-  tabIndex?: number
+  token: WhitelistedToken;
+  onClick?: () => void;
+  tabIndex?: number;
 };
 
 const modeClass = {
@@ -21,19 +21,22 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const TokenCell: React.FC<TokenCellProps> = ({
-  token,
-  onClick,
-  tabIndex,
-  children,
-}) => {
+export const TokenCell: React.FC<TokenCellProps> = ({ token, onClick, tabIndex, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(
-    modeClass[colorThemeMode],
-    s.listItem,
-    s.splitRow,
-  );
+  const compoundClassName = cx(modeClass[colorThemeMode], s.listItem, s.splitRow);
+
+  const bageArray = useMemo(() => {
+    if (token.contractAddress === TEZOS_TOKEN.contractAddress) {
+      return [];
+    }
+    if (token.type) {
+      return token.type.toLowerCase() === 'fa1.2'
+        ? ['FA 1.2']
+        : ['FA 2.0', `ID: ${token.fa2TokenId ?? 0}`];
+    }
+    return [];
+  }, [token]);
 
   return (
     // eslint-disable-next-line max-len
@@ -50,31 +53,18 @@ export const TokenCell: React.FC<TokenCellProps> = ({
       className={compoundClassName}
     >
       <div className={cx(s.splitRow, s.start)}>
-        <TokensLogos
-          token1={token}
-        />
+        <TokensLogos token1={token} />
         <div className={cx(s.mleft8, s.tokenBody)}>
           <div className={s.joinRow}>
-            <h6>
-              {getWhitelistedTokenSymbol(token)}
-            </h6>
-            {token?.type && (token.type.toLowerCase() === 'fa1.2' ? ['FA 1.2'] : ['FA 2.0', `ID: ${token.fa2TokenId ?? 0}`]).map((x) => (
-              <Bage
-                className={s.bage}
-                key={x}
-                text={x}
-              />
+            <h6>{getWhitelistedTokenSymbol(token)}</h6>
+            {bageArray.map((x) => (
+              <Bage className={s.bage} key={x} text={x} />
             ))}
           </div>
 
-          <span className={s.caption}>
-            {getWhitelistedTokenName(token, 100)}
-          </span>
+          <span className={s.caption}>{getWhitelistedTokenName(token, 100)}</span>
 
-          <span className={s.caption}>
-            {token.contractAddress}
-          </span>
-
+          <span className={s.caption}>{token.contractAddress}</span>
         </div>
       </div>
       {children}

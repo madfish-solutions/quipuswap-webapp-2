@@ -1,32 +1,20 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo, useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { withTypes } from 'react-final-form';
-import {
-  FoundDex,
-  TransferParams,
-} from '@quipuswap/sdk';
+import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { useRouter } from 'next/router';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import {
-  fallbackTokenToTokenData, handleSearchToken, handleTokenChange,
-} from '@utils/helpers';
-import {
-  useAccountPkh,
-  useNetwork,
-  useOnBlock,
-  useTezos,
-} from '@utils/dapp';
+import { fallbackTokenToTokenData, handleSearchToken, handleTokenChange } from '@utils/helpers';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import {
   QSMainNet,
   TokenDataMap,
   VoteFormValues,
-  VoterType, WhitelistedToken, WhitelistedTokenPair,
+  VoterType,
+  WhitelistedToken,
+  WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
@@ -49,7 +37,7 @@ const TabsContent = [
 ];
 
 type VotingProps = {
-  className?: string
+  className?: string;
 };
 
 const fallbackTokenPair = {
@@ -57,9 +45,7 @@ const fallbackTokenPair = {
   token2: STABLE_TOKEN,
 } as WhitelistedTokenPair;
 
-export const Voting: React.FC<VotingProps> = ({
-  className,
-}) => {
+export const Voting: React.FC<VotingProps> = ({ className }) => {
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const network = useNetwork();
@@ -68,12 +54,10 @@ export const Voting: React.FC<VotingProps> = ({
   const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tokensData, setTokensData] = useState<TokenDataMap>(
-    {
-      first: fallbackTokenToTokenData(TEZOS_TOKEN),
-      second: fallbackTokenToTokenData(STABLE_TOKEN),
-    },
-  );
+  const [tokensData, setTokensData] = useState<TokenDataMap>({
+    first: fallbackTokenToTokenData(TEZOS_TOKEN),
+    second: fallbackTokenToTokenData(STABLE_TOKEN),
+  });
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
@@ -81,10 +65,7 @@ export const Voting: React.FC<VotingProps> = ({
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState('0');
   const [voter, setVoter] = useState<VoterType>();
-  const [
-    tokenPair,
-    setTokenPair,
-  ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
   const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
   const { from, to } = useRouterPair({
@@ -95,17 +76,17 @@ export const Voting: React.FC<VotingProps> = ({
     token2: tokenPair.token2,
   });
 
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
-  );
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleErrorToast = useCallback((err) => {
-    updateToast({
-      type: 'error',
-      render: `${err.name}: ${err.message}`,
-    });
-  }, [updateToast]);
+  const handleErrorToast = useCallback(
+    (err) => {
+      updateToast({
+        type: 'error',
+        render: `${err.name}: ${err.message}`,
+      });
+    },
+    [updateToast],
+  );
 
   const handleLoader = useCallback(() => {
     updateToast({
@@ -121,17 +102,15 @@ export const Voting: React.FC<VotingProps> = ({
     });
   }, [updateToast]);
 
-  const handleTokenChangeWrapper = (
-    token: WhitelistedToken,
-    tokenNumber: 'first' | 'second',
-  ) => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
-  });
+  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
+    handleTokenChange({
+      token,
+      tokenNumber,
+      exchangeRates,
+      tezos: tezos!,
+      accountPkh: accountPkh!,
+      setTokensData,
+    });
 
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
@@ -188,7 +167,7 @@ export const Voting: React.FC<VotingProps> = ({
         amounts={[tokenPair.balance ?? '0', voter?.vote ?? '0', voter?.veto ?? '0']}
         className={s.votingStats}
         dex={dex}
-        handleSubmit={(params:TransferParams[]) => {
+        handleSubmit={(params: TransferParams[]) => {
           if (!tezos) return;
           handleLoader();
           submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast, getBalance);
@@ -219,8 +198,8 @@ export const Voting: React.FC<VotingProps> = ({
             <VotingForm
               form={form}
               handleSubmit={handleSubmit}
-              debounce={100}
-              save={() => { }}
+              debounce={1}
+              save={() => {}}
               setTabsState={setTabsState}
               tabsState={tabsState}
               rewards={rewards}

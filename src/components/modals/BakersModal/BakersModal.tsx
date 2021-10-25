@@ -1,6 +1,4 @@
-import React, {
-  useContext, useEffect, useRef, useState, useCallback,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -12,6 +10,7 @@ import { useBakers } from '@utils/bakers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
+import { MultiLoader } from '@components/ui/MultiLoader';
 import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -24,30 +23,28 @@ const themeClass = {
 };
 
 type BakersModalProps = {
-  onChange: (baker: WhitelistedBaker) => void
+  onChange: (baker: WhitelistedBaker) => void;
 } & ReactModal.Props;
 
 type HeaderProps = {
-  debounce:number,
-  save:any,
-  values:FormValues,
-  form:any,
+  debounce: number;
+  save: any;
+  values: FormValues;
+  form: any;
 };
 
 type FormValues = {
-  search: string
+  search: string;
 };
 
-const Header:React.FC<HeaderProps> = ({
-  debounce, save, values,
-}) => {
+const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  let promise: any;
 
   const saveFunc = async () => {
     if (promise) {
@@ -75,9 +72,7 @@ const Header:React.FC<HeaderProps> = ({
 
   return (
     <div className={s.inputs}>
-      <Field
-        name="search"
-      >
+      <Field name="search">
         {({ input, meta }) => (
           <Input
             {...input}
@@ -87,20 +82,16 @@ const Header:React.FC<HeaderProps> = ({
             error={meta.error}
           />
         )}
-
       </Field>
     </div>
   );
 };
 
-const AutoSave = (props:any) => (
+const AutoSave = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-export const BakersModal: React.FC<BakersModalProps> = ({
-  onChange,
-  ...props
-}) => {
+export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
@@ -108,18 +99,12 @@ export const BakersModal: React.FC<BakersModalProps> = ({
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const handleInput = useCallback((values:FormValues) => {
+  const handleInput = useCallback((values: FormValues) => {
     setInputValue(values.search ?? '');
   }, []);
 
   const handleTokenSearch = useCallback(() => {
-    const isBakers = bakers
-      .filter(
-        (baker) => localSearchBaker(
-          baker,
-          inputValue,
-        ),
-      );
+    const isBakers = bakers.filter((baker) => localSearchBaker(baker, inputValue));
     setFilteredBakers(isBakers);
   }, [bakers, inputValue]);
 
@@ -139,13 +124,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
       render={({ form }) => (
         <Modal
           title={t('common|Bakers List')}
-          header={(
-            <AutoSave
-              form={form}
-              debounce={1000}
-              save={handleInput}
-            />
-          )}
+          header={<AutoSave form={form} debounce={1000} save={handleInput} />}
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -159,13 +138,9 @@ export const BakersModal: React.FC<BakersModalProps> = ({
               <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
-          {loading && (
-            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingBakerCell key={x} />))
-          )}
+          {loading && <MultiLoader Component={LoadingBakerCell} count={7} />}
           {filteredBakers.map((baker) => {
-            const {
-              address,
-            } = baker;
+            const { address } = baker;
             return (
               <BakerCell
                 key={address}
@@ -180,7 +155,6 @@ export const BakersModal: React.FC<BakersModalProps> = ({
             );
           })}
         </Modal>
-
       )}
     />
   );

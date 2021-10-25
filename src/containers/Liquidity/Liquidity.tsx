@@ -1,7 +1,5 @@
 import { useTranslation } from 'next-i18next';
-import React, {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 import { TransferParams } from '@quipuswap/sdk';
@@ -9,12 +7,11 @@ import { TransferParams } from '@quipuswap/sdk';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {
-  useAccountPkh, useNetwork, useOnBlock, useTezos,
-} from '@utils/dapp';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
 import {
   LiquidityFormValues,
+  QSMainNet,
   TokenDataMap,
   WhitelistedToken,
   WhitelistedTokenPair,
@@ -81,12 +78,15 @@ export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  // const handleErrorToast = useCallback((err) => {
-  //   updateToast({
-  //     type: 'error',
-  //     render: `${err.name}: ${err.message}`,
-  //   });
-  // }, [updateToast]);
+  const handleErrorToast = useCallback(
+    (err) => {
+      updateToast({
+        type: 'error',
+        render: `${err.name}: ${err.message}`,
+      });
+    },
+    [updateToast],
+  );
 
   const handleLoader = useCallback(() => {
     updateToast({
@@ -95,21 +95,25 @@ export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
     });
   }, [updateToast, t]);
 
-  // const handleSuccessToast = useCallback((text:string) => {
-  //   updateToast({
-  //     type: 'success',
-  //     render: t(text),
-  //   });
-  // }, [updateToast, t]);
+  const handleSuccessToast = useCallback(
+    (text: string) => {
+      updateToast({
+        type: 'success',
+        render: t(text),
+      });
+    },
+    [updateToast, t],
+  );
 
-  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
-  });
+  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
+    handleTokenChange({
+      token,
+      tokenNumber,
+      exchangeRates,
+      tezos: tezos!,
+      accountPkh: accountPkh!,
+      setTokensData,
+    });
 
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0) {
@@ -156,17 +160,20 @@ export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
       <LiquidityChart token1={token1} token2={token2} />
       <StickyBlock className={className}>
         <Form
-          onSubmit={() => {
-            // onSubmit={(values:LiquidityFormValues) => {
-            // console.log(values);
+          onSubmit={(values: LiquidityFormValues) => {
             if (!tezos) return;
             handleLoader();
-            submitForm();
-            // tezos,
-            // values,
-            // handleErrorToast,
-            // handleSuccessToast,
-            // currentTab.id,
+            submitForm({
+              tezos,
+              values,
+              updateToast: handleErrorToast,
+              handleSuccessToast,
+              currentTab: currentTab.id,
+              accountPkh,
+              token2,
+              tokensData,
+              networkId: network.id as QSMainNet,
+            });
           }}
           mutators={{
             setValue: ([field, value], state, { changeValue }) => {
@@ -177,7 +184,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
             <LiquidityForm
               form={form}
               handleSubmit={handleSubmit}
-              debounce={1}
+              debounce={10}
               save={() => {}}
               setTabsState={setTabsState}
               tabsState={tabsState}

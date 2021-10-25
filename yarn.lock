@@ -1123,9 +1123,9 @@
   integrity sha512-VZMYa7+fXHdwIq1TDhSXoVmSPEGM/aa+6Aiq3nVVJ9bXr24zScr+NlKFKC3iPljA7ho/GAZr+d2jOf5GIRC30Q==
 
 "@quipuswap/sdk@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-2.2.1.tgz#b1bba16d70fb93c2c8683d8d3087194994552132"
-  integrity sha512-EvOevelNRLg9CK/65rA8BVYGPWw/0B2HTXTCvoBZR7SPk4JOMuwiz2tpqMnSp7oBpuXdEfaF4d6GBTGbE5uSyw==
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@quipuswap/sdk/-/sdk-2.3.0.tgz#53e6afcc9db07c383e001b9029894110be35c84d"
+  integrity sha512-evrCHiJ5Oby6VokRdO0w6OwT5dv3H/ae6f3TkL0+Te0uWcQlCntc4oUB/FtbvDHWdliSYVvFMFGCcvBtKfdXzQ==
   dependencies:
     bignumber.js "^9.0.1"
 

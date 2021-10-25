@@ -7,9 +7,9 @@ import { Button } from '@components/ui/Button';
 import s from './ComplexInput.module.sass';
 
 type PercentSelectorProps = {
-  handleBalance: (state:string) => void,
-  decimals?: number
-  value: string,
+  handleBalance: (state: string) => void;
+  decimals?: number;
+  value: string;
 };
 
 export const PercentSelector: React.FC<PercentSelectorProps> = ({
@@ -17,14 +17,13 @@ export const PercentSelector: React.FC<PercentSelectorProps> = ({
   decimals = 0,
   value,
 }) => {
-  const handleRatio = useCallback((ratio: BigNumber.Value) => handleBalance(
-    parseDecimals(
-      new BigNumber(value).times(ratio).toString(),
-      0,
-      Infinity,
-      decimals,
-    ),
-  ), [value, decimals, handleBalance]);
+  const handleRatio = useCallback(
+    (ratio: BigNumber.Value) =>
+      handleBalance(
+        parseDecimals(new BigNumber(value).times(ratio).toFixed(), 0, Infinity, decimals),
+      ),
+    [value, decimals, handleBalance],
+  );
 
   return (
     <div className={s.controls}>

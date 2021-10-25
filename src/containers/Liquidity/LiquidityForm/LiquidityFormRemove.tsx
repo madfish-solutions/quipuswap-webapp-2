@@ -48,14 +48,11 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     () => fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6).toString(),
     [poolShare],
   );
-  const unfrozenBalance = useMemo(
-    () => fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6).toString(),
-    [poolShare],
-  );
   const totalBalance = useMemo(
-    () => fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)
-      .plus(fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6))
-      .toString(),
+    () =>
+      fromDecimals(new BigNumber(poolShare?.unfrozen ?? '0'), 6)
+        .plus(fromDecimals(new BigNumber(poolShare?.frozen ?? '0'), 6))
+        .toString(),
     [poolShare],
   );
 
@@ -91,7 +88,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
                 form.mutators.setValue('balance3', +value);
               }}
               noBalanceButtons={!accountPkh}
-              balance={unfrozenBalance}
+              balance={totalBalance}
               frozenBalance={frozenBalance}
               totalBalance={totalBalance}
               balanceLabel={t('common|Liquid Balance')}

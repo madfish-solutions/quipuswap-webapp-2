@@ -1,9 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
@@ -18,22 +13,17 @@ import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo';
 import { Preloader } from '@components/common/Preloader';
 
-import {
-  GraphicColors,
-  GraphicHeight,
-  GraphOptions,
-  LineGraphOptions,
-} from '../config';
+import { GraphicColors, GraphicHeight, GraphOptions, LineGraphOptions } from '../config';
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
-  error?: any
-  data: PlotPoint[]
-  token1?: WhitelistedToken
-  token2?: WhitelistedToken
-  loading?: boolean
-  headerContent?: React.ReactNode
-  className?: string
+  error?: any;
+  data: PlotPoint[];
+  token1?: WhitelistedToken;
+  token2?: WhitelistedToken;
+  loading?: boolean;
+  headerContent?: React.ReactNode;
+  className?: string;
 };
 
 const modeClass = {
@@ -49,7 +39,7 @@ const formatDate = (date: Date) => {
   const minutes = date.getMinutes();
   let ampm = 'AM';
 
-  let monString = `${minutes}`;
+  let monString = `${month}`;
   let dayString = `${dt}`;
   let minString = `${minutes}`;
 
@@ -74,9 +64,7 @@ const formatDate = (date: Date) => {
   return `${dayString}.${monString}.${year} ${hourString}:${minString} ${ampm}`;
 };
 
-const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
-  data,
-}) => {
+const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({ data }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
@@ -89,7 +77,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   // for reseting value on hover exit
   const currenValue = data[data.length - 1];
 
-  const [value, setValue] = useState<{ price: number, time: number }>({
+  const [value, setValue] = useState<{ price: number; time: number }>({
     price: currenValue.value,
     time: currenValue.time,
   });
@@ -98,9 +86,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
 
   // if chart not instantiated in canvas, create it
   useEffect(() => {
-    if (
-      prevColorThemeModeState !== colorThemeMode
-    ) {
+    if (prevColorThemeModeState !== colorThemeMode) {
       chartCreated?.remove();
       setChart(undefined);
     }
@@ -140,9 +126,9 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
         topColor: GraphicColors[colorThemeMode].accent,
         bottomColor: GraphicColors[colorThemeMode].background,
         crosshairMarkerBorderColor: GraphicColors[colorThemeMode].primary1,
-        crosshairMarkerBackgroundColor: GraphicColors[
-          colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light
-        ].primary1,
+        crosshairMarkerBackgroundColor:
+          GraphicColors[colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light]
+            .primary1,
         ...LineGraphOptions,
       });
 
@@ -152,13 +138,13 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
       // update the title when hovering on the chart
       chart.subscribeCrosshairMove((param) => {
         if (
-          chartRef?.current
-          && (param === undefined
-            || param.time === undefined
-            || (param && param.point && param.point.x < 0)
-            || (param && param.point && param.point.x > chartRef.current.clientWidth)
-            || (param && param.point && param.point.y < 0)
-            || (param && param.point && param.point.y > height))
+          chartRef?.current &&
+          (param === undefined ||
+            param.time === undefined ||
+            (param && param.point && param.point.x < 0) ||
+            (param && param.point && param.point.x > chartRef.current.clientWidth) ||
+            (param && param.point && param.point.y < 0) ||
+            (param && param.point && param.point.y > height))
         ) {
           if (setValue) {
             setValue({
@@ -192,18 +178,10 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   return (
     <>
       <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <h4>
-          {t('common|Total liquidity:')}
-        </h4>
-        <span className={s.date}>
-          {formatDate(new Date(value.time * 1000))}
-        </span>
+        <h4>{t('common|Total liquidity:')}</h4>
+        <span className={s.date}>{formatDate(new Date(value.time * 1000))}</span>
         <h4 className={s.value}>
-          <span className={s.dollar}>
-            $
-          </span>
-          {' '}
-          {prettyPrice(value.price, 2, 22)}
+          <span className={s.dollar}>$</span> {prettyPrice(value.price, 2, 22)}
         </h4>
       </div>
       <div ref={chartRef} className={s.chart} />
@@ -222,18 +200,16 @@ export const LineChart: React.FC<LineChartProps> = ({
   <Card className={className}>
     <CardHeader
       header={{
-        content: (
-          <PairChartInfo hidePeriods token1={token1} token2={token2} />
-        ),
+        content: <PairChartInfo hidePeriods token1={token1} token2={token2} />,
       }}
       className={s.cardHeader}
     />
     <CardContent className={cx(s.container, s.cardContent)}>
-      {loading || error || !data || data.length === 0
-        ? (<Preloader style={{ minHeight: '360px' }} />)
-        : (
-          <ChartInstance data={data} />
-        )}
+      {loading || error || !data || data.length === 0 ? (
+        <Preloader style={{ minHeight: '360px' }} />
+      ) : (
+        <ChartInstance data={data} />
+      )}
     </CardContent>
   </Card>
 );
