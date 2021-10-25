@@ -87,6 +87,16 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       ),
     [rate1, token1.metadata.decimals, tokensData],
   );
+  const impact = useMemo(() => {
+    if (!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01)) {
+      return '<0.01';
+    }
+    if (priceImpact.gt(100)) {
+      return '100';
+    }
+    return priceImpact.toFixed(2);
+  }, [priceImpact]);
+
   return (
     <Card
       header={{
@@ -182,14 +192,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <CurrencyAmount
-          amount={
-            !priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01)
-              ? '<0.01'
-              : priceImpact.toFixed(2)
-          }
-          currency="%"
-        />
+        <CurrencyAmount amount={impact} currency="%" />
       </CardCell>
       <CardCell
         header={

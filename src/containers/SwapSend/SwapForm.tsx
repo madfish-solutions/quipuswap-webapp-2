@@ -144,9 +144,6 @@ const RealForm: React.FC<SwapFormProps> = ({
     const isDex2Same = dex2 && oldDex2 && isDexEqual(dex2, oldDex2);
     const isDexSame = isDex1Same || (isTokenToToken && isDex1Same && isDex2Same);
     if (isValuesSame && isTokensSame && isDexSame) return;
-    if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
-      return;
-    }
     if (isValuesSame && !isTokensSame) {
       lastChangeMod = 'balance1';
     }
@@ -198,19 +195,18 @@ const RealForm: React.FC<SwapFormProps> = ({
     }
 
     const result = new BigNumber(parseDecimals(retValue.toFixed(), 0, Infinity, decimals2));
-
-    const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate).div(
-      tokensData.second.exchangeRate,
-    );
-
     let rate1buf = new BigNumber(result).div(balance1);
     if (lastChangeMod === 'balance1') {
       rate1buf = balance1.div(result);
     }
 
-    const priceImp = new BigNumber(1)
-      .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
-      .multipliedBy(100);
+    const priceImp = toDecimals(new BigNumber(balance1), token1.metadata.decimals)
+      .div(
+        token1.contractAddress === TEZOS_TOKEN.contractAddress
+          ? dex1.storage.storage.tez_pool
+          : dex1.storage.storage.token_pool,
+      )
+      .times(100);
     setRate1(rate1buf);
     setRate2(rate1buf.exponentiatedBy(-1));
     setPriceImpact(priceImp);
