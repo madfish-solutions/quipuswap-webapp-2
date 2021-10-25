@@ -12,18 +12,18 @@ interface UseLoadDexArgs {
   token2: WhitelistedToken;
 }
 
+let curDate = Date.now();
+
 export const useLoadDex = ({token1, token2}: UseLoadDexArgs) => {
   const [localToken1, setLocalToken1] = useState(token1 || TEZOS_TOKEN);
   const [localToken2, setLocalToken2] = useState(token2 || STABLE_TOKEN);
   const [[dex1, dex2], setDex] = useState<FoundDex[]>([]);
   const [[dexStorage1, dexStorage2], setDexStorage] = useState<any>([]);
-  // const [currentFetch, setCurrentFetch] = useState<number>();
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
   const loadDex = useCallback(() => {
     if (!tezos || !localToken2 || !localToken1) return;
-    const curDate = Date.now();
-    console.log('get dex', localToken1, localToken2, curDate);
+    curDate = Date.now();
     getDex({
       tezos,
       networkId,
@@ -31,14 +31,11 @@ export const useLoadDex = ({token1, token2}: UseLoadDexArgs) => {
       token2: localToken2,
       nonce: curDate,
     }).then((x) => {
-      console.log(curDate, x.nonce);
       if (curDate !== x.nonce) return;
       const {dexes, storages} = x;
-      console.log('loaded dex', dexes, storages);
       setDex(dexes);
       setDexStorage(storages);
     });
-    // setCurrentFetch(curDate);
   }, [tezos, localToken1, localToken2, networkId]);
 
   useEffect(() => {
