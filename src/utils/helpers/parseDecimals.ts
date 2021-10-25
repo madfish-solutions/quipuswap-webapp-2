@@ -1,29 +1,33 @@
 import BigNumber from 'bignumber.js';
 
-export const parseDecimals = (value: string, min: number, max: number, decimals?:number) => {
+export const parseDecimals = (value: string, min: number, max: number, decimals?: number) => {
   // leave only numbers
-  let val = value.replace(/ /g, '').replace(/,/g, '.').replace(/[^0-9.]+/g, '');
-  const match = (val.match(/[.]/g) || []);
-  if (val.endsWith('.') && match.length > 1) {
-    val = val.slice(0, -1);
+  if (value === '.') {
+    return '0.';
   }
-  let numVal = new BigNumber(val || 0);
+  let val = value
+    .replace(/ /g, '') // removes empty spaces
+    .replace(/,/g, '.') // changes , to .
+    .replace(/[.]+/g, '.') // changes multidots ... to signle dot .
+    .replace(/[^0-9.]+/g, '') // removes all symbols, that not numbers or dot
+    .replace(/^0+(?=\d)/, ''); // removes leading zeros
+  const match = val.match(/[.]/g) || [];
+  if (match.length > 1) {
+    val = val.replace('.', '');
+  }
   const indexOfDot = val.indexOf('.');
+  const symbolsAfterDot = val.length - 1 - indexOfDot;
   if (decimals && indexOfDot !== -1 && val.length - indexOfDot > decimals + 1) {
     val = val.substring(0, indexOfDot + decimals + 1);
-    numVal = new BigNumber(val);
   }
-  let onlyNums = val;
-  if (val.endsWith('.') && match.length > 1) {
-    onlyNums = numVal.toFixed();
-  }
-  if (onlyNums === '') return '';
-  let res = onlyNums;
-  if (new BigNumber(onlyNums).lt(new BigNumber(min))) {
+  if (val === '') return '';
+  let res = val;
+  if (new BigNumber(val).lt(new BigNumber(min))) {
     res = min.toString();
   }
-  if (new BigNumber(onlyNums).gt(new BigNumber(max))) {
+  if (new BigNumber(val).gt(new BigNumber(max))) {
     res = max.toString();
   }
-  return res;
+  if (indexOfDot && !symbolsAfterDot) return res;
+  return new BigNumber(res).toFixed();
 };
