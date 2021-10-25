@@ -15,6 +15,7 @@ export * from './getWhitelistedBakerName';
 export * from './getWhitelistedTokenSymbol';
 export * from './getWhitelistedTokenDecimals';
 export * from './getWhitelistedTokenAddress';
+export * from './localSearchTokenByAddr';
 export * from './isTokenEqual';
 export * from './isPairEqual';
 export * from './slippageToBignum';

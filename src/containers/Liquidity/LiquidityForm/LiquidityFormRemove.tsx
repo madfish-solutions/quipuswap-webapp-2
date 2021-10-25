@@ -24,7 +24,7 @@ interface LiquidityFormRemoveProps {
   tokenPair: WhitelistedTokenPair;
   setDex: (dex?: FoundDex) => void;
   setTokens: (tokens: WhitelistedToken[]) => void;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChange: (arg: any) => void;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   form: any;
   poolShare: any;
@@ -80,8 +80,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
               setTokenPair={(pair) => {
                 setDex(undefined);
                 setTokens([pair.token1, pair.token2]);
-                handleTokenChange(pair.token1, 'first');
-                handleTokenChange(pair.token2, 'second');
+                handleTokenChange({token: pair.token1, tokenNumber: 'first'});
+                handleTokenChange({token: pair.token2, tokenNumber: 'second'});
                 hanldeTokenPairSelect(pair, setTokenPair, handleTokenChange);
               }}
               handleBalance={(value) => {

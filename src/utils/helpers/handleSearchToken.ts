@@ -5,8 +5,7 @@ import {QSNetwork, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
 import {hanldeTokenPairSelect} from '@containers/Liquidity/liquidityHelpers';
 
 import {isTokenEqual} from './isTokenEqual';
-import {localSearchToken} from './localSearchToken';
-import {localSearchSortSymbol} from './localSearchSortSymbol';
+import {localSearchTokenByAddr} from './localSearchTokenByAddr';
 
 type SearchTokenType = {
   tokens: WhitelistedToken[];
@@ -15,7 +14,7 @@ type SearchTokenType = {
   from: string;
   to: string;
   fixTokenFrom?: WhitelistedToken;
-  handleTokenChangeWrapper: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChange: (arg: any) => void;
   setTokens: React.Dispatch<React.SetStateAction<WhitelistedToken[]>>;
   setInitialLoad: React.Dispatch<React.SetStateAction<boolean>>;
   setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -29,12 +28,11 @@ type SearchTokenType = {
 
 export const handleSearchToken = async ({
   tokens,
-  network,
   tezos,
   from,
   to,
   fixTokenFrom,
-  handleTokenChangeWrapper,
+  handleTokenChange,
   setTokens,
   setInitialLoad,
   setUrlLoaded,
@@ -47,9 +45,9 @@ export const handleSearchToken = async ({
     const strStr = Array.isArray(str) ? str[0] : str;
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
-    const isTokens = tokens
-      .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
-      .filter((token: any) => localSearchToken(token, network, inputValue, +inputToken));
+    const isTokens = tokens.filter((token: any) =>
+      localSearchTokenByAddr(token, inputValue, +inputToken),
+    );
     if (isTokens.length === 0) {
       return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
         if (x) {
@@ -65,7 +63,7 @@ export const handleSearchToken = async ({
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChangeWrapper(resTo, 'second');
+      handleTokenChange({token: resTo, tokenNumber: 'second'});
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -74,7 +72,7 @@ export const handleSearchToken = async ({
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChangeWrapper(resFrom, 'first');
+    handleTokenChange({token: resFrom, tokenNumber: 'first'});
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {
@@ -83,7 +81,7 @@ export const handleSearchToken = async ({
       hanldeTokenPairSelect(
         {token1: res[0], token2: res[1]} as WhitelistedTokenPair,
         setTokenPair,
-        handleTokenChangeWrapper,
+        handleTokenChange,
       );
     }
   }

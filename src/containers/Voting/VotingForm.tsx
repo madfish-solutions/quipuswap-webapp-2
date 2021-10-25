@@ -65,7 +65,7 @@ type VotingFormProps = {
   tokenPair: WhitelistedTokenPair;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChange: (arg: any) => void;
   currentTab: any;
   setTabsState: (val: any) => void;
 };
@@ -264,8 +264,8 @@ const RealForm: React.FC<VotingFormProps> = ({
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
-                handleTokenChange(pair.token1, 'first');
-                handleTokenChange(pair.token2, 'second');
+                handleTokenChange({token: pair.token1, tokenNumber: 'first'});
+                handleTokenChange({token: pair.token2, tokenNumber: 'second'});
                 setTokens([pair.token1, pair.token2]);
                 hanldeTokenPairSelect(
                   pair,

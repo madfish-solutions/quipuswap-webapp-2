@@ -35,7 +35,7 @@ interface LiquidityFormAddProps {
   setDex: (dex?: FoundDex) => void;
   setTokens: (tokens: WhitelistedToken[]) => void;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChange: (arg: any) => void;
   setLastChange: (change: 'balance1' | 'balance2') => void;
   form: any;
   tokensData: TokenDataMap;
@@ -128,7 +128,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
             noBalanceButtons={!accountPkh}
             handleChange={(token) => {
               setDex(undefined);
-              handleTokenChange(token, 'first');
+              handleTokenChange({token, tokenNumber: 'first'});
             }}
             balance={tokensData.first.balance}
             exchangeRate={tokensData.first.exchangeRate}
@@ -165,7 +165,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
             noBalanceButtons={!accountPkh}
             handleChange={(token) => {
               setDex(undefined);
-              handleTokenChange(token, 'second');
+              handleTokenChange({token, tokenNumber: 'second'});
             }}
             balance={tokensData.second.balance}
             exchangeRate={tokensData.second.exchangeRate}

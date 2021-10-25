@@ -6,11 +6,11 @@ import {useRouter} from 'next/router';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {useRouterPair} from '@hooks/useRouterPair';
 import {useExchangeRates} from '@hooks/useExchangeRate';
-import {fallbackTokenToTokenData, handleSearchToken, handleTokenChange} from '@utils/helpers';
+import {useTokensData} from '@hooks/useTokensData';
+import {handleSearchToken} from '@utils/helpers';
 import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
 import {
   QSMainNet,
-  TokenDataMap,
   VoteFormValues,
   VoterType,
   WhitelistedToken,
@@ -54,10 +54,7 @@ export const Voting: React.FC<VotingProps> = ({className}) => {
   const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(STABLE_TOKEN),
-  });
+  const {tokensData, handleTokenChange} = useTokensData();
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
@@ -102,16 +99,6 @@ export const Voting: React.FC<VotingProps> = ({className}) => {
     });
   }, [updateToast]);
 
-  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
-    handleTokenChange({
-      token,
-      tokenNumber,
-      exchangeRates,
-      tezos: tezos!,
-      accountPkh: accountPkh!,
-      setTokensData,
-    });
-
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
       handleSearchToken({
@@ -126,7 +113,7 @@ export const Voting: React.FC<VotingProps> = ({className}) => {
         setTokens,
         setTokenPair,
         searchCustomToken,
-        handleTokenChangeWrapper,
+        handleTokenChange,
       });
     }
     // eslint-disable-next-line
@@ -134,8 +121,8 @@ export const Voting: React.FC<VotingProps> = ({className}) => {
 
   const getBalance = useCallback(() => {
     if (tezos && tokenPair.token1 && tokenPair.token2) {
-      handleTokenChangeWrapper(tokenPair.token1, 'first');
-      handleTokenChangeWrapper(tokenPair.token2, 'second');
+      handleTokenChange({token: tokenPair.token1, tokenNumber: 'first'});
+      handleTokenChange({token: tokenPair.token2, tokenNumber: 'second'});
       hanldeTokenPairSelect(
         tokenPair,
         setTokenPair,

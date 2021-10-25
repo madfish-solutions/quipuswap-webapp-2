@@ -1,11 +1,11 @@
-import {WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
+import {WhitelistedTokenPair} from '@utils/types';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
-  handleTokenChange: (token: WhitelistedToken, tokenNum: 'first' | 'second') => void,
+  handleTokenChange: (arg: any) => void,
 ) => {
-  handleTokenChange(pair.token1, 'first');
-  handleTokenChange(pair.token2, 'second');
+  handleTokenChange({token: pair.token1, tokenNumber: 'first'});
+  handleTokenChange({token: pair.token2, tokenNumber: 'second'});
   setTokenPair(pair);
 };

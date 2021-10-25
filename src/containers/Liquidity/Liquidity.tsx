@@ -7,15 +7,10 @@ import {TransferParams} from '@quipuswap/sdk';
 import {useRouterPair} from '@hooks/useRouterPair';
 import {useExchangeRates} from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
+import {useTokensData} from '@hooks/useTokensData';
 import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
-import {fallbackTokenToTokenData, handleTokenChange, handleSearchToken} from '@utils/helpers';
-import {
-  LiquidityFormValues,
-  QSMainNet,
-  TokenDataMap,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-} from '@utils/types';
+import {handleSearchToken} from '@utils/helpers';
+import {LiquidityFormValues, QSMainNet, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
 import {findTokensByList, useLists, useSearchCustomTokens} from '@utils/tokenLists';
 import {STABLE_TOKEN, TEZOS_TOKEN} from '@utils/defaults';
 import {StickyBlock} from '@components/common/StickyBlock';
@@ -55,10 +50,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
   const network = useNetwork();
   const searchCustomToken = useSearchCustomTokens();
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(STABLE_TOKEN),
-  });
+  const {tokensData, handleTokenChange} = useTokensData();
 
   const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
@@ -105,16 +97,6 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
     [updateToast, t],
   );
 
-  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
-    handleTokenChange({
-      token,
-      tokenNumber,
-      exchangeRates,
-      tezos: tezos!,
-      accountPkh: accountPkh!,
-      setTokensData,
-    });
-
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0) {
       handleSearchToken({
@@ -129,7 +111,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
         setTokens,
         setTokenPair,
         searchCustomToken,
-        handleTokenChangeWrapper,
+        handleTokenChange,
       });
     }
     // eslint-disable-next-line
@@ -137,12 +119,12 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
 
   const getBalance = useCallback(() => {
     if (tezos && token1 && token2) {
-      handleTokenChangeWrapper(token1, 'first');
-      handleTokenChangeWrapper(token2, 'second');
+      handleTokenChange({token: token1, tokenNumber: 'first'});
+      handleTokenChange({token: token2, tokenNumber: 'second'});
       hanldeTokenPairSelect(
         {token1, token2} as WhitelistedTokenPair,
         setTokenPair,
-        handleTokenChangeWrapper,
+        handleTokenChange,
       );
     }
     // eslint-disable-next-line
@@ -194,7 +176,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
               tokenPair={tokenPair}
               setTokenPair={setTokenPair}
               tokensData={tokensData}
-              handleTokenChange={handleTokenChangeWrapper}
+              handleTokenChange={handleTokenChange}
               currentTab={currentTab}
               setRemoveLiquidityParams={setRemoveLiquidityParams}
               removeLiquidityParams={removeLiquidityParams}

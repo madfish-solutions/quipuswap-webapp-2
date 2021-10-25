@@ -70,7 +70,7 @@ type LiquidityFormProps = {
   tokenPair: WhitelistedTokenPair;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChange: (arg: any) => void;
   currentTab: any;
   setTabsState: (val: any) => void;
 };
