@@ -30,12 +30,16 @@ export const useLoadDex = ({token1, token2}: UseLoadDexArgs) => {
       token1: localToken1,
       token2: localToken2,
       nonce: curDate,
-    }).then((x) => {
-      if (curDate !== x.nonce) return;
-      const {dexes, storages} = x;
-      setDex(dexes);
-      setDexStorage(storages);
-    });
+    })
+      .then((x) => {
+        if (curDate !== x.nonce) return;
+        const {dexes, storages} = x;
+        setDex(dexes);
+        setDexStorage(storages);
+      })
+      .catch(() => {
+        // todo, fall silently
+      });
   }, [tezos, localToken1, localToken2, networkId]);
 
   useEffect(() => {
