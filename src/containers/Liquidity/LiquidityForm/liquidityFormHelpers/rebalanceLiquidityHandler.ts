@@ -67,22 +67,9 @@ export const rebalanceLiquidityHandler = ({
       swapValue.plus(new BigNumber(localDex.storage.storage.token_pool)),
       getWhitelistedTokenDecimals(TEZOS_TOKEN),
     ).dividedBy(toDecimals(localDex.storage.storage.tez_pool, getWhitelistedTokenDecimals(token2)));
-    const investValue = (whichTokenPoolIsGreater ? inputValue.times(rate) : inputValue.idiv(rate))
-      .idiv(2)
-      .minus(1);
-    // console.log({
-    //   bal1: bal1.toString(),
-    //   bal2: bal2.toString(),
-    //   initialAto: initialAto$.toString(),
-    //   initialBto: initialBto$.toString(),
-    //   total: total$.toString(),
-    //   val1: val1.toString(),
-    //   val2: val2.toString(),
-    //   inputValue: inputValue.toString(),
-    //   swapValue: swapValue.toString(),
-    //   rate: rate.toString(),
-    //   investValue: investValue.toString(),
-    // })
+    const investValue = (
+      whichTokenPoolIsGreater ? inputValue.times(rate) : inputValue.idiv(rate)
+    ).minus(1);
     return [swapValue, investValue];
   } catch (e) {
     return null;
