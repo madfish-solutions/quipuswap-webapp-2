@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -13,11 +12,9 @@ import { composeValidators, isAddress, validateBalance, validateMinMax } from '@
 import {
   fromDecimals,
   getWhitelistedTokenDecimals,
-  getWhitelistedTokenSymbol,
   isDexEqual,
   isTokenEqual,
   parseDecimals,
-  slippageToBignum,
   toDecimals,
   transformTokenDataToAsset,
 } from '@utils/helpers';
@@ -28,13 +25,12 @@ import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/Button';
 import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
-import { SwapDetails } from './SwapDetails';
-import { getDex } from './swapHelpers';
+import { SwapDetails } from '../SwapDetails';
+import { getDex } from '../swapHelpers';
+import { SwapFormSlippage } from './SwapFormSlippage';
 
 const TabsContent = [
   {
@@ -91,7 +87,6 @@ const RealForm: React.FC<SwapFormProps> = ({
   const updateToast = useUpdateToast();
   const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } =
     useConnectModalsState();
-  const { t } = useTranslation(['swap']);
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -303,19 +298,21 @@ const RealForm: React.FC<SwapFormProps> = ({
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
   );
-  let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
-  if (
-    token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
-    token2.contractAddress !== TEZOS_TOKEN.contractAddress
-  ) {
-    feeVal = feeVal.times(2);
-  }
-  const fee = parseDecimals(
-    feeVal.times(FEE_RATE).toFixed(),
-    0,
-    Infinity,
-    getWhitelistedTokenDecimals(TEZOS_TOKEN),
-  );
+  const fee = useMemo(() => {
+    let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
+    if (
+      token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
+      token2.contractAddress !== TEZOS_TOKEN.contractAddress
+    ) {
+      feeVal = feeVal.times(2);
+    }
+    return parseDecimals(
+      feeVal.times(FEE_RATE).toFixed(),
+      0,
+      Infinity,
+      getWhitelistedTokenDecimals(TEZOS_TOKEN),
+    );
+  }, []);
 
   return (
     <>
@@ -424,31 +421,7 @@ const RealForm: React.FC<SwapFormProps> = ({
             </>
           )}
         </Field>
-        <Field initialValue="0.5 %" name="slippage">
-          {({ input }) => {
-            const slipPerc = slippageToBignum(values.slippage).times(
-              new BigNumber(values.balance2 ?? 0),
-            );
-            const minimumReceived = parseDecimals(
-              new BigNumber(values.balance2 ?? 0).minus(slipPerc).toFixed(),
-              0,
-              Infinity,
-              token2.metadata.decimals,
-            );
-            return (
-              <>
-                <Slippage handleChange={(value) => input.onChange(value)} />
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>{t('swap|Minimum received')}</span>
-                  <CurrencyAmount
-                    amount={minimumReceived}
-                    currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
-                  />
-                </div>
-              </>
-            );
-          }}
-        </Field>
+        <SwapFormSlippage values={values} token2={token2} />
         <Button
           disabled={values.balance1 === undefined || values.balance1 === '' || token2 === undefined}
           type="submit"
