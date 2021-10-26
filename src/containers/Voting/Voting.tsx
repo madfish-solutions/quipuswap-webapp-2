@@ -7,7 +7,7 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { fallbackTokenToTokenData, handleSearchToken, handleTokenChange } from '@utils/helpers';
-import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@providers/dapp';
 import {
   QSMainNet,
   TokenDataMap,
@@ -17,7 +17,7 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@providers/tokenLists';
 import { VotingStats } from '@components/voting/VotingStats';
 import { StickyBlock } from '@components/common/StickyBlock';
 

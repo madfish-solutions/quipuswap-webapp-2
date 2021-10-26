@@ -1,15 +1,10 @@
-import React, {
-  useContext, useEffect, useRef, useState, useMemo, useCallback,
-} from 'react';
+import React, { useContext, useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import {
-  useTezos,
-  useNetwork,
-} from '@utils/dapp';
+import { useTezos, useNetwork } from '@providers/dapp';
 import {
   useLists,
   useSearchCustomLists,
@@ -18,9 +13,12 @@ import {
   useSearchTokens,
   findTokensByList,
   isTokenFa2,
-} from '@utils/tokenLists';
+} from '@providers/tokenLists';
 import {
-  parseNumber, localSearchToken, isTokenEqual, localSearchListByNameOrUrl,
+  parseNumber,
+  localSearchToken,
+  isTokenEqual,
+  localSearchListByNameOrUrl,
 } from '@utils/helpers';
 
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
@@ -53,26 +51,24 @@ const TabsContent = [
 ];
 
 type TokensModalProps = {
-  onChange: (token: WhitelistedToken) => void,
-  blackListedTokens: WhitelistedToken[],
+  onChange: (token: WhitelistedToken) => void;
+  blackListedTokens: WhitelistedToken[];
 } & ReactModal.Props;
 
 type HeaderProps = {
-  isSecondInput:boolean
-  debounce:number,
-  save:any,
-  values:any,
-  form:any,
+  isSecondInput: boolean;
+  debounce: number;
+  save: any;
+  values: any;
+  form: any;
 };
 
 type FormValues = {
-  search: string
-  tokenId: number
+  search: string;
+  tokenId: number;
 };
 
-const Header:React.FC<HeaderProps> = ({
-  isSecondInput, debounce, save, values, form,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
@@ -106,9 +102,7 @@ const Header:React.FC<HeaderProps> = ({
 
   return (
     <div className={s.inputs}>
-      <Field
-        name="search"
-      >
+      <Field name="search">
         {({ input, meta }) => (
           <>
             <Input
@@ -120,46 +114,42 @@ const Header:React.FC<HeaderProps> = ({
             />
           </>
         )}
-
       </Field>
-      {(isSecondInput) && (
-      <Field
-        name="tokenId"
-        validate={validateMinMax(0, 100)}
-        parse={(value) => parseNumber(value, 0, 100)}
-      >
-        {({ input, meta }) => (
-          <>
-            <NumberInput
-              {...input}
-              className={s.modalInput}
-              placeholder={t('common|Token ID')}
-              step={1}
-              min={0}
-              max={100}
-              error={(meta.touched && meta.error) || meta.submitError}
-              onIncrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  +input.value + 1 > 100 ? 100 : +input.value + 1,
-                );
-              }}
-              onDecrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  +input.value - 1 < 1 ? 1 : +input.value - 1,
-                );
-              }}
-            />
-          </>
-        )}
-      </Field>
+      {isSecondInput && (
+        <Field
+          name="tokenId"
+          validate={validateMinMax(0, 100)}
+          parse={(value) => parseNumber(value, 0, 100)}
+        >
+          {({ input, meta }) => (
+            <>
+              <NumberInput
+                {...input}
+                className={s.modalInput}
+                placeholder={t('common|Token ID')}
+                step={1}
+                min={0}
+                max={100}
+                error={(meta.touched && meta.error) || meta.submitError}
+                onIncrementClick={() => {
+                  form.mutators.setValue(
+                    'tokenId',
+                    +input.value + 1 > 100 ? 100 : +input.value + 1,
+                  );
+                }}
+                onDecrementClick={() => {
+                  form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
+                }}
+              />
+            </>
+          )}
+        </Field>
       )}
     </div>
   );
 };
 
-const AutoSave = (props:any) => (
+const AutoSave = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
@@ -186,31 +176,25 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const { data: searchLists, loading: searchListsLoading } = useSearchLists();
   const [filteredLists, setFilteredLists] = useState<WhitelistedTokenList[]>([]);
 
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
-  );
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleInput = useCallback((values:FormValues) => {
-    if (currentTab.id === TabsContent[0].id) {
-      setInputValue(values.search ?? '');
-      setInputToken(isSoleFa2Token ? values.tokenId : 0);
-    } else {
-      setInputValue(values.search ?? '');
-    }
-  }, [setInputValue, setInputToken, isSoleFa2Token, currentTab]);
+  const handleInput = useCallback(
+    (values: FormValues) => {
+      if (currentTab.id === TabsContent[0].id) {
+        setInputValue(values.search ?? '');
+        setInputToken(isSoleFa2Token ? values.tokenId : 0);
+      } else {
+        setInputValue(values.search ?? '');
+      }
+    },
+    [setInputValue, setInputToken, isSoleFa2Token, currentTab],
+  );
 
   const handleTokenSearch = useCallback(() => {
     if (!network || !tezos) return;
-    const searchTokensArr = tokens
-      .filter(
-        (token:any) => localSearchToken(
-          token,
-          network,
-          inputValue,
-          inputToken,
-        ),
-      );
+    const searchTokensArr = tokens.filter((token: any) =>
+      localSearchToken(token, network, inputValue, inputToken),
+    );
     setFilteredTokens(searchTokensArr);
     if (inputValue.length > 0 && searchTokensArr.length === 0) {
       searchCustomToken(inputValue, inputToken);
@@ -219,13 +203,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   const handleListSearch = useCallback(() => {
     if (!tezos) return;
-    const listArr = lists
-      .filter(
-        (list:WhitelistedTokenList) => localSearchListByNameOrUrl(
-          list,
-          inputValue,
-        ),
-      );
+    const listArr = lists.filter((list: WhitelistedTokenList) =>
+      localSearchListByNameOrUrl(list, inputValue),
+    );
     setFilteredLists(listArr);
     if (inputValue.length > 0 && listArr.length === 0) {
       searchCustomList(inputValue);
@@ -233,8 +213,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   }, [inputValue, tezos, searchCustomList, lists]);
 
   const isEmptyTokens = useMemo(
-    () => filteredTokens.length === 0
-    && searchTokens.length === 0,
+    () => filteredTokens.length === 0 && searchTokens.length === 0,
     [searchTokens, filteredTokens],
   );
 
@@ -242,35 +221,21 @@ export const TokensModal: React.FC<TokensModalProps> = ({
     if (currentTab.id === TabsContent[1].id) {
       handleListSearch();
     }
-  },
-  [
-    currentTab,
-    lists,
-    inputValue,
-    tezos,
-    handleListSearch,
-  ]);
+  }, [currentTab, lists, inputValue, tezos, handleListSearch]);
 
   useEffect(() => {
     if (currentTab.id === TabsContent[0].id) {
       handleTokenSearch();
     }
-  }, [
-    currentTab,
-    tokens,
-    inputValue,
-    inputToken,
-    network,
-    handleTokenSearch,
-  ]);
+  }, [currentTab, tokens, inputValue, inputToken, network, handleTokenSearch]);
 
-  const allTokens = useMemo(() => (
-    inputValue.length > 0 && filteredTokens.length === 0
-      ? searchTokens
-      : filteredTokens
-  )
-    .filter((x) => !blackListedTokens.find((y) => isTokenEqual(x, y))),
-  [inputValue, filteredTokens, searchTokens, blackListedTokens]);
+  const allTokens = useMemo(
+    () =>
+      (inputValue.length > 0 && filteredTokens.length === 0 ? searchTokens : filteredTokens).filter(
+        (x) => !blackListedTokens.find((y) => isTokenEqual(x, y)),
+      ),
+    [inputValue, filteredTokens, searchTokens, blackListedTokens],
+  );
 
   useEffect(() => {
     const getFa2 = async () => {
@@ -281,17 +246,14 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   }, [inputValue, tezos]);
 
   const isEmptyLists = useMemo(
-    () => filteredLists.length === 0
-      && searchLists.length === 0,
+    () => filteredLists.length === 0 && searchLists.length === 0,
     [searchLists, filteredLists],
   );
 
-  const allLists = useMemo(() => (
-    inputValue.length > 0 && filteredLists.length === 0
-      ? searchLists
-      : filteredLists
-  ),
-  [inputValue, filteredLists, searchLists]);
+  const allLists = useMemo(
+    () => (inputValue.length > 0 && filteredLists.length === 0 ? searchLists : filteredLists),
+    [inputValue, filteredLists, searchLists],
+  );
 
   return (
     <>
@@ -305,22 +267,22 @@ export const TokensModal: React.FC<TokensModalProps> = ({
         render={({ form }) => (
           <Modal
             title={t('common|Search token')}
-            header={(
+            header={
               <Tabs
                 values={TabsContent}
                 activeId={tabsState}
                 setActiveId={(val) => setTabsState(val)}
               />
-            )}
+            }
             headerClassName={s.tabs}
-            additional={(
+            additional={
               <AutoSave
                 form={form}
                 debounce={0}
                 save={handleInput}
                 isSecondInput={isSoleFa2Token}
               />
-            )}
+            }
             className={themeClass[colorThemeMode]}
             modalClassName={s.tokenModal}
             containerClassName={s.tokenModal}
@@ -349,7 +311,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
               />
             )}
           </Modal>
-
         )}
       />
     </>

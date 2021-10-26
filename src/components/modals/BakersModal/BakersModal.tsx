@@ -6,7 +6,7 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
-import { useBakers } from '@utils/bakers';
+import { useBakers } from '@providers/bakers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';

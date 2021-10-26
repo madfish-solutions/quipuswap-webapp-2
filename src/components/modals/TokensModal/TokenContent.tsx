@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { useAddCustomToken } from '@utils/tokenLists';
+import { useAddCustomToken } from '@providers/tokenLists';
 import { WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { MultiLoader } from '@components/ui/MultiLoader';

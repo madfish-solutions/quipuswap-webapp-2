@@ -1,13 +1,11 @@
-import React, {
-  useState, useEffect,
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { useGetHomeOverviewQuery } from '@graphql';
-import { getStorageInfo } from '@utils/dapp';
+import { getStorageInfo } from '@providers/dapp';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
 import { Section } from '@components/home/Section';
 import { Card } from '@components/ui/Card';
@@ -17,12 +15,10 @@ import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
 
 type DexDashboardProps = {
-  className?: string
+  className?: string;
 };
 
-export const DexDashboard: React.FC<DexDashboardProps> = ({
-  className,
-}) => {
+export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetHomeOverviewQuery();
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
@@ -44,10 +40,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       description={t('home|The short overview of the most relevant DEX information.')}
       className={cx(className)}
     >
-      <Card
-        className={(s.mobile)}
-        contentClassName={s.mobContent}
-      >
+      <Card className={s.mobile} contentClassName={s.mobContent}>
         <>
           <SliderUI className={s.mobSlider}>
             <DexDashboardInner

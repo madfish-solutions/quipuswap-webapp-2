@@ -5,9 +5,7 @@ import { findDex, FoundDex } from '@quipuswap/sdk';
 import { PlotPoint, useGetPairPlotLiquidityQuery } from '@graphql';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
-import {
-  useNetwork, useTezos,
-} from '@utils/dapp';
+import { useNetwork, useTezos } from '@providers/dapp';
 
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -16,17 +14,17 @@ const LineChart = dynamic(() => import('@components/charts/LineChart'), {
 });
 
 type ChartProps = {
-  dex: FoundDex
-  token1:WhitelistedToken
-  token2:WhitelistedToken
+  dex: FoundDex;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
 };
 
 type LiquidityChartProps = {
-  token1:WhitelistedToken
-  token2:WhitelistedToken
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
 };
 
-const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
+const Chart: React.FC<ChartProps> = ({ dex, token1, token2 }) => {
   const { loading, data, error } = useGetPairPlotLiquidityQuery({
     variables: {
       id: dex.contract.address,
@@ -40,15 +38,12 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       className={s.chart}
       loading={!!loadingProp}
       error={error}
-      data={!loadingProp && data ? data.pair.plotLiquidity as PlotPoint[] : []}
+      data={!loadingProp && data ? (data.pair.plotLiquidity as PlotPoint[]) : []}
     />
   );
 };
 
-export const LiquidityChart: React.FC<LiquidityChartProps> = ({
-  token1,
-  token2,
-}) => {
+export const LiquidityChart: React.FC<LiquidityChartProps> = ({ token1, token2 }) => {
   const tezos = useTezos();
   const network = useNetwork();
   const networkId = network.id as QSMainNet;
@@ -68,15 +63,7 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({
   }, [token1, token2, networkId, tezos]);
 
   if (!dex) {
-    return (
-      <LineChart
-        className={s.chart}
-        loading
-        data={[]}
-      />
-    );
+    return <LineChart className={s.chart} loading data={[]} />;
   }
-  return (
-    <Chart token1={token1} token2={token2} dex={dex} />
-  );
+  return <Chart token1={token1} token2={token2} dex={dex} />;
 };

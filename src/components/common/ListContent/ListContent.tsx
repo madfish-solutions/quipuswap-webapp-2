@@ -2,7 +2,7 @@ import cx from 'classnames';
 import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { useToggleList, useRemoveList } from '@utils/tokenLists';
+import { useToggleList, useRemoveList } from '@providers/tokenLists';
 import { WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ChooseListCell, LoadingChooseListCell } from '@components/ui/Modal/ModalCell';

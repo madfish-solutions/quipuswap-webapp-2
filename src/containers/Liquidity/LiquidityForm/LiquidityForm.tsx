@@ -12,7 +12,7 @@ import {
   TransferParams,
 } from '@quipuswap/sdk';
 
-import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@providers/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {

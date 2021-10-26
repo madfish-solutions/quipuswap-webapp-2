@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
 
-import { useAddCustomToken } from '@utils/tokenLists';
+import { useAddCustomToken } from '@providers/tokenLists';
 import { isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';

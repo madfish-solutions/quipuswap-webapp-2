@@ -4,14 +4,14 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import { useTezos } from '@utils/dapp';
+import { useTezos } from '@providers/dapp';
 import {
   useToggleList,
   useLists,
   useSearchLists,
   useSearchCustomLists,
   useRemoveList,
-} from '@utils/tokenLists';
+} from '@providers/tokenLists';
 import { localSearchListByNameOrUrl } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';

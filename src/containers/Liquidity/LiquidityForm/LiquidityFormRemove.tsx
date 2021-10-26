@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
 
-import { useAccountPkh } from '@utils/dapp';
+import { useAccountPkh } from '@providers/dapp';
 import { TokenDataMap, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
 import { fromDecimals, parseTezDecimals } from '@utils/helpers';

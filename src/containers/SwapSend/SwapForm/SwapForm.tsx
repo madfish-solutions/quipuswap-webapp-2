@@ -7,7 +7,7 @@ import { Field, FormSpy } from 'react-final-form';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
-import { useAccountPkh, useTezos, useNetwork } from '@utils/dapp';
+import { useAccountPkh, useTezos, useNetwork } from '@providers/dapp';
 import { composeValidators, isAddress, validateBalance, validateMinMax } from '@utils/validators';
 import {
   fromDecimals,

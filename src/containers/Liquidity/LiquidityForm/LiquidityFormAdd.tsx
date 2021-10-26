@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
 
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@providers/dapp';
 import {
   LiquidityFormValues,
   QSMainNet,

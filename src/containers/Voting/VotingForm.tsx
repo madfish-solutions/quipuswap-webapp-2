@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@providers/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {

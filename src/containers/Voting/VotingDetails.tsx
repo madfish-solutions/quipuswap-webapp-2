@@ -1,16 +1,12 @@
 import React, { useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import {
-  FoundDex,
-} from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { useBakers } from '@utils/bakers';
+import { useBakers } from '@providers/bakers';
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
-import {
-  VoterType, WhitelistedBaker, WhitelistedTokenPair,
-} from '@utils/types';
+import { VoterType, WhitelistedBaker, WhitelistedTokenPair } from '@utils/types';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
@@ -22,25 +18,23 @@ import s from '@styles/CommonContainer.module.sass';
 import { Skeleton } from '@components/ui/Skeleton';
 
 type VotingDetailsProps = {
-  tokenPair: WhitelistedTokenPair
-  dex?: FoundDex
-  voter?: VoterType
+  tokenPair: WhitelistedTokenPair;
+  dex?: FoundDex;
+  voter?: VoterType;
 };
 
-export const VotingDetails: React.FC<VotingDetailsProps> = ({
-  tokenPair,
-  dex,
-  voter,
-}) => {
+export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, voter }) => {
   const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
   const currentCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
       if (!dex.storage.storage.current_candidate) return undefined;
-      return bakers.find((x) => x.address === dex.storage.storage.current_candidate)
-      || {
-        address: dex.storage.storage.current_candidate,
-      } as WhitelistedBaker;
+      return (
+        bakers.find((x) => x.address === dex.storage.storage.current_candidate) ||
+        ({
+          address: dex.storage.storage.current_candidate,
+        } as WhitelistedBaker)
+      );
     }
     return undefined;
   }, [dex, bakers]);
@@ -48,10 +42,12 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   const secondCandidate: WhitelistedBaker | undefined = useMemo(() => {
     if (dex?.storage?.storage) {
       if (!dex.storage.storage.current_delegated) return undefined;
-      return bakers.find((x) => x.address === dex.storage.storage.current_delegated)
-      || {
-        address: dex.storage.storage.current_delegated,
-      } as WhitelistedBaker;
+      return (
+        bakers.find((x) => x.address === dex.storage.storage.current_delegated) ||
+        ({
+          address: dex.storage.storage.current_delegated,
+        } as WhitelistedBaker)
+      );
     }
     return undefined;
   }, [dex, bakers]);
@@ -87,7 +83,11 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     return '';
   }, [dex]);
 
-  const pairLink = useMemo(() => (tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`), [tokenPair.dex]);
+  const pairLink = useMemo(
+    () =>
+      tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`,
+    [tokenPair.dex],
+  );
 
   const DexLoader = !dex ? <Skeleton className={s.currency2} /> : '-';
 
@@ -100,7 +100,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     >
       {getWhitelistedBakerName(myCandidate)}
     </Button>
-  ) : DexLoader;
+  ) : (
+    DexLoader
+  );
 
   return (
     <Card
@@ -110,7 +112,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       contentClassName={s.content}
     >
       <CardCell
-        header={(
+        header={
           <>
             {t('vote|Delegated To')}
             <Tooltip
@@ -118,7 +120,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote|Current baker elected by simple majority of votes.')}
             />
           </>
-            )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
         {currentCandidate ? (
@@ -130,18 +132,22 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           >
             {getWhitelistedBakerName(currentCandidate)}
           </Button>
-        ) : DexLoader}
+        ) : (
+          DexLoader
+        )}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('vote|Second Candidate')}
             <Tooltip
               sizeT="small"
-              content={t('vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.')}
+              content={t(
+                'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.',
+              )}
             />
           </>
-            )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
         {secondCandidate && dex ? (
@@ -153,10 +159,12 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           >
             {getWhitelistedBakerName(secondCandidate)}
           </Button>
-        ) : DexLoader}
+        ) : (
+          DexLoader
+        )}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('vote|Total Votes')}
             <Tooltip
@@ -164,13 +172,13 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote|The total amount of votes cast to elect a baker in the pool.')}
             />
           </>
-            )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
-        {dex ? (<CurrencyAmount amount={totalVotes} />) : <Skeleton className={s.currency2} />}
+        {dex ? <CurrencyAmount amount={totalVotes} /> : <Skeleton className={s.currency2} />}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('vote|Total Vetos')}
             <Tooltip
@@ -178,27 +186,24 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote|The total amount of shares cast so far to veto the current baker.')}
             />
           </>
-            )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
-        {dex ? (<CurrencyAmount amount={totalVeto} />) : <Skeleton className={s.currency2} />}
+        {dex ? <CurrencyAmount amount={totalVeto} /> : <Skeleton className={s.currency2} />}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('vote|Your Candidate')}
-            <Tooltip
-              sizeT="small"
-              content={t('vote|The candidate you voted for.')}
-            />
+            <Tooltip sizeT="small" content={t('vote|The candidate you voted for.')} />
           </>
-        )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
         {MyCandidateButton}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('Votes To Veto Left')}
             <Tooltip
@@ -206,10 +211,10 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote|This much more votes needed to veto a delegate.')}
             />
           </>
-            )}
+        }
         className={cx(s.cellCenter, s.cell)}
       >
-        {dex ? (<CurrencyAmount amount={votesToVeto} />) : <Skeleton className={s.currency2} />}
+        {dex ? <CurrencyAmount amount={votesToVeto} /> : <Skeleton className={s.currency2} />}
       </CardCell>
       {tokenPair.dex ? (
         <div className={s.detailsButtons}>
@@ -231,7 +236,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
           Delegation Analytics
         </Button> */}
         </div>
-      ) : <Skeleton className={s.currency2} />}
+      ) : (
+        <Skeleton className={s.currency2} />
+      )}
     </Card>
   );
 };

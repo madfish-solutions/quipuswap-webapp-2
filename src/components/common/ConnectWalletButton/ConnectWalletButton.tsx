@@ -1,17 +1,15 @@
 import React from 'react';
 
 import { shortize } from '@utils/helpers';
-import { useAccountPkh, useReady } from '@utils/dapp';
+import { useAccountPkh, useReady } from '@providers/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Button } from '@components/ui/Button';
 
 type ConnectWalletButtonProps = {
-  className?: string
+  className?: string;
 };
 
-export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
-  className,
-}) => {
+export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ className }) => {
   const ready = useReady();
   const accountPkh = useAccountPkh();
   const { openConnectWalletModal } = useConnectModalsState();
@@ -19,21 +17,14 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({
 
   if (ready && accountPkh) {
     return (
-      <Button
-        className={className}
-        onClick={openAccountInfoModal}
-        title={accountPkh}
-      >
+      <Button className={className} onClick={openAccountInfoModal} title={accountPkh}>
         {shortize(accountPkh, 7)}
       </Button>
     );
   }
 
   return (
-    <Button
-      className={className}
-      onClick={openConnectWalletModal}
-    >
+    <Button className={className} onClick={openConnectWalletModal}>
       Connect wallet
     </Button>
   );

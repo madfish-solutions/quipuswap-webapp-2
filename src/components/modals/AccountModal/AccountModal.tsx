@@ -1,12 +1,9 @@
-import React, {
-  useCallback, useContext, useRef, useState,
-  useEffect,
-} from 'react';
+import React, { useCallback, useContext, useRef, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { shortize } from '@utils/helpers';
-import { useAccountPkh, useDisconnect } from '@utils/dapp';
+import { useAccountPkh, useDisconnect } from '@providers/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Modal } from '@components/ui/Modal';
@@ -27,10 +24,7 @@ export const AccountModal: React.FC = () => {
   const disconnect = useDisconnect();
   const [copied, setCopied] = useState<boolean>(false);
 
-  const {
-    accountInfoModalOpen,
-    closeAccountInfoModal,
-  } = useConnectModalsState();
+  const { accountInfoModalOpen, closeAccountInfoModal } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const timeout = useRef(setTimeout(() => {}, 0));
 
@@ -38,18 +32,18 @@ export const AccountModal: React.FC = () => {
     disconnect();
   }, [disconnect]);
 
-  useEffect(() => () => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-  }, []);
+  useEffect(
+    () => () => {
+      if (timeout.current) {
+        clearTimeout(timeout.current);
+      }
+    },
+    [],
+  );
 
   if (!accountPkh) return <></>;
 
-  const compoundClassName = cx(
-    s.modal,
-    modeClass[colorThemeMode],
-  );
+  const compoundClassName = cx(s.modal, modeClass[colorThemeMode]);
 
   const handleCopy = async () => {
     navigator.clipboard.writeText(accountPkh);
@@ -74,16 +68,12 @@ export const AccountModal: React.FC = () => {
           onClick={handleCopy}
           theme="inverse"
           className={s.buttonCopy}
-          control={copied ? <CheckMark className={s.icon} /> : (<Copy className={s.icon} />)}
+          control={copied ? <CheckMark className={s.icon} /> : <Copy className={s.icon} />}
         >
           {copied ? t('swap|Copied') : t('swap|Copy')}
         </Button>
       </div>
-      <Button
-        className={s.button}
-        theme="secondary"
-        onClick={handleLogout}
-      >
+      <Button className={s.button} theme="secondary" onClick={handleLogout}>
         {t('common|Log Out')}
       </Button>
     </Modal>

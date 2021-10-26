@@ -2,25 +2,30 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { findTokensByList, useLists } from '@utils/tokenLists';
+import { findTokensByList, useLists } from '@providers/tokenLists';
 import { WhitelistedFarm } from '@utils/types';
 import { Section } from '@components/home/Section';
 import { FarmTable } from '@components/tables/FarmTable';
 
 type TopFarmingsProps = {
-  className?: string
+  className?: string;
 };
 
-export const TopFarmings: React.FC<TopFarmingsProps> = ({
-  className,
-}) => {
+export const TopFarmings: React.FC<TopFarmingsProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
   const { data: lists } = useLists();
   const tokens = findTokensByList(lists);
-  const farms = useMemo(() => tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
-    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }))
-    .filter((x, i) => i < 5), [tokens]);
+  const farms = useMemo(
+    () =>
+      tokens
+        .map((x) =>
+          x.contractAddress === TEZOS_TOKEN.contractAddress
+            ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+            : { tokenPair: { token1: x, token2: TEZOS_TOKEN } },
+        )
+        .filter((x, i) => i < 5),
+    [tokens],
+  );
   return (
     <Section
       header={t('home|Top Farms')}

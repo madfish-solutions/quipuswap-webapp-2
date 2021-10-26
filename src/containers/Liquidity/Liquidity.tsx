@@ -7,7 +7,7 @@ import { TransferParams } from '@quipuswap/sdk';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@providers/dapp';
 import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
 import {
   LiquidityFormValues,
@@ -16,7 +16,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@providers/tokenLists';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { StickyBlock } from '@components/common/StickyBlock';
 

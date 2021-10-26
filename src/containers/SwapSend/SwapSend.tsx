@@ -1,21 +1,15 @@
-import React, {
-  useMemo, useState, useEffect, useCallback,
-} from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
-} from '@utils/types';
-import {
-  useAccountPkh, useTezos, useNetwork, useOnBlock,
-} from '@utils/dapp';
+import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { useAccountPkh, useTezos, useNetwork, useOnBlock } from '@providers/dapp';
 import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@providers/tokenLists';
 import { StickyBlock } from '@components/common/StickyBlock';
 
 import { SwapForm } from './SwapForm';
@@ -94,14 +88,15 @@ export const SwapSend: React.FC<SwapSendProps> = ({ className }) => {
   }, [updateToast, t]);
 
   const handleTokenChangeWrapper = useCallback(
-    (token: WhitelistedToken, tokenNumber: 'first' | 'second') => handleTokenChange({
-      token,
-      tokenNumber,
-      exchangeRates,
-      tezos: tezos!,
-      accountPkh,
-      setTokensData,
-    }),
+    (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
+      handleTokenChange({
+        token,
+        tokenNumber,
+        exchangeRates,
+        tezos: tezos!,
+        accountPkh,
+        setTokensData,
+      }),
     [accountPkh, exchangeRates, tezos],
   );
 

@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import memoizee from 'memoizee';
 
 import { getReadOnlyTezos } from './getReadOnlyTezos';
-import { KNOWN_LAMBDA_CONTRACTS } from '../defaults';
+import { KNOWN_LAMBDA_CONTRACTS } from '../../utils/defaults';
 
 const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
