@@ -287,7 +287,12 @@ const RealForm: React.FC<SwapFormProps> = ({
         <SwapFormSend form={form} currentTab={currentTab} />
         <SwapFormSlippage values={values} token2={token2} />
         <Button
-          disabled={values.balance1 === undefined || values.balance1 === '' || token2 === undefined}
+          disabled={
+            values.balance1 === undefined ||
+            values.balance1 === '' ||
+            token2 === undefined ||
+            dex1 === undefined
+          }
           type="submit"
           onClick={handleSwapSubmit}
           className={s.button}
