@@ -69,6 +69,7 @@ export const Button: React.FC<ButtonProps> = ({
           target="_blank"
           rel="noreferrer noopener"
           className={compoundClassName}
+          disabled={disabled}
           {...(props as React.HTMLProps<HTMLAnchorElement>)}
         >
           {control}
@@ -95,6 +96,7 @@ export const Button: React.FC<ButtonProps> = ({
     <button
       // @ts-ignore
       type={type}
+      disabled={disabled}
       {...(props as React.HTMLProps<HTMLButtonElement>)}
       className={compoundClassName}
     >

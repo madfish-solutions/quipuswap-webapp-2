@@ -72,32 +72,16 @@ export const STABLE_TOKEN: WhitelistedToken = {
 
 export const FACTORIES = {
   granadanet: {
-    fa1_2Factory: [
-      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
-    ],
-    fa2Factory: [
-      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
-    ],
+    fa1_2Factory: ['KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd'],
+    fa2Factory: ['KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT'],
   },
   florencenet: {
-    fa1_2Factory: [
-      'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
-      'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY',
-    ],
-    fa2Factory: [
-      'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
-      'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
-    ],
+    fa1_2Factory: ['KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW', 'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY'],
+    fa2Factory: ['KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc', 'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD'],
   },
   mainnet: {
-    fa1_2Factory: [
-      'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
-      'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD',
-    ],
-    fa2Factory: [
-      'KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ',
-      'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
-    ],
+    fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
+    fa2Factory: ['KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ', 'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS'],
   },
 };
 

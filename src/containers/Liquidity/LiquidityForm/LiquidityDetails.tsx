@@ -69,25 +69,27 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
     [poolShare],
   );
   const sellPrice = useMemo(
-    () => parseDecimals(
-      new BigNumber(tokensData.first.exchangeRate ?? 1)
-        .div(tokensData.second.exchangeRate ?? 1)
-        .toString(),
-      0,
-      Infinity,
-      token2.metadata.decimals,
-    ),
+    () =>
+      parseDecimals(
+        new BigNumber(tokensData.first.exchangeRate ?? 1)
+          .div(tokensData.second.exchangeRate ?? 1)
+          .toString(),
+        0,
+        Infinity,
+        token2.metadata.decimals,
+      ),
     [tokensData, token2.metadata.decimals],
   );
   const buyPrice = useMemo(
-    () => parseDecimals(
-      new BigNumber(tokensData.second.exchangeRate ?? 1)
-        .div(tokensData.first.exchangeRate ?? 1)
-        .toString(),
-      0,
-      Infinity,
-      token1.metadata.decimals,
-    ),
+    () =>
+      parseDecimals(
+        new BigNumber(tokensData.second.exchangeRate ?? 1)
+          .div(tokensData.first.exchangeRate ?? 1)
+          .toString(),
+        0,
+        Infinity,
+        token1.metadata.decimals,
+      ),
     [tokensData, token1.metadata.decimals],
   );
   return (
@@ -98,7 +100,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
       contentClassName={s.content}
     >
       <CardCell
-        header={(
+        header={
           <>
             {t('common|Sell Price')}
             <Tooltip
@@ -109,7 +111,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         <div className={s.cellAmount}>
@@ -133,7 +135,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         </div>
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('common|Buy Price')}
             <Tooltip
@@ -144,7 +146,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         <div className={s.cellAmount}>
@@ -168,7 +170,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         </div>
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('liquidity|{{tokenAName}} Locked', { tokenAName })}
             <Tooltip
@@ -179,7 +181,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         {loading || !dex ? (
@@ -189,7 +191,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         )}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('liquidity|{{tokenBName}} Locked', { tokenBName })}
             <Tooltip
@@ -200,7 +202,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         {loading || !dex ? (
@@ -210,7 +212,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         )}
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('liquidity|Your Total LP')}
             <Tooltip
@@ -220,13 +222,13 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         <CurrencyAmount amount={totalShare} />
       </CardCell>
       <CardCell
-        header={(
+        header={
           <>
             {t('liquidity|Your Frozen LP')}
             <Tooltip
@@ -236,7 +238,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
               )}
             />
           </>
-        )}
+        }
         className={s.cell}
       >
         <CurrencyAmount amount={frozenShare} />

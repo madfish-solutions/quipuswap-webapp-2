@@ -229,7 +229,7 @@ const RealForm: React.FC<SwapFormProps> = ({
       Infinity,
       getWhitelistedTokenDecimals(TEZOS_TOKEN),
     );
-  }, []);
+  }, [token1.contractAddress, token2.contractAddress, values.balance1]);
 
   return (
     <>
@@ -271,6 +271,7 @@ const RealForm: React.FC<SwapFormProps> = ({
         />
         <SwapButton onClick={handleSwapButton} />
         <SwapFormTokenSelect
+          className={s.mb24}
           token1={token2}
           setToken1={setToken2}
           blackListedTokens={blackListedTokens}

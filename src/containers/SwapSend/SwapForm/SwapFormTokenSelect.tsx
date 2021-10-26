@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
 
@@ -23,6 +24,7 @@ interface SwapFormTokenSelectArgs {
   valueField: 'balance1' | 'balance2';
   tokenNumber: 'first' | 'second';
   id: string;
+  className?: string;
 }
 
 export const SwapFormTokenSelect: React.FC<SwapFormTokenSelectArgs> = ({
@@ -38,6 +40,7 @@ export const SwapFormTokenSelect: React.FC<SwapFormTokenSelectArgs> = ({
   valueField,
   tokenNumber,
   id,
+  className,
 }) => {
   const accountPkh = useAccountPkh();
   return (
@@ -75,7 +78,7 @@ export const SwapFormTokenSelect: React.FC<SwapFormTokenSelectArgs> = ({
           exchangeRate={tokensData[tokenNumber].exchangeRate}
           id={id}
           label={label}
-          className={s.input}
+          className={cx(s.input, className)}
           error={meta.error || meta.submitError}
         />
       )}
