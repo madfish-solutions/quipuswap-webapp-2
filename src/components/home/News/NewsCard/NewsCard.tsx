@@ -34,8 +34,8 @@ export const NewsCard: React.FC<NewsCardProps> = ({
       {prepimg ? (
         <Image
           layout="fixed"
-          width={24}
-          height={24}
+          width={272}
+          height={136}
           src={prepimg}
           alt="news"
           className={cx(s.image)}

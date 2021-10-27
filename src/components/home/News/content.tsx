@@ -1,11 +1,13 @@
 type NewsDataProps = {
-  id: number
+  id: number,
+  content?: string
   sponsored?: boolean
 }[];
 
 export const NewsData: NewsDataProps = [
   {
     id: 0,
+    content: 'ipfs://QmSYAbaWtLCMfZdgpk8cbb1jBdrZ54DzgzGw5ZUSGJpXTg',
   },
   {
     id: 1,

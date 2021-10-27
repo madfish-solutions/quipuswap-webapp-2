@@ -39,7 +39,7 @@ export const News: React.FC<NewsProps> = ({
         className={s.uncenter}
         responsive={[
           {
-            breakpoint: 1224,
+            breakpoint: 1441,
             settings: {
               slidesToShow: 4,
               slidesToScroll: 4,
@@ -48,7 +48,7 @@ export const News: React.FC<NewsProps> = ({
             },
           },
           {
-            breakpoint: 900,
+            breakpoint: 1440,
             settings: {
               slidesToShow: 3,
               slidesToScroll: 3,
@@ -57,7 +57,7 @@ export const News: React.FC<NewsProps> = ({
             },
           },
           {
-            breakpoint: 700,
+            breakpoint: 900,
             settings: {
               slidesToShow: 2,
               slidesToScroll: 2,
@@ -66,7 +66,7 @@ export const News: React.FC<NewsProps> = ({
             },
           },
           {
-            breakpoint: 500,
+            breakpoint: 630,
             settings: {
               slidesToShow: 1,
               slidesToScroll: 1,
@@ -76,11 +76,12 @@ export const News: React.FC<NewsProps> = ({
           },
         ]}
       >
-        {NewsData.map(({ id, sponsored }) => (
+        {NewsData.map(({ id, sponsored, content }) => (
           <Card key={id} className={s.root} contentClassName={s.content}>
             <NewsCard
               className={cx(s.card, modeClass[colorThemeMode])}
               sponsored={sponsored}
+              img={content}
             />
           </Card>
         ))}
