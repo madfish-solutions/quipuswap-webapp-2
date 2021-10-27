@@ -1,6 +1,4 @@
-import {
-  useState, useEffect, useMemo, useCallback,
-} from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import constate from 'constate';
 
 import {
@@ -24,17 +22,13 @@ import { getTokenMetadata } from './tokensMetadata';
 import { removeCustomList } from './removeCustomList';
 
 export type TokenListsType = {
-  lists: { data: WhitelistedTokenList[], loading: boolean, error?: string },
-  searchTokens: { data: WhitelistedToken[], loading: boolean, error?: string },
-  searchLists: { data: WhitelistedTokenList[], loading: boolean, error?: string },
+  lists: { data: WhitelistedTokenList[]; loading: boolean; error?: string };
+  searchTokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
+  searchLists: { data: WhitelistedTokenList[]; loading: boolean; error?: string };
 };
 
 function useTokenLists() {
-  const [{
-    lists,
-    searchTokens,
-    searchLists,
-  }, setState] = useState<TokenListsType>({
+  const [{ lists, searchTokens, searchLists }, setState] = useState<TokenListsType>({
     lists: { loading: true, data: [] },
     searchTokens: { loading: false, data: [] },
     searchLists: { loading: false, data: [] },
@@ -42,7 +36,10 @@ function useTokenLists() {
 
   const network = useNetwork();
   const tezos = useTezos();
-  const initialList = useMemo(() => (network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS), [network.id]);
+  const initialList = useMemo(
+    () => (network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS),
+    [network.id],
+  );
 
   useEffect(() => {
     const savedList = getSavedLists();
@@ -50,9 +47,7 @@ function useTokenLists() {
     const uniqTokenList = initialList
       .split(' ')
       .concat(savedKeys)
-      .filter(
-        (value, index, self) => self.indexOf(value) === index,
-      ); // get only unique lists by url
+      .filter((value, index, self) => self.indexOf(value) === index); // get only unique lists by url
     const tempLists = uniqTokenList.map((x) => {
       const url = x;
       let enabled = !!savedList[url];
@@ -71,46 +66,51 @@ function useTokenLists() {
       };
     });
     setState((prevState) => ({ ...prevState, lists: { loading: true, data: tempLists } }));
-    uniqTokenList.map((x: string, i) => fetch(ipfsToHttps(x))
-      .then((res) => res.json())
-      .then((json) => json || [])
-      .then((res) => {
-        setState((prevState: any) => {
-          const newState = prevState.lists.data;
-          const url = uniqTokenList[i];
-          let enabled = !!savedList[url];
-          if (savedList[url] === undefined && initialList.split(' ').find((y: string) => y === url)) {
-            enabled = true;
-          }
-          const errorObj = Array.isArray(res);
-          newState[i] = {
-            error: errorObj,
-            loading: false,
-            keywords: res.keywords ?? [],
-            logoURI: res.logoURI ?? '',
-            name: res.name ?? url,
-            tokens: res.tokens ?? [],
-            enabled,
-            url,
-          };
-          return {
-            ...prevState,
-            lists: { loading: false, data: newState },
-          };
-        });
-      })
-      .catch(() => []));
+    uniqTokenList.map((x: string, i) =>
+      fetch(ipfsToHttps(x))
+        .then((res) => res.json())
+        .then((json) => json || [])
+        .then((res) => {
+          setState((prevState: any) => {
+            const newState = prevState.lists.data;
+            const url = uniqTokenList[i];
+            let enabled = !!savedList[url];
+            if (
+              savedList[url] === undefined &&
+              initialList.split(' ').find((y: string) => y === url)
+            ) {
+              enabled = true;
+            }
+            const errorObj = Array.isArray(res);
+            newState[i] = {
+              error: errorObj,
+              loading: false,
+              keywords: res.keywords ?? [],
+              logoURI: res.logoURI ?? '',
+              name: res.name ?? url,
+              tokens: res.tokens ?? [],
+              enabled,
+              url,
+            };
+            return {
+              ...prevState,
+              lists: { loading: false, data: newState },
+            };
+          });
+        })
+        .catch(() => []),
+    );
   }, [initialList]);
 
-  const addCustomToken = useCallback((token:WhitelistedToken) => {
+  const addCustomToken = useCallback((token: WhitelistedToken) => {
     saveCustomToken(token);
     setState((prevState) => {
       let listData = prevState.lists.data;
       const listWithCustomTokens = listData.some((x) => x.url === CUSTOM_SAVED_TOKEN_LIST_KEY);
       if (!listWithCustomTokens) {
-        listData = listData.map((x) => (
-          x.url === CUSTOM_SAVED_TOKEN_LIST_KEY ? ({ ...x, tokens: [token, ...x.tokens] }) : x
-        ));
+        listData = listData.map((x) =>
+          x.url === CUSTOM_SAVED_TOKEN_LIST_KEY ? { ...x, tokens: [token, ...x.tokens] } : x,
+        );
       } else {
         listData = listData.concat({
           name: CUSTOM_SAVED_TOKEN_LIST_KEY,
@@ -129,13 +129,16 @@ function useTokenLists() {
     });
   }, []);
 
-  const addCustomList = useCallback((list:WhitelistedTokenList, url:string) => {
-    saveCustomList({ key: url, val: true });
-    setState((prevState) => ({
-      ...prevState,
-      lists: { ...lists, data: [...lists.data, list] },
-    }));
-  }, [lists]);
+  const addCustomList = useCallback(
+    (list: WhitelistedTokenList, url: string) => {
+      saveCustomList({ key: url, val: true });
+      setState((prevState) => ({
+        ...prevState,
+        lists: { ...lists, data: [...lists.data, list] },
+      }));
+    },
+    [lists],
+  );
 
   const searchCustomList = useCallback(
     async (url: string): Promise<WhitelistedTokenList | null> => {
@@ -186,9 +189,9 @@ function useTokenLists() {
     async (
       address: string,
       tokenId?: number,
-      saveAfterSearch?:boolean,
+      saveAfterSearch?: boolean,
     ): Promise<WhitelistedToken | null> => {
-      if (await isContractAddress(address) === true) {
+      if ((await isContractAddress(address)) === true) {
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: true, data: [] },
@@ -207,9 +210,11 @@ function useTokenLists() {
           return null;
         }
         const isFa2 = !!type.methods.update_operators;
-        const customToken = await getTokenMetadata(network.id === MAINNET_NETWORK.id
-          ? METADATA_API_MAINNET
-          : METADATA_API_TESTNET, address, tokenId);
+        const customToken = await getTokenMetadata(
+          network.id === MAINNET_NETWORK.id ? METADATA_API_MAINNET : METADATA_API_TESTNET,
+          address,
+          tokenId,
+        );
         if (!customToken) {
           setState((prevState) => ({
             ...prevState,
@@ -217,7 +222,7 @@ function useTokenLists() {
           }));
           return null;
         }
-        const token : WhitelistedToken = {
+        const token: WhitelistedToken = {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
@@ -236,10 +241,10 @@ function useTokenLists() {
     [tezos, network],
   );
 
-  const toggleList = useCallback((url:string) => {
-    let isEnabled = false;
-    const newData = (lists.data ?? []).concat(searchLists.data)
-      .map((x:WhitelistedTokenList) => {
+  const toggleList = useCallback(
+    (url: string) => {
+      let isEnabled = false;
+      const newData = (lists.data ?? []).concat(searchLists.data).map((x: WhitelistedTokenList) => {
         if (x.url === url) {
           if (searchLists.data.length > 0) {
             isEnabled = true;
@@ -247,28 +252,32 @@ function useTokenLists() {
             isEnabled = !x.enabled;
           }
         }
-        return (x.url === url ? ({ ...x, enabled: isEnabled }) : x);
+        return x.url === url ? { ...x, enabled: isEnabled } : x;
       });
-    saveCustomList({ key: url, val: isEnabled });
+      saveCustomList({ key: url, val: isEnabled });
 
-    setState((prevState) => ({
-      ...prevState,
-      lists: { loading: false, data: newData },
-      searchLists: { loading: false, data: [] },
-    }));
-  }, [lists, searchLists]);
+      setState((prevState) => ({
+        ...prevState,
+        lists: { loading: false, data: newData },
+        searchLists: { loading: false, data: [] },
+      }));
+    },
+    [lists, searchLists],
+  );
 
-  const removeList = useCallback((url:string) => {
-    const newData = (lists.data ?? [])
-      .filter((x:WhitelistedTokenList) => x.url !== url);
-    removeCustomList(url);
+  const removeList = useCallback(
+    (url: string) => {
+      const newData = (lists.data ?? []).filter((x: WhitelistedTokenList) => x.url !== url);
+      removeCustomList(url);
 
-    setState((prevState) => ({
-      ...prevState,
-      lists: { loading: false, data: newData },
-      searchLists: { loading: false, data: [] },
-    }));
-  }, [lists]);
+      setState((prevState) => ({
+        ...prevState,
+        lists: { loading: false, data: newData },
+        searchLists: { loading: false, data: [] },
+      }));
+    },
+    [lists],
+  );
 
   return {
     searchTokens,

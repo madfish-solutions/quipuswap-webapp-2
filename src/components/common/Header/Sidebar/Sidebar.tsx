@@ -3,6 +3,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { NetworkSelect } from '@components/common/NetworkSelect';
 import { Button } from '@components/ui/Button';
 import { Madfish } from '@components/svg/Madfish';
 
@@ -27,6 +28,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
+        <NetworkSelect className={s.button} />
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
