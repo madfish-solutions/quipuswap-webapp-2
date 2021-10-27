@@ -9,7 +9,7 @@ module.exports = withReactSvg({
     return config
   },
   images: {
-    domains: ['img.templewallet.com'],
+    domains: ['img.templewallet.com', 'ipfs.io'],
   },
   i18n,
   async redirects() {

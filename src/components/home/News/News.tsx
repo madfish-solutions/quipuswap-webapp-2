@@ -76,12 +76,15 @@ export const News: React.FC<NewsProps> = ({
           },
         ]}
       >
-        {NewsData.map(({ id, sponsored, content }) => (
+        {NewsData.map(({
+          id, sponsored, content, link,
+        }) => (
           <Card key={id} className={s.root} contentClassName={s.content}>
             <NewsCard
               className={cx(s.card, modeClass[colorThemeMode])}
               sponsored={sponsored}
               img={content}
+              link={link}
             />
           </Card>
         ))}

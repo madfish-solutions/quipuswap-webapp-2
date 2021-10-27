@@ -1,4 +1,31 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+  
 .sponsored
   position: absolute
   left: 8px
   top: 8px
+
+.disabled, .disabledBg
+  position: absolute
+  top: 0px
+  left: 0px
+  right: 0px
+  bottom: 0px
+  z-index: 5
+  opacity: 1
+  display: flex
+  align-items: center
+  justify-content: center
+
+.disabledBg
+  opacity: 0.9
+
+.light
+  .disabledBg
+    background: $skeleton-light
+
+.dark
+  .disabledBg
+    background: $skeleton-dark
