@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import { useRouter } from 'next/router';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';

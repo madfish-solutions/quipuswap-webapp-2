@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { LightMode } from '@components/svg/LightMode';
 import { DarkMode } from '@components/svg/DarkMode';
 

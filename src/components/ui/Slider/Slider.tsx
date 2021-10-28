@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import Slider, { ResponsiveObject } from 'react-slick';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 import s from './Slider.module.sass';
 import 'slick-carousel/slick/slick.css';

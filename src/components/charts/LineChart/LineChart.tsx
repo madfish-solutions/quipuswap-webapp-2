@@ -10,7 +10,7 @@ import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 
 import { PlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { usePrevious } from '@hooks/usePrevious';
 import { prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';

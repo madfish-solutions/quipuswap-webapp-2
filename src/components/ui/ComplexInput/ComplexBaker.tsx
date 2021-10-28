@@ -1,9 +1,9 @@
 import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { WhitelistedBaker } from '@utils/types';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { BakerLogo } from '@components/ui/BakerLogo';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';

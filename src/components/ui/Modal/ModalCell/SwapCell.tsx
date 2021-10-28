@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from './ModalCell.module.sass';

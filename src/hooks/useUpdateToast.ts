@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { UpdateOptions, toast } from 'react-toastify';
 import { useRouter } from 'next/router';
-import { toastContent } from '@components/ui/ToastWrapper';
+import { toastContent } from '@madfish-solutions/quipu-ui-kit';
 
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();
@@ -24,7 +24,7 @@ export default function useUpdateToast() {
   }: UpdateOptions) => {
     const creationFn = type && type !== 'default' ? toast[type] : toast;
 
-    const contentRender = toastContent(render, type);
+    const contentRender = toastContent(render, type as 'info' | 'default' | 'error' | 'success' | null | undefined);
 
     if (toastIdRef.current && toast.isActive(toastIdRef.current)) {
       toast.update(toastIdRef.current, {

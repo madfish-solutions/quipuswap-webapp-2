@@ -7,10 +7,10 @@ import { useTranslation } from 'next-i18next';
 
 import { shortize } from '@utils/helpers';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { Modal } from '@components/ui/Modal';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { Copy } from '@components/svg/Copy';
 import { CheckMark } from '@components/svg/CheckMark';
 

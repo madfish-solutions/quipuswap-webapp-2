@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cx from 'classnames';
 
 import { SwapIcon } from '@components/svg/Swap';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 
 import s from './SwapButton.module.sass';
 

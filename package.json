@@ -13,6 +13,7 @@
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.0",
     "@apollo/client": "^3.3.21",
+    "@madfish-solutions/quipu-ui-kit": "../quipu-ui-kit",
     "@quipuswap/sdk": "^2.2.1",
     "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/taquito": "^9.2.0",

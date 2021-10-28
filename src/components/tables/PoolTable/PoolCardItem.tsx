@@ -3,13 +3,13 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { PoolTableType } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { Bage } from '@components/ui/Bage';
 
 import s from './PoolCardTable.module.sass';

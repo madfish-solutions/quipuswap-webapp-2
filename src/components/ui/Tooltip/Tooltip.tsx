@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Tippy, { TippyProps } from '@tippyjs/react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import Info from '@icons/Info.svg';
 
 import s from './Tooltip.module.sass';

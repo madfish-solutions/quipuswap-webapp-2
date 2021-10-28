@@ -2,9 +2,9 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 

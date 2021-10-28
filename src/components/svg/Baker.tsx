@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 export const Baker: React.FC<IconProps> = ({
   className,

@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 

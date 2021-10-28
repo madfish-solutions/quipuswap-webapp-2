@@ -4,12 +4,12 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
 import { DefaultSeo } from 'next-seo';
+import { ColorThemeProvider } from '@madfish-solutions/quipu-ui-kit';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { DAppProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
-import { ColorThemeProvider } from '@providers/ColorThemeContext';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
 import '@styles/globals.sass';

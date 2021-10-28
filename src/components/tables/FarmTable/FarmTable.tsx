@@ -10,7 +10,7 @@ import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 

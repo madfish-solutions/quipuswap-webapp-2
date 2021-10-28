@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import Link, { LinkProps } from 'next/link';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 import s from './Button.module.sass';
 

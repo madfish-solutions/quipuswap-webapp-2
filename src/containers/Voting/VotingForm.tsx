@@ -33,7 +33,7 @@ import {
 } from '@utils/validators';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';

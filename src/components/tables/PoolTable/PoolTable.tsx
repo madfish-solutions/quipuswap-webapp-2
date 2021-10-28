@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { fromDecimals } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
@@ -14,7 +14,7 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { TokensLogos } from '@components/ui/TokensLogos';
 // import { Bage } from '@components/ui/Bage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';

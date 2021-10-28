@@ -9,7 +9,7 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { Modal } from '@components/ui/Modal';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';

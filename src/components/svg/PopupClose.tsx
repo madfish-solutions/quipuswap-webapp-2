@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 export const PopupClose: React.FC<IconProps> = ({
   className,

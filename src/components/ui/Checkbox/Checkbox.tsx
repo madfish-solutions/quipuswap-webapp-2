@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { CheckboxIcon } from '@components/svg/CheckboxIcon';
 import { Checkdone } from '@components/svg/Checkdone';
 

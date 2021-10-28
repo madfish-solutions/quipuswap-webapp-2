@@ -2,7 +2,7 @@ import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { parseDecimals } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';

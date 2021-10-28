@@ -6,8 +6,8 @@ import { useTranslation } from 'next-i18next';
 
 import { WhitelistedToken } from '@utils/types';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { TokensModal } from '@components/modals/TokensModal';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';

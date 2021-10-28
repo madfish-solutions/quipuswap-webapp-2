@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 export const ToastClose: React.FC<IconProps> = ({
   className,

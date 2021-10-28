@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 export const Madfish: React.FC<IconProps> = ({
   className,

@@ -18,9 +18,9 @@ import {
 } from '@utils/dapp';
 import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { Checkbox } from '@components/ui/Checkbox';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';

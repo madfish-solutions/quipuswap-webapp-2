@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { BaseLayout } from '@layouts/BaseLayout';
 
 import s from '@styles/SwapLiquidity.module.sass';

@@ -10,7 +10,7 @@ import { BaseLayout } from '@layouts/BaseLayout';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { Modal } from '@components/ui/Modal';

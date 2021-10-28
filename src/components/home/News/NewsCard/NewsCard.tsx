@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { prepareTokenLogo } from '@utils/helpers';
 import { Bage } from '@components/ui/Bage';
 import { FallbackLogo } from '@components/svg/FallbackLogo';

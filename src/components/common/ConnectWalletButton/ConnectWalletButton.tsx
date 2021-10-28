@@ -3,7 +3,7 @@ import React from 'react';
 import { shortize } from '@utils/helpers';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 
 type ConnectWalletButtonProps = {
   className?: string

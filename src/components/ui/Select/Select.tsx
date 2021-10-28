@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import Select, { Props as SelectProps } from 'react-select';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 
 import s from './Select.module.sass';
 

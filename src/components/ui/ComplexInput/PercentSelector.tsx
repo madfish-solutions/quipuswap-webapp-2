@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Button } from '@components/ui/Button';
+import { Button } from '@madfish-solutions/quipu-ui-kit';;
 
 import s from './ComplexInput.module.sass';
 
