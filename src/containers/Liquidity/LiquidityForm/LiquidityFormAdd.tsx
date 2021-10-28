@@ -16,6 +16,7 @@ import {
 
 import {
   composeValidators,
+  required,
   validateBalance,
   validateMinMax,
   validateRebalance,
@@ -78,7 +79,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
             : undefined,
       );
     }
-    return validateMinMax(0, Infinity);
+    return composeValidators(required, validateMinMax(0, Infinity));
   }, [values.rebalanceSwitcher, localSwap, localInvest, t, values.balance1, values.balance2]);
 
   const setToken2 = useCallback(
