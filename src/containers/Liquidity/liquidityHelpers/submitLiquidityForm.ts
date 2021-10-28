@@ -57,7 +57,7 @@ export const submitForm = async ({
         const balance = toDecimals(new BigNumber(values.balance3), 6);
         const remParams = await removeLiquidity(tezos, dex, balance, slippage);
         const voter = await dex.storage.storage.voters.get(accountPkh);
-        if (voter && new BigNumber(values.balance3).gt(share.frozen.plus(share.unfrozen))) {
+        if (voter && balance.gt(share.unfrozen)) {
           const invoteParams = await voteForBaker(tezos, dex, voter.candidate, new BigNumber(0));
           liquidityParams = invoteParams.concat(remParams);
         } else {
