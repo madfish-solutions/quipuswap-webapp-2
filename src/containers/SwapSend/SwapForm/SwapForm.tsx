@@ -300,7 +300,7 @@ const RealForm: React.FC<SwapFormProps> = ({
       Infinity,
       getWhitelistedTokenDecimals(TEZOS_TOKEN),
     );
-  }, []);
+  }, [token1.contractAddress, token2.contractAddress, values.balance1]);
 
   return (
     <>
