@@ -1,19 +1,19 @@
-import React, {useContext, useEffect, useRef, useState} from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
-import {createChart, IChartApi} from 'lightweight-charts';
-import {useTranslation} from 'next-i18next';
+import { createChart, IChartApi } from 'lightweight-charts';
+import { useTranslation } from 'next-i18next';
 
-import {PlotPoint} from '@graphql';
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {useClientHeight} from '@hooks/useClientHeight';
-import {usePrevious} from '@hooks/usePrevious';
-import {prettyPrice} from '@utils/helpers';
-import {WhitelistedToken} from '@utils/types';
-import {Card, CardContent, CardHeader} from '@components/ui/Card';
-import {PairChartInfo} from '@components/common/PairChartInfo';
-import {Preloader} from '@components/common/Preloader';
+import { PlotPoint } from '@graphql';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { useClientHeight } from '@hooks/useClientHeight';
+import { usePrevious } from '@hooks/usePrevious';
+import { prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { PairChartInfo } from '@components/common/PairChartInfo';
+import { Preloader } from '@components/common/Preloader';
 
-import {GraphicColors, GraphicHeight, GraphOptions, LineGraphOptions} from '../config';
+import { GraphicColors, GraphicHeight, GraphOptions, LineGraphOptions } from '../config';
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
@@ -64,25 +64,25 @@ const formatDate = (date: Date) => {
   return `${dayString}.${monString}.${year} ${hourString}:${minString} ${ampm}`;
 };
 
-const ChartInstance: React.FC<{data: PlotPoint[]}> = ({data}) => {
-  const {colorThemeMode} = useContext(ColorThemeContext);
+const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({ data }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
   const prevColorThemeModeState = usePrevious(colorThemeMode);
-  const {t} = useTranslation(['common']);
-  const {i18n} = useTranslation('home');
+  const { t } = useTranslation(['common']);
+  const { i18n } = useTranslation('home');
 
   const height = GraphicHeight;
 
   // for reseting value on hover exit
   const currenValue = data[data.length - 1];
 
-  const [value, setValue] = useState<{price: number; time: number}>({
+  const [value, setValue] = useState<{ price: number; time: number }>({
     price: currenValue.value,
     time: currenValue.time,
   });
 
-  useClientHeight({chartCreated, chartRef, height});
+  useClientHeight({ chartCreated, chartRef, height });
 
   // if chart not instantiated in canvas, create it
   useEffect(() => {
@@ -206,7 +206,7 @@ export const LineChart: React.FC<LineChartProps> = ({
     />
     <CardContent className={cx(s.container, s.cardContent)}>
       {loading || error || !data || data.length === 0 ? (
-        <Preloader style={{minHeight: '360px'}} />
+        <Preloader style={{ minHeight: '360px' }} />
       ) : (
         <ChartInstance data={data} />
       )}

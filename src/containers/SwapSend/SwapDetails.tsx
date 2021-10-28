@@ -1,24 +1,24 @@
-import React, {useMemo} from 'react';
+import React, { useMemo } from 'react';
 import cx from 'classnames';
-import {useTranslation} from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
-import {FoundDex} from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 
 import {
   getWhitelistedTokenSymbol,
   parseDecimals,
   transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {TokenDataMap, WhitelistedToken} from '@utils/types';
-import {Card} from '@components/ui/Card';
-import {Button} from '@components/ui/Button';
-import {Tooltip} from '@components/ui/Tooltip';
-import {CardCell} from '@components/ui/Card/CardCell';
-import {Skeleton} from '@components/ui/Skeleton';
-import {Route} from '@components/common/Route';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
-import {ExternalLink} from '@components/svg/ExternalLink';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { Card } from '@components/ui/Card';
+import { Button } from '@components/ui/Button';
+import { Tooltip } from '@components/ui/Tooltip';
+import { CardCell } from '@components/ui/Card/CardCell';
+import { Skeleton } from '@components/ui/Skeleton';
+import { Route } from '@components/common/Route';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -47,7 +47,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex1,
   dex2,
 }) => {
-  const {t} = useTranslation(['common', 'swap']);
+  const { t } = useTranslation(['common', 'swap']);
   const loading = useMemo(() => !token1 || !token2, [token1, token2]);
   const tokenAName = useMemo(
     () => (token1 ? getWhitelistedTokenSymbol(token1) : 'Token A'),
@@ -113,7 +113,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 sizeT="small"
                 content={t(
                   'common|The amount of {{tokenB}} you receive for 1 {{tokenA}}, according to the current exchange rate.',
-                  {tokenA: tokenAName, tokenB: tokenBName},
+                  { tokenA: tokenAName, tokenB: tokenBName },
                 )}
               />
             )}
@@ -150,7 +150,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
                 sizeT="small"
                 content={t(
                   'common|The amount of {{tokenA}} you receive for 1 {{tokenB}}, according to the current exchange rate.',
-                  {tokenA: tokenAName, tokenB: tokenBName},
+                  { tokenA: tokenAName, tokenB: tokenBName },
                 )}
               />
             )}
