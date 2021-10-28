@@ -2,10 +2,10 @@ import React, {useContext} from 'react';
 
 import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
 
-import {DesktopDark} from './DesktopDark';
-import {DesktopLight} from './DesktopLight';
-import {MobileDark} from './MobileDark';
-import {MobileLight} from './MobileLight';
+import DesktopDark from './DesktopDark.svg';
+import DesktopLight from './DesktopLight.svg';
+import MobileDark from './MobileDark.svg';
+import MobileLight from './MobileLight.svg';
 
 export const Background: React.FC<IconProps> = ({className}) => {
   const {colorThemeMode} = useContext(ColorThemeContext);
