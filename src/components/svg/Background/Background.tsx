@@ -1,22 +1,19 @@
 import React, {useContext} from 'react';
 
 import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-
-import DesktopDark from '@icons/DesktopDark.svg';
-import DesktopLight from '@icons/DesktopLight.svg';
-import MobileDark from '@icons/MobileDark.svg';
-import MobileLight from '@icons/MobileLight.svg';
+import {isClient} from '@utils/helpers';
 
 export const Background: React.FC<IconProps> = ({className}) => {
   const {colorThemeMode} = useContext(ColorThemeContext);
+  if (!isClient) return null;
   if (window.innerWidth > 1024) {
     if (colorThemeMode === ColorModes.Dark) {
-      return <DesktopDark className={className} />;
+      return <img src="/svg/DesktopDark.svg" alt="background" className={className} />;
     }
-    return <DesktopLight className={className} />;
+    return <img src="/svg/DesktopLight.svg" alt="background" className={className} />;
   }
   if (colorThemeMode === ColorModes.Dark) {
-    return <MobileDark className={className} />;
+    return <img src="/svg/MobileDark.svg" alt="background" className={className} />;
   }
-  return <MobileLight className={className} />;
+  return <img src="/svg/MobileLight.svg" alt="background" className={className} />;
 };
