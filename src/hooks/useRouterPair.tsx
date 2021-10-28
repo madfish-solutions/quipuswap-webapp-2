@@ -1,8 +1,8 @@
-import {useRouter} from 'next/router';
-import {useEffect} from 'react';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-import {getWhitelistedTokenAddress} from '@utils/helpers';
-import {WhitelistedToken} from '@utils/types';
+import { getWhitelistedTokenAddress } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 
 type RouterPairType = {
   page: string;
@@ -15,7 +15,7 @@ type RouterPairType = {
 const pairString = '[from-to]';
 const pairLength = pairString.length;
 
-export const useRouterPair = ({page, urlLoaded, initialLoad, token1, token2}: RouterPairType) => {
+export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: RouterPairType) => {
   const router = useRouter();
   let urlSearchParams;
   const actualUrl = router.pathname.indexOf(pairString)
@@ -31,18 +31,18 @@ export const useRouterPair = ({page, urlLoaded, initialLoad, token1, token2}: Ro
   const params = Object.fromEntries(
     new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])),
   );
-  const {from, to} = params;
+  const { from, to } = params;
   useEffect(() => {
     if (urlLoaded && initialLoad) {
       if (token1 && token2) {
         const fromToken = getWhitelistedTokenAddress(token1);
         const toToken = getWhitelistedTokenAddress(token2);
         const url = `/${page}/${fromToken}-${toToken}`;
-        router.replace(url, undefined, {shallow: true});
+        router.replace(url, undefined, { shallow: true });
       }
     }
     // eslint-disable-next-line
   }, [token1, token2]);
 
-  return {from, to};
+  return { from, to };
 };

@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Button } from '@components/ui/Button';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { LogoButton } from '@components/common/LogoButton';
@@ -14,7 +13,7 @@ import { MenuOpened } from '@components/svg/MenuOpened';
 import s from './Header.module.sass';
 
 type HeaderProps = {
-  className?: string
+  className?: string;
 };
 
 const modeClass = {
@@ -22,9 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const Header: React.FC<HeaderProps> = ({
-  className,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
@@ -42,10 +39,6 @@ export const Header: React.FC<HeaderProps> = ({
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton />
         <ConnectWalletButton className={s.connect} />
-        <LanguageSwitcher
-          direction="bottom"
-          className={s.languageSwitcher}
-        />
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button
           theme="quaternary"
@@ -55,9 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}
         </Button>
       </header>
-      <Menu
-        className={cx(s.menu, { [s.active]: isMenuOpened })}
-      />
+      <Menu className={cx(s.menu, { [s.active]: isMenuOpened })} />
     </div>
   );
 };

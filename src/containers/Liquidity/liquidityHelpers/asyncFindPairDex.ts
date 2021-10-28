@@ -1,9 +1,9 @@
-import {findDex, getLiquidityShare} from '@quipuswap/sdk';
-import {TezosToolkit} from '@taquito/taquito';
+import { findDex, getLiquidityShare } from '@quipuswap/sdk';
+import { TezosToolkit } from '@taquito/taquito';
 
-import {FACTORIES} from '@utils/defaults';
-import {QSMainNet, WhitelistedTokenPair} from '@utils/types';
-import {fromDecimals} from '@utils/helpers';
+import { FACTORIES } from '@utils/defaults';
+import { QSMainNet, WhitelistedTokenPair } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
 
 export const asyncFindPairDex = async (
   pair: WhitelistedTokenPair,

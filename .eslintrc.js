@@ -1,7 +1,7 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'react-hooks'],
-  extends: ['airbnb-typescript', 'plugin:react/recommended', 'prettier'],
+  plugins: ['@typescript-eslint', 'react-hooks', 'prettier'],
+  extends: ['airbnb-typescript', 'plugin:react/recommended', 'plugin:prettier/recommended'],
   rules: {
     'react/display-name': 0,
     'react/jsx-props-no-spreading': 0,

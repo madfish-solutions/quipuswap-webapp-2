@@ -35,13 +35,13 @@ module.exports = {
     jsx: ['JsxLexer'],
     tsx: ['JsxLexer'],
 
-    default: ['JavascriptLexer']
+    default: ['JavascriptLexer'],
   },
 
   lineEnding: 'auto',
   // Control the line ending. See options at https://github.com/ryanve/eol
 
-  locales: ['en', 'fr', 'ru', 'es', 'pt'],
+  locales: ['en'],
   // An array of the locales in your applications
 
   namespaceSeparator: ':',
@@ -73,7 +73,7 @@ module.exports = {
   failOnWarnings: false,
   // Exit with an exit code of 1 on warnings
 
-  customValueTemplate: null
+  customValueTemplate: null,
   // If you wish to customize the value output the value as an object, you can set your own format.
   // ${defaultValue} is the default value you set in your translation function.
   // Any other custom property will be automatically extracted.
@@ -83,4 +83,4 @@ module.exports = {
   //   message: "${defaultValue}",
   //   description: "${maxLength}", // t('my-key', {maxLength: 150})
   // }
-}
+};
