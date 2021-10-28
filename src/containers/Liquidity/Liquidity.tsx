@@ -1,14 +1,14 @@
-import {useTranslation} from 'next-i18next';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
-import {useRouter} from 'next/router';
-import {withTypes} from 'react-final-form';
-import {TransferParams} from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { withTypes } from 'react-final-form';
+import { TransferParams } from '@quipuswap/sdk';
 
-import {useRouterPair} from '@hooks/useRouterPair';
-import {useExchangeRates} from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
-import {fallbackTokenToTokenData, handleTokenChange, handleSearchToken} from '@utils/helpers';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
+import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
 import {
   LiquidityFormValues,
   QSMainNet,
@@ -16,13 +16,13 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import {findTokensByList, useLists, useSearchCustomTokens} from '@utils/tokenLists';
-import {STABLE_TOKEN, TEZOS_TOKEN} from '@utils/defaults';
-import {StickyBlock} from '@components/common/StickyBlock';
+import { findTokensByList, useLists, useSearchCustomTokens } from '@utils/tokenLists';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { StickyBlock } from '@components/common/StickyBlock';
 
-import {LiquidityForm} from './LiquidityForm/LiquidityForm';
-import {LiquidityChart} from './LiquidityChart';
-import {hanldeTokenPairSelect, submitForm} from './liquidityHelpers';
+import { LiquidityForm } from './LiquidityForm/LiquidityForm';
+import { LiquidityChart } from './LiquidityChart';
+import { hanldeTokenPairSelect, submitForm } from './liquidityHelpers';
 
 const TabsContent = [
   {
@@ -44,11 +44,11 @@ const fallbackTokenPair = {
   token2: STABLE_TOKEN,
 } as WhitelistedTokenPair;
 
-export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
-  const {t} = useTranslation(['common', 'swap', 'liquidity']);
+export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
+  const { t } = useTranslation(['common', 'swap', 'liquidity']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const {data: lists} = useLists();
+  const { data: lists } = useLists();
   const tokens = findTokensByList(lists);
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
@@ -62,13 +62,13 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
 
   const [removeLiquidityParams, setRemoveLiquidityParams] = useState<TransferParams[]>([]);
   const [addLiquidityParams, setAddLiquidityParams] = useState<TransferParams[]>([]);
-  const {Form} = withTypes<LiquidityFormValues>();
+  const { Form } = withTypes<LiquidityFormValues>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
   const router = useRouter();
   const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
-  const {from, to} = useRouterPair({
+  const { from, to } = useRouterPair({
     page: `liquidity/${router.query.method}`,
     urlLoaded,
     initialLoad,
@@ -76,7 +76,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
     token2,
   });
 
-  const currentTab = useMemo(() => TabsContent.find(({id}) => id === tabsState)!, [tabsState]);
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const handleErrorToast = useCallback(
     (err) => {
@@ -140,7 +140,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
       handleTokenChangeWrapper(token1, 'first');
       handleTokenChangeWrapper(token2, 'second');
       hanldeTokenPairSelect(
-        {token1, token2} as WhitelistedTokenPair,
+        { token1, token2 } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper,
       );
@@ -176,11 +176,11 @@ export const Liquidity: React.FC<LiquidityProps> = ({className}) => {
             });
           }}
           mutators={{
-            setValue: ([field, value], state, {changeValue}) => {
+            setValue: ([field, value], state, { changeValue }) => {
               changeValue(state, field, () => value);
             },
           }}
-          render={({handleSubmit, form}) => (
+          render={({ handleSubmit, form }) => (
             <LiquidityForm
               form={form}
               handleSubmit={handleSubmit}

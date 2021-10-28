@@ -12,12 +12,12 @@ import {
   toContract,
   voteForBaker,
 } from '@quipuswap/sdk';
-import {TezosToolkit, TransferParams} from '@taquito/taquito';
+import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
-import {LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {fromDecimals, getValueForSDK, slippageToBignum, toDecimals} from '@utils/helpers';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { fromDecimals, getValueForSDK, slippageToBignum, toDecimals } from '@utils/helpers';
 
 interface SubmitFormArgs {
   tezos: TezosToolkit;
@@ -103,7 +103,7 @@ export const submitForm = async ({
 
             const tezValue = total$;
 
-            const addParams = await addLiquidity(tezos, dex, {tezValue});
+            const addParams = await addLiquidity(tezos, dex, { tezValue });
 
             liquidityParams = swapParams.concat(addParams);
             if (!token2.fa2TokenId) {
@@ -120,7 +120,7 @@ export const submitForm = async ({
 
           if (values.balance1 && accountPkh) {
             const tezValue = toDecimals(new BigNumber(values.balance1), 6);
-            liquidityParams = await addLiquidity(tezos, dex, {tezValue});
+            liquidityParams = await addLiquidity(tezos, dex, { tezValue });
           }
         }
       }

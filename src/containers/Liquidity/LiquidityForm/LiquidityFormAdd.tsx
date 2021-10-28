@@ -1,11 +1,11 @@
-import {useTranslation} from 'next-i18next';
-import React, {useMemo, useCallback} from 'react';
+import { useTranslation } from 'next-i18next';
+import React, { useMemo, useCallback } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
-import {Field} from 'react-final-form';
-import {FoundDex} from '@quipuswap/sdk';
+import { Field } from 'react-final-form';
+import { FoundDex } from '@quipuswap/sdk';
 
-import {useAccountPkh, useNetwork, useTezos} from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import {
   LiquidityFormValues,
   QSMainNet,
@@ -20,13 +20,13 @@ import {
   validateMinMax,
   validateRebalance,
 } from '@utils/validators';
-import {parseDecimals} from '@utils/helpers';
-import {TokenSelect} from '@components/ui/ComplexInput/TokenSelect';
-import {Plus} from '@components/svg/Plus';
+import { parseDecimals } from '@utils/helpers';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { Plus } from '@components/svg/Plus';
 
 import s from '../Liquidity.module.sass';
 
-import {hanldeTokenPairSelect} from '../liquidityHelpers';
+import { hanldeTokenPairSelect } from '../liquidityHelpers';
 
 interface LiquidityFormAddProps {
   tab: 'remove' | 'add';
@@ -60,7 +60,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
   localSwap,
   localInvest,
 }) => {
-  const {t} = useTranslation(['liquidity']);
+  const { t } = useTranslation(['liquidity']);
   const accountPkh = useAccountPkh();
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
@@ -86,7 +86,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
       setTokens([token1 || undefined, token]);
       if (token1) {
         hanldeTokenPairSelect(
-          {token1, token2: token} as WhitelistedTokenPair,
+          { token1, token2: token } as WhitelistedTokenPair,
           setTokenPair,
           handleTokenChange,
         );
@@ -110,7 +110,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
         )}
         parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
       >
-        {({input, meta}) => (
+        {({ input, meta }) => (
           <TokenSelect
             {...input}
             blackListedTokens={blackListedTokens}
@@ -148,7 +148,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
         )}
         parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
       >
-        {({input, meta}) => (
+        {({ input, meta }) => (
           <TokenSelect
             {...input}
             blackListedTokens={blackListedTokens}

@@ -1,12 +1,12 @@
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {QSNetwork, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
-import {hanldeTokenPairSelect} from '@containers/Liquidity/liquidityHelpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
 
-import {isTokenEqual} from './isTokenEqual';
-import {localSearchToken} from './localSearchToken';
-import {localSearchSortSymbol} from './localSearchSortSymbol';
+import { isTokenEqual } from './isTokenEqual';
+import { localSearchToken } from './localSearchToken';
+import { localSearchSortSymbol } from './localSearchSortSymbol';
 
 type SearchTokenType = {
   tokens: WhitelistedToken[];
@@ -81,7 +81,7 @@ export const handleSearchToken = async ({
     setTokens(res);
     if (setTokenPair && tezos) {
       hanldeTokenPairSelect(
-        {token1: res[0], token2: res[1]} as WhitelistedTokenPair,
+        { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper,
       );

@@ -1,8 +1,8 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
-import {parseDecimals} from '@utils/helpers';
-import {Button} from '@components/ui/Button';
+import { parseDecimals } from '@utils/helpers';
+import { Button } from '@components/ui/Button';
 
 import s from './ComplexInput.module.sass';
 

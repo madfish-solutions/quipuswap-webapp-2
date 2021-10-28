@@ -1,4 +1,4 @@
-import {WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,

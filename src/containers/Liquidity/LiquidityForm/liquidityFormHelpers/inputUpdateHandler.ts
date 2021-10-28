@@ -1,11 +1,11 @@
-import {estimateSharesInTez, estimateSharesInToken, FoundDex} from '@quipuswap/sdk';
+import { estimateSharesInTez, estimateSharesInToken, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
-import {fromDecimals, getValueForSDK, parseDecimals} from '@utils/helpers';
-import {LiquidityFormValues, TokenDataMap, TokenDataType, WhitelistedToken} from '@utils/types';
+import { fromDecimals, getValueForSDK, parseDecimals } from '@utils/helpers';
+import { LiquidityFormValues, TokenDataMap, TokenDataType, WhitelistedToken } from '@utils/types';
 
-import {isTez} from './isTez';
+import { isTez } from './isTez';
 
 interface InputUpdateHandlerArgs {
   accountPkh?: string | null;

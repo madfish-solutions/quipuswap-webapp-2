@@ -1,10 +1,10 @@
-import {estimateTezInShares, estimateTokenInShares, FoundDex} from '@quipuswap/sdk';
-import {TezosToolkit} from '@taquito/taquito';
+import { estimateTezInShares, estimateTokenInShares, FoundDex } from '@quipuswap/sdk';
+import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import {QSMainNet, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
-import {fromDecimals} from '@utils/helpers';
-import {asyncFindPairDex} from './asyncFindPairDex';
+import { QSMainNet, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
+import { asyncFindPairDex } from './asyncFindPairDex';
 
 export const asyncGetShares = async (
   setTokenPair: (pair: WhitelistedTokenPair) => void,
@@ -23,7 +23,7 @@ export const asyncGetShares = async (
   let tokenPairValue = tokenPair;
   if (currentTab.id !== 'remove') {
     const attempt = await asyncFindPairDex(
-      {token1, token2} as WhitelistedTokenPair,
+      { token1, token2 } as WhitelistedTokenPair,
       setTokenPair,
       tezos,
       accountPkh,

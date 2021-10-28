@@ -1,13 +1,13 @@
-import React, {useContext, useMemo} from 'react';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {getWhitelistedTokenName, getWhitelistedTokenSymbol} from '@utils/helpers';
-import {WhitelistedToken} from '@utils/types';
-import {TokensLogos} from '@components/ui/TokensLogos';
-import {Bage} from '@components/ui/Bage';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { Bage } from '@components/ui/Bage';
 
-import {TEZOS_TOKEN} from '@utils/defaults';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import s from './ModalCell.module.sass';
 
 type TokenCellProps = {
@@ -21,8 +21,8 @@ const modeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-export const TokenCell: React.FC<TokenCellProps> = ({token, onClick, tabIndex, children}) => {
-  const {colorThemeMode} = useContext(ColorThemeContext);
+export const TokenCell: React.FC<TokenCellProps> = ({ token, onClick, tabIndex, children }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(modeClass[colorThemeMode], s.listItem, s.splitRow);
 
