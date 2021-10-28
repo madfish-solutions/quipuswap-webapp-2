@@ -1,6 +1,6 @@
-import {estimateTezInToken, estimateTokenInTez, FoundDex} from '@quipuswap/sdk';
+import { estimateTezInToken, estimateTokenInTez, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
 import {
   fromDecimals,
@@ -8,8 +8,8 @@ import {
   getWhitelistedTokenDecimals,
   toDecimals,
 } from '@utils/helpers';
-import {LiquidityFormValues, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {TEZOS_TOKEN} from '@utils/defaults';
+import { LiquidityFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 
 interface RebalanceLiquidityHandlerArgs {
   accountPkh?: string | null;

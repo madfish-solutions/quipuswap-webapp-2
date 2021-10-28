@@ -1,9 +1,9 @@
 /* eslint-disable react/button-has-type */
-import React, {useContext} from 'react';
-import Link, {LinkProps} from 'next/link';
+import React, { useContext } from 'react';
+import Link, { LinkProps } from 'next/link';
 import cx from 'classnames';
 
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './Button.module.sass';
 
@@ -47,7 +47,7 @@ export const Button: React.FC<ButtonProps> = ({
   disabled,
   ...props
 }) => {
-  const {colorThemeMode} = useContext(ColorThemeContext);
+  const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], themeClass[theme], className);
 

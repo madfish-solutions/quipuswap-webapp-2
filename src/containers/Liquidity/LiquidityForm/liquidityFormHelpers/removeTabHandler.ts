@@ -1,8 +1,8 @@
-import {estimateTezInShares, estimateTokenInShares, FoundDex} from '@quipuswap/sdk';
+import { estimateTezInShares, estimateTokenInShares, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import {fromDecimals, getWhitelistedTokenDecimals, toDecimals} from '@utils/helpers';
-import {LiquidityFormValues, WhitelistedToken} from '@utils/types';
+import { fromDecimals, getWhitelistedTokenDecimals, toDecimals } from '@utils/helpers';
+import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
 
 interface RemoveTabHandlerArgs {
   isTokensSame: boolean;

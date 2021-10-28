@@ -1,11 +1,11 @@
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {QSNetwork, WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
-import {hanldeTokenPairSelect} from '@containers/Liquidity/liquidityHelpers';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
 
-import {isTokenEqual} from './isTokenEqual';
-import {localSearchTokenByAddr} from './localSearchTokenByAddr';
+import { isTokenEqual } from './isTokenEqual';
+import { localSearchTokenByAddr } from './localSearchTokenByAddr';
 
 type SearchTokenType = {
   tokens: WhitelistedToken[];
@@ -63,7 +63,7 @@ export const handleSearchToken = async ({
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChange({token: resTo, tokenNumber: 'second'});
+      handleTokenChange({ token: resTo, tokenNumber: 'second' });
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -72,14 +72,14 @@ export const handleSearchToken = async ({
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChange({token: resFrom, tokenNumber: 'first'});
+    handleTokenChange({ token: resFrom, tokenNumber: 'first' });
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
       hanldeTokenPairSelect(
-        {token1: res[0], token2: res[1]} as WhitelistedTokenPair,
+        { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChange,
       );

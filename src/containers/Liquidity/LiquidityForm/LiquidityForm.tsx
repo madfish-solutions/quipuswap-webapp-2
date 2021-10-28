@@ -1,7 +1,7 @@
 import router from 'next/router';
-import React, {useEffect, useRef, useState, useCallback} from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
-import {FormSpy} from 'react-final-form';
+import { FormSpy } from 'react-final-form';
 import {
   // Dex,
   estimateTezInShares,
@@ -12,9 +12,9 @@ import {
   TransferParams,
 } from '@quipuswap/sdk';
 
-import {useAccountPkh, useNetwork, useOnBlock, useTezos} from '@utils/dapp';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {useConnectModalsState} from '@hooks/useConnectModalsState';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   LiquidityFormValues,
   PoolShare,
@@ -23,19 +23,19 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import {fromDecimals, getWhitelistedTokenSymbol, isDexEqual, isTokenEqual} from '@utils/helpers';
-import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
-import {Card} from '@components/ui/Card';
-import {Tabs} from '@components/ui/Tabs';
+import { fromDecimals, getWhitelistedTokenSymbol, isDexEqual, isTokenEqual } from '@utils/helpers';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from '../Liquidity.module.sass';
 
-import {LiquidityDetails} from './LiquidityDetails';
-import {LiquiditySlippage} from './LiquiditySlippage';
-import {LiquidityFormRemove} from './LiquidityFormRemove';
-import {LiquidityFormAdd} from './LiquidityFormAdd';
-import {LiquiditySwitcher} from './LiquiditySwitcher';
+import { LiquidityDetails } from './LiquidityDetails';
+import { LiquiditySlippage } from './LiquiditySlippage';
+import { LiquidityFormRemove } from './LiquidityFormRemove';
+import { LiquidityFormAdd } from './LiquidityFormAdd';
+import { LiquiditySwitcher } from './LiquiditySwitcher';
 import {
   inputUpdateHandler,
   addLiquidityHandler,
@@ -92,7 +92,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
   handleTokenChange,
   currentTab,
 }) => {
-  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
+  const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } =
     useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
@@ -355,7 +355,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
                     token1,
                   )}-${getWhitelistedTokenSymbol(token2)}`,
                   undefined,
-                  {shallow: true},
+                  { shallow: true },
                 );
                 setTabsState(val);
               }}
@@ -428,5 +428,5 @@ const RealForm: React.FC<LiquidityFormProps> = ({
 };
 
 export const LiquidityForm = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
+  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

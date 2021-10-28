@@ -7,14 +7,14 @@ import {
   removeLiquidity,
   voteForBaker,
 } from '@quipuswap/sdk';
-import {TezosToolkit, TransferParams} from '@taquito/taquito';
+import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import {FACTORIES} from '@utils/defaults';
-import {LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {slippageToBignum, toDecimals} from '@utils/helpers';
+import { FACTORIES } from '@utils/defaults';
+import { LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { slippageToBignum, toDecimals } from '@utils/helpers';
 
-import {rebalanceFunction} from './rebalanceFunction';
+import { rebalanceFunction } from './rebalanceFunction';
 // import { oldRebalanceFunction } from './oldRebalanceFunction';
 
 interface SubmitFormArgs {
@@ -73,22 +73,12 @@ export const submitForm = async ({
             slippage,
             updateToast,
           });
-          // liquidityParams = await oldRebalanceFunction({
-          //   dex,
-          //   accountPkh,
-          //   tezos,
-          //   values,
-          //   token2,
-          //   tokensData,
-          //   networkId,
-          //   updateToast
-          // })
         } else {
           if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
 
           if (values.balance1 && accountPkh) {
             const tezValue = toDecimals(new BigNumber(values.balance1), 6);
-            liquidityParams = await addLiquidity(tezos, dex, {tezValue});
+            liquidityParams = await addLiquidity(tezos, dex, { tezValue });
           }
         }
       }
