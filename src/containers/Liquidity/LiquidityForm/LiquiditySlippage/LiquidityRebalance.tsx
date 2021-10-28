@@ -69,17 +69,11 @@ export const LiquidityRebalance: React.FC<LiquidityRebalanceProps> = ({
   return (
     <>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>
-          {t('liquidity|Max invested')}
-          :
-        </span>
+        <span className={s.receiveLabel}>{t('liquidity|Max invested')}:</span>
         <CurrencyAmount currency={tokenAName} amount={maxA} />
       </div>
       <div className={cx(s.receive, s.mb24)}>
-        <span className={s.receiveLabel}>
-          {t('liquidity|Max invested')}
-          :
-        </span>
+        <span className={s.receiveLabel}>{t('liquidity|Max invested')}:</span>
         <CurrencyAmount currency={tokenBName} amount={maxB} />
       </div>
     </>

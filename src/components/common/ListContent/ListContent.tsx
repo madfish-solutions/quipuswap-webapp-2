@@ -1,12 +1,12 @@
 import cx from 'classnames';
-import React, {useContext} from 'react';
-import {useTranslation} from 'next-i18next';
+import React, { useContext } from 'react';
+import { useTranslation } from 'next-i18next';
 
-import {useToggleList, useRemoveList} from '@utils/tokenLists';
-import {WhitelistedTokenList} from '@utils/types';
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {ChooseListCell, LoadingChooseListCell} from '@components/ui/Modal/ModalCell';
-import {MultiLoader} from '@components/ui/MultiLoader';
+import { useToggleList, useRemoveList } from '@utils/tokenLists';
+import { WhitelistedTokenList } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { ChooseListCell, LoadingChooseListCell } from '@components/ui/Modal/ModalCell';
+import { MultiLoader } from '@components/ui/MultiLoader';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './ListContent.module.sass';
@@ -29,10 +29,10 @@ export const ListContent: React.FC<ListContentProps> = ({
   searchLoading,
   listsLoading,
 }) => {
-  const {colorThemeMode} = useContext(ColorThemeContext);
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const toggle = useToggleList();
   const removeList = useRemoveList();
-  const {t} = useTranslation(['common']);
+  const { t } = useTranslation(['common']);
   return (
     <>
       {isEmptyLists && !searchLoading && !listsLoading && (
@@ -45,7 +45,7 @@ export const ListContent: React.FC<ListContentProps> = ({
         <MultiLoader Component={LoadingChooseListCell} count={7} />
       )}
       {allLists.map((list: WhitelistedTokenList) => {
-        const {url, enabled} = list;
+        const { url, enabled } = list;
         return (
           <ChooseListCell
             key={url}

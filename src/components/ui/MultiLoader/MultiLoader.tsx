@@ -5,7 +5,7 @@ interface MultiLoaderProps {
   Component: React.FC;
 }
 
-export const MultiLoader: React.FC<MultiLoaderProps> = ({count, Component}) => (
+export const MultiLoader: React.FC<MultiLoaderProps> = ({ count, Component }) => (
   <>
     {new Array(count)
       .fill(0)

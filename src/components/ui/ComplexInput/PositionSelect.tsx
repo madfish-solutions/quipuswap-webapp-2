@@ -1,17 +1,17 @@
-import React, {useContext, useRef, useState} from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import cx from 'classnames';
-import {useTranslation} from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 
-import {WhitelistedToken, WhitelistedTokenPair} from '@utils/types';
-import {TEZOS_TOKEN} from '@utils/defaults';
-import {getWhitelistedTokenSymbol, prettyPriceThousands} from '@utils/helpers';
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {PositionsModal} from '@components/modals/PositionsModal';
-import {Button} from '@components/ui/Button';
-import {TokensLogos} from '@components/ui/TokensLogos';
-import {PercentSelector} from '@components/ui/ComplexInput/PercentSelector';
-import {ComplexError} from '@components/ui/ComplexInput/ComplexError';
-import {Shevron} from '@components/svg/Shevron';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol, prettyPriceThousands } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { PositionsModal } from '@components/modals/PositionsModal';
+import { Button } from '@components/ui/Button';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
@@ -58,15 +58,15 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   notFrozen,
   ...props
 }) => {
-  const {t} = useTranslation(['common']);
-  const {colorThemeMode} = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const compoundClassName = cx(
-    {[s.focused]: focused},
-    {[s.error]: !!error},
+    { [s.focused]: focused },
+    { [s.error]: !!error },
     themeClass[colorThemeMode],
     className,
   );

@@ -1,41 +1,36 @@
-import React, {useMemo, useState, useEffect, useRef, useCallback} from 'react';
+import React, { useMemo, useState, useEffect, useRef, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import {estimateSwap, FoundDex} from '@quipuswap/sdk';
-import {Field, FormSpy} from 'react-final-form';
-import {useTranslation} from 'next-i18next';
+import { estimateSwap, FoundDex } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
 
-import {useConnectModalsState} from '@hooks/useConnectModalsState';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {useLoadDex} from '@hooks/useLoadDex';
-import {QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken} from '@utils/types';
-import {useAccountPkh, useTezos, useNetwork} from '@utils/dapp';
-import {composeValidators, isAddress, validateBalance, validateMinMax} from '@utils/validators';
+import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { useAccountPkh, useTezos, useNetwork } from '@utils/dapp';
+import { composeValidators, isAddress, validateBalance, validateMinMax } from '@utils/validators';
 import {
   fromDecimals,
   getWhitelistedTokenDecimals,
-  getWhitelistedTokenSymbol,
   isDexEqual,
   isTokenEqual,
   parseDecimals,
-  slippageToBignum,
   toDecimals,
   transformTokenDataToAsset,
 } from '@utils/helpers';
-import {FACTORIES, FEE_RATE, TEZOS_TOKEN} from '@utils/defaults';
-import {Tabs} from '@components/ui/Tabs';
-import {Card} from '@components/ui/Card';
-import {ComplexRecipient} from '@components/ui/ComplexInput';
-import {TokenSelect} from '@components/ui/ComplexInput/TokenSelect';
-import {Button} from '@components/ui/Button';
-import {SwapButton} from '@components/common/SwapButton';
-import {Slippage} from '@components/common/Slippage';
-import {CurrencyAmount} from '@components/common/CurrencyAmount';
+import { FACTORIES, FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
+import { Tabs } from '@components/ui/Tabs';
+import { Card } from '@components/ui/Card';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { Button } from '@components/ui/Button';
+import { SwapButton } from '@components/common/SwapButton';
 // import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
-import {SwapDetails} from './SwapDetails';
-// import { getDex } from './swapHelpers';
+import { useLoadDex } from '@hooks/useLoadDex';
+import { SwapDetails } from '../SwapDetails';
+import { SwapFormSlippage } from './SwapFormSlippage';
 
 const TabsContent = [
   {
@@ -90,9 +85,8 @@ const RealForm: React.FC<SwapFormProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const updateToast = useUpdateToast();
-  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
+  const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } =
     useConnectModalsState();
-  const {t} = useTranslation(['swap']);
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -105,7 +99,7 @@ const RealForm: React.FC<SwapFormProps> = ({
     storages: [dexStorage1, dexStorage2],
     setDex,
     setDexStorage,
-  } = useLoadDex({token1, token2});
+  } = useLoadDex({ token1, token2 });
   const [[oldDex1, oldDex2], setOldDex] = useState<FoundDex[]>([]);
   const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
 
@@ -165,13 +159,15 @@ const RealForm: React.FC<SwapFormProps> = ({
     const toAsset = transformTokenDataToAsset(tokensData.second);
 
     const valuesInner =
-      lastChangeMod === 'balance1' ? {inputValue: inputValueInner} : {outputValue: inputValueInner};
+      lastChangeMod === 'balance1'
+        ? { inputValue: inputValueInner }
+        : { outputValue: inputValueInner };
 
     let retValue = new BigNumber(0);
     if (!inputWrapper.eq(0)) {
       try {
         if (isTokenToToken && dex2) {
-          const sendDex = {inputDex: dex1, outputDex: dex2};
+          const sendDex = { inputDex: dex1, outputDex: dex2 };
           retValue = await estimateSwap(
             tezos,
             FACTORIES[networkId],
@@ -181,7 +177,8 @@ const RealForm: React.FC<SwapFormProps> = ({
             sendDex,
           );
         } else {
-          const sendDex = token2.contractAddress === 'tez' ? {outputDex: dex1} : {inputDex: dex1};
+          const sendDex =
+            token2.contractAddress === 'tez' ? { outputDex: dex1 } : { inputDex: dex1 };
           retValue = await estimateSwap(
             tezos,
             FACTORIES[networkId],
@@ -293,19 +290,21 @@ const RealForm: React.FC<SwapFormProps> = ({
     () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
     [token1, token2],
   );
-  let feeVal = new BigNumber(values.balance1 ?? 0);
-  if (
-    token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
-    token2.contractAddress !== TEZOS_TOKEN.contractAddress
-  ) {
-    feeVal = feeVal.times(2);
-  }
-  const fee = parseDecimals(
-    feeVal.times(FEE_RATE).toFixed(),
-    0,
-    Infinity,
-    getWhitelistedTokenDecimals(TEZOS_TOKEN),
-  );
+  const fee = useMemo(() => {
+    let feeVal = new BigNumber(values.balance1) ?? new BigNumber(0);
+    if (
+      token1.contractAddress !== TEZOS_TOKEN.contractAddress &&
+      token2.contractAddress !== TEZOS_TOKEN.contractAddress
+    ) {
+      feeVal = feeVal.times(2);
+    }
+    return parseDecimals(
+      feeVal.times(FEE_RATE).toFixed(),
+      0,
+      Infinity,
+      getWhitelistedTokenDecimals(TEZOS_TOKEN),
+    );
+  }, [token1.contractAddress, token2.contractAddress, values.balance1]);
 
   return (
     <>
@@ -339,7 +338,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
           name="balance1"
         >
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               blackListedTokens={blackListedTokens}
@@ -356,7 +355,7 @@ const RealForm: React.FC<SwapFormProps> = ({
               }}
               noBalanceButtons={!accountPkh}
               handleChange={(token) => {
-                handleTokenChange({token, tokenNumber: 'first'});
+                handleTokenChange({ token, tokenNumber: 'first' });
                 setDex([]);
               }}
               balance={tokensData.first.balance}
@@ -374,7 +373,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           validate={validateMinMax(0, Infinity)}
           name="balance2"
         >
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <TokenSelect
               {...input}
               blackListedTokens={blackListedTokens}
@@ -384,7 +383,7 @@ const RealForm: React.FC<SwapFormProps> = ({
               handleBalance={() => {}}
               noBalanceButtons
               handleChange={(token) => {
-                handleTokenChange({token, tokenNumber: 'second'});
+                handleTokenChange({ token, tokenNumber: 'second' });
                 setDex([]);
               }}
               balance={tokensData.second.balance}
@@ -397,7 +396,7 @@ const RealForm: React.FC<SwapFormProps> = ({
           )}
         </Field>
         <Field validate={currentTab.id === 'send' ? isAddress : () => undefined} name="recipient">
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <>
               {currentTab.id === 'send' && (
                 <ComplexRecipient
@@ -414,31 +413,7 @@ const RealForm: React.FC<SwapFormProps> = ({
             </>
           )}
         </Field>
-        <Field initialValue="0.5 %" name="slippage">
-          {({input}) => {
-            const slipPerc = slippageToBignum(values.slippage).times(
-              new BigNumber(values.balance2 ?? 0),
-            );
-            const minimumReceived = parseDecimals(
-              new BigNumber(values.balance2 ?? 0).minus(slipPerc).toFixed(),
-              0,
-              Infinity,
-              token2.metadata.decimals,
-            );
-            return (
-              <>
-                <Slippage handleChange={(value) => input.onChange(value)} />
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>{t('swap|Minimum received')}</span>
-                  <CurrencyAmount
-                    amount={minimumReceived}
-                    currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
-                  />
-                </div>
-              </>
-            );
-          }}
-        </Field>
+        <SwapFormSlippage values={values} token2={token2} />
         <Button
           disabled={values.balance1 === undefined || values.balance1 === '' || token2 === undefined}
           type="submit"
@@ -465,5 +440,5 @@ const RealForm: React.FC<SwapFormProps> = ({
 };
 
 export const SwapForm = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
+  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

@@ -1,6 +1,6 @@
-import {estimateSharesInTez, estimateSharesInToken, FoundDex} from '@quipuswap/sdk';
+import { estimateSharesInTez, estimateSharesInToken, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
-import {TezosToolkit} from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 
 import {
   fromDecimals,
@@ -8,10 +8,10 @@ import {
   getWhitelistedTokenDecimals,
   toDecimals,
 } from '@utils/helpers';
-import {LiquidityFormValues, TokenDataMap, TokenDataType, WhitelistedToken} from '@utils/types';
-import {TEZOS_TOKEN} from '@utils/defaults';
+import { LiquidityFormValues, TokenDataMap, TokenDataType, WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
 
-import {isTez} from './isTez';
+import { isTez } from './isTez';
 
 interface AddLiquidityHandlerArgs {
   isTokensSame: boolean;
