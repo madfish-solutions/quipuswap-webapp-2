@@ -5,7 +5,12 @@ import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import {
-  ColorModes, ColorThemeContext, Button, Card,
+  ColorModes,
+  ColorThemeContext,
+  Button,
+  Card,
+  Tabs,
+  CardCell,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -13,10 +18,8 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { VotingReward } from '@components/svg/VotingReward';

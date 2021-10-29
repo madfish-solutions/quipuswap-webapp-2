@@ -9,7 +9,9 @@ import {
   FoundDex,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
-import { Card, Button } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Card, Button, Tabs, CardHeader, CardContent,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -35,7 +37,6 @@ import {
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { SwapButton } from '@components/common/SwapButton';
@@ -63,24 +64,24 @@ export type SwapSendProps = {
 };
 
 type SwapFormProps = {
-  handleSubmit:() => void,
-  debounce:number,
-  save:any,
-  values:SwapFormValues,
-  form:any,
-  tabsState:any,
-  setTabsState: (state:string) => void,
-  token1:WhitelistedToken,
-  setToken1:(token:WhitelistedToken) => void,
-  token2:WhitelistedToken,
-  setToken2:(token:WhitelistedToken) => void,
-  tokensData:TokenDataMap,
-  handleSwapTokens:() => void,
-  handleTokenChange:(token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
-  currentTab:any
+  handleSubmit: () => void,
+  debounce: number,
+  save: any,
+  values: SwapFormValues,
+  form: any,
+  tabsState: any,
+  setTabsState: (state: string) => void,
+  token1: WhitelistedToken,
+  setToken1: (token: WhitelistedToken) => void,
+  token2: WhitelistedToken,
+  setToken2: (token: WhitelistedToken) => void,
+  tokensData: TokenDataMap,
+  handleSwapTokens: () => void,
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void,
+  currentTab: any
 };
 
-const RealForm:React.FC<SwapFormProps> = ({
+const RealForm: React.FC<SwapFormProps> = ({
   debounce,
   save,
   values,
@@ -118,8 +119,8 @@ const RealForm:React.FC<SwapFormProps> = ({
   const [[dexstorage, dexstorage2], setDexstorage] = useState<any>([]);
   const [[oldToken1, oldToken2], setOldTokens] = useState<WhitelistedToken[]>([token1, token2]);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  const timeout = useRef(setTimeout(() => { }, 0));
+  let promise: any;
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -335,147 +336,156 @@ const RealForm:React.FC<SwapFormProps> = ({
   return (
     <>
       <Card
-        header={{
-          content: (
-            <Tabs
-              values={TabsContent}
-              activeId={tabsState}
-              setActiveId={(val) => setTabsState(val)}
-              className={s.tabs}
-            />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
-          ),
-          className: s.header,
-        }}
-        contentClassName={s.content}
+        isV2
+        className={s.root}
       >
-        <Field
-          validate={composeValidators(
-            validateMinMax(0, Infinity),
-            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
-          )}
-          parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
-          name="balance1"
-        >
-          {({ input, meta }) => (
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance1')}
-              token={token1}
-              setToken={setToken1}
-              handleBalance={(value) => {
-                if (token1) {
-                  form.mutators.setValue(
-                    'balance1',
-                    new BigNumber(parseDecimals(value, 0, Infinity, token1.metadata.decimals)),
-                  );
-                }
-              }}
-              noBalanceButtons={!accountPkh}
-              handleChange={(token) => {
-                handleTokenChange(token, 'first');
-                setDex([]);
-              }}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
-              id="swap-send-from"
-              label="From"
-              className={s.input}
-              error={((meta.error) || meta.submitError)}
-            />
-          )}
-        </Field>
-        <SwapButton onClick={handleSwapButton} />
-        <Field
-          parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
-          name="balance2"
-        >
-          {({ input, meta }) => (
-            <TokenSelect
-              {...input}
-              blackListedTokens={blackListedTokens}
-              onFocus={() => setLastChange('balance2')}
-              token={token2}
-              setToken={setToken2}
-              handleBalance={() => {}}
-              noBalanceButtons
-              handleChange={(token) => {
-                handleTokenChange(token, 'second');
-                setDex([]);
-              }}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
-              id="swap-send-to"
-              label="To"
-              className={cx(s.input, s.mb24)}
-              error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
-            />
-          )}
-        </Field>
-        <Field
-          validate={currentTab.id === 'send' ? isAddress : () => undefined}
-          name="recipient"
-        >
-          {({ input, meta }) => (
-            <>
-              {currentTab.id === 'send' && (
-              <ComplexRecipient
-                {...input}
-                handleInput={(value) => {
-                  form.mutators.setValue(
-                    'recipient',
-                    value,
-                  );
-                }}
-                label="Recipient address"
-                id="swap-send-recipient"
-                className={cx(s.input, s.mb24)}
-                error={((meta.touched && meta.error) || meta.submitError)}
+        <CardHeader
+          header={{
+            content: (
+              <Tabs
+                values={TabsContent}
+                activeId={tabsState}
+                setActiveId={(val) => setTabsState(val)}
+                className={s.tabs}
               />
-              )}
-            </>
-          )}
-        </Field>
-        <Field initialValue="0.5 %" name="slippage">
-          {({ input }) => {
-            const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
-            const minimumReceived = new BigNumber(values.balance2 ?? 0).minus(slipPerc);
-            return (
-              <>
-                <Slippage handleChange={(value) => input.onChange(value)} />
-                <div className={s.receive}>
-                  <span className={s.receiveLabel}>
-                    Minimum received:
-                  </span>
-                  <CurrencyAmount
-                    amount={minimumReceived.isNaN() ? '0' : minimumReceived.toString()}
-                    currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
-                  />
-                </div>
-              </>
-            );
+            ),
+            button: (
+              <Button
+                theme="quaternary"
+              >
+                <Transactions />
+              </Button>
+            ),
           }}
+          className={s.header}
+        />
+        <CardContent className={s.content}>
+          <Field
+            validate={composeValidators(
+              validateMinMax(0, Infinity),
+              accountPkh
+                ? validateBalance(new BigNumber(tokensData.first.balance))
+                : () => undefined,
+            )}
+            parse={(v) => token1?.metadata
+              && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
+            name="balance1"
+          >
+            {({ input, meta }) => (
+              <TokenSelect
+                {...input}
+                blackListedTokens={blackListedTokens}
+                onFocus={() => setLastChange('balance1')}
+                token={token1}
+                setToken={setToken1}
+                handleBalance={(value) => {
+                  if (token1) {
+                    form.mutators.setValue(
+                      'balance1',
+                      new BigNumber(parseDecimals(value, 0, Infinity, token1.metadata.decimals)),
+                    );
+                  }
+                }}
+                noBalanceButtons={!accountPkh}
+                handleChange={(token) => {
+                  handleTokenChange(token, 'first');
+                  setDex([]);
+                }}
+                balance={tokensData.first.balance}
+                exchangeRate={tokensData.first.exchangeRate}
+                id="swap-send-from"
+                label="From"
+                className={s.input}
+                error={((meta.error) || meta.submitError)}
+              />
+            )}
+          </Field>
+          <SwapButton onClick={handleSwapButton} />
+          <Field
+            parse={(v) => token2?.metadata
+              && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
+            name="balance2"
+          >
+            {({ input, meta }) => (
+              <TokenSelect
+                {...input}
+                blackListedTokens={blackListedTokens}
+                onFocus={() => setLastChange('balance2')}
+                token={token2}
+                setToken={setToken2}
+                handleBalance={() => { }}
+                noBalanceButtons
+                handleChange={(token) => {
+                  handleTokenChange(token, 'second');
+                  setDex([]);
+                }}
+                balance={tokensData.second.balance}
+                exchangeRate={tokensData.second.exchangeRate}
+                id="swap-send-to"
+                label="To"
+                className={cx(s.input, s.mb24)}
+                error={((lastChange === 'balance2' && meta.touched && meta.error) || meta.submitError)}
+              />
+            )}
+          </Field>
+          <Field
+            validate={currentTab.id === 'send' ? isAddress : () => undefined}
+            name="recipient"
+          >
+            {({ input, meta }) => (
+              <>
+                {currentTab.id === 'send' && (
+                  <ComplexRecipient
+                    {...input}
+                    handleInput={(value) => {
+                      form.mutators.setValue(
+                        'recipient',
+                        value,
+                      );
+                    }}
+                    label="Recipient address"
+                    id="swap-send-recipient"
+                    className={cx(s.input, s.mb24)}
+                    error={((meta.touched && meta.error) || meta.submitError)}
+                  />
+                )}
+              </>
+            )}
+          </Field>
+          <Field initialValue="0.5 %" name="slippage">
+            {({ input }) => {
+              const slipPerc = slippageToBignum(values.slippage).multipliedBy(values.balance2 ?? 0);
+              const minimumReceived = new BigNumber(values.balance2 ?? 0).minus(slipPerc);
+              return (
+                <>
+                  <Slippage handleChange={(value) => input.onChange(value)} />
+                  <div className={s.receive}>
+                    <span className={s.receiveLabel}>
+                      Minimum received:
+                    </span>
+                    <CurrencyAmount
+                      amount={minimumReceived.isNaN() ? '0' : minimumReceived.toString()}
+                      currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
+                    />
+                  </div>
+                </>
+              );
+            }}
 
-        </Field>
-        <Button
-          disabled={
-          values.balance1 === undefined
-          || values.balance1.toString() === ''
-          || token2 === undefined
-        }
-          type="submit"
-          onClick={handleSwapSubmit}
-          className={s.button}
-        >
-          {currentTab.label}
-        </Button>
+          </Field>
+          <Button
+            disabled={
+              values.balance1 === undefined
+              || values.balance1.toString() === ''
+              || token2 === undefined
+            }
+            type="submit"
+            onClick={handleSwapSubmit}
+            className={s.button}
+          >
+            {currentTab.label}
+          </Button>
+        </CardContent>
       </Card>
       <SwapDetails
         dex={dex}
@@ -493,6 +503,6 @@ const RealForm:React.FC<SwapFormProps> = ({
   );
 };
 
-export const SwapForm = (props:any) => (
+export const SwapForm = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import {
   FoundDex,
 } from '@quipuswap/sdk';
-import { Card, Button } from '@madfish-solutions/quipu-ui-kit';
+import { Card, Button, CardCell } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   PoolShare,
@@ -12,7 +12,6 @@ import {
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
-import { Card, Button } from '@madfish-solutions/quipu-ui-kit';
+import { Card, Button, CardCell } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
@@ -10,7 +10,6 @@ import {
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { Route } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';

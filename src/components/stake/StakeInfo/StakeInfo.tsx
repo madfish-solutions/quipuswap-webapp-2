@@ -6,13 +6,12 @@ import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
 import {
   ColorModes, ColorThemeContext, Card, Button,
+  Tabs, CardCell,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { Tabs } from '@components/ui/Tabs';
 import { Timeleft } from '@components/ui/Timeleft';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
