@@ -9,13 +9,14 @@ import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 import { CandlePlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
+import {
+  ColorModes, ColorThemeContext, Card, CardContent, CardHeader,
+} from '@madfish-solutions/quipu-ui-kit';
 
-import { usePrevious } from '@hooks/usePrevious';
 import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { usePrevious } from '@hooks/usePrevious';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
 import { Preloader } from '@components/common/Preloader';
 

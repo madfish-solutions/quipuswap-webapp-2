@@ -8,13 +8,14 @@ import React, {
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-
 import { PlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
-import { usePrevious } from '@hooks/usePrevious';
+import {
+  ColorModes, ColorThemeContext, Card, CardContent, CardHeader,
+} from '@madfish-solutions/quipu-ui-kit';
+
 import { prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
+import { usePrevious } from '@hooks/usePrevious';
 import { PairChartInfo } from '@components/common/PairChartInfo';
 import { Preloader } from '@components/common/Preloader';
 

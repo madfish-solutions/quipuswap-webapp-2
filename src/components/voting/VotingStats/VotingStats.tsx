@@ -2,12 +2,12 @@ import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
+import {
+  ColorModes, ColorThemeContext, Card, Button,
+} from '@madfish-solutions/quipu-ui-kit';
 
-import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card } from '@components/ui/Card';
-import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './VotingStats.module.sass';

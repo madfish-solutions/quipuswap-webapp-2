@@ -10,7 +10,7 @@ import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo } from '@utils/dapp';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
 import { Section } from '@components/home/Section';
-import { Card } from '@components/ui/Card';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 import { SliderUI } from '@components/ui/Slider';
 
 import s from './DexDashboard.module.sass';
@@ -45,7 +45,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       className={cx(className)}
     >
       <Card
-        className={(s.mobile)}
+        className={s.mobile}
         contentClassName={s.mobContent}
       >
         <>

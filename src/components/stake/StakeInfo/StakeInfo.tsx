@@ -4,12 +4,12 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
+import {
+  ColorModes, ColorThemeContext, Card, Button,
+} from '@madfish-solutions/quipu-ui-kit';
 
-import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { Button } from '@madfish-solutions/quipu-ui-kit';;
 import { CardCell } from '@components/ui/Card/CardCell';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { Tabs } from '@components/ui/Tabs';
