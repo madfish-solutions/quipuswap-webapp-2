@@ -1,6 +1,7 @@
 import { estimateSharesInTez, estimateSharesInToken, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
+import { FormApi } from 'final-form';
 
 import {
   fromDecimals,
@@ -26,7 +27,7 @@ interface AddLiquidityHandlerArgs {
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   lastChange: 'balance1' | 'balance2';
-  form: any;
+  form: FormApi<LiquidityFormValues, Partial<LiquidityFormValues>>;
 }
 
 export const addLiquidityHandler = async ({

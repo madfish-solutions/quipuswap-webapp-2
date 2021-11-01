@@ -1,5 +1,6 @@
 import { estimateTezInShares, estimateTokenInShares, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { FormApi } from 'final-form';
 
 import { fromDecimals, getWhitelistedTokenDecimals, toDecimals } from '@utils/helpers';
 import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
@@ -12,7 +13,7 @@ interface RemoveTabHandlerArgs {
   dex?: FoundDex;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
-  form: any;
+  form: FormApi<LiquidityFormValues, Partial<LiquidityFormValues>>;
 }
 
 export const removeTabHandler = async ({

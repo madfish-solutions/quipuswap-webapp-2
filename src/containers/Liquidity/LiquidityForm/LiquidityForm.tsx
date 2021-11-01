@@ -11,6 +11,7 @@ import {
   getLiquidityShare,
   TransferParams,
 } from '@quipuswap/sdk';
+import { FormApi } from 'final-form';
 
 import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -62,7 +63,7 @@ type LiquidityFormProps = {
   debounce: number;
   save: any;
   values: LiquidityFormValues;
-  form: any;
+  form: FormApi<LiquidityFormValues, Partial<LiquidityFormValues>>;
   tabsState: any;
   dex: FoundDex;
   token1: WhitelistedToken;

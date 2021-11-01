@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
+import { FormApi } from 'final-form';
 
 import { useTezos } from '@utils/dapp';
 import {
@@ -13,7 +14,12 @@ import {
   useRemoveList,
 } from '@utils/tokenLists';
 import { localSearchListByNameOrUrl } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
+import {
+  ListModalFormValues,
+  PositionModalFormValues,
+  WhitelistedToken,
+  WhitelistedTokenList,
+} from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { ChooseListCell, LoadingChooseListCell } from '@components/ui/Modal/ModalCell';
@@ -37,13 +43,8 @@ type HeaderProps = {
   isSecondInput: boolean;
   debounce: number;
   save: any;
-  values: any;
-  form: any;
-};
-
-type FormValues = {
-  search: string;
-  tokenId: number;
+  values: ListModalFormValues;
+  form: FormApi<PositionModalFormValues, Partial<PositionModalFormValues>>;
 };
 
 const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
@@ -105,14 +106,14 @@ export const ListModal: React.FC<ListModalProps> = ({ onChange, ...props }) => {
   const toggle = useToggleList();
   const removeList = useRemoveList();
   const tezos = useTezos();
-  const { Form } = withTypes<FormValues>();
+  const { Form } = withTypes<ListModalFormValues>();
   const { data: lists, loading: listsLoading } = useLists();
   const { data: searchLists, loading: searchLoading } = useSearchLists();
   const [filteredLists, setFilteredLists] = useState<WhitelistedTokenList[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
   const handleInput = useCallback(
-    (values: FormValues) => {
+    (values: ListModalFormValues) => {
       setInputValue(values.search ?? '');
     },
     [setInputValue],

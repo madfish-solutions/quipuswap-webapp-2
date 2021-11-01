@@ -1,10 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
+import { FormApi } from 'final-form';
 
 import { useAddCustomToken } from '@utils/tokenLists';
 import { isTokenEqual } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { PositionModalFormValues, WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Checkbox } from '@components/ui/Checkbox';
 import { MultiLoader } from '@components/ui/MultiLoader';
@@ -19,11 +20,11 @@ type PairContentProps = {
   notSelectable1?: WhitelistedToken;
   notSelectable2?: WhitelistedToken;
   allTokens: WhitelistedToken[];
-  form: any;
+  form: FormApi<PositionModalFormValues, Partial<PositionModalFormValues>>;
   setInputValue: (value: string) => void;
   setInputToken: (value: string) => void;
   searchTokens: WhitelistedToken[];
-  values: any;
+  values: PositionModalFormValues;
 };
 
 export const PairContent: React.FC<PairContentProps> = ({

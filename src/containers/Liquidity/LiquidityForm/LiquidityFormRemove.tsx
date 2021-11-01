@@ -4,9 +4,16 @@ import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
+import { FormApi } from 'final-form';
 
 import { useAccountPkh } from '@utils/dapp';
-import { ICurrentTab, TokenDataMap, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import {
+  ICurrentTab,
+  LiquidityFormValues,
+  TokenDataMap,
+  WhitelistedToken,
+  WhitelistedTokenPair,
+} from '@utils/types';
 import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
 import { fromDecimals, parseTezDecimals } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -26,7 +33,7 @@ interface LiquidityFormRemoveProps {
   setTokens: (tokens: WhitelistedToken[]) => void;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
-  form: any;
+  form: FormApi<LiquidityFormValues, Partial<LiquidityFormValues>>;
   poolShare: any;
   tokensData: TokenDataMap;
 }

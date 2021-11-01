@@ -11,7 +11,13 @@ import {
   toDecimals,
   transformTokenDataToAsset,
 } from '@utils/helpers';
-import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  IQuipuSwapDEXStorage,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
+} from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
 
 interface HandleInputChangeArgs {
@@ -23,11 +29,11 @@ interface HandleInputChangeArgs {
   token2: WhitelistedToken;
   oldToken1: WhitelistedToken;
   oldToken2: WhitelistedToken;
-  dex1: FoundDex;
-  dex2: FoundDex;
-  dexStorage1: any;
-  oldDex1: FoundDex;
-  oldDex2: FoundDex;
+  inputDex: FoundDex;
+  outputDex: FoundDex;
+  dexStorage: IQuipuSwapDEXStorage;
+  oldInputDex: FoundDex;
+  oldOutputDex: FoundDex;
   tokensData: TokenDataMap;
   formValues: SwapFormValues;
   networkId: QSMainNet;
@@ -48,11 +54,11 @@ export const handleInputChange = async ({
   token2,
   oldToken1,
   oldToken2,
-  dex1,
-  dex2,
-  dexStorage1,
-  oldDex1,
-  oldDex2,
+  inputDex,
+  outputDex,
+  dexStorage,
+  oldInputDex,
+  oldOutputDex,
   tokensData,
   formValues,
   networkId,
@@ -72,13 +78,13 @@ export const handleInputChange = async ({
     return;
   }
   const isTokenToToken = token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez';
-  if (!dex1 || !dexStorage1 || (isTokenToToken && !dex2)) return;
+  if (!inputDex || !dexStorage || (isTokenToToken && !outputDex)) return;
   if (token1 === undefined || token2 === undefined) return;
   let lastChangeMod = lastChange;
   const isTokensSame = isTokenEqual(token1, oldToken1) && isTokenEqual(token2, oldToken2);
   const isValuesSame = val[lastChange] === formValues[lastChange];
-  const isDex1Same = dex1 && oldDex1 && isDexEqual(dex1, oldDex1);
-  const isDex2Same = dex2 && oldDex2 && isDexEqual(dex2, oldDex2);
+  const isDex1Same = inputDex && oldInputDex && isDexEqual(inputDex, oldInputDex);
+  const isDex2Same = outputDex && oldOutputDex && isDexEqual(outputDex, oldOutputDex);
   const isDexSame = isDex1Same || (isTokenToToken && isDex1Same && isDex2Same);
   if (isValuesSame && isTokensSame && isDexSame) return;
   if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) {
@@ -106,54 +112,44 @@ export const handleInputChange = async ({
       ? { inputValue: inputValueInner }
       : { outputValue: inputValueInner };
 
-  let retValue = new BigNumber(0);
+  let sendDex;
+  if (isTokenToToken && outputDex) {
+    sendDex = { inputDex, outputDex };
+  } else {
+    sendDex = token2.contractAddress === 'tez' ? { outputDex: inputDex } : { inputDex };
+  }
   try {
-    if (isTokenToToken && dex2) {
-      const sendDex = { inputDex: dex1, outputDex: dex2 };
-      retValue = await estimateSwap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        valuesInner,
-        sendDex,
-      );
-    } else {
-      const sendDex = token2.contractAddress === 'tez' ? { outputDex: dex1 } : { inputDex: dex1 };
-      retValue = await estimateSwap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        valuesInner,
-        sendDex,
-      );
+    const retValue = fromDecimals(
+      await estimateSwap(tezos, FACTORIES[networkId], fromAsset, toAsset, valuesInner, sendDex),
+      decimals2,
+    );
+
+    const result = new BigNumber(parseDecimals(retValue.toFixed(), 0, Infinity, decimals2));
+
+    const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate).div(
+      tokensData.second.exchangeRate,
+    );
+
+    let rate1buf = new BigNumber(result).div(val.balance2);
+    if (lastChangeMod === 'balance1') {
+      rate1buf = new BigNumber(val.balance1).div(result);
     }
-    retValue = fromDecimals(retValue, decimals2);
+
+    const priceImp = new BigNumber(1)
+      .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
+      .multipliedBy(100);
+    setRate1(rate1buf);
+    setRate2(rate1buf.exponentiatedBy(-1));
+    setPriceImpact(priceImp);
+
+    form.mutators.setValue(
+      lastChangeMod === 'balance1' ? 'balance2' : 'balance1',
+      result.toFixed(),
+    );
   } catch (e) {
     handleErrorToast(e);
   }
 
-  const result = new BigNumber(parseDecimals(retValue.toFixed(), 0, Infinity, decimals2));
-
-  const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate).div(
-    tokensData.second.exchangeRate,
-  );
-
-  let rate1buf = new BigNumber(result).div(val.balance2);
-  if (lastChangeMod === 'balance1') {
-    rate1buf = new BigNumber(val.balance1).div(result);
-  }
-
-  const priceImp = new BigNumber(1)
-    .minus(rate1buf.exponentiatedBy(-1).div(tokenToTokenRate))
-    .multipliedBy(100);
-  setRate1(rate1buf);
-  setRate2(rate1buf.exponentiatedBy(-1));
-  setPriceImpact(priceImp);
-
-  form.mutators.setValue(lastChangeMod === 'balance1' ? 'balance2' : 'balance1', result.toFixed());
-
   setOldTokens([token1, token2]);
-  setOldDex([dex1, dex2]);
+  setOldDex([inputDex, outputDex]);
 };

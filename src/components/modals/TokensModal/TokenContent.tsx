@@ -1,8 +1,9 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
+import { FormApi } from 'final-form';
 
 import { useAddCustomToken } from '@utils/tokenLists';
-import { WhitelistedToken } from '@utils/types';
+import { TokensModalFormValues, WhitelistedToken } from '@utils/types';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { MultiLoader } from '@components/ui/MultiLoader';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -15,9 +16,9 @@ type TokenContentProps = {
   listsLoading: boolean;
   onChange: (token: WhitelistedToken) => void;
   allTokens: WhitelistedToken[];
-  form: any;
+  form: FormApi<TokensModalFormValues, Partial<TokensModalFormValues>>;
   setInputValue: (value: string) => void;
-  setInputToken: (value: number) => void;
+  setInputToken: (value: string) => void;
   searchTokens: WhitelistedToken[];
 };
 
@@ -58,9 +59,9 @@ export const TokenContent: React.FC<TokenContentProps> = ({
                 addCustomToken(token);
               }
               form.mutators.setValue('search', '');
-              form.mutators.setValue('tokenId', 0);
+              form.mutators.setValue('tokenId', '');
               setInputValue('');
-              setInputToken(0);
+              setInputToken('');
             }}
           />
         );

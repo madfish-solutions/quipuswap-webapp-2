@@ -1,9 +1,16 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { batchify, findDex, FoundDex, swap } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
+import { FormApi } from 'final-form';
 
 import { FACTORIES } from '@utils/defaults';
-import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  IQuipuSwapDEXStorage,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
+} from '@utils/types';
 import { getValueForSDK, slippageToBignum, transformTokenDataToAsset } from '@utils/helpers';
 
 export const submitForm = (
@@ -12,7 +19,7 @@ export const submitForm = (
   tokensData: TokenDataMap,
   tabsState: string,
   networkId: QSMainNet,
-  form: any,
+  form: FormApi<SwapFormValues, Partial<SwapFormValues>>,
   updateToast: (err: any) => void,
   handleSuccessToast: any,
 ) => {
@@ -56,7 +63,7 @@ export const getDex = async ({
   networkId,
   token1,
   token2,
-}: GetDexParams): Promise<{ dexes: FoundDex[]; storages: any }> => {
+}: GetDexParams): Promise<{ dexes: FoundDex[]; storages: IQuipuSwapDEXStorage[] }> => {
   const fromAsset = {
     contract: token1.contractAddress,
     id: token1.fa2TokenId ?? undefined,
@@ -67,23 +74,23 @@ export const getDex = async ({
   };
 
   if (token1.contractAddress !== 'tez' && token2.contractAddress !== 'tez') {
-    const dexbuf1 = await findDex(tezos, FACTORIES[networkId], fromAsset);
-    const dexStorageBuf1: any = await dexbuf1.contract.storage();
-    const dexbuf2 = await findDex(tezos, FACTORIES[networkId], toAsset);
-    const dexStorageBuf2: any = await dexbuf2.contract.storage();
+    const findDexInput = await findDex(tezos, FACTORIES[networkId], fromAsset);
+    const inputDexStorage: IQuipuSwapDEXStorage = await findDexInput.contract.storage();
+    const findDexOutput = await findDex(tezos, FACTORIES[networkId], toAsset);
+    const outputDexStorage: IQuipuSwapDEXStorage = await findDexOutput.contract.storage();
     return {
-      dexes: [dexbuf1, dexbuf2],
-      storages: [dexStorageBuf1, dexStorageBuf2],
+      dexes: [findDexInput, findDexOutput],
+      storages: [inputDexStorage, outputDexStorage],
     };
   }
-  const dexbuf = await findDex(
+  const findDexForAsset = await findDex(
     tezos,
     FACTORIES[networkId],
     token2.contractAddress === 'tez' ? fromAsset : toAsset,
   );
-  const dexStorageBuf: any = await dexbuf.contract.storage();
+  const assetDexStorage: IQuipuSwapDEXStorage = await findDexForAsset.contract.storage();
   return {
-    dexes: [dexbuf],
-    storages: [dexStorageBuf, undefined],
+    dexes: [findDexForAsset],
+    storages: [assetDexStorage],
   };
 };

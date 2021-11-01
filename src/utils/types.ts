@@ -199,3 +199,45 @@ export interface ICurrentTab {
   id: string;
   label: string;
 }
+
+export interface IQuipuSwapDEXStorage {
+  tez_pool: BigNumber;
+  token_pool: BigNumber;
+  token_address: string;
+  baker_validator: string;
+  total_supply: BigNumber;
+  // ledger              : big_map(address, account_info);
+  // voters              : big_map(address, vote_info);
+  // vetos               : big_map(key_hash, timestamp);
+  // votes               : big_map(key_hash, nat);
+  veto: BigNumber;
+  last_veto: string;
+  current_delegated?: string;
+  current_candidate?: string;
+  total_votes: BigNumber;
+  reward: BigNumber;
+  total_reward: BigNumber;
+  reward_paid: BigNumber;
+  reward_per_share: BigNumber;
+  reward_per_sec: BigNumber;
+  last_update_time: string;
+  period_finish: string;
+  // user_rewards        : big_map(address, user_reward_info);
+}
+
+export interface TokensModalFormValues {
+  search: string;
+  tokenId: string;
+}
+
+export interface ListModalFormValues {
+  search: string;
+  tokenId: string;
+}
+
+export interface PositionModalFormValues {
+  search: string;
+  tokenId: string;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+}

@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
+import { FormApi } from 'final-form';
 
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -53,7 +54,7 @@ type VotingFormProps = {
   debounce: number;
   save: any;
   values: VoteFormValues;
-  form: any;
+  form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
   tabsState: any;
   rewards: string;
   setRewards: (reward: string) => void;

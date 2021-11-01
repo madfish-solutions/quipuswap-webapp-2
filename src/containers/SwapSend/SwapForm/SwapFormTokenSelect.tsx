@@ -2,8 +2,10 @@ import React from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
+import { FoundDex } from '@quipuswap/sdk';
+import { FormApi } from 'final-form';
 
-import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
 import { useAccountPkh } from '@utils/dapp';
 import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
 import { parseDecimals } from '@utils/helpers';
@@ -16,8 +18,8 @@ interface SwapFormTokenSelectArgs {
   setToken: (t: WhitelistedToken) => void;
   tokensData: TokenDataMap;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  setDex: (arr: any[]) => void;
-  form: any;
+  setDex: (dexes: FoundDex[]) => void;
+  form: FormApi<SwapFormValues, Partial<SwapFormValues>>;
   blackListedTokens: WhitelistedToken[];
   setLastChange: (last: string) => void;
   label: string;

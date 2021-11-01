@@ -3,6 +3,7 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
+import { FormApi } from 'final-form';
 
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
@@ -30,7 +31,7 @@ type HeaderProps = {
   debounce: number;
   save: any;
   values: FormValues;
-  form: any;
+  form: FormApi<FormValues, Partial<FormValues>>;
 };
 
 type FormValues = {

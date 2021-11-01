@@ -6,12 +6,12 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import {
   ICurrentTab,
+  PositionModalFormValues,
   WhitelistedToken,
   WhitelistedTokenList,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { localSearchListByNameOrUrl, localSearchToken } from '@utils/helpers';
-import { validateMinMax } from '@utils/validators';
+import { localSearchListByNameOrUrl, localSearchToken, parseDecimals } from '@utils/helpers';
 import {
   findTokensByList,
   isTokenFa2,
@@ -27,7 +27,6 @@ import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';
 import { Input } from '@components/ui/Input';
 import { Tabs } from '@components/ui/Tabs';
-import { NumberInput } from '@components/ui/NumberInput';
 import { ListContent } from '@components/common/ListContent';
 import Search from '@icons/Search.svg';
 
@@ -61,26 +60,11 @@ type HeaderProps = {
   isSecondInput: boolean;
   debounce: number;
   save: any;
-  values: any;
-  form: any;
+  values: PositionModalFormValues;
   currentTab: ICurrentTab;
 };
 
-type FormValues = {
-  search: string;
-  tokenId: string;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
-};
-
-const Header: React.FC<HeaderProps> = ({
-  isSecondInput,
-  debounce,
-  save,
-  values,
-  form,
-  currentTab,
-}) => {
+const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, currentTab }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
@@ -124,7 +108,7 @@ const Header: React.FC<HeaderProps> = ({
                 className={s.modalInput}
                 placeholder={t('common|Search')}
                 error={meta.error}
-                readOnly={values.token1 && values.token2}
+                readOnly={!!(values.token1 && values.token2)}
               />
             ) : (
               <Input
@@ -139,27 +123,15 @@ const Header: React.FC<HeaderProps> = ({
         )}
       </Field>
       {isSecondInput && (
-        <Field name="tokenId" validate={validateMinMax(0, 100)}>
+        <Field name="tokenId" parse={(v) => parseDecimals(v, 0, Infinity, 0)}>
           {({ input, meta }) => (
             <>
-              <NumberInput
+              <Input
                 {...input}
                 className={s.modalInput}
                 placeholder={t('common|Token ID')}
-                step={1}
-                min={0}
-                max={100}
-                readOnly={values.token1 && values.token2}
+                readOnly={!!(values.token1 && values.token2)}
                 error={(meta.touched && meta.error) || meta.submitError}
-                onIncrementClick={() => {
-                  form.mutators.setValue(
-                    'tokenId',
-                    +input.value + 1 > 100 ? 100 : +input.value + 1,
-                  );
-                }}
-                onDecrementClick={() => {
-                  form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
-                }}
               />
             </>
           )}
@@ -186,7 +158,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
-  const { Form } = withTypes<FormValues>();
+  const { Form } = withTypes<PositionModalFormValues>();
   const { data: lists, loading: listsLoading } = useLists();
   const tokens = useMemo(() => findTokensByList(lists), [lists, listsLoading]);
   const network = useNetwork();
@@ -202,7 +174,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const handleInput = useCallback(
-    (values: FormValues) => {
+    (values: PositionModalFormValues) => {
       setInputValue(values.search ?? '');
       setInputToken(isSoleFa2Token ? values.tokenId : '');
     },
@@ -211,11 +183,11 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
 
   const handleTokenSearch = useCallback(() => {
     const isTokens = tokens.filter((token: any) =>
-      localSearchToken(token, network, inputValue, +inputToken),
+      localSearchToken(token, network, inputValue, inputToken),
     );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
-      searchCustomToken(inputValue, +inputToken);
+      searchCustomToken(inputValue, inputToken);
     }
   }, [inputToken, inputValue, network, tokens, searchCustomToken]);
 

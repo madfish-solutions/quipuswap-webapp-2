@@ -188,7 +188,7 @@ function useTokenLists() {
   const searchCustomToken = useCallback(
     async (
       address: string,
-      tokenId?: number,
+      tokenId?: string,
       saveAfterSearch?: boolean,
     ): Promise<WhitelistedToken | null> => {
       if ((await isContractAddress(address)) === true) {

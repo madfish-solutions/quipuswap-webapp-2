@@ -4,6 +4,7 @@ import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
+import { FormApi } from 'final-form';
 
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import {
@@ -14,7 +15,6 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-
 import {
   composeValidators,
   validateBalance,
@@ -38,7 +38,7 @@ interface LiquidityFormAddProps {
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
   setLastChange: (change: 'balance1' | 'balance2') => void;
-  form: any;
+  form: FormApi<LiquidityFormValues, Partial<LiquidityFormValues>>;
   tokensData: TokenDataMap;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
