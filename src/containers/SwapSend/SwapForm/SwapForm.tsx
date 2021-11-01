@@ -256,8 +256,8 @@ const RealForm: React.FC<SwapFormProps> = ({
         contentClassName={s.content}
       >
         <SwapFormTokenSelect
-          token1={token1}
-          setToken1={setToken1}
+          token={token1}
+          setToken={setToken1}
           blackListedTokens={blackListedTokens}
           handleTokenChange={handleTokenChange}
           form={form}
@@ -272,8 +272,8 @@ const RealForm: React.FC<SwapFormProps> = ({
         <SwapButton onClick={handleSwapButton} />
         <SwapFormTokenSelect
           className={s.mb24}
-          token1={token2}
-          setToken1={setToken2}
+          token={token2}
+          setToken={setToken2}
           blackListedTokens={blackListedTokens}
           handleTokenChange={handleTokenChange}
           form={form}
