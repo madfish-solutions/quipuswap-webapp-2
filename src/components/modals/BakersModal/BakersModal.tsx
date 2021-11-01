@@ -1,17 +1,17 @@
-import React, {useContext, useEffect, useRef, useState, useCallback} from 'react';
+import React, { useContext, useEffect, useRef, useState, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
-import {useTranslation} from 'next-i18next';
-import {Field, FormSpy, withTypes} from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import {localSearchBaker} from '@utils/helpers';
-import {WhitelistedBaker} from '@utils/types';
-import {useBakers} from '@utils/bakers';
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {Modal} from '@components/ui/Modal';
-import {BakerCell, LoadingBakerCell} from '@components/ui/Modal/ModalCell';
-import {MultiLoader} from '@components/ui/MultiLoader';
-import {Input} from '@components/ui/Input';
+import { localSearchBaker } from '@utils/helpers';
+import { WhitelistedBaker } from '@utils/types';
+import { useBakers } from '@utils/bakers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Modal } from '@components/ui/Modal';
+import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
+import { MultiLoader } from '@components/ui/MultiLoader';
+import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -37,8 +37,8 @@ type FormValues = {
   search: string;
 };
 
-const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
-  const {t} = useTranslation(['common']);
+const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
+  const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -73,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
   return (
     <div className={s.inputs}>
       <Field name="search">
-        {({input, meta}) => (
+        {({ input, meta }) => (
           <Input
             {...input}
             StartAdornment={Search}
@@ -88,14 +88,14 @@ const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
 };
 
 const AutoSave = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={Header} />
+  <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-export const BakersModal: React.FC<BakersModalProps> = ({onChange, ...props}) => {
-  const {colorThemeMode} = useContext(ColorThemeContext);
-  const {t} = useTranslation(['common']);
-  const {Form} = withTypes<FormValues>();
-  const {data: bakers, loading} = useBakers();
+export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
+  const { Form } = withTypes<FormValues>();
+  const { data: bakers, loading } = useBakers();
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -117,11 +117,11 @@ export const BakersModal: React.FC<BakersModalProps> = ({onChange, ...props}) =>
     <Form
       onSubmit={handleInput}
       mutators={{
-        setValue: ([field, value], state, {changeValue}) => {
+        setValue: ([field, value], state, { changeValue }) => {
           changeValue(state, field, () => value);
         },
       }}
-      render={({form}) => (
+      render={({ form }) => (
         <Modal
           title={t('common|Bakers List')}
           header={<AutoSave form={form} debounce={1000} save={handleInput} />}
@@ -140,7 +140,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({onChange, ...props}) =>
           )}
           {loading && <MultiLoader Component={LoadingBakerCell} count={7} />}
           {filteredBakers.map((baker) => {
-            const {address} = baker;
+            const { address } = baker;
             return (
               <BakerCell
                 key={address}

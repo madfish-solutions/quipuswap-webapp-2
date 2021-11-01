@@ -1,14 +1,14 @@
 import React from 'react';
-import {useTranslation} from 'next-i18next';
-import {Field} from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Field } from 'react-final-form';
 
-import {useAddCustomToken} from '@utils/tokenLists';
-import {isTokenEqual} from '@utils/helpers';
-import {WhitelistedToken} from '@utils/types';
-import {LoadingTokenCell, TokenCell} from '@components/ui/Modal/ModalCell';
-import {Checkbox} from '@components/ui/Checkbox';
-import {MultiLoader} from '@components/ui/MultiLoader';
-import {Plus} from '@components/svg/Plus';
+import { useAddCustomToken } from '@utils/tokenLists';
+import { isTokenEqual } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
+import { Checkbox } from '@components/ui/Checkbox';
+import { MultiLoader } from '@components/ui/MultiLoader';
+import { Plus } from '@components/svg/Plus';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './PositionsModal.module.sass';
@@ -39,11 +39,11 @@ export const PairContent: React.FC<PairContentProps> = ({
   values,
 }) => {
   const addCustomToken = useAddCustomToken();
-  const {t} = useTranslation(['common']);
+  const { t } = useTranslation(['common']);
   return (
     <>
       <Field name="token1" initialValue={notSelectable1}>
-        {({input}) => {
+        {({ input }) => {
           const token = input.value;
           if (!token) return '';
           return (
@@ -76,7 +76,7 @@ export const PairContent: React.FC<PairContentProps> = ({
         </div>
       )}
       <Field initialValue={notSelectable2} name="token2">
-        {({input}) => {
+        {({ input }) => {
           const token = input.value;
           if (!token) return '';
           return (
@@ -105,7 +105,7 @@ export const PairContent: React.FC<PairContentProps> = ({
         allTokens
           .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
           .map((token) => {
-            const {contractAddress, fa2TokenId} = token;
+            const { contractAddress, fa2TokenId } = token;
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}

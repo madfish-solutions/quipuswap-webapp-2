@@ -1,10 +1,10 @@
-import React, {useContext, useEffect, useRef, useState, useMemo, useCallback} from 'react';
+import React, { useContext, useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
-import {useTranslation} from 'next-i18next';
-import {Field, FormSpy, withTypes} from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Field, FormSpy, withTypes } from 'react-final-form';
 
-import {useTezos} from '@utils/dapp';
+import { useTezos } from '@utils/dapp';
 import {
   useToggleList,
   useLists,
@@ -12,13 +12,13 @@ import {
   useSearchCustomLists,
   useRemoveList,
 } from '@utils/tokenLists';
-import {localSearchListByNameOrUrl} from '@utils/helpers';
-import {WhitelistedToken, WhitelistedTokenList} from '@utils/types';
-import {ColorModes, ColorThemeContext} from '@providers/ColorThemeContext';
-import {Modal} from '@components/ui/Modal';
-import {ChooseListCell, LoadingChooseListCell} from '@components/ui/Modal/ModalCell';
-import {Input} from '@components/ui/Input';
-import {MultiLoader} from '@components/ui/MultiLoader';
+import { localSearchListByNameOrUrl } from '@utils/helpers';
+import { WhitelistedToken, WhitelistedTokenList } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Modal } from '@components/ui/Modal';
+import { ChooseListCell, LoadingChooseListCell } from '@components/ui/Modal/ModalCell';
+import { Input } from '@components/ui/Input';
+import { MultiLoader } from '@components/ui/MultiLoader';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -46,8 +46,8 @@ type FormValues = {
   tokenId: number;
 };
 
-const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
-  const {t} = useTranslation(['common']);
+const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
+  const { t } = useTranslation(['common']);
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
@@ -78,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
   return (
     <div className={s.inputs}>
       <Field name="search">
-        {({input, meta}) => (
+        {({ input, meta }) => (
           <>
             <Input
               {...input}
@@ -95,19 +95,19 @@ const Header: React.FC<HeaderProps> = ({debounce, save, values}) => {
 };
 
 const AutoSave = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={Header} />
+  <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
-export const ListModal: React.FC<ListModalProps> = ({onChange, ...props}) => {
+export const ListModal: React.FC<ListModalProps> = ({ onChange, ...props }) => {
   const searchCustomList = useSearchCustomLists();
-  const {colorThemeMode} = useContext(ColorThemeContext);
-  const {t} = useTranslation(['common']);
+  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['common']);
   const toggle = useToggleList();
   const removeList = useRemoveList();
   const tezos = useTezos();
-  const {Form} = withTypes<FormValues>();
-  const {data: lists, loading: listsLoading} = useLists();
-  const {data: searchLists, loading: searchLoading} = useSearchLists();
+  const { Form } = withTypes<FormValues>();
+  const { data: lists, loading: listsLoading } = useLists();
+  const { data: searchLists, loading: searchLoading } = useSearchLists();
   const [filteredLists, setFilteredLists] = useState<WhitelistedTokenList[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -145,11 +145,11 @@ export const ListModal: React.FC<ListModalProps> = ({onChange, ...props}) => {
     <Form
       onSubmit={handleInput}
       mutators={{
-        setValue: ([field, value], state, {changeValue}) => {
+        setValue: ([field, value], state, { changeValue }) => {
           changeValue(state, field, () => value);
         },
       }}
-      render={({form}) => (
+      render={({ form }) => (
         <Modal
           title={t('common|Choose List')}
           header={<AutoSave form={form} debounce={1000} save={handleInput} />}
@@ -171,7 +171,7 @@ export const ListModal: React.FC<ListModalProps> = ({onChange, ...props}) => {
             <MultiLoader Component={LoadingChooseListCell} count={7} />
           )}
           {allLists.map((list: WhitelistedTokenList) => {
-            const {url, enabled} = list;
+            const { url, enabled } = list;
             return (
               <ChooseListCell
                 key={url}

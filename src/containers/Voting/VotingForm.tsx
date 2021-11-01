@@ -1,13 +1,13 @@
-import React, {useEffect, useRef, useState, useCallback, useMemo} from 'react';
-import {useRouter} from 'next/router';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
-import {useTranslation} from 'next-i18next';
-import {Field, FormSpy} from 'react-final-form';
-import {findDex, FoundDex, Token} from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
+import { Field, FormSpy } from 'react-final-form';
+import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
-import {useAccountPkh, useNetwork, useTezos} from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
-import {useConnectModalsState} from '@hooks/useConnectModalsState';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   QSMainNet,
   TokenDataMap,
@@ -16,26 +16,26 @@ import {
   WhitelistedTokenPair,
   VoterType,
 } from '@utils/types';
-import {tokenDataToToken} from '@utils/helpers/tokenDataToToken';
-import {FACTORIES, TEZOS_TOKEN} from '@utils/defaults';
+import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
+import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import {
   getWhitelistedTokenSymbol,
   isAssetEqual,
   parseDecimals,
   parseTezDecimals,
 } from '@utils/helpers';
-import {composeValidators, validateBalance, validateMinMax} from '@utils/validators';
-import {Card} from '@components/ui/Card';
-import {Tabs} from '@components/ui/Tabs';
-import {Button} from '@components/ui/Button';
-import {PositionSelect} from '@components/ui/ComplexInput/PositionSelect';
-import {ComplexBaker} from '@components/ui/ComplexInput';
-import {Transactions} from '@components/svg/Transactions';
+import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
+import { Button } from '@components/ui/Button';
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { ComplexBaker } from '@components/ui/ComplexInput';
+import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 
-import {VotingDetails} from './VotingDetails';
-import {hanldeTokenPairSelect} from './votingHelpers';
+import { VotingDetails } from './VotingDetails';
+import { hanldeTokenPairSelect } from './votingHelpers';
 
 const TabsContent = [
   {
@@ -90,9 +90,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   currentTab,
   setTabsState,
 }) => {
-  const {t} = useTranslation(['common', 'vote']);
+  const { t } = useTranslation(['common', 'vote']);
   const updateToast = useUpdateToast();
-  const {openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal} =
+  const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } =
     useConnectModalsState();
   const tezos = useTezos();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
@@ -125,7 +125,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         contract: tokenPair.token2.contractAddress,
         id: tokenPair.token2.fa2TokenId ?? undefined,
       };
-      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? {contract: ''});
+      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
       if (isAssetSame) return;
       setDex(undefined);
       const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
@@ -228,7 +228,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                     tokenPair.token1,
                   )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
                   undefined,
-                  {shallow: true},
+                  { shallow: true },
                 );
                 setTabsState(val);
               }}
@@ -257,15 +257,15 @@ const RealForm: React.FC<VotingFormProps> = ({
           )}
           parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
-          {({input, meta}) => (
+          {({ input, meta }) => (
             <PositionSelect
               {...input}
               autoComplete="off"
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={(pair) => {
-                handleTokenChange({token: pair.token1, tokenNumber: 'first'});
-                handleTokenChange({token: pair.token2, tokenNumber: 'second'});
+                handleTokenChange({ token: pair.token1, tokenNumber: 'first' });
+                handleTokenChange({ token: pair.token2, tokenNumber: 'second' });
                 setTokens([pair.token1, pair.token2]);
                 hanldeTokenPairSelect(
                   pair,
@@ -295,7 +295,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         </Field>
         {currentTab.id === 'vote' && (
           <Field name="selectedBaker">
-            {({input, meta}) => (
+            {({ input, meta }) => (
               <ComplexBaker
                 {...input}
                 label="Baker"
@@ -345,5 +345,5 @@ const RealForm: React.FC<VotingFormProps> = ({
 };
 
 export const VotingForm = (props: any) => (
-  <FormSpy {...props} subscription={{values: true}} component={RealForm} />
+  <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );
