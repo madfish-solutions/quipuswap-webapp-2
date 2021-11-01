@@ -13,6 +13,7 @@ import { withApollo } from '@client';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
 import '@styles/globals.sass';
+import '@madfish-solutions/quipu-ui-kit/quipu-ui-kit.cjs.development.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
