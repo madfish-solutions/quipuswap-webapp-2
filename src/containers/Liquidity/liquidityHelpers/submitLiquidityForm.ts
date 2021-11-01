@@ -16,13 +16,20 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { LiquidityFormValues, QSMainNet, TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  GeneralErrorException,
+  LiquidityFormValues,
+  QSMainNet,
+  TokenDataMap,
+  WhitelistedToken,
+} from '@utils/types';
 import { fromDecimals, getValueForSDK, slippageToBignum, toDecimals } from '@utils/helpers';
+import { isError } from '@utils/validators';
 
 interface SubmitFormArgs {
   tezos: TezosToolkit;
   values: LiquidityFormValues;
-  updateToast: (err: Error) => void;
+  updateToast: (err: GeneralErrorException) => void;
   handleSuccessToast: (text: string) => void;
   currentTab: string;
   token2: WhitelistedToken;
@@ -111,8 +118,11 @@ export const submitForm = async ({
               const approveParams = await FA1_2.approve(tokenContract, dex.contract.address, 0);
               liquidityParams = liquidityParams.concat(approveParams);
             }
-          } catch (e: any) {
-            updateToast(e);
+          } catch (e: unknown) {
+            // so if its not error, then fall silently and dont tell anybody
+            if (isError(e)) {
+              updateToast(e);
+            }
           }
         } else {
           if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
@@ -123,25 +133,28 @@ export const submitForm = async ({
           }
         }
       }
-    } catch (e: any) {
-      if (e.name === 'DexNotFoundError') {
-        if (values.balance1 && values.balance2) {
-          const strictFactories = {
-            fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
-            fa2Factory: FACTORIES[networkId].fa2Factory[0],
-          };
-          const tezVal = toDecimals(new BigNumber(values.balance1), 6);
-          const tokenVal = new BigNumber(values.balance2);
-          liquidityParams = await initializeLiquidity(
-            tezos,
-            strictFactories,
-            toAsset,
-            tokenVal,
-            tezVal,
-          );
+    } catch (e: unknown) {
+      // so if its not error, then fall silently and dont tell anybody
+      if (isError(e)) {
+        if (e.name === 'DexNotFoundError') {
+          if (values.balance1 && values.balance2) {
+            const strictFactories = {
+              fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
+              fa2Factory: FACTORIES[networkId].fa2Factory[0],
+            };
+            const tezVal = toDecimals(new BigNumber(values.balance1), 6);
+            const tokenVal = new BigNumber(values.balance2);
+            liquidityParams = await initializeLiquidity(
+              tezos,
+              strictFactories,
+              toAsset,
+              tokenVal,
+              tezVal,
+            );
+          }
+        } else {
+          updateToast(e);
         }
-      } else {
-        updateToast(e);
       }
     }
     const dop = await batchify(tezos.wallet.batch([]), liquidityParams);

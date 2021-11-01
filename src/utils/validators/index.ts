@@ -6,3 +6,4 @@ export * from './validateBalance';
 export * from './required';
 export * from './validateMinMaxNonStrict';
 export * from './validateRebalance';
+export * from './isError';

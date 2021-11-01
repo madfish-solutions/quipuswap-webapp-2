@@ -16,6 +16,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
+  ICurrentTab,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -67,7 +68,7 @@ type VotingFormProps = {
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  currentTab: any;
+  currentTab: ICurrentTab;
   setTabsState: (val: any) => void;
 };
 

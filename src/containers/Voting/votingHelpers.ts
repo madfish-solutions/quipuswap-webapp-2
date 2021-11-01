@@ -1,23 +1,28 @@
 import {
   batchify,
-  estimateReward, findDex, FoundDex, getLiquidityShare, vetoCurrentBaker, voteForBaker,
+  estimateReward,
+  findDex,
+  FoundDex,
+  getLiquidityShare,
+  vetoCurrentBaker,
+  voteForBaker,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
+import { UpdateOptions } from 'react-toastify';
 
-import {
-  QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair,
-} from '@utils/types';
+import { QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
+import { isError } from '@utils/validators';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
   setDex: (dex: FoundDex) => void,
   setRewards: (reward: string) => void,
-  setVoter: (voter: VoterType) => any,
-  updateToast: (err:any) => void,
+  setVoter: (voter: VoterType) => void,
+  updateToast: (err: any) => void,
   tezos?: TezosToolkit | null,
   accountPkh?: string | null,
   networkId?: QSMainNet,
@@ -62,7 +67,10 @@ export const hanldeTokenPairSelect = (
         totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
       }
       const res = {
-        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
+        ...pair,
+        frozenBalance,
+        balance: totalBalance,
+        dex: foundDex,
       };
       setTokenPair(res);
     } catch (err) {
@@ -73,14 +81,14 @@ export const hanldeTokenPairSelect = (
 };
 
 type SubmitProps = {
-  tezos:TezosToolkit,
-  values:VoteFormValues,
-  dex?: FoundDex,
-  tab: string,
-  voter?:VoterType,
-  updateToast:any,
-  handleErrorToast:(e:any) => void,
-  getBalance:() => void,
+  tezos: TezosToolkit;
+  values: VoteFormValues;
+  dex?: FoundDex;
+  tab: string;
+  voter?: VoterType;
+  updateToast: (options: UpdateOptions) => void;
+  handleErrorToast: (e: Error) => void;
+  getBalance: () => void;
 };
 
 export const submitForm = async ({
@@ -92,8 +100,8 @@ export const submitForm = async ({
   handleErrorToast,
   updateToast,
   getBalance,
-}:SubmitProps) => {
-  let params:TransferParams[] = [];
+}: SubmitProps) => {
+  let params: TransferParams[] = [];
   const { method, balance1, selectedBaker } = values;
   if (!dex) return;
   let updateToastText = '';
@@ -116,7 +124,8 @@ export const submitForm = async ({
         );
       }
     } catch (e) {
-      handleErrorToast(e);
+      // so if its not error, then fall silently and dont tell anybody
+      if (isError(e)) handleErrorToast(e);
     }
   } else {
     try {
@@ -129,14 +138,12 @@ export const submitForm = async ({
         params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
       }
     } catch (e) {
-      handleErrorToast(e);
+      // so if its not error, then fall silently and dont tell anybody
+      if (isError(e)) handleErrorToast(e);
     }
   }
   try {
-    const op = await batchify(
-      tezos.wallet.batch([]),
-      params,
-    ).send();
+    const op = await batchify(tezos.wallet.batch([]), params).send();
     await op.confirmation();
     // handleSuccessToast();
     updateToast({
@@ -145,26 +152,25 @@ export const submitForm = async ({
     });
     getBalance();
   } catch (e) {
-    handleErrorToast(e);
+    // so if its not error, then fall silently and dont tell anybody
+    if (isError(e)) handleErrorToast(e);
   }
 };
 
 export const submitWithdraw = async (
-  tezos:TezosToolkit,
-  voteParams:TransferParams[],
-  updateToast: (err:any) => void,
-  handleSuccessToast:any,
-  getBalance:() => void,
+  tezos: TezosToolkit,
+  voteParams: TransferParams[],
+  updateToast: (err: Error) => void,
+  handleSuccessToast: () => void,
+  getBalance: () => void,
 ) => {
   try {
-    const op = await batchify(
-      tezos.wallet.batch([]),
-      voteParams,
-    ).send();
+    const op = await batchify(tezos.wallet.batch([]), voteParams).send();
     await op.confirmation();
     handleSuccessToast();
     getBalance();
   } catch (e) {
-    updateToast(e);
+    // so if its not error, then fall silently and dont tell anybody
+    if (isError(e)) updateToast(e);
   }
 };

@@ -31,6 +31,7 @@ import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 // import { Transactions } from '@components/svg/Transactions';
 
+import { isError } from '@utils/validators';
 import s from '../Liquidity.module.sass';
 
 import { LiquidityDetails } from './LiquidityDetails';
@@ -232,7 +233,8 @@ const RealForm: React.FC<LiquidityFormProps> = ({
 
       form.mutators.setValue('balanceTotalB', balA2);
     } catch (err) {
-      handleErrorToast(err);
+      // so if its not error, then fall silently and dont tell anybody
+      if (isError(err)) handleErrorToast(err);
     }
   }, [token2, token1, tezos, networkId, accountPkh, form.mutators, handleErrorToast]);
 

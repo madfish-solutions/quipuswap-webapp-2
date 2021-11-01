@@ -10,6 +10,7 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import { fallbackTokenToTokenData, handleTokenChange, handleSearchToken } from '@utils/helpers';
 import {
+  GeneralErrorException,
   LiquidityFormValues,
   QSMainNet,
   TokenDataMap,
@@ -79,7 +80,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({ className }) => {
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const handleErrorToast = useCallback(
-    (err) => {
+    (err: GeneralErrorException) => {
       updateToast({
         type: 'error',
         render: `${err.name}: ${err.message}`,

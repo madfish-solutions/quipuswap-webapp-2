@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback, useMemo,
-} from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -16,23 +14,14 @@ import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { Modal } from '@components/ui/Modal';
-import {
-  BakerCell,
-  ChooseListCell,
-  SwapCell,
-} from '@components/ui/Modal/ModalCell';
+import { BakerCell, ChooseListCell, SwapCell } from '@components/ui/Modal/ModalCell';
 import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
-import {
-  LineChartSampleData,
-  CandleChartSampleData,
-} from '@components/charts/content';
+import { LineChartSampleData, CandleChartSampleData } from '@components/charts/content';
 import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import { Tooltip } from '@components/ui/Tooltip';
-import {
-  ComplexBaker, ComplexInput, ComplexRecipient,
-} from '@components/ui/ComplexInput';
+import { ComplexBaker, ComplexInput, ComplexRecipient } from '@components/ui/ComplexInput';
 import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
@@ -120,9 +109,11 @@ const UiKit: React.FC = () => {
   const [listsModal, setListsModal] = useState<boolean>(false);
   const { data: lists, loading: listsLoading } = useLists();
   const tokens = useMemo(() => findTokensByList(lists), [lists, listsLoading]);
-  const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
-    : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
+  const farms = tokens.map((x) =>
+    x.contractAddress === TEZOS_TOKEN.contractAddress
+      ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+      : { tokenPair: { token1: x, token2: TEZOS_TOKEN } },
+  );
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);
   const [inputAddress, setInputAddress] = useState<string>('');
@@ -140,7 +131,9 @@ const UiKit: React.FC = () => {
   const handleErrorToast = useCallback(() => {
     updateToast({
       type: 'error',
-      render: `${t('common|errorWhileConnectingWallet')} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
+      render: `${t(
+        'common|errorWhileConnectingWallet',
+      )} Alert message goes here The first decentralized exchange on Tezos with baker’ rewards distribution`,
     });
   }, [t, updateToast]);
 
@@ -273,128 +266,67 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Elevation</h1>
         <div className={s.elevationBlock}>
-          <div className={s.elevation}>
-            $elevation-01
-          </div>
-          <div className={cx(s.elevation, s.elevation02)}>
-            $elevation-02
-          </div>
-          <div className={cx(s.elevation, s.elevation03)}>
-            $elevation-03
-          </div>
-          <div className={cx(s.elevation, s.elevation04)}>
-            $elevation-04
-          </div>
-          <div className={cx(s.elevation, s.elevation05)}>
-            $elevation-05
-          </div>
-          <div className={cx(s.elevation, s.elevation06)}>
-            $elevation-06
-          </div>
+          <div className={s.elevation}>$elevation-01</div>
+          <div className={cx(s.elevation, s.elevation02)}>$elevation-02</div>
+          <div className={cx(s.elevation, s.elevation03)}>$elevation-03</div>
+          <div className={cx(s.elevation, s.elevation04)}>$elevation-04</div>
+          <div className={cx(s.elevation, s.elevation05)}>$elevation-05</div>
+          <div className={cx(s.elevation, s.elevation06)}>$elevation-06</div>
         </div>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Buttons Light</h1>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-          >
-            Primary
-          </Button>
-          <Button
-            className={s.button}
-            disabled
-          >
+          <Button className={s.button}>Primary</Button>
+          <Button className={s.button} disabled>
             Primary
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="secondary"
-          >
+          <Button className={s.button} theme="secondary">
             Secondary
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="secondary"
-          >
+          <Button className={s.button} disabled theme="secondary">
             Secondary
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="tertiary"
-          >
+          <Button className={s.button} theme="tertiary">
             Tertiary
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="tertiary"
-          >
+          <Button className={s.button} disabled theme="tertiary">
             Tertiary
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="quaternary"
-          >
+          <Button className={s.button} theme="quaternary">
             Quaternary
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="quaternary"
-          >
+          <Button className={s.button} disabled theme="quaternary">
             Quaternary
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="inverse"
-          >
+          <Button className={s.button} theme="inverse">
             Inverse
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="inverse"
-          >
+          <Button className={s.button} disabled theme="inverse">
             Inverse
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="underlined"
-          >
+          <Button className={s.button} theme="underlined">
             Underlined
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="underlined"
-          >
+          <Button className={s.button} disabled theme="underlined">
             Underlined
           </Button>
         </div>
         <div className={s.buttonsBlock}>
-          <Button
-            className={s.button}
-            theme="clean"
-          >
+          <Button className={s.button} theme="clean">
             Clean
           </Button>
-          <Button
-            className={s.button}
-            disabled
-            theme="clean"
-          >
+          <Button className={s.button} disabled theme="clean">
             Clean
           </Button>
         </div>
@@ -402,11 +334,7 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Inputs</h1>
         <div className={s.inputsBlock}>
-          <Input
-            className={s.input}
-            value={inputValue}
-            onChange={handleInputChange}
-          />
+          <Input className={s.input} value={inputValue} onChange={handleInputChange} />
           <Input
             className={s.input}
             value={inputValue}
@@ -479,7 +407,6 @@ const UiKit: React.FC = () => {
             id="input-07"
             placeholder="Input placeholder"
           />
-
         </div>
         <div className={s.inputsBlock}>
           <Input
@@ -500,7 +427,6 @@ const UiKit: React.FC = () => {
         <div className={s.cardsBlock}>
           <Bage text="FA 2.0" />
           <Bage text="ID: 0" />
-
         </div>
         <div className={s.cardsBlock}>
           <Bage text="some wide text" />
@@ -509,43 +435,25 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Toast</h1>
-        <Button
-          className={s.button}
-          onClick={() => handleErrorToast()}
-        >
+        <Button className={s.button} onClick={() => handleErrorToast()}>
           Error toast
         </Button>
-        <Button
-          className={s.button}
-          onClick={() => handleSuccessToast()}
-        >
+        <Button className={s.button} onClick={() => handleSuccessToast()}>
           Success toast
         </Button>
-        <Button
-          className={s.button}
-          onClick={() => handleLoadToast()}
-        >
+        <Button className={s.button} onClick={() => handleLoadToast()}>
           loading toast
         </Button>
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Popup</h1>
-        <Button
-          className={s.button}
-          onClick={() => setShowExamplePopup(true)}
-        >
+        <Button className={s.button} onClick={() => setShowExamplePopup(true)}>
           All modal cells popup
         </Button>
-        <Button
-          className={s.button}
-          onClick={() => setTokensModal(true)}
-        >
+        <Button className={s.button} onClick={() => setTokensModal(true)}>
           Open tokens modal
         </Button>
-        <Button
-          className={s.button}
-          onClick={() => setListsModal(true)}
-        >
+        <Button className={s.button} onClick={() => setListsModal(true)}>
           Open lists modal
         </Button>
         <ListModal
@@ -563,7 +471,7 @@ const UiKit: React.FC = () => {
           isOpen={showExamplePopup}
           onRequestClose={() => setShowExamplePopup(false)}
           title="title & list of components"
-          header={(
+          header={
             <Input
               StartAdornment={Search}
               className={s.modalInput}
@@ -571,25 +479,26 @@ const UiKit: React.FC = () => {
               onChange={handleInputChange}
               placeholder="Search"
             />
-          )}
-          footer={(
+          }
+          footer={
             <Button className={s.modalButton} theme="inverse">
               Manage Lists
               <Pen className={s.penIcon} />
-
             </Button>
-          )}
+          }
         >
           <ChooseListCell
             onChange={() => {}}
             isActive={false}
-            tokenList={{
-              keywords: [],
-              logoURI: '',
-              tokens: [STABLE_TOKEN, TEZOS_TOKEN],
-              name: 'temp name',
-              url: '#',
-            } as WhitelistedTokenList}
+            tokenList={
+              {
+                keywords: [],
+                logoURI: '',
+                tokens: [STABLE_TOKEN, TEZOS_TOKEN],
+                name: 'temp name',
+                url: '#',
+              } as WhitelistedTokenList
+            }
           />
           <SwapCell
             transaction={{
@@ -632,99 +541,88 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Tooltips</h1>
         <div className={s.inputsBlock}>
-          <Tooltip placement="top" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <div>
-              top
-
-            </div>
+          <Tooltip
+            placement="top"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <div>top</div>
           </Tooltip>
-          <Tooltip placement="left" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <div>
-              left
-
-            </div>
+          <Tooltip
+            placement="left"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <div>left</div>
           </Tooltip>
         </div>
         <div className={s.inputsBlock}>
-          <Tooltip placement="right" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <div>
-              right
-            </div>
+          <Tooltip
+            placement="right"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <div>right</div>
           </Tooltip>
-          <Tooltip placement="bottom" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <div>
-              bot
-            </div>
-          </Tooltip>
-        </div>
-        <div className={s.buttonsBlock}>
-          <Tooltip placement="top-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              top-end
-            </Button>
-          </Tooltip>
-          <Tooltip placement="top-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              top-start
-            </Button>
+          <Tooltip
+            placement="bottom"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <div>bot</div>
           </Tooltip>
         </div>
         <div className={s.buttonsBlock}>
-
-          <Tooltip placement="left-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              left-start
-            </Button>
+          <Tooltip
+            placement="top-end"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>top-end</Button>
           </Tooltip>
-          <Tooltip placement="left-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              left-end
-            </Button>
+          <Tooltip
+            placement="top-start"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>top-start</Button>
           </Tooltip>
         </div>
         <div className={s.buttonsBlock}>
-
-          <Tooltip placement="right-start" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              right-start
-            </Button>
+          <Tooltip
+            placement="left-start"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>left-start</Button>
           </Tooltip>
-          <Tooltip placement="right-end" content="Energistically syndicate distinctive metrics without client-centric technology.">
-            <Button
-              className={s.button}
-            >
-              right-end
-            </Button>
+          <Tooltip
+            placement="left-end"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>left-end</Button>
           </Tooltip>
         </div>
         <div className={s.buttonsBlock}>
-
+          <Tooltip
+            placement="right-start"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>right-start</Button>
+          </Tooltip>
+          <Tooltip
+            placement="right-end"
+            content="Energistically syndicate distinctive metrics without client-centric technology."
+          >
+            <Button className={s.button}>right-end</Button>
+          </Tooltip>
+        </div>
+        <div className={s.buttonsBlock}>
           <Tooltip placement="bottom-start" content="Short">
-            <Button
-              className={s.button}
-            >
-              bottom-start Energistically syndicate
-              distinctive metrics without client-centric technology.
-              Energistically syndicate distinctive metrics without client-centric technology.
+            <Button className={s.button}>
+              bottom-start Energistically syndicate distinctive metrics without client-centric
+              technology. Energistically syndicate distinctive metrics without client-centric
+              technology.
             </Button>
           </Tooltip>
           <Tooltip placement="bottom-end" content="Short">
-            <Button
-              className={s.button}
-            >
-              bottom-end
-              Energistically syndicate distinctive metrics without client-centric technology.
-              Energistically syndicate distinctive metrics without client-centric technology.
+            <Button className={s.button}>
+              bottom-end Energistically syndicate distinctive metrics without client-centric
+              technology. Energistically syndicate distinctive metrics without client-centric
+              technology.
             </Button>
           </Tooltip>
         </div>
@@ -743,12 +641,7 @@ const UiKit: React.FC = () => {
           />
         </div>
         <div className={s.complexInput}>
-          <ComplexInput
-            token1={TEZOS_TOKEN}
-            value={inputValue}
-            readOnly
-            label="Output"
-          />
+          <ComplexInput token1={TEZOS_TOKEN} value={inputValue} readOnly label="Output" />
         </div>
         <div className={s.complexInput}>
           <ComplexInput
@@ -775,10 +668,7 @@ const UiKit: React.FC = () => {
           />
         </div>
         <div className={s.complexInput}>
-          <ComplexBaker
-            label="Baker"
-            id="ComplexBaker-01"
-          />
+          <ComplexBaker label="Baker" id="ComplexBaker-01" />
         </div>
         <div className={s.complexInput}>
           <ComplexRecipient
@@ -845,14 +735,8 @@ const UiKit: React.FC = () => {
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Graphics</h1>
-        <LineChart
-          data={LineChartSampleData}
-          className={s.chart}
-        />
-        <CandleChart
-          data={CandleChartSampleData}
-          className={s.chart}
-        />
+        <LineChart data={LineChartSampleData} className={s.chart} />
+        <CandleChart data={CandleChartSampleData} className={s.chart} />
       </section>
       <section className={s.section}>
         <h1 className={s.header}>Currency amounts</h1>
@@ -868,7 +752,11 @@ const UiKit: React.FC = () => {
       <section className={s.section}>
         <h1 className={s.header}>Routes</h1>
         <Route
-          routes={[{ name: 'qpsp', link: '', id: 1 }, { name: 'usd', link: '', id: 2 }, { name: 'xtz', link: '', id: 3 }]}
+          routes={[
+            { name: 'qpsp', link: '', id: 1 },
+            { name: 'usd', link: '', id: 2 },
+            { name: 'xtz', link: '', id: 3 },
+          ]}
         />
       </section>
     </BaseLayout>
@@ -877,7 +765,7 @@ const UiKit: React.FC = () => {
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...await serverSideTranslations(locale, ['common', 'ui-kit']),
+    ...(await serverSideTranslations(locale, ['common', 'ui-kit'])),
   },
 });
 

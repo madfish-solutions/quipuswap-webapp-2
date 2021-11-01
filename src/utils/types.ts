@@ -241,3 +241,8 @@ export interface PositionModalFormValues {
   token1: WhitelistedToken;
   token2: WhitelistedToken;
 }
+
+export interface GeneralErrorException {
+  name?: string;
+  message?: string;
+}

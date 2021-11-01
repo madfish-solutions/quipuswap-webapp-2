@@ -22,7 +22,7 @@ type SearchTokenType = {
   setTokenPair?: React.Dispatch<React.SetStateAction<WhitelistedTokenPair>>;
   searchCustomToken: (
     address: string,
-    tokenId?: number,
+    tokenId?: string,
     saveAfterSearch?: boolean,
   ) => Promise<WhitelistedToken | null>;
 };
@@ -49,9 +49,9 @@ export const handleSearchToken = async ({
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
       .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
-      .filter((token: any) => localSearchToken(token, network, inputValue, +inputToken));
+      .filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
     if (isTokens.length === 0) {
-      return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
+      return await searchCustomToken(inputValue, inputToken, true).then((x) => {
         if (x) {
           return x;
         }
