@@ -71,7 +71,7 @@ function useTokenLists() {
         .then((res) => res.json())
         .then((json) => json || [])
         .then((res) => {
-          setState((prevState: any) => {
+          setState((prevState) => {
             const newState = prevState.lists.data;
             const url = uniqTokenList[i];
             let enabled = !!savedList[url];

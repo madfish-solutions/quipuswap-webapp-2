@@ -6,13 +6,13 @@ import { parseTezDecimals, slippageToBignum } from '@utils/helpers';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Button } from '@components/ui/Button';
 
-import { LiquidityFormValues } from '@utils/types';
+import { ICurrentTab, LiquidityFormValues } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 
 interface LiquidityRemoveConfirmProps {
   handleRemoveLiquidity: () => void;
   values: LiquidityFormValues;
-  tab: 'remove' | 'add';
+  currentTab: ICurrentTab;
   tokenAName: string;
   tokenBName: string;
 }
@@ -20,12 +20,12 @@ interface LiquidityRemoveConfirmProps {
 export const LiquidityRemoveConfirm: React.FC<LiquidityRemoveConfirmProps> = ({
   handleRemoveLiquidity,
   values,
-  tab,
+  currentTab,
   tokenAName,
   tokenBName,
 }) => {
   const { t } = useTranslation(['liquidity']);
-  if (tab !== 'remove') {
+  if (currentTab.id !== 'remove') {
     return null;
   }
   const slipPercA = slippageToBignum(values.slippage).times(new BigNumber(values.balanceA ?? 0));
@@ -39,17 +39,11 @@ export const LiquidityRemoveConfirm: React.FC<LiquidityRemoveConfirmProps> = ({
   return (
     <>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>
-          {t('liquidity|Minimum received')}
-          :
-        </span>
+        <span className={s.receiveLabel}>{t('liquidity|Minimum received')}:</span>
         <CurrencyAmount currency={tokenAName} amount={minimumReceivedA} />
       </div>
       <div className={s.receive}>
-        <span className={s.receiveLabel}>
-          {t('liquidity|Minimum received')}
-          :
-        </span>
+        <span className={s.receiveLabel}>{t('liquidity|Minimum received')}:</span>
         <CurrencyAmount currency={tokenBName} amount={minimumReceivedB} />
       </div>
       <Button onClick={handleRemoveLiquidity} className={s.button}>

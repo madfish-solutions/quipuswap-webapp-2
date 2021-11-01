@@ -16,6 +16,7 @@ import { useAccountPkh, useNetwork, useOnBlock, useTezos } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
+  ICurrentTab,
   LiquidityFormValues,
   PoolShare,
   QSMainNet,
@@ -71,7 +72,7 @@ type LiquidityFormProps = {
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  currentTab: any;
+  currentTab: ICurrentTab;
   setTabsState: (val: any) => void;
 };
 
@@ -373,7 +374,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
         contentClassName={s.content}
       >
         <LiquidityFormRemove
-          tab={currentTab.id as 'remove' | 'add'}
+          currentTab={currentTab}
           handleTokenChange={handleTokenChange}
           tokenPair={tokenPair}
           tokensData={tokensData}
@@ -384,7 +385,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
           form={form}
         />
         <LiquidityFormAdd
-          tab={currentTab.id as 'remove' | 'add'}
+          currentTab={currentTab}
           handleTokenChange={handleTokenChange}
           tokenPair={tokenPair}
           tokensData={tokensData}
@@ -401,7 +402,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({
         />
         <LiquiditySlippage
           handleRemoveLiquidity={handleRemoveLiquidity}
-          tab={currentTab.id}
+          currentTab={currentTab}
           dex={dex}
           values={values}
           token1={token1}

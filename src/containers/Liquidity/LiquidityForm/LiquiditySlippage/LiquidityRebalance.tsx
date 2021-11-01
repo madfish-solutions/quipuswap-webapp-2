@@ -12,16 +12,16 @@ import {
   toDecimals,
 } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
+import { ICurrentTab, LiquidityFormValues, WhitelistedToken } from '@utils/types';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
-import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 
 interface LiquidityRebalanceProps {
   dex?: FoundDex;
   values: LiquidityFormValues;
   token2: WhitelistedToken;
-  tab: 'remove' | 'add';
+  currentTab: ICurrentTab;
   tokenAName: string;
   tokenBName: string;
   rebalanceSwitcher: boolean;
@@ -31,13 +31,13 @@ export const LiquidityRebalance: React.FC<LiquidityRebalanceProps> = ({
   dex,
   values,
   token2,
-  tab,
+  currentTab,
   tokenAName,
   tokenBName,
   rebalanceSwitcher,
 }) => {
   const { t } = useTranslation(['liquidity']);
-  if (tab !== 'add' || !rebalanceSwitcher) {
+  if (currentTab.id !== 'add' || !rebalanceSwitcher) {
     return null;
   }
   let maxInvestedA = new BigNumber(0);

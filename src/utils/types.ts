@@ -51,6 +51,7 @@ export interface WhitelistedTokenList {
   tokens: WhitelistedToken[];
   enabled?: boolean;
   error?: boolean;
+  loading?: boolean;
 }
 
 export interface WhitelistedBaker {
@@ -193,3 +194,8 @@ export type PoolTableType = {
     };
   };
 };
+
+export interface ICurrentTab {
+  id: string;
+  label: string;
+}

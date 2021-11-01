@@ -1,13 +1,14 @@
 import React from 'react';
 
+import { ICurrentTab } from '@utils/types';
 import { Slippage } from '@components/common/Slippage';
 
 export const LiquiditySlippageField: React.FC<{
   rebalanceSwitcher: boolean;
   input: any;
-  tab: 'remove' | 'add';
-}> = ({ rebalanceSwitcher, input, tab }) => {
-  if (tab === 'remove' || rebalanceSwitcher) {
+  currentTab: ICurrentTab;
+}> = ({ rebalanceSwitcher, input, currentTab }) => {
+  if (currentTab.id === 'remove' || rebalanceSwitcher) {
     return <Slippage handleChange={(value) => input.onChange(value)} />;
   }
   return null;

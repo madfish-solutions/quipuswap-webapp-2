@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
 
-import { LiquidityFormValues, WhitelistedToken } from '@utils/types';
+import { ICurrentTab, LiquidityFormValues, WhitelistedToken } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 
 import { LiquiditySlippageField } from './LiquiditySlippageField';
@@ -13,7 +13,7 @@ interface LiquiditySlippageProps {
   dex?: FoundDex;
   handleRemoveLiquidity: () => void;
   values: LiquidityFormValues;
-  tab: 'remove' | 'add';
+  currentTab: ICurrentTab;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
 }
@@ -23,7 +23,7 @@ export const LiquiditySlippage: React.FC<LiquiditySlippageProps> = ({
   values,
   token1,
   token2,
-  tab,
+  currentTab,
   handleRemoveLiquidity,
 }) => {
   const tokenAName = useMemo(
@@ -40,12 +40,12 @@ export const LiquiditySlippage: React.FC<LiquiditySlippageProps> = ({
         <>
           <LiquiditySlippageField
             rebalanceSwitcher={values.rebalanceSwitcher}
-            tab={tab}
+            currentTab={currentTab}
             input={input}
           />
           <LiquidityRebalance
             rebalanceSwitcher={values.rebalanceSwitcher}
-            tab={tab}
+            currentTab={currentTab}
             dex={dex}
             values={values}
             token2={token2}
@@ -54,7 +54,7 @@ export const LiquiditySlippage: React.FC<LiquiditySlippageProps> = ({
           />
           <LiquidityRemoveConfirm
             handleRemoveLiquidity={handleRemoveLiquidity}
-            tab={tab}
+            currentTab={currentTab}
             values={values}
             tokenAName={tokenAName}
             tokenBName={tokenBName}

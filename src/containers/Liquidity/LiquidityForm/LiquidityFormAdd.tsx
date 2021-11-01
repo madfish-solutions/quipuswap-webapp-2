@@ -7,6 +7,7 @@ import { FoundDex } from '@quipuswap/sdk';
 
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import {
+  ICurrentTab,
   LiquidityFormValues,
   QSMainNet,
   TokenDataMap,
@@ -29,7 +30,7 @@ import s from '../Liquidity.module.sass';
 import { hanldeTokenPairSelect } from '../liquidityHelpers';
 
 interface LiquidityFormAddProps {
-  tab: 'remove' | 'add';
+  currentTab: ICurrentTab;
   values: LiquidityFormValues;
   tokenPair: WhitelistedTokenPair;
   setDex: (dex?: FoundDex) => void;
@@ -46,7 +47,7 @@ interface LiquidityFormAddProps {
 }
 
 export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
-  tab,
+  currentTab,
   values,
   setDex,
   handleTokenChange,
@@ -96,7 +97,7 @@ export const LiquidityFormAdd: React.FC<LiquidityFormAddProps> = ({
     [tezos, accountPkh, networkId, token1],
   );
 
-  if (tab !== 'add') {
+  if (currentTab.id !== 'add') {
     return null;
   }
 

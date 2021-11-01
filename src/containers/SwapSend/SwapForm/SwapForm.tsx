@@ -3,10 +3,17 @@ import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 import { FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
+import { FormApi } from 'final-form';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken } from '@utils/types';
+import {
+  ICurrentTab,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
+} from '@utils/types';
 import { useAccountPkh, useTezos, useNetwork } from '@utils/dapp';
 import { getWhitelistedTokenDecimals, parseDecimals } from '@utils/helpers';
 import { FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
@@ -44,7 +51,7 @@ type SwapFormProps = {
   debounce: number;
   save: any;
   values: SwapFormValues;
-  form: any;
+  form: FormApi<SwapFormValues, Partial<SwapFormValues>>;
   tabsState: any;
   setTabsState: (state: string) => void;
   token1: WhitelistedToken;
@@ -54,7 +61,7 @@ type SwapFormProps = {
   tokensData: TokenDataMap;
   handleSwapTokens: () => void;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  currentTab: any;
+  currentTab: ICurrentTab;
 };
 
 const RealForm: React.FC<SwapFormProps> = ({

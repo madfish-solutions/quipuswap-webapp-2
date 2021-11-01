@@ -112,7 +112,6 @@ export const submitForm = async ({
               liquidityParams = liquidityParams.concat(approveParams);
             }
           } catch (e: any) {
-            console.info(e);
             updateToast(e);
           }
         } else {

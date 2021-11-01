@@ -1,15 +1,20 @@
 import React from 'react';
 import { Field } from 'react-final-form';
+import { FormApi } from 'final-form';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import s from '@styles/CommonContainer.module.sass';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { isAddress } from '@utils/validators';
+import { SwapFormValues } from '@utils/types';
 
 interface SwapFormSendArgs {
-  form: any;
-  currentTab: any;
+  form: FormApi<SwapFormValues, Partial<SwapFormValues>>;
+  currentTab: {
+    id: string;
+    label: string;
+  };
 }
 
 export const SwapFormSend: React.FC<SwapFormSendArgs> = ({ form, currentTab }) => {

@@ -1,6 +1,7 @@
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
+import { FormApi } from 'final-form';
 
 import {
   fromDecimals,
@@ -17,7 +18,7 @@ interface HandleInputChangeArgs {
   val: SwapFormValues;
   tezos?: TezosToolkit | null;
   lastChange: 'balance1' | 'balance2';
-  form: any;
+  form: FormApi<SwapFormValues, Partial<SwapFormValues>>;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   oldToken1: WhitelistedToken;
@@ -30,12 +31,12 @@ interface HandleInputChangeArgs {
   tokensData: TokenDataMap;
   formValues: SwapFormValues;
   networkId: QSMainNet;
-  handleErrorToast: (e: any) => void;
-  setRate1: (r: BigNumber) => void;
-  setRate2: (r: BigNumber) => void;
-  setPriceImpact: (r: BigNumber) => void;
-  setOldTokens: (t: WhitelistedToken[]) => void;
-  setOldDex: (t: FoundDex[]) => void;
+  handleErrorToast: (error: any) => void;
+  setRate1: (rate: BigNumber) => void;
+  setRate2: (rate: BigNumber) => void;
+  setPriceImpact: (priceImpact: BigNumber) => void;
+  setOldTokens: (tokens: WhitelistedToken[]) => void;
+  setOldDex: (dexes: FoundDex[]) => void;
 }
 
 export const handleInputChange = async ({

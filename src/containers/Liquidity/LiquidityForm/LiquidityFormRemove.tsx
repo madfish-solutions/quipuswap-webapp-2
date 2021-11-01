@@ -6,7 +6,7 @@ import { Field } from 'react-final-form';
 import { FoundDex } from '@quipuswap/sdk';
 
 import { useAccountPkh } from '@utils/dapp';
-import { TokenDataMap, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { ICurrentTab, TokenDataMap, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { composeValidators, validateBalance, validateMinMax } from '@utils/validators';
 import { fromDecimals, parseTezDecimals } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -20,7 +20,7 @@ import s from '../Liquidity.module.sass';
 import { hanldeTokenPairSelect } from '../liquidityHelpers';
 
 interface LiquidityFormRemoveProps {
-  tab: 'remove' | 'add';
+  currentTab: ICurrentTab;
   tokenPair: WhitelistedTokenPair;
   setDex: (dex?: FoundDex) => void;
   setTokens: (tokens: WhitelistedToken[]) => void;
@@ -32,7 +32,7 @@ interface LiquidityFormRemoveProps {
 }
 
 export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
-  tab,
+  currentTab,
   tokenPair,
   setDex,
   setTokens,
@@ -56,7 +56,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     [poolShare],
   );
 
-  if (tab !== 'remove') {
+  if (currentTab.id !== 'remove') {
     return null;
   }
 
