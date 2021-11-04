@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
-import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 import {
+  Card,
   Button,
   Tooltip,
-  Card,
   CardCell,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
 
 import {
   PoolShare,

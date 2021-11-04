@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 import {
+  Card,
   Button,
   Tooltip,
-  Card,
   CardCell,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';

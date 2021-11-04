@@ -24,11 +24,11 @@ import {
   TransferParams,
 } from '@quipuswap/sdk';
 import {
-  Button,
   Tabs,
-  Switcher,
-  Tooltip,
   Card,
+  Button,
+  Tooltip,
+  Switcher,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';

@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { Button, Tooltip, Card } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useAccountPkh, useTezos } from '@utils/dapp';

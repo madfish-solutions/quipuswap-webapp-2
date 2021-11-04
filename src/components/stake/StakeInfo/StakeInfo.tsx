@@ -1,17 +1,18 @@
 import React, {
   useContext, useState, useMemo,
 } from 'react';
-import cx from 'classnames';
-import dynamic from 'next/dynamic';
+
 import { useTranslation } from 'next-i18next';
 import {
-  Button,
-  Timeleft,
   Tabs,
-  Tooltip,
   Card,
+  Button,
+  Tooltip,
   CardCell,
+  Timeleft,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
+import dynamic from 'next/dynamic';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';

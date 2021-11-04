@@ -1,16 +1,16 @@
 import React, {
+  useRef,
   useMemo,
   useState,
   useEffect,
-  useRef,
   useCallback,
 } from 'react';
 import { Field, FormSpy } from 'react-final-form';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
 import {
-  Button,
   Tabs,
   Card,
+  Button,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
@@ -30,19 +30,19 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators,
   isAddress,
-  validateBalance,
   validateMinMax,
+  validateBalance,
+  composeValidators,
 } from '@utils/validators';
 import {
-  fromDecimals,
-  getWhitelistedTokenSymbol,
+  toDecimals,
   isDexEqual,
   isTokenEqual,
+  fromDecimals,
   parseDecimals,
   slippageToBignum,
-  toDecimals,
+  getWhitelistedTokenSymbol,
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';

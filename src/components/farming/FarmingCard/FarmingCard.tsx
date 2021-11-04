@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import {
-  Button,
-  TokensLogos,
   Bage,
-  Tooltip,
   Card,
+  Button,
+  Tooltip,
+  TokensLogos,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';

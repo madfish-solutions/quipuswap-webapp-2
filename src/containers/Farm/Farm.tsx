@@ -1,15 +1,19 @@
 import React, {
-  useState, useContext, useMemo, useCallback, useEffect,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
-import cx from 'classnames';
 import {
+  Card,
+  Input,
   Switcher,
   SelectUI,
-  Input,
-  Card,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
