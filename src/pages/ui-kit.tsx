@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import BigNumber from 'bignumber.js';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Timeleft } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -31,7 +31,6 @@ import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { Timeleft } from '@components/ui/Timeleft';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
