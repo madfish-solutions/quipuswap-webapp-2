@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 import {
   Card,
+  Route,
   Button,
   Tooltip,
   CardCell,
@@ -16,7 +17,6 @@ import {
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
-import { Route } from '@components/common/Route';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

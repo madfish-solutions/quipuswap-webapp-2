@@ -9,6 +9,7 @@ import {
   Tabs,
   Bage,
   Modal,
+  Route,
   Input,
   Button,
   Tooltip,
@@ -42,7 +43,6 @@ import {
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
