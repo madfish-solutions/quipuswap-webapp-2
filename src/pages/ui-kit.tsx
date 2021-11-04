@@ -17,6 +17,8 @@ import {
   Switcher,
   SelectUI,
   Slippage,
+  FarmTable,
+  PoolTable,
   CurrencyAmount,
   ColorModeSwitcher,
 } from '@madfish-solutions/quipu-ui-kit';
@@ -43,8 +45,6 @@ import {
   ComplexInput,
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { FarmTable } from '@components/tables/FarmTable';
-import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
