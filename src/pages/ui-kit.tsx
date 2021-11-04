@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import BigNumber from 'bignumber.js';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Switcher } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -19,7 +19,6 @@ import {
   ChooseListCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
-import { Switcher } from '@components/ui/Switcher';
 import { Tabs } from '@components/ui/Tabs';
 import {
   LineChartSampleData,
