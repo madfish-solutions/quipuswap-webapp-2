@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import dynamic from 'next/dynamic';
 import BigNumber from 'bignumber.js';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Input } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -25,7 +25,6 @@ import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import { Input } from '@components/ui/Input';
 import { SelectUI } from '@components/ui/Select';
 import { Tooltip } from '@components/ui/Tooltip';
 import {
