@@ -9,6 +9,7 @@ import {
   TokensLogos,
   Timeleft,
   Tabs,
+  Tooltip,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -17,7 +18,6 @@ import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
-import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { LineChartSampleData } from '@components/charts/content';
 import { StickyBlock } from '@components/common/StickyBlock';

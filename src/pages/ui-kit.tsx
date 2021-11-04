@@ -14,6 +14,7 @@ import {
   Input,
   Bage,
   ColorModeSwitcher,
+  Tooltip,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -30,7 +31,6 @@ import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
 } from '@components/ui/ComplexInput';
