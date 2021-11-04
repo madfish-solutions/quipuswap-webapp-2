@@ -16,6 +16,7 @@ import {
   Timeleft,
   Switcher,
   SelectUI,
+  Slippage,
   CurrencyAmount,
   ColorModeSwitcher,
 } from '@madfish-solutions/quipu-ui-kit';
@@ -42,7 +43,6 @@ import {
   ComplexInput,
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { Slippage } from '@components/common/Slippage';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';

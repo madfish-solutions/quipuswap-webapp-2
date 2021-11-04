@@ -28,6 +28,7 @@ import {
   Card,
   Button,
   Tooltip,
+  Slippage,
   Switcher,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
@@ -71,7 +72,6 @@ import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Slippage } from '@components/common/Slippage';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';

@@ -11,6 +11,7 @@ import {
   Tabs,
   Card,
   Button,
+  Slippage,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
@@ -49,7 +50,6 @@ import { FACTORIES, FEE_RATE } from '@utils/defaults';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
