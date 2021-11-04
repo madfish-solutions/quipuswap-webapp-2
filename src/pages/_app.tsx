@@ -4,14 +4,16 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { appWithTranslation } from 'next-i18next';
 import { DefaultSeo } from 'next-seo';
+import { ColorThemeProvider as CP1 } from '@madfish-solutions/quipu-ui-kit';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { DAppProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
-import { ColorThemeProvider } from '@providers/ColorThemeContext';
+import { ColorThemeProvider as CP2 } from '@providers/ColorThemeContext';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
+import '@madfish-solutions/quipu-ui-kit/quipu-ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -136,11 +138,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <DAppProvider>
-        <ColorThemeProvider>
-          <ExchangeRatesProvider>
-            <Component {...pageProps} />
-          </ExchangeRatesProvider>
-        </ColorThemeProvider>
+        <CP1>
+          <CP2>
+            <ExchangeRatesProvider>
+              <Component {...pageProps} />
+            </ExchangeRatesProvider>
+          </CP2>
+        </CP1>
       </DAppProvider>
     </>
   );
