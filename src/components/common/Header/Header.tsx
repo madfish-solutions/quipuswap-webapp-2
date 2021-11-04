@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, ConnectWalletButton } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
-import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { LogoButton } from '@components/common/LogoButton';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
