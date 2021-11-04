@@ -1,6 +1,6 @@
 import React, { ReactNode, useContext } from 'react';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Loader } from '@madfish-solutions/quipu-ui-kit';
 import {
   ToastContainer,
   ToastContentProps,
@@ -9,7 +9,6 @@ import {
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Loader } from '@components/ui/Loader';
 import { ToastClose } from '@components/svg/ToastClose';
 import ToastSuccess from '@icons/ToastSuccess.svg';
 import ToastError from '@icons/ToastError.svg';
