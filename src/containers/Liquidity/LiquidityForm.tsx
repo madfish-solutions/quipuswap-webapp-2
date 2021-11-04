@@ -28,6 +28,7 @@ import {
   Tabs,
   Switcher,
   Tooltip,
+  Card,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import {
@@ -50,7 +51,6 @@ import {
   getWhitelistedTokenSymbol, isDexEqual, isTokenEqual, parseDecimals, slippageToBignum, toDecimals,
 } from '@utils/helpers';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';

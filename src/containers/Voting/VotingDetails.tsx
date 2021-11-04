@@ -1,19 +1,22 @@
 import React, { useMemo } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { FoundDex } from '@quipuswap/sdk';
 import {
-  FoundDex,
-} from '@quipuswap/sdk';
-import { Button, Tooltip } from '@madfish-solutions/quipu-ui-kit';
+  Button,
+  Tooltip,
+  Card,
+  CardCell,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import {
-  VoterType, WhitelistedBaker, WhitelistedTokenPair,
+  VoterType,
+  WhitelistedBaker,
+  WhitelistedTokenPair,
 } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 

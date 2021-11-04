@@ -1,5 +1,8 @@
 import React, {
-  useMemo, useState, useEffect, useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
   useCallback,
 } from 'react';
 import BigNumber from 'bignumber.js';
@@ -9,12 +12,15 @@ import {
   FoundDex,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
-import { Button, Tabs } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Tabs, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -22,7 +28,10 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, validateBalance, validateMinMax,
+  composeValidators,
+  isAddress,
+  validateBalance,
+  validateMinMax,
 } from '@utils/validators';
 import {
   fromDecimals,
@@ -35,7 +44,6 @@ import {
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { SwapButton } from '@components/common/SwapButton';

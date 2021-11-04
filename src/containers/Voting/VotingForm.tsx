@@ -1,5 +1,9 @@
 import React, {
-  useEffect, useRef, useState, useCallback, useMemo,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
 } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
@@ -10,10 +14,12 @@ import {
   FoundDex,
   Token,
 } from '@quipuswap/sdk';
-import { Button, Tabs } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Tabs, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  useAccountPkh,
+  useNetwork,
+  useTezos,
 } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -21,18 +27,23 @@ import {
   QSMainNet,
   TokenDataMap,
   VoteFormValues,
-  WhitelistedToken, WhitelistedTokenPair,
+  WhitelistedToken,
+  WhitelistedTokenPair,
   VoterType,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import {
-  getWhitelistedTokenSymbol, isAssetEqual, parseDecimals,
+  getWhitelistedTokenSymbol,
+  isAssetEqual,
+  parseDecimals,
 } from '@utils/helpers';
 import {
-  composeValidators, required, validateBalance, validateMinMax,
+  composeValidators,
+  required,
+  validateBalance,
+  validateMinMax,
 } from '@utils/validators';
-import { Card } from '@components/ui/Card';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';

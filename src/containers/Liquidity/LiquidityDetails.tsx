@@ -4,15 +4,19 @@ import { useTranslation } from 'next-i18next';
 import {
   FoundDex,
 } from '@quipuswap/sdk';
-import { Button, Tooltip } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  Tooltip,
+  Card,
+  CardCell,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import {
   PoolShare,
-  TokenDataMap, WhitelistedToken,
+  TokenDataMap,
+  WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Card } from '@components/ui/Card';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 

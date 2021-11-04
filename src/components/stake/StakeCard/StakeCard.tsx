@@ -1,12 +1,16 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { Button, TokensLogos, Tooltip } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  TokensLogos,
+  Tooltip,
+  Card,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Card } from '@components/ui/Card';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { APY } from '@components/svg/APY';
 

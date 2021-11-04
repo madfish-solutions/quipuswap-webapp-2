@@ -8,6 +8,7 @@ import React, {
 import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
+import { Card, CardContent, CardHeader } from '@madfish-solutions/quipu-ui-kit';
 
 import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -15,7 +16,6 @@ import { usePrevious } from '@hooks/usePrevious';
 import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
 import { Preloader } from '@components/common/Preloader';
 

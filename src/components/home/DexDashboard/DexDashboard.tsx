@@ -5,12 +5,12 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo } from '@utils/dapp';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
 import { Section } from '@components/home/Section';
-import { Card } from '@components/ui/Card';
 import { SliderUI } from '@components/ui/Slider';
 
 import s from './DexDashboard.module.sass';

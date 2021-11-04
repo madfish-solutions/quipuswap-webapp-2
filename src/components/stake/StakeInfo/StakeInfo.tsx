@@ -9,13 +9,13 @@ import {
   Timeleft,
   Tabs,
   Tooltip,
+  Card,
+  CardCell,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { LineChartSampleData } from '@components/charts/content';
