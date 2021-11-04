@@ -2,11 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import cx from 'classnames';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
 import { TFooter } from '@components/ui/TFooter';
-import { Button } from '@components/ui/Button';
 import { Preloader } from '@components/common/Preloader';
 import { Skeleton } from '@components/ui/Skeleton';
 

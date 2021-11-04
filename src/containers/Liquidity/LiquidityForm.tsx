@@ -23,6 +23,7 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   useAccountPkh, useNetwork, useOnBlock, useTezos,
@@ -48,7 +49,6 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
 import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
