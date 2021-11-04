@@ -4,7 +4,7 @@ import React, {
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Timeleft } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -13,7 +13,6 @@ import { Card } from '@components/ui/Card';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { Tabs } from '@components/ui/Tabs';
-import { Timeleft } from '@components/ui/Timeleft';
 import { StickyBlock } from '@components/common/StickyBlock';
 import { Tooltip } from '@components/ui/Tooltip';
 import { LineChartSampleData } from '@components/charts/content';
