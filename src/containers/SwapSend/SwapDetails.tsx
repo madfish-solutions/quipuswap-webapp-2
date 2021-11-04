@@ -1,18 +1,22 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Card,
+  Route,
+  Button,
+  Tooltip,
+  CardCell,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
 
 import {
-  getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
+  getWhitelistedTokenSymbol,
+  transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Route } from '@components/common/Route';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

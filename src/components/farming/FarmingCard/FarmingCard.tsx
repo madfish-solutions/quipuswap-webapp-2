@@ -1,14 +1,17 @@
 import React, { useContext } from 'react';
+import {
+  Bage,
+  Card,
+  Button,
+  Tooltip,
+  TokensLogos,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';

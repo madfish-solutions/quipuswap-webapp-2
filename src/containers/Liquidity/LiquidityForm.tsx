@@ -1,11 +1,11 @@
-import { useTranslation } from 'next-i18next';
-import router from 'next/router';
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
   useCallback,
 } from 'react';
-import cx from 'classnames';
-import BigNumber from 'bignumber.js';
+import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
@@ -23,37 +23,55 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Tabs,
+  Card,
+  Button,
+  Tooltip,
+  Slippage,
+  Switcher,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
+import router from 'next/router';
+import cx from 'classnames';
 
 import {
-  useAccountPkh, useNetwork, useOnBlock, useTezos,
+  useAccountPkh,
+  useNetwork,
+  useOnBlock,
+  useTezos,
 } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
-  LiquidityFormValues,
   PoolShare,
-  TokenDataMap, TokenDataType,
-  WhitelistedToken, WhitelistedTokenPair,
+  TokenDataMap,
+  TokenDataType,
+  WhitelistedToken,
+  LiquidityFormValues,
+  WhitelistedTokenPair,
 } from '@utils/types';
-
 import {
-  composeValidators, validateBalance, validateMinMax, validateMinMaxNonStrict,
+  validateMinMaxNonStrict,
+  composeValidators,
+  validateBalance,
+  validateMinMax,
 } from '@utils/validators';
 import {
+  isDexEqual,
+  toDecimals,
+  isTokenEqual,
   fromDecimals,
+  parseDecimals,
   getValueForSDK,
-  getWhitelistedTokenSymbol, isDexEqual, isTokenEqual, parseDecimals, slippageToBignum, toDecimals,
+  slippageToBignum,
+  getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
-import { Switcher } from '@components/ui/Switcher';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';

@@ -5,14 +5,13 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
+import { Modal, Input } from '@madfish-solutions/quipu-ui-kit';
 
 import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Modal } from '@components/ui/Modal';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
-import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 

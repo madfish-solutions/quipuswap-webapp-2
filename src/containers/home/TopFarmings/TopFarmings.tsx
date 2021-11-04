@@ -1,9 +1,9 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
+import { FarmTable } from '@madfish-solutions/quipu-ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Section } from '@components/home/Section';
-import { FarmTable } from '@components/tables/FarmTable';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 

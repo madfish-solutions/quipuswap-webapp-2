@@ -2,15 +2,17 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  TokensLogos,
+  Bage,
+  Tooltip,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PoolTableType } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Bage } from '@components/ui/Bage';
 
 import s from './PoolCardTable.module.sass';
 

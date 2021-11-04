@@ -5,7 +5,13 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  NumberInput,
+  Modal,
+  Input,
+  Checkbox,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
@@ -20,11 +26,7 @@ import {
 import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Checkbox } from '@components/ui/Checkbox';
-import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
-import { Input } from '@components/ui/Input';
-import { NumberInput } from '@components/ui/NumberInput';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';

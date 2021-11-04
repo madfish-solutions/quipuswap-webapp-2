@@ -1,7 +1,6 @@
 import React from 'react';
 import cx from 'classnames';
-
-import { Skeleton } from '@components/ui/Skeleton';
+import { Skeleton } from '@madfish-solutions/quipu-ui-kit';
 
 import s from './ModalCell.module.sass';
 

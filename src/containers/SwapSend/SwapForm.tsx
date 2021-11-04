@@ -1,20 +1,30 @@
 import React, {
-  useMemo, useState, useEffect, useRef,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
   useCallback,
 } from 'react';
+import { Field, FormSpy } from 'react-final-form';
+import { estimateSwap, FoundDex } from '@quipuswap/sdk';
+import {
+  Tabs,
+  Card,
+  Button,
+  Slippage,
+  SwapButton,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import {
-  estimateSwap,
-  FoundDex,
-} from '@quipuswap/sdk';
-import { Field, FormSpy } from 'react-final-form';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -22,25 +32,24 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, validateBalance, validateMinMax,
+  isAddress,
+  validateMinMax,
+  validateBalance,
+  composeValidators,
 } from '@utils/validators';
 import {
-  fromDecimals,
-  getWhitelistedTokenSymbol,
+  toDecimals,
   isDexEqual,
   isTokenEqual,
+  fromDecimals,
   parseDecimals,
   slippageToBignum,
-  toDecimals,
+  getWhitelistedTokenSymbol,
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';

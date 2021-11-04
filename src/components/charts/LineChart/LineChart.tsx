@@ -5,19 +5,22 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-import { Card } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Card,
+  Preloader,
+  CardHeader,
+  CardContent,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { PlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { CardContent, CardHeader } from '@components/ui/Card';
 import { PairChartInfo } from '@components/common/PairChartInfo';
-import { Preloader } from '@components/common/Preloader';
 
 import {
   GraphicColors,

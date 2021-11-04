@@ -9,7 +9,6 @@ import { SliderUI } from '@components/ui/Slider';
 
 import { NewsCard } from './NewsCard';
 import { NewsData } from './content';
-
 import s from './News.module.sass';
 
 type NewsProps = {

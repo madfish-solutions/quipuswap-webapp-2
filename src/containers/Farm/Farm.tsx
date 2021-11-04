@@ -1,18 +1,24 @@
 import React, {
-  useState, useContext, useMemo, useCallback, useEffect,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
+import {
+  Card,
+  Input,
+  Switcher,
+  SelectUI,
+  CurrencyAmount,
+} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
-import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Input } from '@components/ui/Input';
-import { Switcher } from '@components/ui/Switcher';
-import { SelectUI } from '@components/ui/Select';
 import { SliderUI } from '@components/ui/Slider';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';

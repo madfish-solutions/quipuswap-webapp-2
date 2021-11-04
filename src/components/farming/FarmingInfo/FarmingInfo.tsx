@@ -1,23 +1,28 @@
 import React, {
-  useContext, useState, useMemo,
+  useMemo,
+  useState,
+  useContext,
 } from 'react';
+import { useTranslation } from 'next-i18next';
+import {
+  Tabs,
+  Card,
+  Button,
+  Tooltip,
+  CardCell,
+  Timeleft,
+  StickyBlock,
+  TokensLogos,
+} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
-import { useTranslation } from 'next-i18next';
-import { Button,Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Timeleft } from '@components/ui/Timeleft';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';

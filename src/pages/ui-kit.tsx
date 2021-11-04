@@ -1,42 +1,50 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import cx from 'classnames';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import {
+  Tabs,
+  Bage,
+  Modal,
+  Route,
+  Input,
+  Button,
+  Tooltip,
+  Timeleft,
+  Switcher,
+  SelectUI,
+  Slippage,
+  FarmTable,
+  PoolTable,
+  CurrencyAmount,
+  ColorModeSwitcher,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 import dynamic from 'next/dynamic';
 import BigNumber from 'bignumber.js';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { Bage } from '@components/ui/Bage';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Modal } from '@components/ui/Modal';
 import {
   BakerCell,
   ChooseListCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
-import { Switcher } from '@components/ui/Switcher';
-import { Tabs } from '@components/ui/Tabs';
 import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import { Input } from '@components/ui/Input';
-import { SelectUI } from '@components/ui/Select';
-import { Tooltip } from '@components/ui/Tooltip';
 import {
-  ComplexBaker, ComplexInput, ComplexRecipient,
+  ComplexBaker,
+  ComplexInput,
+  ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { Timeleft } from '@components/ui/Timeleft';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
-import { FarmTable } from '@components/tables/FarmTable';
-import { PoolTable } from '@components/tables/PoolTable';
 import { TokensModal } from '@components/modals/TokensModal';
 import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';

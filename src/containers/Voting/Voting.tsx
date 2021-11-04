@@ -1,38 +1,40 @@
 import React, {
-  useCallback,
+  useMemo,
+  useState,
   useEffect,
-  useMemo, useState,
+  useCallback,
 } from 'react';
-import { withTypes } from 'react-final-form';
-import {
-  FoundDex,
-  TransferParams,
-} from '@quipuswap/sdk';
 import { useRouter } from 'next/router';
+import { withTypes } from 'react-final-form';
+import { FoundDex, TransferParams } from '@quipuswap/sdk';
+import { StickyBlock } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import {
-  fallbackTokenToTokenData, handleSearchToken, handleTokenChange,
+  handleSearchToken,
+  handleTokenChange,
+  fallbackTokenToTokenData,
 } from '@utils/helpers';
 import {
-  useAccountPkh,
-  useNetwork,
-  useOnBlock,
-  useSearchCustomTokens,
   useTezos,
   useTokens,
+  useNetwork,
+  useOnBlock,
+  useAccountPkh,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
+  VoterType,
   QSMainNet,
   TokenDataMap,
   VoteFormValues,
-  VoterType, WhitelistedToken, WhitelistedTokenPair,
+  WhitelistedToken,
+  WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { VotingStats } from '@components/voting/VotingStats';
-import { StickyBlock } from '@components/common/StickyBlock';
 
 import s from '@styles/CommonContainer.module.sass';
 import { VotingForm } from './VotingForm';
