@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 
 import s from './Route.module.sass';
 

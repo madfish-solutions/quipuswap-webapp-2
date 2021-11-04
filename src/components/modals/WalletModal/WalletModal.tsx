@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { WalletType } from '@utils/types';
 import {
@@ -12,9 +13,8 @@ import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { Modal } from '@components/ui/Modal';
-import { Button } from '@components/ui/Button';
-
 import { Checkbox } from '@components/ui/Checkbox';
+
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
 

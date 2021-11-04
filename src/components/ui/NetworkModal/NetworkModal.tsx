@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
-import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 
 import s from './NetworkModal.module.sass';
