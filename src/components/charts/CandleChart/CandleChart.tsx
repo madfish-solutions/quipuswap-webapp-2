@@ -1,14 +1,19 @@
 import React, {
-  useCallback,
-  useContext,
-  useEffect,
   useRef,
   useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
-import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-import { Card, CardContent, CardHeader } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Card,
+  Preloader,
+  CardHeader,
+  CardContent,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { CandlePlotPoint } from '@graphql';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -17,7 +22,6 @@ import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
-import { Preloader } from '@components/common/Preloader';
 
 import {
   CandleGraphOptions,

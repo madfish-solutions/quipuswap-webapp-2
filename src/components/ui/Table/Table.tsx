@@ -1,12 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import cx from 'classnames';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useTranslation } from 'next-i18next';
-import { Button, TFooter, Skeleton } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  TFooter,
+  Skeleton,
+  Preloader,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
-import { Preloader } from '@components/common/Preloader';
 
 import s from './Table.module.sass';
 
