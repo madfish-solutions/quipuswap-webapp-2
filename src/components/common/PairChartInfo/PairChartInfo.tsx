@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Button } from '@components/ui/Button';
 import { Tabs } from '@components/ui/Tabs';
 import { Refresh } from '@components/svg/Refresh';
 

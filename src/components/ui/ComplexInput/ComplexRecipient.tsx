@@ -2,10 +2,10 @@ import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { Button } from '@components/ui/Button';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
 import s from './ComplexInput.module.sass';

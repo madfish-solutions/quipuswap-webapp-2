@@ -1,11 +1,11 @@
 import React, { useContext, useMemo, useRef } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';

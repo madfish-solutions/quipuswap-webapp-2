@@ -4,6 +4,7 @@ import React, {
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { fromDecimals } from '@utils/helpers';
@@ -14,7 +15,6 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { TokensLogos } from '@components/ui/TokensLogos';
 // import { Bage } from '@components/ui/Bage';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Button } from '@components/ui/Button';
 
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';
