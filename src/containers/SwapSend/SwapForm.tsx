@@ -9,7 +9,7 @@ import {
   FoundDex,
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Tabs } from '@madfish-solutions/quipu-ui-kit';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -35,7 +35,6 @@ import {
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
 import { Card } from '@components/ui/Card';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
