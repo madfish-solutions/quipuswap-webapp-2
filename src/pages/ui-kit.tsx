@@ -11,6 +11,7 @@ import {
   Switcher,
   SelectUI,
   Modal,
+  Input,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -29,7 +30,6 @@ import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import { Input } from '@components/ui/Input';
 import { Tooltip } from '@components/ui/Tooltip';
 import {
   ComplexBaker, ComplexInput, ComplexRecipient,
