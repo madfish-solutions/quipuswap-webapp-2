@@ -5,13 +5,13 @@ import {
   TokensLogos,
   Tooltip,
   Card,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { APY } from '@components/svg/APY';
 
 import { ArrowDown } from '@components/svg/ArrowDown';

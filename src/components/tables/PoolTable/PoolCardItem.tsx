@@ -7,12 +7,12 @@ import {
   TokensLogos,
   Bage,
   Tooltip,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PoolTableType } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from './PoolCardTable.module.sass';
 

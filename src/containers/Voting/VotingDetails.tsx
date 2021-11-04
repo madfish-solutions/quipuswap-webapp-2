@@ -6,6 +6,7 @@ import {
   Tooltip,
   Card,
   CardCell,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
@@ -17,7 +18,6 @@ import {
   WhitelistedBaker,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

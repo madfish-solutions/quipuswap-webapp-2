@@ -7,14 +7,12 @@ import {
   TokensLogos,
   Table,
   Tooltip,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
-import {
-  WhitelistedFarm,
-} from '@utils/types';
+import { WhitelistedFarm } from '@utils/types';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from './FarmTable.module.sass';
 

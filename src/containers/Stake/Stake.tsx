@@ -5,19 +5,19 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import cx from 'classnames';
 import { useRouter } from 'next/router';
 import {
   Switcher,
   SelectUI,
   Input,
   Card,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';

@@ -1,21 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import cx from 'classnames';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import dynamic from 'next/dynamic';
-import BigNumber from 'bignumber.js';
 import {
-  Button,
-  Timeleft,
   Tabs,
-  Switcher,
-  SelectUI,
+  Bage,
   Modal,
   Input,
-  Bage,
-  ColorModeSwitcher,
+  Button,
   Tooltip,
+  Timeleft,
+  Switcher,
+  SelectUI,
+  CurrencyAmount,
+  ColorModeSwitcher,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
+import dynamic from 'next/dynamic';
+import BigNumber from 'bignumber.js';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -32,9 +37,10 @@ import {
   CandleChartSampleData,
 } from '@components/charts/content';
 import {
-  ComplexBaker, ComplexInput, ComplexRecipient,
+  ComplexBaker,
+  ComplexInput,
+  ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { Route } from '@components/common/Route';
 import { FarmTable } from '@components/tables/FarmTable';

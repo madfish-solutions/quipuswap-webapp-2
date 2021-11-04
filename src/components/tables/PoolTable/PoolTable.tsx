@@ -9,6 +9,7 @@ import {
   TokensLogos,
   Table,
   Tooltip,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -16,7 +17,6 @@ import { fromDecimals } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
 // import { Bage } from '@components/ui/Bage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';

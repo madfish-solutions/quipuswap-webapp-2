@@ -6,12 +6,12 @@ import {
   Bage,
   Tooltip,
   Card,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';

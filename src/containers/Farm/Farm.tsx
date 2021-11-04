@@ -8,13 +8,13 @@ import {
   SelectUI,
   Input,
   Card,
+  CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SliderUI } from '@components/ui/Slider';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingCard } from '@components/farming/FarmingCard';
