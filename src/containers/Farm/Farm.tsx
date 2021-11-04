@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
+import { SelectUI } from '@madfish-solutions/quipu-ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
@@ -10,7 +11,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
-import { SelectUI } from '@components/ui/Select';
 import { SliderUI } from '@components/ui/Slider';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingInfo } from '@components/farming/FarmingInfo';

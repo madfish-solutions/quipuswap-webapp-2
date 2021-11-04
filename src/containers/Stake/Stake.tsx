@@ -3,6 +3,7 @@ import React, {
 } from 'react';
 import cx from 'classnames';
 import { useRouter } from 'next/router';
+import { SelectUI } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -10,7 +11,6 @@ import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { Card } from '@components/ui/Card';
 import { Input } from '@components/ui/Input';
 import { Switcher } from '@components/ui/Switcher';
-import { SelectUI } from '@components/ui/Select';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
