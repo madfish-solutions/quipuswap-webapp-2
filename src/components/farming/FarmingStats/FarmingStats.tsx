@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 

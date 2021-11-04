@@ -1054,6 +1054,9 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
+"@madfish-solutions/quipu-ui-kit@../quipu-ui-kit/dist":
+  version "0.0.0"
+
 "@microsoft/fetch-event-source@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@microsoft/fetch-event-source/-/fetch-event-source-2.0.1.tgz#9ceecc94b49fbaa15666e38ae8587f64acce007d"

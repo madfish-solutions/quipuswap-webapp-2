@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
-import { Card } from '@components/ui/Card';
-
 import { SliderUI } from '@components/ui/Slider';
+
 import { NewsCard } from './NewsCard';
 import { NewsData } from './content';
 

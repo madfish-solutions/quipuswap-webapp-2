@@ -10,6 +10,7 @@ import {
   FoundDex,
   Token,
 } from '@quipuswap/sdk';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   useAccountPkh, useNetwork, useTezos,
@@ -31,7 +32,6 @@ import {
 import {
   composeValidators, required, validateBalance, validateMinMax,
 } from '@utils/validators';
-import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Button } from '@components/ui/Button';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';

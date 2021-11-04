@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
+import { Card } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
-import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
