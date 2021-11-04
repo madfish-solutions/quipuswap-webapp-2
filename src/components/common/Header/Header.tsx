@@ -1,9 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, ColorModeSwitcher } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
