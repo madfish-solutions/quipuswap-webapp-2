@@ -11,6 +11,7 @@ import {
   Tooltip,
   CardCell,
   Timeleft,
+  StickyBlock,
   TokensLogos,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
@@ -22,7 +23,6 @@ import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { LineChartSampleData } from '@components/charts/content';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';

@@ -10,6 +10,7 @@ import {
   Tooltip,
   CardCell,
   Timeleft,
+  StickyBlock,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 import dynamic from 'next/dynamic';
@@ -18,7 +19,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { LineChartSampleData } from '@components/charts/content';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
