@@ -1,12 +1,12 @@
 import React, { useContext, useState, useCallback } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { Tooltip } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { parseDecimals } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { Input } from '@components/ui/Input';
-import { Tooltip } from '@components/ui/Tooltip';
 
 import s from './Slippage.module.sass';
 

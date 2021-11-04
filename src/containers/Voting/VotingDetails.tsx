@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import {
   FoundDex,
 } from '@quipuswap/sdk';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Tooltip } from '@madfish-solutions/quipu-ui-kit';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
@@ -12,7 +12,6 @@ import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import {
   VoterType, WhitelistedBaker, WhitelistedTokenPair,
 } from '@utils/types';
-import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
