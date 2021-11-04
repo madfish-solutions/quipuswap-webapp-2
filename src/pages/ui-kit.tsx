@@ -10,6 +10,7 @@ import {
   Tabs,
   Switcher,
   SelectUI,
+  Modal,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -19,7 +20,6 @@ import { WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Modal } from '@components/ui/Modal';
 import {
   BakerCell,
   ChooseListCell,
