@@ -2,14 +2,13 @@ import React, {
   useState, useMemo, useEffect,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   WhitelistedFarm,
 } from '@utils/types';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Table } from '@components/ui/Table';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';

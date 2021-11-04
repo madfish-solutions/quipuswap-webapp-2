@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
+import { TokensLogos } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { WhitelistedTokenPair } from '@utils/types';
 import { getWhitelistedTokenName } from '@utils/helpers';
 
