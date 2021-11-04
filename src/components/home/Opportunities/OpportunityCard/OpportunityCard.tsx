@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
-
-import { Card } from '@components/ui/Card';
+import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import s from './OpportunityCard.module.sass';
 

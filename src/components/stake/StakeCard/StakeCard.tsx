@@ -1,18 +1,17 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Card } from '@components/ui/Card';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { APY } from '@components/svg/APY';
-
 import { ArrowDown } from '@components/svg/ArrowDown';
+
 import s from './StakeCard.module.sass';
 
 const modeClass = {
