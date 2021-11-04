@@ -10,6 +10,7 @@ import {
   NumberInput,
   Modal,
   Input,
+  Checkbox,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
@@ -25,7 +26,6 @@ import {
 import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Checkbox } from '@components/ui/Checkbox';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
