@@ -12,6 +12,7 @@ import {
   SelectUI,
   Modal,
   Input,
+  Bage,
 } from '@madfish-solutions/quipu-ui-kit';
 
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -19,7 +20,6 @@ import { BaseLayout } from '@layouts/BaseLayout';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { Bage } from '@components/ui/Bage';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import {
   BakerCell,

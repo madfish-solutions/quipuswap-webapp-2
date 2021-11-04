@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { Button, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
+import { Button, TokensLogos, Bage } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
@@ -8,7 +8,6 @@ import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Card } from '@components/ui/Card';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Bage } from '@components/ui/Bage';
 import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';

@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { TokensLogos } from '@madfish-solutions/quipu-ui-kit';
+import { TokensLogos, Bage } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { Bage } from '@components/ui/Bage';
 
 import s from './ModalCell.module.sass';
 
