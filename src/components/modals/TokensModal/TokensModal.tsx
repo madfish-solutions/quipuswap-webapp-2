@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, NumberInput } from '@madfish-solutions/quipu-ui-kit';
 
 import {
   useAddCustomToken,
@@ -23,7 +23,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Modal } from '@components/ui/Modal';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Input } from '@components/ui/Input';
-import { NumberInput } from '@components/ui/NumberInput';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
