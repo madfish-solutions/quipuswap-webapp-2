@@ -2,13 +2,13 @@ import React, { useContext } from 'react';
 import {
   Bage,
   ColorModes,
+  FallbackLogo,
   ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
 import Image from 'next/image';
 import cx from 'classnames';
 
 import { prepareTokenLogo } from '@utils/helpers';
-import { FallbackLogo } from '@components/svg/FallbackLogo';
 
 import s from './NewsCard.module.sass';
 

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
+import { Button, Back } from '@madfish-solutions/quipu-ui-kit';
 
-import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import { getUniqueKey } from '@utils/helpers';

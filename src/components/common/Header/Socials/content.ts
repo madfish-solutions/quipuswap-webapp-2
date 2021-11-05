@@ -1,8 +1,10 @@
-import { TwitterIcon } from '@components/svg/Socials/TwitterIcon';
-import { TelegramIcon } from '@components/svg/Socials/TelegramIcon';
-import { DiscordIcon } from '@components/svg/Socials/DiscordIcon';
-import { GithubIcon } from '@components/svg/Socials/GithubIcon';
-import { RedditIcon } from '@components/svg/Socials/RedditIcon';
+import {
+  GithubIcon,
+  RedditIcon,
+  TwitterIcon,
+  DiscordIcon,
+  TelegramIcon,
+} from '@madfish-solutions/quipu-ui-kit';
 
 export const SocialLinksData = [
   {

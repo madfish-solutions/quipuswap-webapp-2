@@ -5,6 +5,8 @@ import React, {
 } from 'react';
 import {
   Button,
+  MenuOpened,
+  MenuClosed,
   LogoButton,
   ColorModes,
   ColorModeSwitcher,
@@ -15,8 +17,6 @@ import cx from 'classnames';
 
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from './Header.module.sass';
 

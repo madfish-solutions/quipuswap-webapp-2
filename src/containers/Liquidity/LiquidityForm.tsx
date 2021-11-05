@@ -1,27 +1,25 @@
 import React, {
-  useEffect,
-  useMemo,
   useRef,
+  useMemo,
   useState,
+  useEffect,
   useCallback,
 } from 'react';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
   // Dex,
-  estimateSharesInTez,
-  estimateSharesInToken,
-  estimateTezInShares,
-  estimateTezInToken,
-  estimateTokenInShares,
-  estimateTokenInTez,
+  swap,
   findDex,
   FoundDex,
-  getLiquidityShare,
-  removeLiquidity,
-  swap,
   TransferParams,
+  removeLiquidity,
+  getLiquidityShare,
+  estimateTezInToken,
+  estimateTokenInTez,
+  estimateSharesInTez,
+  estimateTezInShares,
+  estimateSharesInToken,
+  estimateTokenInShares,
 } from '@quipuswap/sdk';
 import {
   Tabs,
@@ -30,17 +28,20 @@ import {
   Tooltip,
   Slippage,
   Switcher,
+  ArrowDown,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import router from 'next/router';
 import cx from 'classnames';
 
 import {
-  useAccountPkh,
+  useTezos,
   useNetwork,
   useOnBlock,
-  useTezos,
+  useAccountPkh,
 } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -53,10 +54,10 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 import {
-  validateMinMaxNonStrict,
-  composeValidators,
-  validateBalance,
   validateMinMax,
+  validateBalance,
+  composeValidators,
+  validateMinMaxNonStrict,
 } from '@utils/validators';
 import {
   isDexEqual,
@@ -73,7 +74,6 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';
-import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
 import s from './Liquidity.module.sass';

@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import {
+  Back,
   Tabs,
   Card,
   Button,
@@ -12,6 +13,7 @@ import {
   Timeleft,
   ColorModes,
   StickyBlock,
+  ExternalLink,
   ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
@@ -22,9 +24,7 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { LineChartSampleData } from '@components/charts/content';
-import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
-import { Back } from '@components/svg/Back';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './StakeInfo.module.sass';

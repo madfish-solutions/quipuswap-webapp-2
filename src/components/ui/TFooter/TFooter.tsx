@@ -1,8 +1,8 @@
 import React from 'react';
+import { Back } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
 import { getUniqueKey } from '@utils/helpers';
-import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
 import s from '@components/ui/Table/Table.module.sass';

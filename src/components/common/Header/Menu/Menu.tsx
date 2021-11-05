@@ -1,16 +1,16 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import {
   Button,
+  Madfish,
   ColorModes,
   ColorThemeContext,
   ColorModeSwitcher,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { NetworkSelect } from '@components/common/NetworkSelect';
-import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';

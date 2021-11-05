@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos, Tabs } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Tabs,
+  Button,
+  Refresh,
+  TokensLogos,
+} from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { Refresh } from '@components/svg/Refresh';
 
 import s from './PairChartInfo.module.sass';
 

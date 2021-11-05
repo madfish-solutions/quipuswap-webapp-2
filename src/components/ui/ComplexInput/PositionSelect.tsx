@@ -1,9 +1,15 @@
 import React, {
-  useContext, useRef, useState,
+  useRef,
+  useState,
+  useContext,
 } from 'react';
-import cx from 'classnames';
+import {
+  Button,
+  Shevron,
+  TokensLogos,
+} from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -12,7 +18,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import {
+  APY,
   Bage,
   Card,
   Button,
@@ -13,7 +14,6 @@ import cx from 'classnames';
 
 import { WhitelistedFarm } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';
 

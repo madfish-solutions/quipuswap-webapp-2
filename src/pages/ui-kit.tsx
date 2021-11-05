@@ -3,9 +3,8 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
+  Logo,
   Tabs,
   Bage,
   Modal,
@@ -19,12 +18,16 @@ import {
   Slippage,
   FarmTable,
   PoolTable,
+  MenuClosed,
+  MenuOpened,
   CurrencyAmount,
   ColorModeSwitcher,
 } from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
-import dynamic from 'next/dynamic';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
+import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
@@ -32,9 +35,9 @@ import { useTokens } from '@utils/dapp';
 import { WhitelistedFarm } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import {
+  SwapCell,
   BakerCell,
   ChooseListCell,
-  SwapCell,
 } from '@components/ui/Modal/ModalCell';
 import {
   LineChartSampleData,
@@ -46,9 +49,6 @@ import {
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { TokensModal } from '@components/modals/TokensModal';
-import { Logo } from '@components/svg/Logo';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';

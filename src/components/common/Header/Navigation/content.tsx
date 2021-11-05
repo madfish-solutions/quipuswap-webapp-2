@@ -1,15 +1,16 @@
 import React from 'react';
+import {
+  MoreIcon,
+  FarmIcon,
+  SwapIcon,
+  HomeIcon,
+  StakeIcon,
+  VotingIcon,
+  LiquidityIcon,
+  PortfolioIcon,
+  GovernanceIcon,
+} from '@madfish-solutions/quipu-ui-kit';
 import { Trans } from 'next-i18next';
-
-import { GovernanceIcon } from '@components/svg/Sidebar/GovernanceIcon';
-import { PortfolioIcon } from '@components/svg/Sidebar/PortfolioIcon';
-import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';
-import { VotingIcon } from '@components/svg/Sidebar/VotingIcon';
-import { LiquidityIcon } from '@components/svg/Sidebar/LiquidityIcon';
-import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
-import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
-import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
-import MoreIcon from '@icons/MoreIcon.svg';
 
 type NavigationDataProps = {
   id: number

@@ -1,8 +1,10 @@
 import React, { useContext } from 'react';
 import {
+  APY,
   Card,
   Button,
   Tooltip,
+  ArrowDown,
   ColorModes,
   TokensLogos,
   CurrencyAmount,
@@ -13,8 +15,6 @@ import cx from 'classnames';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { APY } from '@components/svg/APY';
-import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from './StakeCard.module.sass';
 

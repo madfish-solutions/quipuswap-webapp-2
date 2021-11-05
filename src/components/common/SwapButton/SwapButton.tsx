@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
+import { Button, SwapIcon } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
-
-import { SwapIcon } from '@components/svg/Swap';
 
 import s from './SwapButton.module.sass';
 

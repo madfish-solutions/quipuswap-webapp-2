@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
-import { useTranslation } from 'next-i18next';
-import { FoundDex } from '@quipuswap/sdk';
 import {
   Card,
   Button,
   Tooltip,
   CardCell,
+  ExternalLink,
   CurrencyAmount,
 } from '@madfish-solutions/quipu-ui-kit';
+import { useTranslation } from 'next-i18next';
+import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -16,7 +17,6 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 

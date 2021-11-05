@@ -1,10 +1,10 @@
 import React from 'react';
+import { Baker } from '@madfish-solutions/quipu-ui-kit';
 import Image from 'next/image';
 import cx from 'classnames';
 
 import { prepareTokenLogo, getWhitelistedBakerName } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
-import { Baker } from '@components/svg/Baker';
 
 import s from './BakerLogo.module.sass';
 
