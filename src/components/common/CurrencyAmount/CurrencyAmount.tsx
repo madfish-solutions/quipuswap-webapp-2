@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { prettyPrice } from '@utils/helpers';
 
 import s from './CurrencyAmount.module.sass';

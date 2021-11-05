@@ -1,31 +1,41 @@
 import React, {
-  useContext, useEffect, useRef, useState, useMemo, useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
-import ReactModal from 'react-modal';
-import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy, withTypes } from 'react-final-form';
 import {
-  Button,
-  NumberInput,
+  Field,
+  FormSpy,
+  withTypes,
+} from 'react-final-form';
+import {
   Modal,
   Input,
+  Button,
   Checkbox,
+  ColorModes,
+  NumberInput,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
+import { useTranslation } from 'next-i18next';
+import ReactModal from 'react-modal';
+import cx from 'classnames';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
-  useAddCustomToken,
-  useSearchCustomTokens,
-  useSearchTokens,
   useTezos,
   useTokens,
   isTokenFa2,
   useNetwork,
+  useSearchTokens,
+  useAddCustomToken,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import { localSearchToken, isTokenEqual } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';

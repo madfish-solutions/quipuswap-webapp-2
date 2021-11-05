@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { isTouchDevice } from '@utils/helpers';
 
 import s from './LanguageSwitcher.module.sass';

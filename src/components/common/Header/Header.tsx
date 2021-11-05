@@ -5,13 +5,14 @@ import React, {
 } from 'react';
 import {
   Button,
-  ConnectWalletButton,
-  ColorModeSwitcher,
   LogoButton,
+  ColorModes,
+  ColorModeSwitcher,
+  ColorThemeContext,
+  ConnectWalletButton,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';

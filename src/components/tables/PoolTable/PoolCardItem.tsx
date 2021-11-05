@@ -1,16 +1,17 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import {
-  Button,
-  TokensLogos,
   Bage,
+  Button,
   Tooltip,
+  ColorModes,
+  TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PoolTableType } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
 

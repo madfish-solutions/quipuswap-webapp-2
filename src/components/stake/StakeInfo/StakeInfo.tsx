@@ -1,8 +1,8 @@
 import React, {
-  useContext, useState, useMemo,
+  useMemo,
+  useState,
+  useContext,
 } from 'react';
-
-import { useTranslation } from 'next-i18next';
 import {
   Tabs,
   Card,
@@ -10,12 +10,14 @@ import {
   Tooltip,
   CardCell,
   Timeleft,
+  ColorModes,
   StickyBlock,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';

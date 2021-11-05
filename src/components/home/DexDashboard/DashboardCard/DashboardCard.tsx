@@ -1,8 +1,12 @@
 import React, { useContext } from 'react';
+import {
+  Skeleton,
+  Tooltip,
+  CurrencyAmount,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
-import { Skeleton, Tooltip, CurrencyAmount } from '@madfish-solutions/quipu-ui-kit';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './DashboardCard.module.sass';
 

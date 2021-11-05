@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { STABLE_TOKEN } from '@utils/defaults';
 import { QuipuToken } from '@components/svg/QuipuToken';

@@ -1,12 +1,16 @@
 import React, {
-  useContext, useMemo,
+  useMemo,
+  useContext,
 } from 'react';
-import cx from 'classnames';
+import {
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
 import { Maybe } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { fromDecimals } from '@utils/helpers';
 
 import { DashboardCard } from './DashboardCard';

@@ -1,12 +1,16 @@
 import React, { useContext, useEffect } from 'react';
-import { ToastWrapper, Header } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Header,
+  ColorModes,
+  ToastWrapper,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import { NextSeo } from 'next-seo';
 import Script from 'next/script';
 import cx from 'classnames';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { WalletModal } from '@components/modals/WalletModal';
 import { AccountModal } from '@components/modals/AccountModal';

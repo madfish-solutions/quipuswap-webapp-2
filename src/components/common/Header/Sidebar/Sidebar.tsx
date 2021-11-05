@@ -1,9 +1,13 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { Button, ConnectWalletButton } from '@madfish-solutions/quipu-ui-kit';
+import {
+  Button,
+  ColorModes,
+  ColorThemeContext,
+  ConnectWalletButton,
+} from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 import { Madfish } from '@components/svg/Madfish';
 

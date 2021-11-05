@@ -3,12 +3,13 @@ import {
   Card,
   Button,
   Tooltip,
+  ColorModes,
   TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';

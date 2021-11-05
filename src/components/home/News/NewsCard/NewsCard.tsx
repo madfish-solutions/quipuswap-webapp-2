@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
+import {
+  Bage,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import Image from 'next/image';
 import cx from 'classnames';
-import { Bage } from '@madfish-solutions/quipu-ui-kit';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { prepareTokenLogo } from '@utils/helpers';
 import { FallbackLogo } from '@components/svg/FallbackLogo';
 

@@ -1,9 +1,17 @@
-import React, { useContext, useState, useCallback } from 'react';
-import cx from 'classnames';
+import React, {
+  useState,
+  useContext,
+  useCallback,
+} from 'react';
+import {
+  Input,
+  Tooltip,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Input, Tooltip } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { parseDecimals } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 

@@ -11,12 +11,13 @@ import {
   Card,
   Preloader,
   CardHeader,
+  ColorModes,
   CardContent,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
 import { PlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';

@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import { WhitelistedFarm } from '@utils/types';
 import { useTranslation } from 'next-i18next';
 import {
-  Button,
-  TokensLogos,
   Bage,
+  Button,
+  ColorModes,
+  TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 
 import s from './FarmCardTable.module.sass';

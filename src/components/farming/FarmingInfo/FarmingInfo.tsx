@@ -3,7 +3,6 @@ import React, {
   useState,
   useContext,
 } from 'react';
-import { useTranslation } from 'next-i18next';
 import {
   Tabs,
   Card,
@@ -11,16 +10,18 @@ import {
   Tooltip,
   CardCell,
   Timeleft,
+  ColorModes,
   StickyBlock,
   TokensLogos,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { LineChartSampleData } from '@components/charts/content';
 import { VotingReward } from '@components/svg/VotingReward';

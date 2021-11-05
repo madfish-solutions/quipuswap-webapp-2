@@ -1,9 +1,12 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
+import {
+  Card,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Card } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
 import { SliderUI } from '@components/ui/Slider';
 

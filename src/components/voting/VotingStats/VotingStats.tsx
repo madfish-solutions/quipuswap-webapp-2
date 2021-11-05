@@ -1,10 +1,22 @@
-import React, { useContext, useMemo } from 'react';
+import React, {
+  useMemo,
+  useContext,
+} from 'react';
+import {
+  FoundDex,
+  TransferParams,
+  withdrawReward,
+} from '@quipuswap/sdk';
+import {
+  Card,
+  Button,
+  Tooltip,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import { useTranslation } from 'next-i18next';
-import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
-import { Button, Tooltip, Card } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { VotingReward } from '@components/svg/VotingReward';
 

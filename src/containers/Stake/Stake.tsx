@@ -5,17 +5,18 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
 import {
   Card,
   Input,
   Switcher,
   SelectUI,
+  ColorModes,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
+import { useRouter } from 'next/router';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { StakeInfo } from '@components/stake/StakeInfo';

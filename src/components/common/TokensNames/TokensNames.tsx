@@ -1,8 +1,11 @@
 import React, { useContext } from 'react';
+import {
+  TokensLogosProps,
+  TokensLogos,
+  ColorModes,
+  ColorThemeContext,
+} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
-import { TokensLogosProps, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './TokensNames.module.sass';
 

@@ -4,12 +4,13 @@ import {
   Card,
   Button,
   Tooltip,
+  ColorModes,
   TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedFarm } from '@utils/types';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { APY } from '@components/svg/APY';

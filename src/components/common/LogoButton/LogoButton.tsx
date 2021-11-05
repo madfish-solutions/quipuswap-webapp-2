@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { ColorModes, ColorThemeContext } from '@madfish-solutions/quipu-ui-kit';
 import Link from 'next/link';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Logo } from '@components/svg/Logo';
 import { LogoSmall } from '@components/svg/LogoSmall';
 
