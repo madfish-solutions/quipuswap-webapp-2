@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  Header,
   ColorModes,
+  Background,
   ToastWrapper,
   ColorThemeContext,
 } from '@madfish-solutions/quipu-ui-kit';
@@ -11,10 +11,10 @@ import cx from 'classnames';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
+import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { WalletModal } from '@components/modals/WalletModal';
 import { AccountModal } from '@components/modals/AccountModal';
-import { Background } from '@components/svg/Background';
 
 import s from './BaseLayout.module.sass';
 

@@ -9,13 +9,13 @@ import {
   MenuClosed,
   LogoButton,
   ColorModes,
+  LanguageSwitcher,
   ColorModeSwitcher,
   ColorThemeContext,
   ConnectWalletButton,
 } from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 
 import s from './Header.module.sass';
@@ -52,6 +52,8 @@ export const Header: React.FC<HeaderProps> = ({
         <LanguageSwitcher
           direction="bottom"
           className={s.languageSwitcher}
+          locale="RU"
+          locales={['EN', 'PL', 'GE', 'IT']}
         />
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button
