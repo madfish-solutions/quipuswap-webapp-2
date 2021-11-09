@@ -28,13 +28,14 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const content: ReactNode[] = [];
   NavigationData.forEach(({
-    id, href, label, Icon, links,
+    id, href, label, Icon, links, as,
   }) => {
     if (href) {
       content.push(
         <Link
           key={id}
           href={href}
+          as={as}
         >
           <a
             className={cx(

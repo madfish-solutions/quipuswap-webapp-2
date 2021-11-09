@@ -14,6 +14,7 @@ import MoreIcon from '@icons/MoreIcon.svg';
 type NavigationDataProps = {
   id: number
   href?: string
+  as?: string
   label: React.ReactNode
   Icon: React.FC<{ className?: string, id?: string }>
   links?: {
@@ -33,18 +34,21 @@ export const NavigationData: NavigationDataProps = [
   {
     id: 1,
     href: '/swap',
+    as: '/swap/TEZ-QUIPU',
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon,
   },
   {
     id: 2,
     href: '/liquidity',
+    as: '/liquidity/add/TEZ-QUIPU',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon,
   },
   {
     id: 3,
     href: '/voting',
+    as: '/voting/vote/TEZ-QUIPU',
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon,
   },

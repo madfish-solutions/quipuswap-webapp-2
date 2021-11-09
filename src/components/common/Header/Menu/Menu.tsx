@@ -30,7 +30,7 @@ export const Menu: React.FC<MenuProps> = ({
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
-      <Navigation className={s.navigation} />
+      <Navigation className={s.navigation} iconId="tufta" />
       <footer className={s.footer}>
         <div className={s.row}>
           <QPToken />
