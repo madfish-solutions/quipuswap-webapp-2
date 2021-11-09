@@ -48,7 +48,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               modeClass[colorThemeMode],
             )}
           >
-            <Icon className={s.icon} id={iconId} />
+            {Icon && <Icon className={s.icon} id={iconId} />}
             {label}
           </a>
         </Link>,
