@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
+import { Preloader } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { CandlePlotPoint } from '@graphql';
@@ -16,7 +17,6 @@ import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
-import { Preloader } from '@components/common/Preloader';
 import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import {
