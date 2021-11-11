@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Button } from '../Button';
+import { Button } from '@quipuswap/ui-kit';
 
 import s from './ComplexInput.module.sass';
 

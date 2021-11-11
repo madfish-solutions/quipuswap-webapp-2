@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { WhitelistedFarm } from '@utils/types';
 import { useTranslation } from 'next-i18next';
-import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Bage, Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Bage } from '@components/ui/Bage';
 
 import s from './FarmCardTable.module.sass';
 

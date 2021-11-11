@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -15,7 +16,6 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
 import { TokensLogos } from '../TokensLogos';
-import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {

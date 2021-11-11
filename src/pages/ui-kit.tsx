@@ -3,14 +3,15 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'next-i18next';
 import {
+  Bage,
   Route,
   Button,
   Slippage,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
@@ -44,7 +45,6 @@ import { Tooltip } from '@components/ui/Tooltip';
 import { SelectUI } from '@components/ui/Select';
 import { Input } from '@components/ui/Input';
 import { Modal } from '@components/ui/Modal';
-import { Bage } from '@components/ui/Bage';
 import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Bage, Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -7,7 +7,6 @@ import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Bage } from '@components/ui/Bage';
 import { Card } from '@components/ui/Card';
 import { APY } from '@components/svg/APY';
 

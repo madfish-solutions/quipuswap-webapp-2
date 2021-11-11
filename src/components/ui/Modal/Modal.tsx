@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
+import { Button } from '@quipuswap/ui-kit';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PopupClose } from '@components/svg/PopupClose';
 
-import { Button } from '../Button';
 import { Card } from '../Card';
 import s from './Modal.module.sass';
 

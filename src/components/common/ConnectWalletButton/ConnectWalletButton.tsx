@@ -1,9 +1,9 @@
 import React from 'react';
+import { Button } from '@quipuswap/ui-kit';
 
 import { shortize } from '@utils/helpers';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { Button } from '@components/ui/Button';
 
 type ConnectWalletButtonProps = {
   className?: string
