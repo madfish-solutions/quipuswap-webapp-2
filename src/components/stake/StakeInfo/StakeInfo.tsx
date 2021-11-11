@@ -4,7 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, StickyBlock } from '@quipuswap/ui-kit';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
@@ -12,7 +12,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { LineChartSampleData } from '@components/charts/content';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Timeleft } from '@components/ui/Timeleft';
