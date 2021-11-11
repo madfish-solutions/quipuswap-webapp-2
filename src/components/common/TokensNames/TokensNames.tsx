@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
+import { TokensLogos, TokensLogosProps } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos, TokensLogosInterface } from '@components/ui/TokensLogos';
 
 import s from './TokensNames.module.sass';
 
 export type TokensNamesProps = {
   name: string
   className?: string
-} & TokensLogosInterface;
+} & TokensLogosProps;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -17,8 +17,10 @@ const modeClass = {
 };
 
 export const TokensNames: React.FC<TokensNamesProps> = ({
-  token1,
-  token2,
+  firstTokenIcon,
+  firstTokenSymbol,
+  secondTokenIcon,
+  secondTokenSymbol,
   name,
   className,
 }) => {
@@ -29,8 +31,10 @@ export const TokensNames: React.FC<TokensNamesProps> = ({
       className={cx(s.root, modeClass[colorThemeMode], className)}
     >
       <TokensLogos
-        token1={token1}
-        token2={token2}
+        firstTokenIcon={firstTokenIcon}
+        firstTokenSymbol={firstTokenSymbol}
+        secondTokenIcon={secondTokenIcon}
+        secondTokenSymbol={secondTokenSymbol}
       />
 
       <div className={s.name}>

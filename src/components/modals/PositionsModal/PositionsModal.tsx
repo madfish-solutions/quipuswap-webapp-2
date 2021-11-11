@@ -12,6 +12,8 @@ import {
   Button,
   Checkbox,
   NumberInput,
+  TokenCell,
+  LoadingTokenCell,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -28,10 +30,11 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { localSearchToken, isTokenEqual } from '@utils/helpers';
+import {
+  localSearchToken, isTokenEqual, prepareTokenLogo, getWhitelistedTokenSymbol,
+} from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -275,7 +278,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               if (!token) return '';
               return (
                 <TokenCell
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                   // onChange(token);
@@ -310,7 +315,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               if (!token) return '';
               return (
                 <TokenCell
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                     if (!notSelectable2) {
@@ -345,7 +352,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               return (
                 <TokenCell
                   key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                     if (searchTokens.length > 0) {

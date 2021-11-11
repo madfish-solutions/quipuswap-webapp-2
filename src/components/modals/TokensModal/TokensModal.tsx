@@ -10,7 +10,9 @@ import {
   Input,
   Modal,
   Button,
+  TokenCell,
   NumberInput,
+  LoadingTokenCell,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -26,11 +28,16 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { parseNumber, localSearchToken, isTokenEqual } from '@utils/helpers';
+import {
+  parseNumber,
+  isTokenEqual,
+  prepareTokenLogo,
+  localSearchToken,
+  getWhitelistedTokenSymbol,
+} from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -274,7 +281,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                token={token}
+                tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                tokenName={getWhitelistedTokenSymbol(token)}
+                tokenSymbol="qwe"
                 tabIndex={0}
                 onClick={() => {
                   onChange(token);

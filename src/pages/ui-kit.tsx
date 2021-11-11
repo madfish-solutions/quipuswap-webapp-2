@@ -15,12 +15,14 @@ import {
   SelectUI,
   Switcher,
   Timeleft,
+  SwapCell,
+  BakerCell,
   CurrencyAmount,
+  ChooseListCell,
   ColorModeSwitcher,
 } from '@quipuswap/ui-kit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
@@ -33,11 +35,6 @@ import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import {
-  BakerCell,
-  ChooseListCell,
-  SwapCell,
-} from '@components/ui/Modal/ModalCell';
 import {
   ComplexBaker,
   ComplexInput,
@@ -599,14 +596,10 @@ const UiKit: React.FC = () => {
             token2={{ name: 'Token' }}
           /> */}
           <BakerCell
-            baker={{
-              name: 'EVERSTAKE',
-              votes: 100002,
-              fee: 10,
-              freeSpace: new BigNumber('1,000,000,000.00'),
-              address: 'test',
-              logo: '',
-            }}
+            bakerName="EVERSTAKE"
+            bakerFee="10"
+            bakerFreeSpace="1,000,000,000.00"
+            bakerLogo=""
           />
         </Modal>
       </section>

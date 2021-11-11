@@ -4,19 +4,18 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, TokensLogos } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { TokensLogos } from '../TokensLogos';
 import s from './ComplexInput.module.sass';
 
 type PositionSelectProps = {
@@ -78,6 +77,9 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
       inputRef.current.focus();
     }
   };
+
+  const token1 = tokenPair?.token1 ?? TEZOS_TOKEN;
+  const token2 = tokenPair?.token2 ?? TEZOS_TOKEN;
 
   return (
     <>
@@ -145,8 +147,10 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               textClassName={s.item4Inner}
             >
               <TokensLogos
-                token1={tokenPair?.token1 ?? TEZOS_TOKEN}
-                token2={tokenPair?.token2 ?? TEZOS_TOKEN}
+                firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+                secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
               />
               <h6 className={cx(s.token)}>
                 {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
