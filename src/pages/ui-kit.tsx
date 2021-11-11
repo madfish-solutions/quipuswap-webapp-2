@@ -4,6 +4,7 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Tabs,
   Bage,
   Route,
   Input,
@@ -45,7 +46,6 @@ import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { Logo } from '@components/svg/Logo';

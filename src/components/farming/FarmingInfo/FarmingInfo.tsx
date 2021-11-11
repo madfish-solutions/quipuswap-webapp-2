@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import {
+  Tabs,
   Card,
   Button,
   CardCell,
@@ -21,7 +22,6 @@ import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
 import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';

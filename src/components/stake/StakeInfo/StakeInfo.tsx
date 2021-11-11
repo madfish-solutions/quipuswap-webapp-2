@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import {
   Card,
+  Tabs,
   Button,
   CardCell,
   StickyBlock,
@@ -20,7 +21,6 @@ import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Tabs } from '@components/ui/Tabs';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
 import { Back } from '@components/svg/Back';

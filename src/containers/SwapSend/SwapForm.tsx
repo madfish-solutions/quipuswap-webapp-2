@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Tabs,
   Card,
   Button,
   Slippage,
@@ -49,7 +50,6 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';

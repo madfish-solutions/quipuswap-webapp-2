@@ -12,7 +12,7 @@ import {
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import { Button, Card } from '@quipuswap/ui-kit';
+import { Button, Card, Tabs } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 
@@ -46,7 +46,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
-import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
