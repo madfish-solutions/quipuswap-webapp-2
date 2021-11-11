@@ -11,6 +11,7 @@ import {
   SelectUI,
   SliderUI,
   CurrencyAmount,
+  Switcher,
 } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
@@ -21,7 +22,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
-import { Switcher } from '@components/ui/Switcher';
 import Search from '@icons/Search.svg';
 
 import s from './Stake.module.sass';
