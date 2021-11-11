@@ -3,14 +3,18 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Button, ConnectWalletButton, LanguageSwitcher } from '@quipuswap/ui-kit';
+import {
+  Button,
+  LanguageSwitcher,
+  ColorModeSwitcher,
+  ConnectWalletButton,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
 import { LogoButton } from '../LogoButton';
 
 import s from './Header.module.sass';
