@@ -13,6 +13,7 @@ import {
   Slippage,
   SelectUI,
   Switcher,
+  Timeleft,
   CurrencyAmount,
   ColorModeSwitcher,
 } from '@quipuswap/ui-kit';
@@ -44,7 +45,6 @@ import {
 import { TokensModal } from '@components/modals/TokensModal';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
-import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';

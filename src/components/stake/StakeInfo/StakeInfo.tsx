@@ -8,6 +8,7 @@ import {
   Tabs,
   Button,
   CardCell,
+  Timeleft,
   StickyBlock,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
@@ -19,7 +20,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 import { Transactions } from '@components/svg/Transactions';
