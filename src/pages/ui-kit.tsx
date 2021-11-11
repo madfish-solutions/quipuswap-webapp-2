@@ -6,11 +6,12 @@ import React, {
 import {
   Bage,
   Route,
+  Input,
+  Modal,
   Button,
   Slippage,
   CurrencyAmount,
   ColorModeSwitcher,
-  Input,
 } from '@quipuswap/ui-kit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -44,7 +45,6 @@ import { Timeleft } from '@components/ui/Timeleft';
 import { Switcher } from '@components/ui/Switcher';
 import { Tooltip } from '@components/ui/Tooltip';
 import { SelectUI } from '@components/ui/Select';
-import { Modal } from '@components/ui/Modal';
 import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';

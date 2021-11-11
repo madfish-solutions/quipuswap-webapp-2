@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import { Input } from '@quipuswap/ui-kit';
+import { Input, Modal } from '@quipuswap/ui-kit';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
@@ -15,7 +15,6 @@ import { WhitelistedBaker } from '@utils/types';
 import { useBakers } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
-import { Modal } from '@components/ui/Modal';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 

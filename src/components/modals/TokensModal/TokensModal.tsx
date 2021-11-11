@@ -8,7 +8,7 @@ import React, {
 } from 'react';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import { Button, Input } from '@quipuswap/ui-kit';
+import { Button, Input, Modal } from '@quipuswap/ui-kit';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
@@ -27,7 +27,6 @@ import { validateMinMax } from '@utils/validators';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { NumberInput } from '@components/ui/NumberInput';
-import { Modal } from '@components/ui/Modal';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
