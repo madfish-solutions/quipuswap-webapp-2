@@ -12,6 +12,7 @@ import { withApollo } from '@client';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 
+import '@quipuswap/ui-kit/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
 function MyApp({ Component, pageProps }: AppProps) {

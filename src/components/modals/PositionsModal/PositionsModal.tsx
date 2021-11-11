@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
@@ -27,7 +28,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
 import { NumberInput } from '@components/ui/NumberInput';
 import { Checkbox } from '@components/ui/Checkbox';
-import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';
 import { Input } from '@components/ui/Input';
 import { Plus } from '@components/svg/Plus';

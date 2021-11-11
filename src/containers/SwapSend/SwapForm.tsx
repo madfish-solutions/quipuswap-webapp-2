@@ -5,8 +5,9 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Field, FormSpy } from 'react-final-form';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
+import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -45,7 +46,6 @@ import { SwapButton } from '@components/common/SwapButton';
 import { Slippage } from '@components/common/Slippage';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';

@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
@@ -39,7 +40,6 @@ import { Timeleft } from '@components/ui/Timeleft';
 import { Switcher } from '@components/ui/Switcher';
 import { Tooltip } from '@components/ui/Tooltip';
 import { SelectUI } from '@components/ui/Select';
-import { Button } from '@components/ui/Button';
 import { Input } from '@components/ui/Input';
 import { Modal } from '@components/ui/Modal';
 import { Bage } from '@components/ui/Bage';

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
 import { VotingReward } from '@components/svg/VotingReward';
 

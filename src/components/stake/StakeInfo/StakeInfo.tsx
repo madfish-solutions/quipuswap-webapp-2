@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
@@ -16,7 +17,6 @@ import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { ExternalLink } from '@components/svg/ExternalLink';

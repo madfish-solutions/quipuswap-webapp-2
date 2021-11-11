@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
 import { VotingReward } from '@components/svg/VotingReward';
 

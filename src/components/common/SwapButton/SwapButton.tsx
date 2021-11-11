@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { Button } from '@components/ui/Button';
 import { SwapIcon } from '@components/svg/Swap';
 
 import s from './SwapButton.module.sass';

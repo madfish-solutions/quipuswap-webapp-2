@@ -1,13 +1,13 @@
 import React, { useContext } from 'react';
 import { WhitelistedFarm } from '@utils/types';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Button } from '@components/ui/Button';
 import { Bage } from '@components/ui/Bage';
 
 import s from './FarmCardTable.module.sass';
@@ -58,7 +58,6 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
-
         <Button
           theme="secondary"
           className={s.button}

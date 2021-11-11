@@ -6,13 +6,13 @@ import React, {
   useCallback,
 } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { Button } from '@components/ui/Button';
 import { Modal } from '@components/ui/Modal';
 import { CheckMark } from '@components/svg/CheckMark';
 import { Copy } from '@components/svg/Copy';

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Button } from '@components/ui/Button';
 import { Tabs } from '@components/ui/Tabs';
 import { Refresh } from '@components/svg/Refresh';
 

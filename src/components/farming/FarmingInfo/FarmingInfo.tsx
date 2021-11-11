@@ -4,6 +4,7 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
+import { Button } from '@quipuswap/ui-kit';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
@@ -17,7 +18,6 @@ import { TokensLogos } from '@components/ui/TokensLogos';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
 import { Card } from '@components/ui/Card';
 import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
