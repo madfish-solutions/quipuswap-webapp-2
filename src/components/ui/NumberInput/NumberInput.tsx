@@ -1,23 +1,25 @@
 import React, { forwardRef } from 'react';
-import { InputProps } from 'react-select';
 import cx from 'classnames';
 
 import PlusIcon from '@icons/TopArrow.svg';
 import MinusIcon from '@icons/BotArrow.svg';
 
-import { Input } from '../Input';
+import { Input, InputProps } from '../Input';
 import s from './NumberInput.module.sass';
-
-type NumberInputProps = {
-  theme?: keyof typeof themeClass
-  onIncrementClick?: () => void
-  onDecrementClick?: () => void
-} & InputProps;
 
 const themeClass = {
   small: s.small,
   medium: s.medium,
 };
+
+type NumberInputProps = {
+  theme?: keyof typeof themeClass
+  onIncrementClick?: () => void
+  onDecrementClick?: () => void
+  placeholder?: string
+  labelClassName?: string
+  disabled?: boolean
+} & InputProps;
 
 export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(({
   theme = 'small',
