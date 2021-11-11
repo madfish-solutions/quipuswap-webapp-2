@@ -11,8 +11,10 @@ import {
   Modal,
   Button,
   TokenCell,
+  ColorModes,
   NumberInput,
   LoadingTokenCell,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -37,7 +39,6 @@ import {
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Pen } from '@components/svg/Pen';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';

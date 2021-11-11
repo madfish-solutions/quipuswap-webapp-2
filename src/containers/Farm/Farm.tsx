@@ -11,14 +11,15 @@ import {
   SelectUI,
   SliderUI,
   Switcher,
+  ColorModes,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingCard } from '@components/farming/FarmingCard';

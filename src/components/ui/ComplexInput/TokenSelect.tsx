@@ -4,8 +4,13 @@ import React, {
   useState,
   useContext,
 } from 'react';
+import {
+  Button,
+  ColorModes,
+  TokensLogos,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -13,7 +18,6 @@ import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils
 import { WhitelistedToken } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useAccountPkh } from '@utils/dapp';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';

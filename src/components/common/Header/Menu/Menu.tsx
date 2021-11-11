@@ -4,11 +4,12 @@ import {
   NetworkSelect,
   LanguageSwitcher,
   ColorModeSwitcher,
+  ColorModes,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';

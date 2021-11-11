@@ -8,7 +8,9 @@ import {
   Modal,
   Input,
   BakerCell,
+  ColorModes,
   LoadingBakerCell,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -18,7 +20,6 @@ import cx from 'classnames';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { useBakers } from '@utils/dapp';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 

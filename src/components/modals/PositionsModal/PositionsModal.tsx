@@ -11,9 +11,11 @@ import {
   Modal,
   Button,
   Checkbox,
-  NumberInput,
   TokenCell,
+  ColorModes,
+  NumberInput,
   LoadingTokenCell,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
@@ -34,7 +36,6 @@ import {
   localSearchToken, isTokenEqual, prepareTokenLogo, getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';

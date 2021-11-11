@@ -6,13 +6,14 @@ import React, {
 import {
   Button,
   LogoButton,
+  ColorModes,
   LanguageSwitcher,
+  ColorThemeContext,
   ColorModeSwitcher,
   ConnectWalletButton,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';

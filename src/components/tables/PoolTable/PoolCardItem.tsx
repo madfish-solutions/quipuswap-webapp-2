@@ -3,8 +3,10 @@ import {
   Bage,
   Button,
   Tooltip,
+  ColorModes,
   TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
@@ -12,7 +14,6 @@ import cx from 'classnames';
 
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './PoolCardTable.module.sass';
 

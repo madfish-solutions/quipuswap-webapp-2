@@ -10,13 +10,14 @@ import {
   Tooltip,
   CardCell,
   Timeleft,
+  ColorModes,
   StickyBlock,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedStake } from '@utils/types';
 import { LineChartSampleData } from '@components/charts/content';

@@ -8,8 +8,10 @@ import {
   Table,
   Button,
   Tooltip,
-  CurrencyAmount,
+  ColorModes,
   TokensLogos,
+  CurrencyAmount,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
@@ -18,7 +20,6 @@ import cx from 'classnames';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 // import { Bage } from '@components/ui/Bage';
 
 import s from './PoolTable.module.sass';

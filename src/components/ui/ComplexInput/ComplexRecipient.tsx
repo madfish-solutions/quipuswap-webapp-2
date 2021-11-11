@@ -1,10 +1,9 @@
 import React, { useContext, useRef } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 

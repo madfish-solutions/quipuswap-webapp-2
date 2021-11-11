@@ -1,9 +1,8 @@
 import React, { ReactNode, useContext, useState } from 'react';
-import Link from 'next/link';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import cx from 'classnames';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import { NavigationData } from './content';
 import s from './Navigation.module.sass';

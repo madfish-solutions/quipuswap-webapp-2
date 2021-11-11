@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardContent,
   PairChartInfo,
+  ColorModes,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
@@ -25,7 +27,6 @@ import {
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
 
 import {

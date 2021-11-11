@@ -1,8 +1,12 @@
 import React, { useContext, useRef } from 'react';
-import { BakerLogo, Button } from '@quipuswap/ui-kit';
+import {
+  Button,
+  BakerLogo,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';

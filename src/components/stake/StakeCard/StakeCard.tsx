@@ -3,15 +3,16 @@ import {
   Card,
   Button,
   Tooltip,
-  CurrencyAmount,
+  ColorModes,
   TokensLogos,
+  CurrencyAmount,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { APY } from '@components/svg/APY';
 import { ArrowDown } from '@components/svg/ArrowDown';
 

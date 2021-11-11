@@ -2,14 +2,15 @@ import React, { useContext } from 'react';
 import {
   Bage,
   Button,
+  ColorModes,
   TokensLogos,
   CurrencyAmount,
+  ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './FarmTable.module.sass';
 

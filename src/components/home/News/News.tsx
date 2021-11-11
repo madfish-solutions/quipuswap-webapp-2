@@ -1,9 +1,13 @@
 import React, { useContext } from 'react';
+import {
+  Card,
+  SliderUI,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Card, SliderUI } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Section } from '@components/home/Section';
 
 import { NewsCard } from './NewsCard';
