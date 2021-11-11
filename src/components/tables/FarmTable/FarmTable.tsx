@@ -4,12 +4,11 @@ import React, {
   useEffect,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Table } from '@components/ui/Table';
@@ -81,8 +80,12 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       id: 'staked',
       accessor: () => (
         <>
-          $
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </>
       ),
     },
@@ -95,7 +98,12 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       ),
       id: 'apr',
       accessor: () => (
-        <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
+        <CurrencyAmount
+          amount="888888888888888.00"
+          currency="%"
+          isLeftCurrency
+          className={s.cardAmount}
+        />
       ),
     },
     {
@@ -121,23 +129,21 @@ export const FarmTable: React.FC<FarmTableProps> = ({
   ], [t]);
 
   return (
-    <>
-      <Table
-        theme="farms"
-        className={className}
-        tableClassName={s.table}
-        data={data ?? []}
-        loading={loading}
-        columns={columns}
-        trClassName={s.tr}
-        thClassName={s.th}
-        tdClassName={s.td}
-        pageCount={pageCount}
-        pageSize={pageSize ?? 10}
-        setOffset={setOffset}
-        isLinked
-        disabled
-      />
-    </>
+    <Table
+      theme="farms"
+      className={className}
+      tableClassName={s.table}
+      data={data ?? []}
+      loading={loading}
+      columns={columns}
+      trClassName={s.tr}
+      thClassName={s.th}
+      tdClassName={s.td}
+      pageCount={pageCount}
+      pageSize={pageSize ?? 10}
+      setOffset={setOffset}
+      isLinked
+      disabled
+    />
   );
 };

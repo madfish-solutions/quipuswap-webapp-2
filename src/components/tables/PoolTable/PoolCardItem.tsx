@@ -1,13 +1,12 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { fromDecimals } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Bage } from '@components/ui/Bage';
@@ -49,13 +48,14 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
           <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
           <CurrencyAmount
-            className={s.cardAmount}
             amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
               .multipliedBy(new BigNumber(pool.xtzUsdQuote))
               .integerValue()
               .toString()}
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
           />
         </div>
       </div>

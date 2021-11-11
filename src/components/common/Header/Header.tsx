@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, ConnectWalletButton } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -12,7 +12,6 @@ import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { ConnectWalletButton } from '../ConnectWalletButton';
 import { LogoButton } from '../LogoButton';
 
 import s from './Header.module.sass';

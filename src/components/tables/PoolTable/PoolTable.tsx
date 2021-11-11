@@ -5,7 +5,7 @@ import React, {
   useContext,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -14,7 +14,6 @@ import { fromDecimals } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 // import { Bage } from '@components/ui/Bage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Table } from '@components/ui/Table';
@@ -100,15 +99,14 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'tvl',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <div className={s.links}>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
-            className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
           />
         </div>
       ),
@@ -123,15 +121,14 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'volume24h',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
-            className={s.cardAmount}
-            amount={fromDecimals(new BigNumber(dataInside.volume24h), 6)
+            amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
           />
         </>
       ),

@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
+import { CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Skeleton } from '@components/ui/Skeleton';
 import { Tooltip } from '@components/ui/Tooltip';
 
@@ -45,9 +45,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
         <CurrencyAmount
           amount={volume}
           currency={currency}
-          isRightCurrency={currency === '$'}
-          decimals={currency === '$' ? 3 : undefined}
-          length={currency === '$' ? 6 : undefined}
+          isLeftCurrency={currency === '$'}
           labelSize={size}
         />
       )}

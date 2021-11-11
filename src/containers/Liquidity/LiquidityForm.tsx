@@ -23,7 +23,7 @@ import {
 } from '@quipuswap/sdk';
 import { Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import router from 'next/router';
 import cx from 'classnames';
@@ -61,7 +61,6 @@ import {
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Slippage } from '@components/common/Slippage';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';

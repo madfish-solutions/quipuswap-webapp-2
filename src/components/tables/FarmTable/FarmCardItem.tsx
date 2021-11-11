@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import { WhitelistedFarm } from '@utils/types';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
 
@@ -46,15 +45,23 @@ export const FarmCardItem: React.FC<FarmCardItemProps> = ({
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>{t('home|Total Staked')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>{t('home|APR')}</div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
-          <CurrencyAmount amount="888888888888888.00" className={s.cardAmount} />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>

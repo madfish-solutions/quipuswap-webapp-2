@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
@@ -10,7 +10,6 @@ import {
 } from '@utils/helpers';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Route } from '@components/common/Route';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Tooltip } from '@components/ui/Tooltip';

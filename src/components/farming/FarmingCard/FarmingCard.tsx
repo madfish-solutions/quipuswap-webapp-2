@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Bage } from '@components/ui/Bage';
@@ -91,9 +90,11 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={totalValueLocked} />
+            <CurrencyAmount
+              amount={totalValueLocked}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -123,17 +124,21 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={deposit} />
+            <CurrencyAmount
+              amount={deposit}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={earned} />
+            <CurrencyAmount
+              amount={earned}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
@@ -159,7 +164,6 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
           </div>
         </div>
         <Button href={`/farm/${id}`} className={s.button}>Select</Button>
-
       </div>
     </Card>
   );

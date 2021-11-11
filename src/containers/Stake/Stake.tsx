@@ -5,13 +5,13 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
+import { CurrencyAmount } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';

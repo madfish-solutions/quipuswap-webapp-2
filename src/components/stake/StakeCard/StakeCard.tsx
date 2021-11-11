@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
@@ -100,9 +99,11 @@ export const StakeCard: React.FC<StakeCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={totalValueLocked} />
+            <CurrencyAmount
+              amount={totalValueLocked}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={s.detailsBlock}>
@@ -126,25 +127,27 @@ export const StakeCard: React.FC<StakeCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
             <CurrencyAmount amount={balance} />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={deposit} />
+            <CurrencyAmount
+              amount={deposit}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            <span className={s.tvl}>$</span>
-            {' '}
-            <CurrencyAmount amount={earned} />
+            <CurrencyAmount
+              amount={earned}
+              currency="$"
+              isLeftCurrency
+            />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>

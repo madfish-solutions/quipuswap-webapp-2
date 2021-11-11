@@ -1,11 +1,10 @@
 import React, { useContext } from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Bage } from '@components/ui/Bage';
 
@@ -48,11 +47,20 @@ export const FarmItem: React.FC<FarmItemProps> = ({
           {isSponsored && (<Bage className={s.bage} text="Sponsored" />)}
         </div>
         <div className={s.cardCellItem}>
-          $
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </div>
         <div className={s.cardCellItem}>
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="%"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </div>
         <div className={cx(s.links, s.cardCellItem)}>
           <Button

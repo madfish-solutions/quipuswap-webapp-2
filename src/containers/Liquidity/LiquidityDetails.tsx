@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
@@ -10,7 +10,6 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { CardCell } from '@components/ui/Card/CardCell';
 import { Tooltip } from '@components/ui/Tooltip';
 import { Card } from '@components/ui/Card';
