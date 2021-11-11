@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Button, Card, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -8,7 +8,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card } from '@components/ui/Card';
 import { APY } from '@components/svg/APY';
 import { ArrowDown } from '@components/svg/ArrowDown';
 

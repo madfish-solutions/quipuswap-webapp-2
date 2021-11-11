@@ -1,6 +1,11 @@
 import React, { useMemo } from 'react';
+import {
+  Card,
+  Button,
+  CardCell,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
 import cx from 'classnames';
 
@@ -12,9 +17,7 @@ import {
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
-import { CardCell } from '@components/ui/Card/CardCell';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Card } from '@components/ui/Card';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

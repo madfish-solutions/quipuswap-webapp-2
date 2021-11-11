@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import { Button, Card } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Card } from '@components/ui/Card';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './FarmingStats.module.sass';
