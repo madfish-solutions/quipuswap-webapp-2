@@ -1,5 +1,10 @@
 import React, { useContext } from 'react';
-import { Button, Card, CurrencyAmount } from '@quipuswap/ui-kit';
+import {
+  Card,
+  Button,
+  Tooltip,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -7,7 +12,6 @@ import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
 import { APY } from '@components/svg/APY';
 import { ArrowDown } from '@components/svg/ArrowDown';
 

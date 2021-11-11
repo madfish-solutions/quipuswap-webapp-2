@@ -1,6 +1,11 @@
 import React, { useContext } from 'react';
+import {
+  Bage,
+  Button,
+  Tooltip,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Bage, Button, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -8,7 +13,6 @@ import { fromDecimals } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
 
 import s from './PoolCardTable.module.sass';
 

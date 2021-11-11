@@ -25,8 +25,9 @@ import {
   Tabs,
   Card,
   Button,
-  Slippage,
+  Tooltip,
   Switcher,
+  Slippage,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -71,7 +72,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Tooltip } from '@components/ui/Tooltip';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';

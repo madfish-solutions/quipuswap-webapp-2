@@ -10,6 +10,7 @@ import {
   CardCell,
   Timeleft,
   StickyBlock,
+  Tooltip,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
@@ -21,7 +22,6 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
 import { LineChartSampleData } from '@components/charts/content';
 import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';

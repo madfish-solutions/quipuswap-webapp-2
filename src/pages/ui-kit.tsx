@@ -10,6 +10,7 @@ import {
   Input,
   Modal,
   Button,
+  Tooltip,
   Slippage,
   SelectUI,
   Switcher,
@@ -45,7 +46,6 @@ import {
 import { TokensModal } from '@components/modals/TokensModal';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
-import { Tooltip } from '@components/ui/Tooltip';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { Logo } from '@components/svg/Logo';

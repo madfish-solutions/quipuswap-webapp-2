@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Card,
   Button,
+  Tooltip,
   CardCell,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
@@ -17,7 +18,6 @@ import {
 import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
-import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

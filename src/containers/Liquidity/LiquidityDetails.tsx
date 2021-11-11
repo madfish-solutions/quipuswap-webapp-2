@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import {
   Card,
   Button,
+  Tooltip,
   CardCell,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
@@ -15,7 +16,6 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Tooltip } from '@components/ui/Tooltip';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
