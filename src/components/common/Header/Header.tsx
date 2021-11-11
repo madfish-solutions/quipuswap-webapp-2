@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import {
   Button,
+  LogoButton,
   LanguageSwitcher,
   ColorModeSwitcher,
   ConnectWalletButton,
@@ -15,7 +16,6 @@ import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
-import { LogoButton } from '../LogoButton';
 
 import s from './Header.module.sass';
 
