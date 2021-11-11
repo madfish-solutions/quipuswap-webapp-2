@@ -4,14 +4,13 @@ import React, {
   useEffect,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Button, CurrencyAmount, Table } from '@quipuswap/ui-kit';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
 import { TokensLogos } from '@components/ui/TokensLogos';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Table } from '@components/ui/Table';
 
 import s from './FarmTable.module.sass';
 
