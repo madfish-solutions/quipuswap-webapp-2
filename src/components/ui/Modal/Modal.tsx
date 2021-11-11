@@ -51,7 +51,7 @@ export const Modal: React.FC<ModalProps> = ({
       className={cx(s.root, className)}
       appElement={
         typeof window !== 'undefined'
-          ? document.querySelector('#__next')!
+          ? document.querySelector<HTMLElement>('#__next')!
           : undefined
       }
       isOpen={isOpen}
