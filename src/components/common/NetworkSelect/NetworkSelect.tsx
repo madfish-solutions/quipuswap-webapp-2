@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import { Props as SelectProps } from 'react-select/src/Select';
-import { SelectUI } from '@madfish-solutions/quipu-ui-kit';
 
 import { ALL_NETWORKS } from '@utils/defaults';
 import { useChangeNetwork, useNetwork } from '@utils/dapp';
+import { SelectUI } from '@components/ui/Select';
 
 type NetworkSelectProps = {
   className?: string

@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PopupClose } from '@components/svg/PopupClose';
 
+import { Button } from '../Button';
+import { Card } from '../Card';
 import s from './Modal.module.sass';
 
 type ModalProps = {

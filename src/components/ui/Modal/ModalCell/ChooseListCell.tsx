@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { Switcher } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Switcher } from '@components/ui/Switcher';
 import { QuipuToken } from '@components/svg/QuipuToken';
 
 import s from './ModalCell.module.sass';

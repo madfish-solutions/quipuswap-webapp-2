@@ -1,6 +1,5 @@
 import React, { useContext, useRef } from 'react';
 import cx from 'classnames';
-import { Button, BakerLogo } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
@@ -8,6 +7,8 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
 import { Shevron } from '@components/svg/Shevron';
 
+import { BakerLogo } from '../BakerLogo';
+import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {

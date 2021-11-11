@@ -1,17 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import { usePagination, useSortBy, useTable } from 'react-table';
 import { useTranslation } from 'next-i18next';
-import {
-  Button,
-  TFooter,
-  Skeleton,
-  Preloader,
-} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { getUniqueKey } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Preloader } from '@components/common/Preloader';
 
+import { Skeleton } from '../Skeleton';
+import { TFooter } from '../TFooter';
+import { Button } from '../Button';
 import s from './Table.module.sass';
 
 type TablePropsT = {
@@ -122,68 +120,63 @@ export const Table: React.FC<TablePropsT> = ({
           <div className={s.innerWrapper}>
             <table {...getTableProps()} className={cx(s.table, tableClassName)}>
               <thead>
-                {
-              headerGroups.map((headerGroup:any) => (
-                <tr className={cx(s.row)} key={getUniqueKey()}>
-                  {headerGroup.headers.map((column:any) => {
-                    const { id } = column;
+                {headerGroups.map((headerGroup:any) => (
+                  <tr className={cx(s.row)} key={getUniqueKey()}>
+                    {headerGroup.headers.map((column:any) => {
+                      const { id } = column;
 
-                    if (
-                      fieldsToSorting
-                          && fieldsToSorting.length
-                          && fieldsToSorting.includes(id)
-                    ) {
+                      if (
+                        fieldsToSorting
+                        && fieldsToSorting.length
+                        && fieldsToSorting.includes(id)
+                      ) {
+                        return (
+                          <th
+                            {...column.getHeaderProps(column.getSortByToggleProps())}
+                            key={getUniqueKey()}
+                            className={cx(s.cell)}
+                          >
+                            <Button
+                              className={cx(s.sortingButton)}
+                              theme="quaternary"
+                            >
+                              {column.render('Header')}
+                            </Button>
+                          </th>
+                        );
+                      }
+
                       return (
                         <th
-                          {...column.getHeaderProps(column.getSortByToggleProps())}
                           key={getUniqueKey()}
                           className={cx(s.cell)}
                         >
-                          <Button
-                            className={cx(s.sortingButton)}
-                            theme="quaternary"
-                          >
-                            {column.render('Header')}
-                          </Button>
+                          {column.render('Header')}
                         </th>
                       );
-                    }
-
-                    return (
-                      <th
-                        key={getUniqueKey()}
-                        className={cx(s.cell)}
-                      >
-                        {column.render('Header')}
-                      </th>
-                    );
-                  })}
-                </tr>
-              ))
-            }
+                    })}
+                  </tr>
+                ))}
               </thead>
 
               <tbody {...getTableBodyProps()}>
-                {
-                    page.map((row:any) => {
-                      prepareRow(row);
-                      return (
-                        <tr {...row.getRowProps()} key={getUniqueKey()} className={cx(s.row)}>
-                          {
-                              row.cells.map((cell:any) => (
-                                <td
-                                  {...cell.getCellProps()}
-                                  key={getUniqueKey()}
-                                  className={cx(s.cell)}
-                                >
-                                  {cell.render('Cell')}
-                                </td>
-                              ))
-                            }
-                        </tr>
-                      );
-                    })
-                  }
+                {page.map((row:any) => {
+                  prepareRow(row);
+
+                  return (
+                    <tr {...row.getRowProps()} key={getUniqueKey()} className={cx(s.row)}>
+                      {row.cells.map((cell:any) => (
+                        <td
+                          {...cell.getCellProps()}
+                          key={getUniqueKey()}
+                          className={cx(s.cell)}
+                        >
+                          {cell.render('Cell')}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
             <div className={cx(
@@ -210,7 +203,6 @@ export const Table: React.FC<TablePropsT> = ({
               <Preloader className={s.preloader} />
             </div>
           ) : (
-
             page.map((row:any) => {
               prepareRow(row);
               return renderMobile && renderMobile(row.original);
@@ -218,10 +210,10 @@ export const Table: React.FC<TablePropsT> = ({
           )}
         </div>
         {disabled && (
-        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
-          <div className={s.disabledBg} />
-          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
-        </div>
+          <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+            <div className={s.disabledBg} />
+            <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+          </div>
         )}
       </div>
       {!disabled && (

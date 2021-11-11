@@ -1,8 +1,8 @@
 import React, {
-  useEffect,
-  useMemo,
   useRef,
+  useMemo,
   useState,
+  useEffect,
   useCallback,
 } from 'react';
 import { useTranslation } from 'next-i18next';
@@ -23,27 +23,16 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
-import {
-  Tabs,
-  Card,
-  Button,
-  Tooltip,
-  Slippage,
-  Switcher,
-  CurrencyAmount,
-} from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
 import router from 'next/router';
 import cx from 'classnames';
 
 import {
-  useAccountPkh,
-  useNetwork,
-  useOnBlock,
   useTezos,
+  useOnBlock,
+  useNetwork,
+  useAccountPkh,
 } from '@utils/dapp';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   PoolShare,
   TokenDataMap,
@@ -53,10 +42,10 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 import {
-  validateMinMaxNonStrict,
-  composeValidators,
-  validateBalance,
   validateMinMax,
+  validateBalance,
+  composeValidators,
+  validateMinMaxNonStrict,
 } from '@utils/validators';
 import {
   isDexEqual,
@@ -69,17 +58,25 @@ import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Slippage } from '@components/common/Slippage';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
+import { Switcher } from '@components/ui/Switcher';
+import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
-import s from './Liquidity.module.sass';
-
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
+import s from './Liquidity.module.sass';
 
 const TabsContent = [
   {

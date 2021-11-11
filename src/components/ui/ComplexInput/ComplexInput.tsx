@@ -1,7 +1,11 @@
-import React, { useContext, useMemo, useRef } from 'react';
-import cx from 'classnames';
+import React, {
+  useRef,
+  useMemo,
+  useContext,
+} from 'react';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -10,7 +14,8 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import BigNumber from 'bignumber.js';
+import { TokensLogos } from '../TokensLogos';
+import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {

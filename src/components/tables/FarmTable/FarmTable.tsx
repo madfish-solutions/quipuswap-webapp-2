@@ -1,18 +1,18 @@
 import React, {
-  useState, useMemo, useEffect,
+  useMemo,
+  useState,
+  useEffect,
 } from 'react';
 import { useTranslation } from 'next-i18next';
-import {
-  Button,
-  TokensLogos,
-  Table,
-  Tooltip,
-  CurrencyAmount,
-} from '@madfish-solutions/quipu-ui-kit';
 
-import { WhitelistedFarm } from '@utils/types';
-import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { Tooltip } from '@components/ui/Tooltip';
+import { Button } from '@components/ui/Button';
+import { Table } from '@components/ui/Table';
 
 import s from './FarmTable.module.sass';
 

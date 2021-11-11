@@ -1,17 +1,21 @@
 import React, {
-  useCallback, useContext, useRef, useState,
+  useRef,
+  useState,
   useEffect,
+  useContext,
+  useCallback,
 } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { Button, Modal } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
-import { shortize } from '@utils/helpers';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
+import { shortize } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { Copy } from '@components/svg/Copy';
+import { Button } from '@components/ui/Button';
+import { Modal } from '@components/ui/Modal';
 import { CheckMark } from '@components/svg/CheckMark';
+import { Copy } from '@components/svg/Copy';
 
 import s from './AccountModal.module.sass';
 

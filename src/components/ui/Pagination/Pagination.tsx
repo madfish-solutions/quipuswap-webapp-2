@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
 
+import { getUniqueKey } from '@utils/helpers';
 import { Back } from '@components/svg/Back';
 import DisabledBack from '@icons/DisabledBack.svg';
 
-import { getUniqueKey } from '@utils/helpers';
+import { Button } from '../Button';
 import s from './Pagination.module.sass';
 
 type PaginationProps = {

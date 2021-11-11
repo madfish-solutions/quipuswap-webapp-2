@@ -7,19 +7,9 @@ import React, {
 } from 'react';
 import { Field, FormSpy } from 'react-final-form';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
-import {
-  Tabs,
-  Card,
-  Button,
-  Slippage,
-  SwapButton,
-  CurrencyAmount,
-} from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import useUpdateToast from '@hooks/useUpdateToast';
 import {
   QSMainNet,
   SwapFormValues,
@@ -48,11 +38,20 @@ import {
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { SwapButton } from '@components/common/SwapButton';
+import { Slippage } from '@components/common/Slippage';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
+
 import { SwapDetails } from './SwapDetails';
 import { getDex } from './swapHelpers';
 

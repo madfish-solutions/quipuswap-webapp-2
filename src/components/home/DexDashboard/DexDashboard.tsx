@@ -1,17 +1,17 @@
 import React, {
   useState, useEffect,
 } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
-import { Card } from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
 import { useGetHomeOverviewQuery } from '@graphql';
-import { getStorageInfo } from '@utils/dapp';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
+import { getStorageInfo } from '@utils/dapp';
 import { Section } from '@components/home/Section';
 import { SliderUI } from '@components/ui/Slider';
+import { Card } from '@components/ui/Card';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';

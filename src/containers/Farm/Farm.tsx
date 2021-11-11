@@ -6,23 +6,21 @@ import React, {
   useCallback,
 } from 'react';
 import { useRouter } from 'next/router';
-import {
-  Card,
-  Input,
-  Switcher,
-  SelectUI,
-  CurrencyAmount,
-} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { SliderUI } from '@components/ui/Slider';
-import { FarmingInfo } from '@components/farming/FarmingInfo';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { FarmingStats } from '@components/farming/FarmingStats';
+import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
+import { Switcher } from '@components/ui/Switcher';
+import { SliderUI } from '@components/ui/Slider';
+import { SelectUI } from '@components/ui/Select';
+import { Input } from '@components/ui/Input';
+import { Card } from '@components/ui/Card';
 import Search from '@icons/Search.svg';
 
 import s from './Farm.module.sass';

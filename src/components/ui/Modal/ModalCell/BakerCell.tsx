@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
-import { TokensLogos, Tooltip } from '@madfish-solutions/quipu-ui-kit';
 
 import { getWhitelistedBakerName, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker, WhitelistedToken } from '@utils/types';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TokensLogos } from '@components/ui/TokensLogos';
+import { Tooltip } from '@components/ui/Tooltip';
 
 import s from './ModalCell.module.sass';
 

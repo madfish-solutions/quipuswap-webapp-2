@@ -7,21 +7,17 @@ import React, {
 } from 'react';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-import {
-  Card,
-  Preloader,
-  CardHeader,
-  CardContent,
-} from '@madfish-solutions/quipu-ui-kit';
 import cx from 'classnames';
 
 import { CandlePlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { usePrevious } from '@hooks/usePrevious';
-import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
+import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { usePrevious } from '@hooks/usePrevious';
 import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
+import { Preloader } from '@components/common/Preloader';
+import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import {
   CandleGraphOptions,

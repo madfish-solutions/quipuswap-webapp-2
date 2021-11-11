@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { Button, Card } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './FarmingStats.module.sass';

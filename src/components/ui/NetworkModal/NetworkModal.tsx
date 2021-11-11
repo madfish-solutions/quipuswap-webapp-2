@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
-import { Button, Modal, Input } from '@madfish-solutions/quipu-ui-kit';
+import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
+import { Button } from '../Button';
+import { Input } from '../Input';
+import { Modal } from '../Modal';
 import s from './NetworkModal.module.sass';
 
 const modeClass = {

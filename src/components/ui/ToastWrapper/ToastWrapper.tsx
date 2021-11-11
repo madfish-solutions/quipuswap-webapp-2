@@ -1,11 +1,10 @@
 import React, { ReactNode, useContext } from 'react';
-import cx from 'classnames';
-import { Button, Loader } from '@madfish-solutions/quipu-ui-kit';
 import {
+  TypeOptions,
   ToastContainer,
   ToastContentProps,
-  TypeOptions,
 } from 'react-toastify';
+import cx from 'classnames';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -13,6 +12,8 @@ import { ToastClose } from '@components/svg/ToastClose';
 import ToastSuccess from '@icons/ToastSuccess.svg';
 import ToastError from '@icons/ToastError.svg';
 
+import { Button } from '../Button';
+import { Loader } from '../Table';
 import s from './ToastWrapper.module.sass';
 
 const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (

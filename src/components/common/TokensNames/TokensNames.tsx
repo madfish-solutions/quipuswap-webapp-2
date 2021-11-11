@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 import cx from 'classnames';
-import { TokensLogosProps, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TokensLogos, TokensLogosInterface } from '@components/ui/TokensLogos';
 
 import s from './TokensNames.module.sass';
 
 export type TokensNamesProps = {
   name: string
   className?: string
-} & TokensLogosProps;
+} & TokensLogosInterface;
 
 const modeClass = {
   [ColorModes.Light]: s.light,

@@ -1,21 +1,25 @@
 import React, {
-  useContext, useMemo, useRef, useState,
+  useRef,
+  useMemo,
+  useState,
+  useContext,
 } from 'react';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos } from '@madfish-solutions/quipu-ui-kit';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
-import { WhitelistedToken } from '@utils/types';
 import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { useAccountPkh } from '@utils/dapp';
-import BigNumber from 'bignumber.js';
+import { TokensLogos } from '../TokensLogos';
+import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {

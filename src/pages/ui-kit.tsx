@@ -3,55 +3,53 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import {
-  Tabs,
-  Bage,
-  Modal,
-  Route,
-  Input,
-  Button,
-  Tooltip,
-  Timeleft,
-  Switcher,
-  SelectUI,
-  Slippage,
-  FarmTable,
-  PoolTable,
-  CurrencyAmount,
-  ColorModeSwitcher,
-} from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
-import dynamic from 'next/dynamic';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
+import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { useTokens } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { useTokens } from '@utils/dapp';
-import { WhitelistedFarm } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import {
+  LineChartSampleData,
+  CandleChartSampleData,
+} from '@components/charts/content';
 import {
   BakerCell,
   ChooseListCell,
   SwapCell,
 } from '@components/ui/Modal/ModalCell';
 import {
-  LineChartSampleData,
-  CandleChartSampleData,
-} from '@components/charts/content';
-import {
   ComplexBaker,
   ComplexInput,
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { TokensModal } from '@components/modals/TokensModal';
-import { Logo } from '@components/svg/Logo';
+import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { Slippage } from '@components/common/Slippage';
+import { Route } from '@components/common/Route';
+import { FarmTable } from '@components/tables/FarmTable';
+import { PoolTable } from '@components/tables/PoolTable';
+import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
+import { Timeleft } from '@components/ui/Timeleft';
+import { Switcher } from '@components/ui/Switcher';
+import { Tooltip } from '@components/ui/Tooltip';
+import { SelectUI } from '@components/ui/Select';
+import { Button } from '@components/ui/Button';
+import { Input } from '@components/ui/Input';
+import { Modal } from '@components/ui/Modal';
+import { Bage } from '@components/ui/Bage';
+import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { Logo } from '@components/svg/Logo';
 import { Pen } from '@components/svg/Pen';
-import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+import Search from '@icons/Search.svg';
 
 import s from '@styles/UiKit.module.sass';
 

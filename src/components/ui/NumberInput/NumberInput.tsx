@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react';
+import { InputProps } from 'react-select';
 import cx from 'classnames';
-import { Input, InputProps } from '@madfish-solutions/quipu-ui-kit';
 
 import PlusIcon from '@icons/TopArrow.svg';
 import MinusIcon from '@icons/BotArrow.svg';
 
+import { Input } from '../Input';
 import s from './NumberInput.module.sass';
 
 type NumberInputProps = {

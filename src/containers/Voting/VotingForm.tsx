@@ -13,7 +13,6 @@ import {
   findDex,
   FoundDex,
 } from '@quipuswap/sdk';
-import { Button, Tabs, Card } from '@madfish-solutions/quipu-ui-kit';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -21,8 +20,6 @@ import {
   useNetwork,
   useAccountPkh,
 } from '@utils/dapp';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   QSMainNet,
   TokenDataMap,
@@ -44,8 +41,13 @@ import {
   validateBalance,
   composeValidators,
 } from '@utils/validators';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
+import { Button } from '@components/ui/Button';
+import { Card } from '@components/ui/Card';
+import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
