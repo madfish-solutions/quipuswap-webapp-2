@@ -5,7 +5,12 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import { Card, CurrencyAmount, Input } from '@quipuswap/ui-kit';
+import {
+  Card,
+  Input,
+  SelectUI,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
 
@@ -16,7 +21,6 @@ import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
 import { Switcher } from '@components/ui/Switcher';
-import { SelectUI } from '@components/ui/Select';
 import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 

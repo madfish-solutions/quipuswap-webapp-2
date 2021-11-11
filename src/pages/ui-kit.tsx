@@ -12,6 +12,7 @@ import {
   Slippage,
   CurrencyAmount,
   ColorModeSwitcher,
+  SelectUI,
 } from '@quipuswap/ui-kit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
@@ -44,7 +45,6 @@ import { PoolTable } from '@components/tables/PoolTable';
 import { Timeleft } from '@components/ui/Timeleft';
 import { Switcher } from '@components/ui/Switcher';
 import { Tooltip } from '@components/ui/Tooltip';
-import { SelectUI } from '@components/ui/Select';
 import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
