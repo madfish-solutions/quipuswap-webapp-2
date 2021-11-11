@@ -3,16 +3,16 @@ import {
   Bage,
   Button,
   Tooltip,
+  TokensLogos,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos } from '@components/ui/TokensLogos';
 
 import s from './PoolCardTable.module.sass';
 
@@ -37,8 +37,10 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
         <div className={s.links}>
           <TokensLogos
-            token1={pool.token1}
-            token2={pool.token2}
+            firstTokenIcon={prepareTokenLogo(pool.token1.metadata.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(pool.token1)}
+            secondTokenIcon={prepareTokenLogo(pool.token2.metadata.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(pool.token2)}
             className={s.tokenLogo}
           />
           {pool.pair.name}

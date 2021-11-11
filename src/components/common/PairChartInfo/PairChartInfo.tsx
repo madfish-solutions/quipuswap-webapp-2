@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
+import { Button, Tabs, TokensLogos } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { Button, Tabs } from '@quipuswap/ui-kit';
 
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { Refresh } from '@components/svg/Refresh';
 
 import s from './PairChartInfo.module.sass';
@@ -45,7 +44,12 @@ export const PairChartInfo: React.FC<PairChartType> = ({
   return (
     <div className={s.headerContent}>
       <div className={s.tokensInfo}>
-        <TokensLogos token1={token1} token2={token2} />
+        <TokensLogos
+          firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+          firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+          secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+          secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+        />
         { getWhitelistedTokenSymbol(token1) }
         /
         { getWhitelistedTokenSymbol(token2) }

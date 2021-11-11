@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
-import { Bage, Button, CurrencyAmount } from '@quipuswap/ui-kit';
+import {
+  Bage,
+  Button,
+  TokensLogos,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos } from '@components/ui/TokensLogos';
 
 import s from './FarmTable.module.sass';
 
@@ -36,8 +40,10 @@ export const FarmItem: React.FC<FarmItemProps> = ({
       <td className={compoundClassName}>
         <div className={cx(s.links, s.cardCellItem, s.maxWidth, s.wideItem, s.cardCellText)}>
           <TokensLogos
-            token1={farm.tokenPair.token1}
-            token2={farm.tokenPair.token2}
+            firstTokenIcon={prepareTokenLogo(farm.tokenPair.token1.metadata.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(farm.tokenPair.token1)}
+            secondTokenIcon={prepareTokenLogo(farm.tokenPair.token2.metadata.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(farm.tokenPair.token2)}
             className={s.tokenLogo}
           />
           {getWhitelistedTokenSymbol(farm.tokenPair.token1)}

@@ -9,17 +9,17 @@ import {
   Button,
   Tooltip,
   CurrencyAmount,
+  TokensLogos,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { fromDecimals } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 // import { Bage } from '@components/ui/Bage';
-import { TokensLogos } from '@components/ui/TokensLogos';
 
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';
@@ -81,8 +81,10 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       accessor: ({ token1, token2, pair }:PoolTableType) => (
         <div className={s.links}>
           <TokensLogos
-            token1={token1 || TEZOS_TOKEN}
-            token2={token2}
+            firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+            secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
             className={s.tokenLogo}
           />
           <span className={s.cardCellText}>

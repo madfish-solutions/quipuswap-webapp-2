@@ -4,14 +4,14 @@ import {
   Button,
   Tooltip,
   CurrencyAmount,
+  TokensLogos,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { APY } from '@components/svg/APY';
 import { ArrowDown } from '@components/svg/ArrowDown';
 
@@ -59,8 +59,10 @@ export const StakeCard: React.FC<StakeCardProps> = ({
           <TokensLogos
             imageClassName={s.image}
             layout="fill"
-            token1={tokenPair.token1}
-            token2={tokenPair.token2}
+            firstTokenIcon={prepareTokenLogo(tokenPair.token1.metadata.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token1)}
+            secondTokenIcon={prepareTokenLogo(tokenPair.token2.metadata.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token2)}
             width={48}
           />
           <h3 className={s.title}>
@@ -93,7 +95,11 @@ export const StakeCard: React.FC<StakeCardProps> = ({
         <div className={s.firstBlock}>
           <ArrowDown className={s.arrow} />
           <div className={s.tokenItem}>
-            <TokensLogos token1={TEZOS_TOKEN} className={s.tokens} />
+            <TokensLogos
+              firstTokenIcon={prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
+              firstTokenSymbol={getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+              className={s.tokens}
+            />
             <span className={s.bold600}>Earn</span>
             {' '}
             <span className={s.earn}>{earn}</span>

@@ -5,13 +5,13 @@ import {
   Button,
   Tooltip,
   CurrencyAmount,
+  TokensLogos,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';
@@ -58,8 +58,10 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={s.tokens}>
           <TokensLogos
             imageClassName={s.image}
-            token1={tokenPair.token1}
-            token2={tokenPair.token2}
+            firstTokenIcon={prepareTokenLogo(tokenPair.token1.metadata.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token1)}
+            secondTokenIcon={prepareTokenLogo(tokenPair.token2.metadata.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token2)}
             width={48}
           />
           <h3 className={s.title}>
