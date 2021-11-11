@@ -5,7 +5,7 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import { Card, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Card, CurrencyAmount, Input } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
 
@@ -18,7 +18,6 @@ import { ApyModal } from '@components/modals/ApyModal';
 import { Switcher } from '@components/ui/Switcher';
 import { SelectUI } from '@components/ui/Select';
 import { SliderUI } from '@components/ui/Slider';
-import { Input } from '@components/ui/Input';
 import Search from '@icons/Search.svg';
 
 import s from './Stake.module.sass';

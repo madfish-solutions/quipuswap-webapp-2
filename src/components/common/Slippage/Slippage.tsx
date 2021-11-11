@@ -1,12 +1,16 @@
-import React, { useContext, useState, useCallback } from 'react';
+import React, {
+  useState,
+  useContext,
+  useCallback,
+} from 'react';
 import { useTranslation } from 'next-i18next';
+import { Input } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { validateMinMax } from '@utils/validators';
 import { parseDecimals } from '@utils/helpers';
 import { Tooltip } from '@components/ui/Tooltip';
-import { Input } from '@components/ui/Input';
 
 import s from './Slippage.module.sass';
 
