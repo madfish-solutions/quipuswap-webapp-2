@@ -5,7 +5,12 @@ import React, {
 } from 'react';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import { Button, CurrencyAmount, Route } from '@quipuswap/ui-kit';
+import {
+  Route,
+  Button,
+  Slippage,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
@@ -30,7 +35,6 @@ import {
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { TokensModal } from '@components/modals/TokensModal';
-import { Slippage } from '@components/common/Slippage';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
 import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
