@@ -3,11 +3,10 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { Button, ConnectWalletButton } from '@quipuswap/ui-kit';
+import { Button, ConnectWalletButton, LanguageSwitcher } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
