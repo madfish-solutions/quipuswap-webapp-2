@@ -9,6 +9,7 @@ import {
   Card,
   Input,
   SelectUI,
+  SliderUI,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
@@ -21,7 +22,6 @@ import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
 import { Switcher } from '@components/ui/Switcher';
-import { SliderUI } from '@components/ui/Slider';
 import Search from '@icons/Search.svg';
 
 import s from './Stake.module.sass';

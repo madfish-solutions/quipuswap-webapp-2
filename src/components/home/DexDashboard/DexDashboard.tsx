@@ -4,7 +4,7 @@ import React, {
 } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 import { useTranslation } from 'next-i18next';
-import { Card } from '@quipuswap/ui-kit';
+import { Card, SliderUI } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -12,7 +12,6 @@ import { useGetHomeOverviewQuery } from '@graphql';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
 import { getStorageInfo } from '@utils/dapp';
 import { Section } from '@components/home/Section';
-import { SliderUI } from '@components/ui/Slider';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
