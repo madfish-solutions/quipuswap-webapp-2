@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import {
+  APY,
   Card,
   Button,
   Tooltip,
@@ -13,7 +14,6 @@ import cx from 'classnames';
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedStake } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { APY } from '@components/svg/APY';
 import { ArrowDown } from '@components/svg/ArrowDown';
 
 import s from './StakeCard.module.sass';
@@ -73,7 +73,7 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             {' '}
             {getWhitelistedTokenSymbol(tokenPair.token1)}
           </h3>
-          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
+          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools." />
 
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>
