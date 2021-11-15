@@ -1,5 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { Background, ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
+import {
+  Background,
+  ColorModes,
+  ToastWrapper,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { NextSeo } from 'next-seo';
 import Script from 'next/script';
 import cx from 'classnames';
