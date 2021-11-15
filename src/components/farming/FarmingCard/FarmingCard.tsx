@@ -1,14 +1,14 @@
 import React, { useContext } from 'react';
 import {
+  APY,
   Bage,
   Card,
   Button,
   Tooltip,
-  CurrencyAmount,
-  TokensLogos,
   ColorModes,
+  TokensLogos,
+  CurrencyAmount,
   ColorThemeContext,
-  APY,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 

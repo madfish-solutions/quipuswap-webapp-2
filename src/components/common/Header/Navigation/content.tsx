@@ -1,9 +1,8 @@
 import React from 'react';
-import { Trans } from 'next-i18next';
 import {
+  MoreIcon,
   FarmIcon,
   HomeIcon,
-  MoreIcon,
   StakeIcon,
   VotingIcon,
   LiquidityIcon,
@@ -11,6 +10,7 @@ import {
   GovernanceIcon,
   SwapIconSidebar,
 } from '@quipuswap/ui-kit';
+import { Trans } from 'next-i18next';
 
 interface LinkInterface {
   id: number
