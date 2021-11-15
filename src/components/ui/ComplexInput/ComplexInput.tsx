@@ -3,19 +3,22 @@ import React, {
   useMemo,
   useContext,
 } from 'react';
+import {
+  Button,
+  ColorModes,
+  TokensLogos,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { TokensLogos } from '../TokensLogos';
-import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
@@ -145,7 +148,12 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
             textClassName={s.item4Inner}
             disabled={readOnly}
           >
-            <TokensLogos token1={token1} token2={token2} />
+            <TokensLogos
+              firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+              firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+              secondTokenIcon={token2 && prepareTokenLogo(token2.metadata?.thumbnailUri)}
+              secondTokenSymbol={token2 && getWhitelistedTokenSymbol(token2)}
+            />
             <h6 className={cx(s.token)}>
               {mode === 'input' && getWhitelistedTokenSymbol(token1)}
               {mode === 'select' && 'TOKEN / TOKEN'}

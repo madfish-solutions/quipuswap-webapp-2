@@ -5,8 +5,6 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
   // Dex,
@@ -23,6 +21,17 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
+import {
+  Tabs,
+  Card,
+  Button,
+  Tooltip,
+  Switcher,
+  Slippage,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import router from 'next/router';
 import cx from 'classnames';
@@ -60,16 +69,9 @@ import {
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Slippage } from '@components/common/Slippage';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Switcher } from '@components/ui/Switcher';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';

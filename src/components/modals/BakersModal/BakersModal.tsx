@@ -4,6 +4,14 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
+import {
+  Modal,
+  Input,
+  BakerCell,
+  ColorModes,
+  LoadingBakerCell,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
@@ -12,10 +20,6 @@ import cx from 'classnames';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { useBakers } from '@utils/dapp';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { BakerCell, LoadingBakerCell } from '@components/ui/Modal/ModalCell';
-import { Input } from '@components/ui/Input';
-import { Modal } from '@components/ui/Modal';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
 
@@ -172,7 +176,10 @@ export const BakersModal: React.FC<BakersModalProps> = ({
             return (
               <BakerCell
                 key={address}
-                baker={baker}
+                bakerName={baker.name}
+                bakerFee={baker.fee.toString()}
+                bakerFreeSpace={baker.freeSpace.toString()}
+                bakerLogo={baker.logo}
                 tabIndex={0}
                 onClick={() => {
                   onChange(baker);

@@ -3,16 +3,18 @@ import React, {
   useState,
   useEffect,
 } from 'react';
+import {
+  Table,
+  Button,
+  Tooltip,
+  TokensLogos,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Table } from '@components/ui/Table';
 
 import s from './FarmTable.module.sass';
 
@@ -60,8 +62,10 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       accessor: ({ tokenPair }:WhitelistedFarm) => (
         <>
           <TokensLogos
-            token1={tokenPair.token1}
-            token2={tokenPair.token2}
+            firstTokenIcon={prepareTokenLogo(tokenPair.token1.metadata.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token1)}
+            secondTokenIcon={prepareTokenLogo(tokenPair.token2.metadata.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token2)}
             className={s.tokenLogo}
           />
           {getWhitelistedTokenSymbol(tokenPair.token1)}
@@ -81,8 +85,12 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       id: 'staked',
       accessor: () => (
         <>
-          $
-          <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" />
+          <CurrencyAmount
+            amount="888888888888888.00"
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
+          />
         </>
       ),
     },
@@ -95,7 +103,12 @@ export const FarmTable: React.FC<FarmTableProps> = ({
       ),
       id: 'apr',
       accessor: () => (
-        <CurrencyAmount className={s.cardAmount} amount="888888888888888.00" currency="%" />
+        <CurrencyAmount
+          amount="888888888888888.00"
+          currency="%"
+          isLeftCurrency
+          className={s.cardAmount}
+        />
       ),
     },
     {
@@ -121,23 +134,21 @@ export const FarmTable: React.FC<FarmTableProps> = ({
   ], [t]);
 
   return (
-    <>
-      <Table
-        theme="farms"
-        className={className}
-        tableClassName={s.table}
-        data={data ?? []}
-        loading={loading}
-        columns={columns}
-        trClassName={s.tr}
-        thClassName={s.th}
-        tdClassName={s.td}
-        pageCount={pageCount}
-        pageSize={pageSize ?? 10}
-        setOffset={setOffset}
-        isLinked
-        disabled
-      />
-    </>
+    <Table
+      theme="farms"
+      className={className}
+      tableClassName={s.table}
+      data={data ?? []}
+      loading={loading}
+      columns={columns}
+      trClassName={s.tr}
+      thClassName={s.th}
+      tdClassName={s.td}
+      pageCount={pageCount}
+      pageSize={pageSize ?? 10}
+      setOffset={setOffset}
+      isLinked
+      disabled
+    />
   );
 };

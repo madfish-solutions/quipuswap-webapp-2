@@ -5,14 +5,15 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy } from 'react-final-form';
 import {
   Token,
   findDex,
   FoundDex,
 } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Button, Card, Tabs } from '@quipuswap/ui-kit';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -45,9 +46,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';

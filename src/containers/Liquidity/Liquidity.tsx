@@ -5,6 +5,7 @@ import React, {
   useCallback,
 } from 'react';
 import { TransferParams } from '@quipuswap/sdk';
+import { StickyBlock } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import { useRouter } from 'next/router';
@@ -32,7 +33,6 @@ import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { StickyBlock } from '@components/common/StickyBlock';
 
 import { LiquidityForm } from './LiquidityForm';
 import { LiquidityChart } from './LiquidityChart';

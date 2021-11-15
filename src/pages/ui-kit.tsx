@@ -3,9 +3,26 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
+import {
+  Tabs,
+  Bage,
+  Route,
+  Input,
+  Modal,
+  Button,
+  Tooltip,
+  Slippage,
+  SelectUI,
+  Switcher,
+  Timeleft,
+  SwapCell,
+  BakerCell,
+  CurrencyAmount,
+  ChooseListCell,
+  ColorModeSwitcher,
+} from '@quipuswap/ui-kit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
@@ -19,31 +36,13 @@ import {
   CandleChartSampleData,
 } from '@components/charts/content';
 import {
-  BakerCell,
-  ChooseListCell,
-  SwapCell,
-} from '@components/ui/Modal/ModalCell';
-import {
   ComplexBaker,
   ComplexInput,
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { TokensModal } from '@components/modals/TokensModal';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Timeleft } from '@components/ui/Timeleft';
-import { Switcher } from '@components/ui/Switcher';
-import { Tooltip } from '@components/ui/Tooltip';
-import { SelectUI } from '@components/ui/Select';
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
-import { Modal } from '@components/ui/Modal';
-import { Bage } from '@components/ui/Bage';
-import { Tabs } from '@components/ui/Tabs';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 import { Logo } from '@components/svg/Logo';
@@ -597,14 +596,10 @@ const UiKit: React.FC = () => {
             token2={{ name: 'Token' }}
           /> */}
           <BakerCell
-            baker={{
-              name: 'EVERSTAKE',
-              votes: 100002,
-              fee: 10,
-              freeSpace: new BigNumber('1,000,000,000.00'),
-              address: 'test',
-              logo: '',
-            }}
+            bakerName="EVERSTAKE"
+            bakerFee="10"
+            bakerFreeSpace="1,000,000,000.00"
+            bakerLogo=""
           />
         </Modal>
       </section>

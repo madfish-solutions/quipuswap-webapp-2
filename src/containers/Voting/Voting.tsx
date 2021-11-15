@@ -4,9 +4,10 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import { withTypes } from 'react-final-form';
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
+import { StickyBlock } from '@quipuswap/ui-kit';
+import { withTypes } from 'react-final-form';
+import { useRouter } from 'next/router';
 
 import {
   handleSearchToken,
@@ -34,7 +35,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { VotingStats } from '@components/voting/VotingStats';
-import { StickyBlock } from '@components/common/StickyBlock';
 
 import s from '@styles/CommonContainer.module.sass';
 import { VotingForm } from './VotingForm';

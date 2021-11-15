@@ -1,4 +1,12 @@
 import React from 'react';
+import {
+  Card,
+  Route,
+  Button,
+  Tooltip,
+  CardCell,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
@@ -7,14 +15,8 @@ import {
   getWhitelistedTokenSymbol,
   transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Route } from '@components/common/Route';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
@@ -149,22 +151,22 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         <Route
           routes={
-                [{
-                  id: 0,
-                  name: token1 ? getWhitelistedTokenSymbol(token1) : '',
-                  link: transformTokenDataToAnalyticsLink(tokensData.first),
-                },
-                ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
-                  id: 1,
-                  name: 'XTZ',
-                  link: 'https://analytics.quipuswap.com/tokens/tez',
-                }] : []),
-                {
-                  id: 2,
-                  name: token2 ? getWhitelistedTokenSymbol(token2) : '',
-                  link: transformTokenDataToAnalyticsLink(tokensData.second),
-                }]
-              }
+            [{
+              id: 0,
+              name: token1 ? getWhitelistedTokenSymbol(token1) : '',
+              link: transformTokenDataToAnalyticsLink(tokensData.first),
+            },
+            ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
+              id: 1,
+              name: 'XTZ',
+              link: 'https://analytics.quipuswap.com/tokens/tez',
+            }] : []),
+            {
+              id: 2,
+              name: token2 ? getWhitelistedTokenSymbol(token2) : '',
+              link: transformTokenDataToAnalyticsLink(tokensData.second),
+            }]
+          }
         />
       </CardCell>
       {(dex || dex2) && (
@@ -177,7 +179,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          { t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
+          {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
             {
               tokenA: getWhitelistedTokenSymbol(token1),
               tokenB: TEZOS_TOKEN.metadata.symbol,

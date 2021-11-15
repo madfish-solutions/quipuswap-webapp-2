@@ -1,14 +1,17 @@
 import React, { useContext, useRef } from 'react';
+import {
+  Button,
+  BakerLogo,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { WhitelistedBaker } from '@utils/types';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
 import { Shevron } from '@components/svg/Shevron';
 
-import { BakerLogo } from '../BakerLogo';
-import { Button } from '../Button';
 import s from './ComplexInput.module.sass';
 
 type ComplexBakerProps = {
@@ -73,7 +76,10 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         >
           <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
-            <BakerLogo baker={baker || {} as WhitelistedBaker} />
+            <BakerLogo
+              bakerName={baker?.name || ''}
+              bakerIcon={baker?.logo}
+            />
             <h6
               className={cx(s.token, s.bakerLabel)}
               title={baker ? baker.name : 'Choose Baker'}

@@ -1,4 +1,11 @@
 import React, { useMemo } from 'react';
+import {
+  Card,
+  Button,
+  Tooltip,
+  CardCell,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
@@ -9,11 +16,6 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';

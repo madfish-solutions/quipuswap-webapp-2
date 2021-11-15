@@ -1,17 +1,20 @@
 import React, {
-  useState, useEffect,
+  useState,
+  useEffect,
 } from 'react';
-import { useTranslation } from 'next-i18next';
 import { TezosToolkit } from '@taquito/taquito';
+import { useTranslation } from 'next-i18next';
+import { Card, SliderUI } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 import { useGetHomeOverviewQuery } from '@graphql';
 import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
 import { getStorageInfo } from '@utils/dapp';
 import { Section } from '@components/home/Section';
-import { SliderUI } from '@components/ui/Slider';
-import { Card } from '@components/ui/Card';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';

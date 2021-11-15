@@ -5,21 +5,24 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
+import {
+  Card,
+  Input,
+  SelectUI,
+  SliderUI,
+  Switcher,
+  ColorModes,
+  CurrencyAmount,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { StakeInfo } from '@components/stake/StakeInfo';
 import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
-import { Switcher } from '@components/ui/Switcher';
-import { SelectUI } from '@components/ui/Select';
-import { SliderUI } from '@components/ui/Slider';
-import { Input } from '@components/ui/Input';
-import { Card } from '@components/ui/Card';
 import Search from '@icons/Search.svg';
 
 import s from './Stake.module.sass';

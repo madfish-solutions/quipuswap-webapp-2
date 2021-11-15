@@ -5,19 +5,29 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
+import {
+  Card,
+  Preloader,
+  CardHeader,
+  CardContent,
+  PairChartInfo,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { CandlePlotPoint } from '@graphql';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import {
+  prettyPrice,
+  prepareTokenLogo,
+  getWhitelistedTokenName,
+  getWhitelistedTokenSymbol,
+} from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { getWhitelistedTokenName, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { usePrevious } from '@hooks/usePrevious';
-import { PairChartInfo } from '@components/common/PairChartInfo/PairChartInfo';
-import { Preloader } from '@components/common/Preloader';
-import { Card, CardContent, CardHeader } from '@components/ui/Card';
 
 import {
   CandleGraphOptions,
@@ -266,7 +276,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
   className,
   loading = false,
   token1 = TEZOS_TOKEN,
-  token2,
+  token2 = STABLE_TOKEN,
   disabled,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -276,7 +286,13 @@ export const CandleChart: React.FC<CandleChartProps> = ({
       <CardHeader
         header={{
           content: (
-            <PairChartInfo hidePeriods token1={token1} token2={token2} />
+            <PairChartInfo
+              hidePeriods
+              firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+              firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+              secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+              secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+            />
           ),
         }}
         className={s.cardHeader}

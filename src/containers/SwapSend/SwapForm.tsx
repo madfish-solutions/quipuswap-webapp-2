@@ -5,8 +5,16 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { Field, FormSpy } from 'react-final-form';
+import {
+  Tabs,
+  Card,
+  Button,
+  Slippage,
+  SwapButton,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -40,14 +48,8 @@ import {
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';

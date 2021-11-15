@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { useTranslation } from 'next-i18next';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
+import { useTranslation } from 'next-i18next';
+import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 
 import { WalletType } from '@utils/types';
 import {
@@ -11,9 +12,6 @@ import {
 import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { Checkbox } from '@components/ui/Checkbox';
-import { Button } from '@components/ui/Button';
-import { Modal } from '@components/ui/Modal';
 
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';

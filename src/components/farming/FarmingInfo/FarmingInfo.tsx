@@ -3,23 +3,26 @@ import React, {
   useState,
   useContext,
 } from 'react';
+import {
+  Tabs,
+  Card,
+  Button,
+  Tooltip,
+  CardCell,
+  Timeleft,
+  StickyBlock,
+  TokensLogos,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { StickyBlock } from '@components/common/StickyBlock';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Timeleft } from '@components/ui/Timeleft';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
 import { LineChartSampleData } from '@components/charts/content';
 import { VotingReward } from '@components/svg/VotingReward';
 import { ExternalLink } from '@components/svg/ExternalLink';
@@ -145,8 +148,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         headerContent={(
           <div className={s.tokens}>
             <TokensLogos
-              token1={tokenPair.token1}
-              token2={tokenPair.token2}
+              firstTokenIcon={prepareTokenLogo(tokenPair.token1.metadata.thumbnailUri)}
+              firstTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token1)}
+              secondTokenIcon={prepareTokenLogo(tokenPair.token2.metadata.thumbnailUri)}
+              secondTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token2)}
               width={32}
               className={s.tokenLogos}
             />

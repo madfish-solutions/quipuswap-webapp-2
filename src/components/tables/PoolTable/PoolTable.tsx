@@ -4,20 +4,23 @@ import React, {
   useEffect,
   useContext,
 } from 'react';
+import {
+  Table,
+  Button,
+  Tooltip,
+  ColorModes,
+  TokensLogos,
+  CurrencyAmount,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { MAX_ITEMS_PER_PAGE, TEZOS_TOKEN } from '@utils/defaults';
-import { fromDecimals } from '@utils/helpers';
+import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
+import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 // import { Bage } from '@components/ui/Bage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { TokensLogos } from '@components/ui/TokensLogos';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Button } from '@components/ui/Button';
-import { Table } from '@components/ui/Table';
 
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';
@@ -79,8 +82,10 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       accessor: ({ token1, token2, pair }:PoolTableType) => (
         <div className={s.links}>
           <TokensLogos
-            token1={token1 || TEZOS_TOKEN}
-            token2={token2}
+            firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+            secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
             className={s.tokenLogo}
           />
           <span className={s.cardCellText}>
@@ -100,15 +105,14 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'tvl',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <div className={s.links}>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
-            className={s.cardAmount}
             amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
           />
         </div>
       ),
@@ -123,15 +127,14 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       id: 'volume24h',
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
-          <span className={s.dollar}>
-            $
-          </span>
           <CurrencyAmount
-            className={s.cardAmount}
-            amount={fromDecimals(new BigNumber(dataInside.volume24h), 6)
+            amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString()}
+            currency="$"
+            isLeftCurrency
+            className={s.cardAmount}
           />
         </>
       ),

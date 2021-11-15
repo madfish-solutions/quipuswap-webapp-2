@@ -1,12 +1,15 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
+import {
+  Button,
+  NetworkSelect,
+  LanguageSwitcher,
+  ColorModeSwitcher,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
-import { NetworkSelect } from '@components/common/NetworkSelect';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Button } from '@components/ui/Button';
 import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
