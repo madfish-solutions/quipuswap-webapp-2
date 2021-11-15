@@ -5,22 +5,23 @@ import React, {
   useContext,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
 import {
   Card,
   Input,
-  Switcher,
   SelectUI,
+  SliderUI,
+  Switcher,
+  ColorModes,
   CurrencyAmount,
-} from '@madfish-solutions/quipu-ui-kit';
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
+import { useRouter } from 'next/router';
 import cx from 'classnames';
 
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { SliderUI } from '@components/ui/Slider';
-import { FarmingInfo } from '@components/farming/FarmingInfo';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { FarmingStats } from '@components/farming/FarmingStats';
+import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingCard } from '@components/farming/FarmingCard';
 import { ApyModal } from '@components/modals/ApyModal';
 import Search from '@icons/Search.svg';

@@ -4,15 +4,12 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import { withTypes } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
 import { TransferParams } from '@quipuswap/sdk';
-import { StickyBlock } from '@madfish-solutions/quipu-ui-kit';
+import { StickyBlock } from '@quipuswap/ui-kit';
+import { useTranslation } from 'next-i18next';
+import { withTypes } from 'react-final-form';
+import { useRouter } from 'next/router';
 
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
-import useUpdateToast from '@hooks/useUpdateToast';
 import {
   useTezos,
   useTokens,
@@ -33,6 +30,9 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
+import useUpdateToast from '@hooks/useUpdateToast';
 
 import { LiquidityForm } from './LiquidityForm';
 import { LiquidityChart } from './LiquidityChart';

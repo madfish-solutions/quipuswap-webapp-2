@@ -4,14 +4,11 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import { withTypes } from 'react-final-form';
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
-import { StickyBlock } from '@madfish-solutions/quipu-ui-kit';
+import { StickyBlock } from '@quipuswap/ui-kit';
+import { withTypes } from 'react-final-form';
+import { useRouter } from 'next/router';
 
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
 import {
   handleSearchToken,
   handleTokenChange,
@@ -34,6 +31,9 @@ import {
   WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useRouterPair } from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 import { VotingStats } from '@components/voting/VotingStats';
 
 import s from '@styles/CommonContainer.module.sass';

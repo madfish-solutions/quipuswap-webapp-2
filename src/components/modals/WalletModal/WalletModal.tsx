@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
-import { useTranslation } from 'next-i18next';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
-import { Button, Modal, Checkbox } from '@madfish-solutions/quipu-ui-kit';
+import { useTranslation } from 'next-i18next';
+import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 
 import { WalletType } from '@utils/types';
 import {

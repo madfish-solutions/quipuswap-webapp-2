@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { UpdateOptions, toast } from 'react-toastify';
 import { useRouter } from 'next/router';
-import { toastContent } from '@madfish-solutions/quipu-ui-kit';
+
+import { toastContent } from '@quipuswap/ui-kit';
 
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();

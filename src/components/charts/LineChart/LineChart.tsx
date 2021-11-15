@@ -1,26 +1,28 @@
 import React, {
-  useCallback,
-  useContext,
-  useEffect,
   useRef,
   useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
-import { createChart, IChartApi } from 'lightweight-charts';
-import { useTranslation } from 'next-i18next';
 import {
   Card,
   Preloader,
   CardHeader,
   CardContent,
-} from '@madfish-solutions/quipu-ui-kit';
+  PairChartInfo,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
+import { createChart, IChartApi } from 'lightweight-charts';
+import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { PlotPoint } from '@graphql';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { usePrevious } from '@hooks/usePrevious';
-import { prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
-import { PairChartInfo } from '@components/common/PairChartInfo';
+import { usePrevious } from '@hooks/usePrevious';
 
 import {
   GraphicColors,
@@ -201,14 +203,20 @@ export const LineChart: React.FC<LineChartProps> = ({
   data,
   className,
   loading = false,
-  token1,
-  token2,
+  token1 = TEZOS_TOKEN,
+  token2 = STABLE_TOKEN,
 }) => (
   <Card className={className}>
     <CardHeader
       header={{
         content: (
-          <PairChartInfo hidePeriods token1={token1} token2={token2} />
+          <PairChartInfo
+            hidePeriods
+            firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+            firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+            secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+            secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+          />
         ),
       }}
       className={s.cardHeader}

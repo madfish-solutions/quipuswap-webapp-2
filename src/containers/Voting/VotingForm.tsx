@@ -5,15 +5,15 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy } from 'react-final-form';
 import {
   Token,
   findDex,
   FoundDex,
 } from '@quipuswap/sdk';
-import { Button, Tabs, Card } from '@madfish-solutions/quipu-ui-kit';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Button, Card, Tabs } from '@quipuswap/ui-kit';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -21,8 +21,6 @@ import {
   useNetwork,
   useAccountPkh,
 } from '@utils/dapp';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   QSMainNet,
   TokenDataMap,
@@ -44,6 +42,8 @@ import {
   validateBalance,
   composeValidators,
 } from '@utils/validators';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';

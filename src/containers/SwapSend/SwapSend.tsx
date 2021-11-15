@@ -4,13 +4,10 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { withTypes } from 'react-final-form';
+import { StickyBlock } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { StickyBlock } from '@madfish-solutions/quipu-ui-kit';
+import { withTypes } from 'react-final-form';
 
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
 import {
   QSMainNet,
   TokenDataMap,
@@ -31,6 +28,9 @@ import {
   fallbackTokenToTokenData,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useRouterPair } from '@hooks/useRouterPair';
+import { useExchangeRates } from '@hooks/useExchangeRate';
 
 import { SwapForm } from './SwapForm';
 import { submitForm } from './swapHelpers';

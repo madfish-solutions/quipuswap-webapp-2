@@ -3,39 +3,34 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
   Tabs,
   Bage,
-  Modal,
   Route,
   Input,
+  Modal,
   Button,
   Tooltip,
-  Timeleft,
-  Switcher,
-  SelectUI,
   Slippage,
-  FarmTable,
-  PoolTable,
+  SelectUI,
+  Switcher,
+  Timeleft,
+  SwapCell,
+  BakerCell,
   CurrencyAmount,
+  ChooseListCell,
   ColorModeSwitcher,
-} from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
+} from '@quipuswap/ui-kit';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { useTokens } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { useTokens } from '@utils/dapp';
-import { WhitelistedFarm } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  BakerCell,
-  ChooseListCell,
-  SwapCell,
-} from '@components/ui/Modal/ModalCell';
 import {
   LineChartSampleData,
   CandleChartSampleData,
@@ -46,12 +41,14 @@ import {
   ComplexRecipient,
 } from '@components/ui/ComplexInput';
 import { TokensModal } from '@components/modals/TokensModal';
-import { Logo } from '@components/svg/Logo';
+import { FarmTable } from '@components/tables/FarmTable';
+import { PoolTable } from '@components/tables/PoolTable';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { Logo } from '@components/svg/Logo';
 import { Pen } from '@components/svg/Pen';
-import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+import Search from '@icons/Search.svg';
 
 import s from '@styles/UiKit.module.sass';
 
@@ -599,14 +596,10 @@ const UiKit: React.FC = () => {
             token2={{ name: 'Token' }}
           /> */}
           <BakerCell
-            baker={{
-              name: 'EVERSTAKE',
-              votes: 100002,
-              fee: 10,
-              freeSpace: new BigNumber('1,000,000,000.00'),
-              address: 'test',
-              logo: '',
-            }}
+            bakerName="EVERSTAKE"
+            bakerFee="10"
+            bakerFreeSpace="1,000,000,000.00"
+            bakerLogo=""
           />
         </Modal>
       </section>

@@ -1,6 +1,6 @@
 import React from 'react';
+import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { Button } from '@madfish-solutions/quipu-ui-kit';
 
 import { SocialLinksData } from './content';
 import s from './Socials.module.sass';

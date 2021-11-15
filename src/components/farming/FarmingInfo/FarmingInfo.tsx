@@ -3,7 +3,6 @@ import React, {
   useState,
   useContext,
 } from 'react';
-import { useTranslation } from 'next-i18next';
 import {
   Tabs,
   Card,
@@ -13,14 +12,16 @@ import {
   Timeleft,
   StickyBlock,
   TokensLogos,
-} from '@madfish-solutions/quipu-ui-kit';
-import cx from 'classnames';
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
+import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
+import cx from 'classnames';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { LineChartSampleData } from '@components/charts/content';
 import { VotingReward } from '@components/svg/VotingReward';
@@ -147,8 +148,10 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({
         headerContent={(
           <div className={s.tokens}>
             <TokensLogos
-              token1={tokenPair.token1}
-              token2={tokenPair.token2}
+              firstTokenIcon={prepareTokenLogo(tokenPair.token1.metadata.thumbnailUri)}
+              firstTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token1)}
+              secondTokenIcon={prepareTokenLogo(tokenPair.token2.metadata.thumbnailUri)}
+              secondTokenSymbol={getWhitelistedTokenSymbol(tokenPair.token2)}
               width={32}
               className={s.tokenLogos}
             />

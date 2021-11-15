@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import { useGetTokensPairsLazyQuery } from '@graphql';
-import { PoolTable } from '@madfish-solutions/quipu-ui-kit';
 
 import { Token } from 'graphql';
 import { transformNodeToWhitelistedToken, prepareTokenName } from '@utils/helpers';
+import { PoolTable } from '@components/tables/PoolTable';
 import { Section } from '@components/home/Section';
 
 type TopPairsProps = {
