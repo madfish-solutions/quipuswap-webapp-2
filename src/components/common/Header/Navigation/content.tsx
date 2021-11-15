@@ -1,15 +1,16 @@
 import React from 'react';
 import { Trans } from 'next-i18next';
-
-import { GovernanceIcon } from '@components/svg/Sidebar/GovernanceIcon';
-import { PortfolioIcon } from '@components/svg/Sidebar/PortfolioIcon';
-import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';
-import { VotingIcon } from '@components/svg/Sidebar/VotingIcon';
-import { LiquidityIcon } from '@components/svg/Sidebar/LiquidityIcon';
-import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
-import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
-import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
-import MoreIcon from '@icons/MoreIcon.svg';
+import {
+  FarmIcon,
+  HomeIcon,
+  MoreIcon,
+  StakeIcon,
+  VotingIcon,
+  LiquidityIcon,
+  PortfolioIcon,
+  GovernanceIcon,
+  SwapIconSidebar,
+} from '@quipuswap/ui-kit';
 
 interface LinkInterface {
   id: number
@@ -35,7 +36,7 @@ export const NavigationData: NavigationDataProps[] = [
     href: '/swap/[from-to]',
     as: '/swap/TEZ-QUIPU',
     label: <Trans ns="common">Swap</Trans>,
-    Icon: SwapIcon,
+    Icon: SwapIconSidebar,
   },
   {
     id: 2,

@@ -7,12 +7,15 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Pen,
   Input,
   Modal,
   Button,
+  Search,
   TokenCell,
   ColorModes,
   NumberInput,
+  TokenNotFound,
   LoadingTokenCell,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
@@ -39,9 +42,6 @@ import {
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
-import { Pen } from '@components/svg/Pen';
-import Search from '@icons/Search.svg';
-import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './TokensModal.module.sass';
 

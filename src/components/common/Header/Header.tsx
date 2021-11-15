@@ -1,12 +1,14 @@
 import React, {
-  useContext,
-  useEffect,
   useState,
+  useEffect,
+  useContext,
 } from 'react';
 import {
   Button,
   LogoButton,
   ColorModes,
+  MenuOpened,
+  MenuClosed,
   LanguageSwitcher,
   ColorThemeContext,
   ColorModeSwitcher,
@@ -15,8 +17,6 @@ import {
 import cx from 'classnames';
 
 import { Menu } from '@components/common/Header/Menu';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from './Header.module.sass';
 

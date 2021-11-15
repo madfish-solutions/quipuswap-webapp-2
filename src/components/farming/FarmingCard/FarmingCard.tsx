@@ -8,12 +8,12 @@ import {
   TokensLogos,
   ColorModes,
   ColorThemeContext,
+  APY,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedFarm } from '@utils/types';
-import { APY } from '@components/svg/APY';
 
 import s from './FarmingCard.module.sass';
 

@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import {
   Button,
+  Shevron,
   BakerLogo,
   ColorModes,
   ColorThemeContext,
@@ -10,7 +11,6 @@ import cx from 'classnames';
 import { WhitelistedBaker } from '@utils/types';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
-import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 

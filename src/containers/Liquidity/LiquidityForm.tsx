@@ -23,11 +23,14 @@ import {
 } from '@quipuswap/sdk';
 import {
   Tabs,
+  Plus,
   Card,
   Button,
   Tooltip,
   Switcher,
   Slippage,
+  ArrowDown,
+  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -72,9 +75,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Transactions } from '@components/svg/Transactions';
-import { ArrowDown } from '@components/svg/ArrowDown';
-import { Plus } from '@components/svg/Plus';
 
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';

@@ -7,13 +7,16 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Plus,
   Input,
   Modal,
   Button,
+  Search,
   Checkbox,
   TokenCell,
   ColorModes,
   NumberInput,
+  TokenNotFound,
   LoadingTokenCell,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
@@ -33,12 +36,12 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  localSearchToken, isTokenEqual, prepareTokenLogo, getWhitelistedTokenSymbol,
+  isTokenEqual,
+  localSearchToken,
+  prepareTokenLogo,
+  getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
-import { Plus } from '@components/svg/Plus';
-import Search from '@icons/Search.svg';
-import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './PositionsModal.module.sass';
 

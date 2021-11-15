@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import {
   Button,
+  Shevron,
   ColorModes,
   TokensLogos,
   ColorThemeContext,
@@ -17,7 +18,6 @@ import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils
 import { WhitelistedToken } from '@utils/types';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 

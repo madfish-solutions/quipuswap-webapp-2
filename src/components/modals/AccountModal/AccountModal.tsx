@@ -6,8 +6,10 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Copy,
   Modal,
   Button,
+  CheckMark,
   ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
@@ -17,8 +19,6 @@ import cx from 'classnames';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { CheckMark } from '@components/svg/CheckMark';
-import { Copy } from '@components/svg/Copy';
 
 import s from './AccountModal.module.sass';
 
