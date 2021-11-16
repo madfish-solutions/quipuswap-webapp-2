@@ -60,8 +60,8 @@ export type WhitelistedTokenMetadata = {
 };
 
 export type VoterType = {
-  vote: string,
-  veto: string,
+  vote: BigNumber,
+  veto: BigNumber,
   candidate: string
 };
 

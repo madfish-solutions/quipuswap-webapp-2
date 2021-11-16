@@ -53,7 +53,6 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };
-
 export const STABLE_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
@@ -65,6 +64,18 @@ export const STABLE_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
   },
 };
+export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
 
 export const FACTORIES = {
   florencenet: {

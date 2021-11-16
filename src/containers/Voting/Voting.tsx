@@ -30,7 +30,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { STABLE_TOKEN, STABLE_TOKEN_GRANADA, TEZOS_TOKEN } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
@@ -82,7 +82,7 @@ export const Voting: React.FC<VotingProps> = ({
   const { Form } = withTypes<VoteFormValues>();
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState('0');
-  const [voter, setVoter] = useState<VoterType>();
+  const [voter, setVoter] = useState<VoterType | undefined>();
   const [
     tokenPair,
     setTokenPair,
@@ -136,6 +136,22 @@ export const Voting: React.FC<VotingProps> = ({
   });
 
   useEffect(() => {
+    switch (network.id) {
+      case 'granadanet':
+        setTokenPair(
+          {
+            token1: TEZOS_TOKEN,
+            token2: STABLE_TOKEN_GRANADA,
+          } as WhitelistedTokenPair,
+        );
+        break;
+      default:
+        setTokenPair(fallbackTokenPair);
+        break;
+    }
+  }, [network]);
+
+  useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
       handleSearchToken({
         tokens,
@@ -183,11 +199,13 @@ export const Voting: React.FC<VotingProps> = ({
 
   useOnBlock(tezos, getBalance);
 
+  console.log({ voter });
+
   return (
     <>
       <VotingStats
         pendingReward={rewards}
-        amounts={[tokenPair.balance ?? '0', voter?.vote ?? '0', voter?.veto ?? '0']}
+        amounts={[tokenPair.balance ?? '0', voter?.vote?.toFixed() ?? '0', voter?.veto?.toFixed() ?? '0']}
         className={s.votingStats}
         dex={dex}
         handleSubmit={(params:TransferParams[]) => {

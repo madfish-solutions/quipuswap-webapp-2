@@ -217,14 +217,14 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         >
           {t('vote|Pair Analytics')}
         </Button>
-        {/* <Button
+        <Button
           className={s.detailsButton}
           theme="inverse"
           href="#"
           icon={<ExternalLink className={s.linkIcon} />}
         >
           Delegation Analytics
-        </Button> */}
+        </Button>
       </div>
       )}
     </Card>

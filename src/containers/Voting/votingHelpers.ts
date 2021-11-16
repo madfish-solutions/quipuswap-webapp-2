@@ -28,7 +28,7 @@ export const hanldeTokenPairSelect = (
       return;
     }
     try {
-      const secondAsset = {
+      const secondAsset: { contract: string, id?: number } = {
         contract: pair.token2.contractAddress,
         id: pair.token2.fa2TokenId,
       };
@@ -46,9 +46,9 @@ export const hanldeTokenPairSelect = (
         const voter = await foundDex.storage.storage.voters.get(accountPkh);
         if (voter) {
           setVoter({
-            veto: fromDecimals(voter.veto, TEZOS_TOKEN.metadata.decimals).toString(),
+            veto: fromDecimals(voter.veto, TEZOS_TOKEN.metadata.decimals),
             candidate: voter.candidate,
-            vote: fromDecimals(voter.vote, TEZOS_TOKEN.metadata.decimals).toString(),
+            vote: fromDecimals(voter.vote, TEZOS_TOKEN.metadata.decimals),
           });
         } else setVoter({} as VoterType);
       };
