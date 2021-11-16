@@ -1,7 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'granadanet' | 'florencenet';
 
 type QSNetworkType =
   | 'mainnet'
@@ -9,7 +9,8 @@ type QSNetworkType =
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+  | 'granadanet';
 
 export interface QSNetwork {
   id: QSNetworkType

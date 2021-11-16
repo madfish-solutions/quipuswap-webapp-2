@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import {
   Button,
-  NetworkSelect,
   LanguageSwitcher,
   ColorModeSwitcher,
   ColorModes,
@@ -10,6 +9,7 @@ import {
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { NetworkSelect } from '@components/common/NetworkSelect/NetworkSelect';
 import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
@@ -46,7 +46,10 @@ export const Menu: React.FC<MenuProps> = ({
           </div>
         </div>
         <div className={s.row}>
-          <NetworkSelect menuPlacement="top" className={s.select} />
+          <NetworkSelect
+            menuPlacement="top"
+            className={s.select}
+          />
           <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common|Old version')}
           </Button>
