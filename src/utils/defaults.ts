@@ -76,7 +76,6 @@ export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
   },
 };
 
-
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [

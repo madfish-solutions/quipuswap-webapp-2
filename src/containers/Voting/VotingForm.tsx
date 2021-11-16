@@ -227,7 +227,7 @@ const RealForm:React.FC<VotingFormProps> = ({
   const availVetoBalance:string = useMemo(
     () => (tokenPair.balance && tokenPair.frozenBalance && voter
       ? new BigNumber(tokenPair.balance)
-        .minus(new BigNumber(voter.veto ?? '0'))
+        .minus(new BigNumber(voter.vote ?? '0'))
         .toString()
       : new BigNumber(0).toString()), [tokenPair, voter],
   );
