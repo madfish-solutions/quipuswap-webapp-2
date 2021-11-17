@@ -41,7 +41,7 @@ import { Plus } from '@components/svg/Plus';
 
 import { LiquidityDetails } from './LiquidityDetails';
 import s from './Liquidity.module.sass';
-import { addLiquidity } from './liquidutyHelpers';
+import { addLiquidity, removeLiquidity } from './liquidutyHelpers';
 
 const TabsContent = [
   {
@@ -170,14 +170,30 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         </div>
         <Button
           onClick={async () => {
-            if (!tezos) return;
+            if (!tezos || !accountPkh) return;
 
             const token: Token = {
               contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
               id: 0,
             };
             const tezValue = new BigNumber(tokenAInput).multipliedBy(1_000_000);
-            await addLiquidity(tezos, networkId, token, tezValue);
+
+            switch (currentTab.id) {
+              case TabsContent[0].id:
+                await addLiquidity(tezos, networkId, token, tezValue);
+                break;
+              case TabsContent[1].id:
+                await removeLiquidity(
+                  tezos,
+                  networkId,
+                  accountPkh,
+                  new BigNumber(0.1),
+                  token,
+                );
+                break;
+              default:
+                break;
+            }
           }}
         >
           {currentTab.label}
