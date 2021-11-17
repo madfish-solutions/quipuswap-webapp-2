@@ -23,19 +23,20 @@ const SwapSendPage: React.FC = () => {
   );
 };
 
+const defaultFromToken = getWhitelistedTokenSymbol(TEZOS_TOKEN);
+const defaultToToken = getWhitelistedTokenSymbol(STABLE_TOKEN);
+
 export const getServerSideProps = async (props:any) => {
   const { locale, query } = props;
-  const splittedTokens = query['from-to'].split('-');
-  let from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(STABLE_TOKEN);
-  const isSoleToken = splittedTokens.length < 2;
-  const isNoTokens = splittedTokens.length < 1;
+  const splitTokens = query['from-to'].split('-');
+  const from = splitTokens[0] || defaultFromToken;
+  let to = splitTokens[1] || defaultToToken;
 
-  if (
-    (isSoleToken && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) || splittedTokens[1] === ''
-  ) [from] = splittedTokens;
+  if (from === to) {
+    to = from === defaultFromToken ? defaultToToken : defaultFromToken;
+  }
 
-  if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
+  if ((from !== splitTokens[0]) || (to !== splitTokens[1])) {
     return {
       redirect: {
         destination: `/swap/${from}-${to}`,
@@ -43,6 +44,7 @@ export const getServerSideProps = async (props:any) => {
       },
     };
   }
+
   return ({
     props: {
       ...await serverSideTranslations(locale, ['common', 'swap']),

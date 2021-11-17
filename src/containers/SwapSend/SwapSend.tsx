@@ -1,48 +1,44 @@
-import React, {
-  useMemo, useState, useEffect, useCallback,
-} from 'react';
-import { withTypes } from 'react-final-form';
+import BigNumber from 'bignumber.js';
+import { useFormik } from 'formik';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
+import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import { useExchangeRates } from '@hooks/useExchangeRate';
-import { useRouterPair } from '@hooks/useRouterPair';
+import { useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  NewSwapFormValues,
+  WhitelistedToken,
 } from '@utils/types';
 import {
+  getUserBalance,
   useAccountPkh,
   useTezos,
-  useNetwork,
-  useTokens,
-  useSearchCustomTokens,
-  useOnBlock,
 } from '@utils/dapp';
 import {
-  fallbackTokenToTokenData,
-  handleTokenChange,
-  handleSearchToken,
+  convertUnits,
+  fromDecimals,
+  getRouteWithInput,
+  getTokenSlug,
+  slippageToBignum,
+  slippageToNum,
+  swap,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { StickyBlock } from '@components/common/StickyBlock';
+import { addressSchema, bigNumberSchema } from '@utils/validators';
 
-import { SwapForm } from './SwapForm';
-import { submitForm } from './swapHelpers';
-import { SwapChart } from './SwapChart';
-
-const TabsContent = [
-  {
-    id: 'swap',
-    label: 'Swap',
-  },
-  {
-    id: 'send',
-    label: 'Send',
-  },
-];
+import { NewSwapForm } from './NewSwapForm';
 
 type SwapSendProps = {
   className?: string
+};
+
+const initialErrors = {
+  amount1: 'Required',
+  amount2: 'Required',
+};
+const initialValues: Partial<NewSwapFormValues> = {
+  action: 'swap',
+  slippage: '0.5 %',
 };
 
 export const SwapSend: React.FC<SwapSendProps> = ({
@@ -51,37 +47,65 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
-  const exchangeRates = useExchangeRates();
-  const network = useNetwork();
-  const searchCustomToken = useSearchCustomTokens();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id);
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
-  const { from, to } = useRouterPair({
-    page: 'swap',
-    urlLoaded,
-    initialLoad,
-    token1,
-    token2,
-  });
+  const { dexGraph } = useDexGraph();
+  const [
+    knownTokensBalances,
+    setKnownTokensBalances,
+  ] = useState<Record<string, BigNumber>>({});
 
-  const [tokensData, setTokensData] = useState<TokenDataMap>(
-    {
-      first: fallbackTokenToTokenData(TEZOS_TOKEN),
-      second: fallbackTokenToTokenData(STABLE_TOKEN),
-    },
-  );
+  const updateTokenBalance = useCallback((token: WhitelistedToken) => {
+    const newTokenSlug = getTokenSlug(token);
+    if (!accountPkh) {
+      return;
+    }
+    getUserBalance(
+      tezos!,
+      accountPkh!,
+      token.contractAddress,
+      token.type,
+      token.fa2TokenId,
+    ).then(
+      (balance) => {
+        setKnownTokensBalances(
+          (prevValue) => ({
+            ...prevValue,
+            [newTokenSlug]: convertUnits(balance ?? new BigNumber(0), token.metadata.decimals),
+          }),
+        );
+      },
+    ).catch(console.error);
+  }, [accountPkh, tezos]);
 
-  const { Form } = withTypes<SwapFormValues>();
-
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
-  );
+  const validationSchema = useMemo(() => objectSchema().shape({
+    token1: objectSchema().required(),
+    token2: objectSchema().required(),
+    amount1: objectSchema().when(
+      'token1',
+      (firstToken?: WhitelistedToken) => bigNumberSchema(
+        firstToken ? fromDecimals(new BigNumber(1), firstToken.metadata.decimals) : undefined,
+        firstToken && knownTokensBalances[getTokenSlug(firstToken)],
+      ).required(),
+    ),
+    amount2: objectSchema().when(
+      'token2',
+      (secondToken?: WhitelistedToken) => bigNumberSchema(
+        secondToken ? fromDecimals(new BigNumber(1), secondToken.metadata.decimals) : undefined,
+      ).required(),
+    ),
+    recipient: mixedSchema().when(
+      'action',
+      (currentAction: string) => (currentAction === 'swap'
+        ? mixedSchema()
+        : addressSchema().required()
+      ),
+    ),
+    slippage: stringSchema().test((value = '') => {
+      const normalizedValue = slippageToNum(value);
+      return (value !== '') && (normalizedValue > 0) && (normalizedValue <= 30);
+    }).required(),
+    action: stringSchema().oneOf(['swap', 'send']).required(),
+  }), [knownTokensBalances]);
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -104,109 +128,61 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast, t]);
 
-  const handleTokenChangeWrapper = (
-    token: WhitelistedToken,
-    tokenNumber: 'first' | 'second',
-  ) => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
+  const handleSubmit = useCallback(async (formValues: Partial<NewSwapFormValues>) => {
+    console.log(tezos, formValues);
+    if (!tezos) {
+      return;
+    }
+
+    const {
+      amount1,
+      token1,
+      token2,
+      recipient,
+      slippage,
+      action,
+    } = formValues;
+
+    handleLoader();
+    const inputAmount = convertUnits(amount1!, -token1!.metadata.decimals);
+    try {
+      await swap(
+        tezos,
+        accountPkh!,
+        {
+          inputAmount,
+          inputToken: token1!,
+          recipient: action === 'send' ? recipient : undefined,
+          slippageTolerance: slippageToBignum(slippage!).div(100),
+          dexChain: getRouteWithInput({
+            startTokenSlug: getTokenSlug(token1!),
+            endTokenSlug: getTokenSlug(token2!),
+            graph: dexGraph,
+            inputAmount,
+          })!,
+        },
+      );
+      handleSuccessToast();
+    } catch (e) {
+      handleErrorToast(e);
+      throw e;
+    }
+  }, [handleLoader, tezos, handleErrorToast, handleSuccessToast, accountPkh, dexGraph]);
+
+  const formikProps = useFormik({
+    validationSchema,
+    initialValues,
+    initialErrors,
+    onSubmit: handleSubmit,
+    validateOnChange: true,
   });
 
-  const handleSwapTokens = () => {
-    setTokens([token2, token1]);
-    setTokensData({ first: tokensData.second, second: tokensData.first });
-  };
-
-  useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0) {
-      handleSearchToken({
-        tokens,
-        network,
-        from,
-        to,
-        setInitialLoad,
-        setUrlLoaded,
-        setTokens,
-        searchCustomToken,
-        handleTokenChangeWrapper,
-      });
-    }
-    // eslint-disable-next-line
-  }, [from, to, initialLoad, tokens]);
-
-  const getBalance = useCallback(() => {
-    if (tezos && token1 && token2) {
-      handleTokenChangeWrapper(token1, 'first');
-      handleTokenChangeWrapper(token2, 'second');
-    }
-    // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId, token1, token2]);
-
-  useEffect(() => {
-    getBalance();
-    // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId]);
-
-  useOnBlock(tezos, getBalance);
-
-  useEffect(() => {
-    setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
-  }, [networkId]);
-
   return (
-    <>
-      <SwapChart
-        token1={token1}
-        token2={token2}
-      />
-      <StickyBlock className={className}>
-        <Form
-          onSubmit={(values, form) => {
-            if (!tezos) return;
-            handleLoader();
-            submitForm(values,
-              tezos,
-              tokensData,
-              tabsState,
-              networkId,
-              form,
-              (err) => handleErrorToast(err),
-              handleSuccessToast);
-          }}
-          mutators={{
-            setValue: ([field, value], state, { changeValue }) => {
-              changeValue(state, field, () => value);
-            },
-            setValues: (fields, state, { changeValue }) => {
-              fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
-            },
-          }}
-          render={({
-            handleSubmit, form,
-          }) => (
-            <SwapForm
-              handleSubmit={handleSubmit}
-              form={form}
-              debounce={100}
-              save={() => {}}
-              setTabsState={setTabsState}
-              tabsState={tabsState}
-              token1={token1}
-              token2={token2}
-              setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
-              setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
-              tokensData={tokensData}
-              handleSwapTokens={handleSwapTokens}
-              handleTokenChange={handleTokenChangeWrapper}
-              currentTab={currentTab}
-            />
-          )}
-        />
-      </StickyBlock>
-    </>
+    <NewSwapForm
+      {...formikProps}
+      className={className}
+      knownTokensBalances={knownTokensBalances}
+      updateTokenBalance={updateTokenBalance}
+    />
   );
 };

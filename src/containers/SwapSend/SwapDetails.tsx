@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
@@ -12,7 +12,7 @@ import { Card } from '@components/ui/Card';
 import { Button } from '@components/ui/Button';
 import { Tooltip } from '@components/ui/Tooltip';
 import { CardCell } from '@components/ui/Card/CardCell';
-import { Route } from '@components/common/Route';
+import { Route, RouteType } from '@components/common/Route';
 import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
@@ -24,7 +24,7 @@ type SwapDetailsProps = {
   token1: WhitelistedToken
   token2: WhitelistedToken
   tokensData: TokenDataMap
-  priceImpact: BigNumber
+  priceImpact?: BigNumber
   rate1: BigNumber
   rate2: BigNumber
   dex?: FoundDex
@@ -44,16 +44,49 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   dex2,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const sellRate = (((rate2 && !rate2.isNaN()) && !rate2.eq(0))
-    ? rate2
-    : new BigNumber(tokensData.first.exchangeRate ?? 1)
-      .div(new BigNumber(tokensData.second.exchangeRate ?? 1)))
-    .toString();
-  const buyRate = (((rate1 && !rate1.isNaN()) && !rate1.eq(0))
-    ? rate1
-    : new BigNumber(tokensData.second.exchangeRate ?? 1)
-      .div(new BigNumber(tokensData.first.exchangeRate ?? 1)))
-    .toString();
+  const sellRate = useMemo(() => {
+    if (rate2 && !rate2.isNaN() && !rate2.eq(0)) {
+      return rate2.toFixed();
+    }
+    if (tokensData.first && tokensData.second) {
+      return new BigNumber(tokensData.first.exchangeRate ?? 1)
+        .div(new BigNumber(tokensData.second.exchangeRate ?? 1)).toFixed();
+    }
+    return undefined;
+  }, [rate2, tokensData.first, tokensData.second]);
+
+  const buyRate = useMemo(() => {
+    if (rate1 && !rate1.isNaN() && !rate1.eq(0)) {
+      return rate1.toFixed();
+    }
+    if (tokensData.first && tokensData.second) {
+      return new BigNumber(tokensData.second.exchangeRate ?? 1)
+        .div(new BigNumber(tokensData.first.exchangeRate ?? 1)).toFixed();
+    }
+    return undefined;
+  }, [rate1, tokensData.first, tokensData.second]);
+
+  const routes = useMemo(
+    () => [
+      tokensData.first ? {
+        id: 0,
+        name: token1 ? getWhitelistedTokenSymbol(token1) : '',
+        link: transformTokenDataToAnalyticsLink(tokensData.first),
+      } : undefined,
+      tokensData.first && tokensData.second && tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? {
+        id: 1,
+        name: 'XTZ',
+        link: 'https://analytics.quipuswap.com/tokens/tez',
+      } : undefined,
+      tokensData.second ? {
+        id: 2,
+        name: token2 ? getWhitelistedTokenSymbol(token2) : '',
+        link: transformTokenDataToAnalyticsLink(tokensData.second),
+      } : undefined,
+    ].filter((x): x is RouteType => !!x),
+    [token1, token2, tokensData.first, tokensData.second],
+  );
+
   return (
     <Card
       header={{
@@ -74,14 +107,18 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={sellRate}
-            currency={token2
-              ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
-          />
+          {sellRate && (
+            <>
+              <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
+              <span className={s.equal}>=</span>
+              <CurrencyAmount
+                amount={sellRate}
+                currency={token2
+                  ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
+                dollarEquivalent={tokensData.first?.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
+              />
+            </>
+          )}
         </div>
       </CardCell>
       <CardCell
@@ -97,13 +134,17 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <div className={s.cellAmount}>
-          <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={buyRate}
-            currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
-          />
+          {buyRate && (
+            <>
+              <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
+              <span className={s.equal}>=</span>
+              <CurrencyAmount
+                amount={buyRate}
+                currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
+                dollarEquivalent={tokensData.second?.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
+              />
+            </>
+          )}
         </div>
       </CardCell>
       <CardCell
@@ -118,7 +159,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        <CurrencyAmount amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)} currency="%" />
+        <CurrencyAmount
+          amount={
+            priceImpact?.isFinite() && priceImpact.gt('0.01')
+              ? priceImpact.toFixed(2)
+              : '<0.01'
+          }
+          currency="%"
+        />
       </CardCell>
       <CardCell
         header={(
@@ -146,25 +194,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           )}
         className={s.cell}
       >
-        <Route
-          routes={
-                [{
-                  id: 0,
-                  name: token1 ? getWhitelistedTokenSymbol(token1) : '',
-                  link: transformTokenDataToAnalyticsLink(tokensData.first),
-                },
-                ...(tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? [{
-                  id: 1,
-                  name: 'XTZ',
-                  link: 'https://analytics.quipuswap.com/tokens/tez',
-                }] : []),
-                {
-                  id: 2,
-                  name: token2 ? getWhitelistedTokenSymbol(token2) : '',
-                  link: transformTokenDataToAnalyticsLink(tokensData.second),
-                }]
-              }
-        />
+        <Route routes={routes} />
       </CardCell>
       {(dex || dex2) && (
       <div className={s.detailsButtons}>

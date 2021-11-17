@@ -1,6 +1,9 @@
 import React, {
-  useMemo, useState, useEffect, useRef,
   useCallback,
+  useMemo,
+  useState,
+  useEffect,
+  useRef,
 } from 'react';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -153,7 +156,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     const isDex2Same = dex2 && oldDex2 && isDexEqual(dex2, oldDex2);
     const isDexSame = isDex1Same || (isTokenToToken && isDex1Same && isDex2Same);
     if (isValuesSame && isTokensSame && isDexSame) return;
-    if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+    if (!tokensData.first!.exchangeRate || !tokensData.second!.exchangeRate) return;
     if (isValuesSame && !isTokensSame) {
       lastChangeMod = 'balance1';
     }
@@ -166,8 +169,8 @@ const RealForm:React.FC<SwapFormProps> = ({
 
     const inputWrapper = new BigNumber(lastChangeMod === 'balance1' ? val.balance1 : val.balance2);
     const inputValueInner = toDecimals(inputWrapper, decimals1);
-    const fromAsset = transformTokenDataToAsset(tokensData.first);
-    const toAsset = transformTokenDataToAsset(tokensData.second);
+    const fromAsset = transformTokenDataToAsset(tokensData.first!);
+    const toAsset = transformTokenDataToAsset(tokensData.second!);
 
     const valuesInner = lastChangeMod === 'balance1' ? { inputValue: inputValueInner } : { outputValue: inputValueInner };
 
@@ -208,8 +211,8 @@ const RealForm:React.FC<SwapFormProps> = ({
       decimals2,
     ));
 
-    const tokenToTokenRate = new BigNumber(tokensData.first.exchangeRate)
-      .div(tokensData.second.exchangeRate);
+    const tokenToTokenRate = new BigNumber(tokensData.first!.exchangeRate)
+      .div(tokensData.second!.exchangeRate);
 
     let rate1buf = new BigNumber(result)
       .div(val.balance2);
@@ -359,7 +362,9 @@ const RealForm:React.FC<SwapFormProps> = ({
         <Field
           validate={composeValidators(
             validateMinMax(0, Infinity),
-            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
+            accountPkh
+              ? validateBalance(new BigNumber(tokensData.first!.balance))
+              : () => undefined,
           )}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
           name="balance1"
@@ -384,8 +389,8 @@ const RealForm:React.FC<SwapFormProps> = ({
                 handleTokenChange(token, 'first');
                 setDex([]);
               }}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
+              balance={tokensData.first!.balance}
+              exchangeRate={tokensData.first!.exchangeRate}
               id="swap-send-from"
               label="From"
               className={s.input}
@@ -411,8 +416,8 @@ const RealForm:React.FC<SwapFormProps> = ({
                 handleTokenChange(token, 'second');
                 setDex([]);
               }}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
+              balance={tokensData.second!.balance}
+              exchangeRate={tokensData.second!.exchangeRate}
               id="swap-send-to"
               label="To"
               className={cx(s.input, s.mb24)}

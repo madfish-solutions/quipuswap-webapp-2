@@ -1,3 +1,4 @@
+export * from './bigNumber';
 export * from './isContractAddress';
 export * from './isAddress';
 export * from './composeValidators';

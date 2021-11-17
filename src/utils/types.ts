@@ -1,7 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-export type QSMainNet = 'mainnet' | 'florencenet';
+export type QSMainNet = 'mainnet' | 'granadanet';
 
 type QSNetworkType =
   | 'mainnet'
@@ -9,7 +9,8 @@ type QSNetworkType =
   | 'edo2net'
   | 'edonet'
   | 'delphinet'
-  | 'carthagenet';
+  | 'carthagenet'
+  | 'granadanet';
 
 export interface QSNetwork {
   id: QSNetworkType
@@ -20,6 +21,7 @@ export interface QSNetwork {
   metadata: string
   description: string
   disabled: boolean
+  ttDexApi?: string
 }
 
 export enum WalletType {
@@ -42,6 +44,11 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
+export type TokenId = Pick<
+WhitelistedToken,
+'contractAddress' | 'fa2TokenId' | 'type'
+>;
+
 export interface WhitelistedBaker {
   name: string,
   address: string,
@@ -57,6 +64,15 @@ export type WhitelistedTokenMetadata = {
   name: string
   thumbnailUri: string
 };
+
+export interface DexPair {
+  token1Pool: BigNumber;
+  token2Pool: BigNumber;
+  totalSupply: BigNumber;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  id: string | number;
+}
 
 export type VoterType = {
   vote: string,
@@ -75,9 +91,15 @@ export type TokenDataType = {
   exchangeRate?: string
 };
 
+export type NewTokenDataType = {
+  token: WhitelistedToken;
+  balance?: BigNumber;
+  exchangeRate?: BigNumber;
+};
+
 export type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
+  first?: TokenDataType,
+  second?: TokenDataType
 };
 
 export type SwapFormValues = {
@@ -86,6 +108,16 @@ export type SwapFormValues = {
   balance2: BigNumber
   recipient: string
   slippage: string
+};
+
+export type NewSwapFormValues = {
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  amount1: BigNumber;
+  amount2: BigNumber;
+  recipient: string;
+  slippage: string;
+  action: 'swap' | 'send';
 };
 
 export type LiquidityFormValues = {

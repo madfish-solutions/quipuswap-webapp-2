@@ -3,6 +3,7 @@ import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
   TESTNET_TOKENS,
+  TEZOS_TOKEN,
 } from '@utils/defaults';
 import {
   WhitelistedToken, WhitelistedTokenPair, QSNetwork,
@@ -34,12 +35,25 @@ export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
 export const getTokens = async (
   network:QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(network.id === 'florencenet' ? TESTNET_TOKENS : MAINNET_TOKENS))
+) => fetch(ipfsToHttps(network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
-    let res = [];
+    let res: any[] = [];
     if (json.tokens?.length !== 0) {
       res = json.tokens;
+    }
+    if (!res.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
+      res.unshift({
+        network: 'granadanet',
+        type: 'fa1.2',
+        contractAddress: 'tez',
+        metadata: {
+          decimals: 6,
+          name: 'Tezos',
+          symbol: 'TEZ',
+          thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
+        },
+      });
     }
     if (addTokensFromLocalStorage) {
       res = [...getSavedTokens(), ...res];

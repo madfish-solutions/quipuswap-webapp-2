@@ -100,7 +100,7 @@ type LiquidityFormProps = {
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
-type QSMainNet = 'mainnet' | 'florencenet';
+type QSMainNet = 'mainnet' | 'granadanet';
 
 const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
@@ -245,7 +245,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       } else if (!val.switcher) {
         if (!val.balance1 && !val.balance2) return;
         if (isTokensSame && isValuesSame && isDexSame) return;
-        if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
+        if (!tokensData.first!.exchangeRate || !tokensData.second!.exchangeRate) return;
 
         if (values.balance1 && accountPkh) {
           const tezValue = toDecimals(new BigNumber(values.balance1), 6);
@@ -279,18 +279,18 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
             : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!)));
           const sharesA = await getMethod(
-            tokensData.first,
+            tokensData.first!,
             dex,
             new BigNumber(values.balance1),
           );
           const sharesB = await getMethod(
-            tokensData.second,
+            tokensData.second!,
             dex,
             lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
           );
 
-          const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
-          const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
+          const lp1 = fromDecimals(sharesA, tokensData.first!.token.decimals);
+          const lp2 = fromDecimals(sharesB, tokensData.second!.token.decimals);
 
           form.mutators.setValue(
             'estimateLP',
@@ -324,15 +324,15 @@ const RealForm:React.FC<LiquidityFormProps> = ({
             inputValue = val1.div(exA);
           } else {
             inputValue = getValueForSDK(
-              tokensData.second,
+              tokensData.second!,
               fromDecimals(val2, token2.metadata.decimals),
               tezos,
             );
           }
           const fromAsset = 'tez';
           const toAsset = {
-            contract: tokensData.second.token.address,
-            id: tokensData.second.token.id ?? undefined,
+            contract: tokensData.second!.token.address,
+            id: tokensData.second!.token.id ?? undefined,
           };
           const slippage = slippageToBignum(values.slippage).div(100);
           const swapParams = await swap(
@@ -467,9 +467,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       setSubm(true);
       if (values.switcher !== formValues.switcher) {
         if (!values.switcher) {
-          if (!tokensData.first.exchangeRate || !tokensData.second.exchangeRate) return;
-          const rate = new BigNumber(tokensData.first.exchangeRate)
-            .dividedBy(new BigNumber(tokensData.second.exchangeRate));
+          if (!tokensData.first!.exchangeRate || !tokensData.second!.exchangeRate) return;
+          const rate = new BigNumber(tokensData.first!.exchangeRate)
+            .dividedBy(new BigNumber(tokensData.second!.exchangeRate));
           const retValue = lastChange === 'balance1' ? new BigNumber(values.balance1).multipliedBy(rate) : new BigNumber(values.balance2).dividedBy(rate);
           const decimals = lastChange === 'balance1' ? token1.metadata.decimals : token2.metadata.decimals;
 
@@ -492,18 +492,18 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               ? estimateSharesInTez(foundDex.storage, getValueForSDK(token, value, tezos!))
               : estimateSharesInToken(foundDex.storage, getValueForSDK(token, value, tezos!)));
             const sharesA = await getMethod(
-              tokensData.first,
+              tokensData.first!,
               dex,
               new BigNumber(values.balance1),
             );
             const sharesB = await getMethod(
-              tokensData.second,
+              tokensData.second!,
               dex,
               lastChange === 'balance2' ? new BigNumber(values.balance2) : retValue,
             );
 
-            const lp1 = fromDecimals(sharesA, tokensData.first.token.decimals);
-            const lp2 = fromDecimals(sharesB, tokensData.second.token.decimals);
+            const lp1 = fromDecimals(sharesA, tokensData.first!.token.decimals);
+            const lp2 = fromDecimals(sharesB, tokensData.second!.token.decimals);
 
             form.mutators.setValue(
               'estimateLP',
@@ -659,8 +659,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               {...input}
               token1={tokenPair.token1}
               handleBalance={() => {}}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
+              balance={tokensData.first!.balance}
+              exchangeRate={tokensData.first!.exchangeRate}
               id="liquidity-token-A"
               label="Output"
               className={cx(s.input, s.mb24)}
@@ -676,7 +676,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           name="balance1"
           validate={composeValidators(
             !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
-            accountPkh ? validateBalance(new BigNumber(tokensData.first.balance)) : () => undefined,
+            accountPkh
+              ? validateBalance(new BigNumber(tokensData.first!.balance))
+              : () => undefined,
           )}
           parse={(v) => token1?.metadata && parseDecimals(v, 0, Infinity, token1.metadata.decimals)}
         >
@@ -707,8 +709,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 setLastChange('balance1');
                 handleTokenChange(token, 'first');
               }}
-              balance={tokensData.first.balance}
-              exchangeRate={tokensData.first.exchangeRate}
+              balance={tokensData.first!.balance}
+              exchangeRate={tokensData.first!.exchangeRate}
               id="liquidity-token-1"
               label="Input"
               className={s.input}
@@ -728,8 +730,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
               {...input}
               token1={tokenPair.token2}
               handleBalance={() => {}}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
+              balance={tokensData.second!.balance}
+              exchangeRate={tokensData.second!.exchangeRate}
               id="liquidity-token-B"
               label="Output"
               className={cx(s.input, s.mb24)}
@@ -744,7 +746,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           validate={composeValidators(
             !values.switcher ? validateMinMax(0, Infinity) : validateMinMaxNonStrict(0, Infinity),
             accountPkh
-              ? validateBalance(new BigNumber(tokensData.second.balance))
+              ? validateBalance(new BigNumber(tokensData.second!.balance))
               : () => undefined,
           )}
           parse={(v) => token2?.metadata && parseDecimals(v, 0, Infinity, token2.metadata.decimals)}
@@ -774,8 +776,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 setAddLiquidityParams([]);
                 handleTokenChange(token, 'second');
               }}
-              balance={tokensData.second.balance}
-              exchangeRate={tokensData.second.exchangeRate}
+              balance={tokensData.second!.balance}
+              exchangeRate={tokensData.second!.exchangeRate}
               id="liquidity-token-2"
               label="Input"
               className={cx(s.input, s.mb24)}

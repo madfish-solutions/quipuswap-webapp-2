@@ -6,7 +6,7 @@ import { Button } from '@components/ui/Button';
 
 import s from './Route.module.sass';
 
-type RouteType = {
+export type RouteType = {
   id: number,
   name: string,
   link: string

@@ -4,6 +4,12 @@ import useSWR from 'swr';
 import { useOnBlock, useTezos } from '@utils/dapp';
 import useUpdateToast from './useUpdateToast';
 
+type ExchangeRateEntry = {
+  tokenAddress: string,
+  tokenId?: number,
+  exchangeRate: string
+};
+
 export const [
   ExchangeRatesProvider,
   useExchangeRates,
@@ -28,5 +34,5 @@ export const [
   );
   useOnBlock(tezos, revalidate);
 
-  return exchangeRates;
+  return exchangeRates as (ExchangeRateEntry[] | undefined);
 });

@@ -98,14 +98,14 @@ const TabsBig = [
 const selectValues = [
   { value: 'mainnet', label: 'Mainnet' },
   { value: 'edo2testnet', label: 'Edo2 Testnet' },
-  { value: 'florenceTestnet', label: 'Florence Testnet' },
+  { value: 'granadaTestnet', label: 'Granada Testnet' },
   { value: 'localhost8888', label: 'localhost: 8888' },
 ];
 
 const selectValuesTop = [
   { value: 'mainnet', label: 'Mainnet Top' },
   { value: 'edo2testnet', label: 'Edo2 Testnet Top' },
-  { value: 'florenceTestnet', label: 'Florence Testnet Top' },
+  { value: 'granadaTestnet', label: 'Granada Testnet Top' },
   { value: 'localhost8888', label: 'localhost: 8888 Top' },
 ];
 

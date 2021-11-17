@@ -1,4 +1,5 @@
 import React from 'react';
+import BigNumber from 'bignumber.js';
 
 import { Button } from '@components/ui/Button';
 
@@ -13,9 +14,9 @@ export const PercentSelector: React.FC<PercentSelectorProps> = ({
   handleBalance,
   value,
 }) => {
-  const handle25 = () => handleBalance((parseFloat(value) * 0.25).toString());
-  const handle50 = () => handleBalance((parseFloat(value) * 0.5).toString());
-  const handle75 = () => handleBalance((parseFloat(value) * 0.75).toString());
+  const handle25 = () => handleBalance(new BigNumber(value).times(0.25).toFixed());
+  const handle50 = () => handleBalance(new BigNumber(value).times(0.5).toFixed());
+  const handle75 = () => handleBalance(new BigNumber(value).times(0.75).toFixed());
   const handleMAX = () => handleBalance(value);
 
   return (

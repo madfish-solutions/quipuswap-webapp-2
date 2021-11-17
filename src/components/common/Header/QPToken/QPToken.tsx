@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
 import BigNumber from 'bignumber.js';
 
@@ -26,10 +26,14 @@ export const QPToken: React.FC<QPTokenProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const exchangeRates = useExchangeRates();
 
-  const price = new BigNumber(exchangeRates && exchangeRates.find
-    ? exchangeRates
-      .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
-    : NaN);
+  const price = useMemo(() => {
+    if (!exchangeRates) {
+      return new BigNumber(NaN);
+    }
+    const rawExchangeRate = exchangeRates
+      .find(({ tokenAddress }) => tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate;
+    return new BigNumber(rawExchangeRate || NaN);
+  }, [exchangeRates]);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>

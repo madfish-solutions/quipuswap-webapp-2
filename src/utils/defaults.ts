@@ -1,4 +1,4 @@
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -66,6 +66,18 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
+export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1Mfz9fXRQHrPQyCyJQDnFRgUv9fi18HbHR',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [
@@ -76,6 +88,10 @@ export const FACTORIES = {
       'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
       'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
     ],
+  },
+  granadanet: {
+    fa1_2Factory: ['KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd'],
+    fa2Factory: ['KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT'],
   },
   mainnet: {
     fa1_2Factory: [
@@ -89,21 +105,27 @@ export const FACTORIES = {
   },
 };
 
+export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
+  granadanet: 'KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H',
+};
+
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
+export const TTDEX_API_TESTNET = process.env.NEXT_PUBLIC_TTDEX_API_TESTNET!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
-export const FLORENCENET_NETWORK: QSNetwork = {
-  id: 'florencenet',
+export const GRANADANET_NETWORK: QSNetwork = {
+  id: 'granadanet',
   connectType: 'default',
-  name: 'Florence Testnet',
+  name: 'Granada Testnet',
   type: 'test',
-  rpcBaseURL: 'https://testnet-tezos.giganode.io',
+  rpcBaseURL: 'https://granadanet.smartpy.io',
   metadata: METADATA_API_TESTNET,
-  description: 'Florence testnet',
+  description: 'Granada testnet',
   disabled: false,
+  ttDexApi: TTDEX_API_TESTNET,
 };
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
@@ -115,9 +137,9 @@ export const MAINNET_NETWORK: QSNetwork = {
   description: 'Tezos mainnet',
   disabled: false,
 };
-export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK];
+export const ALL_NETWORKS = [MAINNET_NETWORK, GRANADANET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
-  ['florencenet', 'NetXxkAx4woPLyu'],
+  ['granadanet', 'NetXz969SFaFn8k'],
   ['mainnet', 'NetXdQprcVkpaWU'],
 ]);

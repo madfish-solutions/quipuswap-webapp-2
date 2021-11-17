@@ -11,8 +11,10 @@ import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
 import { ColorThemeProvider } from '@providers/ColorThemeContext';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
+import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
 
 import '@styles/globals.sass';
+import { DexGraphProvider } from '@hooks/useDexGraph';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -138,7 +140,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <DAppProvider>
         <ColorThemeProvider>
           <ExchangeRatesProvider>
-            <Component {...pageProps} />
+            <NewExchangeRatesProvider>
+              <DexGraphProvider>
+                <Component {...pageProps} />
+              </DexGraphProvider>
+            </NewExchangeRatesProvider>
           </ExchangeRatesProvider>
         </ColorThemeProvider>
       </DAppProvider>
