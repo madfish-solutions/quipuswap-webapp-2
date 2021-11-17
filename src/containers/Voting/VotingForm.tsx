@@ -1,39 +1,49 @@
 import React, {
-  useEffect, useRef, useState, useCallback, useMemo,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
 } from 'react';
-import { useRouter } from 'next/router';
-import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy } from 'react-final-form';
 import {
+  Token,
   findDex,
   FoundDex,
-  Token,
 } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import { Button, Card, Tabs } from '@quipuswap/ui-kit';
+import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
 
 import {
-  useAccountPkh, useNetwork, useTezos,
+  useTezos,
+  useNetwork,
+  useAccountPkh,
 } from '@utils/dapp';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
   QSMainNet,
   TokenDataMap,
   VoteFormValues,
-  WhitelistedToken, WhitelistedTokenPair,
+  WhitelistedToken,
+  WhitelistedTokenPair,
   VoterType,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import {
-  getWhitelistedTokenSymbol, isAssetEqual, parseDecimals,
+  isAssetEqual,
+  parseDecimals,
+  getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import {
-  composeValidators, required, validateBalance, validateMinMax,
+  required,
+  validateMinMax,
+  validateBalance,
+  composeValidators,
 } from '@utils/validators';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';

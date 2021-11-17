@@ -1,10 +1,9 @@
 import React, { useContext } from 'react';
+import { Bage, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import Image from 'next/image';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { prepareTokenLogo } from '@utils/helpers';
-import { Bage } from '@components/ui/Bage';
 import { FallbackLogo } from '@components/svg/FallbackLogo';
 
 import s from './NewsCard.module.sass';

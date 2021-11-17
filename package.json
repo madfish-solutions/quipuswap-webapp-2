@@ -14,6 +14,7 @@
     "@airgap/beacon-sdk": "^2.3.0",
     "@apollo/client": "^3.3.21",
     "@quipuswap/sdk": "^2.2.1",
+    "@quipuswap/ui-kit": "../quipu-ui-kit/dist",
     "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/taquito": "^9.2.0",
     "@taquito/utils": "^9.2.0",
@@ -42,7 +43,7 @@
     "react-slick": "^0.28.1",
     "react-table": "^7.7.0",
     "react-textarea-autosize": "^8.3.3",
-    "react-toastify": "^7.0.4",
+    "react-toastify": "^8.0.3",
     "sass": "^1.35.1",
     "slick-carousel": "^1.8.1",
     "swr": "^0.5.6",
@@ -66,11 +67,11 @@
     "eslint-config-next": "^11.0.1",
     "eslint-plugin-import": "^2.23.4",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.24.0",
+    "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "4.3.8",
     "i18next-parser": "^4.2.0",
-    "typescript": "^4.3.5"
+    "typescript": "4.3.5"
   },
   "husky": {
     "hooks": {

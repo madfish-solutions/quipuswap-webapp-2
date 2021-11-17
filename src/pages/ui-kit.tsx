@@ -1,49 +1,54 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import {
+  Tabs,
+  Bage,
+  Route,
+  Input,
+  Modal,
+  Button,
+  Tooltip,
+  Slippage,
+  SelectUI,
+  Switcher,
+  Timeleft,
+  SwapCell,
+  BakerCell,
+  CurrencyAmount,
+  ChooseListCell,
+  ColorModeSwitcher,
+} from '@quipuswap/ui-kit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedFarm } from '@utils/types';
+import { useTokens } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { BaseLayout } from '@layouts/BaseLayout';
-import { useTokens } from '@utils/dapp';
-import { WhitelistedFarm } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { Button } from '@components/ui/Button';
-import { Bage } from '@components/ui/Bage';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { Modal } from '@components/ui/Modal';
-import {
-  BakerCell,
-  ChooseListCell,
-  SwapCell,
-} from '@components/ui/Modal/ModalCell';
-import { Switcher } from '@components/ui/Switcher';
-import { Tabs } from '@components/ui/Tabs';
 import {
   LineChartSampleData,
   CandleChartSampleData,
 } from '@components/charts/content';
-import { Input } from '@components/ui/Input';
-import { SelectUI } from '@components/ui/Select';
-import { Tooltip } from '@components/ui/Tooltip';
 import {
-  ComplexBaker, ComplexInput, ComplexRecipient,
+  ComplexBaker,
+  ComplexInput,
+  ComplexRecipient,
 } from '@components/ui/ComplexInput';
-import { Timeleft } from '@components/ui/Timeleft';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
-import { Slippage } from '@components/common/Slippage';
-import { Route } from '@components/common/Route';
+import { TokensModal } from '@components/modals/TokensModal';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
-import { TokensModal } from '@components/modals/TokensModal';
-import { Logo } from '@components/svg/Logo';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
+import { Logo } from '@components/svg/Logo';
 import { Pen } from '@components/svg/Pen';
-import Search from '@icons/Search.svg';
 import Chevron from '@icons/Chevron.svg';
+import Search from '@icons/Search.svg';
 
 import s from '@styles/UiKit.module.sass';
 
@@ -591,14 +596,10 @@ const UiKit: React.FC = () => {
             token2={{ name: 'Token' }}
           /> */}
           <BakerCell
-            baker={{
-              name: 'EVERSTAKE',
-              votes: 100002,
-              fee: 10,
-              freeSpace: new BigNumber('1,000,000,000.00'),
-              address: 'test',
-              logo: '',
-            }}
+            bakerName="EVERSTAKE"
+            bakerFee="10"
+            bakerFreeSpace="1,000,000,000.00"
+            bakerLogo=""
           />
         </Modal>
       </section>

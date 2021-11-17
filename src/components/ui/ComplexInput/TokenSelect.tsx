@@ -1,22 +1,28 @@
 import React, {
-  useContext, useMemo, useRef, useState,
+  useRef,
+  useMemo,
+  useState,
+  useContext,
 } from 'react';
-import cx from 'classnames';
+import {
+  Button,
+  ColorModes,
+  TokensLogos,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { useAccountPkh } from '@utils/dapp';
-import BigNumber from 'bignumber.js';
 import s from './ComplexInput.module.sass';
 
 type TokenSelectProps = {
@@ -141,7 +147,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos token1={token ?? TEZOS_TOKEN} />
+              <TokensLogos
+                firstTokenIcon={token
+                  ? prepareTokenLogo(token.metadata?.thumbnailUri)
+                  : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
+                firstTokenSymbol={token
+                  ? getWhitelistedTokenSymbol(token)
+                  : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+              />
               <h6 className={cx(s.token)}>
 
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}

@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import { useGetTokensPairsLazyQuery } from '@graphql';
 import { useTranslation } from 'next-i18next';
+import { useGetTokensPairsLazyQuery } from '@graphql';
 
 import { Token } from 'graphql';
 import { transformNodeToWhitelistedToken, prepareTokenName } from '@utils/helpers';
-import { Section } from '@components/home/Section';
 import { PoolTable } from '@components/tables/PoolTable';
+import { Section } from '@components/home/Section';
 
 type TopPairsProps = {
   className?: string

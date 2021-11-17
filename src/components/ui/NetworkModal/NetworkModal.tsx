@@ -1,12 +1,14 @@
 import React, { useContext } from 'react';
-import cx from 'classnames';
+import {
+  Input,
+  Modal,
+  Button,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Modal } from '@components/ui/Modal';
-import { Button } from '@components/ui/Button';
-import { Input } from '@components/ui/Input';
+import cx from 'classnames';
 
 import s from './NetworkModal.module.sass';
 

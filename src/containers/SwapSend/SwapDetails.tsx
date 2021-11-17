@@ -1,19 +1,23 @@
 import React, { useMemo } from 'react';
+import {
+  Card,
+  Route,
+  RouteProps,
+  Button,
+  Tooltip,
+  CardCell,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
+import BigNumber from 'bignumber.js';
 
 import {
-  getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink,
+  getWhitelistedTokenSymbol,
+  transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Route, RouteType } from '@components/common/Route';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
@@ -83,7 +87,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         name: token2 ? getWhitelistedTokenSymbol(token2) : '',
         link: transformTokenDataToAnalyticsLink(tokensData.second),
       } : undefined,
-    ].filter((x): x is RouteType => !!x),
+    ].filter((x): x is RouteProps['routes'][0] => !!x),
     [token1, token2, tokensData.first, tokensData.second],
   );
 
@@ -206,7 +210,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          { t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
+          {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
             {
               tokenA: getWhitelistedTokenSymbol(token1),
               tokenB: TEZOS_TOKEN.metadata.symbol,

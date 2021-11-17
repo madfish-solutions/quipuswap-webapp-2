@@ -5,18 +5,24 @@ import React, {
   useEffect,
   useRef,
 } from 'react';
+import {
+  Tabs,
+  Card,
+  Button,
+  Slippage,
+  SwapButton,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
+import { estimateSwap, FoundDex } from '@quipuswap/sdk';
+import { Field, FormSpy } from 'react-final-form';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import {
-  estimateSwap,
-  FoundDex,
-} from '@quipuswap/sdk';
-import { Field, FormSpy } from 'react-final-form';
 
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  QSMainNet,
+  SwapFormValues,
+  TokenDataMap,
+  WhitelistedToken,
 } from '@utils/types';
 import {
   useAccountPkh,
@@ -24,30 +30,30 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
-  composeValidators, isAddress, validateBalance, validateMinMax,
+  isAddress,
+  validateMinMax,
+  validateBalance,
+  composeValidators,
 } from '@utils/validators';
 import {
-  fromDecimals,
-  getWhitelistedTokenSymbol,
+  toDecimals,
   isDexEqual,
   isTokenEqual,
+  fromDecimals,
   parseDecimals,
   slippageToBignum,
-  toDecimals,
+  getWhitelistedTokenSymbol,
   transformTokenDataToAsset,
 } from '@utils/helpers';
 import { FACTORIES, FEE_RATE } from '@utils/defaults';
-import { Tabs } from '@components/ui/Tabs';
-import { Card } from '@components/ui/Card';
-import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { Button } from '@components/ui/Button';
-import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
+
 import { SwapDetails } from './SwapDetails';
 import { getDex } from './swapHelpers';
 

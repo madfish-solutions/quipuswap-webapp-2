@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
+import { ColorModes, ColorThemeContext, Modal } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Modal } from '@components/ui/Modal';
 
 import s from './ApyModal.module.sass';
 

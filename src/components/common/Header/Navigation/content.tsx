@@ -11,19 +11,19 @@ import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
 import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
 import MoreIcon from '@icons/MoreIcon.svg';
 
-type NavigationDataProps = {
+interface LinkInterface {
   id: number
   href?: string
+  as?: string
   label: React.ReactNode
-  Icon: React.FC<{ className?: string, id?: string }>
-  links?: {
-    id: number
-    href: string
-    label: string
-  }[]
-}[];
+  Icon?: React.FC<{ className?: string, id?: string }>
+}
 
-export const NavigationData: NavigationDataProps = [
+interface NavigationDataProps extends LinkInterface {
+  links?: LinkInterface[]
+}
+
+export const NavigationData: NavigationDataProps[] = [
   {
     id: 0,
     href: '/',
@@ -32,19 +32,22 @@ export const NavigationData: NavigationDataProps = [
   },
   {
     id: 1,
-    href: '/swap',
+    href: '/swap/[from-to]',
+    as: '/swap/TEZ-QUIPU',
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon,
   },
   {
     id: 2,
-    href: '/liquidity',
+    href: '/liquidity/[method]/[from-to]',
+    as: '/liquidity/add/TEZ-QUIPU',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon,
   },
   {
     id: 3,
-    href: '/voting',
+    href: '/voting/[method]/[from-to]',
+    as: '/voting/vote/TEZ-QUIPU',
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon,
   },

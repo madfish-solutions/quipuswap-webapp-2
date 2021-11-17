@@ -1,7 +1,5 @@
 import React, { ReactNode } from 'react';
-
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
+import { Button, Card } from '@quipuswap/ui-kit';
 
 import s from './OpportunityCard.module.sass';
 

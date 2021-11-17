@@ -1,12 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import cx from 'classnames';
+import { ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
 import { NextSeo } from 'next-seo';
 import Script from 'next/script';
+import cx from 'classnames';
 
 import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { ToastWrapper } from '@components/ui/ToastWrapper';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
 import { WalletModal } from '@components/modals/WalletModal';

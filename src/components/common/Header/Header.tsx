@@ -1,13 +1,20 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import {
+  Button,
+  LogoButton,
+  ColorModes,
+  LanguageSwitcher,
+  ColorThemeContext,
+  ColorModeSwitcher,
+  ConnectWalletButton,
+} from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
-import { ColorModeSwitcher } from '@components/ui/ColorModeSwitcher';
-import { LanguageSwitcher } from '@components/common/LanguageSwitcher';
 import { Menu } from '@components/common/Header/Menu';
-import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { LogoButton } from '@components/common/LogoButton';
 import { MenuClosed } from '@components/svg/MenuClosed';
 import { MenuOpened } from '@components/svg/MenuOpened';
 

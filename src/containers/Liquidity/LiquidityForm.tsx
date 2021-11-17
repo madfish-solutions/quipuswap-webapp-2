@@ -1,12 +1,10 @@
-import { useTranslation } from 'next-i18next';
-import router from 'next/router';
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
   useCallback,
 } from 'react';
-import cx from 'classnames';
-import BigNumber from 'bignumber.js';
-import { Field, FormSpy } from 'react-final-form';
 import {
   addLiquidity,
   // Dex,
@@ -23,46 +21,64 @@ import {
   swap,
   TransferParams,
 } from '@quipuswap/sdk';
+import {
+  Tabs,
+  Card,
+  Button,
+  Tooltip,
+  Switcher,
+  Slippage,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
+import { Field, FormSpy } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
+import router from 'next/router';
+import cx from 'classnames';
 
 import {
-  useAccountPkh, useNetwork, useOnBlock, useTezos,
+  useTezos,
+  useOnBlock,
+  useNetwork,
+  useAccountPkh,
 } from '@utils/dapp';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import {
-  LiquidityFormValues,
   PoolShare,
-  TokenDataMap, TokenDataType,
-  WhitelistedToken, WhitelistedTokenPair,
+  TokenDataMap,
+  TokenDataType,
+  WhitelistedToken,
+  LiquidityFormValues,
+  WhitelistedTokenPair,
 } from '@utils/types';
-
 import {
-  composeValidators, validateBalance, validateMinMax, validateMinMaxNonStrict,
+  validateMinMax,
+  validateBalance,
+  composeValidators,
+  validateMinMaxNonStrict,
 } from '@utils/validators';
 import {
+  isDexEqual,
+  toDecimals,
+  isTokenEqual,
   fromDecimals,
+  parseDecimals,
   getValueForSDK,
-  getWhitelistedTokenSymbol, isDexEqual, isTokenEqual, parseDecimals, slippageToBignum, toDecimals,
+  slippageToBignum,
+  getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { Tooltip } from '@components/ui/Tooltip';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
-import { Switcher } from '@components/ui/Switcher';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexInput } from '@components/ui/ComplexInput';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { Transactions } from '@components/svg/Transactions';
 import { ArrowDown } from '@components/svg/ArrowDown';
 import { Plus } from '@components/svg/Plus';
 
-import s from './Liquidity.module.sass';
-
 import { asyncGetLiquidityShare, hanldeTokenPairSelect } from './liquidityHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
+import s from './Liquidity.module.sass';
 
 const TabsContent = [
   {

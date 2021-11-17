@@ -1,7 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 
-import { Button } from '@components/ui/Button';
+import { Button } from '@quipuswap/ui-kit';
 
 import s from './ComplexInput.module.sass';
 

@@ -1,33 +1,38 @@
-import { useTranslation } from 'next-i18next';
 import React, {
+  useMemo,
+  useState,
+  useEffect,
   useCallback,
-  useEffect, useMemo, useState,
 } from 'react';
-import { useRouter } from 'next/router';
+import { TransferParams } from '@quipuswap/sdk';
+import { StickyBlock } from '@quipuswap/ui-kit';
+import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
-import {
-  TransferParams,
-} from '@quipuswap/sdk';
+import { useRouter } from 'next/router';
 
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
-import useUpdateToast from '@hooks/useUpdateToast';
 import {
-  useAccountPkh, useNetwork, useOnBlock, useSearchCustomTokens, useTezos, useTokens,
+  useTezos,
+  useTokens,
+  useNetwork,
+  useOnBlock,
+  useAccountPkh,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
-  fallbackTokenToTokenData,
   handleTokenChange,
   handleSearchToken,
+  fallbackTokenToTokenData,
 } from '@utils/helpers';
 import {
-  LiquidityFormValues,
   TokenDataMap,
   WhitelistedToken,
+  LiquidityFormValues,
   WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { StickyBlock } from '@components/common/StickyBlock';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
+import useUpdateToast from '@hooks/useUpdateToast';
 
 import { LiquidityForm } from './LiquidityForm';
 import { LiquidityChart } from './LiquidityChart';

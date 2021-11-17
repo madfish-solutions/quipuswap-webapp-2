@@ -62,7 +62,7 @@ export const handleSearchToken = async ({
         ),
       );
     if (isTokens.length === 0) {
-      return await searchCustomToken(inputValue, +inputToken, true).then((x) => {
+      return searchCustomToken(inputValue, +inputToken, true).then((x) => {
         if (x) {
           return x;
         }

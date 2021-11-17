@@ -1,9 +1,8 @@
 import React, { ReactNode, useContext, useState } from 'react';
-import Link from 'next/link';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import cx from 'classnames';
-
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import { NavigationData } from './content';
 import s from './Navigation.module.sass';
@@ -28,13 +27,14 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const content: ReactNode[] = [];
   NavigationData.forEach(({
-    id, href, label, Icon, links,
+    id, href, label, Icon, links, as,
   }) => {
     if (href) {
       content.push(
         <Link
           key={id}
           href={href}
+          as={as}
         >
           <a
             className={cx(
@@ -47,7 +47,7 @@ export const Navigation: React.FC<NavigationProps> = ({
               modeClass[colorThemeMode],
             )}
           >
-            <Icon className={s.icon} id={iconId} />
+            {Icon && <Icon className={s.icon} id={iconId} />}
             {label}
           </a>
         </Link>,
@@ -64,14 +64,14 @@ export const Navigation: React.FC<NavigationProps> = ({
             className={cx(s.link, s.linkToggle, modeClass[colorThemeMode])}
             onClick={() => setIsInnerMenuOpened(!isInnerMenuOpened)}
           >
-            <Icon className={s.icon} id={iconId} />
+            {Icon && <Icon className={s.icon} id={iconId} />}
             {label}
           </button>
           <span className={s.linksInner}>
             {links.map((el) => (
               <Link
                 key={el.id}
-                href={el.href}
+                href={el.href ?? ''}
               >
                 <a
                   className={cx(

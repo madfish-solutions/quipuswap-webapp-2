@@ -1,13 +1,16 @@
 import React, { useContext, useMemo } from 'react';
-import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
+import {
+  Card,
+  Button,
+  Tooltip,
+  ColorModes,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
+import cx from 'classnames';
 
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Tooltip } from '@components/ui/Tooltip';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
 import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './VotingStats.module.sass';
@@ -80,7 +83,6 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           <span className={s.header}>
             {t(header)}
             :
-
             <Tooltip content={t(tooltip)} />
           </span>
           <span className={s.amount}>{amount}</span>
@@ -99,7 +101,6 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         className={s.button}
       >
         {t('vote|Claim Reward')}
-
       </Button>
     </Card>
   );

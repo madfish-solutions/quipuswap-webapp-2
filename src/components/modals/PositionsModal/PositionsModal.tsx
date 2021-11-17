@@ -1,10 +1,26 @@
 import React, {
-  useContext, useEffect, useRef, useState, useMemo, useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
 } from 'react';
+import {
+  Input,
+  Modal,
+  Button,
+  Checkbox,
+  TokenCell,
+  ColorModes,
+  NumberInput,
+  LoadingTokenCell,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
+import { Field, FormSpy, withTypes } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
-import { Field, FormSpy, withTypes } from 'react-final-form';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
@@ -16,15 +32,10 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import { localSearchToken, isTokenEqual } from '@utils/helpers';
+import {
+  localSearchToken, isTokenEqual, prepareTokenLogo, getWhitelistedTokenSymbol,
+} from '@utils/helpers';
 import { validateMinMax } from '@utils/validators';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Checkbox } from '@components/ui/Checkbox';
-import { Button } from '@components/ui/Button';
-import { Modal } from '@components/ui/Modal';
-import { LoadingTokenCell, TokenCell } from '@components/ui/Modal/ModalCell';
-import { Input } from '@components/ui/Input';
-import { NumberInput } from '@components/ui/NumberInput';
 import { Plus } from '@components/svg/Plus';
 import Search from '@icons/Search.svg';
 import TokenNotFound from '@icons/TokenNotFound.svg';
@@ -268,7 +279,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               if (!token) return '';
               return (
                 <TokenCell
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                   // onChange(token);
@@ -303,7 +316,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               if (!token) return '';
               return (
                 <TokenCell
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                     if (!notSelectable2) {
@@ -338,7 +353,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               return (
                 <TokenCell
                   key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                  token={token}
+                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                  tokenName={getWhitelistedTokenSymbol(token)}
+                  tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
                     if (searchTokens.length > 0) {
