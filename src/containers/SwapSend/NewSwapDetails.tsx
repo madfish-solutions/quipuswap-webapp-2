@@ -1,7 +1,17 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
+import {
+  Button,
+  Card,
+  CardCell,
+  CurrencyAmount,
+  Tooltip,
+  Route,
+  RouteProps,
+} from '@quipuswap/ui-kit';
 
+import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   convertUnits,
   getTokenInput,
@@ -11,16 +21,9 @@ import {
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { DexPair, WhitelistedToken } from '@utils/types';
-import { Card } from '@components/ui/Card';
-import { Button } from '@components/ui/Button';
-import { Tooltip } from '@components/ui/Tooltip';
-import { CardCell } from '@components/ui/Card/CardCell';
-import { Route, RouteType } from '@components/common/Route';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 
 type NewSwapDetailsProps = {
   currentTab: string;
@@ -94,7 +97,7 @@ export const NewSwapDetails: React.FC<NewSwapDetailsProps> = ({
 
   const routes = useMemo(
     () => {
-      const displayedRoute: RouteType[] = [];
+      const displayedRoute: RouteProps['routes'] = [];
       if (inputToken && route.length > 0) {
         displayedRoute.push({
           id: 0,

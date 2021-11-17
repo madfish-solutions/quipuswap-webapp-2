@@ -9,13 +9,12 @@ import React, {
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { Button, TokensLogos } from '@quipuswap/ui-kit';
 
 import { WhitelistedToken } from '@utils/types';
-import { getWhitelistedTokenSymbol, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { Button } from '@components/ui/Button';
 import { TokensModal } from '@components/modals/TokensModal';
-import { TokensLogos } from '@components/ui/TokensLogos';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { Shevron } from '@components/svg/Shevron';
@@ -198,7 +197,14 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos token1={token ?? TEZOS_TOKEN} />
+              <TokensLogos
+                firstTokenIcon={token
+                  ? prepareTokenLogo(token.metadata?.thumbnailUri)
+                  : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
+                firstTokenSymbol={token
+                  ? getWhitelistedTokenSymbol(token)
+                  : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+              />
               <h6 className={cx(s.token)}>
 
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}

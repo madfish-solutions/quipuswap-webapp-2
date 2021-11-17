@@ -8,14 +8,16 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {
+  Tabs,
+  Card,
+  Button,
+  Slippage,
+  StickyBlock,
+  SwapButton,
+  CurrencyAmount,
+} from '@quipuswap/ui-kit';
 
-import { StickyBlock } from '@components/common/StickyBlock';
-import { Card } from '@components/ui/Card';
-import { Tabs } from '@components/ui/Tabs';
-import { Button } from '@components/ui/Button';
-import { SwapButton } from '@components/common/SwapButton';
-import { Slippage } from '@components/common/Slippage';
-import { CurrencyAmount } from '@components/common/CurrencyAmount';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
 import { Transactions } from '@components/svg/Transactions';
