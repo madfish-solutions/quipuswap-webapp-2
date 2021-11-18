@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import {
   Button,
-  NetworkSelect,
   LanguageSwitcher,
   ColorModeSwitcher,
   ColorModes,
@@ -10,6 +9,7 @@ import {
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { NetworkSelect } from '@components/common/NetworkSelect';
 import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
