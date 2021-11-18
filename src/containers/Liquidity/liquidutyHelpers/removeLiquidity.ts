@@ -20,8 +20,11 @@ export const removeLiquidity = async (
 ) => {
   try {
     const dex = await findDex(tezos, FACTORIES[networkId], token);
+    console.log({ dex });
     const share = await getLiquidityShare(tezos, dex, accountPkh);
-    const lpTokenValue = share.total;
+    console.log({ share });
+    const lpTokenValue = share.unfrozen;
+    console.log('lpTokenValue', lpTokenValue.dividedBy(1_000_000).toFixed());
 
     const removeLiquidityParams = await getRemoveLiquidityParams(
       tezos,
