@@ -2,7 +2,6 @@ import {
   Token,
   findDex,
   batchify,
-  getLiquidityShare,
   removeLiquidity as getRemoveLiquidityParams,
 } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
@@ -14,22 +13,17 @@ import BigNumber from 'bignumber.js';
 export const removeLiquidity = async (
   tezos:TezosToolkit,
   networkId: QSMainNet,
-  accountPkh:string,
-  slippageTolerance: BigNumber,
   token:Token,
+  lpTokenValue: BigNumber,
+  slippageTolerance: BigNumber,
 ) => {
   try {
     const dex = await findDex(tezos, FACTORIES[networkId], token);
-    console.log({ dex });
-    const share = await getLiquidityShare(tezos, dex, accountPkh);
-    console.log({ share });
-    const lpTokenValue = share.unfrozen;
-    console.log('lpTokenValue', lpTokenValue.dividedBy(1_000_000).toFixed());
 
     const removeLiquidityParams = await getRemoveLiquidityParams(
       tezos,
       dex,
-      lpTokenValue,
+      lpTokenValue.multipliedBy(1_000_000),
       slippageTolerance,
     );
 
