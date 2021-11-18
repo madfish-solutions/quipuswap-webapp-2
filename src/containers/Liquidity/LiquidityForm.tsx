@@ -15,7 +15,6 @@ import {
   Button,
   Tooltip,
   Switcher,
-  Slippage,
 } from '@quipuswap/ui-kit';
 // import { useTranslation } from 'next-i18next';
 import { FormSpy } from 'react-final-form';
@@ -40,6 +39,8 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Transactions } from '@components/svg/Transactions';
 import { Plus } from '@components/svg/Plus';
 
+import { calculateTokenAmount } from '@containers/Liquidity/liquidutyHelpers/calculateTokenAmount';
+import { calculateTezAmount } from '@containers/Liquidity/liquidutyHelpers/calculateTezAmount';
 import { LiquidityDetails } from './LiquidityDetails';
 import s from './Liquidity.module.sass';
 import { addLiquidity } from './liquidutyHelpers';
@@ -94,12 +95,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({
 }) => {
   // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
+  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+
   const [tokenABalance, setTokenABalance] = useState('0');
   const [tokenBBalance, setTokenBBalance] = useState('0');
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
+  const [dex, setDex] = useState<FoundDex>();
 
   useEffect(() => {
     const getBothTokensBalances = async () => {
@@ -113,6 +116,53 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     };
     getBothTokensBalances();
   }, [tezos]);
+  useEffect(() => {
+    const loadDex = async () => {
+      if (!tezos) return;
+      const foundDex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
+      setDex(foundDex);
+    };
+
+    loadDex();
+  }, [tezos, networkId, QUIPU_TOKEN]);
+
+  const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    setTokenAInput(event.target.value);
+
+    if (!tezos || !dex) return;
+    if (event.target.value === '') {
+      setTokenBInput('');
+      return;
+    }
+
+    const tokenAmount = calculateTokenAmount(
+      new BigNumber(event.target.value),
+      dex.storage.storage.total_supply,
+      dex.storage.storage.tez_pool,
+      dex.storage.storage.token_pool,
+    );
+
+    setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+  };
+
+  const handleTokenBChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    setTokenBInput(event.target.value);
+
+    if (!tezos || !dex) return;
+    if (event.target.value === '') {
+      setTokenAInput('');
+      return;
+    }
+
+    const tezAmount = calculateTezAmount(
+      new BigNumber(event.target.value),
+      dex.storage.storage.total_supply,
+      dex.storage.storage.token_pool,
+      dex.storage.storage.tez_pool,
+    );
+
+    setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+  };
 
   return (
     <>
@@ -150,63 +200,59 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           token={TEZOS_TOKEN}
           setToken={(token) => console.log(token)}
           value={tokenAInput}
-          onChange={async (event: ChangeEvent<HTMLInputElement>) => {
-            setTokenAInput(event.target.value);
-            if (tezos) {
-              const dex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
-              const shares = new BigNumber(event.target.value)
-                .multipliedBy(1_000_000)
-                .multipliedBy(dex.storage.storage.total_supply)
-                .dividedBy(dex.storage.storage.tez_pool);
-              const tokenInput = shares
-                .multipliedBy(dex.storage.storage.token_pool)
-                .dividedBy(dex.storage.storage.total_supply);
-              setTokenBInput(tokenInput.dividedBy(1_000_000).toFixed(6));
-            }
-          }}
+          onChange={handleTokenAChange}
           blackListedTokens={[{}] as WhitelistedToken[]}
-          handleBalance={() => {}}
+          handleBalance={(value) => {
+            if (!dex) return;
+            const fixedValue = parseFloat(value).toFixed(6);
+            setTokenAInput(fixedValue);
+            const tokenAmount = calculateTokenAmount(
+              new BigNumber(fixedValue),
+              dex.storage.storage.total_supply,
+              dex.storage.storage.tez_pool,
+              dex.storage.storage.token_pool,
+            );
+            setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+          }}
+          noBalanceButtons={!accountPkh}
         />
-        <Plus />
+        <Plus className={s.iconButton} />
         <TokenSelect
           label="Input"
           balance={tokenBBalance}
           token={STABLE_TOKEN}
           setToken={(token) => console.log(token)}
           value={tokenBInput}
-          onChange={async (event: ChangeEvent<HTMLInputElement>) => {
-            setTokenBInput(event.target.value);
-            if (tezos) {
-              const dex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
-              const shares = new BigNumber(event.target.value)
-                .multipliedBy(1_000_000)
-                .multipliedBy(dex.storage.storage.total_supply)
-                .dividedBy(dex.storage.storage.token_pool);
-              const tezInput = shares
-                .multipliedBy(dex.storage.storage.tez_pool)
-                .dividedBy(dex.storage.storage.total_supply);
-              setTokenAInput(tezInput.dividedBy(1_000_000).toFixed(6));
-            }
-          }}
+          onChange={handleTokenBChange}
           blackListedTokens={[{}] as WhitelistedToken[]}
-          handleBalance={() => {}}
+          handleBalance={(value) => {
+            if (!dex) return;
+            const fixedValue = parseFloat(value).toFixed(6);
+            setTokenBInput(fixedValue);
+            const tezAmount = calculateTezAmount(
+              new BigNumber(fixedValue),
+              dex.storage.storage.total_supply,
+              dex.storage.storage.token_pool,
+              dex.storage.storage.tez_pool,
+            );
+            setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+          }}
+          noBalanceButtons={!accountPkh}
         />
-        <Slippage handleChange={() => {}} />
-        <div>
-          <Switcher isActive onChange={() => {}} />
-          <span>Rebalance Liq</span>
+        <div className={s.switcher}>
+          <Switcher isActive={false} onChange={() => {}} />
+          <span className={s.rebalance}>Rebalance Liq</span>
           <Tooltip content="Liquidity rebalace description" />
         </div>
         <Button
-          onClick={async () => {
+          className={s.button}
+          onClick={() => {
             if (!tezos) return;
 
-            const token: Token = {
-              contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
-              id: 0,
-            };
             const tezValue = new BigNumber(tokenAInput).multipliedBy(1_000_000);
-            await addLiquidity(tezos, networkId, token, tezValue);
+            addLiquidity(tezos, networkId, QUIPU_TOKEN, tezValue);
+            setTokenAInput('');
+            setTokenBInput('');
           }}
         >
           {currentTab.label}
