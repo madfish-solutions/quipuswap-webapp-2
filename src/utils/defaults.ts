@@ -67,6 +67,14 @@ export const STABLE_TOKEN: WhitelistedToken = {
 };
 
 export const FACTORIES = {
+  granadanet: {
+    fa1_2Factory: [
+      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
+    ],
+    fa2Factory: [
+      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
+    ],
+  },
   florencenet: {
     fa1_2Factory: [
       'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
