@@ -5,6 +5,7 @@ import React, {
 } from 'react';
 import {
   Token,
+  findDex,
   FoundDex,
   TransferParams,
 } from '@quipuswap/sdk';
@@ -33,7 +34,7 @@ import {
   LiquidityFormValues,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { FACTORIES, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Transactions } from '@components/svg/Transactions';
@@ -53,6 +54,8 @@ const TabsContent = [
     label: 'Remove',
   },
 ];
+
+const QUIPU_TOKEN:Token = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
 
 type LiquidityFormProps = {
   handleSubmit: () => void,
@@ -147,7 +150,20 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           token={TEZOS_TOKEN}
           setToken={(token) => console.log(token)}
           value={tokenAInput}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setTokenAInput(event.target.value)}
+          onChange={async (event: ChangeEvent<HTMLInputElement>) => {
+            setTokenAInput(event.target.value);
+            if (tezos) {
+              const dex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
+              const shares = new BigNumber(event.target.value)
+                .multipliedBy(1_000_000)
+                .multipliedBy(dex.storage.storage.total_supply)
+                .dividedBy(dex.storage.storage.tez_pool);
+              const tokenInput = shares
+                .multipliedBy(dex.storage.storage.token_pool)
+                .dividedBy(dex.storage.storage.total_supply);
+              setTokenBInput(tokenInput.dividedBy(1_000_000).toFixed(6));
+            }
+          }}
           blackListedTokens={[{}] as WhitelistedToken[]}
           handleBalance={() => {}}
         />
@@ -158,7 +174,20 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           token={STABLE_TOKEN}
           setToken={(token) => console.log(token)}
           value={tokenBInput}
-          onChange={(event: ChangeEvent<HTMLInputElement>) => setTokenBInput(event.target.value)}
+          onChange={async (event: ChangeEvent<HTMLInputElement>) => {
+            setTokenBInput(event.target.value);
+            if (tezos) {
+              const dex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
+              const shares = new BigNumber(event.target.value)
+                .multipliedBy(1_000_000)
+                .multipliedBy(dex.storage.storage.total_supply)
+                .dividedBy(dex.storage.storage.token_pool);
+              const tezInput = shares
+                .multipliedBy(dex.storage.storage.tez_pool)
+                .dividedBy(dex.storage.storage.total_supply);
+              setTokenAInput(tezInput.dividedBy(1_000_000).toFixed(6));
+            }
+          }}
           blackListedTokens={[{}] as WhitelistedToken[]}
           handleBalance={() => {}}
         />
