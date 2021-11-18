@@ -6,4 +6,4 @@ export const slippageToNum = (str?: string) => +slippageToParseable(str);
 
 export const slippageToBignum = (
   percentage:string,
-) => new BigNumber(slippageToParseable(percentage)).div(100);
+) => new BigNumber(slippageToParseable(percentage));

@@ -13,7 +13,7 @@ import {
 
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
-  convertUnits,
+  fromDecimals,
   getTokenInput,
   getTokenSlug,
   getWhitelistedTokenSymbol,
@@ -65,13 +65,13 @@ export const NewSwapDetails: React.FC<NewSwapDetailsProps> = ({
         const reversedRoute = [...route].reverse();
         try {
           const tokenAAmount = inputAmount;
-          const tokenBAmount = convertUnits(
+          const tokenBAmount = fromDecimals(
             getTokenInput(
               inputToken,
-              convertUnits(inputAmount, -inputToken.metadata.decimals),
+              fromDecimals(inputAmount, -inputToken.metadata.decimals),
               reversedRoute,
             ),
-            inputToken.metadata.decimals,
+            outputToken.metadata.decimals,
           );
           return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
           // eslint-disable-next-line no-empty

@@ -1,6 +1,6 @@
 import { validateAddress, validateContractAddress, ValidationResult } from '@taquito/utils';
 import { i18n } from 'next-i18next';
-import { string as stringSchema, ValidationError } from 'yup';
+import { string as stringSchema } from 'yup';
 
 export const isAddress = async (value: string) => {
   const isAddr = await validateAddress(value) === 3;
@@ -11,12 +11,12 @@ export const isAddress = async (value: string) => {
 };
 
 export const addressSchema = () => stringSchema().test(
+  'valid-address',
+  () => i18n?.t('common|You entered not a valid address') ?? '',
   async (value) => {
     if (typeof value !== 'string') {
-      return false;
+      return true;
     }
-    const isValid = await validateAddress(value) === ValidationResult.VALID;
-
-    return isValid || new ValidationError(i18n?.t('common|You entered not a valid address') ?? '');
+    return await validateAddress(value) === ValidationResult.VALID;
   },
 );

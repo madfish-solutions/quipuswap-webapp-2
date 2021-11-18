@@ -30,9 +30,9 @@ import {
 } from '@utils/dapp';
 import { TTDEX_CONTRACTS } from '@utils/defaults';
 import {
-  convertUnits,
   DexGraph,
   estimateSwapFee,
+  fromDecimals,
   getPriceImpact,
   getRouteWithInput,
   getRouteWithOutput,
@@ -59,6 +59,9 @@ type NewSwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
   submitError?: string;
   updateTokenBalance: (token: WhitelistedToken) => void;
   knownTokensBalances: Record<string, BigNumber>;
+  onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
+  knownMaxInputAmounts: any;
+  knownMaxOutputAmounts: any;
 };
 
 type SlippageInputProps = {
@@ -85,9 +88,9 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   value,
   token2,
 }) => {
-  const slipPerc = slippageToBignum(value)
+  const slipPerc = slippageToBignum(value).div(100)
     .times(balance2 ?? 0)
-    .decimalPlaces(token2?.metadata.decimals ?? 0, BigNumber.ROUND_DOWN);
+    .decimalPlaces(token2?.metadata.decimals ?? 0, BigNumber.ROUND_CEIL);
   const minimumReceived = new BigNumber(balance2 ?? 0).minus(slipPerc);
 
   return (
@@ -120,7 +123,17 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   setValues,
   setFieldValue,
   submitError,
-  values: {
+  values,
+  knownTokensBalances,
+  knownMaxInputAmounts,
+  knownMaxOutputAmounts,
+  onTokensSelected,
+  updateTokenBalance,
+  setFieldTouched,
+  touched,
+  validateField,
+}) => {
+  const {
     token1,
     token2,
     amount1,
@@ -128,10 +141,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     recipient,
     slippage,
     action,
-  },
-  knownTokensBalances,
-  updateTokenBalance,
-}) => {
+  } = values;
   const exchangeRates = useNewExchangeRates();
   const network = useNetwork();
   const tezos = useTezos();
@@ -147,6 +157,9 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   const prevAmount2Ref = useRef<BigNumber>();
   const prevDexGraphRef = useRef<DexGraph>();
   const prevAccountPkh = useRef<string | null>(null);
+
+  useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts]);
+  useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
@@ -199,6 +212,10 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     prevAmount2Ref.current = amount2;
     prevDexGraphRef.current = dexGraph;
 
+    if ((prevDexGraph !== dexGraph) && token1 && token2) {
+      onTokensSelected(token1, token2);
+    }
+
     if (token1 && token2 && dexGraph) {
       const inputChanged = (prevToken1Slug !== token1Slug) || !amountsAreEqual(
         prevAmount1,
@@ -215,15 +232,15 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
           startTokenSlug: token1Slug!,
           endTokenSlug: token2Slug!,
           graph: dexGraph,
-          inputAmount: convertUnits(amount1, -token1.metadata.decimals),
+          inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
         });
         let outputAmount: BigNumber | undefined;
         if (route) {
           try {
-            outputAmount = convertUnits(
+            outputAmount = fromDecimals(
               getTokenOutput({
                 inputToken: token1,
-                inputAmount: convertUnits(amount1!, -token1.metadata.decimals),
+                inputAmount: fromDecimals(amount1!, -token1.metadata.decimals),
                 dexChain: route,
               }),
               token2.metadata.decimals,
@@ -240,12 +257,13 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
             accountPkh,
             {
               inputToken: token1,
-              inputAmount: convertUnits(amount1, -token1.metadata.decimals),
+              inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
               dexChain: route,
               recipient,
+              slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
             },
           )
-            .then((newFee) => setFee(convertUnits(newFee, 6)))
+            .then((newFee) => setFee(fromDecimals(newFee, 6)))
             .catch((e) => {
               console.error(e);
               setFee(undefined);
@@ -263,10 +281,10 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
         let inputAmount: BigNumber | undefined;
         if (route) {
           try {
-            inputAmount = convertUnits(
+            inputAmount = fromDecimals(
               getTokenInput(
                 token2,
-                convertUnits(amount2!, -token2.metadata.decimals),
+                fromDecimals(amount2!, -token2.metadata.decimals),
                 route,
               ),
               token1.metadata.decimals,
@@ -283,12 +301,13 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
             accountPkh,
             {
               inputToken: token1,
-              inputAmount: convertUnits(inputAmount, -token1.metadata.decimals),
+              inputAmount: fromDecimals(inputAmount, -token1.metadata.decimals),
               dexChain: route,
               recipient,
+              slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
             },
           )
-            .then((newFee) => setFee(convertUnits(newFee, 6)))
+            .then((newFee) => setFee(fromDecimals(newFee, 6)))
             .catch((e) => {
               console.error(e);
               setFee(undefined);
@@ -298,13 +317,32 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
         }
       }
     }
-  }, [amount1, amount2, token1, token2, dexGraph, setFieldValue, accountPkh, tezos, recipient]);
+  }, [
+    amount1,
+    amount2,
+    token1,
+    token2,
+    dexGraph,
+    setFieldValue,
+    accountPkh,
+    tezos,
+    recipient,
+    slippage,
+    onTokensSelected,
+  ]);
 
-  const handleSubmit = useCallback(() => {
-    submitForm().then(
-      () => setValues((prevValues) => ({ ...prevValues, amount1: undefined, amount2: undefined })),
-    ).catch(console.error);
-  }, [setValues, submitForm]);
+  const handleSubmit = useCallback(
+    () => {
+      submitForm().then(
+        () => {
+          setFieldTouched('amount1', false);
+          setFieldTouched('amount2', false);
+          setValues((prevValues) => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+        },
+      ).catch(console.error);
+    },
+    [setValues, submitForm, setFieldTouched],
+  );
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
@@ -326,33 +364,66 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   );
 
   const handleAmount1Change = useCallback(
-    (newAmount?: BigNumber) => setFieldValue('amount1', newAmount, true),
-    [setFieldValue],
+    (newAmount?: BigNumber) => {
+      setFieldTouched('amount1', true);
+      setFieldValue('amount1', newAmount, true);
+    },
+    [setFieldValue, setFieldTouched],
   );
   const handleAmount2Change = useCallback(
-    (newAmount?: BigNumber) => setFieldValue('amount2', newAmount, true),
-    [setFieldValue],
+    (newAmount?: BigNumber) => {
+      setFieldTouched('amount2', true);
+      setFieldValue('amount2', newAmount, true);
+    },
+    [setFieldValue, setFieldTouched],
   );
 
   const handleSomeTokenChange = useCallback(
-    (fieldName: string, newToken?: WhitelistedToken) => {
+    (
+      fieldName: 'token1' | 'token2',
+      amountFieldName: 'amount1' | 'amount2',
+      newToken?: WhitelistedToken,
+    ) => {
       const newTokenSlug = newToken && getTokenSlug(newToken);
-      setFieldValue(fieldName, newToken, true);
+      setFieldTouched(fieldName, true);
+      const valuesToSet: Partial<NewSwapFormValues> = {
+        [fieldName]: newToken,
+      };
+      const amount = amountFieldName === 'amount1' ? amount1 : amount2;
+      if (newToken && amount) {
+        setFieldTouched(amountFieldName, true);
+        valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
+      }
+      setValues((prevValues) => ({ ...prevValues, ...valuesToSet }));
       if (newTokenSlug) {
         updateTokenBalance(newToken!);
-      } else {
-        setFieldValue(fieldName, undefined, true);
+      }
+      const newToken1 = fieldName === 'token1' ? newToken : token1;
+      const newToken2 = fieldName === 'token2' ? newToken : token2;
+      if (newToken1 && newToken2) {
+        onTokensSelected(newToken1, newToken2);
       }
     },
-    [setFieldValue, updateTokenBalance],
+    [
+      setValues,
+      updateTokenBalance,
+      setFieldTouched,
+      amount1,
+      amount2,
+      token1,
+      token2,
+      onTokensSelected,
+    ],
   );
 
   const handleToken1Change = useCallback(
-    (newToken?: WhitelistedToken) => handleSomeTokenChange('token1', newToken),
+    (newToken?: WhitelistedToken) => {
+      handleSomeTokenChange('token1', 'amount1', newToken);
+    },
     [handleSomeTokenChange],
   );
   const handleToken2Change = useCallback(
-    (newToken?: WhitelistedToken) => handleSomeTokenChange('token2', newToken),
+    (newToken?: WhitelistedToken) => handleSomeTokenChange('token2', 'amount2', newToken),
     [handleSomeTokenChange],
   );
 
@@ -368,8 +439,11 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   }, [setValues, token1, token2, amount2]);
 
   const handleRecipientChange = useCallback(
-    (newValue: string) => setFieldValue('recipient', newValue, true),
-    [setFieldValue],
+    (newValue: string) => {
+      setFieldTouched('recipient', true);
+      setFieldValue('recipient', newValue, true);
+    },
+    [setFieldValue, setFieldTouched],
   );
 
   const handleRecipientChangeFromEvent = useCallback(
@@ -378,14 +452,17 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   );
 
   const handleSlippageChange = useCallback(
-    (newValue: string) => setFieldValue('slippage', newValue, true),
-    [setFieldValue],
+    (newValue: string) => {
+      setFieldTouched('slippage', true);
+      setFieldValue('slippage', newValue, true);
+    },
+    [setFieldValue, setFieldTouched],
   );
 
   const priceImpact = useMemo(
     () => (token1 && amount1 && dexRoute && slippage ? getPriceImpact({
       inputToken: token1,
-      inputAmount: convertUnits(amount1, -token1.metadata.decimals),
+      inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
       dexChain: dexRoute,
       slippageTolerance: slippageToBignum(slippage),
       ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
@@ -397,9 +474,14 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   const token2Slug = token2 && getTokenSlug(token2);
   const token2Balance = token2Slug === undefined ? undefined : knownTokensBalances[token2Slug];
 
+  const token1Error = touched.token1 ? errors.token1 : undefined;
+  const amount1Error = touched.amount1 ? errors.amount1 : undefined;
+  const token2Error = touched.token2 ? errors.token2 : undefined;
+  const amount2Error = touched.amount2 ? errors.amount2 : undefined;
+
   return (
     <>
-      {token1 && token2 && (
+      {token1 && token2 && (network.id === 'mainnet') && (
         <SwapChart
           token1={token1}
           token2={token2}
@@ -432,7 +514,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
             balance={token1Slug === undefined ? undefined : knownTokensBalances[token1Slug]}
             exchangeRate={token1Slug === undefined ? undefined : exchangeRates[token1Slug]}
             label="From"
-            error={errors.token1 ?? errors.amount1}
+            error={token1Error ?? amount1Error}
             onAmountChange={handleAmount1Change}
             token={token1}
             blackListedTokens={blackListedTokens}
@@ -447,7 +529,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
             balance={token2Balance}
             exchangeRate={token2Slug === undefined ? undefined : exchangeRates[token2Slug]}
             label="To"
-            error={errors.token2 ?? errors.amount2 ?? submitError}
+            error={token2Error ?? amount2Error ?? submitError}
             onAmountChange={handleAmount2Change}
             token={token2}
             blackListedTokens={blackListedTokens}
@@ -462,7 +544,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
               label="Recipient address"
               id="swap-send-recipient"
               className={cx(s.input, s.mb24)}
-              error={errors.recipient}
+              error={touched.recipient ? errors.recipient : undefined}
             />
           )}
           <SlippageInput

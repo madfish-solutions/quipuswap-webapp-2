@@ -92,16 +92,19 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           />
         </div>
       </div>
-      <div className={s.controls}>
-        <Button
-          disabled={readOnly}
-          onClick={handlePaste}
-          theme="inverse"
-          className={s.btn}
-        >
-          {t('common|Paste')}
-        </Button>
-      </div>
+      {/* @ts-ignore */}
+      {navigator.clipboard.readText && (
+        <div className={s.controls}>
+          <Button
+            disabled={readOnly}
+            onClick={handlePaste}
+            theme="inverse"
+            className={s.btn}
+          >
+            {t('common|Paste')}
+          </Button>
+        </div>
+      )}
       {!readOnly && (<ComplexError error={error} />)}
     </div>
   );

@@ -279,7 +279,7 @@ export const getMaxInputRoute = memoizee(
     endTokenSlug,
     graph,
     depth = 5,
-  }: CommonRouteProblemParams) => {
+  }: CommonRouteProblemParams): DexPair[] | undefined => {
     const routes = makeRoutesList(
       startTokenSlug,
       endTokenSlug,
@@ -310,7 +310,7 @@ export const getMaxOutputRoute = memoizee(
     endTokenSlug,
     graph,
     depth = 5,
-  }: CommonRouteProblemParams) => {
+  }: CommonRouteProblemParams): DexPair[] | undefined => {
     const routes = makeRoutesList(
       startTokenSlug,
       endTokenSlug,

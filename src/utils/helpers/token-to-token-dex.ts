@@ -276,9 +276,9 @@ export const getSwapTransferParams = async (
   let ttdexSwapInput: BigNumber = new BigNumber(0);
   let currentDexInput: BigNumber = new BigNumber(inputAmount);
   const fa2Operators: Record<string, Record<number, string[]>> = {};
-  const singleExchangeToleranceQuotient = new BigNumber(1)
-    .minus(slippageTolerance).toNumber() ** new BigNumber(1)
-    .div(dexChain.length).toNumber();
+  const singleExchangeToleranceQuotient = (
+    new BigNumber(1).minus(slippageTolerance).toNumber()
+  ) ** (new BigNumber(1).div(dexChain.length).toNumber());
 
   const addFa2Operator = (
     {

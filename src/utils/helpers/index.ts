@@ -33,7 +33,6 @@ export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
-export * from './convertUnits';
 export * from './dex-routes-algorithms';
 export * from './getTokenSlug';
 export * from './getTokenIdFromSlug';

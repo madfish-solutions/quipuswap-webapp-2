@@ -125,17 +125,17 @@ export const GRANADANET_NETWORK: QSNetwork = {
   metadata: METADATA_API_TESTNET,
   description: 'Granada testnet',
   disabled: false,
+  ttDexApi: TTDEX_API_TESTNET,
 };
 export const FLORENCENET_NETWORK: QSNetwork = {
   id: 'florencenet',
   connectType: 'default',
-  name: 'Granada Testnet',
+  name: 'Florence Testnet',
   type: 'test',
-  rpcBaseURL: 'https://granadanet.smartpy.io',
+  rpcBaseURL: 'https://florencenet.smartpy.io',
   metadata: METADATA_API_TESTNET,
-  description: 'Granada testnet',
+  description: 'Florence testnet',
   disabled: false,
-  ttDexApi: TTDEX_API_TESTNET,
 };
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',

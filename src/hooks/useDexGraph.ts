@@ -221,6 +221,9 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             ([token1Slug, { edges }]) => {
               Object.entries(edges).forEach(
                 ([token2Slug, pair]) => {
+                  if (pair.totalSupply.eq(0)) {
+                    return;
+                  }
                   if (!result[token1Slug]) {
                     result[token1Slug] = { edges: {} };
                   }

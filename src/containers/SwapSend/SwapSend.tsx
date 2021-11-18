@@ -16,9 +16,12 @@ import {
   useTezos,
 } from '@utils/dapp';
 import {
-  convertUnits,
   fromDecimals,
+  getMaxInputRoute,
+  getMaxOutputRoute,
+  getMaxTokenInput,
   getRouteWithInput,
+  getTokenOutput,
   getTokenSlug,
   slippageToBignum,
   slippageToNum,
@@ -53,6 +56,14 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     knownTokensBalances,
     setKnownTokensBalances,
   ] = useState<Record<string, BigNumber>>({});
+  const [
+    knownMaxInputAmounts,
+    setKnownMaxInputAmounts,
+  ] = useState<Record<string, Record<string, BigNumber>>>({});
+  const [
+    knownMaxOutputAmounts,
+    setKnownMaxOutputAmounts,
+  ] = useState<Record<string, Record<string, BigNumber>>>({});
 
   const updateTokenBalance = useCallback((token: WhitelistedToken) => {
     const newTokenSlug = getTokenSlug(token);
@@ -70,7 +81,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
         setKnownTokensBalances(
           (prevValue) => ({
             ...prevValue,
-            [newTokenSlug]: convertUnits(balance ?? new BigNumber(0), token.metadata.decimals),
+            [newTokenSlug]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals),
           }),
         );
       },
@@ -78,20 +89,54 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [accountPkh, tezos]);
 
   const validationSchema = useMemo(() => objectSchema().shape({
-    token1: objectSchema().required(),
-    token2: objectSchema().required(),
+    token1: objectSchema().required(t('common|This field is required')),
+    token2: objectSchema().required(t('common|This field is required')),
     amount1: objectSchema().when(
-      'token1',
-      (firstToken?: WhitelistedToken) => bigNumberSchema(
-        firstToken ? fromDecimals(new BigNumber(1), firstToken.metadata.decimals) : undefined,
-        firstToken && knownTokensBalances[getTokenSlug(firstToken)],
-      ).required(),
+      ['token1', 'token2'],
+      // @ts-ignore
+      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
+        if (!firstToken) {
+          return bigNumberSchema().required(t('common|This field is required'));
+        }
+        const token1Balance = knownTokensBalances[getTokenSlug(firstToken)];
+        let max: BigNumber | undefined = BigNumber.min(
+          token1Balance ?? new BigNumber(Infinity),
+          (
+            secondToken && knownMaxInputAmounts[
+              getTokenSlug(firstToken)
+            ]?.[getTokenSlug(secondToken)]
+          ) ?? new BigNumber(Infinity),
+        );
+        if (!max.isFinite()) {
+          max = undefined;
+        }
+        const min = fromDecimals(new BigNumber(1), firstToken.metadata.decimals);
+        if (token1Balance?.eq(0)) {
+          return bigNumberSchema(min)
+            .test(
+              'balance',
+              () => t('common|Insufficient funds'),
+              (value) => !(value instanceof BigNumber) || value.eq(0),
+            )
+            .required(t('common|This field is required'));
+        }
+
+        return bigNumberSchema(min, max).required(t('common|This field is required'));
+      },
     ),
     amount2: objectSchema().when(
-      'token2',
-      (secondToken?: WhitelistedToken) => bigNumberSchema(
-        secondToken ? fromDecimals(new BigNumber(1), secondToken.metadata.decimals) : undefined,
-      ).required(),
+      ['token1', 'token2'],
+      // @ts-ignore
+      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
+        if (!secondToken) {
+          return bigNumberSchema().required(t('common|This field is required'));
+        }
+        const max = (firstToken && knownMaxOutputAmounts[
+          getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)]);
+
+        return bigNumberSchema(fromDecimals(new BigNumber(1), secondToken.metadata.decimals), max)
+          .required();
+      },
     ),
     recipient: mixedSchema().when(
       'action',
@@ -105,7 +150,88 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       return (value !== '') && (normalizedValue > 0) && (normalizedValue <= 30);
     }).required(),
     action: stringSchema().oneOf(['swap', 'send']).required(),
-  }), [knownTokensBalances]);
+  }), [knownTokensBalances, t, knownMaxInputAmounts, knownMaxOutputAmounts]);
+
+  const updateMaxInputAmount = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+      setKnownMaxInputAmounts((prevValue) => {
+        const token1Slug = getTokenSlug(token1);
+        const token2Slug = getTokenSlug(token2);
+
+        return {
+          ...prevValue,
+          [token1Slug]: {
+            ...(prevValue[token1Slug] ?? {}),
+            [token2Slug]: amount,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const updateMaxOutputAmount = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+      setKnownMaxOutputAmounts((prevValue) => {
+        const token1Slug = getTokenSlug(token1);
+        const token2Slug = getTokenSlug(token2);
+
+        return {
+          ...prevValue,
+          [token1Slug]: {
+            ...(prevValue[token1Slug] ?? {}),
+            [token2Slug]: amount,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const handleTokensSelected = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken) => {
+      try {
+        const maxInputRoute = getMaxInputRoute({
+          startTokenSlug: getTokenSlug(token1),
+          endTokenSlug: getTokenSlug(token2),
+          graph: dexGraph,
+        });
+        if (maxInputRoute) {
+          updateMaxInputAmount(
+            token1,
+            token2,
+            fromDecimals(
+              getMaxTokenInput(token2, maxInputRoute),
+              token1.metadata.decimals,
+            ),
+          );
+        }
+        const maxOutputRoute = getMaxOutputRoute({
+          startTokenSlug: getTokenSlug(token1),
+          endTokenSlug: getTokenSlug(token2),
+          graph: dexGraph,
+        });
+        if (maxOutputRoute) {
+          updateMaxOutputAmount(
+            token1,
+            token2,
+            fromDecimals(
+              getTokenOutput({
+                inputToken: token1,
+                inputAmount: getMaxTokenInput(token2, maxOutputRoute),
+                dexChain: maxOutputRoute,
+              }),
+              token2.metadata.decimals,
+            ),
+          );
+        }
+        // eslint-disable-next-line no-empty
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount],
+  );
 
   const handleErrorToast = useCallback((err) => {
     updateToast({
@@ -129,7 +255,6 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   }, [updateToast, t]);
 
   const handleSubmit = useCallback(async (formValues: Partial<NewSwapFormValues>) => {
-    console.log(tezos, formValues);
     if (!tezos) {
       return;
     }
@@ -144,7 +269,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     } = formValues;
 
     handleLoader();
-    const inputAmount = convertUnits(amount1!, -token1!.metadata.decimals);
+    const inputAmount = fromDecimals(amount1!, -token1!.metadata.decimals);
     try {
       await swap(
         tezos,
@@ -182,7 +307,10 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       {...formikProps}
       className={className}
       knownTokensBalances={knownTokensBalances}
+      onTokensSelected={handleTokensSelected}
       updateTokenBalance={updateTokenBalance}
+      knownMaxInputAmounts={knownMaxInputAmounts}
+      knownMaxOutputAmounts={knownMaxOutputAmounts}
     />
   );
 };
