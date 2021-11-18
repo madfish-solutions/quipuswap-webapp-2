@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import {
   Button,
   ColorModes,
-  NetworkSelect,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { NetworkSelect } from '@components/common/NetworkSelect';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Madfish } from '@components/svg/Madfish';
 
