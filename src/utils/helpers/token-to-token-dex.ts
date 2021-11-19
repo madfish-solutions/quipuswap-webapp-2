@@ -289,7 +289,6 @@ export const getSwapTransferParams = async (
     currentToken = shouldSellToken1 ? token2 : token1;
   }
   currentToken = inputToken;
-  console.log(noSlippageToleranceOutputs.map((x) => x.toFixed()));
 
   const addFa2Operator = (
     {
@@ -330,13 +329,6 @@ export const getSwapTransferParams = async (
       const minOut = noSlippageToleranceOutputs[index + 1]
         .times(currentSlippageToleranceQuotient)
         .integerValue(BigNumber.ROUND_FLOOR);
-      console.log(
-        index,
-        prevSlippageToleranceQuotient.toString(),
-        currentSlippageToleranceQuotient.toString(),
-        currentDexInput.toFixed(),
-        minOut.toFixed(),
-      );
 
       if (typeof prevDexId === 'number') {
         if (typeof id === 'string') {
@@ -345,7 +337,7 @@ export const getSwapTransferParams = async (
             ttDexContract!.methods.swap(
               ttdexSwapStepsParams,
               ttdexSwapInput,
-              minOut,
+              currentDexInput,
               accountPkh,
             ).toTransferParams({ storageLimit: 1000 }),
           );
