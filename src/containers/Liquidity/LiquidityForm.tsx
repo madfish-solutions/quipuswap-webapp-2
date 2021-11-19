@@ -113,7 +113,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       if (tokenB) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
     };
     getBothTokensBalances();
-  }, [tezos]);
+  }, [tezos, accountPkh]);
   useEffect(() => {
     const loadDex = async () => {
       if (!tezos) return;
