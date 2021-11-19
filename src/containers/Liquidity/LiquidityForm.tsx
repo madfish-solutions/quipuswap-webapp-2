@@ -196,16 +196,16 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           label="Input"
           balance={tokenABalance}
           token={TEZOS_TOKEN}
-          setToken={(token) => console.log(token)}
+          setToken={(token) => token}
           value={tokenAInput}
           onChange={handleTokenAChange}
           blackListedTokens={[{}] as WhitelistedToken[]}
           handleBalance={(value) => {
             if (!dex) return;
-            const fixedValue = parseFloat(value).toFixed(6);
-            setTokenAInput(fixedValue);
+            const fixedValue = new BigNumber(value);
+            setTokenAInput(fixedValue.toFixed());
             const tokenAmount = calculateTokenAmount(
-              new BigNumber(fixedValue),
+              fixedValue,
               dex.storage.storage.total_supply,
               dex.storage.storage.tez_pool,
               dex.storage.storage.token_pool,
@@ -219,16 +219,16 @@ const RealForm:React.FC<LiquidityFormProps> = ({
           label="Input"
           balance={tokenBBalance}
           token={STABLE_TOKEN}
-          setToken={(token) => console.log(token)}
+          setToken={(token) => token}
           value={tokenBInput}
           onChange={handleTokenBChange}
           blackListedTokens={[{}] as WhitelistedToken[]}
           handleBalance={(value) => {
             if (!dex) return;
-            const fixedValue = parseFloat(value).toFixed(6);
-            setTokenBInput(fixedValue);
-            const tezAmount = calculateTezAmount(
-              new BigNumber(fixedValue),
+            const fixedValue = new BigNumber(value);
+            setTokenBInput(fixedValue.toFixed);
+            const tezAmount = calculateTokenAmount(
+              fixedValue,
               dex.storage.storage.total_supply,
               dex.storage.storage.token_pool,
               dex.storage.storage.tez_pool,
