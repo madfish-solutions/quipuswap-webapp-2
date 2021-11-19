@@ -39,11 +39,9 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Transactions } from '@components/svg/Transactions';
 import { Plus } from '@components/svg/Plus';
 
-import { calculateTokenAmount } from '@containers/Liquidity/liquidutyHelpers/calculateTokenAmount';
-import { calculateTezAmount } from '@containers/Liquidity/liquidutyHelpers/calculateTezAmount';
+import { addLiquidity, calculateTokenAmount } from './liquidutyHelpers';
 import { LiquidityDetails } from './LiquidityDetails';
 import s from './Liquidity.module.sass';
-import { addLiquidity } from './liquidutyHelpers';
 
 const TabsContent = [
   {
@@ -154,7 +152,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
       return;
     }
 
-    const tezAmount = calculateTezAmount(
+    const tezAmount = calculateTokenAmount(
       new BigNumber(event.target.value),
       dex.storage.storage.total_supply,
       dex.storage.storage.token_pool,

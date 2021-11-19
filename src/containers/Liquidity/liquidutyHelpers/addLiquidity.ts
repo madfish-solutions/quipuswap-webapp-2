@@ -24,9 +24,7 @@ export const addLiquidity = async (
       addLiquidityParams,
     ).send();
 
-    console.info(walletOperation.opHash);
     await walletOperation.confirmation();
-    console.info('Complete');
   } catch (e) {
     console.error(e);
   }

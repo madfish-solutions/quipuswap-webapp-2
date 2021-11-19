@@ -3,15 +3,15 @@ import BigNumber from 'bignumber.js';
 export const calculateTokenAmount = (
   amount:BigNumber,
   totalSupply: BigNumber,
-  tezPool: BigNumber,
-  tokenPool: BigNumber,
+  tokenAPool: BigNumber,
+  tokenBPool: BigNumber,
 ): BigNumber => {
   const shares = amount
     .multipliedBy(1_000_000)
     .multipliedBy(totalSupply)
-    .dividedBy(tezPool);
+    .dividedBy(tokenAPool);
   const tokenInput = shares
-    .multipliedBy(tokenPool)
+    .multipliedBy(tokenBPool)
     .dividedBy(totalSupply);
 
   return tokenInput;
