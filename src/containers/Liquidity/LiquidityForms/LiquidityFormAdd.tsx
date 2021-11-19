@@ -65,7 +65,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       if (tokenB) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
     };
     getBothTokensBalances();
-  }, [tezos]);
+  }, [tezos, accountPkh]);
 
   const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -111,7 +111,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         label="Input"
         balance={tokenABalance}
         token={TEZOS_TOKEN}
-        setToken={(token) => console.log(token)}
+        setToken={(token) => token}
         value={tokenAInput}
         onChange={handleTokenAChange}
         blackListedTokens={[{}] as WhitelistedToken[]}
@@ -134,7 +134,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         label="Input"
         balance={tokenBBalance}
         token={STABLE_TOKEN}
-        setToken={(token) => console.log(token)}
+        setToken={(token) => token}
         value={tokenBInput}
         onChange={handleTokenBChange}
         blackListedTokens={[{}] as WhitelistedToken[]}

@@ -48,7 +48,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       if (userLpBalance) setLpTokenBalance(userLpBalance.dividedBy(1_000_000).toFixed());
     };
     loadLpBalance();
-  }, [dex]);
+  }, [dex, tezos, accountPkh]);
 
   useEffect(() => {
     if (lpTokenInput === '') {
