@@ -5,7 +5,7 @@ import {
   Slippage,
   ArrowDown,
 } from '@quipuswap/ui-kit';
-import { FoundDex, Token } from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -21,7 +21,8 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
-const QUIPU_TOKEN:Token = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
+const QUIPU_TOKEN = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
+const QUIPU_TEZ_LP = { contract: 'KT1MsQZeAbLuNfhfWdiUsJT4tTDzxymkaxwo', id: 0 };
 
 type LiquidityFormRemoveProps = {
   dex: FoundDex;
@@ -43,7 +44,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     const loadLpBalance = async () => {
       if (!tezos || !accountPkh) return;
 
-      const userLpBalance = await getUserBalance(tezos, accountPkh, 'KT1MsQZeAbLuNfhfWdiUsJT4tTDzxymkaxwo', 'fa2');
+      const userLpBalance = await getUserBalance(tezos, accountPkh, QUIPU_TEZ_LP.contract, 'fa2', QUIPU_TEZ_LP.id);
 
       if (userLpBalance) setLpTokenBalance(userLpBalance.dividedBy(1_000_000).toFixed());
     };
@@ -78,8 +79,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={(value) => {
-          const fixedValue = parseFloat(value).toFixed(6);
-          setLpTokenInput(fixedValue);
+          const fixedValue = new BigNumber(value);
+          setLpTokenInput(fixedValue.toFixed());
         }}
       />
       <ArrowDown className={s.iconButton} />

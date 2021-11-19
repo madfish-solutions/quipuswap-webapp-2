@@ -4,14 +4,11 @@ import React, {
   ChangeEvent,
 } from 'react';
 import {
-  Token,
-  FoundDex,
-} from '@quipuswap/sdk';
-import {
   Button,
   Tooltip,
   Switcher,
 } from '@quipuswap/ui-kit';
+import { FoundDex } from '@quipuswap/sdk';
 // import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
@@ -32,10 +29,9 @@ import s from '../Liquidity.module.sass';
 import {
   addLiquidity,
   calculateTokenAmount,
-  calculateTezAmount,
 } from '../liquidutyHelpers';
 
-const QUIPU_TOKEN:Token = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
+const QUIPU_TOKEN = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
 
 type LiquidityFormProps = {
   dex: FoundDex;
@@ -58,8 +54,8 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
     const getBothTokensBalances = async () => {
       if (!tezos || !accountPkh) return;
 
-      const tokenA = await getUserBalance(tezos, accountPkh, TEZOS_TOKEN.contractAddress);
-      const tokenB = await getUserBalance(tezos, accountPkh, 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', 'fa2');
+      const tokenA = await getUserBalance(tezos, accountPkh, TEZOS_TOKEN.contractAddress, 'fa1.2');
+      const tokenB = await getUserBalance(tezos, accountPkh, QUIPU_TOKEN.contract, 'fa2', QUIPU_TOKEN.id);
 
       if (tokenA) setTokenABalance(tokenA.dividedBy(1_000_000).toFixed());
       if (tokenB) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
@@ -95,7 +91,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       return;
     }
 
-    const tezAmount = calculateTezAmount(
+    const tezAmount = calculateTokenAmount(
       new BigNumber(event.target.value),
       dex.storage.storage.total_supply,
       dex.storage.storage.token_pool,
@@ -117,10 +113,10 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={(value) => {
           if (!dex) return;
-          const fixedValue = parseFloat(value).toFixed(6);
-          setTokenAInput(fixedValue);
+          const fixedValue = new BigNumber(value);
+          setTokenAInput(fixedValue.toFixed());
           const tokenAmount = calculateTokenAmount(
-            new BigNumber(fixedValue),
+            fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.tez_pool,
             dex.storage.storage.token_pool,
@@ -140,10 +136,10 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={(value) => {
           if (!dex) return;
-          const fixedValue = parseFloat(value).toFixed(6);
-          setTokenBInput(fixedValue);
-          const tezAmount = calculateTezAmount(
-            new BigNumber(fixedValue),
+          const fixedValue = new BigNumber(value);
+          setTokenBInput(fixedValue.toFixed());
+          const tezAmount = calculateTokenAmount(
+            fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.token_pool,
             dex.storage.storage.tez_pool,
