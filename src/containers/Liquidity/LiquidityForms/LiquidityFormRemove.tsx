@@ -118,7 +118,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
             new BigNumber(lpTokenInput),
             new BigNumber(0.1),
           );
-          // setLpTokenInput('');
+          setLpTokenInput('');
         }}
       >
         Remove
