@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import debouncePromise from 'debounce-promise';
 import { FormikProps } from 'formik';
 import React, {
   useCallback,
@@ -196,6 +197,35 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     }
   }, [amount1, amount2, token1, token2, updateTokenToXtzDexGraphPart]);
 
+  const updateSwapFee = useMemo(
+    () => debouncePromise(
+      (inputAmount: BigNumber, route: DexPair[]) => {
+        if (!accountPkh || !token1) {
+          return;
+        }
+        estimateSwapFee(
+          tezos!,
+          accountPkh,
+          {
+            inputToken: token1,
+            inputAmount: fromDecimals(inputAmount, -token1!.metadata.decimals),
+            dexChain: route,
+            recipient,
+            slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
+            ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
+          },
+        )
+          .then((newFee) => setFee(fromDecimals(newFee, 6)))
+          .catch((e) => {
+            console.error(e);
+            setFee(undefined);
+          });
+      },
+      250,
+    ),
+    [accountPkh, network.id, recipient, slippage, tezos, token1],
+  );
+
   useEffect(() => {
     const prevToken1 = prevToken1Ref.current;
     const prevToken2 = prevToken2Ref.current;
@@ -252,23 +282,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
         prevAmount2Ref.current = outputAmount;
         setFieldValue('amount2', outputAmount, true);
         if (accountPkh && amount1 && route) {
-          estimateSwapFee(
-            tezos!,
-            accountPkh,
-            {
-              inputToken: token1,
-              inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
-              dexChain: route,
-              recipient,
-              slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
-              ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
-            },
-          )
-            .then((newFee) => setFee(fromDecimals(newFee, 6)))
-            .catch((e) => {
-              console.error(e);
-              setFee(undefined);
-            });
+          updateSwapFee(amount1, route);
         } else {
           setFee(undefined);
         }
@@ -297,23 +311,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
         prevAmount1Ref.current = inputAmount;
         setFieldValue('amount1', inputAmount, true);
         if (accountPkh && inputAmount && route) {
-          estimateSwapFee(
-            tezos!,
-            accountPkh,
-            {
-              inputToken: token1,
-              inputAmount: fromDecimals(inputAmount, -token1.metadata.decimals),
-              dexChain: route,
-              recipient,
-              slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
-              ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
-            },
-          )
-            .then((newFee) => setFee(fromDecimals(newFee, 6)))
-            .catch((e) => {
-              console.error(e);
-              setFee(undefined);
-            });
+          updateSwapFee(inputAmount, route);
         } else {
           setFee(undefined);
         }
@@ -332,6 +330,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     slippage,
     onTokensSelected,
     network.id,
+    updateSwapFee,
   ]);
 
   const onBlockCallback = useCallback(() => {

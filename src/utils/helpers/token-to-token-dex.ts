@@ -1,11 +1,17 @@
 import { batchify } from '@quipuswap/sdk';
-import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
+import {
+  OpKind,
+  TezosToolkit,
+  TransferParams,
+  Wallet,
+} from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { TokenId, DexPair } from '@utils/types';
 import { getTokenSlug } from '@utils/helpers';
 import { FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
 import { getAllowance } from '@utils/dapp';
+import memoizee from 'memoizee';
 
 const feeDenominator = new BigNumber(1000);
 const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times(feeDenominator));
@@ -233,28 +239,36 @@ const serialPromiseAll = <T extends unknown[], U>(
   );
 };
 
-const makeAllowanceTransfersParams = async (
-  tezos: TezosToolkit,
-  token: TokenId,
-  accountPkh: string,
-  spender: string,
-  amount: BigNumber,
-) => {
-  if (token.type === 'fa2' || token.contractAddress === TEZOS_TOKEN.contractAddress) {
-    return [];
-  }
-  const tokenContract = await tezos.wallet.at(token.contractAddress);
-  const allowance = await getAllowance(tezos, token.contractAddress, accountPkh, spender);
-  const setAllowanceTransferParams = tokenContract
-    .methods.approve(spender, amount).toTransferParams();
-  if (allowance.gt(0)) {
-    return [
-      tokenContract.methods.approve(spender, 0).toTransferParams(),
-      setAllowanceTransferParams,
-    ];
-  }
-  return [setAllowanceTransferParams];
-};
+const getWalletContract = memoizee(
+  (wallet: Wallet, address: string) => wallet.at(address),
+  { promise: true },
+);
+
+const makeAllowanceTransfersParams = memoizee(
+  async (
+    tezos: TezosToolkit,
+    token: TokenId,
+    accountPkh: string,
+    spender: string,
+    amount: BigNumber,
+  ) => {
+    if (token.type === 'fa2' || token.contractAddress === TEZOS_TOKEN.contractAddress) {
+      return [];
+    }
+    const tokenContract = await getWalletContract(tezos.wallet, token.contractAddress);
+    const allowance = await getAllowance(tezos, token.contractAddress, accountPkh, spender);
+    const setAllowanceTransferParams = tokenContract
+      .methods.approve(spender, amount).toTransferParams();
+    if (allowance.gt(0)) {
+      return [
+        tokenContract.methods.approve(spender, 0).toTransferParams(),
+        setAllowanceTransferParams,
+      ];
+    }
+    return [setAllowanceTransferParams];
+  },
+  { promise: true, maxAge: 5000 },
+);
 
 export const getSwapTransferParams = async (
   tezos: TezosToolkit,
@@ -269,7 +283,9 @@ export const getSwapTransferParams = async (
     ttDexAddress,
     recipient = accountPkh,
   } = swapParams;
-  const ttDexContract = ttDexAddress ? (await tezos.wallet.at(ttDexAddress)) : undefined;
+  const ttDexContract = ttDexAddress
+    ? (await getWalletContract(tezos.wallet, ttDexAddress))
+    : undefined;
   let currentToken = inputToken;
   const swapsParams: TransferParams[] = [];
   let ttdexSwapStepsParams: SwapStepParams[] = [];
@@ -332,7 +348,7 @@ export const getSwapTransferParams = async (
 
       if (typeof prevDexId === 'number') {
         if (typeof id === 'string') {
-          const tokenToXtzContract = await tezos.wallet.at(id);
+          const tokenToXtzContract = await getWalletContract(tezos.wallet, id);
           swapsParams.push(
             ttDexContract!.methods.swap(
               ttdexSwapStepsParams,
@@ -364,7 +380,7 @@ export const getSwapTransferParams = async (
           });
         }
       } else if (typeof id === 'string') {
-        const tokenToXtzContract = await tezos.wallet.at(id);
+        const tokenToXtzContract = await getWalletContract(tezos.wallet, id);
         if (currentToken.contractAddress === TEZOS_TOKEN.contractAddress) {
           swapsParams.push(
             tokenToXtzContract.methods.tezToTokenPayment(
@@ -430,7 +446,7 @@ export const getSwapTransferParams = async (
   const rawOperatorsOperations = await Promise.all(
     Object.entries(fa2Operators).map(
       async ([tokenAddress, tokensIdsOperators]): Promise<[TransferParams, TransferParams]> => {
-        const tokenContract = await tezos.wallet.at(tokenAddress);
+        const tokenContract = await getWalletContract(tezos.wallet, tokenAddress);
 
         return [
           tokenContract.methods.update_operators(
