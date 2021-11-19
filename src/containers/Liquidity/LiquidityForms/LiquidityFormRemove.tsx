@@ -73,7 +73,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         label="Select LP"
         balance={lpTokenBalance}
         token={TEZOS_TOKEN}
-        setToken={(token) => console.log(token)}
+        setToken={(token) => token}
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
         blackListedTokens={[{}] as WhitelistedToken[]}
@@ -87,7 +87,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         label="Output"
         balance="888"
         token={TEZOS_TOKEN}
-        setToken={(token) => console.log(token)}
+        setToken={(token) => token}
         value={tokenAOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={() => {}}
@@ -99,7 +99,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         label="Output"
         balance="888"
         token={STABLE_TOKEN}
-        setToken={(token) => console.log(token)}
+        setToken={(token) => token}
         value={tokenBOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={() => {}}
