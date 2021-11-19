@@ -36,6 +36,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
 
   const [lpTokenBalance, setLpTokenBalance] = useState('0');
   const [lpTokenInput, setLpTokenInput] = useState('');
+  const [tokenAOutput, setTokenAOutput] = useState('777');
+  const [tokenBOutput, setTokenBOutput] = useState('777');
 
   useEffect(() => {
     const loadLpBalance = async () => {
@@ -47,6 +49,23 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     };
     loadLpBalance();
   }, [dex]);
+
+  useEffect(() => {
+    if (lpTokenInput === '') {
+      setTokenAOutput('');
+      setTokenBOutput('');
+      return;
+    }
+
+    const tezPerOneLp = dex.storage.storage.tez_pool
+      .dividedBy(dex.storage.storage.total_supply);
+
+    const quipuPerOneLp = dex.storage.storage.token_pool
+      .dividedBy(dex.storage.storage.total_supply);
+
+    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(6));
+    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(6));
+  }, [lpTokenInput, dex]);
 
   return (
     <>
@@ -67,12 +86,13 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <TokenSelect
         label="Output"
         balance="888"
-        token={STABLE_TOKEN}
+        token={TEZOS_TOKEN}
         setToken={(token) => console.log(token)}
-        onChange={() => {}}
+        value={tokenAOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={() => {}}
         noBalanceButtons
+        disabled
       />
       <Plus className={s.iconButton} />
       <TokenSelect
@@ -80,10 +100,11 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         balance="888"
         token={STABLE_TOKEN}
         setToken={(token) => console.log(token)}
-        onChange={() => {}}
+        value={tokenBOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={() => {}}
         noBalanceButtons
+        disabled
       />
       <Slippage handleChange={() => {}} />
       <Button
@@ -97,7 +118,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
             new BigNumber(lpTokenInput),
             new BigNumber(0.1),
           );
-          setLpTokenInput('');
+          // setLpTokenInput('');
         }}
       >
         Remove
