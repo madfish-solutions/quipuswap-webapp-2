@@ -26,6 +26,7 @@ import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   useAccountPkh,
   useNetwork,
+  useOnBlock,
   useTezos,
 } from '@utils/dapp';
 import { TTDEX_CONTRACTS } from '@utils/defaults';
@@ -88,10 +89,9 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   value,
   token2,
 }) => {
-  const slipPerc = slippageToBignum(value).div(100)
-    .times(balance2 ?? 0)
-    .decimalPlaces(token2?.metadata.decimals ?? 0, BigNumber.ROUND_CEIL);
-  const minimumReceived = new BigNumber(balance2 ?? 0).minus(slipPerc);
+  const minimumReceived = new BigNumber(balance2 ?? 0).times(
+    new BigNumber(1).minus(slippageToBignum(value).div(100)),
+  ).decimalPlaces(token2?.metadata.decimals ?? 0, BigNumber.ROUND_FLOOR);
 
   return (
     <>
@@ -261,6 +261,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
               dexChain: route,
               recipient,
               slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
+              ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
             },
           )
             .then((newFee) => setFee(fromDecimals(newFee, 6)))
@@ -305,6 +306,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
               dexChain: route,
               recipient,
               slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
+              ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
             },
           )
             .then((newFee) => setFee(fromDecimals(newFee, 6)))
@@ -329,7 +331,17 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     recipient,
     slippage,
     onTokensSelected,
+    network.id,
   ]);
+
+  const onBlockCallback = useCallback(() => {
+    [token1, token2].forEach((token) => {
+      if (token) {
+        updateTokenBalance(token);
+      }
+    });
+  }, [token1, token2, updateTokenBalance]);
+  useOnBlock(tezos, onBlockCallback);
 
   const handleSubmit = useCallback(
     () => {

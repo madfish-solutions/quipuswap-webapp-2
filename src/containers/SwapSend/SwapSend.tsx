@@ -8,13 +8,16 @@ import { useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
 import {
   NewSwapFormValues,
+  QSMainNet,
   WhitelistedToken,
 } from '@utils/types';
 import {
   getUserBalance,
   useAccountPkh,
+  useNetwork,
   useTezos,
 } from '@utils/dapp';
+import { TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   fromDecimals,
   getMaxInputRoute,
@@ -52,6 +55,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
+  const network = useNetwork();
   const [
     knownTokensBalances,
     setKnownTokensBalances,
@@ -285,6 +289,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             graph: dexGraph,
             inputAmount,
           })!,
+          ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
         },
       );
       handleSuccessToast();
@@ -292,7 +297,15 @@ export const SwapSend: React.FC<SwapSendProps> = ({
       handleErrorToast(e);
       throw e;
     }
-  }, [handleLoader, tezos, handleErrorToast, handleSuccessToast, accountPkh, dexGraph]);
+  }, [
+    handleLoader,
+    tezos,
+    handleErrorToast,
+    handleSuccessToast,
+    accountPkh,
+    dexGraph,
+    network.id,
+  ]);
 
   const formikProps = useFormik({
     validationSchema,

@@ -273,12 +273,23 @@ export const getSwapTransferParams = async (
   let currentToken = inputToken;
   const swapsParams: TransferParams[] = [];
   let ttdexSwapStepsParams: SwapStepParams[] = [];
-  let ttdexSwapInput: BigNumber = new BigNumber(0);
-  let currentDexInput: BigNumber = new BigNumber(inputAmount);
+  let ttdexSwapInput = new BigNumber(0);
   const fa2Operators: Record<string, Record<number, string[]>> = {};
-  const singleExchangeToleranceQuotient = (
-    new BigNumber(1).minus(slippageTolerance).toNumber()
-  ) ** (new BigNumber(1).div(dexChain.length).toNumber());
+  const noSlippageToleranceOutputs: BigNumber[] = [inputAmount];
+  for (let i = 0; i < dexChain.length; i++) {
+    const { token1, token2 } = dexChain[i];
+    const shouldSellToken1 = getTokenSlug(token1) === getTokenSlug(currentToken);
+    noSlippageToleranceOutputs.push(
+      getTokenOutput({
+        inputToken: currentToken,
+        inputAmount: noSlippageToleranceOutputs[i],
+        dexChain: [dexChain[i]],
+      }),
+    );
+    currentToken = shouldSellToken1 ? token2 : token1;
+  }
+  currentToken = inputToken;
+  console.log(noSlippageToleranceOutputs.map((x) => x.toFixed()));
 
   const addFa2Operator = (
     {
@@ -307,12 +318,25 @@ export const getSwapTransferParams = async (
       const currentOperationRecipient = index === dexChain.length - 1 ? recipient : accountPkh;
       const prevDexId = index === 0 ? undefined : dexChain[index - 1].id;
       const shouldSellToken1 = getTokenSlug(token1) === getTokenSlug(currentToken);
-      const minOut = getTokenOutput({
-        inputToken: currentToken,
-        inputAmount: currentDexInput,
-        dexChain: [currentDex],
-      }).times(singleExchangeToleranceQuotient)
-        .integerValue(BigNumber.ROUND_DOWN);
+      const currentSlippageToleranceQuotient = (
+        new BigNumber(1).minus(slippageTolerance).toNumber()
+      ) ** (new BigNumber(index + 1).div(dexChain.length).toNumber());
+      const prevSlippageToleranceQuotient = (
+        new BigNumber(1).minus(slippageTolerance).toNumber()
+      ) ** (new BigNumber(index).div(dexChain.length).toNumber());
+      const currentDexInput = noSlippageToleranceOutputs[index]
+        .times(prevSlippageToleranceQuotient)
+        .integerValue(BigNumber.ROUND_FLOOR);
+      const minOut = noSlippageToleranceOutputs[index + 1]
+        .times(currentSlippageToleranceQuotient)
+        .integerValue(BigNumber.ROUND_FLOOR);
+      console.log(
+        index,
+        prevSlippageToleranceQuotient.toString(),
+        currentSlippageToleranceQuotient.toString(),
+        currentDexInput.toFixed(),
+        minOut.toFixed(),
+      );
 
       if (typeof prevDexId === 'number') {
         if (typeof id === 'string') {
@@ -395,7 +419,6 @@ export const getSwapTransferParams = async (
       }
 
       currentToken = shouldSellToken1 ? token2 : token1;
-      currentDexInput = minOut;
     },
   );
   if (ttdexSwapStepsParams.length > 0) {
@@ -403,7 +426,9 @@ export const getSwapTransferParams = async (
       ttDexContract!.methods.swap(
         ttdexSwapStepsParams,
         ttdexSwapInput,
-        currentDexInput,
+        noSlippageToleranceOutputs[dexChain.length]
+          .times(new BigNumber(1).minus(slippageTolerance))
+          .integerValue(BigNumber.ROUND_FLOOR),
         recipient,
       ).toTransferParams({ storageLimit: 1000 }),
     );
