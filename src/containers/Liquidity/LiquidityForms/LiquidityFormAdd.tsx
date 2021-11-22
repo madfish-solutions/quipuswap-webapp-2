@@ -22,6 +22,7 @@ import {
   WhitelistedToken,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { fromDecimals } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
@@ -58,8 +59,8 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       const tokenA = await getUserBalance(tezos, accountPkh, TEZOS_TOKEN.contractAddress, 'fa1.2');
       const tokenB = await getUserBalance(tezos, accountPkh, QUIPU_TOKEN.contract, 'fa2', QUIPU_TOKEN.id);
 
-      if (tokenA && isLoadBalances) setTokenABalance(tokenA.dividedBy(1_000_000).toFixed());
-      if (tokenB && isLoadBalances) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
+      if (tokenA && isLoadBalances) setTokenABalance(fromDecimals(tokenA, 6).toFixed());
+      if (tokenB && isLoadBalances) setTokenBBalance(fromDecimals(tokenB, 6).toFixed());
     };
     getBothTokensBalances();
 

@@ -16,6 +16,7 @@ import {
 } from '@utils/dapp';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { fromDecimals, noOpFunc } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { removeLiquidity } from '../liquidutyHelpers';
@@ -48,7 +49,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       const userLpBalance = await getUserBalance(tezos, accountPkh, QUIPU_TEZ_LP.contract, 'fa2', QUIPU_TEZ_LP.id);
 
       if (userLpBalance && isLoadBalances) {
-        setLpTokenBalance(userLpBalance.dividedBy(1_000_000).toFixed());
+        setLpTokenBalance(fromDecimals(userLpBalance, 6).toFixed());
       }
     };
     loadLpBalance();
@@ -96,7 +97,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         setToken={(token) => token}
         value={tokenAOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
-        handleBalance={() => {}}
+        handleBalance={noOpFunc}
         noBalanceButtons
         disabled
       />
@@ -108,11 +109,11 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         setToken={(token) => token}
         value={tokenBOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
-        handleBalance={() => {}}
+        handleBalance={noOpFunc}
         noBalanceButtons
         disabled
       />
-      <Slippage handleChange={() => {}} />
+      <Slippage handleChange={noOpFunc} />
       <Button
         className={s.button}
         onClick={() => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Tabs,
   Card,
@@ -66,17 +66,30 @@ const RealForm:React.FC = () => {
   useEffect(() => {
     let isLoadDex = true;
     const loadDex = async () => {
-      if (!tezos) return;
+      if (!tezos || !isLoadDex) return;
 
       const foundDex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
 
-      if (isLoadDex) setDex(foundDex);
+      setDex(foundDex);
     };
 
     loadDex();
 
     return () => { isLoadDex = false; };
   }, [tezos, networkId]);
+
+  const setActiveId = useCallback(
+    (val:string) => {
+      router.replace(
+        `/liquidity/${val}/${getWhitelistedTokenSymbol(fallbackTokenPair.token1)}-${getWhitelistedTokenSymbol(fallbackTokenPair.token2)}`,
+        undefined,
+        { shallow: true },
+      );
+      const findActiveTab = TabsContent.find((tab) => tab.id === val);
+      if (!findActiveTab) return;
+      setTabState(findActiveTab);
+    }, [],
+  );
 
   return (
     <>
@@ -86,16 +99,7 @@ const RealForm:React.FC = () => {
             <Tabs
               values={TabsContent}
               activeId={tabState.id}
-              setActiveId={(val) => {
-                router.replace(
-                  `/liquidity/${val}/${getWhitelistedTokenSymbol(fallbackTokenPair.token1)}-${getWhitelistedTokenSymbol(fallbackTokenPair.token2)}`,
-                  undefined,
-                  { shallow: true },
-                );
-                const findActiveTab = TabsContent.find((tab) => tab.id === val);
-                if (!findActiveTab) return;
-                setTabState(findActiveTab);
-              }}
+              setActiveId={setActiveId}
               className={s.tabs}
             />
           ),
