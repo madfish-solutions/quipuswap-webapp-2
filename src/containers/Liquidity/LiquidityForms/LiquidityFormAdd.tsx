@@ -1,14 +1,16 @@
 import React, {
   useState,
+  Dispatch,
   useEffect,
   ChangeEvent,
+  SetStateAction,
 } from 'react';
 import {
   Button,
   Tooltip,
   Switcher,
 } from '@quipuswap/ui-kit';
-import { FoundDex } from '@quipuswap/sdk';
+import { FoundDex, Token } from '@quipuswap/sdk';
 // import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
@@ -21,7 +23,6 @@ import {
 import {
   WhitelistedToken,
 } from '@utils/types';
-import { QUIPU_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
@@ -34,18 +35,25 @@ import {
 
 type LiquidityFormProps = {
   dex: FoundDex;
+  tokenA: WhitelistedToken;
+  tokenB: WhitelistedToken;
+  setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
+  setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
 };
 
 type QSMainNet = 'mainnet' | 'florencenet' | 'granadanet';
 
-export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
+export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
+  dex,
+  tokenA,
+  tokenB,
+  setTokenA,
+  setTokenB,
+}) => {
   // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
-
-  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
-  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
 
   const [tokenABalance, setTokenABalance] = useState('0');
   const [tokenBBalance, setTokenBBalance] = useState('0');
@@ -184,7 +192,12 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
           if (!tezos || !accountPkh) return;
 
           const tezValue = new BigNumber(tokenAInput).multipliedBy(1_000_000);
-          addLiquidity(tezos, networkId, QUIPU_TOKEN, tezValue);
+          const token:Token = {
+            contract: tokenB.contractAddress,
+            id: tokenB.fa2TokenId,
+          };
+
+          addLiquidity(tezos, networkId, token, tezValue);
           setTokenAInput('');
           setTokenBInput('');
         }}

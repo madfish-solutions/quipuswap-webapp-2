@@ -1,17 +1,21 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import {
   Tabs,
   Card,
   Button,
 } from '@quipuswap/ui-kit';
-import { findDex, FoundDex, Token } from '@quipuswap/sdk';
+import { FoundDex, findDex, Token } from '@quipuswap/sdk';
 import { FormSpy } from 'react-final-form';
 import router from 'next/router';
 
 import { QSMainNet, TokenDataMap, WhitelistedTokenPair } from '@utils/types';
-import { FACTORIES, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { FACTORIES, TEZOS_TOKEN, QUIPU_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { useNetwork, useTezos } from '@utils/dapp';
+import { useTezos, useNetwork } from '@utils/dapp';
 import { Transactions } from '@components/svg/Transactions';
 
 import { LiquidityFormRemove } from './LiquidityFormRemove';
@@ -40,7 +44,7 @@ const tokenDataMap:TokenDataMap = {
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: STABLE_TOKEN,
+  token2: QUIPU_TOKEN,
 } as WhitelistedTokenPair;
 
 const TabsContent = [
@@ -54,29 +58,34 @@ const TabsContent = [
   },
 ];
 
-const QUIPU_TOKEN:Token = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
-
 const RealForm:React.FC = () => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
 
-  const [tabState, setTabState] = useState(TabsContent[0]);
   const [dex, setDex] = useState<FoundDex>();
+  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
+  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
+  const [tabState, setTabState] = useState(TabsContent[0]);
 
   useEffect(() => {
     let isLoadDex = true;
     const loadDex = async () => {
-      if (!tezos || !isLoadDex) return;
+      if (!tezos) return;
 
-      const foundDex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
+      const token: Token = {
+        contract: tokenB.contractAddress,
+        id: tokenB.fa2TokenId,
+      };
 
-      setDex(foundDex);
+      const foundDex = await findDex(tezos, FACTORIES[networkId], token);
+
+      if (isLoadDex) setDex(foundDex);
     };
 
     loadDex();
 
     return () => { isLoadDex = false; };
-  }, [tezos, networkId]);
+  }, [tezos, networkId, tokenB]);
 
   const setActiveId = useCallback(
     (val:string) => {
@@ -115,10 +124,22 @@ const RealForm:React.FC = () => {
         contentClassName={s.content}
       >
         {tabState.id === 'add' && dex && (
-          <LiquidityFormAdd dex={dex} />
+          <LiquidityFormAdd
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            setTokenA={setTokenA}
+            setTokenB={setTokenB}
+          />
         )}
         {tabState.id === 'remove' && dex && (
-          <LiquidityFormRemove dex={dex} />
+          <LiquidityFormRemove
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            setTokenA={setTokenA}
+            setTokenB={setTokenB}
+          />
         )}
       </Card>
       <LiquidityDetails

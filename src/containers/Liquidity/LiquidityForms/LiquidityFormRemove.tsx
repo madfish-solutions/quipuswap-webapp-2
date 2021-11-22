@@ -1,4 +1,6 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent, Dispatch, SetStateAction, useEffect, useState,
+} from 'react';
 import {
   Plus,
   Button,
@@ -14,7 +16,6 @@ import {
   useAccountPkh,
   getUserBalance,
 } from '@utils/dapp';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
 import { fromDecimals, noOpFunc } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
@@ -27,10 +28,18 @@ const QUIPU_TEZ_LP = { contract: 'KT1MsQZeAbLuNfhfWdiUsJT4tTDzxymkaxwo', id: 0 }
 
 type LiquidityFormRemoveProps = {
   dex: FoundDex;
+  tokenA: WhitelistedToken;
+  tokenB: WhitelistedToken;
+  setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
+  setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
 };
 
 export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   dex,
+  tokenA,
+  tokenB,
+  setTokenA,
+  setTokenB,
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -79,7 +88,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <TokenSelect
         label="Select LP"
         balance={lpTokenBalance}
-        token={TEZOS_TOKEN}
+        token={tokenA}
         setToken={(token) => token}
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
@@ -93,8 +102,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <TokenSelect
         label="Output"
         balance="888"
-        token={TEZOS_TOKEN}
-        setToken={(token) => token}
+        token={tokenA}
+        setToken={setTokenA}
         value={tokenAOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={noOpFunc}
@@ -105,8 +114,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <TokenSelect
         label="Output"
         balance="888"
-        token={STABLE_TOKEN}
-        setToken={(token) => token}
+        token={tokenB}
+        setToken={setTokenB}
         value={tokenBOutput}
         blackListedTokens={[{}] as WhitelistedToken[]}
         handleBalance={noOpFunc}
