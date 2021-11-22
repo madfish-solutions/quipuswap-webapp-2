@@ -68,8 +68,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     const quipuPerOneLp = dex.storage.storage.token_pool
       .dividedBy(dex.storage.storage.total_supply);
 
-    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(6));
-    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(6));
+    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
   }, [lpTokenInput, dex]);
 
   return (

@@ -121,19 +121,19 @@ const RealForm:React.FC = () => {
       );
 
       if (userTokenABalanance && isLoadBalances) {
-        setTokenABalance(fromDecimals(userTokenABalanance, 6).toFixed(6));
+        setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed());
       } else if (!userTokenABalanance && isLoadBalances) {
         setTokenABalance('0');
       }
 
       if (userTokenBBalance && isLoadBalances) {
-        setTokenBBalance(fromDecimals(userTokenBBalance, 6).toFixed(6));
+        setTokenBBalance(fromDecimals(userTokenBBalance, tokenB.metadata.decimals).toFixed());
       } else if (!userTokenBBalance && isLoadBalances) {
         setTokenBBalance('0');
       }
 
       if (userLpTokenBalance && isLoadBalances) {
-        setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed(6));
+        setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed());
       } else if (!userLpTokenBalance && isLoadBalances) {
         setLpTokenBalance('0');
       }

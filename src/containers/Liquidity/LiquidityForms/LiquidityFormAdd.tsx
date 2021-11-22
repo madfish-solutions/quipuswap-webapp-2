@@ -63,7 +63,6 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
 
-    if (!tezos || !dex) return;
     if (event.target.value === '') {
       setTokenBInput('');
       return;
@@ -76,13 +75,14 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.token_pool,
     );
 
-    setTokenBInput(fromDecimals(tokenAmount, 6).toFixed(6));
+    setTokenBInput(
+      fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+    );
   };
 
   const handleTokenBChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
-    if (!tezos || !dex) return;
     if (event.target.value === '') {
       setTokenAInput('');
       return;
@@ -95,7 +95,9 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.tez_pool,
     );
 
-    setTokenBInput(fromDecimals(tezAmount, 6).toFixed(6));
+    setTokenAInput(
+      fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+    );
   };
 
   return (
@@ -111,14 +113,16 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
         handleBalance={(value) => {
           if (!dex) return;
           const fixedValue = new BigNumber(value);
-          setTokenAInput(fixedValue.toFixed());
+          setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
           const tokenAmount = calculateTokenAmount(
             fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.tez_pool,
             dex.storage.storage.token_pool,
           );
-          setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+          setTokenBInput(
+            fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+          );
         }}
         noBalanceButtons={!accountPkh}
       />
@@ -134,14 +138,16 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
         handleBalance={(value) => {
           if (!dex) return;
           const fixedValue = new BigNumber(value);
-          setTokenBInput(fixedValue.toFixed());
+          setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
           const tezAmount = calculateTokenAmount(
             fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.token_pool,
             dex.storage.storage.tez_pool,
           );
-          setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+          setTokenAInput(
+            fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+          );
         }}
         noBalanceButtons={!accountPkh}
       />
