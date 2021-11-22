@@ -53,13 +53,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const networkId = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
 
-  console.log({ tokensData });
-
   const [tabState, setTabState] = useState(TabsContent[0]);
   const [poolShare, setPoolShare] = useState<PoolShare>();
   const [dex, setDex] = useState<FoundDex>();
-
-  console.log(poolShare);
 
   useEffect(() => {
     let isLoadDex = true;
