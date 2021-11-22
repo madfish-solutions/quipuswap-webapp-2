@@ -61,11 +61,11 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
     let isLoadDex = true;
 
     const loadDex = async () => {
-      if (!tezos || !isLoadDex) return;
+      if (!tezos) return;
 
       const foundDex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
 
-      setDex(foundDex);
+      if (isLoadDex) setDex(foundDex);
     };
     loadDex();
 
@@ -73,14 +73,17 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   }, [tezos, networkId]);
 
   useEffect(() => {
+    let isLoadShares = true;
     const loadShares = async () => {
       if (!accountPkh || !tezos || !dex) return;
 
       const share = await getLiquidityShare(tezos, dex, accountPkh);
 
-      setPoolShare(share);
+      if (isLoadShares) setPoolShare(share);
     };
     loadShares();
+
+    return () => { isLoadShares = false; };
   }, [dex, accountPkh, tezos]);
 
   const setActiveId = useCallback(
