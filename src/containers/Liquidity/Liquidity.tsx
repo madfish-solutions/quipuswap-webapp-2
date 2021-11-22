@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { withTypes } from 'react-final-form';
 
 import {
   LiquidityFormValues,
+  TokenDataMap,
   WhitelistedTokenPair,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { fallbackTokenToTokenData } from '@utils/helpers';
 import { LiquidityForm } from '@containers/Liquidity/LiquidityForms';
 
 import { LiquidityChart } from './LiquidityChart';
@@ -24,6 +26,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   className,
 }) => {
   const { Form } = withTypes<LiquidityFormValues>();
+  const [tokensData] = useState<TokenDataMap>({
+    first: fallbackTokenToTokenData(TEZOS_TOKEN),
+    second: fallbackTokenToTokenData(STABLE_TOKEN),
+  });
 
   return (
     <>
@@ -32,7 +38,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
         <Form
           onSubmit={() => {}}
           render={() => (
-            <LiquidityForm />
+            <LiquidityForm tokensData={tokensData} />
           )}
         />
 
