@@ -1,5 +1,9 @@
 import React, {
-  ChangeEvent, Dispatch, SetStateAction, useEffect, useState,
+  useState,
+  Dispatch,
+  useEffect,
+  ChangeEvent,
+  SetStateAction,
 } from 'react';
 import {
   Plus,
@@ -7,7 +11,7 @@ import {
   Slippage,
   ArrowDown,
 } from '@quipuswap/ui-kit';
-import { FoundDex } from '@quipuswap/sdk';
+import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -22,9 +26,6 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
-
-const QUIPU_TOKEN = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
-const QUIPU_TEZ_LP = { contract: 'KT1MsQZeAbLuNfhfWdiUsJT4tTDzxymkaxwo', id: 0 };
 
 type LiquidityFormRemoveProps = {
   dex: FoundDex;
@@ -55,16 +56,22 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     const loadLpBalance = async () => {
       if (!tezos || !accountPkh) return;
 
-      const userLpBalance = await getUserBalance(tezos, accountPkh, QUIPU_TEZ_LP.contract, 'fa2', QUIPU_TEZ_LP.id);
+      const userLpBalance = await getUserBalance(
+        tezos,
+        accountPkh,
+        dex.contract.address,
+        tokenB.type,
+        tokenB.fa2TokenId,
+      );
 
       if (userLpBalance && isLoadBalances) {
-        setLpTokenBalance(fromDecimals(userLpBalance, 6).toFixed());
+        setLpTokenBalance(fromDecimals(userLpBalance, 6).toFixed(6));
       }
     };
     loadLpBalance();
 
     return () => { isLoadBalances = false; };
-  }, [dex, tezos, accountPkh]);
+  }, [dex, tezos, accountPkh, tokenB]);
 
   useEffect(() => {
     if (lpTokenInput === '') {
@@ -127,10 +134,15 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         className={s.button}
         onClick={() => {
           if (!tezos || !accountPkh) return;
+          const token:Token = {
+            contract: tokenB.contractAddress,
+            id: tokenB.fa2TokenId,
+          };
+
           removeLiquidity(
             tezos,
             networkId,
-            QUIPU_TOKEN,
+            token,
             new BigNumber(lpTokenInput),
             new BigNumber(0.1),
           );

@@ -87,6 +87,8 @@ const RealForm:React.FC = () => {
     return () => { isLoadDex = false; };
   }, [tezos, networkId, tokenB]);
 
+  console.log({ dex });
+
   const setActiveId = useCallback(
     (val:string) => {
       router.replace(
