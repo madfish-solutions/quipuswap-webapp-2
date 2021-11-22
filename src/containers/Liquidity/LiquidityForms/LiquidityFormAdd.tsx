@@ -21,7 +21,7 @@ import {
 import {
   WhitelistedToken,
 } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { QUIPU_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
@@ -31,8 +31,6 @@ import {
   addLiquidity,
   calculateTokenAmount,
 } from '../liquidutyHelpers';
-
-const QUIPU_TOKEN = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
 
 type LiquidityFormProps = {
   dex: FoundDex;
@@ -46,6 +44,9 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
   const accountPkh = useAccountPkh();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
 
+  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
+  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
+
   const [tokenABalance, setTokenABalance] = useState('0');
   const [tokenBBalance, setTokenBBalance] = useState('0');
   const [tokenAInput, setTokenAInput] = useState<string>('');
@@ -56,16 +57,36 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
     const getBothTokensBalances = async () => {
       if (!tezos || !accountPkh) return;
 
-      const tokenA = await getUserBalance(tezos, accountPkh, TEZOS_TOKEN.contractAddress, 'fa1.2');
-      const tokenB = await getUserBalance(tezos, accountPkh, QUIPU_TOKEN.contract, 'fa2', QUIPU_TOKEN.id);
+      const tokenABal = await getUserBalance(
+        tezos,
+        accountPkh,
+        tokenA.contractAddress,
+        tokenA.type,
+        tokenA.fa2TokenId,
+      );
+      const tokenBBal = await getUserBalance(
+        tezos,
+        accountPkh,
+        tokenB.contractAddress,
+        tokenB.type,
+        tokenB.fa2TokenId,
+      );
 
-      if (tokenA && isLoadBalances) setTokenABalance(fromDecimals(tokenA, 6).toFixed());
-      if (tokenB && isLoadBalances) setTokenBBalance(fromDecimals(tokenB, 6).toFixed());
+      if (tokenABal && isLoadBalances) {
+        setTokenABalance(fromDecimals(tokenABal, 6).toFixed());
+      } else {
+        setTokenABalance('0');
+      }
+      if (tokenBBal && isLoadBalances) {
+        setTokenBBalance(fromDecimals(tokenBBal, 6).toFixed());
+      } else {
+        setTokenBBalance('0');
+      }
     };
     getBothTokensBalances();
 
     return () => { isLoadBalances = false; };
-  }, [tezos, accountPkh]);
+  }, [tezos, accountPkh, tokenB, tokenA]);
 
   const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -110,8 +131,8 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       <TokenSelect
         label="Input"
         balance={tokenABalance}
-        token={TEZOS_TOKEN}
-        setToken={(token) => token}
+        token={tokenA}
+        setToken={setTokenA}
         value={tokenAInput}
         onChange={handleTokenAChange}
         blackListedTokens={[{}] as WhitelistedToken[]}
@@ -133,8 +154,8 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       <TokenSelect
         label="Input"
         balance={tokenBBalance}
-        token={STABLE_TOKEN}
-        setToken={(token) => token}
+        token={tokenB}
+        setToken={setTokenB}
         value={tokenBInput}
         onChange={handleTokenBChange}
         blackListedTokens={[{}] as WhitelistedToken[]}
