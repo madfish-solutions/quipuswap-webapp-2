@@ -10,7 +10,7 @@ import {
 } from '@utils/dapp';
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
 import { DexGraph, getTokenSlug, shortize } from '@utils/helpers';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { DexPair, QSMainNet, WhitelistedToken } from '@utils/types';
 import useUpdateToast from '@hooks/useUpdateToast';
 import useContinuousSWR from '@hooks/useContinuousSWR';
 
@@ -44,8 +44,6 @@ type RawTokenXtzPoolData = RawCommonPoolData & {
 
 type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 
-const fallbackDexGraph = {};
-
 const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: WhitelistedToken[]) => {
   const { id, address, type } = rawTokenData;
   const matchingToken = knownTokens.find(
@@ -69,20 +67,24 @@ const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: WhitelistedTo
   return matchingToken ?? fallbackToken;
 };
 
+const fallbackDexPools: DexPair[] = [];
+
 export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
   const updateToast = useUpdateToast();
 
-  const getTTDexPools = useCallback(async (): Promise<DexGraph | undefined> => {
+  const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
     const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId as QSMainNet];
+
     try {
       const result = await fetch(`${POOLS_LIST_API}/api/${networkId}/pools`);
       if (result.status >= 400) {
         throw new Error(`Response has status ${result.status}`);
       }
       const rawTTDexPools: RawPoolData[] = await result.json();
+
       return rawTTDexPools.map(
         (rawPool) => {
           const {
@@ -107,27 +109,10 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
           };
         },
       ).filter(
-        ({ token1Pool, token2Pool, factoryAddress }) => !token1Pool.eq(0) && !token2Pool.eq(0) && (
-          !factoryAddress || fa12Factory.includes(factoryAddress) || fa2Factory.includes(
-            factoryAddress,
-          )
-        ),
-      ).reduce<DexGraph>((graphPart, dexPair) => {
-        /* eslint-disable no-param-reassign */
-        const token1Slug = getTokenSlug(dexPair.token1);
-        const token2Slug = getTokenSlug(dexPair.token2);
-        if (!graphPart[token1Slug]) {
-          graphPart[token1Slug] = { edges: {} };
-        }
-        if (!graphPart[token2Slug]) {
-          graphPart[token2Slug] = { edges: {} };
-        }
-        graphPart[token1Slug].edges[token2Slug] = dexPair;
-        graphPart[token2Slug].edges[token1Slug] = dexPair;
-
-        return graphPart;
-        /* eslint-enable no-param-reassign */
-      }, {});
+        ({ factoryAddress }) => !factoryAddress || fa12Factory.includes(
+          factoryAddress,
+        ) || fa2Factory.includes(factoryAddress),
+      );
     } catch (e) {
       console.error(e);
       updateToast({
@@ -144,17 +129,38 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   );
 
   const {
-    data: dexGraph,
-    revalidate: updateDexGraph,
-  } = useContinuousSWR(
-    ['ttdexPools', networkId, tokensSWRKey],
-    getTTDexPools,
-  );
-  useOnBlock(tezos, updateDexGraph);
+    data: dexPools,
+    revalidate: updateDexPools,
+  } = useContinuousSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
+  useOnBlock(tezos, updateDexPools);
+
+  const dexGraph = useMemo(() => (dexPools ?? []).filter(
+    ({ token1Pool, token2Pool }) => !token1Pool.eq(0) && !token2Pool.eq(0),
+  ).reduce<DexGraph>(
+    (graphPart, dexPair) => {
+      /* eslint-disable no-param-reassign */
+      const token1Slug = getTokenSlug(dexPair.token1);
+      const token2Slug = getTokenSlug(dexPair.token2);
+      if (!graphPart[token1Slug]) {
+        graphPart[token1Slug] = { edges: {} };
+      }
+      if (!graphPart[token2Slug]) {
+        graphPart[token2Slug] = { edges: {} };
+      }
+      graphPart[token1Slug].edges[token2Slug] = dexPair;
+      graphPart[token2Slug].edges[token1Slug] = dexPair;
+
+      return graphPart;
+    /* eslint-enable no-param-reassign */
+    },
+    {},
+  ),
+  [dexPools]);
 
   return {
-    dexGraph: dexGraph ?? fallbackDexGraph,
-    updateDexGraph,
-    ttDexGraphLoading: !dexGraph,
+    dexGraph,
+    dexPools: dexPools ?? fallbackDexPools,
+    updateDexPools,
+    dexPoolsLoading: !dexPools,
   };
 });

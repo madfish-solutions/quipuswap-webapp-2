@@ -102,7 +102,7 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
           Minimum received:
         </span>
         <CurrencyAmount
-          amount={minimumReceived.isNaN() ? '0' : minimumReceived.toString()}
+          amount={minimumReceived.isNaN() ? '0' : minimumReceived.toFixed()}
           currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
         />
       </div>
