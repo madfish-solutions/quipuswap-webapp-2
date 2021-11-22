@@ -64,13 +64,18 @@ const RealForm:React.FC = () => {
   const [dex, setDex] = useState<FoundDex>();
 
   useEffect(() => {
+    let isLoadDex = true;
     const loadDex = async () => {
       if (!tezos) return;
+
       const foundDex = await findDex(tezos, FACTORIES[networkId], QUIPU_TOKEN);
-      setDex(foundDex);
+
+      if (isLoadDex) setDex(foundDex);
     };
 
     loadDex();
+
+    return () => { isLoadDex = false; };
   }, [tezos, networkId]);
 
   return (

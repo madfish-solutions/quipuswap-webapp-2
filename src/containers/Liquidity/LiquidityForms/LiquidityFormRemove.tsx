@@ -41,14 +41,19 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   const [tokenBOutput, setTokenBOutput] = useState('777');
 
   useEffect(() => {
+    let isLoadBalances = true;
     const loadLpBalance = async () => {
       if (!tezos || !accountPkh) return;
 
       const userLpBalance = await getUserBalance(tezos, accountPkh, QUIPU_TEZ_LP.contract, 'fa2', QUIPU_TEZ_LP.id);
 
-      if (userLpBalance) setLpTokenBalance(userLpBalance.dividedBy(1_000_000).toFixed());
+      if (userLpBalance && isLoadBalances) {
+        setLpTokenBalance(userLpBalance.dividedBy(1_000_000).toFixed());
+      }
     };
     loadLpBalance();
+
+    return () => { isLoadBalances = false; };
   }, [dex, tezos, accountPkh]);
 
   useEffect(() => {

@@ -51,16 +51,19 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
   const [tokenBInput, setTokenBInput] = useState<string>('');
 
   useEffect(() => {
+    let isLoadBalances = true;
     const getBothTokensBalances = async () => {
       if (!tezos || !accountPkh) return;
 
       const tokenA = await getUserBalance(tezos, accountPkh, TEZOS_TOKEN.contractAddress, 'fa1.2');
       const tokenB = await getUserBalance(tezos, accountPkh, QUIPU_TOKEN.contract, 'fa2', QUIPU_TOKEN.id);
 
-      if (tokenA) setTokenABalance(tokenA.dividedBy(1_000_000).toFixed());
-      if (tokenB) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
+      if (tokenA && isLoadBalances) setTokenABalance(tokenA.dividedBy(1_000_000).toFixed());
+      if (tokenB && isLoadBalances) setTokenBBalance(tokenB.dividedBy(1_000_000).toFixed());
     };
     getBothTokensBalances();
+
+    return () => { isLoadBalances = false; };
   }, [tezos, accountPkh]);
 
   const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
