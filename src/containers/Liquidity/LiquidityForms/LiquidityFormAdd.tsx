@@ -83,7 +83,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       dex.storage.storage.token_pool,
     );
 
-    setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+    setTokenBInput(fromDecimals(tokenAmount, 6).toFixed());
   };
 
   const handleTokenBChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -102,7 +102,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
       dex.storage.storage.tez_pool,
     );
 
-    setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+    setTokenAInput(fromDecimals(tezAmount, 6).toFixed());
   };
 
   return (
@@ -118,14 +118,14 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         handleBalance={(value) => {
           if (!dex) return;
           const fixedValue = new BigNumber(value);
-          setTokenAInput(fixedValue.toFixed());
+          setTokenAInput(fixedValue.toFixed(6));
           const tokenAmount = calculateTokenAmount(
             fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.tez_pool,
             dex.storage.storage.token_pool,
           );
-          setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+          setTokenBInput(fromDecimals(tokenAmount, 6).toFixed(6));
         }}
         noBalanceButtons={!accountPkh}
       />
@@ -141,14 +141,14 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({ dex }) => {
         handleBalance={(value) => {
           if (!dex) return;
           const fixedValue = new BigNumber(value);
-          setTokenBInput(fixedValue.toFixed());
+          setTokenBInput(fixedValue.toFixed(6));
           const tezAmount = calculateTokenAmount(
             fixedValue,
             dex.storage.storage.total_supply,
             dex.storage.storage.token_pool,
             dex.storage.storage.tez_pool,
           );
-          setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+          setTokenAInput(fromDecimals(tezAmount, 6).toFixed(6));
         }}
         noBalanceButtons={!accountPkh}
       />

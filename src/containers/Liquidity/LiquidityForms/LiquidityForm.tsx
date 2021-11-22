@@ -4,39 +4,27 @@ import {
   Card,
   Button,
 } from '@quipuswap/ui-kit';
-import { findDex, FoundDex, Token } from '@quipuswap/sdk';
+import {
+  findDex, FoundDex, getLiquidityShare, Token,
+} from '@quipuswap/sdk';
 import { FormSpy } from 'react-final-form';
 import router from 'next/router';
 
-import { QSMainNet, TokenDataMap, WhitelistedTokenPair } from '@utils/types';
+import {
+  PoolShare,
+  QSMainNet,
+  TokenDataMap,
+  WhitelistedTokenPair,
+} from '@utils/types';
 import { FACTORIES, STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { Transactions } from '@components/svg/Transactions';
 
 import { LiquidityFormRemove } from './LiquidityFormRemove';
 import { LiquidityFormAdd } from './LiquidityFormAdd';
 import { LiquidityDetails } from '../LiquidityDetails';
 import s from '../Liquidity.module.sass';
-
-const tokenDataMap:TokenDataMap = {
-  first: {
-    token: {
-      address: 'qwe',
-      type: 'fa1.2',
-      decimals: 6,
-    },
-    balance: '123',
-  },
-  second: {
-    token: {
-      address: 'asd',
-      type: 'fa1.2',
-      decimals: 6,
-    },
-    balance: '345',
-  },
-};
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
@@ -56,12 +44,22 @@ const TabsContent = [
 
 const QUIPU_TOKEN:Token = { contract: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu', id: 0 };
 
-const RealForm:React.FC = () => {
+type LiquidityFormProps = {
+  tokensData: TokenDataMap;
+};
+
+const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
+  const accountPkh = useAccountPkh();
+
+  console.log({ tokensData });
 
   const [tabState, setTabState] = useState(TabsContent[0]);
+  const [poolShare, setPoolShare] = useState<PoolShare>();
   const [dex, setDex] = useState<FoundDex>();
+
+  console.log(poolShare);
 
   useEffect(() => {
     let isLoadDex = true;
@@ -72,8 +70,15 @@ const RealForm:React.FC = () => {
 
       setDex(foundDex);
     };
+    const loadShares = async () => {
+      if (!accountPkh || !tezos || !dex) return;
+
+      const share = await getLiquidityShare(tezos, dex, accountPkh);
+      setPoolShare(share);
+    };
 
     loadDex();
+    loadShares();
 
     return () => { isLoadDex = false; };
   }, [tezos, networkId]);
@@ -125,9 +130,8 @@ const RealForm:React.FC = () => {
         currentTab={tabState.label}
         token1={fallbackTokenPair.token1}
         token2={fallbackTokenPair.token2}
-        tokensData={tokenDataMap}
-        balanceTotalA="123"
-        balanceTotalB="123"
+        tokensData={tokensData}
+        poolShare={poolShare}
       />
     </>
   );
