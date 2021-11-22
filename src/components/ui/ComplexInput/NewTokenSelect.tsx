@@ -146,6 +146,15 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     onAmountChange(new BigNumber(state));
   }, [onAmountChange]);
 
+  const formattedBalance = useMemo(() => {
+    if (!balance) {
+      return balance;
+    }
+    const correctBalance = balance.decimalPlaces(token?.metadata.decimals ?? 3);
+    const decimalExp = Math.floor(Math.log10(correctBalance.toNumber()) + 1);
+    return correctBalance.decimalPlaces(Math.min(Math.max(0, 7 - decimalExp), 7)).toFixed();
+  }, [balance, token?.metadata.decimals]);
+
   return (
     <>
       <TokensModal
@@ -175,9 +184,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                   {t('common|Balance')}
                   :
                 </div>
-                <div className={cx(s.label2, s.price)}>
-                  {balance?.decimalPlaces(token?.metadata.decimals ?? 3).toFixed()}
-                </div>
+                <div className={cx(s.label2, s.price)}>{formattedBalance}</div>
               </div>
               )}
             </div>
