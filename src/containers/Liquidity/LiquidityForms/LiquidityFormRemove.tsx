@@ -18,10 +18,9 @@ import {
   useTezos,
   useNetwork,
   useAccountPkh,
-  getUserBalance,
 } from '@utils/dapp';
 import { QSMainNet, WhitelistedToken } from '@utils/types';
-import { fromDecimals, noOpFunc } from '@utils/helpers';
+import { noOpFunc } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { removeLiquidity } from '../liquidutyHelpers';
@@ -33,6 +32,9 @@ type LiquidityFormRemoveProps = {
   tokenB: WhitelistedToken;
   setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
   setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
+  tokenABalance: string;
+  tokenBBalance: string;
+  lpTokenBalance: string;
 };
 
 export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
@@ -41,37 +43,17 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   tokenB,
   setTokenA,
   setTokenB,
+  tokenABalance,
+  tokenBBalance,
+  lpTokenBalance,
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const networkId = useNetwork().id as QSMainNet;
 
-  const [lpTokenBalance, setLpTokenBalance] = useState('0');
   const [lpTokenInput, setLpTokenInput] = useState('');
   const [tokenAOutput, setTokenAOutput] = useState('777');
   const [tokenBOutput, setTokenBOutput] = useState('777');
-
-  useEffect(() => {
-    let isLoadBalances = true;
-    const loadLpBalance = async () => {
-      if (!tezos || !accountPkh) return;
-
-      const userLpBalance = await getUserBalance(
-        tezos,
-        accountPkh,
-        dex.contract.address,
-        tokenB.type,
-        tokenB.fa2TokenId,
-      );
-
-      if (userLpBalance && isLoadBalances) {
-        setLpTokenBalance(fromDecimals(userLpBalance, 6).toFixed(6));
-      }
-    };
-    loadLpBalance();
-
-    return () => { isLoadBalances = false; };
-  }, [dex, tezos, accountPkh, tokenB]);
 
   useEffect(() => {
     if (lpTokenInput === '') {
@@ -108,7 +90,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance="888"
+        balance={tokenABalance}
         token={tokenA}
         setToken={setTokenA}
         value={tokenAOutput}
@@ -120,7 +102,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance="888"
+        balance={tokenBBalance}
         token={tokenB}
         setToken={setTokenB}
         value={tokenBOutput}

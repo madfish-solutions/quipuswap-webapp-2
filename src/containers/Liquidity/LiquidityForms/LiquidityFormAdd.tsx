@@ -1,7 +1,6 @@
 import React, {
   useState,
   Dispatch,
-  useEffect,
   ChangeEvent,
   SetStateAction,
 } from 'react';
@@ -18,7 +17,6 @@ import {
   useTezos,
   useNetwork,
   useAccountPkh,
-  getUserBalance,
 } from '@utils/dapp';
 import {
   WhitelistedToken,
@@ -39,6 +37,8 @@ type LiquidityFormProps = {
   tokenB: WhitelistedToken;
   setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
   setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
+  tokenABalance: string;
+  tokenBBalance: string;
 };
 
 type QSMainNet = 'mainnet' | 'florencenet' | 'granadanet';
@@ -49,52 +49,16 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   tokenB,
   setTokenA,
   setTokenB,
+  tokenABalance,
+  tokenBBalance,
 }) => {
   // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const networkId: QSMainNet = useNetwork().id as QSMainNet;
 
-  const [tokenABalance, setTokenABalance] = useState('0');
-  const [tokenBBalance, setTokenBBalance] = useState('0');
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
-
-  useEffect(() => {
-    let isLoadBalances = true;
-    const getBothTokensBalances = async () => {
-      if (!tezos || !accountPkh) return;
-
-      const tokenABal = await getUserBalance(
-        tezos,
-        accountPkh,
-        tokenA.contractAddress,
-        tokenA.type,
-        tokenA.fa2TokenId,
-      );
-      const tokenBBal = await getUserBalance(
-        tezos,
-        accountPkh,
-        tokenB.contractAddress,
-        tokenB.type,
-        tokenB.fa2TokenId,
-      );
-
-      if (tokenABal && isLoadBalances) {
-        setTokenABalance(fromDecimals(tokenABal, 6).toFixed());
-      } else {
-        setTokenABalance('0');
-      }
-      if (tokenBBal && isLoadBalances) {
-        setTokenBBalance(fromDecimals(tokenBBal, 6).toFixed());
-      } else {
-        setTokenBBalance('0');
-      }
-    };
-    getBothTokensBalances();
-
-    return () => { isLoadBalances = false; };
-  }, [tezos, accountPkh, tokenB, tokenA]);
 
   const handleTokenAChange = async (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -112,7 +76,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.token_pool,
     );
 
-    setTokenBInput(tokenAmount.dividedBy(1_000_000).toFixed(6));
+    setTokenBInput(fromDecimals(tokenAmount, 6).toFixed(6));
   };
 
   const handleTokenBChange = async (event: ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +95,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.tez_pool,
     );
 
-    setTokenAInput(tezAmount.dividedBy(1_000_000).toFixed(6));
+    setTokenBInput(fromDecimals(tezAmount, 6).toFixed(6));
   };
 
   return (

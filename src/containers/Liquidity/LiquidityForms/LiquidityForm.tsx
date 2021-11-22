@@ -14,8 +14,10 @@ import router from 'next/router';
 
 import { QSMainNet, TokenDataMap, WhitelistedTokenPair } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN, QUIPU_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { useTezos, useNetwork } from '@utils/dapp';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import {
+  useTezos, useNetwork, getUserBalance, useAccountPkh,
+} from '@utils/dapp';
 import { Transactions } from '@components/svg/Transactions';
 
 import { LiquidityFormRemove } from './LiquidityFormRemove';
@@ -61,11 +63,15 @@ const TabsContent = [
 const RealForm:React.FC = () => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
+  const accountPkh = useAccountPkh();
 
   const [dex, setDex] = useState<FoundDex>();
+  const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
   const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
-  const [tabState, setTabState] = useState(TabsContent[0]);
+  const [tokenABalance, setTokenABalance] = useState<string>('0');
+  const [tokenBBalance, setTokenBBalance] = useState<string>('0');
+  const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
 
   useEffect(() => {
     let isLoadDex = true;
@@ -86,6 +92,56 @@ const RealForm:React.FC = () => {
 
     return () => { isLoadDex = false; };
   }, [tezos, networkId, tokenB]);
+
+  useEffect(() => {
+    let isLoadBalances = true;
+    const getTokensBalances = async () => {
+      if (!tezos || !accountPkh || !dex) return;
+
+      const userTokenABalanance = await getUserBalance(
+        tezos,
+        accountPkh,
+        tokenA.contractAddress,
+        tokenA.type,
+        tokenA.fa2TokenId,
+      );
+      const userTokenBBalance = await getUserBalance(
+        tezos,
+        accountPkh,
+        tokenB.contractAddress,
+        tokenB.type,
+        tokenB.fa2TokenId,
+      );
+      const userLpTokenBalance = await getUserBalance(
+        tezos,
+        accountPkh,
+        dex.contract.address,
+        tokenB.type,
+        tokenB.fa2TokenId,
+      );
+
+      if (userTokenABalanance && isLoadBalances) {
+        setTokenABalance(fromDecimals(userTokenABalanance, 6).toFixed(6));
+      } else if (!userTokenABalanance && isLoadBalances) {
+        setTokenABalance('0');
+      }
+
+      if (userTokenBBalance && isLoadBalances) {
+        setTokenBBalance(fromDecimals(userTokenBBalance, 6).toFixed(6));
+      } else if (!userTokenBBalance && isLoadBalances) {
+        setTokenBBalance('0');
+      }
+
+      if (userLpTokenBalance && isLoadBalances) {
+        setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed(6));
+      } else if (!userLpTokenBalance && isLoadBalances) {
+        setLpTokenBalance('0');
+      }
+    };
+    getTokensBalances();
+
+    return () => { isLoadBalances = false; };
+  }, [tezos, accountPkh, tokenB, tokenA, dex]);
 
   const setActiveId = useCallback(
     (val:string) => {
@@ -130,6 +186,8 @@ const RealForm:React.FC = () => {
             tokenB={tokenB}
             setTokenA={setTokenA}
             setTokenB={setTokenB}
+            tokenABalance={tokenABalance}
+            tokenBBalance={tokenBBalance}
           />
         )}
         {tabState.id === 'remove' && dex && (
@@ -139,6 +197,9 @@ const RealForm:React.FC = () => {
             tokenB={tokenB}
             setTokenA={setTokenA}
             setTokenB={setTokenB}
+            tokenABalance={tokenABalance}
+            tokenBBalance={tokenBBalance}
+            lpTokenBalance={lpTokenBalance}
           />
         )}
       </Card>
