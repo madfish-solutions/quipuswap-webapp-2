@@ -47,7 +47,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <div className={s.wrapper}>
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
-        <LogoButton href="/" />
+        <LogoButton />
         <ConnectWalletButton className={s.connect} />
         <LanguageSwitcher
           direction="bottom"
