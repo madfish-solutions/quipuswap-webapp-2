@@ -22,7 +22,6 @@ export interface QSNetwork {
   metadata: string
   description: string
   disabled: boolean
-  ttDexApi?: string
 }
 
 export enum WalletType {

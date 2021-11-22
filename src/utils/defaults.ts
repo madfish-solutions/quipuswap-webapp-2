@@ -111,7 +111,7 @@ export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
-export const TTDEX_API_TESTNET = process.env.NEXT_PUBLIC_TTDEX_API_TESTNET!;
+export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
@@ -125,7 +125,6 @@ export const GRANADANET_NETWORK: QSNetwork = {
   metadata: METADATA_API_TESTNET,
   description: 'Granada testnet',
   disabled: false,
-  ttDexApi: TTDEX_API_TESTNET,
 };
 export const FLORENCENET_NETWORK: QSNetwork = {
   id: 'florencenet',

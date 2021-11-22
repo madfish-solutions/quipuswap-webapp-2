@@ -149,7 +149,7 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
-  const { dexGraph, updateTokenToXtzDexGraphPart } = useDexGraph();
+  const { dexGraph } = useDexGraph();
   const [fee, setFee] = useState<BigNumber>();
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
   const prevToken1Ref = useRef<WhitelistedToken>();
@@ -172,30 +172,6 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     }
     prevAccountPkh.current = accountPkh;
   }, [accountPkh, token1, token2, updateTokenBalance]);
-
-  useEffect(() => {
-    const prevToken1 = prevToken1Ref.current;
-    const prevToken2 = prevToken2Ref.current;
-    const prevAmount1 = prevAmount1Ref.current;
-    const prevAmount2 = prevAmount2Ref.current;
-    const prevToken1Slug = prevToken1 && getTokenSlug(prevToken1);
-    const prevToken2Slug = prevToken2 && getTokenSlug(prevToken2);
-    const token1Slug = token1 && getTokenSlug(token1);
-    const token2Slug = token2 && getTokenSlug(token2);
-
-    if (
-      ((prevToken1Slug !== token1Slug) || !amountsAreEqual(prevAmount1, amount1))
-      && token1 && token1.contractAddress !== 'tez'
-    ) {
-      updateTokenToXtzDexGraphPart(token1);
-    }
-    if (
-      ((prevToken2Slug !== token2Slug) || !amountsAreEqual(prevAmount2, amount2))
-      && token2 && token2.contractAddress !== 'tez'
-    ) {
-      updateTokenToXtzDexGraphPart(token2);
-    }
-  }, [amount1, amount2, token1, token2, updateTokenToXtzDexGraphPart]);
 
   const updateSwapFee = useMemo(
     () => debouncePromise(
