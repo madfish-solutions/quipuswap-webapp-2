@@ -22,15 +22,18 @@ import {
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
 import { Transactions } from '@components/svg/Transactions';
-import { useDexGraph } from '@hooks/useDexGraph';
+import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   useAccountPkh,
+  useAddCustomToken,
   useNetwork,
   useOnBlock,
+  useSearchCustomTokens,
   useTezos,
+  useTokens,
 } from '@utils/dapp';
-import { TTDEX_CONTRACTS } from '@utils/defaults';
+import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   DexGraph,
   estimateSwapFee,
@@ -38,6 +41,7 @@ import {
   getPriceImpact,
   getRouteWithInput,
   getRouteWithOutput,
+  getTokenIdFromSlug,
   getTokenInput,
   getTokenOutput,
   getTokenSlug,
@@ -62,8 +66,10 @@ type NewSwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
   updateTokenBalance: (token: WhitelistedToken) => void;
   knownTokensBalances: Record<string, BigNumber>;
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
-  knownMaxInputAmounts: any;
-  knownMaxOutputAmounts: any;
+  knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
+  knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
+  initialFrom: string;
+  initialTo: string;
 };
 
 type SlippageInputProps = {
@@ -120,6 +126,8 @@ function amountsAreEqual(amount1?: BigNumber, amount2?: BigNumber) {
 export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   className,
   errors,
+  initialFrom,
+  initialTo,
   submitForm,
   setValues,
   setFieldValue,
@@ -146,12 +154,16 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
   const exchangeRates = useNewExchangeRates();
   const network = useNetwork();
   const tezos = useTezos();
+  const { data: tokens } = useTokens();
+  const searchCustomTokens = useSearchCustomTokens();
+  const addCustomToken = useAddCustomToken();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
   const { dexGraph } = useDexGraph();
   const [fee, setFee] = useState<BigNumber>();
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
+  const initialValuesAppliedRef = useRef(false);
   const prevToken1Ref = useRef<WhitelistedToken>();
   const prevToken2Ref = useRef<WhitelistedToken>();
   const prevAmount1Ref = useRef<BigNumber>();
@@ -172,6 +184,59 @@ export const NewSwapForm: React.FC<NewSwapFormProps> = ({
     }
     prevAccountPkh.current = accountPkh;
   }, [accountPkh, token1, token2, updateTokenBalance]);
+
+  const tokensTouched = touched.token1 || touched.token2;
+
+  useEffect(() => {
+    if (initialValuesAppliedRef.current || tokensTouched) {
+      return;
+    }
+
+    const tokensSlugsToFields = [
+      { fieldName: 'token1', tokenSlug: initialFrom },
+      { fieldName: 'token2', tokenSlug: initialTo },
+    ];
+
+    tokensSlugsToFields.forEach(
+      ({ fieldName, tokenSlug }) => {
+        const isTez = tokenSlug === getTokenSlug(TEZOS_TOKEN);
+        const tokenIsKnown = isTez || tokens.some(
+          (token) => getTokenSlug(token) === tokenSlug,
+        );
+        const { contractAddress, fa2TokenId, type } = getTokenIdFromSlug(tokenSlug);
+        const token = isTez ? TEZOS_TOKEN : makeWhitelistedToken(
+          { type, id: fa2TokenId, address: contractAddress },
+          tokens,
+        );
+        setFieldValue(fieldName, token, true);
+        if (!tokenIsKnown) {
+          searchCustomTokens(contractAddress, fa2TokenId)
+            .then((customToken) => {
+              if (customToken) {
+                addCustomToken(customToken);
+              }
+            })
+            .catch(console.error);
+        }
+      },
+    );
+
+    if (
+      tokensSlugsToFields.every(
+        ({ tokenSlug }) => tokens.some((token) => getTokenSlug(token) === tokenSlug),
+      )
+    ) {
+      initialValuesAppliedRef.current = true;
+    }
+  }, [
+    initialFrom,
+    initialTo,
+    searchCustomTokens,
+    tokens,
+    tokensTouched,
+    setFieldValue,
+    addCustomToken,
+  ]);
 
   const updateSwapFee = useMemo(
     () => debouncePromise(

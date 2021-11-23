@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
@@ -35,7 +36,9 @@ import { addressSchema, bigNumberSchema } from '@utils/validators';
 import { NewSwapForm } from './NewSwapForm';
 
 type SwapSendProps = {
-  className?: string
+  className?: string;
+  initialFrom: string;
+  initialTo: string;
 };
 
 const initialErrors = {
@@ -47,8 +50,11 @@ const initialValues: Partial<NewSwapFormValues> = {
   slippage: '0.5 %',
 };
 
-export const SwapSend: React.FC<SwapSendProps> = ({
+const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
   className,
+  initialFrom,
+  initialTo,
+  router,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
@@ -229,12 +235,12 @@ export const SwapSend: React.FC<SwapSendProps> = ({
             ),
           );
         }
-        // eslint-disable-next-line no-empty
+        router.push(`/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`);
       } catch (e) {
         console.error(e);
       }
     },
-    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount],
+    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount, router],
   );
 
   const handleErrorToast = useCallback((err) => {
@@ -319,6 +325,8 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     <NewSwapForm
       {...formikProps}
       className={className}
+      initialFrom={initialFrom}
+      initialTo={initialTo}
       knownTokensBalances={knownTokensBalances}
       onTokensSelected={handleTokensSelected}
       updateTokenBalance={updateTokenBalance}
@@ -327,3 +335,5 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     />
   );
 };
+
+export const SwapSend = withRouter<SwapSendProps & WithRouterProps>(OrdinarySwapSend);

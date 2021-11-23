@@ -66,6 +66,18 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
+export const FLORENCENET_STABLE_TOKEN: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1CdFLoqESYe3qBCgM7LZUVmqYZFEabzwyS',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
 export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT1Mfz9fXRQHrPQyCyJQDnFRgUv9fi18HbHR',
@@ -76,6 +88,12 @@ export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
     name: 'Quipuswap Governance Token',
     thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
   },
+};
+
+export const networksStableTokens: Record<QSMainNet, WhitelistedToken> = {
+  mainnet: STABLE_TOKEN,
+  florencenet: FLORENCENET_STABLE_TOKEN,
+  granadanet: GRANADANET_STABLE_TOKEN,
 };
 
 export const FACTORIES = {

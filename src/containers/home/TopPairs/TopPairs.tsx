@@ -3,13 +3,19 @@ import { useTranslation } from 'next-i18next';
 import { useGetTokensPairsLazyQuery } from '@graphql';
 
 import { Token } from 'graphql';
-import { transformNodeToWhitelistedToken, prepareTokenName } from '@utils/helpers';
+import { transformNodeToWhitelistedToken, prepareTokenName, getTokenSlug } from '@utils/helpers';
 import { PoolTable } from '@components/tables/PoolTable';
 import { Section } from '@components/home/Section';
 
 type TopPairsProps = {
   className?: string
 };
+
+const getTokenId = (t1: Token) => ({
+  contractAddress: t1.id!,
+  fa2TokenId: t1.tokenId ? +(t1.tokenId) : undefined,
+  type: t1.tokenId ? 'fa2' as const : 'fa1.2' as const,
+});
 
 export const TopPairs: React.FC<TopPairsProps> = ({
   className,
@@ -41,7 +47,7 @@ export const TopPairs: React.FC<TopPairsProps> = ({
         },
         second: {
           label: t('home|Trade'),
-          href: `/swap/${x?.node?.token1.id}-${x?.node?.token2.id}`,
+          href: `/swap/${getTokenSlug(getTokenId(t1))}-${getTokenSlug(getTokenId(t2))}`,
         },
       },
     });

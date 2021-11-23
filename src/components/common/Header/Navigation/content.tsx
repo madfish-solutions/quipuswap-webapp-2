@@ -10,6 +10,8 @@ import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
 import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
 import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
 import MoreIcon from '@icons/MoreIcon.svg';
+import { getTokenSlug } from '@utils/helpers';
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 
 interface LinkInterface {
   id: number
@@ -33,7 +35,7 @@ export const NavigationData: NavigationDataProps[] = [
   {
     id: 1,
     href: '/swap/[from-to]',
-    as: '/swap/TEZ-QUIPU',
+    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(STABLE_TOKEN)}`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon,
   },

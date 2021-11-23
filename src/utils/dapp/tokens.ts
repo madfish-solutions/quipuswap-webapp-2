@@ -1,4 +1,5 @@
 import { TezosToolkit } from '@taquito/taquito';
+import memoizee from 'memoizee';
 import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
@@ -18,19 +19,22 @@ export const getContractInfo = (address:string, tz:TezosToolkit) => tz
   ?.contract
   .at(address);
 
-export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
-  if (await isContractAddress(address) === true) {
-    let type;
-    try {
-      type = await getContractInfo(address, tz);
-    } catch (e) {
-      type = null;
+export const isTokenFa2 = memoizee(
+  async (address:string, tz:TezosToolkit) => {
+    if (await isContractAddress(address) === true) {
+      let type;
+      try {
+        type = await getContractInfo(address, tz);
+      } catch (e) {
+        type = null;
+      }
+      if (!type) return false;
+      return !!type.methods.update_operators;
     }
-    if (!type) return false;
-    return !!type.methods.update_operators;
-  }
-  return false;
-};
+    return false;
+  },
+  { promise: true },
+);
 
 export const getTokens = async (
   network:QSNetwork,

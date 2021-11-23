@@ -10,12 +10,18 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
+  FLORENCENET_NETWORK,
+  GRANADANET_NETWORK,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
+  MAINNET_NETWORK,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSNetwork, WhitelistedBaker, WhitelistedToken,
+  QSMainNet,
+  QSNetwork,
+  WhitelistedBaker,
+  WhitelistedToken,
 } from '@utils/types';
 import {
   getContractInfo, getTokens, saveCustomToken,
@@ -122,8 +128,13 @@ export type DAppType = {
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
 
-const fallbackToolkit = new TezosToolkit(net.rpcBaseURL);
-fallbackToolkit.setPackerProvider(michelEncoder);
+export const fallbackToolkits: Record<QSMainNet, TezosToolkit> = {
+  florencenet: new TezosToolkit(FLORENCENET_NETWORK.rpcBaseURL),
+  granadanet: new TezosToolkit(GRANADANET_NETWORK.rpcBaseURL),
+  mainnet: new TezosToolkit(MAINNET_NETWORK.rpcBaseURL),
+};
+
+Object.values(fallbackToolkits).forEach((toolkit) => toolkit.setPackerProvider(michelEncoder));
 
 function useDApp() {
   const [{
@@ -152,9 +163,9 @@ function useDApp() {
     () => setState((prevState) => ({
       ...prevState,
       connectionType: null,
-      tezos: prevState.tezos ?? fallbackToolkit,
+      tezos: prevState.tezos ?? fallbackToolkits[network.id as QSMainNet],
     })),
-    [],
+    [network.id],
   );
 
   const getTempleInitialAvailable = useCallback(() => TempleWallet.isAvailable(), []);
@@ -188,7 +199,7 @@ function useDApp() {
 
           if (lastUsedConnection === 'temple') {
             const pkh = wlt.connected ? await wlt.getPKH() : null;
-            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkit;
+            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkits[net.id as QSMainNet];
             if (wlt.connected && pkh) {
               const { publicKey } = wlt.permission!;
               tk.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
@@ -203,7 +214,7 @@ function useDApp() {
           } else {
             setState((prevState) => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkit,
+              tezos: prevState.tezos ?? fallbackToolkits[net.id as QSMainNet],
               templeWallet: wlt,
             }));
           }
@@ -457,13 +468,13 @@ function useDApp() {
     async () => {
       setState((prevState) => ({
         ...prevState,
-        tezos: fallbackToolkit,
+        tezos: fallbackToolkits[network.id as QSMainNet],
         accountPkh: null,
         connectionType: null,
       }));
       localStorage.removeItem(LAST_USED_CONNECTION_KEY);
     },
-    [],
+    [network.id],
   );
 
   const changeNetwork = useCallback(

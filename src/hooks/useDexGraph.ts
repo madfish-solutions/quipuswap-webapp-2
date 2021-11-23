@@ -44,7 +44,7 @@ type RawTokenXtzPoolData = RawCommonPoolData & {
 
 type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 
-const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: WhitelistedToken[]) => {
+export const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: WhitelistedToken[]) => {
   const { id, address, type } = rawTokenData;
   const matchingToken = knownTokens.find(
     ({
