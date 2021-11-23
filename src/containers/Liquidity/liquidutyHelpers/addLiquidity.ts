@@ -18,5 +18,5 @@ export const addLiquidity = async (
     addLiquidityParams,
   ).send();
 
-  await walletOperation.confirmation();
+  return walletOperation.confirmation();
 };

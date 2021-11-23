@@ -30,5 +30,5 @@ export const initializeLiquidity = async (
     initializeLiquidityParams,
   ).send();
 
-  await walletOperation.confirmation();
+  return walletOperation.confirmation();
 };

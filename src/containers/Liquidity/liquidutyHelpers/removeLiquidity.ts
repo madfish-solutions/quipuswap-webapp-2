@@ -25,5 +25,5 @@ export const removeLiquidity = async (
     removeLiquidityParams,
   ).send();
 
-  await walletOperation.confirmation();
+  return walletOperation.confirmation();
 };
