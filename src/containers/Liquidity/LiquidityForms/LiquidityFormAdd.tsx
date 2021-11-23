@@ -106,13 +106,14 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
     if (!dex) return;
 
     const fixedValue = new BigNumber(value);
-    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
     const tokenAmount = calculateTokenAmount(
       fixedValue,
       dex.storage.storage.total_supply,
       dex.storage.storage.tez_pool,
       dex.storage.storage.token_pool,
     );
+
+    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
     setTokenBInput(
       fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
     );
@@ -122,19 +123,20 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
     if (!dex) return;
 
     const fixedValue = new BigNumber(value);
-    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
     const tezAmount = calculateTokenAmount(
       fixedValue,
       dex.storage.storage.total_supply,
       dex.storage.storage.token_pool,
       dex.storage.storage.tez_pool,
     );
+
+    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
     setTokenAInput(
       fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
     );
   };
 
-  const handleAddLiquidity = () => {
+  const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh) return;
 
     const tezDecimals = new BigNumber(10).pow(TEZOS_TOKEN.metadata.decimals);
@@ -142,7 +144,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       .multipliedBy(tezDecimals);
 
     if (dex) {
-      addLiquidity(tezos, dex, tezValue);
+      await addLiquidity(tezos, dex, tezValue);
     } else {
       const token:Token = {
         contract: tokenB.contractAddress,
@@ -150,7 +152,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       };
       const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
       const tokenBValue = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
-      initializeLiquidity(tezos, token, tokenBValue, tezValue);
+      await initializeLiquidity(tezos, token, tokenBValue, tezValue);
     }
 
     setTokenAInput('');

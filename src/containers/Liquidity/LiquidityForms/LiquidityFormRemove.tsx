@@ -71,10 +71,10 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
   }, [lpTokenInput, dex, tokenA, tokenB]);
 
-  const handleRemoveLiquidity = () => {
+  const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
-    removeLiquidity(
+    await removeLiquidity(
       tezos,
       dex,
       new BigNumber(lpTokenInput),
