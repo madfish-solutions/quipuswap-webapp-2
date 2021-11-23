@@ -13,21 +13,17 @@ export const removeLiquidity = async (
   lpTokenValue: BigNumber,
   slippageTolerance: BigNumber,
 ) => {
-  try {
-    const removeLiquidityParams = await getRemoveLiquidityParams(
-      tezos,
-      dex,
-      lpTokenValue.multipliedBy(1_000_000),
-      slippageTolerance,
-    );
+  const removeLiquidityParams = await getRemoveLiquidityParams(
+    tezos,
+    dex,
+    lpTokenValue.multipliedBy(1_000_000),
+    slippageTolerance,
+  );
 
-    const walletOperation = await batchify(
-      tezos.wallet.batch([]),
-      removeLiquidityParams,
-    ).send();
+  const walletOperation = await batchify(
+    tezos.wallet.batch([]),
+    removeLiquidityParams,
+  ).send();
 
-    await walletOperation.confirmation();
-  } catch (e) {
-    console.error(e);
-  }
+  await walletOperation.confirmation();
 };

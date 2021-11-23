@@ -17,22 +17,18 @@ export const initializeLiquidity = async (
   tokenValue:BigNumber,
   tezValue:BigNumber,
 ) => {
-  try {
-    const initializeLiquidityParams = await getInitializeLiquidityParams(
-      tezos,
-      factories,
-      token,
-      tokenValue,
-      tezValue,
-    );
+  const initializeLiquidityParams = await getInitializeLiquidityParams(
+    tezos,
+    factories,
+    token,
+    tokenValue,
+    tezValue,
+  );
 
-    const walletOperation = await batchify(
-      tezos.wallet.batch([]),
-      initializeLiquidityParams,
-    ).send();
+  const walletOperation = await batchify(
+    tezos.wallet.batch([]),
+    initializeLiquidityParams,
+  ).send();
 
-    await walletOperation.confirmation();
-  } catch (err) {
-    console.error(err);
-  }
+  await walletOperation.confirmation();
 };

@@ -12,15 +12,11 @@ export const addLiquidity = async (
   dex: FoundDex,
   tezValue: BigNumber,
 ) => {
-  try {
-    const addLiquidityParams = await getAddLiquidityParams(tezos, dex, { tezValue });
-    const walletOperation = await batchify(
-      tezos.wallet.batch([]),
-      addLiquidityParams,
-    ).send();
+  const addLiquidityParams = await getAddLiquidityParams(tezos, dex, { tezValue });
+  const walletOperation = await batchify(
+    tezos.wallet.batch([]),
+    addLiquidityParams,
+  ).send();
 
-    await walletOperation.confirmation();
-  } catch (e) {
-    console.error(e);
-  }
+  await walletOperation.confirmation();
 };
