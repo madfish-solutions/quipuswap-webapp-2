@@ -12,7 +12,7 @@ import {
   Token,
   findDex,
   FoundDex,
-  getLiquidityShare,
+  // getLiquidityShare,
 } from '@quipuswap/sdk';
 import { FormSpy } from 'react-final-form';
 import router from 'next/router';
@@ -20,12 +20,14 @@ import router from 'next/router';
 import {
   useTezos,
   useNetwork,
-  useAccountPkh,
-  getUserBalance,
+  // useAccountPkh,
+  // getUserBalance,
+  getContract,
+  getStorageInfo,
 } from '@utils/dapp';
 import {
   QSMainNet,
-  PoolShare,
+  // PoolShare,
   TokenDataMap,
   WhitelistedTokenPair,
 } from '@utils/types';
@@ -34,12 +36,13 @@ import {
   TEZOS_TOKEN,
   QUIPU_TOKEN,
 } from '@utils/defaults';
-import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+// import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
 
-import { LiquidityFormAdd } from './LiquidityFormAdd';
-import { LiquidityDetails } from '../LiquidityDetails';
-import { LiquidityFormRemove } from './LiquidityFormRemove';
+// import { LiquidityFormAdd } from './LiquidityFormAdd';
+// import { LiquidityDetails } from '../LiquidityDetails';
+// import { LiquidityFormRemove } from './LiquidityFormRemove';
 import s from '../Liquidity.module.sass';
 
 const fallbackTokenPair = {
@@ -62,19 +65,23 @@ type LiquidityFormProps = {
   tokensData: TokenDataMap;
 };
 
-const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
+// const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
+const RealForm:React.FC<LiquidityFormProps> = () => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
-  const accountPkh = useAccountPkh();
+  // const accountPkh = useAccountPkh();
 
-  const [dex, setDex] = useState<FoundDex | null>(null);
-  const [poolShare, setPoolShare] = useState<PoolShare>();
+  // const [dex, setDex] = useState<FoundDex | null>(null);
+  const [, setDex] = useState<FoundDex | null>(null);
+  // const [poolShare, setPoolShare] = useState<PoolShare>();
   const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
-  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
-  const [tokenABalance, setTokenABalance] = useState<string>('0');
-  const [tokenBBalance, setTokenBBalance] = useState<string>('0');
-  const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
+  // const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
+  const [tokenA] = useState(TEZOS_TOKEN);
+  // const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
+  const [tokenB] = useState(QUIPU_TOKEN);
+  // const [tokenABalance, setTokenABalance] = useState<string>('0');
+  // const [tokenBBalance, setTokenBBalance] = useState<string>('0');
+  // const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
 
   useEffect(() => {
     let isLoadDex = true;
@@ -87,7 +94,24 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         id: tokenB.fa2TokenId,
       };
       try {
-        const foundDex = await findDex(tezos, FACTORIES[networkId], token);
+        const isTezInPair:boolean = false;
+        // if (
+        //   tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+        //   || tokenB.contractAddress === TEZOS_TOKEN.contractAddress
+        // ) {
+        //   isTezInPair = true;
+        // }
+
+        let foundDex:FoundDex;
+        if (isTezInPair) {
+          foundDex = await findDex(tezos, FACTORIES[networkId], token);
+        } else {
+          const contract = await getContract(tezos, 'KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H');
+          const storage = await getStorageInfo(tezos, 'KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H');
+          foundDex = new FoundDex(contract, storage);
+        }
+
+        console.log({ foundDex });
 
         if (isLoadDex) setDex(foundDex);
       } catch (error) {
@@ -97,72 +121,72 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
     loadDex();
 
     return () => { isLoadDex = false; };
-  }, [tezos, networkId, tokenB]);
+  }, [tezos, networkId, tokenB, tokenA]);
 
-  useEffect(() => {
-    let isLoadBalances = true;
-    const getTokensBalances = async () => {
-      if (!tezos || !accountPkh) return;
+  // useEffect(() => {
+  //   let isLoadBalances = true;
+  //   const getTokensBalances = async () => {
+  //     if (!tezos || !accountPkh) return;
 
-      const userTokenABalanance = await getUserBalance(
-        tezos,
-        accountPkh,
-        tokenA.contractAddress,
-        tokenA.type,
-        tokenA.fa2TokenId,
-      );
-      const userTokenBBalance = await getUserBalance(
-        tezos,
-        accountPkh,
-        tokenB.contractAddress,
-        tokenB.type,
-        tokenB.fa2TokenId,
-      );
+  //     const userTokenABalanance = await getUserBalance(
+  //       tezos,
+  //       accountPkh,
+  //       tokenA.contractAddress,
+  //       tokenA.type,
+  //       tokenA.fa2TokenId,
+  //     );
+  //     const userTokenBBalance = await getUserBalance(
+  //       tezos,
+  //       accountPkh,
+  //       tokenB.contractAddress,
+  //       tokenB.type,
+  //       tokenB.fa2TokenId,
+  //     );
 
-      const userLpTokenBalance = dex && (await getUserBalance(
-        tezos,
-        accountPkh,
-        dex.contract.address,
-        tokenB.type,
-        tokenB.fa2TokenId,
-      ));
+  //     const userLpTokenBalance = dex && (await getUserBalance(
+  //       tezos,
+  //       accountPkh,
+  //       dex.contract.address,
+  //       tokenB.type,
+  //       tokenB.fa2TokenId,
+  //     ));
 
-      if (userTokenABalanance && isLoadBalances) {
-        setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed());
-      } else if (!userTokenABalanance && isLoadBalances) {
-        setTokenABalance('0');
-      }
+  //     if (userTokenABalanance && isLoadBalances) {
+  //       setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed());
+  //     } else if (!userTokenABalanance && isLoadBalances) {
+  //       setTokenABalance('0');
+  //     }
 
-      if (userTokenBBalance && isLoadBalances) {
-        setTokenBBalance(fromDecimals(userTokenBBalance, tokenB.metadata.decimals).toFixed());
-      } else if (!userTokenBBalance && isLoadBalances) {
-        setTokenBBalance('0');
-      }
+  //     if (userTokenBBalance && isLoadBalances) {
+  //       setTokenBBalance(fromDecimals(userTokenBBalance, tokenB.metadata.decimals).toFixed());
+  //     } else if (!userTokenBBalance && isLoadBalances) {
+  //       setTokenBBalance('0');
+  //     }
 
-      if (userLpTokenBalance && isLoadBalances) {
-        setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed());
-      } else if (!userLpTokenBalance && isLoadBalances) {
-        setLpTokenBalance('0');
-      }
-    };
-    getTokensBalances();
+  //     if (userLpTokenBalance && isLoadBalances) {
+  //       setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed());
+  //     } else if (!userLpTokenBalance && isLoadBalances) {
+  //       setLpTokenBalance('0');
+  //     }
+  //   };
+  //   getTokensBalances();
 
-    return () => { isLoadBalances = false; };
-  }, [tezos, accountPkh, tokenB, tokenA, dex]);
+  //   return () => { isLoadBalances = false; };
+  // }, [tezos, accountPkh, dex]);
 
-  useEffect(() => {
-    let isLoadShares = true;
-    const loadShares = async () => {
-      if (!accountPkh || !tezos || !dex) return;
+  // useEffect(() => {
+  //   let isLoadShares = true;
+  //   const loadShares = async () => {
+  //     if (!accountPkh || !tezos || !dex) return;
 
-      const share = await getLiquidityShare(tezos, dex, accountPkh);
+  //     const share = await getLiquidityShare(tezos, dex, accountPkh);
 
-      if (isLoadShares) setPoolShare(share);
-    };
-    loadShares();
+  //     if (isLoadShares) setPoolShare(share);
+  //   };
+  //   loadShares();
 
-    return () => { isLoadShares = false; };
-  }, [dex, accountPkh, tezos]);
+  //   return () => { isLoadShares = false; };
+  // }, [tezos, accountPkh, dex]);
 
   const setActiveId = useCallback(
     (val:string) => {
@@ -200,7 +224,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         }}
         contentClassName={s.content}
       >
-        {tabState.id === 'add' && (
+        {/* {tabState.id === 'add' && (
           <LiquidityFormAdd
             dex={dex}
             tokenA={tokenA}
@@ -222,9 +246,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
             tokenBBalance={tokenBBalance}
             lpTokenBalance={lpTokenBalance}
           />
-        )}
+        )} */}
+        qwe
       </Card>
-      <LiquidityDetails
+      {/* <LiquidityDetails
         currentTab={tabState.label}
         token1={fallbackTokenPair.token1}
         token2={fallbackTokenPair.token2}
@@ -232,7 +257,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         poolShare={poolShare}
         balanceTotalA="1"
         balanceTotalB="2"
-      />
+      /> */}
     </>
   );
 };
