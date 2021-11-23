@@ -29,13 +29,17 @@ import {
   TokenDataMap,
   WhitelistedTokenPair,
 } from '@utils/types';
+import {
+  FACTORIES,
+  TEZOS_TOKEN,
+  QUIPU_TOKEN,
+} from '@utils/defaults';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { TEZOS_TOKEN, QUIPU_TOKEN, FACTORIES } from '@utils/defaults';
 import { Transactions } from '@components/svg/Transactions';
 
-import { LiquidityFormRemove } from './LiquidityFormRemove';
 import { LiquidityFormAdd } from './LiquidityFormAdd';
 import { LiquidityDetails } from '../LiquidityDetails';
+import { LiquidityFormRemove } from './LiquidityFormRemove';
 import s from '../Liquidity.module.sass';
 
 const fallbackTokenPair = {
@@ -63,7 +67,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const networkId = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
 
-  const [dex, setDex] = useState<FoundDex>();
+  const [dex, setDex] = useState<FoundDex | null>(null);
   const [poolShare, setPoolShare] = useState<PoolShare>();
   const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
@@ -82,10 +86,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         contract: tokenB.contractAddress,
         id: tokenB.fa2TokenId,
       };
+      try {
+        const foundDex = await findDex(tezos, FACTORIES[networkId], token);
 
-      const foundDex = await findDex(tezos, FACTORIES[networkId], token);
-
-      if (isLoadDex) setDex(foundDex);
+        if (isLoadDex) setDex(foundDex);
+      } catch (error) {
+        setDex(null);
+      }
     };
     loadDex();
 
@@ -95,7 +102,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   useEffect(() => {
     let isLoadBalances = true;
     const getTokensBalances = async () => {
-      if (!tezos || !accountPkh || !dex) return;
+      if (!tezos || !accountPkh) return;
 
       const userTokenABalanance = await getUserBalance(
         tezos,
@@ -111,13 +118,14 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         tokenB.type,
         tokenB.fa2TokenId,
       );
-      const userLpTokenBalance = await getUserBalance(
+
+      const userLpTokenBalance = dex && (await getUserBalance(
         tezos,
         accountPkh,
         dex.contract.address,
         tokenB.type,
         tokenB.fa2TokenId,
-      );
+      ));
 
       if (userTokenABalanance && isLoadBalances) {
         setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed());
@@ -192,7 +200,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         }}
         contentClassName={s.content}
       >
-        {tabState.id === 'add' && dex && (
+        {tabState.id === 'add' && (
           <LiquidityFormAdd
             dex={dex}
             tokenA={tokenA}
@@ -203,7 +211,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
             tokenBBalance={tokenBBalance}
           />
         )}
-        {tabState.id === 'remove' && dex && (
+        {tabState.id === 'remove' && (
           <LiquidityFormRemove
             dex={dex}
             tokenA={tokenA}

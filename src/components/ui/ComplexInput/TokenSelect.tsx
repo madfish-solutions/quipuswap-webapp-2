@@ -16,7 +16,6 @@ import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -36,6 +35,7 @@ type TokenSelectProps = {
   handleChange?: (token:WhitelistedToken) => void
   handleBalance: (value: string) => void
   token?: WhitelistedToken,
+  token2?: WhitelistedToken,
   blackListedTokens: WhitelistedToken[],
   setToken: (token:WhitelistedToken) => void
 } & React.HTMLProps<HTMLInputElement>;
@@ -58,6 +58,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   id,
   handleChange,
   token,
+  token2,
   setToken,
   blackListedTokens,
   ...props
@@ -150,14 +151,16 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               <TokensLogos
                 firstTokenIcon={token
                   ? prepareTokenLogo(token.metadata?.thumbnailUri)
-                  : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
+                  : null}
                 firstTokenSymbol={token
                   ? getWhitelistedTokenSymbol(token)
-                  : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+                  : 'TOKEN'}
+                secondTokenIcon={token2 && prepareTokenLogo(token2.metadata.thumbnailUri)}
+                secondTokenSymbol={token2 && getWhitelistedTokenSymbol(token2)}
               />
               <h6 className={cx(s.token)}>
-
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
+                {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
               </h6>
               {!notSelectable && (<Shevron />)}
             </Button>
