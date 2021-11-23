@@ -36,6 +36,7 @@ import {
   prepareTokenLogo,
   localSearchToken,
   getWhitelistedTokenSymbol,
+  getWhitelistedTokenName,
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { validateMinMax } from '@utils/validators';
@@ -283,8 +284,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
                 tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                tokenName={getWhitelistedTokenSymbol(token)}
-                tokenSymbol="qwe"
+                tokenName={getWhitelistedTokenName(token)}
+                tokenSymbol={getWhitelistedTokenSymbol(token)}
                 tabIndex={0}
                 onClick={() => {
                   onChange(token);
