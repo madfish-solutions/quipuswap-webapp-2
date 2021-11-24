@@ -43,6 +43,11 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
+export type TokenId = Pick<
+WhitelistedToken,
+'contractAddress' | 'fa2TokenId' | 'type'
+>;
+
 export interface WhitelistedBaker {
   name: string,
   address: string,
