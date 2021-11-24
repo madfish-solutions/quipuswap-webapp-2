@@ -77,7 +77,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
 
   useEffect(() => {
-    let isLoadDex = true;
+    let isMounted = true;
 
     const loadDex = async () => {
       if (!tezos) return;
@@ -89,18 +89,18 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
       try {
         const foundDex = await findDex(tezos, FACTORIES[networkId], token);
 
-        if (isLoadDex) setDex(foundDex);
+        if (isMounted) setDex(foundDex);
       } catch (error) {
-        setDex(null);
+        if (isMounted) setDex(null);
       }
     };
     loadDex();
 
-    return () => { isLoadDex = false; };
+    return () => { isMounted = false; };
   }, [tezos, networkId, tokenB]);
 
   useEffect(() => {
-    let isLoadBalances = true;
+    let isMounted = true;
     const getTokensBalances = async () => {
       if (!tezos || !accountPkh) return;
 
@@ -127,41 +127,41 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         tokenB.fa2TokenId,
       ));
 
-      if (userTokenABalanance && isLoadBalances) {
+      if (userTokenABalanance && isMounted) {
         setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed());
-      } else if (!userTokenABalanance && isLoadBalances) {
+      } else if (!userTokenABalanance && isMounted) {
         setTokenABalance('0');
       }
 
-      if (userTokenBBalance && isLoadBalances) {
+      if (userTokenBBalance && isMounted) {
         setTokenBBalance(fromDecimals(userTokenBBalance, tokenB.metadata.decimals).toFixed());
-      } else if (!userTokenBBalance && isLoadBalances) {
+      } else if (!userTokenBBalance && isMounted) {
         setTokenBBalance('0');
       }
 
-      if (userLpTokenBalance && isLoadBalances) {
+      if (userLpTokenBalance && isMounted) {
         setLpTokenBalance(fromDecimals(userLpTokenBalance, 6).toFixed());
-      } else if (!userLpTokenBalance && isLoadBalances) {
+      } else if (!userLpTokenBalance && isMounted) {
         setLpTokenBalance('0');
       }
     };
     getTokensBalances();
 
-    return () => { isLoadBalances = false; };
+    return () => { isMounted = false; };
   }, [tezos, accountPkh, tokenB, tokenA, dex]);
 
   useEffect(() => {
-    let isLoadShares = true;
+    let isMounted = true;
     const loadShares = async () => {
       if (!accountPkh || !tezos || !dex) return;
 
       const share = await getLiquidityShare(tezos, dex, accountPkh);
 
-      if (isLoadShares) setPoolShare(share);
+      if (isMounted) setPoolShare(share);
     };
     loadShares();
 
-    return () => { isLoadShares = false; };
+    return () => { isMounted = false; };
   }, [dex, accountPkh, tezos]);
 
   const setActiveId = useCallback(
