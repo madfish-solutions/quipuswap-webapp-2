@@ -801,9 +801,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({
         )}
         <Field initialValue="0.5 %" name="slippage">
           {({ input }) => {
-            const slipPercA = slippageToBignum(values.slippage)
+            const slipPercA = slippageToBignum(values.slippage).div(100)
               .multipliedBy(new BigNumber(values.balanceA ?? 0));
-            const slipPercB = slippageToBignum(values.slippage)
+            const slipPercB = slippageToBignum(values.slippage).div(100)
               .multipliedBy(new BigNumber(values.balanceB ?? 0));
             const minimumReceivedA = new BigNumber(values.balanceA ?? 0).minus(slipPercA);
             const minimumReceivedB = new BigNumber(values.balanceB ?? 0).minus(slipPercB);
@@ -824,9 +824,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({
                 const totalB = fromDecimals(estimateTokenInTez(dex.storage, total$),
                   token2.metadata.decimals);
                 maxInvestedA = totalA
-                  .minus(slippageToBignum(values.slippage).multipliedBy(totalA));
+                  .minus(slippageToBignum(values.slippage).div(100).multipliedBy(totalA));
                 maxInvestedB = totalB
                   .minus(slippageToBignum(values.slippage)
+                    .div(100)
                     .multipliedBy(totalB));
               } catch (e) {
                 maxInvestedA = bal1;
