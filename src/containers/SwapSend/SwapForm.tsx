@@ -241,6 +241,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       )
     ) {
       initialValuesAppliedRef.current = true;
+      onTokensSelected(
+        tokens.find((token) => getTokenSlug(token) === initialFrom)!,
+        tokens.find((token) => getTokenSlug(token) === initialTo)!,
+      );
     }
   }, [
     initialFrom,
@@ -250,6 +254,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     tokensTouched,
     setFieldValue,
     addCustomToken,
+    onTokensSelected,
   ]);
 
   const updateSwapFee = useMemo(
@@ -502,7 +507,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         amount1: amount2,
       }),
     );
-  }, [setValues, token1, token2, amount2]);
+    if (token1 && token2) {
+      onTokensSelected(token2, token1);
+    }
+  }, [setValues, token1, token2, amount2, onTokensSelected]);
 
   const handleRecipientChange = useCallback(
     (newValue: string) => {
