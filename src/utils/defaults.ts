@@ -66,6 +66,18 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
+export const QUIPU_TOKEN:WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+  },
+};
+
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [
