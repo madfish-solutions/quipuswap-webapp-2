@@ -37,3 +37,4 @@ export * from './dex-routes-algorithms';
 export * from './getTokenSlug';
 export * from './getTokenIdFromSlug';
 export * from './token-to-token-dex';
+export * from './swap';
