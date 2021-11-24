@@ -48,7 +48,7 @@ export const getTokens = async (
     }
     if (!res.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
       res.unshift({
-        network: 'granadanet',
+        network,
         type: 'fa1.2',
         contractAddress: 'tez',
         metadata: {

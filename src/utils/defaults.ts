@@ -169,5 +169,5 @@ export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
   ['granadanet', 'NetXz969SFaFn8k'],
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['granadanet', 'NetXxkAx4woPLyu'],
+  ['florencenet', 'NetXxkAx4woPLyu'],
 ]);

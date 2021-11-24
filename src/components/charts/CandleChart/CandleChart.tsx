@@ -108,7 +108,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
       chartCreated?.remove();
       setChart(undefined);
     }
-    if (!chartCreated && data && !!chartRef.current?.parentElement) {
+    if (!chartCreated && data && !!chartRef?.current?.parentElement) {
       const chart = createChart(chartRef.current, {
         height,
         width: chartRef.current.parentElement.clientWidth - 40,

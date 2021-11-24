@@ -49,11 +49,11 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
   const tokenBName = useMemo(() => (token2 ? getWhitelistedTokenSymbol(token2) : 'Token B'), [token2]);
   const totalShare = useMemo(() => (fromDecimals(poolShare?.total || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
   const frozenShare = useMemo(() => (fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString()) ?? '0', [poolShare]);
-  const sellPrice = useMemo(() => new BigNumber(tokensData.first!.exchangeRate ?? 1)
-    .div(new BigNumber(tokensData.second!.exchangeRate ?? 1))
+  const sellPrice = useMemo(() => new BigNumber(tokensData.first.exchangeRate ?? 1)
+    .div(new BigNumber(tokensData.second.exchangeRate ?? 1))
     .toString(), [tokensData]);
-  const buyPrice = useMemo(() => new BigNumber(tokensData.second!.exchangeRate ?? 1)
-    .div(new BigNumber(tokensData.first!.exchangeRate ?? 1))
+  const buyPrice = useMemo(() => new BigNumber(tokensData.second.exchangeRate ?? 1)
+    .div(new BigNumber(tokensData.first.exchangeRate ?? 1))
     .toString(), [tokensData]);
   return (
     <Card
@@ -83,7 +83,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={sellPrice}
             currency={tokenBName}
-            dollarEquivalent={tokensData.first!.exchangeRate ? `${tokensData.first!.exchangeRate}` : undefined}
+            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>
@@ -108,7 +108,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
           <CurrencyAmount
             amount={buyPrice}
             currency={tokenAName}
-            dollarEquivalent={tokensData.second!.exchangeRate ? `${tokensData.second!.exchangeRate}` : undefined}
+            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
           />
         </div>
       </CardCell>

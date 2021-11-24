@@ -326,14 +326,14 @@ function useDApp() {
       tokenId?: number,
       saveAfterSearch?:boolean,
     ): Promise<WhitelistedToken | null> => {
-      if (await isContractAddress(address) === true) {
+      if (isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: true, data: [] },
         }));
         let type;
         try {
-          type = await getContractInfo(address, tezos!!);
+          type = await getContractInfo(address, tezos!);
         } catch (e) {
           type = null;
         }
@@ -383,7 +383,7 @@ function useDApp() {
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
-      if (await isContractAddress(address)) {
+      if (isContractAddress(address) === true) {
         setState((prevState) => ({
           ...prevState,
           searchBakers: { loading: true, data: [] },

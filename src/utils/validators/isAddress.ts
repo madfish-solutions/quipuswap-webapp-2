@@ -3,8 +3,8 @@ import { i18n } from 'next-i18next';
 import { string as stringSchema } from 'yup';
 
 export const isAddress = async (value: string) => {
-  const isAddr = validateAddress(value) === 3;
-  const isContract = validateContractAddress(value) === 3;
+  const isAddr = validateAddress(value) === ValidationResult.VALID;
+  const isContract = validateContractAddress(value) === ValidationResult.VALID;
   return isAddr && !isContract
     ? undefined
     : i18n?.t('common|You entered not a valid address');

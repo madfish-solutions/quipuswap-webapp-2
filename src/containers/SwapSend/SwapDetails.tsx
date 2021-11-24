@@ -1,94 +1,139 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'next-i18next';
+import BigNumber from 'bignumber.js';
 import {
-  Card,
-  Route,
-  RouteProps,
   Button,
-  Tooltip,
+  Card,
   CardCell,
   CurrencyAmount,
+  Tooltip,
+  Route,
+  RouteProps,
 } from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
-import { FoundDex } from '@quipuswap/sdk';
-import BigNumber from 'bignumber.js';
 
+import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
+  fromDecimals,
+  getTokenInput,
+  getTokenSlug,
   getWhitelistedTokenSymbol,
   transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { DexPair, WhitelistedToken } from '@utils/types';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
 type SwapDetailsProps = {
-  currentTab: string
-  fee: string
-  token1: WhitelistedToken
-  token2: WhitelistedToken
-  tokensData: TokenDataMap
-  priceImpact?: BigNumber
-  rate1: BigNumber
-  rate2: BigNumber
-  dex?: FoundDex
-  dex2?: FoundDex
+  currentTab: string;
+  fee: string;
+  priceImpact: BigNumber;
+  inputToken?: WhitelistedToken;
+  outputToken?: WhitelistedToken;
+  inputAmount?: BigNumber;
+  outputAmount?: BigNumber;
+  route?: DexPair[];
 };
 
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
   currentTab,
   fee,
-  token1,
-  token2,
-  tokensData,
   priceImpact,
-  rate1,
-  rate2,
-  dex,
-  dex2,
+  inputToken,
+  outputToken,
+  inputAmount,
+  outputAmount,
+  route = [],
 }) => {
   const { t } = useTranslation(['common', 'swap']);
-  const sellRate = useMemo(() => {
-    if (rate2 && !rate2.isNaN() && !rate2.eq(0)) {
-      return rate2.toFixed();
-    }
-    if (tokensData.first && tokensData.second) {
-      return new BigNumber(tokensData.first.exchangeRate ?? 1)
-        .div(new BigNumber(tokensData.second.exchangeRate ?? 1)).toFixed();
-    }
-    return undefined;
-  }, [rate2, tokensData.first, tokensData.second]);
+  const exchangeRates = useNewExchangeRates();
+  const inputTokenUsdExchangeRate = inputToken && exchangeRates[getTokenSlug(inputToken)];
+  const outputTokenUsdExchangeRate = outputToken && exchangeRates[getTokenSlug(outputToken)];
 
-  const buyRate = useMemo(() => {
-    if (rate1 && !rate1.isNaN() && !rate1.eq(0)) {
-      return rate1.toFixed();
-    }
-    if (tokensData.first && tokensData.second) {
-      return new BigNumber(tokensData.second.exchangeRate ?? 1)
-        .div(new BigNumber(tokensData.first.exchangeRate ?? 1)).toFixed();
-    }
-    return undefined;
-  }, [rate1, tokensData.first, tokensData.second]);
+  const sellRate = useMemo(
+    () => (inputToken && outputToken && inputAmount?.gt(0) && outputAmount
+      ? outputAmount.div(inputAmount).decimalPlaces(outputToken.metadata.decimals)
+      : undefined
+    ),
+    [inputAmount, outputAmount, inputToken, outputToken],
+  );
+
+  const buyRate = useMemo(
+    () => {
+      if (inputToken && outputToken && inputAmount?.gt(0) && route.length > 0) {
+        const reversedRoute = [...route].reverse();
+        try {
+          const tokenAAmount = inputAmount;
+          const tokenBAmount = fromDecimals(
+            getTokenInput(
+              inputToken,
+              fromDecimals(inputAmount, -inputToken.metadata.decimals),
+              reversedRoute,
+            ),
+            outputToken.metadata.decimals,
+          );
+          return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
+          // eslint-disable-next-line no-empty
+        } catch {}
+      }
+      return undefined;
+    },
+    [route, inputToken, outputToken, inputAmount],
+  );
+
+  const sellUsdRate = useMemo(
+    () => (outputTokenUsdExchangeRate && sellRate
+      ? sellRate.times(outputTokenUsdExchangeRate)
+      : undefined),
+    [outputTokenUsdExchangeRate, sellRate],
+  );
+  const buyUsdRate = useMemo(
+    () => (inputTokenUsdExchangeRate && sellRate
+      ? sellRate.times(inputTokenUsdExchangeRate)
+      : undefined),
+    [inputTokenUsdExchangeRate, sellRate],
+  );
 
   const routes = useMemo(
-    () => [
-      tokensData.first ? {
-        id: 0,
-        name: token1 ? getWhitelistedTokenSymbol(token1) : '',
-        link: transformTokenDataToAnalyticsLink(tokensData.first),
-      } : undefined,
-      tokensData.first && tokensData.second && tokensData.first.token.address !== 'tez' && tokensData.second.token.address !== 'tez' ? {
-        id: 1,
-        name: 'XTZ',
-        link: 'https://analytics.quipuswap.com/tokens/tez',
-      } : undefined,
-      tokensData.second ? {
-        id: 2,
-        name: token2 ? getWhitelistedTokenSymbol(token2) : '',
-        link: transformTokenDataToAnalyticsLink(tokensData.second),
-      } : undefined,
-    ].filter((x): x is RouteProps['routes'][0] => !!x),
-    [token1, token2, tokensData.first, tokensData.second],
+    () => {
+      const displayedRoute: RouteProps['routes'] = [];
+      if (inputToken && route.length > 0) {
+        displayedRoute.push({
+          id: 0,
+          name: getWhitelistedTokenSymbol(inputToken),
+          link: transformTokenDataToAnalyticsLink({
+            token: {
+              address: inputToken.contractAddress,
+              type: inputToken.type,
+              id: inputToken.fa2TokenId,
+              decimals: inputToken.metadata.decimals,
+            },
+            balance: '0',
+          }),
+        });
+        let currentToken = inputToken;
+        route.forEach(({ token1, token2 }, index) => {
+          const token1IsNext = getTokenSlug(token2) === getTokenSlug(currentToken);
+          currentToken = token1IsNext ? token1 : token2;
+          displayedRoute.push({
+            id: index + 1,
+            name: getWhitelistedTokenSymbol(currentToken),
+            link: transformTokenDataToAnalyticsLink({
+              token: {
+                address: currentToken.contractAddress,
+                type: currentToken.type,
+                id: currentToken.fa2TokenId,
+                decimals: currentToken.metadata.decimals,
+              },
+              balance: '0',
+            }),
+          });
+        });
+      }
+      return displayedRoute;
+    },
+    [inputToken, route],
   );
 
   return (
@@ -113,13 +158,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <div className={s.cellAmount}>
           {sellRate && (
             <>
-              <CurrencyAmount amount="1" currency={token1 ? getWhitelistedTokenSymbol(token1) : ''} />
+              <CurrencyAmount
+                amount="1"
+                currency={inputToken ? getWhitelistedTokenSymbol(inputToken) : ''}
+              />
               <span className={s.equal}>=</span>
               <CurrencyAmount
-                amount={sellRate}
-                currency={token2
-                  ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)}
-                dollarEquivalent={tokensData.first?.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
+                amount={sellRate.toFixed()}
+                currency={getWhitelistedTokenSymbol(outputToken ?? STABLE_TOKEN)}
+                dollarEquivalent={sellUsdRate?.toFixed(2)}
               />
             </>
           )}
@@ -131,7 +178,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             {t('common|Buy Price')}
             <Tooltip
               sizeT="small"
-              content={t('common|The amount of token A you receive for 1 token B, according to the current exchange rate.')}
+              content={t('common|The amount of token A you receive for 1 token B according to the current exchange rate.')}
             />
           </>
           )}
@@ -140,12 +187,15 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <div className={s.cellAmount}>
           {buyRate && (
             <>
-              <CurrencyAmount amount="1" currency={token2 ? getWhitelistedTokenSymbol(token2) : getWhitelistedTokenSymbol(STABLE_TOKEN)} />
+              <CurrencyAmount
+                amount="1"
+                currency={getWhitelistedTokenSymbol(outputToken ?? STABLE_TOKEN)}
+              />
               <span className={s.equal}>=</span>
               <CurrencyAmount
-                amount={buyRate}
-                currency={token1 ? getWhitelistedTokenSymbol(token1) : ''}
-                dollarEquivalent={tokensData.second?.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
+                amount={buyRate.toFixed()}
+                currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
+                dollarEquivalent={buyUsdRate?.toFixed(2)}
               />
             </>
           )}
@@ -164,11 +214,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <CurrencyAmount
-          amount={
-            priceImpact?.isFinite() && priceImpact.gt('0.01')
-              ? priceImpact.toFixed(2)
-              : '<0.01'
-          }
+          amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)}
           currency="%"
         />
       </CardCell>
@@ -200,41 +246,29 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         <Route routes={routes} />
       </CardCell>
-      {(dex || dex2) && (
-      <div className={s.detailsButtons}>
-        {dex2 && dex && (
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={`https://analytics.quipuswap.com/pairs/${dex.contract.address}`}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
-            {
-              tokenA: getWhitelistedTokenSymbol(token1),
-              tokenB: TEZOS_TOKEN.metadata.symbol,
-            })}
-        </Button>
-        )}
-        {dex && (
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={`https://analytics.quipuswap.com/pairs/${dex2 ? dex2.contract.address : dex.contract.address}`}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {dex2
-            ? t('common|View {{tokenA}}/{{tokenB}} Pair Analytics',
-              {
-                tokenA: TEZOS_TOKEN.metadata.symbol,
-                tokenB: getWhitelistedTokenSymbol(token2),
-              })
-            : t('common|View Pair Analytics')}
-        </Button>
-        )}
-      </div>
+      {(route.length > 0) && (
+        <div className={s.detailsButtons}>
+          {route.map(({ id, token1, token2 }) => (
+            <Button
+              key={id}
+              className={s.detailsButton}
+              theme="inverse"
+              href={typeof id === 'string'
+                ? `https://analytics.quipuswap.com/pairs/${id}`
+                : '#'}
+              external
+              icon={<ExternalLink className={s.linkIcon} />}
+            >
+              {t(
+                'common|View {{tokenA}}/{{tokenB}} Pair Analytics',
+                {
+                  tokenA: getWhitelistedTokenSymbol(token1),
+                  tokenB: getWhitelistedTokenSymbol(token2),
+                },
+              )}
+            </Button>
+          ))}
+        </div>
       )}
     </Card>
   );

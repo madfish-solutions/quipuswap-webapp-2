@@ -339,12 +339,18 @@ export const getSwapTransferParams = async (
       const prevSlippageToleranceQuotient = (
         new BigNumber(1).minus(slippageTolerance).toNumber()
       ) ** (new BigNumber(index).div(dexChain.length).toNumber());
-      const currentDexInput = noSlippageToleranceOutputs[index]
+      let currentDexInput = noSlippageToleranceOutputs[index]
         .times(prevSlippageToleranceQuotient)
         .integerValue(BigNumber.ROUND_FLOOR);
-      const minOut = noSlippageToleranceOutputs[index + 1]
+      if (currentDexInput.eq(0) && !noSlippageToleranceOutputs[index].eq(0)) {
+        currentDexInput = new BigNumber(1);
+      }
+      let minOut = noSlippageToleranceOutputs[index + 1]
         .times(currentSlippageToleranceQuotient)
         .integerValue(BigNumber.ROUND_FLOOR);
+      if (minOut.eq(0) && !noSlippageToleranceOutputs[index + 1].eq(0)) {
+        minOut = new BigNumber(1);
+      }
 
       if (typeof prevDexId === 'number') {
         if (typeof id === 'string') {

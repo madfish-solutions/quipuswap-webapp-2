@@ -7,6 +7,7 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 
 import { useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
+import { useInitialTokensSlugs } from '@hooks/useInitialTokensSlugs';
 import {
   NewSwapFormValues,
   QSMainNet,
@@ -33,12 +34,11 @@ import {
 } from '@utils/helpers';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
-import { NewSwapForm } from './NewSwapForm';
+import { SwapForm } from './SwapForm';
 
 type SwapSendProps = {
   className?: string;
-  initialFrom: string;
-  initialTo: string;
+  fromToSlug?: string;
 };
 
 const initialErrors = {
@@ -52,8 +52,7 @@ const initialValues: Partial<NewSwapFormValues> = {
 
 const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
   className,
-  initialFrom,
-  initialTo,
+  fromToSlug,
   router,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
@@ -74,6 +73,8 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     knownMaxOutputAmounts,
     setKnownMaxOutputAmounts,
   ] = useState<Record<string, Record<string, BigNumber>>>({});
+
+  const initialTokensSlugs = useInitialTokensSlugs(fromToSlug);
 
   const updateTokenBalance = useCallback((token: WhitelistedToken) => {
     const newTokenSlug = getTokenSlug(token);
@@ -322,11 +323,11 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
   });
 
   return (
-    <NewSwapForm
+    <SwapForm
       {...formikProps}
       className={className}
-      initialFrom={initialFrom}
-      initialTo={initialTo}
+      initialFrom={initialTokensSlugs?.[0]}
+      initialTo={initialTokensSlugs?.[1]}
       knownTokensBalances={knownTokensBalances}
       onTokensSelected={handleTokensSelected}
       updateTokenBalance={updateTokenBalance}

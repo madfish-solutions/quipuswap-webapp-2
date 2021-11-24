@@ -98,8 +98,8 @@ export type NewTokenDataType = {
 };
 
 export type TokenDataMap = {
-  first?: TokenDataType,
-  second?: TokenDataType
+  first: TokenDataType,
+  second: TokenDataType
 };
 
 export type SwapFormValues = {
