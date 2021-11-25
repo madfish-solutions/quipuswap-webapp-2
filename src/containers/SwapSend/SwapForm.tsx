@@ -22,7 +22,7 @@ import {
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
 import { Transactions } from '@components/svg/Transactions';
-import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
+import { useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   useAccountPkh,
@@ -41,7 +41,6 @@ import {
   getPriceImpact,
   getRouteWithInput,
   getRouteWithOutput,
-  getTokenIdFromSlug,
   getTokenInput,
   getTokenOutput,
   getTokenSlug,
@@ -68,6 +67,7 @@ type SwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
   knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
+  matchingNetwork?: QSMainNet;
   initialFrom?: string;
   initialTo?: string;
 };
@@ -128,19 +128,20 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   errors,
   initialFrom,
   initialTo,
+  knownTokensBalances,
+  knownMaxInputAmounts,
+  knownMaxOutputAmounts,
+  matchingNetwork,
+  onTokensSelected,
   submitForm,
   setValues,
   setFieldValue,
   submitError,
-  values,
-  knownTokensBalances,
-  knownMaxInputAmounts,
-  knownMaxOutputAmounts,
-  onTokensSelected,
-  updateTokenBalance,
   setFieldTouched,
   touched,
+  updateTokenBalance,
   validateField,
+  values,
 }) => {
   const {
     token1,
@@ -176,7 +177,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
 
   useEffect(() => {
-    if (network.id !== prevNetworkIdRef.current) {
+    const prevNetworkId = prevNetworkIdRef.current;
+    if ((network.id !== prevNetworkId) && (matchingNetwork === prevNetworkId)) {
       setValues((prevValues) => ({
         ...prevValues,
         token1: TEZOS_TOKEN,
@@ -186,7 +188,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       }));
     }
     prevNetworkIdRef.current = network.id;
-  }, [network.id, setValues]);
+  }, [network.id, setValues, matchingNetwork]);
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
@@ -206,45 +208,17 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       return;
     }
 
-    const tokensSlugsToFields = [
-      { fieldName: 'token1', tokenSlug: initialFrom },
-      { fieldName: 'token2', tokenSlug: initialTo },
-    ];
+    const newToken1 = tokens.find((token) => getTokenSlug(token) === initialFrom);
+    const newToken2 = tokens.find((token) => getTokenSlug(token) === initialTo);
 
-    tokensSlugsToFields.forEach(
-      ({ fieldName, tokenSlug }) => {
-        const isTez = tokenSlug === getTokenSlug(TEZOS_TOKEN);
-        const tokenIsKnown = isTez || tokens.some(
-          (token) => getTokenSlug(token) === tokenSlug,
-        );
-        const { contractAddress, fa2TokenId, type } = getTokenIdFromSlug(tokenSlug);
-        const token = isTez ? TEZOS_TOKEN : makeWhitelistedToken(
-          { type, id: fa2TokenId, address: contractAddress },
-          tokens,
-        );
-        setFieldValue(fieldName, token, true);
-        if (!tokenIsKnown) {
-          searchCustomTokens(contractAddress, fa2TokenId)
-            .then((customToken) => {
-              if (customToken) {
-                addCustomToken(customToken);
-              }
-            })
-            .catch(console.error);
-        }
-      },
-    );
-
-    if (
-      tokensSlugsToFields.every(
-        ({ tokenSlug }) => tokens.some((token) => getTokenSlug(token) === tokenSlug),
-      )
-    ) {
+    if (newToken1 && newToken2) {
       initialValuesAppliedRef.current = true;
-      onTokensSelected(
-        tokens.find((token) => getTokenSlug(token) === initialFrom)!,
-        tokens.find((token) => getTokenSlug(token) === initialTo)!,
-      );
+      setValues((prevValues) => ({
+        ...prevValues,
+        token1: newToken1,
+        token2: newToken2,
+      }));
+      onTokensSelected(newToken1, newToken2);
     }
   }, [
     initialFrom,
@@ -252,7 +226,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     searchCustomTokens,
     tokens,
     tokensTouched,
-    setFieldValue,
+    setValues,
     addCustomToken,
     onTokensSelected,
   ]);

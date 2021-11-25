@@ -13,7 +13,7 @@ import { withApollo } from '@client';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
 
-import '@quipuswap/ui-kit/ui-kit.cjs.development.css';
+import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 import { DexGraphProvider } from '@hooks/useDexGraph';
 

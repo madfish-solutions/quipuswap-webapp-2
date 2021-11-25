@@ -1,13 +1,19 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import { useDexGraph } from '@hooks/useDexGraph';
+import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { useInitialTokensSlugs } from '@hooks/useInitialTokensSlugs';
+import { useInitialTokens } from '@hooks/useInitialTokens';
 import {
   NewSwapFormValues,
   QSMainNet,
@@ -16,16 +22,21 @@ import {
 import {
   getUserBalance,
   useAccountPkh,
+  useAddCustomToken,
+  useChangeNetwork,
   useNetwork,
+  useSearchCustomTokens,
   useTezos,
+  useTokens,
 } from '@utils/dapp';
-import { TTDEX_CONTRACTS } from '@utils/defaults';
+import { ALL_NETWORKS, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   fromDecimals,
   getMaxInputRoute,
   getMaxOutputRoute,
   getMaxTokenInput,
   getRouteWithInput,
+  getTokenIdFromSlug,
   getTokenOutput,
   getTokenSlug,
   slippageToBignum,
@@ -58,9 +69,13 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
+  const { data: tokens, loading: tokensLoading } = useTokens();
+  const searchCustomTokens = useSearchCustomTokens();
+  const addCustomToken = useAddCustomToken();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const network = useNetwork();
+  const changeNetwork = useChangeNetwork();
   const [
     knownTokensBalances,
     setKnownTokensBalances,
@@ -74,7 +89,50 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     setKnownMaxOutputAmounts,
   ] = useState<Record<string, Record<string, BigNumber>>>({});
 
-  const initialTokensSlugs = useInitialTokensSlugs(fromToSlug);
+  const initialTokens = useInitialTokens(fromToSlug);
+  const tokensSearchInitializedRef = useRef(false);
+
+  useEffect(() => {
+    if (tokensSearchInitializedRef.current) {
+      return;
+    }
+    if (initialTokens && (initialTokens.network !== network.id)) {
+      changeNetwork(ALL_NETWORKS.find(({ id }) => id === initialTokens.network)!);
+    }
+    if ((initialTokens?.network !== network.id) || tokensLoading) {
+      return;
+    }
+    initialTokens.slugs.forEach((tokenSlug) => {
+      const isTez = tokenSlug === getTokenSlug(TEZOS_TOKEN);
+      const tokenIsKnown = isTez || tokens.some(
+        (token) => getTokenSlug(token) === tokenSlug,
+      );
+      const { contractAddress, fa2TokenId, type: tokenType } = getTokenIdFromSlug(tokenSlug);
+      if (!tokenIsKnown) {
+        searchCustomTokens(contractAddress, fa2TokenId)
+          .then((customToken) => {
+            if (customToken) {
+              addCustomToken(customToken);
+            } else {
+              addCustomToken(makeWhitelistedToken(
+                { address: contractAddress, id: fa2TokenId, type: tokenType },
+                [],
+              ));
+            }
+          })
+          .catch(console.error);
+      }
+    });
+    tokensSearchInitializedRef.current = true;
+  }, [
+    initialTokens,
+    network.id,
+    tokens,
+    tokensLoading,
+    addCustomToken,
+    searchCustomTokens,
+    changeNetwork,
+  ]);
 
   const updateTokenBalance = useCallback((token: WhitelistedToken) => {
     const newTokenSlug = getTokenSlug(token);
@@ -326,8 +384,9 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     <SwapForm
       {...formikProps}
       className={className}
-      initialFrom={initialTokensSlugs?.[0]}
-      initialTo={initialTokensSlugs?.[1]}
+      initialFrom={initialTokens?.slugs[0]}
+      initialTo={initialTokens?.slugs[1]}
+      matchingNetwork={initialTokens?.network}
       knownTokensBalances={knownTokensBalances}
       onTokensSelected={handleTokensSelected}
       updateTokenBalance={updateTokenBalance}
