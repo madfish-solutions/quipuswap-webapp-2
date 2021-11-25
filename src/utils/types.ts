@@ -183,3 +183,9 @@ export type PoolTableType = {
     },
   },
 };
+
+export type SortTokensContractsType = {
+  addressA: string;
+  addressB: string;
+  type: 'Left-Left' | 'Right-Right' | 'Left-Right';
+};

@@ -78,6 +78,30 @@ export const QUIPU_TOKEN:WhitelistedToken = {
   },
 };
 
+export const ETHPL_TOKEN:WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1VCjwHVDTAYQ7ShoDEY7kg3yT9cDHr7c7R',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'ETHPL',
+    name: 'Ethereum Platinum',
+    thumbnailUri: 'https://ethereum.org/static/a110735dade3f354a46fc2446cd52476/415a1/eth-home-icon.png',
+  },
+};
+
+export const REACT_TOKEN:WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1TAPP2x1y77KC9zCiwVKr3TXyHjHutshvm',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'RCT',
+    name: 'React',
+    thumbnailUri: 'https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg',
+  },
+};
+
 export const FACTORIES = {
   florencenet: {
     fa1_2Factory: [
