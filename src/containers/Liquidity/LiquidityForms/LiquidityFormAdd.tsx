@@ -1,6 +1,7 @@
 import React, {
   useState,
   Dispatch,
+  useEffect,
   ChangeEvent,
   SetStateAction,
 } from 'react';
@@ -20,20 +21,27 @@ import {
 import {
   WhitelistedToken,
 } from '@utils/types';
-import { fromDecimals } from '@utils/helpers';
+import {
+  fromDecimals,
+  sortTokensContracts,
+  findNotTezTokenInPair,
+  getValidMichelTemplate,
+} from '@utils/helpers';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
-import s from '../Liquidity.module.sass';
 import {
   addLiquidity,
   calculateTokenAmount,
 } from '../liquidutyHelpers';
 import { initializeLiquidity } from '../liquidutyHelpers/initializeLiquidity';
+import s from '../Liquidity.module.sass';
+
+const MichelCodec = require('@taquito/michel-codec');
 
 type LiquidityFormProps = {
-  dex: FoundDex | null;
+  dexInfo: { dex:FoundDex | null, isTezosToTokenDex:boolean };
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
   setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
@@ -43,7 +51,7 @@ type LiquidityFormProps = {
 };
 
 export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
-  dex,
+  dexInfo,
   tokenA,
   tokenB,
   setTokenA,
@@ -51,12 +59,60 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   tokenABalance,
   tokenBBalance,
 }) => {
+  const { dex, isTezosToTokenDex } = dexInfo;
   // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
+  const [pairId, setPairId] = useState<BigNumber>();
+  const [pairData, setPairDataInfo] = useState<{
+    totalSupply: BigNumber,
+    tokenAPool: BigNumber,
+    tokenBPool: BigNumber,
+  }>({
+    totalSupply: new BigNumber(0),
+    tokenAPool: new BigNumber(0),
+    tokenBPool: new BigNumber(0),
+  });
+
+  useEffect(() => {
+    let isMounted = true;
+    const loadPairData = async () => {
+      if (isTezosToTokenDex) {
+        if (!dex) return;
+
+        setPairDataInfo({
+          totalSupply: dex.storage.storage.total_supply,
+          tokenAPool: dex.storage.storage.tez_pool,
+          tokenBPool: dex.storage.storage.token_pool,
+        });
+      } else if (!isTezosToTokenDex) {
+        if (!dex) return;
+        const addresses = sortTokensContracts(tokenA, tokenB);
+
+        if (!addresses) return;
+
+        const michelData = getValidMichelTemplate(addresses);
+        const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
+
+        const pairIdTemp = await dex.storage.storage.token_to_id.get(key);
+        const pairDataTemp = await dex.storage.storage.pairs.get(pairIdTemp);
+
+        if (isMounted) {
+          setPairId(pairIdTemp);
+          setPairDataInfo({
+            totalSupply: pairDataTemp.total_supply,
+            tokenAPool: pairDataTemp.token_a_pool,
+            tokenBPool: pairDataTemp.token_b_pool,
+          });
+        }
+      }
+    };
+    loadPairData();
+    return () => { isMounted = false; };
+  }, [dex, isTezosToTokenDex]);
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -66,18 +122,16 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       return;
     }
 
-    const tokenAmount = dex && calculateTokenAmount(
+    const tokenAmount = calculateTokenAmount(
       new BigNumber(event.target.value),
-      dex.storage.storage.total_supply,
-      dex.storage.storage.tez_pool,
-      dex.storage.storage.token_pool,
+      pairData.totalSupply,
+      pairData.tokenAPool,
+      pairData.tokenBPool,
     );
 
-    if (tokenAmount) {
-      setTokenBInput(
-        fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
-      );
-    }
+    setTokenBInput(
+      fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+    );
   };
 
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -88,29 +142,25 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       return;
     }
 
-    const tezAmount = dex && calculateTokenAmount(
+    const tezAmount = calculateTokenAmount(
       new BigNumber(event.target.value),
-      dex.storage.storage.total_supply,
-      dex.storage.storage.token_pool,
-      dex.storage.storage.tez_pool,
+      pairData.totalSupply,
+      pairData.tokenBPool,
+      pairData.tokenAPool,
     );
 
-    if (tezAmount) {
-      setTokenAInput(
-        fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
-      );
-    }
+    setTokenAInput(
+      fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+    );
   };
 
   const handleTokenABalance = (value:string) => {
-    if (!dex) return;
-
     const fixedValue = new BigNumber(value);
     const tokenAmount = calculateTokenAmount(
       fixedValue,
-      dex.storage.storage.total_supply,
-      dex.storage.storage.tez_pool,
-      dex.storage.storage.token_pool,
+      pairData.totalSupply,
+      pairData.tokenAPool,
+      pairData.tokenBPool,
     );
 
     setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
@@ -120,14 +170,12 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   };
 
   const handleTokenBBalance = (value:string) => {
-    if (!dex) return;
-
     const fixedValue = new BigNumber(value);
     const tezAmount = calculateTokenAmount(
       fixedValue,
-      dex.storage.storage.total_supply,
-      dex.storage.storage.token_pool,
-      dex.storage.storage.tez_pool,
+      pairData.totalSupply,
+      pairData.tokenBPool,
+      pairData.tokenAPool,
     );
 
     setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
@@ -139,24 +187,50 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh) return;
 
-    const tezDecimals = new BigNumber(10).pow(TEZOS_TOKEN.metadata.decimals);
-    const tezValue = new BigNumber(tokenAInput)
-      .multipliedBy(tezDecimals);
+    if (isTezosToTokenDex) {
+      const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
 
-    if (dex) {
-      await addLiquidity(tezos, dex, tezValue);
-    } else {
-      const token:Token = {
-        contract: tokenB.contractAddress,
-        id: tokenB.fa2TokenId,
-      };
-      const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
-      const tokenBValue = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
-      await initializeLiquidity(tezos, token, tokenBValue, tezValue);
+      const tezInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+        ? tokenAInput
+        : tokenBInput;
+      const tokenInput = tokenA.contractAddress !== TEZOS_TOKEN.contractAddress
+        ? tokenAInput
+        : tokenBInput;
+
+      const tezDecimals = new BigNumber(10).pow(TEZOS_TOKEN.metadata.decimals);
+      const tezValue = new BigNumber(tezInput)
+        .multipliedBy(tezDecimals);
+
+      if (dex) {
+        await addLiquidity(tezos, dex, tezValue);
+      } else {
+        const token:Token = {
+          contract: notTezToken.contractAddress,
+          id: notTezToken.fa2TokenId,
+        };
+        const tokenBDecimals = new BigNumber(10).pow(notTezToken.metadata.decimals);
+        const tokenBValue = new BigNumber(tokenInput).multipliedBy(tokenBDecimals);
+        await initializeLiquidity(tezos, token, tokenBValue, tezValue);
+      }
+    } else if (!isTezosToTokenDex) {
+      if (!dex) return;
+
+      const shares = new BigNumber(tokenAInput)
+        .multipliedBy(1_000_000)
+        .multipliedBy(pairData.totalSupply)
+        .idiv(pairData.tokenAPool);
+
+      const tokenBIn = shares
+        .multipliedBy(pairData.tokenBPool)
+        .idiv(pairData.totalSupply);
+
+      await dex.contract.methods.invest(
+        pairId,
+        shares,
+        new BigNumber(tokenAInput).multipliedBy(1_000_000),
+        tokenBIn,
+      ).send();
     }
-
-    setTokenAInput('');
-    setTokenBInput('');
   };
 
   return (

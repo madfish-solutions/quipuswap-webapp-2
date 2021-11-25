@@ -26,7 +26,7 @@ import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
 type LiquidityFormRemoveProps = {
-  dex: FoundDex | null;
+  dexInfo: { dex:FoundDex | null, isTezosToTokenDex:boolean };
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
   setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
@@ -37,7 +37,7 @@ type LiquidityFormRemoveProps = {
 };
 
 export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
-  dex,
+  dexInfo,
   tokenA,
   tokenB,
   setTokenA,
@@ -46,6 +46,8 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   tokenBBalance,
   lpTokenBalance,
 }) => {
+  const { dex, isTezosToTokenDex } = dexInfo;
+
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -61,26 +63,30 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       return;
     }
 
-    const tezPerOneLp = dex.storage.storage.tez_pool
-      .dividedBy(dex.storage.storage.total_supply);
+    if (isTezosToTokenDex) {
+      const tezPerOneLp = dex.storage.storage.tez_pool
+        .dividedBy(dex.storage.storage.total_supply);
 
-    const quipuPerOneLp = dex.storage.storage.token_pool
-      .dividedBy(dex.storage.storage.total_supply);
+      const quipuPerOneLp = dex.storage.storage.token_pool
+        .dividedBy(dex.storage.storage.total_supply);
 
-    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
-  }, [lpTokenInput, dex, tokenA, tokenB]);
+      setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    }
+  }, [lpTokenInput, dex, tokenA, tokenB, isTezosToTokenDex]);
 
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
-    await removeLiquidity(
-      tezos,
-      dex,
-      new BigNumber(lpTokenInput),
-      new BigNumber(0.1),
-    );
-    setLpTokenInput('');
+    if (isTezosToTokenDex) {
+      await removeLiquidity(
+        tezos,
+        dex,
+        new BigNumber(lpTokenInput),
+        new BigNumber(0.1),
+      );
+      setLpTokenInput('');
+    }
   };
 
   return (
