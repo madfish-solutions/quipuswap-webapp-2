@@ -201,8 +201,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
     if (!tezos || !accountPkh || !dex) return;
 
     if (pairId && pairData) {
-      console.log('111');
-
       const shares = new BigNumber(tokenAInput)
         .multipliedBy(1_000_000)
         .multipliedBy(pairData.totalSupply)
@@ -219,8 +217,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         tokenBIn,
       ).send();
     } else {
-      console.log('222');
-
       const addresses = sortTokensContracts(tokenA, tokenB);
       if (!addresses) return;
 
