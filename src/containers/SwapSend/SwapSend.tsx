@@ -14,11 +14,7 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useInitialTokens } from '@hooks/useInitialTokens';
-import {
-  NewSwapFormValues,
-  QSMainNet,
-  WhitelistedToken,
-} from '@utils/types';
+import { NewSwapFormValues, WhitelistedToken } from '@utils/types';
 import {
   getUserBalance,
   useAccountPkh,
@@ -354,7 +350,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
             graph: dexGraph,
             inputAmount,
           })!,
-          ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
+          ttDexAddress: TTDEX_CONTRACTS[network.id],
         },
       );
       handleSuccessToast();

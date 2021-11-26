@@ -10,7 +10,7 @@ import {
 } from '@utils/dapp';
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
 import { DexGraph, getTokenSlug, shortize } from '@utils/helpers';
-import { DexPair, QSMainNet, WhitelistedToken } from '@utils/types';
+import { DexPair, WhitelistedToken } from '@utils/types';
 import useUpdateToast from '@hooks/useUpdateToast';
 import useContinuousSWR from '@hooks/useContinuousSWR';
 
@@ -76,7 +76,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   const updateToast = useUpdateToast();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
-    const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId as QSMainNet];
+    const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];
 
     try {
       const result = await fetch(`${POOLS_LIST_API}/api/${networkId}/pools`);

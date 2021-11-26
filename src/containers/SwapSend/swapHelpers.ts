@@ -2,11 +2,11 @@ import { TezosToolkit } from '@taquito/taquito';
 import { findDex, FoundDex } from '@quipuswap/sdk';
 
 import { FACTORIES } from '@utils/defaults';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { QSNetworkType, WhitelistedToken } from '@utils/types';
 
 type GetDexParams = {
   tezos: TezosToolkit
-  networkId: QSMainNet
+  networkId: QSNetworkType
   token1: WhitelistedToken
   token2: WhitelistedToken
 };

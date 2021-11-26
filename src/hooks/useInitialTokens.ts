@@ -7,7 +7,7 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import useContinuousSWR from '@hooks/useContinuousSWR';
-import { QSMainNet } from '@utils/types';
+import { QSNetworkType } from '@utils/types';
 import { networksStableTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { isValidTokenSlug } from '@utils/validators';
@@ -16,14 +16,14 @@ type TokensSlugs = [string, string];
 
 type InitialTokensValue = {
   slugs: TokensSlugs;
-  network: QSMainNet;
+  network: QSNetworkType;
 };
 
 export const useInitialTokens = (fromToSlug?: string) => {
   const network = useNetwork();
 
   const getInitialTokens = useCallback(
-    async (_key: string, currentNetworkId: QSMainNet, tokensSlug: string = ''): Promise<InitialTokensValue> => {
+    async (_key: string, currentNetworkId: QSNetworkType, tokensSlug: string = ''): Promise<InitialTokensValue> => {
       const currentNetworkFallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
         getTokenSlug(networksStableTokens[currentNetworkId]),
@@ -64,12 +64,12 @@ export const useInitialTokens = (fromToSlug?: string) => {
             }),
           );
           return token1Slug && token2Slug ? {
-            network: networkId as QSMainNet,
+            network: networkId,
             slugs: [token1Slug, token2Slug],
           } : undefined;
         }),
       );
-      const networksPriorityOrder: QSMainNet[] = ['mainnet', currentNetworkId];
+      const networksPriorityOrder: QSNetworkType[] = ['mainnet', currentNetworkId];
       const searchResult = tokensSearchResults
         .filter((value): value is InitialTokensValue => value !== undefined)
         .sort(

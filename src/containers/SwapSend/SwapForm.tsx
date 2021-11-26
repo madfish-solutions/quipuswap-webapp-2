@@ -50,7 +50,7 @@ import {
 import {
   DexPair,
   NewSwapFormValues,
-  QSMainNet,
+  QSNetworkType,
   WhitelistedToken,
 } from '@utils/types';
 
@@ -67,7 +67,7 @@ type SwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
   knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
-  matchingNetwork?: QSMainNet;
+  matchingNetwork?: QSNetworkType;
   initialFrom?: string;
   initialTo?: string;
 };
@@ -182,7 +182,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       setValues((prevValues) => ({
         ...prevValues,
         token1: TEZOS_TOKEN,
-        token2: networksStableTokens[network.id as QSMainNet],
+        token2: networksStableTokens[network.id],
         amount1: undefined,
         amount2: undefined,
       }));
@@ -246,7 +246,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             dexChain: route,
             recipient,
             slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
-            ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
+            ttDexAddress: TTDEX_CONTRACTS[network.id],
           },
         )
           .then((newFee) => setFee(fromDecimals(newFee, 6)))
@@ -513,7 +513,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
       dexChain: dexRoute,
       slippageTolerance: slippageToBignum(slippage),
-      ttDexAddress: TTDEX_CONTRACTS[network.id as QSMainNet],
+      ttDexAddress: TTDEX_CONTRACTS[network.id],
     }) : new BigNumber(0)),
     [amount1, network.id, slippage, token1, dexRoute],
   );

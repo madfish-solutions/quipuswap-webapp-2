@@ -10,7 +10,6 @@ import Link from 'next/link';
 import cx from 'classnames';
 
 import { useNetwork } from '@utils/dapp';
-import { QSMainNet } from '@utils/types';
 
 import { makeNavigationData } from './content';
 import s from './Navigation.module.sass';
@@ -36,7 +35,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    makeNavigationData(network.id as QSMainNet).forEach(({
+    makeNavigationData(network.id).forEach(({
       id, href, label, Icon, links, as,
     }) => {
       if (href) {

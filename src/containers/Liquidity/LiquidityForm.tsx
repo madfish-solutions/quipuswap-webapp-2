@@ -49,7 +49,6 @@ import {
   WhitelistedToken,
   LiquidityFormValues,
   WhitelistedTokenPair,
-  QSMainNet,
 } from '@utils/types';
 import {
   validateMinMax,
@@ -145,7 +144,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();

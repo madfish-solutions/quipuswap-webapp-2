@@ -1,4 +1,4 @@
-import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSNetworkType, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -90,7 +90,7 @@ export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
-export const networksStableTokens: Record<QSMainNet, WhitelistedToken> = {
+export const networksStableTokens: Record<QSNetworkType, WhitelistedToken> = {
   mainnet: STABLE_TOKEN,
   florencenet: FLORENCENET_STABLE_TOKEN,
   granadanet: GRANADANET_STABLE_TOKEN,
@@ -123,7 +123,7 @@ export const FACTORIES = {
   },
 };
 
-export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
+export const TTDEX_CONTRACTS: Partial<Record<QSNetworkType, string>> = {
   granadanet: 'KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H',
 };
 

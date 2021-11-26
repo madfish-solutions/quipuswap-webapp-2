@@ -18,7 +18,7 @@ import {
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSMainNet,
+  QSNetworkType,
   QSNetwork,
   WhitelistedBaker,
   WhitelistedToken,
@@ -128,7 +128,7 @@ export type DAppType = {
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
 
-export const fallbackToolkits: Record<QSMainNet, TezosToolkit> = {
+export const fallbackToolkits: Record<QSNetworkType, TezosToolkit> = {
   florencenet: new TezosToolkit(FLORENCENET_NETWORK.rpcBaseURL),
   granadanet: new TezosToolkit(GRANADANET_NETWORK.rpcBaseURL),
   mainnet: new TezosToolkit(MAINNET_NETWORK.rpcBaseURL),
@@ -163,7 +163,7 @@ function useDApp() {
     () => setState((prevState) => ({
       ...prevState,
       connectionType: null,
-      tezos: prevState.tezos ?? fallbackToolkits[network.id as QSMainNet],
+      tezos: prevState.tezos ?? fallbackToolkits[network.id],
     })),
     [network.id],
   );
@@ -199,7 +199,7 @@ function useDApp() {
 
           if (lastUsedConnection === 'temple') {
             const pkh = wlt.connected ? await wlt.getPKH() : null;
-            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkits[net.id as QSMainNet];
+            const tk = wlt.connected ? wlt.toTezos() : fallbackToolkits[net.id];
             if (wlt.connected && pkh) {
               const { publicKey } = wlt.permission!;
               tk.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
@@ -214,7 +214,7 @@ function useDApp() {
           } else {
             setState((prevState) => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkits[net.id as QSMainNet],
+              tezos: prevState.tezos ?? fallbackToolkits[net.id],
               templeWallet: wlt,
             }));
           }
@@ -468,7 +468,7 @@ function useDApp() {
     async () => {
       setState((prevState) => ({
         ...prevState,
-        tezos: fallbackToolkits[network.id as QSMainNet],
+        tezos: fallbackToolkits[network.id],
         accountPkh: null,
         connectionType: null,
       }));
@@ -483,7 +483,7 @@ function useDApp() {
         ...prevState,
         accountPkh: null,
         connectionType: null,
-        tezos: fallbackToolkits[networkNew.id as QSMainNet],
+        tezos: fallbackToolkits[networkNew.id],
         network: networkNew,
       }));
       setNetwork(networkNew);
