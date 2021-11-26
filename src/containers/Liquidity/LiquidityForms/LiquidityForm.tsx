@@ -44,9 +44,11 @@ import {
 } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
 
-import { LiquidityFormAdd } from './LiquidityFormAdd';
 // import { LiquidityDetails } from '../LiquidityDetails';
-import { LiquidityFormRemove } from './LiquidityFormRemove';
+import { AddTezToToken } from './AddTezToToken';
+import { AddTokenToToken } from './AddTokenToToken';
+import { RemoveTezToToken } from './RemoveTezToToken';
+import { RemoveTokenToToken } from './RemoveTokenToToken';
 import s from '../Liquidity.module.sass';
 
 const MichelCodec = require('@taquito/michel-codec');
@@ -280,9 +282,9 @@ const RealForm:React.FC = () => {
         }}
         contentClassName={s.content}
       >
-        {tabState.id === 'add' && (
-          <LiquidityFormAdd
-            dexInfo={dexInfo}
+        {tabState.id === 'add' && dexInfo.isTezosToTokenDex && (
+          <AddTezToToken
+            dex={dexInfo.dex}
             tokenA={tokenA}
             tokenB={tokenB}
             setTokenA={setTokenA}
@@ -291,9 +293,32 @@ const RealForm:React.FC = () => {
             tokenBBalance={tokenBBalance}
           />
         )}
-        {tabState.id === 'remove' && (
-          <LiquidityFormRemove
-            dexInfo={dexInfo}
+        {tabState.id === 'remove' && dexInfo.isTezosToTokenDex && (
+          <RemoveTezToToken
+            dex={dexInfo.dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            setTokenA={setTokenA}
+            setTokenB={setTokenB}
+            tokenABalance={tokenABalance}
+            tokenBBalance={tokenBBalance}
+            lpTokenBalance={lpTokenBalance}
+          />
+        )}
+        {tabState.id === 'add' && !dexInfo.isTezosToTokenDex && (
+          <AddTokenToToken
+            dex={dexInfo.dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            setTokenA={setTokenA}
+            setTokenB={setTokenB}
+            tokenABalance={tokenABalance}
+            tokenBBalance={tokenBBalance}
+          />
+        )}
+        {tabState.id === 'remove' && !dexInfo.isTezosToTokenDex && (
+          <RemoveTokenToToken
+            dex={dexInfo.dex}
             tokenA={tokenA}
             tokenB={tokenB}
             setTokenA={setTokenA}
