@@ -6,7 +6,7 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import {
-  QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair,
+  QSNetworkType, VoteFormValues, VoterType, WhitelistedTokenPair,
 } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -20,7 +20,7 @@ export const hanldeTokenPairSelect = (
   updateToast: (err:any) => void,
   tezos?: TezosToolkit | null,
   accountPkh?: string | null,
-  networkId?: QSMainNet,
+  networkId?: QSNetworkType,
 ) => {
   const asyncFunc = async () => {
     if (!tezos || !networkId) {
