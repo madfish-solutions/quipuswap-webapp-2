@@ -145,6 +145,7 @@ const RealForm:React.FC = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
+
       if (!tezos || !accountPkh) return;
 
       const userTokenABalanance = await getUserBalance(
