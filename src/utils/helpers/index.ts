@@ -34,6 +34,3 @@ export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
 export * from './noOpFunc';
-export * from './sortTokensContracts';
-export * from './getValidMichelTemplate';
-export * from './findNotTezTokenInPair';

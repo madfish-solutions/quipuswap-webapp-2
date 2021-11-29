@@ -18,10 +18,11 @@ import {
   useTezos,
   useAccountPkh,
 } from '@utils/dapp';
+import { noOpFunc } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { getValidMichelTemplate, noOpFunc, sortTokensContracts } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
+import { sortTokensContracts, getValidMichelTemplate } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
 const MichelCodec = require('@taquito/michel-codec');

@@ -18,16 +18,16 @@ import {
   useTezos,
   useAccountPkh,
 } from '@utils/dapp';
-import {
-  fromDecimals,
-  sortTokensContracts,
-  getValidMichelTemplate,
-} from '@utils/helpers';
+import { fromDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
-import { calculateTokenAmount } from '../liquidutyHelpers';
+import {
+  sortTokensContracts,
+  calculateTokenAmount,
+  getValidMichelTemplate,
+} from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
 const MichelCodec = require('@taquito/michel-codec');
@@ -200,7 +200,13 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
-    if (pairId && pairData) {
+    if (
+      pairId
+      && pairData
+      && pairData.tokenAPool.gt(0)
+      && pairData.tokenBPool.gt(0)
+      && pairData.totalSupply.gt(0)
+    ) {
       const shares = new BigNumber(tokenAInput)
         .multipliedBy(1_000_000)
         .multipliedBy(pairData.totalSupply)
@@ -208,13 +214,13 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
       const tokenBIn = shares
         .multipliedBy(pairData.tokenBPool)
-        .idiv(pairData.totalSupply);
+        .div(pairData.totalSupply);
 
       await dex.contract.methods.invest(
         pairId,
         shares,
         new BigNumber(tokenAInput).multipliedBy(1_000_000),
-        tokenBIn,
+        Math.ceil(+tokenBIn.toFixed()),
       ).send();
     } else {
       const addresses = sortTokensContracts(tokenA, tokenB);
@@ -230,19 +236,27 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         ? tokenB
         : tokenA;
 
+      const validTokenAInput = validTokenA.contractAddress === tokenA.contractAddress
+        ? tokenAInput
+        : tokenBInput;
+
+      const validTokenBInput = validTokenB.contractAddress === tokenB.contractAddress
+        ? tokenBInput
+        : tokenAInput;
+
       const batch = await tezos.wallet.batch()
         .withContractCall(tokenAContract.methods.update_operators([{
           add_operator: {
             operator: dex.contract.address,
             owner: accountPkh,
-            token_id: tokenA.fa2TokenId,
+            token_id: validTokenA.fa2TokenId,
           },
         }]))
         .withContractCall(tokenBContract.methods.update_operators([{
           add_operator: {
             operator: dex.contract.address,
             owner: accountPkh,
-            token_id: tokenB.fa2TokenId,
+            token_id: validTokenB.fa2TokenId,
           },
         }]))
         .withContractCall(dex.contract.methods.addPair(
@@ -252,8 +266,8 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           validTokenB.type,
           validTokenB.contractAddress,
           validTokenB.fa2TokenId,
-          new BigNumber(tokenAInput).multipliedBy(1_000_000),
-          new BigNumber(tokenBInput).multipliedBy(1_000_000),
+          new BigNumber(validTokenAInput).multipliedBy(1_000_000),
+          new BigNumber(validTokenBInput).multipliedBy(1_000_000),
         ));
 
       await batch.send();

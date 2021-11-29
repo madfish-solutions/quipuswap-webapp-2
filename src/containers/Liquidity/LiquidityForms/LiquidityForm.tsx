@@ -33,15 +33,8 @@ import {
   FACTORIES,
   TEZOS_TOKEN,
   QUIPU_TOKEN,
-  REACT_TOKEN,
-  ETHPL_TOKEN,
 } from '@utils/defaults';
-import {
-  sortTokensContracts,
-  findNotTezTokenInPair,
-  getValidMichelTemplate,
-  getWhitelistedTokenSymbol,
-} from '@utils/helpers';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
 
 // import { LiquidityDetails } from '../LiquidityDetails';
@@ -49,6 +42,11 @@ import { AddTezToToken } from './AddTezToToken';
 import { AddTokenToToken } from './AddTokenToToken';
 import { RemoveTezToToken } from './RemoveTezToToken';
 import { RemoveTokenToToken } from './RemoveTokenToToken';
+import {
+  sortTokensContracts,
+  findNotTezTokenInPair,
+  getValidMichelTemplate,
+} from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
 const MichelCodec = require('@taquito/michel-codec');
@@ -80,8 +78,8 @@ const RealForm:React.FC = () => {
 
   // const [poolShare, setPoolShare] = useState<PoolShare>();
   const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(REACT_TOKEN);
-  const [tokenB, setTokenB] = useState(ETHPL_TOKEN);
+  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
+  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
   const [tokenABalance, setTokenABalance] = useState<string>('0');
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
@@ -113,12 +111,12 @@ const RealForm:React.FC = () => {
   // Loading a valid dex contract
   useEffect(() => {
     let isMounted = true;
-    const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
+    let foundDex:FoundDex;
     const loadDex = async () => {
       if (!tezos) return;
+      const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
-        let foundDex:FoundDex;
         if (isTezosInPair) {
           const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
           const token: Token = {
@@ -199,7 +197,7 @@ const RealForm:React.FC = () => {
 
       if (!tezos || !accountPkh || !dex) return;
 
-      if (isTezosToTokenDex && isMounted) {
+      if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
         const userLpTokenBalance = await getUserBalance(
           tezos,
@@ -209,20 +207,17 @@ const RealForm:React.FC = () => {
           notTezToken.fa2TokenId,
         );
 
-        if (userLpTokenBalance) {
+        if (userLpTokenBalance && isMounted) {
           setLpTokenBalance(userLpTokenBalance.dividedBy(1_000_000).toFixed());
-        } else {
+        } else if (!userLpTokenBalance && isMounted) {
           setLpTokenBalance('0');
         }
-      } else if (!isTezosToTokenDex && isMounted) {
+      } else if (!isTezosToTokenDex) {
         const addresses = sortTokensContracts(tokenA, tokenB);
-
         if (!addresses) return;
 
         const michelData = getValidMichelTemplate(addresses);
-
         const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
-
         const pairId = await dex.storage.storage.token_to_id.get(key);
         if (pairId) {
           const userLpTokenBalance = await dex.storage.storage.ledger.get([
@@ -230,12 +225,12 @@ const RealForm:React.FC = () => {
             pairId,
           ]);
 
-          if (userLpTokenBalance) {
+          if (userLpTokenBalance && isMounted) {
             setLpTokenBalance(userLpTokenBalance.balance.dividedBy(1_000_000).toFixed());
-          } else {
+          } else if (!userLpTokenBalance && isMounted) {
             setLpTokenBalance('0');
           }
-        } else {
+        } else if (!pairId && isMounted) {
           setLpTokenBalance('0');
         }
       }
