@@ -71,9 +71,9 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
       || dex.storage.storage.token_pool.eq(0)
     ) return;
 
-    const isTokenATEZ = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
+    const isTokenATez = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
     let tokenAmount:BigNumber;
-    if (isTokenATEZ) {
+    if (isTokenATez) {
       tokenAmount = calculateTokenAmount(
         new BigNumber(event.target.value),
         dex.storage.storage.total_supply,
@@ -107,9 +107,9 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
       || dex.storage.storage.token_pool.eq(0)
     ) return;
 
-    const isTokenBTEZ = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
+    const isTokenBTez = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
     let tezAmount:BigNumber;
-    if (isTokenBTEZ) {
+    if (isTokenBTez) {
       tezAmount = calculateTokenAmount(
         new BigNumber(event.target.value),
         dex.storage.storage.total_supply,

@@ -109,12 +109,20 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       && pairData.tokenBPool.gt(0)
       && pairData.totalSupply.gt(0)
     ) {
-      const tokenAmount = calculateTokenAmount(
-        new BigNumber(event.target.value),
-        pairData.totalSupply,
-        pairData.tokenAPool,
-        pairData.tokenBPool,
-      );
+      const validAddress = tokenA.contractAddress < tokenB.contractAddress;
+      const tokenAmount = validAddress
+        ? calculateTokenAmount(
+          new BigNumber(event.target.value),
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        )
+        : calculateTokenAmount(
+          new BigNumber(event.target.value),
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        );
 
       setTokenBInput(
         fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
@@ -136,15 +144,23 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       && pairData.tokenBPool.gt(0)
       && pairData.totalSupply.gt(0)
     ) {
-      const tezAmount = calculateTokenAmount(
-        new BigNumber(event.target.value),
-        pairData.totalSupply,
-        pairData.tokenBPool,
-        pairData.tokenAPool,
-      );
+      const validAddress = tokenA.contractAddress < tokenB.contractAddress;
+      const tokenBmount = validAddress
+        ? calculateTokenAmount(
+          new BigNumber(event.target.value),
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        )
+        : calculateTokenAmount(
+          new BigNumber(event.target.value),
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        );
 
       setTokenAInput(
-        fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+        fromDecimals(tokenBmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
       );
     }
   };

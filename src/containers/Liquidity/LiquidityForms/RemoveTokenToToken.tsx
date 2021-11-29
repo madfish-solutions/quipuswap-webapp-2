@@ -105,8 +105,13 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     const tokenBPerOneLp = pairData.tokenBPool
       .dividedBy(pairData.totalSupply);
 
-    setTokenAOutput(tokenAPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-    setTokenBOutput(tokenBPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    if (tokenA.contractAddress < tokenB.contractAddress) {
+      setTokenAOutput(tokenAPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(tokenBPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    } else {
+      setTokenAOutput(tokenBPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+      setTokenBOutput(tokenAPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+    }
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {

@@ -22,6 +22,7 @@ import { WhitelistedToken } from '@utils/types';
 import { noOpFunc } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
@@ -67,8 +68,15 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     const quipuPerOneLp = dex.storage.storage.token_pool
       .dividedBy(dex.storage.storage.total_supply);
 
-    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    const isTokenATez = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
+
+    if (isTokenATez) {
+      setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    } else {
+      setTokenAOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    }
   }, [lpTokenInput, dex, tokenA, tokenB]);
 
   const handleRemoveLiquidity = async () => {
