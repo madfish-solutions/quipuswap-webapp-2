@@ -151,6 +151,9 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       return balance;
     }
     const correctBalance = balance.decimalPlaces(token?.metadata.decimals ?? 3);
+    if (balance.eq(0)) {
+      return balance.toFixed();
+    }
     const integerLog = Math.floor(Math.log10(correctBalance.toNumber()));
     const decimalPlaces = integerLog >= 0
       ? Math.max(0, 6 - integerLog)
