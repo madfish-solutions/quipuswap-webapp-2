@@ -2,13 +2,14 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { DexPair } from '@utils/types';
-import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import {
+  getTokenIdFromSlug,
+  getTokenSlug,
   getMarketQuotient,
   getMaxTokenInput,
   getTokenInput,
   getTokenOutput,
-} from '@utils/helpers/token-to-token-dex';
+} from '@utils/helpers';
 
 type Vertex = {
   edges: Record<string, DexPair>;

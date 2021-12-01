@@ -15,7 +15,7 @@ import {
   makeAllowanceTransfersParams,
   makeRemoveOperatorsTransferMethod,
 } from '@utils/dapp';
-import { getTokenOutput } from './token-to-token-dex';
+import { getTokenOutput } from './tokenToTokenDex';
 
 export type SwapParams = {
   inputToken: TokenId;

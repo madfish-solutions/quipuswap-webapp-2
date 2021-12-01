@@ -36,5 +36,5 @@ export * from './preparePairName';
 export * from './dexRoutesAlgorithms';
 export * from './getTokenSlug';
 export * from './getTokenIdFromSlug';
-export * from './token-to-token-dex';
+export * from './tokenToTokenDex';
 export * from './swap';
