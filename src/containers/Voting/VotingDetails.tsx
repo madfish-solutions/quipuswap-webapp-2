@@ -4,8 +4,8 @@ import {
   Button,
   Tooltip,
   CardCell,
-  CurrencyAmount,
   ExternalLink,
+  CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { FoundDex } from '@quipuswap/sdk';

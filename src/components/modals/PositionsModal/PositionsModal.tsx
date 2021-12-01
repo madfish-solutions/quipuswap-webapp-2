@@ -27,13 +27,13 @@ import cx from 'classnames';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
-  useAddCustomToken,
-  useSearchCustomTokens,
-  useSearchTokens,
   useTezos,
   useTokens,
   isTokenFa2,
   useNetwork,
+  useSearchTokens,
+  useAddCustomToken,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
   isTokenEqual,

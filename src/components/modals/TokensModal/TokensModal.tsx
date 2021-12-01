@@ -25,13 +25,13 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import {
-  useAddCustomToken,
-  useSearchCustomTokens,
-  useSearchTokens,
   useTezos,
   useTokens,
   isTokenFa2,
   useNetwork,
+  useSearchTokens,
+  useAddCustomToken,
+  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
   parseNumber,

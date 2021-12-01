@@ -6,6 +6,7 @@ import {
   ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
+
 import cx from 'classnames';
 
 import { WhitelistedBaker } from '@utils/types';

@@ -14,6 +14,7 @@ import {
   ColorModeSwitcher,
   ConnectWalletButton,
 } from '@quipuswap/ui-kit';
+
 import cx from 'classnames';
 
 import { Menu } from '@components/common/Header/Menu';
@@ -52,6 +53,8 @@ export const Header: React.FC<HeaderProps> = ({
         <LanguageSwitcher
           direction="bottom"
           className={s.languageSwitcher}
+          locale="RU"
+          locales={['EN', 'PL', 'GE', 'IT']}
         />
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button
