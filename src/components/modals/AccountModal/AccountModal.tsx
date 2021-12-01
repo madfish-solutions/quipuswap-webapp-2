@@ -9,16 +9,16 @@ import {
   Copy,
   Modal,
   Button,
-  CheckMark,
   ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
+import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { CheckMark } from '@components/svg/CheckMark';
 
 import s from './AccountModal.module.sass';
 
