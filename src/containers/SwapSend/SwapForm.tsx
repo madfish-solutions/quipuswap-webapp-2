@@ -73,10 +73,10 @@ type SwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
 };
 
 type SlippageInputProps = {
+  outputAmount?: BigNumber;
+  outputToken?: WhitelistedToken;
   onChange: (newValue: string) => void;
-  value: string;
-  balance2?: BigNumber;
-  token2?: WhitelistedToken;
+  slippage: string;
 };
 
 const TabsContent = [
@@ -91,14 +91,14 @@ const TabsContent = [
 ];
 
 const SlippageInput: React.FC<SlippageInputProps> = ({
-  balance2,
+  outputAmount,
   onChange,
-  value,
-  token2,
+  slippage,
+  outputToken,
 }) => {
-  const minimumReceived = new BigNumber(balance2 ?? 0).times(
-    new BigNumber(1).minus(slippageToBignum(value).div(100)),
-  ).decimalPlaces(token2?.metadata.decimals ?? 0, BigNumber.ROUND_FLOOR);
+  const minimumReceived = new BigNumber(outputAmount ?? 0).times(
+    new BigNumber(1).minus(slippageToBignum(slippage).div(100)),
+  ).decimalPlaces(outputToken?.metadata.decimals ?? 0, BigNumber.ROUND_FLOOR);
 
   return (
     <>
@@ -109,7 +109,7 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
         </span>
         <CurrencyAmount
           amount={minimumReceived.isNaN() ? '0' : minimumReceived.toFixed()}
-          currency={token2 ? getWhitelistedTokenSymbol(token2) : ''}
+          currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
         />
       </div>
     </>
@@ -596,10 +596,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             />
           )}
           <SlippageInput
-            balance2={amount2}
+            outputAmount={amount2}
             onChange={handleSlippageChange}
-            value={slippage ?? ''}
-            token2={token2}
+            slippage={slippage ?? ''}
+            outputToken={token2}
           />
           <Button
             disabled={(Object.keys(errors).length > 0) || !accountPkh}
