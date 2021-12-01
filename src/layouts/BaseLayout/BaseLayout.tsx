@@ -14,6 +14,7 @@ import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
 import { WalletModal } from '@components/modals/WalletModal';
 import { AccountModal } from '@components/modals/AccountModal';
+import { Background } from '@components/svg/Background';
 
 import s from './BaseLayout.module.sass';
 
@@ -87,6 +88,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
           <div className={s.root}>
             <Header />
             <Sidebar className={s.sidebar} />
+            <Background className={s.background} />
             <main className={cx(s.wrapper, className)}>
               <ToastWrapper />
               {children}
