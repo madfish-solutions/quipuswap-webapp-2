@@ -49,7 +49,7 @@ import {
 } from '@utils/helpers';
 import {
   DexPair,
-  NewSwapFormValues,
+  SwapFormValues,
   QSNetworkType,
   WhitelistedToken,
 } from '@utils/types';
@@ -59,7 +59,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { SwapChart } from './SwapChart';
 import { SwapDetails } from './SwapDetails';
 
-type SwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
+type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   className?: string;
   submitError?: string;
   updateTokenBalance: (token: WhitelistedToken) => void;
@@ -75,8 +75,8 @@ type SwapFormProps = FormikProps<Partial<NewSwapFormValues>> & {
 type SlippageInputProps = {
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
-  onChange: (newValue: string) => void;
-  slippage: string;
+  onChange: (newValue?: BigNumber) => void;
+  slippage?: BigNumber;
 };
 
 const TabsContent = [
@@ -96,19 +96,31 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   slippage,
   outputToken,
 }) => {
-  const minimumReceived = new BigNumber(outputAmount ?? 0).times(
-    new BigNumber(1).minus(slippageToBignum(slippage).div(100)),
-  ).decimalPlaces(outputToken?.metadata.decimals ?? 0, BigNumber.ROUND_FLOOR);
+  const handleChange = useCallback((newValue: string) => {
+    const parsedPercentage = slippageToBignum(newValue);
+    onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
+  }, [onChange]);
+
+  const tokenDecimals = outputToken?.metadata.decimals ?? 0;
+
+  const minimumReceived = useMemo(
+    () => (slippage && outputAmount
+      ? outputAmount.times(new BigNumber(1).minus(slippage.div(100)))
+        .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
+      : new BigNumber(0)
+    ),
+    [slippage, outputAmount, tokenDecimals],
+  );
 
   return (
     <>
-      <Slippage handleChange={onChange} />
+      <Slippage handleChange={handleChange} />
       <div className={s.receive}>
         <span className={s.receiveLabel}>
           Minimum received:
         </span>
         <CurrencyAmount
-          amount={minimumReceived.isNaN() ? '0' : minimumReceived.toFixed()}
+          amount={minimumReceived.toFixed()}
           currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
         />
       </div>
@@ -175,6 +187,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts]);
   useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
+  console.log(slippage?.toFixed(), errors);
 
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
@@ -245,7 +258,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             inputAmount: fromDecimals(inputAmount, -token1!.metadata.decimals),
             dexChain: route,
             recipient,
-            slippageTolerance: slippage ? slippageToBignum(slippage).div(100) : undefined,
+            slippageTolerance: slippage?.div(100),
             ttDexAddress: TTDEX_CONTRACTS[network.id],
           },
         )
@@ -391,8 +404,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
-      const valuesToSet: Partial<NewSwapFormValues> = {
-        action: newTabId as NewSwapFormValues['action'],
+      const valuesToSet: Partial<SwapFormValues> = {
+        action: newTabId as SwapFormValues['action'],
       };
       if (newTabId === 'swap') {
         valuesToSet.recipient = undefined;
@@ -431,7 +444,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     ) => {
       const newTokenSlug = newToken && getTokenSlug(newToken);
       setFieldTouched(fieldName, true);
-      const valuesToSet: Partial<NewSwapFormValues> = {
+      const valuesToSet: Partial<SwapFormValues> = {
         [fieldName]: newToken,
       };
       const amount = amountFieldName === 'amount1' ? amount1 : amount2;
@@ -500,7 +513,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   );
 
   const handleSlippageChange = useCallback(
-    (newValue: string) => {
+    (newValue?: BigNumber) => {
       setFieldTouched('slippage', true);
       setFieldValue('slippage', newValue, true);
     },
@@ -512,7 +525,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       inputToken: token1,
       inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
       dexChain: dexRoute,
-      slippageTolerance: slippageToBignum(slippage),
+      slippageTolerance: slippage?.div(100),
       ttDexAddress: TTDEX_CONTRACTS[network.id],
     }) : new BigNumber(0)),
     [amount1, network.id, slippage, token1, dexRoute],
@@ -598,7 +611,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           <SlippageInput
             outputAmount={amount2}
             onChange={handleSlippageChange}
-            slippage={slippage ?? ''}
+            slippage={slippage}
             outputToken={token2}
           />
           <Button

@@ -14,7 +14,7 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useInitialTokens } from '@hooks/useInitialTokens';
-import { NewSwapFormValues, WhitelistedToken } from '@utils/types';
+import { SwapFormValues, WhitelistedToken } from '@utils/types';
 import {
   getUserBalance,
   useAccountPkh,
@@ -35,8 +35,6 @@ import {
   getTokenIdFromSlug,
   getTokenOutput,
   getTokenSlug,
-  slippageToBignum,
-  slippageToNum,
   swap,
 } from '@utils/helpers';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
@@ -52,9 +50,9 @@ const initialErrors = {
   amount1: 'Required',
   amount2: 'Required',
 };
-const initialValues: Partial<NewSwapFormValues> = {
+const initialValues: Partial<SwapFormValues> = {
   action: 'swap',
-  slippage: '0.5 %',
+  slippage: new BigNumber(0.5),
 };
 
 const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
@@ -210,10 +208,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
         : addressSchema().required()
       ),
     ),
-    slippage: stringSchema().test((value = '') => {
-      const normalizedValue = slippageToNum(value);
-      return (value !== '') && (normalizedValue > 0) && (normalizedValue <= 30);
-    }).required(),
+    slippage: bigNumberSchema(0, 30).required(t('common|This field is required')),
     action: stringSchema().oneOf(['swap', 'send']).required(),
   }), [knownTokensBalances, t, knownMaxInputAmounts, knownMaxOutputAmounts]);
 
@@ -319,7 +314,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     });
   }, [updateToast, t]);
 
-  const handleSubmit = useCallback(async (formValues: Partial<NewSwapFormValues>) => {
+  const handleSubmit = useCallback(async (formValues: Partial<SwapFormValues>) => {
     if (!tezos) {
       return;
     }
@@ -343,7 +338,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
           inputAmount,
           inputToken: token1!,
           recipient: action === 'send' ? recipient : undefined,
-          slippageTolerance: slippageToBignum(slippage!).div(100),
+          slippageTolerance: slippage!.div(100),
           dexChain: getRouteWithInput({
             startTokenSlug: getTokenSlug(token1!),
             endTokenSlug: getTokenSlug(token2!),

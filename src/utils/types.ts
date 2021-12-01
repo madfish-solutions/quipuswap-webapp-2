@@ -93,20 +93,12 @@ export type TokenDataMap = {
 };
 
 export type SwapFormValues = {
-  lastChange: 'balance1' | 'balance2'
-  balance1: BigNumber
-  balance2: BigNumber
-  recipient: string
-  slippage: string
-};
-
-export type NewSwapFormValues = {
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   amount1: BigNumber;
   amount2: BigNumber;
   recipient: string;
-  slippage: string;
+  slippage: BigNumber;
   action: 'swap' | 'send';
 };
 

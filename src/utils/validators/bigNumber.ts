@@ -14,7 +14,7 @@ export const bigNumberSchema = (
     (value) => !value || (value instanceof BigNumber),
   );
 
-  if (min && max) {
+  if ((min !== undefined) && (max !== undefined)) {
     schema = schema.test(
       'min-max-value',
       () => i18n?.t(
@@ -23,7 +23,7 @@ export const bigNumberSchema = (
       ) ?? '',
       (value) => !(value instanceof BigNumber) || (value.gte(min) && value.lte(max)),
     );
-  } else if (min) {
+  } else if (min !== undefined) {
     schema = schema.test(
       'min-value',
       () => i18n?.t(
@@ -32,7 +32,7 @@ export const bigNumberSchema = (
       ) ?? '',
       (value) => !(value instanceof BigNumber) || value.gte(min),
     );
-  } else if (max) {
+  } else if (max !== undefined) {
     schema = schema.test(
       'max-value',
       () => i18n?.t(
