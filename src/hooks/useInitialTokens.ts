@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import useSWR from 'swr';
 
 import {
   fallbackToolkits,
@@ -6,7 +7,6 @@ import {
   isTokenFa2,
   useNetwork,
 } from '@utils/dapp';
-import useContinuousSWR from '@hooks/useContinuousSWR';
 import { QSNetworkType } from '@utils/types';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
@@ -100,7 +100,7 @@ export const useInitialTokens = (fromToSlug?: string) => {
     [],
   );
 
-  const { data: initialTokensSlugs } = useContinuousSWR(
+  const { data: initialTokensSlugs } = useSWR(
     ['initial-tokens', network.id, fromToSlug],
     getInitialTokens,
   );

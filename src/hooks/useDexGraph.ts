@@ -2,17 +2,12 @@ import { useCallback, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import {
-  useNetwork,
-  useOnBlock,
-  useTezos,
-  useTokens,
-} from '@utils/dapp';
+import { useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
 import { DexGraph, getTokenSlug, shortize } from '@utils/helpers';
 import { DexPair, WhitelistedToken } from '@utils/types';
 import useUpdateToast from '@hooks/useUpdateToast';
-import useContinuousSWR from '@hooks/useContinuousSWR';
+import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type TokenType = 'fa1.2' | 'fa2';
 
@@ -130,9 +125,8 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
   const {
     data: dexPools,
-    revalidate: updateDexPools,
-  } = useContinuousSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
-  useOnBlock(tezos, updateDexPools);
+    error: dexPoolsError,
+  } = useUpdateOnBlockSWR(tezos, ['dexPools', networkId, tokensSWRKey], getDexPools);
 
   const dexGraph = useMemo(() => (dexPools ?? []).filter(
     ({ token1Pool, token2Pool }) => !token1Pool.eq(0) && !token2Pool.eq(0),
@@ -160,7 +154,6 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   return {
     dexGraph,
     dexPools: dexPools ?? fallbackDexPools,
-    updateDexPools,
-    dexPoolsLoading: !dexPools,
+    dexPoolsLoading: !dexPools && !dexPoolsError,
   };
 });

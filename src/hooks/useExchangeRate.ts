@@ -1,8 +1,8 @@
 import constate from 'constate';
-import useSWR from 'swr';
 
-import { useOnBlock, useTezos } from '@utils/dapp';
+import { useTezos } from '@utils/dapp';
 import useUpdateToast from './useUpdateToast';
+import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type ExchangeRateEntry = {
   tokenAddress: string,
@@ -27,12 +27,12 @@ export const [
       });
     });
 
-  const { data: exchangeRates, revalidate } = useSWR(
+  const { data: exchangeRates } = useUpdateOnBlockSWR(
+    tezos,
     ['exchange-rates'],
     getExchangeRates,
     { refreshInterval: 30000 },
   );
-  useOnBlock(tezos, revalidate);
 
   return exchangeRates as (ExchangeRateEntry[] | undefined);
 });
