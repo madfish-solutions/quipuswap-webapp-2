@@ -7,8 +7,10 @@ import React, {
 import {
   Modal,
   Input,
+  Search,
   BakerCell,
   ColorModes,
+  TokenNotFound,
   LoadingBakerCell,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
@@ -20,8 +22,6 @@ import cx from 'classnames';
 import { localSearchBaker } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { useBakers } from '@utils/dapp';
-import Search from '@icons/Search.svg';
-import TokenNotFound from '@icons/TokenNotFound.svg';
 
 import s from './BakersModal.module.sass';
 
