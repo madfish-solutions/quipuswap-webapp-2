@@ -1,20 +1,20 @@
-import React, { useCallback, useState } from "react";
-import { AbortedBeaconError } from "@airgap/beacon-sdk";
-import { useTranslation } from "next-i18next";
-import { Button, Checkbox, Modal } from "@quipuswap/ui-kit";
+import React, { useCallback, useState } from 'react';
+import { AbortedBeaconError } from '@airgap/beacon-sdk';
+import { useTranslation } from 'next-i18next';
+import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 
-import { WalletType } from "@utils/types";
+import { WalletType } from '@utils/types';
 import {
   TEMPLE_WALLET_NOT_INSTALLED_MESSAGE,
   useConnectWithBeacon,
   useConnectWithTemple,
-} from "@utils/dapp";
-import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from "@utils/defaults";
-import { useConnectModalsState } from "@hooks/useConnectModalsState";
-import useUpdateToast from "@hooks/useUpdateToast";
+} from '@utils/dapp';
+import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import useUpdateToast from '@hooks/useUpdateToast';
 
-import { Wallets } from "./content";
-import s from "./WalletModal.module.sass";
+import { Wallets } from './content';
+import s from './WalletModal.module.sass';
 
 type WalletProps = {
   className?: string;
@@ -46,13 +46,13 @@ export const Wallet: React.FC<WalletProps> = ({
 );
 
 export const WalletModal: React.FC = () => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
   const [check1, setCheck1] = useState<boolean>(
-    localStorage.getItem(SAVED_TERMS_KEY) === "true" ?? false
+    localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false,
   );
   const [check2, setCheck2] = useState<boolean>(
-    localStorage.getItem(SAVED_ANALYTICS_KEY) === "true" ?? false
+    localStorage.getItem(SAVED_ANALYTICS_KEY) === 'true' ?? false,
   );
 
   const {
@@ -78,15 +78,14 @@ export const WalletModal: React.FC = () => {
         if (e.message === TEMPLE_WALLET_NOT_INSTALLED_MESSAGE) {
           openInstallTempleWalletModal();
         } else {
-          const authenticationWasRejected =
-            e.name === "NotGrantedTempleWalletError" ||
-            e instanceof AbortedBeaconError;
+          const authenticationWasRejected = e.name === 'NotGrantedTempleWalletError'
+            || e instanceof AbortedBeaconError;
           if (!authenticationWasRejected) {
             updateToast({
-              type: "error",
-              render: t("common|errorWhileConnectingWallet", {
+              type: 'error',
+              render: t('common|errorWhileConnectingWallet', {
                 walletName:
-                  walletType === WalletType.BEACON ? "Beacon" : "Temple Wallet",
+                  walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
                 error: e.message,
               }),
             });
@@ -102,7 +101,7 @@ export const WalletModal: React.FC = () => {
       openInstallTempleWalletModal,
       t,
       updateToast,
-    ]
+    ],
   );
 
   const handleCheck1 = () => {
@@ -119,7 +118,7 @@ export const WalletModal: React.FC = () => {
     <Modal
       containerClassName={s.modalWrap}
       contentClassName={s.modal}
-      title={t("common|Connect wallet")}
+      title={t('common|Connect wallet')}
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
@@ -131,15 +130,18 @@ export const WalletModal: React.FC = () => {
             theme="quaternary"
             className={s.btn}
           >
-            <div className={s.btnText}>{t("common|Accept terms")}</div>
+            <div className={s.btnText}>{t('common|Accept terms')}</div>
           </Button>
-          {t("common|I have read and agree to the")}{" "}
+          {t('common|I have read and agree to the')}
+          {' '}
           <Button className={s.defText} theme="underlined" href="#" external>
-            {t("common|Terms of Usage")}
-          </Button>{" "}
-          {t("common|and")}{" "}
+            {t('common|Terms of Usage')}
+          </Button>
+          {' '}
+          {t('common|and')}
+          {' '}
           <Button className={s.defText} theme="underlined" href="#" external>
-            {t("common|Privacy Policy")}
+            {t('common|Privacy Policy')}
           </Button>
         </div>
         <div className={s.def}>
@@ -149,11 +151,12 @@ export const WalletModal: React.FC = () => {
             theme="quaternary"
             className={s.btn}
           >
-            <div className={s.btnText}>{t("common|Analytics")}</div>
+            <div className={s.btnText}>{t('common|Analytics')}</div>
           </Button>
-          {t("common|I agree to the")}{" "}
+          {t('common|I agree to the')}
+          {' '}
           <Button className={s.defText} theme="underlined" href="#" external>
-            {t("common|anonymous information collecting")}
+            {t('common|anonymous information collecting')}
           </Button>
         </div>
       </div>

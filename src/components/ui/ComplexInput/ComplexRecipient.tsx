@@ -1,13 +1,13 @@
-import React, { useContext, useRef } from "react";
-import TextareaAutosize from "react-textarea-autosize";
-import { useTranslation } from "next-i18next";
-import { Button, ColorModes, ColorThemeContext } from "@quipuswap/ui-kit";
-import cx from "classnames";
+import React, { useContext, useRef } from 'react';
+import TextareaAutosize from 'react-textarea-autosize';
+import { useTranslation } from 'next-i18next';
+import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 
-import useUpdateToast from "@hooks/useUpdateToast";
-import { ComplexError } from "@components/ui/ComplexInput/ComplexError";
+import useUpdateToast from '@hooks/useUpdateToast';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
-import s from "./ComplexInput.module.sass";
+import s from './ComplexInput.module.sass';
 
 type ComplexRecipientProps = {
   className?: string;
@@ -30,7 +30,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   handleInput,
   ...props
 }) => {
-  const { t } = useTranslation(["common"]);
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -42,7 +42,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
     modeClass[colorThemeMode],
     { [s.error]: !readOnly && !!error },
     { [s.readOnly]: readOnly },
-    className
+    className,
   );
 
   const focusInput = () => {
@@ -56,7 +56,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
       handleInput(await navigator.clipboard.readText());
     } catch (err: any) {
       updateToast({
-        type: "error",
+        type: 'error',
         render: `${err.name}: ${err.message}`,
       });
     }
@@ -93,7 +93,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           theme="inverse"
           className={s.btn}
         >
-          {t("common|Paste")}
+          {t('common|Paste')}
         </Button>
       </div>
       {!readOnly && <ComplexError error={error} />}
