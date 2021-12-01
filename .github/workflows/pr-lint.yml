@@ -1,0 +1,18 @@
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  steps:
+    - run: yarn install
+      shell: bash
+
+    - run: yarn lint
+      shell: bash
+
+    - run: yarn build
+      shell: bash
