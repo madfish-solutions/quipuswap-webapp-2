@@ -18,7 +18,6 @@ import cx from 'classnames';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Menu } from '@components/common/Header/Menu';
 
-import { ConnectWalletButton } from '../ConnectWalletButton';
 import s from './Header.module.sass';
 
 type HeaderProps = {
