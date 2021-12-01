@@ -48,7 +48,7 @@ export const asyncFindPairDex = async (
     };
     setTokenPair(res);
     return res;
-  } catch (err) {
+  } catch (err: any) {
     updateToast(err);
     return pair;
   }
@@ -113,7 +113,7 @@ export const asyncGetShares = async (
       'balanceTotalB',
       balA2,
     );
-  } catch (err) {
+  } catch (err: any) {
     updateToast(err);
   }
 };
@@ -153,7 +153,7 @@ export const asyncGetLiquidityShare = async ({
           if (tempDex && tempDex !== dex) {
             setDex(tempDex);
           }
-        } catch (e) {
+        } catch (e: any) {
           if (e.name === 'DexNotFoundError') {
             if (values.balance1 && values.balance2) {
               const strictFactories = {
@@ -178,7 +178,7 @@ export const asyncGetLiquidityShare = async ({
         }
       }
     }
-  } catch (e) {
+  } catch (e: any) {
     updateToast(e);
   }
 };
@@ -201,7 +201,7 @@ export const submitForm = async (
     } else {
       handleSuccessToast('liquidity|Invest completed!');
     }
-  } catch (e) {
+  } catch (e: any) {
     updateToast(e);
   }
 };
