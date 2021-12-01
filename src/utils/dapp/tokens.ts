@@ -1,4 +1,9 @@
-import { TezosToolkit, Wallet } from '@taquito/taquito';
+import {
+  ContractAbstraction,
+  ContractProvider,
+  TezosToolkit,
+  Wallet,
+} from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 import {
@@ -20,6 +25,22 @@ export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(wi
 
 // TODO: remove either getContract or this method
 export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
+
+export const getTokenType = memoizee(
+  async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
+    const contract = typeof contractOrAddress === 'string'
+      ? await getContract(tz, contractOrAddress)
+      : contractOrAddress;
+    if (contract.methods.approve) {
+      return 'fa1.2';
+    }
+    if (contract.methods.update_operators) {
+      return 'fa2';
+    }
+    return undefined;
+  },
+  { promise: true },
+);
 
 export const isTokenFa2 = memoizee(
   async (address:string, tz:TezosToolkit) => {

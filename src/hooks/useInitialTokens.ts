@@ -3,8 +3,7 @@ import useSWR from 'swr';
 
 import {
   fallbackToolkits,
-  getContract,
-  isTokenFa2,
+  getTokenType,
   useNetwork,
 } from '@utils/dapp';
 import { QSNetworkType } from '@utils/types';
@@ -48,18 +47,16 @@ export const useInitialTokens = (fromToSlug?: string) => {
               }
               const { contractAddress, fa2TokenId } = getTokenIdFromSlug(rawSlug);
               try {
-                await getContract(tezos, contractAddress);
-              } catch {
-                return undefined;
-              }
-              try {
-                const isFa2Token = await isTokenFa2(contractAddress, tezos);
-                if (isFa2Token) {
+                const tokenType = await getTokenType(contractAddress, tezos);
+                if (tokenType === 'fa2') {
                   return `${contractAddress}_${fa2TokenId ?? 0}`;
                 }
-                return contractAddress;
+                if (tokenType === 'fa1.2') {
+                  return contractAddress;
+                }
+                return undefined;
               } catch (e) {
-                return rawSlug;
+                return undefined;
               }
             }),
           );

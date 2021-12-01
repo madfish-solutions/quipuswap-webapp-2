@@ -29,7 +29,7 @@ import {
   useSearchTokens,
   useTezos,
   useTokens,
-  isTokenFa2,
+  getTokenType,
   useNetwork,
 } from '@utils/dapp';
 import {
@@ -217,11 +217,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
     ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
 
   useEffect(() => {
-    const getFa2 = async () => {
-      const res = await isTokenFa2(inputValue, tezos!!);
-      setSoleFa2Token(res);
-    };
-    getFa2();
+    getTokenType(inputValue, tezos!)
+      .then((tokenType) => setSoleFa2Token(tokenType === 'fa2'))
+      .catch(console.error);
   }, [inputValue, tezos]);
 
   return (

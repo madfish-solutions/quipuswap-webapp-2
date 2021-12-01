@@ -187,7 +187,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts]);
   useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
-  console.log(slippage?.toFixed(), errors);
 
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
