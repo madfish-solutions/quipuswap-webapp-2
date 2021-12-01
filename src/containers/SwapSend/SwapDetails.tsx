@@ -19,7 +19,7 @@ import {
   getWhitelistedTokenSymbol,
   transformTokenDataToAnalyticsLink,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { DexPair, WhitelistedToken } from '@utils/types';
 import { ExternalLink } from '@components/svg/ExternalLink';
 
@@ -165,7 +165,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               <span className={s.equal}>=</span>
               <CurrencyAmount
                 amount={sellRate.toFixed()}
-                currency={getWhitelistedTokenSymbol(outputToken ?? STABLE_TOKEN)}
+                currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
                 dollarEquivalent={sellUsdRate?.toFixed(2)}
               />
             </>
@@ -189,7 +189,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             <>
               <CurrencyAmount
                 amount="1"
-                currency={getWhitelistedTokenSymbol(outputToken ?? STABLE_TOKEN)}
+                currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
               />
               <span className={s.equal}>=</span>
               <CurrencyAmount

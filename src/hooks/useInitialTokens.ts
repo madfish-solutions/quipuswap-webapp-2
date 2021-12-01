@@ -8,7 +8,7 @@ import {
 } from '@utils/dapp';
 import useContinuousSWR from '@hooks/useContinuousSWR';
 import { QSNetworkType } from '@utils/types';
-import { networksStableTokens, TEZOS_TOKEN } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { isValidTokenSlug } from '@utils/validators';
 
@@ -26,7 +26,7 @@ export const useInitialTokens = (fromToSlug?: string) => {
     async (_key: string, currentNetworkId: QSNetworkType, tokensSlug: string = ''): Promise<InitialTokensValue> => {
       const currentNetworkFallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
-        getTokenSlug(networksStableTokens[currentNetworkId]),
+        getTokenSlug(networksDefaultTokens[currentNetworkId]),
       ];
       const rawSlugs = tokensSlug.split('-').slice(0, 2);
       while (rawSlugs.length < 2) {
@@ -36,7 +36,7 @@ export const useInitialTokens = (fromToSlug?: string) => {
         Object.entries(fallbackToolkits).map(async ([networkId, tezos]) => {
           const fallbackTokensSlugs = [
             getTokenSlug(TEZOS_TOKEN),
-            getTokenSlug(networksStableTokens[currentNetworkId]),
+            getTokenSlug(networksDefaultTokens[currentNetworkId]),
           ];
           const [token1Slug, token2Slug] = await Promise.all(
             rawSlugs.map(async (rawSlug, index) => {

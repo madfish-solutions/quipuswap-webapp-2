@@ -11,7 +11,7 @@ import { SwapIcon } from '@components/svg/Sidebar/SwapIcon';
 import { HomeIcon } from '@components/svg/Sidebar/HomeIcon';
 import MoreIcon from '@icons/MoreIcon.svg';
 import { getTokenSlug } from '@utils/helpers';
-import { networksStableTokens, TEZOS_TOKEN } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { QSNetworkType } from '@utils/types';
 
 interface LinkInterface {
@@ -36,7 +36,7 @@ export const makeNavigationData = (network: QSNetworkType): NavigationDataProps[
   {
     id: 1,
     href: '/swap/[from-to]',
-    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksStableTokens[network])}`,
+    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon,
   },

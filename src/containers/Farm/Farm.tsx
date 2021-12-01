@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import cx from 'classnames';
 
 import { WhitelistedFarm, WhitelistedTokenPair } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { FarmingStats } from '@components/farming/FarmingStats';
 import { FarmingInfo } from '@components/farming/FarmingInfo';
 import { FarmingCard } from '@components/farming/FarmingCard';
@@ -57,7 +57,7 @@ const content:ContentType = [
   {
     name: 'Total Value Locked',
     value: '888888888888888.00',
-    currency: STABLE_TOKEN.metadata.symbol,
+    currency: MAINNET_DEFAULT_TOKEN.metadata.symbol,
   },
   {
     name: 'Total Daily Reward',
@@ -70,7 +70,7 @@ const content:ContentType = [
   {
     name: 'Total Claimed Reward',
     value: '888888888888888.00',
-    currency: STABLE_TOKEN.metadata.symbol,
+    currency: MAINNET_DEFAULT_TOKEN.metadata.symbol,
   },
 ];
 

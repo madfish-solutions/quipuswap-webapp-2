@@ -26,7 +26,7 @@ import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
 
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedFarm } from '@utils/types';
 import { useTokens } from '@utils/dapp';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -121,7 +121,7 @@ const UiKit: React.FC = () => {
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const { data: tokens } = useTokens();
   const farms = tokens.map((x) => (x.contractAddress === TEZOS_TOKEN.contractAddress
-    ? { tokenPair: { token1: x, token2: STABLE_TOKEN } }
+    ? { tokenPair: { token1: x, token2: MAINNET_DEFAULT_TOKEN } }
     : { tokenPair: { token1: x, token2: TEZOS_TOKEN } }));
 
   const [activeSwitcher, setActiveSwitcher] = useState(false);

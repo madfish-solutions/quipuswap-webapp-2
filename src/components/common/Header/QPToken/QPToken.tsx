@@ -4,7 +4,7 @@ import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { STABLE_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 import { QuipuToken } from '@components/svg/QuipuToken';
 
 import s from './QPToken.module.sass';
@@ -31,7 +31,9 @@ export const QPToken: React.FC<QPTokenProps> = ({
       return new BigNumber(NaN);
     }
     const rawExchangeRate = exchangeRates
-      .find(({ tokenAddress }) => tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate;
+      .find(
+        ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress,
+      )?.exchangeRate;
     return new BigNumber(rawExchangeRate || NaN);
   }, [exchangeRates]);
 

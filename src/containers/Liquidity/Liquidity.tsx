@@ -29,7 +29,7 @@ import {
   LiquidityFormValues,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -55,7 +55,7 @@ type LiquidityProps = {
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: STABLE_TOKEN,
+  token2: MAINNET_DEFAULT_TOKEN,
 } as WhitelistedTokenPair;
 
 export const Liquidity: React.FC<LiquidityProps> = ({
@@ -73,7 +73,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const [tokensData, setTokensData] = useState<TokenDataMap>(
     {
       first: fallbackTokenToTokenData(TEZOS_TOKEN),
-      second: fallbackTokenToTokenData(STABLE_TOKEN),
+      second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN),
     },
   );
 
@@ -85,7 +85,10 @@ export const Liquidity: React.FC<LiquidityProps> = ({
     tokenPair,
     setTokenPair,
   ] = useState<WhitelistedTokenPair>(fallbackTokenPair);
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([
+    TEZOS_TOKEN,
+    MAINNET_DEFAULT_TOKEN,
+  ]);
   const router = useRouter();
   const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
   const { from, to } = useRouterPair({

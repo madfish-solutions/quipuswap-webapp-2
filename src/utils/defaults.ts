@@ -54,7 +54,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   },
 };
 
-export const STABLE_TOKEN: WhitelistedToken = {
+export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -66,7 +66,7 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
-export const FLORENCENET_STABLE_TOKEN: WhitelistedToken = {
+export const FLORENCENET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT1CdFLoqESYe3qBCgM7LZUVmqYZFEabzwyS',
   fa2TokenId: 0,
@@ -78,7 +78,7 @@ export const FLORENCENET_STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
-export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
+export const GRANADANET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT1Mfz9fXRQHrPQyCyJQDnFRgUv9fi18HbHR',
   fa2TokenId: 0,
@@ -90,10 +90,10 @@ export const GRANADANET_STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
-export const networksStableTokens: Record<QSNetworkType, WhitelistedToken> = {
-  mainnet: STABLE_TOKEN,
-  florencenet: FLORENCENET_STABLE_TOKEN,
-  granadanet: GRANADANET_STABLE_TOKEN,
+export const networksDefaultTokens: Record<QSNetworkType, WhitelistedToken> = {
+  mainnet: MAINNET_DEFAULT_TOKEN,
+  florencenet: FLORENCENET_DEFAULT_TOKEN,
+  granadanet: GRANADANET_DEFAULT_TOKEN,
 };
 
 export const FACTORIES = {

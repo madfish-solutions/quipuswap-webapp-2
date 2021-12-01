@@ -33,7 +33,7 @@ import {
   useTezos,
   useTokens,
 } from '@utils/dapp';
-import { networksStableTokens, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   DexGraph,
   estimateSwapFee,
@@ -182,7 +182,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       setValues((prevValues) => ({
         ...prevValues,
         token1: TEZOS_TOKEN,
-        token2: networksStableTokens[network.id],
+        token2: networksDefaultTokens[network.id],
         amount1: undefined,
         amount2: undefined,
       }));
