@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  Background,
   ColorModes,
   ToastWrapper,
   ColorThemeContext,
@@ -88,7 +87,6 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
           <div className={s.root}>
             <Header />
             <Sidebar className={s.sidebar} />
-            <Background className={s.background} />
             <main className={cx(s.wrapper, className)}>
               <ToastWrapper />
               {children}
