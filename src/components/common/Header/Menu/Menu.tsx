@@ -3,13 +3,14 @@ import {
   Button,
   Madfish,
   ColorModes,
-  NetworkSelect,
   LanguageSwitcher,
   ColorModeSwitcher,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
+
+import { NetworkSelect } from '@components/common/NetworkSelect';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';

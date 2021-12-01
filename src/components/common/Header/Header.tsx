@@ -12,12 +12,12 @@ import {
   LanguageSwitcher,
   ColorThemeContext,
   ColorModeSwitcher,
-  ConnectWalletButton,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { Menu } from '@components/common/Header/Menu';
 
+import { ConnectWalletButton } from '../ConnectWalletButton';
 import s from './Header.module.sass';
 
 type HeaderProps = {

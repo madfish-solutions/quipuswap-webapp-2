@@ -8,9 +8,6 @@
   justify-content: space-between
   width: 100%
   padding-top: 64px
-  background-image: url(/svg/Background.svg)
-  background-repeat: no-repeat
-  background-attachment: fixed
 
 .wrapper
   padding: 24px
@@ -20,6 +17,13 @@
   left: -37px
   top: 64px
   z-index: -1
+
+@include media('>Ltablet')
+  .root
+    background-image: url(/svg/Background.svg)
+    background-repeat: no-repeat
+    background-attachment: fixed
+    background-size: cover
 
 @include media('>SDesktop')
   .root
