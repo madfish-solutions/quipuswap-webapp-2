@@ -44,19 +44,19 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
     {
       id: 0,
       header: 'vote|Your LP',
-      amount: amounts[0] ?? '1',
+      amount: amounts[0] ?? '0',
       tooltip: 'vote|Total number of LP tokens you own.',
     },
     {
       id: 1,
       header: 'vote|Your votes',
-      amount: amounts[1] ?? '2',
+      amount: amounts[1] ?? '0',
       tooltip: 'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
     },
     {
       id: 2,
       header: 'vote|Your vetos',
-      amount: amounts[2] ?? '3',
+      amount: amounts[2] ?? '0',
       tooltip: 'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
     },
   ], [amounts]);

@@ -199,8 +199,6 @@ export const Voting: React.FC<VotingProps> = ({
 
   useOnBlock(tezos, getBalance);
 
-  console.log({ voter });
-
   return (
     <>
       <VotingStats
