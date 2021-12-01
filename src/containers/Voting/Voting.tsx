@@ -28,6 +28,7 @@ import {
   VoteFormValues,
   WhitelistedToken,
   WhitelistedTokenPair,
+  QSMainNet,
 } from '@utils/types';
 import { STABLE_TOKEN, STABLE_TOKEN_GRANADA, TEZOS_TOKEN } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';
@@ -183,7 +184,7 @@ export const Voting: React.FC<VotingProps> = ({
         handleErrorToast,
         tezos,
         accountPkh,
-        network.id,
+        network.id as QSMainNet,
       );
     }
     // eslint-disable-next-line
