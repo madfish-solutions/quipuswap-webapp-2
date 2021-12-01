@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import {
   Button,
+  Shevron,
   ColorModes,
   TokensLogos,
   ColorThemeContext,
@@ -21,7 +22,6 @@ import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 

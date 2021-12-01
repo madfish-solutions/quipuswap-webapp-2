@@ -16,12 +16,12 @@ import {
   Slippage,
   StickyBlock,
   SwapButton,
+  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
-import { Transactions } from '@components/svg/Transactions';
 import { useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {

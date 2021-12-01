@@ -5,6 +5,7 @@ import {
   Button,
   Card,
   CardCell,
+  ExternalLink,
   CurrencyAmount,
   Tooltip,
   Route,
@@ -21,7 +22,6 @@ import {
 } from '@utils/helpers';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { DexPair, WhitelistedToken } from '@utils/types';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
