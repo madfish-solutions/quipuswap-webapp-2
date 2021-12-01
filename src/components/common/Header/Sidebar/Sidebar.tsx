@@ -4,11 +4,11 @@ import {
   Madfish,
   ColorModes,
   ColorThemeContext,
-  ConnectWalletButton,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
 import { Navigation } from '../Navigation';

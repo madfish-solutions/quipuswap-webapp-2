@@ -27,7 +27,6 @@ import {
   useAccountPkh,
 } from '@utils/dapp';
 import {
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken,
@@ -118,7 +117,7 @@ const RealForm:React.FC<VotingFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();

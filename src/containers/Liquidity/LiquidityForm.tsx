@@ -116,8 +116,6 @@ type LiquidityFormProps = {
 
 const isTez = (tokensData:TokenDataType) => tokensData.token.address === 'tez';
 
-type QSMainNet = 'mainnet' | 'florencenet';
-
 const RealForm:React.FC<LiquidityFormProps> = ({
   handleSubmit,
   debounce,
@@ -146,7 +144,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();

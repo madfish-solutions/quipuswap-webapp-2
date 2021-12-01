@@ -67,6 +67,14 @@ export const STABLE_TOKEN: WhitelistedToken = {
 };
 
 export const FACTORIES = {
+  granadanet: {
+    fa1_2Factory: [
+      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
+    ],
+    fa2Factory: [
+      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
+    ],
+  },
   florencenet: {
     fa1_2Factory: [
       'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
@@ -95,6 +103,16 @@ export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
+export const GRANADANET_NETWORK: QSNetwork = {
+  id: 'granadanet',
+  connectType: 'default',
+  name: 'Granada Testnet',
+  type: 'test',
+  rpcBaseURL: 'https://granadanet.smartpy.io/',
+  metadata: METADATA_API_TESTNET,
+  description: 'Granada testnet',
+  disabled: false,
+};
 export const FLORENCENET_NETWORK: QSNetwork = {
   id: 'florencenet',
   connectType: 'default',
@@ -115,9 +133,10 @@ export const MAINNET_NETWORK: QSNetwork = {
   description: 'Tezos mainnet',
   disabled: false,
 };
-export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK];
+export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK, GRANADANET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
   ['florencenet', 'NetXxkAx4woPLyu'],
   ['mainnet', 'NetXdQprcVkpaWU'],
+  ['granadanet', 'NetXxkAx4woPLyu'],
 ]);
