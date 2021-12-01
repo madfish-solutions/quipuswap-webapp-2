@@ -9,9 +9,9 @@ import {
   Card,
   Preloader,
   CardHeader,
+  ColorModes,
   CardContent,
   PairChartInfo,
-  ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { createChart, IChartApi } from 'lightweight-charts';
@@ -26,6 +26,7 @@ import {
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+
 import { WhitelistedToken } from '@utils/types';
 import { usePrevious } from '@hooks/usePrevious';
 

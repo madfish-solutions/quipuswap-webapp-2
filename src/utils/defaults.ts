@@ -77,6 +77,14 @@ export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
 };
 
 export const FACTORIES = {
+  granadanet: {
+    fa1_2Factory: [
+      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
+    ],
+    fa2Factory: [
+      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
+    ],
+  },
   florencenet: {
     fa1_2Factory: [
       'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
@@ -97,14 +105,6 @@ export const FACTORIES = {
       'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
     ],
   },
-  granadanet: {
-    fa1_2Factory: [
-      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
-    ],
-    fa2Factory: [
-      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
-    ],
-  },
 };
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
@@ -113,7 +113,6 @@ export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
-
 export const GRANADANET_NETWORK: QSNetwork = {
   id: 'granadanet',
   connectType: 'default',
@@ -149,5 +148,5 @@ export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
   ['florencenet', 'NetXxkAx4woPLyu'],
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['granadanet', 'PtGRANADsDU8R9daYKAgWnQYAJ64omN1o3KMGVCykShA97vQbvV'],
+  ['granadanet', 'NetXxkAx4woPLyu'],
 ]);
