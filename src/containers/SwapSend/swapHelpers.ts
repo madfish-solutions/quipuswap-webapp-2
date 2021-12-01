@@ -8,7 +8,7 @@ import {
 
 import { FACTORIES } from '@utils/defaults';
 import {
-  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
+  QSNetworkType, SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
 import { getValueForSDK, slippageToBignum, transformTokenDataToAsset } from '@utils/helpers';
 
@@ -17,7 +17,7 @@ export const submitForm = (
   tezos:TezosToolkit,
   tokensData:TokenDataMap,
   tabsState:string,
-  networkId:QSMainNet,
+  networkId:QSNetworkType,
   form:any,
   updateToast: (err:any) => void,
   handleSuccessToast: any,
@@ -55,7 +55,7 @@ export const submitForm = (
 
 type GetDexParams = {
   tezos: TezosToolkit
-  networkId: QSMainNet
+  networkId: QSNetworkType
   token1: WhitelistedToken
   token2: WhitelistedToken
 };
