@@ -22,8 +22,8 @@ jobs:
       - run: yarn install
         shell: bash
 
-      - run: yarn lint
+      - run: yarn build
         shell: bash
 
-      - run: yarn build
+      - run: yarn lint
         shell: bash
