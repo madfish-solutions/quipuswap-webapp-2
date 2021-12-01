@@ -20,6 +20,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
+  QSMainNet,
   SwapFormValues,
   TokenDataMap,
   WhitelistedToken,
@@ -114,7 +115,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     connectWalletModalOpen,
     closeConnectWalletModal,
   } = useConnectModalsState();
-  const networkId = useNetwork().id;
+  const networkId = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [fee, setFee] = useState<BigNumber>();
