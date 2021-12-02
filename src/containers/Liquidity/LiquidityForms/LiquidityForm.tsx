@@ -12,7 +12,6 @@ import {
   Token,
   findDex,
   FoundDex,
-  // getLiquidityShare,
 } from '@quipuswap/sdk';
 import { FormSpy } from 'react-final-form';
 import router from 'next/router';
@@ -26,7 +25,7 @@ import {
 } from '@utils/dapp';
 import {
   QSMainNet,
-  // TokenDataMap,
+  TokenDataMap,
   WhitelistedTokenPair,
 } from '@utils/types';
 import {
@@ -37,7 +36,7 @@ import {
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
 
-// import { LiquidityDetails } from '../LiquidityDetails';
+import { LiquidityDetails } from '../LiquidityDetails';
 import { AddTezToToken } from './AddTezToToken';
 import { AddTokenToToken } from './AddTokenToToken';
 import { RemoveTezToToken } from './RemoveTezToToken';
@@ -67,16 +66,14 @@ const TabsContent = [
   },
 ];
 
-// type LiquidityFormProps = {
-//   tokensData: TokenDataMap;
-// };
-// const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
-const RealForm:React.FC = () => {
+type LiquidityFormProps = {
+  tokensData: TokenDataMap;
+};
+const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
 
-  // const [poolShare, setPoolShare] = useState<PoolShare>();
   const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
   const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
@@ -108,7 +105,6 @@ const RealForm:React.FC = () => {
       setTabState(findActiveTab);
     }, [],
   );
-  // Loading a valid dex contract
   useEffect(() => {
     let isMounted = true;
     let foundDex:FoundDex;
@@ -141,11 +137,9 @@ const RealForm:React.FC = () => {
 
     return () => { isMounted = false; };
   }, [tezos, networkId, tokenA, tokenB]);
-  // Loading a tokenA balance
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
-
       if (!tezos || !accountPkh) return;
 
       const userTokenABalanance = await getUserBalance(
@@ -166,7 +160,6 @@ const RealForm:React.FC = () => {
 
     return () => { isMounted = false; };
   }, [tezos, accountPkh, tokenA]);
-  // Loading a tokenB balance
   useEffect(() => {
     let isMounted = true;
     const getTokenBBalance = async () => {
@@ -190,7 +183,6 @@ const RealForm:React.FC = () => {
 
     return () => { isMounted = false; };
   }, [tezos, accountPkh, tokenB]);
-  // Loading a lpToken balance
   useEffect(() => {
     let isMounted = true;
     const getLpTokenBalance = async () => {
@@ -240,20 +232,6 @@ const RealForm:React.FC = () => {
 
     return () => { isMounted = false; };
   }, [tezos, accountPkh, dexInfo]);
-
-  // useEffect(() => {
-  //   let isLoadShares = true;
-  //   const loadShares = async () => {
-  //     if (!accountPkh || !tezos || !dex) return;
-
-  //     const share = await getLiquidityShare(tezos, dex, accountPkh);
-
-  //     if (isLoadShares) setPoolShare(share);
-  //   };
-  //   loadShares();
-
-  //   return () => { isLoadShares = false; };
-  // }, [tezos, accountPkh, dex]);
 
   return (
     <>
@@ -325,15 +303,14 @@ const RealForm:React.FC = () => {
           />
         )}
       </Card>
-      {/* <LiquidityDetails
+      <LiquidityDetails
         currentTab={tabState.label}
         token1={fallbackTokenPair.token1}
         token2={fallbackTokenPair.token2}
         tokensData={tokensData}
-        poolShare={poolShare}
         balanceTotalA="1"
         balanceTotalB="2"
-      /> */}
+      />
     </>
   );
 };
