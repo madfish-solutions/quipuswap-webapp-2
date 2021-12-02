@@ -11,7 +11,6 @@ import {
   Switcher,
 } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
-// import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -51,7 +50,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
   tokenABalance,
   tokenBBalance,
 }) => {
-  // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
