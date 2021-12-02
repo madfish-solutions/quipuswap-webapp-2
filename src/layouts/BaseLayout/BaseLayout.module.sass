@@ -14,9 +14,13 @@
 
 .background
   position: fixed
-  left: -37px
-  top: 64px
+  left: -25%
+  top: 0px
   z-index: -1
+
+@include media('>tablet')
+  .background
+    left: 0
 
 @include media('>SDesktop')
   .root
@@ -26,8 +30,6 @@
     max-width: 1236px
     padding: 24px 32px 32px
     margin: 0 auto
-
-@include media('>desktop')
   .background
-    left: 50%
-    transform: translateX(-50%)
+    left: calc(50% + 100px)
+    transform: translateX(calc(-50% - 100px))
