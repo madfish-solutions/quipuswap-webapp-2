@@ -9,9 +9,6 @@ const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
 });
 
-// TODO: implement for liquidity
-// const isLPToken = (contract: string) => false;
-
 export const getAllowance = memoizee(
   async (
     tezos: TezosToolkit,
@@ -21,15 +18,6 @@ export const getAllowance = memoizee(
   ) => {
     const newTezos = getReadOnlyTezos(tezos);
     const contract = await newTezos.contract.at(contractAddress);
-
-    // if (isLPToken(contractAddress)) {
-    //   const dexStorage = await contract.storage<any>();
-    //   const ledgerValue = await dexStorage.storage.ledger.get(account);
-    //
-    //   return ledgerValue
-    //     ? new BigNumber(ledgerValue.balance).plus(ledgerValue.frozen_balance)
-    //     : new BigNumber(0);
-    // }
     const chainId = await loadChainId(newTezos);
     const lambdaContract = KNOWN_LAMBDA_CONTRACTS.get(chainId);
 
