@@ -43,6 +43,11 @@ export interface WhitelistedBaker {
   freeSpace: BigNumber
 }
 
+export type TokenId = Pick<
+WhitelistedToken,
+'contractAddress' | 'fa2TokenId' | 'type'
+>;
+
 export type WhitelistedTokenMetadata = {
   decimals: number
   symbol: string

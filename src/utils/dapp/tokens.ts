@@ -1,45 +1,65 @@
-import { TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit, Wallet } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
+import memoizee from 'memoizee';
 import {
   MAINNET_TOKENS,
   SAVED_TOKENS_KEY,
   TESTNET_TOKENS,
+  TEZOS_TOKEN,
 } from '@utils/defaults';
 import {
-  WhitelistedToken, WhitelistedTokenPair, QSNetwork,
+  WhitelistedToken, WhitelistedTokenPair, QSNetwork, TokenId,
 } from '@utils/types';
 
 import { isContractAddress } from '@utils/validators';
 import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
+import { getContract } from './getStorageInfo';
+import { getAllowance } from './getAllowance';
 
 export const getSavedTokens = () => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
-export const getContractInfo = (address:string, tz:TezosToolkit) => tz
-  ?.contract
-  .at(address);
+// TODO: remove either getContract or this method
+export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
 
-export const isTokenFa2 = async (address:string, tz:TezosToolkit) => {
-  if (await isContractAddress(address) === true) {
-    let type;
-    try {
-      type = await getContractInfo(address, tz);
-    } catch (e) {
-      type = null;
+export const isTokenFa2 = memoizee(
+  async (address:string, tz:TezosToolkit) => {
+    if (await isContractAddress(address) === true) {
+      let type;
+      try {
+        type = await getContractInfo(address, tz);
+      } catch (e) {
+        type = null;
+      }
+      if (!type) return false;
+      return !!type.methods.update_operators;
     }
-    if (!type) return false;
-    return !!type.methods.update_operators;
-  }
-  return false;
-};
+    return false;
+  },
+  { promise: true },
+);
 
 export const getTokens = async (
   network:QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(network.id === 'florencenet' ? TESTNET_TOKENS : MAINNET_TOKENS))
+) => fetch(ipfsToHttps(network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
-    let res = [];
+    let res: any[] = [];
     if (json.tokens?.length !== 0) {
       res = json.tokens;
+    }
+    if (!res.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
+      res.unshift({
+        network: network.id,
+        type: 'fa1.2',
+        contractAddress: 'tez',
+        metadata: {
+          decimals: 6,
+          name: 'Tezos',
+          symbol: 'TEZ',
+          thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
+        },
+      });
     }
     if (addTokensFromLocalStorage) {
       res = [...getSavedTokens(), ...res];
@@ -67,3 +87,84 @@ export const mergeTokensToPair = (
   const res = { token1: tokens1[0], token2: tokens2[0] } as WhitelistedTokenPair;
   return [res];
 };
+
+export const getWalletContract = memoizee(
+  (wallet: Wallet, address: string) => wallet.at(address),
+  { promise: true },
+);
+
+export const makeAllowanceTransfersParams = memoizee(
+  async (
+    tezos: TezosToolkit,
+    token: TokenId,
+    accountPkh: string,
+    spender: string,
+    amount: BigNumber,
+  ) => {
+    if (token.type === 'fa2' || token.contractAddress === TEZOS_TOKEN.contractAddress) {
+      return [];
+    }
+    const tokenContract = await getWalletContract(tezos.wallet, token.contractAddress);
+    const allowance = await getAllowance(tezos, token.contractAddress, accountPkh, spender);
+    const setAllowanceTransferParams = tokenContract
+      .methods.approve(spender, amount).toTransferParams();
+    if (allowance.gt(0)) {
+      return [
+        tokenContract.methods.approve(spender, 0).toTransferParams(),
+        setAllowanceTransferParams,
+      ];
+    }
+    return [setAllowanceTransferParams];
+  },
+  { promise: true, maxAge: 5000 },
+);
+
+export const makeAddOperatorsTransferMethod = memoizee(
+  async (
+    tezos: TezosToolkit,
+    accountPkh: string,
+    tokenAddress: string,
+    tokensIdsOperators: Record<number, string[]>,
+  ) => {
+    const tokenContract = await getWalletContract(tezos.wallet, tokenAddress);
+
+    return tokenContract.methods.update_operators(
+      Object.entries(tokensIdsOperators).map(
+        ([tokenId, operators]) => operators.map(
+          (operator) => ({
+            add_operator: {
+              owner: accountPkh,
+              operator,
+              token_id: +tokenId,
+            },
+          }),
+        ),
+      ).flat(),
+    );
+  },
+);
+
+export const makeRemoveOperatorsTransferMethod = memoizee(
+  async (
+    tezos: TezosToolkit,
+    accountPkh: string,
+    tokenAddress: string,
+    tokensIdsOperators: Record<number, string[]>,
+  ) => {
+    const tokenContract = await getWalletContract(tezos.wallet, tokenAddress);
+
+    return tokenContract.methods.update_operators(
+      Object.entries(tokensIdsOperators).map(
+        ([tokenId, operators]) => operators.map(
+          (operator) => ({
+            remove_operator: {
+              owner: accountPkh,
+              operator,
+              token_id: +tokenId,
+            },
+          }),
+        ),
+      ).flat(),
+    );
+  },
+);
