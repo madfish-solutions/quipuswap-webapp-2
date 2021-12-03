@@ -1,5 +1,10 @@
 import React, { useContext, useEffect } from 'react';
-import { ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
+import {
+  Background,
+  ColorModes,
+  ToastWrapper,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import { NextSeo } from 'next-seo';
 import Script from 'next/script';
 import cx from 'classnames';
@@ -10,7 +15,6 @@ import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
 import { WalletModal } from '@components/modals/WalletModal';
 import { AccountModal } from '@components/modals/AccountModal';
-import { Background } from '@components/svg/Background';
 
 import s from './BaseLayout.module.sass';
 

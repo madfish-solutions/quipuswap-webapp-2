@@ -11,6 +11,7 @@ import {
   Button,
   Slippage,
   SwapButton,
+  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
@@ -19,7 +20,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
-  QSMainNet,
   SwapFormValues,
   TokenDataMap,
   WhitelistedToken,
@@ -50,7 +50,6 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -115,7 +114,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     connectWalletModalOpen,
     closeConnectWalletModal,
   } = useConnectModalsState();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [fee, setFee] = useState<BigNumber>();

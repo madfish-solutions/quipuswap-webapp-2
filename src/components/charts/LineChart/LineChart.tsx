@@ -9,9 +9,9 @@ import {
   Card,
   Preloader,
   CardHeader,
+  ColorModes,
   CardContent,
   PairChartInfo,
-  ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { createChart, IChartApi } from 'lightweight-charts';

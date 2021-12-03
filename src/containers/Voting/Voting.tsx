@@ -24,7 +24,6 @@ import {
 } from '@utils/dapp';
 import {
   VoterType,
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken,
@@ -168,7 +167,7 @@ export const Voting: React.FC<VotingProps> = ({
         handleErrorToast,
         tezos,
         accountPkh,
-        network.id as QSMainNet,
+        network.id,
       );
     }
     // eslint-disable-next-line
