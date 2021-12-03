@@ -15,7 +15,7 @@ import {
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSNetwork, WhitelistedBaker, WhitelistedToken,
+  QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 import {
   getContractInfo, getTokens, saveCustomToken,
@@ -342,13 +342,13 @@ function useDApp() {
           }));
           return null;
         }
-        const token : WhitelistedToken = {
+        const token: WhitelistedTokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
           fa2TokenId: !isFa2 ? undefined : tokenId || 0,
           network: network.id,
-        } as WhitelistedToken;
+        };
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
@@ -361,7 +361,7 @@ function useDApp() {
     [tezos, network],
   );
 
-  const addCustomToken = useCallback((token:WhitelistedToken) => {
+  const addCustomToken = useCallback((token:WhitelistedTokenWithQSNetworkType) => {
     saveCustomToken(token);
     setState((prevState) => ({
       ...prevState,
@@ -372,7 +372,7 @@ function useDApp() {
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
-      if (isContractAddress(address)) {
+      if (await isContractAddress(address)) {
         setState((prevState) => ({
           ...prevState,
           searchBakers: { loading: true, data: [] },

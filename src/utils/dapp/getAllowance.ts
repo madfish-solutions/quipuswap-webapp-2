@@ -9,7 +9,7 @@ const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
 });
 
-export const getAllowance =  async (
+export const getAllowance = async (
   tezos: TezosToolkit,
   contractAddress: string,
   owner: string,
@@ -22,13 +22,13 @@ export const getAllowance =  async (
 
   try {
     const value = await contract.views.getAllowance(owner, receiver).read(lambdaContract);
-    
+
     if (!(value instanceof BigNumber) || !value.isFinite()) {
       return new BigNumber(0);
     }
-    
+
     return value;
   } catch {
     return new BigNumber(0);
   }
-}
+};

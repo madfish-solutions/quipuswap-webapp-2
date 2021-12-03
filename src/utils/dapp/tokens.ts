@@ -8,11 +8,11 @@ import {
   TEZOS_TOKEN,
 } from '@utils/defaults';
 import {
-  WhitelistedToken, 
-  WhitelistedTokenPair, 
-  QSNetwork, 
-  TokenId, 
-  WhitelistedTokenWithQSNetwork,
+  WhitelistedToken,
+  WhitelistedTokenPair,
+  QSNetwork,
+  TokenId,
+  WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 
 import { isContractAddress } from '@utils/validators';
@@ -20,7 +20,7 @@ import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getContract } from './getStorageInfo';
 import { getAllowance } from './getAllowance';
 
-export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetwork> => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
+export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
 // TODO: remove either getContract or this method
 export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
@@ -33,9 +33,8 @@ export const isTokenFa2 = memoizee(
       const type = await getContractInfo(address, tz);
       return !!type.methods.update_operators;
     } catch (e) {
-      return false
-    }     
-
+      return false;
+    }
   },
   { promise: true },
 );
@@ -48,9 +47,8 @@ export const isTokenFa12 = memoizee(
       const type = await getContractInfo(address, tz);
       return !!type.methods.approve;
     } catch (e) {
-      return false
-    }     
-
+      return false;
+    }
   },
   { promise: true },
 );
@@ -61,13 +59,13 @@ export const getTokens = async (
 ) => fetch(ipfsToHttps(network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
-    let tokens: Array<WhitelistedTokenWithQSNetwork> = [];
+    let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
     if (json.tokens?.length !== 0) {
       tokens = json.tokens;
     }
     if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
       tokens.unshift({
-        network,
+        network: network.id,
         type: 'fa1.2',
         contractAddress: 'tez',
         metadata: {
@@ -85,11 +83,11 @@ export const getTokens = async (
   })
   .catch(() => ([]));
 
-export const saveCustomToken = (token:WhitelistedTokenWithQSNetwork) => {
+export const saveCustomToken = (token:WhitelistedTokenWithQSNetworkType) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
     JSON.stringify([token, ...getSavedTokens()
-      .filter((x:WhitelistedTokenWithQSNetwork) => !isTokenEqual(x, token))]),
+      .filter((x:WhitelistedTokenWithQSNetworkType) => !isTokenEqual(x, token))]),
   );
 };
 
@@ -110,7 +108,7 @@ export const getWalletContract = memoizee(
   { promise: true },
 );
 
-export const getAllowanceTransferParams =  async (
+export const getAllowanceTransferParams = async (
   tezos: TezosToolkit,
   token: TokenId,
   accountPkh: string,
@@ -131,7 +129,7 @@ export const getAllowanceTransferParams =  async (
     ];
   }
   return [setAllowanceTransferParams];
-}
+};
 
 export const makeAddOperatorsTransferMethod = async (
   tezos: TezosToolkit,
@@ -152,9 +150,9 @@ export const makeAddOperatorsTransferMethod = async (
           },
         }),
       ),
-    )
+    ),
   );
-}
+};
 
 export const makeRemoveOperatorsTransferMethod = memoizee(
   async (
@@ -176,7 +174,7 @@ export const makeRemoveOperatorsTransferMethod = memoizee(
             },
           }),
         ),
-      )
+      ),
     );
   },
 );
