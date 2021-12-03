@@ -34,6 +34,8 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
+export type WhitelistedTokenWithQSNetwork = WhitelistedToken & { network : QSNetwork }
+
 export type TokenId = Pick<
 WhitelistedToken,
 'contractAddress' | 'fa2TokenId' | 'type'
