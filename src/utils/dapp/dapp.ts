@@ -18,7 +18,7 @@ import {
   QSNetwork, WhitelistedBaker, WhitelistedToken, WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 import {
-  getContractInfo, getTokens, saveCustomToken,
+  getTokens, saveCustomToken,
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
@@ -29,6 +29,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getContract } from './getStorageInfo';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -322,7 +323,7 @@ function useDApp() {
         }));
         let type;
         try {
-          type = await getContractInfo(address, tezos!!);
+          type = await getContract(tezos!, address);
         } catch (e) {
           type = null;
         }

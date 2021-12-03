@@ -22,15 +22,12 @@ import { getAllowance } from './getAllowance';
 
 export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
 
-// TODO: remove either getContract or this method
-export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
-
 export const isTokenFa2 = memoizee(
   async (address:string, tz:TezosToolkit) => {
     if (await isContractAddress(address) !== true) return false;
 
     try {
-      const type = await getContractInfo(address, tz);
+      const type = await getContract(tz, address);
       return !!type.methods.update_operators;
     } catch (e) {
       return false;
@@ -44,7 +41,7 @@ export const isTokenFa12 = memoizee(
     if (await isContractAddress(address) !== true) return false;
 
     try {
-      const type = await getContractInfo(address, tz);
+      const type = await getContract(tz, address);
       return !!type.methods.approve;
     } catch (e) {
       return false;
@@ -77,7 +74,7 @@ export const getTokens = async (
       });
     }
     if (addTokensFromLocalStorage) {
-      tokens = [...getSavedTokens(), ...tokens];
+      tokens = getSavedTokens().concat(tokens);
     }
     return tokens;
   })
