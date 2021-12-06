@@ -37,6 +37,9 @@ export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
+    if (typeof contractOrAddress === 'string' && (isContractAddress(contractOrAddress) !== true)) {
+      return undefined;
+    }
     const contract = typeof contractOrAddress === 'string'
       ? await getContract(tz, contractOrAddress)
       : contractOrAddress;
