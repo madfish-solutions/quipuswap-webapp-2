@@ -20,7 +20,12 @@ import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getContract } from './getStorageInfo';
 import { getAllowance } from './getAllowance';
 
-export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> => (typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : []);
+export const getSavedTokens = (): Array<
+WhitelistedTokenWithQSNetworkType
+> => (typeof window !== undefined
+  ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]')
+  : []
+);
 
 export const isTokenFa2 = memoizee(
   async (address:string, tz:TezosToolkit) => {
@@ -59,6 +64,19 @@ export const getTokens = async (
     let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
     if (json.tokens?.length !== 0) {
       tokens = json.tokens;
+    }
+    if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
+      tokens.unshift({
+        network: network.id,
+        type: 'fa1.2',
+        contractAddress: 'tez',
+        metadata: {
+          decimals: 6,
+          name: 'Tezos',
+          symbol: 'TEZ',
+          thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
+        },
+      });
     }
     if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
       tokens.unshift({
