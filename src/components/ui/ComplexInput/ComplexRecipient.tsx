@@ -10,10 +10,10 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import s from './ComplexInput.module.sass';
 
 type ComplexRecipientProps = {
-  className?: string,
-  label?:string,
-  error?: string
-  handleInput: (value: string) => void
+  className?: string;
+  label?: string;
+  error?: string;
+  handleInput: (value: string) => void;
 } & React.HTMLProps<HTMLTextAreaElement>;
 
 const modeClass = {
@@ -53,10 +53,8 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
 
   const handlePaste = async () => {
     try {
-      handleInput(
-        await navigator.clipboard.readText(),
-      );
-    } catch (err) {
+      handleInput(await navigator.clipboard.readText());
+    } catch (err: any) {
       updateToast({
         type: 'error',
         render: `${err.name}: ${err.message}`,
@@ -67,17 +65,13 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   return (
     // eslint-disable-next-line max-len
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div
-      className={compoundClassName}
-      onClick={focusInput}
-    >
+    <div className={compoundClassName} onClick={focusInput}>
       {label && (
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
       )}
       <div className={s.background}>
-
         <div className={s.shape}>
           <TextareaAutosize
             minRows={1}
@@ -102,7 +96,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           {t('common|Paste')}
         </Button>
       </div>
-      {!readOnly && (<ComplexError error={error} />)}
+      {!readOnly && <ComplexError error={error} />}
     </div>
   );
 };
