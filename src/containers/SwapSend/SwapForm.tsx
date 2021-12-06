@@ -11,6 +11,7 @@ import {
   Button,
   Slippage,
   SwapButton,
+  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
@@ -50,7 +51,6 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 

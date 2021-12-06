@@ -5,6 +5,7 @@ import {
   Button,
   Tooltip,
   CardCell,
+  ExternalLink,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
@@ -17,7 +18,6 @@ import {
 } from '@utils/helpers';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { ExternalLink } from '@components/svg/ExternalLink';
 
 import s from '@styles/CommonContainer.module.sass';
 
