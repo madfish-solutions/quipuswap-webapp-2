@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   ApolloClient,
   ApolloProvider,
@@ -6,9 +6,9 @@ import {
   HttpLink,
   InMemoryCache,
   defaultDataIdFromObject,
-} from "@apollo/client";
+} from '@apollo/client';
 
-import { APOLLO_CLIENT_ENDPOINT } from "@utils/defaults";
+import { APOLLO_CLIENT_ENDPOINT } from '@utils/defaults';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -16,8 +16,7 @@ const cache = new InMemoryCache({
   dataIdFromObject(responseObject) {
     // eslint-disable-next-line no-underscore-dangle
     switch (responseObject.__typename) {
-      // @ts-ignore
-      case "Token":
+      case 'Token':
         return `Token:${responseObject.id}:${responseObject.tokenId}`;
       default:
         return defaultDataIdFromObject(responseObject);
@@ -27,7 +26,7 @@ const cache = new InMemoryCache({
 
 function createApolloClient() {
   return new ApolloClient({
-    ssrMode: typeof window === "undefined", // set to true for SSR
+    ssrMode: typeof window === 'undefined', // set to true for SSR
     link: new HttpLink({
       uri: APOLLO_CLIENT_ENDPOINT,
     }),
@@ -47,7 +46,7 @@ function initializeApollo(initialState: any = null) {
   }
 
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === "undefined") return localApolloClient;
+  if (typeof window === 'undefined') return localApolloClient;
 
   // Create the Apollo Client once in the client
   if (!globalApolloClient) globalApolloClient = localApolloClient;
@@ -75,9 +74,9 @@ export const withApollo =
       );
     };
     // Set the correct displayName in development
-    if (process.env.NODE_ENV !== "production") {
+    if (process.env.NODE_ENV !== 'production') {
       const displayName =
-        PageComponent.displayName || PageComponent.name || "Component";
+        PageComponent.displayName || PageComponent.name || 'Component';
       WithApollo.displayName = `withApollo(${displayName})`;
     }
     if (ssr || PageComponent.getInitialProps) {
@@ -94,7 +93,7 @@ export const withApollo =
           pageProps = await PageComponent.getInitialProps(ctx);
         }
         // Only on the server:
-        if (typeof window === "undefined") {
+        if (typeof window === 'undefined') {
           // When redirecting, the response is finished.
           // No point in continuing to render
           if (ctx.res && ctx.res.finished) {
@@ -105,7 +104,7 @@ export const withApollo =
             try {
               // Run all GraphQL queries
               const { getDataFromTree } = await import(
-                "@apollo/client/react/ssr"
+                '@apollo/client/react/ssr'
               );
               await getDataFromTree(
                 <AppTree {...pageProps} apolloClient={apolloClient} />
@@ -115,7 +114,7 @@ export const withApollo =
               // Handle them in components via the data.error prop:
               // https://www.apollographql.com/docs/react/api/react-apollo.html#graphql-query-data-error
               // eslint-disable-next-line no-console
-              console.error("Error while running `getDataFromTree`", error);
+              console.error('Error while running `getDataFromTree`', error);
             }
             // getDataFromTree does not call componentWillUnmount
             // head side effect therefore need to be cleared manually
