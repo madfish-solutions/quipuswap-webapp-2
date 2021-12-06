@@ -4,19 +4,25 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Pen,
   Tabs,
   Bage,
+  Logo,
   Route,
   Input,
   Modal,
+  Search,
   Button,
   Tooltip,
+  Chevron,
   Slippage,
   SelectUI,
   Switcher,
   Timeleft,
   SwapCell,
   BakerCell,
+  MenuClosed,
+  MenuOpened,
   CurrencyAmount,
   ChooseListCell,
   ColorModeSwitcher,
@@ -43,12 +49,6 @@ import {
 import { TokensModal } from '@components/modals/TokensModal';
 import { FarmTable } from '@components/tables/FarmTable';
 import { PoolTable } from '@components/tables/PoolTable';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
-import { Logo } from '@components/svg/Logo';
-import { Pen } from '@components/svg/Pen';
-import Chevron from '@icons/Chevron.svg';
-import Search from '@icons/Search.svg';
 
 import s from '@styles/UiKit.module.sass';
 
