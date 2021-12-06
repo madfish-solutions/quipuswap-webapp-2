@@ -32,7 +32,6 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
-  QSMainNet,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -118,7 +117,7 @@ const RealForm:React.FC<VotingFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
