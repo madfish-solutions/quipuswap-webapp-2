@@ -21,8 +21,8 @@ import cx from 'classnames';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
-// import { Bage } from '@components/ui/Bage';
 
+import { toLocaleString } from '@utils/helpers/toLocaleString';
 import s from './PoolTable.module.sass';
 import { PoolCardItem } from './PoolCardItem';
 
@@ -107,10 +107,10 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <div className={s.links}>
           <CurrencyAmount
-            amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
+            amount={toLocaleString(fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
-              .toString()}
+              .toString())}
             currency="$"
             isLeftCurrency
             className={s.cardAmount}
@@ -129,10 +129,10 @@ export const PoolTable: React.FC<PoolTableProps> = ({
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
           <CurrencyAmount
-            amount={fromDecimals(new BigNumber(dataInside.tvl), 6)
+            amount={toLocaleString(fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
-              .toString()}
+              .toString())}
             currency="$"
             isLeftCurrency
             className={s.cardAmount}
