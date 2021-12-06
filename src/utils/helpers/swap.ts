@@ -12,7 +12,7 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
-  makeAllowanceTransfersParams,
+  getAllowanceTransferParams,
   makeRemoveOperatorsTransferMethod,
 } from '@utils/dapp';
 import { getTokenOutput } from './tokenToTokenDex';
@@ -146,7 +146,7 @@ export const getSwapTransferParams = async (
           ttdexSwapStepsParams = [];
           addFa2Operator(currentToken, id);
           swapsParams.push(
-            ...(await makeAllowanceTransfersParams(
+            ...(await getAllowanceTransferParams(
               tezos,
               currentToken,
               accountPkh,
@@ -180,7 +180,7 @@ export const getSwapTransferParams = async (
         } else {
           addFa2Operator(currentToken, id);
           swapsParams.push(
-            ...(await makeAllowanceTransfersParams(
+            ...(await getAllowanceTransferParams(
               tezos,
               currentToken,
               accountPkh,
@@ -198,7 +198,7 @@ export const getSwapTransferParams = async (
         ttdexSwapInput = currentDexInput;
         addFa2Operator(currentToken, ttDexAddress!);
         swapsParams.push(
-          ...(await makeAllowanceTransfersParams(
+          ...(await getAllowanceTransferParams(
             tezos,
             currentToken,
             accountPkh,
