@@ -3,13 +3,7 @@ import BigNumber from 'bignumber.js';
 
 export type QSMainNet =
   | 'mainnet'
-  | 'granadanet'
-  | 'florencenet'
-  | 'edo2net'
-  | 'edonet'
-  | 'delphinet'
-  | 'hangzhounet'
-  | 'carthagenet';
+  | 'hangzhounet';
 
 export interface QSNetwork {
   id: QSMainNet
@@ -42,7 +36,7 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
-export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSNetworkType };
+export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSMainNet };
 
 export type TokenId = Pick<
 WhitelistedToken,
