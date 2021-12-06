@@ -22,9 +22,10 @@ import {
   QSNetwork,
   WhitelistedBaker,
   WhitelistedToken,
+  WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 import {
-  getContractInfo, getTokens, saveCustomToken,
+  getTokens, saveCustomToken,
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
@@ -35,6 +36,7 @@ import {
   setNetwork,
   toBeaconNetworkType,
 } from './network';
+import { getContract } from './getStorageInfo';
 
 const michelEncoder = new MichelCodecPacker();
 const beaconWallet = typeof window === 'undefined' ? undefined : new BeaconWallet({
@@ -333,7 +335,7 @@ function useDApp() {
         }));
         let type;
         try {
-          type = await getContractInfo(address, tezos!);
+          type = await getContract(tezos!, address);
         } catch (e) {
           type = null;
         }
@@ -353,13 +355,13 @@ function useDApp() {
           }));
           return null;
         }
-        const token : WhitelistedToken = {
+        const token: WhitelistedTokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
           type: !isFa2 ? 'fa1.2' : 'fa2',
           fa2TokenId: !isFa2 ? undefined : tokenId || 0,
           network: network.id,
-        } as WhitelistedToken;
+        };
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: false, data: [token] },
@@ -372,7 +374,7 @@ function useDApp() {
     [tezos, network],
   );
 
-  const addCustomToken = useCallback((token:WhitelistedToken) => {
+  const addCustomToken = useCallback((token:WhitelistedTokenWithQSNetworkType) => {
     saveCustomToken(token);
     setState((prevState) => ({
       ...prevState,
