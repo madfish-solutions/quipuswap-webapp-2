@@ -1,10 +1,12 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-export type QSNetworkType = 'mainnet' | 'florencenet' | 'granadanet';
+export type QSMainNet =
+  | 'mainnet'
+  | 'hangzhounet';
 
 export interface QSNetwork {
-  id: QSNetworkType
+  id: QSMainNet
   connectType: 'default' | 'custom'
   name: string
   type: 'main' | 'test'
@@ -34,7 +36,7 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
-export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSNetworkType };
+export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSMainNet };
 
 export type TokenId = Pick<
 WhitelistedToken,

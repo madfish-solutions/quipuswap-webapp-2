@@ -11,7 +11,7 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@utils/defaults';
-import { QSNetworkType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { QSMainNet, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
   fromDecimals, isTokenEqual, toDecimals,
 } from '@utils/helpers';
@@ -31,7 +31,7 @@ export const asyncFindPairDex = async (
   setTokenPair:(pair:WhitelistedTokenPair) => void,
   tezos:TezosToolkit,
   accountPkh: string,
-  networkId: QSNetworkType,
+  networkId: QSMainNet,
   updateToast: (err:Error) => void,
 ) => {
   try {
@@ -65,7 +65,7 @@ export const asyncGetShares = async (
   currentTab: any,
   tezos: TezosToolkit,
   accountPkh: string,
-  networkId: QSNetworkType,
+  networkId: QSMainNet,
   updateToast: (err:Error) => void,
 ) => {
   let tokenPairValue = tokenPair;
@@ -126,7 +126,7 @@ type GetShareType = {
   token2: WhitelistedToken,
   dex: FoundDex,
   tezos: TezosToolkit,
-  networkId: QSNetworkType,
+  networkId: QSMainNet,
   updateToast: (err:Error) => void,
 };
 

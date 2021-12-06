@@ -58,7 +58,7 @@ export const isTokenFa12 = memoizee(
 export const getTokens = async (
   network:QSNetwork,
   addTokensFromLocalStorage?:boolean,
-) => fetch(ipfsToHttps(network.id === 'granadanet' ? TESTNET_TOKENS : MAINNET_TOKENS))
+) => fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS))
   .then((res) => res.json())
   .then((json) => {
     let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
