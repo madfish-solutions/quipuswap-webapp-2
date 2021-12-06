@@ -115,7 +115,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     connectWalletModalOpen,
     closeConnectWalletModal,
   } = useConnectModalsState();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [fee, setFee] = useState<BigNumber>();

@@ -9,10 +9,10 @@ import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 
 import {
-  QSMainNet,
   TokenDataMap,
   SwapFormValues,
   WhitelistedToken,
+  QSMainNet,
 } from '@utils/types';
 import {
   useTezos,
@@ -62,7 +62,7 @@ export const SwapSend: React.FC<SwapSendProps> = ({
   const exchangeRates = useExchangeRates();
   const network = useNetwork();
   const searchCustomToken = useSearchCustomTokens();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id as QSMainNet;
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);

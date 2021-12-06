@@ -7,8 +7,8 @@ import {
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
