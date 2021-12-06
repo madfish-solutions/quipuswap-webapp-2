@@ -3,13 +3,7 @@ import BigNumber from 'bignumber.js';
 
 export type QSMainNet =
   | 'mainnet'
-  | 'granadanet'
-  | 'florencenet'
-  | 'edo2net'
-  | 'edonet'
-  | 'delphinet'
-  | 'hangzhounet'
-  | 'carthagenet';
+  | 'hangzhounet';
 
 export interface QSNetwork {
   id: QSMainNet
