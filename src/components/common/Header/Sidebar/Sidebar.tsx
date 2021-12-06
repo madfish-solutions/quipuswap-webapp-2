@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import {
   Button,
+  Madfish,
   ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
@@ -9,7 +10,6 @@ import cx from 'classnames';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
-import { Madfish } from '@components/svg/Madfish';
 
 import { Navigation } from '../Navigation';
 import { Socials } from '../Socials';

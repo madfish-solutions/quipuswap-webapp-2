@@ -1,9 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Trans } from 'next-i18next';
-
-import { Earn } from '@components/svg/Opportunities/Earn';
-import { Farm } from '@components/svg/Opportunities/Farm';
-import { Trade } from '@components/svg/Opportunities/Trade';
+import { Earn, Farm, Trade } from '@quipuswap/ui-kit';
 
 type OpportunitiesCardsDataType = {
   id: number

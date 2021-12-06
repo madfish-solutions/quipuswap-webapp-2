@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import {
+  Copy,
   Modal,
   Button,
   ColorModes,
@@ -14,11 +15,10 @@ import {
 import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
-import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
+import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { CheckMark } from '@components/svg/CheckMark';
-import { Copy } from '@components/svg/Copy';
 
 import s from './AccountModal.module.sass';
 
