@@ -6,7 +6,7 @@ import {
   getTokenType,
   useNetwork,
 } from '@utils/dapp';
-import { QSNetworkType } from '@utils/types';
+import { QSMainNet } from '@utils/types';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { isValidTokenSlug } from '@utils/validators';
@@ -15,14 +15,14 @@ type TokensSlugs = [string, string];
 
 type InitialTokensValue = {
   slugs: TokensSlugs;
-  network: QSNetworkType;
+  network: QSMainNet;
 };
 
 export const useInitialTokens = (fromToSlug?: string) => {
   const network = useNetwork();
 
   const getInitialTokens = useCallback(
-    async (_key: string, currentNetworkId: QSNetworkType, tokensSlug: string = ''): Promise<InitialTokensValue> => {
+    async (_key: string, currentNetworkId: QSMainNet, tokensSlug: string = ''): Promise<InitialTokensValue> => {
       const currentNetworkFallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
         getTokenSlug(networksDefaultTokens[currentNetworkId]),
@@ -66,7 +66,7 @@ export const useInitialTokens = (fromToSlug?: string) => {
           } : undefined;
         }),
       );
-      const networksPriorityOrder: QSNetworkType[] = ['mainnet', currentNetworkId];
+      const networksPriorityOrder: QSMainNet[] = ['mainnet', currentNetworkId];
       const searchResult = tokensSearchResults
         .filter((value): value is InitialTokensValue => value !== undefined)
         .sort(

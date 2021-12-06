@@ -10,15 +10,14 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import {
   APP_NAME,
   BASE_URL,
-  FLORENCENET_NETWORK,
-  GRANADANET_NETWORK,
+  HANGZHOUNET_NETWORK,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK,
 } from '@utils/defaults';
 import { getBakers } from '@utils/dapp/bakers';
 import {
-  QSNetworkType,
+  QSMainNet,
   QSNetwork,
   WhitelistedBaker,
   WhitelistedToken,
@@ -130,9 +129,8 @@ export type DAppType = {
   searchBakers: { data:WhitelistedBaker[], loading:boolean, error?:string },
 };
 
-export const fallbackToolkits: Record<QSNetworkType, TezosToolkit> = {
-  florencenet: new TezosToolkit(FLORENCENET_NETWORK.rpcBaseURL),
-  granadanet: new TezosToolkit(GRANADANET_NETWORK.rpcBaseURL),
+export const fallbackToolkits: Record<QSMainNet, TezosToolkit> = {
+  hangzhounet: new TezosToolkit(HANGZHOUNET_NETWORK.rpcBaseURL),
   mainnet: new TezosToolkit(MAINNET_NETWORK.rpcBaseURL),
 };
 

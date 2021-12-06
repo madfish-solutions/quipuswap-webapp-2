@@ -14,7 +14,7 @@ import { Trans } from 'next-i18next';
 
 import { getTokenSlug } from '@utils/helpers';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
-import { QSNetworkType } from '@utils/types';
+import { QSMainNet } from '@utils/types';
 
 interface LinkInterface {
   id: number
@@ -28,7 +28,7 @@ interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[]
 }
 
-export const makeNavigationData = (network: QSNetworkType): NavigationDataProps[] => [
+export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] => [
   {
     id: 0,
     href: '/',

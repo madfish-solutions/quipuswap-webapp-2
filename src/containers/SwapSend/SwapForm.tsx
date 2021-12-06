@@ -50,7 +50,7 @@ import {
 import {
   DexPair,
   SwapFormValues,
-  QSNetworkType,
+  QSMainNet,
   WhitelistedToken,
 } from '@utils/types';
 
@@ -67,7 +67,7 @@ type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
   knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
-  matchingNetwork?: QSNetworkType;
+  matchingNetwork?: QSMainNet;
   initialFrom?: string;
   initialTo?: string;
 };
