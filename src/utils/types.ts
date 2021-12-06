@@ -34,6 +34,13 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata
 }
 
+export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSNetworkType };
+
+export type TokenId = Pick<
+WhitelistedToken,
+'contractAddress' | 'fa2TokenId' | 'type'
+>;
+
 export interface WhitelistedBaker {
   name: string,
   address: string,
@@ -42,11 +49,6 @@ export interface WhitelistedBaker {
   fee: number,
   freeSpace: BigNumber
 }
-
-export type TokenId = Pick<
-WhitelistedToken,
-'contractAddress' | 'fa2TokenId' | 'type'
->;
 
 export type WhitelistedTokenMetadata = {
   decimals: number
