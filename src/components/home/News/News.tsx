@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  Card,
   SliderUI,
   ColorModes,
   ColorThemeContext,
@@ -10,6 +9,7 @@ import cx from 'classnames';
 
 import { Section } from '@components/home/Section';
 
+import { responsive } from '@components/home/News/News.styles';
 import { NewsCard } from './NewsCard';
 import { NewsData } from './content';
 import s from './News.module.sass';
@@ -39,52 +39,10 @@ export const News: React.FC<NewsProps> = ({
       <SliderUI
         items={4}
         className={s.uncenter}
-        responsive={[
-          {
-            breakpoint: 1224,
-            settings: {
-              slidesToShow: 4,
-              slidesToScroll: 4,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 900,
-            settings: {
-              slidesToShow: 3,
-              slidesToScroll: 3,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 700,
-            settings: {
-              slidesToShow: 2,
-              slidesToScroll: 2,
-              infinite: true,
-              dots: true,
-            },
-          },
-          {
-            breakpoint: 500,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: true,
-            },
-          },
-        ]}
+        responsive={responsive}
       >
-        {NewsData.map(({ id, sponsored }) => (
-          <Card key={id} className={s.root} contentClassName={s.content}>
-            <NewsCard
-              className={cx(s.card, modeClass[colorThemeMode])}
-              sponsored={sponsored}
-            />
-          </Card>
+        {NewsData.map((news) => (
+          <NewsCard key={news.id} className={cx(s.card, modeClass[colorThemeMode])} news={news} />
         ))}
       </SliderUI>
 

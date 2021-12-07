@@ -11,7 +11,6 @@ type OpportunitiesCardsDataType = {
     label: ReactNode
     href?: string
     disabled?: boolean
-    external?: boolean
   }
 };
 
