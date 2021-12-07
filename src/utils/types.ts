@@ -1,6 +1,9 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+export type Undefined<T> = T | undefined;
+export type Nullable<T> = T | null; // MayBe<T>
+
 export type QSMainNet = 'mainnet' | 'granadanet' | 'florencenet';
 
 type QSNetworkType =
@@ -145,10 +148,16 @@ export type WhitelistedStake = {
   analyticsLink: string
 };
 
+export enum VotingMethod {
+  FIRST = 'FIRST',
+  SECOND = 'SECOND',
+}
+
 export type VoteFormValues = {
   balance1: number
   selectedBaker: string
-  method:'first' | 'second'
+  method: VotingMethod
+  currentBacker?: string
 };
 
 export type PoolTableType = {

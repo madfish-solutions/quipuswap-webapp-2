@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
@@ -47,7 +49,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <div className={s.inputs}>
-      <Field name='search'>
+      <Field name="search">
         {({ input, meta }) => (
           <>
             <Input
@@ -62,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       </Field>
       {isSecondInput && (
-        <Field name='tokenId' validate={validateMinMax(0, 100)}>
+        <Field name="tokenId" validate={validateMinMax(0, 100)}>
           {({ input, meta }) => (
             <NumberInput
               {...input}
@@ -76,13 +78,13 @@ export const Header: React.FC<HeaderProps> = ({
               onIncrementClick={() => {
                 form.mutators.setValue(
                   'tokenId',
-                  +input.value + 1 > 100 ? 100 : +input.value + 1
+                  +input.value + 1 > 100 ? 100 : +input.value + 1,
                 );
               }}
               onDecrementClick={() => {
                 form.mutators.setValue(
                   'tokenId',
-                  +input.value - 1 < 1 ? 1 : +input.value - 1
+                  +input.value - 1 < 1 ? 1 : +input.value - 1,
                 );
               }}
             />

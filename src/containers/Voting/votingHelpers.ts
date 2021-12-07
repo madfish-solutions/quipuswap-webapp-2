@@ -1,6 +1,11 @@
 import {
   batchify,
-  estimateReward, findDex, FoundDex, getLiquidityShare, vetoCurrentBaker, voteForBaker,
+  estimateReward,
+  findDex,
+  FoundDex,
+  getLiquidityShare,
+  vetoCurrentBaker,
+  voteForBaker,
 } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
@@ -10,6 +15,7 @@ import {
   VoterType,
   VoteFormValues,
   WhitelistedTokenPair,
+  VotingMethod,
 } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -20,7 +26,7 @@ export const hanldeTokenPairSelect = (
   setDex: (dex: FoundDex) => void,
   setRewards: (reward: string) => void,
   setVoter: (voter: VoterType) => any,
-  updateToast: (err:any) => void,
+  updateToast: (err: any) => void,
   tezos?: TezosToolkit | null,
   accountPkh?: string | null,
   networkId?: QSMainNet,
@@ -31,7 +37,7 @@ export const hanldeTokenPairSelect = (
       return;
     }
     try {
-      const secondAsset: { contract: string, id?: number } = {
+      const secondAsset: { contract: string; id?: number } = {
         contract: pair.token2.contractAddress,
         id: pair.token2.fa2TokenId,
       };
@@ -40,7 +46,10 @@ export const hanldeTokenPairSelect = (
       const asyncRewards = async () => {
         if (!accountPkh) return;
         const res = await estimateReward(tezos, foundDex, accountPkh);
-        const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
+        const rewards = fromDecimals(
+          res,
+          TEZOS_TOKEN.metadata.decimals,
+        ).toString();
         setRewards(rewards);
       };
       asyncRewards();
@@ -61,11 +70,20 @@ export const hanldeTokenPairSelect = (
       if (accountPkh) {
         const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
 
-        frozenBalance = fromDecimals(share.frozen, TEZOS_TOKEN.metadata.decimals).toString();
-        totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
+        frozenBalance = fromDecimals(
+          share.frozen,
+          TEZOS_TOKEN.metadata.decimals,
+        ).toString();
+        totalBalance = fromDecimals(
+          share.total,
+          TEZOS_TOKEN.metadata.decimals,
+        ).toString();
       }
       const res = {
-        ...pair, frozenBalance, balance: totalBalance, dex: foundDex,
+        ...pair,
+        frozenBalance,
+        balance: totalBalance,
+        dex: foundDex,
       };
       setTokenPair(res);
     } catch (err) {
@@ -76,13 +94,103 @@ export const hanldeTokenPairSelect = (
 };
 
 type SubmitProps = {
-  tezos:TezosToolkit,
-  values:VoteFormValues,
-  dex?: FoundDex,
+  tezos: TezosToolkit;
+  values: VoteFormValues;
+  dex?: FoundDex;
+  tab: string;
+  updateToast: any;
+  handleErrorToast: (e: any) => void;
+  getBalance: () => void;
+};
+
+interface IBatchParamsAndToastText {
+  text: string;
+  params: Array<TransferParams>;
+}
+
+const vote = async (
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  baker: string,
+  balance: number,
+): Promise<IBatchParamsAndToastText> => {
+  const text = 'Vote completed!';
+  const params = await voteForBaker(
+    tezos,
+    dex,
+    baker,
+    toDecimals(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals),
+  );
+
+  return {
+    text,
+    params,
+  };
+};
+
+const unvote = async (
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  baker: string,
+): Promise<IBatchParamsAndToastText> => {
+  const text = 'Unvote completed!';
+  const params = await voteForBaker(tezos, dex, baker, new BigNumber(0));
+
+  return {
+    text,
+    params,
+  };
+};
+
+const veto = async (
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  balance: number,
+): Promise<IBatchParamsAndToastText> => {
+  const text = 'Veto completed!';
+  const params = await vetoCurrentBaker(
+    tezos,
+    dex,
+    toDecimals(new BigNumber(balance), TEZOS_TOKEN.metadata.decimals),
+  );
+
+  return {
+    text,
+    params,
+  };
+};
+
+const unveto = async (
+  tezos: TezosToolkit,
+  dex: FoundDex,
+): Promise<IBatchParamsAndToastText> => {
+  const text = 'Remove veto completed!';
+  const params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
+
+  return {
+    text,
+    params,
+  };
+};
+
+const getBatchParamsAndToastText = async (
   tab: string,
-  updateToast:any,
-  handleErrorToast:(e:any) => void,
-  getBalance:() => void,
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  values: VoteFormValues,
+): Promise<IBatchParamsAndToastText> => {
+  const { method, balance1, selectedBaker } = values;
+
+  if (method === VotingMethod.FIRST) {
+    if (tab === 'vote') {
+      return vote(tezos, dex, selectedBaker, balance1);
+    }
+    return veto(tezos, dex, balance1);
+  }
+  if (tab === 'vote') {
+    return unvote(tezos, dex, values.currentBacker!);
+  }
+  return unveto(tezos, dex);
 };
 
 export const submitForm = async ({
@@ -93,50 +201,19 @@ export const submitForm = async ({
   handleErrorToast,
   updateToast,
   getBalance,
-}:SubmitProps) => {
-  let params:TransferParams[] = [];
-  const { method, balance1, selectedBaker } = values;
+}: SubmitProps) => {
   if (!dex) return;
-  let updateToastText = '';
-  if (method !== 'first') {
-    try {
-      if (tab === 'vote') {
-        updateToastText = 'Vote completed!';
-        params = await voteForBaker(
-          tezos,
-          dex,
-          selectedBaker,
-          toDecimals(new BigNumber(balance1), TEZOS_TOKEN.metadata.decimals),
-        );
-      } else {
-        updateToastText = 'Veto completed!';
-        params = await vetoCurrentBaker(
-          tezos,
-          dex,
-          toDecimals(new BigNumber(balance1), TEZOS_TOKEN.metadata.decimals),
-        );
-      }
-    } catch (e) {
-      handleErrorToast(e);
-    }
-  } else {
-    try {
-      if (tab === 'vote') {
-        updateToastText = 'Unvote completed!';
-        params = await voteForBaker(tezos, dex, values.selectedBaker, new BigNumber(0));
-      } else {
-        updateToastText = 'Remove veto completed!';
-        params = await vetoCurrentBaker(tezos, dex, new BigNumber(0));
-      }
-    } catch (e) {
-      handleErrorToast(e);
-    }
-  }
+
   try {
-    const op = await batchify(
-      tezos.wallet.batch([]),
-      params,
-    ).send();
+    const { params, text: updateToastText } = await getBatchParamsAndToastText(
+      tab,
+      tezos,
+      dex,
+      values,
+    );
+
+    const op = await batchify(tezos.wallet.batch([]), params).send();
+
     await op.confirmation();
     // handleSuccessToast();
     updateToast({
@@ -150,17 +227,14 @@ export const submitForm = async ({
 };
 
 export const submitWithdraw = async (
-  tezos:TezosToolkit,
-  voteParams:TransferParams[],
-  updateToast: (err:any) => void,
-  handleSuccessToast:any,
-  getBalance:() => void,
+  tezos: TezosToolkit,
+  voteParams: TransferParams[],
+  updateToast: (err: any) => void,
+  handleSuccessToast: any,
+  getBalance: () => void,
 ) => {
   try {
-    const op = await batchify(
-      tezos.wallet.batch([]),
-      voteParams,
-    ).send();
+    const op = await batchify(tezos.wallet.batch([]), voteParams).send();
     await op.confirmation();
     handleSuccessToast();
     getBalance();
