@@ -123,13 +123,13 @@ export const getSwapTransferParams = async (
       ) ** (new BigNumber(index).div(dexChain.length).toNumber());
       let currentDexInput = noSlippageToleranceOutputs[index]
         .times(prevSlippageToleranceQuotient)
-        .integerValue(BigNumber.ROUND_FLOOR);
+        .integerValue();
       if (currentDexInput.eq(0) && !noSlippageToleranceOutputs[index].eq(0)) {
         currentDexInput = new BigNumber(1);
       }
       let minOut = noSlippageToleranceOutputs[index + 1]
         .times(currentSlippageToleranceQuotient)
-        .integerValue(BigNumber.ROUND_FLOOR);
+        .integerValue(index === dexChain.length - 1 ? BigNumber.ROUND_FLOOR : undefined);
       if (minOut.eq(0) && !noSlippageToleranceOutputs[index + 1].eq(0)) {
         minOut = new BigNumber(1);
       }
