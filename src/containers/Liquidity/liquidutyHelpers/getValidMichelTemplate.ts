@@ -35,10 +35,13 @@ export const getValidMichelTemplate = ({
           },
           {
             prim: 'Right',
-            args: [
-              { bytes: tokenBAddressBytes },
-              { int: 0 },
-            ],
+            args: [{
+              prim: 'Pair',
+              args: [
+                { bytes: tokenBAddressBytes },
+                { int: 0 },
+              ],
+            }],
           },
         ],
       };

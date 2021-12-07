@@ -130,8 +130,28 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<string, string>([
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['granadanet', 'NetXxkAx4woPLyu'],
   ['hangzhounet', 'NetXZSsxBpMQeAT'],
 ]);
 
 export const TOKEN_TO_TOKEN_DEX = 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC';
+export const FA12_TOKEN:WhitelistedToken = {
+  type: 'fa1.2',
+  contractAddress: 'KT1Dr8Qf9at75uEvwN4QnGTNFfPMAr8KL4kK',
+  metadata: {
+    decimals: 6,
+    name: 'FA12 Token',
+    symbol: 'FA12',
+    thumbnailUri: 'https://smartpy.io/static/img/logo-only.svg',
+  },
+};
+export const TS_TOKEN:WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1CaWSNEnU6RR9ZMSSgD5tQtQDqdpw4sG83',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'TS',
+    name: 'TypeScript Token',
+    thumbnailUri: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
+  },
+};

@@ -33,8 +33,10 @@ import {
   TEZOS_TOKEN,
   QUIPU_TOKEN,
   TOKEN_TO_TOKEN_DEX,
+  TS_TOKEN,
+  FA12_TOKEN,
 } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
 
 import { LiquidityDetails } from '../LiquidityDetails';
@@ -76,8 +78,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const accountPkh = useAccountPkh();
 
   const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
-  const [tokenB, setTokenB] = useState(QUIPU_TOKEN);
+  const [tokenA, setTokenA] = useState(FA12_TOKEN);
+  const [tokenB, setTokenB] = useState(TS_TOKEN);
   const [tokenABalance, setTokenABalance] = useState<string>('0');
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
@@ -152,7 +154,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
       );
 
       if (userTokenABalanance && isMounted) {
-        setTokenABalance(userTokenABalanance.dividedBy(1_000_000).toFixed());
+        setTokenABalance(
+          fromDecimals(userTokenABalanance, tokenA.metadata.decimals)
+            .toFixed(tokenA.metadata.decimals),
+        );
       } else if (!userTokenABalanance && isMounted) {
         setTokenABalance('0');
       }
@@ -175,7 +180,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
       );
 
       if (userTokenBBalance && isMounted) {
-        setTokenBBalance(userTokenBBalance.dividedBy(1_000_000).toFixed());
+        setTokenBBalance(
+          fromDecimals(userTokenBBalance, tokenB.metadata.decimals)
+            .toFixed(tokenB.metadata.decimals),
+        );
       } else if (!userTokenBBalance && isMounted) {
         setTokenBBalance('0');
       }
