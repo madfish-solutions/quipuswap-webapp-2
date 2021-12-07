@@ -28,15 +28,17 @@ import {
 import { ALL_NETWORKS, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   fromDecimals,
-  getMaxInputRoute,
-  getMaxOutputRoute,
   getMaxTokenInput,
-  getRouteWithInput,
   getTokenIdFromSlug,
   getTokenOutput,
   getTokenSlug,
   swap,
 } from '@utils/helpers';
+import {
+  getMaxInputRoute,
+  getMaxOutputRoute,
+  getRouteWithInput,
+} from '@utils/routing';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { SwapForm } from './SwapForm';

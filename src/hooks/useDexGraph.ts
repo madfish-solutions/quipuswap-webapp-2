@@ -4,7 +4,8 @@ import constate from 'constate';
 
 import { useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
-import { DexGraph, getTokenSlug, shortize } from '@utils/helpers';
+import { getTokenSlug, shortize } from '@utils/helpers';
+import { DexGraph } from '@utils/routing';
 import { DexPair, WhitelistedToken } from '@utils/types';
 import useUpdateToast from '@hooks/useUpdateToast';
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
@@ -132,20 +133,26 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     ({ token1Pool, token2Pool }) => !token1Pool.eq(0) && !token2Pool.eq(0),
   ).reduce<DexGraph>(
     (graphPart, dexPair) => {
-      /* eslint-disable no-param-reassign */
       const token1Slug = getTokenSlug(dexPair.token1);
       const token2Slug = getTokenSlug(dexPair.token2);
-      if (!graphPart[token1Slug]) {
-        graphPart[token1Slug] = { edges: {} };
-      }
-      if (!graphPart[token2Slug]) {
-        graphPart[token2Slug] = { edges: {} };
-      }
-      graphPart[token1Slug].edges[token2Slug] = dexPair;
-      graphPart[token2Slug].edges[token1Slug] = dexPair;
+      const previousToken1Edges = graphPart[token1Slug]?.edges ?? {};
+      const previousToken2Edges = graphPart[token2Slug]?.edges ?? {};
 
-      return graphPart;
-    /* eslint-enable no-param-reassign */
+      return {
+        ...graphPart,
+        [token1Slug]: {
+          edges: {
+            ...previousToken1Edges,
+            [token2Slug]: dexPair,
+          },
+        },
+        [token2Slug]: {
+          edges: {
+            ...previousToken2Edges,
+            [token1Slug]: dexPair,
+          },
+        },
+      };
     },
     {},
   ),

@@ -35,18 +35,20 @@ import {
 } from '@utils/dapp';
 import { networksDefaultTokens, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
-  DexGraph,
   estimateSwapFee,
   fromDecimals,
   getPriceImpact,
-  getRouteWithInput,
-  getRouteWithOutput,
   getTokenInput,
   getTokenOutput,
   getTokenSlug,
   getWhitelistedTokenSymbol,
   slippageToBignum,
 } from '@utils/helpers';
+import {
+  DexGraph,
+  getRouteWithInput,
+  getRouteWithOutput,
+} from '@utils/routing';
 import {
   DexPair,
   SwapFormValues,
