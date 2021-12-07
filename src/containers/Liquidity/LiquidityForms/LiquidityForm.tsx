@@ -32,6 +32,7 @@ import {
   FACTORIES,
   TEZOS_TOKEN,
   QUIPU_TOKEN,
+  TOKEN_TO_TOKEN_DEX,
 } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Transactions } from '@components/svg/Transactions';
@@ -122,8 +123,8 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
 
           foundDex = await findDex(tezos, FACTORIES[networkId], token);
         } else {
-          const contract = await tezos.wallet.at('KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H');
-          const storage = await getStorageInfo(tezos, 'KT1SumF3C6ZRKHpDsctzbeqw9rMHQk1ATR4H');
+          const contract = await tezos.wallet.at(TOKEN_TO_TOKEN_DEX); // TODO: Create Promise.all
+          const storage = await getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
 
           foundDex = new FoundDex(contract, storage);
         }

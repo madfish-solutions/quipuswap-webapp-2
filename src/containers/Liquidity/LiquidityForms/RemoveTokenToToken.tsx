@@ -105,27 +105,50 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     const tokenBPerOneLp = pairData.tokenBPool
       .dividedBy(pairData.totalSupply);
 
-    if (tokenA.contractAddress < tokenB.contractAddress) {
-      setTokenAOutput(tokenAPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-      setTokenBOutput(tokenBPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
-    } else {
-      setTokenAOutput(tokenBPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
-      setTokenBOutput(tokenAPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-    }
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    const validTokenA = addresses?.addressA === tokenA.contractAddress
+      ? tokenA
+      : tokenB;
+    const validTokenB = addresses?.addressB === tokenB.contractAddress
+      ? tokenB
+      : tokenA;
+
+    setTokenAOutput(
+      tokenAPerOneLp
+        .multipliedBy(lpTokenInput)
+        .toFixed(validTokenA.metadata.decimals),
+    );
+    setTokenBOutput(
+      tokenBPerOneLp
+        .multipliedBy(lpTokenInput)
+        .toFixed(validTokenB.metadata.decimals),
+    );
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    const validTokenA = addresses?.addressA === tokenA.contractAddress
+      ? tokenA
+      : tokenB;
+    const validTokenB = addresses?.addressB === tokenB.contractAddress
+      ? tokenB
+      : tokenA;
+
     const shares = new BigNumber(lpTokenInput).multipliedBy(1_000_000);
-    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(1_000_000);
-    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(1_000_000);
+    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(10 ** validTokenA.metadata.decimals);
+    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(10 ** validTokenB.metadata.decimals);
+
+    const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
+    const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
 
     await dex.contract.methods.divest(
       pairId,
       tokenAOut,
       tokenBOut,
       shares,
+      timestamp.toString(),
     ).send();
 
     setLpTokenInput('');
