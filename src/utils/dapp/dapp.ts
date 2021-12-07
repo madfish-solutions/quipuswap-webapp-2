@@ -28,7 +28,7 @@ import {
 } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
-import { isContractAddress } from '@utils/validators';
+import { isValidContractAddress } from '@utils/validators';
 import { ReadOnlySigner } from './ReadOnlySigner';
 import {
   getNetwork,
@@ -326,7 +326,7 @@ function useDApp() {
       tokenId?: number,
       saveAfterSearch?:boolean,
     ): Promise<WhitelistedToken | null> => {
-      if (isContractAddress(address) === true) {
+      if (isValidContractAddress(address)) {
         setState((prevState) => ({
           ...prevState,
           searchTokens: { loading: true, data: [] },
@@ -383,7 +383,7 @@ function useDApp() {
 
   const searchCustomBaker = useCallback(
     async (address: string) => {
-      if (isContractAddress(address) === true) {
+      if (isValidContractAddress(address)) {
         setState((prevState) => ({
           ...prevState,
           searchBakers: { loading: true, data: [] },

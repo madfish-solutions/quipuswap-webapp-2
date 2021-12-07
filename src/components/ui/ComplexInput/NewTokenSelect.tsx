@@ -173,12 +173,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
         onRequestClose={() => setTokensModal(false)}
         onChange={handleTokenChange}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={compoundClassName}
-        onClick={focusInput}
-      >
+      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} tabIndex={0} role="button">
         <label htmlFor={id} className={s.label}>
           {label}
         </label>

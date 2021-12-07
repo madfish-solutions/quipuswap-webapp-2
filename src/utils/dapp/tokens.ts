@@ -20,7 +20,7 @@ import {
   WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 
-import { isContractAddress } from '@utils/validators';
+import { isValidContractAddress } from '@utils/validators';
 import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getContract } from './getStorageInfo';
 import { getAllowance } from './getAllowance';
@@ -37,7 +37,7 @@ export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
-    if (typeof contractOrAddress === 'string' && (isContractAddress(contractOrAddress) !== true)) {
+    if (typeof contractOrAddress === 'string' && !isValidContractAddress(contractOrAddress)) {
       return undefined;
     }
     const contract = typeof contractOrAddress === 'string'
@@ -56,7 +56,7 @@ export const getTokenType = memoizee(
 
 export const isTokenFa2 = memoizee(
   async (address:string, tz:TezosToolkit) => {
-    if (await isContractAddress(address) !== true) return false;
+    if (!isValidContractAddress(address)) return false;
 
     try {
       const type = await getContract(tz, address);
@@ -70,7 +70,7 @@ export const isTokenFa2 = memoizee(
 
 export const isTokenFa12 = memoizee(
   async (address:string, tz:TezosToolkit) => {
-    if (await isContractAddress(address) !== true) return false;
+    if (!isValidContractAddress(address)) return false;
 
     try {
       const type = await getContract(tz, address);
