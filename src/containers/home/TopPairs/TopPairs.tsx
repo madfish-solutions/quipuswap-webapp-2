@@ -5,6 +5,7 @@ import { useGetTokensPairsLazyQuery } from '@graphql';
 import { PoolTable } from '@components/tables/PoolTable';
 import { Section } from '@components/home/Section';
 import { usePairs } from '@containers/home/TopPairs/hooks';
+import { ErrorAlert } from '@components/common/ErrorAlert';
 
 interface TopPairsProps {
   className?: string;
@@ -26,12 +27,16 @@ export const TopPairs: React.FC<TopPairsProps> = ({
       description={t('home|The most popular Trading Pairs by trading volume')}
       className={className}
     >
-      <PoolTable
-        fetch={fetchPairsData}
-        loading={!!isNotLoaded}
-        totalCount={data?.pairs?.totalCount ?? 0}
-        data={isNotLoaded ? [] : pairData as any}
-      />
+      {error ? <ErrorAlert error={error} />
+        : (
+          <PoolTable
+            fetch={fetchPairsData}
+            loading={!!isNotLoaded}
+            totalCount={data?.pairs?.totalCount ?? 0}
+            data={isNotLoaded ? [] : pairData as any}
+          />
+        )}
+
     </Section>
   );
 };
