@@ -33,7 +33,7 @@ import {
   useTezos,
   useTokens,
 } from '@utils/dapp';
-import { networksDefaultTokens, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
+import { TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   estimateSwapFee,
   fromDecimals,
@@ -69,7 +69,6 @@ type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
   knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
-  matchingNetwork?: QSMainNet;
   initialFrom?: string;
   initialTo?: string;
 };
@@ -145,7 +144,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   knownTokensBalances,
   knownMaxInputAmounts,
   knownMaxOutputAmounts,
-  matchingNetwork,
   onTokensSelected,
   submitForm,
   setValues,
@@ -174,6 +172,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const addCustomToken = useAddCustomToken();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
+  const prevNetworkIdRef = useRef<QSMainNet | undefined>();
 
   const { dexGraph } = useDexGraph();
   const [fee, setFee] = useState<BigNumber>();
@@ -184,25 +183,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const prevAmount1Ref = useRef<BigNumber>();
   const prevAmount2Ref = useRef<BigNumber>();
   const prevDexGraphRef = useRef<DexGraph>();
-  const prevNetworkIdRef = useRef(network.id);
   const prevAccountPkh = useRef<string | null>(null);
 
   useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts]);
   useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
-
-  useEffect(() => {
-    const prevNetworkId = prevNetworkIdRef.current;
-    if ((network.id !== prevNetworkId) && (matchingNetwork === prevNetworkId)) {
-      setValues((prevValues) => ({
-        ...prevValues,
-        token1: TEZOS_TOKEN,
-        token2: networksDefaultTokens[network.id],
-        amount1: undefined,
-        amount2: undefined,
-      }));
-    }
-    prevNetworkIdRef.current = network.id;
-  }, [network.id, setValues, matchingNetwork]);
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
@@ -218,7 +202,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const tokensTouched = touched.token1 || touched.token2;
 
   useEffect(() => {
-    if (initialValuesAppliedRef.current || tokensTouched || !initialFrom || !initialTo) {
+    const prevNetworkId = prevNetworkIdRef.current;
+    if ((prevNetworkId === network.id) || !initialFrom || !initialTo) {
       return;
     }
 
@@ -234,9 +219,11 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       }));
       onTokensSelected(newToken1, newToken2);
     }
+    prevNetworkIdRef.current = network.id;
   }, [
     initialFrom,
     initialTo,
+    network.id,
     searchCustomTokens,
     tokens,
     tokensTouched,
