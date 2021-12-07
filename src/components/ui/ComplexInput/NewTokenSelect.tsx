@@ -6,21 +6,24 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import {
+  Button,
+  Shevron,
+  ColorModes,
+  TokensLogos,
+  ColorThemeContext,
+} from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { Button, TokensLogos } from '@quipuswap/ui-kit';
 
-import { WhitelistedToken } from '@utils/types';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { WhitelistedToken } from '@utils/types';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
-
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { useAccountPkh } from '@utils/dapp';
 
 import s from './ComplexInput.module.sass';
 
