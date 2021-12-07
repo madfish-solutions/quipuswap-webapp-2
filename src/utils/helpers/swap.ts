@@ -50,6 +50,7 @@ const serialPromiseAll = <T extends unknown[], U>(
   );
 };
 
+const defaultMaxDelay = 15 * 60 * 1000;
 export const getSwapTransferParams = async (
   tezos: TezosToolkit,
   accountPkh: string,
@@ -105,6 +106,7 @@ export const getSwapTransferParams = async (
     }
     fa2Operators[tokenAddress][tokenId!].push(operator);
   };
+  const deadline = new BigNumber(Date.now() + defaultMaxDelay).idiv(1000).toFixed();
 
   await serialPromiseAll(
     dexChain.map((x) => [x]),
@@ -141,6 +143,7 @@ export const getSwapTransferParams = async (
               ttdexSwapInput,
               currentDexInput,
               accountPkh,
+              deadline,
             ).toTransferParams({ storageLimit: 1000 }),
           );
           ttdexSwapStepsParams = [];
@@ -224,6 +227,7 @@ export const getSwapTransferParams = async (
           .times(new BigNumber(1).minus(slippageTolerance))
           .integerValue(BigNumber.ROUND_FLOOR),
         recipient,
+        deadline,
       ).toTransferParams({ storageLimit: 1000 }),
     );
     ttdexSwapStepsParams = [];
