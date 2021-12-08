@@ -4,17 +4,18 @@ import { useTranslation } from 'next-i18next';
 
 export const usePairs = (data?: GetTokensPairsQuery) => {
   const { t } = useTranslation(['home']);
-  return data?.pairs?.edges ? data?.pairs?.edges.map((x) => {
-    const t1 = (x && x.node && x.node.token1) as Token;
-    const t2 = (x && x.node && x.node.token2) as Token;
+  return data?.pairs?.edges.map((x) => {
+    // TODO: Avoid type casting
+    const token1 = x?.node?.token1 as Token;
+    const token2 = x?.node?.token2 as Token;
     return ({
-      token1: transformNodeToWhitelistedToken(t1),
-      token2: transformNodeToWhitelistedToken(t2),
+      token1: transformNodeToWhitelistedToken(token1),
+      token2: transformNodeToWhitelistedToken(token2),
       xtzUsdQuote: data?.overview.xtzUsdQuote,
       pair: {
-        name: `${prepareTokenName(t1)} / ${prepareTokenName(t2)}`,
-        token1: x?.node?.token1,
-        token2: x?.node?.token2,
+        name: `${prepareTokenName(token1)} / ${prepareTokenName(token2)}`,
+        token1,
+        token2,
       },
       data: {
         tvl: x?.node?.liquidity,
@@ -32,5 +33,5 @@ export const usePairs = (data?: GetTokensPairsQuery) => {
         },
       },
     });
-  }) : [];
+  }) ?? [];
 };
