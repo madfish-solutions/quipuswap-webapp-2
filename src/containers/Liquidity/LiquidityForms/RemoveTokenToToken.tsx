@@ -142,7 +142,6 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
 
     const addresses = sortTokensContracts(tokenA, tokenB);
-    console.log(addresses);
 
     if (!addresses) return;
     if (addresses.addressA === tokenA.contractAddress) {
