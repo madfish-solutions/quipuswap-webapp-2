@@ -236,7 +236,10 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
             ),
           );
         }
-        router.push(`/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`);
+        const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+        if (router.asPath !== newRoute) {
+          router.push(newRoute);
+        }
       } catch (e) {
         console.error(e);
       }
