@@ -1,4 +1,4 @@
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -36,7 +36,7 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXdQprcVkpaWU', 'KT1CPuTzwC7h7uLXd5WQmpMFso1HxrLBUtpE'],
   ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
   ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
-  ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
+  ['NetXZSsxBpMQeAT', 'KT19ewhnhaCcCuoF1Ly2pxXAFRiF3UtgaY9U'],
 ]);
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
@@ -115,8 +115,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
 };
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
-export const CHAIN_ID_MAPPING = new Map<string, string>([
-  ['florencenet', 'NetXxkAx4woPLyu'],
+export const CHAIN_ID_MAPPING = new Map<QSMainNet, string>([
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['granadanet', 'NetXxkAx4woPLyu'],
+  ['hangzhounet', 'NetXZSsxBpMQeAT'],
 ]);
