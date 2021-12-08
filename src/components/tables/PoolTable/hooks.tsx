@@ -34,7 +34,7 @@ export const useColumns = () => {
       Header: (
         <div className={s.links}>
           {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.')} />
         </div>
       ),
       id: 'tvl',
