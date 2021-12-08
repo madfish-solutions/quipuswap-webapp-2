@@ -309,8 +309,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
       await batch.send();
     } else {
-      console.log('x2');
-
       const tokenAContract = await tezos.wallet.at(validTokenA.contractAddress);
       const tokenBContract = await tezos.wallet.at(validTokenB.contractAddress);
 
@@ -319,9 +317,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
       const validTokenAInput = new BigNumber(tokenBInput).multipliedBy(tokenADecimals);
       const validTokenBInput = new BigNumber(tokenAInput).multipliedBy(tokenBDecimals);
-
-      console.log('validTokenAInput', validTokenAInput.toFixed());
-      console.log('validTokenBInput', validTokenBInput.toFixed());
 
       const tokenAUpdateOperator = validTokenA.type === 'fa1.2'
         ? tokenAContract.methods.approve(
@@ -357,8 +352,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         validTokenAInput,
       );
       if (!validAppPairParams) return;
-
-      console.log({ validAppPairParams });
 
       const batch = await tezos.wallet.batch()
         .withContractCall(tokenAUpdateOperator)
