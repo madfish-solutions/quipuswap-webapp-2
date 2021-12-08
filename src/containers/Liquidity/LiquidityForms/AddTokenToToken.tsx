@@ -258,17 +258,16 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         timestamp.toString(),
       ).send();
     } else if (validTokenA.contractAddress === tokenA.contractAddress) {
-      const tokenAContract = await tezos.wallet.at(validTokenA.contractAddress);
-      const tokenBContract = await tezos.wallet.at(validTokenB.contractAddress);
+      const tokenAContract = await tezos.wallet.at(tokenA.contractAddress);
+      const tokenBContract = await tezos.wallet.at(tokenB.contractAddress);
 
-      const tokenADecimals = ten.pow(validTokenA.metadata.decimals);
-      const tokenBDecimals = ten.pow(validTokenB.metadata.decimals);
+      const tokenADecimals = ten.pow(tokenA.metadata.decimals);
+      const tokenBDecimals = ten.pow(tokenB.metadata.decimals);
 
       const validTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
-
       const validTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
 
-      const tokenAUpdateOperator = validTokenA.type === 'fa1.2'
+      const tokenAUpdateOperator = tokenA.type === 'fa1.2'
         ? tokenAContract.methods.approve(
           dex.contract.address,
           validTokenAInput,
@@ -277,10 +276,10 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           add_operator: {
             operator: dex.contract.address,
             owner: accountPkh,
-            token_id: validTokenA.fa2TokenId,
+            token_id: tokenA.fa2TokenId,
           },
         }]);
-      const tokenBUpdateOperator = validTokenB.type === 'fa1.2'
+      const tokenBUpdateOperator = tokenB.type === 'fa1.2'
         ? tokenBContract.methods.approve(
           dex.contract.address,
           validTokenBInput,
@@ -289,14 +288,14 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           add_operator: {
             operator: dex.contract.address,
             owner: accountPkh,
-            token_id: validTokenB.fa2TokenId,
+            token_id: tokenB.fa2TokenId,
           },
         }]);
 
       const validAppPairParams = getValidPairParams(
         dex,
-        validTokenA,
-        validTokenB,
+        tokenA,
+        tokenB,
         validTokenAInput,
         validTokenBInput,
       );
@@ -310,15 +309,19 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
       await batch.send();
     } else {
-      const tokenAContract = await tezos.wallet.at(tokenA.contractAddress);
-      const tokenBContract = await tezos.wallet.at(tokenB.contractAddress);
+      console.log('x2');
 
-      const tokenADecimals = ten.pow(tokenA.metadata.decimals);
-      const tokenBDecimals = ten.pow(tokenB.metadata.decimals);
+      const tokenAContract = await tezos.wallet.at(validTokenA.contractAddress);
+      const tokenBContract = await tezos.wallet.at(validTokenB.contractAddress);
 
-      const validTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
+      const tokenADecimals = ten.pow(validTokenA.metadata.decimals);
+      const tokenBDecimals = ten.pow(validTokenB.metadata.decimals);
 
-      const validTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
+      const validTokenAInput = new BigNumber(tokenBInput).multipliedBy(tokenADecimals);
+      const validTokenBInput = new BigNumber(tokenAInput).multipliedBy(tokenBDecimals);
+
+      console.log('validTokenAInput', validTokenAInput.toFixed());
+      console.log('validTokenBInput', validTokenBInput.toFixed());
 
       const tokenAUpdateOperator = validTokenA.type === 'fa1.2'
         ? tokenAContract.methods.approve(
@@ -354,6 +357,8 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         validTokenAInput,
       );
       if (!validAppPairParams) return;
+
+      console.log({ validAppPairParams });
 
       const batch = await tezos.wallet.batch()
         .withContractCall(tokenAUpdateOperator)

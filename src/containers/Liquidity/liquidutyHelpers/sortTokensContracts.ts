@@ -12,6 +12,14 @@ export const sortTokensContracts = (
     };
   }
 
+  if (tokenB.type < tokenA.type) {
+    return {
+      addressA: tokenB.contractAddress,
+      addressB: tokenA.contractAddress,
+      type: 'Left-Right',
+    };
+  }
+
   if (tokenA.type === 'fa1.2' && tokenA.type === tokenB.type) {
     if (tokenA.contractAddress < tokenB.contractAddress) {
       return {
