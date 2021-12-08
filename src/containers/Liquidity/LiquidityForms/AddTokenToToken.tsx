@@ -258,6 +258,8 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         timestamp.toString(),
       ).send();
     } else if (validTokenA.contractAddress === tokenA.contractAddress) {
+      console.log('x1');
+
       const tokenAContract = await tezos.wallet.at(tokenA.contractAddress);
       const tokenBContract = await tezos.wallet.at(tokenB.contractAddress);
 
@@ -348,8 +350,8 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         dex,
         validTokenA,
         validTokenB,
-        validTokenBInput,
         validTokenAInput,
+        validTokenBInput,
       );
       if (!validAppPairParams) return;
 
