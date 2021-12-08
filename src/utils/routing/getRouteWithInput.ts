@@ -67,7 +67,7 @@ export function getRoutesTreeWithInput(
       )) {
         return;
       }
-      const inputToken = getTokenIdFromSlug(nextTokenSlug);
+      const inputToken = getTokenIdFromSlug(startTokenSlug);
       try {
         const outputAmount = shouldUseImaginaryAmount
           ? inputAmount.times(getMarketQuotient(inputToken, [pair]))
@@ -112,6 +112,7 @@ export const getRouteWithInput = memoizee(
     const { endTokenSlug, inputAmount } = params;
     const shouldUseImaginaryAmount = !inputAmount || inputAmount.eq(0);
     const tree = getRoutesTreeWithInput(params, shouldUseImaginaryAmount);
+    console.log('x1', tree);
     const leaves = getLeaves(tree).filter(({ tokenSlug }) => tokenSlug === endTokenSlug);
     if (leaves.length === 0) {
       return undefined;
