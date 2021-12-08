@@ -181,7 +181,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const prevDexGraphRef = useRef<DexGraph>();
   const prevAccountPkh = useRef<string | null>(null);
 
-  useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts]);
+  useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts, knownTokensBalances]);
   useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
 
   useEffect(() => {
