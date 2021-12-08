@@ -15,10 +15,10 @@ import {
   VoterType,
   VoteFormValues,
   WhitelistedTokenPair,
-  VotingMethod,
 } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
+import { IUseVotingToast } from './useVotingToast';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
@@ -173,24 +173,64 @@ const unveto = async (
   };
 };
 
+export const unvoteOrUnveto = (
+  tab: string,
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  baker?: string,
+): Promise<IBatchParamsAndToastText> => {
+  if (tab === 'vote' && baker) return unvote(tezos, dex, baker);
+
+  if (tab !== 'veto') return unveto(tezos, dex);
+
+  throw Error('Something went wrong');
+};
+
 const getBatchParamsAndToastText = async (
   tab: string,
   tezos: TezosToolkit,
   dex: FoundDex,
   values: VoteFormValues,
 ): Promise<IBatchParamsAndToastText> => {
-  const { method, balance1, selectedBaker } = values;
+  const { balance1, selectedBaker } = values;
 
-  if (method === VotingMethod.FIRST) {
-    if (tab === 'vote') {
-      return vote(tezos, dex, selectedBaker, balance1);
-    }
-    return veto(tezos, dex, balance1);
-  }
   if (tab === 'vote') {
-    return unvote(tezos, dex, values.currentBacker!);
+    return vote(tezos, dex, selectedBaker, balance1);
   }
-  return unveto(tezos, dex);
+  return veto(tezos, dex, balance1);
+};
+
+export const unvoteOrRemoveVeto = async (
+  tab: string,
+  tezos: TezosToolkit,
+  dex: FoundDex,
+  {
+    updateToast,
+    handleErrorToast,
+  }: Pick<IUseVotingToast, 'updateToast' | 'handleErrorToast'>,
+  getBalance: () => void,
+  baker?: string,
+) => {
+  try {
+    const { params, text: updateToastText } = await unvoteOrUnveto(
+      tab,
+      tezos,
+      dex,
+      baker,
+    );
+
+    const op = await batchify(tezos.wallet.batch([]), params).send();
+
+    await op.confirmation();
+    // handleSuccessToast();
+    updateToast({
+      type: 'success',
+      render: updateToastText,
+    });
+    getBalance();
+  } catch (e) {
+    handleErrorToast(e);
+  }
 };
 
 export const submitForm = async ({

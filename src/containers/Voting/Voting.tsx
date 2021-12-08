@@ -242,6 +242,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               tokensData={tokensData}
               handleTokenChange={handleTokenChange}
               currentTab={currentTab}
+              getBalance={getBalance}
             />
           )}
         />

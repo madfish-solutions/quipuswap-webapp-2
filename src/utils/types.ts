@@ -148,15 +148,9 @@ export type WhitelistedStake = {
   analyticsLink: string
 };
 
-export enum VotingMethod {
-  FIRST = 'FIRST',
-  SECOND = 'SECOND',
-}
-
 export type VoteFormValues = {
   balance1: number
   selectedBaker: string
-  method: VotingMethod
   currentBacker?: string
 };
 

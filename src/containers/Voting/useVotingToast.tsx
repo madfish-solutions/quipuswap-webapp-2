@@ -1,7 +1,21 @@
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useCallback } from 'react';
+import { UpdateOptions } from 'react-toastify';
 
-export const useVotingToast = () => {
+export interface IUseVotingToast {
+  updateToast: ({
+    type,
+    render,
+    progress,
+    autoClose,
+    ...restOptions
+  }: UpdateOptions) => void;
+  handleErrorToast: (err: any) => void;
+  handleLoader: () => void;
+  handleSuccessToast: () => void;
+}
+
+export const useVotingToast = (): IUseVotingToast => {
   const updateToast = useUpdateToast();
 
   const handleErrorToast = useCallback(

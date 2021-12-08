@@ -1,10 +1,4 @@
-import React, {
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useCallback,
-} from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -20,7 +14,6 @@ import {
   WhitelistedTokenPair,
   VoterType,
   QSMainNet,
-  VotingMethod,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -35,7 +28,6 @@ import {
   validateBalance,
   composeValidators,
 } from '@utils/validators';
-import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
@@ -44,7 +36,8 @@ import s from '@styles/CommonContainer.module.sass';
 
 import { FormApi } from 'final-form';
 import { VotingDetails } from './VotingDetails';
-import { hanldeTokenPairSelect } from './votingHelpers';
+import { hanldeTokenPairSelect, unvoteOrRemoveVeto } from './votingHelpers';
+import { useVotingToast } from './useVotingToast';
 
 const TabsContent = [
   {
@@ -80,6 +73,7 @@ interface VotingFormProps {
   ) => void;
   currentTab: any;
   setTabsState: (val: any) => void;
+  getBalance: () => void;
 }
 
 const RealForm: React.FC<VotingFormProps> = ({
@@ -101,9 +95,10 @@ const RealForm: React.FC<VotingFormProps> = ({
   tokensData,
   currentTab,
   setTabsState,
+  getBalance,
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const updateToast = useUpdateToast();
+  const { updateToast, handleErrorToast } = useVotingToast();
   const {
     openConnectWalletModal,
     connectWalletModalOpen,
@@ -117,16 +112,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
   const [isBanned, setIsBanned] = useState<boolean>(false);
-
-  const handleErrorToast = useCallback(
-    (err) => {
-      updateToast({
-        type: 'error',
-        render: `${err.name}: ${err.message}`,
-      });
-    },
-    [updateToast]
-  );
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise: any;
@@ -188,7 +173,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     if (!accountPkh) {
       return openConnectWalletModal();
     }
-    form.mutators.setValue('method', VotingMethod.FIRST);
+
     if (!values.balance1) {
       // throw form validation error
       handleSubmit();
@@ -204,12 +189,15 @@ const RealForm: React.FC<VotingFormProps> = ({
     if (!accountPkh) {
       return openConnectWalletModal();
     }
-    form.mutators.setValue('method', VotingMethod.SECOND);
-    if (currentTab.id === 'vote')
-      form.mutators.setValue('currentBacker', voter?.candidate);
 
-    form.pauseValidation();
-    handleSubmit();
+    unvoteOrRemoveVeto(
+      currentTab.id,
+      tezos,
+      dex,
+      { updateToast, handleErrorToast },
+      getBalance,
+      voter?.candidate
+    );
   };
 
   const availVoteBalance: string = useMemo(
@@ -234,7 +222,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   );
 
   const toSixDecimals = (value: string) =>
-    new BigNumber(value).decimalPlaces(6).toNumber();
+    new BigNumber(value)
+      .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
+      .toNumber();
 
   return (
     <>
@@ -268,9 +258,6 @@ const RealForm: React.FC<VotingFormProps> = ({
         }}
         contentClassName={s.content}
       >
-        <Field name='method' initialValue='first'>
-          {() => <></>}
-        </Field>
         <Field
           name='balance1'
           validate={composeValidators(
