@@ -16,7 +16,6 @@ import {
   Slippage,
   StickyBlock,
   SwapButton,
-  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 
@@ -31,7 +30,12 @@ import {
   useTezos,
   useTokens,
 } from '@utils/dapp';
-import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
+import {
+  DEFAULT_SLIPPAGE_PERCENTAGE,
+  MAX_SLIPPAGE_PERCENTAGE,
+  TEZOS_TOKEN,
+  TTDEX_CONTRACTS,
+} from '@utils/defaults';
 import {
   estimateSwapFee,
   fromDecimals,
@@ -72,6 +76,7 @@ type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
 };
 
 type SlippageInputProps = {
+  error?: string;
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
   onChange: (newValue?: BigNumber) => void;
@@ -90,14 +95,19 @@ const TabsContent = [
 ];
 
 const SlippageInput: React.FC<SlippageInputProps> = ({
+  error,
   outputAmount,
   onChange,
   slippage,
   outputToken,
 }) => {
   const handleChange = useCallback((newValue: string) => {
-    const parsedPercentage = slippageToBignum(newValue);
-    onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
+    if (newValue === '') {
+      onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
+    } else {
+      const parsedPercentage = slippageToBignum(newValue);
+      onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
+    }
   }, [onChange]);
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
@@ -114,14 +124,19 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   return (
     <>
       <Slippage handleChange={handleChange} />
+      {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.receive}>
-        <span className={s.receiveLabel}>
-          Minimum received:
-        </span>
-        <CurrencyAmount
-          amount={minimumReceived.toFixed()}
-          currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
-        />
+        {slippage?.lte(MAX_SLIPPAGE_PERCENTAGE) && slippage.gt(0) && (
+          <>
+            <span className={s.receiveLabel}>
+              Minimum received:
+            </span>
+            <CurrencyAmount
+              amount={minimumReceived.toFixed()}
+              currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
+            />
+          </>
+        )}
       </div>
     </>
   );
@@ -532,11 +547,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
                 className={s.tabs}
               />
             ),
-            button: (
-              <Button theme="quaternary">
-                <Transactions />
-              </Button>
-            ),
+            // TODO: add a button for transactions history
             className: s.header,
           }}
           contentClassName={s.content}
@@ -582,6 +593,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             />
           )}
           <SlippageInput
+            error={touched.slippage ? errors.slippage : undefined}
             outputAmount={amount2}
             onChange={handleSlippageChange}
             slippage={slippage}

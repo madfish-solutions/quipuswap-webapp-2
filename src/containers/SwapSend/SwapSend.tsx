@@ -20,7 +20,11 @@ import {
   useNetwork,
   useTezos,
 } from '@utils/dapp';
-import { TTDEX_CONTRACTS } from '@utils/defaults';
+import {
+  DEFAULT_SLIPPAGE_PERCENTAGE,
+  MAX_SLIPPAGE_PERCENTAGE,
+  TTDEX_CONTRACTS,
+} from '@utils/defaults';
 import {
   fromDecimals,
   getMaxTokenInput,
@@ -49,7 +53,7 @@ const initialErrors = {
 };
 const initialValues: Partial<SwapFormValues> = {
   action: 'swap',
-  slippage: new BigNumber(0.5),
+  slippage: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
 };
 
 const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
@@ -162,7 +166,8 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
         : addressSchema().required(t('common|This field is required'))
       ),
     ),
-    slippage: bigNumberSchema(0, 30).required(t('common|This field is required')),
+    slippage: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE)
+      .required(t('common|This field is required')),
     action: stringSchema().oneOf(['swap', 'send']).required(),
   }), [knownTokensBalances, t, knownMaxInputAmounts, knownMaxOutputAmounts]);
 
