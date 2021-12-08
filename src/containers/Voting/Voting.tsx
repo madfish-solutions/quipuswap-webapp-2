@@ -119,7 +119,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useEffect(() => {
     switch (network.id) {
-      case 'granadanet':
+      case 'hangzhounet':
         setTokenPair({
           token1: TEZOS_TOKEN,
           token2: STABLE_TOKEN_GRANADA,

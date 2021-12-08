@@ -1,4 +1,6 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, {
+  useRef, useMemo, useState, useEffect,
+} from 'react';
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -196,35 +198,32 @@ const RealForm: React.FC<VotingFormProps> = ({
       dex,
       { updateToast, handleErrorToast },
       getBalance,
-      voter?.candidate
+      voter?.candidate,
     );
   };
 
   const availVoteBalance: string = useMemo(
-    () =>
-      tokenPair.balance && tokenPair.frozenBalance && voter
-        ? new BigNumber(tokenPair.balance)
-            .minus(new BigNumber(tokenPair.frozenBalance))
-            .plus(new BigNumber(voter.vote ?? '0'))
-            .toString()
-        : new BigNumber(0).toString(),
-    [tokenPair, voter]
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(tokenPair.frozenBalance))
+        .plus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()),
+    [tokenPair, voter],
   );
 
   const availVetoBalance: string = useMemo(
-    () =>
-      tokenPair.balance && tokenPair.frozenBalance && voter
-        ? new BigNumber(tokenPair.balance)
-            .minus(new BigNumber(voter.vote ?? '0'))
-            .toString()
-        : new BigNumber(0).toString(),
-    [tokenPair, voter]
+    () => (tokenPair.balance && tokenPair.frozenBalance && voter
+      ? new BigNumber(tokenPair.balance)
+        .minus(new BigNumber(voter.vote ?? '0'))
+        .toString()
+      : new BigNumber(0).toString()),
+    [tokenPair, voter],
   );
 
-  const toSixDecimals = (value: string) =>
-    new BigNumber(value)
-      .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
-      .toNumber();
+  const toSixDecimals = (value: string) => new BigNumber(value)
+    .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
+    .toNumber();
 
   return (
     <>
@@ -237,10 +236,10 @@ const RealForm: React.FC<VotingFormProps> = ({
               setActiveId={(val) => {
                 router.replace(
                   `/voting/${val}/${getWhitelistedTokenSymbol(
-                    tokenPair.token1
+                    tokenPair.token1,
                   )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
                   undefined,
-                  { shallow: true }
+                  { shallow: true },
                 );
                 setTabsState(val);
               }}
@@ -259,20 +258,18 @@ const RealForm: React.FC<VotingFormProps> = ({
         contentClassName={s.content}
       >
         <Field
-          name='balance1'
+          name="balance1"
           validate={composeValidators(
             validateMinMax(0, Infinity),
             accountPkh
               ? validateBalance(
-                  new BigNumber(
-                    tokenPair.balance ? tokenPair.balance : Infinity
-                  )
-                )
-              : () => undefined
+                new BigNumber(
+                  tokenPair.balance ? tokenPair.balance : Infinity,
+                ),
+              )
+              : () => undefined,
           )}
-          parse={(v) =>
-            parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)
-          }
+          parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
           {({ input, meta }) => (
             <PositionSelect
@@ -292,7 +289,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   handleErrorToast,
                   tezos,
                   accountPkh,
-                  networkId
+                  networkId,
                 );
               }}
               balance={
@@ -304,7 +301,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               noBalanceButtons={!accountPkh}
               balanceLabel={t('vote|Available Balance')}
               notFrozen
-              id='liquidity-remove-input'
+              id="liquidity-remove-input"
               label={currentTab.label}
               className={s.input}
               error={(meta.touched && meta.error) || meta.submitError}
@@ -312,19 +309,19 @@ const RealForm: React.FC<VotingFormProps> = ({
           )}
         </Field>
         {currentTab.id === 'vote' && (
-          <Field name='selectedBaker' validate={required}>
+          <Field name="selectedBaker" validate={required}>
             {({ input, meta }) => (
               <ComplexBaker
                 {...input}
-                label='Baker'
-                id='voting-baker'
+                label="Baker"
+                id="voting-baker"
                 className={s.mt12}
                 handleChange={(bakerObj) => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
                     if (!dex) return;
                     const tempBaker = await dex.storage.storage.vetos.get(
-                      bakerObj.address
+                      bakerObj.address,
                     );
                     setIsBanned(!!tempBaker);
                   };
@@ -339,7 +336,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           <Button
             onClick={handleUnvoteOrRemoveveto}
             className={s.button}
-            theme='secondary'
+            theme="secondary"
             disabled={
               currentTab.id === 'vote'
                 ? new BigNumber(voter?.vote ?? '0').eq(0)

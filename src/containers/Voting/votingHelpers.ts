@@ -11,10 +11,7 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import {
-  QSMainNet,
-  VoterType,
-  VoteFormValues,
-  WhitelistedTokenPair,
+  QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair,
 } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';

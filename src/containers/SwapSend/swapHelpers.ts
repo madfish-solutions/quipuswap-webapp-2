@@ -8,10 +8,7 @@ import {
 
 import { FACTORIES } from '@utils/defaults';
 import {
-  QSMainNet,
-  TokenDataMap,
-  SwapFormValues,
-  WhitelistedToken,
+  QSMainNet, SwapFormValues, TokenDataMap, WhitelistedToken,
 } from '@utils/types';
 import { getValueForSDK, slippageToBignum, transformTokenDataToAsset } from '@utils/helpers';
 

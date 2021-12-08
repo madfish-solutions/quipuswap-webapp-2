@@ -4,19 +4,12 @@ import BigNumber from 'bignumber.js';
 export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null; // MayBe<T>
 
-export type QSMainNet = 'mainnet' | 'granadanet' | 'florencenet';
-
-type QSNetworkType =
+export type QSMainNet =
   | 'mainnet'
-  | 'florencenet'
-  | 'edo2net'
-  | 'edonet'
-  | 'delphinet'
-  | 'carthagenet'
-  | 'granadanet';
+  | 'hangzhounet';
 
 export interface QSNetwork {
-  id: QSNetworkType
+  id: QSMainNet
   connectType: 'default' | 'custom'
   name: string
   type: 'main' | 'test'
@@ -45,6 +38,13 @@ export interface WhitelistedToken {
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
 }
+
+export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSMainNet };
+
+export type TokenId = Pick<
+WhitelistedToken,
+'contractAddress' | 'fa2TokenId' | 'type'
+>;
 
 export interface WhitelistedBaker {
   name: string,
