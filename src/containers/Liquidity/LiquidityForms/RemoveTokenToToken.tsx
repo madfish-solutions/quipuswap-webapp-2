@@ -8,7 +8,6 @@ import React, {
 import {
   Plus,
   Button,
-  Slippage,
   ArrowDown,
 } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
@@ -205,7 +204,6 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         noBalanceButtons
         disabled
       />
-      <Slippage handleChange={noOpFunc} />
       <Button
         className={s.button}
         onClick={handleRemoveLiquidity}

@@ -7,8 +7,6 @@ import React, {
 } from 'react';
 import {
   Button,
-  Tooltip,
-  Switcher,
 } from '@quipuswap/ui-kit';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
@@ -26,9 +24,9 @@ import {
   sortTokensContracts,
   calculateTokenAmount,
   getValidMichelTemplate,
-  getValidPairParams,
 } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
+import { addLiquidityTokenToToken } from '../liquidutyHelpers/addLiquidityTokenToToken';
 
 const MichelCodec = require('@taquito/michel-codec');
 
@@ -83,19 +81,19 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       const michelData = getValidMichelTemplate(addresses);
       const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
 
-      const pairIdTemp = await dex.storage.storage.token_to_id.get(key);
+      const id = await dex.storage.storage.token_to_id.get(key);
 
-      if (pairIdTemp) {
-        const pairDataTemp = await dex.storage.storage.pairs.get(pairIdTemp);
+      if (id) {
+        const data = await dex.storage.storage.pairs.get(id);
         if (isMounted) {
-          setPairId(pairIdTemp);
+          setPairId(id);
           setPairDataInfo({
-            totalSupply: pairDataTemp.total_supply,
-            tokenAPool: pairDataTemp.token_a_pool,
-            tokenBPool: pairDataTemp.token_b_pool,
+            totalSupply: data.total_supply,
+            tokenAPool: data.token_a_pool,
+            tokenBPool: data.token_b_pool,
           });
         }
-      } else if (!pairIdTemp && isMounted) {
+      } else if (!id && isMounted) {
         setPairDataInfo(null);
       }
     };
@@ -120,15 +118,16 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       && pairData.totalSupply.gt(0)
     ) {
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenAAmountWithDecimals = new BigNumber(event.target.value).multipliedBy(decimalsA);
       const tokenBAmount = tokenA.contractAddress === validTokenA.contractAddress
         ? calculateTokenAmount(
-          new BigNumber(event.target.value).multipliedBy(decimalsA),
+          tokenAAmountWithDecimals,
           pairData.totalSupply,
           pairData.tokenAPool,
           pairData.tokenBPool,
         )
         : calculateTokenAmount(
-          new BigNumber(event.target.value).multipliedBy(decimalsA),
+          tokenAAmountWithDecimals,
           pairData.totalSupply,
           pairData.tokenBPool,
           pairData.tokenAPool,
@@ -140,7 +139,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       );
     }
   };
-
   const handleTokenBInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
@@ -180,49 +178,68 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
   };
 
   const handleTokenABalance = (value:string) => {
-    const fixedValue = new BigNumber(value);
+    const tokenAAmount = new BigNumber(value);
 
-    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
+    setTokenAInput(tokenAAmount.toFixed(tokenA.metadata.decimals));
 
     if (
       pairData
       && pairData.tokenAPool.gt(0)
       && pairData.tokenBPool.gt(0)
       && pairData.totalSupply.gt(0)
+      && validTokenB
     ) {
-      const tokenAmount = calculateTokenAmount(
-        fixedValue,
-        pairData.totalSupply,
-        pairData.tokenAPool,
-        pairData.tokenBPool,
-      );
+      const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenAAmountWithDecimals = tokenAAmount.multipliedBy(decimalsA);
+      const tokenBAmount = tokenB.contractAddress === validTokenB.contractAddress
+        ? calculateTokenAmount(
+          tokenAAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        )
+        : calculateTokenAmount(
+          tokenAAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        );
 
       setTokenBInput(
-        fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+        fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
       );
     }
   };
-
   const handleTokenBBalance = (value:string) => {
-    const fixedValue = new BigNumber(value);
+    const tokenBAmount = new BigNumber(value);
 
-    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
+    setTokenBInput(tokenBAmount.toFixed(tokenB.metadata.decimals));
 
     if (
       pairData
       && pairData.tokenAPool.gt(0)
       && pairData.tokenBPool.gt(0)
       && pairData.totalSupply.gt(0)
+      && validTokenA
     ) {
-      const tezAmount = calculateTokenAmount(
-        fixedValue,
-        pairData.totalSupply,
-        pairData.tokenBPool,
-        pairData.tokenAPool,
-      );
+      const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
+      const tokenBAmountWithDecimals = tokenBAmount.multipliedBy(decimalsB);
+      const tokenAAmount = tokenA.contractAddress === validTokenA.contractAddress
+        ? calculateTokenAmount(
+          tokenBAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        )
+        : calculateTokenAmount(
+          tokenBAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        );
 
       setTokenAInput(
-        fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+        fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
       );
     }
   };
@@ -243,9 +260,13 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         .multipliedBy(pairData.totalSupply)
         .idiv(pairData.tokenAPool);
 
-      const tokenBIn = shares
+      const tokenAAmount = new BigNumber(tokenAInput)
+        .multipliedBy(ten.pow(validTokenA.metadata.decimals));
+
+      const tokenBAmount = shares
         .multipliedBy(pairData.tokenBPool)
-        .div(pairData.totalSupply);
+        .div(pairData.totalSupply)
+        .integerValue(BigNumber.ROUND_CEIL);
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -253,114 +274,30 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       await dex.contract.methods.invest(
         pairId,
         shares,
-        new BigNumber(tokenAInput).multipliedBy(ten.pow(validTokenA.metadata.decimals)),
-        tokenBIn.integerValue(BigNumber.ROUND_CEIL),
+        tokenAAmount,
+        tokenBAmount,
         timestamp.toString(),
       ).send();
     } else if (validTokenA.contractAddress === tokenA.contractAddress) {
-      console.log('x1');
-
-      const tokenAContract = await tezos.wallet.at(tokenA.contractAddress);
-      const tokenBContract = await tezos.wallet.at(tokenB.contractAddress);
-
-      const tokenADecimals = ten.pow(tokenA.metadata.decimals);
-      const tokenBDecimals = ten.pow(tokenB.metadata.decimals);
-
-      const validTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
-      const validTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
-
-      const tokenAUpdateOperator = tokenA.type === 'fa1.2'
-        ? tokenAContract.methods.approve(
-          dex.contract.address,
-          validTokenAInput,
-        )
-        : tokenAContract.methods.update_operators([{
-          add_operator: {
-            operator: dex.contract.address,
-            owner: accountPkh,
-            token_id: tokenA.fa2TokenId,
-          },
-        }]);
-      const tokenBUpdateOperator = tokenB.type === 'fa1.2'
-        ? tokenBContract.methods.approve(
-          dex.contract.address,
-          validTokenBInput,
-        )
-        : tokenBContract.methods.update_operators([{
-          add_operator: {
-            operator: dex.contract.address,
-            owner: accountPkh,
-            token_id: tokenB.fa2TokenId,
-          },
-        }]);
-
-      const validAppPairParams = getValidPairParams(
+      addLiquidityTokenToToken(
+        tezos,
         dex,
+        accountPkh,
         tokenA,
         tokenB,
-        validTokenAInput,
-        validTokenBInput,
+        tokenAInput,
+        tokenBInput,
       );
-
-      if (!validAppPairParams) return;
-
-      const batch = await tezos.wallet.batch()
-        .withContractCall(tokenAUpdateOperator)
-        .withContractCall(tokenBUpdateOperator)
-        .withContractCall(validAppPairParams);
-
-      await batch.send();
     } else {
-      const tokenAContract = await tezos.wallet.at(validTokenA.contractAddress);
-      const tokenBContract = await tezos.wallet.at(validTokenB.contractAddress);
-
-      const tokenADecimals = ten.pow(validTokenA.metadata.decimals);
-      const tokenBDecimals = ten.pow(validTokenB.metadata.decimals);
-
-      const validTokenAInput = new BigNumber(tokenBInput).multipliedBy(tokenADecimals);
-      const validTokenBInput = new BigNumber(tokenAInput).multipliedBy(tokenBDecimals);
-
-      const tokenAUpdateOperator = validTokenA.type === 'fa1.2'
-        ? tokenAContract.methods.approve(
-          dex.contract.address,
-          validTokenAInput,
-        )
-        : tokenAContract.methods.update_operators([{
-          add_operator: {
-            operator: dex.contract.address,
-            owner: accountPkh,
-            token_id: validTokenA.fa2TokenId,
-          },
-        }]);
-
-      const tokenBUpdateOperator = validTokenB.type === 'fa1.2'
-        ? tokenBContract.methods.approve(
-          dex.contract.address,
-          validTokenBInput,
-        )
-        : tokenBContract.methods.update_operators([{
-          add_operator: {
-            operator: dex.contract.address,
-            owner: accountPkh,
-            token_id: validTokenB.fa2TokenId,
-          },
-        }]);
-
-      const validAppPairParams = getValidPairParams(
+      addLiquidityTokenToToken(
+        tezos,
         dex,
-        validTokenA,
-        validTokenB,
-        validTokenAInput,
-        validTokenBInput,
+        accountPkh,
+        tokenB,
+        tokenA,
+        tokenAInput,
+        tokenBInput,
       );
-      if (!validAppPairParams) return;
-
-      const batch = await tezos.wallet.batch()
-        .withContractCall(tokenAUpdateOperator)
-        .withContractCall(tokenBUpdateOperator)
-        .withContractCall(validAppPairParams);
-
-      await batch.send();
     }
   };
 
@@ -389,11 +326,6 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
-      <div className={s.switcher}>
-        <Switcher isActive={false} onChange={() => {}} />
-        <span className={s.rebalance}>Rebalance Liq</span>
-        <Tooltip content="Liquidity rebalace description" />
-      </div>
       <Button
         className={s.button}
         onClick={handleAddLiquidity}

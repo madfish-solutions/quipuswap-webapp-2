@@ -19,7 +19,7 @@ import {
   useAccountPkh,
 } from '@utils/dapp';
 import { WhitelistedToken } from '@utils/types';
-import { noOpFunc } from '@utils/helpers';
+import { noOpFunc, slippageToBignum } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
@@ -50,9 +50,10 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [lpTokenInput, setLpTokenInput] = useState('');
-  const [tokenAOutput, setTokenAOutput] = useState('');
-  const [tokenBOutput, setTokenBOutput] = useState('');
+  const [lpTokenInput, setLpTokenInput] = useState<string>('');
+  const [tokenAOutput, setTokenAOutput] = useState<string>('');
+  const [tokenBOutput, setTokenBOutput] = useState<string>('');
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
 
   useEffect(() => {
     if (!dex) return;
@@ -79,6 +80,15 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     }
   }, [lpTokenInput, dex, tokenA, tokenB]);
 
+  const handleSlippageChange = (value: string) => {
+    const fixedValue = slippageToBignum(value);
+    if (fixedValue.gte(100)) {
+      return setSlippage(new BigNumber(100));
+    }
+
+    return setSlippage(fixedValue);
+  };
+
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
@@ -86,7 +96,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
       tezos,
       dex,
       new BigNumber(lpTokenInput),
-      new BigNumber(0.1),
+      slippage,
     );
     setLpTokenInput('');
   };
@@ -131,7 +141,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         noBalanceButtons
         disabled
       />
-      <Slippage handleChange={noOpFunc} />
+      <Slippage handleChange={handleSlippageChange} />
       <Button
         className={s.button}
         onClick={handleRemoveLiquidity}

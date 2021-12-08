@@ -97,13 +97,13 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
     return false;
   };
   const setActiveId = useCallback(
-    (val:string) => {
+    (tabId:string) => {
       router.replace(
-        `/liquidity/${val}/${getWhitelistedTokenSymbol(fallbackTokenPair.token1)}-${getWhitelistedTokenSymbol(fallbackTokenPair.token2)}`,
+        `/liquidity/${tabId}/${getWhitelistedTokenSymbol(fallbackTokenPair.token1)}-${getWhitelistedTokenSymbol(fallbackTokenPair.token2)}`,
         undefined,
         { shallow: true },
       );
-      const findActiveTab = TabsContent.find((tab) => tab.id === val);
+      const findActiveTab = TabsContent.find((tab) => tab.id === tabId);
       if (!findActiveTab) return;
       setTabState(findActiveTab);
     }, [],

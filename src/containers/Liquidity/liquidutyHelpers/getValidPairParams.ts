@@ -1,5 +1,5 @@
 import { FoundDex } from '@quipuswap/sdk';
-import { WhitelistedToken } from '@quipuswap/ui-kit/dist/utils/types';
+import { WhitelistedToken } from '@utils/types';
 import BigNumber from 'bignumber.js';
 
 export const getValidPairParams = (

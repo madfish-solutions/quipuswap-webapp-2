@@ -6,3 +6,5 @@ export * from './findNotTezTokenInPair';
 export * from './getValidMichelTemplate';
 export * from './sortTokensContracts';
 export * from './getValidPairParams';
+export * from './updateOperator';
+export * from './addLiquidityTokenToToken';
