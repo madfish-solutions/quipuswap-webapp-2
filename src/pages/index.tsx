@@ -20,7 +20,7 @@ const Home: React.FC = () => {
       <DexDashboard />
       <Opportunities />
       <TopPairs />
-      {/* TODO: Implement it */}
+      {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>
   );
