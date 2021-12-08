@@ -1,5 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-export const fromDecimals = (num: BigNumber, decimals: number) => num.div(
-  new BigNumber(10).pow(decimals),
-);
+import { WhitelistedToken } from '@utils/types';
+
+export const fromDecimals = (
+  num: BigNumber,
+  decimalsOrToken: number | WhitelistedToken,
+) => num.div(new BigNumber(10).pow(
+  typeof decimalsOrToken === 'number' ? decimalsOrToken : decimalsOrToken.metadata.decimals,
+));

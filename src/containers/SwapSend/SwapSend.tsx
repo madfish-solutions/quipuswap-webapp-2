@@ -27,6 +27,7 @@ import {
   getTokenOutput,
   getTokenSlug,
   swap,
+  toDecimals,
 } from '@utils/helpers';
 import {
   getMaxInputRoute,
@@ -213,10 +214,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
           updateMaxInputAmount(
             token1,
             token2,
-            fromDecimals(
-              getMaxTokenInput(token2, maxInputRoute),
-              token1.metadata.decimals,
-            ),
+            fromDecimals(getMaxTokenInput(token2, maxInputRoute), token1),
           );
         }
         const maxOutputRoute = getMaxOutputRoute({
@@ -234,7 +232,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
                 inputAmount: getMaxTokenInput(token2, maxOutputRoute),
                 dexChain: maxOutputRoute,
               }),
-              token2.metadata.decimals,
+              token2,
             ),
           );
         }
@@ -282,7 +280,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     } = formValues;
 
     handleLoader();
-    const inputAmount = fromDecimals(amount1!, -token1!.metadata.decimals);
+    const inputAmount = toDecimals(amount1!, token1!);
     try {
       await swap(
         tezos,

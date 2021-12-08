@@ -31,7 +31,7 @@ import {
   useTezos,
   useTokens,
 } from '@utils/dapp';
-import { TTDEX_CONTRACTS } from '@utils/defaults';
+import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   estimateSwapFee,
   fromDecimals,
@@ -41,6 +41,7 @@ import {
   getTokenSlug,
   getWhitelistedTokenSymbol,
   slippageToBignum,
+  toDecimals,
 } from '@utils/helpers';
 import {
   DexGraph,
@@ -233,14 +234,14 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           accountPkh,
           {
             inputToken: token1,
-            inputAmount: fromDecimals(inputAmount, -token1!.metadata.decimals),
+            inputAmount: toDecimals(inputAmount, token1!),
             dexChain: route,
             recipient,
             slippageTolerance: slippage?.div(100),
             ttDexAddress: TTDEX_CONTRACTS[network.id],
           },
         )
-          .then((newFee) => setFee(fromDecimals(newFee, 6)))
+          .then((newFee) => setFee(fromDecimals(newFee, TEZOS_TOKEN)))
           .catch((e) => {
             console.error(e);
             setFee(undefined);
@@ -287,7 +288,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           startTokenSlug: token1Slug!,
           endTokenSlug: token2Slug!,
           graph: dexGraph,
-          inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
+          inputAmount: toDecimals(amount1, token1),
         });
         let outputAmount: BigNumber | undefined;
         if (route) {
@@ -295,10 +296,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             outputAmount = fromDecimals(
               getTokenOutput({
                 inputToken: token1,
-                inputAmount: fromDecimals(amount1!, -token1.metadata.decimals),
+                inputAmount: toDecimals(amount1!, token1),
                 dexChain: route,
               }),
-              token2.metadata.decimals,
+              token2,
             );
           } catch (_) {
             // ignore error
@@ -323,12 +324,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         if (route) {
           try {
             inputAmount = fromDecimals(
-              getTokenInput(
-                token2,
-                fromDecimals(amount2!, -token2.metadata.decimals),
-                route,
-              ),
-              token1.metadata.decimals,
+              getTokenInput(token2, toDecimals(amount2!, token2), route),
+              token1,
             );
           } catch (_) {
             // ignore error
@@ -376,6 +373,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           setFieldTouched('amount1', false);
           setFieldTouched('amount2', false);
           setValues((prevValues) => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+          setFee(undefined);
         },
       ).catch(console.error);
     },
@@ -503,7 +501,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const priceImpact = useMemo(
     () => (token1 && amount1 && dexRoute && slippage ? getPriceImpact({
       inputToken: token1,
-      inputAmount: fromDecimals(amount1, -token1.metadata.decimals),
+      inputAmount: toDecimals(amount1, token1),
       dexChain: dexRoute,
       slippageTolerance: slippage?.div(100),
       ttDexAddress: TTDEX_CONTRACTS[network.id],
