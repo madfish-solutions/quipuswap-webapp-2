@@ -26,10 +26,8 @@ import { useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   useAccountPkh,
-  useAddCustomToken,
   useNetwork,
   useOnBlock,
-  useSearchCustomTokens,
   useTezos,
   useTokens,
 } from '@utils/dapp';
@@ -58,7 +56,6 @@ import {
 
 import s from '@styles/CommonContainer.module.sass';
 
-import { SwapChart } from './SwapChart';
 import { SwapDetails } from './SwapDetails';
 
 type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
@@ -168,8 +165,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const network = useNetwork();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
-  const searchCustomTokens = useSearchCustomTokens();
-  const addCustomToken = useAddCustomToken();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
   const prevNetworkIdRef = useRef<QSMainNet | undefined>();
@@ -199,8 +194,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     prevAccountPkh.current = accountPkh;
   }, [accountPkh, token1, token2, updateTokenBalance]);
 
-  const tokensTouched = touched.token1 || touched.token2;
-
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
     if ((prevNetworkId === network.id) || !initialFrom || !initialTo) {
@@ -224,11 +217,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     initialFrom,
     initialTo,
     network.id,
-    searchCustomTokens,
     tokens,
-    tokensTouched,
     setValues,
-    addCustomToken,
     onTokensSelected,
   ]);
 
@@ -310,8 +300,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
               }),
               token2.metadata.decimals,
             );
-            // eslint-disable-next-line no-empty
-          } catch {}
+          } catch (_) {
+            // ignore error
+          }
         }
         setDexRoute(route);
         prevAmount2Ref.current = outputAmount;
@@ -339,8 +330,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
               ),
               token1.metadata.decimals,
             );
-            // eslint-disable-next-line no-empty
-          } catch {}
+          } catch (_) {
+            // ignore error
+          }
         }
         setDexRoute(route);
         prevAmount1Ref.current = inputAmount;
@@ -530,12 +522,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   return (
     <>
-      {token1 && token2 && (network.id === 'mainnet') && (
-        <SwapChart
-          token1={token1}
-          token2={token2}
-        />
-      )}
+      {/* TODO: add swap chart */}
       <StickyBlock className={className}>
         <Card
           header={{

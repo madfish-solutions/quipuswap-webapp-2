@@ -15,7 +15,7 @@ type TokenType = 'fa1.2' | 'fa2';
 type RawToken = {
   address: string;
   type: TokenType;
-  id?: number;
+  id?: string;
 };
 
 type RawCommonPoolData = {
@@ -46,13 +46,13 @@ export const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: Whitel
     ({
       fa2TokenId,
       contractAddress,
-    }) => (contractAddress === address) && fa2TokenId === id,
+    }) => (contractAddress === address) && fa2TokenId?.toString() === id,
   );
   const fallbackSymbol = type === 'fa1.2' ? shortize(address) : `${shortize(address)}_${id}`;
   const fallbackToken = {
     type,
     contractAddress: address,
-    fa2TokenId: id,
+    fa2TokenId: id ? +id : undefined,
     metadata: {
       decimals: 0,
       symbol: fallbackSymbol,
@@ -94,20 +94,29 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             ? makeWhitelistedToken(rawPool.tokenB, tokens)
             : TEZOS_TOKEN;
 
-          return {
+          const commonPoolProps = {
             token1Pool: new BigNumber(tokenAPool),
             token2Pool: new BigNumber(tokenBPool),
             totalSupply: new BigNumber(totalSupply),
             token1,
             token2,
-            id: rawPool.type === 'ttdex' ? rawPool.id : rawPool.address,
-            factoryAddress: rawPool.type === 'ttdex' ? undefined : rawPool.factoryAddress,
+          };
+
+          return rawPool.type === 'ttdex' ? {
+            ...commonPoolProps,
+            id: rawPool.id,
+            type: 'ttdex' as const,
+          } : {
+            ...commonPoolProps,
+            id: rawPool.address,
+            factoryAddress: rawPool.factoryAddress,
+            type: 'tokenxtz' as const,
           };
         },
       ).filter(
-        ({ factoryAddress }) => !factoryAddress || fa12Factory.includes(
-          factoryAddress,
-        ) || fa2Factory.includes(factoryAddress),
+        (pool) => (pool.type === 'ttdex') || fa12Factory.includes(
+          pool.factoryAddress,
+        ) || fa2Factory.includes(pool.factoryAddress),
       );
     } catch (e) {
       console.error(e);

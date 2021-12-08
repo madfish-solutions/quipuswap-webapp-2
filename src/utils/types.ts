@@ -32,6 +32,7 @@ export interface WhitelistedTokenPair {
 export interface WhitelistedToken {
   type: 'fa1.2' | 'fa2'
   contractAddress: string
+  // TODO: change the type to BigNumber
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
 }
@@ -59,14 +60,27 @@ export type WhitelistedTokenMetadata = {
   thumbnailUri: string
 };
 
-export interface DexPair {
+type CommonDexPairProps = {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
   totalSupply: BigNumber;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   id: string | number;
-}
+  type: 'ttdex' | 'tokenxtz';
+};
+
+type TTDexPairProps = CommonDexPairProps & {
+  id: number;
+  type: 'ttdex';
+};
+
+type TokenXtzDexPairProps = CommonDexPairProps & {
+  id: string;
+  type: 'tokenxtz';
+};
+
+export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
 export type VoterType = {
   vote: string,

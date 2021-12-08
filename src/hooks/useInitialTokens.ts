@@ -106,7 +106,7 @@ export const useInitialTokens = (
               addCustomToken(customToken);
             } else {
               addCustomToken(makeWhitelistedToken(
-                { address: contractAddress, id: fa2TokenId, type: tokenType },
+                { address: contractAddress, id: fa2TokenId?.toString(), type: tokenType },
                 [],
               ));
             }

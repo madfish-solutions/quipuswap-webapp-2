@@ -111,9 +111,9 @@ export const getSwapTransferParams = async (
   await serialPromiseAll(
     dexChain.map((x) => [x]),
     async (index, currentDex) => {
-      const { token1, token2, id } = currentDex;
+      const { token1, token2 } = currentDex;
       const currentOperationRecipient = index === dexChain.length - 1 ? recipient : accountPkh;
-      const prevDexId = index === 0 ? undefined : dexChain[index - 1].id;
+      const prevDex = index === 0 ? undefined : dexChain[index - 1];
       const shouldSellToken1 = getTokenSlug(token1) === getTokenSlug(currentToken);
       const currentSlippageToleranceQuotient = (
         new BigNumber(1).minus(slippageTolerance).toNumber()
@@ -134,9 +134,9 @@ export const getSwapTransferParams = async (
         minOut = new BigNumber(1);
       }
 
-      if (typeof prevDexId === 'number') {
-        if (typeof id === 'string') {
-          const tokenToXtzContract = await getWalletContract(tezos.wallet, id);
+      if (prevDex?.type === 'ttdex') {
+        if (currentDex.type === 'tokenxtz') {
+          const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
           swapsParams.push(
             ttDexContract!.methods.swap(
               ttdexSwapStepsParams,
@@ -147,7 +147,7 @@ export const getSwapTransferParams = async (
             ).toTransferParams({ storageLimit: 1000 }),
           );
           ttdexSwapStepsParams = [];
-          addFa2Operator(currentToken, id);
+          addFa2Operator(currentToken, currentDex.id);
           swapsParams.push(
             ...(await getAllowanceTransferParams(
               tezos,
@@ -165,11 +165,11 @@ export const getSwapTransferParams = async (
         } else {
           ttdexSwapStepsParams.push({
             operation: shouldSellToken1 ? { a_to_b: {} } : { b_to_a: {} },
-            pair_id: id,
+            pair_id: currentDex.id,
           });
         }
-      } else if (typeof id === 'string') {
-        const tokenToXtzContract = await getWalletContract(tezos.wallet, id);
+      } else if (currentDex.type === 'tokenxtz') {
+        const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
         if (currentToken.contractAddress === TEZOS_TOKEN.contractAddress) {
           swapsParams.push(
             tokenToXtzContract.methods.tezToTokenPayment(
@@ -181,13 +181,13 @@ export const getSwapTransferParams = async (
             }),
           );
         } else {
-          addFa2Operator(currentToken, id);
+          addFa2Operator(currentToken, currentDex.id);
           swapsParams.push(
             ...(await getAllowanceTransferParams(
               tezos,
               currentToken,
               accountPkh,
-              id,
+              currentDex.id,
               currentDexInput,
             )),
             tokenToXtzContract.methods.tokenToTezPayment(
@@ -211,7 +211,7 @@ export const getSwapTransferParams = async (
         );
         ttdexSwapStepsParams.push({
           operation: shouldSellToken1 ? { a_to_b: {} } : { b_to_a: {} },
-          pair_id: id,
+          pair_id: currentDex.id,
         });
       }
 
