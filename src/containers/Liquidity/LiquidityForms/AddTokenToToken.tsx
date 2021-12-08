@@ -230,6 +230,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh || !dex || !validTokenA || !validTokenB) return;
+    const ten = new BigNumber(10);
 
     if (
       pairId
@@ -239,7 +240,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       && pairData.totalSupply.gt(0)
     ) {
       const shares = new BigNumber(tokenAInput)
-        .multipliedBy(10 ** validTokenA.metadata.decimals)
+        .multipliedBy(ten.pow(validTokenA.metadata.decimals))
         .multipliedBy(pairData.totalSupply)
         .idiv(pairData.tokenAPool);
 
@@ -253,15 +254,14 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       await dex.contract.methods.invest(
         pairId,
         shares,
-        new BigNumber(tokenAInput).multipliedBy(10 ** validTokenA.metadata.decimals),
-        Math.ceil(+tokenBIn.toFixed()),
+        new BigNumber(tokenAInput).multipliedBy(ten.pow(validTokenA.metadata.decimals)),
+        tokenBIn.integerValue(BigNumber.ROUND_CEIL),
         timestamp.toString(),
       ).send();
     } else {
       const tokenAContract = await tezos.wallet.at(validTokenA.contractAddress);
       const tokenBContract = await tezos.wallet.at(validTokenB.contractAddress);
 
-      const ten = new BigNumber(10);
       const tokenADecimals = ten.pow(validTokenA.metadata.decimals);
       const tokenBDecimals = ten.pow(validTokenB.metadata.decimals);
 
