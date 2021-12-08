@@ -50,12 +50,17 @@ export const Header: React.FC<HeaderProps> = ({
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton href="/" />
         <ConnectWalletButton className={s.connect} />
-        <LanguageSwitcher
-          direction="bottom"
-          className={s.languageSwitcher}
-          locale="RU"
-          locales={['EN', 'PL', 'GE', 'IT']}
-        />
+        {
+          // TODO: Restore Languages
+          false && (
+          <LanguageSwitcher
+            direction="bottom"
+            className={s.languageSwitcher}
+            locale="EN"
+            locales={['EN', 'RU', 'PL', 'GE', 'IT']}
+          />
+          )
+        }
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button
           theme="quaternary"

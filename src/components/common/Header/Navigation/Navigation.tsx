@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import cx from 'classnames';
 
+import { isActivePath } from '@components/common/Header/Navigation/utils';
 import { useNetwork } from '@utils/dapp';
 
 import { makeNavigationData } from './content';
@@ -41,18 +42,12 @@ export const Navigation: React.FC<NavigationProps> = ({
     }) => {
       if (href) {
         result.push(
-          <Link
-            key={id}
-            href={href}
-            as={as}
-          >
+          <Link key={id} href={href} as={as}>
             <a
               className={cx(
                 s.link,
                 {
-                  [s.active]: router.pathname === '/'
-                    ? href === '/'
-                    : href !== '/' && router.pathname.includes(href),
+                  [s.active]: isActivePath(router.pathname, href),
                 },
                 modeClass[colorThemeMode],
               )}
