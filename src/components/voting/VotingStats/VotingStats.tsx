@@ -42,6 +42,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const accountPkh = useAccountPkh();
 
   const BNZero = new BigNumber(0);
+
   const isRewardGreaterThenZero = () =>
     new BigNumber(pendingReward).isGreaterThan(BNZero);
 
