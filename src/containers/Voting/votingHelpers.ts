@@ -178,7 +178,7 @@ export const unvoteOrUnveto = (
 ): Promise<IBatchParamsAndToastText> => {
   if (tab === 'vote' && baker) return unvote(tezos, dex, baker);
 
-  if (tab !== 'veto') return unveto(tezos, dex);
+  if (tab === 'veto') return unveto(tezos, dex);
 
   throw Error('Something went wrong');
 };
