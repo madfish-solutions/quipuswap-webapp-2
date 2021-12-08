@@ -1,5 +1,5 @@
 export * from './bigNumber';
-export * from './isContractAddress';
+export * from './isValidContractAddress';
 export * from './isAddress';
 export * from './isValidTokenSlug';
 export * from './composeValidators';

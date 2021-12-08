@@ -35,7 +35,8 @@ export const Navigation: React.FC<NavigationProps> = ({
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    makeNavigationData(network.id).forEach(({
+    const navigationData = makeNavigationData(network.id);
+    navigationData.forEach(({
       id, href, label, Icon, links, as,
     }) => {
       if (href) {
@@ -77,10 +78,10 @@ export const Navigation: React.FC<NavigationProps> = ({
               {label}
             </button>
             <span className={s.linksInner}>
-              {links.map((el) => (
+              {links.map((link) => (
                 <Link
-                  key={el.id}
-                  href={el.href ?? ''}
+                  key={link.id}
+                  href={link.href ?? ''}
                 >
                   <a
                     className={cx(
@@ -91,7 +92,7 @@ export const Navigation: React.FC<NavigationProps> = ({
                     rel="noreferrer noopener"
                     onFocus={() => setIsInnerMenuOpened(true)}
                   >
-                    {el.label}
+                    {link.label}
                   </a>
                 </Link>
               ))}
