@@ -43,8 +43,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
 
   const BNZero = new BigNumber(0);
 
-  const isRewardGreaterThenZero = () =>
-    new BigNumber(pendingReward).isGreaterThan(BNZero);
+  const isRewardGreaterThenZero = () => new BigNumber(pendingReward).isGreaterThan(BNZero);
 
   const content = useMemo(
     () => [
@@ -69,7 +68,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
       },
     ],
-    [amounts]
+    [amounts],
   );
 
   return (
@@ -80,7 +79,8 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       <div className={s.reward}>
         <div className={s.rewardContent}>
           <span className={s.rewardHeader}>
-            {t('vote|Your Pending Rewards')}:
+            {t('vote|Your Pending Rewards')}
+            :
           </span>
           <span className={s.rewardAmount}>
             {pendingReward}
@@ -89,7 +89,9 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         </div>
         <VotingReward />
       </div>
-      {content.map(({ id, header, amount, tooltip }) => (
+      {content.map(({
+        id, header, amount, tooltip,
+      }) => (
         <div key={id} className={s.item}>
           <span className={s.header}>
             {t(header)}

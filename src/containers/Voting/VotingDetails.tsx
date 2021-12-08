@@ -39,9 +39,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     if (dex?.storage?.storage) {
       return (
         bakers.find(
-          (x) => x.address === dex.storage.storage.current_candidate
-        ) ||
-        ({
+          (x) => x.address === dex.storage.storage.current_candidate,
+        )
+        || ({
           address: dex.storage.storage.current_candidate,
         } as WhitelistedBaker)
       );
@@ -53,9 +53,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     if (dex?.storage?.storage) {
       return (
         bakers.find(
-          (x) => x.address === dex.storage.storage.current_delegated
-        ) ||
-        ({
+          (x) => x.address === dex.storage.storage.current_delegated,
+        )
+        || ({
           address: dex.storage.storage.current_delegated,
         } as WhitelistedBaker)
       );
@@ -74,7 +74,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     if (dex?.storage?.storage) {
       return fromDecimals(
         dex.storage.storage.total_votes,
-        TEZOS_TOKEN.metadata.decimals
+        TEZOS_TOKEN.metadata.decimals,
       ).toFixed();
     }
     return '';
@@ -84,7 +84,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     if (dex?.storage?.storage) {
       return fromDecimals(
         dex.storage.storage.veto,
-        TEZOS_TOKEN.metadata.decimals
+        TEZOS_TOKEN.metadata.decimals,
       ).toFixed();
     }
     return '';
@@ -94,11 +94,11 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     if (dex?.storage?.storage) {
       return fromDecimals(
         dex.storage.storage.total_votes,
-        TEZOS_TOKEN.metadata.decimals
+        TEZOS_TOKEN.metadata.decimals,
       )
         .div(3)
         .minus(
-          fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals)
+          fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals),
         )
         .toFixed(6);
     }
@@ -106,10 +106,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   }, [dex]);
 
   const pairLink = useMemo(
-    () =>
-      tokenPair.dex &&
-      `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`,
-    [tokenPair.dex]
+    () => tokenPair.dex
+      && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`,
+    [tokenPair.dex],
   );
 
   return (
@@ -120,24 +119,24 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       contentClassName={s.content}
     >
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Delegated To')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t(
-                'vote|Current baker elected by simple majority of votes.'
+                'vote|Current baker elected by simple majority of votes.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         {currentCandidate ? (
           <Button
             href={`https://tzkt.io/${currentCandidate.address}`}
             external
-            theme='underlined'
+            theme="underlined"
             title={getWhitelistedBakerName(currentCandidate)}
           >
             {getWhitelistedBakerName(currentCandidate)}
@@ -147,24 +146,24 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Second Candidate')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t(
-                'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.'
+                'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         {secondCandidate ? (
           <Button
             href={`https://tzkt.io/${secondCandidate.address}`}
             external
-            theme='underlined'
+            theme="underlined"
             title={getWhitelistedBakerName(secondCandidate)}
           >
             {getWhitelistedBakerName(secondCandidate)}
@@ -174,54 +173,54 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Total Votes')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t(
-                'vote|The total amount of votes cast to elect a baker in the pool.'
+                'vote|The total amount of votes cast to elect a baker in the pool.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={totalVotes} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Total Vetos')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t(
-                'vote|The total amount of shares cast so far to veto the current baker.'
+                'vote|The total amount of shares cast so far to veto the current baker.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={totalVeto} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Your Candidate')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t('vote|The candidate you voted for.')}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         {myCandidate ? (
           <Button
             href={`https://tzkt.io/${myCandidate.address}`}
             external
-            theme='underlined'
+            theme="underlined"
             title={getWhitelistedBakerName(myCandidate)}
           >
             {getWhitelistedBakerName(myCandidate)}
@@ -231,17 +230,17 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('Votes To Veto Left')}
             <Tooltip
-              sizeT='small'
+              sizeT="small"
               content={t(
-                'vote|This much more votes needed to veto a delegate.'
+                'vote|This much more votes needed to veto a delegate.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={votesToVeto} />
@@ -250,7 +249,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         <div className={s.detailsButtons}>
           <Button
             className={s.detailsButton}
-            theme='inverse'
+            theme="inverse"
             href={pairLink}
             external
             icon={<ExternalLink className={s.linkIcon} />}
