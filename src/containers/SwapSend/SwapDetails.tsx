@@ -36,6 +36,63 @@ type SwapDetailsProps = {
   route?: DexPair[];
 };
 
+const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute: DexPair[]) => {
+  if (dexRoute.length === 0) {
+    return [];
+  }
+
+  return dexRoute.reduce<{ displayedRoute: RouteProps['routes'], currentToken: WhitelistedToken }>(
+    ({ displayedRoute, currentToken }, { token1, token2 }, index) => {
+      const token1IsNext = getTokenSlug(token2) === getTokenSlug(currentToken);
+      const newCurrentToken = token1IsNext ? token1 : token2;
+      const {
+        contractAddress,
+        type: tokenType,
+        fa2TokenId,
+        metadata: { decimals },
+      } = newCurrentToken;
+
+      return {
+        displayedRoute: [
+          ...displayedRoute,
+          {
+            id: index + 1,
+            name: getWhitelistedTokenSymbol(newCurrentToken),
+            link: transformTokenDataToAnalyticsLink({
+              token: {
+                address: contractAddress,
+                type: tokenType,
+                id: fa2TokenId,
+                decimals,
+              },
+              balance: '0',
+            }),
+          },
+        ],
+        currentToken: newCurrentToken,
+      };
+    },
+    {
+      displayedRoute: [
+        {
+          id: 0,
+          name: getWhitelistedTokenSymbol(inputToken),
+          link: transformTokenDataToAnalyticsLink({
+            token: {
+              address: inputToken.contractAddress,
+              type: inputToken.type,
+              id: inputToken.fa2TokenId,
+              decimals: inputToken.metadata.decimals,
+            },
+            balance: '0',
+          }),
+        },
+      ],
+      currentToken: inputToken,
+    },
+  ).displayedRoute;
+};
+
 export const SwapDetails: React.FC<SwapDetailsProps> = ({
   currentTab,
   fee,
@@ -74,8 +131,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
             outputToken.metadata.decimals,
           );
           return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
-          // eslint-disable-next-line no-empty
-        } catch {}
+        } catch (_) {
+          // ignore error
+        }
       }
       return undefined;
     },
@@ -96,43 +154,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   );
 
   const routes = useMemo(
-    () => {
-      const displayedRoute: RouteProps['routes'] = [];
-      if (inputToken && route.length > 0) {
-        displayedRoute.push({
-          id: 0,
-          name: getWhitelistedTokenSymbol(inputToken),
-          link: transformTokenDataToAnalyticsLink({
-            token: {
-              address: inputToken.contractAddress,
-              type: inputToken.type,
-              id: inputToken.fa2TokenId,
-              decimals: inputToken.metadata.decimals,
-            },
-            balance: '0',
-          }),
-        });
-        let currentToken = inputToken;
-        route.forEach(({ token1, token2 }, index) => {
-          const token1IsNext = getTokenSlug(token2) === getTokenSlug(currentToken);
-          currentToken = token1IsNext ? token1 : token2;
-          displayedRoute.push({
-            id: index + 1,
-            name: getWhitelistedTokenSymbol(currentToken),
-            link: transformTokenDataToAnalyticsLink({
-              token: {
-                address: currentToken.contractAddress,
-                type: currentToken.type,
-                id: currentToken.fa2TokenId,
-                decimals: currentToken.metadata.decimals,
-              },
-              balance: '0',
-            }),
-          });
-        });
-      }
-      return displayedRoute;
-    },
+    () => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []),
     [inputToken, route],
   );
 
@@ -248,12 +270,17 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       </CardCell>
       {(route.length > 0) && (
         <div className={s.detailsButtons}>
-          {route.map(({ id, token1, token2 }) => (
+          {route.map(({
+            id,
+            type: dexType,
+            token1,
+            token2,
+          }) => (
             <Button
               key={id}
               className={s.detailsButton}
               theme="inverse"
-              href={typeof id === 'string'
+              href={dexType === 'tokenxtz'
                 ? `https://analytics.quipuswap.com/pairs/${id}`
                 : '#'}
               external
