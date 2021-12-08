@@ -14,7 +14,7 @@
     "@airgap/beacon-sdk": "^2.3.0",
     "@apollo/client": "^3.3.21",
     "@quipuswap/sdk": "^2.2.1",
-    "@quipuswap/ui-kit": "^0.1.16",
+    "@quipuswap/ui-kit": "0.1.17",
     "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/taquito": "^9.2.0",
     "@taquito/utils": "^9.2.0",
