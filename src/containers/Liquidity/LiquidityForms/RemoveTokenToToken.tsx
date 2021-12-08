@@ -18,7 +18,8 @@ import {
   useTezos,
   useAccountPkh,
 } from '@utils/dapp';
-import { noOpFunc } from '@utils/helpers';
+import { fromDecimals, noOpFunc } from '@utils/helpers';
+import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
@@ -99,57 +100,68 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       setTokenBOutput('');
       return;
     }
-    const tokenAPerOneLp = pairData.tokenAPool
-      .dividedBy(pairData.totalSupply);
-
-    const tokenBPerOneLp = pairData.tokenBPool
-      .dividedBy(pairData.totalSupply);
-
     const addresses = sortTokensContracts(tokenA, tokenB);
-    const validTokenA = addresses?.addressA === tokenA.contractAddress
-      ? tokenA
-      : tokenB;
-    const validTokenB = addresses?.addressB === tokenB.contractAddress
-      ? tokenB
-      : tokenA;
+    if (!addresses) return;
+
+    const tokenAPerOneLp = addresses.addressA === tokenA.contractAddress
+      ? pairData.tokenAPool.dividedBy(pairData.totalSupply)
+      : pairData.tokenBPool.dividedBy(pairData.totalSupply);
+    const tokenBPerOneLp = addresses.addressB === tokenB.contractAddress
+      ? pairData.tokenBPool.dividedBy(pairData.totalSupply)
+      : pairData.tokenAPool.dividedBy(pairData.totalSupply);
+
+    const lpInputWithDecimals = new BigNumber(10).pow(6).multipliedBy(lpTokenInput);
+
+    const tokenAOut = tokenAPerOneLp
+      .multipliedBy(lpInputWithDecimals);
+    const tokenBOut = tokenBPerOneLp
+      .multipliedBy(lpInputWithDecimals);
 
     setTokenAOutput(
-      tokenAPerOneLp
-        .multipliedBy(lpTokenInput)
-        .toFixed(validTokenA.metadata.decimals),
+      fromDecimals(tokenAOut, tokenA.metadata.decimals)
+        .toFixed(tokenA.metadata.decimals),
     );
     setTokenBOutput(
-      tokenBPerOneLp
-        .multipliedBy(lpTokenInput)
-        .toFixed(validTokenB.metadata.decimals),
+      fromDecimals(tokenBOut, tokenB.metadata.decimals)
+        .toFixed(tokenB.metadata.decimals),
     );
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
-    const addresses = sortTokensContracts(tokenA, tokenB);
-    const validTokenA = addresses?.addressA === tokenA.contractAddress
-      ? tokenA
-      : tokenB;
-    const validTokenB = addresses?.addressB === tokenB.contractAddress
-      ? tokenB
-      : tokenA;
+    const ten = new BigNumber(10);
 
-    const shares = new BigNumber(lpTokenInput).multipliedBy(1_000_000);
-    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(10 ** validTokenA.metadata.decimals);
-    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(10 ** validTokenB.metadata.decimals);
+    const shares = new BigNumber(lpTokenInput).multipliedBy(ten.pow(LP_TOKEN_DECIMALS));
+    const tokenAOut = new BigNumber(tokenAOutput)
+      .multipliedBy(ten.pow(tokenA.metadata.decimals));
+    const tokenBOut = new BigNumber(tokenBOutput)
+      .multipliedBy(ten.pow(tokenB.metadata.decimals));
 
     const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
     const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
 
-    await dex.contract.methods.divest(
-      pairId,
-      tokenAOut,
-      tokenBOut,
-      shares,
-      timestamp.toString(),
-    ).send();
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    console.log(addresses);
+
+    if (!addresses) return;
+    if (addresses.addressA === tokenA.contractAddress) {
+      await dex.contract.methods.divest(
+        pairId,
+        tokenAOut,
+        tokenBOut,
+        shares,
+        timestamp.toString(),
+      ).send();
+    } else {
+      await dex.contract.methods.divest(
+        pairId,
+        tokenBOut,
+        tokenAOut,
+        shares,
+        timestamp.toString(),
+      ).send();
+    }
 
     setLpTokenInput('');
   };

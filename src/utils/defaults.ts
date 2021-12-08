@@ -155,3 +155,5 @@ export const TS_TOKEN:WhitelistedToken = {
     thumbnailUri: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
   },
 };
+
+export const LP_TOKEN_DECIMALS = 6;
