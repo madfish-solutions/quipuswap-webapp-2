@@ -4,10 +4,10 @@ import { TezosToolkit } from '@taquito/taquito';
 
 import { WhitelistedToken } from '@utils/types';
 
-import { updateOperator } from './updateOperator';
+import { allowContractSpendYourTokens } from './allowContractSpendYourTokens';
 import { getValidPairParams } from './getValidPairParams';
 
-export const addLiquidityTokenToToken = async (
+export const addPairTokenToToken = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   accountPkh: string,
@@ -23,7 +23,7 @@ export const addLiquidityTokenToToken = async (
   const fixedTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
   const fixedTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
 
-  const tokenAUpdateOperator = await updateOperator(
+  const tokenAUpdateOperator = await allowContractSpendYourTokens(
     tezos,
     tokenA,
     dex.contract.address,
@@ -31,7 +31,7 @@ export const addLiquidityTokenToToken = async (
     accountPkh,
   );
   if (!tokenAUpdateOperator) return;
-  const tokenBUpdateOperator = await updateOperator(
+  const tokenBUpdateOperator = await allowContractSpendYourTokens(
     tezos,
     tokenB,
     dex.contract.address,

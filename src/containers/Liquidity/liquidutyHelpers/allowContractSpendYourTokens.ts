@@ -3,7 +3,7 @@ import { ContractMethod, TezosToolkit, Wallet } from '@taquito/taquito';
 import { WhitelistedToken } from '@utils/types';
 import BigNumber from 'bignumber.js';
 
-export const updateOperator = async (
+export const allowContractSpendYourTokens = async (
   tezos: TezosToolkit,
   token: WhitelistedToken,
   spender: string,
