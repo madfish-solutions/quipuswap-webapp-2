@@ -47,12 +47,12 @@ WhitelistedToken,
 >;
 
 export interface WhitelistedBaker {
-  name: string,
   address: string,
-  logo: string,
-  votes: number,
-  fee: number,
-  freeSpace: BigNumber
+  name?: string,
+  logo?: string,
+  votes?: number,
+  fee?: number,
+  freeSpace?: BigNumber
 }
 
 export type WhitelistedTokenMetadata = {

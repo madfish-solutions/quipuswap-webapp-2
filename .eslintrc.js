@@ -13,6 +13,7 @@ module.exports = {
     'no-plusplus': 0,
     'linebreak-style': 0,
     'consistent-return': 'off',
+    'max-len': ["warn", { "code": 100 }],
   },
   parserOptions: {
     project: './tsconfig.json',
