@@ -183,6 +183,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
                 tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
+                tokenType={token.type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}
               />
