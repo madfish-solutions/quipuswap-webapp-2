@@ -73,6 +73,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     () => (amount === undefined ? '' : new BigNumber(amount).toFixed()),
     [amount],
   );
+  const tokenDecimals = token?.metadata.decimals;
 
   const [localAmount, setLocalAmount] = useState(amountStr);
   const [focused, setFocused] = useState(false);
@@ -109,7 +110,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       let val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
       let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
-      const assetDecimals = token?.metadata.decimals ?? Infinity;
+      const assetDecimals = tokenDecimals ?? Infinity;
       if (indexOfDot !== -1 && val.length - indexOfDot > assetDecimals + 1) {
         val = val.substring(0, indexOfDot + assetDecimals + 1);
         numVal = new BigNumber(val);
@@ -120,7 +121,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
         onAmountChange(val === '' ? undefined : numVal);
       }
     },
-    [onAmountChange, token?.metadata.decimals],
+    [onAmountChange, tokenDecimals],
   );
 
   const handleFocus = useCallback(() => setFocused(true), []);
@@ -145,15 +146,16 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   );
 
   const handlePercentageSelect = useCallback((state: string) => {
-    setLocalAmount(state);
-    onAmountChange(new BigNumber(state));
-  }, [onAmountChange]);
+    const newValue = new BigNumber(state).decimalPlaces(tokenDecimals ?? 3);
+    setLocalAmount(newValue.toFixed());
+    onAmountChange(newValue);
+  }, [onAmountChange, tokenDecimals]);
 
   const formattedBalance = useMemo(() => {
     if (!balance) {
       return balance;
     }
-    const correctBalance = balance.decimalPlaces(token?.metadata.decimals ?? 3);
+    const correctBalance = balance.decimalPlaces(tokenDecimals ?? 3);
     if (balance.eq(0)) {
       return balance.toFixed();
     }
@@ -163,7 +165,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       : Math.max(6, -integerLog + 1);
 
     return correctBalance.decimalPlaces(decimalPlaces).toFixed();
-  }, [balance, token?.metadata.decimals]);
+  }, [balance, tokenDecimals]);
 
   return (
     <>
