@@ -207,6 +207,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       <Button
         className={s.button}
         onClick={handleRemoveLiquidity}
+        disabled={!accountPkh}
       >
         Remove
       </Button>

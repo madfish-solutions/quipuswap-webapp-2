@@ -145,6 +145,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
       <Button
         className={s.button}
         onClick={handleRemoveLiquidity}
+        disabled={!accountPkh}
       >
         Remove
       </Button>

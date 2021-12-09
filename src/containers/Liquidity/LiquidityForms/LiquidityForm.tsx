@@ -6,7 +6,6 @@ import React, {
 import {
   Tabs,
   Card,
-  Button,
 } from '@quipuswap/ui-kit';
 import {
   Token,
@@ -37,7 +36,6 @@ import {
   FA12_TOKEN,
 } from '@utils/defaults';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Transactions } from '@components/svg/Transactions';
 
 import { LiquidityDetails } from '../LiquidityDetails';
 import { AddTezToToken } from './AddTezToToken';
@@ -77,9 +75,9 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const networkId = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
 
-  const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(FA12_TOKEN);
   const [tokenB, setTokenB] = useState(TS_TOKEN);
+  const [tokenA, setTokenA] = useState(FA12_TOKEN);
+  const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenABalance, setTokenABalance] = useState<string>('0');
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
@@ -125,10 +123,12 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
 
           foundDex = await findDex(tezos, FACTORIES[networkId], token);
         } else {
-          const contract = await tezos.wallet.at(TOKEN_TO_TOKEN_DEX); // TODO: Create Promise.all
-          const storage = await getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
+          const contract = tezos.wallet.at(TOKEN_TO_TOKEN_DEX);
+          const storage = getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
 
-          foundDex = new FoundDex(contract, storage);
+          const dexResolved = await Promise.all([contract, storage]);
+
+          foundDex = new FoundDex(dexResolved[0], dexResolved[1]);
         }
 
         if (isMounted) setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
@@ -253,13 +253,6 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
               setActiveId={setActiveId}
               className={s.tabs}
             />
-          ),
-          button: (
-            <Button
-              theme="quaternary"
-            >
-              <Transactions />
-            </Button>
           ),
           className: s.header,
         }}

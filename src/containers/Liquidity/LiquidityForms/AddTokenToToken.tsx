@@ -53,38 +53,18 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
+  const [pairId, setPairId] = useState<BigNumber>();
+  const [pairData, setPairData] = useState<{
+    totalSupply: BigNumber,
+    tokenAPool: BigNumber,
+    tokenBPool: BigNumber,
+  } | null>(null);
   const [tokenPairAndInputs, setTokenPairAndInputs] = useState<{
     pairTokenA: WhitelistedToken,
     pairTokenB: WhitelistedToken,
     pairInputA: string,
     pairInputB: string,
   } | null>(null);
-  const [pairId, setPairId] = useState<BigNumber>();
-  const [pairData, setPairDataInfo] = useState<{
-    totalSupply: BigNumber,
-    tokenAPool: BigNumber,
-    tokenBPool: BigNumber,
-  } | null>(null);
-
-  useEffect(() => {
-    const sortedTokens = sortTokensContracts(tokenA, tokenB);
-    if (!sortedTokens) return;
-    if (sortedTokens.addressA === tokenA.contractAddress) {
-      setTokenPairAndInputs({
-        pairTokenA: tokenA,
-        pairTokenB: tokenB,
-        pairInputA: tokenAInput,
-        pairInputB: tokenBInput,
-      });
-    } else {
-      setTokenPairAndInputs({
-        pairTokenA: tokenB,
-        pairTokenB: tokenA,
-        pairInputA: tokenBInput,
-        pairInputB: tokenAInput,
-      });
-    }
-  }, [tokenA, tokenB]);
 
   useEffect(() => {
     let isMounted = true;
@@ -102,20 +82,96 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       if (id) {
         const data = await dex.storage.storage.pairs.get(id);
         if (isMounted) {
+          if (addresses.addressA === tokenA.contractAddress) {
+            setTokenPairAndInputs({
+              pairTokenA: tokenA,
+              pairTokenB: tokenB,
+              pairInputA: tokenAInput,
+              pairInputB: tokenBInput,
+            });
+          } else {
+            setTokenPairAndInputs({
+              pairTokenA: tokenB,
+              pairTokenB: tokenA,
+              pairInputA: tokenBInput,
+              pairInputB: tokenAInput,
+            });
+          }
+
           setPairId(id);
-          setPairDataInfo({
+          setPairData({
             totalSupply: data.total_supply,
             tokenAPool: data.token_a_pool,
             tokenBPool: data.token_b_pool,
           });
         }
       } else if (!id && isMounted) {
-        setPairDataInfo(null);
+        setPairData(null);
       }
     };
     loadPairData();
     return () => { isMounted = false; };
   }, [dex]);
+  useEffect(() => {
+    if (!pairData || !tokenPairAndInputs) return;
+
+    if (tokenBInput === '') {
+      setTokenAInput('');
+    } else {
+      const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
+      const tokenBAmountWithDecimals = new BigNumber(tokenBInput).multipliedBy(decimalsB);
+      const calculatedTokenAInput = (
+        tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
+      )
+        ? calculateTokenAmount(
+          tokenBAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        )
+        : calculateTokenAmount(
+          tokenBAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        );
+
+      setTokenAInput(
+        fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals)
+          .toFixed(tokenA.metadata.decimals),
+      );
+    }
+  }, [tokenABalance]);
+  useEffect(() => {
+    if (!pairData || !tokenPairAndInputs) return;
+
+    if (tokenAInput === '') {
+      setTokenBInput('');
+    } else {
+      const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
+      const calculatedTokenAInput = (
+        tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
+      )
+        ? calculateTokenAmount(
+          tokenAAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenAPool,
+          pairData.tokenBPool,
+        )
+        : calculateTokenAmount(
+          tokenAAmountWithDecimals,
+          pairData.totalSupply,
+          pairData.tokenBPool,
+          pairData.tokenAPool,
+        );
+
+      setTokenBInput(
+        fromDecimals(calculatedTokenAInput, tokenB.metadata.decimals)
+          .toFixed(tokenB.metadata.decimals),
+      );
+    }
+  }, [tokenBBalance]);
 
   const handleTokenAInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -362,6 +418,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       <Button
         className={s.button}
         onClick={handleAddLiquidity}
+        disabled={!accountPkh}
       >
         Add
       </Button>

@@ -245,6 +245,7 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
       <Button
         className={s.button}
         onClick={handleAddLiquidity}
+        disabled={!accountPkh}
       >
         Add
       </Button>
