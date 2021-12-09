@@ -44,7 +44,6 @@ import {
   getTokenOutput,
   getTokenSlug,
   getWhitelistedTokenSymbol,
-  slippageToBignum,
   toDecimals,
 } from '@utils/helpers';
 import {
@@ -102,14 +101,14 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   slippage,
   outputToken,
 }) => {
-  const handleChange = useCallback((newValue: string) => {
-    if (newValue === '') {
+  const handleChange = (newValue?: string) => {
+    if (!newValue) {
       onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
     } else {
-      const parsedPercentage = slippageToBignum(newValue);
+      const parsedPercentage = new BigNumber(newValue);
       onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
     }
-  }, [onChange]);
+  };
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
