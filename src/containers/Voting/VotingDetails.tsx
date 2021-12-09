@@ -12,15 +12,16 @@ import { FoundDex } from '@quipuswap/sdk';
 import cx from 'classnames';
 
 import {
+  Undefined,
   VoterType,
   WhitelistedBaker,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { fromDecimals, getWhitelistedBakerName } from '@utils/helpers';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { useBakers } from '@utils/dapp';
 
 import s from '@styles/CommonContainer.module.sass';
+import { getCandidateInfo, getVeteVetoInfo } from './getBackerInfo';
+import { CandidateButton } from './CandidateButton';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair;
@@ -36,48 +37,23 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
   const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
 
-  const currentCandidate: WhitelistedBaker | undefined = useMemo(() => (dex?.storage?.storage ? (
-    bakers.find(
-      (x) => x.address === dex.storage.storage.current_candidate,
-    )
-      || ({
-        address: dex.storage.storage.current_candidate,
-      })
-  ) : undefined), [dex, bakers]);
-
-  const secondCandidate: WhitelistedBaker | undefined = (dex?.storage?.storage ? (
-    bakers.find(
-      (x) => x.address === dex.storage.storage.current_delegated,
-    ) || ({
-      address: dex.storage.storage.current_delegated,
-    })
-  ) : undefined);
+  const { currentCandidate, secondCandidate } = useMemo(
+    () => getCandidateInfo(dex, bakers),
+    [dex, bakers],
+  );
 
   // eslint-disable-next-line max-len
-  const myCandidate: WhitelistedBaker | undefined = (voter?.candidate ? bakers.find((x) => x.address === voter?.candidate) : undefined);
+  const myCandidate: Undefined<WhitelistedBaker> = bakers.find(
+    (backer) => backer.address === voter?.candidate,
+  );
 
-  const totalVotes = (dex?.storage?.storage ? fromDecimals(
-    dex.storage.storage.total_votes,
-    TEZOS_TOKEN.metadata.decimals,
-  ).toFixed() : '');
-
-  const totalVeto = (dex?.storage?.storage ? fromDecimals(
-    dex.storage.storage.veto,
-    TEZOS_TOKEN.metadata.decimals,
-  ).toFixed() : '');
-
-  const votesToVeto = (dex?.storage?.storage ? fromDecimals(
-    dex.storage.storage.total_votes,
-    TEZOS_TOKEN.metadata.decimals,
-  )
-    .div(3)
-    .minus(
-      fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals),
-    )
-    .toFixed(6) : '');
+  const { totalVotes, totalVeto, votesToVeto } = useMemo(
+    () => getVeteVetoInfo(dex),
+    [dex],
+  );
 
   const pairLink = tokenPair.dex
-      && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
+    && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
   return (
     <Card
       header={{
@@ -99,18 +75,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
         className={cx(s.cellCenter, s.cell)}
       >
-        {currentCandidate ? (
-          <Button
-            href={`https://tzkt.io/${currentCandidate.address}`}
-            external
-            theme="underlined"
-            title={getWhitelistedBakerName(currentCandidate)}
-          >
-            {getWhitelistedBakerName(currentCandidate)}
-          </Button>
-        ) : (
-          '—'
-        )}
+        <CandidateButton candidate={currentCandidate} />
       </CardCell>
       <CardCell
         header={(
@@ -126,18 +91,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
         className={cx(s.cellCenter, s.cell)}
       >
-        {secondCandidate ? (
-          <Button
-            href={`https://tzkt.io/${secondCandidate.address}`}
-            external
-            theme="underlined"
-            title={getWhitelistedBakerName(secondCandidate)}
-          >
-            {getWhitelistedBakerName(secondCandidate)}
-          </Button>
-        ) : (
-          '—'
-        )}
+        <CandidateButton candidate={secondCandidate} />
       </CardCell>
       <CardCell
         header={(
@@ -183,18 +137,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         )}
         className={cx(s.cellCenter, s.cell)}
       >
-        {myCandidate ? (
-          <Button
-            href={`https://tzkt.io/${myCandidate.address}`}
-            external
-            theme="underlined"
-            title={getWhitelistedBakerName(myCandidate)}
-          >
-            {getWhitelistedBakerName(myCandidate)}
-          </Button>
-        ) : (
-          '—'
-        )}
+        <CandidateButton candidate={myCandidate} />
       </CardCell>
       <CardCell
         header={(
@@ -213,17 +156,17 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
         <CurrencyAmount amount={votesToVeto} />
       </CardCell>
       {tokenPair.dex && (
-      <div className={s.detailsButtons}>
-        <Button
-          className={s.detailsButton}
-          theme="inverse"
-          href={pairLink}
-          external
-          icon={<ExternalLink className={s.linkIcon} />}
-        >
-          {t('vote|Pair Analytics')}
-        </Button>
-      </div>
+        <div className={s.detailsButtons}>
+          <Button
+            className={s.detailsButton}
+            theme="inverse"
+            href={pairLink}
+            external
+            icon={<ExternalLink className={s.linkIcon} />}
+          >
+            {t('vote|Pair Analytics')}
+          </Button>
+        </div>
       )}
     </Card>
   );
