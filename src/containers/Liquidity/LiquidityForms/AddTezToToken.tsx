@@ -21,12 +21,13 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import s from '../Liquidity.module.sass';
 import {
   addLiquidity,
   calculateTokenAmount,
+  initializeLiquidity,
 } from '../liquidutyHelpers';
-import { initializeLiquidity } from '../liquidutyHelpers/initializeLiquidity';
 
 type AddTezToTokenProps = {
   dex: FoundDex | null;
@@ -226,7 +227,7 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
         setToken={setTokenA}
         value={tokenAInput}
         onChange={handleTokenAChange}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenABalance}
         noBalanceButtons={!accountPkh}
       />
@@ -238,7 +239,7 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
         setToken={setTokenB}
         value={tokenBInput}
         onChange={handleTokenBChange}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />

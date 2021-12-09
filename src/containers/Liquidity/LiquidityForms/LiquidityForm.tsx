@@ -88,14 +88,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
     isTezosToTokenDex:boolean,
   }>({ dex: null, isTezosToTokenDex: false });
 
-  const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => {
-    if (
-      contractAddressA === TEZOS_TOKEN.contractAddress
-      || contractAddressB === TEZOS_TOKEN.contractAddress
-    ) return true;
+  // eslint-disable-next-line max-len
+  const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => contractAddressA === TEZOS_TOKEN.contractAddress
+      || contractAddressB === TEZOS_TOKEN.contractAddress;
 
-    return false;
-  };
   const setActiveId = useCallback(
     (tabId:string) => {
       router.replace(
@@ -108,9 +104,10 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
       setTabState(findActiveTab);
     }, [],
   );
+
   useEffect(() => {
     let isMounted = true;
-    let foundDex:FoundDex;
+    let foundDex: FoundDex;
     const loadDex = async () => {
       if (!tezos) return;
       const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
@@ -140,6 +137,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
 
     return () => { isMounted = false; };
   }, [tezos, networkId, tokenA, tokenB]);
+
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
@@ -166,6 +164,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
 
     return () => { isMounted = false; };
   }, [tezos, accountPkh, tokenA]);
+
   useEffect(() => {
     let isMounted = true;
     const getTokenBBalance = async () => {
@@ -192,6 +191,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
 
     return () => { isMounted = false; };
   }, [tezos, accountPkh, tokenB]);
+
   useEffect(() => {
     let isMounted = true;
     const getLpTokenBalance = async () => {

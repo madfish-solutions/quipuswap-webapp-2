@@ -18,14 +18,15 @@ import { WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import {
   sortTokensContracts,
   calculateTokenAmount,
   getValidMichelTemplate,
   allowContractSpendYourTokens,
+  addPairTokenToToken,
 } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
-import { addPairTokenToToken } from '../liquidutyHelpers/addPairTokenToToken';
 
 const MichelCodec = require('@taquito/michel-codec');
 
@@ -343,7 +344,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         setToken={setTokenA}
         value={tokenAInput}
         onInput={handleTokenAInput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenABalance}
         noBalanceButtons={!accountPkh}
       />
@@ -355,7 +356,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         setToken={setTokenB}
         value={tokenBInput}
         onInput={handleTokenBInput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
