@@ -22,6 +22,7 @@ import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { sortTokensContracts, getValidMichelTemplate } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
@@ -174,7 +175,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         setToken={setTokenB}
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={(value) => {
           const fixedValue = new BigNumber(value);
           setLpTokenInput(fixedValue.toFixed());
@@ -187,7 +188,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         token={tokenA}
         setToken={setTokenA}
         value={tokenAOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
@@ -199,7 +200,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         token={tokenB}
         setToken={setTokenB}
         value={tokenBOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
