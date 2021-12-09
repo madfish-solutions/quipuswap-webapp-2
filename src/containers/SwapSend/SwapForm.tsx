@@ -49,6 +49,7 @@ import {
 } from '@utils/helpers';
 import {
   DexGraph,
+  getMaxOutputRoute,
   getRouteWithInput,
   getRouteWithOutput,
 } from '@utils/routing';
@@ -526,12 +527,38 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   const token1Slug = token1 && getTokenSlug(token1);
   const token2Slug = token2 && getTokenSlug(token2);
+  const token1Balance = token1Slug === undefined ? undefined : knownTokensBalances[token1Slug];
   const token2Balance = token2Slug === undefined ? undefined : knownTokensBalances[token2Slug];
 
   const token1Error = touched.token1 ? errors.token1 : undefined;
   const amount1Error = touched.amount1 ? errors.amount1 : undefined;
   const token2Error = touched.token2 ? errors.token2 : undefined;
   const amount2Error = touched.amount2 ? errors.amount2 : undefined;
+
+  const generalMaxOutputAmount = token1Slug && token2Slug
+    ? knownMaxOutputAmounts[token1Slug][token2Slug]
+    : undefined;
+  const maxOutputAmountByBalance = useMemo(() => {
+    if (dexGraph && token1 && token1Balance && token2) {
+      const route = getMaxOutputRoute({
+        startTokenSlug: getTokenSlug(token1),
+        endTokenSlug: getTokenSlug(token2),
+        graph: dexGraph,
+      }, token1Balance);
+      if (route) {
+        return fromDecimals(
+          getTokenOutput({
+            inputToken: token1,
+            inputAmount: toDecimals(token1Balance, token1),
+            dexChain: route,
+          }),
+          token2,
+        );
+      }
+    }
+    return undefined;
+  }, [dexGraph, token1, token1Balance, token2]);
+  const maxOutput = maxOutputAmountByBalance ?? generalMaxOutputAmount;
 
   return (
     <>
@@ -556,7 +583,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             showBalanceButtons={!!accountPkh}
             amount={amount1}
             className={s.input}
-            balance={token1Slug === undefined ? undefined : knownTokensBalances[token1Slug]}
+            balance={token1Balance}
             exchangeRate={token1Slug === undefined ? undefined : exchangeRates[token1Slug]}
             label="From"
             error={token1Error ?? amount1Error}
@@ -572,6 +599,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             amount={amount2}
             className={cx(s.input, s.mb24)}
             balance={token2Balance}
+            maxValue={maxOutput}
             exchangeRate={token2Slug === undefined ? undefined : exchangeRates[token2Slug]}
             label="To"
             error={token2Error ?? amount2Error ?? submitError}

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { DexPair } from '@utils/types';
@@ -11,13 +12,16 @@ import { getRoutesList } from './getRoutesList';
 import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
 import { CommonRouteProblemParams } from './types';
 
+const defaultMaxTokenInput = new BigNumber(Infinity);
+
 export const getMaxOutputRoute = memoizee(
   ({
     startTokenSlug,
     endTokenSlug,
     graph,
     depth = 5,
-  }: CommonRouteProblemParams): DexPair[] | undefined => {
+  }: CommonRouteProblemParams,
+  maxTokenInput = defaultMaxTokenInput): DexPair[] | undefined => {
     const routes = getRoutesList(
       startTokenSlug,
       endTokenSlug,
@@ -31,12 +35,18 @@ export const getMaxOutputRoute = memoizee(
         try {
           const prevMaxOutputAmount = getTokenOutput({
             inputToken,
-            inputAmount: getMaxTokenInput(outputToken, prevCandidate),
+            inputAmount: BigNumber.max(
+              getMaxTokenInput(outputToken, prevCandidate),
+              maxTokenInput,
+            ),
             dexChain: prevCandidate,
           });
           const maxOutputAmount = getTokenOutput({
             inputToken,
-            inputAmount: getMaxTokenInput(outputToken, route),
+            inputAmount: BigNumber.max(
+              getMaxTokenInput(outputToken, route),
+              maxTokenInput,
+            ),
             dexChain: route,
           });
           return maxOutputAmount.gt(prevMaxOutputAmount)

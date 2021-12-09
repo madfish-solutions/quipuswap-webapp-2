@@ -209,10 +209,12 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
 
   const handleTokensSelected = useCallback(
     (token1: WhitelistedToken, token2: WhitelistedToken) => {
+      const startTokenSlug = getTokenSlug(token1);
+      const endTokenSlug = getTokenSlug(token2);
       try {
         const maxInputRoute = getMaxInputRoute({
-          startTokenSlug: getTokenSlug(token1),
-          endTokenSlug: getTokenSlug(token2),
+          startTokenSlug,
+          endTokenSlug,
           graph: dexGraph,
         });
         if (maxInputRoute) {
@@ -223,30 +225,32 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
           );
         }
         const maxOutputRoute = getMaxOutputRoute({
-          startTokenSlug: getTokenSlug(token1),
-          endTokenSlug: getTokenSlug(token2),
+          startTokenSlug,
+          endTokenSlug,
           graph: dexGraph,
         });
         if (maxOutputRoute) {
+          const generalMaxInputAmount = getMaxTokenInput(token2, maxOutputRoute);
           updateMaxOutputAmount(
             token1,
             token2,
             fromDecimals(
               getTokenOutput({
                 inputToken: token1,
-                inputAmount: getMaxTokenInput(token2, maxOutputRoute),
+                inputAmount: generalMaxInputAmount,
                 dexChain: maxOutputRoute,
               }),
               token2,
             ),
           );
         }
+      } catch (e) {
+        console.error(e);
+      } finally {
         const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
         if (router.asPath !== newRoute) {
           router.push(newRoute);
         }
-      } catch (e) {
-        console.error(e);
       }
     },
     [dexGraph, updateMaxInputAmount, updateMaxOutputAmount, router],
