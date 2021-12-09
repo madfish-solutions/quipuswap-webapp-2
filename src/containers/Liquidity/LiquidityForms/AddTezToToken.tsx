@@ -4,13 +4,8 @@ import React, {
   ChangeEvent,
   SetStateAction,
 } from 'react';
-import {
-  Button,
-  Tooltip,
-  Switcher,
-} from '@quipuswap/ui-kit';
+import { Button } from '@quipuswap/ui-kit';
 import { FoundDex, Token } from '@quipuswap/sdk';
-// import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -52,7 +47,6 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
   tokenABalance,
   tokenBBalance,
 }) => {
-  // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const networkId = useNetwork().id;
@@ -150,7 +144,6 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
       fromDecimals(tezAmount, 6).toFixed(6),
     );
   };
-
   const handleTokenABalance = (value:string) => {
     const fixedValue = new BigNumber(value);
 
@@ -188,7 +181,6 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
       fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
     );
   };
-
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh) return;
 
@@ -250,11 +242,6 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
-      <div className={s.switcher}>
-        <Switcher isActive={false} onChange={() => {}} />
-        <span className={s.rebalance}>Rebalance Liq</span>
-        <Tooltip content="Liquidity rebalace description" />
-      </div>
       <Button
         className={s.button}
         onClick={handleAddLiquidity}

@@ -273,17 +273,10 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       && pairData.tokenBPool.gt(0)
       && pairData.totalSupply.gt(0)
     ) {
-      console.log({ pairTokenA });
-      console.log({ pairTokenB });
-      console.log({ pairInputA });
-      console.log({ pairInputB });
-
       const shares = new BigNumber(pairInputA)
         .multipliedBy(ten.pow(pairTokenA.metadata.decimals))
         .multipliedBy(pairData.totalSupply)
         .idiv(pairData.tokenAPool);
-
-      console.log('shares', shares.toFixed());
 
       const tokenAAmount = new BigNumber(tokenAInput)
         .multipliedBy(ten.pow(pairTokenA.metadata.decimals));
@@ -293,28 +286,28 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         .div(pairData.totalSupply)
         .integerValue(BigNumber.ROUND_CEIL);
 
-      const tokenAUpdateOperator = await allowContractSpendYourTokens(
+      const tokenAUpdateOperator = allowContractSpendYourTokens(
         tezos,
         pairTokenA,
         dex.contract.address,
         tokenAAmount,
         accountPkh,
       );
-      if (!tokenAUpdateOperator) return;
-
-      const tokenBUpdateOperator = await allowContractSpendYourTokens(
+      const tokenBUpdateOperator = allowContractSpendYourTokens(
         tezos,
         pairTokenB,
         dex.contract.address,
         tokenBAmount,
         accountPkh,
       );
-      if (!tokenBUpdateOperator) return;
+
+      const tokensUpdateOperators = await Promise.all([tokenAUpdateOperator, tokenBUpdateOperator]);
+      if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) return;
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
 
-      const investParams = await dex.contract.methods.invest(
+      const investParams = dex.contract.methods.invest(
         pairId,
         shares,
         tokenAAmount,
@@ -323,8 +316,8 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       );
 
       const batch = await tezos.wallet.batch()
-        .withContractCall(tokenAUpdateOperator)
-        .withContractCall(tokenBUpdateOperator)
+        .withContractCall(tokensUpdateOperators[0])
+        .withContractCall(tokensUpdateOperators[1])
         .withContractCall(investParams);
 
       await batch.send();
