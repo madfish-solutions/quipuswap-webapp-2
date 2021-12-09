@@ -53,6 +53,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     })
   ) : undefined);
 
+  // eslint-disable-next-line max-len
   const myCandidate: WhitelistedBaker | undefined = (voter?.candidate ? bakers.find((x) => x.address === voter?.candidate) : undefined);
 
   const totalVotes = (dex?.storage?.storage ? fromDecimals(
