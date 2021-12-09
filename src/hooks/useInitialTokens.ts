@@ -45,8 +45,8 @@ export const useInitialTokens = (
           if (!rawSlug || (isValidTokenSlug(rawSlug) !== true)) {
             return fallbackTokensSlugs[index];
           }
-          if (rawSlug === getTokenSlug(TEZOS_TOKEN)) {
-            return rawSlug;
+          if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
+            return rawSlug.toLowerCase();
           }
           const { contractAddress, fa2TokenId } = getTokenIdFromSlug(rawSlug);
           try {
@@ -94,7 +94,7 @@ export const useInitialTokens = (
       router.push(getRedirectionUrl(newTokensSlug));
     }
     initialTokensSlugs.forEach((tokenSlug) => {
-      const isTez = tokenSlug === getTokenSlug(TEZOS_TOKEN);
+      const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();
       const tokenIsKnown = isTez || tokens.some(
         (token) => getTokenSlug(token) === tokenSlug,
       );
