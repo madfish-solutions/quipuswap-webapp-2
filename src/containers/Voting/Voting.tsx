@@ -25,7 +25,6 @@ import {
   VoteFormValues,
   WhitelistedToken,
   WhitelistedTokenPair,
-  QSMainNet,
 } from '@utils/types';
 import {
   STABLE_TOKEN,
@@ -164,7 +163,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         handleErrorToast,
         tezos,
         accountPkh,
-        network.id as QSMainNet,
+        network.id,
       );
     }
     // eslint-disable-next-line

@@ -17,7 +17,7 @@ import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import { localSearchBaker } from '@utils/helpers';
-import { WhitelistedBaker } from '@utils/types';
+import { isFullBaker, WhitelistedBaker } from '@utils/types';
 import { useBakers } from '@utils/dapp';
 
 import s from './BakersModal.module.sass';
@@ -150,24 +150,21 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           )}
           {loading
             && [1, 2, 3, 4, 5, 6].map((x) => <LoadingBakerCell key={x} />)}
-          {filteredBakers.map((baker) => {
-            const { address } = baker;
-            return (
-              <BakerCell
-                key={address}
-                bakerName={baker.name}
-                bakerFee={baker.fee.toString()}
-                bakerFreeSpace={baker.freeSpace.toString()}
-                bakerLogo={baker.logo}
-                tabIndex={0}
-                onClick={() => {
-                  onChange(baker);
-                  form.mutators.setValue('search', '');
-                  setInputValue('');
-                }}
-              />
-            );
-          })}
+          {filteredBakers.map((baker) => (
+            <BakerCell
+              key={baker.address}
+              bakerName={isFullBaker(baker) ? baker.name : baker.address}
+              bakerFee={isFullBaker(baker) ? baker.fee.toString() : ''}
+              bakerFreeSpace={isFullBaker(baker) ? baker.freeSpace.toString() : ''}
+              bakerLogo={isFullBaker(baker) ? baker.logo : ''}
+              tabIndex={0}
+              onClick={() => {
+                onChange(baker);
+                form.mutators.setValue('search', '');
+                setInputValue('');
+              }}
+            />
+          ))}
         </Modal>
       )}
     />

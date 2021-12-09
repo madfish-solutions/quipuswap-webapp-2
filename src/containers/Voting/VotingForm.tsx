@@ -15,7 +15,6 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
-  QSMainNet,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -107,7 +106,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
@@ -225,6 +224,17 @@ const RealForm: React.FC<VotingFormProps> = ({
     .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
     .toNumber();
 
+  const handleSetActiveId = (val: string) => {
+    router.replace(
+      `/voting/${val}/${getWhitelistedTokenSymbol(
+        tokenPair.token1,
+      )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
+      undefined,
+      { shallow: true },
+    );
+    setTabsState(val);
+  };
+
   return (
     <>
       <Card
@@ -233,26 +243,10 @@ const RealForm: React.FC<VotingFormProps> = ({
             <Tabs
               values={TabsContent}
               activeId={tabsState}
-              setActiveId={(val) => {
-                router.replace(
-                  `/voting/${val}/${getWhitelistedTokenSymbol(
-                    tokenPair.token1,
-                  )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
-                  undefined,
-                  { shallow: true },
-                );
-                setTabsState(val);
-              }}
+              setActiveId={handleSetActiveId}
               className={s.tabs}
             />
           ),
-          // button: (
-          //   <Button
-          //     theme="quaternary"
-          //   >
-          //     <Transactions />
-          //   </Button>
-          // ),
           className: s.header,
         }}
         contentClassName={s.content}

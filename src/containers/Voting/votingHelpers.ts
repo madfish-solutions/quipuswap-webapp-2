@@ -252,7 +252,6 @@ export const submitForm = async ({
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
     await op.confirmation();
-    // handleSuccessToast();
     updateToast({
       type: 'success',
       render: updateToastText,
