@@ -41,7 +41,7 @@ import {
   hanldeTokenPairSelect,
   submitForm,
   submitWithdraw,
-} from './votingHelpers';
+} from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
 
 const TabsContent = [

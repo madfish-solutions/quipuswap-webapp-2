@@ -20,7 +20,7 @@ import {
 import { useBakers } from '@utils/dapp';
 
 import s from '@styles/CommonContainer.module.sass';
-import { getCandidateInfo, getVeteVetoInfo } from './getBackerInfo';
+import { getCandidateInfo, getVeteVetoInfo } from './helpers/getBackerInfo';
 import { CandidateButton } from './CandidateButton';
 
 type VotingDetailsProps = {

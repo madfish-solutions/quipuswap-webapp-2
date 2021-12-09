@@ -9,7 +9,7 @@ interface CandidateButtonProps {
 
 export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
   // eslint-disable-next-line react/no-unescaped-entities
-  if (!candidate) return <>' — '</>;
+  if (!candidate) return <div> — </div>;
 
   return (
     <Button

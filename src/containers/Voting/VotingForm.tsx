@@ -1,6 +1,4 @@
-import React, {
-  useRef, useMemo, useState, useEffect,
-} from 'react';
+import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -15,6 +13,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
+  Undefined,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -37,8 +36,12 @@ import s from '@styles/CommonContainer.module.sass';
 
 import { FormApi } from 'final-form';
 import { VotingDetails } from './VotingDetails';
-import { hanldeTokenPairSelect, unvoteOrRemoveVeto } from './votingHelpers';
+import {
+  hanldeTokenPairSelect,
+  unvoteOrRemoveVeto,
+} from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
+import { getVoteVetoBalances } from './helpers/getVoteVetoBalance';
 
 const TabsContent = [
   {
@@ -113,6 +116,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
   const [isBanned, setIsBanned] = useState<boolean>(false);
+  const [isFormError, setIsFormError] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise: any;
@@ -197,43 +201,42 @@ const RealForm: React.FC<VotingFormProps> = ({
       dex,
       { updateToast, handleErrorToast },
       getBalance,
-      voter?.candidate,
+      voter?.candidate
     );
   };
 
-  const availVoteBalance: string = useMemo(
-    () => (tokenPair.balance && tokenPair.frozenBalance && voter
-      ? new BigNumber(tokenPair.balance)
-        .minus(new BigNumber(tokenPair.frozenBalance))
-        .plus(new BigNumber(voter.vote ?? '0'))
-        .toString()
-      : new BigNumber(0).toString()),
-    [tokenPair, voter],
+  const { availableVoteBalance, availableVetoBalance } = useMemo(
+    () => getVoteVetoBalances(tokenPair, voter),
+    [tokenPair, voter]
   );
 
-  const availVetoBalance: string = useMemo(
-    () => (tokenPair.balance && tokenPair.frozenBalance && voter
-      ? new BigNumber(tokenPair.balance)
-        .minus(new BigNumber(voter.vote ?? '0'))
-        .toString()
-      : new BigNumber(0).toString()),
-    [tokenPair, voter],
-  );
+  const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
+    if (isFormError !== Boolean(value)) setIsFormError(Boolean(value));
 
-  const toSixDecimals = (value: string) => new BigNumber(value)
-    .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
-    .toNumber();
+    return value;
+  };
+
+  const toSixDecimals = (value: string) =>
+    new BigNumber(value)
+      .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
+      .toNumber();
 
   const handleSetActiveId = (val: string) => {
     router.replace(
       `/voting/${val}/${getWhitelistedTokenSymbol(
-        tokenPair.token1,
+        tokenPair.token1
       )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
       undefined,
-      { shallow: true },
+      { shallow: true }
     );
     setTabsState(val);
   };
+
+  const isVoteOrVetoButtonDisabled = () =>
+    !values.balance1 ||
+    (currentTab.id === 'vote' && isBanned) ||
+    isFormError ||
+    !accountPkh;
 
   return (
     <>
@@ -257,13 +260,15 @@ const RealForm: React.FC<VotingFormProps> = ({
             validateMinMax(0, Infinity),
             accountPkh
               ? validateBalance(
-                new BigNumber(
-                  tokenPair.balance ? tokenPair.balance : Infinity,
-                ),
-              )
-              : () => undefined,
+                  new BigNumber(
+                    tokenPair.balance ? tokenPair.balance : Infinity
+                  )
+                )
+              : () => undefined
           )}
-          parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
+          parse={(v) =>
+            parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)
+          }
         >
           {({ input, meta }) => (
             <PositionSelect
@@ -283,22 +288,26 @@ const RealForm: React.FC<VotingFormProps> = ({
                   handleErrorToast,
                   tezos,
                   accountPkh,
-                  networkId,
+                  networkId
                 );
               }}
               balance={
-                currentTab.id === 'vote' ? availVoteBalance : availVetoBalance
+                currentTab.id === 'vote'
+                  ? availableVoteBalance
+                  : availableVetoBalance
               }
               handleBalance={(value) => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
               }}
               noBalanceButtons={!accountPkh}
-              balanceLabel={t('vote|Available Balance')}
+              balanceLabel={t('vote|Available balance')}
               notFrozen
               id="liquidity-remove-input"
               label={currentTab.label}
               className={s.input}
-              error={(meta.touched && meta.error) || meta.submitError}
+              error={errorInterceptor(
+                (meta.touched && meta.error) || meta.submitError
+              )}
             />
           )}
         </Field>
@@ -315,7 +324,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   const asyncisBanned = async () => {
                     if (!dex) return;
                     const tempBaker = await dex.storage.storage.vetos.get(
-                      bakerObj.address,
+                      bakerObj.address
                     );
                     setIsBanned(!!tempBaker);
                   };
@@ -342,9 +351,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           <Button
             onClick={handleVoteOrVeto}
             className={s.button}
-            disabled={
-              !values.balance1 || (currentTab.id === 'vote' && isBanned)
-            }
+            disabled={isVoteOrVetoButtonDisabled()}
           >
             {currentTab.id === 'vote' && isBanned
               ? t('vote|Baker under Veto')

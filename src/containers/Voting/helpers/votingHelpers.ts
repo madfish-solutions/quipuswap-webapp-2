@@ -15,7 +15,7 @@ import {
 } from '@utils/types';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
-import { IUseVotingToast } from './useVotingToast';
+import { IUseVotingToast } from '../useVotingToast';
 
 export const hanldeTokenPairSelect = (
   pair: WhitelistedTokenPair,
