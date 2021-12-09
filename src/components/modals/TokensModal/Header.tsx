@@ -50,22 +50,17 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <div className={s.inputs}>
-      <Field
-        name="search"
-      >
+      <Field name="search">
         {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common|Search')}
-              error={meta.error}
-              autoFocus
-            />
-          </>
+          <Input
+            {...input}
+            StartAdornment={Search}
+            className={s.modalInput}
+            placeholder={t('common|Search')}
+            error={meta.error}
+            autoFocus
+          />
         )}
-
       </Field>
       {(isSecondInput) && (
         <Field
