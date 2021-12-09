@@ -12,8 +12,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'no-plusplus': 0,
     'linebreak-style': 0,
-    'consistent-return': 'off',
-    'max-len': ["warn", { "code": 100 }],
+    'consistent-return': 'off'
   },
   parserOptions: {
     project: './tsconfig.json',
