@@ -78,8 +78,9 @@ export const useViewModel = () => {
 
           foundDex = await findDex(tezos, FACTORIES[networkId], token);
         } else {
-          const contract = await tezos.wallet.at(TOKEN_TO_TOKEN_DEX); // TODO: Create Promise.all
-          const storage = await getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
+          const contractPromise = tezos.wallet.at(TOKEN_TO_TOKEN_DEX);
+          const storagePromise = getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
+          const [contract, storage] = await Promise.all([contractPromise, storagePromise]);
 
           foundDex = new FoundDex(contract, storage);
         }

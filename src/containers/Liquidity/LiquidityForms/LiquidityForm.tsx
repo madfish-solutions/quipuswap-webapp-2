@@ -1,7 +1,6 @@
 import React from 'react';
-import { Button, Card, Tabs } from '@quipuswap/ui-kit';
+import { Card, Tabs } from '@quipuswap/ui-kit';
 import { FormSpy } from 'react-final-form';
-import { Transactions } from '@components/svg/Transactions';
 
 import { TabsContent, useViewModel } from '@containers/Liquidity/LiquidityForms/useViewModel';
 import { LiquidityFormProps } from '@containers/Liquidity/LiquidityForms/LiquidityForm.props';
