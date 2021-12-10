@@ -542,7 +542,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const amount2Error = touched.amount2 ? errors.amount2 : undefined;
 
   const generalMaxOutputAmount = token1Slug && token2Slug
-    ? knownMaxOutputAmounts[token1Slug][token2Slug]
+    ? knownMaxOutputAmounts[token1Slug]?.[token2Slug]
     : undefined;
   const maxOutputAmountByBalance = useMemo(() => {
     if (dexGraph && token1 && token1Balance && token2) {
