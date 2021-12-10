@@ -1,4 +1,6 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, {
+  useRef, useMemo, useState, useEffect,
+} from 'react';
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
@@ -201,13 +203,13 @@ const RealForm: React.FC<VotingFormProps> = ({
       dex,
       { updateToast, handleErrorToast },
       getBalance,
-      voter?.candidate
+      voter?.candidate,
     );
   };
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
     () => getVoteVetoBalances(tokenPair, voter),
-    [tokenPair, voter]
+    [tokenPair, voter],
   );
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
@@ -216,27 +218,25 @@ const RealForm: React.FC<VotingFormProps> = ({
     return value;
   };
 
-  const toSixDecimals = (value: string) =>
-    new BigNumber(value)
-      .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
-      .toNumber();
+  const toSixDecimals = (value: string) => new BigNumber(value)
+    .decimalPlaces(TEZOS_TOKEN.metadata.decimals)
+    .toNumber();
 
   const handleSetActiveId = (val: string) => {
     router.replace(
       `/voting/${val}/${getWhitelistedTokenSymbol(
-        tokenPair.token1
+        tokenPair.token1,
       )}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
       undefined,
-      { shallow: true }
+      { shallow: true },
     );
     setTabsState(val);
   };
 
-  const isVoteOrVetoButtonDisabled = () =>
-    !values.balance1 ||
-    (currentTab.id === 'vote' && isBanned) ||
-    isFormError ||
-    !accountPkh;
+  const isVoteOrVetoButtonDisabled = () => !values.balance1
+    || (currentTab.id === 'vote' && isBanned)
+    || isFormError
+    || !accountPkh;
 
   return (
     <>
@@ -260,15 +260,13 @@ const RealForm: React.FC<VotingFormProps> = ({
             validateMinMax(0, Infinity),
             accountPkh
               ? validateBalance(
-                  new BigNumber(
-                    tokenPair.balance ? tokenPair.balance : Infinity
-                  )
-                )
-              : () => undefined
+                new BigNumber(
+                  tokenPair.balance ? tokenPair.balance : Infinity,
+                ),
+              )
+              : () => undefined,
           )}
-          parse={(v) =>
-            parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)
-          }
+          parse={(v) => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
           {({ input, meta }) => (
             <PositionSelect
@@ -288,7 +286,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   handleErrorToast,
                   tezos,
                   accountPkh,
-                  networkId
+                  networkId,
                 );
               }}
               balance={
@@ -306,7 +304,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               label={currentTab.label}
               className={s.input}
               error={errorInterceptor(
-                (meta.touched && meta.error) || meta.submitError
+                (meta.touched && meta.error) || meta.submitError,
               )}
             />
           )}
@@ -324,7 +322,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   const asyncisBanned = async () => {
                     if (!dex) return;
                     const tempBaker = await dex.storage.storage.vetos.get(
-                      bakerObj.address
+                      bakerObj.address,
                     );
                     setIsBanned(!!tempBaker);
                   };

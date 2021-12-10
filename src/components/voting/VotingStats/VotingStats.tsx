@@ -13,7 +13,8 @@ import cx from 'classnames';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
 
-import BigNumber from 'bignumber.js';
+import { isRewardGreaterThenZero } from './isRewardGreaterThenZero';
+
 import s from './VotingStats.module.sass';
 
 const modeClass = {
@@ -40,10 +41,6 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-
-  const BNZero = new BigNumber(0);
-
-  const isRewardGreaterThenZero = () => new BigNumber(pendingReward).isGreaterThan(BNZero);
 
   const content = useMemo(
     () => [
@@ -102,7 +99,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         </div>
       ))}
       <Button
-        disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero()}
+        disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(pendingReward)}
         onClick={() => {
           const asyncFunc = async () => {
             if (!tezos || !dex || !accountPkh) return;

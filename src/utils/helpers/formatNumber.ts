@@ -23,7 +23,7 @@ export const FormatInteger = (value: BigNumber.Value): string => {
 
 export const FormatNumber = (
   value: BigNumber.Value,
-  options?: FormatNumberOptinos
+  options?: FormatNumberOptinos,
 ): string => {
   const decimals = options?.decimals ?? DEFAULT_DECIMALS;
 
@@ -35,7 +35,6 @@ export const FormatNumber = (
     const newDecimal = decimal.substring(0, decimals);
 
     return `${newInteger}.${newDecimal}`;
-  } else {
-    return newInteger;
   }
+  return newInteger;
 };

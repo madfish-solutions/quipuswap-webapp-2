@@ -20,9 +20,9 @@ import {
 import { useBakers } from '@utils/dapp';
 
 import s from '@styles/CommonContainer.module.sass';
+import { FormatNumber } from '@utils/helpers/formatNumber';
 import { getCandidateInfo, getVeteVetoInfo } from './helpers/getBackerInfo';
 import { CandidateButton } from './CandidateButton';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 
 type VotingDetailsProps = {
   tokenPair: WhitelistedTokenPair;
@@ -40,22 +40,21 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
 
   const { currentCandidate, secondCandidate } = useMemo(
     () => getCandidateInfo(dex, bakers),
-    [dex, bakers]
+    [dex, bakers],
   );
 
   // eslint-disable-next-line max-len
   const myCandidate: Undefined<WhitelistedBaker> = bakers.find(
-    (backer) => backer.address === voter?.candidate
+    (backer) => backer.address === voter?.candidate,
   );
 
   const { totalVotes, totalVeto, votesToVeto } = useMemo(
     () => getVeteVetoInfo(dex),
-    [dex]
+    [dex],
   );
 
-  const pairLink =
-    tokenPair.dex &&
-    `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
+  const pairLink = tokenPair.dex
+    && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
   return (
     <Card
       header={{
@@ -64,71 +63,71 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
       contentClassName={s.content}
     >
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Delegated To')}
             <Tooltip
               sizeT="small"
               content={t(
-                'vote|Current baker elected by simple majority of votes.'
+                'vote|Current baker elected by simple majority of votes.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CandidateButton candidate={currentCandidate} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Second Candidate')}
             <Tooltip
               sizeT="small"
               content={t(
-                'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.'
+                'vote|The candidate who garnered second largest number of votes. If the current baker gets vetoed, the second candidate will assume his place.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CandidateButton candidate={secondCandidate} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Total Votes')}
             <Tooltip
               sizeT="small"
               content={t(
-                'vote|The total amount of votes cast to elect a baker in the pool.'
+                'vote|The total amount of votes cast to elect a baker in the pool.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={FormatNumber(totalVotes)} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Total Vetos')}
             <Tooltip
               sizeT="small"
               content={t(
-                'vote|The total amount of shares cast so far to veto the current baker.'
+                'vote|The total amount of shares cast so far to veto the current baker.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={FormatNumber(totalVeto)} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('vote|Your Candidate')}
             <Tooltip
@@ -136,23 +135,23 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
               content={t('vote|The candidate you voted for.')}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CandidateButton candidate={myCandidate} />
       </CardCell>
       <CardCell
-        header={
+        header={(
           <>
             {t('Votes To Veto Left')}
             <Tooltip
               sizeT="small"
               content={t(
-                'vote|This much more votes needed to veto a delegate.'
+                'vote|This much more votes needed to veto a delegate.',
               )}
             />
           </>
-        }
+        )}
         className={cx(s.cellCenter, s.cell)}
       >
         <CurrencyAmount amount={FormatNumber(votesToVeto)} />

@@ -178,16 +178,16 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useOnBlock(tezos, getBalance);
 
-  const amounts = accountPkh ?  [
+  const amounts = accountPkh ? [
     tokenPair.balance ?? '0',
     voter?.vote?.toFixed() ?? '0',
     voter?.veto?.toFixed() ?? '0',
-  ] : ['0', '0', '0']
+  ] : ['0', '0', '0'];
 
   return (
     <>
       <VotingStats
-        pendingReward={accountPkh ? rewards: "0"}
+        pendingReward={accountPkh ? rewards : '0'}
         amounts={amounts}
         className={s.votingStats}
         dex={dex}
