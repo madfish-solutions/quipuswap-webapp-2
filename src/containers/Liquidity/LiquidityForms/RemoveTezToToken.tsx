@@ -81,13 +81,12 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     }
   }, [lpTokenInput, dex, tokenA, tokenB]);
 
-  const handleSlippageChange = (value: string) => {
-    const fixedValue = slippageToBignum(value);
-    if (fixedValue.gte(100)) {
-      return setSlippage(new BigNumber(100));
+  const handleSlippageChange = (value?: string) => {
+    if (!value) {
+      return;
     }
-
-    return setSlippage(fixedValue);
+    const fixedValue = slippageToBignum(value);
+    setSlippage(fixedValue.gte(100) ? new BigNumber(100) : fixedValue);
   };
 
   const handleRemoveLiquidity = async () => {
@@ -128,6 +127,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
+        notSelectable
         disabled
       />
       <Plus className={s.iconButton} />
@@ -140,6 +140,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
+        notSelectable
         disabled
       />
       <Slippage handleChange={handleSlippageChange} />

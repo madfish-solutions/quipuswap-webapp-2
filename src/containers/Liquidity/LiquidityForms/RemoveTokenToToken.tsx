@@ -91,6 +91,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     };
     loadPairData();
     return () => { isMounted = false; };
+    // Ignore tokenA & tokenB
   }, [dex]);
 
   useEffect(() => {
@@ -125,6 +126,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       fromDecimals(tokenBOut, tokenB.metadata.decimals)
         .toFixed(tokenB.metadata.decimals),
     );
+    // Ignore tokenA & tokenB
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {
@@ -192,6 +194,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
+        notSelectable
       />
       <Plus className={s.iconButton} />
       <TokenSelect
@@ -204,6 +207,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
+        notSelectable
       />
       <Button
         className={s.button}
