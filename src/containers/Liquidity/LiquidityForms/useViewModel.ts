@@ -13,7 +13,8 @@ import {
   getValidMichelTemplate,
   sortTokensContracts,
 } from '@containers/Liquidity/liquidutyHelpers';
-import MichelCodec from '@taquito/michel-codec';
+
+const MichelCodec = require('@taquito/michel-codec');
 
 export const TabsContent = [
   {
