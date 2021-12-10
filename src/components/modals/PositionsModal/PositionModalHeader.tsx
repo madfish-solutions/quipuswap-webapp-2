@@ -21,7 +21,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
+  const timeout = useRef<NodeJS.Timeout>();
   const promise = useRef();
 
   const saveFunc = useCallback(async () => {
@@ -78,13 +78,13 @@ export const Header: React.FC<HeaderProps> = ({
               onIncrementClick={() => {
                 form.mutators.setValue(
                   'tokenId',
-                  +input.value + 1 > 100 ? 100 : +input.value + 1,
+                  Math.min(Number(input.value) + 1, 100),
                 );
               }}
               onDecrementClick={() => {
                 form.mutators.setValue(
                   'tokenId',
-                  +input.value - 1 < 1 ? 1 : +input.value - 1,
+                  Math.max(Number(input.value) - 1, 1),
                 );
               }}
             />
