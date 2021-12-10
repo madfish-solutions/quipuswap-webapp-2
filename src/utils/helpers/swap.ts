@@ -153,7 +153,7 @@ export const getSwapTransferParams = async (
               tezos,
               currentToken,
               accountPkh,
-              ttDexAddress!,
+              currentDex.id,
               currentDexInput,
             )),
             tokenToXtzContract.methods.tokenToTezPayment(

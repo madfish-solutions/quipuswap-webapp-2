@@ -545,14 +545,18 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         graph: dexGraph,
       }, token1Balance);
       if (route) {
-        return fromDecimals(
-          getTokenOutput({
-            inputToken: token1,
-            inputAmount: toDecimals(token1Balance, token1),
-            dexChain: route,
-          }),
-          token2,
-        );
+        try {
+          return fromDecimals(
+            getTokenOutput({
+              inputToken: token1,
+              inputAmount: toDecimals(token1Balance, token1),
+              dexChain: route,
+            }),
+            token2,
+          );
+        } catch (e) {
+          return undefined;
+        }
       }
     }
     return undefined;
