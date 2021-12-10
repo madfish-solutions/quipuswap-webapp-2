@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'next-i18next';
-import s from '@components/modals/TokensModal/TokensModal.module.sass';
 import { Field } from 'react-final-form';
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+
 import { validateMinMax } from '@utils/validators';
 import { parseNumber } from '@utils/helpers';
+
+import s from '@components/modals/TokensModal/TokensModal.module.sass';
 
 export interface HeaderProps {
   isSecondInput:boolean
