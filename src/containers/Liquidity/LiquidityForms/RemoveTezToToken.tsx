@@ -23,6 +23,7 @@ import { noOpFunc, slippageToBignum } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { TEZOS_TOKEN } from '@utils/defaults';
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
@@ -111,7 +112,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         setToken={setTokenB}
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={(value) => {
           const fixedValue = new BigNumber(value);
           setLpTokenInput(fixedValue.toFixed());
@@ -124,7 +125,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         token={tokenA}
         setToken={setTokenA}
         value={tokenAOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
@@ -136,7 +137,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         token={tokenB}
         setToken={setTokenB}
         value={tokenBOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
         disabled
