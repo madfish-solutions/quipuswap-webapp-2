@@ -322,6 +322,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         }
         setDexRoute(route);
         prevAmount2Ref.current = outputAmount;
+        if (outputAmount) {
+          setFieldTouched('amount2', true);
+        }
         setFieldValue('amount2', outputAmount, true);
         if (accountPkh && amount1 && route) {
           updateSwapFee(amount1, route);
@@ -348,6 +351,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         }
         setDexRoute(route);
         prevAmount1Ref.current = inputAmount;
+        if (inputAmount) {
+          setFieldTouched('amount1', true);
+        }
         setFieldValue('amount1', inputAmount, true);
         if (accountPkh && inputAmount && route) {
           updateSwapFee(inputAmount, route);
@@ -363,6 +369,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     token2,
     dexGraph,
     setFieldValue,
+    setFieldTouched,
     accountPkh,
     tezos,
     recipient,
