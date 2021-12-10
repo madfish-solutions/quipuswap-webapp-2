@@ -78,6 +78,6 @@ export const getValidMichelTemplate = ({
       };
 
     default:
-      return null;
+      throw Error(`Not Valid Token Type: ${type}`);
   }
 };
