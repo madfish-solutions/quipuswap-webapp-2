@@ -33,7 +33,12 @@ export const Liquidity: React.FC<LiquidityProps> = ({
 
   return (
     <>
-      <LiquidityChart token1={fallbackTokenPair.token1} token2={fallbackTokenPair.token2} />
+      {
+        // TODO: Implement it
+        false && (
+          <LiquidityChart token1={fallbackTokenPair.token1} token2={fallbackTokenPair.token2} />
+        )
+      }
       <StickyBlock className={className}>
         <Form
           onSubmit={() => {}}

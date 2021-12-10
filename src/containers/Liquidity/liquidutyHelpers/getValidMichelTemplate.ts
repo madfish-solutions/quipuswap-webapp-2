@@ -1,5 +1,6 @@
 import { MichelsonData } from '@taquito/michel-codec';
 import { SortTokensContractsType } from '@utils/types';
+import { MichelsonData } from '@taquito/michel-codec';
 
 const taquitoUtils = require('@taquito/utils');
 
