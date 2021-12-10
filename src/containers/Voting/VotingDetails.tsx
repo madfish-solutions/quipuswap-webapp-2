@@ -43,7 +43,6 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({
     [dex, bakers],
   );
 
-  // eslint-disable-next-line max-len
   const myCandidate: Undefined<WhitelistedBaker> = bakers.find(
     (backer) => backer.address === voter?.candidate,
   );

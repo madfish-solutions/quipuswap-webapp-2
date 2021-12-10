@@ -1,6 +1,4 @@
-import React, {
-  useMemo, useState, useEffect, useCallback,
-} from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { withTypes } from 'react-final-form';
@@ -65,9 +63,8 @@ const fallbackTokenPair = {
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
-  const {
-    updateToast, handleErrorToast, handleLoader, handleSuccessToast,
-  } = useVotingToast();
+  const { updateToast, handleErrorToast, handleLoader, handleSuccessToast } =
+    useVotingToast();
   const tezos = useTezos();
   const network = useNetwork();
   const exchangeRates = useExchangeRates();
@@ -88,7 +85,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
   const [rewards, setRewards] = useState<string>('0');
   const [voter, setVoter] = useState<VoterType | undefined>();
-  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const [tokenPair, setTokenPair] =
+    useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
   const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
   const { from, to } = useRouterPair({
@@ -101,32 +99,30 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   const currentTab = useMemo(
     () => TabsContent.find(({ id }) => id === tabsState)!,
-    [tabsState],
+    [tabsState]
   );
 
   const handleTokenChangeWrapper = (
     token: WhitelistedToken,
-    tokenNumber: 'first' | 'second',
-  ) => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
-  });
+    tokenNumber: 'first' | 'second'
+  ) =>
+    handleTokenChange({
+      token,
+      tokenNumber,
+      exchangeRates,
+      tezos: tezos!,
+      accountPkh: accountPkh!,
+      setTokensData,
+    });
 
   useEffect(() => {
-    switch (network.id) {
-      case 'hangzhounet':
-        setTokenPair({
-          token1: TEZOS_TOKEN,
-          token2: STABLE_TOKEN_GRANADA,
-        } as WhitelistedTokenPair);
-        break;
-      default:
-        setTokenPair(fallbackTokenPair);
-        break;
+    if (network.id === 'hangzhounet') {
+      setTokenPair({
+        token1: TEZOS_TOKEN,
+        token2: STABLE_TOKEN_GRANADA,
+      } as WhitelistedTokenPair);
+    } else {
+      setTokenPair(fallbackTokenPair);
     }
   }, [network]);
 
@@ -163,7 +159,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         handleErrorToast,
         tezos,
         accountPkh,
-        network.id,
+        network.id
       );
     }
     // eslint-disable-next-line
@@ -178,11 +174,13 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useOnBlock(tezos, getBalance);
 
-  const amounts = accountPkh ? [
-    tokenPair.balance ?? '0',
-    voter?.vote?.toFixed() ?? '0',
-    voter?.veto?.toFixed() ?? '0',
-  ] : ['0', '0', '0'];
+  const amounts = accountPkh
+    ? [
+        tokenPair.balance ?? '0',
+        voter?.vote?.toFixed() ?? '0',
+        voter?.veto?.toFixed() ?? '0',
+      ]
+    : ['0', '0', '0'];
 
   return (
     <>
@@ -199,7 +197,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             params,
             handleErrorToast,
             handleSuccessToast,
-            getBalance,
+            getBalance
           );
         }}
       />
