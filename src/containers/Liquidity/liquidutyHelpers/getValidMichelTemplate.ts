@@ -1,3 +1,4 @@
+import { MichelsonData } from '@taquito/michel-codec';
 import { SortTokensContractsType } from '@utils/types';
 
 const taquitoUtils = require('@taquito/utils');
@@ -6,7 +7,7 @@ export const getValidMichelTemplate = ({
   addressA,
   addressB,
   type,
-}: SortTokensContractsType) => {
+}: SortTokensContractsType): MichelsonData => {
   const tokenAAddressBytes = taquitoUtils.b58decode(addressA);
   const tokenBAddressBytes = taquitoUtils.b58decode(addressB);
 
@@ -39,7 +40,7 @@ export const getValidMichelTemplate = ({
               prim: 'Pair',
               args: [
                 { bytes: tokenBAddressBytes },
-                { int: 0 },
+                { int: '0' },
               ],
             }],
           },
@@ -56,7 +57,7 @@ export const getValidMichelTemplate = ({
                 prim: 'Pair',
                 args: [
                   { bytes: tokenAAddressBytes },
-                  { int: 0 },
+                  { int: '0' },
                 ],
               },
             ],
@@ -68,7 +69,7 @@ export const getValidMichelTemplate = ({
                 prim: 'Pair',
                 args: [
                   { bytes: tokenBAddressBytes },
-                  { int: 0 },
+                  { int: '0' },
                 ],
               },
             ],
