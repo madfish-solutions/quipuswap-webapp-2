@@ -68,6 +68,27 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
   } | null>(null);
 
   useEffect(() => {
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    if (!addresses) return;
+    if (addresses.addressA === tokenA.contractAddress) {
+      setTokenPairAndInputs({
+        pairTokenA: tokenA,
+        pairTokenB: tokenB,
+        pairInputA: tokenAInput,
+        pairInputB: tokenBInput,
+      });
+    } else {
+      setTokenPairAndInputs({
+        pairTokenA: tokenB,
+        pairTokenB: tokenA,
+        pairInputA: tokenBInput,
+        pairInputB: tokenAInput,
+      });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenAInput, tokenBInput]);
+
+  useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
       if (!dex) return;
@@ -82,23 +103,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
 
       if (id) {
         const data = await dex.storage.storage.pairs.get(id);
-        if (isMounted) {
-          if (addresses.addressA === tokenA.contractAddress) {
-            setTokenPairAndInputs({
-              pairTokenA: tokenA,
-              pairTokenB: tokenB,
-              pairInputA: tokenAInput,
-              pairInputB: tokenBInput,
-            });
-          } else {
-            setTokenPairAndInputs({
-              pairTokenA: tokenB,
-              pairTokenB: tokenA,
-              pairInputA: tokenBInput,
-              pairInputB: tokenAInput,
-            });
-          }
-
+        if (isMounted && data) {
           setPairId(id);
           setPairData({
             totalSupply: data.total_supply,
@@ -112,9 +117,17 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
     };
     loadPairData();
     return () => { isMounted = false; };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dex]);
   useEffect(() => {
-    if (!pairData || !tokenPairAndInputs) return;
+    if (
+      !pairData
+      || !pairId
+      || !tokenPairAndInputs
+      || pairData.tokenAPool.eq(0)
+      || pairData.tokenBPool.eq(0)
+      || pairData.totalSupply.eq(0)
+    ) return;
 
     if (tokenBInput === '') {
       setTokenAInput('');
@@ -142,9 +155,17 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           .toFixed(tokenA.metadata.decimals),
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenABalance]);
   useEffect(() => {
-    if (!pairData || !tokenPairAndInputs) return;
+    if (
+      !pairData
+      || !pairId
+      || !tokenPairAndInputs
+      || pairData.tokenAPool.eq(0)
+      || pairData.tokenBPool.eq(0)
+      || pairData.totalSupply.eq(0)
+    ) return;
 
     if (tokenAInput === '') {
       setTokenBInput('');
@@ -172,6 +193,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           .toFixed(tokenB.metadata.decimals),
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenBBalance]);
 
   const handleTokenAInput = (event: ChangeEvent<HTMLInputElement>) => {

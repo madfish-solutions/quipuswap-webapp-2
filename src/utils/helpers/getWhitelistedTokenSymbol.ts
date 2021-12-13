@@ -2,7 +2,7 @@ import { WhitelistedToken } from '@utils/types';
 import { shortize } from './shortize';
 
 export const getWhitelistedTokenSymbol = (
-  token:WhitelistedToken,
+  token: WhitelistedToken,
   sliceAmount: number = 10,
 ) : string => (
   token.metadata.symbol.length > sliceAmount + 2
