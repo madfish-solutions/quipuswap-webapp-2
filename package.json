@@ -34,7 +34,7 @@
     "lightweight-charts": "^3.3.0",
     "memoizee": "^0.4.15",
     "next": "11.0.1",
-    "next-i18next": "^8.5.3",
+    "next-i18next": "^10.0.1",
     "next-react-svg": "^1.1.3",
     "next-seo": "^4.26.0",
     "react": "17.0.2",
