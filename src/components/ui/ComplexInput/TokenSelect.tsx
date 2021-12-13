@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import {
   Button,
+  Shevron,
   ColorModes,
   TokensLogos,
   ColorThemeContext,
@@ -20,25 +21,24 @@ import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { Shevron } from '@components/svg/Shevron';
 
 import s from './ComplexInput.module.sass';
 
-type TokenSelectProps = {
-  noBalanceButtons?: boolean
-  className?: string
-  balance: string
-  exchangeRate?: string
-  label: string
-  error?: string
-  notSelectable?: boolean
-  handleChange?: (token:WhitelistedToken) => void
-  handleBalance: (value: string) => void
-  token?: WhitelistedToken,
-  token2?: WhitelistedToken,
-  blackListedTokens: WhitelistedToken[],
-  setToken: (token:WhitelistedToken) => void
-} & React.HTMLProps<HTMLInputElement>;
+interface TokenSelectProps extends React.HTMLProps<HTMLInputElement> {
+  noBalanceButtons?: boolean;
+  className?: string;
+  balance: string;
+  exchangeRate?: string;
+  label: string;
+  error?: string;
+  notSelectable?: boolean;
+  handleChange?: (token:WhitelistedToken) => void;
+  handleBalance: (value: string) => void;
+  token?: WhitelistedToken;
+  token2?: WhitelistedToken;
+  blackListedTokens: WhitelistedToken[];
+  setToken: (token:WhitelistedToken) => void;
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -105,12 +105,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           setTokensModal(false);
         }}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={compoundClassName}
-        onClick={focusInput}
-      >
+      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
         <label htmlFor={id} className={s.label}>
           {label}
         </label>

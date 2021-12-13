@@ -4,6 +4,7 @@ import {
   Button,
   Tooltip,
   ColorModes,
+  VotingReward,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
@@ -11,7 +12,6 @@ import { useTranslation } from 'next-i18next';
 import cx from 'classnames';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './VotingStats.module.sass';
 

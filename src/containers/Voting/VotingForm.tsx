@@ -10,9 +10,14 @@ import {
   findDex,
   FoundDex,
 } from '@quipuswap/sdk';
+import {
+  Card,
+  Tabs,
+  Button,
+  Transactions,
+} from '@quipuswap/ui-kit';
 import { Field, FormSpy } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import { Button, Card, Tabs } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 
@@ -22,12 +27,12 @@ import {
   useAccountPkh,
 } from '@utils/dapp';
 import {
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
+  QSMainNet,
 } from '@utils/types';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
@@ -46,7 +51,6 @@ import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { ComplexBaker } from '@components/ui/ComplexInput';
-import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -114,7 +118,7 @@ const RealForm:React.FC<VotingFormProps> = ({
     closeConnectWalletModal,
   } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id as QSMainNet;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const router = useRouter();

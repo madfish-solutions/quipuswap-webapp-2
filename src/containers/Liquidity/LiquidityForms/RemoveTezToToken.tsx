@@ -19,13 +19,15 @@ import {
   useAccountPkh,
 } from '@utils/dapp';
 import { WhitelistedToken } from '@utils/types';
-import { noOpFunc } from '@utils/helpers';
+import { noOpFunc, slippageToBignum } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { removeLiquidity } from '../liquidutyHelpers';
 import s from '../Liquidity.module.sass';
 
-type LiquidityFormRemoveProps = {
+type RemoveTezToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -36,7 +38,7 @@ type LiquidityFormRemoveProps = {
   lpTokenBalance: string;
 };
 
-export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
+export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   dex,
   tokenA,
   tokenB,
@@ -49,9 +51,10 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [lpTokenInput, setLpTokenInput] = useState('');
-  const [tokenAOutput, setTokenAOutput] = useState('');
-  const [tokenBOutput, setTokenBOutput] = useState('');
+  const [lpTokenInput, setLpTokenInput] = useState<string>('');
+  const [tokenAOutput, setTokenAOutput] = useState<string>('');
+  const [tokenBOutput, setTokenBOutput] = useState<string>('');
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
 
   useEffect(() => {
     if (!dex) return;
@@ -67,9 +70,24 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
     const quipuPerOneLp = dex.storage.storage.token_pool
       .dividedBy(dex.storage.storage.total_supply);
 
-    setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
-    setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    const isTokenATez = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
+
+    if (isTokenATez) {
+      setTokenAOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    } else {
+      setTokenAOutput(quipuPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenA.metadata.decimals));
+      setTokenBOutput(tezPerOneLp.multipliedBy(lpTokenInput).toFixed(tokenB.metadata.decimals));
+    }
   }, [lpTokenInput, dex, tokenA, tokenB]);
+
+  const handleSlippageChange = (value?: string) => {
+    if (!value) {
+      return;
+    }
+    const fixedValue = slippageToBignum(value);
+    setSlippage(fixedValue.gte(100) ? new BigNumber(100) : fixedValue);
+  };
 
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
@@ -78,7 +96,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
       tezos,
       dex,
       new BigNumber(lpTokenInput),
-      new BigNumber(0.1),
+      slippage,
     );
     setLpTokenInput('');
   };
@@ -93,7 +111,7 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         setToken={setTokenB}
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={(value) => {
           const fixedValue = new BigNumber(value);
           setLpTokenInput(fixedValue.toFixed());
@@ -106,9 +124,10 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         token={tokenA}
         setToken={setTokenA}
         value={tokenAOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
+        notSelectable
         disabled
       />
       <Plus className={s.iconButton} />
@@ -118,15 +137,17 @@ export const LiquidityFormRemove: React.FC<LiquidityFormRemoveProps> = ({
         token={tokenB}
         setToken={setTokenB}
         value={tokenBOutput}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
+        notSelectable
         disabled
       />
-      <Slippage handleChange={noOpFunc} />
+      <Slippage handleChange={handleSlippageChange} />
       <Button
         className={s.button}
         onClick={handleRemoveLiquidity}
+        disabled={!accountPkh}
       >
         Remove
       </Button>

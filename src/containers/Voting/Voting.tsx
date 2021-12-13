@@ -24,11 +24,11 @@ import {
 } from '@utils/dapp';
 import {
   VoterType,
-  QSMainNet,
   TokenDataMap,
   VoteFormValues,
   WhitelistedToken,
   WhitelistedTokenPair,
+  QSMainNet,
 } from '@utils/types';
 import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import useUpdateToast from '@hooks/useUpdateToast';

@@ -1,8 +1,7 @@
 import React from 'react';
+import { Beacon, Temple } from '@quipuswap/ui-kit';
 
 import { WalletType } from '@utils/types';
-import Temple from '@icons/Temple.svg';
-import Beacon from '@icons/Beacon.svg';
 
 type WalletsProps = {
   id: WalletType

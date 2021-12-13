@@ -1,6 +1,5 @@
 import React, {
   useRef,
-  useMemo,
   useState,
   useEffect,
   useCallback,
@@ -11,6 +10,7 @@ import {
   Button,
   Slippage,
   SwapButton,
+  Transactions,
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 import { estimateSwap, FoundDex } from '@quipuswap/sdk';
@@ -50,10 +50,10 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { Transactions } from '@components/svg/Transactions';
 
 import s from '@styles/CommonContainer.module.sass';
 
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { SwapDetails } from './SwapDetails';
 import { getDex } from './swapHelpers';
 
@@ -115,7 +115,7 @@ const RealForm:React.FC<SwapFormProps> = ({
     connectWalletModalOpen,
     closeConnectWalletModal,
   } = useConnectModalsState();
-  const networkId: QSMainNet = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id as QSMainNet;
   const [formValues, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
   const [fee, setFee] = useState<BigNumber>();
@@ -337,11 +337,6 @@ const RealForm:React.FC<SwapFormProps> = ({
     // eslint-disable-next-line
   }, [token1, token2, dex, dex2, lastChange, values, form, dexstorage, dexstorage2]);
 
-  const blackListedTokens = useMemo(
-    () => [...(token1 ? [token1] : []), ...(token2 ? [token2] : [])],
-    [token1, token2],
-  );
-
   return (
     <>
       <Card
@@ -376,7 +371,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           {({ input, meta }) => (
             <TokenSelect
               {...input}
-              blackListedTokens={blackListedTokens}
+              blackListedTokens={getBlackListedTokens(token1, token2)}
               onFocus={() => setLastChange('balance1')}
               token={token1}
               setToken={setToken1}
@@ -410,7 +405,7 @@ const RealForm:React.FC<SwapFormProps> = ({
           {({ input, meta }) => (
             <TokenSelect
               {...input}
-              blackListedTokens={blackListedTokens}
+              blackListedTokens={getBlackListedTokens(token1, token2)}
               onFocus={() => setLastChange('balance2')}
               token={token2}
               setToken={setToken2}

@@ -4,18 +4,14 @@ import React, {
   ChangeEvent,
   SetStateAction,
 } from 'react';
-import {
-  Button,
-  Tooltip,
-  Switcher,
-} from '@quipuswap/ui-kit';
+import { Button } from '@quipuswap/ui-kit';
 import { FoundDex, Token } from '@quipuswap/sdk';
-// import { useTranslation } from 'next-i18next';
 import BigNumber from 'bignumber.js';
 
 import {
   useTezos,
   useAccountPkh,
+  useNetwork,
 } from '@utils/dapp';
 import {
   WhitelistedToken,
@@ -25,14 +21,15 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import s from '../Liquidity.module.sass';
 import {
   addLiquidity,
   calculateTokenAmount,
+  initializeLiquidity,
 } from '../liquidutyHelpers';
-import { initializeLiquidity } from '../liquidutyHelpers/initializeLiquidity';
 
-type LiquidityFormProps = {
+type AddTezToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -42,7 +39,7 @@ type LiquidityFormProps = {
   tokenBBalance: string;
 };
 
-export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
+export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
   dex,
   tokenA,
   tokenB,
@@ -51,9 +48,9 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   tokenABalance,
   tokenBBalance,
 }) => {
-  // const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const networkId = useNetwork().id;
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
@@ -66,20 +63,33 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       return;
     }
 
-    const tokenAmount = dex && calculateTokenAmount(
-      new BigNumber(event.target.value),
-      dex.storage.storage.total_supply,
-      dex.storage.storage.tez_pool,
-      dex.storage.storage.token_pool,
-    );
+    if (!dex
+      || dex.storage.storage.tez_pool.eq(0)
+      || dex.storage.storage.token_pool.eq(0)
+    ) return;
 
-    if (tokenAmount) {
-      setTokenBInput(
-        fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+    const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+    const tokenAAmount = new BigNumber(event.target.value).multipliedBy(tokenADecimals);
+
+    const tokenBAmount = tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+      ? calculateTokenAmount(
+        tokenAAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.tez_pool,
+        dex.storage.storage.token_pool,
+      )
+      : calculateTokenAmount(
+        tokenAAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.token_pool,
+        dex.storage.storage.tez_pool,
       );
-    }
-  };
 
+    setTokenBInput(
+      fromDecimals(tokenBAmount, tokenB.metadata.decimals)
+        .toFixed(tokenB.metadata.decimals),
+    );
+  };
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
@@ -88,24 +98,41 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       return;
     }
 
-    const tezAmount = dex && calculateTokenAmount(
-      new BigNumber(event.target.value),
-      dex.storage.storage.total_supply,
-      dex.storage.storage.token_pool,
-      dex.storage.storage.tez_pool,
-    );
+    if (!dex
+      || dex.storage.storage.tez_pool.eq(0)
+      || dex.storage.storage.token_pool.eq(0)
+    ) return;
 
-    if (tezAmount) {
-      setTokenAInput(
-        fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+    const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+    const tokenBAmount = new BigNumber(event.target.value).multipliedBy(tokenBDecimals);
+
+    const tokenAAmount = tokenB.contractAddress === TEZOS_TOKEN.contractAddress
+      ? calculateTokenAmount(
+        tokenBAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.tez_pool,
+        dex.storage.storage.token_pool,
+      )
+      : calculateTokenAmount(
+        tokenBAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.token_pool,
+        dex.storage.storage.tez_pool,
       );
-    }
+
+    setTokenAInput(
+      fromDecimals(tokenAAmount, tokenA.metadata.decimals)
+        .toFixed(tokenA.metadata.decimals),
+    );
   };
 
   const handleTokenABalance = (value:string) => {
+    const fixedValue = new BigNumber(value);
+
+    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
+
     if (!dex) return;
 
-    const fixedValue = new BigNumber(value);
     const tokenAmount = calculateTokenAmount(
       fixedValue,
       dex.storage.storage.total_supply,
@@ -113,16 +140,17 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.token_pool,
     );
 
-    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
     setTokenBInput(
       fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
     );
   };
-
   const handleTokenBBalance = (value:string) => {
+    const fixedValue = new BigNumber(value);
+
+    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
+
     if (!dex) return;
 
-    const fixedValue = new BigNumber(value);
     const tezAmount = calculateTokenAmount(
       fixedValue,
       dex.storage.storage.total_supply,
@@ -130,7 +158,6 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
       dex.storage.storage.tez_pool,
     );
 
-    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
     setTokenAInput(
       fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
     );
@@ -139,20 +166,33 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh) return;
 
+    const notTezToken = tokenA.contractAddress !== TEZOS_TOKEN.contractAddress
+      ? tokenA
+      : tokenB;
+    const notTezTokenInput = tokenA.contractAddress !== TEZOS_TOKEN.contractAddress
+      ? tokenAInput
+      : tokenBInput;
+    const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+      ? tokenAInput
+      : tokenBInput;
+
     const tezDecimals = new BigNumber(10).pow(TEZOS_TOKEN.metadata.decimals);
-    const tezValue = new BigNumber(tokenAInput)
+    const tezValue = new BigNumber(tezTokenInput)
       .multipliedBy(tezDecimals);
 
-    if (dex) {
+    if (dex
+      && dex.storage.storage.token_pool.gt(0)
+      && dex.storage.storage.tez_pool.gt(0)
+    ) {
       await addLiquidity(tezos, dex, tezValue);
     } else {
       const token:Token = {
-        contract: tokenB.contractAddress,
-        id: tokenB.fa2TokenId,
+        contract: notTezToken.contractAddress,
+        id: notTezToken.fa2TokenId,
       };
-      const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
-      const tokenBValue = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
-      await initializeLiquidity(tezos, token, tokenBValue, tezValue);
+      const tokenBDecimals = new BigNumber(10).pow(notTezToken.metadata.decimals);
+      const tokenBValue = new BigNumber(notTezTokenInput).multipliedBy(tokenBDecimals);
+      await initializeLiquidity(tezos, networkId, token, tokenBValue, tezValue);
     }
 
     setTokenAInput('');
@@ -168,7 +208,7 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
         setToken={setTokenA}
         value={tokenAInput}
         onChange={handleTokenAChange}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenABalance}
         noBalanceButtons={!accountPkh}
       />
@@ -180,18 +220,14 @@ export const LiquidityFormAdd:React.FC<LiquidityFormProps> = ({
         setToken={setTokenB}
         value={tokenBInput}
         onChange={handleTokenBChange}
-        blackListedTokens={[{}] as WhitelistedToken[]}
+        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
-      <div className={s.switcher}>
-        <Switcher isActive={false} onChange={() => {}} />
-        <span className={s.rebalance}>Rebalance Liq</span>
-        <Tooltip content="Liquidity rebalace description" />
-      </div>
       <Button
         className={s.button}
         onClick={handleAddLiquidity}
+        disabled={!accountPkh}
       >
         Add
       </Button>

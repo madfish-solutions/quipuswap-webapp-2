@@ -3,11 +3,10 @@ import {
   Card,
   Button,
   ColorModes,
+  VotingReward,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-
-import { VotingReward } from '@components/svg/VotingReward';
 
 import s from './FarmingStats.module.sass';
 

@@ -4,17 +4,22 @@ import React, {
   useContext,
 } from 'react';
 import {
+  Back,
   Tabs,
   Card,
   Button,
   Tooltip,
   CardCell,
   Timeleft,
+  ColorModes,
   StickyBlock,
   TokensLogos,
-  ColorModes,
+  VotingReward,
+  Transactions,
+  ExternalLink,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
+
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
@@ -24,10 +29,6 @@ import { WhitelistedFarm } from '@utils/types';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
 import { LineChartSampleData } from '@components/charts/content';
-import { VotingReward } from '@components/svg/VotingReward';
-import { ExternalLink } from '@components/svg/ExternalLink';
-import { Transactions } from '@components/svg/Transactions';
-import { Back } from '@components/svg/Back';
 
 import s from './FarmingInfo.module.sass';
 
