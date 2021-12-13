@@ -17,7 +17,6 @@ import cx from 'classnames';
 
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { useAccountPkh } from '@utils/dapp';
 import { TokensModal } from '@components/modals/TokensModal';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -25,20 +24,21 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
 import s from './ComplexInput.module.sass';
 
-type TokenSelectProps = {
-  noBalanceButtons?: boolean
-  className?: string
-  balance: string
-  exchangeRate?: string
-  label: string
-  error?: string
-  notSelectable?: boolean
-  handleChange?: (token:WhitelistedToken) => void
-  handleBalance: (value: string) => void
-  token?: WhitelistedToken,
-  blackListedTokens: WhitelistedToken[],
-  setToken: (token:WhitelistedToken) => void
-} & React.HTMLProps<HTMLInputElement>;
+interface TokenSelectProps extends React.HTMLProps<HTMLInputElement> {
+  noBalanceButtons?: boolean;
+  className?: string;
+  balance: string;
+  exchangeRate?: string;
+  label: string;
+  error?: string;
+  notSelectable?: boolean;
+  handleChange?: (token:WhitelistedToken) => void;
+  handleBalance: (value: string) => void;
+  token?: WhitelistedToken;
+  token2?: WhitelistedToken;
+  blackListedTokens: WhitelistedToken[];
+  setToken: (token:WhitelistedToken) => void;
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -58,6 +58,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   id,
   handleChange,
   token,
+  token2,
   setToken,
   blackListedTokens,
   ...props
@@ -104,12 +105,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           setTokensModal(false);
         }}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={compoundClassName}
-        onClick={focusInput}
-      >
+      <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
@@ -150,14 +146,16 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               <TokensLogos
                 firstTokenIcon={token
                   ? prepareTokenLogo(token.metadata?.thumbnailUri)
-                  : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
+                  : null}
                 firstTokenSymbol={token
                   ? getWhitelistedTokenSymbol(token)
-                  : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+                  : 'TOKEN'}
+                secondTokenIcon={token2 && prepareTokenLogo(token2.metadata.thumbnailUri)}
+                secondTokenSymbol={token2 && getWhitelistedTokenSymbol(token2)}
               />
               <h6 className={cx(s.token)}>
-
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
+                {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
               </h6>
               {!notSelectable && (<Shevron />)}
             </Button>
