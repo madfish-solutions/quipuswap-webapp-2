@@ -119,7 +119,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   const [oldAsset, setOldAsset] = useState<Token>();
   const [isBanned, setIsBanned] = useState<boolean>(false);
   const [isFormError, setIsFormError] = useState<boolean>(false);
-  const [isBakerChoosen, setIsBakerChoosen] = useState(false)
+  const [isBakerChoosen, setIsBakerChoosen] = useState(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
   let promise: any;
@@ -238,7 +238,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     || (currentTab.id === 'vote' && isBanned)
     || isFormError
     || !accountPkh
-    || !isBakerChoosen
+    || !isBakerChoosen;
 
   return (
     <>
@@ -323,8 +323,8 @@ const RealForm: React.FC<VotingFormProps> = ({
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
                     if (!dex) return;
-                    
-                    if(!isBakerChoosen) setIsBakerChoosen(true)
+
+                    if (!isBakerChoosen) setIsBakerChoosen(true);
 
                     const tempBaker = await dex.storage.storage.vetos.get(
                       bakerObj.address,
