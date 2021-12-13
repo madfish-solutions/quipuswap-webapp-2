@@ -1,22 +1,23 @@
 import React, {
-  useContext,
-  useEffect,
   useState,
+  useEffect,
+  useContext,
 } from 'react';
 import {
   Button,
   LogoButton,
   ColorModes,
+  MenuClosed,
+  MenuOpened,
   LanguageSwitcher,
   ColorThemeContext,
   ColorModeSwitcher,
 } from '@quipuswap/ui-kit';
+
 import cx from 'classnames';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Menu } from '@components/common/Header/Menu';
-import { MenuClosed } from '@components/svg/MenuClosed';
-import { MenuOpened } from '@components/svg/MenuOpened';
 
 import s from './Header.module.sass';
 
@@ -47,12 +48,19 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <div className={s.wrapper}>
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
-        <LogoButton />
+        <LogoButton href="/" />
         <ConnectWalletButton className={s.connect} />
-        <LanguageSwitcher
-          direction="bottom"
-          className={s.languageSwitcher}
-        />
+        {
+          // TODO: Restore Languages
+          false && (
+          <LanguageSwitcher
+            direction="bottom"
+            className={s.languageSwitcher}
+            locale="EN"
+            locales={['EN', 'RU', 'PL', 'GE', 'IT']}
+          />
+          )
+        }
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button
           theme="quaternary"

@@ -1206,8 +1206,12 @@
   dependencies:
     bignumber.js "^9.0.1"
 
-"@quipuswap/ui-kit@../quipu-ui-kit/dist":
-  version "0.0.0"
+"@quipuswap/ui-kit@0.1.17":
+  version "0.1.17"
+  resolved "https://registry.yarnpkg.com/@quipuswap/ui-kit/-/ui-kit-0.1.17.tgz#96856b7a0d784dc106c22ff80b23b8699e696f83"
+  integrity sha512-j0PKA7pwh+CiGTZs6kOtplmcCjvthTDzaFb2S71BpFd3j/x7Qkz2pMqwGhrjgM+ES+B/5R7kzOWb+S6qoSS0NA==
+  dependencies:
+    slick-carousel "^1.8.1"
 
 "@rushstack/eslint-patch@^1.0.6":
   version "1.1.0"

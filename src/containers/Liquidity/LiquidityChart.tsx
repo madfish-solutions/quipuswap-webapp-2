@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { findDex, FoundDex } from '@quipuswap/sdk';
 
 import { PlotPoint, useGetPairPlotLiquidityQuery } from '@graphql';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 import { FACTORIES } from '@utils/defaults';
 import {
   useNetwork, useTezos,
@@ -50,7 +50,7 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({
 }) => {
   const tezos = useTezos();
   const network = useNetwork();
-  const networkId = network.id as QSMainNet;
+  const networkId = network.id;
   const [dex, setDex] = useState<FoundDex>();
   useEffect(() => {
     const asyncLoad = async () => {
