@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 import { Checkbox, TokenCell } from '@quipuswap/ui-kit';
 import { WhitelistedToken } from '@quipuswap/ui-kit/dist/utils/types';
