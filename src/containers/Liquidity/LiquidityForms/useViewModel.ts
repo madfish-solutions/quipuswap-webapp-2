@@ -4,7 +4,7 @@ import {
 import { QSMainNet } from '@utils/types';
 import { useCallback, useEffect, useState } from 'react';
 import {
-  FA12_TOKEN, FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, TS_TOKEN,
+  FACTORIES, STABLE_TOKEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX,
 } from '@utils/defaults';
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { fromDecimals } from '@utils/helpers';
@@ -33,8 +33,8 @@ export const useViewModel = () => {
   const accountPkh = useAccountPkh();
 
   const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(FA12_TOKEN);
-  const [tokenB, setTokenB] = useState(TS_TOKEN);
+  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
+  const [tokenB, setTokenB] = useState(STABLE_TOKEN);
   const [tokenABalance, setTokenABalance] = useState<string>('0');
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');

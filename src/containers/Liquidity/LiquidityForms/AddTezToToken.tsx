@@ -133,15 +133,25 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
 
     if (!dex) return;
 
-    const tokenAmount = calculateTokenAmount(
-      fixedValue,
-      dex.storage.storage.total_supply,
-      dex.storage.storage.tez_pool,
-      dex.storage.storage.token_pool,
-    );
+    const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+    const tokenAAmount = fixedValue.multipliedBy(tokenADecimals);
+
+    const tokenBAmount = tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+      ? calculateTokenAmount(
+        tokenAAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.tez_pool,
+        dex.storage.storage.token_pool,
+      )
+      : calculateTokenAmount(
+        tokenAAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.token_pool,
+        dex.storage.storage.tez_pool,
+      );
 
     setTokenBInput(
-      fromDecimals(tokenAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
+      fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
     );
   };
   const handleTokenBBalance = (value:string) => {
@@ -151,15 +161,26 @@ export const AddTezToToken:React.FC<AddTezToTokenProps> = ({
 
     if (!dex) return;
 
-    const tezAmount = calculateTokenAmount(
-      fixedValue,
-      dex.storage.storage.total_supply,
-      dex.storage.storage.token_pool,
-      dex.storage.storage.tez_pool,
-    );
+    const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+    const tokenBAmount = fixedValue.multipliedBy(tokenBDecimals);
+
+    const tokenAAmount = tokenB.contractAddress === TEZOS_TOKEN.contractAddress
+      ? calculateTokenAmount(
+        tokenBAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.tez_pool,
+        dex.storage.storage.token_pool,
+      )
+      : calculateTokenAmount(
+        tokenBAmount,
+        dex.storage.storage.total_supply,
+        dex.storage.storage.token_pool,
+        dex.storage.storage.tez_pool,
+      );
 
     setTokenAInput(
-      fromDecimals(tezAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
+      fromDecimals(tokenAAmount, tokenA.metadata.decimals)
+        .toFixed(tokenA.metadata.decimals),
     );
   };
 
