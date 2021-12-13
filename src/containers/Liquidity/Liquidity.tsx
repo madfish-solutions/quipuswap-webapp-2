@@ -7,7 +7,7 @@ import {
   TokenDataMap,
   WhitelistedTokenPair,
 } from '@utils/types';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { fallbackTokenToTokenData } from '@utils/helpers';
 import { LiquidityForm } from '@containers/Liquidity/LiquidityForms';
 
@@ -19,7 +19,7 @@ type LiquidityProps = {
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: STABLE_TOKEN,
+  token2: MAINNET_DEFAULT_TOKEN,
 } as WhitelistedTokenPair;
 
 export const Liquidity: React.FC<LiquidityProps> = ({
@@ -28,7 +28,7 @@ export const Liquidity: React.FC<LiquidityProps> = ({
   const { Form } = withTypes<LiquidityFormValues>();
   const [tokensData] = useState<TokenDataMap>({
     first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(STABLE_TOKEN),
+    second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN),
   });
 
   return (

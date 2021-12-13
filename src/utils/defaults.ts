@@ -27,6 +27,8 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const MAX_SLIPPAGE_PERCENTAGE = 30;
+export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 
@@ -54,7 +56,8 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
   },
 };
-export const STABLE_TOKEN: WhitelistedToken = {
+
+export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -65,16 +68,22 @@ export const STABLE_TOKEN: WhitelistedToken = {
     thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
   },
 };
-export const STABLE_TOKEN_GRANADA: WhitelistedToken = {
+
+export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
-  contractAddress: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
+  contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
   metadata: {
     decimals: 6,
     symbol: 'QUIPU',
     name: 'Quipuswap Governance Token',
-    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
+    thumbnailUri: 'https://ipfs.io/ipfs/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP',
   },
+};
+
+export const networksDefaultTokens: Record<QSMainNet, WhitelistedToken> = {
+  mainnet: MAINNET_DEFAULT_TOKEN,
+  hangzhounet: HANGZHOUNET_DEFAULT_TOKEN,
 };
 
 export const FACTORIES = {
@@ -98,8 +107,13 @@ export const FACTORIES = {
   },
 };
 
+export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
+  hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC',
+};
+
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
+export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';

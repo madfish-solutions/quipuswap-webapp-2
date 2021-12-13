@@ -21,7 +21,7 @@ module.exports = withReactSvg({
       },
       {
         source: '/liquidity',
-        destination: `/liquidity/add/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/liquidity/add/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
@@ -41,12 +41,12 @@ module.exports = withReactSvg({
       },
       {
         source: '/liquidity/add',
-        destination: `/liquidity/add/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/liquidity/add/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
         source: '/liquidity/remove',
-        destination: `/liquidity/remove/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/liquidity/remove/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
@@ -56,7 +56,7 @@ module.exports = withReactSvg({
       },
       {
         source: '/voting',
-        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
@@ -66,12 +66,12 @@ module.exports = withReactSvg({
       },
       {
         source: '/voting/vote',
-        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
         source: '/voting/veto',
-        destination: `/voting/veto/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/veto/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {

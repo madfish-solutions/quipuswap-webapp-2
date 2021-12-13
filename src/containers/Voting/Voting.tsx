@@ -26,11 +26,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
 } from '@utils/types';
-import {
-  STABLE_TOKEN,
-  STABLE_TOKEN_GRANADA,
-  TEZOS_TOKEN,
-} from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { useRouterPair } from '@hooks/useRouterPair';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { VotingStats } from '@components/voting/VotingStats';
@@ -61,7 +57,7 @@ type VotingProps = {
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: STABLE_TOKEN,
+  token2: MAINNET_DEFAULT_TOKEN,
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
@@ -74,13 +70,15 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(STABLE_TOKEN),
-  });
+  const [tokensData, setTokensData] = useState<TokenDataMap>(
+    {
+      first: fallbackTokenToTokenData(TEZOS_TOKEN),
+      second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN),
+    },
+  );
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([
     TEZOS_TOKEN,
-    STABLE_TOKEN,
+    MAINNET_DEFAULT_TOKEN,
   ]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
@@ -120,7 +118,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     if (network.id === 'hangzhounet') {
       setTokenPair({
         token1: TEZOS_TOKEN,
-        token2: STABLE_TOKEN_GRANADA,
+        token2: HANGZHOUNET_DEFAULT_TOKEN,
       } as WhitelistedTokenPair);
     } else {
       setTokenPair(fallbackTokenPair);

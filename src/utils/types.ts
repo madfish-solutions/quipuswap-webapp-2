@@ -35,6 +35,7 @@ export interface WhitelistedTokenPair {
 export interface WhitelistedToken {
   type: 'fa1.2' | 'fa2'
   contractAddress: string
+  // TODO: change the type to BigNumber
   fa2TokenId?: number
   metadata: WhitelistedTokenMetadata
 }
@@ -69,6 +70,28 @@ export type WhitelistedTokenMetadata = {
   thumbnailUri: string
 };
 
+type CommonDexPairProps = {
+  token1Pool: BigNumber;
+  token2Pool: BigNumber;
+  totalSupply: BigNumber;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  id: string | number;
+  type: 'ttdex' | 'tokenxtz';
+};
+
+type TTDexPairProps = CommonDexPairProps & {
+  id: number;
+  type: 'ttdex';
+};
+
+type TokenXtzDexPairProps = CommonDexPairProps & {
+  id: string;
+  type: 'tokenxtz';
+};
+
+export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
+
 export type VoterType = {
   vote: BigNumber,
   veto: BigNumber,
@@ -86,17 +109,25 @@ export type TokenDataType = {
   exchangeRate?: string
 };
 
+export type NewTokenDataType = {
+  token: WhitelistedToken;
+  balance?: BigNumber;
+  exchangeRate?: BigNumber;
+};
+
 export type TokenDataMap = {
   first: TokenDataType,
   second: TokenDataType
 };
 
 export type SwapFormValues = {
-  lastChange: 'balance1' | 'balance2'
-  balance1: BigNumber
-  balance2: BigNumber
-  recipient: string
-  slippage: string
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  amount1: BigNumber;
+  amount2: BigNumber;
+  recipient: string;
+  slippage: BigNumber;
+  action: 'swap' | 'send';
 };
 
 export type LiquidityFormValues = {

@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { Voting } from '@containers/Voting';
 
@@ -27,7 +27,7 @@ export const getServerSideProps = async (props:any) => {
   const { locale, query } = props;
   const splittedTokens = query['from-to'].split('-');
   const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(STABLE_TOKEN);
+  const to = getWhitelistedTokenSymbol(MAINNET_DEFAULT_TOKEN);
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 

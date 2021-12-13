@@ -4,7 +4,7 @@ import { FormSpy } from 'react-final-form';
 
 import { TabsContent, useViewModel } from '@containers/Liquidity/LiquidityForms/useViewModel';
 import { LiquidityFormProps } from '@containers/Liquidity/LiquidityForms/LiquidityForm.props';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { LiquidityDetails } from '../LiquidityDetails';
 import { AddTezToToken } from './AddTezToToken';
 import { AddTokenToToken } from './AddTokenToToken';
@@ -86,7 +86,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
           <LiquidityDetails
             currentTab={tabState.label}
             token1={TEZOS_TOKEN}
-            token2={STABLE_TOKEN}
+            token2={MAINNET_DEFAULT_TOKEN}
             tokensData={tokensData}
             balanceTotalA="1"
             balanceTotalB="2"

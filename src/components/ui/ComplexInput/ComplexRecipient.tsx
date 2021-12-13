@@ -63,9 +63,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   };
 
   return (
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div className={compoundClassName} onClick={focusInput}>
+    <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
       {label && (
         <label htmlFor={id} className={s.label}>
           {label}
@@ -86,17 +84,19 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
           />
         </div>
       </div>
-      <div className={s.controls}>
-        <Button
-          disabled={readOnly}
-          onClick={handlePaste}
-          theme="inverse"
-          className={s.btn}
-        >
-          {t('common|Paste')}
-        </Button>
-      </div>
-      {!readOnly && <ComplexError error={error} />}
+      {'readText' in navigator.clipboard && (
+        <div className={s.controls}>
+          <Button
+            disabled={readOnly}
+            onClick={handlePaste}
+            theme="inverse"
+            className={s.btn}
+          >
+            {t('common|Paste')}
+          </Button>
+        </div>
+      )}
+      {!readOnly && (<ComplexError error={error} />)}
     </div>
   );
 };
