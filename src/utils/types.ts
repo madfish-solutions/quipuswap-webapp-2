@@ -1,6 +1,9 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+export type Undefined<T> = T | undefined;
+export type Nullable<T> = T | null; // MayBe<T>
+
 export type QSMainNet =
   | 'mainnet'
   | 'hangzhounet';
@@ -43,14 +46,21 @@ WhitelistedToken,
 'contractAddress' | 'fa2TokenId' | 'type'
 >;
 
-export interface WhitelistedBaker {
-  name: string,
+export interface WhitelistedBakerEmpty {
   address: string,
+}
+
+export interface WhitelistedBakerFull extends WhitelistedBakerEmpty {
+  name: string,
   logo: string,
   votes: number,
   fee: number,
   freeSpace: BigNumber
 }
+
+export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
+
+export const isFullBaker = (baker: WhitelistedBaker): baker is WhitelistedBakerFull => baker && 'name' in baker;
 
 export type WhitelistedTokenMetadata = {
   decimals: number
@@ -60,8 +70,8 @@ export type WhitelistedTokenMetadata = {
 };
 
 export type VoterType = {
-  vote: string,
-  veto: string,
+  vote: BigNumber,
+  veto: BigNumber,
   candidate: string
 };
 
@@ -148,7 +158,7 @@ export type WhitelistedStake = {
 export type VoteFormValues = {
   balance1: number
   selectedBaker: string
-  method:'first' | 'second'
+  currentBacker?: string
 };
 
 export type PoolTableType = {
