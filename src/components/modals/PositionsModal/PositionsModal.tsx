@@ -77,14 +77,12 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   };
 
   const handleTokenSearch = useCallback(() => {
-    const isTokens = tokens.filter((token: WhitelistedToken) =>
-      localSearchToken(
-        token as WhitelistedOrCustomToken,
-        network,
-        inputValue,
-        +inputToken
-      )
-    );
+    const isTokens = tokens.filter((token: WhitelistedToken) => localSearchToken(
+      token as WhitelistedOrCustomToken,
+      network,
+      inputValue,
+      +inputToken,
+    ));
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, +inputToken);
@@ -93,20 +91,19 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
 
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0 && searchTokens.length === 0,
-    [searchTokens, filteredTokens]
+    [searchTokens, filteredTokens],
   );
 
   useEffect(
     () => handleTokenSearch(),
-    [tokens, inputValue, inputToken, handleTokenSearch]
+    [tokens, inputValue, inputToken, handleTokenSearch],
   );
 
   const allTokens = useMemo(
-    () =>
-      inputValue.length > 0 && filteredTokens.length === 0
-        ? searchTokens
-        : filteredTokens,
-    [inputValue, filteredTokens, searchTokens]
+    () => (inputValue.length > 0 && filteredTokens.length === 0
+      ? searchTokens
+      : filteredTokens),
+    [inputValue, filteredTokens, searchTokens],
   );
 
   useEffect(() => {
@@ -118,7 +115,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const handleTokenA = (
     token: WhitelistedToken,
     form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
+    values: FormValues,
   ) => {
     if (!notSelectable1) {
       if (values.token2 && values.token1) {
@@ -135,7 +132,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const handleTokenB = (
     token: WhitelistedToken,
     form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
+    values: FormValues,
   ) => {
     if (!notSelectable2) {
       if (!values.token2) {
@@ -149,7 +146,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const handleTokenListItem = (
     token: WhitelistedToken,
     form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
+    values: FormValues,
   ) => {
     if (searchTokens.length > 0) {
       addCustomToken(token);
@@ -180,29 +177,27 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
       render={({ form, values }) => (
         <Modal
           title={t('common|Your Positions')}
-          header={
+          header={(
             <AutoSave
               form={form}
               debounce={1000}
               save={handleInput}
               isSecondInput={isSoleFa2Token}
             />
-          }
-          footer={
+          )}
+          footer={(
             <Button
-              onClick={() =>
-                onChange({
-                  token1: values.token1,
-                  token2: values.token2,
-                } as WhitelistedTokenPair)
-              }
+              onClick={() => onChange({
+                token1: values.token1,
+                token2: values.token2,
+              } as WhitelistedTokenPair)}
               disabled={!values.token2 || !values.token1}
               className={s.modalButton}
               theme="primary"
             >
               Select
             </Button>
-          }
+          )}
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -259,11 +254,11 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               </div>
             </div>
           )}
-          {isEmptyTokens &&
-            searchLoading &&
-            [1, 2, 3, 4, 5, 6].map((x) => <LoadingTokenCell key={x} />)}
-          {!values.token2 &&
-            allTokens
+          {isEmptyTokens
+            && searchLoading
+            && [1, 2, 3, 4, 5, 6].map((x) => <LoadingTokenCell key={x} />)}
+          {!values.token2
+            && allTokens
               .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
               .map((token) => {
                 const { contractAddress, fa2TokenId } = token;
