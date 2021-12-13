@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import cx from 'classnames';
 
+import { isActivePath } from '@components/common/Header/Navigation/utils';
 import { NavigationData } from './content';
 import s from './Navigation.module.sass';
 
@@ -31,18 +32,12 @@ export const Navigation: React.FC<NavigationProps> = ({
   }) => {
     if (href) {
       content.push(
-        <Link
-          key={id}
-          href={href}
-          as={as}
-        >
+        <Link key={id} href={href} as={as}>
           <a
             className={cx(
               s.link,
               {
-                [s.active]: router.pathname === '/'
-                  ? href === '/'
-                  : href !== '/' && router.pathname.includes(href),
+                [s.active]: isActivePath(router.pathname, href),
               },
               modeClass[colorThemeMode],
             )}
@@ -69,10 +64,7 @@ export const Navigation: React.FC<NavigationProps> = ({
           </button>
           <span className={s.linksInner}>
             {links.map((el) => (
-              <Link
-                key={el.id}
-                href={el.href ?? ''}
-              >
+              <Link key={el.id} href={el.href ?? ''}>
                 <a
                   className={cx(
                     s.linkInner,

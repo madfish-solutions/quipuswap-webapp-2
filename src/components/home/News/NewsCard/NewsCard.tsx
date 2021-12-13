@@ -1,51 +1,39 @@
-import React, { useContext } from 'react';
-import {
-  Bage,
-  ColorModes,
-  FallbackLogo,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+import React from 'react';
 import Image from 'next/image';
-import cx from 'classnames';
 
-import { prepareTokenLogo } from '@utils/helpers';
+import { isNewsWithLink, News } from '@components/home/News/content';
 
-import s from './NewsCard.module.sass';
-
-type NewsCardProps = {
-  img?: string,
-  sponsored?: boolean
-  className?: string
-};
-
-const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
-};
+interface NewsCardProps {
+  news: News;
+  className?: string;
+}
 
 export const NewsCard: React.FC<NewsCardProps> = ({
-  sponsored = false,
-  img = '',
+  news,
   className,
 }) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
-  const prepimg = prepareTokenLogo(img);
+  const ImageComponent = (
+    <Image
+      layout="fixed"
+      width={272}
+      height={136}
+      src={news.img}
+      alt="news"
+    />
+  );
 
   return (
-    <div className={cx(s.root, className, modeClass[colorThemeMode])}>
-      {sponsored && <Bage text="sponsored" className={s.sponsored} />}
-      {prepimg ? (
-        <Image
-          layout="fixed"
-          width={24}
-          height={24}
-          src={prepimg}
-          alt="news"
-          className={cx(s.image)}
-        />
-      ) : (
-        <FallbackLogo className={cx(s.image)} />
-      )}
+    <div className={className}>
+      {isNewsWithLink(news) ? (
+        <a
+          href={news.url}
+          target={news.external ? '_blank' : '_self'}
+          rel="noreferrer noopener"
+        >
+          {ImageComponent}
+        </a>
+      ) : ImageComponent}
+
     </div>
   );
 };

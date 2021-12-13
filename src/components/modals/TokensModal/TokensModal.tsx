@@ -1,48 +1,41 @@
 import React, {
-  useRef,
-  useMemo,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
+  useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import {
-  Pen,
-  Input,
-  Modal,
   Button,
-  Search,
-  TokenCell,
   ColorModes,
-  NumberInput,
-  TokenNotFound,
-  LoadingTokenCell,
   ColorThemeContext,
+  LoadingTokenCell,
+  Modal,
+  Pen,
+  TokenCell,
+  TokenNotFound,
 } from '@quipuswap/ui-kit';
-import { Field, FormSpy, withTypes } from 'react-final-form';
+import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import {
+  isTokenFa2,
+  useAddCustomToken,
+  useNetwork,
+  useSearchCustomTokens,
+  useSearchTokens,
   useTezos,
   useTokens,
-  isTokenFa2,
-  useNetwork,
-  useSearchTokens,
-  useAddCustomToken,
-  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
-  parseNumber,
-  isTokenEqual,
-  prepareTokenLogo,
-  localSearchToken,
+  getWhitelistedTokenName,
   getWhitelistedTokenSymbol,
+  isTokenEqual,
+  localSearchToken,
+  prepareTokenLogo,
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { validateMinMax } from '@utils/validators';
 
+import { FormApi } from 'final-form';
+import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
 
 const themeClass = {
@@ -50,116 +43,15 @@ const themeClass = {
   [ColorModes.Dark]: s.dark,
 };
 
-type TokensModalProps = {
-  onChange: (token: WhitelistedToken) => void,
-  blackListedTokens: WhitelistedToken[],
-} & ReactModal.Props;
+interface TokensModalProps extends ReactModal.Props {
+  onChange: (token: WhitelistedToken) => void;
+  blackListedTokens: WhitelistedToken[];
+}
 
-type HeaderProps = {
-  isSecondInput:boolean
-  debounce:number,
-  save:any,
-  values:any,
-  form:any,
-};
-
-type FormValues = {
-  search: string
-  tokenId: number
-};
-
-const Header:React.FC<HeaderProps> = ({
-  isSecondInput, debounce, save, values, form,
-}) => {
-  const { t } = useTranslation(['common']);
-
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
-
-  const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
-
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    promise = save(values);
-    await promise;
-    setSubm(false);
-  };
-
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, [values]);
-
-  return (
-    <div className={s.inputs}>
-      <Field
-        name="search"
-      >
-        {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common|Search')}
-              error={meta.error}
-            />
-          </>
-        )}
-
-      </Field>
-      {(isSecondInput) && (
-      <Field
-        name="tokenId"
-        validate={validateMinMax(0, 100)}
-        parse={(value) => parseNumber(value, 0, 100)}
-      >
-        {({ input, meta }) => (
-          <>
-            <NumberInput
-              {...input}
-              className={s.modalInput}
-              placeholder={t('common|Token ID')}
-              step={1}
-              min={0}
-              max={100}
-              error={(meta.touched && meta.error) || meta.submitError}
-              onIncrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  Math.min(Number(input.value) + 1, 100),
-                );
-              }}
-              onDecrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  Math.max(Number(input.value) - 1, 1),
-                );
-              }}
-            />
-          </>
-        )}
-      </Field>
-      )}
-    </div>
-  );
-};
-
-const AutoSave = (props:any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={Header} />
-);
+interface FormValues {
+  search: string;
+  tokenId: number;
+}
 
 export const TokensModal: React.FC<TokensModalProps> = ({
   onChange,
@@ -180,7 +72,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   const [inputToken, setInputToken] = useState<number>(0);
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
-  const handleInput = (values:FormValues) => {
+  const handleInput = (values: FormValues) => {
     setInputValue(values.search ?? '');
     setInputToken(isSoleFa2Token ? values.tokenId : 0);
   };
@@ -225,12 +117,19 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   [inputValue, filteredTokens, searchTokens, blackListedTokens]);
 
   useEffect(() => {
-    const getFa2 = async () => {
-      const res = await isTokenFa2(inputValue, tezos!!);
-      setSoleFa2Token(res);
-    };
-    getFa2();
+    isTokenFa2(inputValue, tezos!!).then(setSoleFa2Token);
   }, [inputValue, tezos]);
+
+  const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {
+    onChange(token);
+    if (searchTokens.length > 0) {
+      addCustomToken(token);
+    }
+    form.mutators.setValue('search', '');
+    form.mutators.setValue('tokenId', 0);
+    setInputValue('');
+    setInputToken(0);
+  };
 
   return (
     <Form
@@ -246,16 +145,15 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           header={(
             <AutoSave
               form={form}
-              debounce={1000}
               save={handleInput}
               isSecondInput={isSoleFa2Token}
             />
           )}
-          footer={(
+          footer={false && (
+            // TODO: Impelement it
             <Button className={s.modalButton} theme="inverse">
               Manage Lists
               <Pen className={s.penIcon} />
-
             </Button>
           )}
           className={themeClass[colorThemeMode]}
@@ -283,19 +181,11 @@ export const TokensModal: React.FC<TokensModalProps> = ({
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
                 tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                tokenName={getWhitelistedTokenSymbol(token)}
-                tokenSymbol="qwe"
+                tokenName={getWhitelistedTokenName(token)}
+                tokenSymbol={getWhitelistedTokenSymbol(token)}
+                tokenType={token.type}
                 tabIndex={0}
-                onClick={() => {
-                  onChange(token);
-                  if (searchTokens.length > 0) {
-                    addCustomToken(token);
-                  }
-                  form.mutators.setValue('search', '');
-                  form.mutators.setValue('tokenId', 0);
-                  setInputValue('');
-                  setInputToken(0);
-                }}
+                onClick={() => handleTokenSelect(form, token)}
               />
             );
           })}
