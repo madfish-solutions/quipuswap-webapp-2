@@ -19,10 +19,6 @@ import {
   CurrencyAmount,
 } from '@quipuswap/ui-kit';
 
-import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
-import { useDexGraph } from '@hooks/useDexGraph';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import {
   useAccountPkh,
   useNetwork,
@@ -57,7 +53,10 @@ import {
   QSMainNet,
   WhitelistedToken,
 } from '@utils/types';
-
+import { useDexGraph } from '@hooks/useDexGraph';
+import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
 import s from '@styles/CommonContainer.module.sass';
 
 import { SwapDetails } from './SwapDetails';

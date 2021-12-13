@@ -285,7 +285,6 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                   tokenSymbol="TOKEN"
                   tabIndex={0}
                   onClick={() => {
-                  // onChange(token);
                     if (!notSelectable1) {
                       if (values.token2 && values.token1) {
                         form.mutators.setValue('token1', values.token2);

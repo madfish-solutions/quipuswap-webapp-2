@@ -10,15 +10,12 @@ import React, {
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import { useDexGraph } from '@hooks/useDexGraph';
-import useUpdateToast from '@hooks/useUpdateToast';
-import { useInitialTokens } from '@hooks/useInitialTokens';
 import { SwapFormValues, WhitelistedToken } from '@utils/types';
 import {
   getUserBalance,
-  useAccountPkh,
-  useNetwork,
   useTezos,
+  useNetwork,
+  useAccountPkh,
 } from '@utils/dapp';
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
@@ -39,6 +36,9 @@ import {
   getRouteWithInput,
 } from '@utils/routing';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
+import { useDexGraph } from '@hooks/useDexGraph';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { useInitialTokens } from '@hooks/useInitialTokens';
 
 import { SwapForm } from './SwapForm';
 

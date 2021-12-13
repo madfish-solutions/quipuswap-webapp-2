@@ -37,3 +37,4 @@ export * from './getTokenSlug';
 export * from './getTokenIdFromSlug';
 export * from './tokenToTokenDex';
 export * from './swap';
+export * from './noOpFunc';
