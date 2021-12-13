@@ -51,7 +51,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
           {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           <CurrencyAmount

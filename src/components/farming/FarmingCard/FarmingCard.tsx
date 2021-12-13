@@ -72,7 +72,7 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             {' '}
             {getWhitelistedTokenSymbol(tokenPair.token1)}
           </h3>
-          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools." />
+          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools." />
 
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>

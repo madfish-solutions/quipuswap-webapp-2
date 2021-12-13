@@ -1,4 +1,4 @@
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -67,18 +67,6 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
-export const QUIPU_TOKEN:WhitelistedToken = {
-  type: 'fa2',
-  contractAddress: 'KT1NfYbYTCRZsNPZ97VdLqSrwPdVupiqniFu',
-  fa2TokenId: 0,
-  metadata: {
-    decimals: 6,
-    symbol: 'QUIPU',
-    name: 'Quipuswap Governance Token',
-    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
-  },
-};
-
 export const FACTORIES = {
   mainnet: {
     fa1_2Factory: [
@@ -128,7 +116,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
 };
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
-export const CHAIN_ID_MAPPING = new Map<string, string>([
+export const CHAIN_ID_MAPPING = new Map<QSMainNet, string>([
   ['mainnet', 'NetXdQprcVkpaWU'],
   ['hangzhounet', 'NetXZSsxBpMQeAT'],
 ]);
