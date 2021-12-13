@@ -32,7 +32,6 @@ import {
 } from '@utils/dapp';
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
-  MAX_SLIPPAGE_PERCENTAGE,
   TEZOS_TOKEN,
   TTDEX_CONTRACTS,
 } from '@utils/defaults';
@@ -123,10 +122,10 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
 
   return (
     <>
-      <Slippage handleChange={handleChange} />
+      <Slippage handleChange={handleChange} placeholder={slippage?.toFixed()} />
       {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.receive}>
-        {slippage?.lte(MAX_SLIPPAGE_PERCENTAGE) && slippage.gt(0) && (
+        {slippage && (
           <>
             <span className={s.receiveLabel}>
               Minimum received:
