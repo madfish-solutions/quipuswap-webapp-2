@@ -4,10 +4,10 @@ import {
   Button, CurrencyAmount, TokensLogos, Tooltip,
 } from '@quipuswap/ui-kit';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { toLocaleString } from '@utils/helpers/toLocaleString';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import { useTranslation } from 'next-i18next';
+import { FormatNumber } from '@utils/helpers/formatNumber';
 
 export const useColumns = () => {
   const { t } = useTranslation(['home']);
@@ -41,7 +41,7 @@ export const useColumns = () => {
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <div className={s.links}>
           <CurrencyAmount
-            amount={toLocaleString(fromDecimals(new BigNumber(dataInside.tvl), 6)
+            amount={FormatNumber(fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString())}
@@ -63,7 +63,7 @@ export const useColumns = () => {
       accessor: ({ data: dataInside, xtzUsdQuote }:PoolTableType) => (
         <>
           <CurrencyAmount
-            amount={toLocaleString(fromDecimals(new BigNumber(dataInside.tvl), 6)
+            amount={FormatNumber(fromDecimals(new BigNumber(dataInside.tvl), 6)
               .multipliedBy(new BigNumber(xtzUsdQuote))
               .integerValue()
               .toString())}
