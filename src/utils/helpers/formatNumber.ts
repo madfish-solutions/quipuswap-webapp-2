@@ -5,6 +5,8 @@ export interface FormatNumberOptinos {
   decimals?: number;
 }
 
+const STRING_ZERO: string = '0';
+
 export const FormatInteger = (value: BigNumber.Value): string => {
   const integer = value.toString();
 
@@ -28,6 +30,10 @@ export const FormatNumber = (
   const decimals = options?.decimals ?? DEFAULT_DECIMALS;
 
   const [integer, decimal] = value.toString().split('.');
+
+  if (integer === STRING_ZERO && !decimal) {
+    return STRING_ZERO;
+  }
 
   const newInteger = FormatInteger(integer);
 
