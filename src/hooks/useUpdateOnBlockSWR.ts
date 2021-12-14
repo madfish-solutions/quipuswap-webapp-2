@@ -1,13 +1,9 @@
-import { TezosToolkit } from '@taquito/taquito';
-import { useOnBlock } from '@utils/dapp';
 import { useCallback } from 'react';
-import useSWR, {
-  Fetcher,
-  Key,
-  SWRConfiguration,
-  SWRResponse,
-  useSWRConfig,
-} from 'swr';
+
+import { TezosToolkit } from '@taquito/taquito';
+import useSWR, { Fetcher, Key, SWRConfiguration, SWRResponse, useSWRConfig } from 'swr';
+
+import { useOnBlock } from '@utils/dapp';
 
 function useUpdateOnBlockSWR<Data = any, Error = any, SWRKey extends Key = null>(
   tezos: TezosToolkit | null,

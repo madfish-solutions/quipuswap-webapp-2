@@ -1,4 +1,5 @@
 import { FoundDex } from '@quipuswap/sdk';
+
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Undefined, WhitelistedBaker } from '@utils/types';
@@ -14,32 +15,25 @@ export interface VoteVetoInfo {
   votesToVeto: string;
 }
 
-export const getCandidateInfo = (
-  dex: Undefined<FoundDex>,
-  bakers: Array<WhitelistedBaker>,
-): CandidateInfo => {
+export const getCandidateInfo = (dex: Undefined<FoundDex>, bakers: Array<WhitelistedBaker>): CandidateInfo => {
   if (!dex?.storage?.storage) {
     return {
       currentCandidate: undefined,
-      secondCandidate: undefined,
+      secondCandidate: undefined
     };
   }
 
-  const currentCandidate = bakers.find(
-    (x) => x.address === dex.storage.storage.current_candidate,
-  ) || {
-    address: dex.storage.storage.current_candidate,
+  const currentCandidate = bakers.find(x => x.address === dex.storage.storage.current_candidate) || {
+    address: dex.storage.storage.current_candidate
   };
 
-  const secondCandidate = bakers.find(
-    (x) => x.address === dex.storage.storage.current_delegated,
-  ) || {
-    address: dex.storage.storage.current_delegated,
+  const secondCandidate = bakers.find(x => x.address === dex.storage.storage.current_delegated) || {
+    address: dex.storage.storage.current_delegated
   };
 
   return {
     currentCandidate,
-    secondCandidate,
+    secondCandidate
   };
 };
 
@@ -48,33 +42,22 @@ export const getVeteVetoInfo = (dex: Undefined<FoundDex>): VoteVetoInfo => {
     return {
       totalVotes: '',
       totalVeto: '',
-      votesToVeto: '',
+      votesToVeto: ''
     };
   }
 
-  const totalVotes = fromDecimals(
-    dex.storage.storage.total_votes,
-    TEZOS_TOKEN.metadata.decimals,
-  ).toFixed();
+  const totalVotes = fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals).toFixed();
 
-  const totalVeto = fromDecimals(
-    dex.storage.storage.veto,
-    TEZOS_TOKEN.metadata.decimals,
-  ).toFixed();
+  const totalVeto = fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
 
-  const votesToVeto = fromDecimals(
-    dex.storage.storage.total_votes,
-    TEZOS_TOKEN.metadata.decimals,
-  )
+  const votesToVeto = fromDecimals(dex.storage.storage.total_votes, TEZOS_TOKEN.metadata.decimals)
     .div(3)
-    .minus(
-      fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals),
-    )
+    .minus(fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals))
     .toFixed(6);
 
   return {
     totalVotes,
     totalVeto,
-    votesToVeto,
+    votesToVeto
   };
 };

@@ -1,12 +1,12 @@
-import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { getReadOnlyTezos } from './getReadOnlyTezos';
 import { KNOWN_LAMBDA_CONTRACTS } from '../defaults';
+import { getReadOnlyTezos } from './getReadOnlyTezos';
 
 const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
-  normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
+  normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
 });
 
 // TODO: implement for liquidity
@@ -17,7 +17,7 @@ export const getUserBalance = async (
   account: string,
   contractAddress: string,
   type: 'fa1.2' | 'fa2' = 'fa1.2',
-  tokenId = 0,
+  tokenId = 0
 ) => {
   const newTezos = getReadOnlyTezos(tezos);
 
@@ -41,9 +41,7 @@ export const getUserBalance = async (
 
   if (type === 'fa2') {
     try {
-      const response = await contract.views
-        .balance_of([{ owner: account, token_id: tokenId }])
-        .read(lambdaContract);
+      const response = await contract.views.balance_of([{ owner: account, token_id: tokenId }]).read(lambdaContract);
       nat = response[0].balance;
     } catch (e) {
       return null;

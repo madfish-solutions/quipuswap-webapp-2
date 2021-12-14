@@ -1,5 +1,5 @@
-import { DexPair } from '@utils/types';
 import { getTokenSlug } from '@utils/helpers';
+import { DexPair } from '@utils/types';
 
 import { DexGraph } from './types';
 
@@ -10,7 +10,7 @@ export function getRoutesList(
   endTokenSlug: string,
   graph: DexGraph,
   depth: number,
-  prevRoute: Route = [],
+  prevRoute: Route = []
 ): Route[] {
   if (startTokenSlug === endTokenSlug) {
     return [prevRoute];
@@ -20,19 +20,13 @@ export function getRoutesList(
   }
   const vertex = graph[startTokenSlug] ?? { edges: {} };
   return Object.entries(vertex.edges).flatMap(([nextTokenSlug, pair]) => {
-    if (prevRoute.some(
-      ({ token1, token2 }) => [token1, token2].some(
-        (visitedToken) => getTokenSlug(visitedToken) === nextTokenSlug,
-      ),
-    )) {
+    if (
+      prevRoute.some(({ token1, token2 }) =>
+        [token1, token2].some(visitedToken => getTokenSlug(visitedToken) === nextTokenSlug)
+      )
+    ) {
       return [];
     }
-    return getRoutesList(
-      nextTokenSlug,
-      endTokenSlug,
-      graph,
-      depth - 1,
-      [...prevRoute, pair],
-    );
+    return getRoutesList(nextTokenSlug, endTokenSlug, graph, depth - 1, [...prevRoute, pair]);
   });
 }

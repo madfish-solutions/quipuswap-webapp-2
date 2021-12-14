@@ -1,8 +1,5 @@
-import React, {
-  useMemo,
-  useState,
-  useContext,
-} from 'react';
+import React, { useMemo, useState, useContext } from 'react';
+
 import {
   Back,
   Card,
@@ -16,67 +13,56 @@ import {
   VotingReward,
   Transactions,
   ExternalLink,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
-
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
-import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedStake } from '@utils/types';
 import { LineChartSampleData } from '@components/charts/content';
 import { ComplexBaker, ComplexInput } from '@components/ui/ComplexInput';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedStake } from '@utils/types';
 
 import s from './StakeInfo.module.sass';
 
+const TOOLTIP_TODO = 'common|TOOLTIP TODO';
+
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
-  ssr: false,
+  ssr: false
 });
 
 const TabsContent = [
   {
     id: 'stake',
-    label: 'Stake',
+    label: 'Stake'
   },
   {
     id: 'unstake',
-    label: 'Unstake',
-  },
+    label: 'Unstake'
+  }
 ];
 
 type StakeInfoProps = {
-  stake:WhitelistedStake
-  className?: string
-  onClick?:(stake:WhitelistedStake) => void
+  stake: WhitelistedStake;
+  className?: string;
+  onClick?: (stake: WhitelistedStake) => void;
 };
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const StakeInfo: React.FC<StakeInfoProps> = ({
-  className,
-  stake,
-}) => {
-  const {
-    remaining,
-  } = stake;
+export const StakeInfo: React.FC<StakeInfoProps> = ({ className, stake }) => {
+  const { remaining } = stake;
   const { t } = useTranslation(['common', 'swap']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tabsState, setTabsState] = useState(TabsContent[0].id);
 
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
-  );
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const compountClassName = cx(
-    modeClass[colorThemeMode],
-    s.mb24i,
-    className,
-  );
+  const compountClassName = cx(modeClass[colorThemeMode], s.mb24i, className);
   return (
     <>
       <Card
@@ -88,21 +74,17 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               href="/stake"
               theme="quaternary"
               className={s.proposalHeader}
-              control={
-                <Back className={s.proposalBackIcon} />
-            }
+              control={<Back className={s.proposalBackIcon} />}
             >
               Back to Vaults
             </Button>
-          ),
+          )
         }}
       >
         <div className={cx(s.fullWidth, s.flex)}>
           <div className={s.reward}>
             <div className={s.rewardContent}>
-              <span className={s.rewardHeader}>
-                Your Pending Reward
-              </span>
+              <span className={s.rewardHeader}>Your Pending Reward</span>
               <span className={s.rewardAmount}>
                 100,000,000
                 <span className={s.rewardCurrency}>QUIPU</span>
@@ -113,33 +95,25 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
           <div className={s.notRewards}>
             <div className={s.itemsRows}>
               <div className={s.item}>
-                <header className={s.header}>
-                  Your Share
-                </header>
+                <header className={s.header}>Your Share</header>
                 <span className={s.amount}>1,000,000.00(0.001$)</span>
               </div>
               <div className={s.item}>
-                <header className={s.header}>
-                  Your Delegate
-                </header>
-                <Button theme="inverse" className={s.amount}>Everstake</Button>
+                <header className={s.header}>Your Delegate</header>
+                <Button theme="inverse" className={s.amount}>
+                  Everstake
+                </Button>
               </div>
               <div className={s.item}>
-                <header className={s.header}>
-                  Lock ends in
-                </header>
+                <header className={s.header}>Lock ends in</header>
                 <Timeleft remaining={remaining} />
               </div>
-
             </div>
             <Button className={cx(s.statButton, s.button)}>Harvest</Button>
           </div>
         </div>
       </Card>
-      <LineChart
-        className={s.chart}
-        data={LineChartSampleData}
-      />
+      <LineChart className={s.chart} data={LineChartSampleData} />
       <StickyBlock>
         <Card
           header={{
@@ -147,18 +121,16 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
               <Tabs
                 values={TabsContent}
                 activeId={tabsState}
-                setActiveId={(val) => setTabsState(val)}
+                setActiveId={val => setTabsState(val)}
                 className={s.tabs}
               />
             ),
             button: (
-              <Button
-                theme="quaternary"
-              >
+              <Button theme="quaternary">
                 <Transactions />
               </Button>
             ),
-            className: s.header,
+            className: s.header
           }}
           contentClassName={s.content}
         >
@@ -172,13 +144,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             className={cx(s.input, s.mb24)}
             mode="votes"
           />
-          {currentTab.id === 'stake' && (
-            <ComplexBaker
-              className={s.baker}
-              label="Baker"
-              id="voting-baker"
-            />
-          )}
+          {currentTab.id === 'stake' && <ComplexBaker className={s.baker} label="Baker" id="voting-baker" />}
           <div className={s.tradeControls}>
             <Button theme="underlined" className={s.tradeBtn}>
               Trade
@@ -192,84 +158,61 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
                 Divest
               </Button>
             )}
-
           </div>
           <div className={s.buttons}>
-            <Button className={s.button}>
-              {currentTab.label}
-            </Button>
+            <Button className={s.button}>{currentTab.label}</Button>
           </div>
         </Card>
         <Card
           header={{
-            content: 'Stake Details',
+            content: 'Stake Details'
           }}
           contentClassName={cx(modeClass[colorThemeMode], s.details)}
         >
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Value Locked')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-            )}
+            }
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              $
-              {' '}
-              <span className={s.priceAmount}>
-                1,000,000
-              </span>
+              $ <span className={s.priceAmount}>1,000,000</span>
             </div>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|APR')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
-            <div className={cx(s.cellAmount, s.priceAmount)}>
-              888 %
-            </div>
+            <div className={cx(s.cellAmount, s.priceAmount)}>888 %</div>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Daily')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                0.008 %
-              </span>
+              <span className={s.priceAmount}>0.008 %</span>
             </div>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Current Delegate')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <Button href="#" theme="underlined">
@@ -277,15 +220,12 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             </Button>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Next Delegate')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <Button href="#" theme="underlined">
@@ -293,106 +233,66 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({
             </Button>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Ends in')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <Timeleft remaining={remaining} className={s.priceAmount} />
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Lock Period')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <Timeleft remaining={remaining} className={s.priceAmount} />
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Withdrawal Fee')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                888 %
-              </span>
+              <span className={s.priceAmount}>888 %</span>
             </div>
           </CardCell>
           <CardCell
-            header={(
+            header={
               <>
                 {t('common|Interface Fee')}
-                <Tooltip
-                  sizeT="small"
-                  content={t('common|TOOLTIP TODO')}
-                />
+                <Tooltip sizeT="small" content={t(TOOLTIP_TODO)} />
               </>
-              )}
+            }
             className={s.cell}
           >
             <div className={s.cellAmount}>
-              <span className={s.priceAmount}>
-                888 %
-              </span>
+              <span className={s.priceAmount}>888 %</span>
             </div>
           </CardCell>
           <div className={s.detailsButtons}>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
+            <Button className={s.detailsButton} theme="inverse" icon={<ExternalLink className={s.linkIcon} />}>
               Pair Analytics
             </Button>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
+            <Button className={s.detailsButton} theme="inverse" icon={<ExternalLink className={s.linkIcon} />}>
               Farm Contract
             </Button>
           </div>
           <div className={s.detailsButtons}>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
+            <Button className={s.detailsButton} theme="inverse" icon={<ExternalLink className={s.linkIcon} />}>
               Token Contract
             </Button>
-            <Button
-              className={s.detailsButton}
-              theme="inverse"
-              icon={
-                <ExternalLink className={s.linkIcon} />
-              }
-            >
+            <Button className={s.detailsButton} theme="inverse" icon={<ExternalLink className={s.linkIcon} />}>
               Project
             </Button>
           </div>

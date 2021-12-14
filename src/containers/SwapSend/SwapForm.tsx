@@ -1,36 +1,18 @@
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { Tabs, Card, Button, Slippage, StickyBlock, SwapButton, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import debouncePromise from 'debounce-promise';
 import { FormikProps } from 'formik';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  Tabs,
-  Card,
-  Button,
-  Slippage,
-  StickyBlock,
-  SwapButton,
-  CurrencyAmount,
-} from '@quipuswap/ui-kit';
 
-import {
-  useAccountPkh,
-  useNetwork,
-  useOnBlock,
-  useTezos,
-  useTokens,
-} from '@utils/dapp';
-import {
-  DEFAULT_SLIPPAGE_PERCENTAGE,
-  TEZOS_TOKEN,
-  TTDEX_CONTRACTS,
-} from '@utils/defaults';
+import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
+import { useDexGraph } from '@hooks/useDexGraph';
+import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import s from '@styles/CommonContainer.module.sass';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   estimateSwapFee,
   fromDecimals,
@@ -39,25 +21,10 @@ import {
   getTokenOutput,
   getTokenSlug,
   getWhitelistedTokenSymbol,
-  toDecimals,
+  toDecimals
 } from '@utils/helpers';
-import {
-  DexGraph,
-  getMaxOutputRoute,
-  getRouteWithInput,
-  getRouteWithOutput,
-} from '@utils/routing';
-import {
-  DexPair,
-  SwapFormValues,
-  QSMainNet,
-  WhitelistedToken,
-} from '@utils/types';
-import { useDexGraph } from '@hooks/useDexGraph';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
-import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
-import s from '@styles/CommonContainer.module.sass';
+import { DexGraph, getMaxOutputRoute, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
+import { DexPair, SwapFormValues, QSMainNet, WhitelistedToken } from '@utils/types';
 
 import { SwapDetails } from './SwapDetails';
 
@@ -84,21 +51,15 @@ type SlippageInputProps = {
 const TabsContent = [
   {
     id: 'swap',
-    label: 'Swap',
+    label: 'Swap'
   },
   {
     id: 'send',
-    label: 'Send',
-  },
+    label: 'Send'
+  }
 ];
 
-const SlippageInput: React.FC<SlippageInputProps> = ({
-  error,
-  outputAmount,
-  onChange,
-  slippage,
-  outputToken,
-}) => {
+const SlippageInput: React.FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const handleChange = (newValue?: string) => {
     if (!newValue) {
       onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
@@ -111,12 +72,13 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
   const minimumReceived = useMemo(
-    () => (slippage && outputAmount
-      ? outputAmount.times(new BigNumber(1).minus(slippage.div(100)))
-        .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
-      : new BigNumber(0)
-    ),
-    [slippage, outputAmount, tokenDecimals],
+    () =>
+      slippage && outputAmount
+        ? outputAmount
+            .times(new BigNumber(1).minus(slippage.div(100)))
+            .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
+        : new BigNumber(0),
+    [slippage, outputAmount, tokenDecimals]
   );
 
   return (
@@ -126,9 +88,7 @@ const SlippageInput: React.FC<SlippageInputProps> = ({
       <div className={s.receive}>
         {slippage && (
           <>
-            <span className={s.receiveLabel}>
-              Minimum received:
-            </span>
+            <span className={s.receiveLabel}>Minimum received:</span>
             <CurrencyAmount
               amount={minimumReceived.toFixed()}
               currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
@@ -164,17 +124,10 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   touched,
   updateTokenBalance,
   validateField,
-  values,
+  values
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
-  const {
-    token1,
-    token2,
-    amount1,
-    amount2,
-    recipient,
-    slippage,
-    action,
-  } = values;
+  const { token1, token2, amount1, amount2, recipient, slippage, action } = values;
   const exchangeRates = useNewExchangeRates();
   const network = useNetwork();
   const tezos = useTezos();
@@ -199,7 +152,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
-      [token1, token2].forEach((token) => {
+      [token1, token2].forEach(token => {
         if (token) {
           updateTokenBalance(token);
         }
@@ -210,61 +163,49 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
-    if ((prevNetworkId === network.id) || !initialFrom || !initialTo) {
+    if (prevNetworkId === network.id || !initialFrom || !initialTo) {
       return;
     }
 
-    const newToken1 = tokens.find((token) => getTokenSlug(token) === initialFrom);
-    const newToken2 = tokens.find((token) => getTokenSlug(token) === initialTo);
+    const newToken1 = tokens.find(token => getTokenSlug(token) === initialFrom);
+    const newToken2 = tokens.find(token => getTokenSlug(token) === initialTo);
 
     if (newToken1 && newToken2) {
       initialValuesAppliedRef.current = true;
-      setValues((prevValues) => ({
+      setValues(prevValues => ({
         ...prevValues,
         token1: newToken1,
-        token2: newToken2,
+        token2: newToken2
       }));
       onTokensSelected(newToken1, newToken2);
     }
     prevNetworkIdRef.current = network.id;
-  }, [
-    initialFrom,
-    initialTo,
-    network.id,
-    tokens,
-    setValues,
-    onTokensSelected,
-  ]);
+  }, [initialFrom, initialTo, network.id, tokens, setValues, onTokensSelected]);
 
   const updateSwapFee = useMemo(
-    () => debouncePromise(
-      (inputAmount: BigNumber, route: DexPair[]) => {
+    () =>
+      debouncePromise((inputAmount: BigNumber, route: DexPair[]) => {
         if (!accountPkh || !token1) {
           return;
         }
-        estimateSwapFee(
-          tezos!,
-          accountPkh,
-          {
-            inputToken: token1,
-            inputAmount: toDecimals(inputAmount, token1!),
-            dexChain: route,
-            recipient,
-            slippageTolerance: slippage?.div(100),
-            ttDexAddress: TTDEX_CONTRACTS[network.id],
-          },
-        )
-          .then((newFee) => setFee(fromDecimals(newFee, TEZOS_TOKEN)))
-          .catch((e) => {
+        estimateSwapFee(tezos!, accountPkh, {
+          inputToken: token1,
+          inputAmount: toDecimals(inputAmount, token1!),
+          dexChain: route,
+          recipient,
+          slippageTolerance: slippage?.div(100),
+          ttDexAddress: TTDEX_CONTRACTS[network.id]
+        })
+          .then(newFee => setFee(fromDecimals(newFee, TEZOS_TOKEN)))
+          .catch(e => {
             console.error(e);
             setFee(undefined);
           });
-      },
-      250,
-    ),
-    [accountPkh, network.id, recipient, slippage, tezos, token1],
+      }, 250),
+    [accountPkh, network.id, recipient, slippage, tezos, token1]
   );
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     const prevToken1 = prevToken1Ref.current;
     const prevToken2 = prevToken2Ref.current;
@@ -281,28 +222,25 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     prevAmount2Ref.current = amount2;
     prevDexGraphRef.current = dexGraph;
 
-    if ((prevDexGraph !== dexGraph) && token1 && token2) {
+    if (prevDexGraph !== dexGraph && token1 && token2) {
       onTokensSelected(token1, token2);
     }
 
     if (token1 && token2 && dexGraph) {
-      const inputChanged = (prevToken1Slug !== token1Slug) || !amountsAreEqual(
-        prevAmount1,
-        amount1,
-      );
+      const inputChanged = prevToken1Slug !== token1Slug || !amountsAreEqual(prevAmount1, amount1);
       const outputTokenChanged = prevToken2Slug !== token2Slug;
       const outputAmountChanged = !amountsAreEqual(prevAmount2, amount2);
-      const shouldUpdateOutputAmountOnValuesChange = (
-        inputChanged || outputTokenChanged
-      );
+      const shouldUpdateOutputAmountOnValuesChange = inputChanged || outputTokenChanged;
       const shouldUpdateInputAmountOnValuesChange = outputAmountChanged;
-      if (shouldUpdateOutputAmountOnValuesChange || (prevDexGraph !== dexGraph)) {
-        const route = amount1 && getRouteWithInput({
-          startTokenSlug: token1Slug!,
-          endTokenSlug: token2Slug!,
-          graph: dexGraph,
-          inputAmount: toDecimals(amount1, token1),
-        });
+      if (shouldUpdateOutputAmountOnValuesChange || prevDexGraph !== dexGraph) {
+        const route =
+          amount1 &&
+          getRouteWithInput({
+            startTokenSlug: token1Slug!,
+            endTokenSlug: token2Slug!,
+            graph: dexGraph,
+            inputAmount: toDecimals(amount1, token1)
+          });
         let outputAmount: BigNumber | undefined;
         if (route) {
           try {
@@ -310,9 +248,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
               getTokenOutput({
                 inputToken: token1,
                 inputAmount: toDecimals(amount1!, token1),
-                dexChain: route,
+                dexChain: route
               }),
-              token2,
+              token2
             );
           } catch (_) {
             // ignore error
@@ -330,19 +268,18 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           setFee(undefined);
         }
       } else if (shouldUpdateInputAmountOnValuesChange) {
-        const route = amount2 && getRouteWithOutput({
-          startTokenSlug: token1Slug!,
-          endTokenSlug: token2Slug!,
-          graph: dexGraph,
-          outputAmount: amount2,
-        });
+        const route =
+          amount2 &&
+          getRouteWithOutput({
+            startTokenSlug: token1Slug!,
+            endTokenSlug: token2Slug!,
+            graph: dexGraph,
+            outputAmount: amount2
+          });
         let inputAmount: BigNumber | undefined;
         if (route) {
           try {
-            inputAmount = fromDecimals(
-              getTokenInput(token2, toDecimals(amount2!, token2), route),
-              token1,
-            );
+            inputAmount = fromDecimals(getTokenInput(token2, toDecimals(amount2!, token2), route), token1);
           } catch (_) {
             // ignore error
           }
@@ -374,11 +311,12 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     slippage,
     onTokensSelected,
     network.id,
-    updateSwapFee,
+    updateSwapFee
   ]);
 
   const onBlockCallback = useCallback(() => {
-    [token1, token2].forEach((token) => {
+    // eslint-disable-next-line sonarjs/no-identical-functions
+    [token1, token2].forEach(token => {
       if (token) {
         updateTokenBalance(token);
       }
@@ -386,71 +324,61 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   }, [token1, token2, updateTokenBalance]);
   useOnBlock(tezos, onBlockCallback);
 
-  const handleSubmit = useCallback(
-    () => {
-      submitForm().then(
-        () => {
-          setFieldTouched('amount1', false);
-          setFieldTouched('amount2', false);
-          setValues((prevValues) => ({ ...prevValues, amount1: undefined, amount2: undefined }));
-          setFee(undefined);
-        },
-      ).catch(console.error);
-    },
-    [setValues, submitForm, setFieldTouched],
-  );
+  const handleSubmit = useCallback(() => {
+    submitForm()
+      .then(() => {
+        setFieldTouched('amount1', false);
+        setFieldTouched('amount2', false);
+        setValues(prevValues => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+        setFee(undefined);
+      })
+      .catch(console.error);
+  }, [setValues, submitForm, setFieldTouched]);
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
       const valuesToSet: Partial<SwapFormValues> = {
-        action: newTabId as SwapFormValues['action'],
+        action: newTabId as SwapFormValues['action']
       };
       if (newTabId === 'swap') {
         valuesToSet.recipient = undefined;
       }
 
-      setValues((prevValues) => ({ ...prevValues, ...valuesToSet }));
+      setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
     },
-    [setValues],
+    [setValues]
   );
 
-  const blackListedTokens = useMemo(
-    () => [token1, token2].filter((x): x is WhitelistedToken => !!x),
-    [token1, token2],
-  );
+  const blackListedTokens = useMemo(() => [token1, token2].filter((x): x is WhitelistedToken => !!x), [token1, token2]);
 
   const handleAmount1Change = useCallback(
     (newAmount?: BigNumber) => {
       setFieldTouched('amount1', true);
       setFieldValue('amount1', newAmount, true);
     },
-    [setFieldValue, setFieldTouched],
+    [setFieldValue, setFieldTouched]
   );
   const handleAmount2Change = useCallback(
     (newAmount?: BigNumber) => {
       setFieldTouched('amount2', true);
       setFieldValue('amount2', newAmount, true);
     },
-    [setFieldValue, setFieldTouched],
+    [setFieldValue, setFieldTouched]
   );
 
   const handleSomeTokenChange = useCallback(
-    (
-      fieldName: 'token1' | 'token2',
-      amountFieldName: 'amount1' | 'amount2',
-      newToken?: WhitelistedToken,
-    ) => {
+    (fieldName: 'token1' | 'token2', amountFieldName: 'amount1' | 'amount2', newToken?: WhitelistedToken) => {
       const newTokenSlug = newToken && getTokenSlug(newToken);
       setFieldTouched(fieldName, true);
       const valuesToSet: Partial<SwapFormValues> = {
-        [fieldName]: newToken,
+        [fieldName]: newToken
       };
       const amount = amountFieldName === 'amount1' ? amount1 : amount2;
       if (newToken && amount) {
         setFieldTouched(amountFieldName, true);
         valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
       }
-      setValues((prevValues) => ({ ...prevValues, ...valuesToSet }));
+      setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
       if (newTokenSlug) {
         updateTokenBalance(newToken!);
       }
@@ -460,38 +388,27 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         onTokensSelected(newToken1, newToken2);
       }
     },
-    [
-      setValues,
-      updateTokenBalance,
-      setFieldTouched,
-      amount1,
-      amount2,
-      token1,
-      token2,
-      onTokensSelected,
-    ],
+    [setValues, updateTokenBalance, setFieldTouched, amount1, amount2, token1, token2, onTokensSelected]
   );
 
   const handleToken1Change = useCallback(
     (newToken?: WhitelistedToken) => {
       handleSomeTokenChange('token1', 'amount1', newToken);
     },
-    [handleSomeTokenChange],
+    [handleSomeTokenChange]
   );
   const handleToken2Change = useCallback(
     (newToken?: WhitelistedToken) => handleSomeTokenChange('token2', 'amount2', newToken),
-    [handleSomeTokenChange],
+    [handleSomeTokenChange]
   );
 
   const handleSwapButtonClick = useCallback(() => {
-    setValues(
-      (prevState) => ({
-        ...prevState,
-        token1: token2,
-        token2: token1,
-        amount1: amount2,
-      }),
-    );
+    setValues(prevState => ({
+      ...prevState,
+      token1: token2,
+      token2: token1,
+      amount1: amount2
+    }));
     if (token1 && token2) {
       onTokensSelected(token2, token1);
     }
@@ -502,12 +419,12 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       setFieldTouched('recipient', true);
       setFieldValue('recipient', newValue, true);
     },
-    [setFieldValue, setFieldTouched],
+    [setFieldValue, setFieldTouched]
   );
 
   const handleRecipientChangeFromEvent = useCallback(
     (e: React.FormEvent<HTMLTextAreaElement>) => handleRecipientChange(e.currentTarget.value),
-    [handleRecipientChange],
+    [handleRecipientChange]
   );
 
   const handleSlippageChange = useCallback(
@@ -515,18 +432,21 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       setFieldTouched('slippage', true);
       setFieldValue('slippage', newValue, true);
     },
-    [setFieldValue, setFieldTouched],
+    [setFieldValue, setFieldTouched]
   );
 
   const priceImpact = useMemo(
-    () => (token1 && amount1 && dexRoute && slippage ? getPriceImpact({
-      inputToken: token1,
-      inputAmount: toDecimals(amount1, token1),
-      dexChain: dexRoute,
-      slippageTolerance: slippage?.div(100),
-      ttDexAddress: TTDEX_CONTRACTS[network.id],
-    }) : new BigNumber(0)),
-    [amount1, network.id, slippage, token1, dexRoute],
+    () =>
+      token1 && amount1 && dexRoute && slippage
+        ? getPriceImpact({
+            inputToken: token1,
+            inputAmount: toDecimals(amount1, token1),
+            dexChain: dexRoute,
+            slippageTolerance: slippage?.div(100),
+            ttDexAddress: TTDEX_CONTRACTS[network.id]
+          })
+        : new BigNumber(0),
+    [amount1, network.id, slippage, token1, dexRoute]
   );
 
   const token1Slug = token1 && getTokenSlug(token1);
@@ -539,25 +459,26 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const token2Error = touched.token2 ? errors.token2 : undefined;
   const amount2Error = touched.amount2 ? errors.amount2 : undefined;
 
-  const generalMaxOutputAmount = token1Slug && token2Slug
-    ? knownMaxOutputAmounts[token1Slug]?.[token2Slug]
-    : undefined;
+  const generalMaxOutputAmount = token1Slug && token2Slug ? knownMaxOutputAmounts[token1Slug]?.[token2Slug] : undefined;
   const maxOutputAmountByBalance = useMemo(() => {
     if (dexGraph && token1 && token1Balance && token2) {
-      const route = getMaxOutputRoute({
-        startTokenSlug: getTokenSlug(token1),
-        endTokenSlug: getTokenSlug(token2),
-        graph: dexGraph,
-      }, token1Balance);
+      const route = getMaxOutputRoute(
+        {
+          startTokenSlug: getTokenSlug(token1),
+          endTokenSlug: getTokenSlug(token2),
+          graph: dexGraph
+        },
+        token1Balance
+      );
       if (route) {
         try {
           return fromDecimals(
             getTokenOutput({
               inputToken: token1,
               inputAmount: toDecimals(token1Balance, token1),
-              dexChain: route,
+              dexChain: route
             }),
-            token2,
+            token2
           );
         } catch (e) {
           return undefined;
@@ -574,16 +495,9 @@ export const SwapForm: React.FC<SwapFormProps> = ({
       <StickyBlock className={className}>
         <Card
           header={{
-            content: (
-              <Tabs
-                values={TabsContent}
-                activeId={action!}
-                setActiveId={handleTabSwitch}
-                className={s.tabs}
-              />
-            ),
+            content: <Tabs values={TabsContent} activeId={action!} setActiveId={handleTabSwitch} className={s.tabs} />,
             // TODO: add a button for transactions history
-            className: s.header,
+            className: s.header
           }}
           contentClassName={s.content}
         >
@@ -636,7 +550,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
             outputToken={token2}
           />
           <Button
-            disabled={(Object.keys(errors).length > 0) || !accountPkh}
+            disabled={Object.keys(errors).length > 0 || !accountPkh}
             type="submit"
             onClick={handleSubmit}
             className={s.button}

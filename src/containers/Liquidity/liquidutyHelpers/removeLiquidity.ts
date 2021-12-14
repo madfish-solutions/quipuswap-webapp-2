@@ -1,29 +1,21 @@
-import {
-  batchify,
-  FoundDex,
-  removeLiquidity as getRemoveLiquidityParams,
-} from '@quipuswap/sdk';
+import { batchify, FoundDex, removeLiquidity as getRemoveLiquidityParams } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
-
 import BigNumber from 'bignumber.js';
 
 export const removeLiquidity = async (
-  tezos:TezosToolkit,
+  tezos: TezosToolkit,
   dex: FoundDex,
   lpTokenValue: BigNumber,
-  slippageTolerance: BigNumber,
+  slippageTolerance: BigNumber
 ) => {
   const removeLiquidityParams = await getRemoveLiquidityParams(
     tezos,
     dex,
     lpTokenValue.multipliedBy(1_000_000),
-    slippageTolerance,
+    slippageTolerance
   );
 
-  const walletOperation = await batchify(
-    tezos.wallet.batch([]),
-    removeLiquidityParams,
-  ).send();
+  const walletOperation = await batchify(tezos.wallet.batch([]), removeLiquidityParams).send();
 
   return walletOperation.confirmation();
 };

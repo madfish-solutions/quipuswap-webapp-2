@@ -1,16 +1,9 @@
 import React, { useContext } from 'react';
-import {
-  Bage,
-  Button,
-  Tooltip,
-  ColorModes,
-  TokensLogos,
-  CurrencyAmount,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+
+import { Bage, Button, Tooltip, ColorModes, TokensLogos, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
@@ -18,19 +11,16 @@ import { PoolTableType } from '@utils/types';
 import s from './PoolCardTable.module.sass';
 
 type PoolCardItemProps = {
-  pool: PoolTableType
-  isSponsored?: boolean
+  pool: PoolTableType;
+  isSponsored?: boolean;
 };
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const PoolCardItem: React.FC<PoolCardItemProps> = ({
-  pool,
-  isSponsored,
-}) => {
+export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   return (
@@ -46,12 +36,17 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
           />
           {pool.pair.name}
         </div>
-        {isSponsored && (<Bage text={t('home|Sponsored')} />)}
+        {isSponsored && <Bage text={t('home|Sponsored')} />}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
           {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.')} />
+          <Tooltip
+            sizeT="small"
+            content={t(
+              'TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.'
+            )}
+          />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           <CurrencyAmount
@@ -82,18 +77,10 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
-        <Button
-          theme="secondary"
-          className={s.button}
-          href={pool.buttons.first.href}
-          external
-        >
+        <Button theme="secondary" className={s.button} href={pool.buttons.first.href} external>
           {t('home|Analytics')}
         </Button>
-        <Button
-          href="/swap"
-          className={s.button}
-        >
+        <Button href="/swap" className={s.button}>
           {t('home|Trade')}
         </Button>
       </div>

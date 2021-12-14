@@ -2,13 +2,18 @@ import React, { useContext } from 'react';
 
 import { ColorThemeContext } from '@providers/ColorThemeContext';
 
-export const MenuClosed: React.FC<IconProps> = ({
-  className,
-}) => {
+export const MenuClosed: React.FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
       <rect
         x="0.25"
         y="3.75"

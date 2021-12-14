@@ -1,36 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+
 import { findDex, FoundDex } from '@quipuswap/sdk';
+import dynamic from 'next/dynamic';
 
 import { PlotPoint, useGetPairPlotLiquidityQuery } from '@graphql';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
-import { FACTORIES } from '@utils/defaults';
-import {
-  useNetwork, useTezos,
-} from '@utils/dapp';
-
 import s from '@styles/SwapLiquidity.module.sass';
+import { useNetwork, useTezos } from '@utils/dapp';
+import { FACTORIES } from '@utils/defaults';
+import { QSMainNet, WhitelistedToken } from '@utils/types';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
-  ssr: false,
+  ssr: false
 });
 
 type ChartProps = {
-  dex: FoundDex
-  token1:WhitelistedToken
-  token2:WhitelistedToken
+  dex: FoundDex;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
 };
 
 type LiquidityChartProps = {
-  token1:WhitelistedToken
-  token2:WhitelistedToken
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
 };
 
-const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
+const Chart: React.FC<ChartProps> = ({ dex, token1, token2 }) => {
   const { loading, data, error } = useGetPairPlotLiquidityQuery({
     variables: {
-      id: dex.contract.address,
-    },
+      id: dex.contract.address
+    }
   });
   const loadingProp = loading || error || !data || !data?.pair;
   return (
@@ -39,15 +37,12 @@ const Chart : React.FC<ChartProps> = ({ dex, token1, token2 }) => {
       token2={token2}
       className={s.chart}
       loading={!!loadingProp}
-      data={!loadingProp && data ? data.pair.plotLiquidity as PlotPoint[] : []}
+      data={!loadingProp && data ? (data.pair.plotLiquidity as PlotPoint[]) : []}
     />
   );
 };
 
-export const LiquidityChart: React.FC<LiquidityChartProps> = ({
-  token1,
-  token2,
-}) => {
+export const LiquidityChart: React.FC<LiquidityChartProps> = ({ token1, token2 }) => {
   const tezos = useTezos();
   const network = useNetwork();
   const networkId = network.id as QSMainNet;
@@ -57,7 +52,7 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({
       if (!tezos) return;
       const toAsset = {
         contract: token2.contractAddress,
-        id: token2.fa2TokenId ?? undefined,
+        id: token2.fa2TokenId ?? undefined
       };
       const dexbuf = await findDex(tezos!, FACTORIES[networkId], toAsset);
       setDex(dexbuf);
@@ -67,15 +62,7 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({
   }, [token1, token2, networkId, tezos]);
 
   if (!dex) {
-    return (
-      <LineChart
-        className={s.chart}
-        loading
-        data={[]}
-      />
-    );
+    return <LineChart className={s.chart} loading data={[]} />;
   }
-  return (
-    <Chart token1={token1} token2={token2} dex={dex} />
-  );
+  return <Chart token1={token1} token2={token2} dex={dex} />;
 };

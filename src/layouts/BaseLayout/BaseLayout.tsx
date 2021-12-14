@@ -1,37 +1,28 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  ColorModes,
-  ToastWrapper,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+
+import { ColorModes, ToastWrapper, ColorThemeContext } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 import { NextSeo } from 'next-seo';
 import Script from 'next/script';
-import cx from 'classnames';
 
-import { DEFAULT_SEO } from '@utils/default-seo.config';
-import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
-import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
-import { WalletModal } from '@components/modals/WalletModal';
+import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
+import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
+import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
+import { DEFAULT_SEO } from '@utils/default-seo.config';
 
 import s from './BaseLayout.module.sass';
 
 interface BaseLayoutProps {
-  title?: string,
-  description?: string,
-  image?: string,
+  title?: string;
+  description?: string;
+  image?: string;
   className?: string;
 }
 
-export const BaseLayout: React.FC<BaseLayoutProps> = ({
-  title,
-  description,
-  image,
-  className,
-  children,
-}) => {
+export const BaseLayout: React.FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
 
   useEffect(() => {
@@ -69,19 +60,27 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
         openGraph={{
           title,
           description,
-          images: image ? [
-            {
-              url: `${DEFAULT_SEO.WEBSITE_URL}${image}`,
-              width: 1200,
-              height: 627,
-              alt: DEFAULT_SEO.TITLE,
-            },
-          ] : [],
+          images: image
+            ? [
+                {
+                  url: `${DEFAULT_SEO.WEBSITE_URL}${image}`,
+                  width: 1200,
+                  height: 627,
+                  alt: DEFAULT_SEO.TITLE
+                }
+              ]
+            : []
         }}
-        additionalMetaTags={image ? [{
-          property: 'image',
-          content: `${DEFAULT_SEO.WEBSITE_URL}${image}`,
-        }] : []}
+        additionalMetaTags={
+          image
+            ? [
+                {
+                  property: 'image',
+                  content: `${DEFAULT_SEO.WEBSITE_URL}${image}`
+                }
+              ]
+            : []
+        }
       />
       {isComponentDidMount ? (
         <ConnectModalsStateProvider>
@@ -98,7 +97,9 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({
           <WalletModal />
           <AccountModal />
         </ConnectModalsStateProvider>
-      ) : <div />}
+      ) : (
+        <div />
+      )}
     </>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+
 import {
   APY,
   Bage,
@@ -8,7 +9,7 @@ import {
   ColorModes,
   TokensLogos,
   CurrencyAmount,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
@@ -19,20 +20,16 @@ import s from './FarmingCard.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export type FarmingCardProps = {
-  farm:WhitelistedFarm
-  className?: string
-  openModal?:() => void
+  farm: WhitelistedFarm;
+  className?: string;
+  openModal?: () => void;
 };
 
-export const FarmingCard: React.FC<FarmingCardProps> = ({
-  farm,
-  className,
-  openModal,
-}) => {
+export const FarmingCard: React.FC<FarmingCardProps> = ({ farm, className, openModal }) => {
   const {
     id,
     tokenPair,
@@ -46,15 +43,12 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
     tokenContract,
     farmContract,
     projectLink,
-    analyticsLink,
+    analyticsLink
   } = farm;
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <Card
-      className={cx(className, s.card)}
-      contentClassName={cx(s.content, modeClass[colorThemeMode])}
-    >
+    <Card className={cx(className, s.card)} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
       <div className={s.header}>
         <div className={s.tokens}>
           <TokensLogos
@@ -66,14 +60,12 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             width={48}
           />
           <h3 className={s.title}>
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
-            {' '}
-            /
-            {' '}
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
+            {getWhitelistedTokenSymbol(tokenPair.token1)} / {getWhitelistedTokenSymbol(tokenPair.token1)}
           </h3>
-          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools." />
-
+          <Tooltip
+            sizeT="small"
+            content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools."
+          />
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>
           <Button className={s.link} href={tokenContract} theme="underlined">
@@ -89,37 +81,27 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             Analytics
           </Button>
         </div>
-
       </div>
       <div className={s.footer}>
         <Bage className={s.multiplierWrap} innerClassName={s.multiplier} text={`X ${multiplier}`} />
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={totalValueLocked}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={totalValueLocked} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>
-            APY
-            {' '}
+            APY{' '}
             <Button theme="quaternary" className={s.apyIcon} onClick={openModal}>
               <APY />
             </Button>
           </div>
-          <div className={s.detailsValue}>
-            {apy}
-          </div>
+          <div className={s.detailsValue}>{apy}</div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Daily</div>
-          <div className={s.detailsValue}>
-            {daily}
-          </div>
+          <div className={s.detailsValue}>{daily}</div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
@@ -130,21 +112,13 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={deposit}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={deposit} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={earned}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={earned} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
@@ -169,7 +143,9 @@ export const FarmingCard: React.FC<FarmingCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button href={`/farm/${id}`} className={s.button}>Select</Button>
+        <Button href={`/farm/${id}`} className={s.button}>
+          Select
+        </Button>
       </div>
     </Card>
   );

@@ -1,13 +1,10 @@
 import { MichelsonData } from '@taquito/michel-codec';
+
 import { SortTokensContractsType } from '@utils/types';
 
 const taquitoUtils = require('@taquito/utils');
 
-export const getValidMichelTemplate = ({
-  addressA,
-  addressB,
-  type,
-}: SortTokensContractsType): MichelsonData => {
+export const getValidMichelTemplate = ({ addressA, addressB, type }: SortTokensContractsType): MichelsonData => {
   const tokenAAddressBytes = taquitoUtils.b58decode(addressA);
   const tokenBAddressBytes = taquitoUtils.b58decode(addressB);
 
@@ -18,13 +15,13 @@ export const getValidMichelTemplate = ({
         args: [
           {
             prim: 'Left',
-            args: [{ bytes: tokenAAddressBytes }],
+            args: [{ bytes: tokenAAddressBytes }]
           },
           {
             prim: 'Left',
-            args: [{ bytes: tokenBAddressBytes }],
-          },
-        ],
+            args: [{ bytes: tokenBAddressBytes }]
+          }
+        ]
       };
     case 'Left-Right':
       return {
@@ -32,19 +29,18 @@ export const getValidMichelTemplate = ({
         args: [
           {
             prim: 'Left',
-            args: [{ bytes: tokenAAddressBytes }],
+            args: [{ bytes: tokenAAddressBytes }]
           },
           {
             prim: 'Right',
-            args: [{
-              prim: 'Pair',
-              args: [
-                { bytes: tokenBAddressBytes },
-                { int: '0' },
-              ],
-            }],
-          },
-        ],
+            args: [
+              {
+                prim: 'Pair',
+                args: [{ bytes: tokenBAddressBytes }, { int: '0' }]
+              }
+            ]
+          }
+        ]
       };
     case 'Right-Right':
       return {
@@ -55,26 +51,20 @@ export const getValidMichelTemplate = ({
             args: [
               {
                 prim: 'Pair',
-                args: [
-                  { bytes: tokenAAddressBytes },
-                  { int: '0' },
-                ],
-              },
-            ],
+                args: [{ bytes: tokenAAddressBytes }, { int: '0' }]
+              }
+            ]
           },
           {
             prim: 'Right',
             args: [
               {
                 prim: 'Pair',
-                args: [
-                  { bytes: tokenBAddressBytes },
-                  { int: '0' },
-                ],
-              },
-            ],
-          },
-        ],
+                args: [{ bytes: tokenBAddressBytes }, { int: '0' }]
+              }
+            ]
+          }
+        ]
       };
 
     default:

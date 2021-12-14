@@ -1,21 +1,15 @@
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from 'react';
-import { useTranslation } from 'next-i18next';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
+
 import { validateMinMax } from '@utils/validators';
+
 import s from './PositionsModal.module.sass';
 import { HeaderProps } from './PositionsModal.types';
 
-export const Header: React.FC<HeaderProps> = ({
-  isSecondInput,
-  debounce,
-  save,
-  values,
-  form,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
@@ -76,16 +70,10 @@ export const Header: React.FC<HeaderProps> = ({
               readOnly={values.token1 && values.token2}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  Math.min(Number(input.value) + 1, 100),
-                );
+                form.mutators.setValue('tokenId', Math.min(Number(input.value) + 1, 100));
               }}
               onDecrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  Math.max(Number(input.value) - 1, 1),
-                );
+                form.mutators.setValue('tokenId', Math.max(Number(input.value) - 1, 1));
               }}
             />
           )}

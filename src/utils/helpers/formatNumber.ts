@@ -1,5 +1,6 @@
-import { DEFAULT_DECIMALS } from '@utils/defaults';
 import BigNumber from 'bignumber.js';
+
+import { DEFAULT_DECIMALS } from '@utils/defaults';
 
 export interface FormatNumberOptinos {
   decimals?: number;
@@ -18,15 +19,10 @@ export const FormatInteger = (value: BigNumber.Value): string => {
     integerArray.splice(i * 3, 0, ',');
   }
 
-  const newInteger = integerArray.reverse().join('');
-
-  return newInteger;
+  return integerArray.reverse().join('');
 };
 
-export const FormatNumber = (
-  value: BigNumber.Value,
-  options?: FormatNumberOptinos,
-): string => {
+export const FormatNumber = (value: BigNumber.Value, options?: FormatNumberOptinos): string => {
   const decimals = options?.decimals ?? DEFAULT_DECIMALS;
 
   const [integer, decimal] = value.toString().split('.');

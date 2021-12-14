@@ -1,5 +1,6 @@
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import ReactModal from 'react-modal';
+
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 interface IPositionsModalProps {
   onChange: (tokenPair: WhitelistedTokenPair) => void;
