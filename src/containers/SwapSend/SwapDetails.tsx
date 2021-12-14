@@ -22,9 +22,9 @@ import {
 } from '@utils/helpers';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { DexPair, WhitelistedToken } from '@utils/types';
+import { FormatNumber } from '@utils/helpers/formatNumber';
 
 import s from '@styles/CommonContainer.module.sass';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 
 type SwapDetailsProps = {
   currentTab: string;

@@ -36,3 +36,6 @@ export * from './preparePairName';
 export * from './isClient';
 export * from './getTokenSlug';
 export * from './noOpFunc';
+export * from './tokenToTokenDex';
+export * from './swap';
+export * from './getTokenIdFromSlug';
