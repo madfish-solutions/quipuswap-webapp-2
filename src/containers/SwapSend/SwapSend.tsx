@@ -1,91 +1,259 @@
+import BigNumber from 'bignumber.js';
+import { useFormik } from 'formik';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 import React, {
+  useCallback,
+  useEffect,
   useMemo,
   useState,
-  useEffect,
-  useCallback,
 } from 'react';
-import { StickyBlock } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
-import { withTypes } from 'react-final-form';
+import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
+import { SwapFormValues, WhitelistedToken } from '@utils/types';
 import {
-  TokenDataMap,
-  SwapFormValues,
-  WhitelistedToken,
-} from '@utils/types';
-import {
+  getUserBalance,
   useTezos,
-  useTokens,
-  useOnBlock,
   useNetwork,
   useAccountPkh,
-  useSearchCustomTokens,
 } from '@utils/dapp';
 import {
-  handleTokenChange,
-  handleSearchToken,
-  fallbackTokenToTokenData,
+  DEFAULT_SLIPPAGE_PERCENTAGE,
+  MAX_SLIPPAGE_PERCENTAGE,
+  TTDEX_CONTRACTS,
+} from '@utils/defaults';
+import {
+  fromDecimals,
+  getMaxTokenInput,
+  getTokenOutput,
+  getTokenSlug,
+  swap,
+  toDecimals,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import {
+  getMaxInputRoute,
+  getMaxOutputRoute,
+  getRouteWithInput,
+} from '@utils/routing';
+import { addressSchema, bigNumberSchema } from '@utils/validators';
+import { useDexGraph } from '@hooks/useDexGraph';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useInitialTokens } from '@hooks/useInitialTokens';
 
 import { SwapForm } from './SwapForm';
-import { submitForm } from './swapHelpers';
-import { SwapChart } from './SwapChart';
-
-const TabsContent = [
-  {
-    id: 'swap',
-    label: 'Swap',
-  },
-  {
-    id: 'send',
-    label: 'Send',
-  },
-];
 
 type SwapSendProps = {
-  className?: string
+  className?: string;
+  fromToSlug?: string;
 };
 
-export const SwapSend: React.FC<SwapSendProps> = ({
+const initialErrors = {
+  amount1: 'Required',
+  amount2: 'Required',
+};
+const initialValues: Partial<SwapFormValues> = {
+  action: 'swap',
+  slippage: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
+};
+
+const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
+
+const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
   className,
+  fromToSlug,
+  router,
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
-  const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
-  const exchangeRates = useExchangeRates();
+  const { dexGraph } = useDexGraph();
   const network = useNetwork();
-  const searchCustomToken = useSearchCustomTokens();
-  const networkId = useNetwork().id;
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [tabsState, setTabsState] = useState(TabsContent[0].id);
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, STABLE_TOKEN]);
-  const { from, to } = useRouterPair({
-    page: 'swap',
-    urlLoaded,
-    initialLoad,
-    token1,
-    token2,
-  });
+  const [
+    knownTokensBalances,
+    setKnownTokensBalances,
+  ] = useState<Record<string, BigNumber>>({});
+  const [
+    knownMaxInputAmounts,
+    setKnownMaxInputAmounts,
+  ] = useState<Record<string, Record<string, BigNumber>>>({});
+  const [
+    knownMaxOutputAmounts,
+    setKnownMaxOutputAmounts,
+  ] = useState<Record<string, Record<string, BigNumber>>>({});
 
-  const [tokensData, setTokensData] = useState<TokenDataMap>(
-    {
-      first: fallbackTokenToTokenData(TEZOS_TOKEN),
-      second: fallbackTokenToTokenData(STABLE_TOKEN),
+  const initialTokens = useInitialTokens(fromToSlug, getRedirectionUrl);
+
+  useEffect(() => setKnownTokensBalances({}), [accountPkh]);
+
+  const updateTokenBalance = useCallback((token: WhitelistedToken) => {
+    const newTokenSlug = getTokenSlug(token);
+    if (!accountPkh) {
+      return;
+    }
+    getUserBalance(
+      tezos!,
+      accountPkh!,
+      token.contractAddress,
+      token.type,
+      token.fa2TokenId,
+    ).then(
+      (balance) => {
+        setKnownTokensBalances(
+          (prevValue) => ({
+            ...prevValue,
+            [newTokenSlug]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals),
+          }),
+        );
+      },
+    ).catch(console.error);
+  }, [accountPkh, tezos]);
+
+  const validationSchema = useMemo(() => objectSchema().shape({
+    token1: objectSchema().required(t('common|This field is required')),
+    token2: objectSchema().required(t('common|This field is required')),
+    amount1: objectSchema().when(
+      ['token1', 'token2'],
+      // @ts-ignore
+      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
+        if (!firstToken) {
+          return bigNumberSchema().required(t('common|This field is required'));
+        }
+        const token1Balance = knownTokensBalances[getTokenSlug(firstToken)];
+        let max: BigNumber | undefined = BigNumber.min(
+          token1Balance ?? new BigNumber(Infinity),
+          (
+            secondToken && knownMaxInputAmounts[
+              getTokenSlug(firstToken)
+            ]?.[getTokenSlug(secondToken)]
+          ) ?? new BigNumber(Infinity),
+        );
+        if (!max.isFinite()) {
+          max = undefined;
+        }
+        const min = fromDecimals(new BigNumber(1), firstToken.metadata.decimals);
+        if (token1Balance?.eq(0)) {
+          return bigNumberSchema(min)
+            .test(
+              'balance',
+              () => t('common|Insufficient funds'),
+              (value) => !(value instanceof BigNumber) || value.eq(0),
+            )
+            .required(t('common|This field is required'));
+        }
+
+        return bigNumberSchema(min, max).required(t('common|This field is required'));
+      },
+    ),
+    amount2: objectSchema().when(
+      ['token1', 'token2'],
+      // @ts-ignore
+      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
+        if (!secondToken) {
+          return bigNumberSchema().required(t('common|This field is required'));
+        }
+        const max = (firstToken && knownMaxOutputAmounts[
+          getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)]);
+
+        return bigNumberSchema(fromDecimals(new BigNumber(1), secondToken.metadata.decimals), max)
+          .required(t('common|This field is required'));
+      },
+    ),
+    recipient: mixedSchema().when(
+      'action',
+      (currentAction: string) => (currentAction === 'swap'
+        ? mixedSchema()
+        : addressSchema().required(t('common|This field is required'))
+      ),
+    ),
+    slippage: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE)
+      .required(t('common|This field is required')),
+    action: stringSchema().oneOf(['swap', 'send']).required(),
+  }), [knownTokensBalances, t, knownMaxInputAmounts, knownMaxOutputAmounts]);
+
+  const updateMaxInputAmount = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+      setKnownMaxInputAmounts((prevValue) => {
+        const token1Slug = getTokenSlug(token1);
+        const token2Slug = getTokenSlug(token2);
+
+        return {
+          ...prevValue,
+          [token1Slug]: {
+            ...(prevValue[token1Slug] ?? {}),
+            [token2Slug]: amount,
+          },
+        };
+      });
     },
+    [],
   );
 
-  const { Form } = withTypes<SwapFormValues>();
+  const updateMaxOutputAmount = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+      setKnownMaxOutputAmounts((prevValue) => {
+        const token1Slug = getTokenSlug(token1);
+        const token2Slug = getTokenSlug(token2);
 
-  const currentTab = useMemo(
-    () => (TabsContent.find(({ id }) => id === tabsState)!),
-    [tabsState],
+        return {
+          ...prevValue,
+          [token1Slug]: {
+            ...(prevValue[token1Slug] ?? {}),
+            [token2Slug]: amount,
+          },
+        };
+      });
+    },
+    [],
+  );
+
+  const handleTokensSelected = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken) => {
+      const startTokenSlug = getTokenSlug(token1);
+      const endTokenSlug = getTokenSlug(token2);
+      try {
+        const maxInputRoute = getMaxInputRoute({
+          startTokenSlug,
+          endTokenSlug,
+          graph: dexGraph,
+        });
+        if (maxInputRoute) {
+          updateMaxInputAmount(
+            token1,
+            token2,
+            fromDecimals(getMaxTokenInput(token2, maxInputRoute), token1),
+          );
+        }
+        const maxOutputRoute = getMaxOutputRoute({
+          startTokenSlug,
+          endTokenSlug,
+          graph: dexGraph,
+        });
+        if (maxOutputRoute) {
+          const generalMaxInputAmount = getMaxTokenInput(token2, maxOutputRoute);
+          updateMaxOutputAmount(
+            token1,
+            token2,
+            fromDecimals(
+              getTokenOutput({
+                inputToken: token1,
+                inputAmount: generalMaxInputAmount,
+                dexChain: maxOutputRoute,
+              }),
+              token2,
+            ),
+          );
+        }
+      } catch (e) {
+        console.error(e);
+      } finally {
+        const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+        if (router.asPath !== newRoute) {
+          router.push(newRoute);
+        }
+      }
+    },
+    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount, router],
   );
 
   const handleErrorToast = useCallback((err) => {
@@ -109,109 +277,76 @@ export const SwapSend: React.FC<SwapSendProps> = ({
     });
   }, [updateToast, t]);
 
-  const handleTokenChangeWrapper = (
-    token: WhitelistedToken,
-    tokenNumber: 'first' | 'second',
-  ) => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
+  const handleSubmit = useCallback(async (formValues: Partial<SwapFormValues>) => {
+    if (!tezos) {
+      return;
+    }
+
+    const {
+      amount1,
+      token1,
+      token2,
+      recipient,
+      slippage,
+      action,
+    } = formValues;
+
+    handleLoader();
+    const inputAmount = toDecimals(amount1!, token1!);
+    try {
+      await swap(
+        tezos,
+        accountPkh!,
+        {
+          inputAmount,
+          inputToken: token1!,
+          recipient: action === 'send' ? recipient : undefined,
+          slippageTolerance: slippage!.div(100),
+          dexChain: getRouteWithInput({
+            startTokenSlug: getTokenSlug(token1!),
+            endTokenSlug: getTokenSlug(token2!),
+            graph: dexGraph,
+            inputAmount,
+          })!,
+          ttDexAddress: TTDEX_CONTRACTS[network.id],
+        },
+      );
+      handleSuccessToast();
+    } catch (e) {
+      handleErrorToast(e);
+      throw e;
+    }
+  }, [
+    handleLoader,
+    tezos,
+    handleErrorToast,
+    handleSuccessToast,
+    accountPkh,
+    dexGraph,
+    network.id,
+  ]);
+
+  const formikProps = useFormik({
+    validationSchema,
+    initialValues,
+    initialErrors,
+    onSubmit: handleSubmit,
+    validateOnChange: true,
   });
 
-  const handleSwapTokens = () => {
-    setTokens([token2, token1]);
-    setTokensData({ first: tokensData.second, second: tokensData.first });
-  };
-
-  useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0) {
-      handleSearchToken({
-        tokens,
-        network,
-        from,
-        to,
-        setInitialLoad,
-        setUrlLoaded,
-        setTokens,
-        searchCustomToken,
-        handleTokenChangeWrapper,
-      });
-    }
-    // eslint-disable-next-line
-  }, [from, to, initialLoad, tokens]);
-
-  const getBalance = useCallback(() => {
-    if (tezos && token1 && token2) {
-      handleTokenChangeWrapper(token1, 'first');
-      handleTokenChangeWrapper(token2, 'second');
-    }
-    // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId, token1, token2]);
-
-  useEffect(() => {
-    getBalance();
-    // eslint-disable-next-line
-  }, [tezos, accountPkh, networkId]);
-
-  useOnBlock(tezos, getBalance);
-
-  useEffect(() => {
-    setTokens([TEZOS_TOKEN, STABLE_TOKEN]);
-  }, [networkId]);
-
   return (
-    <>
-      <SwapChart
-        token1={token1}
-        token2={token2}
-      />
-      <StickyBlock className={className}>
-        <Form
-          onSubmit={(values, form) => {
-            if (!tezos) return;
-            handleLoader();
-            submitForm(values,
-              tezos,
-              tokensData,
-              tabsState,
-              networkId,
-              form,
-              (err) => handleErrorToast(err),
-              handleSuccessToast);
-          }}
-          mutators={{
-            setValue: ([field, value], state, { changeValue }) => {
-              changeValue(state, field, () => value);
-            },
-            setValues: (fields, state, { changeValue }) => {
-              fields.forEach((x:any) => changeValue(state, x[0], () => x[1]));
-            },
-          }}
-          render={({
-            handleSubmit, form,
-          }) => (
-            <SwapForm
-              handleSubmit={handleSubmit}
-              form={form}
-              debounce={100}
-              save={() => {}}
-              setTabsState={setTabsState}
-              tabsState={tabsState}
-              token1={token1}
-              token2={token2}
-              setToken1={(token:WhitelistedToken) => setTokens([token, (token2 || undefined)])}
-              setToken2={(token:WhitelistedToken) => setTokens([(token1 || undefined), token])}
-              tokensData={tokensData}
-              handleSwapTokens={handleSwapTokens}
-              handleTokenChange={handleTokenChangeWrapper}
-              currentTab={currentTab}
-            />
-          )}
-        />
-      </StickyBlock>
-    </>
+    <SwapForm
+      {...formikProps}
+      className={className}
+      initialFrom={initialTokens?.[0]}
+      initialTo={initialTokens?.[1]}
+      knownTokensBalances={knownTokensBalances}
+      onTokensSelected={handleTokensSelected}
+      updateTokenBalance={updateTokenBalance}
+      knownMaxInputAmounts={knownMaxInputAmounts}
+      knownMaxOutputAmounts={knownMaxOutputAmounts}
+    />
   );
 };
+
+export const SwapSend = withRouter<SwapSendProps & WithRouterProps>(OrdinarySwapSend);

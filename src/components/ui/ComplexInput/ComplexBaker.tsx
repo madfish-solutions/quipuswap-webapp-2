@@ -6,9 +6,10 @@ import {
   ColorModes,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
+
 import cx from 'classnames';
 
-import { WhitelistedBaker } from '@utils/types';
+import { isFullBaker, WhitelistedBaker } from '@utils/types';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { BakersModal } from '@components/modals/BakersModal';
 
@@ -58,7 +59,7 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
           setBaker(selectedBaker);
           if (handleChange) handleChange(selectedBaker);
           if (inputRef.current) {
-            inputRef.current.value = selectedBaker.name;
+            inputRef.current.value = isFullBaker(selectedBaker) ? selectedBaker.name : '';
           }
           setTokensModal(false);
         }}
@@ -77,14 +78,14 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
           <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
             <BakerLogo
-              bakerName={baker?.name || ''}
-              bakerIcon={baker?.logo}
+              bakerName={baker && isFullBaker(baker) ? baker.name : ''}
+              bakerIcon={baker && isFullBaker(baker) ? baker.logo : ''}
             />
             <h6
               className={cx(s.token, s.bakerLabel)}
-              title={baker ? baker.name : 'Choose Baker'}
+              title={baker && isFullBaker(baker) ? baker.name : 'Choose Baker'}
             >
-              {baker ? baker.name : 'Choose Baker'}
+              {baker && isFullBaker(baker) ? baker.name : 'Choose Baker'}
             </h6>
             <Shevron />
           </div>

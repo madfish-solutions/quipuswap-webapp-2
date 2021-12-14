@@ -10,7 +10,8 @@ type OpportunityCardProps = {
   description: ReactNode
   button: {
     label: ReactNode
-    href: string
+    href?: string
+    disabled?: boolean
     external?: boolean
   }
 };
@@ -21,17 +22,20 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({
   title,
   description,
   button,
-}) => (
-  <Card className={className} contentClassName={s.content}>
-    <Icon className={s.icon} />
-    <h3 className={s.title}>{title}</h3>
-    <p className={s.description}>{description}</p>
-    <Button
-      href={button.href}
-      external={button.external}
-      className={s.button}
-    >
-      {button.label}
-    </Button>
-  </Card>
-);
+}) => {
+  const props = button.href ? { href: button.href, external: button.external } : {};
+  return (
+    <Card className={className} contentClassName={s.content}>
+      <Icon className={s.icon} />
+      <h3 className={s.title}>{title}</h3>
+      <p className={s.description}>{description}</p>
+      <Button
+        {...props}
+        disabled={!!button.disabled}
+        className={s.button}
+      >
+        {button.label}
+      </Button>
+    </Card>
+  );
+};

@@ -1,7 +1,7 @@
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 import BigNumber from 'bignumber.js';
 
-type WhitelistedOrCustomToken = WhitelistedToken & { network: string };
+export type WhitelistedOrCustomToken = WhitelistedToken & { network: string };
 
 export const localSearchToken = ({
   metadata,

@@ -1,4 +1,4 @@
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -27,6 +27,8 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const MAX_SLIPPAGE_PERCENTAGE = 30;
+export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 
@@ -37,6 +39,7 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
   ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
   ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
+  ['NetXZSsxBpMQeAT', 'KT19ewhnhaCcCuoF1Ly2pxXAFRiF3UtgaY9U'],
 ]);
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
@@ -54,7 +57,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   },
 };
 
-export const STABLE_TOKEN: WhitelistedToken = {
+export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
   type: 'fa2',
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -66,25 +69,24 @@ export const STABLE_TOKEN: WhitelistedToken = {
   },
 };
 
+export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://ipfs.io/ipfs/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP',
+  },
+};
+
+export const networksDefaultTokens: Record<QSMainNet, WhitelistedToken> = {
+  mainnet: MAINNET_DEFAULT_TOKEN,
+  hangzhounet: HANGZHOUNET_DEFAULT_TOKEN,
+};
+
 export const FACTORIES = {
-  granadanet: {
-    fa1_2Factory: [
-      'KT1EmfR5bSZN7mWgapE8FZKdbJ3NLjDHGZmd',
-    ],
-    fa2Factory: [
-      'KT1SZzW5BZ6aLmcK9i3Us36angwFB67HmsYT',
-    ],
-  },
-  florencenet: {
-    fa1_2Factory: [
-      'KT195gyo5G7pay2tYweWDeYFkGLqcvQTXoCW',
-      'KT1We4CHneKjnCkovTDV34qc4W7xzWbn5LwY',
-    ],
-    fa2Factory: [
-      'KT1HjLwPC3sbh6W5HjaKBsiVPTgptcNbnXnc',
-      'KT1SQX24W2v6D5sgihznax1eBykEGQNc7UpD',
-    ],
-  },
   mainnet: {
     fa1_2Factory: [
       'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
@@ -95,48 +97,75 @@ export const FACTORIES = {
       'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
     ],
   },
+  hangzhounet: {
+    fa1_2Factory: [
+      'KT1HrQWkSFe7ugihjoMWwQ7p8ja9e18LdUFn',
+    ],
+    fa2Factory: [
+      'KT1Dx3SZ6r4h2BZNQM8xri1CtsdNcAoXLGZB',
+    ],
+  },
+};
+
+export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
+  hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC',
 };
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
+export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 // NETWORKS
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
-export const GRANADANET_NETWORK: QSNetwork = {
-  id: 'granadanet',
-  connectType: 'default',
-  name: 'Granada Testnet',
-  type: 'test',
-  rpcBaseURL: 'https://granadanet.smartpy.io/',
-  metadata: METADATA_API_TESTNET,
-  description: 'Granada testnet',
-  disabled: false,
-};
-export const FLORENCENET_NETWORK: QSNetwork = {
-  id: 'florencenet',
-  connectType: 'default',
-  name: 'Florence Testnet',
-  type: 'test',
-  rpcBaseURL: 'https://testnet-tezos.giganode.io',
-  metadata: METADATA_API_TESTNET,
-  description: 'Florence testnet',
-  disabled: false,
-};
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
   connectType: 'default',
   name: 'Tezos Mainnet',
   type: 'main',
-  rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
+  rpcBaseURL: 'https://mainnet.smartpy.io/',
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
   disabled: false,
 };
-export const ALL_NETWORKS = [MAINNET_NETWORK, FLORENCENET_NETWORK, GRANADANET_NETWORK];
+export const HANGZHOUNET_NETWORK: QSNetwork = {
+  id: 'hangzhounet',
+  connectType: 'default',
+  name: 'Hangzhounet Testnet',
+  type: 'test',
+  rpcBaseURL: 'https://hangzhounet.api.tez.ie',
+  metadata: METADATA_API_TESTNET,
+  description: 'Hangzhounet testnet',
+  disabled: false,
+};
+export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
-export const CHAIN_ID_MAPPING = new Map<string, string>([
-  ['florencenet', 'NetXxkAx4woPLyu'],
+export const CHAIN_ID_MAPPING = new Map<QSMainNet, string>([
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['granadanet', 'NetXxkAx4woPLyu'],
+  ['hangzhounet', 'NetXZSsxBpMQeAT'],
 ]);
+
+export const TOKEN_TO_TOKEN_DEX = 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC';
+export const FA12_TOKEN:WhitelistedToken = {
+  type: 'fa1.2',
+  contractAddress: 'KT1Dr8Qf9at75uEvwN4QnGTNFfPMAr8KL4kK',
+  metadata: {
+    decimals: 6,
+    name: 'FA12 Token',
+    symbol: 'FA12',
+    thumbnailUri: 'https://smartpy.io/static/img/logo-only.svg',
+  },
+};
+export const TS_TOKEN:WhitelistedToken = {
+  type: 'fa2',
+  contractAddress: 'KT1CaWSNEnU6RR9ZMSSgD5tQtQDqdpw4sG83',
+  fa2TokenId: 0,
+  metadata: {
+    decimals: 6,
+    symbol: 'TS',
+    name: 'TypeScript Token',
+    thumbnailUri: 'https://upload.wikimedia.org/wikipedia/commons/4/4c/Typescript_logo_2020.svg',
+  },
+};
+
+export const LP_TOKEN_DECIMALS = 6;

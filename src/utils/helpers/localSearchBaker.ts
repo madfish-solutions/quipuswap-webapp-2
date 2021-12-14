@@ -1,12 +1,8 @@
-import { WhitelistedBaker } from '@utils/types';
+import { isFullBaker, WhitelistedBaker } from '@utils/types';
 
-export const localSearchBaker = ({
-  name,
-  address,
-} : WhitelistedBaker, input:string) => {
-  const isName = name?.toLowerCase().includes(input.toLowerCase());
-  const isContract = address?.toLowerCase().includes(input.toLowerCase());
-  const res = (isName
-    || isContract);
-  return res;
+export const localSearchBaker = (baker : WhitelistedBaker, input:string) => {
+  const search = input.toLowerCase();
+  const isName = isFullBaker(baker) ? baker.name.toLowerCase().includes(search) : false;
+  const isContract = baker.address.toLowerCase().includes(search);
+  return isName || isContract;
 };

@@ -1,11 +1,10 @@
-import React, { useContext } from 'react';
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
+import React, { useContext, useMemo } from 'react';
 import cx from 'classnames';
+import { ColorModes, ColorThemeContext, QuipuToken } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { STABLE_TOKEN } from '@utils/defaults';
-import { QuipuToken } from '@components/svg/QuipuToken';
+import { MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './QPToken.module.sass';
 
@@ -26,10 +25,16 @@ export const QPToken: React.FC<QPTokenProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const exchangeRates = useExchangeRates();
 
-  const price = new BigNumber(exchangeRates && exchangeRates.find
-    ? exchangeRates
-      .find((e:any) => e.tokenAddress === STABLE_TOKEN.contractAddress)?.exchangeRate
-    : NaN);
+  const price = useMemo(() => {
+    if (!exchangeRates) {
+      return new BigNumber(NaN);
+    }
+    const rawExchangeRate = exchangeRates
+      .find(
+        ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress,
+      )?.exchangeRate;
+    return new BigNumber(rawExchangeRate || NaN);
+  }, [exchangeRates]);
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>

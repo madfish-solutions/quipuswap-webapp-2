@@ -1,61 +1,12 @@
 import { TezosToolkit } from '@taquito/taquito';
-import {
-  batchify,
-  findDex,
-  FoundDex,
-  swap,
-} from '@quipuswap/sdk';
+import { findDex, FoundDex } from '@quipuswap/sdk';
 
 import { FACTORIES } from '@utils/defaults';
-import {
-  QSNetworkType, SwapFormValues, TokenDataMap, WhitelistedToken,
-} from '@utils/types';
-import { getValueForSDK, slippageToBignum, transformTokenDataToAsset } from '@utils/helpers';
-
-export const submitForm = (
-  values: SwapFormValues,
-  tezos:TezosToolkit,
-  tokensData:TokenDataMap,
-  tabsState:string,
-  networkId:QSNetworkType,
-  form:any,
-  updateToast: (err:any) => void,
-  handleSuccessToast: any,
-) => {
-  if (!tezos) return;
-  const asyncFunc = async () => {
-    try {
-      const fromAsset = transformTokenDataToAsset(tokensData.first);
-      const toAsset = transformTokenDataToAsset(tokensData.second);
-      const slippage = slippageToBignum(values.slippage).div(100);
-      const inputValue = getValueForSDK(tokensData.first, values.balance1, tezos);
-      const swapParams = await swap(
-        tezos,
-        FACTORIES[networkId],
-        fromAsset,
-        toAsset,
-        inputValue,
-        slippage,
-        tabsState === 'send' ? values.recipient : undefined,
-      );
-      const op = await batchify(
-        tezos.wallet.batch([]),
-        swapParams,
-      ).send();
-      form.mutators.setValue('balance1', '');
-      form.mutators.setValue('balance2', '');
-      await op.confirmation();
-      handleSuccessToast();
-    } catch (e) {
-      updateToast(e);
-    }
-  };
-  asyncFunc();
-};
+import { QSMainNet, WhitelistedToken } from '@utils/types';
 
 type GetDexParams = {
   tezos: TezosToolkit
-  networkId: QSNetworkType
+  networkId: QSMainNet
   token1: WhitelistedToken
   token2: WhitelistedToken
 };

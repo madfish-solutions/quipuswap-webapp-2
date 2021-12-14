@@ -19,6 +19,7 @@ import {
   ExternalLink,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
+
 import { useTranslation } from 'next-i18next';
 import dynamic from 'next/dynamic';
 import cx from 'classnames';
