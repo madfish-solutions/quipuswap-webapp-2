@@ -14,6 +14,7 @@ import {
   useNetwork,
 } from '@utils/dapp';
 import {
+  Nullable,
   WhitelistedToken,
 } from '@utils/types';
 import { fromDecimals } from '@utils/helpers';
@@ -33,8 +34,8 @@ type AddTezToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
-  setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
 };

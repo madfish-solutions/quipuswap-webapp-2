@@ -1,18 +1,27 @@
-import {
-  getStorageInfo, getUserBalance, useAccountPkh, useNetwork, useTezos,
-} from '@utils/dapp';
-import { QSMainNet } from '@utils/types';
+import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import {
-  FACTORIES, STABLE_TOKEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX,
-} from '@utils/defaults';
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
-import { fromDecimals } from '@utils/helpers';
+
+import {
+  useTezos,
+  useNetwork,
+  useAccountPkh,
+  getStorageInfo,
+  getUserBalance,
+  useTokens,
+} from '@utils/dapp';
+import {
+  FACTORIES,
+  TEZOS_TOKEN,
+  TOKEN_TO_TOKEN_DEX,
+} from '@utils/defaults';
 import {
   findNotTezTokenInPair,
   getValidMichelTemplate,
   sortTokensContracts,
 } from '@containers/Liquidity/liquidutyHelpers';
+import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { fromDecimals } from '@utils/helpers';
 
 const MichelCodec = require('@taquito/michel-codec');
 
@@ -31,10 +40,12 @@ export const useViewModel = () => {
   const tezos = useTezos();
   const networkId = useNetwork().id as QSMainNet;
   const accountPkh = useAccountPkh();
+  const router = useRouter();
+  const { data: tokens } = useTokens();
 
   const [tabState, setTabState] = useState(TabsContent[0]);
-  const [tokenA, setTokenA] = useState(TEZOS_TOKEN);
-  const [tokenB, setTokenB] = useState(STABLE_TOKEN);
+  const [tokenA, setTokenA] = useState<WhitelistedToken | null>(null);
+  const [tokenB, setTokenB] = useState<WhitelistedToken | null>(null);
   const [tokenABalance, setTokenABalance] = useState<string>('0');
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
@@ -43,19 +54,21 @@ export const useViewModel = () => {
     isTezosToTokenDex:boolean,
   }>({ dex: null, isTezosToTokenDex: false });
 
-  // eslint-disable-next-line max-len
-  const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => contractAddressA === TEZOS_TOKEN.contractAddress
-    || contractAddressB === TEZOS_TOKEN.contractAddress;
+  const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => (
+    [contractAddressA, contractAddressB].includes(TEZOS_TOKEN.contractAddress)
+  );
 
   const setActiveId = useCallback(
     (tabId:string) => {
-      // TODO
-      // router.replace(
-      //   `/liquidity/${tabId}/${getWhitelistedTokenSymbol(tokensData.first.token.address)}
-      //   -${getWhitelistedTokenSymbol(fallbackTokenPair.token2)}`,
-      //   undefined,
-      //   { shallow: true },
-      // );
+      const url = router.asPath.split('/');
+      url[2] = tabId;
+      const newUrl = url.join('/');
+
+      router.replace(
+        newUrl,
+        undefined,
+        { shallow: true },
+      );
       const findActiveTab = TabsContent.find((tab) => tab.id === tabId);
       if (!findActiveTab) return;
       setTabState(findActiveTab);
@@ -63,10 +76,62 @@ export const useViewModel = () => {
   );
 
   useEffect(() => {
+    const tokensUrl = router.asPath.split('/')[3].split('-');
+    const tokenAFromUrl = tokensUrl[0];
+    const tokenBFromUrl = tokensUrl[1];
+    const [contractTokenA, idTokenA] = tokenAFromUrl.split('_');
+    const [contractTokenB, idTokenB] = tokenBFromUrl.split('_');
+
+    const validTokenA = tokens.find((token) => {
+      if (idTokenA !== undefined) {
+        if (
+          token.fa2TokenId
+          && token.fa2TokenId.toString() === idTokenA
+          && token.contractAddress === contractTokenA
+        ) return token;
+      }
+
+      if (contractTokenA === token.contractAddress) return token;
+
+      return undefined;
+    });
+    const validTokenB = tokens.find((token) => {
+      if (idTokenB !== undefined) {
+        if (
+          token.fa2TokenId
+          && token.fa2TokenId.toString() === idTokenB
+          && token.contractAddress === contractTokenB
+        ) return token;
+      }
+
+      if (contractTokenB === token.contractAddress) return token;
+
+      return undefined;
+    });
+
+    if (validTokenA) setTokenA(validTokenA);
+    if (validTokenB) setTokenB(validTokenB);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokens]);
+
+  useEffect(() => {
+    if (!tokenA || !tokenB) return;
+    const from = tokenA.contractAddress + (tokenA.type === 'fa1.2' ? '' : `_${tokenA.fa2TokenId}`);
+    const to = tokenB.contractAddress + (tokenB.type === 'fa1.2' ? '' : `_${tokenB.fa2TokenId}`);
+    router.replace(
+      `/liquidity/${tabState.id}/${from}-${to}`,
+      undefined,
+      { shallow: true },
+    );
+  }, [tokenA, tokenB]);
+
+  useEffect(() => {
     let isMounted = true;
     let foundDex: FoundDex;
+
     const loadDex = async () => {
-      if (!tezos) return;
+      if (!tezos || !tokenA || !tokenB) return;
       const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
@@ -99,7 +164,7 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
-      if (!tezos || !accountPkh) return;
+      if (!tezos || !accountPkh || !tokenA) return;
 
       const userTokenABalanance = await getUserBalance(
         tezos,
@@ -126,7 +191,7 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenBBalance = async () => {
-      if (!tezos || !accountPkh) return;
+      if (!tezos || !accountPkh || !tokenB) return;
 
       const userTokenBBalance = await getUserBalance(
         tezos,
@@ -155,7 +220,7 @@ export const useViewModel = () => {
     const getLpTokenBalance = async () => {
       const { dex, isTezosToTokenDex } = dexInfo;
 
-      if (!tezos || !accountPkh || !dex) return;
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) return;
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
@@ -198,7 +263,7 @@ export const useViewModel = () => {
     getLpTokenBalance();
 
     return () => { isMounted = false; };
-    // Ignore tokenA & tokenB
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dexInfo]);
 
   return {

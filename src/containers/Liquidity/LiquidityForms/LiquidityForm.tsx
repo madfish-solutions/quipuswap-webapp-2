@@ -17,6 +17,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
     // eslint-disable-next-line max-len
     tabState, setActiveId, dexInfo, tokenA, tokenB, setTokenA, setTokenB, tokenABalance, tokenBBalance, lpTokenBalance,
   } = useViewModel();
+
   return (
     <>
       <Card
@@ -33,7 +34,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
         }}
         contentClassName={s.content}
       >
-        {tabState.id === 'add' && dexInfo.isTezosToTokenDex && (
+        {tabState.id === 'add' && dexInfo.isTezosToTokenDex && tokenA && tokenB && (
           <AddTezToToken
             dex={dexInfo.dex}
             tokenA={tokenA}
@@ -44,7 +45,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
             tokenBBalance={tokenBBalance}
           />
         )}
-        {tabState.id === 'remove' && dexInfo.isTezosToTokenDex && (
+        {tabState.id === 'remove' && dexInfo.isTezosToTokenDex && tokenA && tokenB && (
           <RemoveTezToToken
             dex={dexInfo.dex}
             tokenA={tokenA}
@@ -56,7 +57,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
             lpTokenBalance={lpTokenBalance}
           />
         )}
-        {tabState.id === 'add' && !dexInfo.isTezosToTokenDex && (
+        {tabState.id === 'add' && !dexInfo.isTezosToTokenDex && tokenA && tokenB && (
           <AddTokenToToken
             dex={dexInfo.dex}
             tokenA={tokenA}
@@ -67,7 +68,7 @@ const RealForm:React.FC<LiquidityFormProps> = ({ tokensData }) => {
             tokenBBalance={tokenBBalance}
           />
         )}
-        {tabState.id === 'remove' && !dexInfo.isTezosToTokenDex && (
+        {tabState.id === 'remove' && !dexInfo.isTezosToTokenDex && tokenA && tokenB && (
           <RemoveTokenToToken
             dex={dexInfo.dex}
             tokenA={tokenA}
