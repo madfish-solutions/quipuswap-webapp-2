@@ -9,8 +9,6 @@ import {
   Plus,
   Modal,
   Button,
-  Checkbox,
-  TokenCell,
   ColorModes,
   TokenNotFound,
   LoadingTokenCell,
@@ -33,14 +31,14 @@ import {
 import {
   isTokenEqual,
   localSearchToken,
-  prepareTokenLogo,
-  getWhitelistedTokenSymbol,
   WhitelistedOrCustomToken,
 } from '@utils/helpers';
 
+import { FormApi } from 'final-form';
 import s from './PositionsModal.module.sass';
 import { FormValues, PositionsModalProps } from './PositionsModal.types';
 import { Header } from './PositionModalHeader';
+import { PositionTokenCell } from './PositionTokenCell';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -114,6 +112,56 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
       .catch(console.error);
   }, [inputValue, tezos]);
 
+  const handleTokenA = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (!notSelectable1) {
+      if (values.token2 && values.token1) {
+        form.mutators.setValue('token1', values.token2);
+        form.mutators.setValue('token2', undefined);
+      } else if (!values.token1) {
+        form.mutators.setValue('token1', token);
+      } else {
+        form.mutators.setValue('token1', undefined);
+      }
+    }
+  };
+
+  const handleTokenB = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (!notSelectable2) {
+      if (!values.token2) {
+        form.mutators.setValue('token2', token);
+      } else {
+        form.mutators.setValue('token2', undefined);
+      }
+    }
+  };
+
+  const handleTokenListItem = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (searchTokens.length > 0) {
+      addCustomToken(token);
+    }
+    if (!values.token1) {
+      form.mutators.setValue('token1', token);
+    } else if (!values.token2) {
+      form.mutators.setValue('token2', token);
+    }
+    form.mutators.setValue('search', '');
+    form.mutators.setValue('tokenId', '');
+    setInputValue('');
+    setInputToken('');
+  };
+
   return (
     <Form
       onSubmit={handleInput}
@@ -171,26 +219,11 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               const token = input.value;
               if (!token) return '';
               return (
-                <TokenCell
-                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                  tokenName={getWhitelistedTokenSymbol(token)}
-                  tokenSymbol="TOKEN"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (!notSelectable1) {
-                      if (values.token2 && values.token1) {
-                        form.mutators.setValue('token1', values.token2);
-                        form.mutators.setValue('token2', undefined);
-                      } else if (!values.token1) {
-                        form.mutators.setValue('token1', token);
-                      } else {
-                        form.mutators.setValue('token1', undefined);
-                      }
-                    }
-                  }}
-                >
-                  <Checkbox checked />
-                </TokenCell>
+                <PositionTokenCell
+                  token={token}
+                  onClick={() => handleTokenA(token, form, values)}
+                  isChecked
+                />
               );
             }}
           </Field>
@@ -205,23 +238,11 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               const token = input.value;
               if (!token) return '';
               return (
-                <TokenCell
-                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                  tokenName={getWhitelistedTokenSymbol(token)}
-                  tokenSymbol="TOKEN"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (!notSelectable2) {
-                      if (!values.token2) {
-                        form.mutators.setValue('token2', token);
-                      } else {
-                        form.mutators.setValue('token2', undefined);
-                      }
-                    }
-                  }}
-                >
-                  <Checkbox checked />
-                </TokenCell>
+                <PositionTokenCell
+                  token={token}
+                  onClick={() => handleTokenB(token, form, values)}
+                  isChecked
+                />
               );
             }}
           </Field>
@@ -242,29 +263,12 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               .map((token) => {
                 const { contractAddress, fa2TokenId } = token;
                 return (
-                  <TokenCell
+                  <PositionTokenCell
                     key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                    tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                    tokenName={getWhitelistedTokenSymbol(token)}
-                    tokenSymbol="TOKEN"
-                    tabIndex={0}
-                    onClick={() => {
-                      if (searchTokens.length > 0) {
-                        addCustomToken(token);
-                      }
-                      if (!values.token1) {
-                        form.mutators.setValue('token1', token);
-                      } else if (!values.token2) {
-                        form.mutators.setValue('token2', token);
-                      }
-                      form.mutators.setValue('search', '');
-                      form.mutators.setValue('tokenId', '');
-                      setInputValue('');
-                      setInputToken('');
-                    }}
-                  >
-                    <Checkbox checked={false} />
-                  </TokenCell>
+                    token={token}
+                    onClick={() => handleTokenListItem(token, form, values)}
+                    isChecked={false}
+                  />
                 );
               })}
         </Modal>

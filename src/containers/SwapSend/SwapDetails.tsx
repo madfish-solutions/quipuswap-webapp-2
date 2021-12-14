@@ -22,6 +22,7 @@ import {
 } from '@utils/helpers';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { DexPair, WhitelistedToken } from '@utils/types';
+import { FormatNumber } from '@utils/helpers/formatNumber';
 
 import s from '@styles/CommonContainer.module.sass';
 
@@ -186,7 +187,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               />
               <span className={s.equal}>=</span>
               <CurrencyAmount
-                amount={sellRate.toFixed()}
+                amount={FormatNumber(sellRate)}
                 currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
                 dollarEquivalent={sellUsdRate?.toFixed(2)}
               />
@@ -215,7 +216,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               />
               <span className={s.equal}>=</span>
               <CurrencyAmount
-                amount={buyRate.toFixed()}
+                amount={FormatNumber(buyRate)}
                 currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
                 dollarEquivalent={buyUsdRate?.toFixed(2)}
               />
@@ -236,7 +237,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         className={s.cell}
       >
         <CurrencyAmount
-          amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : priceImpact.toFixed(2)}
+          amount={!priceImpact || priceImpact.isNaN() || priceImpact.lt(0.01) ? '<0.01' : FormatNumber(priceImpact, { decimals: 2 })}
           currency="%"
         />
       </CardCell>
