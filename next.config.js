@@ -36,7 +36,7 @@ module.exports = withReactSvg({
       },
       {
         source: '/voting',
-        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
@@ -46,12 +46,12 @@ module.exports = withReactSvg({
       },
       {
         source: '/voting/vote',
-        destination: `/voting/vote/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {
         source: '/voting/veto',
-        destination: `/voting/veto/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/voting/veto/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true,
       },
       {

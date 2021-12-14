@@ -7,6 +7,10 @@ import {
 } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
+import { getTokenSlug } from '@utils/helpers';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
+import { QSMainNet } from '@utils/types';
+
 interface LinkInterface {
   id: number
   href?: string
@@ -19,7 +23,7 @@ interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[]
 }
 
-export const NavigationData: NavigationDataProps[] = [
+export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] => [
   {
     id: 0,
     href: '/',
@@ -29,7 +33,7 @@ export const NavigationData: NavigationDataProps[] = [
   {
     id: 1,
     href: '/swap/[from-to]',
-    as: '/swap/TEZ-QUIPU',
+    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIconSidebar,
   },

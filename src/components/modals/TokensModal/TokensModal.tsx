@@ -11,19 +11,20 @@ import {
   TokenCell,
   TokenNotFound,
 } from '@quipuswap/ui-kit';
+import { FormApi } from 'final-form';
 import { withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import {
-  isTokenFa2,
   useAddCustomToken,
   useNetwork,
   useSearchCustomTokens,
   useSearchTokens,
   useTezos,
   useTokens,
+  getTokenType,
 } from '@utils/dapp';
 import {
   getWhitelistedTokenName,
@@ -34,7 +35,6 @@ import {
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-import { FormApi } from 'final-form';
 import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
 
@@ -117,7 +117,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   [inputValue, filteredTokens, searchTokens, blackListedTokens]);
 
   useEffect(() => {
-    isTokenFa2(inputValue, tezos!!).then(setSoleFa2Token);
+    getTokenType(inputValue, tezos!)
+      .then((tokenType) => setSoleFa2Token(tokenType === 'fa2'))
+      .catch(console.error);
   }, [inputValue, tezos]);
 
   const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {

@@ -1,4 +1,9 @@
-import { TezosToolkit, Wallet } from '@taquito/taquito';
+import {
+  ContractAbstraction,
+  ContractProvider,
+  TezosToolkit,
+  Wallet,
+} from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 import {
@@ -15,7 +20,7 @@ import {
   WhitelistedTokenWithQSNetworkType,
 } from '@utils/types';
 
-import { isContractAddress } from '@utils/validators';
+import { isValidContractAddress } from '@utils/validators';
 import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getContract } from './getStorageInfo';
 import { getAllowance } from './getAllowance';
@@ -27,9 +32,31 @@ WhitelistedTokenWithQSNetworkType
   : []
 );
 
+// TODO: remove either getContract or this method
+export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
+
+export const getTokenType = memoizee(
+  async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
+    if (typeof contractOrAddress === 'string' && !isValidContractAddress(contractOrAddress)) {
+      return undefined;
+    }
+    const contract = typeof contractOrAddress === 'string'
+      ? await getContract(tz, contractOrAddress)
+      : contractOrAddress;
+    if (contract.methods.approve) {
+      return 'fa1.2';
+    }
+    if (contract.methods.update_operators) {
+      return 'fa2';
+    }
+    return undefined;
+  },
+  { promise: true },
+);
+
 export const isTokenFa2 = memoizee(
   async (address:string, tz:TezosToolkit) => {
-    if (await isContractAddress(address) !== true) return false;
+    if (!isValidContractAddress(address)) return false;
 
     try {
       const type = await getContract(tz, address);
@@ -43,7 +70,7 @@ export const isTokenFa2 = memoizee(
 
 export const isTokenFa12 = memoizee(
   async (address:string, tz:TezosToolkit) => {
-    if (await isContractAddress(address) !== true) return false;
+    if (!isValidContractAddress(address)) return false;
 
     try {
       const type = await getContract(tz, address);
@@ -64,19 +91,6 @@ export const getTokens = async (
     let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
     if (json.tokens?.length !== 0) {
       tokens = json.tokens;
-    }
-    if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
-      tokens.unshift({
-        network: network.id,
-        type: 'fa1.2',
-        contractAddress: 'tez',
-        metadata: {
-          decimals: 6,
-          name: 'Tezos',
-          symbol: 'TEZ',
-          thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
-        },
-      });
     }
     if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
       tokens.unshift({

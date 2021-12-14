@@ -25,8 +25,7 @@ import {
   getWhitelistedTokenName,
   getWhitelistedTokenSymbol,
 } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 import { usePrevious } from '@hooks/usePrevious';
 
@@ -277,7 +276,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
   className,
   loading = false,
   token1 = TEZOS_TOKEN,
-  token2 = STABLE_TOKEN,
+  token2 = MAINNET_DEFAULT_TOKEN,
   disabled,
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);

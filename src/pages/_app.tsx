@@ -11,9 +11,11 @@ import { DAppProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import { withApollo } from '@client';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
+import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
 
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
+import { DexGraphProvider } from '@hooks/useDexGraph';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -139,7 +141,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <DAppProvider>
         <ColorThemeProvider>
           <ExchangeRatesProvider>
-            <Component {...pageProps} />
+            <NewExchangeRatesProvider>
+              <DexGraphProvider>
+                <Component {...pageProps} />
+              </DexGraphProvider>
+            </NewExchangeRatesProvider>
           </ExchangeRatesProvider>
         </ColorThemeProvider>
       </DAppProvider>
