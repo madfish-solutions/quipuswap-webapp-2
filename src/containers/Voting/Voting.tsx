@@ -74,6 +74,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     handleTokenChange({
       token,
       tokenNumber,
+      // @ts-ignore
       exchangeRates,
       tezos: tezos!,
       accountPkh: accountPkh!,
@@ -166,6 +167,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               values,
               dex,
               tab: currentTab.id,
+              // @ts-ignore
               updateToast,
               handleErrorToast,
               getBalance

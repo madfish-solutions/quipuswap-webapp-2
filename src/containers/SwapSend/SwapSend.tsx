@@ -57,7 +57,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
       if (!accountPkh) {
         return;
       }
-      getUserBalance(tezos!, accountPkh!, token.contractAddress, token.type, token.fa2TokenId)
+      getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId)
         .then(balance => {
           setKnownTokensBalances(prevValue => ({
             ...prevValue,

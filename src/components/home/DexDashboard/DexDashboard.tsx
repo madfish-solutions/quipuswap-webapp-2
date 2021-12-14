@@ -31,6 +31,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
       // TODO: change after deploy token to testnet
       const tezos = new TezosToolkit(MAINNET_NETWORK.rpcBaseURL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
+      // @ts-ignore
       const tokenInfo = await contract?.token_info.get(0);
       setTotalSupply(tokenInfo);
     };

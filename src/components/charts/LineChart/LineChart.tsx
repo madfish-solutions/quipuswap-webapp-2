@@ -69,6 +69,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({ data }) => {
       return () => {};
     }
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, [isClient, chartRef, handleResize]);
 
@@ -106,7 +107,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({ data }) => {
         },
         localization: {
           locale: i18n.language,
-          priceFormatter: (price: number) => prettyPrice(price!, 3, 3)
+          priceFormatter: (price: number) => prettyPrice(price, 3, 3)
         }
       });
 

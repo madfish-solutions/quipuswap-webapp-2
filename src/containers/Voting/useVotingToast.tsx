@@ -6,6 +6,7 @@ import useUpdateToast from '@hooks/useUpdateToast';
 
 export interface IUseVotingToast {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handleErrorToast: (err: any) => void;
   handleLoader: () => void;
   handleSuccessToast: () => void;

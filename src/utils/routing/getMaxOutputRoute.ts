@@ -18,6 +18,7 @@ export const getMaxOutputRoute = memoizee(
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
     const inputToken = getTokenIdFromSlug(startTokenSlug);
+
     return routes.slice(1).reduce((prevCandidate, route) => {
       try {
         const prevMaxOutputAmount = getTokenOutput({
@@ -30,6 +31,7 @@ export const getMaxOutputRoute = memoizee(
           inputAmount: BigNumber.max(getMaxTokenInput(outputToken, route), maxTokenInput),
           dexChain: route
         });
+
         return maxOutputAmount.gt(prevMaxOutputAmount) ? route : prevCandidate;
       } catch (e) {
         return prevCandidate;

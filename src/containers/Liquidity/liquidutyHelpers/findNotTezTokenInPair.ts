@@ -5,5 +5,6 @@ export const findNotTezTokenInPair = (tokenA: WhitelistedToken, tokenB: Whitelis
   if (tokenA.contractAddress === TEZOS_TOKEN.contractAddress) {
     return tokenB;
   }
+
   return tokenA;
 };

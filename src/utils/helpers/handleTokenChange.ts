@@ -11,7 +11,7 @@ import { fromDecimals } from './fromDecimals';
 type TokenChangeType = {
   token: WhitelistedToken;
   tokenNumber: 'first' | 'second';
-  exchangeRates: any;
+  exchangeRates: Array<{ tokenAddress: string; tokenId?: number; exchangeRate: string }>;
   tezos: TezosToolkit;
   accountPkh: string;
   setTokensData: React.Dispatch<React.SetStateAction<TokenDataMap>>;
@@ -40,17 +40,16 @@ TokenChangeType) => {
     }
   }
 
-  const tokenExchangeRate = exchangeRates.find(
-    (el: { tokenAddress: string; tokenId?: number; exchangeRate: string }) => {
-      const isTokenTez = token.contractAddress === TEZOS_TOKEN.contractAddress && el.tokenAddress === undefined;
-      if (isTokenTez) return true;
-      if (el.tokenAddress === token.contractAddress) {
-        if (!token.fa2TokenId) return true;
-        if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
-      }
-      return false;
+  const tokenExchangeRate = exchangeRates.find(el => {
+    const isTokenTez = token.contractAddress === TEZOS_TOKEN.contractAddress && el.tokenAddress === undefined;
+    if (isTokenTez) return true;
+    if (el.tokenAddress === token.contractAddress) {
+      if (!token.fa2TokenId) return true;
+      if (token.fa2TokenId && el.tokenId === token.fa2TokenId) return true;
     }
-  );
+
+    return false;
+  });
 
   setTokensData(prevState => ({
     ...prevState,

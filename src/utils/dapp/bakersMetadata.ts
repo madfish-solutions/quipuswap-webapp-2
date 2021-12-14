@@ -14,5 +14,6 @@ export const getBakerMetadata = async (address: string): Promise<BakerMetadataRe
     .catch(() => null);
 
   if (data?.message) return null;
+
   return data;
 };

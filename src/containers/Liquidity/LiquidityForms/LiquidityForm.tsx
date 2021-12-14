@@ -96,6 +96,7 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const LiquidityForm = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={RealForm} />
 );

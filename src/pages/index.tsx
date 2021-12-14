@@ -30,4 +30,5 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   }
 });
 
+// eslint-disable-next-line import/no-default-export
 export default Home;

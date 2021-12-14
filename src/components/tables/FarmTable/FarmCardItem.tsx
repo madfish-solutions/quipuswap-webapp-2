@@ -22,6 +22,7 @@ const modeClass = {
 export const FarmCardItem: React.FC<FarmCardItemProps> = ({ farm, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>

@@ -18,7 +18,7 @@ export type Scalars = {
    * value as specified by
    * [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
    */
-  DateTime: any;
+  DateTime: never;
 };
 
 /** Candle plot point data. */
@@ -537,6 +537,7 @@ export function useGetPairPlotLiquidityQuery(
   baseOptions: Apollo.QueryHookOptions<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(
     GetPairPlotLiquidityDocument,
     options
@@ -546,6 +547,7 @@ export function useGetPairPlotLiquidityLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useLazyQuery<GetPairPlotLiquidityQuery, GetPairPlotLiquidityQueryVariables>(
     GetPairPlotLiquidityDocument,
     options
@@ -597,12 +599,14 @@ export function useGetTokenPlotPriceQuery(
   baseOptions: Apollo.QueryHookOptions<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useQuery<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>(GetTokenPlotPriceDocument, options);
 }
 export function useGetTokenPlotPriceLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useLazyQuery<GetTokenPlotPriceQuery, GetTokenPlotPriceQueryVariables>(
     GetTokenPlotPriceDocument,
     options
@@ -643,12 +647,14 @@ export function useGetHomeOverviewQuery(
   baseOptions?: Apollo.QueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useQuery<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
 }
 export function useGetHomeOverviewLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useLazyQuery<GetHomeOverviewQuery, GetHomeOverviewQueryVariables>(GetHomeOverviewDocument, options);
 }
 export type GetHomeOverviewQueryHookResult = ReturnType<typeof useGetHomeOverviewQuery>;
@@ -709,12 +715,14 @@ export function useGetTokensPairsQuery(
   baseOptions?: Apollo.QueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useQuery<GetTokensPairsQuery, GetTokensPairsQueryVariables>(GetTokensPairsDocument, options);
 }
 export function useGetTokensPairsLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<GetTokensPairsQuery, GetTokensPairsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
+
   return Apollo.useLazyQuery<GetTokensPairsQuery, GetTokensPairsQueryVariables>(GetTokensPairsDocument, options);
 }
 export type GetTokensPairsQueryHookResult = ReturnType<typeof useGetTokensPairsQuery>;

@@ -28,5 +28,6 @@ export const parseDecimals = (value: string, min: number, max: number, decimals?
   if (new BigNumber(onlyNums).gt(new BigNumber(max))) {
     res = max.toString();
   }
+
   return res;
 };

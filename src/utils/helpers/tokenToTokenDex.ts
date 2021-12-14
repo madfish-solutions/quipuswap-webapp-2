@@ -114,6 +114,7 @@ export const getMaxTokenInput = (outputToken: TokenId, dexChain: DexPair[]) => {
     }
     intermediateOutputToken = shouldSell ? token1 : token2;
   });
+
   return intermediateMaxTokenInput;
 };
 
@@ -129,6 +130,7 @@ export const getMarketQuotient = (inputToken: TokenId, dexChain: DexPair[]) => {
     marketQuotient = marketQuotient.times(outputLiquidity).div(inputLiquidity);
     currentToken = shouldSell ? token2 : token1;
   });
+
   return marketQuotient;
 };
 
@@ -138,6 +140,7 @@ export const getPriceImpact = (swapParams: SwapParams) => {
     const initialMarketQuotient = getMarketQuotient(inputToken, dexChain);
     const newDexChain = getDexPairsAfterSwap({ inputToken, inputAmount, dexChain });
     const newMarketQuotient = getMarketQuotient(inputToken, newDexChain);
+
     return (
       newMarketQuotient.gt(initialMarketQuotient)
         ? new BigNumber(1).minus(initialMarketQuotient.div(newMarketQuotient))

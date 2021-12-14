@@ -62,7 +62,7 @@ const connectWalletTemple = async (forcePermission: boolean, network: QSNetwork)
   if (!wallet.connected) {
     await wallet.connect(
       network.connectType === 'default'
-        ? (network.id as any)
+        ? (network.id as never)
         : {
             name: network.name,
             rpc: network.rpcBaseURL
@@ -76,6 +76,7 @@ const connectWalletTemple = async (forcePermission: boolean, network: QSNetwork)
   const { pkh, publicKey } = wallet.permission!;
   tezos.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
   localStorage.setItem(LAST_USED_CONNECTION_KEY, 'temple');
+
   return { pkh, toolkit: tezos, wallet };
 };
 
@@ -112,6 +113,7 @@ const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork)
   tezos.setSignerProvider(new ReadOnlySigner(activeAcc.address, activeAcc.publicKey));
   localStorage.setItem(LAST_USED_CONNECTION_KEY, 'beacon');
   localStorage.setItem(LAST_USED_ACCOUNT_KEY, activeAcc.accountIdentifier);
+
   return { pkh: activeAcc.address, toolkit: tezos };
 };
 
@@ -229,6 +231,7 @@ function useDApp() {
             localStorage.removeItem(LAST_USED_ACCOUNT_KEY);
             localStorage.removeItem(LAST_USED_CONNECTION_KEY);
             setFallbackState();
+
             return;
           }
 
@@ -315,6 +318,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] }
           }));
+
           return null;
         }
         const isFa2 = !!type.methods.update_operators;
@@ -324,6 +328,7 @@ function useDApp() {
             ...prevState,
             searchTokens: { loading: false, data: [] }
           }));
+
           return null;
         }
         const token: WhitelistedTokenWithQSNetworkType = {
@@ -338,8 +343,10 @@ function useDApp() {
           searchTokens: { loading: false, data: [token] }
         }));
         if (saveAfterSearch) saveCustomToken(token);
+
         return token;
       }
+
       return null;
     },
     [tezos, network]

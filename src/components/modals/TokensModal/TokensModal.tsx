@@ -74,6 +74,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
 
   const handleTokenSearch = useCallback(() => {
     if (!network || !tezos) return;
+    // eslint-disable-next-line
     const isTokens = tokens.filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
@@ -150,6 +151,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
             [1, 2, 3, 4, 5, 6, 7].map(x => <LoadingTokenCell key={x} />)}
           {allTokens.map(token => {
             const { contractAddress, fa2TokenId } = token;
+
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}

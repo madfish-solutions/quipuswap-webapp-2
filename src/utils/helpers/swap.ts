@@ -224,6 +224,7 @@ export const estimateSwapFee = async (tezos: TezosToolkit, accountPkh: string, s
   const estimations = await tezos.estimate.batch(
     transferParams.map(params => ({ ...params, kind: OpKind.TRANSACTION }))
   );
+
   return estimations.reduce<BigNumber>(
     (
       acc,

@@ -59,6 +59,7 @@ export const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: Whitel
       thumbnailUri: ''
     }
   };
+
   return matchingToken ?? fallbackToken;
 };
 
@@ -119,6 +120,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
         type: 'error',
         render: 'Token to token exchangers not loaded'
       });
+
       return undefined;
     }
   }, [tokens, networkId, updateToast]);

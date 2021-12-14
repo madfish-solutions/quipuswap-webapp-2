@@ -38,5 +38,6 @@ export const FormatNumber = (value: BigNumber.Value, options?: FormatNumberOptin
 
     return `${newInteger}.${newDecimal}`;
   }
+
   return newInteger;
 };

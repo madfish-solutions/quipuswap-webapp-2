@@ -63,7 +63,7 @@ declare module 'react-table' {
       UseRowSelectOptions<D>,
       UseRowStateOptions<D>,
       UseSortByOptions<D>,
-      Record<string, any> {}
+      Record<string, never> {}
 
   export interface Hooks<D extends Record<string, unknown> = Record<string, unknown>>
     extends UseExpandedHooks<D>,

@@ -48,21 +48,26 @@ export const asyncFindPairDex = async (
       dex
     };
     setTokenPair(res);
+
     return res;
   } catch (err) {
     updateToast(err);
+
     return pair;
   }
 };
 
 export const asyncGetShares = async (
   setTokenPair: (pair: WhitelistedTokenPair) => void,
-  setValue: (key: string, value: any) => void,
+  setValue: (key: string, value: string) => void,
   token1: WhitelistedToken,
   token2: WhitelistedToken,
   tokenPair: WhitelistedTokenPair,
+  // eslint-disable-next-line
   shares: any,
+  // eslint-disable-next-line
   values: any,
+  // eslint-disable-next-line
   currentTab: any,
   tezos: TezosToolkit,
   accountPkh: string,
@@ -105,6 +110,7 @@ export const asyncGetShares = async (
 type GetShareType = {
   setDex: (dex: FoundDex) => void;
   setAddLiquidityParams: (params: TransferParams[]) => void;
+  // eslint-disable-next-line
   values: any;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
@@ -149,8 +155,10 @@ GetShareType) => {
               const tokenVal = new BigNumber(values.balance2);
               const initParams = await initializeLiquidity(tezos, strictFactories, toAsset, tokenVal, tezVal);
               setAddLiquidityParams(initParams);
+
               return;
             }
+
             return;
           }
           updateToast(e);

@@ -56,6 +56,7 @@ export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromT
             if (tokenType === 'fa1.2') {
               return contractAddress;
             }
+
             return undefined;
           } catch (e) {
             return undefined;
@@ -70,6 +71,7 @@ export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromT
       if (token1Slug === token2Slug) {
         token2Slug = token1Slug === fallbackTokensSlugs[0] ? fallbackTokensSlugs[1] : fallbackTokensSlugs[0];
       }
+
       return [token1Slug, token2Slug];
     },
     []

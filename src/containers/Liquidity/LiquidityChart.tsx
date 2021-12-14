@@ -7,7 +7,7 @@ import { PlotPoint, useGetPairPlotLiquidityQuery } from '@graphql';
 import s from '@styles/SwapLiquidity.module.sass';
 import { useNetwork, useTezos } from '@utils/dapp';
 import { FACTORIES } from '@utils/defaults';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 const LineChart = dynamic(() => import('@components/charts/LineChart'), {
   ssr: false
@@ -31,6 +31,7 @@ const Chart: React.FC<ChartProps> = ({ dex, token1, token2 }) => {
     }
   });
   const loadingProp = loading || error || !data || !data?.pair;
+
   return (
     <LineChart
       token1={token1}
@@ -45,7 +46,7 @@ const Chart: React.FC<ChartProps> = ({ dex, token1, token2 }) => {
 export const LiquidityChart: React.FC<LiquidityChartProps> = ({ token1, token2 }) => {
   const tezos = useTezos();
   const network = useNetwork();
-  const networkId = network.id as QSMainNet;
+  const networkId = network.id;
   const [dex, setDex] = useState<FoundDex>();
   useEffect(() => {
     const asyncLoad = async () => {
@@ -54,7 +55,7 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({ token1, token2 }
         contract: token2.contractAddress,
         id: token2.fa2TokenId ?? undefined
       };
-      const dexbuf = await findDex(tezos!, FACTORIES[networkId], toAsset);
+      const dexbuf = await findDex(tezos, FACTORIES[networkId], toAsset);
       setDex(dexbuf);
     };
     asyncLoad();
@@ -64,5 +65,6 @@ export const LiquidityChart: React.FC<LiquidityChartProps> = ({ token1, token2 }
   if (!dex) {
     return <LineChart className={s.chart} loading data={[]} />;
   }
+
   return <Chart token1={token1} token2={token2} dex={dex} />;
 };

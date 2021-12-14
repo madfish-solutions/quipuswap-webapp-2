@@ -27,6 +27,7 @@ export function getLeaves(tree: RoutesTreeNode): RoutesTreeNode[] {
   if (tree.branches.length === 0) {
     return [tree];
   }
+
   return tree.branches.map(({ child }) => getLeaves(child)).flat();
 }
 
@@ -84,6 +85,7 @@ export function getRoutesTreeWithInput(
       }
     });
   }
+
   return node;
 }
 
@@ -110,6 +112,7 @@ export const getRouteWithInput = memoizee(
       currentNode = currentNode.parent;
     }
     route.reverse();
+
     return route;
   },
   { max: 64, normalizer: ([params]) => getRouteWithInputProblemMemoKey(params) }

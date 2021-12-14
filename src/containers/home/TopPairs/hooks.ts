@@ -5,11 +5,13 @@ import { prepareTokenName, transformNodeToWhitelistedToken } from '@utils/helper
 
 export const usePairs = (data?: GetTokensPairsQuery) => {
   const { t } = useTranslation(['home']);
+
   return (
     data?.pairs?.edges.map(x => {
       // TODO: Avoid type casting
       const token1 = x?.node?.token1 as Token;
       const token2 = x?.node?.token2 as Token;
+
       return {
         token1: transformNodeToWhitelistedToken(token1),
         token2: transformNodeToWhitelistedToken(token2),

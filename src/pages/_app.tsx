@@ -31,6 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     debouncedHandleResize();
 
     window.addEventListener('resize', debouncedHandleResize);
+
     return () => {
       window.removeEventListener('resize', debouncedHandleResize);
     };
@@ -113,4 +114,5 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
+// eslint-disable-next-line import/no-default-export
 export default withApollo()(appWithTranslation(MyApp));

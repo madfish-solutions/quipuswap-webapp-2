@@ -67,6 +67,7 @@ export const FarmingInfo: React.FC<FarmingInfoProps> = ({ className, farm }) => 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const compountClassName = cx(modeClass[colorThemeMode], s.mb24i, className);
+
   return (
     <>
       <Card

@@ -34,6 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);

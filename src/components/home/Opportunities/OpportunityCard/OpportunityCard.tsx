@@ -19,6 +19,7 @@ type OpportunityCardProps = {
 
 export const OpportunityCard: React.FC<OpportunityCardProps> = ({ className, Icon, title, description, button }) => {
   const props = button.href ? { href: button.href, external: button.external } : {};
+
   return (
     <Card className={className} contentClassName={s.content}>
       <Icon className={s.icon} />

@@ -16,6 +16,7 @@ type PoolTableProps = {
   exchangeRate?: string;
   loading?: boolean;
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetch: any;
 };
 

@@ -11,7 +11,7 @@ import {
 import { useTezos, useNetwork, useAccountPkh, getStorageInfo, getUserBalance, useTokens } from '@utils/dapp';
 import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 const MichelCodec = require('@taquito/michel-codec');
 
@@ -28,7 +28,7 @@ export const TabsContent = [
 
 export const useViewModel = () => {
   const tezos = useTezos();
-  const networkId = useNetwork().id as QSMainNet;
+  const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
   const router = useRouter();
   const { data: tokens } = useTokens();

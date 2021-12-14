@@ -23,6 +23,7 @@ const modeClass = {
 export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>

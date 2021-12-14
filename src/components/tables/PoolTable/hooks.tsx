@@ -11,6 +11,7 @@ import { PoolTableType } from '@utils/types';
 
 export const useColumns = () => {
   const { t } = useTranslation(['home']);
+
   return [
     {
       Header: t('home|Name'),

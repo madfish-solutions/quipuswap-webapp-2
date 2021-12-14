@@ -21,6 +21,7 @@ const modeClass = {
 export const FarmItem: React.FC<FarmItemProps> = ({ farm, isSponsored = false }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(s.tableRow, s.farmRow, s.tableHeader, modeClass[colorThemeMode], s.tableHeaderBorder);
+
   return (
     <tr>
       <td className={compoundClassName}>

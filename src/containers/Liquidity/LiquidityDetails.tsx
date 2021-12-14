@@ -58,6 +58,7 @@ export const LiquidityDetails: React.FC<LiquidityDetailsProps> = ({
         .toString(),
     [tokensData]
   );
+
   return (
     <Card
       header={{

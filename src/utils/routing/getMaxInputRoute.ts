@@ -11,6 +11,7 @@ export const getMaxInputRoute = memoizee(
   ({ startTokenSlug, endTokenSlug, graph, depth = 5 }: CommonRouteProblemParams): DexPair[] | undefined => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
+
     return routes.slice(1).reduce<DexPair[]>((prevCandidate, route) => {
       try {
         const prevMaxInputAmount = getMaxTokenInput(outputToken, prevCandidate);

@@ -57,7 +57,7 @@ export const WalletModal: React.FC = () => {
         }
         closeAccountInfoModal();
         closeConnectWalletModal();
-      } catch (e: any) {
+      } catch (e) {
         if (e.message === TEMPLE_WALLET_NOT_INSTALLED_MESSAGE) {
           openInstallTempleWalletModal();
         } else {

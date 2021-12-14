@@ -7,5 +7,6 @@ export const calculateTokenAmount = (
   tokenBPool: BigNumber
 ): BigNumber => {
   const shares = tokenAInput.multipliedBy(totalSupply).dividedBy(tokenAPool);
+
   return shares.multipliedBy(tokenBPool).dividedBy(totalSupply);
 };
