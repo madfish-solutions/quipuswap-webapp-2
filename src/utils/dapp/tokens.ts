@@ -18,6 +18,7 @@ import {
   QSNetwork,
   TokenId,
   WhitelistedTokenWithQSNetworkType,
+  QSMainNet,
 } from '@utils/types';
 
 import { isValidContractAddress } from '@utils/validators';
@@ -25,12 +26,13 @@ import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getContract } from './getStorageInfo';
 import { getAllowance } from './getAllowance';
 
-export const getSavedTokens = (): Array<
-WhitelistedTokenWithQSNetworkType
-> => (typeof window !== undefined
-  ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]')
-  : []
-);
+export const getSavedTokens = (networkId?: QSMainNet) => {
+  const allTokens: Array<WhitelistedTokenWithQSNetworkType> = typeof window !== undefined
+    ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]')
+    : [];
+
+  return allTokens.filter(({ network }) => !network || !networkId || (network === networkId));
+};
 
 // TODO: remove either getContract or this method
 export const getContractInfo = (address:string, tz:TezosToolkit) => getContract(tz, address);
@@ -106,7 +108,7 @@ export const getTokens = async (
       });
     }
     if (addTokensFromLocalStorage) {
-      tokens = getSavedTokens().concat(tokens);
+      tokens = getSavedTokens(network.id).concat(tokens);
     }
     return tokens;
   })

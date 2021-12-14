@@ -207,7 +207,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
     [],
   );
 
-  const handleTokensSelected = useCallback(
+  const updateSwapLimits = useCallback(
     (token1: WhitelistedToken, token2: WhitelistedToken) => {
       const startTokenSlug = getTokenSlug(token1);
       const endTokenSlug = getTokenSlug(token2);
@@ -246,14 +246,21 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
         }
       } catch (e) {
         console.error(e);
-      } finally {
-        const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
-        if (router.asPath !== newRoute) {
-          router.push(newRoute);
-        }
       }
     },
-    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount, router],
+    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount],
+  );
+
+  const handleTokensSelected = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken) => {
+      updateSwapLimits(token1, token2);
+      const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+      if (router.asPath !== newRoute) {
+        console.log('x1', newRoute);
+        router.replace(newRoute);
+      }
+    },
+    [router, updateSwapLimits],
   );
 
   const handleErrorToast = useCallback((err) => {
@@ -342,6 +349,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({
       initialTo={initialTokens?.[1]}
       knownTokensBalances={knownTokensBalances}
       onTokensSelected={handleTokensSelected}
+      updateSwapLimits={updateSwapLimits}
       updateTokenBalance={updateTokenBalance}
       knownMaxInputAmounts={knownMaxInputAmounts}
       knownMaxOutputAmounts={knownMaxOutputAmounts}

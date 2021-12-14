@@ -35,6 +35,7 @@ import {
   estimateSwapFee,
   fromDecimals,
   getPriceImpact,
+  getTokenIdFromSlug,
   getTokenInput,
   getTokenOutput,
   getTokenSlug,
@@ -50,10 +51,10 @@ import {
 import {
   DexPair,
   SwapFormValues,
-  QSMainNet,
   WhitelistedToken,
+  WhitelistedTokenMetadata,
 } from '@utils/types';
-import { useDexGraph } from '@hooks/useDexGraph';
+import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
@@ -66,6 +67,7 @@ type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   submitError?: string;
   updateTokenBalance: (token: WhitelistedToken) => void;
   knownTokensBalances: Record<string, BigNumber>;
+  updateSwapLimits: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
   knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
@@ -147,6 +149,19 @@ function amountsAreEqual(amount1?: BigNumber, amount2?: BigNumber) {
   return amount1 === amount2;
 }
 
+function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken) {
+  const propsToCompare: (keyof WhitelistedTokenMetadata)[] = [
+    'decimals',
+    'name',
+    'symbol',
+    'thumbnailUri',
+  ];
+
+  return propsToCompare.every(
+    (propName) => token1.metadata[propName] === token2.metadata[propName],
+  );
+}
+
 export const SwapForm: React.FC<SwapFormProps> = ({
   className,
   errors,
@@ -163,6 +178,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   setFieldTouched,
   touched,
   updateTokenBalance,
+  updateSwapLimits,
   validateField,
   values,
 }) => {
@@ -181,17 +197,17 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
-  const prevNetworkIdRef = useRef<QSMainNet | undefined>();
 
   const { dexGraph } = useDexGraph();
   const [fee, setFee] = useState<BigNumber>();
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
-  const initialValuesAppliedRef = useRef(false);
   const prevToken1Ref = useRef<WhitelistedToken>();
   const prevToken2Ref = useRef<WhitelistedToken>();
   const prevAmount1Ref = useRef<BigNumber>();
   const prevAmount2Ref = useRef<BigNumber>();
   const prevDexGraphRef = useRef<DexGraph>();
+  const prevInitialFromRef = useRef<string>();
+  const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
 
   useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts, knownTokensBalances]);
@@ -209,32 +225,65 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   }, [accountPkh, token1, token2, updateTokenBalance]);
 
   useEffect(() => {
-    const prevNetworkId = prevNetworkIdRef.current;
-    if ((prevNetworkId === network.id) || !initialFrom || !initialTo) {
-      return;
+    const prevInitialFrom = prevInitialFromRef.current;
+    const prevInitialTo = prevInitialToRef.current;
+    prevInitialFromRef.current = initialFrom;
+    prevInitialToRef.current = initialTo;
+    if ((initialFrom || initialTo) && (
+      (prevInitialFrom !== initialFrom) || (prevInitialTo !== initialTo)
+    )) {
+      const valuesToChange: Partial<SwapFormValues> = {};
+      if (initialFrom) {
+        const {
+          contractAddress,
+          type: tokenType,
+          fa2TokenId,
+        } = getTokenIdFromSlug(initialFrom);
+        valuesToChange.token1 = makeWhitelistedToken(
+          {
+            address: contractAddress,
+            type: tokenType,
+            id: fa2TokenId === undefined ? undefined : String(fa2TokenId),
+          },
+          tokens,
+        );
+      }
+      if (initialTo) {
+        const {
+          contractAddress,
+          type: tokenType,
+          fa2TokenId,
+        } = getTokenIdFromSlug(initialTo);
+        valuesToChange.token2 = makeWhitelistedToken(
+          {
+            address: contractAddress,
+            type: tokenType,
+            id: fa2TokenId === undefined ? undefined : String(fa2TokenId),
+          },
+          tokens,
+        );
+      }
+      setValues((prevValues) => ({ ...prevValues, ...valuesToChange }));
     }
+  }, [initialFrom, initialTo, setValues, tokens]);
 
-    const newToken1 = tokens.find((token) => getTokenSlug(token) === initialFrom);
-    const newToken2 = tokens.find((token) => getTokenSlug(token) === initialTo);
-
-    if (newToken1 && newToken2) {
-      initialValuesAppliedRef.current = true;
-      setValues((prevValues) => ({
-        ...prevValues,
-        token1: newToken1,
-        token2: newToken2,
-      }));
-      onTokensSelected(newToken1, newToken2);
+  useEffect(() => {
+    if (token1 && token2) {
+      const token1Slug = getTokenSlug(token1);
+      const token2Slug = getTokenSlug(token2);
+      const newToken1 = tokens.find((token) => token1Slug === getTokenSlug(token));
+      const newToken2 = tokens.find((token) => token2Slug === getTokenSlug(token));
+      if (newToken1 && newToken2 && (
+        !tokensMetadataIsSame(token1, newToken1) || !tokensMetadataIsSame(token2, newToken2)
+      )) {
+        setValues((prevValues) => ({
+          ...prevValues,
+          token1: newToken1,
+          token2: newToken2,
+        }));
+      }
     }
-    prevNetworkIdRef.current = network.id;
-  }, [
-    initialFrom,
-    initialTo,
-    network.id,
-    tokens,
-    setValues,
-    onTokensSelected,
-  ]);
+  }, [setValues, token1, token2, tokens]);
 
   const updateSwapFee = useMemo(
     () => debouncePromise(
@@ -282,7 +331,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     prevDexGraphRef.current = dexGraph;
 
     if ((prevDexGraph !== dexGraph) && token1 && token2) {
-      onTokensSelected(token1, token2);
+      updateSwapLimits(token1, token2);
     }
 
     if (token1 && token2 && dexGraph) {
@@ -372,7 +421,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     tezos,
     recipient,
     slippage,
-    onTokensSelected,
+    updateSwapLimits,
     network.id,
     updateSwapFee,
   ]);
