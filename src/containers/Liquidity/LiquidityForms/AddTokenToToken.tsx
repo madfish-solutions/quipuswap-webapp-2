@@ -14,7 +14,7 @@ import {
   useAccountPkh,
 } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Plus } from '@components/svg/Plus';
 
@@ -34,8 +34,8 @@ type AddTokenToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<WhitelistedToken | null>>;
-  setTokenB: Dispatch<SetStateAction<WhitelistedToken | null>>;
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
 };

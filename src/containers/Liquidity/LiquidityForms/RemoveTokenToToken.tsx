@@ -19,7 +19,7 @@ import {
 } from '@utils/dapp';
 import { fromDecimals, noOpFunc } from '@utils/helpers';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -32,8 +32,8 @@ type RemoveTokenToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<WhitelistedToken | null>>;
-  setTokenB: Dispatch<SetStateAction<WhitelistedToken | null>>;
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;

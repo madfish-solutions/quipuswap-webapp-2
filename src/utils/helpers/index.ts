@@ -35,3 +35,4 @@ export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
 export * from './isClient';
 export * from './getTokenSlug';
+export * from './noOpFunc';

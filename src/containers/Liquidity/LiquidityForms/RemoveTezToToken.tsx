@@ -18,7 +18,7 @@ import {
   useTezos,
   useAccountPkh,
 } from '@utils/dapp';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 import { noOpFunc, slippageToBignum } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 
@@ -31,8 +31,8 @@ type RemoveTezToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<WhitelistedToken | null>>;
-  setTokenB: Dispatch<SetStateAction<WhitelistedToken | null>>;
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
