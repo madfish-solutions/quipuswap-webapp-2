@@ -55,13 +55,11 @@ export const useViewModel = () => {
   }>({ dex: null, isTezosToTokenDex: false });
 
   const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => (
-    contractAddressA === TEZOS_TOKEN.contractAddress
-    || contractAddressB === TEZOS_TOKEN.contractAddress
+    [contractAddressA, contractAddressB].includes(TEZOS_TOKEN.contractAddress)
   );
 
   const setActiveId = useCallback(
     (tabId:string) => {
-      // TODO
       const url = router.asPath.split('/');
       url[2] = tabId;
       const newUrl = url.join('/');

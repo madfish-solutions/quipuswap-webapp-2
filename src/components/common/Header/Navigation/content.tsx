@@ -7,6 +7,8 @@ import {
 } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
+import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+
 interface LinkInterface {
   id: number
   href?: string
@@ -36,7 +38,7 @@ export const NavigationData: NavigationDataProps[] = [
   {
     id: 2,
     href: '/liquidity/[method]/[from-to]',
-    as: '/liquidity/add/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0',
+    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${STABLE_TOKEN.contractAddress}_${STABLE_TOKEN.fa2TokenId}`,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon,
   },
