@@ -36,7 +36,7 @@ export const NavigationData: NavigationDataProps[] = [
   {
     id: 2,
     href: '/liquidity/[method]/[from-to]',
-    as: '/liquidity/add/TEZ-QUIPU',
+    as: '/liquidity/add/tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon,
   },

@@ -32,8 +32,8 @@ type RemoveTokenToTokenProps = {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<WhitelistedToken>>;
-  setTokenB: Dispatch<SetStateAction<WhitelistedToken>>;
+  setTokenA: Dispatch<SetStateAction<WhitelistedToken | null>>;
+  setTokenB: Dispatch<SetStateAction<WhitelistedToken | null>>;
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
