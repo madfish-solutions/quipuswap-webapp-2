@@ -1,29 +1,17 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import {
-  Button,
-  Shevron,
-  ColorModes,
-  TokensLogos,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TokensModal } from '@components/modals/TokensModal';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { useAccountPkh } from '@utils/dapp';
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { useAccountPkh } from '@utils/dapp';
-import { TokensModal } from '@components/modals/TokensModal';
-import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
 import s from './ComplexInput.module.sass';
 
@@ -46,7 +34,7 @@ type NewTokenSelectProps = {
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
@@ -63,7 +51,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   onAmountChange,
   onTokenChange,
   token,
-  blackListedTokens,
+  blackListedTokens
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -71,10 +59,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 
-  const amountStr = useMemo(
-    () => (amount === undefined ? '' : new BigNumber(amount).toFixed()),
-    [amount],
-  );
+  const amountStr = useMemo(() => (amount === undefined ? '' : new BigNumber(amount).toFixed()), [amount]);
   const tokenDecimals = token?.metadata.decimals;
 
   const [localAmount, setLocalAmount] = useState(amountStr);
@@ -86,20 +71,12 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     }
   }, [focused, amountStr]);
 
-  const dollarEquivalent = useMemo(() => (exchangeRate
-    && (amount ?? new BigNumber(0))
-      .times(new BigNumber(exchangeRate))
-      .decimalPlaces(2)
-      .toString()
-  ),
-  [exchangeRate, amount]);
-
-  const compoundClassName = cx(
-    { [s.focused]: focused },
-    { [s.error]: !!error },
-    themeClass[colorThemeMode],
-    className,
+  const dollarEquivalent = useMemo(
+    () => exchangeRate && (amount ?? new BigNumber(0)).times(new BigNumber(exchangeRate)).decimalPlaces(2).toString(),
+    [exchangeRate, amount]
   );
+
+  const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = useCallback(() => {
     if (inputRef?.current) {
@@ -108,7 +85,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   }, []);
 
   const handleAmountChange = useCallback(
-    (evt) => {
+    evt => {
       let val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
       let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
@@ -123,7 +100,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
         onAmountChange(val === '' ? undefined : numVal);
       }
     },
-    [onAmountChange, tokenDecimals],
+    [onAmountChange, tokenDecimals]
   );
 
   const handleFocus = useCallback(() => setFocused(true), []);
@@ -144,14 +121,17 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       }
       onTokenChange(selectedToken);
     },
-    [onTokenChange, onAmountChange, localAmount],
+    [onTokenChange, onAmountChange, localAmount]
   );
 
-  const handlePercentageSelect = useCallback((state: string) => {
-    const newValue = new BigNumber(state).decimalPlaces(tokenDecimals ?? 3);
-    setLocalAmount(newValue.toFixed());
-    onAmountChange(newValue);
-  }, [onAmountChange, tokenDecimals]);
+  const handlePercentageSelect = useCallback(
+    (state: string) => {
+      const newValue = new BigNumber(state).decimalPlaces(tokenDecimals ?? 3);
+      setLocalAmount(newValue.toFixed());
+      onAmountChange(newValue);
+    },
+    [onAmountChange, tokenDecimals]
+  );
 
   const formattedBalance = useMemo(() => {
     if (!balance) {
@@ -162,9 +142,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       return balance.toFixed();
     }
     const integerLog = Math.floor(Math.log10(correctBalance.toNumber()));
-    const decimalPlaces = integerLog >= 0
-      ? Math.max(0, 6 - integerLog)
-      : Math.max(6, -integerLog + 1);
+    const decimalPlaces = integerLog >= 0 ? Math.max(0, 6 - integerLog) : Math.max(6, -integerLog + 1);
 
     return correctBalance.decimalPlaces(decimalPlaces).toFixed();
   }, [balance, tokenDecimals]);
@@ -183,18 +161,13 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
         </label>
         <div className={s.background}>
           <div className={s.shape}>
-            <div className={cx(s.item1, s.label2)}>
-              {equivalentContent}
-            </div>
+            <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>
               {account && (
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common|Balance')}
-                  :
+                <div className={s.item2Line}>
+                  <div className={s.caption}>{t('common|Balance')}:</div>
+                  <div className={cx(s.label2, s.price)}>{formattedBalance}</div>
                 </div>
-                <div className={cx(s.label2, s.price)}>{formattedBalance}</div>
-              </div>
               )}
             </div>
             <input
@@ -214,26 +187,20 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
               textClassName={s.item4Inner}
             >
               <TokensLogos
-                firstTokenIcon={token
-                  ? prepareTokenLogo(token.metadata?.thumbnailUri)
-                  : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)}
-                firstTokenSymbol={token
-                  ? getWhitelistedTokenSymbol(token)
-                  : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+                firstTokenIcon={
+                  token
+                    ? prepareTokenLogo(token.metadata?.thumbnailUri)
+                    : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
+                }
+                firstTokenSymbol={token ? getWhitelistedTokenSymbol(token) : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
               />
-              <h6 className={cx(s.token)}>
-
-                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
-              </h6>
-              {selectable && (<Shevron />)}
+              <h6 className={cx(s.token)}>{token ? getWhitelistedTokenSymbol(token) : 'SELECT'}</h6>
+              {selectable && <Shevron />}
             </Button>
           </div>
         </div>
         {showBalanceButtons && (
-          <PercentSelector
-            value={maxValue?.toString() ?? '0'}
-            handleBalance={handlePercentageSelect}
-          />
+          <PercentSelector value={maxValue?.toString() ?? '0'} handleBalance={handlePercentageSelect} />
         )}
         <ComplexError error={error} />
       </div>

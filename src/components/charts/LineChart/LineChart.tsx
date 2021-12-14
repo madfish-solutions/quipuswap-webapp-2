@@ -1,10 +1,5 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   Card,
   Preloader,
@@ -12,43 +7,36 @@ import {
   ColorModes,
   CardContent,
   PairChartInfo,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-import cx from 'classnames';
 
 import { PlotPoint } from '@graphql';
-import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedToken } from '@utils/types';
 import { usePrevious } from '@hooks/usePrevious';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 
-import {
-  GraphicColors,
-  GraphicHeight,
-  GraphOptions,
-  LineGraphOptions,
-} from '../config';
+import { GraphicColors, GraphicHeight, GraphOptions, LineGraphOptions } from '../config';
 import s from './LineChart.module.sass';
 
 type LineChartProps = {
-  data: PlotPoint[]
-  token1?: WhitelistedToken
-  token2?: WhitelistedToken
-  loading?: boolean
-  headerContent?: React.ReactNode
-  className?: string
+  data: PlotPoint[];
+  token1?: WhitelistedToken;
+  token2?: WhitelistedToken;
+  loading?: boolean;
+  headerContent?: React.ReactNode;
+  className?: string;
 };
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
-  data,
-}) => {
+const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({ data }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const chartRef = useRef<HTMLDivElement>(null);
   const [chartCreated, setChart] = useState<IChartApi | undefined>();
@@ -61,9 +49,9 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   // for reseting value on hover exit
   const currenValue = data[data.length - 1];
 
-  const [value, setValue] = useState<{ price: number, time: number }>({
+  const [value, setValue] = useState<{ price: number; time: number }>({
     price: currenValue.value,
-    time: currenValue.time,
+    time: currenValue.time
   });
 
   const handleResize = useCallback(() => {
@@ -85,10 +73,9 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
   }, [isClient, chartRef, handleResize]);
 
   // if chart not instantiated in canvas, create it
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    if (
-      prevColorThemeModeState !== colorThemeMode
-    ) {
+    if (prevColorThemeModeState !== colorThemeMode) {
       chartCreated?.remove();
       setChart(undefined);
     }
@@ -100,7 +87,7 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
         rightPriceScale: GraphOptions.rightPriceScale,
         timeScale: {
           ...GraphOptions.timeScale,
-          borderColor: GraphicColors[colorThemeMode].primary2,
+          borderColor: GraphicColors[colorThemeMode].primary2
         },
         handleScale: GraphOptions.handleScale,
         watermark: GraphOptions.watermark,
@@ -109,18 +96,18 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
           horzLine: {
             ...GraphOptions.crosshair?.horzLine,
             color: GraphicColors[colorThemeMode].primary1,
-            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground
           },
           vertLine: {
             ...GraphOptions.crosshair?.vertLine,
             color: GraphicColors[colorThemeMode].primary1,
-            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
-          },
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground
+          }
         },
         localization: {
           locale: i18n.language,
-          priceFormatter: (price: number) => prettyPrice(price!, 3, 3),
-        },
+          priceFormatter: (price: number) => prettyPrice(price!, 3, 3)
+        }
       });
 
       const series = chart.addAreaSeries({
@@ -128,30 +115,29 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
         topColor: GraphicColors[colorThemeMode].accent,
         bottomColor: GraphicColors[colorThemeMode].background,
         crosshairMarkerBorderColor: GraphicColors[colorThemeMode].primary1,
-        crosshairMarkerBackgroundColor: GraphicColors[
-          colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light
-        ].primary1,
-        ...LineGraphOptions,
+        crosshairMarkerBackgroundColor:
+          GraphicColors[colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light].primary1,
+        ...LineGraphOptions
       });
 
       // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
-      chart.subscribeCrosshairMove((param) => {
+      chart.subscribeCrosshairMove(param => {
         if (
-          chartRef?.current
-          && (param === undefined
-            || param.time === undefined
-            || (param && param.point && param.point.x < 0)
-            || (param && param.point && param.point.x > chartRef.current.clientWidth)
-            || (param && param.point && param.point.y < 0)
-            || (param && param.point && param.point.y > height))
+          chartRef?.current &&
+          (param === undefined ||
+            param.time === undefined ||
+            (param && param.point && param.point.x < 0) ||
+            (param && param.point && param.point.x > chartRef.current.clientWidth) ||
+            (param && param.point && param.point.y < 0) ||
+            (param && param.point && param.point.y > height))
         ) {
           if (setValue) {
             setValue({
               price: currenValue.value,
-              time: currenValue.time,
+              time: currenValue.time
             });
           }
         } else if (setValue) {
@@ -159,39 +145,22 @@ const ChartInstance: React.FC<{ data: PlotPoint[] }> = ({
           const time = param.time ?? currenValue.time;
           setValue({
             price: price as number,
-            time: time as number,
+            time: time as number
           });
         }
       });
       chart.timeScale().fitContent();
       setChart(chart);
     }
-  }, [
-    chartCreated,
-    colorThemeMode,
-    currenValue,
-    data,
-    height,
-    prevColorThemeModeState,
-    setValue,
-    i18n,
-  ]);
+  }, [chartCreated, colorThemeMode, currenValue, data, height, prevColorThemeModeState, setValue, i18n]);
 
   return (
     <>
       <div className={cx(s.info, modeClass[colorThemeMode])}>
-        <h4>
-          {t('common|Total liquidity:')}
-        </h4>
-        <span className={s.date}>
-          {new Date(value.time * 1000).toISOString()}
-        </span>
+        <h4>{t('common|Total liquidity:')}</h4>
+        <span className={s.date}>{new Date(value.time * 1000).toISOString()}</span>
         <h4 className={s.value}>
-          <span className={s.dollar}>
-            $
-          </span>
-          {' '}
-          {prettyPrice(value.price, 2, 22)}
+          <span className={s.dollar}>$</span> {prettyPrice(value.price, 2, 22)}
         </h4>
       </div>
       <div ref={chartRef} className={s.chart} />
@@ -204,7 +173,7 @@ export const LineChart: React.FC<LineChartProps> = ({
   className,
   loading = false,
   token1 = TEZOS_TOKEN,
-  token2 = MAINNET_DEFAULT_TOKEN,
+  token2 = MAINNET_DEFAULT_TOKEN
 }) => (
   <Card className={className}>
     <CardHeader
@@ -217,16 +186,16 @@ export const LineChart: React.FC<LineChartProps> = ({
             secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
             secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
           />
-        ),
+        )
       }}
       className={s.cardHeader}
     />
     <CardContent className={cx(s.container, s.cardContent)}>
-      {loading || !data || data.length === 0
-        ? (<Preloader style={{ minHeight: '360px' }} />)
-        : (
-          <ChartInstance data={data} />
-        )}
+      {loading || !data || data.length === 0 ? (
+        <Preloader style={{ minHeight: '360px' }} />
+      ) : (
+        <ChartInstance data={data} />
+      )}
     </CardContent>
   </Card>
 );

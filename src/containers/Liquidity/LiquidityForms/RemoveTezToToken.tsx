@@ -1,31 +1,18 @@
-import React, {
-  useState,
-  Dispatch,
-  useEffect,
-  ChangeEvent,
-  SetStateAction,
-} from 'react';
-import {
-  Plus,
-  Button,
-  Slippage,
-  ArrowDown,
-} from '@quipuswap/ui-kit';
+import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
+
 import { FoundDex } from '@quipuswap/sdk';
+import { Plus, Button, Slippage, ArrowDown } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import {
-  useTezos,
-  useAccountPkh,
-} from '@utils/dapp';
-import { Nullable, WhitelistedToken } from '@utils/types';
-import { noOpFunc, slippageToBignum } from '@utils/helpers';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { removeLiquidity } from '../liquidutyHelpers';
+import { useTezos, useAccountPkh } from '@utils/dapp';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { noOpFunc, slippageToBignum } from '@utils/helpers';
+import { Nullable, WhitelistedToken } from '@utils/types';
+
 import s from '../Liquidity.module.sass';
+import { removeLiquidity } from '../liquidutyHelpers';
 
 type RemoveTezToTokenProps = {
   dex: FoundDex | null;
@@ -46,7 +33,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   setTokenB,
   tokenABalance,
   tokenBBalance,
-  lpTokenBalance,
+  lpTokenBalance
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -64,11 +51,9 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
       return;
     }
 
-    const tezPerOneLp = dex.storage.storage.tez_pool
-      .dividedBy(dex.storage.storage.total_supply);
+    const tezPerOneLp = dex.storage.storage.tez_pool.dividedBy(dex.storage.storage.total_supply);
 
-    const quipuPerOneLp = dex.storage.storage.token_pool
-      .dividedBy(dex.storage.storage.total_supply);
+    const quipuPerOneLp = dex.storage.storage.token_pool.dividedBy(dex.storage.storage.total_supply);
 
     const isTokenATez = tokenA.contractAddress === TEZOS_TOKEN.contractAddress;
 
@@ -92,12 +77,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
-    await removeLiquidity(
-      tezos,
-      dex,
-      new BigNumber(lpTokenInput),
-      slippage,
-    );
+    await removeLiquidity(tezos, dex, new BigNumber(lpTokenInput), slippage);
     setLpTokenInput('');
   };
 
@@ -112,7 +92,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         value={lpTokenInput}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={(value) => {
+        handleBalance={value => {
           const fixedValue = new BigNumber(value);
           setLpTokenInput(fixedValue.toFixed());
         }}
@@ -144,11 +124,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         disabled
       />
       <Slippage handleChange={handleSlippageChange} />
-      <Button
-        className={s.button}
-        onClick={handleRemoveLiquidity}
-        disabled={!accountPkh}
-      >
+      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh}>
         Remove
       </Button>
     </>

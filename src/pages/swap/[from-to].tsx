@@ -1,10 +1,10 @@
 import React from 'react';
+
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { BaseLayout } from '@layouts/BaseLayout';
 import { SwapSend } from '@containers/SwapSend';
-
+import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/SwapLiquidity.module.sass';
 
 type SwapSendPageProps = {
@@ -25,15 +25,15 @@ const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
   );
 };
 
-export const getServerSideProps = async (props:any) => {
+export const getServerSideProps = async (props: any) => {
   const { locale, query } = props;
 
-  return ({
+  return {
     props: {
-      ...await serverSideTranslations(locale, ['common', 'swap']),
-      fromToSlug: query['from-to'],
-    },
-  });
+      ...(await serverSideTranslations(locale, ['common', 'swap'])),
+      fromToSlug: query['from-to']
+    }
+  };
 };
 
 export default SwapSendPage;

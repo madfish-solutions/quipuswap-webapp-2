@@ -1,25 +1,18 @@
 import React, { useContext } from 'react';
-import {
-  Input,
-  Modal,
-  Button,
-  ColorModes,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+
+import { Input, Modal, Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import ReactModal from 'react-modal';
-import cx from 'classnames';
 
 import s from './NetworkModal.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const NetworkModal: React.FC<ReactModal.Props> = ({
-  ...props
-}) => {
+export const NetworkModal: React.FC<ReactModal.Props> = ({ ...props }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -27,10 +20,7 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({
   const [rpc, setRPC] = React.useState<string>('');
   const [lambda, setLambda] = React.useState<string>('');
 
-  const compoundClassName = cx(
-    s.modal,
-    modeClass[colorThemeMode],
-  );
+  const compoundClassName = cx(s.modal, modeClass[colorThemeMode]);
 
   return (
     <Modal
@@ -43,7 +33,7 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({
         className={s.input}
         value={name}
         label={t('common|Name')}
-        onChange={(ev:any) => setName(ev.target.value)}
+        onChange={(ev: any) => setName(ev.target.value)}
         placeholder={t('common|My custom network')}
         id="networkModal-01"
       />
@@ -51,7 +41,7 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({
         className={s.input}
         value={rpc}
         label={t('common|RPC base URL')}
-        onChange={(ev:any) => setRPC(ev.target.value)}
+        onChange={(ev: any) => setRPC(ev.target.value)}
         placeholder={t('common|http://localhost:2000')}
         id="networkModal-02"
       />
@@ -59,14 +49,11 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({
         className={s.input}
         value={lambda}
         label={t('common|Lambda View contract(optional)')}
-        onChange={(ev:any) => setLambda(ev.target.value)}
+        onChange={(ev: any) => setLambda(ev.target.value)}
         placeholder={t('common|e.g. Kscwf2r3...')}
         id="networkModal-03"
       />
-      <Button
-        theme="primary"
-        className={s.button}
-      >
+      <Button theme="primary" className={s.button}>
         {t('common|Add')}
       </Button>
     </Modal>

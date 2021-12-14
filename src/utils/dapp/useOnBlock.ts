@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+
 import { TezosToolkit } from '@taquito/taquito';
 
 export const useOnBlock = (tezos: TezosToolkit | null, callback: (hash: string) => void) => {

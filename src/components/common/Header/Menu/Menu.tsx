@@ -1,34 +1,26 @@
 import React, { useContext } from 'react';
-import {
-  Button,
-  Madfish,
-  ColorModes,
-  LanguageSwitcher,
-  ColorModeSwitcher,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+
+import { Button, Madfish, ColorModes, LanguageSwitcher, ColorModeSwitcher, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
 import { Navigation } from '../Navigation';
-import { Socials } from '../Socials';
 import { QPToken } from '../QPToken';
+import { Socials } from '../Socials';
 import s from './Menu.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 type MenuProps = {
-  className?: string
+  className?: string;
 };
 
-export const Menu: React.FC<MenuProps> = ({
-  className,
-}) => {
+export const Menu: React.FC<MenuProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -46,22 +38,13 @@ export const Menu: React.FC<MenuProps> = ({
           </div>
         </div>
         <div className={s.row}>
-          <NetworkSelect
-            menuPlacement="top"
-            className={s.select}
-          />
+          <NetworkSelect menuPlacement="top" className={s.select} />
           <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common|Old version')}
           </Button>
-
         </div>
         <div className={s.row}>
-          <Button
-            href="https://www.madfish.solutions/"
-            external
-            theme="clean"
-            className={s.madfish}
-          >
+          <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
             <Madfish />
           </Button>
 

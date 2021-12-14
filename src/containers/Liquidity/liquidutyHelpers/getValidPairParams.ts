@@ -1,13 +1,14 @@
 import { FoundDex } from '@quipuswap/sdk';
-import { WhitelistedToken } from '@utils/types';
 import BigNumber from 'bignumber.js';
 
+import { WhitelistedToken } from '@utils/types';
+
 export const getValidPairParams = (
-  dex:FoundDex,
-  tokenA:WhitelistedToken,
-  tokenB:WhitelistedToken,
+  dex: FoundDex,
+  tokenA: WhitelistedToken,
+  tokenB: WhitelistedToken,
   tokenAInput: BigNumber,
-  tokenBInput: BigNumber,
+  tokenBInput: BigNumber
 ) => {
   const validTokenAType = tokenA.type === 'fa1.2' ? 'fa12' : 'fa2';
   const validTokenBType = tokenB.type === 'fa1.2' ? 'fa12' : 'fa2';
@@ -19,7 +20,7 @@ export const getValidPairParams = (
       validTokenBType,
       tokenB.contractAddress,
       tokenAInput,
-      tokenBInput,
+      tokenBInput
     );
   }
 
@@ -32,7 +33,7 @@ export const getValidPairParams = (
       tokenB.contractAddress,
       tokenB.fa2TokenId,
       tokenAInput,
-      tokenBInput,
+      tokenBInput
     );
   }
 
@@ -44,7 +45,7 @@ export const getValidPairParams = (
       tokenB.contractAddress,
       tokenB.fa2TokenId,
       tokenAInput,
-      tokenBInput,
+      tokenBInput
     );
   }
 
@@ -56,7 +57,7 @@ export const getValidPairParams = (
       validTokenBType,
       tokenB.contractAddress,
       tokenAInput,
-      tokenBInput,
+      tokenBInput
     );
   }
 

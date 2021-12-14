@@ -1,10 +1,4 @@
-import {
-  BAKERS_HTTP,
-  CLOUDFLARE_IPFS,
-  IPFS,
-  IPFS_IO,
-  TEMPLEWALLET_IMG,
-} from '@utils/defaults';
+import { BAKERS_HTTP, CLOUDFLARE_IPFS, IPFS, IPFS_IO, TEMPLEWALLET_IMG } from '@utils/defaults';
 
 export const prepareTokenLogo = (url?: string | null) => {
   if (!url?.trim()) {
@@ -21,10 +15,12 @@ export const prepareTokenLogo = (url?: string | null) => {
     return `${TEMPLEWALLET_IMG}/${IPFS_IO}${splitLink[1]}`;
   }
 
-  if (trimUrl.match(/\.(jpeg|jpg|gif|png)$/) !== null
-  || trimUrl.includes(CLOUDFLARE_IPFS)
-  || trimUrl.includes(IPFS_IO)
-  || trimUrl.includes(BAKERS_HTTP)) {
+  if (
+    trimUrl.match(/\.(jpeg|jpg|gif|png)$/) !== null ||
+    trimUrl.includes(CLOUDFLARE_IPFS) ||
+    trimUrl.includes(IPFS_IO) ||
+    trimUrl.includes(BAKERS_HTTP)
+  ) {
     return `${TEMPLEWALLET_IMG}/${trimUrl}`;
   }
 

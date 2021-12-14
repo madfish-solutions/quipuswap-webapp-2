@@ -1,39 +1,29 @@
-import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
-import {
-  useTezos,
-  useNetwork,
-  useAccountPkh,
-  getStorageInfo,
-  getUserBalance,
-  useTokens,
-} from '@utils/dapp';
-import {
-  FACTORIES,
-  TEZOS_TOKEN,
-  TOKEN_TO_TOKEN_DEX,
-} from '@utils/defaults';
+import { findDex, FoundDex, Token } from '@quipuswap/sdk';
+import { useRouter } from 'next/router';
+
 import {
   findNotTezTokenInPair,
   getValidMichelTemplate,
-  sortTokensContracts,
+  sortTokensContracts
 } from '@containers/Liquidity/liquidutyHelpers';
-import { QSMainNet, WhitelistedToken } from '@utils/types';
+import { useTezos, useNetwork, useAccountPkh, getStorageInfo, getUserBalance, useTokens } from '@utils/dapp';
+import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
+import { QSMainNet, WhitelistedToken } from '@utils/types';
 
 const MichelCodec = require('@taquito/michel-codec');
 
 export const TabsContent = [
   {
     id: 'add',
-    label: 'Add',
+    label: 'Add'
   },
   {
     id: 'remove',
-    label: 'Remove',
-  },
+    label: 'Remove'
+  }
 ];
 
 export const useViewModel = () => {
@@ -50,31 +40,25 @@ export const useViewModel = () => {
   const [tokenBBalance, setTokenBBalance] = useState<string>('0');
   const [lpTokenBalance, setLpTokenBalance] = useState<string>('0');
   const [dexInfo, setDexInfo] = useState<{
-    dex: FoundDex | null,
-    isTezosToTokenDex:boolean,
+    dex: FoundDex | null;
+    isTezosToTokenDex: boolean;
   }>({ dex: null, isTezosToTokenDex: false });
 
-  const checkForTezInPair = (contractAddressA:string, contractAddressB:string) => (
-    [contractAddressA, contractAddressB].includes(TEZOS_TOKEN.contractAddress)
-  );
+  const checkForTezInPair = (contractAddressA: string, contractAddressB: string) =>
+    [contractAddressA, contractAddressB].includes(TEZOS_TOKEN.contractAddress);
 
-  const setActiveId = useCallback(
-    (tabId:string) => {
-      const url = router.asPath.split('/');
-      url[2] = tabId;
-      const newUrl = url.join('/');
+  const setActiveId = useCallback((tabId: string) => {
+    const url = router.asPath.split('/');
+    url[2] = tabId;
+    const newUrl = url.join('/');
 
-      router.replace(
-        newUrl,
-        undefined,
-        { shallow: true },
-      );
-      const findActiveTab = TabsContent.find((tab) => tab.id === tabId);
-      if (!findActiveTab) return;
-      setTabState(findActiveTab);
-    }, [],
-  );
+    router.replace(newUrl, undefined, { shallow: true });
+    const findActiveTab = TabsContent.find(tab => tab.id === tabId);
+    if (!findActiveTab) return;
+    setTabState(findActiveTab);
+  }, []);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     const tokensUrl = router.asPath.split('/')[3].split('-');
     const tokenAFromUrl = tokensUrl[0];
@@ -82,26 +66,28 @@ export const useViewModel = () => {
     const [contractTokenA, idTokenA] = tokenAFromUrl.split('_');
     const [contractTokenB, idTokenB] = tokenBFromUrl.split('_');
 
-    const validTokenA = tokens.find((token) => {
-      if (idTokenA !== undefined) {
-        if (
-          token.fa2TokenId
-          && token.fa2TokenId.toString() === idTokenA
-          && token.contractAddress === contractTokenA
-        ) return token;
+    const validTokenA = tokens.find(token => {
+      if (
+        idTokenA !== undefined &&
+        token.fa2TokenId &&
+        token.fa2TokenId.toString() === idTokenA &&
+        token.contractAddress === contractTokenA
+      ) {
+        return token;
       }
 
       if (contractTokenA === token.contractAddress) return token;
 
       return undefined;
     });
-    const validTokenB = tokens.find((token) => {
-      if (idTokenB !== undefined) {
-        if (
-          token.fa2TokenId
-          && token.fa2TokenId.toString() === idTokenB
-          && token.contractAddress === contractTokenB
-        ) return token;
+    const validTokenB = tokens.find(token => {
+      if (
+        idTokenB !== undefined &&
+        token.fa2TokenId &&
+        token.fa2TokenId.toString() === idTokenB &&
+        token.contractAddress === contractTokenB
+      ) {
+        return token;
       }
 
       if (contractTokenB === token.contractAddress) return token;
@@ -112,18 +98,14 @@ export const useViewModel = () => {
     if (validTokenA) setTokenA(validTokenA);
     if (validTokenB) setTokenB(validTokenB);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokens]);
 
   useEffect(() => {
     if (!tokenA || !tokenB) return;
     const from = tokenA.contractAddress + (tokenA.type === 'fa1.2' ? '' : `_${tokenA.fa2TokenId}`);
     const to = tokenB.contractAddress + (tokenB.type === 'fa1.2' ? '' : `_${tokenB.fa2TokenId}`);
-    router.replace(
-      `/liquidity/${tabState.id}/${from}-${to}`,
-      undefined,
-      { shallow: true },
-    );
+    router.replace(`/liquidity/${tabState.id}/${from}-${to}`, undefined, { shallow: true });
   }, [tokenA, tokenB]);
 
   useEffect(() => {
@@ -139,7 +121,7 @@ export const useViewModel = () => {
           const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
           const token: Token = {
             contract: notTezToken.contractAddress,
-            id: notTezToken.fa2TokenId,
+            id: notTezToken.fa2TokenId
           };
 
           foundDex = await findDex(tezos, FACTORIES[networkId], token);
@@ -158,7 +140,9 @@ export const useViewModel = () => {
     };
     loadDex();
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [tezos, networkId, tokenA, tokenB]);
 
   useEffect(() => {
@@ -171,21 +155,20 @@ export const useViewModel = () => {
         accountPkh,
         tokenA.contractAddress,
         tokenA.type,
-        tokenA.fa2TokenId,
+        tokenA.fa2TokenId
       );
 
       if (userTokenABalanance && isMounted) {
-        setTokenABalance(
-          fromDecimals(userTokenABalanance, tokenA.metadata.decimals)
-            .toFixed(tokenA.metadata.decimals),
-        );
+        setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
       } else if (!userTokenABalanance && isMounted) {
         setTokenABalance('0');
       }
     };
     getTokenABalance();
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [tezos, accountPkh, tokenA]);
 
   useEffect(() => {
@@ -198,23 +181,23 @@ export const useViewModel = () => {
         accountPkh,
         tokenB.contractAddress,
         tokenB.type,
-        tokenB.fa2TokenId,
+        tokenB.fa2TokenId
       );
 
       if (userTokenBBalance && isMounted) {
-        setTokenBBalance(
-          fromDecimals(userTokenBBalance, tokenB.metadata.decimals)
-            .toFixed(tokenB.metadata.decimals),
-        );
+        setTokenBBalance(fromDecimals(userTokenBBalance, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
       } else if (!userTokenBBalance && isMounted) {
         setTokenBBalance('0');
       }
     };
     getTokenBBalance();
 
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, [tezos, accountPkh, tokenB]);
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     let isMounted = true;
     const getLpTokenBalance = async () => {
@@ -229,7 +212,7 @@ export const useViewModel = () => {
           accountPkh,
           dex.contract.address,
           notTezToken.type,
-          notTezToken.fa2TokenId,
+          notTezToken.fa2TokenId
         );
 
         if (userLpTokenBalance && isMounted) {
@@ -245,10 +228,7 @@ export const useViewModel = () => {
         const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
         const pairId = await dex.storage.storage.token_to_id.get(key);
         if (pairId) {
-          const userLpTokenBalance = await dex.storage.storage.ledger.get([
-            accountPkh,
-            pairId,
-          ]);
+          const userLpTokenBalance = await dex.storage.storage.ledger.get([accountPkh, pairId]);
 
           if (userLpTokenBalance && isMounted) {
             setLpTokenBalance(userLpTokenBalance.balance.dividedBy(1_000_000).toFixed());
@@ -262,12 +242,23 @@ export const useViewModel = () => {
     };
     getLpTokenBalance();
 
-    return () => { isMounted = false; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dexInfo]);
 
   return {
     // eslint-disable-next-line max-len
-    tabState, setActiveId, dexInfo, tokenA, tokenB, setTokenA, setTokenB, tokenABalance, tokenBBalance, lpTokenBalance,
+    tabState,
+    setActiveId,
+    dexInfo,
+    tokenA,
+    tokenB,
+    setTokenA,
+    setTokenB,
+    tokenABalance,
+    tokenBBalance,
+    lpTokenBalance
   };
 };

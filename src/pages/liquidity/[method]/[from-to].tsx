@@ -1,10 +1,10 @@
 import React from 'react';
+
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { BaseLayout } from '@layouts/BaseLayout';
 import { Liquidity } from '@containers/Liquidity';
-
+import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const LiquidityPage: React.FC = () => {
@@ -20,10 +20,10 @@ const LiquidityPage: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async ({ locale }:{ locale:string }) => ({
+export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...await serverSideTranslations(locale, ['common', 'liquidity']),
-  },
+    ...(await serverSideTranslations(locale, ['common', 'liquidity']))
+  }
 });
 
 export default LiquidityPage;

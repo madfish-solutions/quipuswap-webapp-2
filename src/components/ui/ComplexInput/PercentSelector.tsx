@@ -1,7 +1,7 @@
 import React from 'react';
-import BigNumber from 'bignumber.js';
 
 import { Button } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 
 import s from './ComplexInput.module.sass';
 
@@ -10,10 +10,7 @@ type PercentSelectorProps = {
   value: string;
 };
 
-export const PercentSelector: React.FC<PercentSelectorProps> = ({
-  handleBalance,
-  value,
-}) => {
+export const PercentSelector: React.FC<PercentSelectorProps> = ({ handleBalance, value }) => {
   const handle25 = () => handleBalance(new BigNumber(value).times(0.25).toFixed());
   const handle50 = () => handleBalance(new BigNumber(value).times(0.5).toFixed());
   const handle75 = () => handleBalance(new BigNumber(value).times(0.75).toFixed());

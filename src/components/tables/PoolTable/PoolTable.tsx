@@ -1,43 +1,34 @@
 import React, { useContext, useEffect, useState } from 'react';
+
 import { ColorModes, ColorThemeContext, Table } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { useColumns } from '@components/tables/PoolTable/hooks';
 import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
-import { useColumns } from '@components/tables/PoolTable/hooks';
-import s from './PoolTable.module.sass';
+
 import { PoolCardItem } from './PoolCardItem';
+import s from './PoolTable.module.sass';
 
 type PoolTableProps = {
-  data?: PoolTableType
-  totalCount?: number
-  exchangeRate?: string
-  loading?: boolean
-  className?: string
-  fetch: any
+  data?: PoolTableType;
+  totalCount?: number;
+  exchangeRate?: string;
+  loading?: boolean;
+  className?: string;
+  fetch: any;
 };
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
-const poolMobileItem = (pool:PoolTableType) => (
-  <PoolCardItem
-    key={pool.pair.name}
-    pool={pool}
-  />
-);
+const poolMobileItem = (pool: PoolTableType) => <PoolCardItem key={pool.pair.name} pool={pool} />;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const PoolTable: React.FC<PoolTableProps> = ({
-  data,
-  totalCount,
-  loading = true,
-  className,
-  fetch,
-}) => {
+export const PoolTable: React.FC<PoolTableProps> = ({ data, totalCount, loading = true, className, fetch }) => {
   const [pageCount, setPageCount] = useState<number>(0);
   const [offset, setOffset] = useState(0);
 
@@ -53,8 +44,8 @@ export const PoolTable: React.FC<PoolTableProps> = ({
     fetch({
       variables: {
         limit: pageSize ?? 10,
-        offset,
-      },
+        offset
+      }
     });
   }, [fetch, offset]);
 

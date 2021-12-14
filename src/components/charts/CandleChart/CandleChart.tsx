@@ -1,10 +1,5 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   Card,
   Preloader,
@@ -12,49 +7,36 @@ import {
   ColorModes,
   CardContent,
   PairChartInfo,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 import { createChart, IChartApi } from 'lightweight-charts';
 import { useTranslation } from 'next-i18next';
-import cx from 'classnames';
 
 import { CandlePlotPoint } from '@graphql';
-import {
-  prettyPrice,
-  prepareTokenLogo,
-  getWhitelistedTokenName,
-  getWhitelistedTokenSymbol,
-} from '@utils/helpers';
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { WhitelistedToken } from '@utils/types';
 import { usePrevious } from '@hooks/usePrevious';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { prettyPrice, prepareTokenLogo, getWhitelistedTokenName, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 
-import {
-  CandleGraphOptions,
-  GraphicColors,
-  GraphicHeight,
-  GraphOptions,
-} from '../config';
+import { CandleGraphOptions, GraphicColors, GraphicHeight, GraphOptions } from '../config';
 import s from './CandleChart.module.sass';
 
 type CandleChartProps = {
-  data: CandlePlotPoint[]
-  className?: string
-  disabled?: boolean
-  loading?: boolean
-  token1?: WhitelistedToken
-  token2?: WhitelistedToken
+  data: CandlePlotPoint[];
+  className?: string;
+  disabled?: boolean;
+  loading?: boolean;
+  token1?: WhitelistedToken;
+  token2?: WhitelistedToken;
 };
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken }> = ({
-  data,
-  token,
-}) => {
+const ChartInstance: React.FC<{ data: CandlePlotPoint[]; token: WhitelistedToken }> = ({ data, token }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { i18n } = useTranslation('home');
   const { t } = useTranslation(['common']);
@@ -69,17 +51,17 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
   const currenValue = data[data.length - 1];
 
   const [value, setValue] = useState<{
-    open: number,
-    high: number,
-    low: number,
-    close: number,
-    time: number
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    time: number;
   }>({
     open: currenValue.open,
     high: currenValue.high,
     low: currenValue.low,
     close: currenValue.close,
-    time: currenValue.time,
+    time: currenValue.time
   });
 
   const handleResize = useCallback(() => {
@@ -101,10 +83,9 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
   }, [isClient, chartRef, handleResize]);
 
   // if chart not instantiated in canvas, create it
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    if (
-      prevColorThemeModeState !== colorThemeMode
-    ) {
+    if (prevColorThemeModeState !== colorThemeMode) {
       chartCreated?.remove();
       setChart(undefined);
     }
@@ -116,7 +97,7 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
         rightPriceScale: GraphOptions.rightPriceScale,
         timeScale: {
           ...GraphOptions.timeScale,
-          borderColor: GraphicColors[colorThemeMode].primary2,
+          borderColor: GraphicColors[colorThemeMode].primary2
         },
         handleScale: GraphOptions.handleScale,
         watermark: GraphOptions.watermark,
@@ -125,38 +106,38 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
           horzLine: {
             ...GraphOptions.crosshair?.horzLine,
             color: GraphicColors[colorThemeMode].primary1,
-            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground
           },
           vertLine: {
             ...GraphOptions.crosshair?.vertLine,
             color: GraphicColors[colorThemeMode].primary1,
-            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground,
-          },
+            labelBackgroundColor: GraphicColors[colorThemeMode].labelBackground
+          }
         },
         localization: {
           locale: i18n.language,
-          priceFormatter: (price: number) => prettyPrice(price!, 3, 3),
-        },
+          priceFormatter: (price: number) => prettyPrice(price!, 3, 3)
+        }
       });
 
       const series = chart.addCandlestickSeries({
         priceLineVisible: false,
-        ...CandleGraphOptions,
+        ...CandleGraphOptions
       });
 
       // @ts-ignore
       series.setData(data);
 
       // update the title when hovering on the chart
-      chart.subscribeCrosshairMove((param) => {
+      chart.subscribeCrosshairMove(param => {
         if (
-          chartRef?.current
-          && (param === undefined
-            || param.time === undefined
-            || (param && param.point && param.point.x < 0)
-            || (param && param.point && param.point.x > chartRef.current.clientWidth)
-            || (param && param.point && param.point.y < 0)
-            || (param && param.point && param.point.y > height))
+          chartRef?.current &&
+          (param === undefined ||
+            param.time === undefined ||
+            (param && param.point && param.point.x < 0) ||
+            (param && param.point && param.point.x > chartRef.current.clientWidth) ||
+            (param && param.point && param.point.y < 0) ||
+            (param && param.point && param.point.y > height))
         ) {
           if (setValue) {
             setValue({
@@ -164,29 +145,25 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
               high: currenValue.high,
               low: currenValue.low,
               close: currenValue.close,
-              time: currenValue.time,
+              time: currenValue.time
             });
           }
         } else if (setValue) {
           const open = parseFloat(
             // @ts-ignore
-            param.seriesPrices.get(series)?.open.toString()
-            ?? currenValue.open,
+            param.seriesPrices.get(series)?.open.toString() ?? currenValue.open
           );
           const high = parseFloat(
             // @ts-ignore
-            param.seriesPrices.get(series)?.high.toString()
-            ?? currenValue.high,
+            param.seriesPrices.get(series)?.high.toString() ?? currenValue.high
           );
           const low = parseFloat(
             // @ts-ignore
-            param.seriesPrices.get(series)?.low.toString()
-            ?? currenValue.low,
+            param.seriesPrices.get(series)?.low.toString() ?? currenValue.low
           );
           const close = parseFloat(
             // @ts-ignore
-            param.seriesPrices.get(series)?.close.toString()
-            ?? currenValue.close,
+            param.seriesPrices.get(series)?.close.toString() ?? currenValue.close
           );
           const time = param.time ?? currenValue.time;
           setValue({
@@ -194,74 +171,45 @@ const ChartInstance: React.FC<{ data:CandlePlotPoint[], token: WhitelistedToken 
             high,
             low,
             close,
-            time: time as number,
+            time: time as number
           });
         }
       });
       chart.timeScale().fitContent();
       setChart(chart);
     }
-  }, [
-    chartCreated,
-    colorThemeMode,
-    currenValue,
-    data,
-    height,
-    prevColorThemeModeState,
-    setValue,
-    i18n,
-  ]);
+  }, [chartCreated, colorThemeMode, currenValue, data, height, prevColorThemeModeState, setValue, i18n]);
 
   return (
     <>
       <div className={cx(s.info, modeClass[colorThemeMode])}>
         <span className={s.prices}>
           <h4 className={s.tokenPrice}>
-            {prettyPrice(value.close, 2, 10)}
-            {' '}
-            {getWhitelistedTokenName(token)}
+            {prettyPrice(value.close, 2, 10)} {getWhitelistedTokenName(token)}
           </h4>
           <h4 className={cx(s.dollarPrice, { [s.down]: value.close < value.open })}>
-            $
-            {' '}
-            {prettyPrice(value.close, 2, 10)}
+            $ {prettyPrice(value.close, 2, 10)}
           </h4>
         </span>
         <div className={s.details}>
           <div className={s.column}>
             <div className={s.item}>
-              <span className={s.label}>
-                {t('common|Open')}
-              </span>
-              <span className={s.value}>
-                {value.open}
-              </span>
+              <span className={s.label}>{t('common|Open')}</span>
+              <span className={s.value}>{value.open}</span>
             </div>
             <div className={s.item}>
-              <span className={s.label}>
-                {t('common|Close')}
-              </span>
-              <span className={s.value}>
-                {value.close}
-              </span>
+              <span className={s.label}>{t('common|Close')}</span>
+              <span className={s.value}>{value.close}</span>
             </div>
           </div>
           <div className={s.column}>
             <div className={s.item}>
-              <span className={s.label}>
-                {t('common|Max')}
-              </span>
-              <span className={s.value}>
-                {value.high}
-              </span>
+              <span className={s.label}>{t('common|Max')}</span>
+              <span className={s.value}>{value.high}</span>
             </div>
             <div className={s.item}>
-              <span className={s.label}>
-                {t('common|Min')}
-              </span>
-              <span className={s.value}>
-                {value.low}
-              </span>
+              <span className={s.label}>{t('common|Min')}</span>
+              <span className={s.value}>{value.low}</span>
             </div>
           </div>
         </div>
@@ -277,7 +225,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
   loading = false,
   token1 = TEZOS_TOKEN,
   token2 = MAINNET_DEFAULT_TOKEN,
-  disabled,
+  disabled
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
@@ -293,22 +241,22 @@ export const CandleChart: React.FC<CandleChartProps> = ({
               secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
               secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
             />
-          ),
+          )
         }}
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || !data || !token2 || data.length === 0
-          ? (<Preloader style={{ minHeight: '360px' }} />)
-          : (
-            <ChartInstance token={token2} data={data} />
-          )}
+        {loading || !data || !token2 || data.length === 0 ? (
+          <Preloader style={{ minHeight: '360px' }} />
+        ) : (
+          <ChartInstance token={token2} data={data} />
+        )}
       </CardContent>
       {disabled && (
-      <div className={cx(s.disabled, modeClass[colorThemeMode])}>
-        <div className={s.disabledBg} />
-        <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
-      </div>
+        <div className={cx(s.disabled, modeClass[colorThemeMode])}>
+          <div className={s.disabledBg} />
+          <h2 className={s.h1}>{t('common|Coming soon!')}</h2>
+        </div>
       )}
     </Card>
   );

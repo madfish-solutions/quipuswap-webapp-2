@@ -39,7 +39,7 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
   ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
   ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
-  ['NetXZSsxBpMQeAT', 'KT19ewhnhaCcCuoF1Ly2pxXAFRiF3UtgaY9U'],
+  ['NetXZSsxBpMQeAT', 'KT19ewhnhaCcCuoF1Ly2pxXAFRiF3UtgaY9U']
 ]);
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
@@ -53,8 +53,8 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     decimals: 6,
     name: 'Tezos',
     symbol: 'TEZ',
-    thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222',
-  },
+    thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222'
+  }
 };
 
 export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
@@ -65,8 +65,8 @@ export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
     decimals: 6,
     symbol: 'QUIPU',
     name: 'Quipuswap Governance Token',
-    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png',
-  },
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png'
+  }
 };
 
 export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
@@ -77,38 +77,28 @@ export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
     decimals: 6,
     symbol: 'QUIPU',
     name: 'Quipuswap Governance Token',
-    thumbnailUri: 'https://ipfs.io/ipfs/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP',
-  },
+    thumbnailUri: 'https://ipfs.io/ipfs/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP'
+  }
 };
 
 export const networksDefaultTokens: Record<QSMainNet, WhitelistedToken> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
-  hangzhounet: HANGZHOUNET_DEFAULT_TOKEN,
+  hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
 
 export const FACTORIES = {
   mainnet: {
-    fa1_2Factory: [
-      'KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw',
-      'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD',
-    ],
-    fa2Factory: [
-      'KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ',
-      'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS',
-    ],
+    fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
+    fa2Factory: ['KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ', 'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS']
   },
   hangzhounet: {
-    fa1_2Factory: [
-      'KT1HrQWkSFe7ugihjoMWwQ7p8ja9e18LdUFn',
-    ],
-    fa2Factory: [
-      'KT1Dx3SZ6r4h2BZNQM8xri1CtsdNcAoXLGZB',
-    ],
-  },
+    fa1_2Factory: ['KT1HrQWkSFe7ugihjoMWwQ7p8ja9e18LdUFn'],
+    fa2Factory: ['KT1Dx3SZ6r4h2BZNQM8xri1CtsdNcAoXLGZB']
+  }
 };
 
 export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
-  hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC',
+  hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC'
 };
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
@@ -126,7 +116,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   rpcBaseURL: 'https://mainnet.smartpy.io/',
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
-  disabled: false,
+  disabled: false
 };
 export const HANGZHOUNET_NETWORK: QSNetwork = {
   id: 'hangzhounet',
@@ -136,13 +126,13 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   rpcBaseURL: 'https://hangzhounet.api.tez.ie',
   metadata: METADATA_API_TESTNET,
   description: 'Hangzhounet testnet',
-  disabled: false,
+  disabled: false
 };
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<QSMainNet, string>([
   ['mainnet', 'NetXdQprcVkpaWU'],
-  ['hangzhounet', 'NetXZSsxBpMQeAT'],
+  ['hangzhounet', 'NetXZSsxBpMQeAT']
 ]);
 
 export const TOKEN_TO_TOKEN_DEX = 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC';

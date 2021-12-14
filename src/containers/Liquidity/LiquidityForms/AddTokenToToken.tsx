@@ -1,32 +1,24 @@
-import React, {
-  useState,
-  Dispatch,
-  useEffect,
-  ChangeEvent,
-  SetStateAction,
-} from 'react';
-import { Button } from '@quipuswap/ui-kit';
+import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
+
 import { FoundDex } from '@quipuswap/sdk';
+import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import {
-  useTezos,
-  useAccountPkh,
-} from '@utils/dapp';
+import { Plus } from '@components/svg/Plus';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { useTezos, useAccountPkh } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { Plus } from '@components/svg/Plus';
 
-import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import s from '../Liquidity.module.sass';
 import {
   sortTokensContracts,
   calculateTokenAmount,
   getValidMichelTemplate,
   allowContractSpendYourTokens,
-  addPairTokenToToken,
+  addPairTokenToToken
 } from '../liquidutyHelpers';
-import s from '../Liquidity.module.sass';
 
 const MichelCodec = require('@taquito/michel-codec');
 
@@ -40,14 +32,14 @@ type AddTokenToTokenProps = {
   tokenBBalance: string;
 };
 
-export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
+export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
   dex,
   tokenA,
   tokenB,
   setTokenA,
   setTokenB,
   tokenABalance,
-  tokenBBalance,
+  tokenBBalance
 }) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -56,15 +48,15 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
   const [tokenBInput, setTokenBInput] = useState<string>('');
   const [pairId, setPairId] = useState<BigNumber>();
   const [pairData, setPairData] = useState<{
-    totalSupply: BigNumber,
-    tokenAPool: BigNumber,
-    tokenBPool: BigNumber,
+    totalSupply: BigNumber;
+    tokenAPool: BigNumber;
+    tokenBPool: BigNumber;
   } | null>(null);
   const [tokenPairAndInputs, setTokenPairAndInputs] = useState<{
-    pairTokenA: WhitelistedToken,
-    pairTokenB: WhitelistedToken,
-    pairInputA: string,
-    pairInputB: string,
+    pairTokenA: WhitelistedToken;
+    pairTokenB: WhitelistedToken;
+    pairInputA: string;
+    pairInputB: string;
   } | null>(null);
 
   useEffect(() => {
@@ -75,17 +67,17 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         pairTokenA: tokenA,
         pairTokenB: tokenB,
         pairInputA: tokenAInput,
-        pairInputB: tokenBInput,
+        pairInputB: tokenBInput
       });
     } else {
       setTokenPairAndInputs({
         pairTokenA: tokenB,
         pairTokenB: tokenA,
         pairInputA: tokenBInput,
-        pairInputB: tokenAInput,
+        pairInputB: tokenAInput
       });
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenAInput, tokenBInput]);
 
   useEffect(() => {
@@ -108,7 +100,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
           setPairData({
             totalSupply: data.total_supply,
             tokenAPool: data.token_a_pool,
-            tokenBPool: data.token_b_pool,
+            tokenBPool: data.token_b_pool
           });
         }
       } else if (!id && isMounted) {
@@ -116,84 +108,80 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
       }
     };
     loadPairData();
-    return () => { isMounted = false; };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      isMounted = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dex]);
   useEffect(() => {
     if (
-      !pairData
-      || !pairId
-      || !tokenPairAndInputs
-      || pairData.tokenAPool.eq(0)
-      || pairData.tokenBPool.eq(0)
-      || pairData.totalSupply.eq(0)
-    ) return;
+      !pairData ||
+      !pairId ||
+      !tokenPairAndInputs ||
+      pairData.tokenAPool.eq(0) ||
+      pairData.tokenBPool.eq(0) ||
+      pairData.totalSupply.eq(0)
+    )
+      return;
 
     if (tokenBInput === '') {
       setTokenAInput('');
     } else {
       const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
       const tokenBAmountWithDecimals = new BigNumber(tokenBInput).multipliedBy(decimalsB);
-      const calculatedTokenAInput = (
+      const calculatedTokenAInput =
         tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
-      )
-        ? calculateTokenAmount(
-          tokenBAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        )
-        : calculateTokenAmount(
-          tokenBAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        );
+          ? calculateTokenAmount(
+              tokenBAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            )
+          : calculateTokenAmount(
+              tokenBAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            );
 
-      setTokenAInput(
-        fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals)
-          .toFixed(tokenA.metadata.decimals),
-      );
+      setTokenAInput(fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenABalance]);
   useEffect(() => {
     if (
-      !pairData
-      || !pairId
-      || !tokenPairAndInputs
-      || pairData.tokenAPool.eq(0)
-      || pairData.tokenBPool.eq(0)
-      || pairData.totalSupply.eq(0)
-    ) return;
+      !pairData ||
+      !pairId ||
+      !tokenPairAndInputs ||
+      pairData.tokenAPool.eq(0) ||
+      pairData.tokenBPool.eq(0) ||
+      pairData.totalSupply.eq(0)
+    )
+      return;
 
     if (tokenAInput === '') {
       setTokenBInput('');
     } else {
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
-      const calculatedTokenAInput = (
+      const calculatedTokenAInput =
         tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
-      )
-        ? calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        )
-        : calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        );
+          ? calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            )
+          : calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            );
 
-      setTokenBInput(
-        fromDecimals(calculatedTokenAInput, tokenB.metadata.decimals)
-          .toFixed(tokenB.metadata.decimals),
-      );
+      setTokenBInput(fromDecimals(calculatedTokenAInput, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenBBalance]);
 
   const handleTokenAInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -205,31 +193,30 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
     }
 
     if (
-      pairData
-      && tokenPairAndInputs
-      && pairData.tokenAPool.gt(0)
-      && pairData.tokenBPool.gt(0)
-      && pairData.totalSupply.gt(0)
+      pairData &&
+      tokenPairAndInputs &&
+      pairData.tokenAPool.gt(0) &&
+      pairData.tokenBPool.gt(0) &&
+      pairData.totalSupply.gt(0)
     ) {
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = new BigNumber(event.target.value).multipliedBy(decimalsA);
-      const tokenBAmount = tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
-        ? calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        )
-        : calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        );
+      const tokenBAmount =
+        tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
+          ? calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            )
+          : calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            );
 
-      setTokenBInput(
-        fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
-      );
+      setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     }
   };
   const handleTokenBInput = (event: ChangeEvent<HTMLInputElement>) => {
@@ -241,124 +228,109 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
     }
 
     if (
-      pairData
-      && tokenPairAndInputs
-      && pairData.tokenAPool.gt(0)
-      && pairData.tokenBPool.gt(0)
-      && pairData.totalSupply.gt(0)
+      pairData &&
+      tokenPairAndInputs &&
+      pairData.tokenAPool.gt(0) &&
+      pairData.tokenBPool.gt(0) &&
+      pairData.totalSupply.gt(0)
     ) {
       const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
-      const tokenAAmount = tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
-        ? calculateTokenAmount(
-          new BigNumber(event.target.value).multipliedBy(decimalsB),
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        )
-        : calculateTokenAmount(
-          new BigNumber(event.target.value).multipliedBy(decimalsB),
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        );
+      const tokenAAmount =
+        tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
+          ? calculateTokenAmount(
+              new BigNumber(event.target.value).multipliedBy(decimalsB),
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            )
+          : calculateTokenAmount(
+              new BigNumber(event.target.value).multipliedBy(decimalsB),
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            );
 
-      setTokenAInput(
-        fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
-      );
+      setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     }
   };
 
-  const handleTokenABalance = (value:string) => {
+  const handleTokenABalance = (value: string) => {
     const tokenAAmount = new BigNumber(value);
 
     setTokenAInput(tokenAAmount.toFixed(tokenA.metadata.decimals));
 
     if (
-      pairData
-      && tokenPairAndInputs
-      && pairData.tokenAPool.gt(0)
-      && pairData.tokenBPool.gt(0)
-      && pairData.totalSupply.gt(0)
+      pairData &&
+      tokenPairAndInputs &&
+      pairData.tokenAPool.gt(0) &&
+      pairData.tokenBPool.gt(0) &&
+      pairData.totalSupply.gt(0)
     ) {
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = tokenAAmount.multipliedBy(decimalsA);
-      const tokenBAmount = tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
-        ? calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        )
-        : calculateTokenAmount(
-          tokenAAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        );
+      const tokenBAmount =
+        tokenB.contractAddress === tokenPairAndInputs.pairTokenB.contractAddress
+          ? calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            )
+          : calculateTokenAmount(
+              tokenAAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            );
 
-      setTokenBInput(
-        fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals),
-      );
+      setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     }
   };
-  const handleTokenBBalance = (value:string) => {
+  const handleTokenBBalance = (value: string) => {
     const tokenBAmount = new BigNumber(value);
 
     setTokenBInput(tokenBAmount.toFixed(tokenB.metadata.decimals));
 
     if (
-      pairData
-      && tokenPairAndInputs
-      && pairData.tokenAPool.gt(0)
-      && pairData.tokenBPool.gt(0)
-      && pairData.totalSupply.gt(0)
+      pairData &&
+      tokenPairAndInputs &&
+      pairData.tokenAPool.gt(0) &&
+      pairData.tokenBPool.gt(0) &&
+      pairData.totalSupply.gt(0)
     ) {
       const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
       const tokenBAmountWithDecimals = tokenBAmount.multipliedBy(decimalsB);
-      const tokenAAmount = tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
-        ? calculateTokenAmount(
-          tokenBAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenBPool,
-          pairData.tokenAPool,
-        )
-        : calculateTokenAmount(
-          tokenBAmountWithDecimals,
-          pairData.totalSupply,
-          pairData.tokenAPool,
-          pairData.tokenBPool,
-        );
+      const tokenAAmount =
+        tokenA.contractAddress === tokenPairAndInputs.pairTokenA.contractAddress
+          ? calculateTokenAmount(
+              tokenBAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenBPool,
+              pairData.tokenAPool
+            )
+          : calculateTokenAmount(
+              tokenBAmountWithDecimals,
+              pairData.totalSupply,
+              pairData.tokenAPool,
+              pairData.tokenBPool
+            );
 
-      setTokenAInput(
-        fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals),
-      );
+      setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     }
   };
 
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) return;
     const ten = new BigNumber(10);
-    const {
-      pairTokenA,
-      pairTokenB,
-      pairInputA,
-      pairInputB,
-    } = tokenPairAndInputs;
+    const { pairTokenA, pairTokenB, pairInputA, pairInputB } = tokenPairAndInputs;
 
-    if (
-      pairId
-      && pairData
-      && pairData.tokenAPool.gt(0)
-      && pairData.tokenBPool.gt(0)
-      && pairData.totalSupply.gt(0)
-    ) {
+    if (pairId && pairData && pairData.tokenAPool.gt(0) && pairData.tokenBPool.gt(0) && pairData.totalSupply.gt(0)) {
       const shares = new BigNumber(pairInputA)
         .multipliedBy(ten.pow(pairTokenA.metadata.decimals))
         .multipliedBy(pairData.totalSupply)
         .idiv(pairData.tokenAPool);
 
-      const tokenAAmount = new BigNumber(tokenAInput)
-        .multipliedBy(ten.pow(pairTokenA.metadata.decimals));
+      const tokenAAmount = new BigNumber(tokenAInput).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
 
       const tokenBAmount = shares
         .multipliedBy(pairData.tokenBPool)
@@ -370,14 +342,14 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         pairTokenA,
         dex.contract.address,
         tokenAAmount,
-        accountPkh,
+        accountPkh
       );
       const tokenBUpdateOperator = allowContractSpendYourTokens(
         tezos,
         pairTokenB,
         dex.contract.address,
         tokenBAmount,
-        accountPkh,
+        accountPkh
       );
 
       const tokensUpdateOperators = await Promise.all([tokenAUpdateOperator, tokenBUpdateOperator]);
@@ -391,25 +363,18 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         shares,
         tokenAAmount,
         tokenBAmount,
-        timestamp.toString(),
+        timestamp.toString()
       );
 
-      const batch = await tezos.wallet.batch()
+      const batch = await tezos.wallet
+        .batch()
         .withContractCall(tokensUpdateOperators[0])
         .withContractCall(tokensUpdateOperators[1])
         .withContractCall(investParams);
 
       await batch.send();
     } else {
-      addPairTokenToToken(
-        tezos,
-        dex,
-        accountPkh,
-        pairTokenA,
-        pairTokenB,
-        pairInputA,
-        pairInputB,
-      );
+      addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
     }
   };
 
@@ -438,11 +403,7 @@ export const AddTokenToToken:React.FC<AddTokenToTokenProps> = ({
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
-      <Button
-        className={s.button}
-        onClick={handleAddLiquidity}
-        disabled={!accountPkh}
-      >
+      <Button className={s.button} onClick={handleAddLiquidity} disabled={!accountPkh}>
         Add
       </Button>
     </>

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { UpdateOptions, toast } from 'react-toastify';
-import { useRouter } from 'next/router';
 
 import { toastContent } from '@quipuswap/ui-kit';
+import { useRouter } from 'next/router';
+import { UpdateOptions, toast } from 'react-toastify';
 
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();
@@ -16,13 +16,7 @@ export default function useUpdateToast() {
     prevRouteRef.current = router.pathname;
   }, [router.pathname]);
 
-  return useCallback(({
-    type,
-    render,
-    progress,
-    autoClose = 5000,
-    ...restOptions
-  }: UpdateOptions) => {
+  return useCallback(({ type, render, progress, autoClose = 5000, ...restOptions }: UpdateOptions) => {
     const creationFn = type && type !== 'default' ? toast[type] : toast;
 
     const contentRender = toastContent(render, type);
@@ -33,7 +27,7 @@ export default function useUpdateToast() {
         type,
         progress,
         autoClose,
-        ...restOptions,
+        ...restOptions
       });
     } else {
       toastIdRef.current = creationFn(contentRender);

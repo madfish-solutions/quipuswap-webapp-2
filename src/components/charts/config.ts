@@ -1,9 +1,4 @@
-import {
-  AreaSeriesOptions,
-  CandlestickSeriesOptions,
-  ChartOptions,
-  DeepPartial,
-} from 'lightweight-charts';
+import { AreaSeriesOptions, CandlestickSeriesOptions, ChartOptions, DeepPartial } from 'lightweight-charts';
 
 export const GraphicHeight = 300;
 
@@ -13,15 +8,15 @@ export const GraphicColors = {
     primary2: '#F0F1F3',
     background: '#ffffff',
     labelBackground: '#14171E',
-    accent: '#1770E4',
+    accent: '#1770E4'
   },
   dark: {
     primary1: '#FFFFFF',
     primary2: '#14171E',
     background: '#070C12',
     labelBackground: '#FAFAFC',
-    accent: '#F9A305',
-  },
+    accent: '#F9A305'
+  }
 };
 
 export const GraphOptions: DeepPartial<ChartOptions> = {
@@ -29,54 +24,54 @@ export const GraphOptions: DeepPartial<ChartOptions> = {
     backgroundColor: 'transparent',
     textColor: '#8B90A0',
     fontFamily: 'IBM Plex Sans',
-    fontSize: 12,
+    fontSize: 12
   },
   rightPriceScale: {
     scaleMargins: {
       top: 0.1,
-      bottom: 0.1,
+      bottom: 0.1
     },
-    borderVisible: false,
+    borderVisible: false
   },
   timeScale: {
     borderVisible: true,
     fixLeftEdge: true,
-    timeVisible: true,
+    timeVisible: true
   },
   handleScale: {
-    axisPressedMouseMove: false,
+    axisPressedMouseMove: false
   },
   watermark: {
-    color: 'transparent',
+    color: 'transparent'
   },
   grid: {
     horzLines: {
-      visible: false,
+      visible: false
     },
     vertLines: {
-      visible: false,
-    },
+      visible: false
+    }
   },
   crosshair: {
     horzLine: {
       visible: true,
       labelVisible: true,
       style: 3,
-      width: 1,
+      width: 1
     },
     vertLine: {
       visible: true,
       labelVisible: true,
       style: 3,
-      width: 1,
-    },
-  },
+      width: 1
+    }
+  }
 };
 
 export const LineGraphOptions: DeepPartial<AreaSeriesOptions> = {
   lineWidth: 1,
   priceLineVisible: false,
-  crosshairMarkerRadius: 6,
+  crosshairMarkerRadius: 6
 };
 
 export const CandleGraphOptions: DeepPartial<CandlestickSeriesOptions> = {
@@ -85,5 +80,5 @@ export const CandleGraphOptions: DeepPartial<CandlestickSeriesOptions> = {
   borderUpColor: '#2ED33E',
   downColor: '#EA2424',
   wickDownColor: '#EA2424',
-  borderDownColor: '#EA2424',
+  borderDownColor: '#EA2424'
 };

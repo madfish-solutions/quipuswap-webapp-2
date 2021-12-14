@@ -1,33 +1,27 @@
 import React, { useContext } from 'react';
-import {
-  Button,
-  Madfish,
-  ColorModes,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+
+import { Button, Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
 import { Navigation } from '../Navigation';
-import { Socials } from '../Socials';
 import { QPToken } from '../QPToken';
+import { Socials } from '../Socials';
 import s from './Sidebar.module.sass';
 
 type SidebarProps = {
-  className?: string
+  className?: string;
 };
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  className,
-}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -44,12 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <footer className={s.footer}>
         <QPToken className={s.token} id="desktop" />
         <Socials className={s.socials} id="desktop" />
-        <Button
-          href="https://www.madfish.solutions/"
-          external
-          theme="clean"
-          className={s.madfish}
-        >
+        <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
           <Madfish />
         </Button>
       </footer>

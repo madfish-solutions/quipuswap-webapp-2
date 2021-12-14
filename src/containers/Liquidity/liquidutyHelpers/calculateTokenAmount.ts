@@ -1,17 +1,11 @@
 import BigNumber from 'bignumber.js';
 
 export const calculateTokenAmount = (
-  tokenAInput:BigNumber,
+  tokenAInput: BigNumber,
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
-  tokenBPool: BigNumber,
+  tokenBPool: BigNumber
 ): BigNumber => {
-  const shares = tokenAInput
-    .multipliedBy(totalSupply)
-    .dividedBy(tokenAPool);
-  const tokenBOutput = shares
-    .multipliedBy(tokenBPool)
-    .dividedBy(totalSupply);
-
-  return tokenBOutput;
+  const shares = tokenAInput.multipliedBy(totalSupply).dividedBy(tokenAPool);
+  return shares.multipliedBy(tokenBPool).dividedBy(totalSupply);
 };

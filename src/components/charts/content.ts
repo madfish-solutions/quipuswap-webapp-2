@@ -2,343 +2,343 @@ export const LineChartSampleData = [
   {
     time: 1620345600,
     value: 0.0,
-    xtzUsdQuoteHistorical: '7.558686008182433',
+    xtzUsdQuoteHistorical: '7.558686008182433'
   },
   {
     time: 1620432000,
     value: 0.0,
-    xtzUsdQuoteHistorical: '7.111173218261499',
+    xtzUsdQuoteHistorical: '7.111173218261499'
   },
   {
     time: 1620518400,
     value: 0.0,
-    xtzUsdQuoteHistorical: '6.98165614884008',
+    xtzUsdQuoteHistorical: '6.98165614884008'
   },
   {
     time: 1620604800,
     value: 0.0,
-    xtzUsdQuoteHistorical: '7.079112968382571',
+    xtzUsdQuoteHistorical: '7.079112968382571'
   },
   {
     time: 1620691200,
     value: 424757.13641,
-    xtzUsdQuoteHistorical: '6.21314110092657',
+    xtzUsdQuoteHistorical: '6.21314110092657'
   },
   {
     time: 1620777600,
     value: 440556.039568,
-    xtzUsdQuoteHistorical: '7.093875465687186',
+    xtzUsdQuoteHistorical: '7.093875465687186'
   },
   {
     time: 1620864000,
     value: 474671.88797,
-    xtzUsdQuoteHistorical: '6.001139668029342',
+    xtzUsdQuoteHistorical: '6.001139668029342'
   },
   {
     time: 1620950400,
     value: 472514.944876,
-    xtzUsdQuoteHistorical: '6.149747425886735',
+    xtzUsdQuoteHistorical: '6.149747425886735'
   },
   {
     time: 1621036800,
     value: 459118.811202,
-    xtzUsdQuoteHistorical: '6.478836152458656',
+    xtzUsdQuoteHistorical: '6.478836152458656'
   },
   {
     time: 1621123200,
     value: 452772.021816,
-    xtzUsdQuoteHistorical: '5.753168013309625',
+    xtzUsdQuoteHistorical: '5.753168013309625'
   },
   {
     time: 1621209600,
     value: 454987.714742,
-    xtzUsdQuoteHistorical: '5.690904721896339',
+    xtzUsdQuoteHistorical: '5.690904721896339'
   },
   {
     time: 1621296000,
     value: 456328.766126,
-    xtzUsdQuoteHistorical: '5.179652750066151',
+    xtzUsdQuoteHistorical: '5.179652750066151'
   },
   {
     time: 1621382400,
     value: 453283.39149,
-    xtzUsdQuoteHistorical: '5.723557371617932',
+    xtzUsdQuoteHistorical: '5.723557371617932'
   },
   {
     time: 1621468800,
     value: 423789.01571,
-    xtzUsdQuoteHistorical: '3.6832300870888206',
+    xtzUsdQuoteHistorical: '3.6832300870888206'
   },
   {
     time: 1621555200,
     value: 420749.578888,
-    xtzUsdQuoteHistorical: '4.113030225535561',
+    xtzUsdQuoteHistorical: '4.113030225535561'
   },
   {
     time: 1621641600,
     value: 427536.12684,
-    xtzUsdQuoteHistorical: '3.6442713622556075',
+    xtzUsdQuoteHistorical: '3.6442713622556075'
   },
   {
     time: 1621728000,
     value: 430774.698052,
-    xtzUsdQuoteHistorical: '3.44321947485997',
+    xtzUsdQuoteHistorical: '3.44321947485997'
   },
   {
     time: 1621814400,
     value: 430288.649886,
-    xtzUsdQuoteHistorical: '2.939956326714582',
+    xtzUsdQuoteHistorical: '2.939956326714582'
   },
   {
     time: 1621900800,
     value: 427840.759956,
-    xtzUsdQuoteHistorical: '3.5191174642319045',
+    xtzUsdQuoteHistorical: '3.5191174642319045'
   },
   {
     time: 1621987200,
     value: 440563.356634,
-    xtzUsdQuoteHistorical: '3.6427544821521685',
+    xtzUsdQuoteHistorical: '3.6427544821521685'
   },
   {
     time: 1622073600,
     value: 451961.853422,
-    xtzUsdQuoteHistorical: '3.917213562204779',
+    xtzUsdQuoteHistorical: '3.917213562204779'
   },
   {
     time: 1622160000,
     value: 456762.801258,
-    xtzUsdQuoteHistorical: '3.853090258916165',
+    xtzUsdQuoteHistorical: '3.853090258916165'
   },
   {
     time: 1622246400,
     value: 452448.742186,
-    xtzUsdQuoteHistorical: '3.402399955018758',
+    xtzUsdQuoteHistorical: '3.402399955018758'
   },
   {
     time: 1622332800,
     value: 447413.186502,
-    xtzUsdQuoteHistorical: '3.2167952185626465',
+    xtzUsdQuoteHistorical: '3.2167952185626465'
   },
   {
     time: 1622419200,
     value: 558320.147882,
-    xtzUsdQuoteHistorical: '3.283133814347242',
+    xtzUsdQuoteHistorical: '3.283133814347242'
   },
   {
     time: 1622505600,
     value: 549595.415674,
-    xtzUsdQuoteHistorical: '3.6029044274573945',
+    xtzUsdQuoteHistorical: '3.6029044274573945'
   },
   {
     time: 1622592000,
     value: 553403.648568,
-    xtzUsdQuoteHistorical: '3.6845474754538223',
+    xtzUsdQuoteHistorical: '3.6845474754538223'
   },
   {
     time: 1622678400,
     value: 568925.161422,
-    xtzUsdQuoteHistorical: '3.8175288717667413',
+    xtzUsdQuoteHistorical: '3.8175288717667413'
   },
   {
     time: 1622764800,
     value: 572648.833928,
-    xtzUsdQuoteHistorical: '3.8923698068994375',
+    xtzUsdQuoteHistorical: '3.8923698068994375'
   },
   {
     time: 1622851200,
     value: 579183.77745,
-    xtzUsdQuoteHistorical: '3.564094619902761',
+    xtzUsdQuoteHistorical: '3.564094619902761'
   },
   {
     time: 1622937600,
     value: 583643.275508,
-    xtzUsdQuoteHistorical: '3.400409650999984',
+    xtzUsdQuoteHistorical: '3.400409650999984'
   },
   {
     time: 1623024000,
     value: 596310.91554,
-    xtzUsdQuoteHistorical: '3.8586403722993787',
+    xtzUsdQuoteHistorical: '3.8586403722993787'
   },
   {
     time: 1623110400,
     value: 623576.489502,
-    xtzUsdQuoteHistorical: '3.4975086444121057',
+    xtzUsdQuoteHistorical: '3.4975086444121057'
   },
   {
     time: 1623196800,
     value: 637336.19383,
-    xtzUsdQuoteHistorical: '3.46682171143783',
+    xtzUsdQuoteHistorical: '3.46682171143783'
   },
   {
     time: 1623283200,
     value: 681266.046334,
-    xtzUsdQuoteHistorical: '3.5055483011955437',
+    xtzUsdQuoteHistorical: '3.5055483011955437'
   },
   {
     time: 1623369600,
     value: 735774.875234,
-    xtzUsdQuoteHistorical: '3.2854823961855173',
+    xtzUsdQuoteHistorical: '3.2854823961855173'
   },
   {
     time: 1623456000,
     value: 767685.823978,
-    xtzUsdQuoteHistorical: '3.127096165275036',
+    xtzUsdQuoteHistorical: '3.127096165275036'
   },
   {
     time: 1623542400,
     value: 770015.559176,
-    xtzUsdQuoteHistorical: '3.1727725722039226',
+    xtzUsdQuoteHistorical: '3.1727725722039226'
   },
   {
     time: 1623628800,
     value: 770314.730008,
-    xtzUsdQuoteHistorical: '3.294520222660754',
+    xtzUsdQuoteHistorical: '3.294520222660754'
   },
   {
     time: 1623715200,
     value: 777512.038518,
-    xtzUsdQuoteHistorical: '3.3492325591199474',
+    xtzUsdQuoteHistorical: '3.3492325591199474'
   },
   {
     time: 1623801600,
     value: 816725.758842,
-    xtzUsdQuoteHistorical: '3.291639276339046',
+    xtzUsdQuoteHistorical: '3.291639276339046'
   },
   {
     time: 1623888000,
     value: 819402.057448,
-    xtzUsdQuoteHistorical: '3.105320014586734',
+    xtzUsdQuoteHistorical: '3.105320014586734'
   },
   {
     time: 1623974400,
     value: 851404.222002,
-    xtzUsdQuoteHistorical: '3.368594668361802',
+    xtzUsdQuoteHistorical: '3.368594668361802'
   },
   {
     time: 1624060800,
     value: 998859.71439,
-    xtzUsdQuoteHistorical: '3.0905444135860614',
+    xtzUsdQuoteHistorical: '3.0905444135860614'
   },
   {
     time: 1624147200,
     value: 1244794.161464,
-    xtzUsdQuoteHistorical: '3.034109584927856',
+    xtzUsdQuoteHistorical: '3.034109584927856'
   },
   {
     time: 1624233600,
     value: 1446341.125326,
-    xtzUsdQuoteHistorical: '3.0969063262137673',
+    xtzUsdQuoteHistorical: '3.0969063262137673'
   },
   {
     time: 1624320000,
     value: 1672280.93964,
-    xtzUsdQuoteHistorical: '2.5108328205756987',
+    xtzUsdQuoteHistorical: '2.5108328205756987'
   },
   {
     time: 1624406400,
     value: 1929049.7674,
-    xtzUsdQuoteHistorical: '2.3586986609968226',
+    xtzUsdQuoteHistorical: '2.3586986609968226'
   },
   {
     time: 1624492800,
     value: 1978443.64797,
-    xtzUsdQuoteHistorical: '2.6851148983684863',
+    xtzUsdQuoteHistorical: '2.6851148983684863'
   },
   {
     time: 1624579200,
     value: 2085415.634236,
-    xtzUsdQuoteHistorical: '2.807341450970148',
+    xtzUsdQuoteHistorical: '2.807341450970148'
   },
   {
     time: 1624665600,
     value: 1892057.469752,
-    xtzUsdQuoteHistorical: '2.564526324159838',
+    xtzUsdQuoteHistorical: '2.564526324159838'
   },
   {
     time: 1624752000,
     value: 1965797.059778,
-    xtzUsdQuoteHistorical: '2.5268021141706467',
+    xtzUsdQuoteHistorical: '2.5268021141706467'
   },
   {
     time: 1624838400,
     value: 1958789.631436,
-    xtzUsdQuoteHistorical: '2.624038760178379',
+    xtzUsdQuoteHistorical: '2.624038760178379'
   },
   {
     time: 1624924800,
     value: 1820726.58675,
-    xtzUsdQuoteHistorical: '2.7062097103316267',
+    xtzUsdQuoteHistorical: '2.7062097103316267'
   },
   {
     time: 1625011200,
     value: 1799162.336386,
-    xtzUsdQuoteHistorical: '2.9717379925829506',
+    xtzUsdQuoteHistorical: '2.9717379925829506'
   },
   {
     time: 1625097600,
     value: 1814633.794494,
-    xtzUsdQuoteHistorical: '3.0285439013255084',
+    xtzUsdQuoteHistorical: '3.0285439013255084'
   },
   {
     time: 1625184000,
     value: 1682808.386206,
-    xtzUsdQuoteHistorical: '2.9528448705194803',
+    xtzUsdQuoteHistorical: '2.9528448705194803'
   },
   {
     time: 1625270400,
     value: 1598895.313386,
-    xtzUsdQuoteHistorical: '2.965939751034525',
+    xtzUsdQuoteHistorical: '2.965939751034525'
   },
   {
     time: 1625356800,
     value: 1554987.733564,
-    xtzUsdQuoteHistorical: '3.0035248900470126',
+    xtzUsdQuoteHistorical: '3.0035248900470126'
   },
   {
     time: 1625443200,
     value: 1556539.96167,
-    xtzUsdQuoteHistorical: '3.0516350388959705',
+    xtzUsdQuoteHistorical: '3.0516350388959705'
   },
   {
     time: 1625529600,
     value: 1544004.868652,
-    xtzUsdQuoteHistorical: '2.8470450561792697',
+    xtzUsdQuoteHistorical: '2.8470450561792697'
   },
   {
     time: 1625616000,
     value: 1521743.118772,
-    xtzUsdQuoteHistorical: '2.864623480159685',
+    xtzUsdQuoteHistorical: '2.864623480159685'
   },
   {
     time: 1625702400,
     value: 1413323.625758,
-    xtzUsdQuoteHistorical: '2.883807078336316',
+    xtzUsdQuoteHistorical: '2.883807078336316'
   },
   {
     time: 1625788800,
     value: 1407790.852092,
-    xtzUsdQuoteHistorical: '2.709627916640297',
+    xtzUsdQuoteHistorical: '2.709627916640297'
   },
   {
     time: 1625875200,
     value: 1415899.119312,
-    xtzUsdQuoteHistorical: '2.76719426898703',
+    xtzUsdQuoteHistorical: '2.76719426898703'
   },
   {
     time: 1625961600,
     value: 1366761.332596,
-    xtzUsdQuoteHistorical: '2.801912370773382',
+    xtzUsdQuoteHistorical: '2.801912370773382'
   },
   {
     time: 1626048000,
     value: 1379394.475034,
-    xtzUsdQuoteHistorical: '2.847995886398754',
+    xtzUsdQuoteHistorical: '2.847995886398754'
   },
   {
     time: 1626134400,
     value: 1310063.800366,
-    xtzUsdQuoteHistorical: '2.8239994742133416',
-  },
+    xtzUsdQuoteHistorical: '2.8239994742133416'
+  }
 ];
 
 export const CandleChartSampleData = [
@@ -348,7 +348,7 @@ export const CandleChartSampleData = [
     close: 1.1945825943580377,
     high: 1.7350817851706228,
     low: 1.1945825943580377,
-    xtzUsdQuoteHistorical: '4.5811302002504455',
+    xtzUsdQuoteHistorical: '4.5811302002504455'
   },
   {
     time: 1629993600,
@@ -356,7 +356,7 @@ export const CandleChartSampleData = [
     close: 1.13778672402702,
     high: 1.1945825943580377,
     low: 1.13778672402702,
-    xtzUsdQuoteHistorical: '4.492593210156393',
+    xtzUsdQuoteHistorical: '4.492593210156393'
   },
   {
     time: 1629997200,
@@ -364,7 +364,7 @@ export const CandleChartSampleData = [
     close: 1.177086971223393,
     high: 1.177086971223393,
     low: 1.13778672402702,
-    xtzUsdQuoteHistorical: '4.432656917355288',
+    xtzUsdQuoteHistorical: '4.432656917355288'
   },
   {
     time: 1630000800,
@@ -372,7 +372,7 @@ export const CandleChartSampleData = [
     close: 1.0721906586845567,
     high: 1.177086971223393,
     low: 1.0721906586845567,
-    xtzUsdQuoteHistorical: '4.460113052263108',
+    xtzUsdQuoteHistorical: '4.460113052263108'
   },
   {
     time: 1630004400,
@@ -380,7 +380,7 @@ export const CandleChartSampleData = [
     close: 1.110821812076706,
     high: 1.110821812076706,
     low: 1.0721906586845567,
-    xtzUsdQuoteHistorical: '4.464249833391183',
+    xtzUsdQuoteHistorical: '4.464249833391183'
   },
   {
     time: 1630008000,
@@ -388,7 +388,7 @@ export const CandleChartSampleData = [
     close: 1.1171224755148896,
     high: 1.1171224755148896,
     low: 1.110821812076706,
-    xtzUsdQuoteHistorical: '4.4780425724454185',
+    xtzUsdQuoteHistorical: '4.4780425724454185'
   },
   {
     time: 1630011600,
@@ -396,7 +396,7 @@ export const CandleChartSampleData = [
     close: 1.0153419998133564,
     high: 1.1171224755148896,
     low: 1.0153419998133564,
-    xtzUsdQuoteHistorical: '4.47474596032731',
+    xtzUsdQuoteHistorical: '4.47474596032731'
   },
   {
     time: 1630015200,
@@ -404,7 +404,7 @@ export const CandleChartSampleData = [
     close: 1.1113584833627808,
     high: 1.1113584833627808,
     low: 1.0153419998133564,
-    xtzUsdQuoteHistorical: '4.545028070579471',
+    xtzUsdQuoteHistorical: '4.545028070579471'
   },
   {
     time: 1630018800,
@@ -412,7 +412,7 @@ export const CandleChartSampleData = [
     close: 1.01225338842298,
     high: 1.1113584833627808,
     low: 1.01225338842298,
-    xtzUsdQuoteHistorical: '4.536269836173472',
+    xtzUsdQuoteHistorical: '4.536269836173472'
   },
   {
     time: 1630022400,
@@ -420,7 +420,7 @@ export const CandleChartSampleData = [
     close: 1.0263609096962698,
     high: 1.0263609096962698,
     low: 1.01225338842298,
-    xtzUsdQuoteHistorical: '4.492379932236366',
+    xtzUsdQuoteHistorical: '4.492379932236366'
   },
   {
     time: 1630026000,
@@ -428,7 +428,7 @@ export const CandleChartSampleData = [
     close: 1.2861961559671016,
     high: 1.2861961559671016,
     low: 1.0263609096962698,
-    xtzUsdQuoteHistorical: '4.327117896414854',
+    xtzUsdQuoteHistorical: '4.327117896414854'
   },
   {
     time: 1630029600,
@@ -436,7 +436,7 @@ export const CandleChartSampleData = [
     close: 1.2023158745811116,
     high: 1.2861961559671016,
     low: 1.2023158745811116,
-    xtzUsdQuoteHistorical: '4.403865717297103',
+    xtzUsdQuoteHistorical: '4.403865717297103'
   },
   {
     time: 1630033200,
@@ -444,7 +444,7 @@ export const CandleChartSampleData = [
     close: 1.3668958782031773,
     high: 1.3668958782031773,
     low: 1.2023158745811116,
-    xtzUsdQuoteHistorical: '4.445218866868267',
+    xtzUsdQuoteHistorical: '4.445218866868267'
   },
   {
     time: 1630036800,
@@ -452,7 +452,7 @@ export const CandleChartSampleData = [
     close: 1.317056516916993,
     high: 1.3668958782031773,
     low: 1.317056516916993,
-    xtzUsdQuoteHistorical: '4.312725874341574',
+    xtzUsdQuoteHistorical: '4.312725874341574'
   },
   {
     time: 1630040400,
@@ -460,7 +460,7 @@ export const CandleChartSampleData = [
     close: 1.2791721368658382,
     high: 1.317056516916993,
     low: 1.2791721368658382,
-    xtzUsdQuoteHistorical: '4.356821455676954',
+    xtzUsdQuoteHistorical: '4.356821455676954'
   },
   {
     time: 1630044000,
@@ -468,7 +468,7 @@ export const CandleChartSampleData = [
     close: 1.2724347402195866,
     high: 1.2791721368658382,
     low: 1.2724347402195866,
-    xtzUsdQuoteHistorical: '4.4915029331164735',
+    xtzUsdQuoteHistorical: '4.4915029331164735'
   },
   {
     time: 1630047600,
@@ -476,7 +476,7 @@ export const CandleChartSampleData = [
     close: 1.3306500221701045,
     high: 1.3306500221701045,
     low: 1.2724347402195866,
-    xtzUsdQuoteHistorical: '4.519498163182991',
+    xtzUsdQuoteHistorical: '4.519498163182991'
   },
   {
     time: 1630051200,
@@ -484,7 +484,7 @@ export const CandleChartSampleData = [
     close: 1.4161704685236247,
     high: 1.4161704685236247,
     low: 1.3306500221701045,
-    xtzUsdQuoteHistorical: '4.667359115081608',
+    xtzUsdQuoteHistorical: '4.667359115081608'
   },
   {
     time: 1630054800,
@@ -492,7 +492,7 @@ export const CandleChartSampleData = [
     close: 1.3431872201120056,
     high: 1.4161704685236247,
     low: 1.3431872201120056,
-    xtzUsdQuoteHistorical: '4.600681366293222',
+    xtzUsdQuoteHistorical: '4.600681366293222'
   },
   {
     time: 1630058400,
@@ -500,7 +500,7 @@ export const CandleChartSampleData = [
     close: 1.2747370515907432,
     high: 1.3431872201120056,
     low: 1.2747370515907432,
-    xtzUsdQuoteHistorical: '4.595025666398451',
+    xtzUsdQuoteHistorical: '4.595025666398451'
   },
   {
     time: 1630062000,
@@ -508,7 +508,7 @@ export const CandleChartSampleData = [
     close: 1.3068166009922684,
     high: 1.3068166009922684,
     low: 1.2747370515907432,
-    xtzUsdQuoteHistorical: '4.662969494353815',
+    xtzUsdQuoteHistorical: '4.662969494353815'
   },
   {
     time: 1630065600,
@@ -516,7 +516,7 @@ export const CandleChartSampleData = [
     close: 1.1428293134134946,
     high: 1.3068166009922684,
     low: 1.1428293134134946,
-    xtzUsdQuoteHistorical: '4.806690791174885',
+    xtzUsdQuoteHistorical: '4.806690791174885'
   },
   {
     time: 1630069200,
@@ -524,7 +524,7 @@ export const CandleChartSampleData = [
     close: 1.293376923100446,
     high: 1.293376923100446,
     low: 1.1428293134134946,
-    xtzUsdQuoteHistorical: '4.784968455155946',
+    xtzUsdQuoteHistorical: '4.784968455155946'
   },
   {
     time: 1630072800,
@@ -532,7 +532,7 @@ export const CandleChartSampleData = [
     close: 1.7201858949915776,
     high: 1.7201858949915776,
     low: 1.293376923100446,
-    xtzUsdQuoteHistorical: '4.722479985148729',
+    xtzUsdQuoteHistorical: '4.722479985148729'
   },
   {
     time: 1630076400,
@@ -540,7 +540,7 @@ export const CandleChartSampleData = [
     close: 1.356792957592046,
     high: 1.7201858949915776,
     low: 1.356792957592046,
-    xtzUsdQuoteHistorical: '5.005564799919055',
+    xtzUsdQuoteHistorical: '5.005564799919055'
   },
   {
     time: 1630080000,
@@ -548,7 +548,7 @@ export const CandleChartSampleData = [
     close: 1.3559609122411862,
     high: 1.356792957592046,
     low: 1.3559609122411862,
-    xtzUsdQuoteHistorical: '5.205311226266698',
+    xtzUsdQuoteHistorical: '5.205311226266698'
   },
   {
     time: 1630083600,
@@ -556,7 +556,7 @@ export const CandleChartSampleData = [
     close: 1.3904497851303677,
     high: 1.3904497851303677,
     low: 1.3559609122411862,
-    xtzUsdQuoteHistorical: '5.2660250163046625',
+    xtzUsdQuoteHistorical: '5.2660250163046625'
   },
   {
     time: 1630087200,
@@ -564,7 +564,7 @@ export const CandleChartSampleData = [
     close: 1.6725543984496225,
     high: 1.6725543984496225,
     low: 1.3904497851303677,
-    xtzUsdQuoteHistorical: '5.454583007729495',
+    xtzUsdQuoteHistorical: '5.454583007729495'
   },
   {
     time: 1630090800,
@@ -572,7 +572,7 @@ export const CandleChartSampleData = [
     close: 1.4139820486367065,
     high: 1.6725543984496225,
     low: 1.4139820486367065,
-    xtzUsdQuoteHistorical: '5.351526065884258',
+    xtzUsdQuoteHistorical: '5.351526065884258'
   },
   {
     time: 1630094400,
@@ -580,7 +580,7 @@ export const CandleChartSampleData = [
     close: 1.4761648204468578,
     high: 1.4761648204468578,
     low: 1.4139820486367065,
-    xtzUsdQuoteHistorical: '5.396751888622344',
+    xtzUsdQuoteHistorical: '5.396751888622344'
   },
   {
     time: 1630098000,
@@ -588,7 +588,7 @@ export const CandleChartSampleData = [
     close: 1.3731149249247672,
     high: 1.4761648204468578,
     low: 1.3731149249247672,
-    xtzUsdQuoteHistorical: '5.40058983346643',
+    xtzUsdQuoteHistorical: '5.40058983346643'
   },
   {
     time: 1630101600,
@@ -596,7 +596,7 @@ export const CandleChartSampleData = [
     close: 1.3632080813695109,
     high: 1.3731149249247672,
     low: 1.3632080813695109,
-    xtzUsdQuoteHistorical: '5.305105581276688',
+    xtzUsdQuoteHistorical: '5.305105581276688'
   },
   {
     time: 1630105200,
@@ -604,7 +604,7 @@ export const CandleChartSampleData = [
     close: 1.355774818338177,
     high: 1.3632080813695109,
     low: 1.355774818338177,
-    xtzUsdQuoteHistorical: '5.337750014280208',
+    xtzUsdQuoteHistorical: '5.337750014280208'
   },
   {
     time: 1630108800,
@@ -612,7 +612,7 @@ export const CandleChartSampleData = [
     close: 1.3247542510363302,
     high: 1.355774818338177,
     low: 1.3247542510363302,
-    xtzUsdQuoteHistorical: '5.224835068509471',
+    xtzUsdQuoteHistorical: '5.224835068509471'
   },
   {
     time: 1630112400,
@@ -620,7 +620,7 @@ export const CandleChartSampleData = [
     close: 1.564757332425819,
     high: 1.564757332425819,
     low: 1.3247542510363302,
-    xtzUsdQuoteHistorical: '5.228384448936327',
+    xtzUsdQuoteHistorical: '5.228384448936327'
   },
   {
     time: 1630116000,
@@ -628,7 +628,7 @@ export const CandleChartSampleData = [
     close: 1.3983427819838326,
     high: 1.564757332425819,
     low: 1.3983427819838326,
-    xtzUsdQuoteHistorical: '5.196685123163788',
+    xtzUsdQuoteHistorical: '5.196685123163788'
   },
   {
     time: 1630119600,
@@ -636,7 +636,7 @@ export const CandleChartSampleData = [
     close: 1.4165478550089774,
     high: 1.4165478550089774,
     low: 1.3983427819838326,
-    xtzUsdQuoteHistorical: '5.205777115111407',
+    xtzUsdQuoteHistorical: '5.205777115111407'
   },
   {
     time: 1630123200,
@@ -644,7 +644,7 @@ export const CandleChartSampleData = [
     close: 1.3768853430275074,
     high: 1.4165478550089774,
     low: 1.3768853430275074,
-    xtzUsdQuoteHistorical: '5.200462232425822',
+    xtzUsdQuoteHistorical: '5.200462232425822'
   },
   {
     time: 1630126800,
@@ -652,7 +652,7 @@ export const CandleChartSampleData = [
     close: 1.374698591993701,
     high: 1.3768853430275074,
     low: 1.374698591993701,
-    xtzUsdQuoteHistorical: '5.123965724740319',
+    xtzUsdQuoteHistorical: '5.123965724740319'
   },
   {
     time: 1630130400,
@@ -660,7 +660,7 @@ export const CandleChartSampleData = [
     close: 1.5939628534700248,
     high: 1.5939628534700248,
     low: 1.374698591993701,
-    xtzUsdQuoteHistorical: '5.098637872954014',
+    xtzUsdQuoteHistorical: '5.098637872954014'
   },
   {
     time: 1630134000,
@@ -668,7 +668,7 @@ export const CandleChartSampleData = [
     close: 1.7148171506138419,
     high: 1.7148171506138419,
     low: 1.5939628534700248,
-    xtzUsdQuoteHistorical: '5.127146765166492',
+    xtzUsdQuoteHistorical: '5.127146765166492'
   },
   {
     time: 1630137600,
@@ -676,7 +676,7 @@ export const CandleChartSampleData = [
     close: 1.558067468777453,
     high: 1.7148171506138419,
     low: 1.558067468777453,
-    xtzUsdQuoteHistorical: '5.142540629853882',
+    xtzUsdQuoteHistorical: '5.142540629853882'
   },
   {
     time: 1630141200,
@@ -684,7 +684,7 @@ export const CandleChartSampleData = [
     close: 1.7400549214018342,
     high: 1.7400549214018342,
     low: 1.558067468777453,
-    xtzUsdQuoteHistorical: '5.163150582623381',
+    xtzUsdQuoteHistorical: '5.163150582623381'
   },
   {
     time: 1630144800,
@@ -692,7 +692,7 @@ export const CandleChartSampleData = [
     close: 2.0959553278743748,
     high: 2.0959553278743748,
     low: 1.7400549214018342,
-    xtzUsdQuoteHistorical: '5.150317597965434',
+    xtzUsdQuoteHistorical: '5.150317597965434'
   },
   {
     time: 1630148400,
@@ -700,7 +700,7 @@ export const CandleChartSampleData = [
     close: 2.0284837221811456,
     high: 2.0959553278743748,
     low: 2.0284837221811456,
-    xtzUsdQuoteHistorical: '5.11955612029057',
+    xtzUsdQuoteHistorical: '5.11955612029057'
   },
   {
     time: 1630152000,
@@ -708,7 +708,7 @@ export const CandleChartSampleData = [
     close: 2.17456670396979,
     high: 2.17456670396979,
     low: 2.0284837221811456,
-    xtzUsdQuoteHistorical: '5.064007820035492',
+    xtzUsdQuoteHistorical: '5.064007820035492'
   },
   {
     time: 1630155600,
@@ -716,7 +716,7 @@ export const CandleChartSampleData = [
     close: 1.9333884383525235,
     high: 2.17456670396979,
     low: 1.9333884383525235,
-    xtzUsdQuoteHistorical: '5.1228370898016005',
+    xtzUsdQuoteHistorical: '5.1228370898016005'
   },
   {
     time: 1630159200,
@@ -724,7 +724,7 @@ export const CandleChartSampleData = [
     close: 1.9511182542510497,
     high: 1.9511182542510497,
     low: 1.9333884383525235,
-    xtzUsdQuoteHistorical: '5.149382275690595',
+    xtzUsdQuoteHistorical: '5.149382275690595'
   },
   {
     time: 1630162800,
@@ -732,7 +732,7 @@ export const CandleChartSampleData = [
     close: 2.0947451124423235,
     high: 2.0947451124423235,
     low: 1.9511182542510497,
-    xtzUsdQuoteHistorical: '5.075317837338161',
+    xtzUsdQuoteHistorical: '5.075317837338161'
   },
   {
     time: 1630166400,
@@ -740,7 +740,7 @@ export const CandleChartSampleData = [
     close: 1.9700076246178326,
     high: 2.0947451124423235,
     low: 1.9700076246178326,
-    xtzUsdQuoteHistorical: '5.141317577831932',
+    xtzUsdQuoteHistorical: '5.141317577831932'
   },
   {
     time: 1630170000,
@@ -748,7 +748,7 @@ export const CandleChartSampleData = [
     close: 2.0110621030025264,
     high: 2.0110621030025264,
     low: 1.9700076246178326,
-    xtzUsdQuoteHistorical: '5.1546337640378175',
+    xtzUsdQuoteHistorical: '5.1546337640378175'
   },
   {
     time: 1630173600,
@@ -756,7 +756,7 @@ export const CandleChartSampleData = [
     close: 1.9488592255343677,
     high: 2.0110621030025264,
     low: 1.9488592255343677,
-    xtzUsdQuoteHistorical: '5.1372806678104626',
+    xtzUsdQuoteHistorical: '5.1372806678104626'
   },
   {
     time: 1630177200,
@@ -764,7 +764,7 @@ export const CandleChartSampleData = [
     close: 1.8161503983356417,
     high: 1.9488592255343677,
     low: 1.8161503983356417,
-    xtzUsdQuoteHistorical: '5.149957512367908',
+    xtzUsdQuoteHistorical: '5.149957512367908'
   },
   {
     time: 1630180800,
@@ -772,7 +772,7 @@ export const CandleChartSampleData = [
     close: 1.7088668601903299,
     high: 1.8161503983356417,
     low: 1.7088668601903299,
-    xtzUsdQuoteHistorical: '5.119379347315546',
+    xtzUsdQuoteHistorical: '5.119379347315546'
   },
   {
     time: 1630184400,
@@ -780,7 +780,7 @@ export const CandleChartSampleData = [
     close: 1.8555688063325053,
     high: 1.8555688063325053,
     low: 1.7088668601903299,
-    xtzUsdQuoteHistorical: '5.165213299724468',
+    xtzUsdQuoteHistorical: '5.165213299724468'
   },
   {
     time: 1630188000,
@@ -788,7 +788,7 @@ export const CandleChartSampleData = [
     close: 1.6019196671090359,
     high: 1.8555688063325053,
     low: 1.6019196671090359,
-    xtzUsdQuoteHistorical: '5.561788465285672',
+    xtzUsdQuoteHistorical: '5.561788465285672'
   },
   {
     time: 1630191600,
@@ -796,7 +796,7 @@ export const CandleChartSampleData = [
     close: 1.610755856834804,
     high: 1.610755856834804,
     low: 1.6019196671090359,
-    xtzUsdQuoteHistorical: '5.508188612347378',
+    xtzUsdQuoteHistorical: '5.508188612347378'
   },
   {
     time: 1630195200,
@@ -804,7 +804,7 @@ export const CandleChartSampleData = [
     close: 1.5588042196804288,
     high: 1.610755856834804,
     low: 1.5588042196804288,
-    xtzUsdQuoteHistorical: '5.514760683039036',
+    xtzUsdQuoteHistorical: '5.514760683039036'
   },
   {
     time: 1630198800,
@@ -812,7 +812,7 @@ export const CandleChartSampleData = [
     close: 1.541971673080289,
     high: 1.5588042196804288,
     low: 1.541971673080289,
-    xtzUsdQuoteHistorical: '5.4719383990559525',
+    xtzUsdQuoteHistorical: '5.4719383990559525'
   },
   {
     time: 1630202400,
@@ -820,7 +820,7 @@ export const CandleChartSampleData = [
     close: 1.6827006711963397,
     high: 1.6827006711963397,
     low: 1.541971673080289,
-    xtzUsdQuoteHistorical: '5.538697643027128',
+    xtzUsdQuoteHistorical: '5.538697643027128'
   },
   {
     time: 1630206000,
@@ -828,7 +828,7 @@ export const CandleChartSampleData = [
     close: 1.6515859701600746,
     high: 1.6827006711963397,
     low: 1.6515859701600746,
-    xtzUsdQuoteHistorical: '5.60111440507082',
+    xtzUsdQuoteHistorical: '5.60111440507082'
   },
   {
     time: 1630209600,
@@ -836,7 +836,7 @@ export const CandleChartSampleData = [
     close: 1.8725119240188495,
     high: 1.8725119240188495,
     low: 1.6515859701600746,
-    xtzUsdQuoteHistorical: '5.539501081931742',
+    xtzUsdQuoteHistorical: '5.539501081931742'
   },
   {
     time: 1630213200,
@@ -844,7 +844,7 @@ export const CandleChartSampleData = [
     close: 2.0025484980066732,
     high: 2.0025484980066732,
     low: 1.8725119240188495,
-    xtzUsdQuoteHistorical: '5.520714202728612',
+    xtzUsdQuoteHistorical: '5.520714202728612'
   },
   {
     time: 1630216800,
@@ -852,7 +852,7 @@ export const CandleChartSampleData = [
     close: 1.9318357036489129,
     high: 2.0025484980066732,
     low: 1.9318357036489129,
-    xtzUsdQuoteHistorical: '5.808668310037884',
+    xtzUsdQuoteHistorical: '5.808668310037884'
   },
   {
     time: 1630220400,
@@ -860,7 +860,7 @@ export const CandleChartSampleData = [
     close: 1.8849376394276343,
     high: 1.9318357036489129,
     low: 1.8849376394276343,
-    xtzUsdQuoteHistorical: '5.845328602725898',
+    xtzUsdQuoteHistorical: '5.845328602725898'
   },
   {
     time: 1630224000,
@@ -868,7 +868,7 @@ export const CandleChartSampleData = [
     close: 1.9087982310546003,
     high: 1.9087982310546003,
     low: 1.8849376394276343,
-    xtzUsdQuoteHistorical: '5.757106315826404',
+    xtzUsdQuoteHistorical: '5.757106315826404'
   },
   {
     time: 1630227600,
@@ -876,7 +876,7 @@ export const CandleChartSampleData = [
     close: 1.905144861706919,
     high: 1.9087982310546003,
     low: 1.905144861706919,
-    xtzUsdQuoteHistorical: '5.7041067850918585',
+    xtzUsdQuoteHistorical: '5.7041067850918585'
   },
   {
     time: 1630231200,
@@ -884,7 +884,7 @@ export const CandleChartSampleData = [
     close: 1.8915845385635042,
     high: 1.905144861706919,
     low: 1.8915845385635042,
-    xtzUsdQuoteHistorical: '5.907939691186828',
+    xtzUsdQuoteHistorical: '5.907939691186828'
   },
   {
     time: 1630234800,
@@ -892,7 +892,7 @@ export const CandleChartSampleData = [
     close: 1.8231714238788024,
     high: 1.8915845385635042,
     low: 1.8231714238788024,
-    xtzUsdQuoteHistorical: '5.873651861434747',
+    xtzUsdQuoteHistorical: '5.873651861434747'
   },
   {
     time: 1630238400,
@@ -900,7 +900,7 @@ export const CandleChartSampleData = [
     close: 1.9027057535688625,
     high: 1.9027057535688625,
     low: 1.8231714238788024,
-    xtzUsdQuoteHistorical: '5.767954179684651',
+    xtzUsdQuoteHistorical: '5.767954179684651'
   },
   {
     time: 1630242000,
@@ -908,7 +908,7 @@ export const CandleChartSampleData = [
     close: 1.843042703900129,
     high: 1.9027057535688625,
     low: 1.843042703900129,
-    xtzUsdQuoteHistorical: '5.980833126185279',
+    xtzUsdQuoteHistorical: '5.980833126185279'
   },
   {
     time: 1630245600,
@@ -916,7 +916,7 @@ export const CandleChartSampleData = [
     close: 1.7848393689556212,
     high: 1.843042703900129,
     low: 1.7848393689556212,
-    xtzUsdQuoteHistorical: '6.0232129247101645',
+    xtzUsdQuoteHistorical: '6.0232129247101645'
   },
   {
     time: 1630249200,
@@ -924,7 +924,7 @@ export const CandleChartSampleData = [
     close: 1.7514531604034964,
     high: 1.7848393689556212,
     low: 1.7514531604034964,
-    xtzUsdQuoteHistorical: '5.9864843547483915',
+    xtzUsdQuoteHistorical: '5.9864843547483915'
   },
   {
     time: 1630252800,
@@ -932,7 +932,7 @@ export const CandleChartSampleData = [
     close: 1.6386201237714875,
     high: 1.7514531604034964,
     low: 1.6386201237714875,
-    xtzUsdQuoteHistorical: '6.0073023922625435',
+    xtzUsdQuoteHistorical: '6.0073023922625435'
   },
   {
     time: 1630256400,
@@ -940,7 +940,7 @@ export const CandleChartSampleData = [
     close: 1.785752175900865,
     high: 1.785752175900865,
     low: 1.6386201237714875,
-    xtzUsdQuoteHistorical: '5.914271654709354',
+    xtzUsdQuoteHistorical: '5.914271654709354'
   },
   {
     time: 1630260000,
@@ -948,7 +948,7 @@ export const CandleChartSampleData = [
     close: 2.005748578093187,
     high: 2.005748578093187,
     low: 1.785752175900865,
-    xtzUsdQuoteHistorical: '5.916179131955711',
+    xtzUsdQuoteHistorical: '5.916179131955711'
   },
   {
     time: 1630263600,
@@ -956,7 +956,7 @@ export const CandleChartSampleData = [
     close: 1.9722967873715171,
     high: 2.005748578093187,
     low: 1.9722967873715171,
-    xtzUsdQuoteHistorical: '5.825918940813457',
+    xtzUsdQuoteHistorical: '5.825918940813457'
   },
   {
     time: 1630267200,
@@ -964,7 +964,7 @@ export const CandleChartSampleData = [
     close: 1.8698800313612436,
     high: 1.9722967873715171,
     low: 1.8698800313612436,
-    xtzUsdQuoteHistorical: '6.050382087143068',
+    xtzUsdQuoteHistorical: '6.050382087143068'
   },
   {
     time: 1630270800,
@@ -972,7 +972,7 @@ export const CandleChartSampleData = [
     close: 1.8017352461965062,
     high: 1.8698800313612436,
     low: 1.8017352461965062,
-    xtzUsdQuoteHistorical: '6.054229631593991',
+    xtzUsdQuoteHistorical: '6.054229631593991'
   },
   {
     time: 1630274400,
@@ -980,7 +980,7 @@ export const CandleChartSampleData = [
     close: 1.8960667827767166,
     high: 1.8960667827767166,
     low: 1.8017352461965062,
-    xtzUsdQuoteHistorical: '5.933924701339366',
+    xtzUsdQuoteHistorical: '5.933924701339366'
   },
   {
     time: 1630278000,
@@ -988,7 +988,7 @@ export const CandleChartSampleData = [
     close: 1.8604329727174909,
     high: 1.8960667827767166,
     low: 1.8604329727174909,
-    xtzUsdQuoteHistorical: '5.900226844925011',
+    xtzUsdQuoteHistorical: '5.900226844925011'
   },
   {
     time: 1630281600,
@@ -996,7 +996,7 @@ export const CandleChartSampleData = [
     close: 1.8187491735648373,
     high: 1.8604329727174909,
     low: 1.8187491735648373,
-    xtzUsdQuoteHistorical: '5.929196265691869',
+    xtzUsdQuoteHistorical: '5.929196265691869'
   },
   {
     time: 1630285200,
@@ -1004,7 +1004,7 @@ export const CandleChartSampleData = [
     close: 1.798007052731122,
     high: 1.8187491735648373,
     low: 1.798007052731122,
-    xtzUsdQuoteHistorical: '5.9352126169876716',
+    xtzUsdQuoteHistorical: '5.9352126169876716'
   },
   {
     time: 1630288800,
@@ -1012,7 +1012,7 @@ export const CandleChartSampleData = [
     close: 1.8047822465307288,
     high: 1.8047822465307288,
     low: 1.798007052731122,
-    xtzUsdQuoteHistorical: '5.805217447250011',
+    xtzUsdQuoteHistorical: '5.805217447250011'
   },
   {
     time: 1630292400,
@@ -1020,7 +1020,7 @@ export const CandleChartSampleData = [
     close: 1.7901268432049697,
     high: 1.8047822465307288,
     low: 1.7901268432049697,
-    xtzUsdQuoteHistorical: '5.724816827554594',
+    xtzUsdQuoteHistorical: '5.724816827554594'
   },
   {
     time: 1630296000,
@@ -1028,7 +1028,7 @@ export const CandleChartSampleData = [
     close: 1.8847727076523297,
     high: 1.8847727076523297,
     low: 1.7901268432049697,
-    xtzUsdQuoteHistorical: '5.530674806535358',
+    xtzUsdQuoteHistorical: '5.530674806535358'
   },
   {
     time: 1630299600,
@@ -1036,7 +1036,7 @@ export const CandleChartSampleData = [
     close: 1.6087496842413889,
     high: 1.8847727076523297,
     low: 1.6087496842413889,
-    xtzUsdQuoteHistorical: '5.602098992792505',
+    xtzUsdQuoteHistorical: '5.602098992792505'
   },
   {
     time: 1630303200,
@@ -1044,7 +1044,7 @@ export const CandleChartSampleData = [
     close: 1.8531461911834144,
     high: 1.8531461911834144,
     low: 1.6087496842413889,
-    xtzUsdQuoteHistorical: '5.680042804445352',
+    xtzUsdQuoteHistorical: '5.680042804445352'
   },
   {
     time: 1630306800,
@@ -1052,7 +1052,7 @@ export const CandleChartSampleData = [
     close: 1.759456596542821,
     high: 1.8531461911834144,
     low: 1.759456596542821,
-    xtzUsdQuoteHistorical: '5.683977863409063',
+    xtzUsdQuoteHistorical: '5.683977863409063'
   },
   {
     time: 1630310400,
@@ -1060,7 +1060,7 @@ export const CandleChartSampleData = [
     close: 1.8017123358629656,
     high: 1.8017123358629656,
     low: 1.759456596542821,
-    xtzUsdQuoteHistorical: '5.638978676778286',
+    xtzUsdQuoteHistorical: '5.638978676778286'
   },
   {
     time: 1630314000,
@@ -1068,7 +1068,7 @@ export const CandleChartSampleData = [
     close: 1.742543959287295,
     high: 1.8017123358629656,
     low: 1.742543959287295,
-    xtzUsdQuoteHistorical: '5.670563810121476',
+    xtzUsdQuoteHistorical: '5.670563810121476'
   },
   {
     time: 1630317600,
@@ -1076,7 +1076,7 @@ export const CandleChartSampleData = [
     close: 1.766036190071236,
     high: 1.766036190071236,
     low: 1.742543959287295,
-    xtzUsdQuoteHistorical: '5.694033578050956',
+    xtzUsdQuoteHistorical: '5.694033578050956'
   },
   {
     time: 1630321200,
@@ -1084,7 +1084,7 @@ export const CandleChartSampleData = [
     close: 1.7663405839330102,
     high: 1.7663405839330102,
     low: 1.766036190071236,
-    xtzUsdQuoteHistorical: '5.645588476884839',
+    xtzUsdQuoteHistorical: '5.645588476884839'
   },
   {
     time: 1630324800,
@@ -1092,7 +1092,7 @@ export const CandleChartSampleData = [
     close: 1.6999579990608233,
     high: 1.7663405839330102,
     low: 1.6999579990608233,
-    xtzUsdQuoteHistorical: '5.686462048727232',
+    xtzUsdQuoteHistorical: '5.686462048727232'
   },
   {
     time: 1630328400,
@@ -1100,7 +1100,7 @@ export const CandleChartSampleData = [
     close: 1.7526349005277158,
     high: 1.7526349005277158,
     low: 1.6999579990608233,
-    xtzUsdQuoteHistorical: '5.710377074981813',
+    xtzUsdQuoteHistorical: '5.710377074981813'
   },
   {
     time: 1630332000,
@@ -1108,7 +1108,7 @@ export const CandleChartSampleData = [
     close: 1.7251055746164334,
     high: 1.7526349005277158,
     low: 1.7251055746164334,
-    xtzUsdQuoteHistorical: '5.538937765201958',
+    xtzUsdQuoteHistorical: '5.538937765201958'
   },
   {
     time: 1630335600,
@@ -1116,7 +1116,7 @@ export const CandleChartSampleData = [
     close: 1.8128749908595327,
     high: 1.8128749908595327,
     low: 1.7251055746164334,
-    xtzUsdQuoteHistorical: '5.463151214094201',
+    xtzUsdQuoteHistorical: '5.463151214094201'
   },
   {
     time: 1630339200,
@@ -1124,7 +1124,7 @@ export const CandleChartSampleData = [
     close: 1.782817693408002,
     high: 1.8128749908595327,
     low: 1.782817693408002,
-    xtzUsdQuoteHistorical: '5.529746272985902',
+    xtzUsdQuoteHistorical: '5.529746272985902'
   },
   {
     time: 1630342800,
@@ -1132,7 +1132,7 @@ export const CandleChartSampleData = [
     close: 1.7630339419829042,
     high: 1.782817693408002,
     low: 1.7630339419829042,
-    xtzUsdQuoteHistorical: '5.539259328285765',
+    xtzUsdQuoteHistorical: '5.539259328285765'
   },
   {
     time: 1630346400,
@@ -1140,7 +1140,7 @@ export const CandleChartSampleData = [
     close: 1.746512524513333,
     high: 1.7630339419829042,
     low: 1.746512524513333,
-    xtzUsdQuoteHistorical: '5.51488585336777',
+    xtzUsdQuoteHistorical: '5.51488585336777'
   },
   {
     time: 1630350000,
@@ -1148,7 +1148,7 @@ export const CandleChartSampleData = [
     close: 1.74261113778234,
     high: 1.746512524513333,
     low: 1.74261113778234,
-    xtzUsdQuoteHistorical: '5.544625024310898',
+    xtzUsdQuoteHistorical: '5.544625024310898'
   },
   {
     time: 1630353600,
@@ -1156,7 +1156,7 @@ export const CandleChartSampleData = [
     close: 1.6924290599863285,
     high: 1.74261113778234,
     low: 1.6924290599863285,
-    xtzUsdQuoteHistorical: '5.506725436935449',
+    xtzUsdQuoteHistorical: '5.506725436935449'
   },
   {
     time: 1630357200,
@@ -1164,7 +1164,7 @@ export const CandleChartSampleData = [
     close: 1.6672729315043116,
     high: 1.6924290599863285,
     low: 1.6672729315043116,
-    xtzUsdQuoteHistorical: '5.614752261228865',
+    xtzUsdQuoteHistorical: '5.614752261228865'
   },
   {
     time: 1630360800,
@@ -1172,7 +1172,7 @@ export const CandleChartSampleData = [
     close: 1.6906512522688508,
     high: 1.6906512522688508,
     low: 1.6672729315043116,
-    xtzUsdQuoteHistorical: '5.618857622722994',
+    xtzUsdQuoteHistorical: '5.618857622722994'
   },
   {
     time: 1630364400,
@@ -1180,7 +1180,7 @@ export const CandleChartSampleData = [
     close: 1.697481471106697,
     high: 1.697481471106697,
     low: 1.6906512522688508,
-    xtzUsdQuoteHistorical: '5.578534892632822',
+    xtzUsdQuoteHistorical: '5.578534892632822'
   },
   {
     time: 1630368000,
@@ -1188,7 +1188,7 @@ export const CandleChartSampleData = [
     close: 1.6604658540841253,
     high: 1.697481471106697,
     low: 1.6604658540841253,
-    xtzUsdQuoteHistorical: '5.379827448926365',
+    xtzUsdQuoteHistorical: '5.379827448926365'
   },
   {
     time: 1630371600,
@@ -1196,7 +1196,7 @@ export const CandleChartSampleData = [
     close: 1.7536995769818085,
     high: 1.7536995769818085,
     low: 1.6604658540841253,
-    xtzUsdQuoteHistorical: '5.245386623786176',
+    xtzUsdQuoteHistorical: '5.245386623786176'
   },
   {
     time: 1630375200,
@@ -1204,7 +1204,7 @@ export const CandleChartSampleData = [
     close: 1.679735595767845,
     high: 1.7536995769818085,
     low: 1.679735595767845,
-    xtzUsdQuoteHistorical: '5.229834898644437',
+    xtzUsdQuoteHistorical: '5.229834898644437'
   },
   {
     time: 1630378800,
@@ -1212,7 +1212,7 @@ export const CandleChartSampleData = [
     close: 1.6700014445228024,
     high: 1.679735595767845,
     low: 1.6700014445228024,
-    xtzUsdQuoteHistorical: '5.232972845360943',
+    xtzUsdQuoteHistorical: '5.232972845360943'
   },
   {
     time: 1630382400,
@@ -1220,7 +1220,7 @@ export const CandleChartSampleData = [
     close: 1.708457404810868,
     high: 1.708457404810868,
     low: 1.6700014445228024,
-    xtzUsdQuoteHistorical: '5.333871258439086',
+    xtzUsdQuoteHistorical: '5.333871258439086'
   },
   {
     time: 1630386000,
@@ -1228,7 +1228,7 @@ export const CandleChartSampleData = [
     close: 1.6791800612395225,
     high: 1.708457404810868,
     low: 1.6791800612395225,
-    xtzUsdQuoteHistorical: '5.372337481402297',
+    xtzUsdQuoteHistorical: '5.372337481402297'
   },
   {
     time: 1630389600,
@@ -1236,7 +1236,7 @@ export const CandleChartSampleData = [
     close: 1.7211723895997892,
     high: 1.7211723895997892,
     low: 1.6791800612395225,
-    xtzUsdQuoteHistorical: '5.368002876235204',
+    xtzUsdQuoteHistorical: '5.368002876235204'
   },
   {
     time: 1630393200,
@@ -1244,7 +1244,7 @@ export const CandleChartSampleData = [
     close: 1.6117255338275418,
     high: 1.7211723895997892,
     low: 1.6117255338275418,
-    xtzUsdQuoteHistorical: '5.3030562245229875',
+    xtzUsdQuoteHistorical: '5.3030562245229875'
   },
   {
     time: 1630396800,
@@ -1252,7 +1252,7 @@ export const CandleChartSampleData = [
     close: 1.6915797837423916,
     high: 1.6915797837423916,
     low: 1.6117255338275418,
-    xtzUsdQuoteHistorical: '5.4272334050169855',
+    xtzUsdQuoteHistorical: '5.4272334050169855'
   },
   {
     time: 1630400400,
@@ -1260,7 +1260,7 @@ export const CandleChartSampleData = [
     close: 1.7146632464878098,
     high: 1.7146632464878098,
     low: 1.6915797837423916,
-    xtzUsdQuoteHistorical: '5.418536723994844',
+    xtzUsdQuoteHistorical: '5.418536723994844'
   },
   {
     time: 1630404000,
@@ -1268,7 +1268,7 @@ export const CandleChartSampleData = [
     close: 1.7104211411611212,
     high: 1.7146632464878098,
     low: 1.7104211411611212,
-    xtzUsdQuoteHistorical: '5.369715485177817',
+    xtzUsdQuoteHistorical: '5.369715485177817'
   },
   {
     time: 1630407600,
@@ -1276,7 +1276,7 @@ export const CandleChartSampleData = [
     close: 1.6773637560084846,
     high: 1.7104211411611212,
     low: 1.6773637560084846,
-    xtzUsdQuoteHistorical: '5.494908399759172',
+    xtzUsdQuoteHistorical: '5.494908399759172'
   },
   {
     time: 1630411200,
@@ -1284,7 +1284,7 @@ export const CandleChartSampleData = [
     close: 1.6669817088858163,
     high: 1.6773637560084846,
     low: 1.6669817088858163,
-    xtzUsdQuoteHistorical: '5.55257590766226',
+    xtzUsdQuoteHistorical: '5.55257590766226'
   },
   {
     time: 1630414800,
@@ -1292,7 +1292,7 @@ export const CandleChartSampleData = [
     close: 1.70494628012598,
     high: 1.70494628012598,
     low: 1.6669817088858163,
-    xtzUsdQuoteHistorical: '5.491831700566967',
+    xtzUsdQuoteHistorical: '5.491831700566967'
   },
   {
     time: 1630418400,
@@ -1300,7 +1300,7 @@ export const CandleChartSampleData = [
     close: 1.6425831065554513,
     high: 1.70494628012598,
     low: 1.6425831065554513,
-    xtzUsdQuoteHistorical: '5.445134287915331',
+    xtzUsdQuoteHistorical: '5.445134287915331'
   },
   {
     time: 1630422000,
@@ -1308,7 +1308,7 @@ export const CandleChartSampleData = [
     close: 1.6801881266046812,
     high: 1.6801881266046812,
     low: 1.6425831065554513,
-    xtzUsdQuoteHistorical: '5.398588199395467',
+    xtzUsdQuoteHistorical: '5.398588199395467'
   },
   {
     time: 1630425600,
@@ -1316,7 +1316,7 @@ export const CandleChartSampleData = [
     close: 1.6376965244158026,
     high: 1.6801881266046812,
     low: 1.6376965244158026,
-    xtzUsdQuoteHistorical: '5.334570229853709',
+    xtzUsdQuoteHistorical: '5.334570229853709'
   },
   {
     time: 1630429200,
@@ -1324,7 +1324,7 @@ export const CandleChartSampleData = [
     close: 1.6738637507633267,
     high: 1.6738637507633267,
     low: 1.6376965244158026,
-    xtzUsdQuoteHistorical: '5.304610509141511',
+    xtzUsdQuoteHistorical: '5.304610509141511'
   },
   {
     time: 1630432800,
@@ -1332,7 +1332,7 @@ export const CandleChartSampleData = [
     close: 1.6528824509888063,
     high: 1.6738637507633267,
     low: 1.6528824509888063,
-    xtzUsdQuoteHistorical: '5.2098634087606115',
+    xtzUsdQuoteHistorical: '5.2098634087606115'
   },
   {
     time: 1630436400,
@@ -1340,7 +1340,7 @@ export const CandleChartSampleData = [
     close: 1.6594309834612782,
     high: 1.6594309834612782,
     low: 1.6528824509888063,
-    xtzUsdQuoteHistorical: '5.248079336491914',
+    xtzUsdQuoteHistorical: '5.248079336491914'
   },
   {
     time: 1630440000,
@@ -1348,7 +1348,7 @@ export const CandleChartSampleData = [
     close: 1.6365539143816998,
     high: 1.6594309834612782,
     low: 1.6365539143816998,
-    xtzUsdQuoteHistorical: '5.241233485059826',
+    xtzUsdQuoteHistorical: '5.241233485059826'
   },
   {
     time: 1630443600,
@@ -1356,7 +1356,7 @@ export const CandleChartSampleData = [
     close: 1.6377334279263054,
     high: 1.6377334279263054,
     low: 1.6365539143816998,
-    xtzUsdQuoteHistorical: '5.234989337278248',
+    xtzUsdQuoteHistorical: '5.234989337278248'
   },
   {
     time: 1630447200,
@@ -1364,7 +1364,7 @@ export const CandleChartSampleData = [
     close: 1.6389609582114382,
     high: 1.6389609582114382,
     low: 1.6377334279263054,
-    xtzUsdQuoteHistorical: '5.180401975336252',
+    xtzUsdQuoteHistorical: '5.180401975336252'
   },
   {
     time: 1630450800,
@@ -1372,7 +1372,7 @@ export const CandleChartSampleData = [
     close: 1.6376229100810085,
     high: 1.6389609582114382,
     low: 1.6376229100810085,
-    xtzUsdQuoteHistorical: '5.089335131497198',
+    xtzUsdQuoteHistorical: '5.089335131497198'
   },
   {
     time: 1630454400,
@@ -1380,7 +1380,7 @@ export const CandleChartSampleData = [
     close: 1.6340349375585683,
     high: 1.6376229100810085,
     low: 1.6340349375585683,
-    xtzUsdQuoteHistorical: '5.195205821190282',
+    xtzUsdQuoteHistorical: '5.195205821190282'
   },
   {
     time: 1630458000,
@@ -1388,7 +1388,7 @@ export const CandleChartSampleData = [
     close: 1.6789354928593427,
     high: 1.6789354928593427,
     low: 1.6340349375585683,
-    xtzUsdQuoteHistorical: '5.0806213329816865',
+    xtzUsdQuoteHistorical: '5.0806213329816865'
   },
   {
     time: 1630461600,
@@ -1396,7 +1396,7 @@ export const CandleChartSampleData = [
     close: 1.6432811833859182,
     high: 1.6789354928593427,
     low: 1.6432811833859182,
-    xtzUsdQuoteHistorical: '5.107713386588509',
+    xtzUsdQuoteHistorical: '5.107713386588509'
   },
   {
     time: 1630465200,
@@ -1404,7 +1404,7 @@ export const CandleChartSampleData = [
     close: 1.693255854248516,
     high: 1.693255854248516,
     low: 1.6432811833859182,
-    xtzUsdQuoteHistorical: '5.131525557678417',
+    xtzUsdQuoteHistorical: '5.131525557678417'
   },
   {
     time: 1630468800,
@@ -1412,7 +1412,7 @@ export const CandleChartSampleData = [
     close: 1.6366353283167532,
     high: 1.693255854248516,
     low: 1.6366353283167532,
-    xtzUsdQuoteHistorical: '5.120483443872402',
+    xtzUsdQuoteHistorical: '5.120483443872402'
   },
   {
     time: 1630472400,
@@ -1420,7 +1420,7 @@ export const CandleChartSampleData = [
     close: 1.702482080771746,
     high: 1.702482080771746,
     low: 1.6366353283167532,
-    xtzUsdQuoteHistorical: '5.180118315850967',
+    xtzUsdQuoteHistorical: '5.180118315850967'
   },
   {
     time: 1630476000,
@@ -1428,7 +1428,7 @@ export const CandleChartSampleData = [
     close: 1.6430374853277896,
     high: 1.702482080771746,
     low: 1.6430374853277896,
-    xtzUsdQuoteHistorical: '5.261515562874575',
+    xtzUsdQuoteHistorical: '5.261515562874575'
   },
   {
     time: 1630479600,
@@ -1436,7 +1436,7 @@ export const CandleChartSampleData = [
     close: 1.6418160183557062,
     high: 1.6430374853277896,
     low: 1.6418160183557062,
-    xtzUsdQuoteHistorical: '5.195888781967228',
+    xtzUsdQuoteHistorical: '5.195888781967228'
   },
   {
     time: 1630483200,
@@ -1444,7 +1444,7 @@ export const CandleChartSampleData = [
     close: 1.6219731026198938,
     high: 1.6418160183557062,
     low: 1.6219731026198938,
-    xtzUsdQuoteHistorical: '5.148905697544891',
+    xtzUsdQuoteHistorical: '5.148905697544891'
   },
   {
     time: 1630486800,
@@ -1452,7 +1452,7 @@ export const CandleChartSampleData = [
     close: 1.6446794291256621,
     high: 1.6446794291256621,
     low: 1.6219731026198938,
-    xtzUsdQuoteHistorical: '5.181388995672061',
+    xtzUsdQuoteHistorical: '5.181388995672061'
   },
   {
     time: 1630490400,
@@ -1460,7 +1460,7 @@ export const CandleChartSampleData = [
     close: 1.6467792353353883,
     high: 1.6467792353353883,
     low: 1.6446794291256621,
-    xtzUsdQuoteHistorical: '5.188195370248325',
+    xtzUsdQuoteHistorical: '5.188195370248325'
   },
   {
     time: 1630494000,
@@ -1468,7 +1468,7 @@ export const CandleChartSampleData = [
     close: 1.6690564686452314,
     high: 1.6690564686452314,
     low: 1.6467792353353883,
-    xtzUsdQuoteHistorical: '5.236562259831796',
+    xtzUsdQuoteHistorical: '5.236562259831796'
   },
   {
     time: 1630497600,
@@ -1476,7 +1476,7 @@ export const CandleChartSampleData = [
     close: 1.691275639142048,
     high: 1.691275639142048,
     low: 1.6690564686452314,
-    xtzUsdQuoteHistorical: '5.266793408243925',
+    xtzUsdQuoteHistorical: '5.266793408243925'
   },
   {
     time: 1630501200,
@@ -1484,7 +1484,7 @@ export const CandleChartSampleData = [
     close: 1.6968282360417313,
     high: 1.6968282360417313,
     low: 1.691275639142048,
-    xtzUsdQuoteHistorical: '5.313566645619543',
+    xtzUsdQuoteHistorical: '5.313566645619543'
   },
   {
     time: 1630504800,
@@ -1492,7 +1492,7 @@ export const CandleChartSampleData = [
     close: 1.6458012877680692,
     high: 1.6968282360417313,
     low: 1.6458012877680692,
-    xtzUsdQuoteHistorical: '5.282328986109172',
+    xtzUsdQuoteHistorical: '5.282328986109172'
   },
   {
     time: 1630508400,
@@ -1500,7 +1500,7 @@ export const CandleChartSampleData = [
     close: 1.7171840882710359,
     high: 1.7171840882710359,
     low: 1.6458012877680692,
-    xtzUsdQuoteHistorical: '5.232279122591308',
+    xtzUsdQuoteHistorical: '5.232279122591308'
   },
   {
     time: 1630512000,
@@ -1508,7 +1508,7 @@ export const CandleChartSampleData = [
     close: 1.7459024563723322,
     high: 1.7459024563723322,
     low: 1.7171840882710359,
-    xtzUsdQuoteHistorical: '5.28305227808393',
+    xtzUsdQuoteHistorical: '5.28305227808393'
   },
   {
     time: 1630515600,
@@ -1516,7 +1516,7 @@ export const CandleChartSampleData = [
     close: 1.7054833345746385,
     high: 1.7459024563723322,
     low: 1.7054833345746385,
-    xtzUsdQuoteHistorical: '5.323126107753048',
+    xtzUsdQuoteHistorical: '5.323126107753048'
   },
   {
     time: 1630519200,
@@ -1524,7 +1524,7 @@ export const CandleChartSampleData = [
     close: 1.7520969341927952,
     high: 1.7520969341927952,
     low: 1.7054833345746385,
-    xtzUsdQuoteHistorical: '5.325277615757402',
+    xtzUsdQuoteHistorical: '5.325277615757402'
   },
   {
     time: 1630522800,
@@ -1532,7 +1532,7 @@ export const CandleChartSampleData = [
     close: 1.7792525019498664,
     high: 1.7792525019498664,
     low: 1.7520969341927952,
-    xtzUsdQuoteHistorical: '5.340301473243217',
+    xtzUsdQuoteHistorical: '5.340301473243217'
   },
   {
     time: 1630526400,
@@ -1540,7 +1540,7 @@ export const CandleChartSampleData = [
     close: 1.824665400691313,
     high: 1.824665400691313,
     low: 1.7792525019498664,
-    xtzUsdQuoteHistorical: '5.473610715015291',
+    xtzUsdQuoteHistorical: '5.473610715015291'
   },
   {
     time: 1630530000,
@@ -1548,7 +1548,7 @@ export const CandleChartSampleData = [
     close: 1.8392293526581789,
     high: 1.8392293526581789,
     low: 1.824665400691313,
-    xtzUsdQuoteHistorical: '5.3972025107909385',
+    xtzUsdQuoteHistorical: '5.3972025107909385'
   },
   {
     time: 1630533600,
@@ -1556,7 +1556,7 @@ export const CandleChartSampleData = [
     close: 1.8154819327286515,
     high: 1.8392293526581789,
     low: 1.8154819327286515,
-    xtzUsdQuoteHistorical: '5.38814886293204',
+    xtzUsdQuoteHistorical: '5.38814886293204'
   },
   {
     time: 1630537200,
@@ -1564,7 +1564,7 @@ export const CandleChartSampleData = [
     close: 1.807512224246215,
     high: 1.8154819327286515,
     low: 1.807512224246215,
-    xtzUsdQuoteHistorical: '5.403588401683262',
+    xtzUsdQuoteHistorical: '5.403588401683262'
   },
   {
     time: 1630540800,
@@ -1572,7 +1572,7 @@ export const CandleChartSampleData = [
     close: 1.8544099152527156,
     high: 1.8544099152527156,
     low: 1.807512224246215,
-    xtzUsdQuoteHistorical: '5.419560874346175',
+    xtzUsdQuoteHistorical: '5.419560874346175'
   },
   {
     time: 1630544400,
@@ -1580,7 +1580,7 @@ export const CandleChartSampleData = [
     close: 1.8830018971994147,
     high: 1.8830018971994147,
     low: 1.8544099152527156,
-    xtzUsdQuoteHistorical: '5.314039381588083',
+    xtzUsdQuoteHistorical: '5.314039381588083'
   },
   {
     time: 1630548000,
@@ -1588,7 +1588,7 @@ export const CandleChartSampleData = [
     close: 1.9448940771076146,
     high: 1.9448940771076146,
     low: 1.8830018971994147,
-    xtzUsdQuoteHistorical: '5.34976616002621',
+    xtzUsdQuoteHistorical: '5.34976616002621'
   },
   {
     time: 1630551600,
@@ -1596,7 +1596,7 @@ export const CandleChartSampleData = [
     close: 2.0833617996715534,
     high: 2.0833617996715534,
     low: 1.9448940771076146,
-    xtzUsdQuoteHistorical: '5.346701301416161',
+    xtzUsdQuoteHistorical: '5.346701301416161'
   },
   {
     time: 1630555200,
@@ -1604,7 +1604,7 @@ export const CandleChartSampleData = [
     close: 2.122605271317589,
     high: 2.122605271317589,
     low: 2.0833617996715534,
-    xtzUsdQuoteHistorical: '5.313747093620387',
+    xtzUsdQuoteHistorical: '5.313747093620387'
   },
   {
     time: 1630558800,
@@ -1612,7 +1612,7 @@ export const CandleChartSampleData = [
     close: 2.061891252141577,
     high: 2.122605271317589,
     low: 2.061891252141577,
-    xtzUsdQuoteHistorical: '5.303741925998664',
+    xtzUsdQuoteHistorical: '5.303741925998664'
   },
   {
     time: 1630562400,
@@ -1620,7 +1620,7 @@ export const CandleChartSampleData = [
     close: 2.0088477897635033,
     high: 2.061891252141577,
     low: 2.0088477897635033,
-    xtzUsdQuoteHistorical: '5.344419788702277',
+    xtzUsdQuoteHistorical: '5.344419788702277'
   },
   {
     time: 1630566000,
@@ -1628,7 +1628,7 @@ export const CandleChartSampleData = [
     close: 2.0926584883115886,
     high: 2.0926584883115886,
     low: 2.0088477897635033,
-    xtzUsdQuoteHistorical: '5.375663691525641',
+    xtzUsdQuoteHistorical: '5.375663691525641'
   },
   {
     time: 1630569600,
@@ -1636,7 +1636,7 @@ export const CandleChartSampleData = [
     close: 2.052607173527282,
     high: 2.0926584883115886,
     low: 2.052607173527282,
-    xtzUsdQuoteHistorical: '5.3792290271916485',
+    xtzUsdQuoteHistorical: '5.3792290271916485'
   },
   {
     time: 1630573200,
@@ -1644,7 +1644,7 @@ export const CandleChartSampleData = [
     close: 2.001324224362492,
     high: 2.052607173527282,
     low: 2.001324224362492,
-    xtzUsdQuoteHistorical: '5.398463409987296',
+    xtzUsdQuoteHistorical: '5.398463409987296'
   },
   {
     time: 1630576800,
@@ -1652,7 +1652,7 @@ export const CandleChartSampleData = [
     close: 1.9642970834379525,
     high: 2.001324224362492,
     low: 1.9642970834379525,
-    xtzUsdQuoteHistorical: '5.363825697332966',
+    xtzUsdQuoteHistorical: '5.363825697332966'
   },
   {
     time: 1630580400,
@@ -1660,7 +1660,7 @@ export const CandleChartSampleData = [
     close: 2.028125123381677,
     high: 2.028125123381677,
     low: 1.9642970834379525,
-    xtzUsdQuoteHistorical: '5.392956028345482',
+    xtzUsdQuoteHistorical: '5.392956028345482'
   },
   {
     time: 1630584000,
@@ -1668,7 +1668,7 @@ export const CandleChartSampleData = [
     close: 2.0176125380965346,
     high: 2.028125123381677,
     low: 2.0176125380965346,
-    xtzUsdQuoteHistorical: '5.39267954287355',
+    xtzUsdQuoteHistorical: '5.39267954287355'
   },
   {
     time: 1630587600,
@@ -1676,7 +1676,7 @@ export const CandleChartSampleData = [
     close: 2.086280068364375,
     high: 2.086280068364375,
     low: 2.0176125380965346,
-    xtzUsdQuoteHistorical: '5.369107552458556',
+    xtzUsdQuoteHistorical: '5.369107552458556'
   },
   {
     time: 1630591200,
@@ -1684,7 +1684,7 @@ export const CandleChartSampleData = [
     close: 2.269906375919386,
     high: 2.269906375919386,
     low: 2.086280068364375,
-    xtzUsdQuoteHistorical: '5.406908695676672',
+    xtzUsdQuoteHistorical: '5.406908695676672'
   },
   {
     time: 1630594800,
@@ -1692,7 +1692,7 @@ export const CandleChartSampleData = [
     close: 2.5609391262109162,
     high: 2.5609391262109162,
     low: 2.269906375919386,
-    xtzUsdQuoteHistorical: '5.315982767693628',
+    xtzUsdQuoteHistorical: '5.315982767693628'
   },
   {
     time: 1630598400,
@@ -1700,7 +1700,7 @@ export const CandleChartSampleData = [
     close: 2.3409375773793073,
     high: 2.5609391262109162,
     low: 2.3409375773793073,
-    xtzUsdQuoteHistorical: '5.253590934094519',
+    xtzUsdQuoteHistorical: '5.253590934094519'
   },
   {
     time: 1630602000,
@@ -1708,7 +1708,7 @@ export const CandleChartSampleData = [
     close: 2.194229581690736,
     high: 2.3409375773793073,
     low: 2.194229581690736,
-    xtzUsdQuoteHistorical: '5.277381233103269',
+    xtzUsdQuoteHistorical: '5.277381233103269'
   },
   {
     time: 1630605600,
@@ -1716,7 +1716,7 @@ export const CandleChartSampleData = [
     close: 2.311645213078524,
     high: 2.311645213078524,
     low: 2.194229581690736,
-    xtzUsdQuoteHistorical: '5.278609965177288',
+    xtzUsdQuoteHistorical: '5.278609965177288'
   },
   {
     time: 1630609200,
@@ -1724,7 +1724,7 @@ export const CandleChartSampleData = [
     close: 2.3428686336757636,
     high: 2.3428686336757636,
     low: 2.311645213078524,
-    xtzUsdQuoteHistorical: '5.324140286022643',
+    xtzUsdQuoteHistorical: '5.324140286022643'
   },
   {
     time: 1630612800,
@@ -1732,7 +1732,7 @@ export const CandleChartSampleData = [
     close: 2.303461512511708,
     high: 2.3428686336757636,
     low: 2.303461512511708,
-    xtzUsdQuoteHistorical: '5.300291920105669',
+    xtzUsdQuoteHistorical: '5.300291920105669'
   },
   {
     time: 1630616400,
@@ -1740,7 +1740,7 @@ export const CandleChartSampleData = [
     close: 2.3722961729635728,
     high: 2.3722961729635728,
     low: 2.303461512511708,
-    xtzUsdQuoteHistorical: '5.312544893164758',
+    xtzUsdQuoteHistorical: '5.312544893164758'
   },
   {
     time: 1630620000,
@@ -1748,7 +1748,7 @@ export const CandleChartSampleData = [
     close: 2.2188348751639144,
     high: 2.3722961729635728,
     low: 2.2188348751639144,
-    xtzUsdQuoteHistorical: '5.3268880562730425',
+    xtzUsdQuoteHistorical: '5.3268880562730425'
   },
   {
     time: 1630623600,
@@ -1756,7 +1756,7 @@ export const CandleChartSampleData = [
     close: 2.0553658382954434,
     high: 2.2188348751639144,
     low: 2.0553658382954434,
-    xtzUsdQuoteHistorical: '5.339130233609702',
+    xtzUsdQuoteHistorical: '5.339130233609702'
   },
   {
     time: 1630627200,
@@ -1764,7 +1764,7 @@ export const CandleChartSampleData = [
     close: 2.123211304913584,
     high: 2.123211304913584,
     low: 2.0553658382954434,
-    xtzUsdQuoteHistorical: '5.299673949682594',
+    xtzUsdQuoteHistorical: '5.299673949682594'
   },
   {
     time: 1630630800,
@@ -1772,7 +1772,7 @@ export const CandleChartSampleData = [
     close: 2.1179455823870748,
     high: 2.123211304913584,
     low: 2.1179455823870748,
-    xtzUsdQuoteHistorical: '5.153742901644432',
+    xtzUsdQuoteHistorical: '5.153742901644432'
   },
   {
     time: 1630634400,
@@ -1780,7 +1780,7 @@ export const CandleChartSampleData = [
     close: 2.248339773903494,
     high: 2.248339773903494,
     low: 2.1179455823870748,
-    xtzUsdQuoteHistorical: '5.15308420809492',
+    xtzUsdQuoteHistorical: '5.15308420809492'
   },
   {
     time: 1630638000,
@@ -1788,7 +1788,7 @@ export const CandleChartSampleData = [
     close: 2.2383747496300823,
     high: 2.248339773903494,
     low: 2.2383747496300823,
-    xtzUsdQuoteHistorical: '5.226983149569409',
+    xtzUsdQuoteHistorical: '5.226983149569409'
   },
   {
     time: 1630641600,
@@ -1796,7 +1796,7 @@ export const CandleChartSampleData = [
     close: 2.252308012958322,
     high: 2.252308012958322,
     low: 2.2383747496300823,
-    xtzUsdQuoteHistorical: '5.291086895343396',
+    xtzUsdQuoteHistorical: '5.291086895343396'
   },
   {
     time: 1630645200,
@@ -1804,7 +1804,7 @@ export const CandleChartSampleData = [
     close: 2.269818193334434,
     high: 2.269818193334434,
     low: 2.252308012958322,
-    xtzUsdQuoteHistorical: '5.3203715675091034',
+    xtzUsdQuoteHistorical: '5.3203715675091034'
   },
   {
     time: 1630648800,
@@ -1812,7 +1812,7 @@ export const CandleChartSampleData = [
     close: 2.296835470370689,
     high: 2.296835470370689,
     low: 2.269818193334434,
-    xtzUsdQuoteHistorical: '5.255991496684774',
+    xtzUsdQuoteHistorical: '5.255991496684774'
   },
   {
     time: 1630652400,
@@ -1820,7 +1820,7 @@ export const CandleChartSampleData = [
     close: 2.2808367876487274,
     high: 2.296835470370689,
     low: 2.2808367876487274,
-    xtzUsdQuoteHistorical: '5.247478756455344',
+    xtzUsdQuoteHistorical: '5.247478756455344'
   },
   {
     time: 1630656000,
@@ -1828,7 +1828,7 @@ export const CandleChartSampleData = [
     close: 2.1856465292403615,
     high: 2.2808367876487274,
     low: 2.1856465292403615,
-    xtzUsdQuoteHistorical: '5.238561008539951',
+    xtzUsdQuoteHistorical: '5.238561008539951'
   },
   {
     time: 1630659600,
@@ -1836,7 +1836,7 @@ export const CandleChartSampleData = [
     close: 2.2097887800798173,
     high: 2.2097887800798173,
     low: 2.1856465292403615,
-    xtzUsdQuoteHistorical: '5.31923305292028',
+    xtzUsdQuoteHistorical: '5.31923305292028'
   },
   {
     time: 1630663200,
@@ -1844,7 +1844,7 @@ export const CandleChartSampleData = [
     close: 2.212656000653154,
     high: 2.212656000653154,
     low: 2.2097887800798173,
-    xtzUsdQuoteHistorical: '5.311949148205235',
+    xtzUsdQuoteHistorical: '5.311949148205235'
   },
   {
     time: 1630666800,
@@ -1852,7 +1852,7 @@ export const CandleChartSampleData = [
     close: 2.215951084041823,
     high: 2.215951084041823,
     low: 2.212656000653154,
-    xtzUsdQuoteHistorical: '5.296893028287083',
+    xtzUsdQuoteHistorical: '5.296893028287083'
   },
   {
     time: 1630670400,
@@ -1860,7 +1860,7 @@ export const CandleChartSampleData = [
     close: 2.1929711319365097,
     high: 2.215951084041823,
     low: 2.1929711319365097,
-    xtzUsdQuoteHistorical: '5.30404584877729',
+    xtzUsdQuoteHistorical: '5.30404584877729'
   },
   {
     time: 1630674000,
@@ -1868,7 +1868,7 @@ export const CandleChartSampleData = [
     close: 2.219043832187356,
     high: 2.219043832187356,
     low: 2.1929711319365097,
-    xtzUsdQuoteHistorical: '5.310570821865233',
+    xtzUsdQuoteHistorical: '5.310570821865233'
   },
   {
     time: 1630677600,
@@ -1876,7 +1876,7 @@ export const CandleChartSampleData = [
     close: 2.19691079151144,
     high: 2.219043832187356,
     low: 2.19691079151144,
-    xtzUsdQuoteHistorical: '5.29706365843431',
+    xtzUsdQuoteHistorical: '5.29706365843431'
   },
   {
     time: 1630681200,
@@ -1884,7 +1884,7 @@ export const CandleChartSampleData = [
     close: 2.1868510012167155,
     high: 2.19691079151144,
     low: 2.1868510012167155,
-    xtzUsdQuoteHistorical: '5.291176709414228',
+    xtzUsdQuoteHistorical: '5.291176709414228'
   },
   {
     time: 1630684800,
@@ -1892,7 +1892,7 @@ export const CandleChartSampleData = [
     close: 2.1467337266428554,
     high: 2.1868510012167155,
     low: 2.1467337266428554,
-    xtzUsdQuoteHistorical: '5.400042195505598',
+    xtzUsdQuoteHistorical: '5.400042195505598'
   },
   {
     time: 1630688400,
@@ -1900,7 +1900,7 @@ export const CandleChartSampleData = [
     close: 2.1721342685551375,
     high: 2.1721342685551375,
     low: 2.1467337266428554,
-    xtzUsdQuoteHistorical: '5.399011600171649',
+    xtzUsdQuoteHistorical: '5.399011600171649'
   },
   {
     time: 1630692000,
@@ -1908,7 +1908,7 @@ export const CandleChartSampleData = [
     close: 2.3302760196170005,
     high: 2.3302760196170005,
     low: 2.1721342685551375,
-    xtzUsdQuoteHistorical: '5.364723631156521',
+    xtzUsdQuoteHistorical: '5.364723631156521'
   },
   {
     time: 1630695600,
@@ -1916,7 +1916,7 @@ export const CandleChartSampleData = [
     close: 2.4134846494044564,
     high: 2.4134846494044564,
     low: 2.3302760196170005,
-    xtzUsdQuoteHistorical: '5.360278206504133',
+    xtzUsdQuoteHistorical: '5.360278206504133'
   },
   {
     time: 1630699200,
@@ -1924,7 +1924,7 @@ export const CandleChartSampleData = [
     close: 2.440349854515424,
     high: 2.440349854515424,
     low: 2.4134846494044564,
-    xtzUsdQuoteHistorical: '5.32367480381966',
+    xtzUsdQuoteHistorical: '5.32367480381966'
   },
   {
     time: 1630702800,
@@ -1932,7 +1932,7 @@ export const CandleChartSampleData = [
     close: 2.427917873342273,
     high: 2.440349854515424,
     low: 2.427917873342273,
-    xtzUsdQuoteHistorical: '5.286287929047892',
+    xtzUsdQuoteHistorical: '5.286287929047892'
   },
   {
     time: 1630706400,
@@ -1940,7 +1940,7 @@ export const CandleChartSampleData = [
     close: 2.410807576571174,
     high: 2.427917873342273,
     low: 2.410807576571174,
-    xtzUsdQuoteHistorical: '5.332793405545885',
+    xtzUsdQuoteHistorical: '5.332793405545885'
   },
   {
     time: 1630710000,
@@ -1948,7 +1948,7 @@ export const CandleChartSampleData = [
     close: 2.4235747260378435,
     high: 2.4235747260378435,
     low: 2.410807576571174,
-    xtzUsdQuoteHistorical: '5.236733699650657',
+    xtzUsdQuoteHistorical: '5.236733699650657'
   },
   {
     time: 1630713600,
@@ -1956,7 +1956,7 @@ export const CandleChartSampleData = [
     close: 2.41185727767092,
     high: 2.4235747260378435,
     low: 2.41185727767092,
-    xtzUsdQuoteHistorical: '5.3068801656285896',
+    xtzUsdQuoteHistorical: '5.3068801656285896'
   },
   {
     time: 1630717200,
@@ -1964,7 +1964,7 @@ export const CandleChartSampleData = [
     close: 2.3549114286498156,
     high: 2.41185727767092,
     low: 2.3549114286498156,
-    xtzUsdQuoteHistorical: '5.32475971599823',
+    xtzUsdQuoteHistorical: '5.32475971599823'
   },
   {
     time: 1630720800,
@@ -1972,7 +1972,7 @@ export const CandleChartSampleData = [
     close: 2.4000615154355787,
     high: 2.4000615154355787,
     low: 2.3549114286498156,
-    xtzUsdQuoteHistorical: '5.279740990056695',
+    xtzUsdQuoteHistorical: '5.279740990056695'
   },
   {
     time: 1630724400,
@@ -1980,7 +1980,7 @@ export const CandleChartSampleData = [
     close: 2.396704359912971,
     high: 2.4000615154355787,
     low: 2.396704359912971,
-    xtzUsdQuoteHistorical: '5.282738989088642',
+    xtzUsdQuoteHistorical: '5.282738989088642'
   },
   {
     time: 1630728000,
@@ -1988,7 +1988,7 @@ export const CandleChartSampleData = [
     close: 2.3805417757736294,
     high: 2.396704359912971,
     low: 2.3805417757736294,
-    xtzUsdQuoteHistorical: '5.3288555972765685',
+    xtzUsdQuoteHistorical: '5.3288555972765685'
   },
   {
     time: 1630731600,
@@ -1996,7 +1996,7 @@ export const CandleChartSampleData = [
     close: 2.3492020679406767,
     high: 2.3805417757736294,
     low: 2.3492020679406767,
-    xtzUsdQuoteHistorical: '5.30788487771049',
+    xtzUsdQuoteHistorical: '5.30788487771049'
   },
   {
     time: 1630735200,
@@ -2004,7 +2004,7 @@ export const CandleChartSampleData = [
     close: 2.3403336925342315,
     high: 2.3492020679406767,
     low: 2.3403336925342315,
-    xtzUsdQuoteHistorical: '5.275843724665798',
+    xtzUsdQuoteHistorical: '5.275843724665798'
   },
   {
     time: 1630738800,
@@ -2012,7 +2012,7 @@ export const CandleChartSampleData = [
     close: 2.389713708327538,
     high: 2.389713708327538,
     low: 2.3403336925342315,
-    xtzUsdQuoteHistorical: '5.2939792161492925',
+    xtzUsdQuoteHistorical: '5.2939792161492925'
   },
   {
     time: 1630742400,
@@ -2020,7 +2020,7 @@ export const CandleChartSampleData = [
     close: 2.354801945384124,
     high: 2.389713708327538,
     low: 2.354801945384124,
-    xtzUsdQuoteHistorical: '5.350382080307289',
+    xtzUsdQuoteHistorical: '5.350382080307289'
   },
   {
     time: 1630746000,
@@ -2028,7 +2028,7 @@ export const CandleChartSampleData = [
     close: 2.369059093556552,
     high: 2.369059093556552,
     low: 2.354801945384124,
-    xtzUsdQuoteHistorical: '5.402409170888635',
+    xtzUsdQuoteHistorical: '5.402409170888635'
   },
   {
     time: 1630749600,
@@ -2036,7 +2036,7 @@ export const CandleChartSampleData = [
     close: 2.3449665478411568,
     high: 2.369059093556552,
     low: 2.3449665478411568,
-    xtzUsdQuoteHistorical: '5.490949892097558',
+    xtzUsdQuoteHistorical: '5.490949892097558'
   },
   {
     time: 1630753200,
@@ -2044,7 +2044,7 @@ export const CandleChartSampleData = [
     close: 2.292284173530337,
     high: 2.3449665478411568,
     low: 2.292284173530337,
-    xtzUsdQuoteHistorical: '5.502180548997232',
+    xtzUsdQuoteHistorical: '5.502180548997232'
   },
   {
     time: 1630756800,
@@ -2052,7 +2052,7 @@ export const CandleChartSampleData = [
     close: 2.3107088576512282,
     high: 2.3107088576512282,
     low: 2.292284173530337,
-    xtzUsdQuoteHistorical: '5.424707976205485',
+    xtzUsdQuoteHistorical: '5.424707976205485'
   },
   {
     time: 1630760400,
@@ -2060,7 +2060,7 @@ export const CandleChartSampleData = [
     close: 2.1714818988449225,
     high: 2.3107088576512282,
     low: 2.1714818988449225,
-    xtzUsdQuoteHistorical: '5.505543812488311',
+    xtzUsdQuoteHistorical: '5.505543812488311'
   },
   {
     time: 1630764000,
@@ -2068,7 +2068,7 @@ export const CandleChartSampleData = [
     close: 2.1638325409458807,
     high: 2.1714818988449225,
     low: 2.1638325409458807,
-    xtzUsdQuoteHistorical: '5.492822087586378',
+    xtzUsdQuoteHistorical: '5.492822087586378'
   },
   {
     time: 1630767600,
@@ -2076,7 +2076,7 @@ export const CandleChartSampleData = [
     close: 1.9582560517780958,
     high: 2.1638325409458807,
     low: 1.9582560517780958,
-    xtzUsdQuoteHistorical: '5.450772115148672',
+    xtzUsdQuoteHistorical: '5.450772115148672'
   },
   {
     time: 1630771200,
@@ -2084,7 +2084,7 @@ export const CandleChartSampleData = [
     close: 1.9991435975534568,
     high: 1.9991435975534568,
     low: 1.9582560517780958,
-    xtzUsdQuoteHistorical: '5.441582703616666',
+    xtzUsdQuoteHistorical: '5.441582703616666'
   },
   {
     time: 1630774800,
@@ -2092,7 +2092,7 @@ export const CandleChartSampleData = [
     close: 1.9828248453420219,
     high: 1.9991435975534568,
     low: 1.9828248453420219,
-    xtzUsdQuoteHistorical: '5.376922806960528',
+    xtzUsdQuoteHistorical: '5.376922806960528'
   },
   {
     time: 1630778400,
@@ -2100,7 +2100,7 @@ export const CandleChartSampleData = [
     close: 1.9951416963617696,
     high: 1.9951416963617696,
     low: 1.9828248453420219,
-    xtzUsdQuoteHistorical: '5.3736171224215115',
+    xtzUsdQuoteHistorical: '5.3736171224215115'
   },
   {
     time: 1630782000,
@@ -2108,7 +2108,7 @@ export const CandleChartSampleData = [
     close: 1.9617258924786058,
     high: 1.9951416963617696,
     low: 1.9617258924786058,
-    xtzUsdQuoteHistorical: '5.3689259467930945',
+    xtzUsdQuoteHistorical: '5.3689259467930945'
   },
   {
     time: 1630785600,
@@ -2116,7 +2116,7 @@ export const CandleChartSampleData = [
     close: 2.041328908508586,
     high: 2.041328908508586,
     low: 1.9617258924786058,
-    xtzUsdQuoteHistorical: '5.3227395456770665',
+    xtzUsdQuoteHistorical: '5.3227395456770665'
   },
   {
     time: 1630789200,
@@ -2124,7 +2124,7 @@ export const CandleChartSampleData = [
     close: 2.427542164191054,
     high: 2.427542164191054,
     low: 2.041328908508586,
-    xtzUsdQuoteHistorical: '5.412051573322991',
+    xtzUsdQuoteHistorical: '5.412051573322991'
   },
   {
     time: 1630792800,
@@ -2132,7 +2132,7 @@ export const CandleChartSampleData = [
     close: 2.1002075985968647,
     high: 2.427542164191054,
     low: 2.1002075985968647,
-    xtzUsdQuoteHistorical: '5.419251342916235',
+    xtzUsdQuoteHistorical: '5.419251342916235'
   },
   {
     time: 1630796400,
@@ -2140,7 +2140,7 @@ export const CandleChartSampleData = [
     close: 2.0943961016648536,
     high: 2.1002075985968647,
     low: 2.0943961016648536,
-    xtzUsdQuoteHistorical: '5.3629618487033985',
+    xtzUsdQuoteHistorical: '5.3629618487033985'
   },
   {
     time: 1630800000,
@@ -2148,7 +2148,7 @@ export const CandleChartSampleData = [
     close: 2.0843714669740767,
     high: 2.0943961016648536,
     low: 2.0843714669740767,
-    xtzUsdQuoteHistorical: '5.419352076781863',
+    xtzUsdQuoteHistorical: '5.419352076781863'
   },
   {
     time: 1630803600,
@@ -2156,7 +2156,7 @@ export const CandleChartSampleData = [
     close: 2.0866739564208916,
     high: 2.0866739564208916,
     low: 2.0843714669740767,
-    xtzUsdQuoteHistorical: '5.445769155206433',
+    xtzUsdQuoteHistorical: '5.445769155206433'
   },
   {
     time: 1630807200,
@@ -2164,7 +2164,7 @@ export const CandleChartSampleData = [
     close: 2.109460672571087,
     high: 2.109460672571087,
     low: 2.0866739564208916,
-    xtzUsdQuoteHistorical: '5.36128859258277',
+    xtzUsdQuoteHistorical: '5.36128859258277'
   },
   {
     time: 1630810800,
@@ -2172,7 +2172,7 @@ export const CandleChartSampleData = [
     close: 2.10672792186857,
     high: 2.109460672571087,
     low: 2.10672792186857,
-    xtzUsdQuoteHistorical: '5.413472374735655',
+    xtzUsdQuoteHistorical: '5.413472374735655'
   },
   {
     time: 1630814400,
@@ -2180,7 +2180,7 @@ export const CandleChartSampleData = [
     close: 2.101641024721779,
     high: 2.10672792186857,
     low: 2.101641024721779,
-    xtzUsdQuoteHistorical: '5.296717976120643',
+    xtzUsdQuoteHistorical: '5.296717976120643'
   },
   {
     time: 1630818000,
@@ -2188,7 +2188,7 @@ export const CandleChartSampleData = [
     close: 2.207930738721444,
     high: 2.207930738721444,
     low: 2.101641024721779,
-    xtzUsdQuoteHistorical: '5.3366354036792565',
+    xtzUsdQuoteHistorical: '5.3366354036792565'
   },
   {
     time: 1630821600,
@@ -2196,7 +2196,7 @@ export const CandleChartSampleData = [
     close: 2.289677625434367,
     high: 2.289677625434367,
     low: 2.207930738721444,
-    xtzUsdQuoteHistorical: '5.317792045898805',
+    xtzUsdQuoteHistorical: '5.317792045898805'
   },
   {
     time: 1630825200,
@@ -2204,7 +2204,7 @@ export const CandleChartSampleData = [
     close: 2.3120149038047164,
     high: 2.3120149038047164,
     low: 2.289677625434367,
-    xtzUsdQuoteHistorical: '5.323765249836146',
+    xtzUsdQuoteHistorical: '5.323765249836146'
   },
   {
     time: 1630828800,
@@ -2212,7 +2212,7 @@ export const CandleChartSampleData = [
     close: 2.2588499872694063,
     high: 2.3120149038047164,
     low: 2.2588499872694063,
-    xtzUsdQuoteHistorical: '5.320810556181399',
+    xtzUsdQuoteHistorical: '5.320810556181399'
   },
   {
     time: 1630832400,
@@ -2220,7 +2220,7 @@ export const CandleChartSampleData = [
     close: 2.286471459305951,
     high: 2.286471459305951,
     low: 2.2588499872694063,
-    xtzUsdQuoteHistorical: '5.354814825855161',
+    xtzUsdQuoteHistorical: '5.354814825855161'
   },
   {
     time: 1630836000,
@@ -2228,7 +2228,7 @@ export const CandleChartSampleData = [
     close: 2.29747697611036,
     high: 2.29747697611036,
     low: 2.286471459305951,
-    xtzUsdQuoteHistorical: '5.333938897738678',
+    xtzUsdQuoteHistorical: '5.333938897738678'
   },
   {
     time: 1630839600,
@@ -2236,7 +2236,7 @@ export const CandleChartSampleData = [
     close: 2.3045323044900465,
     high: 2.3045323044900465,
     low: 2.29747697611036,
-    xtzUsdQuoteHistorical: '5.336643917229248',
+    xtzUsdQuoteHistorical: '5.336643917229248'
   },
   {
     time: 1630843200,
@@ -2244,7 +2244,7 @@ export const CandleChartSampleData = [
     close: 2.273316290201567,
     high: 2.3045323044900465,
     low: 2.273316290201567,
-    xtzUsdQuoteHistorical: '5.336131398151629',
+    xtzUsdQuoteHistorical: '5.336131398151629'
   },
   {
     time: 1630846800,
@@ -2252,7 +2252,7 @@ export const CandleChartSampleData = [
     close: 2.2785303887109984,
     high: 2.2785303887109984,
     low: 2.273316290201567,
-    xtzUsdQuoteHistorical: '5.342101232624647',
+    xtzUsdQuoteHistorical: '5.342101232624647'
   },
   {
     time: 1630850400,
@@ -2260,7 +2260,7 @@ export const CandleChartSampleData = [
     close: 2.2092571260954834,
     high: 2.2785303887109984,
     low: 2.2092571260954834,
-    xtzUsdQuoteHistorical: '5.401405393902205',
+    xtzUsdQuoteHistorical: '5.401405393902205'
   },
   {
     time: 1630854000,
@@ -2268,7 +2268,7 @@ export const CandleChartSampleData = [
     close: 2.208490360966283,
     high: 2.2092571260954834,
     low: 2.208490360966283,
-    xtzUsdQuoteHistorical: '5.460427983084811',
+    xtzUsdQuoteHistorical: '5.460427983084811'
   },
   {
     time: 1630857600,
@@ -2276,7 +2276,7 @@ export const CandleChartSampleData = [
     close: 2.2464644629241044,
     high: 2.2464644629241044,
     low: 2.208490360966283,
-    xtzUsdQuoteHistorical: '5.440166527725896',
+    xtzUsdQuoteHistorical: '5.440166527725896'
   },
   {
     time: 1630861200,
@@ -2284,7 +2284,7 @@ export const CandleChartSampleData = [
     close: 2.225425229484188,
     high: 2.2464644629241044,
     low: 2.225425229484188,
-    xtzUsdQuoteHistorical: '5.427665650297487',
+    xtzUsdQuoteHistorical: '5.427665650297487'
   },
   {
     time: 1630864800,
@@ -2292,7 +2292,7 @@ export const CandleChartSampleData = [
     close: 2.242995889904957,
     high: 2.242995889904957,
     low: 2.225425229484188,
-    xtzUsdQuoteHistorical: '5.454125989997376',
+    xtzUsdQuoteHistorical: '5.454125989997376'
   },
   {
     time: 1630868400,
@@ -2300,7 +2300,7 @@ export const CandleChartSampleData = [
     close: 2.259536838795533,
     high: 2.259536838795533,
     low: 2.242995889904957,
-    xtzUsdQuoteHistorical: '5.497514207909845',
+    xtzUsdQuoteHistorical: '5.497514207909845'
   },
   {
     time: 1630872000,
@@ -2308,7 +2308,7 @@ export const CandleChartSampleData = [
     close: 2.246122931082861,
     high: 2.259536838795533,
     low: 2.246122931082861,
-    xtzUsdQuoteHistorical: '5.460964337580299',
+    xtzUsdQuoteHistorical: '5.460964337580299'
   },
   {
     time: 1630875600,
@@ -2316,7 +2316,7 @@ export const CandleChartSampleData = [
     close: 2.2500738977623995,
     high: 2.2500738977623995,
     low: 2.246122931082861,
-    xtzUsdQuoteHistorical: '5.5143930430124914',
+    xtzUsdQuoteHistorical: '5.5143930430124914'
   },
   {
     time: 1630879200,
@@ -2324,7 +2324,7 @@ export const CandleChartSampleData = [
     close: 2.241519102201342,
     high: 2.2500738977623995,
     low: 2.241519102201342,
-    xtzUsdQuoteHistorical: '5.50923188087008',
+    xtzUsdQuoteHistorical: '5.50923188087008'
   },
   {
     time: 1630882800,
@@ -2332,7 +2332,7 @@ export const CandleChartSampleData = [
     close: 2.223130133818619,
     high: 2.241519102201342,
     low: 2.223130133818619,
-    xtzUsdQuoteHistorical: '5.471104185070317',
+    xtzUsdQuoteHistorical: '5.471104185070317'
   },
   {
     time: 1630886400,
@@ -2340,7 +2340,7 @@ export const CandleChartSampleData = [
     close: 2.22638045148454,
     high: 2.22638045148454,
     low: 2.223130133818619,
-    xtzUsdQuoteHistorical: '5.541506297925475',
+    xtzUsdQuoteHistorical: '5.541506297925475'
   },
   {
     time: 1630890000,
@@ -2348,7 +2348,7 @@ export const CandleChartSampleData = [
     close: 2.2066934383254435,
     high: 2.22638045148454,
     low: 2.2066934383254435,
-    xtzUsdQuoteHistorical: '5.4663262220802915',
+    xtzUsdQuoteHistorical: '5.4663262220802915'
   },
   {
     time: 1630893600,
@@ -2356,7 +2356,7 @@ export const CandleChartSampleData = [
     close: 2.2327179681296703,
     high: 2.2327179681296703,
     low: 2.2066934383254435,
-    xtzUsdQuoteHistorical: '5.435408789224527',
+    xtzUsdQuoteHistorical: '5.435408789224527'
   },
   {
     time: 1630897200,
@@ -2364,7 +2364,7 @@ export const CandleChartSampleData = [
     close: 2.218677947840491,
     high: 2.2327179681296703,
     low: 2.218677947840491,
-    xtzUsdQuoteHistorical: '5.40701995902263',
+    xtzUsdQuoteHistorical: '5.40701995902263'
   },
   {
     time: 1630900800,
@@ -2372,7 +2372,7 @@ export const CandleChartSampleData = [
     close: 2.1944270135650665,
     high: 2.218677947840491,
     low: 2.1944270135650665,
-    xtzUsdQuoteHistorical: '5.435668821404539',
+    xtzUsdQuoteHistorical: '5.435668821404539'
   },
   {
     time: 1630904400,
@@ -2380,7 +2380,7 @@ export const CandleChartSampleData = [
     close: 2.1845252062814957,
     high: 2.1944270135650665,
     low: 2.1845252062814957,
-    xtzUsdQuoteHistorical: '5.449036949283922',
+    xtzUsdQuoteHistorical: '5.449036949283922'
   },
   {
     time: 1630908000,
@@ -2388,7 +2388,7 @@ export const CandleChartSampleData = [
     close: 2.1731834052714465,
     high: 2.1845252062814957,
     low: 2.1731834052714465,
-    xtzUsdQuoteHistorical: '5.486891235485202',
+    xtzUsdQuoteHistorical: '5.486891235485202'
   },
   {
     time: 1630911600,
@@ -2396,7 +2396,7 @@ export const CandleChartSampleData = [
     close: 2.1429948265318925,
     high: 2.1731834052714465,
     low: 2.1429948265318925,
-    xtzUsdQuoteHistorical: '5.5149042948853175',
+    xtzUsdQuoteHistorical: '5.5149042948853175'
   },
   {
     time: 1630915200,
@@ -2404,7 +2404,7 @@ export const CandleChartSampleData = [
     close: 2.1502193668458736,
     high: 2.1502193668458736,
     low: 2.1429948265318925,
-    xtzUsdQuoteHistorical: '5.548366210574722',
+    xtzUsdQuoteHistorical: '5.548366210574722'
   },
   {
     time: 1630918800,
@@ -2412,7 +2412,7 @@ export const CandleChartSampleData = [
     close: 2.2019587254672386,
     high: 2.2019587254672386,
     low: 2.1502193668458736,
-    xtzUsdQuoteHistorical: '5.572210613599578',
+    xtzUsdQuoteHistorical: '5.572210613599578'
   },
   {
     time: 1630922400,
@@ -2420,7 +2420,7 @@ export const CandleChartSampleData = [
     close: 2.1149363619667914,
     high: 2.2019587254672386,
     low: 2.1149363619667914,
-    xtzUsdQuoteHistorical: '5.686906367994386',
+    xtzUsdQuoteHistorical: '5.686906367994386'
   },
   {
     time: 1630926000,
@@ -2428,7 +2428,7 @@ export const CandleChartSampleData = [
     close: 2.1181934196072683,
     high: 2.1181934196072683,
     low: 2.1149363619667914,
-    xtzUsdQuoteHistorical: '5.698234630618011',
+    xtzUsdQuoteHistorical: '5.698234630618011'
   },
   {
     time: 1630929600,
@@ -2436,7 +2436,7 @@ export const CandleChartSampleData = [
     close: 2.1054024242159852,
     high: 2.1181934196072683,
     low: 2.1054024242159852,
-    xtzUsdQuoteHistorical: '5.577193933348353',
+    xtzUsdQuoteHistorical: '5.577193933348353'
   },
   {
     time: 1630933200,
@@ -2444,7 +2444,7 @@ export const CandleChartSampleData = [
     close: 2.1125367114731937,
     high: 2.1125367114731937,
     low: 2.1054024242159852,
-    xtzUsdQuoteHistorical: '5.510558514842501',
+    xtzUsdQuoteHistorical: '5.510558514842501'
   },
   {
     time: 1630936800,
@@ -2452,7 +2452,7 @@ export const CandleChartSampleData = [
     close: 2.110035088905254,
     high: 2.1125367114731937,
     low: 2.110035088905254,
-    xtzUsdQuoteHistorical: '5.545630835343622',
+    xtzUsdQuoteHistorical: '5.545630835343622'
   },
   {
     time: 1630940400,
@@ -2460,7 +2460,7 @@ export const CandleChartSampleData = [
     close: 2.118046439640229,
     high: 2.118046439640229,
     low: 2.110035088905254,
-    xtzUsdQuoteHistorical: '5.619624357507607',
+    xtzUsdQuoteHistorical: '5.619624357507607'
   },
   {
     time: 1630944000,
@@ -2468,7 +2468,7 @@ export const CandleChartSampleData = [
     close: 2.084268536177056,
     high: 2.118046439640229,
     low: 2.084268536177056,
-    xtzUsdQuoteHistorical: '5.5498129345554545',
+    xtzUsdQuoteHistorical: '5.5498129345554545'
   },
   {
     time: 1630947600,
@@ -2476,7 +2476,7 @@ export const CandleChartSampleData = [
     close: 2.0990920793924763,
     high: 2.0990920793924763,
     low: 2.084268536177056,
-    xtzUsdQuoteHistorical: '5.564998340046365',
+    xtzUsdQuoteHistorical: '5.564998340046365'
   },
   {
     time: 1630951200,
@@ -2484,7 +2484,7 @@ export const CandleChartSampleData = [
     close: 2.1566258068751405,
     high: 2.1566258068751405,
     low: 2.0990920793924763,
-    xtzUsdQuoteHistorical: '5.618900318868696',
+    xtzUsdQuoteHistorical: '5.618900318868696'
   },
   {
     time: 1630954800,
@@ -2492,7 +2492,7 @@ export const CandleChartSampleData = [
     close: 2.1465482500344515,
     high: 2.1566258068751405,
     low: 2.1465482500344515,
-    xtzUsdQuoteHistorical: '5.611226416814412',
+    xtzUsdQuoteHistorical: '5.611226416814412'
   },
   {
     time: 1630958400,
@@ -2500,7 +2500,7 @@ export const CandleChartSampleData = [
     close: 2.149335668243952,
     high: 2.149335668243952,
     low: 2.1465482500344515,
-    xtzUsdQuoteHistorical: '5.54683130783531',
+    xtzUsdQuoteHistorical: '5.54683130783531'
   },
   {
     time: 1630962000,
@@ -2508,7 +2508,7 @@ export const CandleChartSampleData = [
     close: 2.1001876374299298,
     high: 2.149335668243952,
     low: 2.1001876374299298,
-    xtzUsdQuoteHistorical: '5.580746363489812',
+    xtzUsdQuoteHistorical: '5.580746363489812'
   },
   {
     time: 1630965600,
@@ -2516,7 +2516,7 @@ export const CandleChartSampleData = [
     close: 2.077077485528015,
     high: 2.1001876374299298,
     low: 2.077077485528015,
-    xtzUsdQuoteHistorical: '5.701402876279397',
+    xtzUsdQuoteHistorical: '5.701402876279397'
   },
   {
     time: 1630969200,
@@ -2524,7 +2524,7 @@ export const CandleChartSampleData = [
     close: 2.0636382162042843,
     high: 2.077077485528015,
     low: 2.0636382162042843,
-    xtzUsdQuoteHistorical: '5.612456417410229',
+    xtzUsdQuoteHistorical: '5.612456417410229'
   },
   {
     time: 1630972800,
@@ -2532,7 +2532,7 @@ export const CandleChartSampleData = [
     close: 2.097419972165183,
     high: 2.097419972165183,
     low: 2.0636382162042843,
-    xtzUsdQuoteHistorical: '5.617953348783617',
+    xtzUsdQuoteHistorical: '5.617953348783617'
   },
   {
     time: 1630976400,
@@ -2540,7 +2540,7 @@ export const CandleChartSampleData = [
     close: 2.1321974685635854,
     high: 2.1321974685635854,
     low: 2.097419972165183,
-    xtzUsdQuoteHistorical: '5.50950684100534',
+    xtzUsdQuoteHistorical: '5.50950684100534'
   },
   {
     time: 1630980000,
@@ -2548,7 +2548,7 @@ export const CandleChartSampleData = [
     close: 2.1170963850980646,
     high: 2.1321974685635854,
     low: 2.1170963850980646,
-    xtzUsdQuoteHistorical: '5.531623052134551',
+    xtzUsdQuoteHistorical: '5.531623052134551'
   },
   {
     time: 1630983600,
@@ -2556,7 +2556,7 @@ export const CandleChartSampleData = [
     close: 2.115488721308747,
     high: 2.1170963850980646,
     low: 2.115488721308747,
-    xtzUsdQuoteHistorical: '5.601450213648779',
+    xtzUsdQuoteHistorical: '5.601450213648779'
   },
   {
     time: 1630987200,
@@ -2564,7 +2564,7 @@ export const CandleChartSampleData = [
     close: 2.1215610455406906,
     high: 2.1215610455406906,
     low: 2.115488721308747,
-    xtzUsdQuoteHistorical: '5.593688197982396',
+    xtzUsdQuoteHistorical: '5.593688197982396'
   },
   {
     time: 1630990800,
@@ -2572,7 +2572,7 @@ export const CandleChartSampleData = [
     close: 2.0920454107210142,
     high: 2.1215610455406906,
     low: 2.0920454107210142,
-    xtzUsdQuoteHistorical: '5.633254797231431',
+    xtzUsdQuoteHistorical: '5.633254797231431'
   },
   {
     time: 1630994400,
@@ -2580,7 +2580,7 @@ export const CandleChartSampleData = [
     close: 2.086271288677961,
     high: 2.0920454107210142,
     low: 2.086271288677961,
-    xtzUsdQuoteHistorical: '5.642713494956',
+    xtzUsdQuoteHistorical: '5.642713494956'
   },
   {
     time: 1630998000,
@@ -2588,7 +2588,7 @@ export const CandleChartSampleData = [
     close: 2.073868454686239,
     high: 2.086271288677961,
     low: 2.073868454686239,
-    xtzUsdQuoteHistorical: '5.664400948568246',
+    xtzUsdQuoteHistorical: '5.664400948568246'
   },
   {
     time: 1631001600,
@@ -2596,7 +2596,7 @@ export const CandleChartSampleData = [
     close: 2.090958150075567,
     high: 2.090958150075567,
     low: 2.073868454686239,
-    xtzUsdQuoteHistorical: '5.502318225511797',
+    xtzUsdQuoteHistorical: '5.502318225511797'
   },
   {
     time: 1631005200,
@@ -2604,7 +2604,7 @@ export const CandleChartSampleData = [
     close: 2.087626583643567,
     high: 2.090958150075567,
     low: 2.087626583643567,
-    xtzUsdQuoteHistorical: '5.2788206770204305',
+    xtzUsdQuoteHistorical: '5.2788206770204305'
   },
   {
     time: 1631008800,
@@ -2612,7 +2612,7 @@ export const CandleChartSampleData = [
     close: 2.0795884064388614,
     high: 2.087626583643567,
     low: 2.0795884064388614,
-    xtzUsdQuoteHistorical: '5.177289310028689',
+    xtzUsdQuoteHistorical: '5.177289310028689'
   },
   {
     time: 1631012400,
@@ -2620,7 +2620,7 @@ export const CandleChartSampleData = [
     close: 2.06500197849301,
     high: 2.0795884064388614,
     low: 2.06500197849301,
-    xtzUsdQuoteHistorical: '5.248612896981242',
+    xtzUsdQuoteHistorical: '5.248612896981242'
   },
   {
     time: 1631016000,
@@ -2628,7 +2628,7 @@ export const CandleChartSampleData = [
     close: 2.0681315032732948,
     high: 2.0681315032732948,
     low: 2.06500197849301,
-    xtzUsdQuoteHistorical: '5.201888351447281',
+    xtzUsdQuoteHistorical: '5.201888351447281'
   },
   {
     time: 1631019600,
@@ -2636,7 +2636,7 @@ export const CandleChartSampleData = [
     close: 2.095312145379247,
     high: 2.095312145379247,
     low: 2.0681315032732948,
-    xtzUsdQuoteHistorical: '5.16089852044367',
+    xtzUsdQuoteHistorical: '5.16089852044367'
   },
   {
     time: 1631023200,
@@ -2644,7 +2644,7 @@ export const CandleChartSampleData = [
     close: 2.052656756335019,
     high: 2.095312145379247,
     low: 2.052656756335019,
-    xtzUsdQuoteHistorical: '5.121354625841161',
+    xtzUsdQuoteHistorical: '5.121354625841161'
   },
   {
     time: 1631026800,
@@ -2652,7 +2652,7 @@ export const CandleChartSampleData = [
     close: 2.0470570691786425,
     high: 2.052656756335019,
     low: 2.0470570691786425,
-    xtzUsdQuoteHistorical: '4.7944741417276004',
+    xtzUsdQuoteHistorical: '4.7944741417276004'
   },
   {
     time: 1631030400,
@@ -2660,7 +2660,7 @@ export const CandleChartSampleData = [
     close: 2.104579497657385,
     high: 2.104579497657385,
     low: 2.0470570691786425,
-    xtzUsdQuoteHistorical: '4.421091047618888',
+    xtzUsdQuoteHistorical: '4.421091047618888'
   },
   {
     time: 1631034000,
@@ -2668,7 +2668,7 @@ export const CandleChartSampleData = [
     close: 2.053660631128326,
     high: 2.104579497657385,
     low: 2.053660631128326,
-    xtzUsdQuoteHistorical: '4.612284777685835',
+    xtzUsdQuoteHistorical: '4.612284777685835'
   },
   {
     time: 1631037600,
@@ -2676,7 +2676,7 @@ export const CandleChartSampleData = [
     close: 2.060101742300891,
     high: 2.060101742300891,
     low: 2.053660631128326,
-    xtzUsdQuoteHistorical: '4.419276145133204',
+    xtzUsdQuoteHistorical: '4.419276145133204'
   },
   {
     time: 1631041200,
@@ -2684,7 +2684,7 @@ export const CandleChartSampleData = [
     close: 2.0594445254424847,
     high: 2.060101742300891,
     low: 2.0594445254424847,
-    xtzUsdQuoteHistorical: '4.434335376738914',
+    xtzUsdQuoteHistorical: '4.434335376738914'
   },
   {
     time: 1631044800,
@@ -2692,7 +2692,7 @@ export const CandleChartSampleData = [
     close: 2.059515465799817,
     high: 2.059515465799817,
     low: 2.0594445254424847,
-    xtzUsdQuoteHistorical: '4.3339409801144315',
+    xtzUsdQuoteHistorical: '4.3339409801144315'
   },
   {
     time: 1631048400,
@@ -2700,7 +2700,7 @@ export const CandleChartSampleData = [
     close: 2.0933448316934262,
     high: 2.0933448316934262,
     low: 2.059515465799817,
-    xtzUsdQuoteHistorical: '4.3654248795999555',
+    xtzUsdQuoteHistorical: '4.3654248795999555'
   },
   {
     time: 1631052000,
@@ -2708,7 +2708,7 @@ export const CandleChartSampleData = [
     close: 2.0885497113690112,
     high: 2.0933448316934262,
     low: 2.0885497113690112,
-    xtzUsdQuoteHistorical: '4.334245784714791',
+    xtzUsdQuoteHistorical: '4.334245784714791'
   },
   {
     time: 1631055600,
@@ -2716,7 +2716,7 @@ export const CandleChartSampleData = [
     close: 2.0996214440388568,
     high: 2.0996214440388568,
     low: 2.0885497113690112,
-    xtzUsdQuoteHistorical: '4.447123855354263',
+    xtzUsdQuoteHistorical: '4.447123855354263'
   },
   {
     time: 1631059200,
@@ -2724,7 +2724,7 @@ export const CandleChartSampleData = [
     close: 2.1062856997779518,
     high: 2.1062856997779518,
     low: 2.0996214440388568,
-    xtzUsdQuoteHistorical: '4.412167726343004',
+    xtzUsdQuoteHistorical: '4.412167726343004'
   },
   {
     time: 1631062800,
@@ -2732,7 +2732,7 @@ export const CandleChartSampleData = [
     close: 2.104506673168766,
     high: 2.1062856997779518,
     low: 2.104506673168766,
-    xtzUsdQuoteHistorical: '4.4411222227571505',
+    xtzUsdQuoteHistorical: '4.4411222227571505'
   },
   {
     time: 1631066400,
@@ -2740,7 +2740,7 @@ export const CandleChartSampleData = [
     close: 2.083641460807029,
     high: 2.104506673168766,
     low: 2.083641460807029,
-    xtzUsdQuoteHistorical: '4.488667853601455',
+    xtzUsdQuoteHistorical: '4.488667853601455'
   },
   {
     time: 1631070000,
@@ -2748,7 +2748,7 @@ export const CandleChartSampleData = [
     close: 2.075511755169153,
     high: 2.083641460807029,
     low: 2.075511755169153,
-    xtzUsdQuoteHistorical: '4.486181631683891',
+    xtzUsdQuoteHistorical: '4.486181631683891'
   },
   {
     time: 1631073600,
@@ -2756,7 +2756,7 @@ export const CandleChartSampleData = [
     close: 2.090889842397563,
     high: 2.090889842397563,
     low: 2.075511755169153,
-    xtzUsdQuoteHistorical: '4.366354154540086',
+    xtzUsdQuoteHistorical: '4.366354154540086'
   },
   {
     time: 1631077200,
@@ -2764,7 +2764,7 @@ export const CandleChartSampleData = [
     close: 2.0223968244727955,
     high: 2.090889842397563,
     low: 2.0223968244727955,
-    xtzUsdQuoteHistorical: '4.374696563572003',
+    xtzUsdQuoteHistorical: '4.374696563572003'
   },
   {
     time: 1631080800,
@@ -2772,7 +2772,7 @@ export const CandleChartSampleData = [
     close: 2.0650751873839277,
     high: 2.0650751873839277,
     low: 2.0223968244727955,
-    xtzUsdQuoteHistorical: '4.325459238777734',
+    xtzUsdQuoteHistorical: '4.325459238777734'
   },
   {
     time: 1631084400,
@@ -2780,7 +2780,7 @@ export const CandleChartSampleData = [
     close: 2.052702287898128,
     high: 2.0650751873839277,
     low: 2.052702287898128,
-    xtzUsdQuoteHistorical: '4.075284422188296',
+    xtzUsdQuoteHistorical: '4.075284422188296'
   },
   {
     time: 1631088000,
@@ -2788,7 +2788,7 @@ export const CandleChartSampleData = [
     close: 2.023772166559497,
     high: 2.052702287898128,
     low: 2.023772166559497,
-    xtzUsdQuoteHistorical: '4.084106721651602',
+    xtzUsdQuoteHistorical: '4.084106721651602'
   },
   {
     time: 1631091600,
@@ -2796,7 +2796,7 @@ export const CandleChartSampleData = [
     close: 2.0428099006209655,
     high: 2.0428099006209655,
     low: 2.023772166559497,
-    xtzUsdQuoteHistorical: '4.181172965103915',
+    xtzUsdQuoteHistorical: '4.181172965103915'
   },
   {
     time: 1631095200,
@@ -2804,7 +2804,7 @@ export const CandleChartSampleData = [
     close: 1.9918750311327649,
     high: 2.0428099006209655,
     low: 1.9918750311327649,
-    xtzUsdQuoteHistorical: '4.223713134535746',
+    xtzUsdQuoteHistorical: '4.223713134535746'
   },
   {
     time: 1631098800,
@@ -2812,7 +2812,7 @@ export const CandleChartSampleData = [
     close: 1.9916496607408474,
     high: 1.9918750311327649,
     low: 1.9916496607408474,
-    xtzUsdQuoteHistorical: '4.201859039572874',
+    xtzUsdQuoteHistorical: '4.201859039572874'
   },
   {
     time: 1631102400,
@@ -2820,7 +2820,7 @@ export const CandleChartSampleData = [
     close: 2.002075656222804,
     high: 2.002075656222804,
     low: 1.9916496607408474,
-    xtzUsdQuoteHistorical: '4.246134377375071',
+    xtzUsdQuoteHistorical: '4.246134377375071'
   },
   {
     time: 1631106000,
@@ -2828,7 +2828,7 @@ export const CandleChartSampleData = [
     close: 1.9887931419817166,
     high: 2.002075656222804,
     low: 1.9887931419817166,
-    xtzUsdQuoteHistorical: '4.277158404081386',
+    xtzUsdQuoteHistorical: '4.277158404081386'
   },
   {
     time: 1631109600,
@@ -2836,7 +2836,7 @@ export const CandleChartSampleData = [
     close: 1.9968383907678322,
     high: 1.9968383907678322,
     low: 1.9887931419817166,
-    xtzUsdQuoteHistorical: '4.294100916166501',
+    xtzUsdQuoteHistorical: '4.294100916166501'
   },
   {
     time: 1631113200,
@@ -2844,7 +2844,7 @@ export const CandleChartSampleData = [
     close: 1.9849268838088858,
     high: 1.9968383907678322,
     low: 1.9849268838088858,
-    xtzUsdQuoteHistorical: '4.240691718333855',
+    xtzUsdQuoteHistorical: '4.240691718333855'
   },
   {
     time: 1631116800,
@@ -2852,7 +2852,7 @@ export const CandleChartSampleData = [
     close: 1.9845654956175274,
     high: 1.9849268838088858,
     low: 1.9845654956175274,
-    xtzUsdQuoteHistorical: '4.30569205091797',
+    xtzUsdQuoteHistorical: '4.30569205091797'
   },
   {
     time: 1631120400,
@@ -2860,7 +2860,7 @@ export const CandleChartSampleData = [
     close: 1.957938177080218,
     high: 1.9845654956175274,
     low: 1.957938177080218,
-    xtzUsdQuoteHistorical: '4.358038655536359',
+    xtzUsdQuoteHistorical: '4.358038655536359'
   },
   {
     time: 1631124000,
@@ -2868,7 +2868,7 @@ export const CandleChartSampleData = [
     close: 1.9541618742708518,
     high: 1.957938177080218,
     low: 1.9541618742708518,
-    xtzUsdQuoteHistorical: '4.337172429023974',
+    xtzUsdQuoteHistorical: '4.337172429023974'
   },
   {
     time: 1631127600,
@@ -2876,7 +2876,7 @@ export const CandleChartSampleData = [
     close: 1.949111100791966,
     high: 1.9541618742708518,
     low: 1.949111100791966,
-    xtzUsdQuoteHistorical: '4.371918240340566',
+    xtzUsdQuoteHistorical: '4.371918240340566'
   },
   {
     time: 1631131200,
@@ -2884,7 +2884,7 @@ export const CandleChartSampleData = [
     close: 1.9383941159824292,
     high: 1.949111100791966,
     low: 1.9383941159824292,
-    xtzUsdQuoteHistorical: '4.396209292427013',
+    xtzUsdQuoteHistorical: '4.396209292427013'
   },
   {
     time: 1631134800,
@@ -2892,7 +2892,7 @@ export const CandleChartSampleData = [
     close: 1.9496739238532543,
     high: 1.9496739238532543,
     low: 1.9383941159824292,
-    xtzUsdQuoteHistorical: '4.319643749620457',
+    xtzUsdQuoteHistorical: '4.319643749620457'
   },
   {
     time: 1631138400,
@@ -2900,7 +2900,7 @@ export const CandleChartSampleData = [
     close: 1.9470999587472468,
     high: 1.9496739238532543,
     low: 1.9470999587472468,
-    xtzUsdQuoteHistorical: '4.307497403568492',
+    xtzUsdQuoteHistorical: '4.307497403568492'
   },
   {
     time: 1631142000,
@@ -2908,7 +2908,7 @@ export const CandleChartSampleData = [
     close: 1.9593330666234219,
     high: 1.9593330666234219,
     low: 1.9470999587472468,
-    xtzUsdQuoteHistorical: '4.427157409109814',
+    xtzUsdQuoteHistorical: '4.427157409109814'
   },
   {
     time: 1631145600,
@@ -2916,7 +2916,7 @@ export const CandleChartSampleData = [
     close: 1.961681363815235,
     high: 1.961681363815235,
     low: 1.9593330666234219,
-    xtzUsdQuoteHistorical: '4.366948337821361',
+    xtzUsdQuoteHistorical: '4.366948337821361'
   },
   {
     time: 1631149200,
@@ -2924,7 +2924,7 @@ export const CandleChartSampleData = [
     close: 1.9675265101172716,
     high: 1.9675265101172716,
     low: 1.961681363815235,
-    xtzUsdQuoteHistorical: '4.397994773339987',
+    xtzUsdQuoteHistorical: '4.397994773339987'
   },
   {
     time: 1631152800,
@@ -2932,7 +2932,7 @@ export const CandleChartSampleData = [
     close: 1.979296781653122,
     high: 1.979296781653122,
     low: 1.9675265101172716,
-    xtzUsdQuoteHistorical: '4.320696341873444',
+    xtzUsdQuoteHistorical: '4.320696341873444'
   },
   {
     time: 1631156400,
@@ -2940,7 +2940,7 @@ export const CandleChartSampleData = [
     close: 1.9734338891904277,
     high: 1.979296781653122,
     low: 1.9734338891904277,
-    xtzUsdQuoteHistorical: '4.335919803952499',
+    xtzUsdQuoteHistorical: '4.335919803952499'
   },
   {
     time: 1631160000,
@@ -2948,7 +2948,7 @@ export const CandleChartSampleData = [
     close: 1.9688146340573685,
     high: 1.9734338891904277,
     low: 1.9688146340573685,
-    xtzUsdQuoteHistorical: '4.3518199488816744',
+    xtzUsdQuoteHistorical: '4.3518199488816744'
   },
   {
     time: 1631163600,
@@ -2956,7 +2956,7 @@ export const CandleChartSampleData = [
     close: 1.992994147648635,
     high: 1.992994147648635,
     low: 1.9688146340573685,
-    xtzUsdQuoteHistorical: '4.453734904347311',
+    xtzUsdQuoteHistorical: '4.453734904347311'
   },
   {
     time: 1631167200,
@@ -2964,7 +2964,7 @@ export const CandleChartSampleData = [
     close: 1.974735955150551,
     high: 1.992994147648635,
     low: 1.974735955150551,
-    xtzUsdQuoteHistorical: '4.62323205280902',
+    xtzUsdQuoteHistorical: '4.62323205280902'
   },
   {
     time: 1631170800,
@@ -2972,7 +2972,7 @@ export const CandleChartSampleData = [
     close: 1.923518188793579,
     high: 1.974735955150551,
     low: 1.923518188793579,
-    xtzUsdQuoteHistorical: '4.616703159434613',
+    xtzUsdQuoteHistorical: '4.616703159434613'
   },
   {
     time: 1631174400,
@@ -2980,7 +2980,7 @@ export const CandleChartSampleData = [
     close: 1.8406521558300213,
     high: 1.923518188793579,
     low: 1.8406521558300213,
-    xtzUsdQuoteHistorical: '4.652342978141633',
+    xtzUsdQuoteHistorical: '4.652342978141633'
   },
   {
     time: 1631178000,
@@ -2988,7 +2988,7 @@ export const CandleChartSampleData = [
     close: 1.9584652423455253,
     high: 1.9584652423455253,
     low: 1.8406521558300213,
-    xtzUsdQuoteHistorical: '4.697411782816235',
+    xtzUsdQuoteHistorical: '4.697411782816235'
   },
   {
     time: 1631181600,
@@ -2996,7 +2996,7 @@ export const CandleChartSampleData = [
     close: 1.965562534754666,
     high: 1.965562534754666,
     low: 1.9584652423455253,
-    xtzUsdQuoteHistorical: '4.684205183646319',
+    xtzUsdQuoteHistorical: '4.684205183646319'
   },
   {
     time: 1631185200,
@@ -3004,7 +3004,7 @@ export const CandleChartSampleData = [
     close: 1.935899334159646,
     high: 1.965562534754666,
     low: 1.935899334159646,
-    xtzUsdQuoteHistorical: '4.60022974034183',
+    xtzUsdQuoteHistorical: '4.60022974034183'
   },
   {
     time: 1631188800,
@@ -3012,7 +3012,7 @@ export const CandleChartSampleData = [
     close: 1.9628889224402122,
     high: 1.9628889224402122,
     low: 1.935899334159646,
-    xtzUsdQuoteHistorical: '4.706219919558477',
+    xtzUsdQuoteHistorical: '4.706219919558477'
   },
   {
     time: 1631192400,
@@ -3020,7 +3020,7 @@ export const CandleChartSampleData = [
     close: 1.951816550536683,
     high: 1.9628889224402122,
     low: 1.951816550536683,
-    xtzUsdQuoteHistorical: '4.724669332037971',
+    xtzUsdQuoteHistorical: '4.724669332037971'
   },
   {
     time: 1631196000,
@@ -3028,7 +3028,7 @@ export const CandleChartSampleData = [
     close: 1.9434003481404114,
     high: 1.951816550536683,
     low: 1.9434003481404114,
-    xtzUsdQuoteHistorical: '4.84818192306753',
+    xtzUsdQuoteHistorical: '4.84818192306753'
   },
   {
     time: 1631199600,
@@ -3036,7 +3036,7 @@ export const CandleChartSampleData = [
     close: 1.9469109137763072,
     high: 1.9469109137763072,
     low: 1.9434003481404114,
-    xtzUsdQuoteHistorical: '4.829317944400814',
+    xtzUsdQuoteHistorical: '4.829317944400814'
   },
   {
     time: 1631203200,
@@ -3044,7 +3044,7 @@ export const CandleChartSampleData = [
     close: 1.9203936540159436,
     high: 1.9469109137763072,
     low: 1.9203936540159436,
-    xtzUsdQuoteHistorical: '5.2500812148460705',
+    xtzUsdQuoteHistorical: '5.2500812148460705'
   },
   {
     time: 1631206800,
@@ -3052,7 +3052,7 @@ export const CandleChartSampleData = [
     close: 0.8796756350094616,
     high: 1.9203936540159436,
     low: 0.8796756350094616,
-    xtzUsdQuoteHistorical: '5.380220784425076',
+    xtzUsdQuoteHistorical: '5.380220784425076'
   },
   {
     time: 1631210400,
@@ -3060,7 +3060,7 @@ export const CandleChartSampleData = [
     close: 1.1140699476172309,
     high: 1.1140699476172309,
     low: 0.8796756350094616,
-    xtzUsdQuoteHistorical: '5.487352642880565',
+    xtzUsdQuoteHistorical: '5.487352642880565'
   },
   {
     time: 1631214000,
@@ -3068,7 +3068,7 @@ export const CandleChartSampleData = [
     close: 1.0517234297160467,
     high: 1.1140699476172309,
     low: 1.0517234297160467,
-    xtzUsdQuoteHistorical: '5.404525015735531',
+    xtzUsdQuoteHistorical: '5.404525015735531'
   },
   {
     time: 1631217600,
@@ -3076,7 +3076,7 @@ export const CandleChartSampleData = [
     close: 1.0694868805594981,
     high: 1.0694868805594981,
     low: 1.0517234297160467,
-    xtzUsdQuoteHistorical: '5.315390673890131',
+    xtzUsdQuoteHistorical: '5.315390673890131'
   },
   {
     time: 1631221200,
@@ -3084,7 +3084,7 @@ export const CandleChartSampleData = [
     close: 0.9531138011821464,
     high: 1.0694868805594981,
     low: 0.9531138011821464,
-    xtzUsdQuoteHistorical: '5.330897600198193',
+    xtzUsdQuoteHistorical: '5.330897600198193'
   },
   {
     time: 1631224800,
@@ -3092,7 +3092,7 @@ export const CandleChartSampleData = [
     close: 0.9320837125897895,
     high: 0.9531138011821464,
     low: 0.9320837125897895,
-    xtzUsdQuoteHistorical: '5.42060332171027',
+    xtzUsdQuoteHistorical: '5.42060332171027'
   },
   {
     time: 1631228400,
@@ -3100,7 +3100,7 @@ export const CandleChartSampleData = [
     close: 0.9720625164013226,
     high: 0.9720625164013226,
     low: 0.9320837125897895,
-    xtzUsdQuoteHistorical: '5.652760301960168',
+    xtzUsdQuoteHistorical: '5.652760301960168'
   },
   {
     time: 1631232000,
@@ -3108,7 +3108,7 @@ export const CandleChartSampleData = [
     close: 0.9846542888031661,
     high: 0.9846542888031661,
     low: 0.9720625164013226,
-    xtzUsdQuoteHistorical: '5.563096081693139',
+    xtzUsdQuoteHistorical: '5.563096081693139'
   },
   {
     time: 1631235600,
@@ -3116,7 +3116,7 @@ export const CandleChartSampleData = [
     close: 0.9369589783160894,
     high: 0.9846542888031661,
     low: 0.9369589783160894,
-    xtzUsdQuoteHistorical: '6.24890507381943',
+    xtzUsdQuoteHistorical: '6.24890507381943'
   },
   {
     time: 1631239200,
@@ -3124,7 +3124,7 @@ export const CandleChartSampleData = [
     close: 0.9090510461986534,
     high: 0.9369589783160894,
     low: 0.9090510461986534,
-    xtzUsdQuoteHistorical: '6.456828281984034',
+    xtzUsdQuoteHistorical: '6.456828281984034'
   },
   {
     time: 1631242800,
@@ -3132,7 +3132,7 @@ export const CandleChartSampleData = [
     close: 1.0188481363286945,
     high: 1.0188481363286945,
     low: 0.9090510461986534,
-    xtzUsdQuoteHistorical: '6.193716274134812',
+    xtzUsdQuoteHistorical: '6.193716274134812'
   },
   {
     time: 1631246400,
@@ -3140,7 +3140,7 @@ export const CandleChartSampleData = [
     close: 1.0573353757601573,
     high: 1.0573353757601573,
     low: 1.0188481363286945,
-    xtzUsdQuoteHistorical: '6.08647851828324',
+    xtzUsdQuoteHistorical: '6.08647851828324'
   },
   {
     time: 1631250000,
@@ -3148,7 +3148,7 @@ export const CandleChartSampleData = [
     close: 1.0357042991711563,
     high: 1.0573353757601573,
     low: 1.0357042991711563,
-    xtzUsdQuoteHistorical: '6.130997206736485',
+    xtzUsdQuoteHistorical: '6.130997206736485'
   },
   {
     time: 1631253600,
@@ -3156,7 +3156,7 @@ export const CandleChartSampleData = [
     close: 1.060820218759608,
     high: 1.060820218759608,
     low: 1.0357042991711563,
-    xtzUsdQuoteHistorical: '6.070518575773348',
+    xtzUsdQuoteHistorical: '6.070518575773348'
   },
   {
     time: 1631257200,
@@ -3164,7 +3164,7 @@ export const CandleChartSampleData = [
     close: 1.0862006777361546,
     high: 1.0862006777361546,
     low: 1.060820218759608,
-    xtzUsdQuoteHistorical: '6.222596095016023',
+    xtzUsdQuoteHistorical: '6.222596095016023'
   },
   {
     time: 1631260800,
@@ -3172,7 +3172,7 @@ export const CandleChartSampleData = [
     close: 1.0678424363325727,
     high: 1.0862006777361546,
     low: 1.0678424363325727,
-    xtzUsdQuoteHistorical: '5.920473303451272',
+    xtzUsdQuoteHistorical: '5.920473303451272'
   },
   {
     time: 1631264400,
@@ -3180,7 +3180,7 @@ export const CandleChartSampleData = [
     close: 1.0555445385793931,
     high: 1.0678424363325727,
     low: 1.0555445385793931,
-    xtzUsdQuoteHistorical: '5.9507821725389185',
+    xtzUsdQuoteHistorical: '5.9507821725389185'
   },
   {
     time: 1631268000,
@@ -3188,7 +3188,7 @@ export const CandleChartSampleData = [
     close: 1.1432491942568184,
     high: 1.1432491942568184,
     low: 1.0555445385793931,
-    xtzUsdQuoteHistorical: '5.9952866660524595',
+    xtzUsdQuoteHistorical: '5.9952866660524595'
   },
   {
     time: 1631271600,
@@ -3196,7 +3196,7 @@ export const CandleChartSampleData = [
     close: 1.12578871218049,
     high: 1.1432491942568184,
     low: 1.12578871218049,
-    xtzUsdQuoteHistorical: '6.18099655197149',
+    xtzUsdQuoteHistorical: '6.18099655197149'
   },
   {
     time: 1631275200,
@@ -3204,7 +3204,7 @@ export const CandleChartSampleData = [
     close: 1.1256495091005476,
     high: 1.12578871218049,
     low: 1.1256495091005476,
-    xtzUsdQuoteHistorical: '6.046510456404579',
+    xtzUsdQuoteHistorical: '6.046510456404579'
   },
   {
     time: 1631278800,
@@ -3212,7 +3212,7 @@ export const CandleChartSampleData = [
     close: 1.1680630378140104,
     high: 1.1680630378140104,
     low: 1.1256495091005476,
-    xtzUsdQuoteHistorical: '5.864536335969429',
+    xtzUsdQuoteHistorical: '5.864536335969429'
   },
   {
     time: 1631282400,
@@ -3220,7 +3220,7 @@ export const CandleChartSampleData = [
     close: 0.9883874240151601,
     high: 1.1680630378140104,
     low: 0.9883874240151601,
-    xtzUsdQuoteHistorical: '5.769497711399283',
+    xtzUsdQuoteHistorical: '5.769497711399283'
   },
   {
     time: 1631286000,
@@ -3228,7 +3228,7 @@ export const CandleChartSampleData = [
     close: 1.044107749145368,
     high: 1.044107749145368,
     low: 0.9883874240151601,
-    xtzUsdQuoteHistorical: '5.420204733069804',
+    xtzUsdQuoteHistorical: '5.420204733069804'
   },
   {
     time: 1631289600,
@@ -3236,7 +3236,7 @@ export const CandleChartSampleData = [
     close: 0.9885420640908863,
     high: 1.044107749145368,
     low: 0.9885420640908863,
-    xtzUsdQuoteHistorical: '5.884411079631048',
+    xtzUsdQuoteHistorical: '5.884411079631048'
   },
   {
     time: 1631293200,
@@ -3244,7 +3244,7 @@ export const CandleChartSampleData = [
     close: 1.0062897347501787,
     high: 1.0062897347501787,
     low: 0.9885420640908863,
-    xtzUsdQuoteHistorical: '5.670607203567129',
+    xtzUsdQuoteHistorical: '5.670607203567129'
   },
   {
     time: 1631296800,
@@ -3252,7 +3252,7 @@ export const CandleChartSampleData = [
     close: 0.9865717998830545,
     high: 1.0062897347501787,
     low: 0.9865717998830545,
-    xtzUsdQuoteHistorical: '6.307865662091842',
+    xtzUsdQuoteHistorical: '6.307865662091842'
   },
   {
     time: 1631300400,
@@ -3260,7 +3260,7 @@ export const CandleChartSampleData = [
     close: 0.9616305369328778,
     high: 0.9865717998830545,
     low: 0.9616305369328778,
-    xtzUsdQuoteHistorical: '6.6975669669457085',
+    xtzUsdQuoteHistorical: '6.6975669669457085'
   },
   {
     time: 1631304000,
@@ -3268,7 +3268,7 @@ export const CandleChartSampleData = [
     close: 0.9541986659098848,
     high: 0.9616305369328778,
     low: 0.9541986659098848,
-    xtzUsdQuoteHistorical: '6.698391387193842',
+    xtzUsdQuoteHistorical: '6.698391387193842'
   },
   {
     time: 1631307600,
@@ -3276,7 +3276,7 @@ export const CandleChartSampleData = [
     close: 0.9649191239813647,
     high: 0.9649191239813647,
     low: 0.9541986659098848,
-    xtzUsdQuoteHistorical: '6.287163930473596',
+    xtzUsdQuoteHistorical: '6.287163930473596'
   },
   {
     time: 1631311200,
@@ -3284,7 +3284,7 @@ export const CandleChartSampleData = [
     close: 0.9667264541567864,
     high: 0.9667264541567864,
     low: 0.9649191239813647,
-    xtzUsdQuoteHistorical: '6.071761249061945',
+    xtzUsdQuoteHistorical: '6.071761249061945'
   },
   {
     time: 1631314800,
@@ -3292,7 +3292,7 @@ export const CandleChartSampleData = [
     close: 0.9701181425759812,
     high: 0.9701181425759812,
     low: 0.9667264541567864,
-    xtzUsdQuoteHistorical: '6.039066774497772',
+    xtzUsdQuoteHistorical: '6.039066774497772'
   },
   {
     time: 1631318400,
@@ -3300,7 +3300,7 @@ export const CandleChartSampleData = [
     close: 0.9684787973149962,
     high: 0.9701181425759812,
     low: 0.9684787973149962,
-    xtzUsdQuoteHistorical: '6.221669798156379',
+    xtzUsdQuoteHistorical: '6.221669798156379'
   },
   {
     time: 1631322000,
@@ -3308,7 +3308,7 @@ export const CandleChartSampleData = [
     close: 0.9463260110168915,
     high: 0.9684787973149962,
     low: 0.9463260110168915,
-    xtzUsdQuoteHistorical: '6.37243796495198',
+    xtzUsdQuoteHistorical: '6.37243796495198'
   },
   {
     time: 1631325600,
@@ -3316,7 +3316,7 @@ export const CandleChartSampleData = [
     close: 0.9280786555846087,
     high: 0.9463260110168915,
     low: 0.9280786555846087,
-    xtzUsdQuoteHistorical: '6.74850475234141',
+    xtzUsdQuoteHistorical: '6.74850475234141'
   },
   {
     time: 1631329200,
@@ -3324,7 +3324,7 @@ export const CandleChartSampleData = [
     close: 0.9294702431970303,
     high: 0.9294702431970303,
     low: 0.9280786555846087,
-    xtzUsdQuoteHistorical: '6.700419042776591',
+    xtzUsdQuoteHistorical: '6.700419042776591'
   },
   {
     time: 1631332800,
@@ -3332,7 +3332,7 @@ export const CandleChartSampleData = [
     close: 0.9311535168421938,
     high: 0.9311535168421938,
     low: 0.9294702431970303,
-    xtzUsdQuoteHistorical: '6.6032333858919925',
+    xtzUsdQuoteHistorical: '6.6032333858919925'
   },
   {
     time: 1631336400,
@@ -3340,7 +3340,7 @@ export const CandleChartSampleData = [
     close: 0.9402756391059718,
     high: 0.9402756391059718,
     low: 0.9311535168421938,
-    xtzUsdQuoteHistorical: '6.544299225367956',
+    xtzUsdQuoteHistorical: '6.544299225367956'
   },
   {
     time: 1631340000,
@@ -3348,7 +3348,7 @@ export const CandleChartSampleData = [
     close: 0.9380508975756279,
     high: 0.9402756391059718,
     low: 0.9380508975756279,
-    xtzUsdQuoteHistorical: '6.404608762192537',
+    xtzUsdQuoteHistorical: '6.404608762192537'
   },
   {
     time: 1631343600,
@@ -3356,7 +3356,7 @@ export const CandleChartSampleData = [
     close: 0.9339779550131168,
     high: 0.9380508975756279,
     low: 0.9339779550131168,
-    xtzUsdQuoteHistorical: '6.502562626146243',
+    xtzUsdQuoteHistorical: '6.502562626146243'
   },
   {
     time: 1631347200,
@@ -3364,7 +3364,7 @@ export const CandleChartSampleData = [
     close: 0.9488349896145045,
     high: 0.9488349896145045,
     low: 0.9339779550131168,
-    xtzUsdQuoteHistorical: '6.439579299847738',
+    xtzUsdQuoteHistorical: '6.439579299847738'
   },
   {
     time: 1631350800,
@@ -3372,7 +3372,7 @@ export const CandleChartSampleData = [
     close: 0.9471901340462416,
     high: 0.9488349896145045,
     low: 0.9471901340462416,
-    xtzUsdQuoteHistorical: '6.592794924153752',
+    xtzUsdQuoteHistorical: '6.592794924153752'
   },
   {
     time: 1631354400,
@@ -3380,7 +3380,7 @@ export const CandleChartSampleData = [
     close: 0.9458338790090135,
     high: 0.9471901340462416,
     low: 0.9458338790090135,
-    xtzUsdQuoteHistorical: '6.627930218604585',
+    xtzUsdQuoteHistorical: '6.627930218604585'
   },
   {
     time: 1631358000,
@@ -3388,7 +3388,7 @@ export const CandleChartSampleData = [
     close: 0.9400515421672958,
     high: 0.9458338790090135,
     low: 0.9400515421672958,
-    xtzUsdQuoteHistorical: '6.537443386197469',
+    xtzUsdQuoteHistorical: '6.537443386197469'
   },
   {
     time: 1631361600,
@@ -3396,7 +3396,7 @@ export const CandleChartSampleData = [
     close: 0.9359439174397388,
     high: 0.9400515421672958,
     low: 0.9359439174397388,
-    xtzUsdQuoteHistorical: '6.385505119651003',
+    xtzUsdQuoteHistorical: '6.385505119651003'
   },
   {
     time: 1631365200,
@@ -3404,7 +3404,7 @@ export const CandleChartSampleData = [
     close: 0.9397558413980118,
     high: 0.9397558413980118,
     low: 0.9359439174397388,
-    xtzUsdQuoteHistorical: '6.328936779471817',
+    xtzUsdQuoteHistorical: '6.328936779471817'
   },
   {
     time: 1631368800,
@@ -3412,7 +3412,7 @@ export const CandleChartSampleData = [
     close: 0.9393989709575953,
     high: 0.9397558413980118,
     low: 0.9393989709575953,
-    xtzUsdQuoteHistorical: '6.318335176741269',
+    xtzUsdQuoteHistorical: '6.318335176741269'
   },
   {
     time: 1631372400,
@@ -3420,7 +3420,7 @@ export const CandleChartSampleData = [
     close: 1.01063568297367,
     high: 1.01063568297367,
     low: 0.9393989709575953,
-    xtzUsdQuoteHistorical: '6.526452486127563',
+    xtzUsdQuoteHistorical: '6.526452486127563'
   },
   {
     time: 1631376000,
@@ -3428,7 +3428,7 @@ export const CandleChartSampleData = [
     close: 0.9990727747973751,
     high: 1.01063568297367,
     low: 0.9990727747973751,
-    xtzUsdQuoteHistorical: '6.48489220488873',
+    xtzUsdQuoteHistorical: '6.48489220488873'
   },
   {
     time: 1631379600,
@@ -3436,7 +3436,7 @@ export const CandleChartSampleData = [
     close: 0.9828122888299936,
     high: 0.9990727747973751,
     low: 0.9828122888299936,
-    xtzUsdQuoteHistorical: '6.479977781595016',
+    xtzUsdQuoteHistorical: '6.479977781595016'
   },
   {
     time: 1631383200,
@@ -3444,7 +3444,7 @@ export const CandleChartSampleData = [
     close: 0.993566402909479,
     high: 0.993566402909479,
     low: 0.9828122888299936,
-    xtzUsdQuoteHistorical: '6.605564392712522',
+    xtzUsdQuoteHistorical: '6.605564392712522'
   },
   {
     time: 1631386800,
@@ -3452,7 +3452,7 @@ export const CandleChartSampleData = [
     close: 0.9844884617331517,
     high: 0.993566402909479,
     low: 0.9844884617331517,
-    xtzUsdQuoteHistorical: '6.481281471628223',
+    xtzUsdQuoteHistorical: '6.481281471628223'
   },
   {
     time: 1631390400,
@@ -3460,7 +3460,7 @@ export const CandleChartSampleData = [
     close: 0.9851314762026766,
     high: 0.9851314762026766,
     low: 0.9844884617331517,
-    xtzUsdQuoteHistorical: '6.426112380910691',
+    xtzUsdQuoteHistorical: '6.426112380910691'
   },
   {
     time: 1631394000,
@@ -3468,7 +3468,7 @@ export const CandleChartSampleData = [
     close: 0.9805501652933585,
     high: 0.9851314762026766,
     low: 0.9805501652933585,
-    xtzUsdQuoteHistorical: '6.361742088513631',
+    xtzUsdQuoteHistorical: '6.361742088513631'
   },
   {
     time: 1631397600,
@@ -3476,7 +3476,7 @@ export const CandleChartSampleData = [
     close: 1.0269665638158443,
     high: 1.0269665638158443,
     low: 0.9805501652933585,
-    xtzUsdQuoteHistorical: '6.375151005479649',
+    xtzUsdQuoteHistorical: '6.375151005479649'
   },
   {
     time: 1631401200,
@@ -3484,7 +3484,7 @@ export const CandleChartSampleData = [
     close: 1.0252486178756774,
     high: 1.0269665638158443,
     low: 1.0252486178756774,
-    xtzUsdQuoteHistorical: '6.131146066720438',
+    xtzUsdQuoteHistorical: '6.131146066720438'
   },
   {
     time: 1631404800,
@@ -3492,7 +3492,7 @@ export const CandleChartSampleData = [
     close: 0.9997180406745789,
     high: 1.0252486178756774,
     low: 0.9997180406745789,
-    xtzUsdQuoteHistorical: '6.10496673032843',
+    xtzUsdQuoteHistorical: '6.10496673032843'
   },
   {
     time: 1631408400,
@@ -3500,7 +3500,7 @@ export const CandleChartSampleData = [
     close: 0.9995168003792695,
     high: 0.9997180406745789,
     low: 0.9995168003792695,
-    xtzUsdQuoteHistorical: '6.027838630586332',
+    xtzUsdQuoteHistorical: '6.027838630586332'
   },
   {
     time: 1631412000,
@@ -3508,7 +3508,7 @@ export const CandleChartSampleData = [
     close: 0.9997315059702905,
     high: 0.9997315059702905,
     low: 0.9995168003792695,
-    xtzUsdQuoteHistorical: '6.0031551630626',
+    xtzUsdQuoteHistorical: '6.0031551630626'
   },
   {
     time: 1631415600,
@@ -3516,7 +3516,7 @@ export const CandleChartSampleData = [
     close: 0.9966431059442564,
     high: 0.9997315059702905,
     low: 0.9966431059442564,
-    xtzUsdQuoteHistorical: '6.046457901973793',
+    xtzUsdQuoteHistorical: '6.046457901973793'
   },
   {
     time: 1631419200,
@@ -3524,7 +3524,7 @@ export const CandleChartSampleData = [
     close: 1.001906708103603,
     high: 1.001906708103603,
     low: 0.9966431059442564,
-    xtzUsdQuoteHistorical: '6.084407738722563',
+    xtzUsdQuoteHistorical: '6.084407738722563'
   },
   {
     time: 1631422800,
@@ -3532,7 +3532,7 @@ export const CandleChartSampleData = [
     close: 1.012041170893826,
     high: 1.012041170893826,
     low: 1.001906708103603,
-    xtzUsdQuoteHistorical: '6.195950426468758',
+    xtzUsdQuoteHistorical: '6.195950426468758'
   },
   {
     time: 1631426400,
@@ -3540,7 +3540,7 @@ export const CandleChartSampleData = [
     close: 1.0106682042679578,
     high: 1.012041170893826,
     low: 1.0106682042679578,
-    xtzUsdQuoteHistorical: '6.1657039274581065',
+    xtzUsdQuoteHistorical: '6.1657039274581065'
   },
   {
     time: 1631430000,
@@ -3548,7 +3548,7 @@ export const CandleChartSampleData = [
     close: 1.0510518117767516,
     high: 1.0510518117767516,
     low: 1.0106682042679578,
-    xtzUsdQuoteHistorical: '6.113325948538686',
+    xtzUsdQuoteHistorical: '6.113325948538686'
   },
   {
     time: 1631433600,
@@ -3556,7 +3556,7 @@ export const CandleChartSampleData = [
     close: 1.041925133379149,
     high: 1.0510518117767516,
     low: 1.041925133379149,
-    xtzUsdQuoteHistorical: '6.233047209386214',
+    xtzUsdQuoteHistorical: '6.233047209386214'
   },
   {
     time: 1631437200,
@@ -3564,7 +3564,7 @@ export const CandleChartSampleData = [
     close: 1.017548464506885,
     high: 1.041925133379149,
     low: 1.017548464506885,
-    xtzUsdQuoteHistorical: '6.293872178169778',
+    xtzUsdQuoteHistorical: '6.293872178169778'
   },
   {
     time: 1631440800,
@@ -3572,7 +3572,7 @@ export const CandleChartSampleData = [
     close: 1.0334372881707152,
     high: 1.0334372881707152,
     low: 1.017548464506885,
-    xtzUsdQuoteHistorical: '6.191949828434273',
+    xtzUsdQuoteHistorical: '6.191949828434273'
   },
   {
     time: 1631444400,
@@ -3580,7 +3580,7 @@ export const CandleChartSampleData = [
     close: 1.0358770491308866,
     high: 1.0358770491308866,
     low: 1.0334372881707152,
-    xtzUsdQuoteHistorical: '6.2273409458925295',
+    xtzUsdQuoteHistorical: '6.2273409458925295'
   },
   {
     time: 1631448000,
@@ -3588,7 +3588,7 @@ export const CandleChartSampleData = [
     close: 1.0338564873786713,
     high: 1.0358770491308866,
     low: 1.0338564873786713,
-    xtzUsdQuoteHistorical: '6.314961220301655',
+    xtzUsdQuoteHistorical: '6.314961220301655'
   },
   {
     time: 1631451600,
@@ -3596,7 +3596,7 @@ export const CandleChartSampleData = [
     close: 1.0516995374977145,
     high: 1.0516995374977145,
     low: 1.0338564873786713,
-    xtzUsdQuoteHistorical: '6.285176800303455',
+    xtzUsdQuoteHistorical: '6.285176800303455'
   },
   {
     time: 1631455200,
@@ -3604,7 +3604,7 @@ export const CandleChartSampleData = [
     close: 1.0652273247356476,
     high: 1.0652273247356476,
     low: 1.0516995374977145,
-    xtzUsdQuoteHistorical: '6.354579383569974',
+    xtzUsdQuoteHistorical: '6.354579383569974'
   },
   {
     time: 1631458800,
@@ -3612,7 +3612,7 @@ export const CandleChartSampleData = [
     close: 1.027550738579457,
     high: 1.0652273247356476,
     low: 1.027550738579457,
-    xtzUsdQuoteHistorical: '6.696095128895091',
+    xtzUsdQuoteHistorical: '6.696095128895091'
   },
   {
     time: 1631462400,
@@ -3620,7 +3620,7 @@ export const CandleChartSampleData = [
     close: 1.0200976046596477,
     high: 1.027550738579457,
     low: 1.0200976046596477,
-    xtzUsdQuoteHistorical: '6.556131849854063',
+    xtzUsdQuoteHistorical: '6.556131849854063'
   },
   {
     time: 1631466000,
@@ -3628,7 +3628,7 @@ export const CandleChartSampleData = [
     close: 1.0195603553990753,
     high: 1.0200976046596477,
     low: 1.0195603553990753,
-    xtzUsdQuoteHistorical: '6.5963385440501545',
+    xtzUsdQuoteHistorical: '6.5963385440501545'
   },
   {
     time: 1631469600,
@@ -3636,7 +3636,7 @@ export const CandleChartSampleData = [
     close: 1.0168911346441103,
     high: 1.0195603553990753,
     low: 1.0168911346441103,
-    xtzUsdQuoteHistorical: '6.677053522933376',
+    xtzUsdQuoteHistorical: '6.677053522933376'
   },
   {
     time: 1631473200,
@@ -3644,7 +3644,7 @@ export const CandleChartSampleData = [
     close: 1.0253158840768641,
     high: 1.0253158840768641,
     low: 1.0168911346441103,
-    xtzUsdQuoteHistorical: '6.502099801707645',
+    xtzUsdQuoteHistorical: '6.502099801707645'
   },
   {
     time: 1631476800,
@@ -3652,7 +3652,7 @@ export const CandleChartSampleData = [
     close: 1.032845470553326,
     high: 1.032845470553326,
     low: 1.0253158840768641,
-    xtzUsdQuoteHistorical: '6.489158277917063',
+    xtzUsdQuoteHistorical: '6.489158277917063'
   },
   {
     time: 1631480400,
@@ -3660,7 +3660,7 @@ export const CandleChartSampleData = [
     close: 1.0012230807246312,
     high: 1.032845470553326,
     low: 1.0012230807246312,
-    xtzUsdQuoteHistorical: '6.976051156121064',
+    xtzUsdQuoteHistorical: '6.976051156121064'
   },
   {
     time: 1631484000,
@@ -3668,7 +3668,7 @@ export const CandleChartSampleData = [
     close: 0.9899747499383806,
     high: 1.0012230807246312,
     low: 0.9899747499383806,
-    xtzUsdQuoteHistorical: '7.180659667291354',
+    xtzUsdQuoteHistorical: '7.180659667291354'
   },
   {
     time: 1631487600,
@@ -3676,7 +3676,7 @@ export const CandleChartSampleData = [
     close: 0.9352569127513138,
     high: 0.9899747499383806,
     low: 0.9352569127513138,
-    xtzUsdQuoteHistorical: '7.138361202928054',
+    xtzUsdQuoteHistorical: '7.138361202928054'
   },
   {
     time: 1631491200,
@@ -3684,7 +3684,7 @@ export const CandleChartSampleData = [
     close: 0.9413368273668402,
     high: 0.9413368273668402,
     low: 0.9352569127513138,
-    xtzUsdQuoteHistorical: '7.055568593737961',
+    xtzUsdQuoteHistorical: '7.055568593737961'
   },
   {
     time: 1631494800,
@@ -3692,7 +3692,7 @@ export const CandleChartSampleData = [
     close: 0.9382857403321577,
     high: 0.9413368273668402,
     low: 0.9382857403321577,
-    xtzUsdQuoteHistorical: '7.419779955621429',
+    xtzUsdQuoteHistorical: '7.419779955621429'
   },
   {
     time: 1631498400,
@@ -3700,7 +3700,7 @@ export const CandleChartSampleData = [
     close: 0.9372046952129763,
     high: 0.9382857403321577,
     low: 0.9372046952129763,
-    xtzUsdQuoteHistorical: '7.374764852920904',
+    xtzUsdQuoteHistorical: '7.374764852920904'
   },
   {
     time: 1631502000,
@@ -3708,7 +3708,7 @@ export const CandleChartSampleData = [
     close: 0.9256238508041214,
     high: 0.9372046952129763,
     low: 0.9256238508041214,
-    xtzUsdQuoteHistorical: '7.2076347055991965',
+    xtzUsdQuoteHistorical: '7.2076347055991965'
   },
   {
     time: 1631505600,
@@ -3716,7 +3716,7 @@ export const CandleChartSampleData = [
     close: 0.919107800083439,
     high: 0.9256238508041214,
     low: 0.919107800083439,
-    xtzUsdQuoteHistorical: '7.138215623039027',
+    xtzUsdQuoteHistorical: '7.138215623039027'
   },
   {
     time: 1631509200,
@@ -3724,7 +3724,7 @@ export const CandleChartSampleData = [
     close: 0.9202938935132118,
     high: 0.9202938935132118,
     low: 0.919107800083439,
-    xtzUsdQuoteHistorical: '7.057328773179005',
+    xtzUsdQuoteHistorical: '7.057328773179005'
   },
   {
     time: 1631512800,
@@ -3732,7 +3732,7 @@ export const CandleChartSampleData = [
     close: 0.9176109769818026,
     high: 0.9202938935132118,
     low: 0.9176109769818026,
-    xtzUsdQuoteHistorical: '7.165658752972831',
+    xtzUsdQuoteHistorical: '7.165658752972831'
   },
   {
     time: 1631516400,
@@ -3740,7 +3740,7 @@ export const CandleChartSampleData = [
     close: 0.9189617605756693,
     high: 0.9189617605756693,
     low: 0.9176109769818026,
-    xtzUsdQuoteHistorical: '7.173291384085445',
+    xtzUsdQuoteHistorical: '7.173291384085445'
   },
   {
     time: 1631520000,
@@ -3748,7 +3748,7 @@ export const CandleChartSampleData = [
     close: 0.9097895399507705,
     high: 0.9189617605756693,
     low: 0.9097895399507705,
-    xtzUsdQuoteHistorical: '6.857556697816841',
+    xtzUsdQuoteHistorical: '6.857556697816841'
   },
   {
     time: 1631523600,
@@ -3756,7 +3756,7 @@ export const CandleChartSampleData = [
     close: 0.9356299795514336,
     high: 0.9356299795514336,
     low: 0.9097895399507705,
-    xtzUsdQuoteHistorical: '6.758944949701136',
+    xtzUsdQuoteHistorical: '6.758944949701136'
   },
   {
     time: 1631527200,
@@ -3764,7 +3764,7 @@ export const CandleChartSampleData = [
     close: 0.9209375342383084,
     high: 0.9356299795514336,
     low: 0.9209375342383084,
-    xtzUsdQuoteHistorical: '6.975587453048519',
+    xtzUsdQuoteHistorical: '6.975587453048519'
   },
   {
     time: 1631530800,
@@ -3772,7 +3772,7 @@ export const CandleChartSampleData = [
     close: 0.9126149665045782,
     high: 0.9209375342383084,
     low: 0.9126149665045782,
-    xtzUsdQuoteHistorical: '7.133921301917736',
+    xtzUsdQuoteHistorical: '7.133921301917736'
   },
   {
     time: 1631534400,
@@ -3780,7 +3780,7 @@ export const CandleChartSampleData = [
     close: 0.8911750670669919,
     high: 0.9126149665045782,
     low: 0.8911750670669919,
-    xtzUsdQuoteHistorical: '7.080337613140692',
+    xtzUsdQuoteHistorical: '7.080337613140692'
   },
   {
     time: 1631538000,
@@ -3788,7 +3788,7 @@ export const CandleChartSampleData = [
     close: 0.8963438473035017,
     high: 0.8963438473035017,
     low: 0.8911750670669919,
-    xtzUsdQuoteHistorical: '7.3192806097187235',
+    xtzUsdQuoteHistorical: '7.3192806097187235'
   },
   {
     time: 1631541600,
@@ -3796,7 +3796,7 @@ export const CandleChartSampleData = [
     close: 0.9897850940075119,
     high: 0.9897850940075119,
     low: 0.8963438473035017,
-    xtzUsdQuoteHistorical: '7.334006294760171',
+    xtzUsdQuoteHistorical: '7.334006294760171'
   },
   {
     time: 1631545200,
@@ -3804,7 +3804,7 @@ export const CandleChartSampleData = [
     close: 0.9382548944991589,
     high: 0.9897850940075119,
     low: 0.9382548944991589,
-    xtzUsdQuoteHistorical: '6.777850000449781',
+    xtzUsdQuoteHistorical: '6.777850000449781'
   },
   {
     time: 1631548800,
@@ -3812,7 +3812,7 @@ export const CandleChartSampleData = [
     close: 0.9308825217606579,
     high: 0.9382548944991589,
     low: 0.9308825217606579,
-    xtzUsdQuoteHistorical: '7.156544011528135',
+    xtzUsdQuoteHistorical: '7.156544011528135'
   },
   {
     time: 1631552400,
@@ -3820,7 +3820,7 @@ export const CandleChartSampleData = [
     close: 0.9122852868660003,
     high: 0.9308825217606579,
     low: 0.9122852868660003,
-    xtzUsdQuoteHistorical: '7.724166768982051',
+    xtzUsdQuoteHistorical: '7.724166768982051'
   },
   {
     time: 1631556000,
@@ -3828,7 +3828,7 @@ export const CandleChartSampleData = [
     close: 0.9095450998420075,
     high: 0.9122852868660003,
     low: 0.9095450998420075,
-    xtzUsdQuoteHistorical: '7.597683292748988',
+    xtzUsdQuoteHistorical: '7.597683292748988'
   },
   {
     time: 1631559600,
@@ -3836,7 +3836,7 @@ export const CandleChartSampleData = [
     close: 0.8966628956954136,
     high: 0.9095450998420075,
     low: 0.8966628956954136,
-    xtzUsdQuoteHistorical: '7.751610365353083',
+    xtzUsdQuoteHistorical: '7.751610365353083'
   },
   {
     time: 1631563200,
@@ -3844,7 +3844,7 @@ export const CandleChartSampleData = [
     close: 0.9085752963192245,
     high: 0.9085752963192245,
     low: 0.8966628956954136,
-    xtzUsdQuoteHistorical: '7.533948246101149',
+    xtzUsdQuoteHistorical: '7.533948246101149'
   },
   {
     time: 1631566800,
@@ -3852,7 +3852,7 @@ export const CandleChartSampleData = [
     close: 0.9752891006250319,
     high: 0.9752891006250319,
     low: 0.9085752963192245,
-    xtzUsdQuoteHistorical: '7.495143535422075',
+    xtzUsdQuoteHistorical: '7.495143535422075'
   },
   {
     time: 1631570400,
@@ -3860,7 +3860,7 @@ export const CandleChartSampleData = [
     close: 0.9578745301230435,
     high: 0.9752891006250319,
     low: 0.9578745301230435,
-    xtzUsdQuoteHistorical: '7.289679660486623',
+    xtzUsdQuoteHistorical: '7.289679660486623'
   },
   {
     time: 1631574000,
@@ -3868,7 +3868,7 @@ export const CandleChartSampleData = [
     close: 0.9570984796998607,
     high: 0.9578745301230435,
     low: 0.9570984796998607,
-    xtzUsdQuoteHistorical: '7.202431581022097',
+    xtzUsdQuoteHistorical: '7.202431581022097'
   },
   {
     time: 1631577600,
@@ -3876,7 +3876,7 @@ export const CandleChartSampleData = [
     close: 0.9619883264750044,
     high: 0.9619883264750044,
     low: 0.9570984796998607,
-    xtzUsdQuoteHistorical: '7.155904048542667',
+    xtzUsdQuoteHistorical: '7.155904048542667'
   },
   {
     time: 1631581200,
@@ -3884,7 +3884,7 @@ export const CandleChartSampleData = [
     close: 0.9626154106837066,
     high: 0.9626154106837066,
     low: 0.9619883264750044,
-    xtzUsdQuoteHistorical: '7.121579504164385',
+    xtzUsdQuoteHistorical: '7.121579504164385'
   },
   {
     time: 1631584800,
@@ -3892,7 +3892,7 @@ export const CandleChartSampleData = [
     close: 0.961402888589988,
     high: 0.9626154106837066,
     low: 0.961402888589988,
-    xtzUsdQuoteHistorical: '7.043146352692947',
+    xtzUsdQuoteHistorical: '7.043146352692947'
   },
   {
     time: 1631588400,
@@ -3900,7 +3900,7 @@ export const CandleChartSampleData = [
     close: 0.9625273755561057,
     high: 0.9625273755561057,
     low: 0.961402888589988,
-    xtzUsdQuoteHistorical: '7.002558669419024',
+    xtzUsdQuoteHistorical: '7.002558669419024'
   },
   {
     time: 1631592000,
@@ -3908,7 +3908,7 @@ export const CandleChartSampleData = [
     close: 0.9417021290423861,
     high: 0.9625273755561057,
     low: 0.9417021290423861,
-    xtzUsdQuoteHistorical: '7.617285584448018',
+    xtzUsdQuoteHistorical: '7.617285584448018'
   },
   {
     time: 1631595600,
@@ -3916,7 +3916,7 @@ export const CandleChartSampleData = [
     close: 0.9309038168116396,
     high: 0.9417021290423861,
     low: 0.9309038168116396,
-    xtzUsdQuoteHistorical: '7.855096417070912',
+    xtzUsdQuoteHistorical: '7.855096417070912'
   },
   {
     time: 1631599200,
@@ -3924,7 +3924,7 @@ export const CandleChartSampleData = [
     close: 0.9307414050676148,
     high: 0.9309038168116396,
     low: 0.9307414050676148,
-    xtzUsdQuoteHistorical: '7.872301272315232',
+    xtzUsdQuoteHistorical: '7.872301272315232'
   },
   {
     time: 1631602800,
@@ -3932,7 +3932,7 @@ export const CandleChartSampleData = [
     close: 0.9284506317401001,
     high: 0.9307414050676148,
     low: 0.9284506317401001,
-    xtzUsdQuoteHistorical: '7.898641567244045',
+    xtzUsdQuoteHistorical: '7.898641567244045'
   },
   {
     time: 1631606400,
@@ -3940,7 +3940,7 @@ export const CandleChartSampleData = [
     close: 0.9320160736510631,
     high: 0.9320160736510631,
     low: 0.9284506317401001,
-    xtzUsdQuoteHistorical: '7.778203031694862',
+    xtzUsdQuoteHistorical: '7.778203031694862'
   },
   {
     time: 1631610000,
@@ -3948,7 +3948,7 @@ export const CandleChartSampleData = [
     close: 0.9628243937345923,
     high: 0.9628243937345923,
     low: 0.9320160736510631,
-    xtzUsdQuoteHistorical: '7.647591563723482',
+    xtzUsdQuoteHistorical: '7.647591563723482'
   },
   {
     time: 1631613600,
@@ -3956,7 +3956,7 @@ export const CandleChartSampleData = [
     close: 0.9760325275929523,
     high: 0.9760325275929523,
     low: 0.9628243937345923,
-    xtzUsdQuoteHistorical: '7.627969913430509',
+    xtzUsdQuoteHistorical: '7.627969913430509'
   },
   {
     time: 1631617200,
@@ -3964,7 +3964,7 @@ export const CandleChartSampleData = [
     close: 0.9695026798800818,
     high: 0.9760325275929523,
     low: 0.9695026798800818,
-    xtzUsdQuoteHistorical: '7.853235738073729',
+    xtzUsdQuoteHistorical: '7.853235738073729'
   },
   {
     time: 1631620800,
@@ -3972,7 +3972,7 @@ export const CandleChartSampleData = [
     close: 0.9622432660662762,
     high: 0.9695026798800818,
     low: 0.9622432660662762,
-    xtzUsdQuoteHistorical: '7.58661606444384',
+    xtzUsdQuoteHistorical: '7.58661606444384'
   },
   {
     time: 1631624400,
@@ -3980,7 +3980,7 @@ export const CandleChartSampleData = [
     close: 0.9846939455081477,
     high: 0.9846939455081477,
     low: 0.9622432660662762,
-    xtzUsdQuoteHistorical: '7.59669316497492',
+    xtzUsdQuoteHistorical: '7.59669316497492'
   },
   {
     time: 1631628000,
@@ -3988,7 +3988,7 @@ export const CandleChartSampleData = [
     close: 0.98394711844137,
     high: 0.9846939455081477,
     low: 0.98394711844137,
-    xtzUsdQuoteHistorical: '7.406970466702608',
+    xtzUsdQuoteHistorical: '7.406970466702608'
   },
   {
     time: 1631631600,
@@ -3996,7 +3996,7 @@ export const CandleChartSampleData = [
     close: 0.996881304261874,
     high: 0.996881304261874,
     low: 0.98394711844137,
-    xtzUsdQuoteHistorical: '7.285552377414275',
+    xtzUsdQuoteHistorical: '7.285552377414275'
   },
   {
     time: 1631635200,
@@ -4004,7 +4004,7 @@ export const CandleChartSampleData = [
     close: 1.0057780706115633,
     high: 1.0057780706115633,
     low: 0.996881304261874,
-    xtzUsdQuoteHistorical: '7.162794931697647',
+    xtzUsdQuoteHistorical: '7.162794931697647'
   },
   {
     time: 1631638800,
@@ -4012,7 +4012,7 @@ export const CandleChartSampleData = [
     close: 0.9875175582980183,
     high: 1.0057780706115633,
     low: 0.9875175582980183,
-    xtzUsdQuoteHistorical: '7.232694591229991',
+    xtzUsdQuoteHistorical: '7.232694591229991'
   },
   {
     time: 1631642400,
@@ -4020,7 +4020,7 @@ export const CandleChartSampleData = [
     close: 0.9771897096901415,
     high: 0.9875175582980183,
     low: 0.9771897096901415,
-    xtzUsdQuoteHistorical: '7.316599181742778',
+    xtzUsdQuoteHistorical: '7.316599181742778'
   },
   {
     time: 1631646000,
@@ -4028,7 +4028,7 @@ export const CandleChartSampleData = [
     close: 0.9816856268535943,
     high: 0.9816856268535943,
     low: 0.9771897096901415,
-    xtzUsdQuoteHistorical: '7.137676537950038',
+    xtzUsdQuoteHistorical: '7.137676537950038'
   },
   {
     time: 1631649600,
@@ -4036,7 +4036,7 @@ export const CandleChartSampleData = [
     close: 0.9986618829839432,
     high: 0.9986618829839432,
     low: 0.9816856268535943,
-    xtzUsdQuoteHistorical: '7.161298783594135',
+    xtzUsdQuoteHistorical: '7.161298783594135'
   },
   {
     time: 1631653200,
@@ -4044,7 +4044,7 @@ export const CandleChartSampleData = [
     close: 0.9731058204179958,
     high: 0.9986618829839432,
     low: 0.9731058204179958,
-    xtzUsdQuoteHistorical: '7.345248014497236',
+    xtzUsdQuoteHistorical: '7.345248014497236'
   },
   {
     time: 1631656800,
@@ -4052,7 +4052,7 @@ export const CandleChartSampleData = [
     close: 0.9796518837004712,
     high: 0.9796518837004712,
     low: 0.9731058204179958,
-    xtzUsdQuoteHistorical: '7.089041172258278',
+    xtzUsdQuoteHistorical: '7.089041172258278'
   },
   {
     time: 1631660400,
@@ -4060,7 +4060,7 @@ export const CandleChartSampleData = [
     close: 0.9815037237040238,
     high: 0.9815037237040238,
     low: 0.9796518837004712,
-    xtzUsdQuoteHistorical: '7.090371463387262',
+    xtzUsdQuoteHistorical: '7.090371463387262'
   },
   {
     time: 1631664000,
@@ -4068,7 +4068,7 @@ export const CandleChartSampleData = [
     close: 0.9891301517655264,
     high: 0.9891301517655264,
     low: 0.9815037237040238,
-    xtzUsdQuoteHistorical: '7.111876507405563',
+    xtzUsdQuoteHistorical: '7.111876507405563'
   },
   {
     time: 1631667600,
@@ -4076,7 +4076,7 @@ export const CandleChartSampleData = [
     close: 0.9821810168060309,
     high: 0.9891301517655264,
     low: 0.9821810168060309,
-    xtzUsdQuoteHistorical: '7.181202635396049',
+    xtzUsdQuoteHistorical: '7.181202635396049'
   },
   {
     time: 1631671200,
@@ -4084,7 +4084,7 @@ export const CandleChartSampleData = [
     close: 0.9787915297969004,
     high: 0.9821810168060309,
     low: 0.9787915297969004,
-    xtzUsdQuoteHistorical: '7.141881758759459',
+    xtzUsdQuoteHistorical: '7.141881758759459'
   },
   {
     time: 1631674800,
@@ -4092,7 +4092,7 @@ export const CandleChartSampleData = [
     close: 1.0065877314966472,
     high: 1.0065877314966472,
     low: 0.9787915297969004,
-    xtzUsdQuoteHistorical: '7.311393111554536',
+    xtzUsdQuoteHistorical: '7.311393111554536'
   },
   {
     time: 1631678400,
@@ -4100,7 +4100,7 @@ export const CandleChartSampleData = [
     close: 1.0039183518726065,
     high: 1.0065877314966472,
     low: 1.0039183518726065,
-    xtzUsdQuoteHistorical: '7.238915241483239',
+    xtzUsdQuoteHistorical: '7.238915241483239'
   },
   {
     time: 1631682000,
@@ -4108,7 +4108,7 @@ export const CandleChartSampleData = [
     close: 1.0385501711707832,
     high: 1.0385501711707832,
     low: 1.0039183518726065,
-    xtzUsdQuoteHistorical: '7.43635794668575',
+    xtzUsdQuoteHistorical: '7.43635794668575'
   },
   {
     time: 1631685600,
@@ -4116,7 +4116,7 @@ export const CandleChartSampleData = [
     close: 1.032189999429,
     high: 1.0385501711707832,
     low: 1.032189999429,
-    xtzUsdQuoteHistorical: '7.44325326374859',
+    xtzUsdQuoteHistorical: '7.44325326374859'
   },
   {
     time: 1631689200,
@@ -4124,7 +4124,7 @@ export const CandleChartSampleData = [
     close: 1.0315745303519803,
     high: 1.032189999429,
     low: 1.0315745303519803,
-    xtzUsdQuoteHistorical: '7.526840020332623',
+    xtzUsdQuoteHistorical: '7.526840020332623'
   },
   {
     time: 1631692800,
@@ -4132,7 +4132,7 @@ export const CandleChartSampleData = [
     close: 1.0060507496930022,
     high: 1.0315745303519803,
     low: 1.0060507496930022,
-    xtzUsdQuoteHistorical: '7.610909368399749',
+    xtzUsdQuoteHistorical: '7.610909368399749'
   },
   {
     time: 1631696400,
@@ -4140,7 +4140,7 @@ export const CandleChartSampleData = [
     close: 1.031596251629009,
     high: 1.031596251629009,
     low: 1.0060507496930022,
-    xtzUsdQuoteHistorical: '7.463893565352893',
+    xtzUsdQuoteHistorical: '7.463893565352893'
   },
   {
     time: 1631700000,
@@ -4148,7 +4148,7 @@ export const CandleChartSampleData = [
     close: 1.0301725854819257,
     high: 1.031596251629009,
     low: 1.0301725854819257,
-    xtzUsdQuoteHistorical: '7.362609165854016',
+    xtzUsdQuoteHistorical: '7.362609165854016'
   },
   {
     time: 1631703600,
@@ -4156,7 +4156,7 @@ export const CandleChartSampleData = [
     close: 1.0298260138610114,
     high: 1.0301725854819257,
     low: 1.0298260138610114,
-    xtzUsdQuoteHistorical: '7.3036484312330385',
+    xtzUsdQuoteHistorical: '7.3036484312330385'
   },
   {
     time: 1631707200,
@@ -4164,7 +4164,7 @@ export const CandleChartSampleData = [
     close: 1.026164760007157,
     high: 1.0298260138610114,
     low: 1.026164760007157,
-    xtzUsdQuoteHistorical: '7.225101567376279',
+    xtzUsdQuoteHistorical: '7.225101567376279'
   },
   {
     time: 1631710800,
@@ -4172,7 +4172,7 @@ export const CandleChartSampleData = [
     close: 1.013050977807117,
     high: 1.026164760007157,
     low: 1.013050977807117,
-    xtzUsdQuoteHistorical: '7.209534900738314',
+    xtzUsdQuoteHistorical: '7.209534900738314'
   },
   {
     time: 1631714400,
@@ -4180,7 +4180,7 @@ export const CandleChartSampleData = [
     close: 1.0272211152172843,
     high: 1.0272211152172843,
     low: 1.013050977807117,
-    xtzUsdQuoteHistorical: '7.185814393032887',
+    xtzUsdQuoteHistorical: '7.185814393032887'
   },
   {
     time: 1631718000,
@@ -4188,7 +4188,7 @@ export const CandleChartSampleData = [
     close: 1.014027868873032,
     high: 1.0272211152172843,
     low: 1.014027868873032,
-    xtzUsdQuoteHistorical: '7.076351476177353',
+    xtzUsdQuoteHistorical: '7.076351476177353'
   },
   {
     time: 1631721600,
@@ -4196,7 +4196,7 @@ export const CandleChartSampleData = [
     close: 1.0291430383870261,
     high: 1.0291430383870261,
     low: 1.014027868873032,
-    xtzUsdQuoteHistorical: '7.180861200156644',
+    xtzUsdQuoteHistorical: '7.180861200156644'
   },
   {
     time: 1631725200,
@@ -4204,7 +4204,7 @@ export const CandleChartSampleData = [
     close: 1.0331976502800917,
     high: 1.0331976502800917,
     low: 1.0291430383870261,
-    xtzUsdQuoteHistorical: '7.157671567779826',
+    xtzUsdQuoteHistorical: '7.157671567779826'
   },
   {
     time: 1631728800,
@@ -4212,7 +4212,7 @@ export const CandleChartSampleData = [
     close: 1.037452448447704,
     high: 1.037452448447704,
     low: 1.0331976502800917,
-    xtzUsdQuoteHistorical: '7.16408753687132',
+    xtzUsdQuoteHistorical: '7.16408753687132'
   },
   {
     time: 1631732400,
@@ -4220,7 +4220,7 @@ export const CandleChartSampleData = [
     close: 1.0320711718504463,
     high: 1.037452448447704,
     low: 1.0320711718504463,
-    xtzUsdQuoteHistorical: '7.087635952330812',
+    xtzUsdQuoteHistorical: '7.087635952330812'
   },
   {
     time: 1631736000,
@@ -4228,7 +4228,7 @@ export const CandleChartSampleData = [
     close: 1.0372267167887697,
     high: 1.0372267167887697,
     low: 1.0320711718504463,
-    xtzUsdQuoteHistorical: '7.016258327344726',
+    xtzUsdQuoteHistorical: '7.016258327344726'
   },
   {
     time: 1631739600,
@@ -4236,7 +4236,7 @@ export const CandleChartSampleData = [
     close: 1.0480181436275002,
     high: 1.0480181436275002,
     low: 1.0372267167887697,
-    xtzUsdQuoteHistorical: '7.02408853840255',
+    xtzUsdQuoteHistorical: '7.02408853840255'
   },
   {
     time: 1631743200,
@@ -4244,7 +4244,7 @@ export const CandleChartSampleData = [
     close: 1.0525392786300922,
     high: 1.0525392786300922,
     low: 1.0480181436275002,
-    xtzUsdQuoteHistorical: '6.823673695680705',
+    xtzUsdQuoteHistorical: '6.823673695680705'
   },
   {
     time: 1631746800,
@@ -4252,7 +4252,7 @@ export const CandleChartSampleData = [
     close: 1.0480823427405592,
     high: 1.0525392786300922,
     low: 1.0480823427405592,
-    xtzUsdQuoteHistorical: '6.911420329833721',
+    xtzUsdQuoteHistorical: '6.911420329833721'
   },
   {
     time: 1631750400,
@@ -4260,7 +4260,7 @@ export const CandleChartSampleData = [
     close: 1.0426364062797104,
     high: 1.0480823427405592,
     low: 1.0426364062797104,
-    xtzUsdQuoteHistorical: '6.867413433893384',
+    xtzUsdQuoteHistorical: '6.867413433893384'
   },
   {
     time: 1631754000,
@@ -4268,7 +4268,7 @@ export const CandleChartSampleData = [
     close: 1.0417843008436578,
     high: 1.0426364062797104,
     low: 1.0417843008436578,
-    xtzUsdQuoteHistorical: '6.7822496711889375',
+    xtzUsdQuoteHistorical: '6.7822496711889375'
   },
   {
     time: 1631757600,
@@ -4276,7 +4276,7 @@ export const CandleChartSampleData = [
     close: 1.0451920593097945,
     high: 1.0451920593097945,
     low: 1.0417843008436578,
-    xtzUsdQuoteHistorical: '6.822600087105853',
+    xtzUsdQuoteHistorical: '6.822600087105853'
   },
   {
     time: 1631761200,
@@ -4284,7 +4284,7 @@ export const CandleChartSampleData = [
     close: 1.0474894768465297,
     high: 1.0474894768465297,
     low: 1.0451920593097945,
-    xtzUsdQuoteHistorical: '6.7934729602359845',
+    xtzUsdQuoteHistorical: '6.7934729602359845'
   },
   {
     time: 1631764800,
@@ -4292,7 +4292,7 @@ export const CandleChartSampleData = [
     close: 1.0484157252769881,
     high: 1.0484157252769881,
     low: 1.0474894768465297,
-    xtzUsdQuoteHistorical: '6.691351393133693',
+    xtzUsdQuoteHistorical: '6.691351393133693'
   },
   {
     time: 1631768400,
@@ -4300,7 +4300,7 @@ export const CandleChartSampleData = [
     close: 1.0477397788543361,
     high: 1.0484157252769881,
     low: 1.0477397788543361,
-    xtzUsdQuoteHistorical: '6.822537837346807',
+    xtzUsdQuoteHistorical: '6.822537837346807'
   },
   {
     time: 1631772000,
@@ -4308,7 +4308,7 @@ export const CandleChartSampleData = [
     close: 1.04269477967174,
     high: 1.0477397788543361,
     low: 1.04269477967174,
-    xtzUsdQuoteHistorical: '6.832582548621455',
+    xtzUsdQuoteHistorical: '6.832582548621455'
   },
   {
     time: 1631775600,
@@ -4316,7 +4316,7 @@ export const CandleChartSampleData = [
     close: 1.033148889929148,
     high: 1.04269477967174,
     low: 1.033148889929148,
-    xtzUsdQuoteHistorical: '6.85273862175237',
+    xtzUsdQuoteHistorical: '6.85273862175237'
   },
   {
     time: 1631779200,
@@ -4324,7 +4324,7 @@ export const CandleChartSampleData = [
     close: 1.0282475444856647,
     high: 1.033148889929148,
     low: 1.0282475444856647,
-    xtzUsdQuoteHistorical: '6.8274388891345135',
+    xtzUsdQuoteHistorical: '6.8274388891345135'
   },
   {
     time: 1631782800,
@@ -4332,7 +4332,7 @@ export const CandleChartSampleData = [
     close: 1.0316022506315872,
     high: 1.0316022506315872,
     low: 1.0282475444856647,
-    xtzUsdQuoteHistorical: '6.7468863151352725',
+    xtzUsdQuoteHistorical: '6.7468863151352725'
   },
   {
     time: 1631786400,
@@ -4340,7 +4340,7 @@ export const CandleChartSampleData = [
     close: 1.0280261446920869,
     high: 1.0316022506315872,
     low: 1.0280261446920869,
-    xtzUsdQuoteHistorical: '6.769084849933347',
+    xtzUsdQuoteHistorical: '6.769084849933347'
   },
   {
     time: 1631790000,
@@ -4348,7 +4348,7 @@ export const CandleChartSampleData = [
     close: 1.0349531811958474,
     high: 1.0349531811958474,
     low: 1.0280261446920869,
-    xtzUsdQuoteHistorical: '6.7527044197223285',
+    xtzUsdQuoteHistorical: '6.7527044197223285'
   },
   {
     time: 1631793600,
@@ -4356,7 +4356,7 @@ export const CandleChartSampleData = [
     close: 1.0374122641851524,
     high: 1.0374122641851524,
     low: 1.0349531811958474,
-    xtzUsdQuoteHistorical: '6.8648296985852895',
+    xtzUsdQuoteHistorical: '6.8648296985852895'
   },
   {
     time: 1631797200,
@@ -4364,7 +4364,7 @@ export const CandleChartSampleData = [
     close: 1.0160386967008006,
     high: 1.0374122641851524,
     low: 1.0160386967008006,
-    xtzUsdQuoteHistorical: '6.859617392305562',
+    xtzUsdQuoteHistorical: '6.859617392305562'
   },
   {
     time: 1631800800,
@@ -4372,7 +4372,7 @@ export const CandleChartSampleData = [
     close: 1.0206515713482025,
     high: 1.0206515713482025,
     low: 1.0160386967008006,
-    xtzUsdQuoteHistorical: '6.665485461807273',
+    xtzUsdQuoteHistorical: '6.665485461807273'
   },
   {
     time: 1631804400,
@@ -4380,7 +4380,7 @@ export const CandleChartSampleData = [
     close: 1.0238613890828216,
     high: 1.0238613890828216,
     low: 1.0206515713482025,
-    xtzUsdQuoteHistorical: '6.649440237363316',
+    xtzUsdQuoteHistorical: '6.649440237363316'
   },
   {
     time: 1631808000,
@@ -4388,7 +4388,7 @@ export const CandleChartSampleData = [
     close: 1.0310234124743791,
     high: 1.0310234124743791,
     low: 1.0238613890828216,
-    xtzUsdQuoteHistorical: '6.669589059339932',
+    xtzUsdQuoteHistorical: '6.669589059339932'
   },
   {
     time: 1631811600,
@@ -4396,7 +4396,7 @@ export const CandleChartSampleData = [
     close: 1.0248547176304872,
     high: 1.0310234124743791,
     low: 1.0248547176304872,
-    xtzUsdQuoteHistorical: '6.654007209640688',
+    xtzUsdQuoteHistorical: '6.654007209640688'
   },
   {
     time: 1631815200,
@@ -4404,7 +4404,7 @@ export const CandleChartSampleData = [
     close: 1.0270260109088618,
     high: 1.0270260109088618,
     low: 1.0248547176304872,
-    xtzUsdQuoteHistorical: '6.68891016111712',
+    xtzUsdQuoteHistorical: '6.68891016111712'
   },
   {
     time: 1631818800,
@@ -4412,7 +4412,7 @@ export const CandleChartSampleData = [
     close: 1.0254098622042547,
     high: 1.0270260109088618,
     low: 1.0254098622042547,
-    xtzUsdQuoteHistorical: '6.639138745716296',
+    xtzUsdQuoteHistorical: '6.639138745716296'
   },
   {
     time: 1631822400,
@@ -4420,7 +4420,7 @@ export const CandleChartSampleData = [
     close: 1.0219045099884825,
     high: 1.0254098622042547,
     low: 1.0219045099884825,
-    xtzUsdQuoteHistorical: '6.739651980930034',
+    xtzUsdQuoteHistorical: '6.739651980930034'
   },
   {
     time: 1631826000,
@@ -4428,7 +4428,7 @@ export const CandleChartSampleData = [
     close: 1.0263265567533872,
     high: 1.0263265567533872,
     low: 1.0219045099884825,
-    xtzUsdQuoteHistorical: '6.652802459742004',
+    xtzUsdQuoteHistorical: '6.652802459742004'
   },
   {
     time: 1631829600,
@@ -4436,7 +4436,7 @@ export const CandleChartSampleData = [
     close: 1.0187599444419375,
     high: 1.0263265567533872,
     low: 1.0187599444419375,
-    xtzUsdQuoteHistorical: '6.66611771545272',
+    xtzUsdQuoteHistorical: '6.66611771545272'
   },
   {
     time: 1631833200,
@@ -4444,7 +4444,7 @@ export const CandleChartSampleData = [
     close: 1.0149917634299155,
     high: 1.0187599444419375,
     low: 1.0149917634299155,
-    xtzUsdQuoteHistorical: '6.719145005559801',
+    xtzUsdQuoteHistorical: '6.719145005559801'
   },
   {
     time: 1631836800,
@@ -4452,7 +4452,7 @@ export const CandleChartSampleData = [
     close: 1.0040919025478663,
     high: 1.0149917634299155,
     low: 1.0040919025478663,
-    xtzUsdQuoteHistorical: '6.997875289906352',
+    xtzUsdQuoteHistorical: '6.997875289906352'
   },
   {
     time: 1631840400,
@@ -4460,7 +4460,7 @@ export const CandleChartSampleData = [
     close: 1.0021960672000776,
     high: 1.0040919025478663,
     low: 1.0021960672000776,
-    xtzUsdQuoteHistorical: '6.811590380708053',
+    xtzUsdQuoteHistorical: '6.811590380708053'
   },
   {
     time: 1631844000,
@@ -4468,7 +4468,7 @@ export const CandleChartSampleData = [
     close: 0.9988464520194326,
     high: 1.0021960672000776,
     low: 0.9988464520194326,
-    xtzUsdQuoteHistorical: '6.831514054725951',
+    xtzUsdQuoteHistorical: '6.831514054725951'
   },
   {
     time: 1631847600,
@@ -4476,7 +4476,7 @@ export const CandleChartSampleData = [
     close: 0.9975657025291725,
     high: 0.9988464520194326,
     low: 0.9975657025291725,
-    xtzUsdQuoteHistorical: '6.726542737422848',
+    xtzUsdQuoteHistorical: '6.726542737422848'
   },
   {
     time: 1631851200,
@@ -4484,7 +4484,7 @@ export const CandleChartSampleData = [
     close: 0.9867935377102416,
     high: 0.9975657025291725,
     low: 0.9867935377102416,
-    xtzUsdQuoteHistorical: '6.8255696559175245',
+    xtzUsdQuoteHistorical: '6.8255696559175245'
   },
   {
     time: 1631854800,
@@ -4492,7 +4492,7 @@ export const CandleChartSampleData = [
     close: 0.9895462178924246,
     high: 0.9895462178924246,
     low: 0.9867935377102416,
-    xtzUsdQuoteHistorical: '6.773690630054611',
+    xtzUsdQuoteHistorical: '6.773690630054611'
   },
   {
     time: 1631858400,
@@ -4500,7 +4500,7 @@ export const CandleChartSampleData = [
     close: 0.9961883251885324,
     high: 0.9961883251885324,
     low: 0.9895462178924246,
-    xtzUsdQuoteHistorical: '6.702568904692416',
+    xtzUsdQuoteHistorical: '6.702568904692416'
   },
   {
     time: 1631862000,
@@ -4508,7 +4508,7 @@ export const CandleChartSampleData = [
     close: 1.004194900363169,
     high: 1.004194900363169,
     low: 0.9961883251885324,
-    xtzUsdQuoteHistorical: '6.620518571400403',
+    xtzUsdQuoteHistorical: '6.620518571400403'
   },
   {
     time: 1631865600,
@@ -4516,7 +4516,7 @@ export const CandleChartSampleData = [
     close: 1.0081399137211817,
     high: 1.0081399137211817,
     low: 1.004194900363169,
-    xtzUsdQuoteHistorical: '6.555413120289694',
+    xtzUsdQuoteHistorical: '6.555413120289694'
   },
   {
     time: 1631869200,
@@ -4524,7 +4524,7 @@ export const CandleChartSampleData = [
     close: 1.0196079772011382,
     high: 1.0196079772011382,
     low: 1.0081399137211817,
-    xtzUsdQuoteHistorical: '6.543987931728505',
+    xtzUsdQuoteHistorical: '6.543987931728505'
   },
   {
     time: 1631872800,
@@ -4532,7 +4532,7 @@ export const CandleChartSampleData = [
     close: 1.020819716266481,
     high: 1.020819716266481,
     low: 1.0196079772011382,
-    xtzUsdQuoteHistorical: '6.449046296997654',
+    xtzUsdQuoteHistorical: '6.449046296997654'
   },
   {
     time: 1631876400,
@@ -4540,7 +4540,7 @@ export const CandleChartSampleData = [
     close: 1.024891648319191,
     high: 1.024891648319191,
     low: 1.020819716266481,
-    xtzUsdQuoteHistorical: '6.285367008939706',
+    xtzUsdQuoteHistorical: '6.285367008939706'
   },
   {
     time: 1631880000,
@@ -4548,7 +4548,7 @@ export const CandleChartSampleData = [
     close: 1.0308569677630142,
     high: 1.0308569677630142,
     low: 1.024891648319191,
-    xtzUsdQuoteHistorical: '6.271377505911379',
+    xtzUsdQuoteHistorical: '6.271377505911379'
   },
   {
     time: 1631883600,
@@ -4556,7 +4556,7 @@ export const CandleChartSampleData = [
     close: 1.0560416334229383,
     high: 1.0560416334229383,
     low: 1.0308569677630142,
-    xtzUsdQuoteHistorical: '6.285996937621206',
+    xtzUsdQuoteHistorical: '6.285996937621206'
   },
   {
     time: 1631887200,
@@ -4564,7 +4564,7 @@ export const CandleChartSampleData = [
     close: 1.0413283809409386,
     high: 1.0560416334229383,
     low: 1.0413283809409386,
-    xtzUsdQuoteHistorical: '6.376397377185637',
+    xtzUsdQuoteHistorical: '6.376397377185637'
   },
   {
     time: 1631890800,
@@ -4572,7 +4572,7 @@ export const CandleChartSampleData = [
     close: 1.023100408587365,
     high: 1.0413283809409386,
     low: 1.023100408587365,
-    xtzUsdQuoteHistorical: '6.3267827034467645',
+    xtzUsdQuoteHistorical: '6.3267827034467645'
   },
   {
     time: 1631894400,
@@ -4580,7 +4580,7 @@ export const CandleChartSampleData = [
     close: 1.0018264754830033,
     high: 1.023100408587365,
     low: 1.0018264754830033,
-    xtzUsdQuoteHistorical: '6.302870994070458',
+    xtzUsdQuoteHistorical: '6.302870994070458'
   },
   {
     time: 1631898000,
@@ -4588,7 +4588,7 @@ export const CandleChartSampleData = [
     close: 0.9948712869376289,
     high: 1.0018264754830033,
     low: 0.9948712869376289,
-    xtzUsdQuoteHistorical: '6.30050518854075',
+    xtzUsdQuoteHistorical: '6.30050518854075'
   },
   {
     time: 1631901600,
@@ -4596,7 +4596,7 @@ export const CandleChartSampleData = [
     close: 0.9948018035447134,
     high: 0.9948712869376289,
     low: 0.9948018035447134,
-    xtzUsdQuoteHistorical: '6.273090730874344',
+    xtzUsdQuoteHistorical: '6.273090730874344'
   },
   {
     time: 1631905200,
@@ -4604,7 +4604,7 @@ export const CandleChartSampleData = [
     close: 0.9924813656213581,
     high: 0.9948018035447134,
     low: 0.9924813656213581,
-    xtzUsdQuoteHistorical: '6.186450104907619',
+    xtzUsdQuoteHistorical: '6.186450104907619'
   },
   {
     time: 1631908800,
@@ -4612,7 +4612,7 @@ export const CandleChartSampleData = [
     close: 0.9863736578260588,
     high: 0.9924813656213581,
     low: 0.9863736578260588,
-    xtzUsdQuoteHistorical: '6.2008297369335095',
+    xtzUsdQuoteHistorical: '6.2008297369335095'
   },
   {
     time: 1631912400,
@@ -4620,7 +4620,7 @@ export const CandleChartSampleData = [
     close: 0.9851808850993329,
     high: 0.9863736578260588,
     low: 0.9851808850993329,
-    xtzUsdQuoteHistorical: '6.150199482383167',
+    xtzUsdQuoteHistorical: '6.150199482383167'
   },
   {
     time: 1631916000,
@@ -4628,7 +4628,7 @@ export const CandleChartSampleData = [
     close: 0.9659545433343549,
     high: 0.9851808850993329,
     low: 0.9659545433343549,
-    xtzUsdQuoteHistorical: '6.117693924526653',
+    xtzUsdQuoteHistorical: '6.117693924526653'
   },
   {
     time: 1631919600,
@@ -4636,7 +4636,7 @@ export const CandleChartSampleData = [
     close: 0.9663376799792586,
     high: 0.9663376799792586,
     low: 0.9659545433343549,
-    xtzUsdQuoteHistorical: '6.1260269534438665',
+    xtzUsdQuoteHistorical: '6.1260269534438665'
   },
   {
     time: 1631923200,
@@ -4644,7 +4644,7 @@ export const CandleChartSampleData = [
     close: 0.963339334517642,
     high: 0.9663376799792586,
     low: 0.963339334517642,
-    xtzUsdQuoteHistorical: '6.116856157642638',
+    xtzUsdQuoteHistorical: '6.116856157642638'
   },
   {
     time: 1631926800,
@@ -4652,7 +4652,7 @@ export const CandleChartSampleData = [
     close: 0.9693802629675005,
     high: 0.9693802629675005,
     low: 0.963339334517642,
-    xtzUsdQuoteHistorical: '5.991533065536433',
+    xtzUsdQuoteHistorical: '5.991533065536433'
   },
   {
     time: 1631930400,
@@ -4660,7 +4660,7 @@ export const CandleChartSampleData = [
     close: 0.955727915578481,
     high: 0.9693802629675005,
     low: 0.955727915578481,
-    xtzUsdQuoteHistorical: '6.137645625368774',
+    xtzUsdQuoteHistorical: '6.137645625368774'
   },
   {
     time: 1631934000,
@@ -4668,7 +4668,7 @@ export const CandleChartSampleData = [
     close: 0.9599119531210502,
     high: 0.9599119531210502,
     low: 0.955727915578481,
-    xtzUsdQuoteHistorical: '6.182823746586589',
+    xtzUsdQuoteHistorical: '6.182823746586589'
   },
   {
     time: 1631937600,
@@ -4676,7 +4676,7 @@ export const CandleChartSampleData = [
     close: 0.9533794913064678,
     high: 0.9599119531210502,
     low: 0.9533794913064678,
-    xtzUsdQuoteHistorical: '6.220456188593162',
+    xtzUsdQuoteHistorical: '6.220456188593162'
   },
   {
     time: 1631941200,
@@ -4684,7 +4684,7 @@ export const CandleChartSampleData = [
     close: 0.9513416075012234,
     high: 0.9533794913064678,
     low: 0.9513416075012234,
-    xtzUsdQuoteHistorical: '6.264197063090681',
+    xtzUsdQuoteHistorical: '6.264197063090681'
   },
   {
     time: 1631944800,
@@ -4692,7 +4692,7 @@ export const CandleChartSampleData = [
     close: 0.952805955481,
     high: 0.952805955481,
     low: 0.9513416075012234,
-    xtzUsdQuoteHistorical: '6.297475942496006',
+    xtzUsdQuoteHistorical: '6.297475942496006'
   },
   {
     time: 1631948400,
@@ -4700,7 +4700,7 @@ export const CandleChartSampleData = [
     close: 0.9474850227705579,
     high: 0.952805955481,
     low: 0.9474850227705579,
-    xtzUsdQuoteHistorical: '6.362708327916354',
+    xtzUsdQuoteHistorical: '6.362708327916354'
   },
   {
     time: 1631952000,
@@ -4708,7 +4708,7 @@ export const CandleChartSampleData = [
     close: 0.9504491994379495,
     high: 0.9504491994379495,
     low: 0.9474850227705579,
-    xtzUsdQuoteHistorical: '6.379884121036053',
+    xtzUsdQuoteHistorical: '6.379884121036053'
   },
   {
     time: 1631955600,
@@ -4716,7 +4716,7 @@ export const CandleChartSampleData = [
     close: 0.946040873368294,
     high: 0.9504491994379495,
     low: 0.946040873368294,
-    xtzUsdQuoteHistorical: '6.34340509626908',
+    xtzUsdQuoteHistorical: '6.34340509626908'
   },
   {
     time: 1631959200,
@@ -4724,7 +4724,7 @@ export const CandleChartSampleData = [
     close: 0.9604593929613692,
     high: 0.9604593929613692,
     low: 0.946040873368294,
-    xtzUsdQuoteHistorical: '6.279894591723852',
+    xtzUsdQuoteHistorical: '6.279894591723852'
   },
   {
     time: 1631962800,
@@ -4732,7 +4732,7 @@ export const CandleChartSampleData = [
     close: 0.9460817749643329,
     high: 0.9604593929613692,
     low: 0.9460817749643329,
-    xtzUsdQuoteHistorical: '6.334724502968336',
+    xtzUsdQuoteHistorical: '6.334724502968336'
   },
   {
     time: 1631966400,
@@ -4740,7 +4740,7 @@ export const CandleChartSampleData = [
     close: 0.9415149059114285,
     high: 0.9460817749643329,
     low: 0.9415149059114285,
-    xtzUsdQuoteHistorical: '6.351060521235636',
+    xtzUsdQuoteHistorical: '6.351060521235636'
   },
   {
     time: 1631970000,
@@ -4748,7 +4748,7 @@ export const CandleChartSampleData = [
     close: 0.9546218029155606,
     high: 0.9546218029155606,
     low: 0.9415149059114285,
-    xtzUsdQuoteHistorical: '6.252493792771197',
+    xtzUsdQuoteHistorical: '6.252493792771197'
   },
   {
     time: 1631973600,
@@ -4756,7 +4756,7 @@ export const CandleChartSampleData = [
     close: 0.9355472633315409,
     high: 0.9546218029155606,
     low: 0.9355472633315409,
-    xtzUsdQuoteHistorical: '6.491176180935307',
+    xtzUsdQuoteHistorical: '6.491176180935307'
   },
   {
     time: 1631977200,
@@ -4764,7 +4764,7 @@ export const CandleChartSampleData = [
     close: 0.9355749247954587,
     high: 0.9355749247954587,
     low: 0.9355472633315409,
-    xtzUsdQuoteHistorical: '6.628506210408999',
+    xtzUsdQuoteHistorical: '6.628506210408999'
   },
   {
     time: 1631980800,
@@ -4772,7 +4772,7 @@ export const CandleChartSampleData = [
     close: 0.9299567873182287,
     high: 0.9355749247954587,
     low: 0.9299567873182287,
-    xtzUsdQuoteHistorical: '6.604006921933696',
+    xtzUsdQuoteHistorical: '6.604006921933696'
   },
   {
     time: 1631984400,
@@ -4780,7 +4780,7 @@ export const CandleChartSampleData = [
     close: 0.9281527031901243,
     high: 0.9299567873182287,
     low: 0.9281527031901243,
-    xtzUsdQuoteHistorical: '6.577985070012353',
+    xtzUsdQuoteHistorical: '6.577985070012353'
   },
   {
     time: 1631988000,
@@ -4788,7 +4788,7 @@ export const CandleChartSampleData = [
     close: 0.9265587755650929,
     high: 0.9281527031901243,
     low: 0.9265587755650929,
-    xtzUsdQuoteHistorical: '6.533436360461244',
+    xtzUsdQuoteHistorical: '6.533436360461244'
   },
   {
     time: 1631991600,
@@ -4796,7 +4796,7 @@ export const CandleChartSampleData = [
     close: 0.9223412290467778,
     high: 0.9265587755650929,
     low: 0.9223412290467778,
-    xtzUsdQuoteHistorical: '6.492813139714986',
+    xtzUsdQuoteHistorical: '6.492813139714986'
   },
   {
     time: 1631995200,
@@ -4804,7 +4804,7 @@ export const CandleChartSampleData = [
     close: 0.9210880473479297,
     high: 0.9223412290467778,
     low: 0.9210880473479297,
-    xtzUsdQuoteHistorical: '6.520553955369268',
+    xtzUsdQuoteHistorical: '6.520553955369268'
   },
   {
     time: 1631998800,
@@ -4812,7 +4812,7 @@ export const CandleChartSampleData = [
     close: 0.9224126576328793,
     high: 0.9224126576328793,
     low: 0.9210880473479297,
-    xtzUsdQuoteHistorical: '6.412539994339029',
+    xtzUsdQuoteHistorical: '6.412539994339029'
   },
   {
     time: 1632002400,
@@ -4820,7 +4820,7 @@ export const CandleChartSampleData = [
     close: 0.9272316004893354,
     high: 0.9272316004893354,
     low: 0.9224126576328793,
-    xtzUsdQuoteHistorical: '6.315606850520767',
+    xtzUsdQuoteHistorical: '6.315606850520767'
   },
   {
     time: 1632006000,
@@ -4828,7 +4828,7 @@ export const CandleChartSampleData = [
     close: 0.9413394176085913,
     high: 0.9413394176085913,
     low: 0.9272316004893354,
-    xtzUsdQuoteHistorical: '6.3459332127993795',
+    xtzUsdQuoteHistorical: '6.3459332127993795'
   },
   {
     time: 1632009600,
@@ -4836,7 +4836,7 @@ export const CandleChartSampleData = [
     close: 0.9358924485076578,
     high: 0.9413394176085913,
     low: 0.9358924485076578,
-    xtzUsdQuoteHistorical: '6.429752116571952',
+    xtzUsdQuoteHistorical: '6.429752116571952'
   },
   {
     time: 1632013200,
@@ -4844,7 +4844,7 @@ export const CandleChartSampleData = [
     close: 0.940984927552859,
     high: 0.940984927552859,
     low: 0.9358924485076578,
-    xtzUsdQuoteHistorical: '6.4001778093635995',
+    xtzUsdQuoteHistorical: '6.4001778093635995'
   },
   {
     time: 1632016800,
@@ -4852,7 +4852,7 @@ export const CandleChartSampleData = [
     close: 0.9387318270525369,
     high: 0.940984927552859,
     low: 0.9387318270525369,
-    xtzUsdQuoteHistorical: '6.355363047605453',
+    xtzUsdQuoteHistorical: '6.355363047605453'
   },
   {
     time: 1632020400,
@@ -4860,7 +4860,7 @@ export const CandleChartSampleData = [
     close: 0.9296662803746669,
     high: 0.9387318270525369,
     low: 0.9296662803746669,
-    xtzUsdQuoteHistorical: '6.565819057699964',
+    xtzUsdQuoteHistorical: '6.565819057699964'
   },
   {
     time: 1632024000,
@@ -4868,7 +4868,7 @@ export const CandleChartSampleData = [
     close: 0.9252390067268615,
     high: 0.9296662803746669,
     low: 0.9252390067268615,
-    xtzUsdQuoteHistorical: '6.450973190425388',
+    xtzUsdQuoteHistorical: '6.450973190425388'
   },
   {
     time: 1632027600,
@@ -4876,7 +4876,7 @@ export const CandleChartSampleData = [
     close: 0.9242246362600429,
     high: 0.9252390067268615,
     low: 0.9242246362600429,
-    xtzUsdQuoteHistorical: '6.425304531019431',
+    xtzUsdQuoteHistorical: '6.425304531019431'
   },
   {
     time: 1632031200,
@@ -4884,7 +4884,7 @@ export const CandleChartSampleData = [
     close: 0.9347904834412152,
     high: 0.9347904834412152,
     low: 0.9242246362600429,
-    xtzUsdQuoteHistorical: '6.423587763693472',
+    xtzUsdQuoteHistorical: '6.423587763693472'
   },
   {
     time: 1632034800,
@@ -4892,7 +4892,7 @@ export const CandleChartSampleData = [
     close: 0.9308655332170749,
     high: 0.9347904834412152,
     low: 0.9308655332170749,
-    xtzUsdQuoteHistorical: '6.411793202391868',
+    xtzUsdQuoteHistorical: '6.411793202391868'
   },
   {
     time: 1632038400,
@@ -4900,7 +4900,7 @@ export const CandleChartSampleData = [
     close: 0.9301253497239266,
     high: 0.9308655332170749,
     low: 0.9301253497239266,
-    xtzUsdQuoteHistorical: '6.405104967214217',
+    xtzUsdQuoteHistorical: '6.405104967214217'
   },
   {
     time: 1632042000,
@@ -4908,7 +4908,7 @@ export const CandleChartSampleData = [
     close: 0.9306809212843877,
     high: 0.9306809212843877,
     low: 0.9301253497239266,
-    xtzUsdQuoteHistorical: '6.506912719016815',
+    xtzUsdQuoteHistorical: '6.506912719016815'
   },
   {
     time: 1632045600,
@@ -4916,7 +4916,7 @@ export const CandleChartSampleData = [
     close: 0.9311252212020391,
     high: 0.9311252212020391,
     low: 0.9306809212843877,
-    xtzUsdQuoteHistorical: '6.464987815650789',
+    xtzUsdQuoteHistorical: '6.464987815650789'
   },
   {
     time: 1632049200,
@@ -4924,7 +4924,7 @@ export const CandleChartSampleData = [
     close: 0.9212544879685969,
     high: 0.9311252212020391,
     low: 0.9212544879685969,
-    xtzUsdQuoteHistorical: '6.45253434949198',
+    xtzUsdQuoteHistorical: '6.45253434949198'
   },
   {
     time: 1632052800,
@@ -4932,7 +4932,7 @@ export const CandleChartSampleData = [
     close: 0.9229749669563333,
     high: 0.9229749669563333,
     low: 0.9212544879685969,
-    xtzUsdQuoteHistorical: '6.253501492022544',
+    xtzUsdQuoteHistorical: '6.253501492022544'
   },
   {
     time: 1632056400,
@@ -4940,7 +4940,7 @@ export const CandleChartSampleData = [
     close: 0.9309208699150985,
     high: 0.9309208699150985,
     low: 0.9229749669563333,
-    xtzUsdQuoteHistorical: '6.1752427292513365',
+    xtzUsdQuoteHistorical: '6.1752427292513365'
   },
   {
     time: 1632060000,
@@ -4948,7 +4948,7 @@ export const CandleChartSampleData = [
     close: 0.9338404807337336,
     high: 0.9338404807337336,
     low: 0.9309208699150985,
-    xtzUsdQuoteHistorical: '6.258797284667927',
+    xtzUsdQuoteHistorical: '6.258797284667927'
   },
   {
     time: 1632063600,
@@ -4956,7 +4956,7 @@ export const CandleChartSampleData = [
     close: 0.9289478367630619,
     high: 0.9338404807337336,
     low: 0.9289478367630619,
-    xtzUsdQuoteHistorical: '6.284791752707951',
+    xtzUsdQuoteHistorical: '6.284791752707951'
   },
   {
     time: 1632067200,
@@ -4964,7 +4964,7 @@ export const CandleChartSampleData = [
     close: 0.9289466518626128,
     high: 0.9289478367630619,
     low: 0.9289466518626128,
-    xtzUsdQuoteHistorical: '6.353813143066179',
+    xtzUsdQuoteHistorical: '6.353813143066179'
   },
   {
     time: 1632070800,
@@ -4972,7 +4972,7 @@ export const CandleChartSampleData = [
     close: 0.9247261988040222,
     high: 0.9289466518626128,
     low: 0.9247261988040222,
-    xtzUsdQuoteHistorical: '6.568630557119379',
+    xtzUsdQuoteHistorical: '6.568630557119379'
   },
   {
     time: 1632074400,
@@ -4980,7 +4980,7 @@ export const CandleChartSampleData = [
     close: 0.8976139513575164,
     high: 0.9247261988040222,
     low: 0.8976139513575164,
-    xtzUsdQuoteHistorical: '6.517807113439004',
+    xtzUsdQuoteHistorical: '6.517807113439004'
   },
   {
     time: 1632078000,
@@ -4988,7 +4988,7 @@ export const CandleChartSampleData = [
     close: 0.8981066196912273,
     high: 0.8981066196912273,
     low: 0.8976139513575164,
-    xtzUsdQuoteHistorical: '6.895957236813721',
+    xtzUsdQuoteHistorical: '6.895957236813721'
   },
   {
     time: 1632081600,
@@ -4996,7 +4996,7 @@ export const CandleChartSampleData = [
     close: 0.8726139897708913,
     high: 0.8981066196912273,
     low: 0.8726139897708913,
-    xtzUsdQuoteHistorical: '6.8267475619135105',
+    xtzUsdQuoteHistorical: '6.8267475619135105'
   },
   {
     time: 1632085200,
@@ -5004,7 +5004,7 @@ export const CandleChartSampleData = [
     close: 0.8800692568773358,
     high: 0.8800692568773358,
     low: 0.8726139897708913,
-    xtzUsdQuoteHistorical: '6.669438697667833',
+    xtzUsdQuoteHistorical: '6.669438697667833'
   },
   {
     time: 1632088800,
@@ -5012,7 +5012,7 @@ export const CandleChartSampleData = [
     close: 0.8865705029002826,
     high: 0.8865705029002826,
     low: 0.8800692568773358,
-    xtzUsdQuoteHistorical: '6.678329480130996',
+    xtzUsdQuoteHistorical: '6.678329480130996'
   },
   {
     time: 1632092400,
@@ -5020,7 +5020,7 @@ export const CandleChartSampleData = [
     close: 0.8873330763221328,
     high: 0.8873330763221328,
     low: 0.8865705029002826,
-    xtzUsdQuoteHistorical: '6.432218955709175',
+    xtzUsdQuoteHistorical: '6.432218955709175'
   },
   {
     time: 1632096000,
@@ -5028,7 +5028,7 @@ export const CandleChartSampleData = [
     close: 0.8896372933460704,
     high: 0.8896372933460704,
     low: 0.8873330763221328,
-    xtzUsdQuoteHistorical: '6.576334709311429',
+    xtzUsdQuoteHistorical: '6.576334709311429'
   },
   {
     time: 1632099600,
@@ -5036,7 +5036,7 @@ export const CandleChartSampleData = [
     close: 0.8931728577877603,
     high: 0.8931728577877603,
     low: 0.8896372933460704,
-    xtzUsdQuoteHistorical: '6.239792901773375',
+    xtzUsdQuoteHistorical: '6.239792901773375'
   },
   {
     time: 1632103200,
@@ -5044,7 +5044,7 @@ export const CandleChartSampleData = [
     close: 0.8932810231061629,
     high: 0.8932810231061629,
     low: 0.8931728577877603,
-    xtzUsdQuoteHistorical: '6.249316308205545',
+    xtzUsdQuoteHistorical: '6.249316308205545'
   },
   {
     time: 1632106800,
@@ -5052,7 +5052,7 @@ export const CandleChartSampleData = [
     close: 0.9062676600021714,
     high: 0.9062676600021714,
     low: 0.8932810231061629,
-    xtzUsdQuoteHistorical: '5.983554049003064',
+    xtzUsdQuoteHistorical: '5.983554049003064'
   },
   {
     time: 1632110400,
@@ -5060,7 +5060,7 @@ export const CandleChartSampleData = [
     close: 0.9163949104218112,
     high: 0.9163949104218112,
     low: 0.9062676600021714,
-    xtzUsdQuoteHistorical: '5.864404142065044',
+    xtzUsdQuoteHistorical: '5.864404142065044'
   },
   {
     time: 1632114000,
@@ -5068,7 +5068,7 @@ export const CandleChartSampleData = [
     close: 0.9156436912153139,
     high: 0.9163949104218112,
     low: 0.9156436912153139,
-    xtzUsdQuoteHistorical: '5.894688971642488',
+    xtzUsdQuoteHistorical: '5.894688971642488'
   },
   {
     time: 1632117600,
@@ -5076,7 +5076,7 @@ export const CandleChartSampleData = [
     close: 0.9109269996371088,
     high: 0.9156436912153139,
     low: 0.9109269996371088,
-    xtzUsdQuoteHistorical: '5.856674129979373',
+    xtzUsdQuoteHistorical: '5.856674129979373'
   },
   {
     time: 1632121200,
@@ -5084,7 +5084,7 @@ export const CandleChartSampleData = [
     close: 0.91938383539203,
     high: 0.91938383539203,
     low: 0.9109269996371088,
-    xtzUsdQuoteHistorical: '5.7682026270883675',
+    xtzUsdQuoteHistorical: '5.7682026270883675'
   },
   {
     time: 1632124800,
@@ -5092,7 +5092,7 @@ export const CandleChartSampleData = [
     close: 0.9200393920750476,
     high: 0.9200393920750476,
     low: 0.91938383539203,
-    xtzUsdQuoteHistorical: '5.572796035257029',
+    xtzUsdQuoteHistorical: '5.572796035257029'
   },
   {
     time: 1632128400,
@@ -5100,7 +5100,7 @@ export const CandleChartSampleData = [
     close: 0.9126414091408178,
     high: 0.9200393920750476,
     low: 0.9126414091408178,
-    xtzUsdQuoteHistorical: '5.714173376867467',
+    xtzUsdQuoteHistorical: '5.714173376867467'
   },
   {
     time: 1632132000,
@@ -5108,7 +5108,7 @@ export const CandleChartSampleData = [
     close: 0.9235820477421046,
     high: 0.9235820477421046,
     low: 0.9126414091408178,
-    xtzUsdQuoteHistorical: '5.672709250961482',
+    xtzUsdQuoteHistorical: '5.672709250961482'
   },
   {
     time: 1632135600,
@@ -5116,7 +5116,7 @@ export const CandleChartSampleData = [
     close: 0.9170860877884501,
     high: 0.9235820477421046,
     low: 0.9170860877884501,
-    xtzUsdQuoteHistorical: '5.603259091965349',
+    xtzUsdQuoteHistorical: '5.603259091965349'
   },
   {
     time: 1632139200,
@@ -5124,7 +5124,7 @@ export const CandleChartSampleData = [
     close: 0.9158555382000318,
     high: 0.9170860877884501,
     low: 0.9158555382000318,
-    xtzUsdQuoteHistorical: '5.316777696315306',
+    xtzUsdQuoteHistorical: '5.316777696315306'
   },
   {
     time: 1632142800,
@@ -5132,7 +5132,7 @@ export const CandleChartSampleData = [
     close: 0.9201404845350679,
     high: 0.9201404845350679,
     low: 0.9158555382000318,
-    xtzUsdQuoteHistorical: '5.283406969762602',
+    xtzUsdQuoteHistorical: '5.283406969762602'
   },
   {
     time: 1632146400,
@@ -5140,7 +5140,7 @@ export const CandleChartSampleData = [
     close: 0.9147769755186386,
     high: 0.9201404845350679,
     low: 0.9147769755186386,
-    xtzUsdQuoteHistorical: '5.530913422606779',
+    xtzUsdQuoteHistorical: '5.530913422606779'
   },
   {
     time: 1632150000,
@@ -5148,7 +5148,7 @@ export const CandleChartSampleData = [
     close: 0.8989050150389684,
     high: 0.9147769755186386,
     low: 0.8989050150389684,
-    xtzUsdQuoteHistorical: '5.490021468412063',
+    xtzUsdQuoteHistorical: '5.490021468412063'
   },
   {
     time: 1632153600,
@@ -5156,7 +5156,7 @@ export const CandleChartSampleData = [
     close: 0.8977473927335798,
     high: 0.8989050150389684,
     low: 0.8977473927335798,
-    xtzUsdQuoteHistorical: '5.516158458565266',
+    xtzUsdQuoteHistorical: '5.516158458565266'
   },
   {
     time: 1632157200,
@@ -5164,7 +5164,7 @@ export const CandleChartSampleData = [
     close: 0.8934857106576531,
     high: 0.8977473927335798,
     low: 0.8934857106576531,
-    xtzUsdQuoteHistorical: '5.5813643375815',
+    xtzUsdQuoteHistorical: '5.5813643375815'
   },
   {
     time: 1632160800,
@@ -5172,7 +5172,7 @@ export const CandleChartSampleData = [
     close: 0.9044912411462254,
     high: 0.9044912411462254,
     low: 0.8934857106576531,
-    xtzUsdQuoteHistorical: '5.544242306258766',
+    xtzUsdQuoteHistorical: '5.544242306258766'
   },
   {
     time: 1632164400,
@@ -5180,7 +5180,7 @@ export const CandleChartSampleData = [
     close: 0.9026588855769789,
     high: 0.9044912411462254,
     low: 0.9026588855769789,
-    xtzUsdQuoteHistorical: '5.357064053097098',
+    xtzUsdQuoteHistorical: '5.357064053097098'
   },
   {
     time: 1632168000,
@@ -5188,7 +5188,7 @@ export const CandleChartSampleData = [
     close: 0.9057368455389381,
     high: 0.9057368455389381,
     low: 0.9026588855769789,
-    xtzUsdQuoteHistorical: '5.365877967496184',
+    xtzUsdQuoteHistorical: '5.365877967496184'
   },
   {
     time: 1632171600,
@@ -5196,7 +5196,7 @@ export const CandleChartSampleData = [
     close: 0.9076564173267209,
     high: 0.9076564173267209,
     low: 0.9057368455389381,
-    xtzUsdQuoteHistorical: '5.276224532958361',
+    xtzUsdQuoteHistorical: '5.276224532958361'
   },
   {
     time: 1632175200,
@@ -5204,7 +5204,7 @@ export const CandleChartSampleData = [
     close: 0.9075762819221929,
     high: 0.9076564173267209,
     low: 0.9075762819221929,
-    xtzUsdQuoteHistorical: '5.42513490804659',
+    xtzUsdQuoteHistorical: '5.42513490804659'
   },
   {
     time: 1632178800,
@@ -5212,7 +5212,7 @@ export const CandleChartSampleData = [
     close: 0.9094211435714608,
     high: 0.9094211435714608,
     low: 0.9075762819221929,
-    xtzUsdQuoteHistorical: '5.387337616269347',
+    xtzUsdQuoteHistorical: '5.387337616269347'
   },
   {
     time: 1632182400,
@@ -5220,7 +5220,7 @@ export const CandleChartSampleData = [
     close: 0.907271666006713,
     high: 0.9094211435714608,
     low: 0.907271666006713,
-    xtzUsdQuoteHistorical: '5.30272816611977',
+    xtzUsdQuoteHistorical: '5.30272816611977'
   },
   {
     time: 1632186000,
@@ -5228,7 +5228,7 @@ export const CandleChartSampleData = [
     close: 0.914982429112886,
     high: 0.914982429112886,
     low: 0.907271666006713,
-    xtzUsdQuoteHistorical: '5.054794755543848',
+    xtzUsdQuoteHistorical: '5.054794755543848'
   },
   {
     time: 1632189600,
@@ -5236,7 +5236,7 @@ export const CandleChartSampleData = [
     close: 0.9093300181093081,
     high: 0.914982429112886,
     low: 0.9093300181093081,
-    xtzUsdQuoteHistorical: '5.164520952970496',
+    xtzUsdQuoteHistorical: '5.164520952970496'
   },
   {
     time: 1632193200,
@@ -5244,7 +5244,7 @@ export const CandleChartSampleData = [
     close: 0.9007469580268911,
     high: 0.9093300181093081,
     low: 0.9007469580268911,
-    xtzUsdQuoteHistorical: '5.287102729295076',
+    xtzUsdQuoteHistorical: '5.287102729295076'
   },
   {
     time: 1632196800,
@@ -5252,7 +5252,7 @@ export const CandleChartSampleData = [
     close: 0.9028721944997459,
     high: 0.9028721944997459,
     low: 0.9007469580268911,
-    xtzUsdQuoteHistorical: '5.196678665822178',
+    xtzUsdQuoteHistorical: '5.196678665822178'
   },
   {
     time: 1632200400,
@@ -5260,7 +5260,7 @@ export const CandleChartSampleData = [
     close: 0.9025488126145187,
     high: 0.9028721944997459,
     low: 0.9025488126145187,
-    xtzUsdQuoteHistorical: '5.115805258214085',
+    xtzUsdQuoteHistorical: '5.115805258214085'
   },
   {
     time: 1632204000,
@@ -5268,7 +5268,7 @@ export const CandleChartSampleData = [
     close: 0.8935060274981897,
     high: 0.9025488126145187,
     low: 0.8935060274981897,
-    xtzUsdQuoteHistorical: '5.070565919337573',
+    xtzUsdQuoteHistorical: '5.070565919337573'
   },
   {
     time: 1632207600,
@@ -5276,7 +5276,7 @@ export const CandleChartSampleData = [
     close: 0.893082513786451,
     high: 0.8935060274981897,
     low: 0.893082513786451,
-    xtzUsdQuoteHistorical: '5.1515576529125395',
+    xtzUsdQuoteHistorical: '5.1515576529125395'
   },
   {
     time: 1632211200,
@@ -5284,7 +5284,7 @@ export const CandleChartSampleData = [
     close: 0.9011408157052588,
     high: 0.9011408157052588,
     low: 0.893082513786451,
-    xtzUsdQuoteHistorical: '5.255016115135436',
+    xtzUsdQuoteHistorical: '5.255016115135436'
   },
   {
     time: 1632214800,
@@ -5292,7 +5292,7 @@ export const CandleChartSampleData = [
     close: 0.8895457218928438,
     high: 0.9011408157052588,
     low: 0.8895457218928438,
-    xtzUsdQuoteHistorical: '5.501167544090781',
+    xtzUsdQuoteHistorical: '5.501167544090781'
   },
   {
     time: 1632218400,
@@ -5300,7 +5300,7 @@ export const CandleChartSampleData = [
     close: 0.8877302039739449,
     high: 0.8895457218928438,
     low: 0.8877302039739449,
-    xtzUsdQuoteHistorical: '5.412048252534757',
+    xtzUsdQuoteHistorical: '5.412048252534757'
   },
   {
     time: 1632222000,
@@ -5308,7 +5308,7 @@ export const CandleChartSampleData = [
     close: 0.8882888070841624,
     high: 0.8882888070841624,
     low: 0.8877302039739449,
-    xtzUsdQuoteHistorical: '5.468974205572403',
+    xtzUsdQuoteHistorical: '5.468974205572403'
   },
   {
     time: 1632225600,
@@ -5316,7 +5316,7 @@ export const CandleChartSampleData = [
     close: 0.8879997025683551,
     high: 0.8882888070841624,
     low: 0.8879997025683551,
-    xtzUsdQuoteHistorical: '5.446222749516696',
+    xtzUsdQuoteHistorical: '5.446222749516696'
   },
   {
     time: 1632229200,
@@ -5324,7 +5324,7 @@ export const CandleChartSampleData = [
     close: 0.8890176526171182,
     high: 0.8890176526171182,
     low: 0.8879997025683551,
-    xtzUsdQuoteHistorical: '5.390336228752661',
+    xtzUsdQuoteHistorical: '5.390336228752661'
   },
   {
     time: 1632232800,
@@ -5332,7 +5332,7 @@ export const CandleChartSampleData = [
     close: 0.8878591076087702,
     high: 0.8890176526171182,
     low: 0.8878591076087702,
-    xtzUsdQuoteHistorical: '5.37064627739152',
+    xtzUsdQuoteHistorical: '5.37064627739152'
   },
   {
     time: 1632236400,
@@ -5340,7 +5340,7 @@ export const CandleChartSampleData = [
     close: 0.8833264398665266,
     high: 0.8878591076087702,
     low: 0.8833264398665266,
-    xtzUsdQuoteHistorical: '5.167278776780513',
+    xtzUsdQuoteHistorical: '5.167278776780513'
   },
   {
     time: 1632240000,
@@ -5348,7 +5348,7 @@ export const CandleChartSampleData = [
     close: 0.8798971444758227,
     high: 0.8833264398665266,
     low: 0.8798971444758227,
-    xtzUsdQuoteHistorical: '5.263894913748117',
+    xtzUsdQuoteHistorical: '5.263894913748117'
   },
   {
     time: 1632243600,
@@ -5356,7 +5356,7 @@ export const CandleChartSampleData = [
     close: 0.8829276181351281,
     high: 0.8829276181351281,
     low: 0.8798971444758227,
-    xtzUsdQuoteHistorical: '5.166404857610289',
+    xtzUsdQuoteHistorical: '5.166404857610289'
   },
   {
     time: 1632247200,
@@ -5364,7 +5364,7 @@ export const CandleChartSampleData = [
     close: 0.8924854708084695,
     high: 0.8924854708084695,
     low: 0.8829276181351281,
-    xtzUsdQuoteHistorical: '5.021552992435861',
+    xtzUsdQuoteHistorical: '5.021552992435861'
   },
   {
     time: 1632250800,
@@ -5372,7 +5372,7 @@ export const CandleChartSampleData = [
     close: 0.8900926872893504,
     high: 0.8924854708084695,
     low: 0.8900926872893504,
-    xtzUsdQuoteHistorical: '5.0113438988820915',
+    xtzUsdQuoteHistorical: '5.0113438988820915'
   },
   {
     time: 1632254400,
@@ -5380,7 +5380,7 @@ export const CandleChartSampleData = [
     close: 0.8889843087808211,
     high: 0.8900926872893504,
     low: 0.8889843087808211,
-    xtzUsdQuoteHistorical: '4.947629971717287',
+    xtzUsdQuoteHistorical: '4.947629971717287'
   },
   {
     time: 1632258000,
@@ -5388,7 +5388,7 @@ export const CandleChartSampleData = [
     close: 0.903315775852576,
     high: 0.903315775852576,
     low: 0.8889843087808211,
-    xtzUsdQuoteHistorical: '4.657070797233715',
+    xtzUsdQuoteHistorical: '4.657070797233715'
   },
   {
     time: 1632261600,
@@ -5396,7 +5396,7 @@ export const CandleChartSampleData = [
     close: 0.8760323868454621,
     high: 0.903315775852576,
     low: 0.8760323868454621,
-    xtzUsdQuoteHistorical: '4.844345281675109',
+    xtzUsdQuoteHistorical: '4.844345281675109'
   },
   {
     time: 1632265200,
@@ -5404,7 +5404,7 @@ export const CandleChartSampleData = [
     close: 0.8768622288756042,
     high: 0.8768622288756042,
     low: 0.8760323868454621,
-    xtzUsdQuoteHistorical: '4.692416010932458',
+    xtzUsdQuoteHistorical: '4.692416010932458'
   },
   {
     time: 1632268800,
@@ -5412,7 +5412,7 @@ export const CandleChartSampleData = [
     close: 0.8679979841954348,
     high: 0.8768622288756042,
     low: 0.8679979841954348,
-    xtzUsdQuoteHistorical: '4.6003475747686835',
+    xtzUsdQuoteHistorical: '4.6003475747686835'
   },
   {
     time: 1632272400,
@@ -5420,7 +5420,7 @@ export const CandleChartSampleData = [
     close: 0.8660250680556749,
     high: 0.8679979841954348,
     low: 0.8660250680556749,
-    xtzUsdQuoteHistorical: '4.587496417239653',
+    xtzUsdQuoteHistorical: '4.587496417239653'
   },
   {
     time: 1632276000,
@@ -5428,7 +5428,7 @@ export const CandleChartSampleData = [
     close: 0.8667570945106988,
     high: 0.8667570945106988,
     low: 0.8660250680556749,
-    xtzUsdQuoteHistorical: '4.875494242420129',
+    xtzUsdQuoteHistorical: '4.875494242420129'
   },
   {
     time: 1632279600,
@@ -5436,7 +5436,7 @@ export const CandleChartSampleData = [
     close: 0.9051478176729176,
     high: 0.9051478176729176,
     low: 0.8667570945106988,
-    xtzUsdQuoteHistorical: '4.876511956058082',
+    xtzUsdQuoteHistorical: '4.876511956058082'
   },
   {
     time: 1632283200,
@@ -5444,7 +5444,7 @@ export const CandleChartSampleData = [
     close: 0.9024945452115657,
     high: 0.9051478176729176,
     low: 0.9024945452115657,
-    xtzUsdQuoteHistorical: '4.818552461240133',
+    xtzUsdQuoteHistorical: '4.818552461240133'
   },
   {
     time: 1632286800,
@@ -5452,7 +5452,7 @@ export const CandleChartSampleData = [
     close: 0.902494545210283,
     high: 0.9024945452115657,
     low: 0.902494545210283,
-    xtzUsdQuoteHistorical: '4.772677079337882',
+    xtzUsdQuoteHistorical: '4.772677079337882'
   },
   {
     time: 1632290400,
@@ -5460,7 +5460,7 @@ export const CandleChartSampleData = [
     close: 0.9041122338354138,
     high: 0.9041122338354138,
     low: 0.902494545210283,
-    xtzUsdQuoteHistorical: '4.830607694230215',
+    xtzUsdQuoteHistorical: '4.830607694230215'
   },
   {
     time: 1632294000,
@@ -5468,7 +5468,7 @@ export const CandleChartSampleData = [
     close: 0.9029960774830531,
     high: 0.9041122338354138,
     low: 0.9029960774830531,
-    xtzUsdQuoteHistorical: '4.91000522509792',
+    xtzUsdQuoteHistorical: '4.91000522509792'
   },
   {
     time: 1632297600,
@@ -5476,7 +5476,7 @@ export const CandleChartSampleData = [
     close: 0.8924005614181061,
     high: 0.9029960774830531,
     low: 0.8924005614181061,
-    xtzUsdQuoteHistorical: '5.057038261039312',
+    xtzUsdQuoteHistorical: '5.057038261039312'
   },
   {
     time: 1632301200,
@@ -5484,7 +5484,7 @@ export const CandleChartSampleData = [
     close: 0.8784498027903389,
     high: 0.8924005614181061,
     low: 0.8784498027903389,
-    xtzUsdQuoteHistorical: '4.966041135690376',
+    xtzUsdQuoteHistorical: '4.966041135690376'
   },
   {
     time: 1632304800,
@@ -5492,7 +5492,7 @@ export const CandleChartSampleData = [
     close: 0.8709361905073154,
     high: 0.8784498027903389,
     low: 0.8709361905073154,
-    xtzUsdQuoteHistorical: '4.978113011751113',
+    xtzUsdQuoteHistorical: '4.978113011751113'
   },
   {
     time: 1632308400,
@@ -5500,7 +5500,7 @@ export const CandleChartSampleData = [
     close: 0.8831204784590088,
     high: 0.8831204784590088,
     low: 0.8709361905073154,
-    xtzUsdQuoteHistorical: '4.913201138956561',
+    xtzUsdQuoteHistorical: '4.913201138956561'
   },
   {
     time: 1632312000,
@@ -5508,7 +5508,7 @@ export const CandleChartSampleData = [
     close: 0.8779485894648444,
     high: 0.8831204784590088,
     low: 0.8779485894648444,
-    xtzUsdQuoteHistorical: '4.856310523997539',
+    xtzUsdQuoteHistorical: '4.856310523997539'
   },
   {
     time: 1632315600,
@@ -5516,7 +5516,7 @@ export const CandleChartSampleData = [
     close: 0.880447561273318,
     high: 0.880447561273318,
     low: 0.8779485894648444,
-    xtzUsdQuoteHistorical: '4.944118934835366',
+    xtzUsdQuoteHistorical: '4.944118934835366'
   },
   {
     time: 1632319200,
@@ -5524,7 +5524,7 @@ export const CandleChartSampleData = [
     close: 0.8832824324255311,
     high: 0.8832824324255311,
     low: 0.880447561273318,
-    xtzUsdQuoteHistorical: '4.980861850860828',
+    xtzUsdQuoteHistorical: '4.980861850860828'
   },
   {
     time: 1632322800,
@@ -5532,7 +5532,7 @@ export const CandleChartSampleData = [
     close: 0.8871351542339334,
     high: 0.8871351542339334,
     low: 0.8832824324255311,
-    xtzUsdQuoteHistorical: '5.073022724490534',
+    xtzUsdQuoteHistorical: '5.073022724490534'
   },
   {
     time: 1632326400,
@@ -5540,7 +5540,7 @@ export const CandleChartSampleData = [
     close: 0.8700947727887605,
     high: 0.8871351542339334,
     low: 0.8700947727887605,
-    xtzUsdQuoteHistorical: '5.298217147071457',
+    xtzUsdQuoteHistorical: '5.298217147071457'
   },
   {
     time: 1632330000,
@@ -5548,7 +5548,7 @@ export const CandleChartSampleData = [
     close: 0.8785229362321721,
     high: 0.8785229362321721,
     low: 0.8700947727887605,
-    xtzUsdQuoteHistorical: '5.365121628788506',
+    xtzUsdQuoteHistorical: '5.365121628788506'
   },
   {
     time: 1632333600,
@@ -5556,7 +5556,7 @@ export const CandleChartSampleData = [
     close: 0.8732524711943757,
     high: 0.8785229362321721,
     low: 0.8732524711943757,
-    xtzUsdQuoteHistorical: '5.298158491075888',
+    xtzUsdQuoteHistorical: '5.298158491075888'
   },
   {
     time: 1632337200,
@@ -5564,7 +5564,7 @@ export const CandleChartSampleData = [
     close: 0.8688699559321377,
     high: 0.8732524711943757,
     low: 0.8688699559321377,
-    xtzUsdQuoteHistorical: '5.329850974133275',
+    xtzUsdQuoteHistorical: '5.329850974133275'
   },
   {
     time: 1632340800,
@@ -5572,7 +5572,7 @@ export const CandleChartSampleData = [
     close: 0.8654653326895373,
     high: 0.8688699559321377,
     low: 0.8654653326895373,
-    xtzUsdQuoteHistorical: '5.4056948982744855',
+    xtzUsdQuoteHistorical: '5.4056948982744855'
   },
   {
     time: 1632344400,
@@ -5580,7 +5580,7 @@ export const CandleChartSampleData = [
     close: 0.8641988293032441,
     high: 0.8654653326895373,
     low: 0.8641988293032441,
-    xtzUsdQuoteHistorical: '5.404754787468106',
+    xtzUsdQuoteHistorical: '5.404754787468106'
   },
   {
     time: 1632348000,
@@ -5588,7 +5588,7 @@ export const CandleChartSampleData = [
     close: 0.8564571864543293,
     high: 0.8641988293032441,
     low: 0.8564571864543293,
-    xtzUsdQuoteHistorical: '5.470708304809857',
+    xtzUsdQuoteHistorical: '5.470708304809857'
   },
   {
     time: 1632351600,
@@ -5596,7 +5596,7 @@ export const CandleChartSampleData = [
     close: 0.8559961394286728,
     high: 0.8564571864543293,
     low: 0.8559961394286728,
-    xtzUsdQuoteHistorical: '5.493293846779832',
+    xtzUsdQuoteHistorical: '5.493293846779832'
   },
   {
     time: 1632355200,
@@ -5604,7 +5604,7 @@ export const CandleChartSampleData = [
     close: 0.8502158303895109,
     high: 0.8559961394286728,
     low: 0.8502158303895109,
-    xtzUsdQuoteHistorical: '5.551490886756355',
+    xtzUsdQuoteHistorical: '5.551490886756355'
   },
   {
     time: 1632358800,
@@ -5612,7 +5612,7 @@ export const CandleChartSampleData = [
     close: 0.8465919530833297,
     high: 0.8502158303895109,
     low: 0.8465919530833297,
-    xtzUsdQuoteHistorical: '5.598698012332499',
+    xtzUsdQuoteHistorical: '5.598698012332499'
   },
   {
     time: 1632362400,
@@ -5620,7 +5620,7 @@ export const CandleChartSampleData = [
     close: 0.8395415343938378,
     high: 0.8465919530833297,
     low: 0.8395415343938378,
-    xtzUsdQuoteHistorical: '5.713363306757834',
+    xtzUsdQuoteHistorical: '5.713363306757834'
   },
   {
     time: 1632366000,
@@ -5628,7 +5628,7 @@ export const CandleChartSampleData = [
     close: 0.8428122696006072,
     high: 0.8428122696006072,
     low: 0.8395415343938378,
-    xtzUsdQuoteHistorical: '5.746792956713965',
+    xtzUsdQuoteHistorical: '5.746792956713965'
   },
   {
     time: 1632369600,
@@ -5636,7 +5636,7 @@ export const CandleChartSampleData = [
     close: 0.8437307216662183,
     high: 0.8437307216662183,
     low: 0.8428122696006072,
-    xtzUsdQuoteHistorical: '5.776073567700152',
+    xtzUsdQuoteHistorical: '5.776073567700152'
   },
   {
     time: 1632373200,
@@ -5644,7 +5644,7 @@ export const CandleChartSampleData = [
     close: 0.8436795898447642,
     high: 0.8437307216662183,
     low: 0.8436795898447642,
-    xtzUsdQuoteHistorical: '5.769130554580943',
+    xtzUsdQuoteHistorical: '5.769130554580943'
   },
   {
     time: 1632376800,
@@ -5652,7 +5652,7 @@ export const CandleChartSampleData = [
     close: 0.8083828324835516,
     high: 0.8436795898447642,
     low: 0.8083828324835516,
-    xtzUsdQuoteHistorical: '5.652632236504699',
+    xtzUsdQuoteHistorical: '5.652632236504699'
   },
   {
     time: 1632380400,
@@ -5660,7 +5660,7 @@ export const CandleChartSampleData = [
     close: 0.8533665692045463,
     high: 0.8533665692045463,
     low: 0.8083828324835516,
-    xtzUsdQuoteHistorical: '5.6728412806574875',
+    xtzUsdQuoteHistorical: '5.6728412806574875'
   },
   {
     time: 1632384000,
@@ -5668,7 +5668,7 @@ export const CandleChartSampleData = [
     close: 0.8522302233877265,
     high: 0.8533665692045463,
     low: 0.8522302233877265,
-    xtzUsdQuoteHistorical: '5.802627432963753',
+    xtzUsdQuoteHistorical: '5.802627432963753'
   },
   {
     time: 1632387600,
@@ -5676,7 +5676,7 @@ export const CandleChartSampleData = [
     close: 0.8455975066180803,
     high: 0.8522302233877265,
     low: 0.8455975066180803,
-    xtzUsdQuoteHistorical: '5.774685252227892',
+    xtzUsdQuoteHistorical: '5.774685252227892'
   },
   {
     time: 1632391200,
@@ -5684,7 +5684,7 @@ export const CandleChartSampleData = [
     close: 0.8406108969965531,
     high: 0.8455975066180803,
     low: 0.8406108969965531,
-    xtzUsdQuoteHistorical: '5.795666491544411',
+    xtzUsdQuoteHistorical: '5.795666491544411'
   },
   {
     time: 1632394800,
@@ -5692,7 +5692,7 @@ export const CandleChartSampleData = [
     close: 0.838969846570599,
     high: 0.8406108969965531,
     low: 0.838969846570599,
-    xtzUsdQuoteHistorical: '5.749350843243259',
+    xtzUsdQuoteHistorical: '5.749350843243259'
   },
   {
     time: 1632398400,
@@ -5700,7 +5700,7 @@ export const CandleChartSampleData = [
     close: 0.8393005496187876,
     high: 0.8393005496187876,
     low: 0.838969846570599,
-    xtzUsdQuoteHistorical: '5.639761034945228',
+    xtzUsdQuoteHistorical: '5.639761034945228'
   },
   {
     time: 1632402000,
@@ -5708,7 +5708,7 @@ export const CandleChartSampleData = [
     close: 0.834427813733951,
     high: 0.8393005496187876,
     low: 0.834427813733951,
-    xtzUsdQuoteHistorical: '5.815155623513837',
+    xtzUsdQuoteHistorical: '5.815155623513837'
   },
   {
     time: 1632405600,
@@ -5716,7 +5716,7 @@ export const CandleChartSampleData = [
     close: 0.826714468167442,
     high: 0.834427813733951,
     low: 0.826714468167442,
-    xtzUsdQuoteHistorical: '6.116693682546885',
+    xtzUsdQuoteHistorical: '6.116693682546885'
   },
   {
     time: 1632409200,
@@ -5724,7 +5724,7 @@ export const CandleChartSampleData = [
     close: 0.8172583182530684,
     high: 0.826714468167442,
     low: 0.8172583182530684,
-    xtzUsdQuoteHistorical: '6.398587216145475',
+    xtzUsdQuoteHistorical: '6.398587216145475'
   },
   {
     time: 1632412800,
@@ -5732,7 +5732,7 @@ export const CandleChartSampleData = [
     close: 0.8087748864504523,
     high: 0.8172583182530684,
     low: 0.8087748864504523,
-    xtzUsdQuoteHistorical: '6.38833741157013',
+    xtzUsdQuoteHistorical: '6.38833741157013'
   },
   {
     time: 1632416400,
@@ -5740,7 +5740,7 @@ export const CandleChartSampleData = [
     close: 0.8093206608413087,
     high: 0.8093206608413087,
     low: 0.8087748864504523,
-    xtzUsdQuoteHistorical: '6.321000751550439',
+    xtzUsdQuoteHistorical: '6.321000751550439'
   },
   {
     time: 1632420000,
@@ -5748,7 +5748,7 @@ export const CandleChartSampleData = [
     close: 0.8088910859468806,
     high: 0.8093206608413087,
     low: 0.8088910859468806,
-    xtzUsdQuoteHistorical: '6.492257205929426',
+    xtzUsdQuoteHistorical: '6.492257205929426'
   },
   {
     time: 1632423600,
@@ -5756,7 +5756,7 @@ export const CandleChartSampleData = [
     close: 0.8040556804850745,
     high: 0.8088910859468806,
     low: 0.8040556804850745,
-    xtzUsdQuoteHistorical: '6.5275013725734325',
+    xtzUsdQuoteHistorical: '6.5275013725734325'
   },
   {
     time: 1632427200,
@@ -5764,7 +5764,7 @@ export const CandleChartSampleData = [
     close: 0.7671518141807853,
     high: 0.8040556804850745,
     low: 0.7671518141807853,
-    xtzUsdQuoteHistorical: '6.482191595785687',
+    xtzUsdQuoteHistorical: '6.482191595785687'
   },
   {
     time: 1632430800,
@@ -5772,7 +5772,7 @@ export const CandleChartSampleData = [
     close: 0.7723171790116243,
     high: 0.7723171790116243,
     low: 0.7671518141807853,
-    xtzUsdQuoteHistorical: '6.379008762393412',
+    xtzUsdQuoteHistorical: '6.379008762393412'
   },
   {
     time: 1632434400,
@@ -5780,7 +5780,7 @@ export const CandleChartSampleData = [
     close: 0.7672097811064008,
     high: 0.7723171790116243,
     low: 0.7672097811064008,
-    xtzUsdQuoteHistorical: '6.356174533319806',
+    xtzUsdQuoteHistorical: '6.356174533319806'
   },
   {
     time: 1632438000,
@@ -5788,7 +5788,7 @@ export const CandleChartSampleData = [
     close: 0.7672097811064008,
     high: 0.7672097811064008,
     low: 0.7672097811064008,
-    xtzUsdQuoteHistorical: '6.275408019568866',
+    xtzUsdQuoteHistorical: '6.275408019568866'
   },
   {
     time: 1632441600,
@@ -5796,7 +5796,7 @@ export const CandleChartSampleData = [
     close: 0.7679054000171424,
     high: 0.7679054000171424,
     low: 0.7672097811064008,
-    xtzUsdQuoteHistorical: '6.265739133456205',
+    xtzUsdQuoteHistorical: '6.265739133456205'
   },
   {
     time: 1632445200,
@@ -5804,7 +5804,7 @@ export const CandleChartSampleData = [
     close: 0.754679215576237,
     high: 0.7679054000171424,
     low: 0.754679215576237,
-    xtzUsdQuoteHistorical: '6.495667552385967',
+    xtzUsdQuoteHistorical: '6.495667552385967'
   },
   {
     time: 1632448800,
@@ -5812,7 +5812,7 @@ export const CandleChartSampleData = [
     close: 0.749271787837206,
     high: 0.754679215576237,
     low: 0.749271787837206,
-    xtzUsdQuoteHistorical: '6.421761721068086',
+    xtzUsdQuoteHistorical: '6.421761721068086'
   },
   {
     time: 1632452400,
@@ -5820,7 +5820,7 @@ export const CandleChartSampleData = [
     close: 0.7545886759675884,
     high: 0.7545886759675884,
     low: 0.749271787837206,
-    xtzUsdQuoteHistorical: '6.348364305107606',
+    xtzUsdQuoteHistorical: '6.348364305107606'
   },
   {
     time: 1632456000,
@@ -5828,7 +5828,7 @@ export const CandleChartSampleData = [
     close: 0.7545006831931163,
     high: 0.7545886759675884,
     low: 0.7545006831931163,
-    xtzUsdQuoteHistorical: '6.406839668018892',
+    xtzUsdQuoteHistorical: '6.406839668018892'
   },
   {
     time: 1632459600,
@@ -5836,6 +5836,6 @@ export const CandleChartSampleData = [
     close: 0.7555076449813027,
     high: 0.7555076449813027,
     low: 0.7545006831931163,
-    xtzUsdQuoteHistorical: '6.576307804582103',
-  },
+    xtzUsdQuoteHistorical: '6.576307804582103'
+  }
 ];

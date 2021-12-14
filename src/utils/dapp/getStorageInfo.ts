@@ -1,5 +1,5 @@
-import memoizee from 'memoizee';
 import { TezosToolkit } from '@taquito/taquito';
+import memoizee from 'memoizee';
 
 const getContractPure = (tezos: TezosToolkit, address: string) => tezos.contract.at(address);
 
