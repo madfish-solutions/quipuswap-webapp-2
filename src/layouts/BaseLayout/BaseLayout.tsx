@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import {
-  Background,
   ColorModes,
   ToastWrapper,
   ColorThemeContext,
@@ -15,6 +14,7 @@ import { Sidebar } from '@components/common/Header/Sidebar';
 import { Header } from '@components/common/Header';
 import { WalletModal } from '@components/modals/WalletModal';
 import { AccountModal } from '@components/modals/AccountModal';
+import { Background } from '@components/svg/Background';
 
 import s from './BaseLayout.module.sass';
 

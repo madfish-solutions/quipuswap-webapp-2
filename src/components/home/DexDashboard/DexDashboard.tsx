@@ -12,7 +12,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import { useGetHomeOverviewQuery } from '@graphql';
-import { MAINNET_NETWORK, STABLE_TOKEN } from '@utils/defaults';
+import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 import { getStorageInfo } from '@utils/dapp';
 import { Section } from '@components/home/Section';
 
@@ -34,7 +34,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
     const asyncLoad = async () => {
       // TODO: change after deploy token to testnet
       const tezos = new TezosToolkit(MAINNET_NETWORK.rpcBaseURL);
-      const contract = await getStorageInfo(tezos, STABLE_TOKEN.contractAddress);
+      const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       const tokenInfo = await contract?.token_info.get(0);
       setTotalSupply(tokenInfo);
     };

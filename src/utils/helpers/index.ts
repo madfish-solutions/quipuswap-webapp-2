@@ -33,4 +33,5 @@ export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';
 export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
-export * from './noOpFunc';
+export * from './isClient';
+export * from './getTokenSlug';

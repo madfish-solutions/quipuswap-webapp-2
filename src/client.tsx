@@ -17,8 +17,10 @@ const cache = new InMemoryCache({
     // eslint-disable-next-line no-underscore-dangle
     switch (responseObject.__typename) {
       // @ts-ignore
-      case 'Token': return `Token:${responseObject.id}:${responseObject.tokenId}`;
-      default: return defaultDataIdFromObject(responseObject);
+      case 'Token':
+        return `Token:${responseObject.id}:${responseObject.tokenId}`;
+      default:
+        return defaultDataIdFromObject(responseObject);
     }
   },
 });
@@ -84,7 +86,7 @@ export const withApollo = ({ ssr = true } = {}) => (PageComponent: any) => {
       ctx.apolloClient = apolloClient;
 
       // Run wrapped getInitialProps methods
-      let pageProps = {};
+      let pageProps = { pageProps: {} };
       if (PageComponent.getInitialProps) {
         pageProps = await PageComponent.getInitialProps(ctx);
       }
@@ -99,13 +101,11 @@ export const withApollo = ({ ssr = true } = {}) => (PageComponent: any) => {
         if (ssr) {
           try {
             // Run all GraphQL queries
-            const { getDataFromTree } = await import('@apollo/client/react/ssr');
+            const { getDataFromTree } = await import(
+              '@apollo/client/react/ssr'
+            );
             await getDataFromTree(
-              <AppTree
-                {...pageProps}
-                apolloClient={apolloClient}
-
-              />,
+              <AppTree {...pageProps} apolloClient={apolloClient} />,
             );
           } catch (error) {
             // Prevent Apollo Client GraphQL errors from crashing SSR.

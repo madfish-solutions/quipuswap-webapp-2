@@ -1,8 +1,18 @@
 import constate from 'constate';
-import useSWR from 'swr';
 
-import { useOnBlock, useTezos } from '@utils/dapp';
+import { useTezos } from '@utils/dapp';
 import useUpdateToast from './useUpdateToast';
+import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
+
+type RawExchangeRateEntry = {
+  tokenAddress?: string,
+  tokenId?: number,
+  exchangeRate: string
+};
+
+type ExchangeRateEntry = RawExchangeRateEntry & {
+  tokenAddress: string;
+};
 
 export const [
   ExchangeRatesProvider,
@@ -13,7 +23,9 @@ export const [
 
   const getExchangeRates = async () => fetch('https://api.templewallet.com/api/exchange-rates')
     .then((res) => res.json())
-    .then((json) => json)
+    .then((rawExchangeRates: RawExchangeRateEntry[]) => rawExchangeRates.map(
+      ({ tokenAddress, ...restProps }) => ({ ...restProps, tokenAddress: tokenAddress ?? 'tez' }),
+    ))
     .catch(() => {
       updateToast({
         type: 'error',
@@ -21,12 +33,12 @@ export const [
       });
     });
 
-  const { data: exchangeRates, revalidate } = useSWR(
+  const { data: exchangeRates } = useUpdateOnBlockSWR(
+    tezos,
     ['exchange-rates'],
     getExchangeRates,
     { refreshInterval: 30000 },
   );
-  useOnBlock(tezos, revalidate);
 
-  return exchangeRates;
+  return exchangeRates as (ExchangeRateEntry[] | undefined);
 });

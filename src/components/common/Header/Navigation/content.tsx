@@ -7,7 +7,9 @@ import {
 } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
+import { QSMainNet } from '@utils/types';
+import { getTokenSlug } from '@utils/helpers';
 
 interface LinkInterface {
   id: number
@@ -21,7 +23,7 @@ interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[]
 }
 
-export const NavigationData: NavigationDataProps[] = [
+export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] => [
   {
     id: 0,
     href: '/',
@@ -31,14 +33,14 @@ export const NavigationData: NavigationDataProps[] = [
   {
     id: 1,
     href: '/swap/[from-to]',
-    as: '/swap/TEZ-QUIPU',
+    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIconSidebar,
   },
   {
     id: 2,
     href: '/liquidity/[method]/[from-to]',
-    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${STABLE_TOKEN.contractAddress}_${STABLE_TOKEN.fa2TokenId}`,
+    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${MAINNET_DEFAULT_TOKEN.contractAddress}_${MAINNET_DEFAULT_TOKEN.fa2TokenId}`,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon,
   },

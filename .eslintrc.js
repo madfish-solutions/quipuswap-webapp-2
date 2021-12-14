@@ -11,7 +11,8 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'warn',
     'react-hooks/exhaustive-deps': 'warn',
     'no-plusplus': 0,
-    "linebreak-style": 0,
+    'linebreak-style': 0,
+    'consistent-return': 'off'
   },
   parserOptions: {
     project: './tsconfig.json',

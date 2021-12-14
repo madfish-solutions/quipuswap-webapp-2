@@ -1,5 +1,4 @@
 import React, {
-  useRef,
   useMemo,
   useState,
   useEffect,
@@ -8,28 +7,22 @@ import React, {
 } from 'react';
 import {
   Plus,
-  Input,
   Modal,
   Button,
-  Search,
-  Checkbox,
-  TokenCell,
   ColorModes,
-  NumberInput,
   TokenNotFound,
   LoadingTokenCell,
   ColorThemeContext,
 } from '@quipuswap/ui-kit';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { useTranslation } from 'next-i18next';
-import ReactModal from 'react-modal';
 import cx from 'classnames';
 
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import {
   useTezos,
   useTokens,
-  isTokenFa2,
+  getTokenType,
   useNetwork,
   useSearchTokens,
   useAddCustomToken,
@@ -38,131 +31,21 @@ import {
 import {
   isTokenEqual,
   localSearchToken,
-  prepareTokenLogo,
-  getWhitelistedTokenSymbol,
+  WhitelistedOrCustomToken,
 } from '@utils/helpers';
-import { validateMinMax } from '@utils/validators';
 
+import { FormApi } from 'final-form';
 import s from './PositionsModal.module.sass';
+import { FormValues, PositionsModalProps } from './PositionsModal.types';
+import { Header } from './PositionModalHeader';
+import { PositionTokenCell } from './PositionTokenCell';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark,
 };
 
-type PositionsModalProps = {
-  onChange: (tokenPair: WhitelistedTokenPair) => void
-  initialPair?: WhitelistedTokenPair
-  notSelectable1?: WhitelistedToken
-  notSelectable2?: WhitelistedToken
-} & ReactModal.Props;
-
-type HeaderProps = {
-  isSecondInput:boolean,
-  debounce:number,
-  save:any,
-  values:any,
-  form:any,
-};
-
-type FormValues = {
-  search: string
-  tokenId: string
-  token1: WhitelistedToken
-  token2: WhitelistedToken
-};
-
-const Header:React.FC<HeaderProps> = ({
-  isSecondInput, debounce, save, values, form,
-}) => {
-  const { t } = useTranslation(['common']);
-
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
-
-  const timeout = useRef(setTimeout(() => {}, 0));
-  const promise = useRef();
-
-  const saveFunc = useCallback(async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    promise.current = save(values);
-    await promise;
-    setSubm(false);
-  }, [save, values]);
-
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, [values, debounce, saveFunc]);
-
-  return (
-    <div className={s.inputs}>
-      <Field
-        name="search"
-      >
-        {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common|Search')}
-              error={meta.error}
-              readOnly={values.token1 && values.token2}
-            />
-          </>
-        )}
-
-      </Field>
-      {(isSecondInput) && (
-      <Field
-        name="tokenId"
-        validate={validateMinMax(0, 100)}
-      >
-        {({ input, meta }) => (
-          <>
-            <NumberInput
-              {...input}
-              className={s.modalInput}
-              placeholder={t('common|Token ID')}
-              step={1}
-              min={0}
-              max={100}
-              readOnly={values.token1 && values.token2}
-              error={(meta.touched && meta.error) || meta.submitError}
-              onIncrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  +input.value + 1 > 100 ? 100 : +input.value + 1,
-                );
-              }}
-              onDecrementClick={() => {
-                form.mutators.setValue(
-                  'tokenId',
-                  +input.value - 1 < 1 ? 1 : +input.value - 1,
-                );
-              }}
-            />
-          </>
-        )}
-      </Field>
-      )}
-    </div>
-  );
-};
-
-const AutoSave = (props:any) => (
+const AutoSave = (props: any) => (
   <FormSpy {...props} subscription={{ values: true }} component={Header} />
 );
 
@@ -188,21 +71,18 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   const [inputToken, setInputToken] = useState<string>('');
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
-  const handleInput = (values:FormValues) => {
+  const handleInput = (values: FormValues) => {
     setInputValue(values.search ?? '');
     setInputToken(isSoleFa2Token ? values.tokenId : '');
   };
 
   const handleTokenSearch = useCallback(() => {
-    const isTokens = tokens
-      .filter(
-        (token:any) => localSearchToken(
-          token,
-          network,
-          inputValue,
-          +inputToken,
-        ),
-      );
+    const isTokens = tokens.filter((token: WhitelistedToken) => localSearchToken(
+      token as WhitelistedOrCustomToken,
+      network,
+      inputValue,
+      +inputToken,
+    ));
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, +inputToken);
@@ -210,22 +90,77 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   }, [inputToken, inputValue, network, tokens, searchCustomToken]);
 
   const isEmptyTokens = useMemo(
-    () => filteredTokens.length === 0
-    && searchTokens.length === 0,
+    () => filteredTokens.length === 0 && searchTokens.length === 0,
     [searchTokens, filteredTokens],
   );
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
-  const allTokens = useMemo(() => (inputValue.length > 0 && filteredTokens.length === 0
-    ? searchTokens : filteredTokens), [inputValue, filteredTokens, searchTokens]);
+  useEffect(
+    () => handleTokenSearch(),
+    [tokens, inputValue, inputToken, handleTokenSearch],
+  );
+
+  const allTokens = useMemo(
+    () => (inputValue.length > 0 && filteredTokens.length === 0
+      ? searchTokens
+      : filteredTokens),
+    [inputValue, filteredTokens, searchTokens],
+  );
 
   useEffect(() => {
-    const getFa2 = async () => {
-      const res = await isTokenFa2(inputValue, tezos!!);
-      setSoleFa2Token(res);
-    };
-    getFa2();
+    getTokenType(inputValue, tezos!)
+      .then((tokenType) => setSoleFa2Token(tokenType === 'fa2'))
+      .catch(console.error);
   }, [inputValue, tezos]);
+
+  const handleTokenA = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (!notSelectable1) {
+      if (values.token2 && values.token1) {
+        form.mutators.setValue('token1', values.token2);
+        form.mutators.setValue('token2', undefined);
+      } else if (!values.token1) {
+        form.mutators.setValue('token1', token);
+      } else {
+        form.mutators.setValue('token1', undefined);
+      }
+    }
+  };
+
+  const handleTokenB = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (!notSelectable2) {
+      if (!values.token2) {
+        form.mutators.setValue('token2', token);
+      } else {
+        form.mutators.setValue('token2', undefined);
+      }
+    }
+  };
+
+  const handleTokenListItem = (
+    token: WhitelistedToken,
+    form: FormApi<FormValues, Partial<FormValues>>,
+    values: FormValues,
+  ) => {
+    if (searchTokens.length > 0) {
+      addCustomToken(token);
+    }
+    if (!values.token1) {
+      form.mutators.setValue('token1', token);
+    } else if (!values.token2) {
+      form.mutators.setValue('token2', token);
+    }
+    form.mutators.setValue('search', '');
+    form.mutators.setValue('tokenId', '');
+    setInputValue('');
+    setInputToken('');
+  };
 
   return (
     <Form
@@ -270,7 +205,10 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           onRequestClose={(e) => {
             if (values.token1 && values.token2) {
-              onChange({ token1: values.token1, token2: values.token2 } as WhitelistedTokenPair);
+              onChange({
+                token1: values.token1,
+                token2: values.token2,
+              } as WhitelistedTokenPair);
             }
             if (onRequestClose) onRequestClose(e);
           }}
@@ -281,105 +219,59 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               const token = input.value;
               if (!token) return '';
               return (
-                <TokenCell
-                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                  tokenName={getWhitelistedTokenSymbol(token)}
-                  tokenSymbol="TOKEN"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (!notSelectable1) {
-                      if (values.token2 && values.token1) {
-                        form.mutators.setValue('token1', values.token2);
-                        form.mutators.setValue('token2', undefined);
-                      } else if (!values.token1) {
-                        form.mutators.setValue('token1', token);
-                      } else {
-                        form.mutators.setValue('token1', undefined);
-                      }
-                    }
-                  }}
-                >
-                  <Checkbox checked />
-                </TokenCell>
+                <PositionTokenCell
+                  token={token}
+                  onClick={() => handleTokenA(token, form, values)}
+                  isChecked
+                />
               );
             }}
           </Field>
           {values.token1 && (
-          <div className={s.listItem}>
-            <Plus className={s.iconButton} />
-            <div className={s.listText}>
-              Search another Token
+            <div className={s.listItem}>
+              <Plus className={s.iconButton} />
+              <div className={s.listText}>Search another Token</div>
             </div>
-          </div>
           )}
           <Field initialValue={notSelectable2} name="token2">
             {({ input }) => {
               const token = input.value;
               if (!token) return '';
               return (
-                <TokenCell
-                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                  tokenName={getWhitelistedTokenSymbol(token)}
-                  tokenSymbol="TOKEN"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (!notSelectable2) {
-                      if (!values.token2) {
-                        form.mutators.setValue('token2', token);
-                      } else {
-                        form.mutators.setValue('token2', undefined);
-                      }
-                    }
-                  }}
-                >
-                  <Checkbox checked />
-                </TokenCell>
+                <PositionTokenCell
+                  token={token}
+                  onClick={() => handleTokenB(token, form, values)}
+                  isChecked
+                />
               );
             }}
           </Field>
           {isEmptyTokens && !searchLoading && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
+              <div className={s.notFoundLabel}>
+                {t('common|No tokens found')}
+              </div>
             </div>
           )}
-          {isEmptyTokens && searchLoading && (
-            [1, 2, 3, 4, 5, 6].map((x) => (<LoadingTokenCell key={x} />))
-          )}
-          {!values.token2 && allTokens
-            .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
-            .map((token) => {
-              const {
-                contractAddress, fa2TokenId,
-              } = token;
-              return (
-                <TokenCell
-                  key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                  tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-                  tokenName={getWhitelistedTokenSymbol(token)}
-                  tokenSymbol="TOKEN"
-                  tabIndex={0}
-                  onClick={() => {
-                    if (searchTokens.length > 0) {
-                      addCustomToken(token);
-                    }
-                    if (!values.token1) {
-                      form.mutators.setValue('token1', token);
-                    } else if (!values.token2) {
-                      form.mutators.setValue('token2', token);
-                    }
-                    form.mutators.setValue('search', '');
-                    form.mutators.setValue('tokenId', '');
-                    setInputValue('');
-                    setInputToken('');
-                  }}
-                >
-                  <Checkbox checked={false} />
-                </TokenCell>
-              );
-            })}
+          {isEmptyTokens
+            && searchLoading
+            && [1, 2, 3, 4, 5, 6].map((x) => <LoadingTokenCell key={x} />)}
+          {!values.token2
+            && allTokens
+              .filter((x) => !values.token1 || !isTokenEqual(x, values.token1))
+              .map((token) => {
+                const { contractAddress, fa2TokenId } = token;
+                return (
+                  <PositionTokenCell
+                    key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                    token={token}
+                    onClick={() => handleTokenListItem(token, form, values)}
+                    isChecked={false}
+                  />
+                );
+              })}
         </Modal>
-
       )}
     />
   );
