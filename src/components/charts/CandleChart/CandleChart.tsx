@@ -79,6 +79,7 @@ const ChartInstance: React.FC<{ data: CandlePlotPoint[]; token: WhitelistedToken
       return () => {};
     }
     window.addEventListener('resize', handleResize);
+
     return () => window.removeEventListener('resize', handleResize);
   }, [isClient, chartRef, handleResize]);
 
@@ -89,7 +90,7 @@ const ChartInstance: React.FC<{ data: CandlePlotPoint[]; token: WhitelistedToken
       chartCreated?.remove();
       setChart(undefined);
     }
-    if (!chartCreated && data && !!chartRef?.current?.parentElement) {
+    if (!chartCreated && Boolean(data) && !!chartRef?.current?.parentElement) {
       const chart = createChart(chartRef.current, {
         height,
         width: chartRef.current.parentElement.clientWidth - 40,
@@ -116,7 +117,7 @@ const ChartInstance: React.FC<{ data: CandlePlotPoint[]; token: WhitelistedToken
         },
         localization: {
           locale: i18n.language,
-          priceFormatter: (price: number) => prettyPrice(price!, 3, 3)
+          priceFormatter: (price: number) => prettyPrice(price, 3, 3)
         }
       });
 
@@ -134,21 +135,19 @@ const ChartInstance: React.FC<{ data: CandlePlotPoint[]; token: WhitelistedToken
           chartRef?.current &&
           (param === undefined ||
             param.time === undefined ||
-            (param && param.point && param.point.x < 0) ||
-            (param && param.point && param.point.x > chartRef.current.clientWidth) ||
-            (param && param.point && param.point.y < 0) ||
-            (param && param.point && param.point.y > height))
+            (param.point && param.point.x < 0) ||
+            (param.point && param.point.x > chartRef.current.clientWidth) ||
+            (param.point && param.point.y < 0) ||
+            (param.point && param.point.y > height))
         ) {
-          if (setValue) {
-            setValue({
-              open: currenValue.open,
-              high: currenValue.high,
-              low: currenValue.low,
-              close: currenValue.close,
-              time: currenValue.time
-            });
-          }
-        } else if (setValue) {
+          setValue({
+            open: currenValue.open,
+            high: currenValue.high,
+            low: currenValue.low,
+            close: currenValue.close,
+            time: currenValue.time
+          });
+        } else {
           const open = parseFloat(
             // @ts-ignore
             param.seriesPrices.get(series)?.open.toString() ?? currenValue.open
@@ -229,6 +228,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
+
   return (
     <Card className={className}>
       <CardHeader
@@ -246,7 +246,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({
         className={s.cardHeader}
       />
       <CardContent className={cx(s.container, s.cardContent)}>
-        {loading || !data || !token2 || data.length === 0 ? (
+        {loading || data.length === 0 ? (
           <Preloader style={{ minHeight: '360px' }} />
         ) : (
           <ChartInstance token={token2} data={data} />

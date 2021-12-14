@@ -23,8 +23,13 @@ const VotePage: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async (props: any) => {
-  const { locale, query } = props;
+export const getServerSideProps = async ({
+  locale,
+  query
+}: {
+  locale: string;
+  query: { 'from-to': string; method: string };
+}) => {
   const splittedTokens = query['from-to'].split('-');
   const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
   const to = getWhitelistedTokenSymbol(MAINNET_DEFAULT_TOKEN);
@@ -64,4 +69,5 @@ export const getServerSideProps = async (props: any) => {
   };
 };
 
+// eslint-disable-next-line import/no-default-export
 export default VotePage;

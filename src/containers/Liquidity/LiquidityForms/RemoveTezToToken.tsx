@@ -48,6 +48,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
+
       return;
     }
 

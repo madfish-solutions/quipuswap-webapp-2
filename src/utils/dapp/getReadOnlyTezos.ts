@@ -9,6 +9,7 @@ const readOnlySigner = new ReadOnlySigner(READ_ONLY_SIGNER_PK_HASH, READ_ONLY_SI
 export const createReadOnlyTezos = (origin: TezosToolkit) => {
   const roTezos = new TezosToolkit(origin.rpc);
   roTezos.setSignerProvider(readOnlySigner);
+
   return roTezos;
 };
 

@@ -190,6 +190,7 @@ export const Stake: React.FC<StakeProps> = () => {
   if (selectedStake) {
     return <StakeInfo stake={selectedStake} />;
   }
+
   return (
     <>
       <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />

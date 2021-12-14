@@ -25,7 +25,8 @@ const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
   );
 };
 
-export const getServerSideProps = async (props: any) => {
+// @ts-ignore
+export const getServerSideProps = async props => {
   const { locale, query } = props;
 
   return {
@@ -36,4 +37,5 @@ export const getServerSideProps = async (props: any) => {
   };
 };
 
+// eslint-disable-next-line import/no-default-export
 export default SwapSendPage;

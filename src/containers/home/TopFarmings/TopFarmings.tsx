@@ -26,6 +26,7 @@ export const TopFarmings: React.FC<TopFarmingsProps> = ({ className }) => {
         .filter((x, i) => i < 5),
     [tokens]
   );
+
   return (
     <Section
       header={t('home|Top Farms')}

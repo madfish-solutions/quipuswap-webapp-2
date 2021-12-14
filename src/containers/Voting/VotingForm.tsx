@@ -45,22 +45,27 @@ const TabsContent = [
 interface VotingFormProps {
   handleSubmit: () => void;
   debounce: number;
+  // eslint-disable-next-line
   save: any;
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
+  // eslint-disable-next-line
   tabsState: any;
   rewards: string;
   setRewards: (reward: string) => void;
   dex?: FoundDex;
   setDex: (dex: FoundDex) => void;
   voter?: VoterType;
+  // eslint-disable-next-line
   setVoter: (voter: any) => void;
   setTokens: (tokens: WhitelistedToken[]) => void;
   tokenPair: WhitelistedTokenPair;
   setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  // eslint-disable-next-line
   currentTab: any;
+  // eslint-disable-next-line
   setTabsState: (val: any) => void;
   getBalance: () => void;
 }
@@ -101,6 +106,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   const [isBakerChoosen, setIsBakerChoosen] = useState(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
+  // eslint-disable-next-line
   let promise: any;
 
   const handleInputChange = async () => {
@@ -139,6 +145,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -164,6 +171,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     if (!values.balance1) {
       // throw form validation error
       handleSubmit();
+
       return;
     }
     form.resumeValidation();
@@ -309,4 +317,5 @@ const RealForm: React.FC<VotingFormProps> = ({
   );
 };
 
+// eslint-disable-next-line
 export const VotingForm = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={RealForm} />;

@@ -16,6 +16,7 @@ export const [NewExchangeRatesProvider, useNewExchangeRates] = constate(() => {
       type: tokenId === undefined ? 'fa1.2' : 'fa2'
     });
     acc[tokenSlug] = new BigNumber(exchangeRate);
+
     return acc;
   }, {});
 });

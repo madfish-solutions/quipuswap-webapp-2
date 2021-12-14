@@ -33,7 +33,10 @@ export const TopPairs: React.FC<TopPairsProps> = ({ className }) => {
           fetch={fetchPairsData}
           loading={!!isNotLoaded}
           totalCount={data?.pairs?.totalCount ?? 0}
-          data={isNotLoaded ? [] : (pairData as any)}
+          data={
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            isNotLoaded ? [] : (pairData as any)
+          }
         />
       )}
     </Section>

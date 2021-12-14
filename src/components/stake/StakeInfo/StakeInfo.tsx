@@ -63,6 +63,7 @@ export const StakeInfo: React.FC<StakeInfoProps> = ({ className, stake }) => {
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const compountClassName = cx(modeClass[colorThemeMode], s.mb24i, className);
+
   return (
     <>
       <Card

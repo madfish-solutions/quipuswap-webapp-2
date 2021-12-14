@@ -117,11 +117,13 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           getTokenInput(inputToken, fromDecimals(inputAmount, -inputToken.metadata.decimals), reversedRoute),
           outputToken.metadata.decimals
         );
+
         return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
       } catch (_) {
         // ignore error
       }
     }
+
     return undefined;
   }, [route, inputToken, outputToken, inputAmount]);
 

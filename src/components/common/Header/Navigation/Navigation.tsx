@@ -78,6 +78,7 @@ export const Navigation: React.FC<NavigationProps> = ({ iconId, className }) => 
         );
       }
     });
+
     return result;
   }, [network.id, colorThemeMode, iconId, isInnerMenuOpened, router.pathname]);
 

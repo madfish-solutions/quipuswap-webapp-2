@@ -104,6 +104,7 @@ function amountsAreEqual(amount1?: BigNumber, amount2?: BigNumber) {
   if (amount1 && amount2) {
     return amount1.eq(amount2);
   }
+
   return amount1 === amount2;
 }
 
@@ -190,7 +191,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         }
         estimateSwapFee(tezos!, accountPkh, {
           inputToken: token1,
-          inputAmount: toDecimals(inputAmount, token1!),
+          inputAmount: toDecimals(inputAmount, token1),
           dexChain: route,
           recipient,
           slippageTolerance: slippage?.div(100),
@@ -485,6 +486,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         }
       }
     }
+
     return undefined;
   }, [dexGraph, token1, token1Balance, token2]);
   const maxOutput = maxOutputAmountByBalance ?? generalMaxOutputAmount;

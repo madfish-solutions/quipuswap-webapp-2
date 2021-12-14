@@ -18,5 +18,6 @@ export const getTokenMetadata = async (
     .catch(() => null);
 
   if (data?.message) return null;
+
   return data;
 };

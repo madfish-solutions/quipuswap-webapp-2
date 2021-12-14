@@ -19,6 +19,7 @@ export function getRoutesList(
     return [];
   }
   const vertex = graph[startTokenSlug] ?? { edges: {} };
+
   return Object.entries(vertex.edges).flatMap(([nextTokenSlug, pair]) => {
     if (
       prevRoute.some(({ token1, token2 }) =>
@@ -27,6 +28,7 @@ export function getRoutesList(
     ) {
       return [];
     }
+
     return getRoutesList(nextTokenSlug, endTokenSlug, graph, depth - 1, [...prevRoute, pair]);
   });
 }

@@ -23,6 +23,7 @@ export const SwapChart: React.FC<SwapChartProps> = ({ token1, token2 }) => {
     }
   });
   const loadingProp = loading || error || !data || !data?.token;
+
   return (
     <CandleChart
       token1={token1}

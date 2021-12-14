@@ -30,6 +30,7 @@ export const QPToken: React.FC<QPTokenProps> = ({ id, className }) => {
     const rawExchangeRate = exchangeRates.find(
       ({ tokenAddress }) => tokenAddress === MAINNET_DEFAULT_TOKEN.contractAddress
     )?.exchangeRate;
+
     return new BigNumber(rawExchangeRate || NaN);
   }, [exchangeRates]);
 

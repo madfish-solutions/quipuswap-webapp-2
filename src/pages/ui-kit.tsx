@@ -121,7 +121,8 @@ const UiKit: React.FC = () => {
   const [inputAddress, setInputAddress] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
   const [inputError, setInputError] = useState<boolean>(false);
-  const handleInputChange = (state: any) => setInputValue(state.target.value);
+  // @ts-ignore
+  const handleInputChange = state => setInputValue(state.target.value);
 
   const [tabsSmallState, setTabsSmallState] = useState(TabsSmall[0].id);
   const [tabsMiddleState, setTabsMiddleState] = useState(TabsMiddle[0].id);
@@ -643,8 +644,11 @@ const UiKit: React.FC = () => {
         <div className={s.complexInput}>
           <ComplexRecipient
             value={inputAddress}
-            onChange={(state: any) => setInputAddress(state.target.value)}
-            handleInput={state => setInputAddress(state)}
+            onChange={
+              // @ts-ignore
+              event => setInputAddress(event.target.value)
+            }
+            handleInput={event => setInputAddress(event)}
             label="Recipient address"
             id="ComplexRecipient-01"
           />
@@ -730,4 +734,5 @@ export const getStaticProps = async ({ locale }: { locale: string }) => ({
   }
 });
 
+// eslint-disable-next-line import/no-default-export
 export default UiKit;

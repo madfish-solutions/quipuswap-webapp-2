@@ -21,8 +21,8 @@ export const hanldeTokenPairSelect = (
   setTokenPair: (pair: WhitelistedTokenPair) => void,
   setDex: (dex: FoundDex) => void,
   setRewards: (reward: string) => void,
-  setVoter: (voter: VoterType) => any,
-  updateToast: (err: any) => void,
+  setVoter: (voter: VoterType) => void,
+  updateToast: (err: Error) => void,
   tezos?: TezosToolkit | null,
   accountPkh?: string | null,
   networkId?: QSMainNet
@@ -30,6 +30,7 @@ export const hanldeTokenPairSelect = (
   const asyncFunc = async () => {
     if (!tezos || !networkId) {
       setTokenPair(pair);
+
       return;
     }
     try {
@@ -61,7 +62,7 @@ export const hanldeTokenPairSelect = (
       let frozenBalance = '0';
       let totalBalance = '0';
       if (accountPkh) {
-        const share = await getLiquidityShare(tezos, foundDex, accountPkh!!);
+        const share = await getLiquidityShare(tezos, foundDex, accountPkh);
 
         frozenBalance = fromDecimals(share.frozen, TEZOS_TOKEN.metadata.decimals).toString();
         totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
@@ -85,8 +86,8 @@ type SubmitProps = {
   values: VoteFormValues;
   dex?: FoundDex;
   tab: string;
-  updateToast: any;
-  handleErrorToast: (e: any) => void;
+  updateToast: never;
+  handleErrorToast: (e: Error) => void;
   getBalance: () => void;
 };
 
@@ -169,6 +170,7 @@ const getBatchParamsAndToastText = async (
   if (tab === 'vote') {
     return vote(tezos, dex, selectedBaker, balance1);
   }
+
   return veto(tezos, dex, balance1);
 };
 
@@ -214,6 +216,7 @@ export const submitForm = async ({
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
     await op.confirmation();
+    // @ts-ignore
     updateToast({
       type: 'success',
       render: updateToastText
@@ -227,8 +230,8 @@ export const submitForm = async ({
 export const submitWithdraw = async (
   tezos: TezosToolkit,
   voteParams: TransferParams[],
-  updateToast: (err: any) => void,
-  handleSuccessToast: any,
+  updateToast: (err: Error) => void,
+  handleSuccessToast: () => void,
   getBalance: () => void
 ) => {
   try {

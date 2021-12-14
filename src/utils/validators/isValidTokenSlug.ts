@@ -12,6 +12,7 @@ export const isValidTokenSlug = (slug: string) => {
     if (isValidContractAddress(address)) {
       return true;
     }
+
     return getContractAddressError();
   }
 

@@ -14,6 +14,7 @@ const themeClass = {
 export const ApyModal: React.FC<{ isOpen: boolean; close: () => void }> = ({ isOpen, close }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
   return (
     <Modal
       containerClassName={cx(themeClass[colorThemeMode], s.modalWrap)}

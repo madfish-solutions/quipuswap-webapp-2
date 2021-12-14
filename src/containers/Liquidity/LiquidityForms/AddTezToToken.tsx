@@ -46,6 +46,7 @@ export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
 
     if (event.target.value === '') {
       setTokenBInput('');
+
       return;
     }
 
@@ -76,6 +77,7 @@ export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
 
     if (event.target.value === '') {
       setTokenAInput('');
+
       return;
     }
 

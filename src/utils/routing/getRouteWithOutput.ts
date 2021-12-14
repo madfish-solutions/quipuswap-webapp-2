@@ -20,6 +20,7 @@ export const getRouteWithOutput = memoizee(
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
     const inputToken = getTokenIdFromSlug(startTokenSlug);
+
     return routes.reduce<DexPair[] | undefined>((prevCandidate, route) => {
       try {
         let prevInputAmount =
@@ -34,6 +35,7 @@ export const getRouteWithOutput = memoizee(
               : getTokenInput(outputToken, outputAmount, prevCandidate);
           inputAmount = getTokenInput(outputToken, outputAmount, route);
         }
+
         return inputAmount.lt(prevInputAmount) ? route : prevCandidate;
       } catch {
         return prevCandidate;

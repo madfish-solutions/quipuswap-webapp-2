@@ -35,6 +35,7 @@ export const getTokenType = memoizee(
     if (contract.methods.update_operators) {
       return 'fa2';
     }
+
     return undefined;
   },
   { promise: true }
@@ -46,6 +47,7 @@ export const isTokenFa2 = memoizee(
 
     try {
       const type = await getContract(tz, address);
+
       return !!type.methods.update_operators;
     } catch (e) {
       return false;
@@ -60,6 +62,7 @@ export const isTokenFa12 = memoizee(
 
     try {
       const type = await getContract(tz, address);
+
       return !!type.methods.approve;
     } catch (e) {
       return false;
@@ -92,6 +95,7 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
       if (addTokensFromLocalStorage) {
         tokens = getSavedTokens().concat(tokens);
       }
+
       return tokens;
     })
     .catch(() => []);
@@ -112,6 +116,7 @@ export const saveCustomToken = (token: WhitelistedTokenWithQSNetworkType) => {
 
 export const mergeTokensToPair = (tokens1: WhitelistedToken[], tokens2: WhitelistedToken[]): WhitelistedTokenPair[] => {
   const pair = { token1: tokens1[0], token2: tokens2[0] } as WhitelistedTokenPair;
+
   return [pair];
 };
 
@@ -133,6 +138,7 @@ export const getAllowanceTransferParams = async (
   if (allowance.gt(0)) {
     return [tokenContract.methods.approve(spender, 0).toTransferParams(), setAllowanceTransferParams];
   }
+
   return [setAllowanceTransferParams];
 };
 

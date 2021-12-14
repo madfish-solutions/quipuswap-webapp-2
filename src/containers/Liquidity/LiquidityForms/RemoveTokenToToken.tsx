@@ -78,6 +78,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       }
     };
     loadPairData();
+
     return () => {
       isMounted = false;
     };
@@ -89,6 +90,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
+
       return;
     }
     const addresses = sortTokensContracts(tokenA, tokenB);

@@ -14,8 +14,11 @@ export type PositionsModalProps = IPositionsModalProps & ReactModal.Props;
 export interface HeaderProps {
   isSecondInput: boolean;
   debounce: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   save: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
 }
 

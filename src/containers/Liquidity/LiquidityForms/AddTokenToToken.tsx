@@ -108,6 +108,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
       }
     };
     loadPairData();
+
     return () => {
       isMounted = false;
     };
@@ -189,6 +190,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
 
     if (event.target.value === '') {
       setTokenBInput('');
+
       return;
     }
 
@@ -224,6 +226,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
 
     if (event.target.value === '') {
       setTokenAInput('');
+
       return;
     }
 

@@ -9,6 +9,7 @@ import s from '@styles/SwapLiquidity.module.sass';
 
 const LiquidityPage: React.FC = () => {
   const { t } = useTranslation(['common', 'liquidity']);
+
   return (
     <BaseLayout
       title={t('liquidity|Liquidity page')}
@@ -26,4 +27,5 @@ export const getServerSideProps = async ({ locale }: { locale: string }) => ({
   }
 });
 
+// eslint-disable-next-line import/no-default-export
 export default LiquidityPage;

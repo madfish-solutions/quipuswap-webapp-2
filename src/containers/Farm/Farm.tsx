@@ -191,6 +191,7 @@ export const Farm: React.FC<FarmProps> = () => {
     // TODO
     return <FarmingInfo handleUnselect={() => selectFarm(undefined)} farm={selectedFarming} />;
   }
+
   return (
     <>
       <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />

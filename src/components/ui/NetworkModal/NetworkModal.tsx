@@ -33,7 +33,10 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({ ...props }) => {
         className={s.input}
         value={name}
         label={t('common|Name')}
-        onChange={(ev: any) => setName(ev.target.value)}
+        onChange={
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (ev: any) => setName(ev.target.value)
+        }
         placeholder={t('common|My custom network')}
         id="networkModal-01"
       />
@@ -41,7 +44,10 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({ ...props }) => {
         className={s.input}
         value={rpc}
         label={t('common|RPC base URL')}
-        onChange={(ev: any) => setRPC(ev.target.value)}
+        onChange={
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (ev: any) => setRPC(ev.target.value)
+        }
         placeholder={t('common|http://localhost:2000')}
         id="networkModal-02"
       />
@@ -49,7 +55,10 @@ export const NetworkModal: React.FC<ReactModal.Props> = ({ ...props }) => {
         className={s.input}
         value={lambda}
         label={t('common|Lambda View contract(optional)')}
-        onChange={(ev: any) => setLambda(ev.target.value)}
+        onChange={
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (ev: any) => setLambda(ev.target.value)
+        }
         placeholder={t('common|e.g. Kscwf2r3...')}
         id="networkModal-03"
       />

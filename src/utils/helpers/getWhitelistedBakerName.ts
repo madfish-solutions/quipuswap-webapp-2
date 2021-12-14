@@ -6,5 +6,6 @@ export const getWhitelistedBakerName = (baker: WhitelistedBaker, sliceAmount: nu
   if (isFullBaker(baker)) {
     return baker.name.length > sliceAmount + 2 ? `${baker.name.slice(0, sliceAmount)}...` : baker.name;
   }
+
   return shortize(baker.address);
 };

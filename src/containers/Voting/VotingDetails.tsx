@@ -30,6 +30,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
   const { totalVotes, totalVeto, votesToVeto } = useMemo(() => getVeteVetoInfo(dex), [dex]);
 
   const pairLink = tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
+
   return (
     <Card
       header={{

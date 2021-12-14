@@ -33,7 +33,8 @@ function createApolloClient() {
   });
 }
 
-function initializeApollo(initialState: any = null) {
+// @ts-ignore
+function initializeApollo(initialState: never = null) {
   const localApolloClient = globalApolloClient ?? createApolloClient();
 
   // If your page has Next.js data fetching methods that use Apollo Client,
@@ -49,14 +50,17 @@ function initializeApollo(initialState: any = null) {
 
   // Create the Apollo Client once in the client
   if (!globalApolloClient) globalApolloClient = localApolloClient;
+
   return localApolloClient;
 }
 
 export const withApollo =
   ({ ssr = true } = {}) =>
+  // @ts-ignore
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  (PageComponent: any) => {
-    const WithApollo = ({ apolloClient, apolloState, ...props }: any) => {
+  PageComponent => {
+    // @ts-ignore
+    const WithApollo = ({ apolloClient, apolloState, ...props }) => {
       let client;
       if (apolloClient) {
         // Happens on: getDataFromTree & next.js ssr
@@ -79,11 +83,13 @@ export const withApollo =
       WithApollo.displayName = `withApollo(${displayName})`;
     }
     if (ssr || PageComponent.getInitialProps) {
-      WithApollo.getInitialProps = async (ctx: any) => {
+      WithApollo.getInitialProps = async (ctx: { apolloClient?: never; res?: never; AppTree?: never }) => {
         const { AppTree } = ctx;
         // Initialize ApolloClient, add it to the ctx object so
         // we can use it in `PageComponent.getInitialProp`.
+        // @ts-ignore
         const apolloClient = initializeApollo(null);
+        // @ts-ignore
         ctx.apolloClient = apolloClient;
 
         // Run wrapped getInitialProps methods
@@ -95,6 +101,7 @@ export const withApollo =
         if (typeof window === 'undefined') {
           // When redirecting, the response is finished.
           // No point in continuing to render
+          // @ts-ignore
           if (ctx.res && ctx.res.finished) {
             return pageProps;
           }
@@ -103,6 +110,7 @@ export const withApollo =
             try {
               // Run all GraphQL queries
               const { getDataFromTree } = await import('@apollo/client/react/ssr');
+              // @ts-ignore
               await getDataFromTree(<AppTree {...pageProps} apolloClient={apolloClient} />);
             } catch (error) {
               // Prevent Apollo Client GraphQL errors from crashing SSR.
@@ -118,11 +126,13 @@ export const withApollo =
         }
         // Extract query data from the Apollo store
         const apolloState = apolloClient.cache.extract();
+
         return {
           ...pageProps,
           apolloState
         };
       };
     }
+
     return WithApollo;
   };

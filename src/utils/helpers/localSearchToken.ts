@@ -24,5 +24,6 @@ export const localSearchToken = (
   if (tokenNetwork) {
     res = res && tokenNetwork === network.id;
   }
+
   return res;
 };

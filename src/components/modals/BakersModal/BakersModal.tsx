@@ -32,9 +32,9 @@ type BakersModalProps = {
 
 type HeaderProps = {
   debounce: number;
-  save: any;
+  save: never;
   values: FormValues;
-  form: any;
+  form: never;
 };
 
 type FormValues = {
@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise: any;
+  let promise: never;
 
   const saveFunc = async () => {
     if (promise) {
@@ -56,6 +56,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
     }
     setVal(values);
     setSubm(true);
+    // @ts-ignore
     promise = save(values);
     await promise;
     setSubm(false);
@@ -66,6 +67,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -91,6 +93,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   );
 };
 
+// eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
 export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {

@@ -55,7 +55,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   const handlePaste = async () => {
     try {
       handleInput(await navigator.clipboard.readText());
-    } catch (err: any) {
+    } catch (err) {
       updateToast({
         type: 'error',
         render: `${err.name}: ${err.message}`

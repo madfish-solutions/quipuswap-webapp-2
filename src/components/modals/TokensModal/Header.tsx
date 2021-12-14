@@ -11,9 +11,9 @@ import { validateMinMax } from '@utils/validators';
 export interface HeaderProps {
   isSecondInput: boolean;
   debounce: number;
-  save: any;
-  values: any;
-  form: any;
+  save: never;
+  values: never;
+  form: never;
 }
 
 export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
@@ -23,7 +23,7 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise: any;
+  let promise: never;
 
   const saveFunc = async () => {
     if (promise) {
@@ -31,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
     }
     setVal(values);
     setSubm(true);
+    // @ts-ignore
     promise = save(values);
     await promise;
     setSubm(false);
@@ -41,6 +42,7 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -75,9 +77,11 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
                 max={100}
                 error={(meta.touched && meta.error) || meta.submitError}
                 onIncrementClick={() => {
+                  // @ts-ignore
                   form.mutators.setValue('tokenId', +input.value + 1 > 100 ? 100 : +input.value + 1);
                 }}
                 onDecrementClick={() => {
+                  // @ts-ignore
                   form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
                 }}
               />

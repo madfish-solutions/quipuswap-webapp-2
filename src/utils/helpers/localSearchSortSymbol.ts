@@ -12,5 +12,6 @@ export const localSearchSortSymbol = (
   const isFa2A = new BigNumber(fa2TokenIdA ?? '-1').eq(new BigNumber(inputToken));
   const isSymbolB = metadataB?.symbol?.toLowerCase().includes(input.toLowerCase());
   const isFa2B = new BigNumber(fa2TokenIdB ?? '-1').eq(new BigNumber(inputToken));
+
   return +isSymbolA - +isSymbolB || +isFa2A - +isFa2B;
 };

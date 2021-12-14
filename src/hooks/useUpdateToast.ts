@@ -4,6 +4,7 @@ import { toastContent } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import { UpdateOptions, toast } from 'react-toastify';
 
+// eslint-disable-next-line import/no-default-export
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();
   const prevRouteRef = useRef<string>();

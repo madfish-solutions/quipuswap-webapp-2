@@ -28,6 +28,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+// eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
 export const PositionsModal: React.FC<PositionsModalProps> = ({
@@ -188,6 +189,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               {({ input }) => {
                 const token = input.value;
                 if (!token) return '';
+
                 return <PositionTokenCell token={token} onClick={() => handleTokenA(token, form, values)} isChecked />;
               }}
             </Field>
@@ -201,6 +203,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
               {({ input }) => {
                 const token = input.value;
                 if (!token) return '';
+
                 return <PositionTokenCell token={token} onClick={() => handleTokenB(token, form, values)} isChecked />;
               }}
             </Field>
@@ -216,6 +219,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                 .filter(x => !values.token1 || !isTokenEqual(x, values.token1))
                 .map(token => {
                   const { contractAddress, fa2TokenId } = token;
+
                   return (
                     <PositionTokenCell
                       key={`${contractAddress}_${fa2TokenId ?? 0}`}
