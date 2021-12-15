@@ -32,6 +32,7 @@ export const useViewModel = () => {
   const accountPkh = useAccountPkh();
   const router = useRouter();
   const { data: tokens } = useTokens();
+  console.log('tokens', tokens);
 
   const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenA, setTokenA] = useState<WhitelistedToken | null>(null);
@@ -97,14 +98,16 @@ export const useViewModel = () => {
 
     if (validTokenA) setTokenA(validTokenA);
     if (validTokenB) setTokenB(validTokenB);
-  }, [router.asPath, tokens]);
+    // eslint-disable-next-line
+  }, [tokens]);
 
   useEffect(() => {
     if (!tokenA || !tokenB) return;
     const from = tokenA.contractAddress + (tokenA.type === 'fa1.2' ? '' : `_${tokenA.fa2TokenId}`);
     const to = tokenB.contractAddress + (tokenB.type === 'fa1.2' ? '' : `_${tokenB.fa2TokenId}`);
     void router.replace(`/liquidity/${tabState.id}/${from}-${to}`, undefined, { shallow: true });
-  }, [router, tabState.id, tokenA, tokenB]);
+    // eslint-disable-next-line
+  }, [tabState.id, tokenA, tokenB]);
 
   useEffect(() => {
     let isMounted = true;
