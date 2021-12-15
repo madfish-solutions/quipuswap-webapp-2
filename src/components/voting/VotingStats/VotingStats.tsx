@@ -16,13 +16,13 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-type VotingStatsProps = {
+interface VotingStatsProps {
   className?: string;
   pendingReward?: string;
   amounts?: string[];
   dex?: FoundDex;
   handleSubmit: (params: TransferParams[]) => void;
-};
+}
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
@@ -86,7 +86,9 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(pendingReward)}
         onClick={() => {
           const asyncFunc = async () => {
-            if (!tezos || !dex || !accountPkh) return;
+            if (!tezos || !dex || !accountPkh) {
+              return;
+            }
             const params = await withdrawReward(tezos, dex, accountPkh);
             handleSubmit(params);
           };

@@ -4,7 +4,7 @@ import { Button, Card } from '@quipuswap/ui-kit';
 
 import s from './OpportunityCard.module.sass';
 
-type OpportunityCardProps = {
+interface OpportunityCardProps {
   className?: string;
   Icon: React.FC<{ className?: string }>;
   title: ReactNode;
@@ -15,7 +15,7 @@ type OpportunityCardProps = {
     disabled?: boolean;
     external?: boolean;
   };
-};
+}
 
 export const OpportunityCard: React.FC<OpportunityCardProps> = ({ className, Icon, title, description, button }) => {
   const props = button.href ? { href: button.href, external: button.external } : {};

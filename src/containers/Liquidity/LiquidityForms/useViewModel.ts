@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { useRouter } from 'next/router';
@@ -13,6 +13,7 @@ import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
 export const TabsContent = [
@@ -47,16 +48,18 @@ export const useViewModel = () => {
   const checkForTezInPair = (contractAddressA: string, contractAddressB: string) =>
     [contractAddressA, contractAddressB].includes(TEZOS_TOKEN.contractAddress);
 
-  const setActiveId = useCallback((tabId: string) => {
+  const handleSetActiveId = (tabId: string) => {
     const url = router.asPath.split('/');
     url[2] = tabId;
     const newUrl = url.join('/');
 
-    router.replace(newUrl, undefined, { shallow: true });
+    void router.replace(newUrl, undefined, { shallow: true });
     const findActiveTab = TabsContent.find(tab => tab.id === tabId);
-    if (!findActiveTab) return;
+    if (!findActiveTab) {
+      return;
+    }
     setTabState(findActiveTab);
-  }, []);
+  };
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
@@ -76,7 +79,9 @@ export const useViewModel = () => {
         return token;
       }
 
-      if (contractTokenA === token.contractAddress) return token;
+      if (contractTokenA === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
@@ -90,30 +95,39 @@ export const useViewModel = () => {
         return token;
       }
 
-      if (contractTokenB === token.contractAddress) return token;
+      if (contractTokenB === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
 
-    if (validTokenA) setTokenA(validTokenA);
-    if (validTokenB) setTokenB(validTokenB);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokens]);
+    if (validTokenA) {
+      setTokenA(validTokenA);
+    }
+    if (validTokenB) {
+      setTokenB(validTokenB);
+    }
+  }, [router.asPath, tokens]);
 
   useEffect(() => {
-    if (!tokenA || !tokenB) return;
+    if (!tokenA || !tokenB) {
+      return;
+    }
     const from = tokenA.contractAddress + (tokenA.type === 'fa1.2' ? '' : `_${tokenA.fa2TokenId}`);
     const to = tokenB.contractAddress + (tokenB.type === 'fa1.2' ? '' : `_${tokenB.fa2TokenId}`);
-    router.replace(`/liquidity/${tabState.id}/${from}-${to}`, undefined, { shallow: true });
-  }, [tokenA, tokenB]);
+    void router.replace(`/liquidity/${tabState.id}/${from}-${to}`, undefined, { shallow: true });
+    //eslint-disable-next-line
+  }, [tabState.id, tokenA, tokenB]);
 
   useEffect(() => {
     let isMounted = true;
     let foundDex: FoundDex;
 
     const loadDex = async () => {
-      if (!tezos || !tokenA || !tokenB) return;
+      if (!tezos || !tokenA || !tokenB) {
+        return;
+      }
       const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
@@ -133,12 +147,16 @@ export const useViewModel = () => {
           foundDex = new FoundDex(contract, storage);
         }
 
-        if (isMounted) setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        }
       } catch (error) {
-        if (isMounted) setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        }
       }
     };
-    loadDex();
+    void loadDex();
 
     return () => {
       isMounted = false;
@@ -148,9 +166,11 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
-      if (!tezos || !accountPkh || !tokenA) return;
+      if (!tezos || !accountPkh || !tokenA) {
+        return;
+      }
 
-      const userTokenABalanance = await getUserBalance(
+      const userTokenABalance = await getUserBalance(
         tezos,
         accountPkh,
         tokenA.contractAddress,
@@ -158,13 +178,13 @@ export const useViewModel = () => {
         tokenA.fa2TokenId
       );
 
-      if (userTokenABalanance && isMounted) {
-        setTokenABalance(fromDecimals(userTokenABalanance, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
-      } else if (!userTokenABalanance && isMounted) {
+      if (userTokenABalance && isMounted) {
+        setTokenABalance(fromDecimals(userTokenABalance, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+      } else if (!userTokenABalance && isMounted) {
         setTokenABalance('0');
       }
     };
-    getTokenABalance();
+    void getTokenABalance();
 
     return () => {
       isMounted = false;
@@ -174,7 +194,9 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenBBalance = async () => {
-      if (!tezos || !accountPkh || !tokenB) return;
+      if (!tezos || !accountPkh || !tokenB) {
+        return;
+      }
 
       const userTokenBBalance = await getUserBalance(
         tezos,
@@ -190,7 +212,7 @@ export const useViewModel = () => {
         setTokenBBalance('0');
       }
     };
-    getTokenBBalance();
+    void getTokenBBalance();
 
     return () => {
       isMounted = false;
@@ -203,7 +225,9 @@ export const useViewModel = () => {
     const getLpTokenBalance = async () => {
       const { dex, isTezosToTokenDex } = dexInfo;
 
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) return;
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+        return;
+      }
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
@@ -222,7 +246,9 @@ export const useViewModel = () => {
         }
       } else if (!isTezosToTokenDex) {
         const addresses = sortTokensContracts(tokenA, tokenB);
-        if (!addresses) return;
+        if (!addresses) {
+          return;
+        }
 
         const michelData = getValidMichelTemplate(addresses);
         const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
@@ -240,7 +266,7 @@ export const useViewModel = () => {
         }
       }
     };
-    getLpTokenBalance();
+    void getLpTokenBalance();
 
     return () => {
       isMounted = false;
@@ -249,9 +275,8 @@ export const useViewModel = () => {
   }, [tezos, accountPkh, dexInfo]);
 
   return {
-    // eslint-disable-next-line max-len
     tabState,
-    setActiveId,
+    handleSetActiveId,
     dexInfo,
     tokenA,
     tokenB,

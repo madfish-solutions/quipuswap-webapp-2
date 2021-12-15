@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
+import { noop } from 'rxjs';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
 import { parseNumber } from '@utils/helpers';
@@ -22,8 +23,8 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
-  let promise: never;
+  const timeout = useRef(setTimeout(noop, 0));
+  let promise: Promise<never>;
 
   const saveFunc = async () => {
     if (promise) {
@@ -48,7 +49,8 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+    // eslint-disable-next-line
+  }, [debounce, values]);
 
   return (
     <div className={s.inputs}>

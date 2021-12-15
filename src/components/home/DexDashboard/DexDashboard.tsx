@@ -18,9 +18,9 @@ import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
 import { useNetwork } from '@utils/dapp';
 
-type DexDashboardProps = {
+interface DexDashboardProps {
   className?: string;
-};
+}
 
 export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);

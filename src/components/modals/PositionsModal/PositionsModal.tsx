@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
+import ReactModal from 'react-modal';
 
 import {
   useTezos,
@@ -20,7 +21,7 @@ import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
-import { FormValues, PositionsModalProps } from './PositionsModal.types';
+import { FormValues, IPositionsModalProps } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
 
 const themeClass = {
@@ -31,7 +32,7 @@ const themeClass = {
 // eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const PositionsModal: React.FC<PositionsModalProps> = ({
+export const PositionsModal: React.FC<IPositionsModalProps & ReactModal.Props> = ({
   onChange,
   onRequestClose,
   notSelectable1 = undefined,
@@ -81,9 +82,7 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!)
-      .then(tokenType => setSoleFa2Token(tokenType === 'fa2'))
-      .catch(console.error);
+    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === 'fa2'));
   }, [inputValue, tezos]);
 
   const handleTokenA = (
@@ -181,14 +180,18 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
                   token2: values.token2
                 } as WhitelistedTokenPair);
               }
-              if (onRequestClose) onRequestClose(e);
+              if (onRequestClose) {
+                onRequestClose(e);
+              }
             }}
             {...props}
           >
             <Field name="token1" initialValue={notSelectable1}>
               {({ input }) => {
                 const token = input.value;
-                if (!token) return '';
+                if (!token) {
+                  return '';
+                }
 
                 return <PositionTokenCell token={token} onClick={() => handleTokenA(token, form, values)} isChecked />;
               }}
@@ -202,7 +205,9 @@ export const PositionsModal: React.FC<PositionsModalProps> = ({
             <Field initialValue={notSelectable2} name="token2">
               {({ input }) => {
                 const token = input.value;
-                if (!token) return '';
+                if (!token) {
+                  return '';
+                }
 
                 return <PositionTokenCell token={token} onClick={() => handleTokenB(token, form, values)} isChecked />;
               }}

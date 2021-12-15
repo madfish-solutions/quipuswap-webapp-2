@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import { FormSpy } from 'react-final-form';
@@ -12,11 +12,10 @@ import { AddTokenToToken } from './AddTokenToToken';
 import { RemoveTezToToken } from './RemoveTezToToken';
 import { RemoveTokenToToken } from './RemoveTokenToToken';
 
-const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
+const RealForm: FC<LiquidityFormProps> = () => {
   const {
-    // eslint-disable-next-line max-len
     tabState,
-    setActiveId,
+    handleSetActiveId,
     dexInfo,
     tokenA,
     tokenB,
@@ -31,7 +30,9 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
     <>
       <Card
         header={{
-          content: <Tabs values={TabsContent} activeId={tabState.id} setActiveId={setActiveId} className={s.tabs} />,
+          content: (
+            <Tabs values={TabsContent} activeId={tabState.id} setActiveId={handleSetActiveId} className={s.tabs} />
+          ),
           className: s.header
         }}
         contentClassName={s.content}
@@ -83,15 +84,6 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
           />
         )}
       </Card>
-      {/*TODO: Implement it*/}
-      {/*<LiquidityDetails*/}
-      {/*  currentTab={tabState.label}*/}
-      {/*  token1={TEZOS_TOKEN}*/}
-      {/*  token2={MAINNET_DEFAULT_TOKEN}*/}
-      {/*  tokensData={tokensData}*/}
-      {/*  balanceTotalA="1"*/}
-      {/*  balanceTotalB="2"*/}
-      {/*/>*/}
     </>
   );
 };

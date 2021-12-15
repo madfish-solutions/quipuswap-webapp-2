@@ -42,6 +42,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 interface TokensModalProps extends ReactModal.Props {
   onChange: (token: WhitelistedToken) => void;
   blackListedTokens: WhitelistedToken[];
@@ -73,7 +74,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   };
 
   const handleTokenSearch = useCallback(() => {
-    if (!network || !tezos) return;
+    if (!network || !tezos) {
+      return;
+    }
     // eslint-disable-next-line
     const isTokens = tokens.filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
     setFilteredTokens(isTokens);
@@ -98,9 +101,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!)
-      .then(tokenType => setSoleFa2Token(tokenType === 'fa2'))
-      .catch(console.error);
+    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === 'fa2'));
   }, [inputValue, tezos]);
 
   const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {
@@ -150,12 +151,12 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
             (searchLoading || tokensLoading) &&
             [1, 2, 3, 4, 5, 6, 7].map(x => <LoadingTokenCell key={x} />)}
           {allTokens.map(token => {
-            const { contractAddress, fa2TokenId } = token;
+            const { contractAddress, fa2TokenId, metadata } = token;
 
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
                 tokenType={token.type}

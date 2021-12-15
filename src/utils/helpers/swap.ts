@@ -14,21 +14,22 @@ import { TokenId, DexPair } from '@utils/types';
 
 import { getTokenOutput } from './tokenToTokenDex';
 
-export type SwapParams = {
+export interface SwapParams {
   inputToken: TokenId;
   inputAmount: BigNumber;
   dexChain: DexPair[];
   slippageTolerance?: BigNumber;
   ttDexAddress?: string;
   recipient?: string;
-};
+}
 
-type SwapStepParams = {
+interface SwapStepParams {
+  // eslint-disable-next-line @typescript-eslint/ban-types
   operation: { a_to_b: {} } | { b_to_a: {} };
   pair_id: number;
-};
+}
 
-const serialPromiseAll = <T extends unknown[], U>(
+const serialPromiseAll = async <T extends unknown[], U>(
   data: T[],
   promiseFactory: (index: number, ...args: T) => Promise<U>,
   initialIndex = 0

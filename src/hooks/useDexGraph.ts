@@ -14,31 +14,31 @@ import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type TokenType = 'fa1.2' | 'fa2';
 
-type RawToken = {
+interface RawToken {
   address: string;
   type: TokenType;
   id?: string;
-};
+}
 
-type RawCommonPoolData = {
+interface RawCommonPoolData {
   type: 'ttdex' | 'tokenxtz';
   totalSupply: string;
   tokenAPool: string;
   tokenBPool: string;
   tokenA: RawToken;
-};
+}
 
-type RawTTDexPoolData = RawCommonPoolData & {
+interface RawTTDexPoolData extends RawCommonPoolData {
   type: 'ttdex';
   tokenB: RawToken;
   id: number;
-};
+}
 
-type RawTokenXtzPoolData = RawCommonPoolData & {
+interface RawTokenXtzPoolData extends RawCommonPoolData {
   type: 'tokenxtz';
   address: string;
   factoryAddress: string;
-};
+}
 
 type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 
@@ -115,6 +115,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             fa2Factory.includes(pool.factoryAddress)
         );
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
       updateToast({
         type: 'error',

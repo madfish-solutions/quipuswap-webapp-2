@@ -13,14 +13,14 @@ import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
 import { useNetwork } from '@utils/dapp';
 
-type DexDashboardInnerProps = {
+interface DexDashboardInnerProps {
   totalLiquidity: Maybe<string> | undefined;
   xtzUsdQuote: Maybe<string> | undefined;
   volume24: Maybe<string> | undefined;
   trasactionsCount24h: number | undefined;
   totalSupply?: BigNumber;
   loading?: boolean;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

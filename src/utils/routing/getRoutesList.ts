@@ -3,15 +3,13 @@ import { DexPair } from '@utils/types';
 
 import { DexGraph } from './types';
 
-type Route = DexPair[];
-
 export function getRoutesList(
   startTokenSlug: string,
   endTokenSlug: string,
   graph: DexGraph,
   depth: number,
-  prevRoute: Route = []
-): Route[] {
+  prevRoute: DexPair[] = []
+): DexPair[][] {
   if (startTokenSlug === endTokenSlug) {
     return [prevRoute];
   }

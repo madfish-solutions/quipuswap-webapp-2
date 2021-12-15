@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useContext } from 'react';
+import React, { useRef, useMemo, useContext, useState, FC, HTMLProps } from 'react';
 
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -12,7 +12,13 @@ import { WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-type ComplexInputProps = {
+const modeClass = {
+  input: s.inputMode,
+  select: s.selectMode,
+  votes: s.votesMode
+};
+
+interface ComplexInputProps extends HTMLProps<HTMLInputElement> {
   className?: string;
   balance?: string;
   exchangeRate?: string;
@@ -24,20 +30,14 @@ type ComplexInputProps = {
   mode?: keyof typeof modeClass;
   decimals?: number;
   handleBalance?: (value: string) => void;
-} & React.HTMLProps<HTMLInputElement>;
-
-const modeClass = {
-  input: s.inputMode,
-  select: s.selectMode,
-  votes: s.votesMode
-};
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
 
-export const ComplexInput: React.FC<ComplexInputProps> = ({
+export const ComplexInput: FC<ComplexInputProps> = ({
   className,
   balance = '10.00',
   label,
@@ -56,7 +56,7 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [focused, setActive] = React.useState<boolean>(false);
+  const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const dollarEquivalent = useMemo(
@@ -87,8 +87,6 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   }
 
   return (
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
     <div className={compoundClassName} onClick={focusInput}>
       <label htmlFor={id} className={s.label}>
         {label}

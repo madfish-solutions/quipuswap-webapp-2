@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { Earn, Farm, Trade } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-type OpportunitiesCardsDataType = {
+interface OpportunitiesCardsDataType {
   id: number;
   Icon: React.FC<{ className?: string }>;
   title: ReactNode;
@@ -13,7 +13,7 @@ type OpportunitiesCardsDataType = {
     href?: string;
     disabled?: boolean;
   };
-};
+}
 
 export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
   {

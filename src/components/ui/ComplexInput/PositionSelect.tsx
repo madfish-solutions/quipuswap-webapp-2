@@ -13,7 +13,7 @@ import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-type PositionSelectProps = {
+interface PositionSelectProps extends React.HTMLProps<HTMLInputElement> {
   noBalanceButtons?: boolean;
   className?: string;
   balance?: string;
@@ -28,7 +28,7 @@ type PositionSelectProps = {
   handleBalance: (value: string) => void;
   tokenPair?: WhitelistedTokenPair;
   setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
-} & React.HTMLProps<HTMLInputElement>;
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -78,7 +78,9 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
           setTokenPair(selectedToken);
-          if (handleChange) handleChange(selectedToken);
+          if (handleChange) {
+            handleChange(selectedToken);
+          }
           setTokensModal(false);
         }}
         initialPair={tokenPair}

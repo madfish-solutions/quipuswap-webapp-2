@@ -6,10 +6,10 @@ import cx from 'classnames';
 import { SocialLinksData } from './content';
 import s from './Socials.module.sass';
 
-type SocialsProps = {
+interface SocialsProps {
   id?: string;
   className?: string;
-};
+}
 
 export const Socials: React.FC<SocialsProps> = ({ id, className }) => (
   <div className={cx(s.root, className)}>
