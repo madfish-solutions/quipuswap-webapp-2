@@ -1,42 +1,17 @@
-import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { sortTokensContracts, getValidMichelTemplate } from '@containers/Liquidity/liquidutyHelpers';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
-import { fromDecimals, noOpFunc } from '@utils/helpers';
+import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
-
-import s from '../Liquidity.module.sass';
-import { sortTokensContracts, getValidMichelTemplate } from '../liquidutyHelpers';
 
 const MichelCodec = require('@taquito/michel-codec');
 
-type RemoveTokenToTokenProps = {
-  dex: FoundDex | null;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-  lpTokenBalance: string;
-};
-
-export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance,
-  lpTokenBalance
-}) => {
+export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -115,6 +90,13 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     // Ignore tokenA & tokenB
   }, [lpTokenInput, dex, pairData]);
 
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
+
+  const handleBalance = (value: string) => {
+    const fixedValue = new BigNumber(value);
+    setLpTokenInput(fixedValue.toFixed());
+  };
+
   const handleRemoveLiquidity = async () => {
     if (!tezos || !accountPkh || !dex) return;
 
@@ -139,51 +121,5 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     setLpTokenInput('');
   };
 
-  return (
-    <>
-      <TokenSelect
-        label="Select LP"
-        balance={lpTokenBalance}
-        token={tokenA}
-        token2={tokenB}
-        setToken={setTokenB}
-        value={lpTokenInput}
-        onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={value => {
-          const fixedValue = new BigNumber(value);
-          setLpTokenInput(fixedValue.toFixed());
-        }}
-      />
-      <ArrowDown className={s.iconButton} />
-      <TokenSelect
-        label="Output"
-        balance={tokenABalance}
-        token={tokenA}
-        setToken={setTokenA}
-        value={tokenAOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
-        noBalanceButtons
-        disabled
-        notSelectable
-      />
-      <Plus className={s.iconButton} />
-      <TokenSelect
-        label="Output"
-        balance={tokenBBalance}
-        token={tokenB}
-        setToken={setTokenB}
-        value={tokenBOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
-        noBalanceButtons
-        disabled
-        notSelectable
-      />
-      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh}>
-        Remove
-      </Button>
-    </>
-  );
+  return { accountPkh, lpTokenInput, tokenAOutput, tokenBOutput, handleRemoveLiquidity, handleChange, handleBalance };
 };

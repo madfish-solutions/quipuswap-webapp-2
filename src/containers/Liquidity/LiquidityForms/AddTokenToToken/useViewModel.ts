@@ -1,46 +1,30 @@
-import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
+import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { Plus } from '@components/svg/Plus';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import {
+  sortTokensContracts,
+  getValidMichelTemplate,
+  calculateTokenAmount,
+  allowContractSpendYourTokens,
+  addPairTokenToToken
+} from '@containers/Liquidity/liquidutyHelpers';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import s from '../Liquidity.module.sass';
-import {
-  sortTokensContracts,
-  calculateTokenAmount,
-  getValidMichelTemplate,
-  allowContractSpendYourTokens,
-  addPairTokenToToken
-} from '../liquidutyHelpers';
-
 const MichelCodec = require('@taquito/michel-codec');
 
-type AddTokenToTokenProps = {
-  dex: FoundDex | null;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-};
-
-export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance
-}) => {
+export const useViewModel = (
+  dex: Nullable<FoundDex>,
+  tokenA: WhitelistedToken,
+  tokenB: WhitelistedToken,
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
+  tokenABalance: string,
+  tokenBBalance: string
+) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -79,7 +63,6 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tokenAInput, tokenBInput]);
-
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
@@ -322,6 +305,15 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
     }
   };
 
+  const handleSetTokenA = (token: WhitelistedToken) => {
+    setTokenA(token);
+    setTokenAInput('');
+  };
+  const handleSetTokenB = (token: WhitelistedToken) => {
+    setTokenB(token);
+    setTokenBInput('');
+  };
+
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) return;
     const ten = new BigNumber(10);
@@ -381,34 +373,16 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
     }
   };
 
-  return (
-    <>
-      <TokenSelect
-        label="Input"
-        balance={tokenABalance}
-        token={tokenA}
-        setToken={setTokenA}
-        value={tokenAInput}
-        onInput={handleTokenAInput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={handleTokenABalance}
-        noBalanceButtons={!accountPkh}
-      />
-      <Plus className={s.iconButton} />
-      <TokenSelect
-        label="Input"
-        balance={tokenBBalance}
-        token={tokenB}
-        setToken={setTokenB}
-        value={tokenBInput}
-        onInput={handleTokenBInput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={handleTokenBBalance}
-        noBalanceButtons={!accountPkh}
-      />
-      <Button className={s.button} onClick={handleAddLiquidity} disabled={!accountPkh}>
-        Add
-      </Button>
-    </>
-  );
+  return {
+    accountPkh,
+    tokenAInput,
+    tokenBInput,
+    handleTokenAInput,
+    handleTokenBInput,
+    handleTokenABalance,
+    handleTokenBBalance,
+    handleSetTokenA,
+    handleSetTokenB,
+    handleAddLiquidity
+  };
 };

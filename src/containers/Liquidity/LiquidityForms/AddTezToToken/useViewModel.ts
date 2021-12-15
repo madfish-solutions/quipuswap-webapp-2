@@ -1,45 +1,68 @@
-import React, { useState, Dispatch, ChangeEvent, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, ChangeEvent, useState, useEffect } from 'react';
 
 import { FoundDex, Token } from '@quipuswap/sdk';
-import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { Plus } from '@components/svg/Plus';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { addLiquidity, calculateTokenAmount, initializeLiquidity } from '@containers/Liquidity/liquidutyHelpers';
 import { useTezos, useAccountPkh, useNetwork } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import s from '../Liquidity.module.sass';
-import { addLiquidity, calculateTokenAmount, initializeLiquidity } from '../liquidutyHelpers';
-
-type AddTezToTokenProps = {
-  dex: FoundDex | null;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-};
-
-export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance
-}) => {
+export const useViewModel = (
+  dex: Nullable<FoundDex>,
+  tokenA: WhitelistedToken,
+  tokenB: WhitelistedToken,
+  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
+  tokenABalance: string,
+  tokenBBalance: string
+) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const networkId = useNetwork().id;
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
+
+  useEffect(() => {
+    if (!dex) return;
+
+    if (tokenBInput === '') {
+      setTokenAInput('');
+    } else {
+      const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+
+      const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
+      const tokenBAmountWithDecimals = new BigNumber(tokenBInput).multipliedBy(decimalsB);
+      const calculatedTokenAInput =
+        tokenB.contractAddress === TEZOS_TOKEN.contractAddress
+          ? calculateTokenAmount(tokenBAmountWithDecimals, total_supply, tez_pool, token_pool)
+          : calculateTokenAmount(tokenBAmountWithDecimals, total_supply, token_pool, tez_pool);
+
+      setTokenAInput(fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenABalance]);
+  useEffect(() => {
+    if (!dex) return;
+
+    if (tokenAInput === '') {
+      setTokenBInput('');
+    } else {
+      const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+
+      const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
+      const calculatedTokenBInput =
+        tokenA.contractAddress === TEZOS_TOKEN.contractAddress
+          ? calculateTokenAmount(tokenAAmountWithDecimals, total_supply, tez_pool, token_pool)
+          : calculateTokenAmount(tokenAAmountWithDecimals, total_supply, token_pool, tez_pool);
+
+      setTokenBInput(fromDecimals(calculatedTokenBInput, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenBBalance]);
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -159,6 +182,15 @@ export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
     setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
   };
 
+  const handleSetTokenA = (token: WhitelistedToken) => {
+    setTokenA(token);
+    setTokenAInput('');
+  };
+  const handleSetTokenB = (token: WhitelistedToken) => {
+    setTokenB(token);
+    setTokenBInput('');
+  };
+
   const handleAddLiquidity = async () => {
     if (!tezos || !accountPkh) return;
 
@@ -185,34 +217,16 @@ export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
     setTokenBInput('');
   };
 
-  return (
-    <>
-      <TokenSelect
-        label="Input"
-        balance={tokenABalance}
-        token={tokenA}
-        setToken={setTokenA}
-        value={tokenAInput}
-        onChange={handleTokenAChange}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={handleTokenABalance}
-        noBalanceButtons={!accountPkh}
-      />
-      <Plus className={s.iconButton} />
-      <TokenSelect
-        label="Input"
-        balance={tokenBBalance}
-        token={tokenB}
-        setToken={setTokenB}
-        value={tokenBInput}
-        onChange={handleTokenBChange}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={handleTokenBBalance}
-        noBalanceButtons={!accountPkh}
-      />
-      <Button className={s.button} onClick={handleAddLiquidity} disabled={!accountPkh}>
-        Add
-      </Button>
-    </>
-  );
+  return {
+    accountPkh,
+    tokenAInput,
+    tokenBInput,
+    handleTokenAChange,
+    handleTokenBChange,
+    handleTokenABalance,
+    handleTokenBBalance,
+    handleSetTokenA,
+    handleSetTokenB,
+    handleAddLiquidity
+  };
 };

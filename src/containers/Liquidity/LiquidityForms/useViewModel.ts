@@ -207,13 +207,11 @@ export const useViewModel = () => {
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
-        const userLpTokenBalance = await getUserBalance(
-          tezos,
-          accountPkh,
-          dex.contract.address,
-          notTezToken.type,
-          notTezToken.fa2TokenId
-        );
+
+        const { address } = dex.contract;
+        const { type, fa2TokenId } = notTezToken;
+
+        const userLpTokenBalance = await getUserBalance(tezos, accountPkh, address, type, fa2TokenId);
 
         if (userLpTokenBalance && isMounted) {
           setLpTokenBalance(userLpTokenBalance.dividedBy(1_000_000).toFixed());

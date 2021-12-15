@@ -7,10 +7,10 @@ import { LiquidityFormProps } from '@containers/Liquidity/LiquidityForms/Liquidi
 import { TabsContent, useViewModel } from '@containers/Liquidity/LiquidityForms/useViewModel';
 
 import s from '../Liquidity.module.sass';
-import { AddTezToToken } from './AddTezToToken';
-import { AddTokenToToken } from './AddTokenToToken';
-import { RemoveTezToToken } from './RemoveTezToToken';
-import { RemoveTokenToToken } from './RemoveTokenToToken';
+import { AddTezToToken } from './AddTezToToken/AddTezToToken';
+import { AddTokenToToken } from './AddTokenToToken/AddTokenToToken';
+import { RemoveTezToToken } from './RemoveTezToToken/RemoveTezToToken';
+import { RemoveTokenToToken } from './RemoveTokenToToken/RemoveTokenToToken';
 
 const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const {
