@@ -13,11 +13,11 @@ import { Undefined, VoterType, WhitelistedBaker, WhitelistedTokenPair } from '@u
 import { CandidateButton } from './CandidateButton';
 import { getCandidateInfo, getVeteVetoInfo } from './helpers/getBackerInfo';
 
-type VotingDetailsProps = {
+interface VotingDetailsProps {
   tokenPair: WhitelistedTokenPair;
   dex?: FoundDex;
   voter?: VoterType;
-};
+}
 
 export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, voter }) => {
   const { t } = useTranslation(['common', 'vote']);

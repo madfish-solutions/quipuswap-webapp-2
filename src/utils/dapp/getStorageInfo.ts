@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import memoizee from 'memoizee';
 
-const getContractPure = (tezos: TezosToolkit, address: string) => tezos.contract.at(address);
+const getContractPure = async (tezos: TezosToolkit, address: string) => tezos.contract.at(address);
 
 export const getContract = memoizee(getContractPure, { promise: true });
 

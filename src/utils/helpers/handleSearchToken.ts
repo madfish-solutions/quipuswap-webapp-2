@@ -8,7 +8,7 @@ import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
 
-type SearchTokenType = {
+interface SearchTokenType {
   tokens: WhitelistedToken[];
   tezos?: TezosToolkit;
   network: QSNetwork;
@@ -21,7 +21,7 @@ type SearchTokenType = {
   setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   setTokenPair?: React.Dispatch<React.SetStateAction<WhitelistedTokenPair>>;
   searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<WhitelistedToken | null>;
-};
+}
 
 export const handleSearchToken = async ({
   tokens,

@@ -6,9 +6,9 @@ import { Props as SelectProps } from 'react-select/src/Select';
 import { useChangeNetwork, useNetwork } from '@utils/dapp';
 import { ALL_NETWORKS } from '@utils/defaults';
 
-type NetworkSelectProps = {
+interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
   className?: string;
-} & Pick<SelectProps, 'menuPlacement'>;
+}
 
 export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, className }) => {
   const net = useNetwork();
@@ -19,7 +19,9 @@ export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, cla
   const handleSwitchNetwork = useCallback(
     ({ value, label }) => {
       const selectedNetwork = ALL_NETWORKS.find(network => network.id === value && network.name === label);
-      if (!selectedNetwork || selectedNetwork.disabled) return;
+      if (!selectedNetwork || selectedNetwork.disabled) {
+        return;
+      }
       changeNetwork(selectedNetwork);
     },
     [changeNetwork]

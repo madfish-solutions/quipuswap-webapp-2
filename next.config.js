@@ -20,28 +20,8 @@ module.exports = withReactSvg({
         permanent: true
       },
       {
-        source: '/invest/add-liquidity/:slug',
-        destination: `/liquidity/add/TEZ-:slug`,
-        permanent: true
-      },
-      {
-        source: '/invest/add-token/:slug',
-        destination: `/liquidity/add/TEZ-:slug`,
-        permanent: true
-      },
-      {
-        source: '/invest/remove-liquidity/:slug',
-        destination: `/liquidity/remove/TEZ-:slug`,
-        permanent: true
-      },
-      {
         source: '/voting',
         destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
-        permanent: true
-      },
-      {
-        source: '/governance/vote-baker/:slug',
-        destination: `/voting/vote/TEZ-:slug`,
         permanent: true
       },
       {
@@ -52,11 +32,6 @@ module.exports = withReactSvg({
       {
         source: '/voting/veto',
         destination: `/voting/veto/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
-        permanent: true
-      },
-      {
-        source: '/governance/veto/:slug',
-        destination: `/voting/veto/TEZ-:slug`,
         permanent: true
       }
     ];

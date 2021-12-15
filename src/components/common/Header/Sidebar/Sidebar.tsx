@@ -12,9 +12,9 @@ import { QPToken } from '../QPToken';
 import { Socials } from '../Socials';
 import s from './Sidebar.module.sass';
 
-type SidebarProps = {
+interface SidebarProps {
   className?: string;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

@@ -5,10 +5,10 @@ import BigNumber from 'bignumber.js';
 
 import s from './ComplexInput.module.sass';
 
-type PercentSelectorProps = {
+interface PercentSelectorProps {
   handleBalance: (state: string) => void;
   value: string;
-};
+}
 
 export const PercentSelector: React.FC<PercentSelectorProps> = ({ handleBalance, value }) => {
   const handle25 = () => handleBalance(new BigNumber(value).times(0.25).toFixed());

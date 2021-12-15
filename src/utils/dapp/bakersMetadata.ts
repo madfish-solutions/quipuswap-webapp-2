@@ -1,19 +1,22 @@
 import { BAKERS_API } from '@utils/defaults';
+import { Nullable } from '@utils/types';
 
-type BakerMetadataResponse = {
+interface BakerMetadataResponse {
   name: string;
   address: string;
   logo: string;
   freeSpace: number;
   fee: number;
-} | null;
+}
 
-export const getBakerMetadata = async (address: string): Promise<BakerMetadataResponse> => {
+export const getBakerMetadata = async (address: string): Promise<Nullable<BakerMetadataResponse>> => {
   const data = await fetch(`${BAKERS_API}/${address}`)
-    .then(res => res.json())
+    .then(async res => res.json())
     .catch(() => null);
 
-  if (data?.message) return null;
+  if (data?.message) {
+    return null;
+  }
 
   return data;
 };

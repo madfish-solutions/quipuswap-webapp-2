@@ -8,9 +8,9 @@ import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
 import { getRoutesList } from './getRoutesList';
 import { CommonRouteProblemParams } from './types';
 
-type RouteWithOutputProblemParams = CommonRouteProblemParams & {
+interface RouteWithOutputProblemParams extends CommonRouteProblemParams {
   outputAmount?: BigNumber;
-};
+}
 
 const getRouteWithOutputProblemMemoKey = ({ outputAmount, ...commonParams }: RouteWithOutputProblemParams) =>
   [outputAmount?.toFixed(), getCommonRouteProblemMemoKey(commonParams)].join(',');

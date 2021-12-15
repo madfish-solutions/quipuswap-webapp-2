@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
 import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -10,19 +10,19 @@ import useUpdateToast from '@hooks/useUpdateToast';
 
 import s from './ComplexInput.module.sass';
 
-type ComplexRecipientProps = {
+interface ComplexRecipientProps extends HTMLProps<HTMLTextAreaElement> {
   className?: string;
   label?: string;
   error?: string;
   handleInput: (value: string) => void;
-} & React.HTMLProps<HTMLTextAreaElement>;
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
 
-export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
+export const ComplexRecipient: FC<ComplexRecipientProps> = ({
   className,
   label,
   id,
@@ -33,7 +33,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [focused, setActive] = React.useState<boolean>(false);
+  const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const updateToast = useUpdateToast();

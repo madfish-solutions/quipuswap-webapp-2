@@ -17,7 +17,7 @@ import {
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
 
-type SwapDetailsProps = {
+interface SwapDetailsProps {
   currentTab: string;
   fee: string;
   priceImpact: BigNumber;
@@ -26,7 +26,7 @@ type SwapDetailsProps = {
   inputAmount?: BigNumber;
   outputAmount?: BigNumber;
   route?: DexPair[];
-};
+}
 
 const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute: DexPair[]) => {
   if (dexRoute.length === 0) {
