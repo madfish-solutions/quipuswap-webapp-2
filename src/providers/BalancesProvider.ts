@@ -19,10 +19,12 @@ export const [BalancesProvider, useBalances] = constate(() => {
     if (accountPkh) {
       const balance = await getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
 
-      setBalances(prevValue => ({
-        ...prevValue,
-        [getTokenSlug(token)]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals)
-      }));
+      if (balance) {
+        setBalances(prevValue => ({
+          ...prevValue,
+          [getTokenSlug(token)]: fromDecimals(balance, token.metadata.decimals)
+        }));
+      }
     }
   };
 
