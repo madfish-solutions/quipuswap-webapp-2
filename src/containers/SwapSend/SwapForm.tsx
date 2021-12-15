@@ -60,6 +60,9 @@ const TabsContent = [
   }
 ];
 
+const WHOLE_ITEM_PERCENT = 100;
+const DEBOUNCE_DELAY = 250;
+
 const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const handleChange = (newValue?: string) => {
     if (!newValue) {
@@ -76,7 +79,7 @@ const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, 
     () =>
       slippage && outputAmount
         ? outputAmount
-            .times(new BigNumber(1).minus(slippage.div(100)))
+            .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
             .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
         : new BigNumber(0),
     [slippage, outputAmount, tokenDecimals]
@@ -245,14 +248,14 @@ export const SwapForm: FC<SwapFormProps> = ({
           inputAmount: toDecimals(inputAmount, token1),
           dexChain: route,
           recipient,
-          slippageTolerance: slippage?.div(100),
+          slippageTolerance: slippage?.div(WHOLE_ITEM_PERCENT),
           ttDexAddress: TTDEX_CONTRACTS[network.id]
         })
           .then(newFee => setFee(fromDecimals(newFee, TEZOS_TOKEN)))
           .catch(e => {
             setFee(undefined);
           });
-      }, 250),
+      }, DEBOUNCE_DELAY),
     [accountPkh, network.id, recipient, slippage, tezos, token1]
   );
 
@@ -264,8 +267,6 @@ export const SwapForm: FC<SwapFormProps> = ({
     const prevAmount2 = prevAmount2Ref.current;
     const prevToken1Slug = prevToken1 && getTokenSlug(prevToken1);
     const prevToken2Slug = prevToken2 && getTokenSlug(prevToken2);
-    const token1Slug = token1 && getTokenSlug(token1);
-    const token2Slug = token2 && getTokenSlug(token2);
     const prevDexGraph = prevDexGraphRef.current;
     prevToken1Ref.current = token1;
     prevToken2Ref.current = token2;
@@ -278,33 +279,36 @@ export const SwapForm: FC<SwapFormProps> = ({
     }
 
     if (token1 && token2 && dexGraph) {
+      const token1Slug = getTokenSlug(token1);
+      const token2Slug = getTokenSlug(token2);
       const inputChanged = prevToken1Slug !== token1Slug || !amountsAreEqual(prevAmount1, amount1);
       const outputTokenChanged = prevToken2Slug !== token2Slug;
       const outputAmountChanged = !amountsAreEqual(prevAmount2, amount2);
       const shouldUpdateOutputAmountOnValuesChange = inputChanged || outputTokenChanged;
       const shouldUpdateInputAmountOnValuesChange = outputAmountChanged;
       if (shouldUpdateOutputAmountOnValuesChange || prevDexGraph !== dexGraph) {
-        const route =
-          amount1 &&
-          getRouteWithInput({
-            startTokenSlug: token1Slug!,
-            endTokenSlug: token2Slug!,
+        let route: DexPair[] | undefined;
+        let outputAmount: BigNumber | undefined;
+        if (amount1) {
+          route = getRouteWithInput({
+            startTokenSlug: token1Slug,
+            endTokenSlug: token2Slug,
             graph: dexGraph,
             inputAmount: toDecimals(amount1, token1)
           });
-        let outputAmount: BigNumber | undefined;
-        if (route) {
-          try {
-            outputAmount = fromDecimals(
-              getTokenOutput({
-                inputToken: token1,
-                inputAmount: toDecimals(amount1!, token1),
-                dexChain: route
-              }),
-              token2
-            );
-          } catch (_) {
-            // ignore error
+          if (route) {
+            try {
+              outputAmount = fromDecimals(
+                getTokenOutput({
+                  inputToken: token1,
+                  inputAmount: toDecimals(amount1, token1),
+                  dexChain: route
+                }),
+                token2
+              );
+            } catch (_) {
+              // ignore error
+            }
           }
         }
         setDexRoute(route);
@@ -319,20 +323,21 @@ export const SwapForm: FC<SwapFormProps> = ({
           setFee(undefined);
         }
       } else if (shouldUpdateInputAmountOnValuesChange) {
-        const route =
-          amount2 &&
-          getRouteWithOutput({
-            startTokenSlug: token1Slug!,
-            endTokenSlug: token2Slug!,
+        let route: DexPair[] | undefined;
+        let inputAmount: BigNumber | undefined;
+        if (amount2) {
+          route = getRouteWithOutput({
+            startTokenSlug: token1Slug,
+            endTokenSlug: token2Slug,
             graph: dexGraph,
             outputAmount: amount2
           });
-        let inputAmount: BigNumber | undefined;
-        if (route) {
-          try {
-            inputAmount = fromDecimals(getTokenInput(token2, toDecimals(amount2!, token2), route), token1);
-          } catch (_) {
-            // ignore error
+          if (route) {
+            try {
+              inputAmount = fromDecimals(getTokenInput(token2, toDecimals(amount2, token2), route), token1);
+            } catch (_) {
+              // ignore error
+            }
           }
         }
         setDexRoute(route);
@@ -482,7 +487,7 @@ export const SwapForm: FC<SwapFormProps> = ({
             inputToken: token1,
             inputAmount: toDecimals(amount1, token1),
             dexChain: dexRoute,
-            slippageTolerance: slippage?.div(100),
+            slippageTolerance: slippage?.div(WHOLE_ITEM_PERCENT),
             ttDexAddress: TTDEX_CONTRACTS[network.id]
           })
         : new BigNumber(0),

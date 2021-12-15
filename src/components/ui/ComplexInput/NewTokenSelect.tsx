@@ -37,6 +37,8 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+const NO_ELEMENT_FOUND_INDEX = -1;
+
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
   className,
@@ -90,7 +92,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
       const assetDecimals = tokenDecimals ?? Infinity;
-      if (indexOfDot !== -1 && val.length - indexOfDot > assetDecimals + 1) {
+      if (indexOfDot !== NO_ELEMENT_FOUND_INDEX && val.length - indexOfDot > assetDecimals + 1) {
         val = val.substring(0, indexOfDot + assetDecimals + 1);
         numVal = new BigNumber(val);
       }

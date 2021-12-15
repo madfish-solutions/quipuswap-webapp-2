@@ -145,6 +145,7 @@ export const getMarketQuotient = (inputToken: TokenId, dexChain: DexPair[]) => {
   return marketQuotient;
 };
 
+const FALLBACK_PRICE_IMPACT = 99.9;
 export const getPriceImpact = (swapParams: SwapParams) => {
   try {
     const { inputToken, inputAmount, dexChain } = swapParams;
@@ -158,6 +159,6 @@ export const getPriceImpact = (swapParams: SwapParams) => {
         : new BigNumber(1).minus(newMarketQuotient.div(initialMarketQuotient))
     ).times(100);
   } catch (e) {
-    return new BigNumber(99.9);
+    return new BigNumber(FALLBACK_PRICE_IMPACT);
   }
 };
