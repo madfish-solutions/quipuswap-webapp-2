@@ -3,7 +3,7 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { networksDefaultTokens, TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';
 
@@ -36,7 +36,9 @@ export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] =>
   {
     id: 2,
     href: '/liquidity/[method]/[from-to]',
-    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${MAINNET_DEFAULT_TOKEN.contractAddress}_${MAINNET_DEFAULT_TOKEN.fa2TokenId}`,
+    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${
+      network === 'mainnet' ? MAINNET_DEFAULT_TOKEN.contractAddress : HANGZHOUNET_DEFAULT_TOKEN.contractAddress
+    }_${network === 'mainnet' ? MAINNET_DEFAULT_TOKEN.fa2TokenId : HANGZHOUNET_DEFAULT_TOKEN.fa2TokenId}`,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },
