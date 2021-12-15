@@ -1,6 +1,5 @@
-import React, {
-  useCallback, useContext, useEffect, useMemo, useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+
 import {
   Button,
   ColorModes,
@@ -9,13 +8,13 @@ import {
   Modal,
   Pen,
   TokenCell,
-  TokenNotFound,
+  TokenNotFound
 } from '@quipuswap/ui-kit';
-import { FormApi } from 'final-form';
-import { withTypes } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
-import ReactModal from 'react-modal';
 import cx from 'classnames';
+import { FormApi } from 'final-form';
+import { useTranslation } from 'next-i18next';
+import { withTypes } from 'react-final-form';
+import ReactModal from 'react-modal';
 
 import {
   useAddCustomToken,
@@ -24,14 +23,14 @@ import {
   useSearchTokens,
   useTezos,
   useTokens,
-  getTokenType,
+  getTokenType
 } from '@utils/dapp';
 import {
   getWhitelistedTokenName,
   getWhitelistedTokenSymbol,
   isTokenEqual,
   localSearchToken,
-  prepareTokenLogo,
+  prepareTokenLogo
 } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
@@ -40,7 +39,7 @@ import s from './TokensModal.module.sass';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 interface TokensModalProps extends ReactModal.Props {
@@ -53,11 +52,7 @@ interface FormValues {
   tokenId: number;
 }
 
-export const TokensModal: React.FC<TokensModalProps> = ({
-  onChange,
-  blackListedTokens = [],
-  ...props
-}) => {
+export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedTokens = [], ...props }) => {
   const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -79,15 +74,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({
 
   const handleTokenSearch = useCallback(() => {
     if (!network || !tezos) return;
-    const isTokens = tokens
-      .filter(
-        (token:any) => localSearchToken(
-          token,
-          network,
-          inputValue,
-          inputToken,
-        ),
-      );
+    // eslint-disable-next-line
+    const isTokens = tokens.filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, inputToken);
@@ -95,30 +83,23 @@ export const TokensModal: React.FC<TokensModalProps> = ({
   }, [inputValue, inputToken, network, tezos, searchCustomToken, tokens]);
 
   const isEmptyTokens = useMemo(
-    () => filteredTokens.length === 0
-    && searchTokens.length === 0,
-    [searchTokens, filteredTokens],
+    () => filteredTokens.length === 0 && searchTokens.length === 0,
+    [searchTokens, filteredTokens]
   );
 
-  useEffect(() => handleTokenSearch(), [
-    tokens,
-    inputValue,
-    inputToken,
-    network,
-    handleTokenSearch,
-  ]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network, handleTokenSearch]);
 
-  const allTokens = useMemo(() => (
-    inputValue.length > 0 && filteredTokens.length === 0
-      ? searchTokens
-      : filteredTokens
-  )
-    .filter((x) => !blackListedTokens.find((y) => isTokenEqual(x, y))),
-  [inputValue, filteredTokens, searchTokens, blackListedTokens]);
+  const allTokens = useMemo(
+    () =>
+      (inputValue.length > 0 && filteredTokens.length === 0 ? searchTokens : filteredTokens).filter(
+        x => !blackListedTokens.find(y => isTokenEqual(x, y))
+      ),
+    [inputValue, filteredTokens, searchTokens, blackListedTokens]
+  );
 
   useEffect(() => {
     getTokenType(inputValue, tezos!)
-      .then((tokenType) => setSoleFa2Token(tokenType === 'fa2'))
+      .then(tokenType => setSoleFa2Token(tokenType === 'fa2'))
       .catch(console.error);
   }, [inputValue, tezos]);
 
@@ -139,25 +120,19 @@ export const TokensModal: React.FC<TokensModalProps> = ({
       mutators={{
         setValue: ([field, value], state, { changeValue }) => {
           changeValue(state, field, () => value);
-        },
+        }
       }}
       render={({ form }) => (
         <Modal
           title={t('common|Search token')}
-          header={(
-            <AutoSave
-              form={form}
-              save={handleInput}
-              isSecondInput={isSoleFa2Token}
-            />
-          )}
-          footer={false && (
-            // TODO: Impelement it
+          header={<AutoSave form={form} save={handleInput} isSecondInput={isSoleFa2Token} />}
+          footer={
             <Button className={s.modalButton} theme="inverse">
+              {/*TODO: Impelement it*/}
               Manage Lists
               <Pen className={s.penIcon} />
             </Button>
-          )}
+          }
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
@@ -165,20 +140,18 @@ export const TokensModal: React.FC<TokensModalProps> = ({
           contentClassName={cx(s.tokenModal)}
           {...props}
         >
-          {isEmptyTokens && (!searchLoading && !tokensLoading) && (
+          {isEmptyTokens && !searchLoading && !tokensLoading && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
-              {' '}
+              <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>{' '}
             </div>
           )}
-          {isEmptyTokens && (searchLoading || tokensLoading) && (
-            [1, 2, 3, 4, 5, 6, 7].map((x) => (<LoadingTokenCell key={x} />))
-          )}
-          {allTokens.map((token) => {
-            const {
-              contractAddress, fa2TokenId,
-            } = token;
+          {isEmptyTokens &&
+            (searchLoading || tokensLoading) &&
+            [1, 2, 3, 4, 5, 6, 7].map(x => <LoadingTokenCell key={x} />)}
+          {allTokens.map(token => {
+            const { contractAddress, fa2TokenId } = token;
+
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
@@ -192,7 +165,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({
             );
           })}
         </Modal>
-
       )}
     />
   );

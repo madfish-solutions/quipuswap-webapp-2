@@ -1,13 +1,13 @@
 import React from 'react';
+
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { BaseLayout } from '@layouts/BaseLayout';
 import { Voting } from '@containers/Voting';
-
+import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/Voting.module.sass';
+import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);
@@ -23,8 +23,13 @@ const VotePage: React.FC = () => {
   );
 };
 
-export const getServerSideProps = async (props:any) => {
-  const { locale, query } = props;
+export const getServerSideProps = async ({
+  locale,
+  query
+}: {
+  locale: string;
+  query: { 'from-to': string; method: string };
+}) => {
   const splittedTokens = query['from-to'].split('-');
   const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
   const to = getWhitelistedTokenSymbol(MAINNET_DEFAULT_TOKEN);
@@ -38,29 +43,31 @@ export const getServerSideProps = async (props:any) => {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
-  if (splittedTokens.length > 0
-    && (splittedTokens[0] !== TEZOS_TOKEN.contractAddress
-    && splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol
-    && splittedTokens[0] !== TEZOS_TOKEN.metadata.name)
+  if (
+    splittedTokens.length > 0 &&
+    splittedTokens[0] !== TEZOS_TOKEN.contractAddress &&
+    splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol &&
+    splittedTokens[0] !== TEZOS_TOKEN.metadata.name
   ) {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
-  return ({
+  return {
     props: {
-      ...await serverSideTranslations(locale, ['common', 'vote']),
-    },
-  });
+      ...(await serverSideTranslations(locale, ['common', 'vote']))
+    }
+  };
 };
 
+// eslint-disable-next-line import/no-default-export
 export default VotePage;

@@ -1,27 +1,25 @@
-import { useRouter } from 'next/router';
 import { useCallback, useEffect, useRef } from 'react';
+
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
+import { makeWhitelistedToken } from '@hooks/useDexGraph';
 import {
   fallbackToolkits,
   getTokenType,
   useNetwork,
   useAddCustomToken,
   useSearchCustomTokens,
-  useTokens,
+  useTokens
 } from '@utils/dapp';
-import { QSMainNet } from '@utils/types';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
+import { QSMainNet } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
-import { makeWhitelistedToken } from '@hooks/useDexGraph';
 
 type TokensSlugs = [string, string];
 
-export const useInitialTokens = (
-  fromToSlug?: string,
-  getRedirectionUrl?: (fromToSlug: string) => string,
-) => {
+export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const network = useNetwork();
   const router = useRouter();
   const { data: tokens, loading: tokensLoading } = useTokens();
@@ -30,10 +28,11 @@ export const useInitialTokens = (
   const prevNetworkIdRef = useRef<QSMainNet | undefined>();
 
   const getInitialTokens = useCallback(
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     async (_key: string, networkId: QSMainNet, tokensSlug: string = ''): Promise<TokensSlugs> => {
       const fallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
-        getTokenSlug(networksDefaultTokens[networkId]),
+        getTokenSlug(networksDefaultTokens[networkId])
       ];
       const rawSlugs = tokensSlug.split('-').slice(0, 2);
       while (rawSlugs.length < 2) {
@@ -42,7 +41,7 @@ export const useInitialTokens = (
       const tezos = fallbackToolkits[networkId];
       const tokensSlugs = await Promise.all(
         rawSlugs.map(async (rawSlug, index) => {
-          if (!rawSlug || (isValidTokenSlug(rawSlug) !== true)) {
+          if (!rawSlug || isValidTokenSlug(rawSlug) !== true) {
             return fallbackTokensSlugs[index];
           }
           if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
@@ -57,11 +56,12 @@ export const useInitialTokens = (
             if (tokenType === 'fa1.2') {
               return contractAddress;
             }
+
             return undefined;
           } catch (e) {
             return undefined;
           }
-        }),
+        })
       );
       const token1Slug = tokensSlugs[0];
       let token2Slug = tokensSlugs[1];
@@ -69,47 +69,39 @@ export const useInitialTokens = (
         return fallbackTokensSlugs;
       }
       if (token1Slug === token2Slug) {
-        token2Slug = token1Slug === fallbackTokensSlugs[0]
-          ? fallbackTokensSlugs[1]
-          : fallbackTokensSlugs[0];
+        token2Slug = token1Slug === fallbackTokensSlugs[0] ? fallbackTokensSlugs[1] : fallbackTokensSlugs[0];
       }
+
       return [token1Slug, token2Slug];
     },
-    [],
+    []
   );
 
-  const { data: initialTokensSlugs } = useSWR(
-    ['initial-tokens', network.id, fromToSlug],
-    getInitialTokens,
-  );
+  const { data: initialTokensSlugs } = useSWR(['initial-tokens', network.id, fromToSlug], getInitialTokens);
 
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
 
-    if ((prevNetworkId === network.id) || tokensLoading || !initialTokensSlugs) {
+    if (prevNetworkId === network.id || tokensLoading || !initialTokensSlugs) {
       return;
     }
     const newTokensSlug = initialTokensSlugs.join('-');
-    if (getRedirectionUrl && (fromToSlug !== newTokensSlug)) {
-      console.log('x2', getRedirectionUrl(newTokensSlug));
+    if (getRedirectionUrl && fromToSlug !== newTokensSlug) {
       router.replace(getRedirectionUrl(newTokensSlug));
     }
-    initialTokensSlugs.forEach((tokenSlug) => {
+    initialTokensSlugs.forEach(tokenSlug => {
       const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();
-      const tokenIsKnown = isTez || tokens.some(
-        (token) => getTokenSlug(token) === tokenSlug,
-      );
+      const tokenIsKnown = isTez || tokens.some(token => getTokenSlug(token) === tokenSlug);
       const { contractAddress, fa2TokenId, type: tokenType } = getTokenIdFromSlug(tokenSlug);
       if (!tokenIsKnown) {
         searchCustomTokens(contractAddress, fa2TokenId)
-          .then((customToken) => {
+          .then(customToken => {
             if (customToken) {
               addCustomToken(customToken);
             } else {
-              addCustomToken(makeWhitelistedToken(
-                { address: contractAddress, id: fa2TokenId?.toString(), type: tokenType },
-                [],
-              ));
+              addCustomToken(
+                makeWhitelistedToken({ address: contractAddress, id: fa2TokenId?.toString(), type: tokenType }, [])
+              );
             }
           })
           .catch(console.error);
@@ -125,7 +117,7 @@ export const useInitialTokens = (
     router,
     searchCustomTokens,
     tokens,
-    tokensLoading,
+    tokensLoading
   ]);
 
   return initialTokensSlugs;

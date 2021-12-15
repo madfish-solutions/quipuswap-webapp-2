@@ -1,27 +1,20 @@
 import React, { useContext } from 'react';
-import {
-  Card,
-  Button,
-  ColorModes,
-  VotingReward,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+
+import { Card, Button, ColorModes, VotingReward, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import s from './FarmingStats.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 type FarmingStatsProps = {
-  className?: string
+  className?: string;
 };
 
-export const FarmingStats: React.FC<FarmingStatsProps> = ({
-  className,
-}) => {
+export const FarmingStats: React.FC<FarmingStatsProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -29,19 +22,13 @@ export const FarmingStats: React.FC<FarmingStatsProps> = ({
       <div className={s.flex}>
         <div className={s.reward}>
           <div className={s.rewardContent}>
-            <span className={s.rewardHeader}>
-              Your Pending QNOTs
-            </span>
-            <span className={s.rewardAmount}>
-              100,000,000
-            </span>
+            <span className={s.rewardHeader}>Your Pending QNOTs</span>
+            <span className={s.rewardAmount}>100,000,000</span>
           </div>
           <VotingReward />
         </div>
         <div className={s.item}>
-          <span className={s.header}>
-            Your claimed QNOTs
-          </span>
+          <span className={s.header}>Your claimed QNOTs</span>
           <span className={s.amount}>1,000,000.00</span>
         </div>
       </div>

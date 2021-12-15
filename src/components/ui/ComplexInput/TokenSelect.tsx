@@ -1,26 +1,16 @@
-import React, {
-  useRef,
-  useMemo,
-  useState,
-  useContext,
-} from 'react';
-import {
-  Button,
-  Shevron,
-  ColorModes,
-  TokensLogos,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+import React, { useRef, useMemo, useState, useContext } from 'react';
+
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { TokensModal } from '@components/modals/TokensModal';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { useAccountPkh } from '@utils/dapp';
-import { TokensModal } from '@components/modals/TokensModal';
-import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
 import s from './ComplexInput.module.sass';
 
@@ -32,17 +22,17 @@ interface TokenSelectProps extends React.HTMLProps<HTMLInputElement> {
   label: string;
   error?: string;
   notSelectable?: boolean;
-  handleChange?: (token:WhitelistedToken) => void;
+  handleChange?: (token: WhitelistedToken) => void;
   handleBalance: (value: string) => void;
   token?: WhitelistedToken;
   token2?: WhitelistedToken;
   blackListedTokens: WhitelistedToken[];
-  setToken: (token:WhitelistedToken) => void;
+  setToken: (token: WhitelistedToken) => void;
 }
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export const TokenSelect: React.FC<TokenSelectProps> = ({
@@ -70,20 +60,15 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const account = useAccountPkh();
 
-  const dollarEquivalent = useMemo(() => (exchangeRate
-    ? new BigNumber(value ? value.toString() : 0)
-      .multipliedBy(new BigNumber(exchangeRate))
-      .toString()
-    : ''
-  ),
-  [exchangeRate, value]);
-
-  const compoundClassName = cx(
-    { [s.focused]: focused },
-    { [s.error]: !!error },
-    themeClass[colorThemeMode],
-    className,
+  const dollarEquivalent = useMemo(
+    () =>
+      exchangeRate
+        ? new BigNumber(value ? value.toString() : 0).multipliedBy(new BigNumber(exchangeRate)).toString()
+        : '',
+    [exchangeRate, value]
   );
+
+  const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {
     if (inputRef?.current) {
@@ -99,7 +84,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         blackListedTokens={blackListedTokens}
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
-        onChange={(selectedToken) => {
+        onChange={selectedToken => {
           setToken(selectedToken);
           if (handleChange) handleChange(selectedToken);
           setTokensModal(false);
@@ -111,20 +96,15 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </label>
         <div className={s.background}>
           <div className={s.shape}>
-            <div className={cx(s.item1, s.label2)}>
-              {equivalentContent}
-            </div>
+            <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>
               {account && (
-              <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common|Balance')}
-                  :
+                <div className={s.item2Line}>
+                  <div className={s.caption}>{t('common|Balance')}:</div>
+                  <div className={cx(s.label2, s.price)}>
+                    {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
+                  </div>
                 </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
-                </div>
-              </div>
               )}
             </div>
             <input
@@ -144,12 +124,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               textClassName={s.item4Inner}
             >
               <TokensLogos
-                firstTokenIcon={token
-                  ? prepareTokenLogo(token.metadata?.thumbnailUri)
-                  : null}
-                firstTokenSymbol={token
-                  ? getWhitelistedTokenSymbol(token)
-                  : 'TOKEN'}
+                firstTokenIcon={token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null}
+                firstTokenSymbol={token ? getWhitelistedTokenSymbol(token) : 'TOKEN'}
                 secondTokenIcon={token2 && prepareTokenLogo(token2.metadata.thumbnailUri)}
                 secondTokenSymbol={token2 && getWhitelistedTokenSymbol(token2)}
               />
@@ -157,11 +133,11 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
                 {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
               </h6>
-              {!notSelectable && (<Shevron />)}
+              {!notSelectable && <Shevron />}
             </Button>
           </div>
         </div>
-        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
+        {!noBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
       </div>
     </>

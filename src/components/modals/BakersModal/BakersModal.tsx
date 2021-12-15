@@ -1,6 +1,5 @@
-import React, {
-  useRef, useState, useEffect, useContext,
-} from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
+
 import {
   Modal,
   Input,
@@ -9,22 +8,22 @@ import {
   ColorModes,
   TokenNotFound,
   LoadingBakerCell,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
-import { Field, FormSpy, withTypes } from 'react-final-form';
-import { useTranslation } from 'next-i18next';
-import ReactModal from 'react-modal';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+import { Field, FormSpy, withTypes } from 'react-final-form';
+import ReactModal from 'react-modal';
 
+import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { isFullBaker, WhitelistedBaker } from '@utils/types';
-import { useBakers } from '@utils/dapp';
 
 import s from './BakersModal.module.sass';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 type BakersModalProps = {
@@ -33,9 +32,9 @@ type BakersModalProps = {
 
 type HeaderProps = {
   debounce: number;
-  save: any;
+  save: never;
   values: FormValues;
-  form: any;
+  form: never;
 };
 
 type FormValues = {
@@ -49,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise: any;
+  let promise: never;
 
   const saveFunc = async () => {
     if (promise) {
@@ -57,6 +56,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
     }
     setVal(values);
     setSubm(true);
+    // @ts-ignore
     promise = save(values);
     await promise;
     setSubm(false);
@@ -67,6 +67,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -92,14 +93,10 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   );
 };
 
-const AutoSave = (props: any) => (
-  <FormSpy {...props} subscription={{ values: true }} component={Header} />
-);
+// eslint-disable-next-line
+const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const BakersModal: React.FC<BakersModalProps> = ({
-  onChange,
-  ...props
-}) => {
+export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
@@ -112,7 +109,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
   };
 
   const handleTokenSearch = () => {
-    const isBakers = bakers.filter((baker) => localSearchBaker(baker, inputValue));
+    const isBakers = bakers.filter(baker => localSearchBaker(baker, inputValue));
     setFilteredBakers(isBakers);
   };
 
@@ -127,7 +124,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({
       mutators={{
         setValue: ([field, value], state, { changeValue }) => {
           changeValue(state, field, () => value);
-        },
+        }
       }}
       render={({ form }) => (
         <Modal
@@ -143,14 +140,11 @@ export const BakersModal: React.FC<BakersModalProps> = ({
           {isEmptyBakers && (
             <div className={s.tokenNotFound}>
               <TokenNotFound />
-              <div className={s.notFoundLabel}>
-                {t('common|No bakers found')}
-              </div>
+              <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
-          {loading
-            && [1, 2, 3, 4, 5, 6].map((x) => <LoadingBakerCell key={x} />)}
-          {filteredBakers.map((baker) => (
+          {loading && [1, 2, 3, 4, 5, 6].map(x => <LoadingBakerCell key={x} />)}
+          {filteredBakers.map(baker => (
             <BakerCell
               key={baker.address}
               bakerName={isFullBaker(baker) ? baker.name : baker.address}

@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js';
 import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 
 import { WhitelistedToken } from '@utils/types';
 
@@ -14,7 +14,7 @@ export const addPairTokenToToken = async (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   tokenAInput: string,
-  tokenBInput: string,
+  tokenBInput: string
 ) => {
   const ten = new BigNumber(10);
   const tokenADecimals = ten.pow(tokenA.metadata.decimals);
@@ -28,7 +28,7 @@ export const addPairTokenToToken = async (
     tokenA,
     dex.contract.address,
     fixedTokenAInput,
-    accountPkh,
+    accountPkh
   );
   if (!tokenAUpdateOperator) return;
   const tokenBUpdateOperator = await allowContractSpendYourTokens(
@@ -36,21 +36,16 @@ export const addPairTokenToToken = async (
     tokenB,
     dex.contract.address,
     fixedTokenBInput,
-    accountPkh,
+    accountPkh
   );
   if (!tokenBUpdateOperator) return;
 
-  const validAppPairParams = getValidPairParams(
-    dex,
-    tokenA,
-    tokenB,
-    fixedTokenAInput,
-    fixedTokenBInput,
-  );
+  const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, fixedTokenAInput, fixedTokenBInput);
 
   if (!validAppPairParams) return;
 
-  const batch = await tezos.wallet.batch()
+  const batch = await tezos.wallet
+    .batch()
     .withContractCall(tokenAUpdateOperator)
     .withContractCall(tokenBUpdateOperator)
     .withContractCall(validAppPairParams);

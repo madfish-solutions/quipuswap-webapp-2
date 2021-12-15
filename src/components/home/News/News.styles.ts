@@ -5,8 +5,8 @@ export const responsive = [
       slidesToShow: 4,
       slidesToScroll: 4,
       infinite: true,
-      dots: true,
-    },
+      dots: true
+    }
   },
   {
     breakpoint: 1370,
@@ -14,8 +14,8 @@ export const responsive = [
       slidesToShow: 3,
       slidesToScroll: 3,
       infinite: true,
-      dots: true,
-    },
+      dots: true
+    }
   },
   {
     breakpoint: 820,
@@ -23,8 +23,8 @@ export const responsive = [
       slidesToShow: 2,
       slidesToScroll: 2,
       infinite: true,
-      dots: true,
-    },
+      dots: true
+    }
   },
   {
     breakpoint: 610,
@@ -32,7 +32,7 @@ export const responsive = [
       slidesToShow: 1,
       slidesToScroll: 1,
       infinite: true,
-      dots: true,
-    },
-  },
+      dots: true
+    }
+  }
 ];

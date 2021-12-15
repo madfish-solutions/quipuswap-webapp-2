@@ -1,50 +1,40 @@
-import React, {
-  useRef,
-  useMemo,
-  useContext,
-} from 'react';
-import {
-  Button,
-  Shevron,
-  ColorModes,
-  TokensLogos,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+import React, { useRef, useMemo, useContext } from 'react';
+
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 
 import s from './ComplexInput.module.sass';
 
 type ComplexInputProps = {
-  className?: string
-  balance?: string
-  exchangeRate?: string
-  label: string
-  error?: string
-  onClick?: () => void
-  token1: WhitelistedToken
-  token2?: WhitelistedToken
-  mode?: keyof typeof modeClass
-  decimals?:number,
-  handleBalance?: (value: string) => void
+  className?: string;
+  balance?: string;
+  exchangeRate?: string;
+  label: string;
+  error?: string;
+  onClick?: () => void;
+  token1: WhitelistedToken;
+  token2?: WhitelistedToken;
+  mode?: keyof typeof modeClass;
+  decimals?: number;
+  handleBalance?: (value: string) => void;
 } & React.HTMLProps<HTMLInputElement>;
 
 const modeClass = {
   input: s.inputMode,
   select: s.selectMode,
-  votes: s.votesMode,
+  votes: s.votesMode
 };
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export const ComplexInput: React.FC<ComplexInputProps> = ({
@@ -69,19 +59,20 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   const [focused, setActive] = React.useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const dollarEquivalent = useMemo(() => (exchangeRate
-    ? new BigNumber(value ? value.toString() : 0)
-      .multipliedBy(new BigNumber(exchangeRate))
-      .toString()
-    : ''
-  ), [exchangeRate, value]);
+  const dollarEquivalent = useMemo(
+    () =>
+      exchangeRate
+        ? new BigNumber(value ? value.toString() : 0).multipliedBy(new BigNumber(exchangeRate)).toString()
+        : '',
+    [exchangeRate, value]
+  );
 
   const compoundClassName = cx(
     { [s.focused]: focused },
     { [s.error]: !readOnly && !!error },
     { [s.readOnly]: readOnly },
     themeClass[colorThemeMode],
-    className,
+    className
   );
 
   const focusInput = () => {
@@ -98,39 +89,23 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
   return (
     // eslint-disable-next-line max-len
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div
-      className={compoundClassName}
-      onClick={focusInput}
-    >
+    <div className={compoundClassName} onClick={focusInput}>
       <label htmlFor={id} className={s.label}>
         {label}
       </label>
       <div className={s.background}>
         <div className={s.shape}>
-          <div className={cx(s.item1, s.label2)}>
-            {equivalentContent}
-          </div>
+          <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
           <div className={s.item2}>
             {mode === 'select' && (
               <div className={s.item2Line}>
-                <div className={s.caption}>
-                  {t('common|Frozen Balance')}
-                  :
-                </div>
-                <div className={cx(s.label2, s.price)}>
-                  {prettyPrice(parseFloat(balance), decimals)}
-                </div>
-
+                <div className={s.caption}>{t('common|Frozen Balance')}:</div>
+                <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance), decimals)}</div>
               </div>
             )}
             <div className={s.item2Line}>
-              <div className={s.caption}>
-                {t('common|Total Balance')}
-                :
-              </div>
-              <div className={cx(s.label2, s.price)}>
-                {prettyPrice(parseFloat(balance), decimals)}
-              </div>
+              <div className={s.caption}>{t('common|Total Balance')}:</div>
+              <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance), decimals)}</div>
             </div>
           </div>
           <input
@@ -160,15 +135,12 @@ export const ComplexInput: React.FC<ComplexInputProps> = ({
               {mode === 'select' && 'TOKEN / TOKEN'}
               {mode === 'votes' && 'SELECT LP'}
             </h6>
-            {!readOnly && (<Shevron />)}
+            {!readOnly && <Shevron />}
           </Button>
         </div>
       </div>
-      {
-        !readOnly
-        && handleBalance && (<PercentSelector value={balance} handleBalance={handleBalance} />)
-      }
-      {!readOnly && (<ComplexError error={error} />)}
+      {!readOnly && handleBalance && <PercentSelector value={balance} handleBalance={handleBalance} />}
+      {!readOnly && <ComplexError error={error} />}
     </div>
   );
 };

@@ -1,54 +1,32 @@
-import React, {
-  useMemo, useState, useEffect, useCallback,
-} from 'react';
+import React, { useMemo, useState, useEffect, useCallback } from 'react';
+
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
-import { withTypes } from 'react-final-form';
 import { useRouter } from 'next/router';
+import { withTypes } from 'react-final-form';
 
-import {
-  handleSearchToken,
-  handleTokenChange,
-  fallbackTokenToTokenData,
-} from '@utils/helpers';
-import {
-  useTezos,
-  useTokens,
-  useNetwork,
-  useOnBlock,
-  useAccountPkh,
-  useSearchCustomTokens,
-} from '@utils/dapp';
-import {
-  VoterType,
-  TokenDataMap,
-  VoteFormValues,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-} from '@utils/types';
-import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { useRouterPair } from '@hooks/useRouterPair';
-import { useExchangeRates } from '@hooks/useExchangeRate';
 import { VotingStats } from '@components/voting/VotingStats';
-
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
-import { VotingForm } from './VotingForm';
-import {
-  hanldeTokenPairSelect,
-  submitForm,
-  submitWithdraw,
-} from './helpers/votingHelpers';
+import { useTezos, useTokens, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens } from '@utils/dapp';
+import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
+import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
+import { VoterType, TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+
+import { hanldeTokenPairSelect, submitForm, submitWithdraw } from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
+import { VotingForm } from './VotingForm';
 
 const TabsContent = [
   {
     id: 'vote',
-    label: 'Vote',
+    label: 'Vote'
   },
   {
     id: 'veto',
-    label: 'Veto',
-  },
+    label: 'Veto'
+  }
 ];
 
 type VotingProps = {
@@ -57,29 +35,22 @@ type VotingProps = {
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: MAINNET_DEFAULT_TOKEN,
+  token2: MAINNET_DEFAULT_TOKEN
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
-  const {
-    updateToast, handleErrorToast, handleLoader, handleSuccessToast,
-  } = useVotingToast();
+  const { updateToast, handleErrorToast, handleLoader, handleSuccessToast } = useVotingToast();
   const tezos = useTezos();
   const network = useNetwork();
   const exchangeRates = useExchangeRates();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tokensData, setTokensData] = useState<TokenDataMap>(
-    {
-      first: fallbackTokenToTokenData(TEZOS_TOKEN),
-      second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN),
-    },
-  );
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([
-    TEZOS_TOKEN,
-    MAINNET_DEFAULT_TOKEN,
-  ]);
+  const [tokensData, setTokensData] = useState<TokenDataMap>({
+    first: fallbackTokenToTokenData(TEZOS_TOKEN),
+    second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN)
+  });
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<FoundDex>();
   const { Form } = withTypes<VoteFormValues>();
@@ -94,31 +65,27 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     urlLoaded,
     initialLoad,
     token1: tokenPair.token1,
-    token2: tokenPair.token2,
+    token2: tokenPair.token2
   });
 
-  const currentTab = useMemo(
-    () => TabsContent.find(({ id }) => id === tabsState)!,
-    [tabsState],
-  );
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = (
-    token: WhitelistedToken,
-    tokenNumber: 'first' | 'second',
-  ) => handleTokenChange({
-    token,
-    tokenNumber,
-    exchangeRates,
-    tezos: tezos!,
-    accountPkh: accountPkh!,
-    setTokensData,
-  });
+  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
+    handleTokenChange({
+      token,
+      tokenNumber,
+      // @ts-ignore
+      exchangeRates,
+      tezos: tezos!,
+      accountPkh: accountPkh!,
+      setTokensData
+    });
 
   useEffect(() => {
     if (network.id === 'hangzhounet') {
       setTokenPair({
         token1: TEZOS_TOKEN,
-        token2: HANGZHOUNET_DEFAULT_TOKEN,
+        token2: HANGZHOUNET_DEFAULT_TOKEN
       } as WhitelistedTokenPair);
     } else {
       setTokenPair(fallbackTokenPair);
@@ -139,7 +106,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         setTokens,
         setTokenPair,
         searchCustomToken,
-        handleTokenChangeWrapper,
+        handleTokenChangeWrapper
       });
     }
     // eslint-disable-next-line
@@ -158,7 +125,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         handleErrorToast,
         tezos,
         accountPkh,
-        network.id,
+        network.id
       );
     }
     // eslint-disable-next-line
@@ -174,11 +141,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   useOnBlock(tezos, getBalance);
 
   const amounts = accountPkh
-    ? [
-      tokenPair.balance ?? '0',
-      voter?.vote?.toFixed() ?? '0',
-      voter?.veto?.toFixed() ?? '0',
-    ]
+    ? [tokenPair.balance ?? '0', voter?.vote?.toFixed() ?? '0', voter?.veto?.toFixed() ?? '0']
     : ['0', '0', '0'];
 
   return (
@@ -191,18 +154,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         handleSubmit={(params: TransferParams[]) => {
           if (!tezos) return;
           handleLoader();
-          submitWithdraw(
-            tezos,
-            params,
-            handleErrorToast,
-            handleSuccessToast,
-            getBalance,
-          );
+          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast, getBalance);
         }}
       />
       <StickyBlock className={className}>
         <Form
-          onSubmit={(values) => {
+          onSubmit={values => {
             if (!tezos) return;
             handleLoader();
             submitForm({
@@ -210,15 +167,16 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               values,
               dex,
               tab: currentTab.id,
+              // @ts-ignore
               updateToast,
               handleErrorToast,
-              getBalance,
+              getBalance
             });
           }}
           mutators={{
             setValue: ([field, value], state, { changeValue }) => {
               changeValue(state, field, () => value);
-            },
+            }
           }}
           render={({ handleSubmit, form }) => (
             <VotingForm

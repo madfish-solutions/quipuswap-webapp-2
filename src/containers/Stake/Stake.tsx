@@ -1,10 +1,6 @@
-import React, {
-  useMemo,
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-} from 'react';
+/* eslint-disable sonarjs/no-duplicate-string */
+import React, { useMemo, useState, useEffect, useContext, useCallback } from 'react';
+
 import {
   Card,
   Input,
@@ -13,72 +9,72 @@ import {
   Switcher,
   ColorModes,
   CurrencyAmount,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
-import { useRouter } from 'next/router';
 import cx from 'classnames';
+import { useRouter } from 'next/router';
 
-import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { StakeInfo } from '@components/stake/StakeInfo';
-import { StakeCard } from '@components/stake/StakeCard';
 import { ApyModal } from '@components/modals/ApyModal';
+import { StakeCard } from '@components/stake/StakeCard';
+import { StakeInfo } from '@components/stake/StakeInfo';
 import Search from '@icons/Search.svg';
+import { TEZOS_TOKEN } from '@utils/defaults';
+import { WhitelistedStake, WhitelistedTokenPair } from '@utils/types';
 
 import s from './Stake.module.sass';
 
 type StakeProps = {
-  className?: string
+  className?: string;
 };
 
-type ContentType = { name:string, value:string, currency?:string }[];
+type ContentType = { name: string; value: string; currency?: string }[];
 
 const SortContent = [
   {
     id: 'asc:token',
-    label: 'Deposit token',
+    label: 'Deposit token'
   },
   {
     id: 'asc:tvl',
-    label: 'TVL',
+    label: 'TVL'
   },
   {
     id: 'asc:apy',
-    label: 'APY',
+    label: 'APY'
   },
   {
     id: 'asc:deposit',
-    label: 'Deposit',
-  },
+    label: 'Deposit'
+  }
 ];
 
-const content:ContentType = [
+const content: ContentType = [
   {
     name: 'Total Value Locked',
     value: '888888888888888.00',
-    currency: 'QPSP',
+    currency: 'QPSP'
   },
   {
     name: 'Total Daily Reward',
-    value: '888888888888888.00',
+    value: '888888888888888.00'
   },
   {
     name: 'Total Pending Reward',
-    value: '888888888888888.00',
+    value: '888888888888888.00'
   },
   {
     name: 'Total Claimed Reward',
     value: '888888888888888.00',
-    currency: 'QPSP',
-  },
+    currency: 'QPSP'
+  }
 ];
 
 const fallbackPair = {
   token1: TEZOS_TOKEN,
-  token2: TEZOS_TOKEN,
+  token2: TEZOS_TOKEN
 } as WhitelistedTokenPair;
 
-const stakes:WhitelistedStake[] = [
+const stakes: WhitelistedStake[] = [
   {
     id: 0,
     tokenPair: fallbackPair,
@@ -93,7 +89,7 @@ const stakes:WhitelistedStake[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
+    remaining: new Date(Date.now() + 48 * 3600000)
   },
   {
     id: 1,
@@ -109,7 +105,7 @@ const stakes:WhitelistedStake[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
+    remaining: new Date(Date.now() + 48 * 3600000)
   },
   {
     id: 2,
@@ -125,7 +121,7 @@ const stakes:WhitelistedStake[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
+    remaining: new Date(Date.now() + 48 * 3600000)
   },
   {
     id: 3,
@@ -141,7 +137,7 @@ const stakes:WhitelistedStake[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
+    remaining: new Date(Date.now() + 48 * 3600000)
   },
   {
     id: 4,
@@ -157,13 +153,13 @@ const stakes:WhitelistedStake[] = [
     farmContract: '#',
     projectLink: '#',
     analyticsLink: '#',
-    remaining: new Date(Date.now() + 48 * 3600000),
-  },
+    remaining: new Date(Date.now() + 48 * 3600000)
+  }
 ];
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export const Stake: React.FC<StakeProps> = () => {
@@ -173,26 +169,18 @@ export const Stake: React.FC<StakeProps> = () => {
   const [sort, setSort] = useState('Sorted By');
   const [modalOpen, setModalOpen] = useState<boolean>(false);
 
-  const currentSort = useMemo(
-    () => (SortContent.find(({ id }) => id === sort)!),
-    [sort],
-  );
-  const selectValues = useMemo(
-    () => SortContent.map((el) => ({ value: el.id, label: el.label })),
-    [],
-  );
+  const currentSort = useMemo(() => SortContent.find(({ id }) => id === sort)!, [sort]);
+  const selectValues = useMemo(() => SortContent.map(el => ({ value: el.id, label: el.label })), []);
 
   const handleChangeSort = useCallback(({ value, label }) => {
-    const selectedSort = SortContent.find((sorting) => (
-      sorting.id === value && sorting.label === label
-    ));
+    const selectedSort = SortContent.find(sorting => sorting.id === value && sorting.label === label);
     if (!selectedSort) return;
     setSort(selectedSort.id);
   }, []);
 
   useEffect(() => {
     if (router.query.slug) {
-      const stakeObj = stakes.find((x) => `${x.id}` === router.query.slug);
+      const stakeObj = stakes.find(x => `${x.id}` === router.query.slug);
       if (stakeObj) {
         selectStake(stakeObj);
       }
@@ -200,25 +188,17 @@ export const Stake: React.FC<StakeProps> = () => {
   }, [router.query, selectedStake]);
 
   if (selectedStake) {
-    return (
-      <StakeInfo stake={selectedStake} />
-    );
+    return <StakeInfo stake={selectedStake} />;
   }
+
   return (
     <>
       <ApyModal isOpen={modalOpen} close={() => setModalOpen(false)} />
-      <Card
-        className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)}
-        contentClassName={cx(s.farmingStats)}
-      >
-        {content.map((x) => (
+      <Card className={cx(modeClass[colorThemeMode], s.farmingCard, s.desktop)} contentClassName={cx(s.farmingStats)}>
+        {content.map(x => (
           <div key={x.name} className={s.farmingStatsBlock}>
             <div className={s.name}>{x.name}</div>
-            <CurrencyAmount
-              amount={x.value}
-              currency={x.currency}
-              labelSize="large"
-            />
+            <CurrencyAmount amount={x.value} currency={x.currency} labelSize="large" />
           </div>
         ))}
       </Card>
@@ -228,24 +208,22 @@ export const Stake: React.FC<StakeProps> = () => {
       >
         <SliderUI
           items={2}
-          responsive={[{
-            breakpoint: 620,
-            settings: {
-              slidesToShow: 1,
-              slidesToScroll: 1,
-              infinite: true,
-              dots: true,
-            },
-          }]}
+          responsive={[
+            {
+              breakpoint: 620,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                infinite: true,
+                dots: true
+              }
+            }
+          ]}
         >
-          {content.map((x) => (
+          {content.map(x => (
             <div key={x.name} className={s.farmingMobileStatsBlock}>
               <div className={s.name}>{x.name}</div>
-              <CurrencyAmount
-                amount={x.value}
-                currency={x.currency}
-                labelSize="large"
-              />
+              <CurrencyAmount amount={x.value} currency={x.currency} labelSize="large" />
             </div>
           ))}
         </SliderUI>
@@ -254,40 +232,26 @@ export const Stake: React.FC<StakeProps> = () => {
         className={cx(modeClass[colorThemeMode], s.farmingCard, s.farmingControllerCard)}
         contentClassName={cx(s.farmingStats, s.farmingControllerContent)}
       >
-        <Input
-          StartAdornment={Search}
-          className={s.searchInput}
-          placeholder="Search"
-        />
+        <Input StartAdornment={Search} className={s.searchInput} placeholder="Search" />
         <div className={s.switcherWrap}>
-          <Switcher
-            isActive
-            onChange={() => {}}
-            className={s.switcherInput}
-          />
-          <div className={s.switcher}>
-            Staked Only
-          </div>
+          <Switcher isActive onChange={() => {}} className={s.switcherInput} />
+          <div className={s.switcher}>Staked Only</div>
         </div>
-        <div
-          className={s.sortItem}
-        >
+        <div className={s.sortItem}>
           <SelectUI
             className={s.select}
             options={selectValues}
-            value={currentSort
-              ? { value: currentSort.id, label: currentSort.label }
-              : { value: 'Sorted By', label: 'Sorted By' }}
+            value={
+              currentSort
+                ? { value: currentSort.id, label: currentSort.label }
+                : { value: 'Sorted By', label: 'Sorted By' }
+            }
             onChange={handleChangeSort}
           />
         </div>
       </Card>
-      {stakes.map((x) => (
-        <StakeCard
-          key={x.earn}
-          stake={x}
-          openModal={() => setModalOpen(true)}
-        />
+      {stakes.map(x => (
+        <StakeCard key={x.earn} stake={x} openModal={() => setModalOpen(true)} />
       ))}
     </>
   );

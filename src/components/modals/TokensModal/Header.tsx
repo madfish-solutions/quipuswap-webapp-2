@@ -1,31 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
+
+import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
-import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
-
-import { validateMinMax } from '@utils/validators';
-import { parseNumber } from '@utils/helpers';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
+import { parseNumber } from '@utils/helpers';
+import { validateMinMax } from '@utils/validators';
 
 export interface HeaderProps {
-  isSecondInput:boolean
-  debounce:number,
-  save:any,
-  values:any,
-  form:any,
+  isSecondInput: boolean;
+  debounce: number;
+  save: never;
+  values: never;
+  form: never;
 }
 
-export const Header: React.FC<HeaderProps> = ({
-  isSecondInput, debounce, save, values, form,
-}) => {
+export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef(setTimeout(() => {}, 0));
-  let promise:any;
+  let promise: never;
 
   const saveFunc = async () => {
     if (promise) {
@@ -33,6 +31,7 @@ export const Header: React.FC<HeaderProps> = ({
     }
     setVal(values);
     setSubm(true);
+    // @ts-ignore
     promise = save(values);
     await promise;
     setSubm(false);
@@ -43,6 +42,7 @@ export const Header: React.FC<HeaderProps> = ({
       clearTimeout(timeout.current);
     }
     timeout.current = setTimeout(saveFunc, debounce);
+
     return () => {
       if (timeout.current) {
         clearTimeout(timeout.current);
@@ -64,12 +64,8 @@ export const Header: React.FC<HeaderProps> = ({
           />
         )}
       </Field>
-      {(isSecondInput) && (
-        <Field
-          name="tokenId"
-          validate={validateMinMax(0, 100)}
-          parse={(value) => parseNumber(value, 0, 100)}
-        >
+      {isSecondInput && (
+        <Field name="tokenId" validate={validateMinMax(0, 100)} parse={value => parseNumber(value, 0, 100)}>
           {({ input, meta }) => (
             <>
               <NumberInput
@@ -81,16 +77,12 @@ export const Header: React.FC<HeaderProps> = ({
                 max={100}
                 error={(meta.touched && meta.error) || meta.submitError}
                 onIncrementClick={() => {
-                  form.mutators.setValue(
-                    'tokenId',
-                    +input.value + 1 > 100 ? 100 : +input.value + 1,
-                  );
+                  // @ts-ignore
+                  form.mutators.setValue('tokenId', +input.value + 1 > 100 ? 100 : +input.value + 1);
                 }}
                 onDecrementClick={() => {
-                  form.mutators.setValue(
-                    'tokenId',
-                    +input.value - 1 < 1 ? 1 : +input.value - 1,
-                  );
+                  // @ts-ignore
+                  form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
                 }}
               />
             </>

@@ -1,33 +1,29 @@
 import React, { useCallback, useMemo } from 'react';
-import { Props as SelectProps } from 'react-select/src/Select';
-import { SelectUI } from '@quipuswap/ui-kit';
 
-import { ALL_NETWORKS } from '@utils/defaults';
+import { SelectUI } from '@quipuswap/ui-kit';
+import { Props as SelectProps } from 'react-select/src/Select';
+
 import { useChangeNetwork, useNetwork } from '@utils/dapp';
+import { ALL_NETWORKS } from '@utils/defaults';
 
 type NetworkSelectProps = {
-  className?: string
+  className?: string;
 } & Pick<SelectProps, 'menuPlacement'>;
 
-export const NetworkSelect: React.FC<NetworkSelectProps> = ({
-  menuPlacement,
-  className,
-}) => {
+export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, className }) => {
   const net = useNetwork();
   const changeNetwork = useChangeNetwork();
 
-  const selectValues = useMemo(
-    () => ALL_NETWORKS.map((el) => ({ value: el.id, label: el.name })),
-    [],
-  );
+  const selectValues = useMemo(() => ALL_NETWORKS.map(el => ({ value: el.id, label: el.name })), []);
 
-  const handleSwitchNetwork = useCallback(({ value, label }) => {
-    const selectedNetwork = ALL_NETWORKS.find((network) => (
-      network.id === value && network.name === label
-    ));
-    if (!selectedNetwork || selectedNetwork.disabled) return;
-    changeNetwork(selectedNetwork);
-  }, [changeNetwork]);
+  const handleSwitchNetwork = useCallback(
+    ({ value, label }) => {
+      const selectedNetwork = ALL_NETWORKS.find(network => network.id === value && network.name === label);
+      if (!selectedNetwork || selectedNetwork.disabled) return;
+      changeNetwork(selectedNetwork);
+    },
+    [changeNetwork]
+  );
 
   return (
     <SelectUI

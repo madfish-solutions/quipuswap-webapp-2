@@ -1,0 +1,43 @@
+{
+  "extends": ["react-app", "plugin:import/errors", "plugin:import/warnings", "plugin:import/typescript", "plugin:sonarjs/recommended"],
+  "plugins": ["@typescript-eslint", "import", "prettier", "sonarjs"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "rules": {
+    "import/no-named-as-default": 0,
+    "prettier/prettier": "error",
+    "import/order": [
+      "error",
+      {
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "groups": [["external", "builtin"], "internal", ["parent", "sibling", "index"]],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "newline-before-return": ["error"],
+    "comma-dangle": ["error", "never"],
+    "import/no-default-export": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "no-restricted-exports": ["error", { "restrictedNamedExports": ["default"] }],
+    "@typescript-eslint/no-unnecessary-type-assertion": "error"
+  }
+}

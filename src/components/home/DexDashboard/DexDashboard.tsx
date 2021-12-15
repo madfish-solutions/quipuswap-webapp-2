@@ -1,31 +1,27 @@
-import React, {
-  useState,
-  useEffect,
-} from 'react';
-import { TezosToolkit } from '@taquito/taquito';
-import { useTranslation } from 'next-i18next';
+import React, { useState, useEffect } from 'react';
+
 import { Card, SliderUI } from '@quipuswap/ui-kit';
+import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { useGetHomeOverviewQuery } from '@graphql';
-import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
-import { getStorageInfo } from '@utils/dapp';
 import { Section } from '@components/home/Section';
+import { useGetHomeOverviewQuery } from '@graphql';
+import { getStorageInfo } from '@utils/dapp';
+import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
 
 type DexDashboardProps = {
-  className?: string
+  className?: string;
 };
 
-export const DexDashboard: React.FC<DexDashboardProps> = ({
-  className,
-}) => {
+export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetHomeOverviewQuery();
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
@@ -35,6 +31,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       // TODO: change after deploy token to testnet
       const tezos = new TezosToolkit(MAINNET_NETWORK.rpcBaseURL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
+      // @ts-ignore
       const tokenInfo = await contract?.token_info.get(0);
       setTotalSupply(tokenInfo);
     };
@@ -47,10 +44,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({
       description={t('home|The short overview of the most relevant DEX information.')}
       className={cx(className)}
     >
-      <Card
-        className={(s.mobile)}
-        contentClassName={s.mobContent}
-      >
+      <Card className={s.mobile} contentClassName={s.mobContent}>
         <>
           <SliderUI className={s.mobSlider}>
             <DexDashboardInner

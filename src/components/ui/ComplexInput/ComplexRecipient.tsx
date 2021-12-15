@@ -1,11 +1,12 @@
 import React, { useContext, useRef } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import { useTranslation } from 'next-i18next';
+
 import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+import TextareaAutosize from 'react-textarea-autosize';
 
-import useUpdateToast from '@hooks/useUpdateToast';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import useUpdateToast from '@hooks/useUpdateToast';
 
 import s from './ComplexInput.module.sass';
 
@@ -18,7 +19,7 @@ type ComplexRecipientProps = {
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
@@ -42,7 +43,7 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
     modeClass[colorThemeMode],
     { [s.error]: !readOnly && !!error },
     { [s.readOnly]: readOnly },
-    className,
+    className
   );
 
   const focusInput = () => {
@@ -54,10 +55,10 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
   const handlePaste = async () => {
     try {
       handleInput(await navigator.clipboard.readText());
-    } catch (err: any) {
+    } catch (err) {
       updateToast({
         type: 'error',
-        render: `${err.name}: ${err.message}`,
+        render: `${err.name}: ${err.message}`
       });
     }
   };
@@ -86,17 +87,12 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
       </div>
       {'readText' in navigator.clipboard && (
         <div className={s.controls}>
-          <Button
-            disabled={readOnly}
-            onClick={handlePaste}
-            theme="inverse"
-            className={s.btn}
-          >
+          <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn}>
             {t('common|Paste')}
           </Button>
         </div>
       )}
-      {!readOnly && (<ComplexError error={error} />)}
+      {!readOnly && <ComplexError error={error} />}
     </div>
   );
 };

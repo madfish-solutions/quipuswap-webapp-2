@@ -1,14 +1,16 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { SortTokensContractsType, WhitelistedToken } from '@utils/types';
 
 export const sortTokensContracts = (
   tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenB: WhitelistedToken
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 ): SortTokensContractsType | null => {
   if (tokenA.type < tokenB.type) {
     return {
       addressA: tokenA.contractAddress,
       addressB: tokenB.contractAddress,
-      type: 'Left-Right',
+      type: 'Left-Right'
     };
   }
 
@@ -16,7 +18,7 @@ export const sortTokensContracts = (
     return {
       addressA: tokenB.contractAddress,
       addressB: tokenA.contractAddress,
-      type: 'Left-Right',
+      type: 'Left-Right'
     };
   }
 
@@ -25,14 +27,14 @@ export const sortTokensContracts = (
       return {
         addressA: tokenA.contractAddress,
         addressB: tokenB.contractAddress,
-        type: 'Left-Left',
+        type: 'Left-Left'
       };
     }
 
     return {
       addressA: tokenB.contractAddress,
       addressB: tokenA.contractAddress,
-      type: 'Left-Left',
+      type: 'Left-Left'
     };
   }
 
@@ -41,7 +43,7 @@ export const sortTokensContracts = (
       return {
         addressA: tokenA.contractAddress,
         addressB: tokenB.contractAddress,
-        type: 'Right-Right',
+        type: 'Right-Right'
       };
     }
 
@@ -49,7 +51,7 @@ export const sortTokensContracts = (
       return {
         addressA: tokenB.contractAddress,
         addressB: tokenA.contractAddress,
-        type: 'Right-Right',
+        type: 'Right-Right'
       };
     }
 
@@ -58,14 +60,14 @@ export const sortTokensContracts = (
         return {
           addressA: tokenA.contractAddress,
           addressB: tokenB.contractAddress,
-          type: 'Right-Right',
+          type: 'Right-Right'
         };
       }
 
       return {
         addressA: tokenB.contractAddress,
         addressB: tokenA.contractAddress,
-        type: 'Right-Right',
+        type: 'Right-Right'
       };
     }
   }

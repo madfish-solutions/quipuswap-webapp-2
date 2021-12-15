@@ -1,26 +1,22 @@
 import React from 'react';
-import {
-  HomeIcon,
-  VotingIcon,
-  LiquidityIcon,
-  SwapIconSidebar,
-} from '@quipuswap/ui-kit';
+
+import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
+import { networksDefaultTokens, TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
-import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { QSMainNet } from '@utils/types';
 
 interface LinkInterface {
-  id: number
-  href?: string
-  as?: string
-  label: React.ReactNode
-  Icon?: React.FC<{ className?: string, id?: string }>
+  id: number;
+  href?: string;
+  as?: string;
+  label: React.ReactNode;
+  Icon?: React.FC<{ className?: string; id?: string }>;
 }
 
 interface NavigationDataProps extends LinkInterface {
-  links?: LinkInterface[]
+  links?: LinkInterface[];
 }
 
 export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] => [
@@ -28,29 +24,29 @@ export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] =>
     id: 0,
     href: '/',
     label: <Trans ns="common">Home</Trans>,
-    Icon: HomeIcon,
+    Icon: HomeIcon
   },
   {
     id: 1,
     href: '/swap/[from-to]',
     as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
     label: <Trans ns="common">Swap</Trans>,
-    Icon: SwapIconSidebar,
+    Icon: SwapIconSidebar
   },
   {
     id: 2,
     href: '/liquidity/[method]/[from-to]',
-    as: '/liquidity/add/TEZ-QUIPU',
+    as: `/liquidity/add/${TEZOS_TOKEN.contractAddress}-${MAINNET_DEFAULT_TOKEN.contractAddress}_${MAINNET_DEFAULT_TOKEN.fa2TokenId}`,
     label: <Trans ns="common">Liquidity</Trans>,
-    Icon: LiquidityIcon,
+    Icon: LiquidityIcon
   },
   {
     id: 3,
     href: '/voting/[method]/[from-to]',
     as: '/voting/vote/TEZ-QUIPU',
     label: <Trans ns="common">Voting</Trans>,
-    Icon: VotingIcon,
-  },
+    Icon: VotingIcon
+  }
   // {
   //   id: 4,
   //   href: '/stake',

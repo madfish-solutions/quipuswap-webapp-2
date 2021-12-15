@@ -1,5 +1,6 @@
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 import ReactModal from 'react-modal';
+
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 interface IPositionsModalProps {
   onChange: (tokenPair: WhitelistedTokenPair) => void;
@@ -13,8 +14,11 @@ export type PositionsModalProps = IPositionsModalProps & ReactModal.Props;
 export interface HeaderProps {
   isSecondInput: boolean;
   debounce: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   save: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   values: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   form: any;
 }
 

@@ -1,25 +1,19 @@
 import React, { useContext, useMemo } from 'react';
-import {
-  Card,
-  Button,
-  Tooltip,
-  ColorModes,
-  VotingReward,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
+
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
-import { useTranslation } from 'next-i18next';
+import { Card, Button, Tooltip, ColorModes, VotingReward, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
+import { FormatNumber } from '@utils/helpers/formatNumber';
 
 import { isRewardGreaterThenZero } from './isRewardGreaterThenZero';
-
 import s from './VotingStats.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 type VotingStatsProps = {
@@ -35,7 +29,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   pendingReward = '0',
   amounts = [],
   dex,
-  handleSubmit,
+  handleSubmit
 }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -47,48 +41,38 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       {
         id: 0,
         header: 'vote|Your LP',
-        amount: amounts[0] ?? '0',
-        tooltip: 'vote|Total number of LP tokens you own.',
+        amount: FormatNumber(amounts[0]),
+        tooltip: 'vote|Total number of LP tokens you own.'
       },
       {
         id: 1,
         header: 'vote|Your votes',
-        amount: amounts[1] ?? '0',
-        tooltip:
-          'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.',
+        amount: FormatNumber(amounts[1]),
+        tooltip: 'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.'
       },
       {
         id: 2,
         header: 'vote|Your vetos',
-        amount: amounts[2] ?? '0',
-        tooltip:
-          'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.',
-      },
+        amount: FormatNumber(amounts[2]),
+        tooltip: 'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
+      }
     ],
-    [amounts],
+    [amounts]
   );
 
   return (
-    <Card
-      className={className}
-      contentClassName={cx(s.content, modeClass[colorThemeMode])}
-    >
+    <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
       <div className={s.reward}>
         <div className={s.rewardContent}>
-          <span className={s.rewardHeader}>
-            {t('vote|Your Pending Rewards')}
-            :
-          </span>
+          <span className={s.rewardHeader}>{t('vote|Your Pending Rewards')}:</span>
           <span className={s.rewardAmount}>
-            {pendingReward}
+            {FormatNumber(pendingReward)}
             <span className={s.rewardCurrency}>TEZ</span>
           </span>
         </div>
         <VotingReward />
       </div>
-      {content.map(({
-        id, header, amount, tooltip,
-      }) => (
+      {content.map(({ id, header, amount, tooltip }) => (
         <div key={id} className={s.item}>
           <span className={s.header}>
             {t(header)}

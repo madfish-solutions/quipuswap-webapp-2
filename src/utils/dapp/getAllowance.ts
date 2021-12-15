@@ -1,20 +1,15 @@
-import BigNumber from 'bignumber.js';
 import { TezosToolkit } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { getReadOnlyTezos } from './getReadOnlyTezos';
 import { KNOWN_LAMBDA_CONTRACTS } from '../defaults';
+import { getReadOnlyTezos } from './getReadOnlyTezos';
 
 const loadChainId = memoizee((tezos: TezosToolkit) => tezos.rpc.getChainId(), {
-  normalizer: ([tezos]) => tezos.rpc.getRpcUrl(),
+  normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
 });
 
-export const getAllowance = async (
-  tezos: TezosToolkit,
-  contractAddress: string,
-  owner: string,
-  receiver: string,
-) => {
+export const getAllowance = async (tezos: TezosToolkit, contractAddress: string, owner: string, receiver: string) => {
   const newTezos = getReadOnlyTezos(tezos);
   const contract = await newTezos.contract.at(contractAddress);
   const chainId = await loadChainId(newTezos);

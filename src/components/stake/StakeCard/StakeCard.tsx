@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+
 import {
   APY,
   Card,
@@ -8,32 +9,28 @@ import {
   ColorModes,
   TokensLogos,
   CurrencyAmount,
-  ColorThemeContext,
+  ColorThemeContext
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedStake } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
 
 import s from './StakeCard.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
 export type StakeCardProps = {
-  stake:WhitelistedStake
-  openModal: () => void
-  className?: string
+  stake: WhitelistedStake;
+  openModal: () => void;
+  className?: string;
 };
 
-export const StakeCard: React.FC<StakeCardProps> = ({
-  stake,
-  openModal,
-  className,
-}) => {
+export const StakeCard: React.FC<StakeCardProps> = ({ stake, openModal, className }) => {
   const {
     tokenPair,
     totalValueLocked,
@@ -46,15 +43,12 @@ export const StakeCard: React.FC<StakeCardProps> = ({
     tokenContract,
     farmContract,
     projectLink,
-    analyticsLink,
+    analyticsLink
   } = stake;
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <Card
-      className={cx(className, s.card)}
-      contentClassName={cx(s.content, modeClass[colorThemeMode])}
-    >
+    <Card className={cx(className, s.card)} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
       <div className={s.header}>
         <div className={s.tokenLogos}>
           <TokensLogos
@@ -67,14 +61,12 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             width={48}
           />
           <h3 className={s.title}>
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
-            {' '}
-            /
-            {' '}
-            {getWhitelistedTokenSymbol(tokenPair.token1)}
+            {getWhitelistedTokenSymbol(tokenPair.token1)} / {getWhitelistedTokenSymbol(tokenPair.token1)}
           </h3>
-          <Tooltip sizeT="small" content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools." />
-
+          <Tooltip
+            sizeT="small"
+            content="TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools."
+          />
         </div>
         <div className={cx(s.links, s.onlyDesktop)}>
           <Button className={s.link} href={tokenContract} theme="underlined">
@@ -90,7 +82,6 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             Analytics
           </Button>
         </div>
-
       </div>
       <div className={s.footer}>
         <div className={s.firstBlock}>
@@ -101,38 +92,27 @@ export const StakeCard: React.FC<StakeCardProps> = ({
               firstTokenSymbol={getWhitelistedTokenSymbol(TEZOS_TOKEN)}
               className={s.tokens}
             />
-            <span className={s.bold600}>Earn</span>
-            {' '}
-            <span className={s.earn}>{earn}</span>
+            <span className={s.bold600}>Earn</span> <span className={s.earn}>{earn}</span>
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>TVL</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={totalValueLocked}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={totalValueLocked} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>
-            APY
-            {' '}
+            APY{' '}
             <Button theme="quaternary" className={s.apyIcon} onClick={openModal}>
               <APY />
             </Button>
           </div>
-          <div className={s.detailsValue}>
-            {apy}
-          </div>
+          <div className={s.detailsValue}>{apy}</div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Daily</div>
-          <div className={s.detailsValue}>
-            {daily}
-          </div>
+          <div className={s.detailsValue}>{daily}</div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Balance</div>
@@ -143,21 +123,13 @@ export const StakeCard: React.FC<StakeCardProps> = ({
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Deposit</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={deposit}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={deposit} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={s.detailsBlock}>
           <div className={s.detailsHeader}>Earned</div>
           <div className={s.detailsValue}>
-            <CurrencyAmount
-              amount={earned}
-              currency="$"
-              isLeftCurrency
-            />
+            <CurrencyAmount amount={earned} currency="$" isLeftCurrency />
           </div>
         </div>
         <div className={cx(s.links, s.onlyMobile)}>
@@ -182,7 +154,9 @@ export const StakeCard: React.FC<StakeCardProps> = ({
             </Button>
           </div>
         </div>
-        <Button href={`/stake/${stake.id}`} className={s.button}>Select</Button>
+        <Button href={`/stake/${stake.id}`} className={s.button}>
+          Select
+        </Button>
       </div>
     </Card>
   );
