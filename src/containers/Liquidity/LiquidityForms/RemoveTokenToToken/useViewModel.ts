@@ -58,6 +58,7 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
       isMounted = false;
     };
     // Ignore tokenA & tokenB
+    // eslint-disable-next-line
   }, [dex]);
 
   useEffect(() => {
@@ -88,6 +89,7 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
     setTokenAOutput(fromDecimals(tokenAOut, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     setTokenBOutput(fromDecimals(tokenBOut, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     // Ignore tokenA & tokenB
+    // eslint-disable-next-line
   }, [lpTokenInput, dex, pairData]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);

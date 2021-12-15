@@ -14,9 +14,8 @@ import { RemoveTokenToToken } from './RemoveTokenToToken/RemoveTokenToToken';
 
 const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const {
-    // eslint-disable-next-line max-len
     tabState,
-    setActiveId,
+    handleSetActiveId,
     dexInfo,
     tokenA,
     tokenB,
@@ -31,7 +30,9 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
     <>
       <Card
         header={{
-          content: <Tabs values={TabsContent} activeId={tabState.id} setActiveId={setActiveId} className={s.tabs} />,
+          content: (
+            <Tabs values={TabsContent} activeId={tabState.id} setActiveId={handleSetActiveId} className={s.tabs} />
+          ),
           className: s.header
         }}
         contentClassName={s.content}

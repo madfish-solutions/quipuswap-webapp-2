@@ -48,7 +48,8 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
         clearTimeout(timeout.current);
       }
     };
-  }, [values]);
+    // eslint-disable-next-line
+  }, [debounce, values]);
 
   return (
     <div className={s.inputs}>
