@@ -7,6 +7,20 @@ import { TokenId, DexPair } from '@utils/types';
 const feeDenominator = new BigNumber(1000);
 const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times(feeDenominator));
 
+export class InputOverflowError extends Error {
+  constructor(inputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
+    const pairName = `${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+    super(`Input amount (${inputAmount.toFixed()} exceeds maximal one on pair ${pairName}`);
+  }
+}
+
+export class OutputOverflowError extends Error {
+  constructor(outputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
+    const pairName = `${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+    super(`Output amount (${outputAmount.toFixed()} exceeds maximal one on pair ${pairName}`);
+  }
+}
+
 const isTokenToTokenDex = ({ token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) => {
   const token1Slug = getTokenSlug(token1);
   const token2Slug = getTokenSlug(token2);
@@ -52,12 +66,13 @@ export const getTokenOutput = ({ inputToken, inputAmount, dexChain }: SwapParams
       const inputWithFee = intermediateInputAmount.times(feeNumerator);
       const numerator = inputWithFee.times(outputLiquidity);
       const denominator = inputLiquidity.times(feeDenominator).plus(inputWithFee);
-      intermediateInputAmount = numerator.idiv(denominator);
-      if (intermediateInputAmount.gt(outputLiquidity.idiv(3)) && !dexIsTokenToToken) {
-        throw new Error('Input amount exceeds maximal one');
+      const outputAmount = numerator.idiv(denominator);
+      if (outputAmount.gt(outputLiquidity.idiv(3)) && !dexIsTokenToToken) {
+        throw new OutputOverflowError(outputAmount, { token1, token2 });
       }
+      intermediateInputAmount = outputAmount;
     } else if (!dexIsTokenToToken) {
-      throw new Error('Input amount exceeds maximal one');
+      throw new InputOverflowError(intermediateInputAmount, { token1, token2 });
     } else {
       intermediateInputAmount = outputLiquidity.minus(1);
     }
@@ -78,7 +93,7 @@ export const getTokenInput = (outputToken: TokenId, outputAmount: BigNumber, dex
     const inputToken = shouldSell ? token1 : token2;
     const maxOutputAmount = isTokenToTokenDex({ token1, token2 }) ? outputLiquidity.minus(1) : outputLiquidity.idiv(3);
     if (intermediateOutputAmount.gt(maxOutputAmount)) {
-      throw new Error('Output amount exceeds maximal one');
+      throw new OutputOverflowError(intermediateOutputAmount, { token1, token2 });
     }
     if (!intermediateOutputAmount.eq(0)) {
       const numerator = inputLiquidity.times(feeDenominator).times(intermediateOutputAmount);

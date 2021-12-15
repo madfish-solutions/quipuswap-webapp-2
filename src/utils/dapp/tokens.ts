@@ -21,7 +21,9 @@ export const getSavedTokens = (networkId?: QSMainNet) => {
   const allTokens: Array<WhitelistedTokenWithQSNetworkType> =
     typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
 
-  return allTokens.filter(({ network }) => !network || !networkId || network === networkId);
+  return networkId
+    ? allTokens.filter(({ network: tokenNetwork }) => !tokenNetwork || tokenNetwork === networkId)
+    : allTokens;
 };
 
 export const getTokenType = memoizee(

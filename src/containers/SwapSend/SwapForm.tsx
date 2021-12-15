@@ -63,6 +63,14 @@ const TabsContent = [
 const WHOLE_ITEM_PERCENT = 100;
 const DEBOUNCE_DELAY = 250;
 
+const getBalanceByTokenSlug = (tokenSlug: string | undefined, balances: Record<string, BigNumber>) => {
+  if (tokenSlug === undefined) {
+    return undefined;
+  }
+
+  return balances[tokenSlug];
+};
+
 const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const handleChange = (newValue?: string) => {
     if (!newValue) {
@@ -496,8 +504,8 @@ export const SwapForm: FC<SwapFormProps> = ({
 
   const token1Slug = token1 && getTokenSlug(token1);
   const token2Slug = token2 && getTokenSlug(token2);
-  const token1Balance = token1Slug === undefined ? undefined : balances[token1Slug];
-  const token2Balance = token2Slug === undefined ? undefined : balances[token2Slug];
+  const token1Balance = getBalanceByTokenSlug(token1Slug, balances);
+  const token2Balance = getBalanceByTokenSlug(token2Slug, balances);
 
   const token1Error = touched.token1 ? errors.token1 : undefined;
   const amount1Error = touched.amount1 ? errors.amount1 : undefined;
