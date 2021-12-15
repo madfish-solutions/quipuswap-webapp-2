@@ -43,7 +43,7 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton href="/" />
         <ConnectWalletButton className={s.connect} />
-        // TODO: Restore Languages
+        {/* TODO: Restore Languages */}
         {/*<LanguageSwitcher*/}
         {/*  direction="bottom"*/}
         {/*  className={s.languageSwitcher}*/}
