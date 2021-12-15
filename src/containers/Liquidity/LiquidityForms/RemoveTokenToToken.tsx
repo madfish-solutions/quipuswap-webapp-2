@@ -83,6 +83,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       isMounted = false;
     };
     // Ignore tokenA & tokenB
+    // eslint-disable-next-line
   }, [dex]);
 
   useEffect(() => {
@@ -113,6 +114,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
     setTokenAOutput(fromDecimals(tokenAOut, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     setTokenBOutput(fromDecimals(tokenBOut, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     // Ignore tokenA & tokenB
+    // eslint-disable-next-line
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {
