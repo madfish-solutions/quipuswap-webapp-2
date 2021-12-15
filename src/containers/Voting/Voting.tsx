@@ -4,6 +4,7 @@ import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
+import { noop } from 'rxjs';
 
 import { VotingStats } from '@components/voting/VotingStats';
 import { useExchangeRates } from '@hooks/useExchangeRate';
@@ -29,9 +30,9 @@ const TabsContent = [
   }
 ];
 
-type VotingProps = {
+interface VotingProps {
   className?: string;
-};
+}
 
 const fallbackTokenPair = {
   token1: TEZOS_TOKEN,
@@ -70,7 +71,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
     handleTokenChange({
       token,
       tokenNumber,
@@ -152,7 +153,9 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         className={s.votingStats}
         dex={dex}
         handleSubmit={(params: TransferParams[]) => {
-          if (!tezos) return;
+          if (!tezos) {
+            return;
+          }
           handleLoader();
           submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast, getBalance);
         }}
@@ -160,9 +163,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       <StickyBlock className={className}>
         <Form
           onSubmit={values => {
-            if (!tezos) return;
+            if (!tezos) {
+              return;
+            }
             handleLoader();
-            submitForm({
+            void submitForm({
               tezos,
               values,
               dex,
@@ -183,7 +188,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               form={form}
               handleSubmit={handleSubmit}
               debounce={100}
-              save={() => {}}
+              save={noop}
               setTabsState={setTabsState}
               tabsState={tabsState}
               rewards={rewards}

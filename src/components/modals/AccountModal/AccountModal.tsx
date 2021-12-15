@@ -3,6 +3,7 @@ import React, { useRef, useState, useEffect, useContext, useCallback } from 'rea
 import { Copy, Modal, Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { noop } from 'rxjs';
 
 import { CheckMark } from '@components/svg/CheckMark';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -24,7 +25,7 @@ export const AccountModal: React.FC = () => {
 
   const { accountInfoModalOpen, closeAccountInfoModal } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const timeout = useRef(setTimeout(() => {}, 0));
+  const timeout = useRef(setTimeout(noop, 0));
 
   const handleLogout = useCallback(() => {
     disconnect();
@@ -39,7 +40,9 @@ export const AccountModal: React.FC = () => {
     []
   );
 
-  if (!accountPkh) return <></>;
+  if (!accountPkh) {
+    return <></>;
+  }
 
   const compoundClassName = cx(s.modal, modeClass[colorThemeMode]);
 

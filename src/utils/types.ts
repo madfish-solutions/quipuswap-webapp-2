@@ -38,7 +38,9 @@ export interface WhitelistedToken {
   metadata: WhitelistedTokenMetadata;
 }
 
-export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSMainNet };
+export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
+  network?: QSMainNet;
+}
 
 export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
 
@@ -58,14 +60,14 @@ export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
 
 export const isFullBaker = (baker: WhitelistedBaker): baker is WhitelistedBakerFull => baker && 'name' in baker;
 
-export type WhitelistedTokenMetadata = {
+export interface WhitelistedTokenMetadata {
   decimals: number;
   symbol: string;
   name: string;
   thumbnailUri: string;
-};
+}
 
-type CommonDexPairProps = {
+interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
   totalSupply: BigNumber;
@@ -73,27 +75,27 @@ type CommonDexPairProps = {
   token2: WhitelistedToken;
   id: string | number;
   type: 'ttdex' | 'tokenxtz';
-};
+}
 
-type TTDexPairProps = CommonDexPairProps & {
+interface TTDexPairProps extends CommonDexPairProps {
   id: number;
   type: 'ttdex';
-};
+}
 
-type TokenXtzDexPairProps = CommonDexPairProps & {
+interface TokenXtzDexPairProps extends CommonDexPairProps {
   id: string;
   type: 'tokenxtz';
-};
+}
 
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
-export type VoterType = {
+export interface VoterType {
   vote: BigNumber;
   veto: BigNumber;
   candidate: string;
-};
+}
 
-export type TokenDataType = {
+export interface TokenDataType {
   token: {
     address: string;
     type: 'fa1.2' | 'fa2';
@@ -102,20 +104,14 @@ export type TokenDataType = {
   };
   balance: string;
   exchangeRate?: string;
-};
+}
 
-export type NewTokenDataType = {
-  token: WhitelistedToken;
-  balance?: BigNumber;
-  exchangeRate?: BigNumber;
-};
-
-export type TokenDataMap = {
+export interface TokenDataMap {
   first: TokenDataType;
   second: TokenDataType;
-};
+}
 
-export type SwapFormValues = {
+export interface SwapFormValues {
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   amount1: BigNumber;
@@ -123,9 +119,9 @@ export type SwapFormValues = {
   recipient: string;
   slippage: BigNumber;
   action: 'swap' | 'send';
-};
+}
 
-export type LiquidityFormValues = {
+export interface LiquidityFormValues {
   switcher: boolean;
   balance1: BigNumber;
   balance2: BigNumber;
@@ -139,32 +135,15 @@ export type LiquidityFormValues = {
   lastChange: string;
   estimateLP: BigNumber;
   slippage: string;
-};
+}
 
-export type PoolShare = {
+export interface PoolShare {
   unfrozen: BigNumber;
   frozen: BigNumber;
   total: BigNumber;
-};
+}
 
-export type WhitelistedFarm = {
-  id: number;
-  remaining: Date;
-  tokenPair: WhitelistedTokenPair;
-  totalValueLocked: string;
-  apy: string;
-  daily: string;
-  balance: string;
-  deposit: string;
-  earned: string;
-  multiplier: string;
-  tokenContract: string;
-  farmContract: string;
-  projectLink: string;
-  analyticsLink: string;
-};
-
-export type WhitelistedStake = {
+export interface WhitelistedStake {
   id: number;
   remaining: Date;
   tokenPair: WhitelistedTokenPair;
@@ -179,15 +158,15 @@ export type WhitelistedStake = {
   farmContract: string;
   projectLink: string;
   analyticsLink: string;
-};
+}
 
-export type VoteFormValues = {
+export interface VoteFormValues {
   balance1: number;
   selectedBaker: string;
   currentBacker?: string;
-};
+}
 
-export type PoolTableType = {
+export interface PoolTableType {
   id: number;
   xtzUsdQuote: string;
   token1: WhitelistedToken;
@@ -218,10 +197,10 @@ export type PoolTableType = {
       href: string;
     };
   };
-};
+}
 
-export type SortTokensContractsType = {
+export interface SortTokensContractsType {
   addressA: string;
   addressB: string;
   type: 'Left-Left' | 'Right-Right' | 'Left-Right';
-};
+}

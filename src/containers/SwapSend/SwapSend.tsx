@@ -22,10 +22,10 @@ import { SwapForm } from './SwapForm';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
-type SwapSendProps = {
+interface SwapSendProps {
   className?: string;
   fromToSlug?: string;
-};
+}
 
 const initialErrors = {
   amount1: 'Required',

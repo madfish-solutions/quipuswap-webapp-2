@@ -3,18 +3,19 @@ import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } fro
 import { FoundDex } from '@quipuswap/sdk';
 import { Plus, Button, Slippage, ArrowDown } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { noOpFunc, slippageToBignum } from '@utils/helpers';
+import { slippageToBignum } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from '../Liquidity.module.sass';
 import { removeLiquidity } from '../liquidutyHelpers';
 
-type RemoveTezToTokenProps = {
+interface RemoveTezToTokenProps {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -23,7 +24,7 @@ type RemoveTezToTokenProps = {
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
-};
+}
 
 export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   dex,
@@ -44,7 +45,9 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
 
   useEffect(() => {
-    if (!dex) return;
+    if (!dex) {
+      return;
+    }
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -76,7 +79,9 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex) return;
+    if (!tezos || !accountPkh || !dex) {
+      return;
+    }
 
     await removeLiquidity(tezos, dex, new BigNumber(lpTokenInput), slippage);
     setLpTokenInput('');
@@ -106,7 +111,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         setToken={setTokenA}
         value={tokenAOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         noBalanceButtons
         notSelectable
         disabled
@@ -119,7 +124,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         setToken={setTokenB}
         value={tokenBOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         noBalanceButtons
         notSelectable
         disabled

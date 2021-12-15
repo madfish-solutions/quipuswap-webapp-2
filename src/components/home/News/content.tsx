@@ -14,9 +14,7 @@ export type News = NewsWithoutLink | NewsWithLink;
 
 export const isNewsWithLink = (news: News): news is NewsWithLink => 'url' in news;
 
-type NewsDataList = News[];
-
-export const NewsData: NewsDataList = [
+export const NewsData: News[] = [
   {
     id: 0,
     img: '/images/news1.png'

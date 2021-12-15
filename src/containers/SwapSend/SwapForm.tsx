@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Tabs, Card, Button, Slippage, StickyBlock, SwapButton, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -30,7 +30,7 @@ import { DexPair, SwapFormValues, WhitelistedToken, WhitelistedTokenMetadata } f
 
 import { SwapDetails } from './SwapDetails';
 
-type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
+interface SwapFormProps extends FormikProps<Partial<SwapFormValues>> {
   className?: string;
   submitError?: string;
   updateSwapLimits: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
@@ -39,15 +39,15 @@ type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   maxOutputAmounts: Record<string, Record<string, BigNumber>>;
   initialFrom?: string;
   initialTo?: string;
-};
+}
 
-type SlippageInputProps = {
+interface SlippageInputProps {
   error?: string;
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
   onChange: (newValue?: BigNumber) => void;
   slippage?: BigNumber;
-};
+}
 
 const TabsContent = [
   {
@@ -60,7 +60,7 @@ const TabsContent = [
   }
 ];
 
-const SlippageInput: React.FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
+const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const handleChange = (newValue?: string) => {
     if (!newValue) {
       onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
@@ -115,7 +115,7 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
-export const SwapForm: React.FC<SwapFormProps> = ({
+export const SwapForm: FC<SwapFormProps> = ({
   className,
   errors,
   initialFrom,
@@ -166,6 +166,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
           try {
             await updateBalance(token);
           } catch (e) {
+            // eslint-disable-next-line no-console
             console.error(e);
           }
         }
@@ -249,7 +250,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         })
           .then(newFee => setFee(fromDecimals(newFee, TEZOS_TOKEN)))
           .catch(e => {
-            console.error(e);
             setFee(undefined);
           });
       }, 250),
@@ -368,14 +368,12 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   useOnBlock(tezos, updateSelectedTokensBalances);
 
   const handleSubmit = useCallback(() => {
-    submitForm()
-      .then(() => {
-        setFieldTouched('amount1', false);
-        setFieldTouched('amount2', false);
-        setValues(prevValues => ({ ...prevValues, amount1: undefined, amount2: undefined }));
-        setFee(undefined);
-      })
-      .catch(console.error);
+    submitForm().then(() => {
+      setFieldTouched('amount1', false);
+      setFieldTouched('amount2', false);
+      setValues(prevValues => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+      setFee(undefined);
+    });
   }, [setValues, submitForm, setFieldTouched]);
 
   const handleTabSwitch = useCallback(

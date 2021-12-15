@@ -7,21 +7,21 @@ import { DexPair } from '@utils/types';
 import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
 import { CommonRouteProblemParams } from './types';
 
-type RouteWithInputProblemParams = CommonRouteProblemParams & {
+interface RouteWithInputProblemParams extends CommonRouteProblemParams {
   inputAmount?: BigNumber;
-};
+}
 
-type RoutesTreeBranch = {
+interface RoutesTreeBranch {
   pair: DexPair;
   child: RoutesTreeNode;
-};
+}
 
-type RoutesTreeNode = {
+interface RoutesTreeNode {
   parent?: RoutesTreeNode;
   amount: BigNumber;
   tokenSlug: string;
   branches: RoutesTreeBranch[];
-};
+}
 
 export function getLeaves(tree: RoutesTreeNode): RoutesTreeNode[] {
   if (tree.branches.length === 0) {

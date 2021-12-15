@@ -7,41 +7,33 @@ import { fromDecimals, getMaxTokenInput, getTokenOutput, getTokenSlug } from '@u
 import { getMaxInputRoute, getMaxOutputRoute } from '@utils/routing';
 import { WhitelistedToken } from '@utils/types';
 
+type TokensAmounts = Record<string, Record<string, BigNumber>>;
+
+const updateTokensAmounts = (
+  prevAmounts: TokensAmounts,
+  token1: WhitelistedToken,
+  token2: WhitelistedToken,
+  amount: BigNumber
+) => ({
+  ...prevAmounts,
+  [getTokenSlug(token1)]: {
+    ...(prevAmounts[getTokenSlug(token1)] ?? {}),
+    [getTokenSlug(token2)]: amount
+  }
+});
+
 export const useSwapLimits = () => {
   const { dexGraph } = useDexGraph();
 
-  const [maxInputAmounts, setMaxInputAmounts] = useState<Record<string, Record<string, BigNumber>>>({});
-  const [maxOutputAmounts, setMaxOutputAmounts] = useState<Record<string, Record<string, BigNumber>>>({});
+  const [maxInputAmounts, setMaxInputAmounts] = useState<TokensAmounts>({});
+  const [maxOutputAmounts, setMaxOutputAmounts] = useState<TokensAmounts>({});
 
   const updateMaxInputAmount = (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
-    setMaxInputAmounts(prevValue => {
-      const token1Slug = getTokenSlug(token1);
-      const token2Slug = getTokenSlug(token2);
-
-      return {
-        ...prevValue,
-        [token1Slug]: {
-          ...(prevValue[token1Slug] ?? {}),
-          [token2Slug]: amount
-        }
-      };
-    });
+    setMaxInputAmounts(prevValue => updateTokensAmounts(prevValue, token1, token2, amount));
   };
 
   const updateMaxOutputAmount = (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
-    // eslint-disable-next-line sonarjs/no-identical-functions
-    setMaxOutputAmounts(prevValue => {
-      const token1Slug = getTokenSlug(token1);
-      const token2Slug = getTokenSlug(token2);
-
-      return {
-        ...prevValue,
-        [token1Slug]: {
-          ...(prevValue[token1Slug] ?? {}),
-          [token2Slug]: amount
-        }
-      };
-    });
+    setMaxOutputAmounts(prevValue => updateTokensAmounts(prevValue, token1, token2, amount));
   };
 
   const updateSwapLimits = (token1: WhitelistedToken, token2: WhitelistedToken) => {
@@ -77,6 +69,7 @@ export const useSwapLimits = () => {
         );
       }
     } catch (e) {
+      // eslint-disable-next-line no-console
       console.error(e);
     }
   };

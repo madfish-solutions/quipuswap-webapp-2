@@ -117,7 +117,7 @@ const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork)
   return { pkh: activeAcc.address, toolkit: tezos };
 };
 
-export type DAppType = {
+export interface DAppType {
   connectionType: 'beacon' | 'temple' | null;
   tezos: TezosToolkit | null;
   accountPkh: string | null;
@@ -127,7 +127,7 @@ export type DAppType = {
   searchTokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
   bakers: { data: WhitelistedBaker[]; loading: boolean; error?: string };
   searchBakers: { data: WhitelistedBaker[]; loading: boolean; error?: string };
-};
+}
 
 export const fallbackToolkits: Record<QSMainNet, TezosToolkit> = {
   hangzhounet: new TezosToolkit(HANGZHOUNET_NETWORK.rpcBaseURL),
@@ -162,7 +162,7 @@ function useDApp() {
     [network.id]
   );
 
-  const getTempleInitialAvailable = useCallback(() => TempleWallet.isAvailable(), []);
+  const getTempleInitialAvailable = useCallback(async () => TempleWallet.isAvailable(), []);
   const { data: templeInitialAvailable } = useSWR(['temple-initial-available'], getTempleInitialAvailable, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false
@@ -262,7 +262,7 @@ function useDApp() {
     }
   }, [setFallbackState, templeInitialAvailable]);
 
-  const getTokensData = useCallback(() => getTokens(network, true), [network]);
+  const getTokensData = useCallback(async () => getTokens(network, true), [network]);
   const { data: tokensData } = useSWR(['tokens-initial-data', network], getTokensData);
 
   useEffect(() => {
@@ -272,7 +272,7 @@ function useDApp() {
     }));
   }, [tokensData]);
 
-  const getBakersData = useCallback(() => getBakers(), []);
+  const getBakersData = useCallback(async () => getBakers(), []);
   const { data: bakersData } = useSWR(['bakers-initial-data'], getBakersData);
 
   useEffect(() => {
@@ -342,7 +342,9 @@ function useDApp() {
           ...prevState,
           searchTokens: { loading: false, data: [token] }
         }));
-        if (saveAfterSearch) saveCustomToken(token);
+        if (saveAfterSearch) {
+          saveCustomToken(token);
+        }
 
         return token;
       }

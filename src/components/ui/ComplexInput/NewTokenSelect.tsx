@@ -15,7 +15,7 @@ import { WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-type NewTokenSelectProps = {
+interface NewTokenSelectProps {
   showBalanceButtons?: boolean;
   amount?: BigNumber;
   className?: string;
@@ -30,7 +30,7 @@ type NewTokenSelectProps = {
   blackListedTokens: WhitelistedToken[];
   onTokenChange: (token: WhitelistedToken) => void;
   id?: string;
-};
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,

@@ -1,6 +1,8 @@
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 
-export type WhitelistedOrCustomToken = WhitelistedToken & { network: string };
+export interface WhitelistedOrCustomToken extends WhitelistedToken {
+  network: string;
+}
 
 export const localSearchToken = (
   { metadata, contractAddress, fa2TokenId, network: tokenNetwork }: WhitelistedOrCustomToken,

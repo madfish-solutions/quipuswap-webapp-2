@@ -5,13 +5,13 @@ import { useRouter } from 'next/router';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-type RouterPairType = {
+interface RouterPairType {
   page: string;
   urlLoaded: boolean;
   initialLoad: boolean;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
-};
+}
 
 const pairString = '[from-to]';
 const pairLength = pairString.length;
