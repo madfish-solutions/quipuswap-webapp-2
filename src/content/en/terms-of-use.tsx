@@ -1,8 +1,9 @@
 import React from 'react';
 
-import s from '@styles/Terms.module.sass';
-import cx from 'classnames';
 import { Button } from '@quipuswap/ui-kit';
+import cx from 'classnames';
+
+import s from '@styles/Terms.module.sass';
 
 export const EnTermsOfUse: React.FC = () => (
   <>

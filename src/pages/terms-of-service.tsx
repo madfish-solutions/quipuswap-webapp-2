@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import { Card, CardContent } from '@quipuswap/ui-kit';
-import s from '@styles/Terms.module.sass';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -11,6 +10,7 @@ import { EnTermsOfUse } from '@content/en/terms-of-use';
 import { RuTermsOfUse } from '@content/ru/terms-of-use';
 import { BaseLayout } from '@layouts/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import s from '@styles/Terms.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
