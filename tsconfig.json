@@ -12,48 +12,21 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "paths": {
-      "@components/*": [
-        "components/*"
-      ],
-      "@containers/*": [
-        "containers/*"
-      ],
-      "@content/*": [
-        "content/*"
-      ],
-      "@layouts/*": [
-        "layouts/*"
-      ],
-      "@styles/*": [
-        "styles/*"
-      ],
-      "@utils/*": [
-        "utils/*"
-      ],
-      "@hooks/*": [
-        "hooks/*"
-      ],
-      "@providers/*": [
-        "providers/*"
-      ],
-      "@icons/*": [
-        "../public/svg/*"
-      ],
-      "@images/*": [
-        "../public/images/*"
-      ],
-      "@client": [
-        "client.tsx"
-      ],
-      "@graphql": [
-        "graphql.ts"
-      ]
+      "@components/*": ["components/*"],
+      "@containers/*": ["containers/*"],
+      "@errors/*": ["errors/*"],
+      "@content/*": ["content/*"],
+      "@layouts/*": ["layouts/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@providers/*": ["providers/*"],
+      "@icons/*": ["../public/svg/*"],
+      "@images/*": ["../public/images/*"],
+      "@client": ["client.tsx"],
+      "@graphql": ["graphql.ts"]
     },
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -61,15 +34,7 @@
     "noImplicitAny": true,
     "downlevelIteration": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "ignorePatterns": [
-    "graphql.ts"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"],
+  "ignorePatterns": ["graphql.ts"]
 }

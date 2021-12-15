@@ -28,6 +28,7 @@ import {
   WhitelistedTokenWithQSNetworkType
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
+import { NoTempleWalletError } from 'errors';
 
 import { getContract } from './getStorageInfo';
 import { getNetwork, setNetwork, toBeaconNetworkType } from './network';
@@ -42,14 +43,12 @@ const beaconWallet =
         iconUrl: `${BASE_URL}/favicon.ico`
       });
 
-export const TEMPLE_WALLET_NOT_INSTALLED_MESSAGE = 'Temple wallet not installed';
-
 const net = getNetwork();
 
 const connectWalletTemple = async (forcePermission: boolean, network: QSNetwork) => {
   const available = await TempleWallet.isAvailable();
   if (!available) {
-    throw new Error(TEMPLE_WALLET_NOT_INSTALLED_MESSAGE);
+    throw new NoTempleWalletError();
   }
 
   let perm;
