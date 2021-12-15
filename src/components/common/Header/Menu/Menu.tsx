@@ -16,9 +16,9 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-type MenuProps = {
+interface MenuProps {
   className?: string;
-};
+}
 
 export const Menu: React.FC<MenuProps> = ({ className }) => {
   const { t } = useTranslation(['common']);

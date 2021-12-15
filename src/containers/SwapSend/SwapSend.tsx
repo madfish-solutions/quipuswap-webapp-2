@@ -20,10 +20,10 @@ import { SwapForm } from './SwapForm';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
-type SwapSendProps = {
+interface SwapSendProps {
   className?: string;
   fromToSlug?: string;
-};
+}
 
 const initialErrors = {
   amount1: 'Required',
@@ -57,14 +57,12 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
       if (!accountPkh) {
         return;
       }
-      getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId)
-        .then(balance => {
-          setKnownTokensBalances(prevValue => ({
-            ...prevValue,
-            [newTokenSlug]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals)
-          }));
-        })
-        .catch(console.error);
+      getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId).then(balance => {
+        setKnownTokensBalances(prevValue => ({
+          ...prevValue,
+          [newTokenSlug]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals)
+        }));
+      });
     },
     [accountPkh, tezos]
   );
@@ -192,6 +190,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
           );
         }
       } catch (e) {
+        // eslint-disable-next-line no-console
         console.error(e);
       } finally {
         const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;

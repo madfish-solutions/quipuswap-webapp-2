@@ -11,9 +11,9 @@ import { NewsData } from './content';
 import s from './News.module.sass';
 import { NewsCard } from './NewsCard';
 
-type NewsProps = {
+interface NewsProps {
   className?: string;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

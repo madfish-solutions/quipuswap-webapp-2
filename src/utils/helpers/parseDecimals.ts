@@ -20,7 +20,9 @@ export const parseDecimals = (value: string, min: number, max: number, decimals?
   if (val.endsWith('.') && match.length > 1) {
     onlyNums = numVal.toFixed();
   }
-  if (onlyNums === '') return '';
+  if (onlyNums === '') {
+    return '';
+  }
   let res = onlyNums;
   if (new BigNumber(onlyNums).lt(new BigNumber(min))) {
     res = min.toString();

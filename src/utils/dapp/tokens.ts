@@ -19,9 +19,6 @@ import { getContract } from './getStorageInfo';
 export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> =>
   typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
 
-// TODO: remove either getContract or this method
-export const getContractInfo = (address: string, tz: TezosToolkit) => getContract(tz, address);
-
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
     if (typeof contractOrAddress === 'string' && !isValidContractAddress(contractOrAddress)) {
@@ -43,7 +40,9 @@ export const getTokenType = memoizee(
 
 export const isTokenFa2 = memoizee(
   async (address: string, tz: TezosToolkit) => {
-    if (!isValidContractAddress(address)) return false;
+    if (!isValidContractAddress(address)) {
+      return false;
+    }
 
     try {
       const type = await getContract(tz, address);
@@ -58,7 +57,9 @@ export const isTokenFa2 = memoizee(
 
 export const isTokenFa12 = memoizee(
   async (address: string, tz: TezosToolkit) => {
-    if (!isValidContractAddress(address)) return false;
+    if (!isValidContractAddress(address)) {
+      return false;
+    }
 
     try {
       const type = await getContract(tz, address);
@@ -73,7 +74,7 @@ export const isTokenFa12 = memoizee(
 
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) =>
   fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS))
-    .then(res => res.json())
+    .then(async res => res.json())
     .then(json => {
       let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
       if (json.tokens?.length !== 0) {
@@ -120,7 +121,9 @@ export const mergeTokensToPair = (tokens1: WhitelistedToken[], tokens2: Whitelis
   return [pair];
 };
 
-export const getWalletContract = memoizee((wallet: Wallet, address: string) => wallet.at(address), { promise: true });
+export const getWalletContract = memoizee(async (wallet: Wallet, address: string) => wallet.at(address), {
+  promise: true
+});
 
 export const getAllowanceTransferParams = async (
   tezos: TezosToolkit,

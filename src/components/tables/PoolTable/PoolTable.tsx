@@ -10,7 +10,7 @@ import { PoolTableType } from '@utils/types';
 import { PoolCardItem } from './PoolCardItem';
 import s from './PoolTable.module.sass';
 
-type PoolTableProps = {
+interface PoolTableProps {
   data?: PoolTableType;
   totalCount?: number;
   exchangeRate?: string;
@@ -18,7 +18,7 @@ type PoolTableProps = {
   className?: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetch: any;
-};
+}
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 

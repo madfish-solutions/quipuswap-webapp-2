@@ -16,15 +16,18 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
   const [, setSubm] = useState<boolean>(false);
 
   const timeout = useRef<NodeJS.Timeout>();
-  const promise = useRef();
+  const promise = useRef<Promise<never>>();
 
   const saveFunc = useCallback(async () => {
     if (promise) {
+      // TODO: Remove this fucking shit
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await promise;
     }
     setVal(values);
     setSubm(true);
     promise.current = save(values);
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await promise;
     setSubm(false);
   }, [save, values]);

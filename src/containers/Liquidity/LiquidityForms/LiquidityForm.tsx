@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import { FormSpy } from 'react-final-form';
@@ -12,7 +12,7 @@ import { AddTokenToToken } from './AddTokenToToken';
 import { RemoveTezToToken } from './RemoveTezToToken';
 import { RemoveTokenToToken } from './RemoveTokenToToken';
 
-const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
+const RealForm: FC<LiquidityFormProps> = () => {
   const {
     tabState,
     handleSetActiveId,
@@ -84,15 +84,6 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
           />
         )}
       </Card>
-      {/*TODO: Implement it*/}
-      {/*<LiquidityDetails*/}
-      {/*  currentTab={tabState.label}*/}
-      {/*  token1={TEZOS_TOKEN}*/}
-      {/*  token2={MAINNET_DEFAULT_TOKEN}*/}
-      {/*  tokensData={tokensData}*/}
-      {/*  balanceTotalA="1"*/}
-      {/*  balanceTotalB="2"*/}
-      {/*/>*/}
     </>
   );
 };

@@ -14,10 +14,10 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-type QPTokenProps = {
+interface QPTokenProps {
   id?: string;
   className?: string;
-};
+}
 
 export const QPToken: React.FC<QPTokenProps> = ({ id, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);

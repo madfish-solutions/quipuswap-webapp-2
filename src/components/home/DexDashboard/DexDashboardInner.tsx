@@ -12,14 +12,14 @@ import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
 
-type DexDashboardInnerProps = {
+interface DexDashboardInnerProps {
   totalLiquidity: Maybe<string> | undefined;
   xtzUsdQuote: Maybe<string> | undefined;
   volume24: Maybe<string> | undefined;
   trasactionsCount24h: number | undefined;
   totalSupply?: BigNumber;
   loading?: boolean;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

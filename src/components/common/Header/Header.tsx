@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, FC } from 'react';
 
 import {
   Button,
@@ -16,16 +16,16 @@ import { Menu } from '@components/common/Header/Menu';
 
 import s from './Header.module.sass';
 
-type HeaderProps = {
+interface HeaderProps {
   className?: string;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
 
-export const Header: React.FC<HeaderProps> = ({ className }) => {
+export const Header: FC<HeaderProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [isMenuOpened, setIsMenuOpened] = useState(false);
@@ -43,13 +43,6 @@ export const Header: React.FC<HeaderProps> = ({ className }) => {
       <header className={cx(s.root, modeClass[colorThemeMode], className)}>
         <LogoButton href="/" />
         <ConnectWalletButton className={s.connect} />
-        // TODO: Restore Languages
-        {/*<LanguageSwitcher*/}
-        {/*  direction="bottom"*/}
-        {/*  className={s.languageSwitcher}*/}
-        {/*  locale="EN"*/}
-        {/*  locales={['EN', 'RU', 'PL', 'GE', 'IT']}*/}
-        {/*/>*/}
         <ColorModeSwitcher className={s.coloModeSwitcher} />
         <Button theme="quaternary" className={s.menuButton} onClick={() => setIsMenuOpened(!isMenuOpened)}>
           {isMenuOpened ? <MenuOpened /> : <MenuClosed />}

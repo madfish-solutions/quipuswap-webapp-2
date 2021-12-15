@@ -14,6 +14,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
+import { noop } from 'rxjs';
 
 import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
@@ -26,20 +27,20 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-type BakersModalProps = {
+interface BakersModalProps extends ReactModal.Props {
   onChange: (baker: WhitelistedBaker) => void;
-} & ReactModal.Props;
+}
 
-type HeaderProps = {
+interface HeaderProps {
   debounce: number;
   save: never;
   values: FormValues;
   form: never;
-};
+}
 
-type FormValues = {
+interface FormValues {
   search: string;
-};
+}
 
 const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   const { t } = useTranslation(['common']);
@@ -47,17 +48,20 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
+  const timeout = useRef(setTimeout(noop, 0));
   let promise: never;
 
   const saveFunc = async () => {
     if (promise) {
+      // TODO: Remove this fucking shit
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       await promise;
     }
     setVal(values);
     setSubm(true);
     // @ts-ignore
     promise = save(values);
+    // eslint-disable-next-line @typescript-eslint/await-thenable
     await promise;
     setSubm(false);
   };

@@ -3,20 +3,22 @@ import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } fro
 import { FoundDex } from '@quipuswap/sdk';
 import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
-import { fromDecimals, noOpFunc } from '@utils/helpers';
+import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from '../Liquidity.module.sass';
 import { sortTokensContracts, getValidMichelTemplate } from '../liquidutyHelpers';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
-type RemoveTokenToTokenProps = {
+interface RemoveTokenToTokenProps {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -25,7 +27,7 @@ type RemoveTokenToTokenProps = {
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
-};
+}
 
 export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
   dex,
@@ -53,10 +55,14 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
-      if (!dex) return;
+      if (!dex) {
+        return;
+      }
 
       const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) return;
+      if (!addresses) {
+        return;
+      }
 
       const michelData = getValidMichelTemplate(addresses);
       const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
@@ -87,7 +93,9 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
   }, [dex]);
 
   useEffect(() => {
-    if (!dex || !pairData) return;
+    if (!dex || !pairData) {
+      return;
+    }
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -95,7 +103,9 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
       return;
     }
     const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) return;
+    if (!addresses) {
+      return;
+    }
 
     const tokenAPerOneLp =
       addresses.addressA === tokenA.contractAddress
@@ -118,7 +128,9 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
   }, [lpTokenInput, dex, pairData]);
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex) return;
+    if (!tezos || !accountPkh || !dex) {
+      return;
+    }
 
     const ten = new BigNumber(10);
 
@@ -131,7 +143,9 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
 
     const addresses = sortTokensContracts(tokenA, tokenB);
 
-    if (!addresses) return;
+    if (!addresses) {
+      return;
+    }
     if (addresses.addressA === tokenA.contractAddress) {
       await dex.contract.methods.divest(pairId, tokenAOut, tokenBOut, shares, timestamp.toString()).send();
     } else {
@@ -165,7 +179,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         setToken={setTokenA}
         value={tokenAOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         noBalanceButtons
         disabled
         notSelectable
@@ -178,7 +192,7 @@ export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
         setToken={setTokenB}
         value={tokenBOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         noBalanceButtons
         disabled
         notSelectable

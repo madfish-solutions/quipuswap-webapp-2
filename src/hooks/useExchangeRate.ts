@@ -5,15 +5,15 @@ import { useTezos } from '@utils/dapp';
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 import useUpdateToast from './useUpdateToast';
 
-type RawExchangeRateEntry = {
+interface RawExchangeRateEntry {
   tokenAddress?: string;
   tokenId?: number;
   exchangeRate: string;
-};
+}
 
-type ExchangeRateEntry = RawExchangeRateEntry & {
+interface ExchangeRateEntry extends RawExchangeRateEntry {
   tokenAddress: string;
-};
+}
 
 export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
   const tezos = useTezos();
@@ -21,7 +21,7 @@ export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
 
   const getExchangeRates = async () =>
     fetch('https://api.templewallet.com/api/exchange-rates')
-      .then(res => res.json())
+      .then(async res => res.json())
       .then((rawExchangeRates: RawExchangeRateEntry[]) =>
         rawExchangeRates.map(({ tokenAddress, ...restProps }) => ({
           ...restProps,
