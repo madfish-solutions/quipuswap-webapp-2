@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, FC, useEffect, useState } from 'react';
 
 import { COLOR_MODE_STORAGE_KEY } from '@utils/defaults';
 
@@ -7,7 +7,7 @@ export enum ColorModes {
   Dark = 'dark'
 }
 
-type ThemeColorsPros = {
+interface ThemeColorsPros {
   fill1: string;
   fill1Inverse: string;
   fill2: string;
@@ -16,7 +16,7 @@ type ThemeColorsPros = {
   background1: string;
   background2: string;
   fillLogo: string;
-};
+}
 
 const themeColorsObj = {
   light: {
@@ -41,12 +41,12 @@ const themeColorsObj = {
   }
 };
 
-type ColorThemeContextValue = {
+interface ColorThemeContextValue {
   colorThemeMode: ColorModes;
   isComponentDidMount: boolean;
   themeColors: ThemeColorsPros;
   setColorThemeMode: () => void;
-};
+}
 
 export const defaultDataContext: ColorThemeContextValue = {
   colorThemeMode: ColorModes.Light,
@@ -55,9 +55,9 @@ export const defaultDataContext: ColorThemeContextValue = {
   setColorThemeMode: () => {}
 };
 
-export const ColorThemeContext = React.createContext<ColorThemeContextValue>(defaultDataContext);
+export const ColorThemeContext = createContext<ColorThemeContextValue>(defaultDataContext);
 
-export const ColorThemeProvider: React.FC = ({ children }) => {
+export const ColorThemeProvider: FC = ({ children }) => {
   const [colorThemeMode, setColorThemeMode] = useState(ColorModes.Light);
   const [themeColors, setThemeColors] = useState(themeColorsObj.light);
   const [isComponentDidMount, setIsComponentDidMount] = useState(false);

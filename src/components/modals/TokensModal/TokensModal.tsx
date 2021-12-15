@@ -42,6 +42,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+// eslint-disable-next-line import/no-named-as-default-member
 interface TokensModalProps extends ReactModal.Props {
   onChange: (token: WhitelistedToken) => void;
   blackListedTokens: WhitelistedToken[];
