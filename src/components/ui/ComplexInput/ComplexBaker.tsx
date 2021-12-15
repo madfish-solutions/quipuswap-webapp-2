@@ -37,7 +37,9 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedBaker => {
           setBaker(selectedBaker);
-          if (handleChange) handleChange(selectedBaker);
+          if (handleChange) {
+            handleChange(selectedBaker);
+          }
           if (inputRef.current) {
             inputRef.current.value = isFullBaker(selectedBaker) ? selectedBaker.name : '';
           }

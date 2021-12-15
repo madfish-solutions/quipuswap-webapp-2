@@ -74,7 +74,9 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   };
 
   const handleTokenSearch = useCallback(() => {
-    if (!network || !tezos) return;
+    if (!network || !tezos) {
+      return;
+    }
     // eslint-disable-next-line
     const isTokens = tokens.filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
     setFilteredTokens(isTokens);
@@ -99,9 +101,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!)
-      .then(tokenType => setSoleFa2Token(tokenType === 'fa2'))
-      .catch(console.error);
+    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === 'fa2'));
   }, [inputValue, tezos]);
 
   const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {

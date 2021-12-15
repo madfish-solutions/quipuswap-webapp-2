@@ -17,9 +17,9 @@ import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
 
-type DexDashboardProps = {
+interface DexDashboardProps {
   className?: string;
-};
+}
 
 export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);

@@ -7,9 +7,9 @@ import { SwapSend } from '@containers/SwapSend';
 import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/SwapLiquidity.module.sass';
 
-type SwapSendPageProps = {
+interface SwapSendPageProps {
   fromToSlug?: string;
-};
+}
 
 const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
   const { t } = useTranslation(['common', 'swap']);

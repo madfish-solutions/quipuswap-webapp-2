@@ -136,7 +136,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             onRequestClose={() => setTokensModal(false)}
             onChange={selectedToken => {
               setToken(selectedToken);
-              if (handleChange) handleChange(selectedToken);
+              if (handleChange) {
+                handleChange(selectedToken);
+              }
               setTokensModal(false);
             }}
           />

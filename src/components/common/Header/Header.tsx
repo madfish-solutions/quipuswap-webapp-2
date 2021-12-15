@@ -16,9 +16,9 @@ import { Menu } from '@components/common/Header/Menu';
 
 import s from './Header.module.sass';
 
-type HeaderProps = {
+interface HeaderProps {
   className?: string;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

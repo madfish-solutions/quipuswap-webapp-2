@@ -1,7 +1,6 @@
 export * from './getUniqueKey';
 export * from './prettyPrice';
 export * from './prepareTokenLogo';
-export * from './transformMutezToTez';
 export * from './ipfsToHttps';
 export * from './debounce';
 export * from './isTouchDevice';
@@ -32,7 +31,6 @@ export * from './transformNodeToWhitelistedToken';
 export * from './preparePairName';
 export * from './isClient';
 export * from './getTokenSlug';
-export * from './noOpFunc';
 export * from './tokenToTokenDex';
 export * from './swap';
 export * from './getTokenIdFromSlug';

@@ -10,7 +10,9 @@ interface CandidateButtonProps {
 }
 
 export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
-  if (!candidate) return <div> — </div>;
+  if (!candidate) {
+    return <div> — </div>;
+  }
 
   return (
     <Button

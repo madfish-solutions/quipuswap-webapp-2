@@ -9,9 +9,9 @@ import { OpportunitiesCardsData } from './content';
 import s from './Opportunities.module.sass';
 import { OpportunityCard } from './OpportunityCard';
 
-type OpportunitiesProps = {
+interface OpportunitiesProps {
   className?: string;
-};
+}
 
 export const Opportunities: React.FC<OpportunitiesProps> = ({ className }) => {
   const { t } = useTranslation('home');

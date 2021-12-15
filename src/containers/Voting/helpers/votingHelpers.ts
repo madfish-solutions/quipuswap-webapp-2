@@ -41,14 +41,18 @@ export const hanldeTokenPairSelect = (
       const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
       setDex(foundDex);
       const asyncRewards = async () => {
-        if (!accountPkh) return;
+        if (!accountPkh) {
+          return;
+        }
         const res = await estimateReward(tezos, foundDex, accountPkh);
         const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
         setRewards(rewards);
       };
       asyncRewards();
       const asyncVoter = async () => {
-        if (!accountPkh) return;
+        if (!accountPkh) {
+          return;
+        }
         const voter = await foundDex.storage.storage.voters.get(accountPkh);
         if (voter) {
           setVoter({
@@ -56,7 +60,9 @@ export const hanldeTokenPairSelect = (
             candidate: voter.candidate,
             vote: fromDecimals(voter.vote, TEZOS_TOKEN.metadata.decimals)
           });
-        } else setVoter({} as VoterType);
+        } else {
+          setVoter({} as VoterType);
+        }
       };
       asyncVoter();
       let frozenBalance = '0';
@@ -78,10 +84,10 @@ export const hanldeTokenPairSelect = (
       updateToast(err);
     }
   };
-  asyncFunc();
+  void asyncFunc();
 };
 
-type SubmitProps = {
+interface SubmitProps {
   tezos: TezosToolkit;
   values: VoteFormValues;
   dex?: FoundDex;
@@ -89,7 +95,7 @@ type SubmitProps = {
   updateToast: never;
   handleErrorToast: (e: Error) => void;
   getBalance: () => void;
-};
+}
 
 interface IBatchParamsAndToastText {
   text: string;
@@ -146,15 +152,19 @@ const unveto = async (tezos: TezosToolkit, dex: FoundDex): Promise<IBatchParamsA
   };
 };
 
-export const unvoteOrUnveto = (
+export const unvoteOrUnveto = async (
   tab: string,
   tezos: TezosToolkit,
   dex: FoundDex,
   baker?: string
 ): Promise<IBatchParamsAndToastText> => {
-  if (tab === 'vote' && baker) return unvote(tezos, dex, baker);
+  if (tab === 'vote' && baker) {
+    return unvote(tezos, dex, baker);
+  }
 
-  if (tab === 'veto') return unveto(tezos, dex);
+  if (tab === 'veto') {
+    return unveto(tezos, dex);
+  }
 
   throw Error('Something went wrong');
 };
@@ -208,7 +218,9 @@ export const submitForm = async ({
   updateToast,
   getBalance
 }: SubmitProps) => {
-  if (!dex) return;
+  if (!dex) {
+    return;
+  }
 
   try {
     const { params, text: updateToastText } = await getBatchParamsAndToastText(tab, tezos, dex, values);

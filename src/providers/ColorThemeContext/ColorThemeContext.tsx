@@ -1,5 +1,7 @@
 import React, { createContext, FC, useEffect, useState } from 'react';
 
+import { noop } from 'rxjs';
+
 import { COLOR_MODE_STORAGE_KEY } from '@utils/defaults';
 
 export enum ColorModes {
@@ -52,7 +54,7 @@ export const defaultDataContext: ColorThemeContextValue = {
   colorThemeMode: ColorModes.Light,
   isComponentDidMount: false,
   themeColors: themeColorsObj.light,
-  setColorThemeMode: () => {}
+  setColorThemeMode: noop
 };
 
 export const ColorThemeContext = createContext<ColorThemeContextValue>(defaultDataContext);

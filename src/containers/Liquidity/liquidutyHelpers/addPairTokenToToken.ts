@@ -30,7 +30,9 @@ export const addPairTokenToToken = async (
     fixedTokenAInput,
     accountPkh
   );
-  if (!tokenAUpdateOperator) return;
+  if (!tokenAUpdateOperator) {
+    return;
+  }
   const tokenBUpdateOperator = await allowContractSpendYourTokens(
     tezos,
     tokenB,
@@ -38,13 +40,17 @@ export const addPairTokenToToken = async (
     fixedTokenBInput,
     accountPkh
   );
-  if (!tokenBUpdateOperator) return;
+  if (!tokenBUpdateOperator) {
+    return;
+  }
 
   const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, fixedTokenAInput, fixedTokenBInput);
 
-  if (!validAppPairParams) return;
+  if (!validAppPairParams) {
+    return;
+  }
 
-  const batch = await tezos.wallet
+  const batch = tezos.wallet
     .batch()
     .withContractCall(tokenAUpdateOperator)
     .withContractCall(tokenBUpdateOperator)

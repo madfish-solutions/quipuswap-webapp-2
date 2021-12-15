@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import s from './DashboardCard.module.sass';
 
-type DashboardCardProps = {
+interface DashboardCardProps {
   volume: string;
   size?: 'large' | 'extraLarge';
   label: React.ReactNode;
@@ -13,7 +13,7 @@ type DashboardCardProps = {
   tooltip?: string;
   className?: string;
   loading?: boolean;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,

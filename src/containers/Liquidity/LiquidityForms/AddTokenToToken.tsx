@@ -20,9 +20,10 @@ import {
   addPairTokenToToken
 } from '../liquidutyHelpers';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
-type AddTokenToTokenProps = {
+interface AddTokenToTokenProps {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -30,7 +31,7 @@ type AddTokenToTokenProps = {
   setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
-};
+}
 
 export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
   dex,
@@ -61,7 +62,9 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
 
   useEffect(() => {
     const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) return;
+    if (!addresses) {
+      return;
+    }
     if (addresses.addressA === tokenA.contractAddress) {
       setTokenPairAndInputs({
         pairTokenA: tokenA,
@@ -83,10 +86,14 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
-      if (!dex) return;
+      if (!dex) {
+        return;
+      }
 
       const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) return;
+      if (!addresses) {
+        return;
+      }
 
       const michelData = getValidMichelTemplate(addresses);
       const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
@@ -122,8 +129,9 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
       pairData.tokenAPool.eq(0) ||
       pairData.tokenBPool.eq(0) ||
       pairData.totalSupply.eq(0)
-    )
+    ) {
       return;
+    }
 
     if (tokenBInput === '') {
       setTokenAInput('');
@@ -157,8 +165,9 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
       pairData.tokenAPool.eq(0) ||
       pairData.tokenBPool.eq(0) ||
       pairData.totalSupply.eq(0)
-    )
+    ) {
       return;
+    }
 
     if (tokenAInput === '') {
       setTokenBInput('');
@@ -323,7 +332,9 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
   };
 
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) return;
+    if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) {
+      return;
+    }
     const ten = new BigNumber(10);
     const { pairTokenA, pairTokenB, pairInputA, pairInputB } = tokenPairAndInputs;
 
@@ -356,7 +367,9 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
       );
 
       const tokensUpdateOperators = await Promise.all([tokenAUpdateOperator, tokenBUpdateOperator]);
-      if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) return;
+      if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) {
+        return;
+      }
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -369,7 +382,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
         timestamp.toString()
       );
 
-      const batch = await tezos.wallet
+      const batch = tezos.wallet
         .batch()
         .withContractCall(tokensUpdateOperators[0])
         .withContractCall(tokensUpdateOperators[1])
