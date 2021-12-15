@@ -97,7 +97,6 @@ export const getRouteWithInput = memoizee(
     const { endTokenSlug, inputAmount } = params;
     const shouldUseImaginaryAmount = !inputAmount || inputAmount.eq(0);
     const tree = getRoutesTreeWithInput(params, shouldUseImaginaryAmount);
-    console.log(tree);
     const leaves = getLeaves(tree).filter(({ tokenSlug }) => tokenSlug === endTokenSlug);
     if (leaves.length === 0) {
       return undefined;

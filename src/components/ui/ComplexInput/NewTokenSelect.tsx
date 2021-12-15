@@ -144,7 +144,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     const integerLog = Math.floor(Math.log10(correctBalance.toNumber()));
     const decimalPlaces = integerLog >= 0 ? Math.max(0, 6 - integerLog) : Math.max(6, -integerLog + 1);
 
-    return correctBalance.decimalPlaces(decimalPlaces).toFixed();
+    return correctBalance.decimalPlaces(decimalPlaces, BigNumber.ROUND_DOWN).toFixed();
   }, [balance, tokenDecimals]);
 
   return (

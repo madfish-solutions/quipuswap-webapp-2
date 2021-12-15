@@ -1,29 +1,32 @@
 import BigNumber from 'bignumber.js';
 
-import { FEE_RATE } from '@utils/defaults';
+import { FEE_RATE, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug, SwapParams } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
 const feeDenominator = new BigNumber(1000);
 const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times(feeDenominator));
 
+const isTokenToTokenDex = ({ token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) => {
+  const token1Slug = getTokenSlug(token1);
+  const token2Slug = getTokenSlug(token2);
+
+  return [token1Slug, token2Slug].every(tokenSlug => tokenSlug !== getTokenSlug(TEZOS_TOKEN));
+};
+
 export const getDexPairsAfterSwap = ({ inputToken, inputAmount, dexChain }: SwapParams) => {
   let currentToken = inputToken;
   let intermediateInputAmount = inputAmount;
   const newDexChain: DexPair[] = [];
   dexChain.forEach(pair => {
-    const { token1, token2, token1Pool, token2Pool } = pair;
+    const { token1, token2 } = pair;
     const shouldSell = getTokenSlug(currentToken) === getTokenSlug(token1);
-    const inputLiquidity = shouldSell ? token1Pool : token2Pool;
-    const outputLiquidity = shouldSell ? token2Pool : token1Pool;
 
-    const inputWithFee = intermediateInputAmount.times(feeNumerator);
-    const numerator = inputWithFee.times(outputLiquidity);
-    const denominator = inputLiquidity.times(feeDenominator).plus(inputWithFee);
-    const outputAmount = numerator.idiv(denominator);
-    if (outputAmount.gt(outputLiquidity.idiv(3))) {
-      throw new Error('Input amount exceeds maximal one');
-    }
+    const outputAmount = getTokenOutput({
+      inputToken: currentToken,
+      inputAmount: intermediateInputAmount,
+      dexChain: [pair]
+    });
     newDexChain.push({
       ...pair,
       token1Pool: pair.token1Pool.plus(shouldSell ? intermediateInputAmount : outputAmount.times(-1)),
@@ -43,13 +46,20 @@ export const getTokenOutput = ({ inputToken, inputAmount, dexChain }: SwapParams
     const shouldSell = getTokenSlug(currentToken) === getTokenSlug(token1);
     const inputLiquidity = shouldSell ? token1Pool : token2Pool;
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
+    const dexIsTokenToToken = isTokenToTokenDex({ token1, token2 });
 
-    const inputWithFee = intermediateInputAmount.times(feeNumerator);
-    const numerator = inputWithFee.times(outputLiquidity);
-    const denominator = inputLiquidity.times(feeDenominator).plus(inputWithFee);
-    intermediateInputAmount = numerator.idiv(denominator);
-    if (intermediateInputAmount.gt(outputLiquidity.idiv(3))) {
+    if (intermediateInputAmount.isFinite()) {
+      const inputWithFee = intermediateInputAmount.times(feeNumerator);
+      const numerator = inputWithFee.times(outputLiquidity);
+      const denominator = inputLiquidity.times(feeDenominator).plus(inputWithFee);
+      intermediateInputAmount = numerator.idiv(denominator);
+      if (intermediateInputAmount.gt(outputLiquidity.idiv(3)) && !dexIsTokenToToken) {
+        throw new Error('Input amount exceeds maximal one');
+      }
+    } else if (!dexIsTokenToToken) {
       throw new Error('Input amount exceeds maximal one');
+    } else {
+      intermediateInputAmount = outputLiquidity.minus(1);
     }
     currentToken = shouldSell ? token2 : token1;
   });
@@ -66,7 +76,8 @@ export const getTokenInput = (outputToken: TokenId, outputAmount: BigNumber, dex
     const inputLiquidity = shouldSell ? token1Pool : token2Pool;
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
     const inputToken = shouldSell ? token1 : token2;
-    if (intermediateOutputAmount.gt(outputLiquidity.idiv(3))) {
+    const maxOutputAmount = isTokenToTokenDex({ token1, token2 }) ? outputLiquidity.minus(1) : outputLiquidity.idiv(3);
+    if (intermediateOutputAmount.gt(maxOutputAmount)) {
       throw new Error('Output amount exceeds maximal one');
     }
     if (!intermediateOutputAmount.eq(0)) {
@@ -85,15 +96,6 @@ export const getTokenInput = (outputToken: TokenId, outputAmount: BigNumber, dex
     }
     currentToken = shouldSell ? token1 : token2;
   });
-  try {
-    getTokenOutput({
-      inputToken: currentToken,
-      inputAmount: intermediateOutputAmount,
-      dexChain
-    });
-  } catch (e) {
-    throw new Error('Output amount exceeds maximal one');
-  }
 
   return intermediateOutputAmount;
 };
@@ -106,11 +108,20 @@ export const getMaxTokenInput = (outputToken: TokenId, dexChain: DexPair[]) => {
     const { token1, token2, token1Pool, token2Pool } = pair;
     const shouldSell = getTokenSlug(intermediateOutputToken) === getTokenSlug(token2);
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
-    const maxOutput = BigNumber.min(intermediateMaxTokenInput, outputLiquidity.idiv(3));
-    try {
-      intermediateMaxTokenInput = getTokenInput(intermediateOutputToken, maxOutput, [pair]).minus(1);
-    } catch {
-      intermediateMaxTokenInput = new BigNumber(0);
+    const dexIsTokenToToken = isTokenToTokenDex({ token1, token2 });
+
+    if (dexIsTokenToToken && intermediateMaxTokenInput.gte(outputLiquidity.minus(1))) {
+      intermediateMaxTokenInput = new BigNumber(Infinity);
+    } else {
+      const maxOutput = BigNumber.min(
+        intermediateMaxTokenInput,
+        dexIsTokenToToken ? outputLiquidity.minus(1) : outputLiquidity.idiv(3)
+      );
+      try {
+        intermediateMaxTokenInput = getTokenInput(intermediateOutputToken, maxOutput, [pair]).minus(1);
+      } catch {
+        intermediateMaxTokenInput = new BigNumber(0);
+      }
     }
     intermediateOutputToken = shouldSell ? token1 : token2;
   });
