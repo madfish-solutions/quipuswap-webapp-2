@@ -10,6 +10,7 @@ import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
 import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE_PERCENTAGE, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
@@ -32,12 +33,10 @@ import { SwapDetails } from './SwapDetails';
 type SwapFormProps = FormikProps<Partial<SwapFormValues>> & {
   className?: string;
   submitError?: string;
-  updateTokenBalance: (token: WhitelistedToken) => void;
-  knownTokensBalances: Record<string, BigNumber>;
   updateSwapLimits: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
   onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
-  knownMaxInputAmounts: Record<string, Record<string, BigNumber>>;
-  knownMaxOutputAmounts: Record<string, Record<string, BigNumber>>;
+  maxInputAmounts: Record<string, Record<string, BigNumber>>;
+  maxOutputAmounts: Record<string, Record<string, BigNumber>>;
   initialFrom?: string;
   initialTo?: string;
 };
@@ -121,9 +120,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   errors,
   initialFrom,
   initialTo,
-  knownTokensBalances,
-  knownMaxInputAmounts,
-  knownMaxOutputAmounts,
+  maxInputAmounts,
+  maxOutputAmounts,
   onTokensSelected,
   submitForm,
   setValues,
@@ -131,13 +129,14 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   submitError,
   setFieldTouched,
   touched,
-  updateTokenBalance,
   updateSwapLimits,
   validateField,
   values
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { token1, token2, amount1, amount2, recipient, slippage, action } = values;
+
+  const { balances, updateBalance } = useBalances();
   const exchangeRates = useNewExchangeRates();
   const network = useNetwork();
   const tezos = useTezos();
@@ -157,19 +156,29 @@ export const SwapForm: React.FC<SwapFormProps> = ({
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
 
-  useEffect(() => validateField('amount1'), [validateField, knownMaxInputAmounts, knownTokensBalances]);
-  useEffect(() => validateField('amount2'), [validateField, knownMaxOutputAmounts]);
+  useEffect(() => validateField('amount1'), [validateField, maxInputAmounts, balances]);
+  useEffect(() => validateField('amount2'), [validateField, maxOutputAmounts]);
+
+  const updateSelectedTokensBalances = useCallback(() => {
+    Promise.all(
+      [token1, token2].map(async token => {
+        if (token) {
+          try {
+            await updateBalance(token);
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      })
+    );
+  }, [token1, token2, updateBalance]);
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
-      [token1, token2].forEach(token => {
-        if (token) {
-          updateTokenBalance(token);
-        }
-      });
+      updateSelectedTokensBalances();
     }
     prevAccountPkh.current = accountPkh;
-  }, [accountPkh, token1, token2, updateTokenBalance]);
+  }, [accountPkh, updateSelectedTokensBalances]);
 
   useEffect(() => {
     const prevInitialFrom = prevInitialFromRef.current;
@@ -356,15 +365,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
     updateSwapFee
   ]);
 
-  const onBlockCallback = useCallback(() => {
-    // eslint-disable-next-line sonarjs/no-identical-functions
-    [token1, token2].forEach(token => {
-      if (token) {
-        updateTokenBalance(token);
-      }
-    });
-  }, [token1, token2, updateTokenBalance]);
-  useOnBlock(tezos, onBlockCallback);
+  useOnBlock(tezos, updateSelectedTokensBalances);
 
   const handleSubmit = useCallback(() => {
     submitForm()
@@ -410,7 +411,6 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   const handleSomeTokenChange = useCallback(
     (fieldName: 'token1' | 'token2', amountFieldName: 'amount1' | 'amount2', newToken?: WhitelistedToken) => {
-      const newTokenSlug = newToken && getTokenSlug(newToken);
       setFieldTouched(fieldName, true);
       const valuesToSet: Partial<SwapFormValues> = {
         [fieldName]: newToken
@@ -421,8 +421,8 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
       }
       setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
-      if (newTokenSlug) {
-        updateTokenBalance(newToken!);
+      if (newToken) {
+        updateBalance(newToken);
       }
       const newToken1 = fieldName === 'token1' ? newToken : token1;
       const newToken2 = fieldName === 'token2' ? newToken : token2;
@@ -430,7 +430,7 @@ export const SwapForm: React.FC<SwapFormProps> = ({
         onTokensSelected(newToken1, newToken2);
       }
     },
-    [setValues, updateTokenBalance, setFieldTouched, amount1, amount2, token1, token2, onTokensSelected]
+    [setValues, updateBalance, setFieldTouched, amount1, amount2, token1, token2, onTokensSelected]
   );
 
   const handleToken1Change = useCallback(
@@ -493,15 +493,15 @@ export const SwapForm: React.FC<SwapFormProps> = ({
 
   const token1Slug = token1 && getTokenSlug(token1);
   const token2Slug = token2 && getTokenSlug(token2);
-  const token1Balance = token1Slug === undefined ? undefined : knownTokensBalances[token1Slug];
-  const token2Balance = token2Slug === undefined ? undefined : knownTokensBalances[token2Slug];
+  const token1Balance = token1Slug === undefined ? undefined : balances[token1Slug];
+  const token2Balance = token2Slug === undefined ? undefined : balances[token2Slug];
 
   const token1Error = touched.token1 ? errors.token1 : undefined;
   const amount1Error = touched.amount1 ? errors.amount1 : undefined;
   const token2Error = touched.token2 ? errors.token2 : undefined;
   const amount2Error = touched.amount2 ? errors.amount2 : undefined;
 
-  const generalMaxOutputAmount = token1Slug && token2Slug ? knownMaxOutputAmounts[token1Slug]?.[token2Slug] : undefined;
+  const generalMaxOutputAmount = token1Slug && token2Slug ? maxOutputAmounts[token1Slug]?.[token2Slug] : undefined;
   const maxOutputAmountByBalance = useMemo(() => {
     if (dexGraph && token1 && token1Balance && token2) {
       const route = getMaxOutputRoute(

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
@@ -9,13 +9,15 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 import { useDexGraph } from '@hooks/useDexGraph';
 import { useInitialTokens } from '@hooks/useInitialTokens';
 import useUpdateToast from '@hooks/useUpdateToast';
-import { getUserBalance, useTezos, useNetwork, useAccountPkh } from '@utils/dapp';
+import { useBalances } from '@providers/BalancesProvider';
+import { useTezos, useNetwork, useAccountPkh } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE_PERCENTAGE, MAX_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@utils/defaults';
-import { fromDecimals, getMaxTokenInput, getTokenOutput, getTokenSlug, swap, toDecimals } from '@utils/helpers';
-import { getMaxInputRoute, getMaxOutputRoute, getRouteWithInput } from '@utils/routing';
+import { fromDecimals, getTokenSlug, swap, toDecimals } from '@utils/helpers';
+import { getRouteWithInput } from '@utils/routing';
 import { SwapFormValues, WhitelistedToken } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
+import { useSwapLimits } from './hooks/useSwapLimits';
 import { SwapForm } from './SwapForm';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
@@ -43,31 +45,10 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const network = useNetwork();
-  const [knownTokensBalances, setKnownTokensBalances] = useState<Record<string, BigNumber>>({});
-  const [knownMaxInputAmounts, setKnownMaxInputAmounts] = useState<Record<string, Record<string, BigNumber>>>({});
-  const [knownMaxOutputAmounts, setKnownMaxOutputAmounts] = useState<Record<string, Record<string, BigNumber>>>({});
+  const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
+  const { balances } = useBalances();
 
   const initialTokens = useInitialTokens(fromToSlug, getRedirectionUrl);
-
-  useEffect(() => setKnownTokensBalances({}), [accountPkh]);
-
-  const updateTokenBalance = useCallback(
-    (token: WhitelistedToken) => {
-      const newTokenSlug = getTokenSlug(token);
-      if (!accountPkh) {
-        return;
-      }
-      getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId)
-        .then(balance => {
-          setKnownTokensBalances(prevValue => ({
-            ...prevValue,
-            [newTokenSlug]: fromDecimals(balance ?? new BigNumber(0), token.metadata.decimals)
-          }));
-        })
-        .catch(console.error);
-    },
-    [accountPkh, tezos]
-  );
 
   const validationSchema = useMemo(
     () =>
@@ -81,10 +62,10 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
             if (!firstToken) {
               return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
             }
-            const token1Balance = knownTokensBalances[getTokenSlug(firstToken)];
+            const token1Balance = balances[getTokenSlug(firstToken)];
             let max: BigNumber | undefined = BigNumber.min(
               token1Balance ?? new BigNumber(Infinity),
-              (secondToken && knownMaxInputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)]) ??
+              (secondToken && maxInputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)]) ??
                 new BigNumber(Infinity)
             );
             if (!max.isFinite()) {
@@ -111,7 +92,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
             if (!secondToken) {
               return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
             }
-            const max = firstToken && knownMaxOutputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)];
+            const max = firstToken && maxOutputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)];
 
             return bigNumberSchema(fromDecimals(new BigNumber(1), secondToken.metadata.decimals), max).required(
               t(REQUIRE_FIELD_MESSAGE)
@@ -124,78 +105,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
         slippage: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
         action: stringSchema().oneOf(['swap', 'send']).required()
       }),
-    [knownTokensBalances, t, knownMaxInputAmounts, knownMaxOutputAmounts]
-  );
-
-  const updateMaxInputAmount = useCallback((token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
-    setKnownMaxInputAmounts(prevValue => {
-      const token1Slug = getTokenSlug(token1);
-      const token2Slug = getTokenSlug(token2);
-
-      return {
-        ...prevValue,
-        [token1Slug]: {
-          ...(prevValue[token1Slug] ?? {}),
-          [token2Slug]: amount
-        }
-      };
-    });
-  }, []);
-
-  const updateMaxOutputAmount = useCallback((token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
-    // eslint-disable-next-line sonarjs/no-identical-functions
-    setKnownMaxOutputAmounts(prevValue => {
-      const token1Slug = getTokenSlug(token1);
-      const token2Slug = getTokenSlug(token2);
-
-      return {
-        ...prevValue,
-        [token1Slug]: {
-          ...(prevValue[token1Slug] ?? {}),
-          [token2Slug]: amount
-        }
-      };
-    });
-  }, []);
-
-  const updateSwapLimits = useCallback(
-    (token1: WhitelistedToken, token2: WhitelistedToken) => {
-      const startTokenSlug = getTokenSlug(token1);
-      const endTokenSlug = getTokenSlug(token2);
-      try {
-        const maxInputRoute = getMaxInputRoute({
-          startTokenSlug,
-          endTokenSlug,
-          graph: dexGraph
-        });
-        if (maxInputRoute) {
-          updateMaxInputAmount(token1, token2, fromDecimals(getMaxTokenInput(token2, maxInputRoute), token1));
-        }
-        const maxOutputRoute = getMaxOutputRoute({
-          startTokenSlug,
-          endTokenSlug,
-          graph: dexGraph
-        });
-        if (maxOutputRoute) {
-          const generalMaxInputAmount = getMaxTokenInput(token2, maxOutputRoute);
-          updateMaxOutputAmount(
-            token1,
-            token2,
-            fromDecimals(
-              getTokenOutput({
-                inputToken: token1,
-                inputAmount: generalMaxInputAmount,
-                dexChain: maxOutputRoute
-              }),
-              token2
-            )
-          );
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [dexGraph, updateMaxInputAmount, updateMaxOutputAmount]
+    [balances, t, maxInputAmounts, maxOutputAmounts]
   );
 
   const handleTokensSelected = useCallback(
@@ -203,7 +113,6 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
       updateSwapLimits(token1, token2);
       const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
       if (router.asPath !== newRoute) {
-        console.log('x1', newRoute);
         router.replace(newRoute);
       }
     },
@@ -281,12 +190,10 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
       className={className}
       initialFrom={initialTokens?.[0]}
       initialTo={initialTokens?.[1]}
-      knownTokensBalances={knownTokensBalances}
       onTokensSelected={handleTokensSelected}
       updateSwapLimits={updateSwapLimits}
-      updateTokenBalance={updateTokenBalance}
-      knownMaxInputAmounts={knownMaxInputAmounts}
-      knownMaxOutputAmounts={knownMaxOutputAmounts}
+      maxInputAmounts={maxInputAmounts}
+      maxOutputAmounts={maxOutputAmounts}
     />
   );
 };
