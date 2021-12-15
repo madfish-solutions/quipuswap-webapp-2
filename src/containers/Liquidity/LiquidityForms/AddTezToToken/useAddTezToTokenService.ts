@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, ChangeEvent, useState, useEffect } from 'react';
 
-import { FoundDex, Token } from '@quipuswap/sdk';
+import { Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { addLiquidity, calculateTokenAmount, initializeLiquidity } from '@containers/Liquidity/liquidutyHelpers';
@@ -9,18 +9,20 @@ import { TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-export const useViewModel = (
-  dex: Nullable<FoundDex>,
+import { useLoadDexContract, useLoadTokenBalance } from '../hooks';
+
+export const useAddTezToTokenService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  tokenABalance: string,
-  tokenBBalance: string
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
 ) => {
   const tezos = useTezos();
-  const accountPkh = useAccountPkh();
   const networkId = useNetwork().id;
+  const accountPkh = useAccountPkh();
+  const tokenABalance = useLoadTokenBalance(tokenA);
+  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const { dex } = useLoadDexContract(tokenA, tokenB);
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
@@ -46,12 +48,11 @@ export const useViewModel = (
   }, [tokenABalance]);
   useEffect(() => {
     if (!dex) return;
-
+    const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+    if (total_supply.eq(0) || tez_pool.eq(0) || token_pool.eq(0)) return;
     if (tokenAInput === '') {
       setTokenBInput('');
     } else {
-      const { total_supply, tez_pool, token_pool } = dex.storage.storage;
-
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
       const calculatedTokenBInput =
@@ -134,23 +135,15 @@ export const useViewModel = (
 
     if (!dex) return;
 
+    const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+
     const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
     const tokenAAmount = fixedValue.multipliedBy(tokenADecimals);
 
     const tokenBAmount =
       tokenA.contractAddress === TEZOS_TOKEN.contractAddress
-        ? calculateTokenAmount(
-            tokenAAmount,
-            dex.storage.storage.total_supply,
-            dex.storage.storage.tez_pool,
-            dex.storage.storage.token_pool
-          )
-        : calculateTokenAmount(
-            tokenAAmount,
-            dex.storage.storage.total_supply,
-            dex.storage.storage.token_pool,
-            dex.storage.storage.tez_pool
-          );
+        ? calculateTokenAmount(tokenAAmount, total_supply, tez_pool, token_pool)
+        : calculateTokenAmount(tokenAAmount, total_supply, token_pool, tez_pool);
 
     setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
   };
@@ -221,6 +214,8 @@ export const useViewModel = (
     accountPkh,
     tokenAInput,
     tokenBInput,
+    tokenABalance,
+    tokenBBalance,
     handleTokenAChange,
     handleTokenBChange,
     handleTokenABalance,

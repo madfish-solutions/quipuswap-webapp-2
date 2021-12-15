@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -14,19 +13,21 @@ import { useTezos, useAccountPkh } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { useLoadTokenBalance, useLoadDexContract } from '../hooks';
+
 const MichelCodec = require('@taquito/michel-codec');
 
-export const useViewModel = (
-  dex: Nullable<FoundDex>,
+export const useAddTokenToTokenService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  tokenABalance: string,
-  tokenBBalance: string
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const tokenABalance = useLoadTokenBalance(tokenA);
+  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const { dex } = useLoadDexContract(tokenA, tokenB);
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
@@ -62,7 +63,7 @@ export const useViewModel = (
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenAInput, tokenBInput]);
+  }, [tokenA, tokenB]);
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
@@ -377,6 +378,8 @@ export const useViewModel = (
     accountPkh,
     tokenAInput,
     tokenBInput,
+    tokenABalance,
+    tokenBBalance,
     handleTokenAInput,
     handleTokenBInput,
     handleTokenABalance,

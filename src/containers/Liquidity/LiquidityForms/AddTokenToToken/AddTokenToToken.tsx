@@ -1,39 +1,22 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Button } from '@quipuswap/ui-kit';
 
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from '../../Liquidity.module.sass';
-import { useViewModel } from './useViewModel';
+import { AddRemoveFormInterface } from '../AddRemoveForm.props';
+import { useAddTokenToTokenService } from './useAddTokenToTokenService';
 
-type AddTokenToTokenProps = {
-  dex: FoundDex | null;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-};
-
-export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance
-}) => {
+export const AddTokenToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
   const {
     accountPkh,
     tokenAInput,
     tokenBInput,
+    tokenABalance,
+    tokenBBalance,
     handleTokenAInput,
     handleTokenBInput,
     handleTokenABalance,
@@ -41,7 +24,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
     handleSetTokenA,
     handleSetTokenB,
     handleAddLiquidity
-  } = useViewModel(dex, tokenA, tokenB, setTokenA, setTokenB, tokenABalance, tokenBBalance);
+  } = useAddTokenToTokenService(tokenA, tokenB, setTokenA, setTokenB);
 
   return (
     <>

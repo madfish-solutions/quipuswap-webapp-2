@@ -1,19 +1,24 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { sortTokensContracts, getValidMichelTemplate } from '@containers/Liquidity/liquidutyHelpers';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
+
+import { useLoadDexContract, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
 
 const MichelCodec = require('@taquito/michel-codec');
 
-export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+export const useRemoveTokenToTokenService = (tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const tokenABalance = useLoadTokenBalance(tokenA);
+  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const { dex, isTezosToTokenDex } = useLoadDexContract(tokenA, tokenB);
+  const lpTokenBalance = useLoadLpTokenBalance(dex, isTezosToTokenDex, tokenA, tokenB);
 
   const [pairId, setPairId] = useState();
   const [lpTokenInput, setLpTokenInput] = useState('');
@@ -123,5 +128,16 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
     setLpTokenInput('');
   };
 
-  return { accountPkh, lpTokenInput, tokenAOutput, tokenBOutput, handleRemoveLiquidity, handleChange, handleBalance };
+  return {
+    accountPkh,
+    lpTokenInput,
+    tokenAOutput,
+    tokenBOutput,
+    lpTokenBalance,
+    tokenABalance,
+    tokenBBalance,
+    handleRemoveLiquidity,
+    handleChange,
+    handleBalance
+  };
 };

@@ -4,27 +4,23 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 import { FormSpy } from 'react-final-form';
 
 import { LiquidityFormProps } from '@containers/Liquidity/LiquidityForms/LiquidityForm.props';
-import { TabsContent, useViewModel } from '@containers/Liquidity/LiquidityForms/useViewModel';
+import { TabsContent, useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/useLiquidityFormService';
 
 import s from '../Liquidity.module.sass';
+import { checkForTezInPair } from '../liquidutyHelpers';
 import { AddTezToToken } from './AddTezToToken/AddTezToToken';
 import { AddTokenToToken } from './AddTokenToToken/AddTokenToToken';
 import { RemoveTezToToken } from './RemoveTezToToken/RemoveTezToToken';
 import { RemoveTokenToToken } from './RemoveTokenToToken/RemoveTokenToToken';
 
 const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
-  const {
-    tabState,
-    handleSetActiveId,
-    dexInfo,
-    tokenA,
-    tokenB,
-    setTokenA,
-    setTokenB,
-    tokenABalance,
-    tokenBBalance,
-    lpTokenBalance
-  } = useViewModel();
+  const { tabState, handleSetActiveId, tokenA, tokenB, setTokenA, setTokenB } = useLiquidityFormService();
+
+  const isTezosToTokenDex = tokenA && tokenB && checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
+  const renderedAddTezToToken = tabState.id === 'add' && isTezosToTokenDex && tokenA && tokenB;
+  const renderedRemoveTezToToken = tabState.id === 'remove' && isTezosToTokenDex && tokenA && tokenB;
+  const renderedAddTokenToToken = tabState.id === 'add' && !isTezosToTokenDex && tokenA && tokenB;
+  const renderedRemoveTokenToToken = tabState.id === 'remove' && !isTezosToTokenDex && tokenA && tokenB;
 
   return (
     <>
@@ -37,51 +33,17 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
         }}
         contentClassName={s.content}
       >
-        {tabState.id === 'add' && dexInfo.isTezosToTokenDex && tokenA && tokenB && (
-          <AddTezToToken
-            dex={dexInfo.dex}
-            tokenA={tokenA}
-            tokenB={tokenB}
-            setTokenA={setTokenA}
-            setTokenB={setTokenB}
-            tokenABalance={tokenABalance}
-            tokenBBalance={tokenBBalance}
-          />
+        {renderedAddTezToToken && (
+          <AddTezToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {tabState.id === 'remove' && dexInfo.isTezosToTokenDex && tokenA && tokenB && (
-          <RemoveTezToToken
-            dex={dexInfo.dex}
-            tokenA={tokenA}
-            tokenB={tokenB}
-            setTokenA={setTokenA}
-            setTokenB={setTokenB}
-            tokenABalance={tokenABalance}
-            tokenBBalance={tokenBBalance}
-            lpTokenBalance={lpTokenBalance}
-          />
+        {renderedRemoveTezToToken && (
+          <RemoveTezToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {tabState.id === 'add' && !dexInfo.isTezosToTokenDex && tokenA && tokenB && (
-          <AddTokenToToken
-            dex={dexInfo.dex}
-            tokenA={tokenA}
-            tokenB={tokenB}
-            setTokenA={setTokenA}
-            setTokenB={setTokenB}
-            tokenABalance={tokenABalance}
-            tokenBBalance={tokenBBalance}
-          />
+        {renderedAddTokenToToken && (
+          <AddTokenToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {tabState.id === 'remove' && !dexInfo.isTezosToTokenDex && tokenA && tokenB && (
-          <RemoveTokenToToken
-            dex={dexInfo.dex}
-            tokenA={tokenA}
-            tokenB={tokenB}
-            setTokenA={setTokenA}
-            setTokenB={setTokenB}
-            tokenABalance={tokenABalance}
-            tokenBBalance={tokenBBalance}
-            lpTokenBalance={lpTokenBalance}
-          />
+        {renderedRemoveTokenToToken && (
+          <RemoveTokenToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
       </Card>
       {/*TODO: Implement it*/}

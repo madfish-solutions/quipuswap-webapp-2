@@ -1,47 +1,29 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Plus, Button, Slippage, ArrowDown } from '@quipuswap/ui-kit';
 
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { noOpFunc } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from '../../Liquidity.module.sass';
-import { useViewModel } from './useViewModel';
+import { AddRemoveFormInterface } from '../AddRemoveForm.props';
+import { useRemoveTezToTokenService } from './useRemoveTezToTokenService';
 
-type RemoveTezToTokenProps = {
-  dex: Nullable<FoundDex>;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-  lpTokenBalance: string;
-};
-
-export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance,
-  lpTokenBalance
-}) => {
+export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
   const {
     accountPkh,
     tokenAOutput,
     tokenBOutput,
     lpTokenInput,
+    tokenABalance,
+    tokenBBalance,
+    lpTokenBalance,
     handleLpTokenChange,
     handleSlippageChange,
     handleBalance,
     handleRemoveLiquidity
-  } = useViewModel(dex, tokenA, tokenB);
+  } = useRemoveTezToTokenService(tokenA, tokenB);
 
   return (
     <>
