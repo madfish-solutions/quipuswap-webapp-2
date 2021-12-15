@@ -17,10 +17,6 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
   const { tabState, handleSetActiveId, tokenA, tokenB, setTokenA, setTokenB } = useLiquidityFormService();
 
   const isTezosToTokenDex = tokenA && tokenB && checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
-  const renderedAddTezToToken = tabState.id === 'add' && isTezosToTokenDex && tokenA && tokenB;
-  const renderedRemoveTezToToken = tabState.id === 'remove' && isTezosToTokenDex && tokenA && tokenB;
-  const renderedAddTokenToToken = tabState.id === 'add' && !isTezosToTokenDex && tokenA && tokenB;
-  const renderedRemoveTokenToToken = tabState.id === 'remove' && !isTezosToTokenDex && tokenA && tokenB;
 
   return (
     <>
@@ -33,16 +29,16 @@ const RealForm: React.FC<LiquidityFormProps> = ({ tokensData }) => {
         }}
         contentClassName={s.content}
       >
-        {renderedAddTezToToken && (
+        {tabState.id === 'add' && isTezosToTokenDex && tokenA && tokenB && (
           <AddTezToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {renderedRemoveTezToToken && (
+        {tabState.id === 'remove' && isTezosToTokenDex && tokenA && tokenB && (
           <RemoveTezToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {renderedAddTokenToToken && (
+        {tabState.id === 'add' && !isTezosToTokenDex && tokenA && tokenB && (
           <AddTokenToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
-        {renderedRemoveTokenToToken && (
+        {tabState.id === 'remove' && !isTezosToTokenDex && tokenA && tokenB && (
           <RemoveTokenToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
         )}
       </Card>
