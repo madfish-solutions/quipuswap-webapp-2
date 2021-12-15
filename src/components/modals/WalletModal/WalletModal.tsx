@@ -112,11 +112,11 @@ export const WalletModal: React.FC = () => {
             <div className={s.btnText}>{t('common|Accept terms')}</div>
           </Button>
           {t('common|I have read and agree to the')}{' '}
-          <Button className={s.defText} theme="underlined" href="#" external>
+          <Button className={s.defText} theme="underlined" href="/terms-of-service" external>
             {t('common|Terms of Usage')}
           </Button>{' '}
           {t('common|and')}{' '}
-          <Button className={s.defText} theme="underlined" href="#" external>
+          <Button className={s.defText} theme="underlined" href="/privacy-policy" external>
             {t('common|Privacy Policy')}
           </Button>
         </div>
