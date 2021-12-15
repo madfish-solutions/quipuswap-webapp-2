@@ -150,12 +150,12 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
             (searchLoading || tokensLoading) &&
             [1, 2, 3, 4, 5, 6, 7].map(x => <LoadingTokenCell key={x} />)}
           {allTokens.map(token => {
-            const { contractAddress, fa2TokenId } = token;
+            const { contractAddress, fa2TokenId, metadata } = token;
 
             return (
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
-                tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
+                tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
                 tokenType={token.type}
