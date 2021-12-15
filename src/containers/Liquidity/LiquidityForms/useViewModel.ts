@@ -32,7 +32,6 @@ export const useViewModel = () => {
   const accountPkh = useAccountPkh();
   const router = useRouter();
   const { data: tokens } = useTokens();
-  console.log('tokens', tokens);
 
   const [tabState, setTabState] = useState(TabsContent[0]);
   const [tokenA, setTokenA] = useState<WhitelistedToken | null>(null);
