@@ -1,41 +1,42 @@
-import React, { useState, Dispatch, useEffect, ChangeEvent, SetStateAction } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Plus, Button, Slippage, ArrowDown } from '@quipuswap/ui-kit';
+import { ArrowDown, Button, Plus, Slippage } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { useTezos, useAccountPkh } from '@utils/dapp';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { slippageToBignum } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import s from '../Liquidity.module.sass';
-import { removeLiquidity } from '../liquidutyHelpers';
+import s from '../../Liquidity.module.sass';
+import { removeLiquidity } from '../../liquidutyHelpers';
 
 interface RemoveTezToTokenProps {
   dex: FoundDex | null;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
+  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void;
 }
 
 export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   dex,
   tokenA,
   tokenB,
-  setTokenA,
-  setTokenB,
   tokenABalance,
   tokenBBalance,
-  lpTokenBalance
+  lpTokenBalance,
+  onChangeTokensPair
 }) => {
+  const { t } = useTranslation(['common', 'liquidity']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -87,28 +88,47 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     setLpTokenInput('');
   };
 
+  const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+
+  useEffect(() => {
+    if (!dex) {
+      return;
+    }
+    setTokenPair({
+      token1: tokenA,
+      token2: tokenB,
+      dex
+    });
+  }, [dex, tokenA, tokenB]);
+
+  const handleBalance = (balance: string) => {
+    setLpTokenInput(new BigNumber(balance).toFixed());
+  };
+
+  const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
+    onChangeTokensPair(tokensPair);
+  };
+
   return (
     <>
-      <TokenSelect
+      <PositionSelect
         label="Select LP"
+        tokenPair={tokenPair}
+        setTokenPair={handleSetTokenPair}
         balance={lpTokenBalance}
-        token={tokenA}
-        token2={tokenB}
-        setToken={setTokenB}
-        value={lpTokenInput}
+        handleBalance={handleBalance}
+        noBalanceButtons={!accountPkh}
         onChange={(event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value)}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
-        handleBalance={value => {
-          const fixedValue = new BigNumber(value);
-          setLpTokenInput(fixedValue.toFixed());
-        }}
+        balanceLabel={t('vote|Available balance')}
+        notFrozen
+        id="liquidity-remove-input"
+        className={s.input}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
         balance={tokenABalance}
         token={tokenA}
-        setToken={setTokenA}
         value={tokenAOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noop}
@@ -121,7 +141,6 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
         label="Output"
         balance={tokenBBalance}
         token={tokenB}
-        setToken={setTokenB}
         value={tokenBOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noop}

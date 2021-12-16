@@ -8,10 +8,11 @@ import {
   getValidMichelTemplate,
   sortTokensContracts
 } from '@containers/Liquidity/liquidutyHelpers';
-import { useTezos, useNetwork, useAccountPkh, getStorageInfo, getUserBalance, useTokens } from '@utils/dapp';
+import useUpdateToast from '@hooks/useUpdateToast';
+import { getStorageInfo, getUserBalance, useAccountPkh, useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
@@ -28,6 +29,7 @@ export const TabsContent = [
 ];
 
 export const useViewModel = () => {
+  const updateToast = useUpdateToast();
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
@@ -154,6 +156,10 @@ export const useViewModel = () => {
         if (isMounted) {
           setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
         }
+        updateToast({
+          type: 'error',
+          render: `Error get DEX: ${error.message}`
+        });
       }
     };
     void loadDex();
@@ -161,7 +167,7 @@ export const useViewModel = () => {
     return () => {
       isMounted = false;
     };
-  }, [tezos, networkId, tokenA, tokenB]);
+  }, [tezos, networkId, tokenA, tokenB, updateToast]);
 
   useEffect(() => {
     let isMounted = true;
@@ -274,6 +280,11 @@ export const useViewModel = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dexInfo]);
 
+  const handleChangeTokensPair = ({ token1, token2 }: WhitelistedTokenPair) => {
+    setTokenA(token1);
+    setTokenB(token2);
+  };
+
   return {
     tabState,
     handleSetActiveId,
@@ -284,6 +295,7 @@ export const useViewModel = () => {
     setTokenB,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance
+    lpTokenBalance,
+    handleChangeTokensPair
   };
 };
