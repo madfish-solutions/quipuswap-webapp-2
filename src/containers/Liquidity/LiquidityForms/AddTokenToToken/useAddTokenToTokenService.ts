@@ -343,6 +343,7 @@ export const useAddTokenToTokenService = (
     if (pairId && pairData && pairData.tokenAPool.gt(0) && pairData.tokenBPool.gt(0) && pairData.totalSupply.gt(0)) {
       const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
       const shares = tokenAAmount.multipliedBy(pairData.totalSupply).idiv(pairData.tokenAPool);
+
       const tokenBAmount = shares
         .multipliedBy(pairData.tokenBPool)
         .div(pairData.totalSupply)
