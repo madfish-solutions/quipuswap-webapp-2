@@ -23,7 +23,9 @@ export const useLoadDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: N
     let foundDex: FoundDex;
 
     const loadDex = async () => {
-      if (!tezos || !tokenA || !tokenB) return;
+      if (!tezos || !tokenA || !tokenB) {
+        return;
+      }
       const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
@@ -43,9 +45,13 @@ export const useLoadDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: N
           foundDex = new FoundDex(contract, storage);
         }
 
-        if (isMounted) setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        }
       } catch (error) {
-        if (isMounted) setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        }
       }
     };
     void loadDex();

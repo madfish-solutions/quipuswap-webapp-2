@@ -29,7 +29,9 @@ export const useParseTokensFromUrl = () => {
         return token;
       }
 
-      if (contractTokenA === token.contractAddress) return token;
+      if (contractTokenA === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
@@ -43,13 +45,19 @@ export const useParseTokensFromUrl = () => {
         return token;
       }
 
-      if (contractTokenB === token.contractAddress) return token;
+      if (contractTokenB === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
 
-    if (validTokenA) setTokenA(validTokenA);
-    if (validTokenB) setTokenB(validTokenB);
+    if (validTokenA) {
+      setTokenA(validTokenA);
+    }
+    if (validTokenB) {
+      setTokenB(validTokenB);
+    }
     // eslint-disable-next-line
   }, [tokens]);
 

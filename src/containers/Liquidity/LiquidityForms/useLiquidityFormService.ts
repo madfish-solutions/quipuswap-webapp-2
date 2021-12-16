@@ -28,7 +28,9 @@ export const useLiquidityFormService = () => {
 
     void router.replace(newUrl, undefined, { shallow: true });
     const findActiveTab = TabsContent.find(tab => tab.id === tabId);
-    if (!findActiveTab) return;
+    if (!findActiveTab) {
+      return;
+    }
     setTabState(findActiveTab);
   };
 

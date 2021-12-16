@@ -24,7 +24,9 @@ export const useRemoveTezToTokenService = (tokenA: WhitelistedToken, tokenB: Whi
   const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
 
   useEffect(() => {
-    if (!dex) return;
+    if (!dex) {
+      return;
+    }
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -63,7 +65,9 @@ export const useRemoveTezToTokenService = (tokenA: WhitelistedToken, tokenB: Whi
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex) return;
+    if (!tezos || !accountPkh || !dex) {
+      return;
+    }
 
     await removeLiquidity(tezos, dex, new BigNumber(lpTokenInput), slippage);
     setLpTokenInput('');

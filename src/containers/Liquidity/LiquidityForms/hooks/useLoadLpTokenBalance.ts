@@ -10,6 +10,7 @@ import {
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
 export const useLoadLpTokenBalance = (
@@ -27,7 +28,9 @@ export const useLoadLpTokenBalance = (
   useEffect(() => {
     let isMounted = true;
     const getLpTokenBalance = async () => {
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) return;
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+        return;
+      }
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
@@ -44,7 +47,9 @@ export const useLoadLpTokenBalance = (
         }
       } else if (!isTezosToTokenDex) {
         const addresses = sortTokensContracts(tokenA, tokenB);
-        if (!addresses) return;
+        if (!addresses) {
+          return;
+        }
 
         const michelData = getValidMichelTemplate(addresses);
         const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');

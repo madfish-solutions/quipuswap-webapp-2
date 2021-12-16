@@ -13,7 +13,9 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
-      if (!tezos || !accountPkh || !token) return;
+      if (!tezos || !accountPkh || !token) {
+        return;
+      }
 
       const userTokenABalance = await getUserBalance(
         tezos,
