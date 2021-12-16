@@ -1,11 +1,9 @@
-import { useCallback } from 'react';
-
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 
+import { useFlowToasts } from '@hooks/use-flow-toasts';
 import { useDexGraph } from '@hooks/useDexGraph';
-import useUpdateToast from '@hooks/useUpdateToast';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@utils/defaults';
 import { getTokenSlug, swap, toDecimals } from '@utils/helpers';
@@ -26,68 +24,41 @@ const initialValues: Partial<SwapFormValues> = {
 export const useSwapFormik = () => {
   const validationSchema = useValidationSchema();
   const { t } = useTranslation(['common', 'swap']);
-  const updateToast = useUpdateToast();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const network = useNetwork();
+  const { showLoaderToast, showSuccessToast, showErrorToast } = useFlowToasts();
 
-  const handleErrorToast = useCallback(
-    (err: Error) => {
-      updateToast({
-        type: 'error',
-        render: `${err.name}: ${err.message}`
+  const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
+    if (!tezos || !accountPkh) {
+      return;
+    }
+
+    const { amount1, token1, token2, recipient, slippage, action } = formValues as SwapFormValues;
+
+    showLoaderToast();
+    const inputAmount = toDecimals(amount1, token1);
+    try {
+      await swap(tezos, accountPkh, {
+        inputAmount,
+        inputToken: token1,
+        recipient: action === 'send' ? recipient : undefined,
+        slippageTolerance: slippage.div(100),
+        dexChain: getRouteWithInput({
+          startTokenSlug: getTokenSlug(token1),
+          endTokenSlug: getTokenSlug(token2),
+          graph: dexGraph,
+          inputAmount
+        })!,
+        ttDexAddress: TTDEX_CONTRACTS[network.id]
       });
-    },
-    [updateToast]
-  );
-
-  const handleLoader = useCallback(() => {
-    updateToast({
-      type: 'info',
-      render: t('common|Loading')
-    });
-  }, [updateToast, t]);
-
-  const handleSuccessToast = useCallback(() => {
-    updateToast({
-      type: 'success',
-      render: t('swap|Swap completed!')
-    });
-  }, [updateToast, t]);
-
-  const handleSubmit = useCallback(
-    async (formValues: Partial<SwapFormValues>) => {
-      if (!tezos || !accountPkh) {
-        return;
-      }
-
-      const { amount1, token1, token2, recipient, slippage, action } = formValues as SwapFormValues;
-
-      handleLoader();
-      const inputAmount = toDecimals(amount1, token1);
-      try {
-        await swap(tezos, accountPkh, {
-          inputAmount,
-          inputToken: token1,
-          recipient: action === 'send' ? recipient : undefined,
-          slippageTolerance: slippage.div(100),
-          dexChain: getRouteWithInput({
-            startTokenSlug: getTokenSlug(token1),
-            endTokenSlug: getTokenSlug(token2),
-            graph: dexGraph,
-            inputAmount
-          })!,
-          ttDexAddress: TTDEX_CONTRACTS[network.id]
-        });
-        handleSuccessToast();
-      } catch (e) {
-        handleErrorToast(e);
-        throw e;
-      }
-    },
-    [handleLoader, tezos, handleErrorToast, handleSuccessToast, accountPkh, dexGraph, network.id]
-  );
+      showSuccessToast(t('swap|Swap completed!'));
+    } catch (e) {
+      showErrorToast(e);
+      throw e;
+    }
+  };
 
   return useFormik({
     validationSchema,
