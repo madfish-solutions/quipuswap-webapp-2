@@ -9,15 +9,22 @@ import {
   WhitelistedTokenPair,
   QSNetwork,
   TokenId,
-  WhitelistedTokenWithQSNetworkType
+  WhitelistedTokenWithQSNetworkType,
+  QSMainNet
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
 
-export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> =>
-  typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+export const getSavedTokens = (networkId?: QSMainNet) => {
+  const allTokens: Array<WhitelistedTokenWithQSNetworkType> =
+    typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+
+  return networkId
+    ? allTokens.filter(({ network: tokenNetwork }) => !tokenNetwork || tokenNetwork === networkId)
+    : allTokens;
+};
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
@@ -94,7 +101,7 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
         });
       }
       if (addTokensFromLocalStorage) {
-        tokens = getSavedTokens().concat(tokens);
+        tokens = getSavedTokens(network.id).concat(tokens);
       }
 
       return tokens;
