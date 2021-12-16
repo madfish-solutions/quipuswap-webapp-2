@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { isFoundIndex } from '@utils/array';
 import { useAccountPkh } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
@@ -36,8 +37,6 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
-
-const NO_ELEMENT_FOUND_INDEX = -1;
 
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
@@ -92,7 +91,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       let numVal = new BigNumber(val || 0);
       const indexOfDot = val.indexOf('.');
       const assetDecimals = tokenDecimals ?? Infinity;
-      if (indexOfDot !== NO_ELEMENT_FOUND_INDEX && val.length - indexOfDot > assetDecimals + 1) {
+      if (isFoundIndex(indexOfDot) && val.length - indexOfDot > assetDecimals + 1) {
         val = val.substring(0, indexOfDot + assetDecimals + 1);
         numVal = new BigNumber(val);
       }

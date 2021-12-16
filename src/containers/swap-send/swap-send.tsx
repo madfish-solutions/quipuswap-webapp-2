@@ -1,19 +1,20 @@
-import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 
-import { Tabs, Card, Button, Slippage, StickyBlock, SwapButton, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Tabs, Card, Button, StickyBlock, SwapButton } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import debouncePromise from 'debounce-promise';
-import { FormikProps } from 'formik';
+import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 import { ComplexRecipient } from '@components/ui/ComplexInput';
-import { NewTokenSelect } from '@components/ui/ComplexInput/NewTokenSelect';
+import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { makeWhitelistedToken, useDexGraph } from '@hooks/useDexGraph';
+import { useInitialTokens } from '@hooks/useInitialTokens';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { DEFAULT_SLIPPAGE_PERCENTAGE, TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
+import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import {
   estimateSwapFee,
   fromDecimals,
@@ -22,32 +23,22 @@ import {
   getTokenInput,
   getTokenOutput,
   getTokenSlug,
-  getWhitelistedTokenSymbol,
   toDecimals
 } from '@utils/helpers';
 import { DexGraph, getMaxOutputRoute, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
 import { DexPair, SwapFormValues, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
-import { SwapDetails } from './SwapDetails';
+import { SlippageInput } from './components/slippage-input';
+import { SwapDetails } from './components/swap-details';
+import { useFormikProps } from './hooks/use-formik-props';
+import { SwapLimitsProvider, useSwapLimits } from './providers/swap-limits-provider';
 
-interface SwapFormProps extends FormikProps<Partial<SwapFormValues>> {
+interface SwapSendProps {
   className?: string;
-  submitError?: string;
-  updateSwapLimits: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
-  onTokensSelected: (token1: WhitelistedToken, token2: WhitelistedToken) => void;
-  maxInputAmounts: Record<string, Record<string, BigNumber>>;
-  maxOutputAmounts: Record<string, Record<string, BigNumber>>;
-  initialFrom?: string;
-  initialTo?: string;
+  fromToSlug?: string;
 }
 
-interface SlippageInputProps {
-  error?: string;
-  outputAmount?: BigNumber;
-  outputToken?: WhitelistedToken;
-  onChange: (newValue?: BigNumber) => void;
-  slippage?: BigNumber;
-}
+const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
 
 const TabsContent = [
   {
@@ -71,47 +62,6 @@ const getBalanceByTokenSlug = (tokenSlug: string | undefined, balances: Record<s
   return balances[tokenSlug];
 };
 
-const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
-  const handleChange = (newValue?: string) => {
-    if (!newValue) {
-      onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
-    } else {
-      const parsedPercentage = new BigNumber(newValue);
-      onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
-    }
-  };
-
-  const tokenDecimals = outputToken?.metadata.decimals ?? 0;
-
-  const minimumReceived = useMemo(
-    () =>
-      slippage && outputAmount
-        ? outputAmount
-            .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
-            .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
-        : new BigNumber(0),
-    [slippage, outputAmount, tokenDecimals]
-  );
-
-  return (
-    <>
-      <Slippage handleChange={handleChange} placeholder={slippage?.toFixed()} />
-      {error && <div className={s.simpleError}>{error}</div>}
-      <div className={s.receive}>
-        {slippage && (
-          <>
-            <span className={s.receiveLabel}>Minimum received:</span>
-            <CurrencyAmount
-              amount={minimumReceived.toFixed()}
-              currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
-            />
-          </>
-        )}
-      </div>
-    </>
-  );
-};
-
 function amountsAreEqual(amount1?: BigNumber, amount2?: BigNumber) {
   if (amount1 && amount2) {
     return amount1.eq(amount2);
@@ -126,26 +76,33 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
-export const SwapForm: FC<SwapFormProps> = ({
-  className,
-  errors,
-  initialFrom,
-  initialTo,
-  maxInputAmounts,
-  maxOutputAmounts,
-  onTokensSelected,
-  submitForm,
-  setValues,
-  setFieldValue,
-  submitError,
-  setFieldTouched,
-  touched,
-  updateSwapLimits,
-  validateField,
-  values
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-}) => {
-  const { token1, token2, amount1, amount2, recipient, slippage, action } = values;
+// eslint-disable-next-line sonarjs/cognitive-complexity
+const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
+  const {
+    errors,
+    values: { token1, token2, amount1, amount2, action, recipient, slippage },
+    validateField,
+    setValues,
+    setFieldValue,
+    setFieldTouched,
+    submitForm,
+    touched
+  } = useFormikProps();
+  const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
+  const initialTokens = useInitialTokens(fromToSlug, getRedirectionUrl);
+  const initialFrom = initialTokens?.[0];
+  const initialTo = initialTokens?.[1];
+
+  const onTokensSelected = useCallback(
+    (token1: WhitelistedToken, token2: WhitelistedToken) => {
+      updateSwapLimits(token1, token2);
+      const newRoute = `/swap/${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
+      if (router.asPath !== newRoute) {
+        router.replace(newRoute);
+      }
+    },
+    [router, updateSwapLimits]
+  );
 
   const { balances, updateBalance } = useBalances();
   const exchangeRates = useNewExchangeRates();
@@ -167,8 +124,8 @@ export const SwapForm: FC<SwapFormProps> = ({
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
 
-  useEffect(() => validateField('amount1'), [validateField, maxInputAmounts, balances]);
-  useEffect(() => validateField('amount2'), [validateField, maxOutputAmounts]);
+  useEffect(() => void validateField('amount1'), [validateField, maxInputAmounts, balances]);
+  useEffect(() => void validateField('amount2'), [validateField, maxOutputAmounts]);
 
   const updateSelectedTokensBalances = useCallback(() => {
     Promise.all(
@@ -578,7 +535,7 @@ export const SwapForm: FC<SwapFormProps> = ({
             maxValue={maxOutput}
             exchangeRate={token2Slug === undefined ? undefined : exchangeRates[token2Slug]}
             label="To"
-            error={token2Error ?? amount2Error ?? submitError}
+            error={token2Error ?? amount2Error}
             onAmountChange={handleAmount2Change}
             token={token2}
             blackListedTokens={blackListedTokens}
@@ -628,3 +585,9 @@ export const SwapForm: FC<SwapFormProps> = ({
     </>
   );
 };
+
+export const SwapSend = withRouter<SwapSendProps & WithRouterProps>(props => (
+  <SwapLimitsProvider>
+    <OrdinarySwapSend {...props} />
+  </SwapLimitsProvider>
+));

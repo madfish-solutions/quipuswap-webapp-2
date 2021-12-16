@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import BigNumber from 'bignumber.js';
+import constate from 'constate';
 
 import { useDexGraph } from '@hooks/useDexGraph';
 import { fromDecimals, getMaxTokenInput, getTokenOutput, getTokenSlug } from '@utils/helpers';
@@ -22,7 +23,7 @@ const updateTokensAmounts = (
   }
 });
 
-export const useSwapLimits = () => {
+export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
   const { dexGraph } = useDexGraph();
 
   const [maxInputAmounts, setMaxInputAmounts] = useState<TokensAmounts>({});
@@ -75,4 +76,4 @@ export const useSwapLimits = () => {
   };
 
   return { maxInputAmounts, maxOutputAmounts, updateSwapLimits };
-};
+});

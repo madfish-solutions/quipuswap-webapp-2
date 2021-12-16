@@ -11,12 +11,12 @@ const basicBigNumberSchema: SchemaOf<BigNumber> = object()
   ) as SchemaOf<BigNumber>;
 
 export const bigNumberSchema = (min?: BigNumber.Value, max?: BigNumber.Value) => {
-  let schema = basicBigNumberSchema.clone();
+  const schema = basicBigNumberSchema.clone();
   const actualMin = min && new BigNumber(min).isFinite() ? new BigNumber(min) : undefined;
   const actualMax = max && new BigNumber(max).isFinite() ? new BigNumber(max) : undefined;
 
   if (actualMin && actualMax) {
-    schema = schema.test(
+    return schema.test(
       'min-max-value',
       () =>
         i18n?.t('common|Value has to be a number between {{min}} and {{max}}', {
@@ -25,14 +25,16 @@ export const bigNumberSchema = (min?: BigNumber.Value, max?: BigNumber.Value) =>
         }) ?? '',
       value => !(value instanceof BigNumber) || (value.gte(actualMin) && value.lte(actualMax))
     );
-  } else if (actualMin) {
-    schema = schema.test(
+  }
+  if (actualMin) {
+    return schema.test(
       'min-value',
       () => i18n?.t('common|Minimal value is {{min}}', { min: actualMin.toFixed() }) ?? '',
       value => !(value instanceof BigNumber) || value.gte(actualMin)
     );
-  } else if (actualMax) {
-    schema = schema.test(
+  }
+  if (actualMax) {
+    return schema.test(
       'max-value',
       () => i18n?.t('common|Maximal value is {{max}}', { max: actualMax.toFixed() }) ?? '',
       value => !(value instanceof BigNumber) || value.lte(actualMax)

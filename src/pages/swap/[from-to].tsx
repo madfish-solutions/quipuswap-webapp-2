@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { SwapSend } from '@containers/SwapSend';
+import { SwapSend } from '@containers/swap-send';
 import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/SwapLiquidity.module.sass';
 

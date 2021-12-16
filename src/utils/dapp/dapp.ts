@@ -20,6 +20,7 @@ import {
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK
 } from '@utils/defaults';
+import { isTokenEqual } from '@utils/helpers';
 import {
   QSMainNet,
   QSNetwork,
@@ -359,7 +360,10 @@ function useDApp() {
       saveCustomToken(token);
       setState(prevState => ({
         ...prevState,
-        tokens: { ...tokens, data: [...tokens.data, token] },
+        tokens: {
+          ...tokens,
+          data: [...tokens.data.filter(alreadyPresentToken => !isTokenEqual(alreadyPresentToken, token)), token]
+        },
         searchTokens: { loading: false, data: [] }
       }));
     },
