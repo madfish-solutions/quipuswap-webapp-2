@@ -21,16 +21,14 @@ export const useViewModel = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  tokenABalance: string,
-  tokenBBalance: string
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
-  const [pairId, setPairId] = useState<BigNumber>();
+  const [pairId, setPairId] = useState<Nullable<BigNumber>>(null);
   const [pairData, setPairData] = useState<{
     totalSupply: BigNumber;
     tokenAPool: BigNumber;
@@ -42,27 +40,8 @@ export const useViewModel = (
     pairInputA: string;
     pairInputB: string;
   } | null>(null);
+  const [changedToken, setChangedToken] = useState<'first' | 'second'>('second');
 
-  useEffect(() => {
-    const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) return;
-    if (addresses.addressA === tokenA.contractAddress) {
-      setTokenPairAndInputs({
-        pairTokenA: tokenA,
-        pairTokenB: tokenB,
-        pairInputA: tokenAInput,
-        pairInputB: tokenBInput
-      });
-    } else {
-      setTokenPairAndInputs({
-        pairTokenA: tokenB,
-        pairTokenB: tokenA,
-        pairInputA: tokenBInput,
-        pairInputB: tokenAInput
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenAInput, tokenBInput]);
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
@@ -88,6 +67,7 @@ export const useViewModel = (
         }
       } else if (!id && isMounted) {
         setPairData(null);
+        setPairId(null);
       }
     };
     loadPairData();
@@ -97,20 +77,31 @@ export const useViewModel = (
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dex]);
+
   useEffect(() => {
     if (
       !pairData ||
-      !pairId ||
       !tokenPairAndInputs ||
       pairData.tokenAPool.eq(0) ||
       pairData.tokenBPool.eq(0) ||
       pairData.totalSupply.eq(0)
-    )
-      return;
+    ) {
+      if (changedToken === 'first') {
+        setTokenAInput('0');
+      } else {
+        setTokenBInput('0');
+      }
 
-    if (tokenBInput === '') {
-      setTokenAInput('');
-    } else {
+      return;
+    }
+
+    if (changedToken === 'first') {
+      if (tokenBInput === '') {
+        setTokenAInput('');
+
+        return;
+      }
+
       const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
       const tokenBAmountWithDecimals = new BigNumber(tokenBInput).multipliedBy(decimalsB);
       const calculatedTokenAInput =
@@ -129,23 +120,13 @@ export const useViewModel = (
             );
 
       setTokenAInput(fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenABalance]);
-  useEffect(() => {
-    if (
-      !pairData ||
-      !pairId ||
-      !tokenPairAndInputs ||
-      pairData.tokenAPool.eq(0) ||
-      pairData.tokenBPool.eq(0) ||
-      pairData.totalSupply.eq(0)
-    )
-      return;
-
-    if (tokenAInput === '') {
-      setTokenBInput('');
     } else {
+      if (tokenAInput === '') {
+        setTokenBInput('');
+
+        return;
+      }
+
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
       const calculatedTokenAInput =
@@ -166,7 +147,35 @@ export const useViewModel = (
       setTokenBInput(fromDecimals(calculatedTokenAInput, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenBBalance]);
+  }, [pairData]);
+
+  useEffect(() => {
+    setChangedToken('first');
+  }, [tokenA]);
+  useEffect(() => {
+    setChangedToken('second');
+  }, [tokenB]);
+
+  useEffect(() => {
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    if (!addresses) return;
+    if (addresses.addressA === tokenA.contractAddress) {
+      setTokenPairAndInputs({
+        pairTokenA: tokenA,
+        pairTokenB: tokenB,
+        pairInputA: tokenAInput,
+        pairInputB: tokenBInput
+      });
+    } else {
+      setTokenPairAndInputs({
+        pairTokenA: tokenB,
+        pairTokenB: tokenA,
+        pairInputA: tokenBInput,
+        pairInputB: tokenAInput
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenAInput, tokenBInput]);
 
   const handleTokenAInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -307,11 +316,11 @@ export const useViewModel = (
 
   const handleSetTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
-    setTokenAInput('');
+    setTokenAInput('Loading...');
   };
   const handleSetTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
-    setTokenBInput('');
+    setTokenBInput('Loading...');
   };
 
   const handleAddLiquidity = async () => {
@@ -369,6 +378,11 @@ export const useViewModel = (
 
       await batch.send();
     } else {
+      console.log({ pairTokenA });
+      console.log({ pairTokenB });
+      console.log({ pairInputA });
+      console.log({ pairInputB });
+
       addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
     }
   };

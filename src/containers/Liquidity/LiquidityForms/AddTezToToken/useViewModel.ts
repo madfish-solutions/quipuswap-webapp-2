@@ -14,9 +14,7 @@ export const useViewModel = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  tokenABalance: string,
-  tokenBBalance: string
+  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -24,14 +22,33 @@ export const useViewModel = (
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
+  const [changedToken, setChangedToken] = useState<'first' | 'second' | null>(null);
 
   useEffect(() => {
-    if (!dex) return;
+    setChangedToken('first');
+  }, [tokenA]);
+  useEffect(() => {
+    setChangedToken('second');
+  }, [tokenB]);
 
-    if (tokenBInput === '') {
-      setTokenAInput('');
-    } else {
-      const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+  useEffect(() => {
+    console.log({ dex });
+
+    if (!dex || !changedToken) return;
+    console.log('*****');
+
+    const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+
+    console.log({ changedToken });
+
+    if (changedToken === 'first') {
+      console.log('x1');
+
+      if (tokenBInput === '') {
+        setTokenAInput('');
+
+        return;
+      }
 
       const decimalsB = new BigNumber(10).pow(tokenB.metadata.decimals);
       const tokenBAmountWithDecimals = new BigNumber(tokenBInput).multipliedBy(decimalsB);
@@ -41,17 +58,14 @@ export const useViewModel = (
           : calculateTokenAmount(tokenBAmountWithDecimals, total_supply, token_pool, tez_pool);
 
       setTokenAInput(fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenABalance]);
-  useEffect(() => {
-    if (!dex) return;
-
-    if (tokenAInput === '') {
-      setTokenBInput('');
     } else {
-      const { total_supply, tez_pool, token_pool } = dex.storage.storage;
+      console.log('x2');
 
+      if (tokenAInput === '') {
+        setTokenBInput('');
+
+        return;
+      }
       const decimalsA = new BigNumber(10).pow(tokenA.metadata.decimals);
       const tokenAAmountWithDecimals = new BigNumber(tokenAInput).multipliedBy(decimalsA);
       const calculatedTokenBInput =
@@ -62,7 +76,7 @@ export const useViewModel = (
       setTokenBInput(fromDecimals(calculatedTokenBInput, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenBBalance]);
+  }, [dex]);
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -184,11 +198,11 @@ export const useViewModel = (
 
   const handleSetTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
-    setTokenAInput('');
+    setTokenAInput('Loading...');
   };
   const handleSetTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
-    setTokenBInput('');
+    setTokenBInput('Loading...');
   };
 
   const handleAddLiquidity = async () => {

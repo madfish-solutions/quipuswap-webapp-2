@@ -98,7 +98,7 @@ export const useViewModel = () => {
     if (validTokenA) setTokenA(validTokenA);
     if (validTokenB) setTokenB(validTokenB);
     // eslint-disable-next-line
-  }, [tokens]);
+  }, [router.asPath]);
 
   useEffect(() => {
     if (!tokenA || !tokenB) return;

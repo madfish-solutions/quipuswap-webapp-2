@@ -41,7 +41,7 @@ export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
     handleSetTokenA,
     handleSetTokenB,
     handleAddLiquidity
-  } = useViewModel(dex, tokenA, tokenB, setTokenA, setTokenB, tokenABalance, tokenBBalance);
+  } = useViewModel(dex, tokenA, tokenB, setTokenA, setTokenB);
 
   return (
     <>

@@ -41,7 +41,7 @@ export const AddTezToToken: React.FC<AddTezToTokenProps> = ({
     handleTokenBChange,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useViewModel(dex, tokenA, tokenB, setTokenA, setTokenB, tokenABalance, tokenBBalance);
+  } = useViewModel(dex, tokenA, tokenB, setTokenA, setTokenB);
 
   return (
     <>
