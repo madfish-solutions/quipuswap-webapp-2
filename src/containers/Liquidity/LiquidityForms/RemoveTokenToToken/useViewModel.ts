@@ -9,6 +9,7 @@ import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
 export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
@@ -28,10 +29,14 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
   useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
-      if (!dex) return;
+      if (!dex) {
+        return;
+      }
 
       const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) return;
+      if (!addresses) {
+        return;
+      }
 
       const michelData = getValidMichelTemplate(addresses);
       const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
@@ -62,7 +67,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
   }, [dex]);
 
   useEffect(() => {
-    if (!dex || !pairData) return;
+    if (!dex || !pairData) {
+      return;
+    }
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -70,7 +77,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
       return;
     }
     const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) return;
+    if (!addresses) {
+      return;
+    }
 
     const tokenAPerOneLp =
       addresses.addressA === tokenA.contractAddress
@@ -100,7 +109,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex) return;
+    if (!tezos || !accountPkh || !dex) {
+      return;
+    }
 
     const ten = new BigNumber(10);
 
@@ -113,7 +124,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
 
     const addresses = sortTokensContracts(tokenA, tokenB);
 
-    if (!addresses) return;
+    if (!addresses) {
+      return;
+    }
     if (addresses.addressA === tokenA.contractAddress) {
       await dex.contract.methods.divest(pairId, tokenAOut, tokenBOut, shares, timestamp.toString()).send();
     } else {

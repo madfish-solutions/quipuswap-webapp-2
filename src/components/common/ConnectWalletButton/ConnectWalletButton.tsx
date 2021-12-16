@@ -6,9 +6,9 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
 
-type ConnectWalletButtonProps = {
+interface ConnectWalletButtonProps {
   className?: string;
-};
+}
 
 export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ className }) => {
   const ready = useReady();

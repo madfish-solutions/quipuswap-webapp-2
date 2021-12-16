@@ -13,6 +13,7 @@ import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
 export const TabsContent = [
@@ -54,7 +55,9 @@ export const useViewModel = () => {
 
     void router.replace(newUrl, undefined, { shallow: true });
     const findActiveTab = TabsContent.find(tab => tab.id === tabId);
-    if (!findActiveTab) return;
+    if (!findActiveTab) {
+      return;
+    }
     setTabState(findActiveTab);
   };
 
@@ -76,7 +79,9 @@ export const useViewModel = () => {
         return token;
       }
 
-      if (contractTokenA === token.contractAddress) return token;
+      if (contractTokenA === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
@@ -90,18 +95,26 @@ export const useViewModel = () => {
         return token;
       }
 
-      if (contractTokenB === token.contractAddress) return token;
+      if (contractTokenB === token.contractAddress) {
+        return token;
+      }
 
       return undefined;
     });
 
-    if (validTokenA) setTokenA(validTokenA);
-    if (validTokenB) setTokenB(validTokenB);
+    if (validTokenA) {
+      setTokenA(validTokenA);
+    }
+    if (validTokenB) {
+      setTokenB(validTokenB);
+    }
     // eslint-disable-next-line
   }, [router.asPath]);
 
   useEffect(() => {
-    if (!tokenA || !tokenB) return;
+    if (!tokenA || !tokenB) {
+      return;
+    }
     const from = tokenA.contractAddress + (tokenA.type === 'fa1.2' ? '' : `_${tokenA.fa2TokenId}`);
     const to = tokenB.contractAddress + (tokenB.type === 'fa1.2' ? '' : `_${tokenB.fa2TokenId}`);
     void router.replace(`/liquidity/${tabState.id}/${from}-${to}`, undefined, { shallow: true });
@@ -113,7 +126,9 @@ export const useViewModel = () => {
     let foundDex: FoundDex;
 
     const loadDex = async () => {
-      if (!tezos || !tokenA || !tokenB) return;
+      if (!tezos || !tokenA || !tokenB) {
+        return;
+      }
       const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
@@ -133,9 +148,13 @@ export const useViewModel = () => {
           foundDex = new FoundDex(contract, storage);
         }
 
-        if (isMounted) setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: foundDex, isTezosToTokenDex: isTezosInPair });
+        }
       } catch (error) {
-        if (isMounted) setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        if (isMounted) {
+          setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
+        }
       }
     };
     void loadDex();
@@ -148,7 +167,9 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenABalance = async () => {
-      if (!tezos || !accountPkh || !tokenA) return;
+      if (!tezos || !accountPkh || !tokenA) {
+        return;
+      }
 
       const userTokenABalance = await getUserBalance(
         tezos,
@@ -174,7 +195,9 @@ export const useViewModel = () => {
   useEffect(() => {
     let isMounted = true;
     const getTokenBBalance = async () => {
-      if (!tezos || !accountPkh || !tokenB) return;
+      if (!tezos || !accountPkh || !tokenB) {
+        return;
+      }
 
       const userTokenBBalance = await getUserBalance(
         tezos,
@@ -203,7 +226,9 @@ export const useViewModel = () => {
     const getLpTokenBalance = async () => {
       const { dex, isTezosToTokenDex } = dexInfo;
 
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) return;
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+        return;
+      }
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
@@ -220,7 +245,9 @@ export const useViewModel = () => {
         }
       } else if (!isTezosToTokenDex) {
         const addresses = sortTokensContracts(tokenA, tokenB);
-        if (!addresses) return;
+        if (!addresses) {
+          return;
+        }
 
         const michelData = getValidMichelTemplate(addresses);
         const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');

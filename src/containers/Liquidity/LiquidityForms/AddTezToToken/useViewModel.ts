@@ -32,18 +32,13 @@ export const useViewModel = (
   }, [tokenB]);
 
   useEffect(() => {
-    console.log({ dex });
-
-    if (!dex || !changedToken) return;
-    console.log('*****');
+    if (!dex || !changedToken) {
+      return;
+    }
 
     const { total_supply, tez_pool, token_pool } = dex.storage.storage;
 
-    console.log({ changedToken });
-
     if (changedToken === 'first') {
-      console.log('x1');
-
       if (tokenBInput === '') {
         setTokenAInput('');
 
@@ -59,8 +54,6 @@ export const useViewModel = (
 
       setTokenAInput(fromDecimals(calculatedTokenAInput, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
     } else {
-      console.log('x2');
-
       if (tokenAInput === '') {
         setTokenBInput('');
 
@@ -87,7 +80,9 @@ export const useViewModel = (
       return;
     }
 
-    if (!dex || dex.storage.storage.tez_pool.eq(0) || dex.storage.storage.token_pool.eq(0)) return;
+    if (!dex || dex.storage.storage.tez_pool.eq(0) || dex.storage.storage.token_pool.eq(0)) {
+      return;
+    }
 
     const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
     const tokenAAmount = new BigNumber(event.target.value).multipliedBy(tokenADecimals);
@@ -118,7 +113,9 @@ export const useViewModel = (
       return;
     }
 
-    if (!dex || dex.storage.storage.tez_pool.eq(0) || dex.storage.storage.token_pool.eq(0)) return;
+    if (!dex || dex.storage.storage.tez_pool.eq(0) || dex.storage.storage.token_pool.eq(0)) {
+      return;
+    }
 
     const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
     const tokenBAmount = new BigNumber(event.target.value).multipliedBy(tokenBDecimals);
@@ -146,7 +143,9 @@ export const useViewModel = (
 
     setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
 
-    if (!dex) return;
+    if (!dex) {
+      return;
+    }
 
     const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
     const tokenAAmount = fixedValue.multipliedBy(tokenADecimals);
@@ -173,7 +172,9 @@ export const useViewModel = (
 
     setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
 
-    if (!dex) return;
+    if (!dex) {
+      return;
+    }
 
     const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
     const tokenBAmount = fixedValue.multipliedBy(tokenBDecimals);
@@ -206,7 +207,9 @@ export const useViewModel = (
   };
 
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh) return;
+    if (!tezos || !accountPkh) {
+      return;
+    }
 
     const notTezToken = tokenA.contractAddress !== TEZOS_TOKEN.contractAddress ? tokenA : tokenB;
     const notTezTokenInput = tokenA.contractAddress !== TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;

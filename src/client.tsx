@@ -46,10 +46,14 @@ function initializeApollo(initialState: never = null) {
   }
 
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === 'undefined') return localApolloClient;
+  if (typeof window === 'undefined') {
+    return localApolloClient;
+  }
 
   // Create the Apollo Client once in the client
-  if (!globalApolloClient) globalApolloClient = localApolloClient;
+  if (!globalApolloClient) {
+    globalApolloClient = localApolloClient;
+  }
 
   return localApolloClient;
 }

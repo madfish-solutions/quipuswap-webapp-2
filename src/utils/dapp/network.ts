@@ -11,7 +11,9 @@ import { QSNetwork } from '@utils/types';
 
 export const getNetwork = () => {
   const netId = typeof window === 'undefined' ? undefined : localStorage.getItem(NETWORK_ID_KEY);
-  if (!netId) return DEFAULT_NETWORK;
+  if (!netId) {
+    return DEFAULT_NETWORK;
+  }
   const found = ALL_NETWORKS.find(n => n.id === netId);
 
   return found && !found.disabled ? found : DEFAULT_NETWORK;

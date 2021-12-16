@@ -14,6 +14,7 @@ import { useTezos, useAccountPkh } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
 export const useViewModel = (
@@ -43,12 +44,39 @@ export const useViewModel = (
   const [changedToken, setChangedToken] = useState<'first' | 'second'>('second');
 
   useEffect(() => {
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    if (!addresses) {
+      return;
+    }
+    if (addresses.addressA === tokenA.contractAddress) {
+      setTokenPairAndInputs({
+        pairTokenA: tokenA,
+        pairTokenB: tokenB,
+        pairInputA: tokenAInput,
+        pairInputB: tokenBInput
+      });
+    } else {
+      setTokenPairAndInputs({
+        pairTokenA: tokenB,
+        pairTokenB: tokenA,
+        pairInputA: tokenBInput,
+        pairInputB: tokenAInput
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tokenAInput, tokenBInput]);
+
+  useEffect(() => {
     let isMounted = true;
     const loadPairData = async () => {
-      if (!dex) return;
+      if (!dex) {
+        return;
+      }
 
       const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) return;
+      if (!addresses) {
+        return;
+      }
 
       const michelData = getValidMichelTemplate(addresses);
       const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
@@ -155,27 +183,6 @@ export const useViewModel = (
   useEffect(() => {
     setChangedToken('second');
   }, [tokenB]);
-
-  useEffect(() => {
-    const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) return;
-    if (addresses.addressA === tokenA.contractAddress) {
-      setTokenPairAndInputs({
-        pairTokenA: tokenA,
-        pairTokenB: tokenB,
-        pairInputA: tokenAInput,
-        pairInputB: tokenBInput
-      });
-    } else {
-      setTokenPairAndInputs({
-        pairTokenA: tokenB,
-        pairTokenB: tokenA,
-        pairInputA: tokenBInput,
-        pairInputB: tokenAInput
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tokenAInput, tokenBInput]);
 
   const handleTokenAInput = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenAInput(event.target.value);
@@ -324,18 +331,15 @@ export const useViewModel = (
   };
 
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) return;
+    if (!tezos || !accountPkh || !dex || !tokenPairAndInputs) {
+      return;
+    }
     const ten = new BigNumber(10);
     const { pairTokenA, pairTokenB, pairInputA, pairInputB } = tokenPairAndInputs;
 
     if (pairId && pairData && pairData.tokenAPool.gt(0) && pairData.tokenBPool.gt(0) && pairData.totalSupply.gt(0)) {
-      const shares = new BigNumber(pairInputA)
-        .multipliedBy(ten.pow(pairTokenA.metadata.decimals))
-        .multipliedBy(pairData.totalSupply)
-        .idiv(pairData.tokenAPool);
-
-      const tokenAAmount = new BigNumber(tokenAInput).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
-
+      const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
+      const shares = tokenAAmount.multipliedBy(pairData.totalSupply).idiv(pairData.tokenAPool);
       const tokenBAmount = shares
         .multipliedBy(pairData.tokenBPool)
         .div(pairData.totalSupply)
@@ -357,7 +361,9 @@ export const useViewModel = (
       );
 
       const tokensUpdateOperators = await Promise.all([tokenAUpdateOperator, tokenBUpdateOperator]);
-      if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) return;
+      if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) {
+        return;
+      }
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -370,7 +376,7 @@ export const useViewModel = (
         timestamp.toString()
       );
 
-      const batch = await tezos.wallet
+      const batch = tezos.wallet
         .batch()
         .withContractCall(tokensUpdateOperators[0])
         .withContractCall(tokensUpdateOperators[1])
@@ -378,11 +384,6 @@ export const useViewModel = (
 
       await batch.send();
     } else {
-      console.log({ pairTokenA });
-      console.log({ pairTokenB });
-      console.log({ pairInputA });
-      console.log({ pairInputB });
-
       addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
     }
   };

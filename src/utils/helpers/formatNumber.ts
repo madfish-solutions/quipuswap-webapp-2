@@ -6,7 +6,7 @@ export interface FormatNumberOptinos {
   decimals?: number;
 }
 
-const STRING_ZERO: string = '0';
+const STRING_ZERO = '0';
 
 export const FormatInteger = (value: BigNumber.Value): string => {
   const integer = value.toString();

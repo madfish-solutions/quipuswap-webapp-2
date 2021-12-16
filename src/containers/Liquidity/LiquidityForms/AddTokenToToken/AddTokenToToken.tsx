@@ -11,15 +11,15 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 import { useViewModel } from './useViewModel';
 
-type AddTokenToTokenProps = {
-  dex: FoundDex | null;
+interface AddTokenToTokenProps {
+  dex: Nullable<FoundDex>;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
   tokenABalance: string;
   tokenBBalance: string;
-};
+}
 
 export const AddTokenToToken: React.FC<AddTokenToTokenProps> = ({
   dex,

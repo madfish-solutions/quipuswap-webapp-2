@@ -7,6 +7,7 @@ import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
+import { noop } from 'rxjs';
 
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
@@ -105,21 +106,27 @@ const RealForm: React.FC<VotingFormProps> = ({
   const [isFormError, setIsFormError] = useState<boolean>(false);
   const [isBakerChoosen, setIsBakerChoosen] = useState(false);
 
-  const timeout = useRef(setTimeout(() => {}, 0));
+  const timeout = useRef(setTimeout(noop, 0));
   // eslint-disable-next-line
   let promise: any;
 
   const handleInputChange = async () => {
-    if (!tezos) return;
+    if (!tezos) {
+      return;
+    }
     const currentTokenA = tokenDataToToken(tokensData.first);
-    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) return;
+    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
+      return;
+    }
     if (tezos && tokenPair) {
       const toAsset = {
         contract: tokenPair.token2.contractAddress,
         id: tokenPair.token2.fa2TokenId ?? undefined
       };
       const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
-      if (isAssetSame) return;
+      if (isAssetSame) {
+        return;
+      }
       const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
       if (tempDex && tempDex !== dex) {
         setDex(tempDex);
@@ -162,7 +169,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [accountPkh, closeConnectWalletModal]);
 
   const handleVoteOrVeto = async () => {
-    if (!tezos || !dex) return;
+    if (!tezos || !dex) {
+      return;
+    }
 
     if (!accountPkh) {
       return openConnectWalletModal();
@@ -179,7 +188,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleUnvoteOrRemoveveto = async () => {
-    if (!tezos || !dex) return;
+    if (!tezos || !dex) {
+      return;
+    }
 
     if (!accountPkh) {
       return openConnectWalletModal();
@@ -194,7 +205,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   );
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
-    if (isFormError !== Boolean(value)) setIsFormError(Boolean(value));
+    if (isFormError !== Boolean(value)) {
+      setIsFormError(Boolean(value));
+    }
 
     return value;
   };
@@ -280,14 +293,18 @@ const RealForm: React.FC<VotingFormProps> = ({
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
-                    if (!dex) return;
+                    if (!dex) {
+                      return;
+                    }
 
-                    if (!isBakerChoosen) setIsBakerChoosen(true);
+                    if (!isBakerChoosen) {
+                      setIsBakerChoosen(true);
+                    }
 
                     const tempBaker = await dex.storage.storage.vetos.get(bakerObj.address);
                     setIsBanned(!!tempBaker);
                   };
-                  asyncisBanned();
+                  void asyncisBanned();
                 }}
                 error={(meta.touched && meta.error) || meta.submitError}
               />

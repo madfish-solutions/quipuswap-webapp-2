@@ -4,11 +4,11 @@ import cx from 'classnames';
 
 import s from './Section.module.sass';
 
-export type SectionProps = {
+export interface SectionProps {
   header: string;
   description: string;
   className?: string;
-};
+}
 
 export const Section: React.FC<SectionProps> = ({ header, description, className, children }) => (
   <section className={cx(s.root, className)}>

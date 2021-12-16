@@ -107,7 +107,7 @@ export const asyncGetShares = async (
   }
 };
 
-type GetShareType = {
+interface GetShareType {
   setDex: (dex: FoundDex) => void;
   setAddLiquidityParams: (params: TransferParams[]) => void;
   // eslint-disable-next-line
@@ -118,7 +118,7 @@ type GetShareType = {
   tezos: TezosToolkit;
   networkId: QSMainNet;
   updateToast: (err: Error) => void;
-};
+}
 
 export const asyncGetLiquidityShare = async ({
   setDex,

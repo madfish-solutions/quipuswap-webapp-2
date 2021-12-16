@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useContext } from 'react';
+import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
 
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -14,7 +14,7 @@ import { WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-interface TokenSelectProps extends React.HTMLProps<HTMLInputElement> {
+interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   noBalanceButtons?: boolean;
   className?: string;
   balance: string;
@@ -80,16 +80,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
 
   return (
     <>
-      <TokensModal
-        blackListedTokens={blackListedTokens}
-        isOpen={tokensModal}
-        onRequestClose={() => setTokensModal(false)}
-        onChange={selectedToken => {
-          setToken(selectedToken);
-          if (handleChange) handleChange(selectedToken);
-          setTokensModal(false);
-        }}
-      />
       <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
         <label htmlFor={id} className={s.label}>
           {label}
@@ -139,6 +129,20 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </div>
         {!noBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
+        {tokensModal && (
+          <TokensModal
+            blackListedTokens={blackListedTokens}
+            isOpen={tokensModal}
+            onRequestClose={() => setTokensModal(false)}
+            onChange={selectedToken => {
+              setToken(selectedToken);
+              if (handleChange) {
+                handleChange(selectedToken);
+              }
+              setTokensModal(false);
+            }}
+          />
+        )}
       </div>
     </>
   );

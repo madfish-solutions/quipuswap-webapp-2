@@ -11,7 +11,7 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 import s from '../../Liquidity.module.sass';
 import { useViewModel } from './useViewModel';
 
-type RemoveTezToTokenProps = {
+interface RemoveTezToTokenProps {
   dex: Nullable<FoundDex>;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
@@ -20,7 +20,7 @@ type RemoveTezToTokenProps = {
   tokenABalance: string;
   tokenBBalance: string;
   lpTokenBalance: string;
-};
+}
 
 export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   dex,

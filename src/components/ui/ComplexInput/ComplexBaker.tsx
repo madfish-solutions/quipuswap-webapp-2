@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react';
+import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
 import { Button, Shevron, BakerLogo, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -9,31 +9,23 @@ import { isFullBaker, WhitelistedBaker } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-type ComplexBakerProps = {
+interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   className?: string;
   label?: string;
   error?: string;
   id?: string;
   handleChange?: (baker: WhitelistedBaker) => void;
-} & React.HTMLProps<HTMLInputElement>;
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
 
-export const ComplexBaker: React.FC<ComplexBakerProps> = ({
-  className,
-  label,
-  id,
-  error,
-  handleChange,
-  value,
-  ...props
-}) => {
+export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, error, handleChange, value, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [tokensModal, setTokensModal] = React.useState<boolean>(false);
-  const [baker, setBaker] = React.useState<WhitelistedBaker>();
+  const [tokensModal, setTokensModal] = useState<boolean>(false);
+  const [baker, setBaker] = useState<WhitelistedBaker>();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
@@ -45,7 +37,9 @@ export const ComplexBaker: React.FC<ComplexBakerProps> = ({
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedBaker => {
           setBaker(selectedBaker);
-          if (handleChange) handleChange(selectedBaker);
+          if (handleChange) {
+            handleChange(selectedBaker);
+          }
           if (inputRef.current) {
             inputRef.current.value = isFullBaker(selectedBaker) ? selectedBaker.name : '';
           }

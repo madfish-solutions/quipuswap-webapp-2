@@ -29,12 +29,12 @@ export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromT
 
   const getInitialTokens = useCallback(
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    async (_key: string, networkId: QSMainNet, tokensSlug: string = ''): Promise<TokensSlugs> => {
+    async (_key: string, networkId: QSMainNet, tokensSlug = ''): Promise<TokensSlugs> => {
       const fallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
         getTokenSlug(networksDefaultTokens[networkId])
       ];
-      const rawSlugs = tokensSlug.split('-').slice(0, 2);
+      const rawSlugs: string[] = tokensSlug.split('-').slice(0, 2);
       while (rawSlugs.length < 2) {
         rawSlugs.push('');
       }
@@ -94,17 +94,15 @@ export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromT
       const tokenIsKnown = isTez || tokens.some(token => getTokenSlug(token) === tokenSlug);
       const { contractAddress, fa2TokenId, type: tokenType } = getTokenIdFromSlug(tokenSlug);
       if (!tokenIsKnown) {
-        searchCustomTokens(contractAddress, fa2TokenId)
-          .then(customToken => {
-            if (customToken) {
-              addCustomToken(customToken);
-            } else {
-              addCustomToken(
-                makeWhitelistedToken({ address: contractAddress, id: fa2TokenId?.toString(), type: tokenType }, [])
-              );
-            }
-          })
-          .catch(console.error);
+        searchCustomTokens(contractAddress, fa2TokenId).then(customToken => {
+          if (customToken) {
+            addCustomToken(customToken);
+          } else {
+            addCustomToken(
+              makeWhitelistedToken({ address: contractAddress, id: fa2TokenId?.toString(), type: tokenType }, [])
+            );
+          }
+        });
       }
     });
     prevNetworkIdRef.current = network.id;

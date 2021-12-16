@@ -1,4 +1,4 @@
-import React, { ReactNode, useContext, useMemo, useState } from 'react';
+import React, { FC, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -16,12 +16,12 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-type NavigationProps = {
+interface NavigationProps {
   iconId?: string;
   className?: string;
-};
+}
 
-export const Navigation: React.FC<NavigationProps> = ({ iconId, className }) => {
+export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const router = useRouter();
   const network = useNetwork();
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -34,6 +34,7 @@ export const Navigation: React.FC<NavigationProps> = ({ iconId, className }) => 
       if (href) {
         result.push(
           <Link key={id} href={href} as={as}>
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               className={cx(
                 s.link,
@@ -63,6 +64,7 @@ export const Navigation: React.FC<NavigationProps> = ({ iconId, className }) => 
             <span className={s.linksInner}>
               {links.map(link => (
                 <Link key={link.id} href={link.href ?? ''}>
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     className={cx(s.linkInner, modeClass[colorThemeMode])}
                     target="_blank"

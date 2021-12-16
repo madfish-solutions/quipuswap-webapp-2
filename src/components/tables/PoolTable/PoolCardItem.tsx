@@ -10,10 +10,10 @@ import { PoolTableType } from '@utils/types';
 
 import s from './PoolCardTable.module.sass';
 
-type PoolCardItemProps = {
+interface PoolCardItemProps {
   pool: PoolTableType;
   isSponsored?: boolean;
-};
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
