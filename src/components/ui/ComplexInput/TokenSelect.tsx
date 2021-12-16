@@ -27,7 +27,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   token?: WhitelistedToken;
   token2?: WhitelistedToken;
   blackListedTokens: WhitelistedToken[];
-  setToken: (token: WhitelistedToken) => void;
+  setToken?: (token: WhitelistedToken) => void;
 }
 
 const themeClass = {
@@ -135,7 +135,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             isOpen={tokensModal}
             onRequestClose={() => setTokensModal(false)}
             onChange={selectedToken => {
-              setToken(selectedToken);
+              if (setToken) {
+                setToken(selectedToken);
+              }
               if (handleChange) {
                 handleChange(selectedToken);
               }

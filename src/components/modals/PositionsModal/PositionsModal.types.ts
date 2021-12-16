@@ -1,8 +1,8 @@
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 export interface IPositionsModalProps {
   onChange: (tokenPair: WhitelistedTokenPair) => void;
-  initialPair?: WhitelistedTokenPair;
+  initialPair: Nullable<WhitelistedTokenPair>;
   notSelectable1?: WhitelistedToken;
   notSelectable2?: WhitelistedToken;
 }
