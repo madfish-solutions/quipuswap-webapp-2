@@ -30,7 +30,7 @@ import { DexPair, SwapFormValues, WhitelistedToken, WhitelistedTokenMetadata } f
 
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details';
-import { useFormikProps } from './hooks/use-formik-props';
+import { useSwapFormik } from './hooks/use-swap-formik';
 import { SwapLimitsProvider, useSwapLimits } from './providers/swap-limits-provider';
 
 interface SwapSendProps {
@@ -87,7 +87,7 @@ const OrdinarySwapSend: React.FC<SwapSendProps & WithRouterProps> = ({ className
     setFieldTouched,
     submitForm,
     touched
-  } = useFormikProps();
+  } = useSwapFormik();
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
   const initialTokens = useInitialTokens(fromToSlug, getRedirectionUrl);
   const initialFrom = initialTokens?.[0];

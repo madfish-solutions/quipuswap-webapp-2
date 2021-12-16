@@ -23,7 +23,7 @@ const initialValues: Partial<SwapFormValues> = {
   slippage: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE)
 };
 
-export const useFormikProps = () => {
+export const useSwapFormik = () => {
   const validationSchema = useValidationSchema();
   const { t } = useTranslation(['common', 'swap']);
   const updateToast = useUpdateToast();
