@@ -1,17 +1,22 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { removeLiquidity } from '@containers/Liquidity/liquidutyHelpers';
 import { useTezos, useAccountPkh } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { slippageToBignum } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
-export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+import { useLoadDexContract, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
+
+export const useRemoveTezToTokenService = (tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const { dex, isTezosToTokenDex } = useLoadDexContract(tokenA, tokenB);
+  const tokenABalance = useLoadTokenBalance(tokenA);
+  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const lpTokenBalance = useLoadLpTokenBalance(dex, isTezosToTokenDex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -19,7 +24,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
   const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(0.005));
 
   useEffect(() => {
-    if (!dex) return;
+    if (!dex) {
+      return;
+    }
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -58,7 +65,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
   };
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex) return;
+    if (!tezos || !accountPkh || !dex) {
+      return;
+    }
 
     await removeLiquidity(tezos, dex, new BigNumber(lpTokenInput), slippage);
     setLpTokenInput('');
@@ -69,6 +78,9 @@ export const useViewModel = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, 
     tokenAOutput,
     tokenBOutput,
     lpTokenInput,
+    tokenABalance,
+    tokenBBalance,
+    lpTokenBalance,
     handleLpTokenChange,
     handleSlippageChange,
     handleBalance,
