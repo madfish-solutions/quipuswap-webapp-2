@@ -1,5 +1,3 @@
-import BigNumber from 'bignumber.js';
-
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 
 export interface WhitelistedOrCustomToken extends WhitelistedToken {
@@ -15,19 +13,8 @@ export const localSearchToken = (
   const isName = metadata?.name?.toLowerCase().includes(oldInput.toLowerCase());
   const isSymbol = metadata?.symbol?.toLowerCase().includes(oldInput.toLowerCase());
   const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
-  let res;
-  if (fa2TokenId) {
-    let isFa2 = new BigNumber(fa2TokenId).eq(new BigNumber(oldInputToken));
-    if (!oldInputToken) {
-      isFa2 = true;
-    }
-    res = (isName || isSymbol || isContract) && isFa2;
-  } else {
-    res = isName || isSymbol || isContract;
-  }
-  if (tokenNetwork) {
-    res = res && tokenNetwork === network.id;
-  }
+  const fa2TokenIdMatches = fa2TokenId === undefined || fa2TokenId === oldInputToken;
+  const networkIdMatches = !tokenNetwork || tokenNetwork === network.id;
 
-  return res;
+  return networkIdMatches && (isName || isSymbol || (isContract && fa2TokenIdMatches));
 };

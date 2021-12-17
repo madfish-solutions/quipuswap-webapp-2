@@ -27,7 +27,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   token?: WhitelistedToken;
   token2?: WhitelistedToken;
   blackListedTokens: WhitelistedToken[];
-  setToken: (token: WhitelistedToken) => void;
+  setToken?: (token: WhitelistedToken) => void;
 }
 
 const themeClass = {
@@ -71,9 +71,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {
-    if (inputRef?.current) {
-      inputRef.current.focus();
-    }
+    inputRef?.current?.focus();
   };
 
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
@@ -135,10 +133,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             isOpen={tokensModal}
             onRequestClose={() => setTokensModal(false)}
             onChange={selectedToken => {
-              setToken(selectedToken);
-              if (handleChange) {
-                handleChange(selectedToken);
-              }
+              setToken?.(selectedToken);
+              handleChange?.(selectedToken);
               setTokensModal(false);
             }}
           />

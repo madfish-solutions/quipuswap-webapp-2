@@ -2,22 +2,30 @@ import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@ta
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { MAINNET_TOKENS, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@utils/defaults';
-import { ipfsToHttps, isTokenEqual } from '@utils/helpers';
+import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@utils/defaults';
+import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
+import { getUniqArray } from '@utils/helpers/arrays';
 import {
   WhitelistedToken,
   WhitelistedTokenPair,
   QSNetwork,
   TokenId,
-  WhitelistedTokenWithQSNetworkType
+  WhitelistedTokenWithQSNetworkType,
+  QSMainNet
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
 
-export const getSavedTokens = (): Array<WhitelistedTokenWithQSNetworkType> =>
-  typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+export const getSavedTokens = (networkId?: QSMainNet) => {
+  const allTokens: Array<WhitelistedTokenWithQSNetworkType> =
+    typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+
+  return networkId
+    ? allTokens.filter(({ network: tokenNetwork }) => !tokenNetwork || tokenNetwork === networkId)
+    : allTokens;
+};
 
 export const getTokenType = memoizee(
   async (contractOrAddress: string | ContractAbstraction<ContractProvider>, tz: TezosToolkit) => {
@@ -76,28 +84,23 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS))
     .then(async res => res.json())
     .then(json => {
-      let tokens: Array<WhitelistedTokenWithQSNetworkType> = [];
-      if (json.tokens?.length !== 0) {
-        tokens = json.tokens;
-      }
-      if (!tokens.some(({ contractAddress }) => contractAddress === TEZOS_TOKEN.contractAddress)) {
-        tokens.unshift({
-          network: network.id,
-          type: 'fa1.2',
-          contractAddress: 'tez',
-          metadata: {
-            decimals: 6,
-            name: 'Tezos',
-            symbol: 'TEZ',
-            thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222'
-          }
-        });
-      }
-      if (addTokensFromLocalStorage) {
-        tokens = getSavedTokens().concat(tokens);
+      let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
+        {
+          ...TEZOS_TOKEN,
+          network: network.id
+        },
+        networksDefaultTokens[network.id]
+      ];
+
+      if (json.tokens?.length) {
+        tokens = tokens.concat(json.tokens);
       }
 
-      return tokens;
+      if (addTokensFromLocalStorage) {
+        tokens = getSavedTokens(network.id).concat(tokens);
+      }
+
+      return getUniqArray(tokens, getTokenSlug);
     })
     .catch(() => []);
 

@@ -1,4 +1,4 @@
-export * from './bigNumber';
+export * from './big-number';
 export * from './isValidContractAddress';
 export * from './isAddress';
 export * from './isValidTokenSlug';

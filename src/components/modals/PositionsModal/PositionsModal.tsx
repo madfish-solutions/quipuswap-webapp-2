@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useContext, useCallback } from 'react';
+import React, { useMemo, useState, useEffect, useContext, useCallback, FC } from 'react';
 
 import { Plus, Modal, Button, ColorModes, TokenNotFound, LoadingTokenCell, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -32,7 +32,7 @@ const themeClass = {
 // eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const PositionsModal: React.FC<IPositionsModalProps & ReactModal.Props> = ({
+export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   onChange,
   onRequestClose,
   notSelectable1 = undefined,

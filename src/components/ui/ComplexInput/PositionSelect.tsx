@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, HTMLProps, FC } from 'react';
 
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -9,11 +9,11 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
-interface PositionSelectProps extends React.HTMLProps<HTMLInputElement> {
+interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   noBalanceButtons?: boolean;
   className?: string;
   balance?: string;
@@ -26,7 +26,7 @@ interface PositionSelectProps extends React.HTMLProps<HTMLInputElement> {
   notSelectable2?: WhitelistedToken;
   handleChange?: (tokenPair: WhitelistedTokenPair) => void;
   handleBalance: (value: string) => void;
-  tokenPair?: WhitelistedTokenPair;
+  tokenPair: Nullable<WhitelistedTokenPair>;
   setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
 }
 
@@ -35,7 +35,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const PositionSelect: React.FC<PositionSelectProps> = ({
+export const PositionSelect: FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
   noBalanceButtons = false,
@@ -87,8 +87,6 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
         notSelectable1={notSelectable1}
         notSelectable2={notSelectable2}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
       <div className={compoundClassName} onClick={focusInput}>
         <label htmlFor={id} className={s.label}>
           {label}
@@ -121,6 +119,8 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               onBlur={() => setActive(false)}
               ref={inputRef}
               value={value}
+              placeholder="0.0"
+              autoFocus
               {...props}
             />
             <Button
