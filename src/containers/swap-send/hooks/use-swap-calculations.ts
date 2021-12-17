@@ -83,10 +83,9 @@ export const useSwapCalculations = () => {
           // eslint-disable-next-line no-console
           console.error(e);
         }
-      } else {
-        setDexRoute(undefined);
-        setOutputAmount(undefined);
       }
+      setDexRoute(undefined);
+      setOutputAmount(undefined);
     },
     [dexGraph]
   );
