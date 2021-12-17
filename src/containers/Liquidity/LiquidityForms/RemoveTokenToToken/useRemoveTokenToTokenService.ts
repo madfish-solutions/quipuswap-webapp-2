@@ -18,8 +18,8 @@ export const useRemoveTokenToTokenService = (tokenA: WhitelistedToken, tokenB: W
   const accountPkh = useAccountPkh();
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
-  const { dex, isTezosToTokenDex } = useLoadDexContract(tokenA, tokenB);
-  const lpTokenBalance = useLoadLpTokenBalance(dex, isTezosToTokenDex, tokenA, tokenB);
+  const { dex } = useLoadDexContract(tokenA, tokenB);
+  const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
   const [pairId, setPairId] = useState();
   const [lpTokenInput, setLpTokenInput] = useState('');

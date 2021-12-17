@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { Button } from '@quipuswap/ui-kit';
 
@@ -10,7 +10,7 @@ import s from '../../Liquidity.module.sass';
 import { AddRemoveFormInterface } from '../AddRemoveForm.props';
 import { useAddTezToTokenService } from './useAddTezToTokenService';
 
-export const AddTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
+export const AddTezToToken: FC<AddRemoveFormInterface> = ({ tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {
     accountPkh,
     tokenAInput,
@@ -24,7 +24,7 @@ export const AddTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB
     handleTokenBChange,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddTezToTokenService(tokenA, tokenB, setTokenA, setTokenB);
+  } = useAddTezToTokenService(tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   return (
     <>

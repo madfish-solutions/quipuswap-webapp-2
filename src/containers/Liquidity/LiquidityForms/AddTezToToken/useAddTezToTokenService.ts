@@ -1,21 +1,21 @@
-import { Dispatch, SetStateAction, ChangeEvent, useState, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { addLiquidity, calculateTokenAmount, initializeLiquidity } from '@containers/Liquidity/liquidutyHelpers';
-import { useTezos, useAccountPkh, useNetwork } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 import { useLoadDexContract, useLoadTokenBalance } from '../hooks';
 
 export const useAddTezToTokenService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
+  onTokenAChange: (token: WhitelistedToken) => void,
+  onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -194,11 +194,11 @@ export const useAddTezToTokenService = (
   };
 
   const handleSetTokenA = (token: WhitelistedToken) => {
-    setTokenA(token);
+    onTokenAChange(token);
     setTokenAInput('Loading...');
   };
   const handleSetTokenB = (token: WhitelistedToken) => {
-    setTokenB(token);
+    onTokenBChange(token);
     setTokenBInput('Loading...');
   };
 
