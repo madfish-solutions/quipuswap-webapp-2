@@ -39,19 +39,20 @@ export const useSwapCalculations = () => {
           endTokenSlug: getTokenSlug(newOutputToken),
           graph: dexGraph
         });
-        setDexRoute(route);
         try {
           setInputAmount(
             route ? fromDecimals(getTokenInput(newOutputToken, rawNewOutputAmount, route), newInputToken) : undefined
           );
+          setDexRoute(route);
+
+          return;
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e);
         }
-      } else {
-        setDexRoute(undefined);
-        setInputAmount(undefined);
       }
+      setDexRoute(undefined);
+      setInputAmount(undefined);
     },
     [dexGraph]
   );
@@ -66,7 +67,6 @@ export const useSwapCalculations = () => {
           endTokenSlug: getTokenSlug(newOutputToken),
           graph: dexGraph
         });
-        setDexRoute(route);
         try {
           setOutputAmount(
             route
@@ -76,6 +76,9 @@ export const useSwapCalculations = () => {
                 )
               : undefined
           );
+          setDexRoute(route);
+
+          return;
         } catch (e) {
           // eslint-disable-next-line no-console
           console.error(e);
