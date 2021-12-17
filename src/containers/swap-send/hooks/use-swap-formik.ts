@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 import { useTranslation } from 'next-i18next';
 
+import { useDexGraph } from '@hooks/use-dex-graph';
 import { useFlowToasts } from '@hooks/use-flow-toasts';
-import { useDexGraph } from '@hooks/useDexGraph';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@utils/defaults';
 import { getTokenSlug, swap, toDecimals } from '@utils/helpers';

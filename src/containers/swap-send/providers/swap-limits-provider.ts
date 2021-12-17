@@ -3,7 +3,7 @@ import { useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { useDexGraph } from '@hooks/useDexGraph';
+import { useDexGraph } from '@hooks/use-dex-graph';
 import { fromDecimals, getMaxTokenInput, getTokenOutput, getTokenSlug } from '@utils/helpers';
 import { getMaxInputRoute, getMaxOutputRoute } from '@utils/routing';
 import { WhitelistedToken } from '@utils/types';

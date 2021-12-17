@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { withApollo } from '@client';
-import { DexGraphProvider } from '@hooks/useDexGraph';
+import { DexGraphProvider } from '@hooks/use-dex-graph';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
 import { BalancesProvider } from '@providers/BalancesProvider';

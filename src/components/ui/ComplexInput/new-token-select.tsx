@@ -8,10 +8,10 @@ import { useTranslation } from 'next-i18next';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { isFoundIndex } from '@utils/array';
 import { useAccountPkh } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { isFoundIndex } from '@utils/helpers/arrays';
 import { WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';

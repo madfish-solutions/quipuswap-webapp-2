@@ -3,7 +3,6 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-import { makeWhitelistedToken } from '@hooks/useDexGraph';
 import {
   fallbackToolkits,
   getTokenType,
@@ -13,13 +12,13 @@ import {
   useTokens
 } from '@utils/dapp';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
-import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
+import { getTokenIdFromSlug, getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 type TokensSlugs = [string, string];
 
-export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
+export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const network = useNetwork();
   const router = useRouter();
   const { data: tokens, loading: tokensLoading } = useTokens();
@@ -98,9 +97,7 @@ export const useInitialTokens = (fromToSlug?: string, getRedirectionUrl?: (fromT
           if (customToken) {
             addCustomToken(customToken);
           } else {
-            addCustomToken(
-              makeWhitelistedToken({ address: contractAddress, id: fa2TokenId?.toString(), type: tokenType }, [])
-            );
+            addCustomToken(makeWhitelistedToken({ contractAddress, fa2TokenId, type: tokenType }, []));
           }
         });
       }
