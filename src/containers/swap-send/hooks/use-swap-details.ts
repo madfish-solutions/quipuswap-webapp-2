@@ -39,7 +39,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
         const tokenAAmount = fromDecimals(
           getTokenOutput({
             inputToken: outputToken,
-            inputAmount: fromDecimals(outputAmount, outputToken),
+            inputAmount: toDecimals(outputAmount, outputToken),
             dexChain: reversedRoute
           }),
           inputToken
