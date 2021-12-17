@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
+import { NextRouter } from 'next/router';
 
 import { useTokens } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-export const useParseTokensFromUrl = () => {
-  const router = useRouter();
+export const useParseTokensFromUrl = (router: NextRouter) => {
   const { data: tokens } = useTokens();
 
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);

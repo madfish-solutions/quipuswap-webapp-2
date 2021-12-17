@@ -17,7 +17,7 @@ export const TabsContent = [
 
 export const useLiquidityFormService = () => {
   const router = useRouter();
-  const { tokenA, tokenB, setTokenA, setTokenB } = useParseTokensFromUrl();
+  const { tokenA, tokenB, setTokenA, setTokenB } = useParseTokensFromUrl(router);
 
   const [tabState, setTabState] = useState(TabsContent[0]);
 
