@@ -6,6 +6,8 @@ import { useAccountPkh, useTezos } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 
+const BASE_TEN = 10;
+
 export const useRemoveLiquidity = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -31,11 +33,11 @@ export const useRemoveLiquidity = () => {
       throw new Error('Some of the Tools are undefined');
     }
 
-    const ten = new BigNumber(10);
+    const tenBN = new BigNumber(BASE_TEN);
 
-    const shares = new BigNumber(lpTokenInput).multipliedBy(ten.pow(LP_TOKEN_DECIMALS));
-    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(ten.pow(tokenA.metadata.decimals));
-    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(ten.pow(tokenB.metadata.decimals));
+    const shares = new BigNumber(lpTokenInput).multipliedBy(tenBN.pow(LP_TOKEN_DECIMALS));
+    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(tenBN.pow(tokenA.metadata.decimals));
+    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(tenBN.pow(tokenB.metadata.decimals));
 
     const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
     const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -45,11 +47,9 @@ export const useRemoveLiquidity = () => {
     if (!addresses) {
       return;
     }
-    if (addresses.addressA === tokenA.contractAddress) {
-      await dex.contract.methods.divest(pairId, tokenAOut, tokenBOut, shares, timestamp.toString()).send();
-    } else {
-      await dex.contract.methods.divest(pairId, tokenBOut, tokenAOut, shares, timestamp.toString()).send();
-    }
+    const token1 = addresses.addressA === tokenA.contractAddress ? tokenAOut : tokenBOut;
+    const token2 = addresses.addressA === tokenA.contractAddress ? tokenBOut : tokenAOut;
+    await dex.contract.methods.divest(pairId, token1, token2, shares, timestamp.toString()).send();
   };
 
   return {

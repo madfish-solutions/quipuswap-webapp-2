@@ -49,7 +49,7 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
     if (!dex) {
       return;
     }
-    if (lpTokenInput === '') {
+    if (!lpTokenInput) {
       setTokenAOutput('');
       setTokenBOutput('');
 
@@ -91,14 +91,13 @@ export const RemoveTezToToken: React.FC<RemoveTezToTokenProps> = ({
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
-    if (!dex) {
-      return;
+    if (dex) {
+      setTokenPair({
+        token1: tokenA,
+        token2: tokenB,
+        dex
+      });
     }
-    setTokenPair({
-      token1: tokenA,
-      token2: tokenB,
-      dex
-    });
   }, [dex, tokenA, tokenB]);
 
   const handleBalance = (balance: string) => {
