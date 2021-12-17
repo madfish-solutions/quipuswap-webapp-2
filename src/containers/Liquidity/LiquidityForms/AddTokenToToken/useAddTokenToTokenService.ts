@@ -1,6 +1,5 @@
 import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import {
@@ -14,11 +13,12 @@ import { useTezos, useAccountPkh } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { useLoadTokenBalance, useLoadDexContract } from '../hooks';
+
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
-export const useViewModel = (
-  dex: Nullable<FoundDex>,
+export const useAddTokenToTokenService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
@@ -26,6 +26,9 @@ export const useViewModel = (
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const tokenABalance = useLoadTokenBalance(tokenA);
+  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const { dex } = useLoadDexContract(tokenA, tokenB);
 
   const [tokenAInput, setTokenAInput] = useState<string>('');
   const [tokenBInput, setTokenBInput] = useState<string>('');
@@ -392,6 +395,8 @@ export const useViewModel = (
     accountPkh,
     tokenAInput,
     tokenBInput,
+    tokenABalance,
+    tokenBBalance,
     handleTokenAInput,
     handleTokenBInput,
     handleTokenABalance,

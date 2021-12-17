@@ -1,39 +1,28 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { noOpFunc } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from '../../Liquidity.module.sass';
-import { useViewModel } from './useViewModel';
+import { AddRemoveFormInterface } from '../AddRemoveForm.props';
+import { useRemoveTokenToTokenService } from './useRemoveTokenToTokenService';
 
-interface RemoveTokenToTokenProps {
-  dex: Nullable<FoundDex>;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>;
-  tokenABalance: string;
-  tokenBBalance: string;
-  lpTokenBalance: string;
-}
-
-export const RemoveTokenToToken: React.FC<RemoveTokenToTokenProps> = ({
-  dex,
-  tokenA,
-  tokenB,
-  setTokenA,
-  setTokenB,
-  tokenABalance,
-  tokenBBalance,
-  lpTokenBalance
-}) => {
-  const { accountPkh, lpTokenInput, tokenAOutput, tokenBOutput, handleRemoveLiquidity, handleChange, handleBalance } =
-    useViewModel(dex, tokenA, tokenB);
+export const RemoveTokenToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
+  const {
+    accountPkh,
+    lpTokenInput,
+    tokenAOutput,
+    tokenBOutput,
+    tokenABalance,
+    tokenBBalance,
+    lpTokenBalance,
+    handleRemoveLiquidity,
+    handleChange,
+    handleBalance
+  } = useRemoveTokenToTokenService(tokenA, tokenB);
 
   return (
     <>

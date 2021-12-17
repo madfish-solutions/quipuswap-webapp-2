@@ -30,25 +30,9 @@ export const LiquidityFormContent: FC<Props> = ({ tab }) => {
 
   if (tab === 'add') {
     return dexInfo.isTezosToTokenDex ? (
-      <AddTezToToken
-        dex={dexInfo.dex}
-        tokenA={tokenA}
-        tokenB={tokenB}
-        setTokenA={setTokenA}
-        setTokenB={setTokenB}
-        tokenABalance={tokenABalance}
-        tokenBBalance={tokenBBalance}
-      />
+      <AddTezToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
     ) : (
-      <AddTokenToToken
-        dex={dexInfo.dex}
-        tokenA={tokenA}
-        tokenB={tokenB}
-        setTokenA={setTokenA}
-        setTokenB={setTokenB}
-        tokenABalance={tokenABalance}
-        tokenBBalance={tokenBBalance}
-      />
+      <AddTokenToToken tokenA={tokenA} tokenB={tokenB} setTokenA={setTokenA} setTokenB={setTokenB} />
     );
   }
 

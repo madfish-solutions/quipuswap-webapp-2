@@ -2,10 +2,10 @@ import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
-import { LiquidityFormContent } from '@containers/Liquidity/LiquidityForms/liquidity-form-content';
 import { TabsContent, useViewModel } from '@containers/Liquidity/LiquidityForms/useViewModel';
 
 import s from '../Liquidity.module.sass';
+import { LiquidityFormContent } from './liquidity-form-content';
 
 export const LiquidityForm: FC = () => {
   const { tabState, handleSetActiveId } = useViewModel();
@@ -23,6 +23,15 @@ export const LiquidityForm: FC = () => {
       >
         <LiquidityFormContent tab={tabState.id} />
       </Card>
+      {/*TODO: Implement it*/}
+      {/*<LiquidityDetails*/}
+      {/*  currentTab={tabState.label}*/}
+      {/*  token1={TEZOS_TOKEN}*/}
+      {/*  token2={MAINNET_DEFAULT_TOKEN}*/}
+      {/*  tokensData={tokensData}*/}
+      {/*  balanceTotalA="1"*/}
+      {/*  balanceTotalB="2"*/}
+      {/*/>*/}
     </>
   );
 };
