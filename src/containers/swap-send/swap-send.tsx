@@ -201,8 +201,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       setFieldTouched('amount1', false);
       setFieldTouched('amount2', false);
       setValues(prevValues => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+      onInputAmountChange(undefined);
+      onOutputAmountChange(undefined);
     });
-  }, [setValues, submitForm, setFieldTouched]);
+  }, [setValues, submitForm, setFieldTouched, onInputAmountChange, onOutputAmountChange]);
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
