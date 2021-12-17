@@ -24,7 +24,7 @@ const WHOLE_ITEM_PERCENT = 100;
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
   const network = useNetwork();
-  const swapFee = useSwapFee(params);
+  const swapFee = useSwapFee({ ...params, dexChain: dexRoute });
 
   const sellRate =
     inputToken && outputToken && inputAmount?.gt(0) && outputAmount

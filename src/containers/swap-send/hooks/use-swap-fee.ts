@@ -6,15 +6,15 @@ import debouncePromise from 'debounce-promise';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
-import { DexPair, WhitelistedToken } from '@utils/types';
+import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
 interface SwapParams {
-  inputToken?: WhitelistedToken;
-  inputAmount?: BigNumber;
-  outputAmount?: BigNumber;
-  dexChain?: DexPair[];
-  slippageTolerance?: BigNumber;
-  recipient?: string;
+  inputToken: Undefined<WhitelistedToken>;
+  inputAmount: Undefined<BigNumber>;
+  outputAmount: Undefined<BigNumber>;
+  dexChain: Undefined<DexPair[]>;
+  slippageTolerance: Undefined<BigNumber>;
+  recipient: Undefined<string>;
 }
 
 const WHOLE_ITEM_PERCENT = 100;
