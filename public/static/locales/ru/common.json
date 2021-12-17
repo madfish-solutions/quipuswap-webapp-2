@@ -51,5 +51,6 @@
   "Insufficient funds": "Insufficient funds",
   "Minimal value is {{min}}": "Minimal value is {{min}}",
   "Maximal value is {{max}}": "Maximal value is {{max}}",
-  "Value has to be a number between {{min}} and {{max}}": "Value has to be a number between {{min}} and {{max}}"
+  "Value has to be a number between {{min}} and {{max}}": "Value has to be a number between {{min}} and {{max}}",
+  "Error {{message}}": "Error {{message}}"
 }

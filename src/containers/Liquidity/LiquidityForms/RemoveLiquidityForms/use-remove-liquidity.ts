@@ -4,9 +4,8 @@ import BigNumber from 'bignumber.js';
 import { sortTokensContracts } from '@containers/Liquidity/liquidutyHelpers';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
+import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
-
-const BASE_TEN = 10;
 
 export const useRemoveLiquidity = () => {
   const tezos = useTezos();
@@ -33,11 +32,9 @@ export const useRemoveLiquidity = () => {
       throw new Error('Some of the Tools are undefined');
     }
 
-    const tenBN = new BigNumber(BASE_TEN);
-
-    const shares = new BigNumber(lpTokenInput).multipliedBy(tenBN.pow(LP_TOKEN_DECIMALS));
-    const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(tenBN.pow(tokenA.metadata.decimals));
-    const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(tenBN.pow(tokenB.metadata.decimals));
+    const shares = toDecimals(new BigNumber(lpTokenInput), LP_TOKEN_DECIMALS);
+    const tokenAOut = toDecimals(new BigNumber(tokenAOutput), tokenA.metadata.decimals);
+    const tokenBOut = toDecimals(new BigNumber(tokenBOutput), tokenB.metadata.decimals);
 
     const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
     const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
