@@ -1,19 +1,19 @@
-import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
 import {
-  sortTokensContracts,
-  getValidMichelTemplate,
-  calculateTokenAmount,
+  addPairTokenToToken,
   allowContractSpendYourTokens,
-  addPairTokenToToken
+  calculateTokenAmount,
+  getValidMichelTemplate,
+  sortTokensContracts
 } from '@containers/Liquidity/liquidutyHelpers';
-import { useTezos, useAccountPkh } from '@utils/dapp';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { useLoadTokenBalance, useLoadDexContract } from '../hooks';
+import { useLoadDexContract, useLoadTokenBalance } from '../hooks';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
@@ -21,8 +21,8 @@ const MichelCodec = require('@taquito/michel-codec');
 export const useAddTokenToTokenService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  setTokenA: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  setTokenB: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>
+  setTokenA: (token: WhitelistedToken) => void,
+  setTokenB: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();

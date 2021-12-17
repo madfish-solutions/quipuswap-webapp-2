@@ -10,7 +10,12 @@ import s from '../../Liquidity.module.sass';
 import { AddRemoveFormInterface } from '../AddRemoveForm.props';
 import { useRemoveTezToTokenService } from './useRemoveTezToTokenService';
 
-export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
+export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({
+  tokenA,
+  tokenB,
+  onTokenAChange,
+  onTokenBChange
+}) => {
   const {
     accountPkh,
     tokenAOutput,
@@ -32,7 +37,7 @@ export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tok
         balance={lpTokenBalance}
         token={tokenA}
         token2={tokenB}
-        setToken={setTokenB}
+        setToken={onTokenBChange}
         value={lpTokenInput}
         onChange={handleLpTokenChange}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
@@ -43,7 +48,7 @@ export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tok
         label="Output"
         balance={tokenABalance}
         token={tokenA}
-        setToken={setTokenA}
+        setToken={onTokenAChange}
         value={tokenAOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
@@ -56,7 +61,7 @@ export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tok
         label="Output"
         balance={tokenBBalance}
         token={tokenB}
-        setToken={setTokenB}
+        setToken={onTokenBChange}
         value={tokenBOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}

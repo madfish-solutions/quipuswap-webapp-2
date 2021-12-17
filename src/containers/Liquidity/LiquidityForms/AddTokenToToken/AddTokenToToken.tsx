@@ -10,7 +10,12 @@ import s from '../../Liquidity.module.sass';
 import { AddRemoveFormInterface } from '../AddRemoveForm.props';
 import { useAddTokenToTokenService } from './useAddTokenToTokenService';
 
-export const AddTokenToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, tokenB, setTokenA, setTokenB }) => {
+export const AddTokenToToken: React.FC<AddRemoveFormInterface> = ({
+  tokenA,
+  tokenB,
+  onTokenAChange,
+  onTokenBChange
+}) => {
   const {
     accountPkh,
     tokenAInput,
@@ -24,7 +29,7 @@ export const AddTokenToToken: React.FC<AddRemoveFormInterface> = ({ tokenA, toke
     handleSetTokenA,
     handleSetTokenB,
     handleAddLiquidity
-  } = useAddTokenToTokenService(tokenA, tokenB, setTokenA, setTokenB);
+  } = useAddTokenToTokenService(tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   return (
     <>

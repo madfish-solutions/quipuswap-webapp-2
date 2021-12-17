@@ -13,10 +13,10 @@ import { useLoadDexContract, useLoadLpTokenBalance, useLoadTokenBalance } from '
 export const useRemoveTezToTokenService = (tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const { dex, isTezosToTokenDex } = useLoadDexContract(tokenA, tokenB);
+  const { dex } = useLoadDexContract(tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
-  const lpTokenBalance = useLoadLpTokenBalance(dex, isTezosToTokenDex, tokenA, tokenB);
+  const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
