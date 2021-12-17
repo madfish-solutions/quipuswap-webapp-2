@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 import {
@@ -29,6 +30,7 @@ export const TabsContent = [
 ];
 
 export const useViewModel = () => {
+  const { t } = useTranslation(['common']);
   const updateToast = useUpdateToast();
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -158,7 +160,7 @@ export const useViewModel = () => {
         }
         updateToast({
           type: 'error',
-          render: `Error get DEX: ${error.message}`
+          render: t('common|Error {{message}}', { message: error.message })
         });
       }
     };
@@ -167,7 +169,7 @@ export const useViewModel = () => {
     return () => {
       isMounted = false;
     };
-  }, [tezos, networkId, tokenA, tokenB, updateToast]);
+  }, [tezos, networkId, tokenA, tokenB, updateToast, t]);
 
   useEffect(() => {
     let isMounted = true;
