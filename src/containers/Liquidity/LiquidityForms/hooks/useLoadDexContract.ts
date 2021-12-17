@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
-import { checkForTezInPair, findNotTezTokenInPair } from '@containers/Liquidity/liquidutyHelpers';
+import { isTezInPair, findNotTezTokenInPair } from '@containers/Liquidity/liquidutyHelpers';
 import { getStorageInfo, useNetwork, useTezos } from '@utils/dapp';
 import { FACTORIES, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -26,7 +26,7 @@ export const useLoadDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: N
       if (!tezos || !tokenA || !tokenB) {
         return;
       }
-      const isTezosInPair = checkForTezInPair(tokenA.contractAddress, tokenB.contractAddress);
+      const isTezosInPair = isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       try {
         if (isTezosInPair) {

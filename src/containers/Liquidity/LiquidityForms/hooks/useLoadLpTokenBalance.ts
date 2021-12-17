@@ -5,7 +5,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import {
   findNotTezTokenInPair,
   sortTokensContracts,
-  getValidMichelTemplate
+  getValidMichelTemplate,
+  isTezInPair
 } from '@containers/Liquidity/liquidutyHelpers';
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -15,9 +16,8 @@ const MichelCodec = require('@taquito/michel-codec');
 
 export const useLoadLpTokenBalance = (
   dex: Nullable<FoundDex>,
-  isTezosToTokenDex: boolean,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -31,6 +31,8 @@ export const useLoadLpTokenBalance = (
       if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
         return;
       }
+
+      const isTezosToTokenDex = isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       if (isTezosToTokenDex) {
         const notTezToken = findNotTezTokenInPair(tokenA, tokenB);

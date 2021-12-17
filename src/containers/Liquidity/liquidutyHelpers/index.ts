@@ -8,4 +8,4 @@ export * from './sortTokensContracts';
 export * from './getValidPairParams';
 export * from './allowContractSpendYourTokens';
 export * from './addPairTokenToToken';
-export * from './checkForTezInPair';
+export * from './isTezInPair';
