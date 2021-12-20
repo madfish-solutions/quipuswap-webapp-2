@@ -41,7 +41,7 @@ export const useSwapFormik = () => {
     const rawInputAmount = toDecimals(inputAmount, token1);
     try {
       await swap(tezos, accountPkh, {
-        inputAmount,
+        inputAmount: rawInputAmount,
         inputToken: token1,
         recipient: action === 'send' ? recipient : undefined,
         slippageTolerance: slippage.div(100),
