@@ -11,7 +11,7 @@ interface GetValidMichelTemplate {
   type: string;
 }
 
-export const getValidMichelTemplate = ({ tokenA, tokenB, type }: GetValidMichelTemplate): MichelsonData => {
+export const newGetValidMichelTemplate = ({ tokenA, tokenB, type }: GetValidMichelTemplate): MichelsonData => {
   const tokenAAddressBytes = taquitoUtils.b58decode(tokenA.contractAddress);
   const tokenBAddressBytes = taquitoUtils.b58decode(tokenB.contractAddress);
   const tokenAId = tokenA.fa2TokenId?.toString() ?? '';

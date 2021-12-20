@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 
 import { WhitelistedToken } from '@utils/types';
 
-import { allowContractSpendYourTokens } from './allowContractSpendYourTokens';
-import { getValidPairParams } from './getValidPairParams';
+import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
+import { getValidPairParams } from './get-valid-pair-params';
 
-export const addPairTokenToToken = async (
+export const addPairT2T = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   accountPkh: string,

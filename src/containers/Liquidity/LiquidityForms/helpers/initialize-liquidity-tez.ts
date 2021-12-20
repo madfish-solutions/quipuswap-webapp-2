@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { FACTORIES } from '@utils/defaults';
 import { QSMainNet } from '@utils/types';
 
-export const initializeLiquidity = async (
+export const initializeLiquidityTez = async (
   tezos: TezosToolkit,
   networkId: QSMainNet,
   token: Token,

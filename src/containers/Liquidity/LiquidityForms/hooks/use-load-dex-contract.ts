@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 
-import { isTezInPair, findNotTezTokenInPair } from '@containers/Liquidity/liquidutyHelpers';
+import { isTezInPair, findNotTezTokenInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { getStorageInfo, useNetwork, useTezos } from '@utils/dapp';
 import { FACTORIES, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { Nullable, WhitelistedToken } from '@utils/types';

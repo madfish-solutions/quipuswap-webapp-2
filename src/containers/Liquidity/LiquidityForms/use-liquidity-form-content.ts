@@ -3,12 +3,12 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
+import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { findToken } from '@containers/Liquidity/LiquidityForms/helpers/find-token';
 import { getLiquidityUrl } from '@containers/Liquidity/LiquidityForms/helpers/get-liquidity-url';
 import { parseUrl } from '@containers/Liquidity/LiquidityForms/helpers/parse-url';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { getTabById, LiquidityTabsEnum } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
-import { isTezInPair } from '@containers/Liquidity/liquidutyHelpers';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 

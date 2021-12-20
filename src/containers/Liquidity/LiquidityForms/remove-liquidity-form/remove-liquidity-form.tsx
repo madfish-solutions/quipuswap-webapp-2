@@ -1,75 +1,75 @@
 import React from 'react';
 
-import { Plus, Button, Slippage, ArrowDown } from '@quipuswap/ui-kit';
+import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
+import { useTranslation } from 'next-i18next';
 
+import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { RemoveFormInterface } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form/remove-form.props';
 import { noOpFunc } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
-import { AddRemoveFormInterface } from '../AddRemoveForm.props';
-import { useRemoveTezToTokenService } from './useRemoveTezToTokenService';
+import { useRemoveLiquidityService } from './use-remove-liquidity-service';
 
-export const RemoveTezToToken: React.FC<AddRemoveFormInterface> = ({
-  tokenA,
-  tokenB,
-  onTokenAChange,
-  onTokenBChange
-}) => {
+export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ tokenA, tokenB, onChangeTokensPair }) => {
+  const { t } = useTranslation(['common', 'liquidity']);
+
   const {
+    tokenPair,
     accountPkh,
+    lpTokenInput,
     tokenAOutput,
     tokenBOutput,
-    lpTokenInput,
     tokenABalance,
     tokenBBalance,
     lpTokenBalance,
-    handleLpTokenChange,
-    handleSlippageChange,
+    handleRemoveLiquidity,
+    handleChange,
     handleBalance,
-    handleRemoveLiquidity
-  } = useRemoveTezToTokenService(tokenA, tokenB);
+    handleSetTokenPair
+  } = useRemoveLiquidityService(tokenA, tokenB, onChangeTokensPair);
 
   return (
     <>
-      <TokenSelect
+      <PositionSelect
         label="Select LP"
+        tokenPair={tokenPair}
+        setTokenPair={handleSetTokenPair}
         balance={lpTokenBalance}
-        token={tokenA}
-        token2={tokenB}
-        setToken={onTokenBChange}
-        value={lpTokenInput}
-        onChange={handleLpTokenChange}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={handleBalance}
+        noBalanceButtons={!accountPkh}
+        onChange={handleChange}
+        value={lpTokenInput}
+        balanceLabel={t('vote|Available balance')}
+        notFrozen
+        id="liquidity-remove-input"
+        className={s.input}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
         balance={tokenABalance}
         token={tokenA}
-        setToken={onTokenAChange}
         value={tokenAOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
-        notSelectable
         disabled
+        notSelectable
       />
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
         balance={tokenBBalance}
         token={tokenB}
-        setToken={onTokenBChange}
         value={tokenBOutput}
         blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
         handleBalance={noOpFunc}
         noBalanceButtons
-        notSelectable
         disabled
+        notSelectable
       />
-      <Slippage handleChange={handleSlippageChange} />
       <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh}>
         Remove
       </Button>

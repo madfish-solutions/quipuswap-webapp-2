@@ -1,7 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 
 import { PairInfo } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/pair-info.interface';
-import { getValidMichelTemplate } from '@containers/Liquidity/LiquidityForms/helpers/new-get-valid-michel-template';
+import { newGetValidMichelTemplate } from '@containers/Liquidity/LiquidityForms/helpers/new-get-valid-michel-template';
 import { sortTokensPair } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-pair';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
@@ -18,7 +18,7 @@ export const loadT2TPairInfo = async (
     return null;
   }
 
-  const michelData = getValidMichelTemplate(sortedTokens);
+  const michelData = newGetValidMichelTemplate(sortedTokens);
   const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
 
   const id = await dex.storage.storage.token_to_id.get(key);

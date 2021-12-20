@@ -2,8 +2,7 @@ import { FC } from 'react';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
 import { AddLiquidityForm } from '@containers/Liquidity/LiquidityForms/add-liquidity-form';
-import { RemoveTezToToken } from '@containers/Liquidity/LiquidityForms/RemoveLiquidityForms/RemoveTezToToken';
-import { RemoveTokenToToken } from '@containers/Liquidity/LiquidityForms/RemoveLiquidityForms/RemoveTokenToToken';
+import { RemoveLiquidityForm } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form';
 import { useLiquidityFormContent } from '@containers/Liquidity/LiquidityForms/use-liquidity-form-content';
 
 interface Props {
@@ -11,17 +10,7 @@ interface Props {
 }
 
 export const LiquidityFormContent: FC<Props> = ({ tab }) => {
-  const {
-    dexInfo,
-    tokenA,
-    tokenB,
-    handleChangeTokenA,
-    handleChangeTokenB,
-    tokenABalance,
-    tokenBBalance,
-    lpTokenBalance,
-    handleChangeTokensPair
-  } = useLiquidityFormContent();
+  const { tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } = useLiquidityFormContent();
 
   if (!tokenA || !tokenB) {
     return <ErrorAlert error={new Error('Tokens should be defined')} />;
@@ -38,25 +27,5 @@ export const LiquidityFormContent: FC<Props> = ({ tab }) => {
     );
   }
 
-  return dexInfo.isTezosToTokenDex ? (
-    <RemoveTezToToken
-      dex={dexInfo.dex}
-      tokenA={tokenA}
-      tokenB={tokenB}
-      tokenABalance={tokenABalance}
-      tokenBBalance={tokenBBalance}
-      lpTokenBalance={lpTokenBalance}
-      onChangeTokensPair={handleChangeTokensPair}
-    />
-  ) : (
-    <RemoveTokenToToken
-      dex={dexInfo.dex}
-      tokenA={tokenA}
-      tokenB={tokenB}
-      tokenABalance={tokenABalance}
-      tokenBBalance={tokenBBalance}
-      lpTokenBalance={lpTokenBalance}
-      onChangeTokensPair={handleChangeTokensPair}
-    />
-  );
+  return <RemoveLiquidityForm tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />;
 };

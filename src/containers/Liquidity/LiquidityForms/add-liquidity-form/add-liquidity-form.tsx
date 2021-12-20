@@ -5,11 +5,12 @@ import { Button } from '@quipuswap/ui-kit';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import s from '@containers/Liquidity/Liquidity.module.sass';
 import { useAddLiqudityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity-service';
-import { AddRemoveFormInterface } from '@containers/Liquidity/LiquidityForms/AddRemoveForm.props';
 
-export const AddLiquidityForm: FC<AddRemoveFormInterface> = ({ tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
+import s from '../../Liquidity.module.sass';
+import { AddFormInterface } from './add-form.props';
+
+export const AddLiquidityForm: FC<AddFormInterface> = ({ tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {
     accountPkh,
     tokenABalance,
@@ -21,7 +22,8 @@ export const AddLiquidityForm: FC<AddRemoveFormInterface> = ({ tokenA, tokenB, o
     handleTokenAChange,
     handleTokenBChange,
     handleTokenABalance,
-    handleTokenBBalance
+    handleTokenBBalance,
+    handleAddLiquidity
   } = useAddLiqudityService(tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   return (
@@ -49,7 +51,7 @@ export const AddLiquidityForm: FC<AddRemoveFormInterface> = ({ tokenA, tokenB, o
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
       />
-      <Button className={s.button} disabled={!accountPkh}>
+      <Button className={s.button} onClick={handleAddLiquidity} disabled={!accountPkh}>
         Add
       </Button>
     </>

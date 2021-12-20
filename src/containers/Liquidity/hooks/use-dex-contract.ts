@@ -4,7 +4,7 @@ import { FoundDex } from '@quipuswap/sdk';
 
 import { loadT2tDex } from '@containers/Liquidity/hooks/helpers/load-t2t-dex';
 import { loadTezDex } from '@containers/Liquidity/hooks/helpers/load-tez-dex';
-import { isTezInPair } from '@containers/Liquidity/liquidutyHelpers';
+import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useNetwork, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 

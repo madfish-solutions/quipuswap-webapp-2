@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
+import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { loadUserLpBalanceTez } from '@containers/Liquidity/LiquidityForms/helpers/load-user-lp-balance-tez';
-import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/liquidutyHelpers';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 

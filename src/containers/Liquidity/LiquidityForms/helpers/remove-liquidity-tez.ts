@@ -2,18 +2,13 @@ import { batchify, FoundDex, removeLiquidity as getRemoveLiquidityParams } from 
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-export const removeLiquidity = async (
+export const removeLiquidityTez = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   lpTokenValue: BigNumber,
   slippageTolerance: BigNumber
 ) => {
-  const removeLiquidityParams = await getRemoveLiquidityParams(
-    tezos,
-    dex,
-    lpTokenValue.multipliedBy(1_000_000),
-    slippageTolerance
-  );
+  const removeLiquidityParams = await getRemoveLiquidityParams(tezos, dex, lpTokenValue, slippageTolerance);
 
   const walletOperation = await batchify(tezos.wallet.batch([]), removeLiquidityParams).send();
 

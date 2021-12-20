@@ -1,7 +1,7 @@
 import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
-import { findNotTezTokenInPair } from '@containers/Liquidity/liquidutyHelpers';
+import { findNotTezTokenInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { FACTORIES } from '@utils/defaults';
 import { Nullable, QSMainNet, WhitelistedToken } from '@utils/types';
 
