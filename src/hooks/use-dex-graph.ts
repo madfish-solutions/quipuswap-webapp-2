@@ -71,18 +71,17 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             },
             tokens
           );
-          let token2 = TEZOS_TOKEN;
-          if (rawPool.type === 'ttdex') {
-            const { type, address, id } = rawPool.tokenB;
-            token2 = makeWhitelistedToken(
-              {
-                contractAddress: address,
-                type,
-                fa2TokenId: id === undefined ? undefined : Number(id)
-              },
-              tokens
-            );
-          }
+          const token2 =
+            rawPool.type === 'ttdex'
+              ? makeWhitelistedToken(
+                  {
+                    contractAddress: rawPool.tokenB.address,
+                    type: rawPool.tokenB.type,
+                    fa2TokenId: rawPool.tokenB.id === undefined ? undefined : Number(rawPool.tokenB.id)
+                  },
+                  tokens
+                )
+              : TEZOS_TOKEN;
 
           const commonPoolProps = {
             token1Pool: new BigNumber(tokenAPool),
