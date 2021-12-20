@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 
 import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
 import {
-  addLiquidity,
-  addPairT2t,
+  addLiquidityTez,
+  addPairT2T,
   allowContractSpendYourTokens,
   calculateTokenAmount,
   initializeLiquidityTez,
@@ -192,7 +192,7 @@ export const useAddLiqudityService = (
 
         await batch.send();
       } else {
-        addPairT2t(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
+        addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
       }
     } else {
       const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
@@ -203,7 +203,7 @@ export const useAddLiqudityService = (
       const tezValue = new BigNumber(tezTokenInput).multipliedBy(tezDecimals);
 
       if (tokenAPool.gt(0) && tokenBPool.gt(0) && totalSupply.gt(0)) {
-        await addLiquidity(tezos, dex, tezValue);
+        await addLiquidityTez(tezos, dex, tezValue);
       } else {
         const token: Token = {
           contract: notTezToken.contractAddress,
