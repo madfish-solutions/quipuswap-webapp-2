@@ -3,11 +3,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useDexGraph } from '@hooks/use-dex-graph';
-import { fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
+import { amountsAreEqual, fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexGraph, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
-import { amountsAreEqual } from '../utils/comparison';
 import { SwapAmountField } from '../utils/types';
 
 interface SwapPair {

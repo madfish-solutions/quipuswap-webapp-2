@@ -10,9 +10,9 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { amountsAreEqual, getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { isFoundIndex } from '@utils/helpers/arrays';
-import { WhitelistedToken } from '@utils/types';
+import { Undefined, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
@@ -26,7 +26,7 @@ interface NewTokenSelectProps {
   label: string;
   error?: string;
   selectable?: boolean;
-  onAmountChange: (value?: BigNumber) => void;
+  onAmountChange: (value: Undefined<BigNumber>) => void;
   token?: WhitelistedToken;
   blackListedTokens: WhitelistedToken[];
   onTokenChange: (token: WhitelistedToken) => void;
@@ -85,54 +85,50 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     }
   }, []);
 
-  const handleAmountChange = useCallback(
-    evt => {
-      let val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
-      let numVal = new BigNumber(val || 0);
-      const indexOfDot = val.indexOf('.');
-      const assetDecimals = tokenDecimals ?? Infinity;
-      if (isFoundIndex(indexOfDot) && val.length - indexOfDot > assetDecimals + 1) {
-        val = val.substring(0, indexOfDot + assetDecimals + 1);
-        numVal = new BigNumber(val);
-      }
+  const handleAmountChangeIfNeeded = (newAmount: Undefined<BigNumber>) => {
+    if (!amountsAreEqual(newAmount, amount)) {
+      onAmountChange(newAmount);
+    }
+  };
 
-      if (!numVal.isNaN() && numVal.gte(0)) {
-        setLocalAmount(val);
-        onAmountChange(val === '' ? undefined : numVal);
-      }
-    },
-    [onAmountChange, tokenDecimals]
-  );
+  const handleAmountChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    let val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
+    let numVal = new BigNumber(val || 0);
+    const indexOfDot = val.indexOf('.');
+    const assetDecimals = tokenDecimals ?? Infinity;
+    if (isFoundIndex(indexOfDot) && val.length - indexOfDot > assetDecimals + 1) {
+      val = val.substring(0, indexOfDot + assetDecimals + 1);
+      numVal = new BigNumber(val);
+    }
+
+    if (!numVal.isNaN() && numVal.gte(0)) {
+      setLocalAmount(val);
+      handleAmountChangeIfNeeded(val === '' ? undefined : numVal);
+    }
+  };
 
   const handleFocus = useCallback(() => setFocused(true), []);
   const handleBlur = useCallback(() => setFocused(false), []);
 
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
-  const handleTokenChange = useCallback(
-    (selectedToken: WhitelistedToken) => {
-      setTokensModal(false);
-      let val = localAmount.replace(/ /g, '').replace(/,/g, '.');
-      let numVal = new BigNumber(val || 0);
-      if (!numVal.isNaN() && numVal.gte(0) && val !== '') {
-        val = numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed();
-        numVal = new BigNumber(val);
-        setLocalAmount(val);
-        onAmountChange(numVal);
-      }
-      onTokenChange(selectedToken);
-    },
-    [onTokenChange, onAmountChange, localAmount]
-  );
+  const handleTokenChange = (selectedToken: WhitelistedToken) => {
+    setTokensModal(false);
+    let val = localAmount.replace(/ /g, '').replace(/,/g, '.');
+    let numVal = new BigNumber(val || 0);
+    if (!numVal.isNaN() && numVal.gte(0) && val !== '') {
+      val = numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed();
+      numVal = new BigNumber(val);
+      setLocalAmount(val);
+    }
+    onTokenChange(selectedToken);
+  };
 
-  const handlePercentageSelect = useCallback(
-    (state: string) => {
-      const newValue = new BigNumber(state).decimalPlaces(tokenDecimals ?? 3);
-      setLocalAmount(newValue.toFixed());
-      onAmountChange(newValue);
-    },
-    [onAmountChange, tokenDecimals]
-  );
+  const handlePercentageSelect = (state: string) => {
+    const newValue = new BigNumber(state).decimalPlaces(tokenDecimals ?? 3);
+    setLocalAmount(newValue.toFixed());
+    handleAmountChangeIfNeeded(newValue);
+  };
 
   const formattedBalance = useMemo(() => {
     if (!balance) {

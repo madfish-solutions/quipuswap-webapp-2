@@ -22,7 +22,7 @@ import {
   toDecimals
 } from '@utils/helpers';
 import { DexGraph, getMaxOutputRoute } from '@utils/routing';
-import { WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details';
@@ -223,12 +223,12 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   const blackListedTokens = useMemo(() => [token1, token2].filter((x): x is WhitelistedToken => !!x), [token1, token2]);
 
-  const handleInputAmountChange = (newAmount?: BigNumber) => {
+  const handleInputAmountChange = (newAmount: Undefined<BigNumber>) => {
     setFieldTouched('inputAmount', true);
     setFieldValue('inputAmount', newAmount, true);
     onInputAmountChange(newAmount);
   };
-  const handleOutputAmountChange = (newAmount?: BigNumber) => {
+  const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
     setFieldTouched('outputAmount', true);
     setFieldValue('outputAmount', newAmount, true);
     onOutputAmountChange(newAmount);
