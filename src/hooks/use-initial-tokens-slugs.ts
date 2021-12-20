@@ -48,7 +48,8 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
           }
           const { contractAddress, fa2TokenId } = getTokenIdFromSlug(rawSlug);
           try {
-            const tokenType = await getTokenType(contractAddress, tezos);
+            const alreadyKnownToken = tokens.find(knownToken => getTokenSlug(knownToken) === rawSlug);
+            const tokenType = alreadyKnownToken?.type ?? (await getTokenType(contractAddress, tezos));
             if (tokenType === 'fa2') {
               return `${contractAddress}_${fa2TokenId ?? 0}`;
             }
@@ -73,7 +74,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
 
       return [token1Slug, token2Slug];
     },
-    []
+    [tokens]
   );
 
   const { data: initialTokensSlugs } = useSWR(['initial-tokens', network.id, fromToSlug], getInitialTokens);
