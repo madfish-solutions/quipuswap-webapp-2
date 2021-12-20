@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
-import { loadT2TDex } from '@containers/Liquidity/hooks/helpers/loadT2TDex';
-import { loadTezDex } from '@containers/Liquidity/hooks/helpers/loadTezDex';
+import { loadT2tDex } from '@containers/Liquidity/hooks/helpers/load-t2t-dex';
+import { loadTezDex } from '@containers/Liquidity/hooks/helpers/load-tez-dex';
 import { isTezInPair } from '@containers/Liquidity/liquidutyHelpers';
 import { useNetwork, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -27,7 +27,7 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
             tokenA,
             tokenB
           })
-        : await loadT2TDex({ tezos });
+        : await loadT2tDex({ tezos });
 
       setDex(newDex);
     };

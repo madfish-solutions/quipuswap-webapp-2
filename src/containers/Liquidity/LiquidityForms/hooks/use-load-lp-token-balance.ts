@@ -2,13 +2,9 @@ import { useState, useEffect } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
-import {
-  findNotTezTokenInPair,
-  sortTokensContracts,
-  getValidMichelTemplate,
-  isTezInPair
-} from '@containers/Liquidity/liquidutyHelpers';
-import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
+import { loadUserLpBalanceTez } from '@containers/Liquidity/LiquidityForms/helpers/load-user-lp-balance-tez';
+import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/liquidutyHelpers';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
@@ -26,7 +22,6 @@ export const useLoadLpTokenBalance = (
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    let isMounted = true;
     const getLpTokenBalance = async () => {
       if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
         return;
@@ -35,16 +30,11 @@ export const useLoadLpTokenBalance = (
       const isTezosToTokenDex = isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
       if (isTezosToTokenDex) {
-        const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
+        const userLpTokenBalance = await loadUserLpBalanceTez(tezos, accountPkh, dex, tokenA, tokenB);
 
-        const { address } = dex.contract;
-        const { type, fa2TokenId } = notTezToken;
-
-        const userLpTokenBalance = await getUserBalance(tezos, accountPkh, address, type, fa2TokenId);
-
-        if (userLpTokenBalance && isMounted) {
+        if (userLpTokenBalance) {
           setLpTokenBalance(userLpTokenBalance.dividedBy(1_000_000).toFixed());
-        } else if (!userLpTokenBalance && isMounted) {
+        } else {
           setLpTokenBalance('0');
         }
       } else if (!isTezosToTokenDex) {
@@ -59,21 +49,17 @@ export const useLoadLpTokenBalance = (
         if (pairId) {
           const userLpTokenBalance = await dex.storage.storage.ledger.get([accountPkh, pairId]);
 
-          if (userLpTokenBalance && isMounted) {
+          if (userLpTokenBalance) {
             setLpTokenBalance(userLpTokenBalance.balance.dividedBy(1_000_000).toFixed());
-          } else if (!userLpTokenBalance && isMounted) {
+          } else if (!userLpTokenBalance) {
             setLpTokenBalance('0');
           }
-        } else if (!pairId && isMounted) {
+        } else if (!pairId) {
           setLpTokenBalance('0');
         }
       }
     };
     void getLpTokenBalance();
-
-    return () => {
-      isMounted = false;
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dex]);
 

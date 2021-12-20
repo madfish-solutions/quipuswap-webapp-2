@@ -4,7 +4,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { getStorageInfo } from '@utils/dapp';
 import { TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 
-export const loadT2TDex = async ({ tezos }: { tezos: TezosToolkit }) => {
+export const loadT2tDex = async ({ tezos }: { tezos: TezosToolkit }) => {
   try {
     const contractPromise = tezos.wallet.at(TOKEN_TO_TOKEN_DEX);
     const storagePromise = getStorageInfo(tezos, TOKEN_TO_TOKEN_DEX);
