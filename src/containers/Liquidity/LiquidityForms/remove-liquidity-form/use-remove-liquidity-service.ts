@@ -56,6 +56,9 @@ export const useRemoveLiquidityService = (
 
       return;
     }
+    const ten = 10;
+    const lpTokenDecimals = new BigNumber(ten).pow(LP_TOKEN_DECIMALS);
+    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput).multipliedBy(lpTokenDecimals);
 
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
@@ -64,8 +67,8 @@ export const useRemoveLiquidityService = (
     const tokenAPerOneLp = tokenAPool.dividedBy(totalSupply);
     const tokenBPerOneLp = tokenBPool.dividedBy(totalSupply);
 
-    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInput);
-    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInput);
+    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals);
+    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals);
 
     if (tokenA.contractAddress === pairTokenA.contractAddress) {
       setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
