@@ -8,15 +8,11 @@ import { DexGraph, getRouteWithInput, getRouteWithOutput } from '@utils/routing'
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
 import { amountsAreEqual } from '../utils/comparison';
+import { SwapAmountField } from '../utils/types';
 
 interface SwapPair {
   inputToken?: WhitelistedToken;
   outputToken?: WhitelistedToken;
-}
-
-enum AmountField {
-  INPUT_AMOUNT = 'inputAmount',
-  OUTPUT_AMOUNT = 'outputAmount'
 }
 
 export const useSwapCalculations = () => {
@@ -26,7 +22,7 @@ export const useSwapCalculations = () => {
   const [outputAmount, setOutputAmount] = useState<BigNumber>();
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({});
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
-  const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState(AmountField.INPUT_AMOUNT);
+  const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountField>('inputAmount');
   const prevDexGraphRef = useRef<DexGraph>();
 
   const onInputPrequisitesChange = useCallback(
@@ -92,7 +88,7 @@ export const useSwapCalculations = () => {
 
   const onInputAmountChange = (newInputAmount: Undefined<BigNumber>) => {
     if (!amountsAreEqual(newInputAmount, inputAmount)) {
-      setLastAmountFieldChanged(AmountField.INPUT_AMOUNT);
+      setLastAmountFieldChanged('inputAmount');
       setInputAmount(newInputAmount);
       onOutputPrequisitesChange(newInputAmount, { inputToken, outputToken });
     }
@@ -100,7 +96,7 @@ export const useSwapCalculations = () => {
 
   const onOutputAmountChange = (newOutputAmount: Undefined<BigNumber>) => {
     if (!amountsAreEqual(newOutputAmount, outputAmount)) {
-      setLastAmountFieldChanged(AmountField.OUTPUT_AMOUNT);
+      setLastAmountFieldChanged('outputAmount');
       setOutputAmount(newOutputAmount);
       onInputPrequisitesChange(newOutputAmount, { inputToken, outputToken });
     }
@@ -109,7 +105,7 @@ export const useSwapCalculations = () => {
   const onSwapPairChange = useCallback(
     (newPair: SwapPair) => {
       setSwapPair(newPair);
-      if (lastAmountFieldChanged === AmountField.INPUT_AMOUNT) {
+      if (lastAmountFieldChanged === 'inputAmount') {
         onOutputPrequisitesChange(inputAmount, newPair);
       } else {
         onInputPrequisitesChange(outputAmount, newPair);

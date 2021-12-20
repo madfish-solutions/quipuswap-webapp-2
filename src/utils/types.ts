@@ -111,16 +111,6 @@ export interface TokenDataMap {
   second: TokenDataType;
 }
 
-export interface SwapFormValues {
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
-  amount1: BigNumber;
-  amount2: BigNumber;
-  recipient: string;
-  slippage: BigNumber;
-  action: 'swap' | 'send';
-}
-
 export interface LiquidityFormValues {
   switcher: boolean;
   balance1: BigNumber;

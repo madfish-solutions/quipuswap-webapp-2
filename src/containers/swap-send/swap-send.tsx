@@ -22,7 +22,7 @@ import {
   toDecimals
 } from '@utils/helpers';
 import { DexGraph, getMaxOutputRoute } from '@utils/routing';
-import { SwapFormValues, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details';
@@ -31,6 +31,7 @@ import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
 import { SwapLimitsProvider, useSwapLimits } from './providers/swap-limits-provider';
 import { getBalanceByTokenSlug } from './utils/get-balance-by-token-slug';
+import { SwapAmountField, SwapFormValues } from './utils/types';
 
 interface SwapSendProps {
   className?: string;
@@ -59,7 +60,7 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
   const {
     errors,
-    values: { token1, token2, amount1, amount2, action, recipient, slippage },
+    values: { token1, token2, inputAmount, outputAmount, action, recipient, slippage },
     validateField,
     setValues,
     setFieldValue,
@@ -82,15 +83,15 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   } = useSwapCalculations();
 
   useEffect(() => {
-    setFieldValue('amount1', calculatedInputAmount);
-    setFieldValue('amount2', calculatedOutputAmount);
+    setFieldValue('inputAmount', calculatedInputAmount);
+    setFieldValue('outputAmount', calculatedOutputAmount);
   }, [calculatedInputAmount, calculatedOutputAmount, setFieldValue]);
 
   const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken: token1,
     outputToken: token2,
-    inputAmount: amount1,
-    outputAmount: amount2,
+    inputAmount,
+    outputAmount,
     slippageTolerance: slippage,
     dexRoute,
     recipient
@@ -120,8 +121,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
 
-  useEffect(() => void validateField('amount1'), [validateField, maxInputAmounts, balances]);
-  useEffect(() => void validateField('amount2'), [validateField, maxOutputAmounts]);
+  useEffect(() => void validateField('inputAmount'), [validateField, maxInputAmounts, balances]);
+  useEffect(() => void validateField('outputAmount'), [validateField, maxOutputAmounts]);
 
   const updateSelectedTokensBalances = useCallback(() => {
     Promise.all(
@@ -198,9 +199,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   const handleSubmit = useCallback(() => {
     submitForm().then(() => {
-      setFieldTouched('amount1', false);
-      setFieldTouched('amount2', false);
-      setValues(prevValues => ({ ...prevValues, amount1: undefined, amount2: undefined }));
+      setFieldTouched('inputAmount', false);
+      setFieldTouched('outputAmount', false);
+      setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
       onInputAmountChange(undefined);
       onOutputAmountChange(undefined);
     });
@@ -222,24 +223,24 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   const blackListedTokens = useMemo(() => [token1, token2].filter((x): x is WhitelistedToken => !!x), [token1, token2]);
 
-  const handleAmount1Change = (newAmount?: BigNumber) => {
-    setFieldTouched('amount1', true);
-    setFieldValue('amount1', newAmount, true);
+  const handleInputAmountChange = (newAmount?: BigNumber) => {
+    setFieldTouched('inputAmount', true);
+    setFieldValue('inputAmount', newAmount, true);
     onInputAmountChange(newAmount);
   };
-  const handleAmount2Change = (newAmount?: BigNumber) => {
-    setFieldTouched('amount2', true);
-    setFieldValue('amount2', newAmount, true);
+  const handleOutputAmountChange = (newAmount?: BigNumber) => {
+    setFieldTouched('outputAmount', true);
+    setFieldValue('outputAmount', newAmount, true);
     onOutputAmountChange(newAmount);
   };
 
   const handleSomeTokenChange = useCallback(
-    (fieldName: 'token1' | 'token2', amountFieldName: 'amount1' | 'amount2', newToken?: WhitelistedToken) => {
+    (fieldName: 'token1' | 'token2', amountFieldName: SwapAmountField, newToken?: WhitelistedToken) => {
       setFieldTouched(fieldName, true);
       const valuesToSet: Partial<SwapFormValues> = {
         [fieldName]: newToken
       };
-      const amount = amountFieldName === 'amount1' ? amount1 : amount2;
+      const amount = amountFieldName === 'inputAmount' ? inputAmount : outputAmount;
       if (newToken && amount) {
         setFieldTouched(amountFieldName, true);
         valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
@@ -255,17 +256,27 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         onTokensSelected(newToken1, newToken2);
       }
     },
-    [setValues, updateBalance, setFieldTouched, amount1, amount2, token1, token2, onTokensSelected, onSwapPairChange]
+    [
+      setValues,
+      updateBalance,
+      setFieldTouched,
+      inputAmount,
+      outputAmount,
+      token1,
+      token2,
+      onTokensSelected,
+      onSwapPairChange
+    ]
   );
 
   const handleToken1Change = useCallback(
     (newToken?: WhitelistedToken) => {
-      handleSomeTokenChange('token1', 'amount1', newToken);
+      handleSomeTokenChange('token1', 'inputAmount', newToken);
     },
     [handleSomeTokenChange]
   );
   const handleToken2Change = useCallback(
-    (newToken?: WhitelistedToken) => handleSomeTokenChange('token2', 'amount2', newToken),
+    (newToken?: WhitelistedToken) => handleSomeTokenChange('token2', 'outputAmount', newToken),
     [handleSomeTokenChange]
   );
 
@@ -274,14 +285,14 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       ...prevState,
       token1: token2,
       token2: token1,
-      amount1: amount2
+      inputAmount: outputAmount
     }));
     onSwapPairChange({ inputToken: token2, outputToken: token1 });
-    onInputAmountChange(amount2);
+    onInputAmountChange(outputAmount);
     if (token1 && token2) {
       onTokensSelected(token2, token1);
     }
-  }, [setValues, token1, token2, amount2, onTokensSelected, onSwapPairChange, onInputAmountChange]);
+  }, [setValues, token1, token2, outputAmount, onTokensSelected, onSwapPairChange, onInputAmountChange]);
 
   const handleRecipientChange = useCallback(
     (newValue: string) => {
@@ -317,8 +328,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     {}
   );
 
-  const swapInputError = touchedFieldsErrors.token1 ?? touchedFieldsErrors.amount1;
-  const swapOutputError = touchedFieldsErrors.token2 ?? touchedFieldsErrors.amount2;
+  const swapInputError = touchedFieldsErrors.token1 ?? touchedFieldsErrors.inputAmount;
+  const swapOutputError = touchedFieldsErrors.token2 ?? touchedFieldsErrors.outputAmount;
   const inputExchangeRate = token1Slug === undefined ? undefined : exchangeRates[token1Slug];
   const outputExchangeRate = token2Slug === undefined ? undefined : exchangeRates[token2Slug];
   const submitDisabled = Object.keys(errors).length > 0 || !accountPkh;
@@ -368,13 +379,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         >
           <NewTokenSelect
             showBalanceButtons={!!accountPkh}
-            amount={amount1}
+            amount={inputAmount}
             className={s.input}
             balance={token1Balance}
             exchangeRate={inputExchangeRate}
             label="From"
             error={swapInputError}
-            onAmountChange={handleAmount1Change}
+            onAmountChange={handleInputAmountChange}
             token={token1}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleToken1Change}
@@ -383,14 +394,14 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
             showBalanceButtons={!!accountPkh}
-            amount={amount2}
+            amount={outputAmount}
             className={cx(s.input, s.mb24)}
             balance={token2Balance}
             maxValue={maxOutput}
             exchangeRate={outputExchangeRate}
             label="To"
             error={swapOutputError}
-            onAmountChange={handleAmount2Change}
+            onAmountChange={handleOutputAmountChange}
             token={token2}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleToken2Change}
@@ -409,7 +420,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
           <SlippageInput
             error={touchedFieldsErrors.slippage}
-            outputAmount={amount2}
+            outputAmount={outputAmount}
             onChange={handleSlippageChange}
             slippage={slippage}
             outputToken={token2}
