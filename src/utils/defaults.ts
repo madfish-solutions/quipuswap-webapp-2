@@ -114,7 +114,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   connectType: 'default',
   name: 'Tezos Mainnet',
   type: 'main',
-  rpcBaseURL: 'https://mainnet.smartpy.io/',
+  rpcBaseURL: 'https://mainnet.api.tez.ie/',
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
   disabled: false
