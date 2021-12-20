@@ -12,16 +12,9 @@ import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
-import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import {
-  fromDecimals,
-  getTokenIdFromSlug,
-  getTokenOutput,
-  getTokenSlug,
-  makeWhitelistedToken,
-  toDecimals
-} from '@utils/helpers';
-import { DexGraph, getMaxOutputRoute } from '@utils/routing';
+import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
+import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
 import { SlippageInput } from './components/slippage-input';
@@ -112,6 +105,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const exchangeRates = useNewExchangeRates();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
+  const network = useNetwork();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
@@ -328,42 +322,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     {}
   );
 
+  const shouldHideExchangeRates = network.type === 'test';
   const swapInputError = touchedFieldsErrors.token1 ?? touchedFieldsErrors.inputAmount;
   const swapOutputError = touchedFieldsErrors.token2 ?? touchedFieldsErrors.outputAmount;
-  const inputExchangeRate = token1Slug === undefined ? undefined : exchangeRates[token1Slug];
-  const outputExchangeRate = token2Slug === undefined ? undefined : exchangeRates[token2Slug];
-  const submitDisabled = Object.keys(errors).length > 0 || !accountPkh;
-
-  const generalMaxOutputAmount = token1Slug && token2Slug ? maxOutputAmounts[token1Slug]?.[token2Slug] : undefined;
-  const maxOutputAmountByBalance = useMemo(() => {
-    if (dexGraph && token1 && token1Balance && token2) {
-      const route = getMaxOutputRoute(
-        {
-          startTokenSlug: getTokenSlug(token1),
-          endTokenSlug: getTokenSlug(token2),
-          graph: dexGraph
-        },
-        token1Balance
-      );
-      if (route) {
-        try {
-          return fromDecimals(
-            getTokenOutput({
-              inputToken: token1,
-              inputAmount: toDecimals(token1Balance, token1),
-              dexChain: route
-            }),
-            token2
-          );
-        } catch (e) {
-          return undefined;
-        }
-      }
-    }
-
-    return undefined;
-  }, [dexGraph, token1, token1Balance, token2]);
-  const maxOutput = maxOutputAmountByBalance ?? generalMaxOutputAmount;
+  const inputExchangeRate = token1Slug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[token1Slug];
+  const outputExchangeRate =
+    token2Slug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[token2Slug];
+  const submitDisabled = !isEmptyArray(Object.keys(errors)) || !accountPkh;
 
   return (
     <>
@@ -393,11 +358,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
-            showBalanceButtons={!!accountPkh}
+            showBalanceButtons={false}
             amount={outputAmount}
             className={cx(s.input, s.mb24)}
             balance={token2Balance}
-            maxValue={maxOutput}
             exchangeRate={outputExchangeRate}
             label="To"
             error={swapOutputError}

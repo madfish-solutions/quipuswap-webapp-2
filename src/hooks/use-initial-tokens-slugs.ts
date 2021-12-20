@@ -12,7 +12,7 @@ import {
   useTokens
 } from '@utils/dapp';
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
-import { getTokenIdFromSlug, getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
+import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
@@ -77,7 +77,8 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     [tokens]
   );
 
-  const { data: initialTokensSlugs } = useSWR(['initial-tokens', network.id, fromToSlug], getInitialTokens);
+  const tokensKey = tokens.map(token => getTokenSlug(token)).join(',');
+  const { data: initialTokensSlugs } = useSWR(['initial-tokens', network.id, fromToSlug, tokensKey], getInitialTokens);
 
   useEffect(() => {
     const prevNetworkId = prevNetworkIdRef.current;
@@ -92,13 +93,11 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     initialTokensSlugs.forEach(tokenSlug => {
       const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();
       const tokenIsKnown = isTez || tokens.some(token => getTokenSlug(token) === tokenSlug);
-      const { contractAddress, fa2TokenId, type: tokenType } = getTokenIdFromSlug(tokenSlug);
+      const { contractAddress, fa2TokenId } = getTokenIdFromSlug(tokenSlug);
       if (!tokenIsKnown) {
         searchCustomTokens(contractAddress, fa2TokenId).then(customToken => {
           if (customToken) {
             addCustomToken(customToken);
-          } else {
-            addCustomToken(makeWhitelistedToken({ contractAddress, fa2TokenId, type: tokenType }, []));
           }
         });
       }

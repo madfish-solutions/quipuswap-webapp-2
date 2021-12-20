@@ -21,7 +21,6 @@ interface NewTokenSelectProps {
   amount?: BigNumber;
   className?: string;
   balance?: BigNumber;
-  maxValue?: BigNumber;
   exchangeRate?: BigNumber;
   label: string;
   error?: string;
@@ -42,7 +41,6 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
   className,
   balance,
-  maxValue = balance,
   showBalanceButtons = true,
   label,
   exchangeRate,
@@ -197,7 +195,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
           </div>
         </div>
         {showBalanceButtons && (
-          <PercentSelector value={maxValue?.toString() ?? '0'} handleBalance={handlePercentageSelect} />
+          <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
         )}
         <ComplexError error={error} />
       </div>
