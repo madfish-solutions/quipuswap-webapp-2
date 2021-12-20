@@ -12,3 +12,5 @@ export const getUniqArray = <T>(list: T[], getKey: (el: T) => string): T[] => {
     return false;
   });
 };
+
+export const isFoundIndex = (index: number) => index !== -1;

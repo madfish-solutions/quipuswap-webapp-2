@@ -7,25 +7,19 @@ import { useTranslation } from 'next-i18next';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import s from '@styles/CommonContainer.module.sass';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import {
-  fromDecimals,
-  getTokenInput,
-  getTokenSlug,
-  getWhitelistedTokenSymbol,
-  transformTokenDataToAnalyticsLink
-} from '@utils/helpers';
+import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
 
 interface SwapDetailsProps {
   currentTab: string;
-  fee: string;
-  priceImpact: BigNumber;
+  fee?: BigNumber;
+  priceImpact?: BigNumber;
   inputToken?: WhitelistedToken;
   outputToken?: WhitelistedToken;
-  inputAmount?: BigNumber;
-  outputAmount?: BigNumber;
   route?: DexPair[];
+  buyRate?: BigNumber;
+  sellRate?: BigNumber;
 }
 
 const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute: DexPair[]) => {
@@ -91,41 +85,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   priceImpact,
   inputToken,
   outputToken,
-  inputAmount,
-  outputAmount,
-  route = []
+  route = [],
+  buyRate,
+  sellRate
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const exchangeRates = useNewExchangeRates();
   const inputTokenUsdExchangeRate = inputToken && exchangeRates[getTokenSlug(inputToken)];
   const outputTokenUsdExchangeRate = outputToken && exchangeRates[getTokenSlug(outputToken)];
-
-  const sellRate = useMemo(
-    () =>
-      inputToken && outputToken && inputAmount?.gt(0) && outputAmount
-        ? outputAmount.div(inputAmount).decimalPlaces(outputToken.metadata.decimals)
-        : undefined,
-    [inputAmount, outputAmount, inputToken, outputToken]
-  );
-
-  const buyRate = useMemo(() => {
-    if (inputToken && outputToken && inputAmount?.gt(0) && route.length > 0) {
-      const reversedRoute = [...route].reverse();
-      try {
-        const tokenAAmount = inputAmount;
-        const tokenBAmount = fromDecimals(
-          getTokenInput(inputToken, fromDecimals(inputAmount, -inputToken.metadata.decimals), reversedRoute),
-          outputToken.metadata.decimals
-        );
-
-        return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
-      } catch (_) {
-        // ignore error
-      }
-    }
-
-    return undefined;
-  }, [route, inputToken, outputToken, inputAmount]);
 
   const sellUsdRate = useMemo(
     () => (outputTokenUsdExchangeRate && sellRate ? sellRate.times(outputTokenUsdExchangeRate) : undefined),
@@ -234,7 +201,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <CurrencyAmount amount={+fee < 0.00000001 || Number.isNaN(+fee) ? '<0.00000001' : fee} currency="XTZ" />
+        {fee && <CurrencyAmount amount={fee.toFixed()} currency="XTZ" />}
       </CardCell>
       <CardCell
         header={

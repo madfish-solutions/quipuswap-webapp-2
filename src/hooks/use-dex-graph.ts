@@ -6,9 +6,9 @@ import constate from 'constate';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
-import { getTokenSlug, shortize } from '@utils/helpers';
+import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { DexPair, WhitelistedToken } from '@utils/types';
+import { DexPair } from '@utils/types';
 
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
@@ -42,27 +42,6 @@ interface RawTokenXtzPoolData extends RawCommonPoolData {
 
 type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 
-export const makeWhitelistedToken = (rawTokenData: RawToken, knownTokens: WhitelistedToken[]) => {
-  const { id, address, type } = rawTokenData;
-  const matchingToken = knownTokens.find(
-    ({ fa2TokenId, contractAddress }) => contractAddress === address && fa2TokenId?.toString() === id
-  );
-  const fallbackSymbol = type === 'fa1.2' ? shortize(address) : `${shortize(address)}_${id}`;
-  const fallbackToken = {
-    type,
-    contractAddress: address,
-    fa2TokenId: id ? +id : undefined,
-    metadata: {
-      decimals: 0,
-      symbol: fallbackSymbol,
-      name: fallbackSymbol,
-      thumbnailUri: ''
-    }
-  };
-
-  return matchingToken ?? fallbackToken;
-};
-
 const fallbackDexPools: DexPair[] = [];
 
 export const [DexGraphProvider, useDexGraph] = constate(() => {
@@ -84,8 +63,25 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
       return rawTTDexPools
         .map(rawPool => {
           const { tokenAPool, tokenBPool, totalSupply, tokenA } = rawPool;
-          const token1 = makeWhitelistedToken(tokenA, tokens);
-          const token2 = rawPool.type === 'ttdex' ? makeWhitelistedToken(rawPool.tokenB, tokens) : TEZOS_TOKEN;
+          const token1 = makeWhitelistedToken(
+            {
+              contractAddress: tokenA.address,
+              type: tokenA.type,
+              fa2TokenId: tokenA.id === undefined ? undefined : Number(tokenA.id)
+            },
+            tokens
+          );
+          const token2 =
+            rawPool.type === 'ttdex'
+              ? makeWhitelistedToken(
+                  {
+                    contractAddress: rawPool.tokenB.address,
+                    type: rawPool.tokenB.type,
+                    fa2TokenId: rawPool.tokenB.id === undefined ? undefined : Number(rawPool.tokenB.id)
+                  },
+                  tokens
+                )
+              : TEZOS_TOKEN;
 
           const commonPoolProps = {
             token1Pool: new BigNumber(tokenAPool),

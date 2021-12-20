@@ -9,6 +9,7 @@ import { WhitelistedToken } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
+import { SwapAction } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
@@ -20,7 +21,7 @@ export const useValidationSchema = () => {
   return objectSchema().shape({
     token1: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
     token2: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
-    amount1: objectSchema().when(
+    inputAmount: objectSchema().when(
       ['token1', 'token2'],
       // @ts-ignore
       (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
@@ -50,7 +51,7 @@ export const useValidationSchema = () => {
         return bigNumberSchema(min, max).required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
-    amount2: objectSchema().when(
+    outputAmount: objectSchema().when(
       ['token1', 'token2'],
       // @ts-ignore
       (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
@@ -64,10 +65,10 @@ export const useValidationSchema = () => {
         );
       }
     ),
-    recipient: mixedSchema().when('action', (currentAction: string) =>
-      currentAction === 'swap' ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
+    recipient: mixedSchema().when('action', (currentAction: SwapAction) =>
+      currentAction === SwapAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
     slippage: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
-    action: stringSchema().oneOf(['swap', 'send']).required()
+    action: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
   });
 };
