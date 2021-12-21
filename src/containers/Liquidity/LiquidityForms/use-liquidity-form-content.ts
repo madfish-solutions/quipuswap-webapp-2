@@ -44,29 +44,35 @@ export const useLiquidityFormContent = () => {
     }
   }, [router.asPath, tokens]);
 
-  const changeRoute = async (tabId?: LiquidityTabsEnum) => {
-    await router.replace(getLiquidityUrl(tabId || tab.id, tokenA, tokenB), undefined, { shallow: true });
+  const changeRoute = async (tabId: LiquidityTabsEnum, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
+    await router.replace(getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB), undefined, { shallow: true });
   };
 
   const handleChangeTab = (tabId: LiquidityTabsEnum) => {
     setTab(getTabById(tabId));
-    void changeRoute(tabId);
+    if (tokenA && tokenB) {
+      void changeRoute(tab.id, tokenA, tokenB);
+    }
   };
 
   const handleChangeTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
-    void changeRoute();
+    if (tokenB) {
+      void changeRoute(tab.id, token, tokenB);
+    }
   };
 
   const handleChangeTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
-    void changeRoute();
+    if (tokenA) {
+      void changeRoute(tab.id, tokenA, token);
+    }
   };
 
   const handleChangeTokensPair = ({ token1, token2 }: WhitelistedTokenPair) => {
     setTokenA(token1);
     setTokenB(token2);
-    void changeRoute();
+    void changeRoute(tab.id, token1, token2);
   };
 
   return {
