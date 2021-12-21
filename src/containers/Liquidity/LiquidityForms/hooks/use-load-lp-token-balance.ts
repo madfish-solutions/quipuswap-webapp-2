@@ -5,16 +5,12 @@ import { FoundDex } from '@quipuswap/sdk';
 import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { loadUserLpBalanceTez } from '@containers/Liquidity/LiquidityForms/helpers/load-user-lp-balance-tez';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
-export const useLoadLpTokenBalance = (
-  dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>
-) => {
+export const useLoadLpTokenBalance = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -23,7 +19,7 @@ export const useLoadLpTokenBalance = (
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     const getLpTokenBalance = async () => {
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+      if (!tezos || !accountPkh) {
         return;
       }
 

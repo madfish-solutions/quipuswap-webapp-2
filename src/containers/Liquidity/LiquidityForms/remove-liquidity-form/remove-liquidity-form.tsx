@@ -12,7 +12,7 @@ import { noOpFunc } from '@utils/helpers';
 import s from '../../Liquidity.module.sass';
 import { useRemoveLiquidityService } from './use-remove-liquidity-service';
 
-export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ tokenA, tokenB, onChangeTokensPair }) => {
+export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
@@ -28,7 +28,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ tokenA, tok
     handleChange,
     handleBalance,
     handleSetTokenPair
-  } = useRemoveLiquidityService(tokenA, tokenB, onChangeTokensPair);
+  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
 
   return (
     <>

@@ -3,18 +3,16 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
-import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { findToken } from '@containers/Liquidity/LiquidityForms/helpers/find-token';
 import { getLiquidityUrl } from '@containers/Liquidity/LiquidityForms/helpers/get-liquidity-url';
 import { parseUrl } from '@containers/Liquidity/LiquidityForms/helpers/parse-url';
-import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { getTabById, LiquidityTabsEnum } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-export const useLiquidityFormContent = () => {
+export const useLiquidityFormService = () => {
   const router = useRouter();
-  const { data: tokens } = useTokens();
+  const { data: tokens, loading } = useTokens();
 
   const { tabId } = parseUrl(router.asPath);
 
@@ -23,14 +21,14 @@ export const useLiquidityFormContent = () => {
   const [tokenA, setTokenA] = useState<WhitelistedToken | null>(null);
   const [tokenB, setTokenB] = useState<WhitelistedToken | null>(null);
 
-  const dexContract = useDexContract(tokenA, tokenB);
-
-  const lpTokenBalance = useLoadLpTokenBalance(dexContract, tokenA, tokenB);
-  const tokenABalance = useLoadTokenBalance(tokenA);
-  const tokenBBalance = useLoadTokenBalance(tokenB);
+  const dex = useDexContract(tokenA, tokenB);
 
   // Initial set tokens
   useEffect(() => {
+    if (loading) {
+      return;
+    }
+
     const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(router.asPath);
 
     const validTokenA = findToken(contractTokenA, idTokenA, tokens);
@@ -42,21 +40,27 @@ export const useLiquidityFormContent = () => {
     if (validTokenB) {
       setTokenB(validTokenB);
     }
-  }, [router.asPath, tokens]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading]);
 
   const changeRoute = async (tabId: LiquidityTabsEnum, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
-    await router.replace(getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB), undefined, { shallow: true });
+    const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
+    await router.replace(liqUrl, undefined, { shallow: true });
   };
 
   const handleChangeTab = (tabId: LiquidityTabsEnum) => {
-    setTab(getTabById(tabId));
+    const newTab = getTabById(tabId);
+
+    setTab(newTab);
+
     if (tokenA && tokenB) {
-      void changeRoute(tab.id, tokenA, tokenB);
+      void changeRoute(newTab.id, tokenA, tokenB);
     }
   };
 
   const handleChangeTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
+
     if (tokenB) {
       void changeRoute(tab.id, token, tokenB);
     }
@@ -64,6 +68,7 @@ export const useLiquidityFormContent = () => {
 
   const handleChangeTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
+
     if (tokenA) {
       void changeRoute(tab.id, tokenA, token);
     }
@@ -78,17 +83,11 @@ export const useLiquidityFormContent = () => {
   return {
     tab,
     handleChangeTab,
-    dexInfo: {
-      dex: dexContract,
-      isTezosToTokenDex: tokenA && tokenB && isTezInPair(tokenA.contractAddress, tokenB.contractAddress)
-    },
+    dex,
     tokenA,
     tokenB,
     handleChangeTokenA,
     handleChangeTokenB,
-    tokenABalance,
-    tokenBBalance,
-    lpTokenBalance,
     handleChangeTokensPair
   };
 };

@@ -8,20 +8,17 @@ import { loadTezTokenPairInfo } from '@containers/Liquidity/LiquidityForms/helpe
 import { TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-export const usePairInfo = (dex: Nullable<FoundDex>, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+export const usePairInfo = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
+
   useEffect(() => {
     const loadPairInfo = async () => {
-      if (!dex) {
-        return;
-      }
-
-      const pairInf =
+      const newPairInfo =
         dex.contract.address === TOKEN_TO_TOKEN_DEX
           ? await loadT2TPairInfo(dex, tokenA, tokenB)
           : loadTezTokenPairInfo(dex, tokenA, tokenB);
 
-      setPairInfo(pairInf);
+      setPairInfo(newPairInfo);
     };
     void loadPairInfo();
     // eslint-disable-next-line react-hooks/exhaustive-deps

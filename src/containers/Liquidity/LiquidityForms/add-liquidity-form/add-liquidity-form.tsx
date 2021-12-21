@@ -10,7 +10,7 @@ import { useAddLiqudityService } from '@containers/Liquidity/LiquidityForms/add-
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 
-export const AddLiquidityForm: FC<AddFormInterface> = ({ tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
+export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {
     accountPkh,
     tokenABalance,
@@ -24,7 +24,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ tokenA, tokenB, onToken
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiqudityService(tokenA, tokenB, onTokenAChange, onTokenBChange);
+  } = useAddLiqudityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   return (
     <>

@@ -1,15 +1,26 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
+import { ErrorAlert } from '@components/common/ErrorAlert';
+import { AddLiquidityForm } from '@containers/Liquidity/LiquidityForms/add-liquidity-form';
 import { LiquidityTabsEnum, TABS_CONTENT } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
-import { useLiquidityFormContent } from '@containers/Liquidity/LiquidityForms/use-liquidity-form-content';
+import { RemoveLiquidityForm } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form';
+import { useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/use-liquidity-form-service';
 
 import s from '../Liquidity.module.sass';
-import { LiquidityFormContent } from './liquidity-form-content';
 
 export const LiquidityForm: FC = () => {
-  const { tab, handleChangeTab } = useLiquidityFormContent();
+  const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
+    useLiquidityFormService();
+
+  if (!tokenA || !tokenB) {
+    return <ErrorAlert error={new Error('Tokens should be defined')} />;
+  }
+
+  if (!dex) {
+    return <ErrorAlert error={new Error('DexContract is loading')} />;
+  }
 
   return (
     <>
@@ -27,7 +38,17 @@ export const LiquidityForm: FC = () => {
         }}
         contentClassName={s.content}
       >
-        <LiquidityFormContent tab={tab.id} />
+        {tab.id === 'add' ? (
+          <AddLiquidityForm
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            onTokenAChange={handleChangeTokenA}
+            onTokenBChange={handleChangeTokenB}
+          />
+        ) : (
+          <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
+        )}
       </Card>
     </>
   );

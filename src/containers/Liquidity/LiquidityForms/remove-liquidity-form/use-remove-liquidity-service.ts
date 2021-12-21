@@ -1,8 +1,8 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
+import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
 import { removeLiquidityTez, sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
@@ -12,13 +12,13 @@ import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 export const useRemoveLiquidityService = (
+  dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const dex = useDexContract(tokenA, tokenB);
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
@@ -31,9 +31,6 @@ export const useRemoveLiquidityService = (
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
-    if (!dex) {
-      return;
-    }
     setTokenPair({
       token1: tokenA,
       token2: tokenB,
@@ -46,7 +43,7 @@ export const useRemoveLiquidityService = (
   };
 
   useEffect(() => {
-    if (!dex || !pairInfo || !tokenA || !tokenB) {
+    if (!pairInfo) {
       return;
     }
 
@@ -87,7 +84,7 @@ export const useRemoveLiquidityService = (
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex || !pairInfo) {
+    if (!tezos || !accountPkh || !pairInfo) {
       return;
     }
 

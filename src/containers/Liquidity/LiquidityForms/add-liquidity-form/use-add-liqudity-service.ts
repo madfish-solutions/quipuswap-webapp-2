@@ -1,9 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-import { Token } from '@quipuswap/sdk';
+import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
 import {
   addLiquidityTez,
   addPairT2T,
@@ -17,9 +16,10 @@ import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useAddLiqudityService = (
+  dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   onTokenAChange: (token: WhitelistedToken) => void,
@@ -28,19 +28,77 @@ export const useAddLiqudityService = (
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
-  const dex = useDexContract(tokenA, tokenB);
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
+  const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
+
+  // eslint-disable-next-line sonarjs/cognitive-complexity
+  useEffect(() => {
+    if (!changedToken) {
+      return;
+    }
+
+    if (changedToken === 'tokenB') {
+      if (tokenAInput === '') {
+        setTokenBInput('');
+
+        return;
+      }
+
+      if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+        return;
+      }
+
+      const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
+
+      const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenAAmount = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
+
+      const tokenBAmount =
+        tokenA.contractAddress === pairTokenA.contractAddress
+          ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
+          : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
+
+      setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
+    } else {
+      if (tokenBInput === '') {
+        setTokenAInput('');
+
+        return;
+      }
+
+      if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+        return;
+      }
+
+      const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
+
+      const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+      const tokenBAmount = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
+
+      const tokenAAmount =
+        tokenB.contractAddress === pairTokenB.contractAddress
+          ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
+          : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
+
+      setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairInfo]);
 
   const handleSetTokenA = (token: WhitelistedToken) => {
     onTokenAChange(token);
+    setChangedToken('tokenA');
+    setTokenAInput('0.0');
   };
   const handleSetTokenB = (token: WhitelistedToken) => {
     onTokenBChange(token);
+    setChangedToken('tokenB');
+    setTokenBInput('0.0');
   };
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -135,7 +193,7 @@ export const useAddLiqudityService = (
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !dex || !pairInfo) {
+    if (!tezos || !accountPkh || !pairInfo) {
       return;
     }
 
