@@ -13,7 +13,7 @@ import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
+import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
@@ -76,9 +76,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   } = useSwapCalculations();
 
   useEffect(() => {
-    setFieldValue('inputAmount', calculatedInputAmount);
-    setFieldValue('outputAmount', calculatedOutputAmount);
-  }, [calculatedInputAmount, calculatedOutputAmount, setFieldValue]);
+    if (!amountsAreEqual(calculatedInputAmount, inputAmount)) {
+      setFieldValue('inputAmount', calculatedInputAmount).then(() => void setFieldTouched('inputAmount', true));
+    }
+    if (!amountsAreEqual(calculatedOutputAmount, outputAmount)) {
+      setFieldValue('outputAmount', calculatedOutputAmount);
+    }
+  }, [calculatedInputAmount, calculatedOutputAmount, inputAmount, outputAmount, setFieldValue, setFieldTouched]);
 
   const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken: token1,
@@ -148,10 +152,16 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     if ((initialFrom || initialTo) && (prevInitialFrom !== initialFrom || prevInitialTo !== initialTo)) {
       const valuesToChange: Partial<SwapFormValues> = {};
       if (initialFrom) {
-        valuesToChange.token1 = makeWhitelistedToken(getTokenIdFromSlug(initialFrom), tokens);
+        const newToken1 = makeWhitelistedToken(getTokenIdFromSlug(initialFrom), tokens);
+        valuesToChange.token1 = newToken1;
+        // eslint-disable-next-line no-console
+        updateBalance(newToken1).catch(console.error);
       }
       if (initialTo) {
-        valuesToChange.token2 = makeWhitelistedToken(getTokenIdFromSlug(initialTo), tokens);
+        const newToken2 = makeWhitelistedToken(getTokenIdFromSlug(initialTo), tokens);
+        valuesToChange.token2 = newToken2;
+        // eslint-disable-next-line no-console
+        updateBalance(newToken2).catch(console.error);
       }
       setValues(prevValues => ({ ...prevValues, ...valuesToChange }));
       onSwapPairChange({
@@ -159,7 +169,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         outputToken: valuesToChange.token2 ?? token2
       });
     }
-  }, [initialFrom, initialTo, setValues, tokens, onSwapPairChange, token1, token2]);
+  }, [initialFrom, initialTo, setValues, tokens, onSwapPairChange, token1, token2, updateBalance]);
 
   useEffect(() => {
     if (token1 && token2) {
@@ -177,10 +187,12 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           token1: newToken1,
           token2: newToken2
         }));
+        // eslint-disable-next-line no-console
+        Promise.all([updateBalance(newToken1), updateBalance(newToken2)]).catch(console.error);
         onSwapPairChange({ inputToken: newToken1, outputToken: newToken2 });
       }
     }
-  }, [setValues, token1, token2, tokens, onSwapPairChange]);
+  }, [setValues, token1, token2, tokens, onSwapPairChange, updateBalance]);
 
   useEffect(() => {
     if (prevDexGraphRef.current !== dexGraph && token1 && token2) {
@@ -191,14 +203,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   useOnBlock(tezos, updateSelectedTokensBalances);
 
-  const handleSubmit = useCallback(() => {
-    submitForm().then(() => {
-      setFieldTouched('inputAmount', false);
-      setFieldTouched('outputAmount', false);
-      setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
-      onInputAmountChange(undefined);
-      onOutputAmountChange(undefined);
-    });
+  const handleSubmit = useCallback(async () => {
+    await submitForm();
+    setFieldTouched('inputAmount', false);
+    setFieldTouched('outputAmount', false);
+    setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
+    onInputAmountChange(undefined);
+    onOutputAmountChange(undefined);
   }, [setValues, submitForm, setFieldTouched, onInputAmountChange, onOutputAmountChange]);
 
   const handleTabSwitch = useCallback(
