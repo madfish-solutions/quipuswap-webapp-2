@@ -72,7 +72,11 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
-      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh || Boolean(errorMessage)}>
+      <Button
+        className={s.button}
+        onClick={handleRemoveLiquidity}
+        disabled={!accountPkh || Boolean(errorMessage) || !lpTokenInput}
+      >
         Remove
       </Button>
     </>

@@ -13,6 +13,7 @@ import {
 } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
+import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
@@ -274,7 +275,12 @@ export const useAddLiqudityService = (
     }
   };
 
+  const errorMessageTokenA = validateUserInput(new BigNumber(tokenAInput), new BigNumber(tokenABalance));
+  const errorMessageTokenB = validateUserInput(new BigNumber(tokenBInput), new BigNumber(tokenBBalance));
+
   return {
+    errorMessageTokenA,
+    errorMessageTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,
