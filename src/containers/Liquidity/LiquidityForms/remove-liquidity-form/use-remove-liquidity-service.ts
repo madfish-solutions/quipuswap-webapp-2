@@ -8,7 +8,7 @@ import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidit
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
+import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
@@ -28,7 +28,7 @@ export const useRemoveLiquidityService = (
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
-  const [slippage] = useState<BigNumber>(new BigNumber(0.005));
+  const [slippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
@@ -56,8 +56,7 @@ export const useRemoveLiquidityService = (
 
       return;
     }
-    const ten = 10;
-    const lpTokenDecimals = new BigNumber(ten).pow(LP_TOKEN_DECIMALS);
+    const lpTokenDecimals = new BigNumber(TEN).pow(LP_TOKEN_DECIMALS);
     const lpTokenInputWithDecimals = new BigNumber(lpTokenInput).multipliedBy(lpTokenDecimals);
 
     const { decimals: decimalsA } = tokenA.metadata;
@@ -93,12 +92,18 @@ export const useRemoveLiquidityService = (
     }
 
     const { id } = pairInfo;
-    const ten = new BigNumber(10);
-    const shares = new BigNumber(lpTokenInput).multipliedBy(ten.pow(LP_TOKEN_DECIMALS));
+    const ten = new BigNumber(TEN);
+    const shares = new BigNumber(lpTokenInput)
+      .multipliedBy(ten.pow(LP_TOKEN_DECIMALS))
+      .integerValue(BigNumber.ROUND_UP);
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(ten.pow(tokenA.metadata.decimals));
-      const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(ten.pow(tokenB.metadata.decimals));
+      const tokenAOut = new BigNumber(tokenAOutput)
+        .multipliedBy(ten.pow(tokenA.metadata.decimals))
+        .integerValue(BigNumber.ROUND_DOWN);
+      const tokenBOut = new BigNumber(tokenBOutput)
+        .multipliedBy(ten.pow(tokenB.metadata.decimals))
+        .integerValue(BigNumber.ROUND_DOWN);
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -117,7 +122,10 @@ export const useRemoveLiquidityService = (
     }
   };
 
-  const errorMessage = validateUserInput(new BigNumber(lpTokenInput), new BigNumber(lpTokenBalance));
+  const errorMessage = validateUserInput(
+    new BigNumber(lpTokenInput).multipliedBy(new BigNumber(TEN).pow(LP_TOKEN_DECIMALS)),
+    lpTokenBalance
+  );
 
   return {
     errorMessage,

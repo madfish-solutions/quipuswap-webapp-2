@@ -15,7 +15,7 @@ import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks'
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
+import { TEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
@@ -50,13 +50,13 @@ export const useAddLiqudityService = (
         return;
       }
 
-      if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
       const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
-      const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+      const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
       const tokenAAmount = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
 
       const tokenBAmount =
@@ -72,13 +72,13 @@ export const useAddLiqudityService = (
         return;
       }
 
-      if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
       const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
 
-      const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+      const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
       const tokenBAmount = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
 
       const tokenAAmount =
@@ -111,11 +111,11 @@ export const useAddLiqudityService = (
       return;
     }
 
-    if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+    if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
       return;
     }
 
-    const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+    const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
     const tokenAAmount = new BigNumber(event.target.value).multipliedBy(tokenADecimals);
 
     const tokenBAmount =
@@ -134,11 +134,11 @@ export const useAddLiqudityService = (
       return;
     }
 
-    if (!pairInfo || pairInfo.tokenAPool.eq(0) || pairInfo.tokenBPool.eq(0) || pairInfo.totalSupply.eq(0)) {
+    if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
       return;
     }
 
-    const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+    const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
     const tokenBAmount = new BigNumber(event.target.value).multipliedBy(tokenBDecimals);
 
     const tokenAAmount =
@@ -160,7 +160,7 @@ export const useAddLiqudityService = (
 
     const { tokenAPool, tokenBPool, totalSupply } = pairInfo;
 
-    const tokenADecimals = new BigNumber(10).pow(tokenA.metadata.decimals);
+    const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
     const tokenAAmount = fixedValue.multipliedBy(tokenADecimals);
 
     const tokenBAmount =
@@ -181,7 +181,7 @@ export const useAddLiqudityService = (
 
     const { tokenAPool, tokenBPool, totalSupply } = pairInfo;
 
-    const tokenBDecimals = new BigNumber(10).pow(tokenB.metadata.decimals);
+    const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
     const tokenBAmount = fixedValue.multipliedBy(tokenBDecimals);
 
     const tokenAAmount =
@@ -211,12 +211,12 @@ export const useAddLiqudityService = (
       const pairTokenB = addresses.addressB === tokenB.contractAddress ? tokenB : tokenA;
       const pairInputB = addresses.addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
-      const ten = new BigNumber(10);
+      const ten = new BigNumber(TEN);
 
-      if (tokenAPool.gt(0) && tokenBPool.gt(0) && totalSupply.gt(0)) {
+      if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
         const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
         const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-        const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_CEIL);
+        const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
 
         const tokenAUpdateOperator = allowContractSpendYourTokens(
           tezos,
@@ -232,11 +232,29 @@ export const useAddLiqudityService = (
           tokenBAmount,
           accountPkh
         );
+        const tokenAResetOperator = allowContractSpendYourTokens(
+          tezos,
+          pairTokenA,
+          dex.contract.address,
+          0,
+          accountPkh
+        );
+        const tokenBResetOperator = allowContractSpendYourTokens(
+          tezos,
+          pairTokenB,
+          dex.contract.address,
+          0,
+          accountPkh
+        );
 
-        const tokensUpdateOperators = await Promise.all([tokenAUpdateOperator, tokenBUpdateOperator]);
-        if (!tokensUpdateOperators[0] || !tokensUpdateOperators[1]) {
-          return;
-        }
+        const tokensUpdateOperators = await Promise.all([
+          tokenAUpdateOperator,
+          tokenBUpdateOperator,
+          tokenAResetOperator,
+          tokenBResetOperator
+        ]);
+        const [tokenAUpdateResolved, tokenBUpdateResolved, tokenAResetResolved, tokenBResetResolved] =
+          tokensUpdateOperators;
 
         const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
         const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
@@ -245,8 +263,10 @@ export const useAddLiqudityService = (
 
         const batch = tezos.wallet
           .batch()
-          .withContractCall(tokensUpdateOperators[0])
-          .withContractCall(tokensUpdateOperators[1])
+          .withContractCall(tokenAResetResolved)
+          .withContractCall(tokenBResetResolved)
+          .withContractCall(tokenAUpdateResolved)
+          .withContractCall(tokenBUpdateResolved)
           .withContractCall(investParams);
 
         await batch.send();
@@ -258,25 +278,31 @@ export const useAddLiqudityService = (
       const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
       const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
 
-      const tezDecimals = new BigNumber(10).pow(TEZOS_TOKEN.metadata.decimals);
+      const tezDecimals = new BigNumber(TEN).pow(TEZOS_TOKEN.metadata.decimals);
       const tezValue = new BigNumber(tezTokenInput).multipliedBy(tezDecimals);
 
-      if (tokenAPool.gt(0) && tokenBPool.gt(0) && totalSupply.gt(0)) {
+      if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
         await addLiquidityTez(tezos, dex, tezValue);
       } else {
         const token: Token = {
           contract: notTezToken.contractAddress,
           id: notTezToken.fa2TokenId
         };
-        const tokenBDecimals = new BigNumber(10).pow(notTezToken.metadata.decimals);
+        const tokenBDecimals = new BigNumber(TEN).pow(notTezToken.metadata.decimals);
         const tokenBValue = new BigNumber(notTezTokenInput).multipliedBy(tokenBDecimals);
         await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
       }
     }
   };
 
-  const errorMessageTokenA = validateUserInput(new BigNumber(tokenAInput), new BigNumber(tokenABalance));
-  const errorMessageTokenB = validateUserInput(new BigNumber(tokenBInput), new BigNumber(tokenBBalance));
+  const errorMessageTokenA = validateUserInput(
+    new BigNumber(tokenAInput).multipliedBy(new BigNumber(TEN).pow(tokenA.metadata.decimals)),
+    tokenABalance
+  );
+  const errorMessageTokenB = validateUserInput(
+    new BigNumber(tokenBInput).multipliedBy(new BigNumber(TEN).pow(tokenB.metadata.decimals)),
+    tokenBBalance
+  );
 
   return {
     errorMessageTokenA,

@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 
+import BigNumber from 'bignumber.js';
+
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
-import { fromDecimals } from '@utils/helpers';
+import { ZERO } from '@utils/defaults';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [tokenBalance, setTokenBalance] = useState<string>('0');
+  const [tokenBalance, setTokenBalance] = useState<BigNumber>(new BigNumber(ZERO));
 
   useEffect(() => {
     let isMounted = true;
@@ -17,15 +19,12 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
         return;
       }
 
-      const { contractAddress, type, fa2TokenId, metadata } = token;
-      const { decimals } = metadata;
+      const { contractAddress, type, fa2TokenId } = token;
 
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
       if (userTokenABalance && isMounted) {
-        setTokenBalance(fromDecimals(userTokenABalance, decimals).toFixed(decimals));
-      } else if (!userTokenABalance && isMounted) {
-        setTokenBalance('0');
+        setTokenBalance(userTokenABalance);
       }
     };
     void getTokenBalance();

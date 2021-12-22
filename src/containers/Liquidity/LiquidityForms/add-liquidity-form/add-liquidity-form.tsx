@@ -6,6 +6,7 @@ import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { useAddLiqudityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity-service';
+import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
@@ -28,11 +29,14 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     handleAddLiquidity
   } = useAddLiqudityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
+  const { decimals: decimalsA } = tokenA.metadata;
+  const { decimals: decimalsB } = tokenB.metadata;
+
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={tokenABalance}
+        balance={fromDecimals(tokenABalance, decimalsA).toFixed(decimalsA)}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -46,7 +50,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={tokenBBalance}
+        balance={fromDecimals(tokenBBalance, decimalsB).toFixed(decimalsB)}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
