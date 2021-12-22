@@ -2,11 +2,11 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getTokenIdFromSlug, getMaxTokenInput, getTokenOutput, isEmptyArray } from '@utils/helpers';
-import { DexPair } from '@utils/types';
+import { DexPair, Undefined } from '@utils/types';
 
 import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
-import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
-import { getRoutesList } from './getRoutesList';
+import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
+import { getRoutesList } from './get-routes-list';
 import { CommonRouteProblemParams } from './types';
 
 const defaultMaxTokenInput = new BigNumber(Infinity);
@@ -15,7 +15,7 @@ export const getMaxOutputRoute = memoizee(
   (
     { startTokenSlug, endTokenSlug, graph, depth = DEFAULT_ROUTE_SEARCH_DEPTH }: CommonRouteProblemParams,
     maxTokenInput = defaultMaxTokenInput
-  ): DexPair[] | undefined => {
+  ): Undefined<DexPair[]> => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
     const inputToken = getTokenIdFromSlug(startTokenSlug);

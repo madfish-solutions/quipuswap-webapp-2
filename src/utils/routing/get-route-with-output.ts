@@ -2,10 +2,11 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { getTokenIdFromSlug, getMarketQuotient, getTokenInput } from '@utils/helpers';
-import { DexPair } from '@utils/types';
+import { DexPair, Undefined } from '@utils/types';
 
-import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
-import { getRoutesList } from './getRoutesList';
+import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
+import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
+import { getRoutesList } from './get-routes-list';
 import { CommonRouteProblemParams } from './types';
 
 interface RouteWithOutputProblemParams extends CommonRouteProblemParams {
@@ -16,12 +17,18 @@ const getRouteWithOutputProblemMemoKey = ({ outputAmount, ...commonParams }: Rou
   [outputAmount?.toFixed(), getCommonRouteProblemMemoKey(commonParams)].join(',');
 
 export const getRouteWithOutput = memoizee(
-  ({ startTokenSlug, endTokenSlug, graph, outputAmount, depth = 5 }: RouteWithOutputProblemParams) => {
+  ({
+    startTokenSlug,
+    endTokenSlug,
+    graph,
+    outputAmount,
+    depth = DEFAULT_ROUTE_SEARCH_DEPTH
+  }: RouteWithOutputProblemParams) => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
     const inputToken = getTokenIdFromSlug(startTokenSlug);
 
-    return routes.reduce<DexPair[] | undefined>((prevCandidate, route) => {
+    return routes.reduce<Undefined<DexPair[]>>((prevCandidate, route) => {
       try {
         let prevInputAmount =
           prevCandidate === undefined

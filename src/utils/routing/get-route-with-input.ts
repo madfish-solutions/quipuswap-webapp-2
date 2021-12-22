@@ -4,7 +4,8 @@ import memoizee from 'memoizee';
 import { getTokenSlug, getTokenIdFromSlug, getMarketQuotient, getTokenOutput } from '@utils/helpers';
 import { DexPair } from '@utils/types';
 
-import { getCommonRouteProblemMemoKey } from './getCommonRouteProblemMemoKey';
+import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
+import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { CommonRouteProblemParams } from './types';
 
 interface RouteWithInputProblemParams extends CommonRouteProblemParams {
@@ -35,7 +36,13 @@ export const getParentBranch = (child: RoutesTreeNode) =>
   child.parent?.branches.find(({ child: candidateChild }) => candidateChild === child);
 
 export function getRoutesTreeWithInput(
-  { startTokenSlug, endTokenSlug, graph, depth = 5, inputAmount = new BigNumber(1) }: RouteWithInputProblemParams,
+  {
+    startTokenSlug,
+    endTokenSlug,
+    graph,
+    depth = DEFAULT_ROUTE_SEARCH_DEPTH,
+    inputAmount = new BigNumber(1)
+  }: RouteWithInputProblemParams,
   shouldUseImaginaryAmount: boolean,
   parent?: RoutesTreeNode,
   prevRoute: DexPair[] = []
