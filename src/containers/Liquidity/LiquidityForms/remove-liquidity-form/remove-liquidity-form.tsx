@@ -46,7 +46,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         notFrozen
         id="liquidity-remove-input"
         className={s.input}
-        error={errorMessage}
+        error={accountPkh ? errorMessage : undefined}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
