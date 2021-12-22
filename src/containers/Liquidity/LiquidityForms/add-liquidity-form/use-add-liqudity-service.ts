@@ -94,12 +94,12 @@ export const useAddLiqudityService = (
   const handleSetTokenA = (token: WhitelistedToken) => {
     onTokenAChange(token);
     setChangedToken('tokenA');
-    setTokenAInput('0.0');
+    setTokenAInput('');
   };
   const handleSetTokenB = (token: WhitelistedToken) => {
     onTokenBChange(token);
     setChangedToken('tokenB');
-    setTokenBInput('0.0');
+    setTokenBInput('');
   };
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
