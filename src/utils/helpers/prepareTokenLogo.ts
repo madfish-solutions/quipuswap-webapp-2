@@ -16,7 +16,7 @@ export const prepareTokenLogo = (url?: string | null) => {
   }
 
   if (
-    trimUrl.match(/\.(jpeg|jpg|gif|png)$/) !== null ||
+    trimUrl.match(/\.(jpeg|jpg|gif|png|svg)$/) !== null ||
     trimUrl.includes(CLOUDFLARE_IPFS) ||
     trimUrl.includes(IPFS_IO) ||
     trimUrl.includes(BAKERS_HTTP)
