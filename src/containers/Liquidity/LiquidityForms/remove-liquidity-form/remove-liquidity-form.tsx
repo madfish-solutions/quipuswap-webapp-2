@@ -16,6 +16,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
+    errorMessage,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -45,6 +46,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         notFrozen
         id="liquidity-remove-input"
         className={s.input}
+        error={errorMessage}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
@@ -70,7 +72,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
-      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh}>
+      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={!accountPkh || Boolean(errorMessage)}>
         Remove
       </Button>
     </>

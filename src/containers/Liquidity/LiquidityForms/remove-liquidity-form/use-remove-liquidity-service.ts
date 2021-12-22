@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { removeLiquidityTez, sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
+import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
@@ -113,7 +114,10 @@ export const useRemoveLiquidityService = (
     }
   };
 
+  const errorMessage = validateUserInput(new BigNumber(lpTokenInput), new BigNumber(lpTokenBalance));
+
   return {
+    errorMessage,
     tokenPair,
     accountPkh,
     lpTokenInput,
