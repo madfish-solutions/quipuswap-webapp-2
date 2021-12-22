@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext, Skeleton } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -21,7 +21,6 @@ interface NewTokenSelectProps {
   amount?: BigNumber;
   className?: string;
   balance?: BigNumber;
-  maxValue?: BigNumber;
   exchangeRate?: BigNumber;
   label: string;
   error?: string;
@@ -42,7 +41,6 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
   className,
   balance,
-  maxValue = balance,
   showBalanceButtons = true,
   label,
   exchangeRate,
@@ -163,7 +161,9 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
               {account && (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>{formattedBalance}</div>
+                  <div className={cx(s.label2, s.price)}>
+                    {formattedBalance ?? <Skeleton className={s.balanceSkeleton} />}
+                  </div>
                 </div>
               )}
             </div>
@@ -197,7 +197,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
           </div>
         </div>
         {showBalanceButtons && (
-          <PercentSelector value={maxValue?.toString() ?? '0'} handleBalance={handlePercentageSelect} />
+          <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
         )}
         <ComplexError error={error} />
       </div>
