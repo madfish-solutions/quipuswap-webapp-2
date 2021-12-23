@@ -16,8 +16,8 @@ export const sortTokensPair = (
 
   if (tokenB.type < tokenA.type) {
     return {
-      tokenB,
-      tokenA,
+      tokenA: tokenB,
+      tokenB: tokenA,
       type: 'Left-Right'
     };
   }
@@ -32,8 +32,8 @@ export const sortTokensPair = (
     }
 
     return {
-      tokenB,
-      tokenA,
+      tokenA: tokenB,
+      tokenB: tokenA,
       type: 'Left-Left'
     };
   }
@@ -49,8 +49,8 @@ export const sortTokensPair = (
 
     if (tokenA.contractAddress > tokenB.contractAddress) {
       return {
-        tokenB,
-        tokenA,
+        tokenA: tokenB,
+        tokenB: tokenA,
         type: 'Right-Right'
       };
     }
@@ -65,8 +65,8 @@ export const sortTokensPair = (
       }
 
       return {
-        tokenB,
-        tokenA,
+        tokenA: tokenB,
+        tokenB: tokenA,
         type: 'Right-Right'
       };
     }

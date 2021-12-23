@@ -57,7 +57,9 @@ export const useRemoveLiquidityService = (
       return;
     }
     const lpTokenDecimals = new BigNumber(TEN).pow(LP_TOKEN_DECIMALS);
-    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput).multipliedBy(lpTokenDecimals);
+    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput)
+      .multipliedBy(lpTokenDecimals)
+      .integerValue(BigNumber.ROUND_UP);
 
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
@@ -66,8 +68,8 @@ export const useRemoveLiquidityService = (
     const tokenAPerOneLp = tokenAPool.dividedBy(totalSupply);
     const tokenBPerOneLp = tokenBPool.dividedBy(totalSupply);
 
-    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals);
-    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals);
+    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
 
     if (tokenA.contractAddress === pairTokenA.contractAddress) {
       setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
@@ -98,12 +100,8 @@ export const useRemoveLiquidityService = (
       .integerValue(BigNumber.ROUND_UP);
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const tokenAOut = new BigNumber(tokenAOutput)
-        .multipliedBy(ten.pow(tokenA.metadata.decimals))
-        .integerValue(BigNumber.ROUND_DOWN);
-      const tokenBOut = new BigNumber(tokenBOutput)
-        .multipliedBy(ten.pow(tokenB.metadata.decimals))
-        .integerValue(BigNumber.ROUND_DOWN);
+      const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(ten.pow(tokenA.metadata.decimals));
+      const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(ten.pow(tokenB.metadata.decimals));
 
       const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
       const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
