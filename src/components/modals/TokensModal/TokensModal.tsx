@@ -50,7 +50,7 @@ interface TokensModalProps extends ReactModal.Props {
 
 interface FormValues {
   search: string;
-  tokenId: number;
+  tokenId: number | string;
 }
 
 export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedTokens = [], ...props }) => {
@@ -70,7 +70,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
 
   const handleInput = (values: FormValues) => {
     setInputValue(values.search ?? '');
-    setInputToken(isSoleFa2Token ? values.tokenId : 0);
+    setInputToken(isSoleFa2Token ? Number(values.tokenId) : 0);
   };
 
   const handleTokenSearch = useCallback(() => {
