@@ -34,12 +34,11 @@ export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 
 export const READ_ONLY_SIGNER_PK = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK!;
 export const READ_ONLY_SIGNER_PK_HASH = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH!;
+export const MAINNET_LAMBDA_VIEW_CONTRACT = process.env.NEXT_PUBLIC_MAINNET_LAMBDA_VIEW_CONTRACT!;
+export const HANGZHOUNET_LAMBDA_VIEW_CONTRACT = process.env.NEXT_PUBLIC_HANGZHOUNET_LAMBDA_VIEW_CONTRACT!;
 export const KNOWN_LAMBDA_CONTRACTS = new Map([
-  ['NetXdQprcVkpaWU', 'KT1CPuTzwC7h7uLXd5WQmpMFso1HxrLBUtpE'],
-  ['NetXz969SFaFn8k', 'KT1VhtTGAyh7AVVwyH2ExNhaXvQq2rAJ6DNs'],
-  ['NetXxkAx4woPLyu', 'KT1BbTmNHmJp2NnQyw5qsAExEYmYuUpR2HdX'],
-  ['NetXSgo1ZT2DRUG', 'KT1A64nVZDccAHGAsf1ZyVajXZcbiwjV3SnN'],
-  ['NetXZSsxBpMQeAT', 'KT19ewhnhaCcCuoF1Ly2pxXAFRiF3UtgaY9U']
+  ['NetXdQprcVkpaWU', MAINNET_LAMBDA_VIEW_CONTRACT],
+  ['NetXZSsxBpMQeAT', HANGZHOUNET_LAMBDA_VIEW_CONTRACT]
 ]);
 
 export const SAVED_TOKENS_KEY = 'savedCustomTokens';
@@ -106,6 +105,8 @@ export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 // NETWORKS
+export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
+export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
@@ -114,7 +115,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   connectType: 'default',
   name: 'Tezos Mainnet',
   type: 'main',
-  rpcBaseURL: 'https://mainnet.api.tez.ie/',
+  rpcBaseURL: MAINNET_RPC_URL,
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
   disabled: false
@@ -124,7 +125,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   connectType: 'default',
   name: 'Hangzhounet Testnet',
   type: 'test',
-  rpcBaseURL: 'https://hangzhounet.api.tez.ie',
+  rpcBaseURL: HANGZHOUNET_RPC_URL,
   metadata: METADATA_API_TESTNET,
   description: 'Hangzhounet testnet',
   disabled: false
