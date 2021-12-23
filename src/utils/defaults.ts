@@ -128,7 +128,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   connectType: 'default',
   name: 'Hangzhounet Testnet',
   type: 'test',
-  rpcBaseURL: 'https://hangzhounet.api.tez.ie',
+  rpcBaseURL: 'https://rpc.hangzhou.tzstats.com',
   metadata: METADATA_API_TESTNET,
   description: 'Hangzhounet testnet',
   disabled: false

@@ -194,7 +194,24 @@ export const useAddLiqudityService = (
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !pairInfo) {
+    if (!tezos || !accountPkh) {
+      return;
+    }
+    const addresses = sortTokensContracts(tokenA, tokenB);
+    if (!addresses) {
+      return;
+    }
+    const pairTokenA = addresses.addressA === tokenA.contractAddress ? tokenA : tokenB;
+    const pairInputA = addresses.addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
+    const pairTokenB = addresses.addressB === tokenB.contractAddress ? tokenB : tokenA;
+    const pairInputB = addresses.addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
+
+    if (
+      !pairInfo ||
+      (pairInfo && pairInfo.tokenAPool.eq(ZERO) && pairInfo.tokenBPool.eq(ZERO) && pairInfo.totalSupply.eq(ZERO))
+    ) {
+      await addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
+
       return;
     }
 
@@ -202,77 +219,63 @@ export const useAddLiqudityService = (
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
       // addLiqTokenToToken
-      const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) {
-        return;
-      }
-      const pairTokenA = addresses.addressA === tokenA.contractAddress ? tokenA : tokenB;
-      const pairInputA = addresses.addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
-      const pairTokenB = addresses.addressB === tokenB.contractAddress ? tokenB : tokenA;
-      const pairInputB = addresses.addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
       const ten = new BigNumber(TEN);
 
-      if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
-        const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
-        const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-        const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
+      const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
+      const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
+      const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
 
-        const tokenAUpdateOperator = allowContractSpendYourTokens(
-          tezos,
-          pairTokenA,
-          dex.contract.address,
-          tokenAAmount,
-          accountPkh
-        );
-        const tokenBUpdateOperator = allowContractSpendYourTokens(
-          tezos,
-          pairTokenB,
-          dex.contract.address,
-          tokenBAmount,
-          accountPkh
-        );
-        const tokenAResetOperator = allowContractSpendYourTokens(
-          tezos,
-          pairTokenA,
-          dex.contract.address,
-          0,
-          accountPkh
-        );
-        const tokenBResetOperator = allowContractSpendYourTokens(
-          tezos,
-          pairTokenB,
-          dex.contract.address,
-          0,
-          accountPkh
-        );
+      const tokenAResetOperator = allowContractSpendYourTokens(
+        tezos,
+        pairTokenA,
+        dex.contract.address,
+        ZERO,
+        accountPkh
+      );
+      const tokenBResetOperator = allowContractSpendYourTokens(
+        tezos,
+        pairTokenB,
+        dex.contract.address,
+        ZERO,
+        accountPkh
+      );
+      const tokenAUpdateOperator = allowContractSpendYourTokens(
+        tezos,
+        pairTokenA,
+        dex.contract.address,
+        tokenAAmount,
+        accountPkh
+      );
+      const tokenBUpdateOperator = allowContractSpendYourTokens(
+        tezos,
+        pairTokenB,
+        dex.contract.address,
+        tokenBAmount,
+        accountPkh
+      );
 
-        const tokensUpdateOperators = await Promise.all([
-          tokenAUpdateOperator,
-          tokenBUpdateOperator,
-          tokenAResetOperator,
-          tokenBResetOperator
-        ]);
-        const [tokenAUpdateResolved, tokenBUpdateResolved, tokenAResetResolved, tokenBResetResolved] =
-          tokensUpdateOperators;
+      const [tokenAUpdateResolved, tokenBUpdateResolved, tokenAResetResolved, tokenBResetResolved] = await Promise.all([
+        tokenAUpdateOperator,
+        tokenBUpdateOperator,
+        tokenAResetOperator,
+        tokenBResetOperator
+      ]);
 
-        const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-        const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
+      const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
+      const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
 
-        const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, timestamp.toString());
+      const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, timestamp.toString());
 
-        const batch = tezos.wallet
-          .batch()
-          .withContractCall(tokenAResetResolved)
-          .withContractCall(tokenBResetResolved)
-          .withContractCall(tokenAUpdateResolved)
-          .withContractCall(tokenBUpdateResolved)
-          .withContractCall(investParams);
+      const batch = tezos.wallet
+        .batch()
+        .withContractCall(tokenAResetResolved)
+        .withContractCall(tokenBResetResolved)
+        .withContractCall(tokenAUpdateResolved)
+        .withContractCall(tokenBUpdateResolved)
+        .withContractCall(investParams);
 
-        await batch.send();
-      } else {
-        addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
-      }
+      await batch.send();
     } else {
       const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
       const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
