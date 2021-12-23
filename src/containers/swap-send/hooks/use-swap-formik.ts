@@ -35,19 +35,19 @@ export const useSwapFormik = () => {
       return;
     }
 
-    const { inputAmount, token1, token2, recipient, slippage, action } = formValues as SwapFormValues;
+    const { inputAmount, inputToken, outputToken, recipient, slippage, action } = formValues as SwapFormValues;
 
     showLoaderToast();
-    const rawInputAmount = toDecimals(inputAmount, token1);
+    const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
       await swap(tezos, accountPkh, {
         inputAmount: rawInputAmount,
-        inputToken: token1,
+        inputToken: inputToken,
         recipient: action === 'send' ? recipient : undefined,
         slippageTolerance: slippage.div(100),
         dexChain: getRouteWithInput({
-          startTokenSlug: getTokenSlug(token1),
-          endTokenSlug: getTokenSlug(token2),
+          startTokenSlug: getTokenSlug(inputToken),
+          endTokenSlug: getTokenSlug(outputToken),
           graph: dexGraph,
           inputAmount: rawInputAmount
         })!,
