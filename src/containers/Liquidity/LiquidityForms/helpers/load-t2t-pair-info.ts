@@ -14,9 +14,6 @@ export const loadT2TPairInfo = async (
   tokenB: WhitelistedToken
 ): Promise<Nullable<PairInfo>> => {
   const sortedTokens = sortTokensPair(tokenA, tokenB);
-  if (!sortedTokens) {
-    return null;
-  }
 
   const michelData = newGetValidMichelTemplate(sortedTokens);
   const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');

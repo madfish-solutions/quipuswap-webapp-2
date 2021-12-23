@@ -72,5 +72,5 @@ export const sortTokensPair = (
     }
   }
 
-  return null;
+  throw new Error('Impossible to sort tokens');
 };
