@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { removeLiquidityT2T, removeLiquidityTez } from '@containers/Liquidity/LiquidityForms/helpers';
+import { removeLiquidityTokenToToken, removeLiquidityTez } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
@@ -95,7 +95,7 @@ export const useRemoveLiquidityService = (
     const { id } = pairInfo;
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
-      await removeLiquidityT2T(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
+      await removeLiquidityTokenToToken(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
     } else {
       await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
     }

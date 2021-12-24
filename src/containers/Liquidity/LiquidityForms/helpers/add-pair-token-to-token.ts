@@ -9,7 +9,7 @@ import { WhitelistedToken } from '@utils/types';
 import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
 import { getValidPairParams } from './get-valid-pair-params';
 
-export const addPairT2T = async (
+export const addPairTokenToToken = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   accountPkh: string,

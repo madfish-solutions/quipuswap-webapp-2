@@ -7,7 +7,7 @@ import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-export const removeLiquidityT2T = async (
+export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   id: BigNumber,

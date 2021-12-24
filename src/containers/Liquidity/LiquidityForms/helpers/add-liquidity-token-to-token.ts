@@ -7,7 +7,7 @@ import { ZERO } from '@utils/defaults';
 import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-export const addLiquidityT2T = async (
+export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,

@@ -5,11 +5,11 @@ import BigNumber from 'bignumber.js';
 
 import {
   addLiquidityTez,
-  addPairT2T,
+  addPairTokenToToken,
   calculateTokenAmount,
   initializeLiquidityTez
 } from '@containers/Liquidity/LiquidityForms/helpers';
-import { addLiquidityT2T } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-t2t';
+import { addLiquidityTokenToToken } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-token-to-token';
 import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
@@ -161,10 +161,10 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
-    const fixedValue = new BigNumber(value);
+    const tokenABN = new BigNumber(value);
     const { decimals: decimalsA } = tokenA.metadata;
 
-    setTokenAInput(fixedValue.toFixed(decimalsA));
+    setTokenAInput(tokenABN.toFixed(decimalsA));
 
     if (!pairInfo) {
       return;
@@ -173,7 +173,6 @@ export const useAddLiquidityService = (
     const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
     const { decimals: decimalsB } = tokenB.metadata;
 
-    const tokenABN = new BigNumber(tokenAInput);
     const tokenAAmount = toDecimals(tokenABN, decimalsA);
 
     const tokenBAmount =
@@ -184,10 +183,10 @@ export const useAddLiquidityService = (
     setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
   };
   const handleTokenBBalance = (value: string) => {
-    const fixedValue = new BigNumber(value);
+    const tokenBBN = new BigNumber(value);
     const { decimals: decimalsB } = tokenB.metadata;
 
-    setTokenBInput(fixedValue.toFixed(decimalsB));
+    setTokenBInput(tokenBBN.toFixed(decimalsB));
 
     if (!pairInfo) {
       return;
@@ -196,7 +195,6 @@ export const useAddLiquidityService = (
     const { tokenAPool, tokenBPool, totalSupply, tokenB: pairTokenB } = pairInfo;
     const { decimals: decimalsA } = tokenA.metadata;
 
-    const tokenBBN = new BigNumber(tokenBInput);
     const tokenBAmount = toDecimals(tokenBBN, decimalsB);
 
     const tokenAAmount =
@@ -219,7 +217,7 @@ export const useAddLiquidityService = (
       const pairInputB = pairTokenB.contractAddress === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
       if (id && tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
-        await addLiquidityT2T(
+        await addLiquidityTokenToToken(
           tezos,
           accountPkh,
           dex,
@@ -234,7 +232,7 @@ export const useAddLiquidityService = (
 
         return;
       }
-      await addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
+      await addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
 
       return;
     }
