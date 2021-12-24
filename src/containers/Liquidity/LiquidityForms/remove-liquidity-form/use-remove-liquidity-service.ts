@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { removeLiquidityTez, sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers';
+import { removeLiquidityT2T, removeLiquidityTez } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
@@ -94,29 +94,11 @@ export const useRemoveLiquidityService = (
     }
 
     const { id } = pairInfo;
-    const ten = new BigNumber(TEN);
-    const shares = new BigNumber(lpTokenInput)
-      .multipliedBy(ten.pow(LP_TOKEN_DECIMALS))
-      .integerValue(BigNumber.ROUND_UP);
 
-    if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(ten.pow(tokenA.metadata.decimals));
-      const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(ten.pow(tokenB.metadata.decimals));
-
-      const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-      const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
-
-      const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) {
-        return;
-      }
-      if (addresses.addressA === tokenA.contractAddress) {
-        await dex.contract.methods.divest(id, tokenAOut, tokenBOut, shares, timestamp.toString()).send();
-      } else {
-        await dex.contract.methods.divest(id, tokenBOut, tokenAOut, shares, timestamp.toString()).send();
-      }
+    if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
+      await removeLiquidityT2T(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
     } else {
-      await removeLiquidityTez(tezos, dex, shares, slippage);
+      await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
     }
   };
 

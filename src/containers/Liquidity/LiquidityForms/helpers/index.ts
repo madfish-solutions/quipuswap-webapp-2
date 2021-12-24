@@ -14,6 +14,7 @@ export * from './load-tez-token-pair-info';
 export * from './load-user-lp-balance-tez';
 export * from './new-get-valid-michel-template';
 export * from './parse-url';
+export * from './remove-liquidity-t2t';
 export * from './remove-liquidity-tez';
 export * from './sort-tokens-contracts';
 export * from './sort-tokens-pair';

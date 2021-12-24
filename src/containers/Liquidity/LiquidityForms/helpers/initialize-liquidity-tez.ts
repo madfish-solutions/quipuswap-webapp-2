@@ -5,6 +5,8 @@ import BigNumber from 'bignumber.js';
 import { FACTORIES } from '@utils/defaults';
 import { QSMainNet } from '@utils/types';
 
+const FIRST_FACTORY_INDEX = 0;
+
 export const initializeLiquidityTez = async (
   tezos: TezosToolkit,
   networkId: QSMainNet,
@@ -13,8 +15,8 @@ export const initializeLiquidityTez = async (
   tezValue: BigNumber
 ) => {
   const factories = {
-    fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
-    fa2Factory: FACTORIES[networkId].fa2Factory[0]
+    fa1_2Factory: FACTORIES[networkId].fa1_2Factory[FIRST_FACTORY_INDEX],
+    fa2Factory: FACTORIES[networkId].fa2Factory[FIRST_FACTORY_INDEX]
   };
 
   const initializeLiquidityParams = await getInitializeLiquidityParams(tezos, factories, token, tokenValue, tezValue);

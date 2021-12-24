@@ -6,17 +6,16 @@ import BigNumber from 'bignumber.js';
 import {
   addLiquidityTez,
   addPairT2T,
-  allowContractSpendYourTokens,
   calculateTokenAmount,
-  initializeLiquidityTez,
-  sortTokensContracts
+  initializeLiquidityTez
 } from '@containers/Liquidity/LiquidityForms/helpers';
+import { addLiquidityT2T } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-t2t';
 import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useAddLiqudityService = (
@@ -192,110 +191,58 @@ export const useAddLiqudityService = (
     setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
   };
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh) {
+    if (!tezos || !accountPkh || !pairInfo) {
       return;
     }
-    const addresses = sortTokensContracts(tokenA, tokenB);
-    if (!addresses) {
-      return;
-    }
-    const pairTokenA = addresses.addressA === tokenA.contractAddress ? tokenA : tokenB;
-    const pairInputA = addresses.addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
-    const pairTokenB = addresses.addressB === tokenB.contractAddress ? tokenB : tokenA;
-    const pairInputB = addresses.addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
-    if (
-      !pairInfo ||
-      (pairInfo && pairInfo.tokenAPool.eq(ZERO) && pairInfo.tokenBPool.eq(ZERO) && pairInfo.totalSupply.eq(ZERO))
-    ) {
+    const { tokenAPool, tokenBPool, totalSupply, id, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
+
+    if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
+      const pairInputA = pairTokenA.contractAddress === tokenA.contractAddress ? tokenAInput : tokenBInput;
+      const pairInputB = pairTokenB.contractAddress === tokenB.contractAddress ? tokenBInput : tokenAInput;
+
+      if (id && tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+        await addLiquidityT2T(
+          tezos,
+          accountPkh,
+          dex,
+          id,
+          pairInputA,
+          pairTokenA,
+          pairTokenB,
+          totalSupply,
+          tokenAPool,
+          tokenBPool
+        );
+
+        return;
+      }
       await addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
 
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply, id } = pairInfo;
+    const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
+    const tezTokenInputBN = new BigNumber(tezTokenInput);
+    const tezValue = toDecimals(tezTokenInputBN, TEZOS_TOKEN);
 
-    if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      // addLiqTokenToToken
+    if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+      await addLiquidityTez(tezos, dex, tezValue);
 
-      const ten = new BigNumber(TEN);
-
-      const tokenAAmount = new BigNumber(pairInputA).multipliedBy(ten.pow(pairTokenA.metadata.decimals));
-      const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-      const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
-
-      const tokenAResetOperator = allowContractSpendYourTokens(
-        tezos,
-        pairTokenA,
-        dex.contract.address,
-        ZERO,
-        accountPkh
-      );
-      const tokenBResetOperator = allowContractSpendYourTokens(
-        tezos,
-        pairTokenB,
-        dex.contract.address,
-        ZERO,
-        accountPkh
-      );
-      const tokenAUpdateOperator = allowContractSpendYourTokens(
-        tezos,
-        pairTokenA,
-        dex.contract.address,
-        tokenAAmount,
-        accountPkh
-      );
-      const tokenBUpdateOperator = allowContractSpendYourTokens(
-        tezos,
-        pairTokenB,
-        dex.contract.address,
-        tokenBAmount,
-        accountPkh
-      );
-
-      const [tokenAUpdateResolved, tokenBUpdateResolved, tokenAResetResolved, tokenBResetResolved] = await Promise.all([
-        tokenAUpdateOperator,
-        tokenBUpdateOperator,
-        tokenAResetOperator,
-        tokenBResetOperator
-      ]);
-
-      const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-      const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
-
-      const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, timestamp.toString());
-
-      const batch = tezos.wallet
-        .batch()
-        .withContractCall(tokenAResetResolved)
-        .withContractCall(tokenBResetResolved)
-        .withContractCall(tokenAUpdateResolved)
-        .withContractCall(tokenBUpdateResolved)
-        .withContractCall(investParams);
-
-      await batch.send();
-    } else {
-      const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
-      const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
-      const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
-
-      const tezDecimals = new BigNumber(TEN).pow(TEZOS_TOKEN.metadata.decimals);
-      const tezValue = new BigNumber(tezTokenInput).multipliedBy(tezDecimals);
-
-      if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
-        await addLiquidityTez(tezos, dex, tezValue);
-      } else {
-        const token: Token = {
-          contract: notTezToken.contractAddress,
-          id: notTezToken.fa2TokenId
-        };
-        const tokenBDecimals = new BigNumber(TEN).pow(notTezToken.metadata.decimals);
-        const tokenBValue = new BigNumber(notTezTokenInput).multipliedBy(tokenBDecimals);
-        await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
-      }
+      return;
     }
+
+    const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
+    const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
+
+    const token: Token = {
+      contract: notTezToken.contractAddress,
+      id: notTezToken.fa2TokenId
+    };
+    const notTezTokenInputBN = new BigNumber(notTezTokenInput);
+    const tokenBValue = toDecimals(notTezTokenInputBN, notTezToken);
+    await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
   };
 
   const errorMessageTokenA = validateUserInput(
