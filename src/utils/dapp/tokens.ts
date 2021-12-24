@@ -18,9 +18,18 @@ import { isValidContractAddress } from '@utils/validators';
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
 
+interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWithQSNetworkType, 'fa2TokenId'> {
+  fa2TokenId?: string;
+}
+
 export const getSavedTokens = (networkId?: QSMainNet) => {
-  const allTokens: Array<WhitelistedTokenWithQSNetworkType> =
+  const allRawTokens: Array<RawWhitelistedTokenWithQSNetworkType> =
     typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+
+  const allTokens: WhitelistedTokenWithQSNetworkType[] = allRawTokens.map(({ fa2TokenId, ...restProps }) => ({
+    ...restProps,
+    fa2TokenId: fa2TokenId === undefined ? undefined : Number(fa2TokenId)
+  }));
 
   return networkId
     ? allTokens.filter(({ network: tokenNetwork }) => !tokenNetwork || tokenNetwork === networkId)

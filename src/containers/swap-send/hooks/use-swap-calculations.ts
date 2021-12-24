@@ -3,12 +3,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useDexGraph } from '@hooks/use-dex-graph';
-import { fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
+import { amountsAreEqual, fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexGraph, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
-import { amountsAreEqual } from '../utils/comparison';
-import { SwapAmountField } from '../utils/types';
+import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
   inputToken?: WhitelistedToken;
@@ -22,7 +21,7 @@ export const useSwapCalculations = () => {
   const [outputAmount, setOutputAmount] = useState<BigNumber>();
   const [{ inputToken, outputToken }, setSwapPair] = useState<SwapPair>({});
   const [dexRoute, setDexRoute] = useState<DexPair[]>();
-  const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountField>('inputAmount');
+  const [lastAmountFieldChanged, setLastAmountFieldChanged] = useState<SwapAmountFieldName>(SwapField.INPUT_AMOUNT);
   const prevDexGraphRef = useRef<DexGraph>();
 
   const onInputPrequisitesChange = useCallback(
@@ -88,7 +87,7 @@ export const useSwapCalculations = () => {
 
   const onInputAmountChange = (newInputAmount: Undefined<BigNumber>) => {
     if (!amountsAreEqual(newInputAmount, inputAmount)) {
-      setLastAmountFieldChanged('inputAmount');
+      setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
       setInputAmount(newInputAmount);
       onOutputPrequisitesChange(newInputAmount, { inputToken, outputToken });
     }
@@ -96,7 +95,7 @@ export const useSwapCalculations = () => {
 
   const onOutputAmountChange = (newOutputAmount: Undefined<BigNumber>) => {
     if (!amountsAreEqual(newOutputAmount, outputAmount)) {
-      setLastAmountFieldChanged('outputAmount');
+      setLastAmountFieldChanged(SwapField.OUTPUT_AMOUNT);
       setOutputAmount(newOutputAmount);
       onInputPrequisitesChange(newOutputAmount, { inputToken, outputToken });
     }
@@ -105,7 +104,7 @@ export const useSwapCalculations = () => {
   const onSwapPairChange = useCallback(
     (newPair: SwapPair) => {
       setSwapPair(newPair);
-      if (lastAmountFieldChanged === 'inputAmount') {
+      if (lastAmountFieldChanged === SwapField.INPUT_AMOUNT) {
         onOutputPrequisitesChange(inputAmount, newPair);
       } else {
         onInputPrequisitesChange(outputAmount, newPair);

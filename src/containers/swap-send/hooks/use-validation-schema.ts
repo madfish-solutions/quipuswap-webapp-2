@@ -9,7 +9,7 @@ import { WhitelistedToken } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
-import { SwapAction } from '../utils/types';
+import { SwapAction, SwapField } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
@@ -19,26 +19,26 @@ export const useValidationSchema = () => {
   const { balances } = useBalances();
 
   return objectSchema().shape({
-    token1: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
-    token2: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
-    inputAmount: objectSchema().when(
-      ['token1', 'token2'],
+    [SwapField.INPUT_TOKEN]: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
+    [SwapField.OUTPUT_TOKEN]: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
+    [SwapField.INPUT_AMOUNT]: objectSchema().when(
+      [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
-        if (!firstToken) {
+      (inputToken?: WhitelistedToken, outputToken?: WhitelistedToken) => {
+        if (!inputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
-        const token1Balance = balances[getTokenSlug(firstToken)];
+        const inputTokenSlug = getTokenSlug(inputToken);
+        const inputTokenBalance = balances[inputTokenSlug];
         let max: BigNumber | undefined = BigNumber.min(
-          token1Balance ?? new BigNumber(Infinity),
-          (secondToken && maxInputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)]) ??
-            new BigNumber(Infinity)
+          inputTokenBalance ?? new BigNumber(Infinity),
+          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity)
         );
         if (!max.isFinite()) {
           max = undefined;
         }
-        const min = fromDecimals(new BigNumber(1), firstToken.metadata.decimals);
-        if (token1Balance?.eq(0)) {
+        const min = fromDecimals(new BigNumber(1), inputToken.metadata.decimals);
+        if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)
             .test(
               'balance',
@@ -51,24 +51,24 @@ export const useValidationSchema = () => {
         return bigNumberSchema(min, max).required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
-    outputAmount: objectSchema().when(
-      ['token1', 'token2'],
+    [SwapField.OUTPUT_AMOUNT]: objectSchema().when(
+      [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (firstToken?: WhitelistedToken, secondToken?: WhitelistedToken) => {
-        if (!secondToken) {
+      (inputToken?: WhitelistedToken, outputToken?: WhitelistedToken) => {
+        if (!outputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
-        const max = firstToken && maxOutputAmounts[getTokenSlug(firstToken)]?.[getTokenSlug(secondToken)];
+        const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(1), secondToken.metadata.decimals), max).required(
+        return bigNumberSchema(fromDecimals(new BigNumber(1), outputToken.metadata.decimals), max).required(
           t(REQUIRE_FIELD_MESSAGE)
         );
       }
     ),
-    recipient: mixedSchema().when('action', (currentAction: SwapAction) =>
+    [SwapField.RECIPIENT]: mixedSchema().when(SwapField.ACTION, (currentAction: SwapAction) =>
       currentAction === SwapAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
-    slippage: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
-    action: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
+    [SwapField.SLIPPAGE]: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
+    [SwapField.ACTION]: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
   });
 };
