@@ -35,6 +35,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
+  const isButtonDisabled = !accountPkh || Boolean(errorMessage) || !lpTokenInput;
+
   return (
     <>
       <PositionSelect
@@ -78,11 +80,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
-      <Button
-        className={s.button}
-        onClick={handleRemoveLiquidity}
-        disabled={!accountPkh || Boolean(errorMessage) || !lpTokenInput}
-      >
+      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
         Remove
       </Button>
     </>

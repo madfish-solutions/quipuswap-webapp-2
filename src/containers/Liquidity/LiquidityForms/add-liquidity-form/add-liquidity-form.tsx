@@ -5,7 +5,7 @@ import { Button } from '@quipuswap/ui-kit';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { useAddLiqudityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity-service';
+import { useAddLiquidityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity-service';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -27,10 +27,13 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiqudityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
+  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
+
+  const isButtonDisabled =
+    !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput;
 
   return (
     <>
@@ -61,13 +64,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={accountPkh ? errorMessageTokenB : undefined}
         placeholder="0.0"
       />
-      <Button
-        className={s.button}
-        onClick={handleAddLiquidity}
-        disabled={
-          !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput
-        }
-      >
+      <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>
     </>

@@ -2,7 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { TEN, ZERO } from '@utils/defaults';
+import { ZERO } from '@utils/defaults';
+import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
@@ -17,31 +18,17 @@ export const addPairT2T = async (
   tokenAInput: string,
   tokenBInput: string
 ) => {
-  const ten = new BigNumber(TEN);
-  const tokenADecimals = ten.pow(tokenA.metadata.decimals);
-  const tokenBDecimals = ten.pow(tokenB.metadata.decimals);
+  const { address: dexAddress } = dex.contract;
 
-  const fixedTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
-  const fixedTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
+  const tokenABN = new BigNumber(tokenAInput);
+  const tokenBBN = new BigNumber(tokenBInput);
+  const tokenAAmount = toDecimals(tokenABN, tokenA);
+  const tokenBAmount = toDecimals(tokenBBN, tokenB);
 
-  const tokenAResetOperator = allowContractSpendYourTokens(tezos, tokenA, dex.contract.address, ZERO, accountPkh);
-  const tokenBResetOperator = allowContractSpendYourTokens(tezos, tokenB, dex.contract.address, ZERO, accountPkh);
-
-  const tokenAUpdateOperator = allowContractSpendYourTokens(
-    tezos,
-    tokenA,
-    dex.contract.address,
-    fixedTokenAInput,
-    accountPkh
-  );
-
-  const tokenBUpdateOperator = allowContractSpendYourTokens(
-    tezos,
-    tokenB,
-    dex.contract.address,
-    fixedTokenBInput,
-    accountPkh
-  );
+  const tokenAResetOperator = allowContractSpendYourTokens(tezos, tokenA, dexAddress, ZERO, accountPkh);
+  const tokenBResetOperator = allowContractSpendYourTokens(tezos, tokenB, dexAddress, ZERO, accountPkh);
+  const tokenAUpdateOperator = allowContractSpendYourTokens(tezos, tokenA, dexAddress, tokenAAmount, accountPkh);
+  const tokenBUpdateOperator = allowContractSpendYourTokens(tezos, tokenB, dexAddress, tokenBAmount, accountPkh);
 
   const [tokenAResetResolved, tokenBResetResolved, tokenAUpdateResolved, tokenBUpdateResolved] = await Promise.all([
     tokenAResetOperator,
@@ -50,7 +37,7 @@ export const addPairT2T = async (
     tokenBUpdateOperator
   ]);
 
-  const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, fixedTokenAInput, fixedTokenBInput);
+  const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
 
   if (!validAppPairParams) {
     return;

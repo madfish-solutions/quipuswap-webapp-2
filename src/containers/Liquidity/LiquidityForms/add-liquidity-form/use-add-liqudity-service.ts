@@ -14,11 +14,11 @@ import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks'
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { TEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
+import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-export const useAddLiqudityService = (
+export const useAddLiquidityService = (
   dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
@@ -54,16 +54,18 @@ export const useAddLiqudityService = (
       }
 
       const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
+      const { decimals: decimalsA } = tokenA.metadata;
+      const { decimals: decimalsB } = tokenB.metadata;
 
-      const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
-      const tokenAAmount = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
+      const tokenABN = new BigNumber(tokenAInput);
+      const tokenAAmount = toDecimals(tokenABN, decimalsA);
 
       const tokenBAmount =
         tokenA.contractAddress === pairTokenA.contractAddress
           ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
           : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-      setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
+      setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
     } else {
       if (tokenBInput === '') {
         setTokenAInput('');
@@ -76,16 +78,18 @@ export const useAddLiqudityService = (
       }
 
       const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
+      const { decimals: decimalsA } = tokenA.metadata;
+      const { decimals: decimalsB } = tokenB.metadata;
 
-      const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
-      const tokenBAmount = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
+      const tokenBBN = new BigNumber(tokenBInput);
+      const tokenBAmount = toDecimals(tokenBBN, decimalsB);
 
       const tokenAAmount =
         tokenB.contractAddress === pairTokenB.contractAddress
           ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
           : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-      setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+      setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo]);
@@ -114,15 +118,19 @@ export const useAddLiqudityService = (
       return;
     }
 
-    const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
-    const tokenAAmount = new BigNumber(event.target.value).multipliedBy(tokenADecimals);
+    const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
+    const { decimals: decimalsA } = tokenA.metadata;
+    const { decimals: decimalsB } = tokenB.metadata;
+
+    const tokenABN = new BigNumber(event.target.value);
+    const tokenAAmount = toDecimals(tokenABN, decimalsA);
 
     const tokenBAmount =
-      tokenA.contractAddress === pairInfo.tokenA.contractAddress
-        ? calculateTokenAmount(tokenAAmount, pairInfo.totalSupply, pairInfo.tokenAPool, pairInfo.tokenBPool)
-        : calculateTokenAmount(tokenAAmount, pairInfo.totalSupply, pairInfo.tokenBPool, pairInfo.tokenAPool);
+      tokenA.contractAddress === pairTokenB.contractAddress
+        ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
+        : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-    setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
+    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
   };
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
@@ -137,58 +145,66 @@ export const useAddLiqudityService = (
       return;
     }
 
-    const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
-    const tokenBAmount = new BigNumber(event.target.value).multipliedBy(tokenBDecimals);
+    const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
+    const { decimals: decimalsA } = tokenA.metadata;
+    const { decimals: decimalsB } = tokenB.metadata;
+
+    const tokenBBN = new BigNumber(event.target.value);
+    const tokenBAmount = toDecimals(tokenBBN, decimalsB);
 
     const tokenAAmount =
-      tokenB.contractAddress === pairInfo.tokenB.contractAddress
-        ? calculateTokenAmount(tokenBAmount, pairInfo.totalSupply, pairInfo.tokenBPool, pairInfo.tokenAPool)
-        : calculateTokenAmount(tokenBAmount, pairInfo.totalSupply, pairInfo.tokenAPool, pairInfo.tokenBPool);
+      tokenB.contractAddress === pairTokenB.contractAddress
+        ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
+        : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-    setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
   };
 
   const handleTokenABalance = (value: string) => {
     const fixedValue = new BigNumber(value);
+    const { decimals: decimalsA } = tokenA.metadata;
 
-    setTokenAInput(fixedValue.toFixed(tokenA.metadata.decimals));
+    setTokenAInput(fixedValue.toFixed(decimalsA));
 
     if (!pairInfo) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply } = pairInfo;
+    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
+    const { decimals: decimalsB } = tokenB.metadata;
 
-    const tokenADecimals = new BigNumber(TEN).pow(tokenA.metadata.decimals);
-    const tokenAAmount = fixedValue.multipliedBy(tokenADecimals);
+    const tokenABN = new BigNumber(tokenAInput);
+    const tokenAAmount = toDecimals(tokenABN, decimalsA);
 
     const tokenBAmount =
-      tokenA.contractAddress === pairInfo.tokenA.contractAddress
+      tokenA.contractAddress === pairTokenA.contractAddress
         ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-    setTokenBInput(fromDecimals(tokenBAmount, tokenB.metadata.decimals).toFixed(tokenB.metadata.decimals));
+    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
   };
   const handleTokenBBalance = (value: string) => {
     const fixedValue = new BigNumber(value);
+    const { decimals: decimalsB } = tokenB.metadata;
 
-    setTokenBInput(fixedValue.toFixed(tokenB.metadata.decimals));
+    setTokenBInput(fixedValue.toFixed(decimalsB));
 
     if (!pairInfo) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply } = pairInfo;
+    const { tokenAPool, tokenBPool, totalSupply, tokenB: pairTokenB } = pairInfo;
+    const { decimals: decimalsA } = tokenA.metadata;
 
-    const tokenBDecimals = new BigNumber(TEN).pow(tokenB.metadata.decimals);
-    const tokenBAmount = fixedValue.multipliedBy(tokenBDecimals);
+    const tokenBBN = new BigNumber(tokenBInput);
+    const tokenBAmount = toDecimals(tokenBBN, decimalsB);
 
     const tokenAAmount =
-      tokenB.contractAddress === pairInfo.tokenB.contractAddress
+      tokenB.contractAddress === pairTokenB.contractAddress
         ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-    setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
+    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
   };
 
   const handleAddLiquidity = async () => {
@@ -224,8 +240,8 @@ export const useAddLiqudityService = (
     }
 
     const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
-    const tezTokenInputBN = new BigNumber(tezTokenInput);
-    const tezValue = toDecimals(tezTokenInputBN, TEZOS_TOKEN);
+    const tezTokenBN = new BigNumber(tezTokenInput);
+    const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
     if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
       await addLiquidityTez(tezos, dex, tezValue);
@@ -240,19 +256,13 @@ export const useAddLiqudityService = (
       contract: notTezToken.contractAddress,
       id: notTezToken.fa2TokenId
     };
-    const notTezTokenInputBN = new BigNumber(notTezTokenInput);
-    const tokenBValue = toDecimals(notTezTokenInputBN, notTezToken);
+    const notTezTokenBN = new BigNumber(notTezTokenInput);
+    const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
     await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
   };
 
-  const errorMessageTokenA = validateUserInput(
-    new BigNumber(tokenAInput).multipliedBy(new BigNumber(TEN).pow(tokenA.metadata.decimals)),
-    tokenABalance
-  );
-  const errorMessageTokenB = validateUserInput(
-    new BigNumber(tokenBInput).multipliedBy(new BigNumber(TEN).pow(tokenB.metadata.decimals)),
-    tokenBBalance
-  );
+  const errorMessageTokenA = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenA), tokenABalance);
+  const errorMessageTokenB = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenB), tokenBBalance);
 
   return {
     errorMessageTokenA,
