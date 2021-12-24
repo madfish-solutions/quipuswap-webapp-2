@@ -9,7 +9,7 @@ import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair
 import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 export const useRemoveLiquidityService = (
@@ -56,28 +56,27 @@ export const useRemoveLiquidityService = (
 
       return;
     }
-    const lpTokenDecimals = new BigNumber(TEN).pow(LP_TOKEN_DECIMALS);
-    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput)
-      .multipliedBy(lpTokenDecimals)
-      .integerValue(BigNumber.ROUND_UP);
+    const lpTokenInputBN = new BigNumber(lpTokenInput);
+    const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
+    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
 
-    const tokenAPerOneLp = tokenAPool.dividedBy(totalSupply);
-    const tokenBPerOneLp = tokenBPool.dividedBy(totalSupply);
+    const tokenAPerOneLp =
+      pairTokenA.contractAddress === tokenA.contractAddress
+        ? tokenAPool.dividedBy(totalSupply)
+        : tokenBPool.dividedBy(totalSupply);
+    const tokenBPerOneLp =
+      pairTokenB.contractAddress === tokenB.contractAddress
+        ? tokenBPool.dividedBy(totalSupply)
+        : tokenAPool.dividedBy(totalSupply);
 
-    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
-    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
-    if (tokenA.contractAddress === pairTokenA.contractAddress) {
-      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
-      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
-    } else {
-      setTokenAOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
-      setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
-    }
+    setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
+    setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 

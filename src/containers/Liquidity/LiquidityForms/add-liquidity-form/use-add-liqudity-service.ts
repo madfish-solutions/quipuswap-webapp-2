@@ -7,7 +7,8 @@ import {
   addLiquidityTez,
   addPairT2T,
   calculateTokenAmount,
-  initializeLiquidityTez
+  initializeLiquidityTez,
+  sortTokensContracts
 } from '@containers/Liquidity/LiquidityForms/helpers';
 import { addLiquidityT2T } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-t2t';
 import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
@@ -191,33 +192,42 @@ export const useAddLiqudityService = (
     setTokenAInput(fromDecimals(tokenAAmount, tokenA.metadata.decimals).toFixed(tokenA.metadata.decimals));
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !pairInfo) {
+    if (!tezos || !accountPkh) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply, id, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
+    const addLiquidityCondition =
+      pairInfo &&
+      pairInfo.id &&
+      pairInfo.tokenAPool.gt(ZERO) &&
+      pairInfo.tokenBPool.gt(ZERO) &&
+      pairInfo.totalSupply.gt(ZERO);
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const pairInputA = pairTokenA.contractAddress === tokenA.contractAddress ? tokenAInput : tokenBInput;
-      const pairInputB = pairTokenB.contractAddress === tokenB.contractAddress ? tokenBInput : tokenAInput;
-
-      if (id && tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+      const { addressA, addressB } = sortTokensContracts(tokenA, tokenB);
+      const pairTokenA = addressA === tokenA.contractAddress ? tokenA : tokenB;
+      const pairTokenB = addressB === tokenB.contractAddress ? tokenB : tokenA;
+      const pairInputA = addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
+      const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
+      if (addLiquidityCondition) {
         await addLiquidityT2T(
           tezos,
           accountPkh,
           dex,
-          id,
+          pairInfo!.id!,
           pairInputA,
           pairTokenA,
           pairTokenB,
-          totalSupply,
-          tokenAPool,
-          tokenBPool
+          pairInfo!.totalSupply,
+          pairInfo!.tokenAPool,
+          pairInfo!.tokenBPool
         );
 
         return;
       }
+
       await addPairT2T(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
 
       return;
@@ -227,7 +237,7 @@ export const useAddLiqudityService = (
     const tezTokenInputBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenInputBN, TEZOS_TOKEN);
 
-    if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+    if (addLiquidityCondition) {
       await addLiquidityTez(tezos, dex, tezValue);
 
       return;
