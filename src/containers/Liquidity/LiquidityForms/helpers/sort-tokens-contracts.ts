@@ -5,7 +5,7 @@ export const sortTokensContracts = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken
   // eslint-disable-next-line sonarjs/cognitive-complexity
-): SortTokensContractsType | null => {
+): SortTokensContractsType => {
   if (tokenA.type < tokenB.type) {
     return {
       addressA: tokenA.contractAddress,
@@ -72,5 +72,5 @@ export const sortTokensContracts = (
     }
   }
 
-  return null;
+  throw new Error('Impossible to sort tokens');
 };

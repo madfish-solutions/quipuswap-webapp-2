@@ -4,6 +4,9 @@ export const COLOR_MODE_STORAGE_KEY = 'theme';
 
 export const DEFAULT_DECIMALS = 6;
 
+export const TEN = 10;
+export const ZERO = 0;
+
 export const QUIPUSWAP = 'https://quipuswap.com/';
 export const QUIPUSWAP_TRADE = 'https://quipuswap.com/swap';
 export const QUIPUSWAP_INVEST = 'https://quipuswap.com/invest/add-liquidity';
@@ -29,6 +32,7 @@ export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
 export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
+export const DEFAULT_SLIPPAGE = 0.005;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 
@@ -124,7 +128,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   connectType: 'default',
   name: 'Hangzhounet Testnet',
   type: 'test',
-  rpcBaseURL: 'https://hangzhounet.api.tez.ie',
+  rpcBaseURL: 'https://rpc.hangzhou.tzstats.com',
   metadata: METADATA_API_TESTNET,
   description: 'Hangzhounet testnet',
   disabled: false

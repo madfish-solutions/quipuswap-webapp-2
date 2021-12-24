@@ -2,6 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { TEN, ZERO } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 
 import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
@@ -16,33 +17,38 @@ export const addPairT2T = async (
   tokenAInput: string,
   tokenBInput: string
 ) => {
-  const ten = new BigNumber(10);
+  const ten = new BigNumber(TEN);
   const tokenADecimals = ten.pow(tokenA.metadata.decimals);
   const tokenBDecimals = ten.pow(tokenB.metadata.decimals);
 
   const fixedTokenAInput = new BigNumber(tokenAInput).multipliedBy(tokenADecimals);
   const fixedTokenBInput = new BigNumber(tokenBInput).multipliedBy(tokenBDecimals);
 
-  const tokenAUpdateOperator = await allowContractSpendYourTokens(
+  const tokenAResetOperator = allowContractSpendYourTokens(tezos, tokenA, dex.contract.address, ZERO, accountPkh);
+  const tokenBResetOperator = allowContractSpendYourTokens(tezos, tokenB, dex.contract.address, ZERO, accountPkh);
+
+  const tokenAUpdateOperator = allowContractSpendYourTokens(
     tezos,
     tokenA,
     dex.contract.address,
     fixedTokenAInput,
     accountPkh
   );
-  if (!tokenAUpdateOperator) {
-    return;
-  }
-  const tokenBUpdateOperator = await allowContractSpendYourTokens(
+
+  const tokenBUpdateOperator = allowContractSpendYourTokens(
     tezos,
     tokenB,
     dex.contract.address,
     fixedTokenBInput,
     accountPkh
   );
-  if (!tokenBUpdateOperator) {
-    return;
-  }
+
+  const [tokenAResetResolved, tokenBResetResolved, tokenAUpdateResolved, tokenBUpdateResolved] = await Promise.all([
+    tokenAResetOperator,
+    tokenBResetOperator,
+    tokenAUpdateOperator,
+    tokenBUpdateOperator
+  ]);
 
   const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, fixedTokenAInput, fixedTokenBInput);
 
@@ -52,8 +58,10 @@ export const addPairT2T = async (
 
   const batch = tezos.wallet
     .batch()
-    .withContractCall(tokenAUpdateOperator)
-    .withContractCall(tokenBUpdateOperator)
+    .withContractCall(tokenAResetResolved)
+    .withContractCall(tokenBResetResolved)
+    .withContractCall(tokenAUpdateResolved)
+    .withContractCall(tokenBUpdateResolved)
     .withContractCall(validAppPairParams);
 
   await batch.send();

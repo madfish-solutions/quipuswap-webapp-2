@@ -3,11 +3,12 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { removeLiquidityTez, sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers';
+import { removeLiquidityT2T, removeLiquidityTez } from '@containers/Liquidity/LiquidityForms/helpers';
 import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
+import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
+import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
@@ -27,7 +28,7 @@ export const useRemoveLiquidityService = (
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
-  const [slippage] = useState<BigNumber>(new BigNumber(0.005));
+  const [slippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
@@ -36,6 +37,8 @@ export const useRemoveLiquidityService = (
       token2: tokenB,
       dex
     });
+    setTokenAOutput('');
+    setTokenBOutput('');
   }, [dex, tokenA, tokenB]);
 
   const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
@@ -53,9 +56,10 @@ export const useRemoveLiquidityService = (
 
       return;
     }
-    const ten = 10;
-    const lpTokenDecimals = new BigNumber(ten).pow(LP_TOKEN_DECIMALS);
-    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput).multipliedBy(lpTokenDecimals);
+    const lpTokenDecimals = new BigNumber(TEN).pow(LP_TOKEN_DECIMALS);
+    const lpTokenInputWithDecimals = new BigNumber(lpTokenInput)
+      .multipliedBy(lpTokenDecimals)
+      .integerValue(BigNumber.ROUND_UP);
 
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
@@ -64,8 +68,8 @@ export const useRemoveLiquidityService = (
     const tokenAPerOneLp = tokenAPool.dividedBy(totalSupply);
     const tokenBPerOneLp = tokenBPool.dividedBy(totalSupply);
 
-    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals);
-    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals);
+    const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
+    const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenInputWithDecimals).integerValue(BigNumber.ROUND_DOWN);
 
     if (tokenA.contractAddress === pairTokenA.contractAddress) {
       setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
@@ -74,7 +78,8 @@ export const useRemoveLiquidityService = (
       setTokenAOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
       setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
     }
-  }, [lpTokenInput, dex, tokenA, tokenB, pairInfo]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lpTokenInput, pairInfo]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value);
@@ -89,31 +94,21 @@ export const useRemoveLiquidityService = (
     }
 
     const { id } = pairInfo;
-    const ten = new BigNumber(10);
-    const shares = new BigNumber(lpTokenInput).multipliedBy(ten.pow(LP_TOKEN_DECIMALS));
 
-    if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const tokenAOut = new BigNumber(tokenAOutput).multipliedBy(ten.pow(tokenA.metadata.decimals));
-      const tokenBOut = new BigNumber(tokenBOutput).multipliedBy(ten.pow(tokenB.metadata.decimals));
-
-      const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-      const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
-
-      const addresses = sortTokensContracts(tokenA, tokenB);
-      if (!addresses) {
-        return;
-      }
-      if (addresses.addressA === tokenA.contractAddress) {
-        await dex.contract.methods.divest(id, tokenAOut, tokenBOut, shares, timestamp.toString()).send();
-      } else {
-        await dex.contract.methods.divest(id, tokenBOut, tokenAOut, shares, timestamp.toString()).send();
-      }
+    if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
+      await removeLiquidityT2T(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
     } else {
-      await removeLiquidityTez(tezos, dex, shares, slippage);
+      await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
     }
   };
 
+  const errorMessage = validateUserInput(
+    new BigNumber(lpTokenInput).multipliedBy(new BigNumber(TEN).pow(LP_TOKEN_DECIMALS)),
+    lpTokenBalance
+  );
+
   return {
+    errorMessage,
     tokenPair,
     accountPkh,
     lpTokenInput,
