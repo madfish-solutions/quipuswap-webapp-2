@@ -69,6 +69,7 @@ export const useValidationSchema = () => {
       currentAction === SwapAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
     [SwapField.SLIPPAGE]: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
+    [SwapField.DEADLINE]: bigNumberSchema(1).required(t(REQUIRE_FIELD_MESSAGE)),
     [SwapField.ACTION]: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
   });
 };

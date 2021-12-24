@@ -8,13 +8,15 @@ import {
   getAllowanceTransferParams,
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
+import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { getTokenOutput } from './tokenToTokenDex';
 
 export interface SwapParams {
+  deadlineTimespan?: BigNumber;
   inputToken: TokenId;
   inputAmount: BigNumber;
   dexChain: DexPair[];
@@ -45,10 +47,11 @@ const serialPromiseAll = async <T extends unknown[], U>(
   );
 };
 
-const defaultMaxDelay = 15 * 60 * 1000;
+const defaultDeadlineTimespan = new BigNumber(DEFAULT_DEADLINE_MINS).times(60);
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
   const {
+    deadlineTimespan = defaultDeadlineTimespan,
     inputToken,
     inputAmount,
     dexChain,
@@ -92,7 +95,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
     }
     fa2Operators[tokenAddress][tokenId!].push(operator);
   };
-  const deadline = new BigNumber(Date.now() + defaultMaxDelay).idiv(1000).toFixed();
+  const deadline = await getBlockchainTimestamp(tezos, deadlineTimespan);
 
   await serialPromiseAll(
     dexChain.map(x => [x]),
@@ -182,7 +185,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
             .times(new BigNumber(1).minus(slippageTolerance))
             .integerValue(BigNumber.ROUND_FLOOR),
           recipient,
-          deadline
+          deadline.toFixed()
         )
         .toTransferParams({ storageLimit: 1000 })
     );

@@ -17,6 +17,7 @@ import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWh
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
+import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
@@ -53,7 +54,7 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
   const {
     errors,
-    values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
+    values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
     validateField,
     setValues,
     setFieldValue,
@@ -317,13 +318,15 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     [handleRecipientChange]
   );
 
-  const handleSlippageChange = useCallback(
-    (newValue?: BigNumber) => {
-      setFieldTouched(SwapField.SLIPPAGE, true);
-      setFieldValue(SwapField.SLIPPAGE, newValue, true);
-    },
-    [setFieldValue, setFieldTouched]
-  );
+  const handleSlippageChange = (newValue?: BigNumber) => {
+    setFieldTouched(SwapField.SLIPPAGE, true);
+    setFieldValue(SwapField.SLIPPAGE, newValue, true);
+  };
+
+  const handleDeadlineChange = (newValue?: BigNumber) => {
+    setFieldTouched(SwapField.DEADLINE, true);
+    setFieldValue(SwapField.DEADLINE, newValue, true);
+  };
 
   const inputTokenSlug = inputToken && getTokenSlug(inputToken);
   const outputTokenSlug = outputToken && getTokenSlug(outputToken);
@@ -372,6 +375,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             blackListedTokens={blackListedTokens}
             onTokenChange={handleInputTokenChange}
             id="swap-send-from"
+            placeholder="0.0"
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
@@ -386,7 +390,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             token={outputToken}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleOutputTokenChange}
-            id="swap-send-from"
+            id="swap-send-to"
+            placeholder="0.0"
           />
           {action === 'send' && (
             <ComplexRecipient
@@ -406,6 +411,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             slippage={slippage}
             outputToken={outputToken}
           />
+          <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
             {currentTabLabel}
           </Button>

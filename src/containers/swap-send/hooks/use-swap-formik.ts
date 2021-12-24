@@ -5,11 +5,11 @@ import { useTranslation } from 'next-i18next';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useFlowToasts } from '@hooks/use-flow-toasts';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@utils/defaults';
+import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@utils/defaults';
 import { getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getRouteWithInput } from '@utils/routing';
 
-import { SwapAction, SwapFormValues } from '../utils/types';
+import { SwapAction, SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';
 
 const initialErrors = {
@@ -17,8 +17,9 @@ const initialErrors = {
   outputAmount: 'Required'
 };
 const initialValues: Partial<SwapFormValues> = {
-  action: SwapAction.SWAP,
-  slippage: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE)
+  [SwapField.ACTION]: SwapAction.SWAP,
+  [SwapField.SLIPPAGE]: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
+  [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
 };
 
 export const useSwapFormik = () => {
@@ -35,12 +36,14 @@ export const useSwapFormik = () => {
       return;
     }
 
-    const { inputAmount, inputToken, outputToken, recipient, slippage, action } = formValues as SwapFormValues;
+    const { inputAmount, inputToken, outputToken, recipient, slippage, action, deadline } =
+      formValues as SwapFormValues;
 
     showLoaderToast();
     const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
       await swap(tezos, accountPkh, {
+        deadlineTimespan: deadline.times(60),
         inputAmount: rawInputAmount,
         inputToken: inputToken,
         recipient: action === 'send' ? recipient : undefined,

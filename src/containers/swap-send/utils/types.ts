@@ -14,6 +14,7 @@ export enum SwapField {
   OUTPUT_TOKEN = 'outputToken',
   RECIPIENT = 'recipient',
   SLIPPAGE = 'slippage',
+  DEADLINE = 'deadline',
   ACTION = 'action'
 }
 
@@ -28,5 +29,6 @@ export interface SwapFormValues {
   [SwapField.OUTPUT_AMOUNT]: BigNumber;
   [SwapField.RECIPIENT]: string;
   [SwapField.SLIPPAGE]: BigNumber;
+  [SwapField.DEADLINE]: BigNumber;
   [SwapField.ACTION]: SwapAction;
 }
