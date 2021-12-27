@@ -118,7 +118,7 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
+    const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
 
@@ -126,7 +126,7 @@ export const useAddLiquidityService = (
     const tokenAAmount = toDecimals(tokenABN, decimalsA);
 
     const tokenBAmount =
-      tokenA.contractAddress === pairTokenB.contractAddress
+      tokenA.contractAddress === pairTokenA.contractAddress
         ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
@@ -164,7 +164,7 @@ export const useAddLiquidityService = (
     const tokenABN = new BigNumber(value);
     const { decimals: decimalsA } = tokenA.metadata;
 
-    setTokenAInput(fromDecimals(tokenABN, decimalsA).toFixed());
+    setTokenAInput(value);
 
     if (!pairInfo) {
       return;
@@ -186,7 +186,7 @@ export const useAddLiquidityService = (
     const tokenBBN = new BigNumber(value);
     const { decimals: decimalsB } = tokenB.metadata;
 
-    setTokenBInput(fromDecimals(tokenBBN, decimalsB).toFixed());
+    setTokenBInput(value);
 
     if (!pairInfo) {
       return;
