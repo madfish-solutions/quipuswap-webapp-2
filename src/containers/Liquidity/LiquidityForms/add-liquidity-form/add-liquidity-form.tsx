@@ -35,6 +35,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
   const isButtonDisabled =
     !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
+  const shouldShowBalanceButtons = Boolean(accountPkh);
 
   return (
     <>
@@ -47,7 +48,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         onChange={handleTokenAChange}
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenABalance}
-        shouldShowBalanceButtons={!accountPkh}
+        shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={accountPkh ? errorMessageTokenA : undefined}
         placeholder="0.0"
       />
@@ -61,7 +62,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         onChange={handleTokenBChange}
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenBBalance}
-        shouldShowBalanceButtons={!accountPkh}
+        shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={accountPkh ? errorMessageTokenB : undefined}
         placeholder="0.0"
       />
