@@ -3,20 +3,20 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import {
-  addLiquidityTez,
-  addPairTokenToToken,
-  calculateTokenAmount,
-  initializeLiquidityTez
-} from '@containers/Liquidity/LiquidityForms/helpers';
-import { addLiquidityTokenToToken } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-token-to-token';
-import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
-import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
-import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
+
+import {
+  addLiquidityTez,
+  addPairTokenToToken,
+  calculateTokenAmount,
+  initializeLiquidityTez,
+  addLiquidityTokenToToken
+} from '../helpers';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import { validateUserInput } from '../validators';
 
 export const useAddLiquidityService = (
   dex: FoundDex,

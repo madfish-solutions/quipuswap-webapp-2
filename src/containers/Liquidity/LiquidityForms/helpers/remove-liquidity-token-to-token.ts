@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
-import { toDecimals } from '@utils/helpers';
+import { getDeadline, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 export const removeLiquidityTokenToToken = async (
@@ -28,8 +28,7 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
 
-  const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-  const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
+  const deadline = await getDeadline(tezos);
 
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
@@ -37,8 +36,8 @@ export const removeLiquidityTokenToToken = async (
   }
 
   if (addresses.addressA === tokenA.contractAddress) {
-    return dex.contract.methods.divest(id, tokenAOutputAmount, tokenBOutputAmount, shares, timestamp.toString()).send();
+    return dex.contract.methods.divest(id, tokenAOutputAmount, tokenBOutputAmount, shares, deadline).send();
   }
 
-  return dex.contract.methods.divest(id, tokenBOutputAmount, tokenAOutputAmount, shares, timestamp.toString()).send();
+  return dex.contract.methods.divest(id, tokenBOutputAmount, tokenAOutputAmount, shares, deadline).send();
 };

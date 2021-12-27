@@ -6,7 +6,7 @@ import { ErrorAlert } from '@components/common/ErrorAlert';
 import { AddLiquidityForm } from '@containers/Liquidity/LiquidityForms/add-liquidity-form';
 import { LiquidityTabsEnum, TABS_CONTENT } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
 import { RemoveLiquidityForm } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form';
-import { useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/use-liquidity-form-service';
+import { useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/use-liquidity-form.service';
 
 import s from '../Liquidity.module.sass';
 

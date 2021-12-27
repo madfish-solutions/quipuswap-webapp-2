@@ -5,7 +5,7 @@ import { Button } from '@quipuswap/ui-kit';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { useAddLiquidityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity-service';
+import { useAddLiquidityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity.service';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';

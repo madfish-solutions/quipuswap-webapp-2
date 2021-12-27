@@ -11,7 +11,7 @@ import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { fromDecimals, noOpFunc } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
-import { useRemoveLiquidityService } from './use-remove-liquidity-service';
+import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
 export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);

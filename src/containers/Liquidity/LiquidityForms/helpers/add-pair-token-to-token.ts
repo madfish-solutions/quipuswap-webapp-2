@@ -2,11 +2,11 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { ZERO } from '@utils/defaults';
+import { walletSendOperation } from '@containers/Liquidity/LiquidityForms/helpers/wallet-send-operation';
 import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
+import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
 import { getValidPairParams } from './get-valid-pair-params';
 
 export const addPairTokenToToken = async (
@@ -25,31 +25,21 @@ export const addPairTokenToToken = async (
   const tokenAAmount = toDecimals(tokenABN, tokenA);
   const tokenBAmount = toDecimals(tokenBBN, tokenB);
 
-  const tokenAResetOperator = allowContractSpendYourTokens(tezos, tokenA, dexAddress, ZERO, accountPkh);
-  const tokenBResetOperator = allowContractSpendYourTokens(tezos, tokenB, dexAddress, ZERO, accountPkh);
-  const tokenAUpdateOperator = allowContractSpendYourTokens(tezos, tokenA, dexAddress, tokenAAmount, accountPkh);
-  const tokenBUpdateOperator = allowContractSpendYourTokens(tezos, tokenB, dexAddress, tokenBAmount, accountPkh);
+  const [tokenAResetOperator, tokenBResetOperator, tokenAUpdateOperator, tokenBUpdateOperator] =
+    await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
 
-  const [tokenAResetResolved, tokenBResetResolved, tokenAUpdateResolved, tokenBUpdateResolved] = await Promise.all([
-    tokenAResetOperator,
-    tokenBResetOperator,
-    tokenAUpdateOperator,
-    tokenBUpdateOperator
-  ]);
+  const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
 
-  const validAppPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
-
-  if (!validAppPairParams) {
+  if (!validAddPairParams) {
     return;
   }
 
-  const batch = tezos.wallet
-    .batch()
-    .withContractCall(tokenAResetResolved)
-    .withContractCall(tokenBResetResolved)
-    .withContractCall(tokenAUpdateResolved)
-    .withContractCall(tokenBUpdateResolved)
-    .withContractCall(validAppPairParams);
-
-  await batch.send();
+  return walletSendOperation(
+    tezos,
+    tokenAResetOperator,
+    tokenBResetOperator,
+    tokenAUpdateOperator,
+    tokenBUpdateOperator,
+    validAddPairParams
+  );
 };
