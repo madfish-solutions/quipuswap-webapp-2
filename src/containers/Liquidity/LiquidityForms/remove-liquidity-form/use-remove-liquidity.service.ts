@@ -3,14 +3,14 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { removeLiquidityTokenToToken, removeLiquidityTez } from '@containers/Liquidity/LiquidityForms/helpers';
-import { useLoadLpTokenBalance, useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
-import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
-import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+
+import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
+import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
+import { validateUserInput } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
