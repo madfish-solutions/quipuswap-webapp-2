@@ -36,6 +36,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { decimals: decimalsB } = tokenB.metadata;
 
   const isButtonDisabled = !accountPkh || Boolean(errorMessage) || !lpTokenInput;
+  const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
 
   return (
     <>
@@ -57,10 +58,10 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenABalance, decimalsA).toFixed(decimalsA)}
+        balance={fromDecimals(tokenABalance, decimalsA).toFixed()}
         token={tokenA}
         value={tokenAOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
         noBalanceButtons
@@ -70,10 +71,10 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenBBalance, decimalsB).toFixed(decimalsB)}
+        balance={fromDecimals(tokenBBalance, decimalsB).toFixed()}
         token={tokenB}
         value={tokenBOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
         noBalanceButtons

@@ -34,17 +34,18 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
 
   const isButtonDisabled =
     !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput;
+  const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
 
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenABalance, decimalsA).toFixed(decimalsA)}
+        balance={fromDecimals(tokenABalance, decimalsA).toFixed()}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
         onChange={handleTokenAChange}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={handleTokenABalance}
         noBalanceButtons={!accountPkh}
         error={accountPkh ? errorMessageTokenA : undefined}
@@ -53,12 +54,12 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenBBalance, decimalsB).toFixed(decimalsB)}
+        balance={fromDecimals(tokenBBalance, decimalsB).toFixed()}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
         onChange={handleTokenBChange}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={handleTokenBBalance}
         noBalanceButtons={!accountPkh}
         error={accountPkh ? errorMessageTokenB : undefined}

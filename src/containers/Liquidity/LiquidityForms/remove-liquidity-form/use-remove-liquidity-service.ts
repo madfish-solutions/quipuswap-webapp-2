@@ -71,18 +71,18 @@ export const useRemoveLiquidityService = (
     const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
     if (tokenA.contractAddress === pairTokenA.contractAddress) {
-      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
-      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
+      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
+      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
     } else {
-      setTokenAOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
-      setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
+      setTokenAOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+      setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value);
-    setLpTokenInput(fixedValue.toFixed(LP_TOKEN_DECIMALS));
+    setLpTokenInput(fromDecimals(fixedValue, LP_TOKEN_DECIMALS).toFixed());
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);

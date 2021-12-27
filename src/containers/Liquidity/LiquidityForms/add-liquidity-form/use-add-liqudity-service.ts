@@ -65,7 +65,7 @@ export const useAddLiquidityService = (
           ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
           : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-      setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
+      setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
     } else {
       if (tokenBInput === '') {
         setTokenAInput('');
@@ -89,7 +89,7 @@ export const useAddLiquidityService = (
           ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
           : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-      setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
+      setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo]);
@@ -130,7 +130,7 @@ export const useAddLiquidityService = (
         ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
+    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
   };
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
@@ -157,14 +157,14 @@ export const useAddLiquidityService = (
         ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
+    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
   };
 
   const handleTokenABalance = (value: string) => {
     const tokenABN = new BigNumber(value);
     const { decimals: decimalsA } = tokenA.metadata;
 
-    setTokenAInput(tokenABN.toFixed(decimalsA));
+    setTokenAInput(fromDecimals(tokenABN, decimalsA).toFixed());
 
     if (!pairInfo) {
       return;
@@ -180,13 +180,13 @@ export const useAddLiquidityService = (
         ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
-    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed(decimalsB));
+    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
   };
   const handleTokenBBalance = (value: string) => {
     const tokenBBN = new BigNumber(value);
     const { decimals: decimalsB } = tokenB.metadata;
 
-    setTokenBInput(tokenBBN.toFixed(decimalsB));
+    setTokenBInput(fromDecimals(tokenBBN, decimalsB).toFixed());
 
     if (!pairInfo) {
       return;
@@ -202,7 +202,7 @@ export const useAddLiquidityService = (
         ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
-    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed(decimalsA));
+    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
   };
 
   const handleAddLiquidity = async () => {
