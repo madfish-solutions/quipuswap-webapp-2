@@ -38,7 +38,7 @@ const themeClass = {
 export const PositionSelect: FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
-  shouldShowBalanceButtons = false,
+  shouldShowBalanceButtons = true,
   frozenBalance = '10.00',
   label,
   balanceLabel,

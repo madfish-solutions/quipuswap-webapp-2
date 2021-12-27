@@ -38,7 +38,7 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
-  shouldShowBalanceButtons = false,
+  shouldShowBalanceButtons = true,
   label,
   handleBalance,
   exchangeRate = null,
