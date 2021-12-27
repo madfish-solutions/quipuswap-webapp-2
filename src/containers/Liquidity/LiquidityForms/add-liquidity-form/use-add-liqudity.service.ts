@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators/validate-user-input';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -16,7 +17,7 @@ import {
   addLiquidityTokenToToken
 } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateUserInput } from '../validators';
+import { validateUserInputAmount } from '../validators';
 
 export const useAddLiquidityService = (
   dex: FoundDex,
@@ -34,6 +35,8 @@ export const useAddLiquidityService = (
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
+  const [validationErrorTokenA, setValidationErrorTokenA] = useState<string | undefined>();
+  const [validationErrorTokenB, setValidationErrorTokenB] = useState<string | undefined>();
   const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -114,6 +117,24 @@ export const useAddLiquidityService = (
       return;
     }
 
+    const validatedInput = validateUserInput(event.target.value);
+    const validatedInputAmount = validateUserInputAmount(
+      toDecimals(new BigNumber(event.target.value), tokenA),
+      tokenABalance
+    );
+
+    if (validatedInput) {
+      setValidationErrorTokenA(validatedInput);
+      setTokenBInput('');
+
+      return;
+    } else if (validatedInputAmount) {
+      setValidationErrorTokenA(validatedInputAmount);
+      setTokenBInput('');
+
+      return;
+    }
+
     if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
       return;
     }
@@ -131,12 +152,31 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
     setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
+    setValidationErrorTokenA(undefined);
   };
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
     if (event.target.value === '') {
       setTokenAInput('');
+
+      return;
+    }
+
+    const validatedInput = validateUserInput(event.target.value);
+    const validatedInputAmount = validateUserInputAmount(
+      toDecimals(new BigNumber(event.target.value), tokenA),
+      tokenABalance
+    );
+
+    if (validatedInput) {
+      setValidationErrorTokenB(validatedInput);
+      setTokenBInput('');
+
+      return;
+    } else if (validatedInputAmount) {
+      setValidationErrorTokenB(validatedInputAmount);
+      setTokenBInput('');
 
       return;
     }
@@ -158,6 +198,7 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
     setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
+    setValidationErrorTokenB(undefined);
   };
 
   const handleTokenABalance = (value: string) => {
@@ -259,12 +300,9 @@ export const useAddLiquidityService = (
     await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
   };
 
-  const errorMessageTokenA = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenA), tokenABalance);
-  const errorMessageTokenB = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenB), tokenBBalance);
-
   return {
-    errorMessageTokenA,
-    errorMessageTokenB,
+    validationErrorTokenA,
+    validationErrorTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,

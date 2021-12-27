@@ -13,8 +13,8 @@ import { AddFormInterface } from './add-form.props';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {
-    errorMessageTokenA,
-    errorMessageTokenB,
+    validationErrorTokenA,
+    validationErrorTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,
@@ -33,7 +33,9 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
   const { decimals: decimalsB } = tokenB.metadata;
 
   const isButtonDisabled =
-    !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput;
+    !accountPkh || Boolean(validationErrorTokenA) || Boolean(validationErrorTokenB) || !tokenAInput || !tokenBInput;
+  const isTokenAErrorMessage = accountPkh ? validationErrorTokenA : undefined;
+  const isTokenBErrorMessage = accountPkh ? validationErrorTokenB : undefined;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
 
   return (
@@ -48,7 +50,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenABalance}
         shouldShowBalanceButtons={!accountPkh}
-        error={accountPkh ? errorMessageTokenA : undefined}
+        error={isTokenAErrorMessage}
         placeholder="0.0"
       />
       <Plus className={s.iconButton} />
@@ -62,7 +64,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenBBalance}
         shouldShowBalanceButtons={!accountPkh}
-        error={accountPkh ? errorMessageTokenB : undefined}
+        error={isTokenBErrorMessage}
         placeholder="0.0"
       />
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
