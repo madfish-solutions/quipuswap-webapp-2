@@ -113,6 +113,12 @@ export const useSwapCalculations = () => {
     [inputAmount, lastAmountFieldChanged, onInputPrequisitesChange, onOutputPrequisitesChange, outputAmount]
   );
 
+  const resetCalculations = () => {
+    setLastAmountFieldChanged(SwapField.INPUT_AMOUNT);
+    setInputAmount(undefined);
+    setOutputAmount(undefined);
+  };
+
   useEffect(() => {
     if (prevDexGraphRef.current !== dexGraph) {
       onSwapPairChange({ inputToken, outputToken });
@@ -126,6 +132,7 @@ export const useSwapCalculations = () => {
     onOutputAmountChange,
     onSwapPairChange,
     inputAmount,
-    outputAmount
+    outputAmount,
+    resetCalculations
   };
 };
