@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { allowContractSpendYourTokens } from '@containers/Liquidity/LiquidityForms/helpers/allow-contract-spend-your-tokens';
 import { ZERO } from '@utils/defaults';
 import { toDecimals } from '@utils/helpers';
+import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
 export const addLiquidityTokenToToken = async (
@@ -40,10 +41,8 @@ export const addLiquidityTokenToToken = async (
     tokenBResetOperator
   ]);
 
-  const finalCurrentTime = (await tezos.rpc.getBlockHeader()).timestamp;
-  const timestamp = new Date(finalCurrentTime).getTime() / 1000 + 900;
-
-  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, timestamp.toString());
+  const deadline = await getDeadline(tezos);
+  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, deadline);
 
   const batch = tezos.wallet
     .batch()

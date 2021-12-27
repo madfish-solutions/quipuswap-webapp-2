@@ -38,3 +38,4 @@ export * from './make-whitelisted-token';
 export * from './noOpFunc';
 export * from './comparison';
 export * from './arrays';
+export * from './get-deadline';
