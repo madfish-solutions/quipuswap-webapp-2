@@ -125,7 +125,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
         {tokensModal && (
           <TokensModal

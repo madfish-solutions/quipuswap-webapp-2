@@ -103,7 +103,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                   <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(frozenBalance))}</div>
                 </div>
               )}
-              {!shouldShowBalanceButtons ? (
+              {shouldShowBalanceButtons ? (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{balanceLabel ?? t('common|Total Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance))}</div>
@@ -147,7 +147,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
       </div>
     </>

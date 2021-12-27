@@ -37,6 +37,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
 
   const isButtonDisabled = !accountPkh || Boolean(errorMessage) || !lpTokenInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
+  const shouldShowBalanceButtons = Boolean(accountPkh);
 
   return (
     <>
@@ -44,9 +45,9 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={fromDecimals(lpTokenBalance, LP_TOKEN_DECIMALS).toFixed(LP_TOKEN_DECIMALS)}
+        balance={fromDecimals(lpTokenBalance, LP_TOKEN_DECIMALS).toFixed()}
         handleBalance={handleBalance}
-        shouldShowBalanceButtons={!accountPkh}
+        shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
@@ -64,7 +65,6 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        shouldShowBalanceButtons
         disabled
         notSelectable
       />
@@ -77,7 +77,6 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        shouldShowBalanceButtons
         disabled
         notSelectable
       />
