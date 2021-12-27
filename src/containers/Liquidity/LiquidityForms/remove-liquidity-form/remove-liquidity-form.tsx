@@ -64,7 +64,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        noBalanceButtons
+        shouldShowBalanceButtons
         disabled
         notSelectable
       />
@@ -77,7 +77,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        noBalanceButtons
+        shouldShowBalanceButtons
         disabled
         notSelectable
       />
