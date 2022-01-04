@@ -341,6 +341,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     {}
   );
 
+  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
   const shouldHideExchangeRates = network.type === 'test';
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors.inputAmount;
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors.outputAmount;
@@ -411,7 +412,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             slippage={slippage}
             outputToken={outputToken}
           />
-          <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+          {shouldShowDeadlineInput && (
+            <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+          )}
           <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
             {currentTabLabel}
           </Button>
