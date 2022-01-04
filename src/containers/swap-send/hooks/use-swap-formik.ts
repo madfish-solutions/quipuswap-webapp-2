@@ -43,7 +43,7 @@ export const useSwapFormik = () => {
     const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
       await swap(tezos, accountPkh, {
-        deadlineTimespan: deadline.times(60).toNumber(),
+        deadlineTimespan: deadline.times(60).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
         inputToken: inputToken,
         recipient: action === 'send' ? recipient : undefined,
