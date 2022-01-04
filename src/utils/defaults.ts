@@ -29,6 +29,7 @@ export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
 export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
+export const DEFAULT_DEADLINE_MINS = 30;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 
