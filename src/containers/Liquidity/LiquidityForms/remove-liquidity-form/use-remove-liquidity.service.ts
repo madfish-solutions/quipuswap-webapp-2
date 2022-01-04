@@ -55,6 +55,7 @@ export const useRemoveLiquidityService = (
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
+      setValidationMessage(undefined);
 
       return;
     }
@@ -95,9 +96,9 @@ export const useRemoveLiquidityService = (
     const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
     const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
-
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
+    setValidationMessage(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 

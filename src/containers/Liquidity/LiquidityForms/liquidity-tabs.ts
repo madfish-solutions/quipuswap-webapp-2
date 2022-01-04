@@ -1,25 +1,25 @@
-export enum LiquidityTabsEnum {
+export enum LiquidityTabs {
   Add = 'add',
   Remove = 'remove'
 }
 
 export interface LiquidityTab {
-  id: LiquidityTabsEnum;
+  id: LiquidityTabs;
   label: string;
 }
 
 export const TABS_CONTENT: LiquidityTab[] = [
   {
-    id: LiquidityTabsEnum.Add,
+    id: LiquidityTabs.Add,
     label: 'Add'
   },
   {
-    id: LiquidityTabsEnum.Remove,
+    id: LiquidityTabs.Remove,
     label: 'Remove'
   }
 ];
 
-export const getTabById = (tabId: LiquidityTabsEnum) => {
+export const getTabById = (tabId: LiquidityTabs) => {
   const findActiveTab = TABS_CONTENT.find(tab => tab.id === tabId);
   if (!findActiveTab) {
     throw new Error('Tab is undefined: ' + tabId);
