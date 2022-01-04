@@ -15,19 +15,19 @@ export const useFlowToasts = (): UseFlowToasts => {
   const { t } = useTranslation(['common']);
 
   const showErrorToast = (err: Error | string) => {
-    if(err instanceof Error) {
+    if (err instanceof Error) {
       updateToast({
         type: 'error',
         render: `${err.name}: ${err.message}`
       });
     }
-    if(typeof err === 'string') {
+    if (typeof err === 'string') {
       updateToast({
         type: 'error',
         render: err
       });
     }
-  }
+  };
 
   const showLoaderToast = () => {
     updateToast({

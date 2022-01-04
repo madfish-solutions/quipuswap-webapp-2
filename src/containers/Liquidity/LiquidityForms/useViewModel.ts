@@ -9,11 +9,11 @@ import {
   getValidMichelTemplate,
   sortTokensContracts
 } from '@containers/Liquidity/liquidutyHelpers';
+import { useFlowToasts } from '@hooks/use-flow-toasts';
 import { getStorageInfo, getUserBalance, useAccountPkh, useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { FACTORIES, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { useFlowToasts } from '@hooks/use-flow-toasts';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
@@ -31,7 +31,7 @@ export const TabsContent = [
 
 export const useViewModel = () => {
   const { t } = useTranslation(['common']);
-  const {showErrorToast} = useFlowToasts();
+  const { showErrorToast } = useFlowToasts();
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
@@ -158,7 +158,7 @@ export const useViewModel = () => {
         if (isMounted) {
           setDexInfo({ dex: null, isTezosToTokenDex: isTezosInPair });
         }
-        showErrorToast(error as Error)
+        showErrorToast(error as Error);
       }
     };
     void loadDex();

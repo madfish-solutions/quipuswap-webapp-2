@@ -5,6 +5,7 @@ import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
+import { useFlowToasts } from '@hooks/use-flow-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { SAVED_TERMS_KEY } from '@utils/defaults';
@@ -13,7 +14,6 @@ import { NoTempleWalletError } from 'errors';
 
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
-import { useFlowToasts } from '@hooks/use-flow-toasts';
 
 interface WalletProps {
   className?: string;
@@ -40,7 +40,7 @@ export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = f
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
-  const {showErrorToast}= useFlowToasts();
+  const { showErrorToast } = useFlowToasts();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
@@ -68,10 +68,9 @@ export const WalletModal: FC = () => {
             const errorMessage = t('common|errorWhileConnectingWallet', {
               walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
               error: (err as Error).message
-            })
+            });
 
-            showErrorToast(errorMessage)
-
+            showErrorToast(errorMessage);
           }
         }
       }

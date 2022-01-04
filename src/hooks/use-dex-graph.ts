@@ -9,8 +9,8 @@ import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
 
-import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 import { useFlowToasts } from './use-flow-toasts';
+import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type TokenType = 'fa1.2' | 'fa2';
 
@@ -48,7 +48,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
-  const {showErrorToast} = useFlowToasts();
+  const { showErrorToast } = useFlowToasts();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
     const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];
@@ -114,7 +114,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
       // eslint-disable-next-line no-console
       console.error(e);
 
-      showErrorToast('Token to token exchangers not loaded')
+      showErrorToast('Token to token exchangers not loaded');
 
       return undefined;
     }
