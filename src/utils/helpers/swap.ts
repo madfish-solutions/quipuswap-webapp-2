@@ -126,7 +126,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
           const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
           swapsParams.push(
             ttDexContract!.methods
-              .swap(ttdexSwapStepsParams, ttdexSwapInput, currentDexInput, accountPkh, deadline)
+              .swap(ttdexSwapStepsParams, ttdexSwapInput, currentDexInput, accountPkh, String(deadline))
               .toTransferParams({ storageLimit: 1000 })
           );
           ttdexSwapStepsParams = [];
@@ -186,7 +186,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
             .times(new BigNumber(1).minus(slippageTolerance))
             .integerValue(BigNumber.ROUND_FLOOR),
           recipient,
-          deadline.toFixed()
+          String(deadline)
         )
         .toTransferParams({ storageLimit: 1000 })
     );
