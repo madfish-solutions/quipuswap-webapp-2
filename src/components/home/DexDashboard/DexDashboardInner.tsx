@@ -6,12 +6,12 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Maybe } from '@graphql';
+import { useNetwork } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
-import { useNetwork } from '@utils/dapp';
 
 interface DexDashboardInnerProps {
   totalLiquidity: Maybe<string> | undefined;

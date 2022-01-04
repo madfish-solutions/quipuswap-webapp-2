@@ -11,12 +11,11 @@ import 'slick-carousel/slick/slick-theme.css';
 
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
-import { getStorageInfo } from '@utils/dapp';
+import { getStorageInfo, useNetwork } from '@utils/dapp';
 import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
-import { useNetwork } from '@utils/dapp';
 
 interface DexDashboardProps {
   className?: string;
