@@ -8,16 +8,18 @@ import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
 import { BaseLayout } from '@layouts/BaseLayout';
+import { useNetwork } from '@utils/dapp';
 
 const Home: React.FC = () => {
   const { t } = useTranslation(['common', 'home']);
+  const network = useNetwork();
 
   return (
     <BaseLayout title={t('home|Home page')} description={t('home|Home page description. Couple sentences...')}>
       <News />
       <DexDashboard />
       <Opportunities />
-      <TopPairs />
+      {network.type === 'main' ? <TopPairs /> : null}
       {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>
