@@ -1,6 +1,5 @@
 import { Signer } from '@taquito/taquito';
 
-/* eslint-disable class-methods-use-this */
 export class ReadOnlySigner implements Signer {
   constructor(private pkh: string, private pk: string) {}
 
