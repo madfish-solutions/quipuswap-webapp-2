@@ -8,13 +8,15 @@ import {
   getAllowanceTransferParams,
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
+import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { getTokenOutput } from './tokenToTokenDex';
 
 export interface SwapParams {
+  deadlineTimespan?: number;
   inputToken: TokenId;
   inputAmount: BigNumber;
   dexChain: DexPair[];
@@ -41,14 +43,16 @@ const serialPromiseAll = async <T extends unknown[], U>(
   }
 
   return promiseFactory(initialIndex, ...dataItem).then(
-    async (result): Promise<U[]> => [result, ...(await serialPromiseAll(restData, promiseFactory, initialIndex + 1))]
+    async (promiseValue): Promise<U[]> =>
+      [promiseValue].concat(await serialPromiseAll(restData, promiseFactory, initialIndex + 1))
   );
 };
 
-const defaultMaxDelay = 15 * 60 * 1000;
+const defaultDeadlineTimespan = DEFAULT_DEADLINE_MINS * 60;
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
   const {
+    deadlineTimespan = defaultDeadlineTimespan,
     inputToken,
     inputAmount,
     dexChain,
@@ -92,7 +96,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
     }
     fa2Operators[tokenAddress][tokenId!].push(operator);
   };
-  const deadline = new BigNumber(Date.now() + defaultMaxDelay).idiv(1000).toFixed();
+  const deadline = await getBlockchainTimestamp(tezos, deadlineTimespan);
 
   await serialPromiseAll(
     dexChain.map(x => [x]),
@@ -182,7 +186,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
             .times(new BigNumber(1).minus(slippageTolerance))
             .integerValue(BigNumber.ROUND_FLOOR),
           recipient,
-          deadline
+          deadline.toFixed()
         )
         .toTransferParams({ storageLimit: 1000 })
     );
@@ -202,14 +206,16 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
   const [addOperatorsParams, removeOperatorsParams] = rawOperatorsOperations.reduce<
     [TransferParams[], TransferParams[]]
   >(
-    (acc, [addOperators, removeOperators]) => [
-      [...acc[0], addOperators],
-      [...acc[1], removeOperators]
-    ],
+    (acc, [addOperators, removeOperators]) => {
+      acc[0].push(addOperators);
+      acc[1].push(removeOperators);
+
+      return acc;
+    },
     [[], []]
   );
 
-  return [...addOperatorsParams, ...swapsParams, ...removeOperatorsParams];
+  return addOperatorsParams.concat(swapsParams, removeOperatorsParams);
 };
 
 export const swap = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {

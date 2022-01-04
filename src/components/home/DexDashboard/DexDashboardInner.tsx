@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Maybe } from '@graphql';
+import { useNetwork } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 
@@ -35,6 +36,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   loading = false
 }) => {
   const { t } = useTranslation(['home']);
+  const network = useNetwork();
 
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tvl: string = useMemo(
@@ -63,33 +65,37 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      <DashboardCard
-        className={cx(s.card, modeClass[colorThemeMode])}
-        size="extraLarge"
-        volume={FormatNumber(tvl)}
-        tooltip={t(
-          'home|TVL (Total Value Locked) represents the total amount of assets currently locked on a DeFi platform. In the case of a DEX it also represents the overall volume of liquidity.'
-        )}
-        label={t('home|TVL')}
-        currency="$"
-        loading={loading}
-      />
-      <DashboardCard
-        className={cx(s.card, modeClass[colorThemeMode])}
-        size="extraLarge"
-        volume={FormatNumber(volume24h)}
-        tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
-        label={t('home|Daily Volume')}
-        currency="$"
-        loading={loading}
-      />
-      <DashboardCard
-        className={cx(s.card, modeClass[colorThemeMode])}
-        size="extraLarge"
-        volume={FormatNumber(transactions24h)}
-        tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
-        label={t('home|Daily Transaction')}
-      />
+      {network.type === 'main' ? (
+        <>
+          <DashboardCard
+            className={cx(s.card, modeClass[colorThemeMode])}
+            size="extraLarge"
+            volume={FormatNumber(tvl)}
+            tooltip={t(
+              'home|TVL (Total Value Locked) represents the total amount of assets currently locked on a DeFi platform. In the case of a DEX it also represents the overall volume of liquidity.'
+            )}
+            label={t('home|TVL')}
+            currency="$"
+            loading={loading}
+          />
+          <DashboardCard
+            className={cx(s.card, modeClass[colorThemeMode])}
+            size="extraLarge"
+            volume={FormatNumber(volume24h)}
+            tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
+            label={t('home|Daily Volume')}
+            currency="$"
+            loading={loading}
+          />
+          <DashboardCard
+            className={cx(s.card, modeClass[colorThemeMode])}
+            size="extraLarge"
+            volume={FormatNumber(transactions24h)}
+            tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
+            label={t('home|Daily Transaction')}
+          />
+        </>
+      ) : null}
       <DashboardCard
         className={cx(s.card, modeClass[colorThemeMode])}
         size="extraLarge"

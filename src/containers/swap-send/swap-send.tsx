@@ -17,6 +17,7 @@ import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWh
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
+import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
@@ -53,7 +54,7 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
   const {
     errors,
-    values: { inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
+    values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
     validateField,
     setValues,
     setFieldValue,
@@ -72,17 +73,22 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     onOutputAmountChange,
     onSwapPairChange,
     inputAmount: calculatedInputAmount,
-    outputAmount: calculatedOutputAmount
+    outputAmount: calculatedOutputAmount,
+    resetCalculations
   } = useSwapCalculations();
+  const prevCalculatedInputAmountRef = useRef(calculatedInputAmount);
+  const prevCalculatedOutputAmountRef = useRef(calculatedOutputAmount);
 
   useEffect(() => {
-    if (!amountsAreEqual(calculatedInputAmount, inputAmount)) {
-      setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(
-        () => void setFieldTouched(SwapField.INPUT_AMOUNT, true)
-      );
+    if (!amountsAreEqual(calculatedInputAmount, prevCalculatedInputAmountRef.current)) {
+      setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(() => {
+        setFieldTouched(SwapField.INPUT_AMOUNT, true);
+      });
+      prevCalculatedInputAmountRef.current = calculatedInputAmount;
     }
-    if (!amountsAreEqual(calculatedOutputAmount, outputAmount)) {
+    if (!amountsAreEqual(calculatedOutputAmount, prevCalculatedOutputAmountRef.current)) {
       setFieldValue(SwapField.OUTPUT_AMOUNT, calculatedOutputAmount);
+      prevCalculatedOutputAmountRef.current = calculatedOutputAmount;
     }
   }, [calculatedInputAmount, calculatedOutputAmount, inputAmount, outputAmount, setFieldValue, setFieldTouched]);
 
@@ -120,6 +126,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
+  const prevNetworkRef = useRef(network);
 
   useEffect(() => void validateField(SwapField.INPUT_AMOUNT), [validateField, maxInputAmounts, balances]);
   useEffect(() => void validateField(SwapField.OUTPUT_AMOUNT), [validateField, maxOutputAmounts]);
@@ -205,14 +212,24 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   useOnBlock(tezos, updateSelectedTokensBalances);
 
-  const handleSubmit = useCallback(async () => {
-    await submitForm();
+  const resetTokensAmounts = useCallback(() => {
     setFieldTouched(SwapField.INPUT_AMOUNT, false);
     setFieldTouched(SwapField.OUTPUT_AMOUNT, false);
     setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
-    onInputAmountChange(undefined);
-    onOutputAmountChange(undefined);
-  }, [setValues, submitForm, setFieldTouched, onInputAmountChange, onOutputAmountChange]);
+    resetCalculations();
+  }, [resetCalculations, setFieldTouched, setValues]);
+
+  const handleSubmit = async () => {
+    await submitForm();
+    resetTokensAmounts();
+  };
+
+  useEffect(() => {
+    if (network.id !== prevNetworkRef.current.id) {
+      resetTokensAmounts();
+    }
+    prevNetworkRef.current = network;
+  }, [network, resetTokensAmounts]);
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
@@ -317,30 +334,33 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     [handleRecipientChange]
   );
 
-  const handleSlippageChange = useCallback(
-    (newValue?: BigNumber) => {
-      setFieldTouched(SwapField.SLIPPAGE, true);
-      setFieldValue(SwapField.SLIPPAGE, newValue, true);
-    },
-    [setFieldValue, setFieldTouched]
-  );
+  const handleSlippageChange = (newValue?: BigNumber) => {
+    setFieldTouched(SwapField.SLIPPAGE, true);
+    setFieldValue(SwapField.SLIPPAGE, newValue, true);
+  };
+
+  const handleDeadlineChange = (newValue?: BigNumber) => {
+    setFieldTouched(SwapField.DEADLINE, true);
+    setFieldValue(SwapField.DEADLINE, newValue, true);
+  };
 
   const inputTokenSlug = inputToken && getTokenSlug(inputToken);
   const outputTokenSlug = outputToken && getTokenSlug(outputToken);
   const inputTokenBalance = getBalanceByTokenSlug(inputTokenSlug, balances);
   const outputTokenBalance = getBalanceByTokenSlug(outputTokenSlug, balances);
 
-  const touchedFieldsErrors = Object.keys(touched).reduce<Partial<Record<keyof SwapFormValues, string>>>(
-    (errorsPart, key) => ({
+  const touchedFieldsErrors = Object.entries(touched).reduce<Partial<Record<keyof SwapFormValues, string>>>(
+    (errorsPart, [key, isTouched]) => ({
       ...errorsPart,
-      [key]: errors[key as keyof SwapFormValues]
+      [key]: isTouched ? errors[key as keyof SwapFormValues] : undefined
     }),
     {}
   );
 
+  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
   const shouldHideExchangeRates = network.type === 'test';
-  const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors.inputAmount;
-  const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors.outputAmount;
+  const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
+  const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate =
     inputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[inputTokenSlug];
   const outputExchangeRate =
@@ -372,6 +392,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             blackListedTokens={blackListedTokens}
             onTokenChange={handleInputTokenChange}
             id="swap-send-from"
+            placeholder="0.0"
           />
           <SwapButton onClick={handleSwapButtonClick} />
           <NewTokenSelect
@@ -386,7 +407,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             token={outputToken}
             blackListedTokens={blackListedTokens}
             onTokenChange={handleOutputTokenChange}
-            id="swap-send-from"
+            id="swap-send-to"
+            placeholder="0.0"
           />
           {action === 'send' && (
             <ComplexRecipient
@@ -406,6 +428,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
             slippage={slippage}
             outputToken={outputToken}
           />
+          {shouldShowDeadlineInput && (
+            <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+          )}
           <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
             {currentTabLabel}
           </Button>

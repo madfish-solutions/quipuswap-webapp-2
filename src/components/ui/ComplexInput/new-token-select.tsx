@@ -17,19 +17,20 @@ import { Undefined, WhitelistedToken } from '@utils/types';
 import s from './ComplexInput.module.sass';
 
 interface NewTokenSelectProps {
+  className?: string;
   showBalanceButtons?: boolean;
   amount?: BigNumber;
-  className?: string;
   balance?: BigNumber;
   exchangeRate?: BigNumber;
   label: string;
   error?: string;
   selectable?: boolean;
-  onAmountChange: (value: Undefined<BigNumber>) => void;
   token?: WhitelistedToken;
   blackListedTokens: WhitelistedToken[];
-  onTokenChange: (token: WhitelistedToken) => void;
   id?: string;
+  placeholder?: string;
+  onAmountChange: (value: Undefined<BigNumber>) => void;
+  onTokenChange: (token: WhitelistedToken) => void;
 }
 
 const themeClass = {
@@ -47,6 +48,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   selectable = true,
   error,
   id,
+  placeholder,
   onAmountChange,
   onTokenChange,
   token,
@@ -175,6 +177,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
               value={localAmount}
               autoComplete="off"
               onChange={handleAmountChange}
+              placeholder={placeholder}
             />
             <Button
               disabled={!selectable}

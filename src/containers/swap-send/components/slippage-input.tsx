@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 
 import { Slippage, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import { useTranslation } from 'next-i18next';
 
 import s from '@styles/CommonContainer.module.sass';
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@utils/defaults';
@@ -12,21 +13,17 @@ interface SlippageInputProps {
   error?: string;
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
-  onChange: (newValue?: BigNumber) => void;
   slippage?: BigNumber;
+  onChange: (newValue?: BigNumber) => void;
 }
 
 const WHOLE_ITEM_PERCENT = 100;
 
 export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
-  const handleChange = (newValue?: string) => {
-    if (!newValue) {
-      onChange(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
-    } else {
-      const parsedPercentage = new BigNumber(newValue);
-      onChange(parsedPercentage.isFinite() ? parsedPercentage : undefined);
-    }
-  };
+  const { t } = useTranslation(['common']);
+
+  const handleChange = (newValue?: string) =>
+    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
@@ -39,6 +36,9 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
 
   return (
     <>
+      <label htmlFor="deadline" className={s.inputLabel}>
+        {t('common|Slippage')}
+      </label>
       <Slippage handleChange={handleChange} placeholder={slippage?.toFixed()} />
       {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.receive}>
