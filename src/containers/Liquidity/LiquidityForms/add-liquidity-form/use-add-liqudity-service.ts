@@ -3,21 +3,21 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { TEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
+import { fromDecimals, toDecimals } from '@utils/helpers';
+import { Nullable, WhitelistedToken } from '@utils/types';
+
 import {
   addLiquidityTez,
   addPairT2T,
   calculateTokenAmount,
   initializeLiquidityTez,
-  sortTokensContracts
-} from '@containers/Liquidity/LiquidityForms/helpers';
-import { addLiquidityT2T } from '@containers/Liquidity/LiquidityForms/helpers/add-liquidity-t2t';
-import { useLoadTokenBalance } from '@containers/Liquidity/LiquidityForms/hooks';
-import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks/use-pair-info';
-import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { TEN, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
-import { fromDecimals, toDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+  sortTokensContracts,
+  addLiquidityT2T
+} from '../helpers';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import { validateUserInput } from '../validators';
 
 export const useAddLiqudityService = (
   dex: FoundDex,
@@ -37,9 +37,14 @@ export const useAddLiqudityService = (
   const [tokenBInput, setTokenBInput] = useState('');
   const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    if (!changedToken) {
+    if (
+      !changedToken ||
+      !pairInfo ||
+      pairInfo.tokenAPool.eq(ZERO) ||
+      pairInfo.tokenBPool.eq(ZERO) ||
+      pairInfo.totalSupply.eq(ZERO)
+    ) {
       return;
     }
 
@@ -47,10 +52,6 @@ export const useAddLiqudityService = (
       if (tokenAInput === '') {
         setTokenBInput('');
 
-        return;
-      }
-
-      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
@@ -69,10 +70,6 @@ export const useAddLiqudityService = (
       if (tokenBInput === '') {
         setTokenAInput('');
 
-        return;
-      }
-
-      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
@@ -198,7 +195,7 @@ export const useAddLiqudityService = (
       return;
     }
 
-    const addLiquidityCondition =
+    const shouldAddLiquidity =
       pairInfo &&
       pairInfo.id &&
       pairInfo.tokenAPool.gt(ZERO) &&
@@ -211,7 +208,7 @@ export const useAddLiqudityService = (
       const pairTokenB = addressB === tokenB.contractAddress ? tokenB : tokenA;
       const pairInputA = addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
       const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
-      if (addLiquidityCondition) {
+      if (shouldAddLiquidity) {
         await addLiquidityT2T(
           tezos,
           accountPkh,
@@ -237,7 +234,7 @@ export const useAddLiqudityService = (
     const tezTokenInputBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenInputBN, TEZOS_TOKEN);
 
-    if (addLiquidityCondition) {
+    if (shouldAddLiquidity) {
       await addLiquidityTez(tezos, dex, tezValue);
 
       return;

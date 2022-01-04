@@ -1,3 +1,4 @@
+export * from './add-liquidity-t2t';
 export * from './add-liquidity-tez';
 export * from './add-pair-t2t';
 export * from './allow-contract-spend-your-tokens';
