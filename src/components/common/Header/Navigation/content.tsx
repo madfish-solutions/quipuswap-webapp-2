@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar } from '@quipuswap/ui-kit';
+import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
 import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
@@ -46,7 +46,7 @@ export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] =>
     as: '/voting/vote/TEZ-QUIPU',
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
-  }
+  },
   // {
   //   id: 4,
   //   href: '/stake',
@@ -71,51 +71,51 @@ export const makeNavigationData = (network: QSMainNet): NavigationDataProps[] =>
   //   label: <Trans ns="common">Governance</Trans>,
   //   Icon: GovernanceIcon,
   // },
-  // {
-  //   id: 7,
-  //   label: <Trans ns="common">More</Trans>,
-  //   Icon: MoreIcon,
-  //   links: [
-  //     {
-  //       id: 0,
-  //       href: 'https://www.google.com',
-  //       label: 'Analytics',
-  //     },
-  //     {
-  //       id: 1,
-  //       href: 'https://www.google.com',
-  //       label: 'About',
-  //     },
-  //     {
-  //       id: 2,
-  //       href: 'https://www.google.com',
-  //       label: 'Audit',
-  //     },
-  //     {
-  //       id: 3,
-  //       href: 'https://www.google.com',
-  //       label: 'Help',
-  //     },
-  //     {
-  //       id: 4,
-  //       href: 'https://www.google.com',
-  //       label: 'Docs',
-  //     },
-  //     {
-  //       id: 5,
-  //       href: 'https://www.google.com',
-  //       label: 'Blog',
-  //     },
-  //     {
-  //       id: 6,
-  //       href: 'https://www.google.com',
-  //       label: 'Terms of Usage',
-  //     },
-  //     {
-  //       id: 7,
-  //       href: 'https://www.google.com',
-  //       label: 'Privacy Policy',
-  //     },
-  //   ],
-  // },
+  {
+    id: 7,
+    label: <Trans ns="common">More</Trans>,
+    Icon: MoreIcon,
+    links: [
+      {
+        id: 0,
+        href: 'https://analytics.quipuswap.com/',
+        label: 'Analytics'
+      },
+      {
+        id: 1,
+        href: 'https://story.madfish.solutions/category/quipuswap/',
+        label: 'About'
+      },
+      {
+        id: 2,
+        href: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
+        label: 'Audit'
+      },
+      {
+        id: 3,
+        href: 'https://madfish.crunch.help/quipu-swap',
+        label: 'Help'
+      },
+      {
+        id: 4,
+        href: 'https://docs.quipuswap.com/',
+        label: 'Docs'
+      },
+      {
+        id: 5,
+        href: 'https://story.madfish.solutions/',
+        label: 'Blog'
+      },
+      {
+        id: 6,
+        href: '/terms-of-service',
+        label: 'Terms of Usage'
+      },
+      {
+        id: 7,
+        href: '/privacy-policy',
+        label: 'Privacy Policy'
+      }
+    ]
+  }
 ];

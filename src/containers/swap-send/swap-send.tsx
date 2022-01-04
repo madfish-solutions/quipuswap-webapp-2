@@ -73,17 +73,22 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     onOutputAmountChange,
     onSwapPairChange,
     inputAmount: calculatedInputAmount,
-    outputAmount: calculatedOutputAmount
+    outputAmount: calculatedOutputAmount,
+    resetCalculations
   } = useSwapCalculations();
+  const prevCalculatedInputAmountRef = useRef(calculatedInputAmount);
+  const prevCalculatedOutputAmountRef = useRef(calculatedOutputAmount);
 
   useEffect(() => {
-    if (!amountsAreEqual(calculatedInputAmount, inputAmount)) {
-      setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(
-        () => void setFieldTouched(SwapField.INPUT_AMOUNT, true)
-      );
+    if (!amountsAreEqual(calculatedInputAmount, prevCalculatedInputAmountRef.current)) {
+      setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(() => {
+        setFieldTouched(SwapField.INPUT_AMOUNT, true);
+      });
+      prevCalculatedInputAmountRef.current = calculatedInputAmount;
     }
-    if (!amountsAreEqual(calculatedOutputAmount, outputAmount)) {
+    if (!amountsAreEqual(calculatedOutputAmount, prevCalculatedOutputAmountRef.current)) {
       setFieldValue(SwapField.OUTPUT_AMOUNT, calculatedOutputAmount);
+      prevCalculatedOutputAmountRef.current = calculatedOutputAmount;
     }
   }, [calculatedInputAmount, calculatedOutputAmount, inputAmount, outputAmount, setFieldValue, setFieldTouched]);
 
@@ -121,6 +126,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
+  const prevNetworkRef = useRef(network);
 
   useEffect(() => void validateField(SwapField.INPUT_AMOUNT), [validateField, maxInputAmounts, balances]);
   useEffect(() => void validateField(SwapField.OUTPUT_AMOUNT), [validateField, maxOutputAmounts]);
@@ -206,14 +212,24 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   useOnBlock(tezos, updateSelectedTokensBalances);
 
-  const handleSubmit = useCallback(async () => {
-    await submitForm();
+  const resetTokensAmounts = useCallback(() => {
     setFieldTouched(SwapField.INPUT_AMOUNT, false);
     setFieldTouched(SwapField.OUTPUT_AMOUNT, false);
     setValues(prevValues => ({ ...prevValues, inputAmount: undefined, outputAmount: undefined }));
-    onInputAmountChange(undefined);
-    onOutputAmountChange(undefined);
-  }, [setValues, submitForm, setFieldTouched, onInputAmountChange, onOutputAmountChange]);
+    resetCalculations();
+  }, [resetCalculations, setFieldTouched, setValues]);
+
+  const handleSubmit = async () => {
+    await submitForm();
+    resetTokensAmounts();
+  };
+
+  useEffect(() => {
+    if (network.id !== prevNetworkRef.current.id) {
+      resetTokensAmounts();
+    }
+    prevNetworkRef.current = network;
+  }, [network, resetTokensAmounts]);
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
@@ -333,18 +349,18 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const inputTokenBalance = getBalanceByTokenSlug(inputTokenSlug, balances);
   const outputTokenBalance = getBalanceByTokenSlug(outputTokenSlug, balances);
 
-  const touchedFieldsErrors = Object.keys(touched).reduce<Partial<Record<keyof SwapFormValues, string>>>(
-    (errorsPart, key) => ({
+  const touchedFieldsErrors = Object.entries(touched).reduce<Partial<Record<keyof SwapFormValues, string>>>(
+    (errorsPart, [key, isTouched]) => ({
       ...errorsPart,
-      [key]: errors[key as keyof SwapFormValues]
+      [key]: isTouched ? errors[key as keyof SwapFormValues] : undefined
     }),
     {}
   );
 
   const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
   const shouldHideExchangeRates = network.type === 'test';
-  const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors.inputAmount;
-  const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors.outputAmount;
+  const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
+  const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate =
     inputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[inputTokenSlug];
   const outputExchangeRate =

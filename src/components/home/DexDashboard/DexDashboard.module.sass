@@ -39,6 +39,8 @@
     display: block
   .content
     grid-template-columns: repeat(2, 1fr)
+    &.testnet 
+      grid-template-columns: 1fr
     .card
       &:nth-last-child(2)
         border-bottom: none
@@ -53,6 +55,8 @@
 @include media('>Ltablet')
   .content
     grid-template-columns: repeat(4, 1fr)
+    &.testnet 
+      grid-template-columns: repeat(2, 1fr)
     .card
       &:nth-child(1), &:nth-child(3)
         grid-column: 1 / 3
