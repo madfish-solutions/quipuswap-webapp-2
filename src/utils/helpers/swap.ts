@@ -43,7 +43,8 @@ const serialPromiseAll = async <T extends unknown[], U>(
   }
 
   return promiseFactory(initialIndex, ...dataItem).then(
-    async (result): Promise<U[]> => [result, ...(await serialPromiseAll(restData, promiseFactory, initialIndex + 1))]
+    async (promiseValue): Promise<U[]> =>
+      [promiseValue].concat(await serialPromiseAll(restData, promiseFactory, initialIndex + 1))
   );
 };
 
@@ -205,14 +206,16 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
   const [addOperatorsParams, removeOperatorsParams] = rawOperatorsOperations.reduce<
     [TransferParams[], TransferParams[]]
   >(
-    (acc, [addOperators, removeOperators]) => [
-      [...acc[0], addOperators],
-      [...acc[1], removeOperators]
-    ],
+    (acc, [addOperators, removeOperators]) => {
+      acc[0].push(addOperators);
+      acc[1].push(removeOperators);
+
+      return acc;
+    },
     [[], []]
   );
 
-  return [...addOperatorsParams, ...swapsParams, ...removeOperatorsParams];
+  return addOperatorsParams.concat(swapsParams, removeOperatorsParams);
 };
 
 export const swap = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
