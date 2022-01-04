@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import {
   addLiquidityTez,
@@ -17,7 +17,7 @@ import {
   sortTokensContracts
 } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateUserInput } from '../validators';
+import { validateUserInputAmount, validateUserInput } from '../validators';
 import { LastChangedTokenEnum } from './last-changed-token.enum';
 
 export const useAddLiquidityService = (
@@ -36,7 +36,9 @@ export const useAddLiquidityService = (
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
-  const [changedToken, setChangedToken] = useState<Nullable<LastChangedTokenEnum>>(null);
+  const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
+  const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
+  const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
 
   useEffect(() => {
     if (
@@ -110,6 +112,25 @@ export const useAddLiquidityService = (
 
     if (event.target.value === '') {
       setTokenBInput('');
+      setValidationMessageTokenA(undefined);
+
+      return;
+    }
+
+    const validatedInput = validateUserInput(event.target.value);
+    const validatedInputAmount = validateUserInputAmount(
+      toDecimals(new BigNumber(event.target.value), tokenA),
+      tokenABalance
+    );
+
+    if (validatedInput) {
+      setValidationMessageTokenA(validatedInput);
+      setTokenBInput('');
+
+      return;
+    } else if (validatedInputAmount) {
+      setValidationMessageTokenA(validatedInputAmount);
+      setTokenBInput('');
 
       return;
     }
@@ -136,12 +157,32 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
     setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
+    setValidationMessageTokenA(undefined);
   };
 
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
     if (event.target.value === '') {
+      setTokenAInput('');
+      setValidationMessageTokenB(undefined);
+
+      return;
+    }
+
+    const validatedInput = validateUserInput(event.target.value);
+    const validatedInputAmount = validateUserInputAmount(
+      toDecimals(new BigNumber(event.target.value), tokenB),
+      tokenBBalance
+    );
+
+    if (validatedInput) {
+      setValidationMessageTokenB(validatedInput);
+      setTokenAInput('');
+
+      return;
+    } else if (validatedInputAmount) {
+      setValidationMessageTokenB(validatedInputAmount);
       setTokenAInput('');
 
       return;
@@ -169,6 +210,7 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
     setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
+    setValidationMessageTokenB(undefined);
   };
 
   const handleTokenABalance = (value: string) => {
@@ -284,12 +326,9 @@ export const useAddLiquidityService = (
     await investTezosToToken();
   };
 
-  const errorMessageTokenA = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenA), tokenABalance);
-  const errorMessageTokenB = validateUserInput(toDecimals(new BigNumber(tokenAInput), tokenB), tokenBBalance);
-
   return {
-    errorMessageTokenA,
-    errorMessageTokenB,
+    validationMessageTokenA,
+    validationMessageTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,

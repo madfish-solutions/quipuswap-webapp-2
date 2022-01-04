@@ -3,14 +3,15 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators/validate-user-input';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validateUserInput } from '../validators';
+import { validateUserInputAmount } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
@@ -28,6 +29,7 @@ export const useRemoveLiquidityService = (
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
+  const [validationMessage, setValidationMessage] = useState<Undefined<string>>();
   const [slippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
@@ -59,6 +61,24 @@ export const useRemoveLiquidityService = (
     const lpTokenInputBN = new BigNumber(lpTokenInput);
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
+    const validatedInput = validateUserInput(lpTokenInput);
+    const validatedInputAmount = validateUserInputAmount(
+      toDecimals(new BigNumber(lpTokenInput), LP_TOKEN_DECIMALS),
+      lpTokenBalance
+    );
+
+    if (validatedInput) {
+      setValidationMessage(validatedInput);
+      setTokenAOutput('');
+      setTokenBOutput('');
+
+      return;
+    } else if (validatedInputAmount) {
+      setValidationMessage(validatedInputAmount);
+
+      return;
+    }
+
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
     const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
@@ -75,15 +95,13 @@ export const useRemoveLiquidityService = (
     const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
     const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
+
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 
-  const handleBalance = (value: string) => {
-    const fixedValue = new BigNumber(value);
-    setLpTokenInput(fromDecimals(fixedValue, LP_TOKEN_DECIMALS).toFixed());
-  };
+  const handleBalance = (value: string) => setLpTokenInput(value);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
@@ -101,10 +119,8 @@ export const useRemoveLiquidityService = (
     }
   };
 
-  const errorMessage = validateUserInput(toDecimals(new BigNumber(lpTokenInput), LP_TOKEN_DECIMALS), lpTokenBalance);
-
   return {
-    errorMessage,
+    validationMessage,
     tokenPair,
     accountPkh,
     lpTokenInput,
