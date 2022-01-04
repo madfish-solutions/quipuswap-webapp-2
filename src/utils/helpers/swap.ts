@@ -16,7 +16,7 @@ import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { getTokenOutput } from './tokenToTokenDex';
 
 export interface SwapParams {
-  deadlineTimespan?: BigNumber;
+  deadlineTimespan?: number;
   inputToken: TokenId;
   inputAmount: BigNumber;
   dexChain: DexPair[];
@@ -48,7 +48,7 @@ const serialPromiseAll = async <T extends unknown[], U>(
   );
 };
 
-const defaultDeadlineTimespan = new BigNumber(DEFAULT_DEADLINE_MINS).times(60);
+const defaultDeadlineTimespan = DEFAULT_DEADLINE_MINS * 60;
 // eslint-disable-next-line sonarjs/cognitive-complexity
 export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: string, swapParams: SwapParams) => {
   const {

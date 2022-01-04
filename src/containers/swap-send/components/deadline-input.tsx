@@ -16,14 +16,8 @@ interface DeadlineInputProps {
 export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }) => {
   const { t } = useTranslation(['common']);
 
-  const handleChange = (newValue?: string) => {
-    if (!newValue) {
-      onChange(new BigNumber(DEFAULT_DEADLINE_MINS));
-    } else {
-      const parsedValue = new BigNumber(newValue);
-      onChange(parsedValue.isFinite() ? parsedValue : undefined);
-    }
-  };
+  const handleChange = (newValue?: string) =>
+    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_DEADLINE_MINS));
 
   return (
     <>
