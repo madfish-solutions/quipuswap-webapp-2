@@ -1,9 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-import { TEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
+
+const DECIMALS_BASE = 10;
 
 export const toDecimals = (num: BigNumber, decimalsOrToken: number | WhitelistedToken): BigNumber =>
   num.times(
-    new BigNumber(TEN).pow(typeof decimalsOrToken === 'number' ? decimalsOrToken : decimalsOrToken.metadata.decimals)
+    new BigNumber(DECIMALS_BASE).pow(
+      typeof decimalsOrToken === 'number' ? decimalsOrToken : decimalsOrToken.metadata.decimals
+    )
   );

@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { walletSendOperation } from '@containers/Liquidity/LiquidityForms/helpers/wallet-send-operation';
+import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
@@ -34,12 +34,13 @@ export const addPairTokenToToken = async (
     return;
   }
 
-  return walletSendOperation(
-    tezos,
-    tokenAResetOperator,
-    tokenBResetOperator,
-    tokenAUpdateOperator,
-    tokenBUpdateOperator,
-    validAddPairParams
-  );
+  return await (
+    await batchOperations(tezos, [
+      tokenAResetOperator,
+      tokenBResetOperator,
+      tokenAUpdateOperator,
+      tokenBUpdateOperator,
+      validAddPairParams
+    ])
+  ).send();
 };

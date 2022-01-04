@@ -2,12 +2,12 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
 import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
-import { walletSendOperation } from './wallet-send-operation';
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -35,12 +35,13 @@ export const addLiquidityTokenToToken = async (
   const deadline = await getDeadline(tezos);
   const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, deadline);
 
-  return walletSendOperation(
-    tezos,
-    tokenAUpdateOperator,
-    tokenBUpdateOperator,
-    tokenAResetOperator,
-    tokenBResetOperator,
-    investParams
-  );
+  return await (
+    await batchOperations(tezos, [
+      tokenAUpdateOperator,
+      tokenBUpdateOperator,
+      tokenAResetOperator,
+      tokenBResetOperator,
+      investParams
+    ])
+  ).send();
 };

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useTokens } from '@utils/dapp';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useDexContract } from '../hooks';
 import { findToken, getLiquidityUrl, parseUrl } from './helpers';
@@ -17,8 +17,8 @@ export const useLiquidityFormService = () => {
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabsEnum));
 
-  const [tokenA, setTokenA] = useState<WhitelistedToken | null>(null);
-  const [tokenB, setTokenB] = useState<WhitelistedToken | null>(null);
+  const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
+  const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
 
   const dex = useDexContract(tokenA, tokenB);
 

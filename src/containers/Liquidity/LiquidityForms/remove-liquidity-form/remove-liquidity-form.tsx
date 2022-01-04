@@ -2,15 +2,16 @@ import React from 'react';
 
 import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
+import { noop } from 'rxjs';
 
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { RemoveFormInterface } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form/remove-form.props';
 import { LP_TOKEN_DECIMALS } from '@utils/defaults';
-import { fromDecimals, noOpFunc } from '@utils/helpers';
+import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
+import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
 export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
@@ -63,7 +64,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         placeholder="0.0"
         disabled
         notSelectable
@@ -75,7 +76,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
-        handleBalance={noOpFunc}
+        handleBalance={noop}
         placeholder="0.0"
         disabled
         notSelectable

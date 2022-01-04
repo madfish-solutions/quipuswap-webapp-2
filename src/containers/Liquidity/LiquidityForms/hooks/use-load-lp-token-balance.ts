@@ -6,17 +6,18 @@ import BigNumber from 'bignumber.js';
 import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { loadUserLpBalanceTez } from '@containers/Liquidity/LiquidityForms/helpers/load-user-lp-balance-tez';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { ZERO } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
+const DEFAULT_BALANCE = 0;
+
 export const useLoadLpTokenBalance = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [lpTokenBalance, setLpTokenBalance] = useState<BigNumber>(new BigNumber(ZERO));
+  const [lpTokenBalance, setLpTokenBalance] = useState<BigNumber>(new BigNumber(DEFAULT_BALANCE));
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {

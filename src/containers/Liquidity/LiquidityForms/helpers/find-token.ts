@@ -6,18 +6,13 @@ export const findToken = (
   tokens: WhitelistedToken[]
 ): Nullable<WhitelistedToken> =>
   tokens.find(token => {
-    if (
-      idToken !== undefined &&
-      token.fa2TokenId &&
-      token.fa2TokenId.toString() === idToken &&
-      token.contractAddress === contractToken
-    ) {
-      return token;
+    if (contractToken !== token.contractAddress) {
+      return false;
     }
 
-    if (contractToken === token.contractAddress) {
-      return token;
+    if (idToken === undefined) {
+      return true;
     }
 
-    return null;
+    return `${token.fa2TokenId}` === idToken;
   }) || null;

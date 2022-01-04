@@ -35,9 +35,10 @@ export const removeLiquidityTokenToToken = async (
     return;
   }
 
-  if (addresses.addressA === tokenA.contractAddress) {
-    return dex.contract.methods.divest(id, tokenAOutputAmount, tokenBOutputAmount, shares, deadline).send();
-  }
+  const isTokenAAddressesTheSame = addresses.addressA === tokenA.contractAddress;
 
-  return dex.contract.methods.divest(id, tokenBOutputAmount, tokenAOutputAmount, shares, deadline).send();
+  const validTokenAAmount = isTokenAAddressesTheSame ? tokenAOutputAmount : tokenBOutputAmount;
+  const validTokenBAmount = isTokenAAddressesTheSame ? tokenBOutputAmount : tokenAOutputAmount;
+
+  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, deadline).send();
 };

@@ -3,9 +3,7 @@ import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
 export const DEFAULT_DECIMALS = 6;
-
-export const TEN = 10;
-export const ZERO = 0;
+export const EMPTY_POOL_AMOUNT = 0;
 
 export const QUIPUSWAP = 'https://quipuswap.com/';
 export const QUIPUSWAP_TRADE = 'https://quipuswap.com/swap';
