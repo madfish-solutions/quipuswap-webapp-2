@@ -35,7 +35,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
   const isButtonDisabled =
     !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenA) || !tokenAInput || !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
-
+  
   return (
     <>
       <TokenSelect

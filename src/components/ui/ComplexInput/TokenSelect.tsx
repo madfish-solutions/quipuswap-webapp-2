@@ -38,7 +38,7 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
-  shouldShowBalanceButtons = false,
+  shouldShowBalanceButtons = true,
   label,
   handleBalance,
   exchangeRate = null,
@@ -125,7 +125,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
         {tokensModal && (
           <TokensModal
