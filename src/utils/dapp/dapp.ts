@@ -10,7 +10,7 @@ import useSWR from 'swr';
 
 import { getBakers } from '@utils/dapp/bakers';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
-import { getTokens, saveCustomToken } from '@utils/dapp/tokens';
+import { getFallbackTokens, getTokens, saveCustomToken } from '@utils/dapp/tokens';
 import { getTokenMetadata } from '@utils/dapp/tokensMetadata';
 import {
   APP_NAME,
@@ -263,14 +263,19 @@ function useDApp() {
   }, [setFallbackState, templeInitialAvailable]);
 
   const getTokensData = useCallback(async () => getTokens(network, true), [network]);
-  const { data: tokensData } = useSWR(['tokens-initial-data', network], getTokensData);
+  const { data: tokensData, error: tokensError } = useSWR(['tokens-initial-data', network], getTokensData);
 
   useEffect(() => {
-    setState(prevState => ({
-      ...prevState,
-      tokens: { loading: !tokensData, data: tokensData ?? [] }
-    }));
-  }, [tokensData]);
+    setState(prevState => {
+      const prevTokens = prevState.tokens.data;
+      const fallbackTokens = prevTokens.length === 0 ? getFallbackTokens(network, true) : prevTokens;
+
+      return {
+        ...prevState,
+        tokens: { loading: !tokensData && !tokensError, data: tokensData ?? fallbackTokens }
+      };
+    });
+  }, [tokensData, tokensError, network]);
 
   const getBakersData = useCallback(async () => getBakers(), []);
   const { data: bakersData } = useSWR(['bakers-initial-data'], getBakersData);

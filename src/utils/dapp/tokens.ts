@@ -22,6 +22,12 @@ interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWith
   fa2TokenId?: string;
 }
 
+class InvalidTokensListError extends Error {
+  constructor(json: unknown) {
+    super(`Invalid response for tokens list was received: ${JSON.stringify(json)}`);
+  }
+}
+
 export const getSavedTokens = (networkId?: QSMainNet) => {
   const allRawTokens: Array<RawWhitelistedTokenWithQSNetworkType> =
     typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
@@ -89,29 +95,35 @@ export const isTokenFa12 = memoizee(
   { promise: true }
 );
 
-export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) =>
-  fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS))
-    .then(async res => res.json())
-    .then(json => {
-      let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
-        {
-          ...TEZOS_TOKEN,
-          network: network.id
-        },
-        networksDefaultTokens[network.id]
-      ];
+export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
+  let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
+    {
+      ...TEZOS_TOKEN,
+      network: network.id
+    },
+    networksDefaultTokens[network.id]
+  ];
 
-      if (json.tokens?.length) {
-        tokens = tokens.concat(json.tokens);
-      }
+  if (addTokensFromLocalStorage) {
+    tokens = tokens.concat(getSavedTokens(network.id));
+  }
 
-      if (addTokensFromLocalStorage) {
-        tokens = getSavedTokens(network.id).concat(tokens);
-      }
+  return getUniqArray(tokens, getTokenSlug);
+};
 
-      return getUniqArray(tokens, getTokenSlug);
-    })
-    .catch(() => []);
+export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
+  let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
+
+  const response = await fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS));
+  const json = await response.json();
+  if (json.tokens?.length) {
+    tokens = tokens.concat(json.tokens);
+  } else {
+    throw new InvalidTokensListError(json);
+  }
+
+  return getUniqArray(tokens, getTokenSlug);
+};
 
 export const saveCustomToken = (token: WhitelistedTokenWithQSNetworkType) => {
   window.localStorage.setItem(
