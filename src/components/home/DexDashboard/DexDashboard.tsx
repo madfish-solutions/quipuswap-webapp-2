@@ -16,6 +16,7 @@ import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
+import { useNetwork } from '@utils/dapp';
 
 interface DexDashboardProps {
   className?: string;
@@ -24,6 +25,7 @@ interface DexDashboardProps {
 export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetHomeOverviewQuery();
+  const network = useNetwork();
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
 
   useEffect(() => {
@@ -38,6 +40,8 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
     asyncLoad();
   }, []);
 
+  const desktopContentClassName = network.type === 'main' ? s.content : cx(s.content, s.testnet);
+
   return (
     <Section
       header={t('home|DEX Dashboard')}
@@ -45,20 +49,18 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
       className={cx(className)}
     >
       <Card className={s.mobile} contentClassName={s.mobContent}>
-        <>
-          <SliderUI className={s.mobSlider}>
-            <DexDashboardInner
-              volume24={data?.overview?.volume24h}
-              totalLiquidity={data?.overview?.totalLiquidity}
-              xtzUsdQuote={data?.overview?.xtzUsdQuote}
-              trasactionsCount24h={data?.overview?.trasactionsCount24h}
-              totalSupply={totalSupply}
-              loading={loading || !!error}
-            />
-          </SliderUI>
-        </>
+        <SliderUI className={s.mobSlider}>
+          <DexDashboardInner
+            volume24={data?.overview?.volume24h}
+            totalLiquidity={data?.overview?.totalLiquidity}
+            xtzUsdQuote={data?.overview?.xtzUsdQuote}
+            trasactionsCount24h={data?.overview?.trasactionsCount24h}
+            totalSupply={totalSupply}
+            loading={loading || !!error}
+          />
+        </SliderUI>
       </Card>
-      <Card className={s.desktop} contentClassName={s.content}>
+      <Card className={s.desktop} contentClassName={desktopContentClassName}>
         <DexDashboardInner
           volume24={data?.overview?.volume24h}
           totalLiquidity={data?.overview?.totalLiquidity}
