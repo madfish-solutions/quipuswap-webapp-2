@@ -6,7 +6,6 @@ import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { SAVED_TERMS_KEY } from '@utils/defaults';
 import { WalletType } from '@utils/types';
@@ -14,6 +13,7 @@ import { NoTempleWalletError } from 'errors';
 
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
+import { useFlowToasts } from '@hooks/use-flow-toasts';
 
 interface WalletProps {
   className?: string;
@@ -40,7 +40,7 @@ export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = f
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
-  const updateToast = useUpdateToast();
+  const {showErrorToast}= useFlowToasts();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
@@ -65,13 +65,13 @@ export const WalletModal: FC = () => {
           const authenticationWasRejected =
             err instanceof NotGrantedTempleWalletError || err instanceof AbortedBeaconError;
           if (!authenticationWasRejected) {
-            updateToast({
-              type: 'error',
-              render: t('common|errorWhileConnectingWallet', {
-                walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
-                error: (err as Error).message
-              })
-            });
+            const errorMessage = t('common|errorWhileConnectingWallet', {
+              walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
+              error: (err as Error).message
+            })
+
+            showErrorToast(errorMessage)
+
           }
         }
       }
@@ -83,7 +83,7 @@ export const WalletModal: FC = () => {
       connectWithTemple,
       openInstallTempleWalletModal,
       t,
-      updateToast
+      showErrorToast
     ]
   );
 
