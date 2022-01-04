@@ -11,7 +11,7 @@ import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { fromDecimals, noOpFunc } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
-import { useRemoveLiquidityService } from './use-remove-liquidity-service';
+import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
 export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
@@ -35,15 +35,19 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
+  const isButtonDisabled = !accountPkh || Boolean(errorMessage) || !lpTokenInput;
+  const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
+  const shouldShowBalanceButtons = Boolean(accountPkh);
+
   return (
     <>
       <PositionSelect
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={fromDecimals(lpTokenBalance, LP_TOKEN_DECIMALS).toFixed(LP_TOKEN_DECIMALS)}
+        balance={fromDecimals(lpTokenBalance, LP_TOKEN_DECIMALS).toFixed()}
         handleBalance={handleBalance}
-        noBalanceButtons={!accountPkh}
+        shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
@@ -55,34 +59,28 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenABalance, decimalsA).toFixed(decimalsA)}
+        balance={fromDecimals(tokenABalance, decimalsA).toFixed()}
         token={tokenA}
         value={tokenAOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        noBalanceButtons
         disabled
         notSelectable
       />
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenBBalance, decimalsB).toFixed(decimalsB)}
+        balance={fromDecimals(tokenBBalance, decimalsB).toFixed()}
         token={tokenB}
         value={tokenBOutput}
-        blackListedTokens={getBlackListedTokens(tokenA, tokenB)}
+        blackListedTokens={blackListedTokens}
         handleBalance={noOpFunc}
         placeholder="0.0"
-        noBalanceButtons
         disabled
         notSelectable
       />
-      <Button
-        className={s.button}
-        onClick={handleRemoveLiquidity}
-        disabled={!accountPkh || Boolean(errorMessage) || !lpTokenInput}
-      >
+      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
         Remove
       </Button>
     </>

@@ -8,7 +8,7 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
 
-export const loadT2TPairInfo = async (
+export const loadTokenToTokenPairInfo = async (
   dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken

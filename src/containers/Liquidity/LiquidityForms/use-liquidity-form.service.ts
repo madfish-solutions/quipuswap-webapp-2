@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { useDexContract } from '@containers/Liquidity/hooks/use-dex-contract';
-import { findToken } from '@containers/Liquidity/LiquidityForms/helpers/find-token';
-import { getLiquidityUrl } from '@containers/Liquidity/LiquidityForms/helpers/get-liquidity-url';
-import { parseUrl } from '@containers/Liquidity/LiquidityForms/helpers/parse-url';
-import { getTabById, LiquidityTabsEnum } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
 import { useTokens } from '@utils/dapp';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+
+import { useDexContract } from '../hooks';
+import { findToken, getLiquidityUrl, parseUrl } from './helpers';
+import { getTabById, LiquidityTabsEnum } from './liquidity-tabs';
 
 export const useLiquidityFormService = () => {
   const router = useRouter();
@@ -65,7 +64,6 @@ export const useLiquidityFormService = () => {
       void changeRoute(tab.id, token, tokenB);
     }
   };
-
   const handleChangeTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
 

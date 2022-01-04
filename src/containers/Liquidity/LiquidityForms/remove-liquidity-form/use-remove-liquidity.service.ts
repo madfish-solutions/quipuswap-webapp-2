@@ -4,12 +4,12 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEN, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
+import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { removeLiquidityT2T, removeLiquidityTez } from '../helpers';
-import { useLoadLpTokenBalance, useLoadTokenBalance, usePairInfo } from '../hooks';
+import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
+import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
 import { validateUserInput } from '../validators';
 
 export const useRemoveLiquidityService = (
@@ -82,7 +82,7 @@ export const useRemoveLiquidityService = (
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value);
-    setLpTokenInput(fixedValue.toFixed(LP_TOKEN_DECIMALS));
+    setLpTokenInput(fromDecimals(fixedValue, LP_TOKEN_DECIMALS).toFixed());
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
@@ -95,16 +95,13 @@ export const useRemoveLiquidityService = (
     const { id } = pairInfo;
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
-      await removeLiquidityT2T(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
+      await removeLiquidityTokenToToken(tezos, dex, id, lpTokenInput, tokenAOutput, tokenBOutput, tokenA, tokenB);
     } else {
       await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
     }
   };
 
-  const errorMessage = validateUserInput(
-    new BigNumber(lpTokenInput).multipliedBy(new BigNumber(TEN).pow(LP_TOKEN_DECIMALS)),
-    lpTokenBalance
-  );
+  const errorMessage = validateUserInput(toDecimals(new BigNumber(lpTokenInput), LP_TOKEN_DECIMALS), lpTokenBalance);
 
   return {
     errorMessage,
