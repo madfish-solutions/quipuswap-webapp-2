@@ -7,7 +7,7 @@ import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useDexContract } from '../hooks';
 import { findToken, getLiquidityUrl, parseUrl } from './helpers';
-import { getTabById, LiquidityTabsEnum } from './liquidity-tabs';
+import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
 export const useLiquidityFormService = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ export const useLiquidityFormService = () => {
 
   const { tabId } = parseUrl(router.asPath);
 
-  const [tab, setTab] = useState(getTabById(tabId as LiquidityTabsEnum));
+  const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
 
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
@@ -42,12 +42,12 @@ export const useLiquidityFormService = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  const changeRoute = async (tabId: LiquidityTabsEnum, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
+  const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
     await router.replace(liqUrl, undefined, { shallow: true });
   };
 
-  const handleChangeTab = (tabId: LiquidityTabsEnum) => {
+  const handleChangeTab = (tabId: LiquidityTabs) => {
     const newTab = getTabById(tabId);
 
     setTab(newTab);

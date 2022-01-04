@@ -4,7 +4,7 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
 import { AddLiquidityForm } from '@containers/Liquidity/LiquidityForms/add-liquidity-form';
-import { LiquidityTabsEnum, TABS_CONTENT } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
+import { LiquidityTabs, TABS_CONTENT } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
 import { RemoveLiquidityForm } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form';
 import { useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/use-liquidity-form.service';
 
@@ -30,7 +30,7 @@ export const LiquidityForm: FC = () => {
             <Tabs
               values={TABS_CONTENT}
               activeId={tab.id}
-              setActiveId={id => handleChangeTab(id as LiquidityTabsEnum)}
+              setActiveId={id => handleChangeTab(id as LiquidityTabs)}
               className={s.tabs}
             />
           ),
