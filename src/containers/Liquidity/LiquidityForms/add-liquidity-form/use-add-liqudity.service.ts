@@ -7,7 +7,7 @@ import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validato
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX, ZERO } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import {
   addLiquidityTez,
@@ -35,8 +35,8 @@ export const useAddLiquidityService = (
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
-  const [validationErrorTokenA, setValidationErrorTokenA] = useState<string | undefined>();
-  const [validationErrorTokenB, setValidationErrorTokenB] = useState<string | undefined>();
+  const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
+  const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
@@ -113,6 +113,7 @@ export const useAddLiquidityService = (
 
     if (event.target.value === '') {
       setTokenBInput('');
+      setValidationMessageTokenA(undefined);
 
       return;
     }
@@ -124,12 +125,12 @@ export const useAddLiquidityService = (
     );
 
     if (validatedInput) {
-      setValidationErrorTokenA(validatedInput);
+      setValidationMessageTokenA(validatedInput);
       setTokenBInput('');
 
       return;
     } else if (validatedInputAmount) {
-      setValidationErrorTokenA(validatedInputAmount);
+      setValidationMessageTokenA(validatedInputAmount);
       setTokenBInput('');
 
       return;
@@ -152,31 +153,32 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
 
     setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
-    setValidationErrorTokenA(undefined);
+    setValidationMessageTokenA(undefined);
   };
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTokenBInput(event.target.value);
 
     if (event.target.value === '') {
       setTokenAInput('');
+      setValidationMessageTokenB(undefined);
 
       return;
     }
 
     const validatedInput = validateUserInput(event.target.value);
     const validatedInputAmount = validateUserInputAmount(
-      toDecimals(new BigNumber(event.target.value), tokenA),
-      tokenABalance
+      toDecimals(new BigNumber(event.target.value), tokenB),
+      tokenBBalance
     );
 
     if (validatedInput) {
-      setValidationErrorTokenB(validatedInput);
-      setTokenBInput('');
+      setValidationMessageTokenB(validatedInput);
+      setTokenAInput('');
 
       return;
     } else if (validatedInputAmount) {
-      setValidationErrorTokenB(validatedInputAmount);
-      setTokenBInput('');
+      setValidationMessageTokenB(validatedInputAmount);
+      setTokenAInput('');
 
       return;
     }
@@ -198,7 +200,7 @@ export const useAddLiquidityService = (
         : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
 
     setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
-    setValidationErrorTokenB(undefined);
+    setValidationMessageTokenB(undefined);
   };
 
   const handleTokenABalance = (value: string) => {
@@ -301,8 +303,8 @@ export const useAddLiquidityService = (
   };
 
   return {
-    validationErrorTokenA,
-    validationErrorTokenB,
+    validationMessageTokenA,
+    validationMessageTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,

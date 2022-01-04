@@ -7,7 +7,7 @@ import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validato
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
@@ -29,7 +29,7 @@ export const useRemoveLiquidityService = (
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
-  const [validationError, setValidationError] = useState<string | undefined>();
+  const [validationMessage, setValidationMessage] = useState<Undefined<string>>();
   const [slippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
@@ -66,13 +66,13 @@ export const useRemoveLiquidityService = (
     );
 
     if (validatedInput) {
-      setValidationError(validatedInput);
+      setValidationMessage(validatedInput);
       setTokenAOutput('');
       setTokenBOutput('');
 
       return;
     } else if (validatedInputAmount) {
-      setValidationError(validatedInputAmount);
+      setValidationMessage(validatedInputAmount);
 
       return;
     }
@@ -98,7 +98,7 @@ export const useRemoveLiquidityService = (
       setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     }
 
-    setValidationError(undefined);
+    setValidationMessage(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 
@@ -121,7 +121,7 @@ export const useRemoveLiquidityService = (
   };
 
   return {
-    validationError,
+    validationMessage,
     tokenPair,
     accountPkh,
     lpTokenInput,
