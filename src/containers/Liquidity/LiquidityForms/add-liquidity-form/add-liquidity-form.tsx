@@ -13,8 +13,8 @@ import { AddFormInterface } from './add-form.props';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {
-    errorMessageTokenA,
-    errorMessageTokenB,
+    validationMessageTokenA,
+    validationMessageTokenB,
     accountPkh,
     tokenABalance,
     tokenBBalance,
@@ -33,10 +33,9 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
   const { decimals: decimalsB } = tokenB.metadata;
 
   const isButtonDisabled =
-    !accountPkh || Boolean(errorMessageTokenA) || Boolean(errorMessageTokenB) || !tokenAInput || !tokenBInput;
+    !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenA) || !tokenAInput || !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
-  const shouldShowBalanceButtons = Boolean(accountPkh);
-
+  
   return (
     <>
       <TokenSelect
@@ -48,8 +47,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         onChange={handleTokenAChange}
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenABalance}
-        shouldShowBalanceButtons={shouldShowBalanceButtons}
-        error={accountPkh ? errorMessageTokenA : undefined}
+        shouldShowBalanceButtons={!accountPkh}
+        error={accountPkh ? validationMessageTokenA : undefined}
         placeholder="0.0"
       />
       <Plus className={s.iconButton} />
@@ -62,8 +61,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         onChange={handleTokenBChange}
         blackListedTokens={blackListedTokens}
         handleBalance={handleTokenBBalance}
-        shouldShowBalanceButtons={shouldShowBalanceButtons}
-        error={accountPkh ? errorMessageTokenB : undefined}
+        shouldShowBalanceButtons={!accountPkh}
+        error={accountPkh ? validationMessageTokenB : undefined}
         placeholder="0.0"
       />
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
