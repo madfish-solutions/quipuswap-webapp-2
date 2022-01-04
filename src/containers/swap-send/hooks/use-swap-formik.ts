@@ -58,7 +58,7 @@ export const useSwapFormik = () => {
       });
       showSuccessToast(t('swap|Swap completed!'));
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
       throw e;
     }
   };

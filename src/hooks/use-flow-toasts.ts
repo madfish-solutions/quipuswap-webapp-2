@@ -7,7 +7,7 @@ export interface UseFlowToasts {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;
   showErrorToast: (err: Error | string) => void;
   showLoaderToast: () => void;
-  showSuccessToast: () => void;
+  showSuccessToast: (render?: ToastContent) => void;
 }
 
 export const useFlowToasts = (): UseFlowToasts => {
