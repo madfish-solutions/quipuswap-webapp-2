@@ -58,6 +58,8 @@ export const useRemoveLiquidityService = (
 
       return;
     }
+    const lpTokenInputBN = new BigNumber(lpTokenInput);
+    const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
     const validatedInput = validateUserInput(lpTokenInput);
     const validatedInputAmount = validateUserInputAmount(
@@ -77,28 +79,25 @@ export const useRemoveLiquidityService = (
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
+    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
 
-    const lpTokenBN = new BigNumber(lpTokenInput);
-    const lpTokenAmount = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
-
-    const tokenAPerOneLp = tokenAPool.dividedBy(totalSupply);
-    const tokenBPerOneLp = tokenBPool.dividedBy(totalSupply);
+    const tokenAPerOneLp =
+      pairTokenA.contractAddress === tokenA.contractAddress
+        ? tokenAPool.dividedBy(totalSupply)
+        : tokenBPool.dividedBy(totalSupply);
+    const tokenBPerOneLp =
+      pairTokenB.contractAddress === tokenB.contractAddress
+        ? tokenBPool.dividedBy(totalSupply)
+        : tokenAPool.dividedBy(totalSupply);
 
     const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
     const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
-    if (tokenA.contractAddress === pairTokenA.contractAddress) {
-      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
-      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-    } else {
-      setTokenAOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-      setTokenBOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
-    }
 
-    setValidationMessage(undefined);
+    setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed(decimalsA));
+    setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed(decimalsB));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 

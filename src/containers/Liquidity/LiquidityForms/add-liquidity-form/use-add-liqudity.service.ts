@@ -14,6 +14,7 @@ import {
   addPairTokenToToken,
   calculateTokenAmount,
   initializeLiquidityTez,
+  sortTokensContracts,
   addLiquidityTokenToToken
 } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
@@ -39,9 +40,14 @@ export const useAddLiquidityService = (
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
-    if (!changedToken) {
+    if (
+      !changedToken ||
+      !pairInfo ||
+      pairInfo.tokenAPool.eq(ZERO) ||
+      pairInfo.tokenBPool.eq(ZERO) ||
+      pairInfo.totalSupply.eq(ZERO)
+    ) {
       return;
     }
 
@@ -49,10 +55,6 @@ export const useAddLiquidityService = (
       if (tokenAInput === '') {
         setTokenBInput('');
 
-        return;
-      }
-
-      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
@@ -73,10 +75,6 @@ export const useAddLiquidityService = (
       if (tokenBInput === '') {
         setTokenAInput('');
 
-        return;
-      }
-
-      if (!pairInfo || pairInfo.tokenAPool.eq(ZERO) || pairInfo.tokenBPool.eq(ZERO) || pairInfo.totalSupply.eq(ZERO)) {
         return;
       }
 
@@ -248,33 +246,42 @@ export const useAddLiquidityService = (
     setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
   };
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   const handleAddLiquidity = async () => {
-    if (!tezos || !accountPkh || !pairInfo) {
+    if (!tezos || !accountPkh) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply, id, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
+    const shouldAddLiquidity =
+      pairInfo &&
+      pairInfo.id &&
+      pairInfo.tokenAPool.gt(ZERO) &&
+      pairInfo.tokenBPool.gt(ZERO) &&
+      pairInfo.totalSupply.gt(ZERO);
 
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      const pairInputA = pairTokenA.contractAddress === tokenA.contractAddress ? tokenAInput : tokenBInput;
-      const pairInputB = pairTokenB.contractAddress === tokenB.contractAddress ? tokenBInput : tokenAInput;
-
-      if (id && tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+      const { addressA, addressB } = sortTokensContracts(tokenA, tokenB);
+      const pairTokenA = addressA === tokenA.contractAddress ? tokenA : tokenB;
+      const pairTokenB = addressB === tokenB.contractAddress ? tokenB : tokenA;
+      const pairInputA = addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
+      const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
+      if (shouldAddLiquidity) {
         await addLiquidityTokenToToken(
           tezos,
           accountPkh,
           dex,
-          id,
+          pairInfo!.id!,
           pairInputA,
           pairTokenA,
           pairTokenB,
-          totalSupply,
-          tokenAPool,
-          tokenBPool
+          pairInfo!.totalSupply,
+          pairInfo!.tokenAPool,
+          pairInfo!.tokenBPool
         );
 
         return;
       }
+
       await addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
 
       return;
@@ -284,7 +291,7 @@ export const useAddLiquidityService = (
     const tezTokenBN = new BigNumber(tezTokenInput);
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
-    if (tokenAPool.gt(ZERO) && tokenBPool.gt(ZERO) && totalSupply.gt(ZERO)) {
+    if (shouldAddLiquidity) {
       await addLiquidityTez(tezos, dex, tezValue);
 
       return;
