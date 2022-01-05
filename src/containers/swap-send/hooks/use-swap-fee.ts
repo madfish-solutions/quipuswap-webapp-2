@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import debouncePromise from 'debounce-promise';
 
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useEstimationToolkit, useNetwork } from '@utils/dapp';
 import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
@@ -23,7 +23,7 @@ const DEBOUNCE_DELAY = 250;
 export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageTolerance, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
   const network = useNetwork();
-  const tezos = useTezos();
+  const tezos = useEstimationToolkit();
 
   const [swapFee, setSwapFee] = useState<BigNumber>();
   const updateSwapFee = useMemo(
