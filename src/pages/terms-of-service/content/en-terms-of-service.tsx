@@ -301,3 +301,6 @@ export const EnTermsOfService: React.FC = () => (
     </p>
   </>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default EnTermsOfService;

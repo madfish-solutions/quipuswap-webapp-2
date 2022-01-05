@@ -8,7 +8,7 @@ import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from '@styles/PrivacyPolicy.module.sass';
 
-import { EnPrivacy } from './content/en-privacy-policy';
+import { EnPrivacyPolicy } from './content/en-privacy-policy';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -27,9 +27,12 @@ export const PrivacyPolicy: FC = () => {
     >
       <Card>
         <CardContent className={s.content}>
-          <EnPrivacy />
+          <EnPrivacyPolicy />
         </CardContent>
       </Card>
     </BaseLayout>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default PrivacyPolicy;
