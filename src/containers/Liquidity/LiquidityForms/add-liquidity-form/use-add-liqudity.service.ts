@@ -51,7 +51,7 @@ export const useAddLiquidityService = (
       return;
     }
 
-    if (changedToken === LastChangedTokenEnum.tokenA) {
+    if (changedToken === LastChangedTokenEnum.tokenB) {
       if (tokenAInput === '') {
         setTokenBInput('');
 
@@ -276,11 +276,20 @@ export const useAddLiquidityService = (
 
     const { id, tokenAPool, tokenBPool, totalSupply } = pairInfo;
 
+    if (
+      !id ||
+      tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
+      tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
+      totalSupply.eq(EMPTY_POOL_AMOUNT)
+    ) {
+      return await addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
+    }
+
     return await addLiquidityTokenToToken(
       tezos,
       accountPkh,
       dex,
-      id!,
+      id,
       pairInputA,
       pairTokenA,
       pairTokenB,
@@ -322,10 +331,10 @@ export const useAddLiquidityService = (
 
   const handleAddLiquidity = async () => {
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      await investTokenToToken();
+      return await investTokenToToken();
     }
 
-    await investTezosToToken();
+    return await investTezosToToken();
   };
 
   return {
