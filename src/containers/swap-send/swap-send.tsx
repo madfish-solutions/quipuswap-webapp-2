@@ -193,8 +193,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       ) {
         setValues(prevValues => ({
           ...prevValues,
-          token1: newInputToken,
-          outputToken: newOutputToken
+          [SwapField.INPUT_TOKEN]: newInputToken,
+          [SwapField.OUTPUT_TOKEN]: newOutputToken
         }));
         // eslint-disable-next-line no-console
         Promise.all([updateBalance(newInputToken), updateBalance(newOutputToken)]).catch(console.error);
