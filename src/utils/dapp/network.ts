@@ -6,7 +6,7 @@ import {
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY,
   NETWORK_ID_KEY
-} from '@utils/defaults';
+} from '@app.config';
 import { QSNetwork } from '@utils/types';
 
 export const getNetwork = () => {

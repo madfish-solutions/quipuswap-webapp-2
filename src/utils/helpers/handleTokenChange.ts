@@ -2,8 +2,8 @@ import React from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { getUserBalance } from '@utils/dapp';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { TokenDataMap, WhitelistedToken } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';

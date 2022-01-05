@@ -3,8 +3,8 @@ import { useCallback, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
+import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
 import { useNetwork, useTezos, useTokens } from '@utils/dapp';
-import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';

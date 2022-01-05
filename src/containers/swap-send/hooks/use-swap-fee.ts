@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import debouncePromise from 'debounce-promise';
 
+import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@app.config';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@utils/defaults';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 

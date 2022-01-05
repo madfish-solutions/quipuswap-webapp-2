@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import s from '@styles/PrivacyPolicy.module.sass';
 
-export const EnPrivacy: React.FC = () => (
+export const EnPrivacyPolicy: React.FC = () => (
   <>
     <h1 className={s.mb24}>Privacy Policy</h1>
     <p className={s.big}>
@@ -268,3 +268,6 @@ export const EnPrivacy: React.FC = () => (
     </p>
   </>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default EnPrivacyPolicy;

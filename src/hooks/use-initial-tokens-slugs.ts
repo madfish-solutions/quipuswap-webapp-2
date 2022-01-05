@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
+import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import {
   fallbackToolkits,
   getTokenType,
@@ -11,7 +12,6 @@ import {
   useSearchCustomTokens,
   useTokens
 } from '@utils/dapp';
-import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';

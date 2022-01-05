@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import s from '@styles/Terms.module.sass';
 
-export const EnTermsOfUse: React.FC = () => (
+export const EnTermsOfService: React.FC = () => (
   <>
     <h1 className={s.mb24}>Terms of Service</h1>
     <p className={s.big}>
@@ -301,3 +301,6 @@ export const EnTermsOfUse: React.FC = () => (
     </p>
   </>
 );
+
+// eslint-disable-next-line import/no-default-export
+export default EnTermsOfService;

@@ -1,16 +1,15 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { BaseLayout } from '@components/common/BaseLayout';
 import { DexDashboard } from '@components/home/DexDashboard';
 import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
-import { BaseLayout } from '@layouts/BaseLayout';
 import { useNetwork } from '@utils/dapp';
 
-const Home: React.FC = () => {
+export const Home: FC = () => {
   const { t } = useTranslation(['common', 'home']);
   const network = useNetwork();
 
@@ -25,12 +24,6 @@ const Home: React.FC = () => {
     </BaseLayout>
   );
 };
-
-export const getStaticProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'home']))
-  }
-});
 
 // eslint-disable-next-line import/no-default-export
 export default Home;

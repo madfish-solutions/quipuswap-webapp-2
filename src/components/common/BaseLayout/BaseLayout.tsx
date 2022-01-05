@@ -11,7 +11,7 @@ import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
-import { DEFAULT_SEO } from '@utils/default-seo.config';
+import { DEFAULT_SEO } from '@seo.config';
 
 import s from './BaseLayout.module.sass';
 

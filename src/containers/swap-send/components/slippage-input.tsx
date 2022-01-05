@@ -4,8 +4,8 @@ import { Slippage, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
+import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
-import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
