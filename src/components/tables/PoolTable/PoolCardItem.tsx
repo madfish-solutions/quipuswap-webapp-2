@@ -9,6 +9,7 @@ import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@util
 import { PoolTableType } from '@utils/types';
 
 import s from './PoolCardTable.module.sass';
+import { getHref } from './get-swap-href.helper';
 
 interface PoolCardItemProps {
   pool: PoolTableType;
@@ -23,7 +24,6 @@ const modeClass = {
 export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
@@ -81,7 +81,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
         <Button theme="secondary" className={s.button} href={pool.buttons.first.href} external>
           {t('home|Analytics')}
         </Button>
-        <Button href="/swap" className={s.button}>
+        <Button href={getHref(pool)} className={s.button}>
           {t('home|Trade')}
         </Button>
       </div>
