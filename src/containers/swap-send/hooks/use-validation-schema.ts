@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
+import { DEFAULT_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
-import { DEFAULT_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE } from '@utils/defaults';
 import { fromDecimals, getTokenSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';

@@ -5,11 +5,11 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { amountsAreEqual, getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { isFoundIndex } from '@utils/helpers/arrays';
 import { Undefined, WhitelistedToken } from '@utils/types';

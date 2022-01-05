@@ -4,17 +4,17 @@ import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@qu
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
-  noBalanceButtons?: boolean;
+  shouldShowBalanceButtons?: boolean;
   className?: string;
   balance?: string;
   balanceLabel?: string;
@@ -38,7 +38,7 @@ const themeClass = {
 export const PositionSelect: FC<PositionSelectProps> = ({
   className,
   balance = '10.00',
-  noBalanceButtons = false,
+  shouldShowBalanceButtons = true,
   frozenBalance = '10.00',
   label,
   balanceLabel,
@@ -103,7 +103,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                   <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(frozenBalance))}</div>
                 </div>
               )}
-              {!noBalanceButtons ? (
+              {shouldShowBalanceButtons ? (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{balanceLabel ?? t('common|Total Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance))}</div>
@@ -147,7 +147,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!noBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
       </div>
     </>

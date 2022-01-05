@@ -16,7 +16,6 @@
       "@containers/*": ["containers/*"],
       "@errors/*": ["errors/*"],
       "@content/*": ["content/*"],
-      "@layouts/*": ["layouts/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
@@ -24,7 +23,9 @@
       "@icons/*": ["../public/svg/*"],
       "@images/*": ["../public/images/*"],
       "@client": ["client.tsx"],
-      "@graphql": ["graphql.ts"]
+      "@graphql": ["graphql.ts"],
+      "@app.config": ["app.config.ts"],
+      "@seo.config": ["seo.config.ts"]
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,

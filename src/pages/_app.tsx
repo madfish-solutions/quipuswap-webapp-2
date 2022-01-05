@@ -2,33 +2,38 @@ import React, { useEffect } from 'react';
 
 import { ColorThemeProvider } from '@quipuswap/ui-kit';
 import { appWithTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { withApollo } from '@client';
 import { DexGraphProvider } from '@hooks/use-dex-graph';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
+import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
+import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider } from '@utils/dapp';
-import { DEFAULT_SEO } from '@utils/default-seo.config';
 import { debounce } from '@utils/helpers';
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
-function MyApp({ Component, pageProps }: AppProps) {
+const RESIZE_DEBOUNCE = 1000; // 1 sec
+const HEIGHT_KOEF = 0.01;
+const HEIGHT_EMPTY = 0;
+
+const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
 
   useEffect(() => {
     // prevents flashing
     const debouncedHandleResize = debounce(() => {
-      const vh = window.innerHeight * 0.01;
-      if (vh !== 0) {
+      const vh = window.innerHeight * HEIGHT_KOEF;
+      if (vh !== HEIGHT_EMPTY) {
         document.documentElement.style.setProperty('--vh', `${vh}px`);
       }
-    }, 1000);
+    }, RESIZE_DEBOUNCE);
     debouncedHandleResize();
 
     window.addEventListener('resize', debouncedHandleResize);
@@ -115,7 +120,13 @@ function MyApp({ Component, pageProps }: AppProps) {
       </DAppProvider>
     </>
   );
-}
+};
+
+export const getStaticProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common', 'privacy']))
+  }
+});
 
 // eslint-disable-next-line import/no-default-export
-export default withApollo()(appWithTranslation(MyApp));
+export default withApollo()(appWithTranslation(App));

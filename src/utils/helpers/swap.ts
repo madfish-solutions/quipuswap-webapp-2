@@ -2,13 +2,13 @@ import { batchify } from '@quipuswap/sdk';
 import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@app.config';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
   getAllowanceTransferParams,
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
-import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
