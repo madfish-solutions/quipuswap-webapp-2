@@ -3,7 +3,7 @@ import { ToastContent, UpdateOptions } from 'react-toastify';
 
 import useUpdateToast from './useUpdateToast';
 
-export interface useToasts {
+export interface UseToasts {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;
   showErrorToast: (err: Error | string) => void;
   showLoaderToast: () => void;
@@ -11,7 +11,7 @@ export interface useToasts {
   showInfoToast: (render?: ToastContent) => void;
 }
 
-export const useToasts = (): useToasts => {
+export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
   const { t } = useTranslation(['common']);
 
