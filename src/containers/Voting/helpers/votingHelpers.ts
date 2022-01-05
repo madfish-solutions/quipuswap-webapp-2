@@ -199,7 +199,7 @@ export const unvoteOrRemoveVeto = async (
 
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await confirmOperation(tezos, op.opHash, {}, { message: updateToastText });
+    await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
   } catch (e) {
     handleErrorToast(e);
@@ -224,7 +224,7 @@ export const submitForm = async ({
 
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await confirmOperation(tezos, op.opHash, {}, { message: updateToastText });
+    await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
   } catch (e) {
     handleErrorToast(e as Error);
@@ -240,7 +240,7 @@ export const submitWithdraw = async (
 ) => {
   try {
     const op = await batchify(tezos.wallet.batch([]), voteParams).send();
-    await confirmOperation(tezos, op.opHash, {}, {});
+    await confirmOperation(op.opHash);
     getBalance();
   } catch (e) {
     updateToast(e as Error);
