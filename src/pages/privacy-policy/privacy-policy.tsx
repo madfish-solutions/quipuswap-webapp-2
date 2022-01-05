@@ -1,9 +1,8 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { Card, CardContent } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -16,7 +15,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const PrivacyPolicy: React.FC = () => {
+export const PrivacyPolicy: FC = () => {
   const { t } = useTranslation(['common', 'privacy']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -34,12 +33,3 @@ const PrivacyPolicy: React.FC = () => {
     </BaseLayout>
   );
 };
-
-export const getStaticProps = async ({ locale }: { locale: string }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common', 'privacy']))
-  }
-});
-
-// eslint-disable-next-line import/no-default-export
-export default PrivacyPolicy;
