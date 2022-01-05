@@ -4,13 +4,12 @@ import { Card, CardContent } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 
-import { EnPrivacy } from '@content/en/privacy-policy';
-import { RuPrivacy } from '@content/ru/privacy-policy';
-import { BaseLayout } from '@layouts/BaseLayout';
+import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from '@styles/PrivacyPolicy.module.sass';
+
+import { EnPrivacy } from './content/en-privacy-policy';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -18,12 +17,8 @@ const modeClass = {
 };
 
 const PrivacyPolicy: React.FC = () => {
-  const router = useRouter();
   const { t } = useTranslation(['common', 'privacy']);
-
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const content = router.locale === 'ru' ? <RuPrivacy /> : <EnPrivacy />;
 
   return (
     <BaseLayout
@@ -32,7 +27,9 @@ const PrivacyPolicy: React.FC = () => {
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
       <Card>
-        <CardContent className={s.content}>{content}</CardContent>
+        <CardContent className={s.content}>
+          <EnPrivacy />
+        </CardContent>
       </Card>
     </BaseLayout>
   );

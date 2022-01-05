@@ -16,7 +16,6 @@
       "@containers/*": ["containers/*"],
       "@errors/*": ["errors/*"],
       "@content/*": ["content/*"],
-      "@layouts/*": ["layouts/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
