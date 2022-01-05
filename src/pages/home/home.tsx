@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
@@ -9,7 +9,7 @@ import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
 import { useNetwork } from '@utils/dapp';
 
-export const Home: React.FC = () => {
+export const Home: FC = () => {
   const { t } = useTranslation(['common', 'home']);
   const network = useNetwork();
 
@@ -24,3 +24,6 @@ export const Home: React.FC = () => {
     </BaseLayout>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default Home;

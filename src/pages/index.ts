@@ -1,6 +1,6 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Home } from './home';
+import Home from './home';
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {

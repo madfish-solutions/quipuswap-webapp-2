@@ -33,3 +33,6 @@ export const TermsOfService: FC = () => {
     </BaseLayout>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export default TermsOfService;
