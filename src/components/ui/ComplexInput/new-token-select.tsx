@@ -15,6 +15,7 @@ import { isFoundIndex } from '@utils/helpers/arrays';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
+import { ErrorLoadingWrapper } from '@components/error-loading';
 
 interface NewTokenSelectProps {
   className?: string;
@@ -164,7 +165,12 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>
-                    {formattedBalance ?? <Skeleton className={s.balanceSkeleton} />}
+                    <ErrorLoadingWrapper 
+                      isLoading={formattedBalance !== null}
+                      fallback={<Skeleton className={s.balanceSkeleton} />}
+                    >
+                      {formattedBalance}
+                    </ErrorLoadingWrapper>
                   </div>
                 </div>
               )}
