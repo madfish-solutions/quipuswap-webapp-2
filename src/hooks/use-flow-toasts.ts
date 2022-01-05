@@ -8,6 +8,7 @@ export interface UseFlowToasts {
   showErrorToast: (err: Error | string) => void;
   showLoaderToast: () => void;
   showSuccessToast: (render?: ToastContent) => void;
+  showInfoToast: (render?: ToastContent) => void;
 }
 
 export const useFlowToasts = (): UseFlowToasts => {
@@ -36,6 +37,13 @@ export const useFlowToasts = (): UseFlowToasts => {
     });
   };
 
+  const showInfoToast = (render?: ToastContent) => {
+    updateToast({
+      type: 'info',
+      render
+    });
+  };
+
   const showSuccessToast = (render?: ToastContent) => {
     updateToast({
       type: 'success',
@@ -43,5 +51,11 @@ export const useFlowToasts = (): UseFlowToasts => {
     });
   };
 
-  return { updateToast, showLoaderToast, showSuccessToast, showErrorToast };
+  return {
+    updateToast,
+    showInfoToast,
+    showLoaderToast,
+    showSuccessToast,
+    showErrorToast
+  };
 };
