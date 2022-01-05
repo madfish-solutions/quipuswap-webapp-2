@@ -274,17 +274,19 @@ export const useAddLiquidityService = (
       return await addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
     }
 
+    const { id, tokenAPool, tokenBPool, totalSupply } = pairInfo;
+
     return await addLiquidityTokenToToken(
       tezos,
       accountPkh,
       dex,
-      pairInfo.id!,
+      id!,
       pairInputA,
       pairTokenA,
       pairTokenB,
-      pairInfo.totalSupply,
-      pairInfo.tokenAPool,
-      pairInfo.tokenBPool
+      totalSupply,
+      tokenAPool,
+      tokenBPool
     );
   };
 
