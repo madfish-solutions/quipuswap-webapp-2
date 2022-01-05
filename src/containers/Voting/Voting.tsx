@@ -41,7 +41,7 @@ const fallbackTokenPair = {
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
-  const { handleErrorToast, handleLoader } = useVotingToast();
+  const { handleErrorToast } = useVotingToast();
   const confirmOperation = useConfirmOperation();
   const tezos = useTezos();
   const network = useNetwork();
@@ -158,7 +158,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
           if (!tezos) {
             return;
           }
-          handleLoader();
           submitWithdraw(tezos, params, handleErrorToast, confirmOperation, getBalance);
         }}
       />
@@ -168,7 +167,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             if (!tezos) {
               return;
             }
-            handleLoader();
             void submitForm({
               tezos,
               values,
