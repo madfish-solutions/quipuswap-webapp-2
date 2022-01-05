@@ -7,10 +7,10 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { withApollo } from '@client';
 import { DexGraphProvider } from '@hooks/use-dex-graph';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
+import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
 import { DAppProvider } from '@utils/dapp';
 import { DEFAULT_SEO } from '@utils/default-seo.config';

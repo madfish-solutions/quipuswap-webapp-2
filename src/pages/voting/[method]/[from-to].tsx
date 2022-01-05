@@ -3,8 +3,8 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { BaseLayout } from '@components/common/BaseLayout';
 import { Voting } from '@containers/Voting';
-import { BaseLayout } from '@layouts/BaseLayout';
 import s from '@styles/Voting.module.sass';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';

@@ -4,13 +4,12 @@ import { Card, CardContent } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 
-import { EnTermsOfUse } from '@content/en/terms-of-use';
-import { RuTermsOfUse } from '@content/ru/terms-of-use';
-import { BaseLayout } from '@layouts/BaseLayout';
+import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import s from '@styles/Terms.module.sass';
+
+import { EnTermsOfUse } from './content/en-terms-of-use';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -18,11 +17,8 @@ const modeClass = {
 };
 
 const TermsOfUse: React.FC = () => {
-  const router = useRouter();
   const { t } = useTranslation(['terms', 'common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const content = router.locale === 'ru' ? <RuTermsOfUse /> : <EnTermsOfUse />;
 
   return (
     <BaseLayout
@@ -31,7 +27,9 @@ const TermsOfUse: React.FC = () => {
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
       <Card>
-        <CardContent className={s.content}>{content}</CardContent>
+        <CardContent className={s.content}>
+          <EnTermsOfUse />
+        </CardContent>
       </Card>
     </BaseLayout>
   );
