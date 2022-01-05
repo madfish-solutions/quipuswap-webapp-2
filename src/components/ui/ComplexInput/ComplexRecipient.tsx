@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { useFlowToasts } from '@hooks/use-flow-toasts';
+import { useToasts } from '@hooks/use-toasts';
 
 import s from './ComplexInput.module.sass';
 
@@ -36,7 +36,7 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
   const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const { showErrorToast } = useFlowToasts();
+  const { showErrorToast } = useToasts();
 
   const compoundClassName = cx(
     { [s.focused]: focused },

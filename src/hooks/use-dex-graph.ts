@@ -9,7 +9,7 @@ import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
 
-import { useFlowToasts } from './use-flow-toasts';
+import { useToasts } from './use-toasts';
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type TokenType = 'fa1.2' | 'fa2';
@@ -48,7 +48,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
-  const { showErrorToast } = useFlowToasts();
+  const { showErrorToast } = useToasts();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
     const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];

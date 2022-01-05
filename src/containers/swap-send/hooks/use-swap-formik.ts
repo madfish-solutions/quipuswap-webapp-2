@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
-import { useFlowToasts } from '@hooks/use-flow-toasts';
+import { useToasts } from '@hooks/use-toasts';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getRouteWithInput } from '@utils/routing';
@@ -29,7 +29,7 @@ export const useSwapFormik = () => {
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const network = useNetwork();
-  const { showLoaderToast, showSuccessToast, showErrorToast } = useFlowToasts();
+  const { showLoaderToast, showSuccessToast, showErrorToast } = useToasts();
 
   const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
     if (!tezos || !accountPkh) {

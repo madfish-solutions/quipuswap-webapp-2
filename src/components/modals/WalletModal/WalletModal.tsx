@@ -6,7 +6,7 @@ import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@app.config';
-import { useFlowToasts } from '@hooks/use-flow-toasts';
+import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { WalletType } from '@utils/types';
@@ -40,7 +40,7 @@ export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = f
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
-  const { showErrorToast } = useFlowToasts();
+  const { showErrorToast } = useToasts();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
