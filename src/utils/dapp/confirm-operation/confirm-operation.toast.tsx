@@ -7,7 +7,7 @@ import { ConfirmationToastProps } from './confirm-operation.types';
 export const ConfirmationSuccessToast: FC<ConfirmationToastProps> = ({ hash, message }) => {
   return (
     <div>
-      <div>{ message }</div>
+      <div>{message}</div>
       <div>Transaction {shortize(hash)} has been confirmed</div>
     </div>
   );

@@ -10,4 +10,4 @@ export interface OperationMessage {
   message: string;
 }
 
-export type ConfirmationToastProps = Pick<OperationEntry, 'hash'> & Partial<OperationMessage>
+export type ConfirmationToastProps = Pick<OperationEntry, 'hash'> & Partial<OperationMessage>;
