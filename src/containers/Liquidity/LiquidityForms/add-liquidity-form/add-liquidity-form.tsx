@@ -1,0 +1,73 @@
+import React, { FC } from 'react';
+
+import { Button } from '@quipuswap/ui-kit';
+
+import { Plus } from '@components/svg/Plus';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { useAddLiquidityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity.service';
+import { fromDecimals } from '@utils/helpers';
+
+import s from '../../Liquidity.module.sass';
+import { AddFormInterface } from './add-form.props';
+
+export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
+  const {
+    validationMessageTokenA,
+    validationMessageTokenB,
+    accountPkh,
+    tokenABalance,
+    tokenBBalance,
+    tokenAInput,
+    tokenBInput,
+    handleSetTokenA,
+    handleSetTokenB,
+    handleTokenAChange,
+    handleTokenBChange,
+    handleTokenABalance,
+    handleTokenBBalance,
+    handleAddLiquidity
+  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
+
+  const { decimals: decimalsA } = tokenA.metadata;
+  const { decimals: decimalsB } = tokenB.metadata;
+
+  const isButtonDisabled =
+    !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenA) || !tokenAInput || !tokenBInput;
+  const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
+
+  return (
+    <>
+      <TokenSelect
+        label="Input"
+        balance={fromDecimals(tokenABalance, decimalsA).toFixed()}
+        token={tokenA}
+        setToken={handleSetTokenA}
+        value={tokenAInput}
+        onChange={handleTokenAChange}
+        blackListedTokens={blackListedTokens}
+        handleBalance={handleTokenABalance}
+        shouldShowBalanceButtons={!accountPkh}
+        error={accountPkh ? validationMessageTokenA : undefined}
+        placeholder="0.0"
+      />
+      <Plus className={s.iconButton} />
+      <TokenSelect
+        label="Input"
+        balance={fromDecimals(tokenBBalance, decimalsB).toFixed()}
+        token={tokenB}
+        setToken={handleSetTokenB}
+        value={tokenBInput}
+        onChange={handleTokenBChange}
+        blackListedTokens={blackListedTokens}
+        handleBalance={handleTokenBBalance}
+        shouldShowBalanceButtons={!accountPkh}
+        error={accountPkh ? validationMessageTokenB : undefined}
+        placeholder="0.0"
+      />
+      <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
+        Add
+      </Button>
+    </>
+  );
+};

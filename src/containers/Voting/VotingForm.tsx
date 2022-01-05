@@ -274,7 +274,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
               }}
-              noBalanceButtons={!accountPkh}
+              shouldShowBalanceButtons={Boolean(accountPkh)}
               balanceLabel={t('vote|Available balance')}
               notFrozen
               id="liquidity-remove-input"
