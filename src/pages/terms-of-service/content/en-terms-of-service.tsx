@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import s from '@styles/Terms.module.sass';
 
-export const EnTermsOfService: React.FC = () => (
+export const EnTermsOfService: FC = () => (
   <>
     <h1 className={s.mb24}>Terms of Service</h1>
     <p className={s.big}>
@@ -301,6 +301,3 @@ export const EnTermsOfService: React.FC = () => (
     </p>
   </>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default EnTermsOfService;

@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -15,7 +15,7 @@ import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
 export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
-  const { t } = useTranslation(['common', 'liquidity']);
+  const { t } = appi18n;
 
   const {
     validationMessage,

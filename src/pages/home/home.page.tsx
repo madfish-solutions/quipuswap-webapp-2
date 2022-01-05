@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
-
+import { appi18n } from '@app.i18n';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { DexDashboard } from '@components/home/DexDashboard';
 import { News } from '@components/home/News';
@@ -9,12 +8,12 @@ import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
 import { useNetwork } from '@utils/dapp';
 
-export const Home: FC = () => {
-  const { t } = useTranslation(['common', 'home']);
+export const HomePage: FC = () => {
+  const { t } = appi18n;
   const network = useNetwork();
 
   return (
-    <BaseLayout title={t('home|Home page')} description={t('home|Home page description. Couple sentences...')}>
+    <BaseLayout title={t('home|HomePage page')} description={t('home|HomePage page description. Couple sentences...')}>
       <News />
       <DexDashboard />
       <Opportunities />
@@ -24,6 +23,3 @@ export const Home: FC = () => {
     </BaseLayout>
   );
 };
-
-// eslint-disable-next-line import/no-default-export
-export default Home;

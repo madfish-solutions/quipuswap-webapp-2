@@ -3,10 +3,10 @@ import React, { useMemo, useState, useEffect, useContext, useCallback, FC } from
 import { Plus, Modal, Button, ColorModes, TokenNotFound, LoadingTokenCell, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { appi18n } from '@app.i18n';
 import {
   useTezos,
   useTokens,
@@ -43,7 +43,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
   const { data: tokens } = useTokens();

@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 
 import { SliderUI, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { responsive } from '@components/home/News/News.styles';
 import { Section } from '@components/home/Section';
 
@@ -21,7 +21,7 @@ const modeClass = {
 };
 
 export const News: React.FC<NewsProps> = ({ className }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
 
   const { colorThemeMode } = useContext(ColorThemeContext);
 

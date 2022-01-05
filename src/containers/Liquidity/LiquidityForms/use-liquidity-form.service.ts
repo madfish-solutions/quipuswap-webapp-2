@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/router';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useTokens } from '@utils/dapp';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
@@ -10,10 +10,11 @@ import { findToken, getLiquidityUrl, parseUrl } from './helpers';
 import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
 export const useLiquidityFormService = () => {
-  const router = useRouter();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { data: tokens, loading } = useTokens();
 
-  const { tabId } = parseUrl(router.asPath);
+  const { tabId } = parseUrl(location.pathname);
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
 
@@ -28,7 +29,7 @@ export const useLiquidityFormService = () => {
       return;
     }
 
-    const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(router.asPath);
+    const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(location.pathname);
 
     const validTokenA = findToken(contractTokenA, idTokenA, tokens);
     if (validTokenA) {
@@ -44,7 +45,7 @@ export const useLiquidityFormService = () => {
 
   const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
-    await router.replace(liqUrl, undefined, { shallow: true });
+    navigate(liqUrl, { replace: true });
   };
 
   const handleChangeTab = (tabId: LiquidityTabs) => {

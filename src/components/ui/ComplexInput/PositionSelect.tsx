@@ -2,9 +2,9 @@ import React, { useRef, useState, useContext, HTMLProps, FC } from 'react';
 
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -54,7 +54,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   notFrozen,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);

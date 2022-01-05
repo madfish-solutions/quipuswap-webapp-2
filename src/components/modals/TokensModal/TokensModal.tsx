@@ -12,10 +12,10 @@ import {
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { appi18n } from '@app.i18n';
 import {
   useAddCustomToken,
   useNetwork,
@@ -57,7 +57,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   const addCustomToken = useAddCustomToken();
   const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const tezos = useTezos();
   const network = useNetwork();
   const { Form } = withTypes<FormValues>();

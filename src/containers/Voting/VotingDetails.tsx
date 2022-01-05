@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import { Card, Button, Tooltip, CardCell, ExternalLink, CurrencyAmount } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
 import { FormatNumber } from '@utils/helpers/formatNumber';
@@ -20,7 +20,7 @@ interface VotingDetailsProps {
 }
 
 export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, voter }) => {
-  const { t } = useTranslation(['common', 'vote']);
+  const { t } = appi18n;
   const { data: bakers } = useBakers();
 
   const { currentCandidate, secondCandidate } = useMemo(() => getCandidateInfo(dex, bakers), [dex, bakers]);

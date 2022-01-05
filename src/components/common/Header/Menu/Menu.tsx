@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 
 import { Button, Madfish, ColorModes, LanguageSwitcher, ColorModeSwitcher, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { NetworkSelect } from '@components/common/NetworkSelect';
 
 import { Navigation } from '../Navigation';
@@ -21,7 +21,7 @@ interface MenuProps {
 }
 
 export const Menu: React.FC<MenuProps> = ({ className }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

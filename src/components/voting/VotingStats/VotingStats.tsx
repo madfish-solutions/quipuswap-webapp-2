@@ -3,8 +3,8 @@ import React, { useContext, useMemo } from 'react';
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { Card, Button, Tooltip, ColorModes, VotingReward, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 
@@ -31,7 +31,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   dex,
   handleSubmit
 }) => {
-  const { t } = useTranslation(['vote']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();

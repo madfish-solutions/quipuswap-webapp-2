@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 import useSWR from 'swr';
 
 import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
@@ -20,7 +20,7 @@ type TokensSlugs = [string, string];
 
 export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const network = useNetwork();
-  const router = useRouter();
+  const navigate = useNavigate();
   const { data: tokens, loading: tokensLoading } = useTokens();
   const searchCustomTokens = useSearchCustomTokens();
   const addCustomToken = useAddCustomToken();
@@ -88,7 +88,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     }
     const newTokensSlug = initialTokensSlugs.join('-');
     if (getRedirectionUrl && fromToSlug !== newTokensSlug) {
-      router.replace(getRedirectionUrl(newTokensSlug));
+      navigate(getRedirectionUrl(newTokensSlug), { replace: true });
     }
     initialTokensSlugs.forEach(tokenSlug => {
       const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();
@@ -109,7 +109,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     initialTokensSlugs,
     network.id,
     getRedirectionUrl,
-    router,
+    navigate,
     searchCustomTokens,
     tokens,
     tokensLoading

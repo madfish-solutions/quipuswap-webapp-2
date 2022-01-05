@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import { toastContent } from '@quipuswap/ui-kit';
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 import { UpdateOptions, toast } from 'react-toastify';
 
 // eslint-disable-next-line import/no-default-export
 export default function useUpdateToast() {
   const toastIdRef = useRef<string | number>();
   const prevRouteRef = useRef<string>();
-  const router = useRouter();
+  const location = useLocation();
 
   useEffect(() => {
-    if (prevRouteRef.current && prevRouteRef.current !== router.pathname) {
+    if (prevRouteRef.current && prevRouteRef.current !== location.pathname) {
       toastIdRef.current = undefined;
     }
-    prevRouteRef.current = router.pathname;
-  }, [router.pathname]);
+    prevRouteRef.current = location.pathname;
+  }, [location.pathname]);
 
   return useCallback(({ type, render, progress, autoClose = 5000, ...restOptions }: UpdateOptions) => {
     const creationFn = type && type !== 'default' ? toast[type] : toast;

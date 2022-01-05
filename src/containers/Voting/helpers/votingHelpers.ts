@@ -81,7 +81,7 @@ export const hanldeTokenPairSelect = (
       };
       setTokenPair(res);
     } catch (err) {
-      updateToast(err);
+      updateToast(err as Error);
     }
   };
   void asyncFunc();
@@ -235,7 +235,7 @@ export const submitForm = async ({
     });
     getBalance();
   } catch (e) {
-    handleErrorToast(e);
+    handleErrorToast(e as Error);
   }
 };
 
@@ -252,6 +252,6 @@ export const submitWithdraw = async (
     handleSuccessToast();
     getBalance();
   } catch (e) {
-    updateToast(e);
+    updateToast(e as Error);
   }
 };

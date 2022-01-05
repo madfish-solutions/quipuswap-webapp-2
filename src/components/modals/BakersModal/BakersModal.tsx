@@ -11,11 +11,11 @@ import {
   ColorThemeContext
 } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 import { noop } from 'rxjs';
 
+import { appi18n } from '@app.i18n';
 import { useBakers } from '@utils/dapp';
 import { localSearchBaker } from '@utils/helpers';
 import { isFullBaker, WhitelistedBaker } from '@utils/types';
@@ -43,7 +43,7 @@ interface FormValues {
 }
 
 const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
 
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
@@ -102,7 +102,7 @@ const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: tru
 
 export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { Form } = withTypes<FormValues>();
   const { data: bakers, loading } = useBakers();
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);

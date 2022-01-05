@@ -4,12 +4,12 @@ import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { FormApi } from 'final-form';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
+import { useNavigate } from 'react-router-dom';
 import { noop } from 'rxjs';
 
 import { FACTORIES, TEZOS_TOKEN } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -92,14 +92,14 @@ const RealForm: React.FC<VotingFormProps> = ({
   setTabsState,
   getBalance
 }) => {
-  const { t } = useTranslation(['common', 'vote']);
+  const { t } = appi18n;
   const { updateToast, handleErrorToast } = useVotingToast();
   const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);
-  const router = useRouter();
+  const navigate = useNavigate();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
   const [isBanned, setIsBanned] = useState<boolean>(false);
@@ -215,10 +215,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
   const handleSetActiveId = (val: string) => {
-    router.replace(
+    navigate(
       `/voting/${val}/${getWhitelistedTokenSymbol(tokenPair.token1)}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
-      undefined,
-      { shallow: true }
+      { replace: true }
     );
     setTabsState(val);
   };

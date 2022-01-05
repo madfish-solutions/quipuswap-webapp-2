@@ -4,12 +4,12 @@ import { Card, SliderUI } from '@quipuswap/ui-kit';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo, useNetwork } from '@utils/dapp';
@@ -22,7 +22,7 @@ interface DexDashboardProps {
 }
 
 export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
   const { loading, data, error } = useGetHomeOverviewQuery();
   const network = useNetwork();
   const [totalSupply, setTotalSupply] = useState<BigNumber>();

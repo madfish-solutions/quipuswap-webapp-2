@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import { Slippage, CurrencyAmount } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
+import { appi18n } from '@app.i18n';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -20,7 +20,7 @@ interface SlippageInputProps {
 const WHOLE_ITEM_PERCENT = 100;
 
 export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
 
   const handleChange = (newValue?: string) =>
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));

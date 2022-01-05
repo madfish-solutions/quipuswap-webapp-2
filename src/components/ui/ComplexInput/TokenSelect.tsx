@@ -3,8 +3,8 @@ import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -53,7 +53,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   blackListedTokens,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);

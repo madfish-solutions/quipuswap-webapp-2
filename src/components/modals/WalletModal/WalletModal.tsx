@@ -3,9 +3,9 @@ import React, { FC, useCallback, useState } from 'react';
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
-import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
@@ -39,7 +39,7 @@ export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = f
 );
 
 export const WalletModal: FC = () => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const updateToast = useUpdateToast();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 

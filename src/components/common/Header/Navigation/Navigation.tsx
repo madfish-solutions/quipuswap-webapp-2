@@ -2,8 +2,7 @@ import React, { FC, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { Link, useLocation } from 'react-router-dom';
 
 import { isActivePath } from '@components/common/Header/Navigation/utils';
 import { useNetwork } from '@utils/dapp';
@@ -22,7 +21,7 @@ interface NavigationProps {
 }
 
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
-  const router = useRouter();
+  const location = useLocation();
   const network = useNetwork();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isInnerMenuOpened, setIsInnerMenuOpened] = useState(false);
@@ -33,13 +32,12 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     navigationData.forEach(({ id, href, label, Icon, links, as }) => {
       if (href) {
         result.push(
-          <Link key={id} href={href} as={as}>
-            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+          <Link key={id} to={href}>
             <a
               className={cx(
                 s.link,
                 {
-                  [s.active]: isActivePath(router.pathname, href)
+                  [s.active]: isActivePath(location.pathname, href)
                 },
                 modeClass[colorThemeMode]
               )}
@@ -63,7 +61,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
             </button>
             <span className={s.linksInner}>
               {links.map(link => (
-                <Link key={link.id} href={link.href ?? ''}>
+                <Link key={link.id} to={link.href ?? ''}>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     className={cx(s.linkInner, modeClass[colorThemeMode])}
@@ -82,7 +80,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     });
 
     return result;
-  }, [network.id, colorThemeMode, iconId, isInnerMenuOpened, router.pathname]);
+  }, [network.id, colorThemeMode, iconId, isInnerMenuOpened, location.pathname]);
 
   return <nav className={cx(s.root, className)}>{content}</nav>;
 };

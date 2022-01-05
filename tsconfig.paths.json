@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@containers/*": ["containers/*"],
+      "@errors/*": ["errors/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"],
+      "@hooks/*": ["hooks/*"],
+      "@pages/*": ["pages/*"],
+      "@providers/*": ["providers/*"],
+      "@icons/*": ["public/svg/*"],
+      "@images/*": ["public/images/*"],
+      "@graphql": ["graphql.ts"],
+      "@app.config": ["app.config.ts"],
+      "@seo.config": ["seo.config.ts"],
+      "@app.i18n": ["app.i18n.ts"]
+    }
+  }
+}

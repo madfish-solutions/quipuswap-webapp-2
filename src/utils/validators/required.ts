@@ -1,4 +1,4 @@
-import { i18n } from 'next-i18next';
+import { appi18n } from '@app.i18n';
 
 export const required = (value: string | number) =>
-  value && value !== '' ? undefined : i18n?.t('common|This field is required');
+  value && value !== '' ? undefined : appi18n.t('common|This field is required');

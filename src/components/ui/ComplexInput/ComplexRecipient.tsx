@@ -2,9 +2,9 @@ import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
 import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
 
+import { appi18n } from '@app.i18n';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import useUpdateToast from '@hooks/useUpdateToast';
 
@@ -31,7 +31,7 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
   handleInput,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -56,9 +56,10 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
     try {
       handleInput(await navigator.clipboard.readText());
     } catch (err) {
+      const error = err as Error;
       updateToast({
         type: 'error',
-        render: `${err.name}: ${err.message}`
+        render: `${error.name}: ${error.message}`
       });
     }
   };

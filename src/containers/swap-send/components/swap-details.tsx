@@ -2,9 +2,9 @@ import React, { useMemo } from 'react';
 
 import { Button, Card, CardCell, ExternalLink, CurrencyAmount, Tooltip, Route, RouteProps } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import s from '@styles/CommonContainer.module.sass';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
@@ -89,7 +89,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   buyRate,
   sellRate
 }) => {
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = appi18n;
   const exchangeRates = useNewExchangeRates();
   const inputTokenUsdExchangeRate = inputToken && exchangeRates[getTokenSlug(inputToken)];
   const outputTokenUsdExchangeRate = outputToken && exchangeRates[getTokenSlug(outputToken)];

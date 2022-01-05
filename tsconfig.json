@@ -3,7 +3,6 @@
     "allowJs": true,
     "strict": true,
     "skipLibCheck": true,
-    "baseUrl": "src",
     "target": "esnext",
     "module": "ESNext",
     "jsx": "preserve",
@@ -11,22 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "paths": {
-      "@components/*": ["components/*"],
-      "@containers/*": ["containers/*"],
-      "@errors/*": ["errors/*"],
-      "@content/*": ["content/*"],
-      "@styles/*": ["styles/*"],
-      "@utils/*": ["utils/*"],
-      "@hooks/*": ["hooks/*"],
-      "@providers/*": ["providers/*"],
-      "@icons/*": ["../public/svg/*"],
-      "@images/*": ["../public/images/*"],
-      "@client": ["client.tsx"],
-      "@graphql": ["graphql.ts"],
-      "@app.config": ["app.config.ts"],
-      "@seo.config": ["seo.config.ts"]
-    },
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
@@ -37,5 +20,6 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"],
-  "ignorePatterns": ["graphql.ts"]
+  "ignorePatterns": ["graphql.ts"],
+  "extends": "./tsconfig.paths.json"
 }

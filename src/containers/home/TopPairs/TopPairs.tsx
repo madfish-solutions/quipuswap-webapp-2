@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { useTranslation } from 'next-i18next';
-
+import { appi18n } from '@app.i18n';
 import { ErrorAlert } from '@components/common/ErrorAlert';
 import { Section } from '@components/home/Section';
 import { PoolTable } from '@components/tables/PoolTable';
@@ -13,7 +12,7 @@ interface TopPairsProps {
 }
 
 export const TopPairs: React.FC<TopPairsProps> = ({ className }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
   const [fetchPairsData, { loading, data, error }] = useGetTokensPairsLazyQuery();
 
   const isNotLoaded = error || (!loading && !data) || data === undefined || !data.pairs;

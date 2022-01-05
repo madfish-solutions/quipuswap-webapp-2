@@ -23,7 +23,6 @@ export * from './transformTokenDataToAsset';
 export * from './transformWhitelistedTokenToAsset';
 export * from './getValueForSDK';
 export * from './handleTokenChange';
-export * from './handleSearchToken';
 export * from './localSearchSortSymbol';
 export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';

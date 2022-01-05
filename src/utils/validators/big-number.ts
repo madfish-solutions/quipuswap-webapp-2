@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js';
-import { i18n } from 'next-i18next';
 import { object, SchemaOf } from 'yup';
+
+import { appi18n } from '@app.i18n';
 
 const basicBigNumberSchema: SchemaOf<BigNumber> = object()
   .shape({})
@@ -20,7 +21,7 @@ export const bigNumberSchema = (min?: BigNumber.Value, max?: BigNumber.Value, me
       'min-max-value',
       () =>
         message ??
-        i18n?.t('common|Value has to be a number between {{min}} and {{max}}', {
+        appi18n.t('common|Value has to be a number between {{min}} and {{max}}', {
           min: actualMin.toFixed(),
           max: actualMax.toFixed()
         }) ??
@@ -31,14 +32,14 @@ export const bigNumberSchema = (min?: BigNumber.Value, max?: BigNumber.Value, me
   if (actualMin) {
     return schema.test(
       'min-value',
-      () => message ?? i18n?.t('common|Minimal value is {{min}}', { min: actualMin.toFixed() }) ?? '',
+      () => message ?? appi18n.t('common|Minimal value is {{min}}', { min: actualMin.toFixed() }) ?? '',
       value => !(value instanceof BigNumber) || value.gte(actualMin)
     );
   }
   if (actualMax) {
     return schema.test(
       'max-value',
-      () => message ?? i18n?.t('common|Maximal value is {{max}}', { max: actualMax.toFixed() }) ?? '',
+      () => message ?? appi18n.t('common|Maximal value is {{max}}', { max: actualMax.toFixed() }) ?? '',
       value => !(value instanceof BigNumber) || value.lte(actualMax)
     );
   }

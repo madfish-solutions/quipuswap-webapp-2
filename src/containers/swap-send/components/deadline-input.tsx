@@ -2,9 +2,9 @@ import React, { FC } from 'react';
 
 import { TransactionDeadline } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS } from '@app.config';
+import { appi18n } from '@app.i18n';
 import s from '@styles/CommonContainer.module.sass';
 
 interface DeadlineInputProps {
@@ -14,7 +14,7 @@ interface DeadlineInputProps {
 }
 
 export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
 
   const handleChange = (newValue?: string) =>
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_DEADLINE_MINS));

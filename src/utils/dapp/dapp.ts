@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { NetworkType } from '@airgap/beacon-sdk';
+// @ts-ignore
+// eslint-disable-next-line import/no-unresolved
+import { NoTempleWalletError } from '@errors';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
@@ -29,7 +32,6 @@ import {
   WhitelistedTokenWithQSNetworkType
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
-import { NoTempleWalletError } from 'errors';
 
 import { getContract } from './getStorageInfo';
 import { getNetwork, setNetwork, toBeaconNetworkType } from './network';

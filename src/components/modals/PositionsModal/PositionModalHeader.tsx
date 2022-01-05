@@ -1,16 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
 
+import { appi18n } from '@app.i18n';
 import { validateMinMax } from '@utils/validators';
 
 import s from './PositionsModal.module.sass';
 import { HeaderProps } from './PositionsModal.types';
 
 export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
 
   const [, setVal] = useState(values);
   const [, setSubm] = useState<boolean>(false);

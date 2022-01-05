@@ -3,8 +3,8 @@ import React, { useContext } from 'react';
 import { Bage, Button, Tooltip, ColorModes, TokensLogos, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
@@ -21,7 +21,7 @@ const modeClass = {
 };
 
 export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
 import { DEFAULT_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -14,7 +14,7 @@ import { SwapAction, SwapField } from '../utils/types';
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 
 export const useValidationSchema = () => {
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = appi18n;
   const { maxInputAmounts, maxOutputAmounts } = useSwapLimits();
   const { balances } = useBalances();
 

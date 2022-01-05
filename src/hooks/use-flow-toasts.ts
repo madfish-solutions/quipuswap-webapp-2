@@ -1,11 +1,12 @@
-import { useTranslation } from 'react-i18next';
 import { ToastContent } from 'react-toastify';
+
+import { appi18n } from '@app.i18n';
 
 import useUpdateToast from './useUpdateToast';
 
 export const useFlowToasts = () => {
   const updateToast = useUpdateToast();
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
 
   const showErrorToast = (err: Error) =>
     updateToast({

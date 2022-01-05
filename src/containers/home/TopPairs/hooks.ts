@@ -1,10 +1,9 @@
-import { useTranslation } from 'next-i18next';
-
+import { appi18n } from '@app.i18n';
 import { GetTokensPairsQuery, Token } from '@graphql';
 import { prepareTokenName, transformNodeToWhitelistedToken } from '@utils/helpers';
 
 export const usePairs = (data?: GetTokensPairsQuery) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
 
   return (
     data?.pairs?.edges.map(x => {

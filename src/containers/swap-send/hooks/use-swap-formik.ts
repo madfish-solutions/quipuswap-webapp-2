@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useFlowToasts } from '@hooks/use-flow-toasts';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
@@ -24,7 +24,7 @@ const initialValues: Partial<SwapFormValues> = {
 
 export const useSwapFormik = () => {
   const validationSchema = useValidationSchema();
-  const { t } = useTranslation(['common', 'swap']);
+  const { t } = appi18n;
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
@@ -58,7 +58,7 @@ export const useSwapFormik = () => {
       });
       showSuccessToast(t('swap|Swap completed!'));
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
       throw e;
     }
   };

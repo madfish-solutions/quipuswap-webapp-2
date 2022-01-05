@@ -2,15 +2,15 @@ import React from 'react';
 
 import { Button, CurrencyAmount, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { PoolTableType } from '@utils/types';
 
 export const useColumns = () => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
 
   return [
     {

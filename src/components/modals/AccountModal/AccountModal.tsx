@@ -2,9 +2,9 @@ import React, { useRef, useState, useEffect, useContext, useCallback } from 'rea
 
 import { Copy, Modal, Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { appi18n } from '@app.i18n';
 import { CheckMark } from '@components/svg/CheckMark';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
@@ -18,7 +18,7 @@ const modeClass = {
 };
 
 export const AccountModal: React.FC = () => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const accountPkh = useAccountPkh();
   const disconnect = useDisconnect();
   const [copied, setCopied] = useState<boolean>(false);

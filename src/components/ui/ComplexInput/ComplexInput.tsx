@@ -3,8 +3,8 @@ import React, { useRef, useMemo, useContext, useState, FC, HTMLProps } from 'rea
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
@@ -54,7 +54,7 @@ export const ComplexInput: FC<ComplexInputProps> = ({
   decimals = 6,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);

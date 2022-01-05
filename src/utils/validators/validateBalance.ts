@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { i18n } from 'next-i18next';
+
+import { appi18n } from '@app.i18n';
 
 export const validateBalance = (balance: BigNumber) => (value: string) =>
-  !value || balance.gte(new BigNumber(value)) ? undefined : i18n?.t('common|Insufficient funds');
+  !value || balance.gte(new BigNumber(value)) ? undefined : appi18n.t('common|Insufficient funds');

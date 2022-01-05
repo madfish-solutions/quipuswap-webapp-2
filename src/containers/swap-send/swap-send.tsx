@@ -3,7 +3,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Tabs, Card, Button, StickyBlock, SwapButton } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
@@ -51,7 +51,9 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
-const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
+const OrdinarySwapSend: FC<SwapSendProps> = ({ className, fromToSlug }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const {
     errors,
     values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
@@ -106,11 +108,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     (inputToken: WhitelistedToken, outputToken: WhitelistedToken) => {
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenSlug(inputToken)}-${getTokenSlug(outputToken)}`;
-      if (router.asPath !== newRoute) {
-        router.replace(newRoute);
+      if (location.pathname !== newRoute) {
+        navigate(newRoute, { replace: true });
       }
     },
-    [router, updateSwapLimits]
+    [navigate, updateSwapLimits, location]
   );
 
   const { balances, updateBalance } = useBalances();
@@ -450,8 +452,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 };
 
-export const SwapSend = withRouter<SwapSendProps & WithRouterProps>(props => (
+export const SwapSend = (props: SwapSendProps) => (
   <SwapLimitsProvider>
     <OrdinarySwapSend {...props} />
   </SwapLimitsProvider>
-));
+);

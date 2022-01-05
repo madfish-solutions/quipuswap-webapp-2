@@ -3,9 +3,9 @@ import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } 
 import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext, Skeleton } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
+import { appi18n } from '@app.i18n';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -54,7 +54,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   token,
   blackListedTokens
 }) => {
-  const { t } = useTranslation(['common']);
+  const { t } = appi18n;
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);

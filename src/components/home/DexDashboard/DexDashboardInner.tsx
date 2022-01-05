@@ -3,8 +3,8 @@ import React, { useContext, useMemo } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
+import { appi18n } from '@app.i18n';
 import { Maybe } from '@graphql';
 import { useNetwork } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
@@ -35,7 +35,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   trasactionsCount24h,
   loading = false
 }) => {
-  const { t } = useTranslation(['home']);
+  const { t } = appi18n;
   const network = useNetwork();
 
   const { colorThemeMode } = useContext(ColorThemeContext);

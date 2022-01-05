@@ -51,7 +51,7 @@ export const asyncFindPairDex = async (
 
     return res;
   } catch (err) {
-    updateToast(err);
+    updateToast(err as Error);
 
     return pair;
   }
@@ -103,7 +103,7 @@ export const asyncGetShares = async (
 
     setValue('balanceTotalB', balA2);
   } catch (err) {
-    updateToast(err);
+    updateToast(err as Error);
   }
 };
 
@@ -145,7 +145,8 @@ GetShareType) => {
             setDex(tempDex);
           }
         } catch (e) {
-          if (e.name === 'DexNotFoundError') {
+          const error = e as Error;
+          if (error.name === 'DexNotFoundError') {
             if (values.balance1 && values.balance2) {
               const strictFactories = {
                 fa1_2Factory: FACTORIES[networkId].fa1_2Factory[0],
@@ -161,12 +162,12 @@ GetShareType) => {
 
             return;
           }
-          updateToast(e);
+          updateToast(error);
         }
       }
     }
   } catch (e) {
-    updateToast(e);
+    updateToast(e as Error);
   }
 };
 
@@ -186,6 +187,6 @@ export const submitForm = async (
       handleSuccessToast('liquidity|Invest completed!');
     }
   } catch (e) {
-    updateToast(e);
+    updateToast(e as Error);
   }
 };

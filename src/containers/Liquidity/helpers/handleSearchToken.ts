@@ -1,12 +1,11 @@
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
+import { hanldeTokenPairSelect } from '@containers/Liquidity/helpers/liquidityHelpers';
+import { isTokenEqual } from '@utils/helpers/isTokenEqual';
+import { localSearchSortSymbol } from '@utils/helpers/localSearchSortSymbol';
+import { localSearchToken, WhitelistedOrCustomToken } from '@utils/helpers/localSearchToken';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-
-import { isTokenEqual } from './isTokenEqual';
-import { localSearchSortSymbol } from './localSearchSortSymbol';
-import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
 
 interface SearchTokenType {
   tokens: WhitelistedToken[];

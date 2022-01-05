@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import s from '@styles/PrivacyPolicy.module.sass';
 
-export const EnPrivacyPolicy: React.FC = () => (
+export const EnPrivacyPolicy: FC = () => (
   <>
     <h1 className={s.mb24}>Privacy Policy</h1>
     <p className={s.big}>
@@ -268,6 +268,3 @@ export const EnPrivacyPolicy: React.FC = () => (
     </p>
   </>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default EnPrivacyPolicy;

@@ -2,17 +2,18 @@ import React, { useMemo, useState, useEffect, useCallback } from 'react';
 
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
-import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
+import { useSearchParams } from 'react-router-dom';
 import { noop } from 'rxjs';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { VotingStats } from '@components/voting/VotingStats';
+import { handleSearchToken } from '@containers/Liquidity/helpers/handleSearchToken';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useTokens, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens } from '@utils/dapp';
-import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
+import { handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
 import { VoterType, TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { hanldeTokenPairSelect, submitForm, submitWithdraw } from './helpers/votingHelpers';
@@ -59,10 +60,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const [rewards, setRewards] = useState<string>('0');
   const [voter, setVoter] = useState<VoterType | undefined>();
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
-  const router = useRouter();
-  const [tabsState, setTabsState] = useState(router.query.method); // TODO: Change to routes
+  const [searchParams] = useSearchParams();
+  const method = searchParams.get('method');
+  const [tabsState, setTabsState] = useState(method); // TODO: Change to routes
   const { from, to } = useRouterPair({
-    page: `voting/${router.query.method}`,
+    page: `voting/${method}`,
     urlLoaded,
     initialLoad,
     token1: tokenPair.token1,
