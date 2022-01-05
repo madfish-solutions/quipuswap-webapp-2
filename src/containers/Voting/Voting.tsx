@@ -11,6 +11,7 @@ import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useTokens, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens } from '@utils/dapp';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
 import { VoterType, TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
@@ -40,7 +41,8 @@ const fallbackTokenPair = {
 } as WhitelistedTokenPair;
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
-  const { updateToast, handleErrorToast, handleLoader, handleSuccessToast } = useVotingToast();
+  const { handleErrorToast, handleLoader } = useVotingToast();
+  const confirmOperation = useConfirmOperation();
   const tezos = useTezos();
   const network = useNetwork();
   const exchangeRates = useExchangeRates();
@@ -157,7 +159,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             return;
           }
           handleLoader();
-          submitWithdraw(tezos, params, handleErrorToast, handleSuccessToast, getBalance);
+          submitWithdraw(tezos, params, handleErrorToast, confirmOperation, getBalance);
         }}
       />
       <StickyBlock className={className}>
@@ -172,8 +174,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               values,
               dex,
               tab: currentTab.id,
-              // @ts-ignore
-              updateToast,
+              confirmOperation,
               handleErrorToast,
               getBalance
             });

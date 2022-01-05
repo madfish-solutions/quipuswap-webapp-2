@@ -14,6 +14,7 @@ import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh } from '@utils/dapp';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
@@ -93,7 +94,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   getBalance
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const { updateToast, handleErrorToast } = useVotingToast();
+  const { handleErrorToast } = useVotingToast();
+  const confirmOperation = useConfirmOperation();
   const { openConnectWalletModal, connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -196,7 +198,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       return openConnectWalletModal();
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, { updateToast, handleErrorToast }, getBalance, voter?.candidate);
+    unvoteOrRemoveVeto(currentTab.id, tezos, dex, { handleErrorToast }, confirmOperation, getBalance, voter?.candidate);
   };
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
