@@ -1,8 +1,8 @@
 import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
+import { TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { getStorageInfo } from '@utils/dapp';
-import { TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 
 export const loadT2tDex = async ({ tezos }: { tezos: TezosToolkit }) => {
   try {

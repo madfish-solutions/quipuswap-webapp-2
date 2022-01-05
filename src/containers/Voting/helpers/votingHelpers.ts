@@ -10,7 +10,7 @@ import {
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
+import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair } from '@utils/types';
 

@@ -1,6 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN } from '@app.config';
 import { fromDecimals } from '@utils/helpers';
 import { Undefined, WhitelistedBaker } from '@utils/types';
 

@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { isTokenEqual } from './isTokenEqual';

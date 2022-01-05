@@ -3,8 +3,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ColorModes, ColorThemeContext, Table } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { MAX_ITEMS_PER_PAGE } from '@app.config';
 import { useColumns } from '@components/tables/PoolTable/hooks';
-import { MAX_ITEMS_PER_PAGE } from '@utils/defaults';
 import { PoolTableType } from '@utils/types';
 
 import { PoolCardItem } from './PoolCardItem';

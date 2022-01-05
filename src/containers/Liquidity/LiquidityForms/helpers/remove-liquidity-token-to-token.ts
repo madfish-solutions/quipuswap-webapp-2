@@ -2,8 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { LP_TOKEN_DECIMALS } from '@app.config';
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
-import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { getDeadline, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 

@@ -5,10 +5,10 @@ import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
+import { SAVED_TERMS_KEY } from '@app.config';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
-import { SAVED_TERMS_KEY } from '@utils/defaults';
 import { WalletType } from '@utils/types';
 import { NoTempleWalletError } from 'errors';
 

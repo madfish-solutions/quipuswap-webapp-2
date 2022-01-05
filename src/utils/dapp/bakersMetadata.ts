@@ -1,4 +1,4 @@
-import { BAKERS_API } from '@utils/defaults';
+import { BAKERS_API } from '@app.config';
 import { Nullable } from '@utils/types';
 
 interface BakerMetadataResponse {

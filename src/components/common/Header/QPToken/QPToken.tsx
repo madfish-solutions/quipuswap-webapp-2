@@ -4,8 +4,8 @@ import { ColorModes, ColorThemeContext, QuipuToken } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { MAINNET_DEFAULT_TOKEN } from '@app.config';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './QPToken.module.sass';
 
