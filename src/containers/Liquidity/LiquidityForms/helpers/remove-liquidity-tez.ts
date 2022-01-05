@@ -2,7 +2,7 @@ import { batchify, FoundDex, removeLiquidity as getRemoveLiquidityParams } from 
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS } from '@utils/defaults';
+import { LP_TOKEN_DECIMALS } from '@app.config';
 import { toDecimals } from '@utils/helpers';
 
 export const removeLiquidityTez = async (

@@ -4,8 +4,8 @@ import { TransactionDeadline } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
+import { DEFAULT_DEADLINE_MINS } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
-import { DEFAULT_DEADLINE_MINS } from '@utils/defaults';
 
 interface DeadlineInputProps {
   error?: string;

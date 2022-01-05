@@ -4,10 +4,10 @@ import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@qu
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 

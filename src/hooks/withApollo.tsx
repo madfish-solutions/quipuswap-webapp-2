@@ -9,7 +9,7 @@ import {
   defaultDataIdFromObject
 } from '@apollo/client';
 
-import { APOLLO_CLIENT_ENDPOINT } from '@utils/defaults';
+import { APOLLO_CLIENT_ENDPOINT } from '@app.config';
 
 let globalApolloClient: ApolloClient<NormalizedCacheObject>;
 

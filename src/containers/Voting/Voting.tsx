@@ -6,12 +6,12 @@ import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 import { noop } from 'rxjs';
 
+import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { VotingStats } from '@components/voting/VotingStats';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useTokens, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens } from '@utils/dapp';
-import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
 import { VoterType, TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 

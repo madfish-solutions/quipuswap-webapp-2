@@ -3,7 +3,7 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { networksDefaultTokens, TEZOS_TOKEN } from '@utils/defaults';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import { getTokenSlug } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';
 

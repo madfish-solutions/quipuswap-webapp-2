@@ -9,10 +9,10 @@ import { useTranslation } from 'next-i18next';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
+import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@app.config';
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo, useNetwork } from '@utils/dapp';
-import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@utils/defaults';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
