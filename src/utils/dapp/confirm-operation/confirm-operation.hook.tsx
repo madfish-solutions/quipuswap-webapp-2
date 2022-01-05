@@ -3,8 +3,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import { useFlowToasts } from '@hooks/use-flow-toasts';
 
 import { confirmOperation } from './confirm-operation.service';
-import { ConfirmOperationOptions } from './confirm-operation.types';
 import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
+import { ConfirmOperationOptions } from './confirm-operation.types';
 
 export const useConfirmOperation = () => {
   const { showSuccessToast, showInfoToast, showErrorToast } = useFlowToasts();
