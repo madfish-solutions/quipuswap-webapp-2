@@ -22,6 +22,8 @@ const initialValues: Partial<SwapFormValues> = {
   [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
 };
 
+const SECS_IN_MIN = 60;
+
 export const useSwapFormik = () => {
   const validationSchema = useValidationSchema();
   const { t } = useTranslation(['common', 'swap']);
@@ -43,7 +45,7 @@ export const useSwapFormik = () => {
     const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
       await swap(tezos, accountPkh, {
-        deadlineTimespan: deadline.times(60).toNumber(),
+        deadlineTimespan: deadline.times(SECS_IN_MIN).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
         inputToken: inputToken,
         recipient: action === 'send' ? recipient : undefined,
