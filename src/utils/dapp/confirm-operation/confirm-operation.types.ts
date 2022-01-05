@@ -6,4 +6,8 @@ export interface ConfirmOperationOptions {
   signal?: AbortSignal;
 }
 
-export type ConfirmationToastProps = Pick<OperationEntry, 'hash'>;
+export interface OperationMessage {
+  message: string;
+}
+
+export type ConfirmationToastProps = Pick<OperationEntry, 'hash'> & Partial<OperationMessage>
