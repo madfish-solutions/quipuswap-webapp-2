@@ -3,7 +3,6 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators/validate-user-input';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -11,7 +10,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 
 import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validateUserInputAmount } from '../validators';
+import { validations } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
@@ -62,20 +61,12 @@ export const useRemoveLiquidityService = (
     const lpTokenInputBN = new BigNumber(lpTokenInput);
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-    const validatedInput = validateUserInput(lpTokenInput);
-    const validatedInputAmount = validateUserInputAmount(
-      toDecimals(new BigNumber(lpTokenInput), LP_TOKEN_DECIMALS),
-      lpTokenBalance
-    );
+    const validatedInput = validations(lpTokenAmount, lpTokenBalance);
+    setValidationMessage(validatedInput);
 
-    if (validatedInput) {
-      setValidationMessage(validatedInput);
+    if (validatedInput === 'Invalid input') {
       setTokenAOutput('');
       setTokenBOutput('');
-
-      return;
-    } else if (validatedInputAmount) {
-      setValidationMessage(validatedInputAmount);
 
       return;
     }
@@ -98,7 +89,6 @@ export const useRemoveLiquidityService = (
 
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-    setValidationMessage(undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lpTokenInput, pairInfo]);
 
