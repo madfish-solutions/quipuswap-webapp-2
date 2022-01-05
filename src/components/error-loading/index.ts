@@ -1,1 +1,1 @@
-export * from './error-loading'
+export * from './error-loading';

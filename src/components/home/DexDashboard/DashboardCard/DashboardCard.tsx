@@ -3,8 +3,9 @@ import React, { useContext } from 'react';
 import { Tooltip, Skeleton, ColorModes, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import s from './DashboardCard.module.sass';
 import { ErrorLoadingWrapper } from '@components/error-loading';
+
+import s from './DashboardCard.module.sass';
 
 interface DashboardCardProps {
   volume: string;
@@ -37,10 +38,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <ErrorLoadingWrapper
-        isLoading={loading}
-        fallback={<Skeleton className={s.skeleton} />}
-      >
+      <ErrorLoadingWrapper isLoading={loading} fallback={<Skeleton className={s.skeleton} />}>
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
       </ErrorLoadingWrapper>
     </div>
