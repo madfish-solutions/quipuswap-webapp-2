@@ -4,10 +4,10 @@ import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { LP_TOKEN_DECIMALS } from '@app.config';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { LP_TOKEN_DECIMALS } from '@utils/defaults';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';

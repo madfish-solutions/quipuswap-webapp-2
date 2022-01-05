@@ -3,8 +3,8 @@ import React, { useCallback, useMemo } from 'react';
 import { SelectUI } from '@quipuswap/ui-kit';
 import { Props as SelectProps } from 'react-select/src/Select';
 
+import { ALL_NETWORKS } from '@app.config';
 import { useChangeNetwork, useNetwork } from '@utils/dapp';
-import { ALL_NETWORKS } from '@utils/defaults';
 
 interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
   className?: string;

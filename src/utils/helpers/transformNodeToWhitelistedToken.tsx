@@ -1,5 +1,5 @@
+import { TEZOS_TOKEN } from '@app.config';
 import { Token } from '@graphql';
-import { TEZOS_TOKEN } from '@utils/defaults';
 import { WhitelistedToken } from '@utils/types';
 
 export const transformNodeToWhitelistedToken = (token?: Token): WhitelistedToken => {

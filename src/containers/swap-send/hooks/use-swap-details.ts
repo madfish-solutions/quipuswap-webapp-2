@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { TTDEX_CONTRACTS } from '@app.config';
 import { useNetwork } from '@utils/dapp';
-import { TTDEX_CONTRACTS } from '@utils/defaults';
 import { fromDecimals, getPriceImpact, getTokenOutput, toDecimals } from '@utils/helpers';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 

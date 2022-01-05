@@ -2,7 +2,7 @@ import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@ta
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@app.config';
 import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
 import {

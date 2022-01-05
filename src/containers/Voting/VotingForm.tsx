@@ -9,12 +9,12 @@ import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
 import { noop } from 'rxjs';
 
+import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh } from '@utils/dapp';
-import { FACTORIES, TEZOS_TOKEN } from '@utils/defaults';
 import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import {
