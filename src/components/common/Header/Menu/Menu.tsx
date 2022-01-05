@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { Button, Madfish, ColorModes, LanguageSwitcher, ColorModeSwitcher, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Button, Madfish, ColorModes, ColorModeSwitcher, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -31,7 +31,6 @@ export const Menu: React.FC<MenuProps> = ({ className }) => {
         <div className={s.row}>
           <QPToken />
           <div className={cx(s.mb0, s.row)}>
-            <LanguageSwitcher direction="up" />
             <div className={s.ml24}>
               <ColorModeSwitcher id="mobile" />
             </div>
