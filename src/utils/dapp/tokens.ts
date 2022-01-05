@@ -17,15 +17,10 @@ import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
+import { InvalidTokensListError } from './tokens.errors';
 
 interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWithQSNetworkType, 'fa2TokenId'> {
   fa2TokenId?: string;
-}
-
-class InvalidTokensListError extends Error {
-  constructor(json: unknown) {
-    super(`Invalid response for tokens list was received: ${JSON.stringify(json)}`);
-  }
 }
 
 export const getSavedTokens = (networkId?: QSMainNet) => {
@@ -114,7 +109,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS));
+  const response = await fetch(ipfsToHttps(network.type === 'test' ? TESTNET_TOKENS : MAINNET_TOKENS));
   const json = await response.json();
   if (json.tokens?.length) {
     tokens = tokens.concat(json.tokens);
