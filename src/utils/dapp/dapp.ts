@@ -520,10 +520,10 @@ function useDApp() {
   }, []);
 
   const estimationToolkit = useMemo(() => {
-    if (tezos && connectionType === 'beacon') {
-      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
+    if (accountPkh && accountPublicKey && connectionType === 'beacon') {
+      const cloneTezosToolkit = new TezosToolkit(tezos!.rpc);
       cloneTezosToolkit.setPackerProvider(michelEncoder);
-      cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh!, accountPublicKey!));
+      cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 
       return cloneTezosToolkit;
     }
