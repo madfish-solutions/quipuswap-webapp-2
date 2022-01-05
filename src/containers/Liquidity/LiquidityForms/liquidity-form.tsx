@@ -4,6 +4,7 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
 import { AddLiquidityForm } from '@containers/Liquidity/LiquidityForms/add-liquidity-form';
+import { LiquidityDetails } from '@containers/Liquidity/LiquidityForms/liquidity-details';
 import { LiquidityTabs, TABS_CONTENT } from '@containers/Liquidity/LiquidityForms/liquidity-tabs';
 import { RemoveLiquidityForm } from '@containers/Liquidity/LiquidityForms/remove-liquidity-form';
 import { useLiquidityFormService } from '@containers/Liquidity/LiquidityForms/use-liquidity-form.service';
@@ -50,6 +51,7 @@ export const LiquidityForm: FC = () => {
           <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
         )}
       </Card>
+      <LiquidityDetails dex={dex} tab={tab} tokenA={tokenA} tokenB={tokenB} />
     </>
   );
 };
