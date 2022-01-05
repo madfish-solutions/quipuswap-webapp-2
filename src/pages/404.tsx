@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { BaseLayout } from '@layouts/BaseLayout';
+import { BaseLayout } from '@components/common/BaseLayout';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const modeClass = {

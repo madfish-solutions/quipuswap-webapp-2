@@ -1,4 +1,4 @@
-import { BAKERS_HTTP, CLOUDFLARE_IPFS, IPFS, IPFS_IO, TEMPLEWALLET_IMG } from '@utils/defaults';
+import { BAKERS_HTTP, CLOUDFLARE_IPFS, IPFS, IPFS_IO, TEMPLEWALLET_IMG } from '@app.config';
 
 export const prepareTokenLogo = (url?: string | null) => {
   if (!url?.trim()) {

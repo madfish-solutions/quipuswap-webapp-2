@@ -15,7 +15,7 @@ import { WhitelistedToken } from '@utils/types';
 import s from './ComplexInput.module.sass';
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
-  noBalanceButtons?: boolean;
+  shouldShowBalanceButtons?: boolean;
   className?: string;
   balance: string;
   exchangeRate?: string;
@@ -38,7 +38,7 @@ const themeClass = {
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = '10.00',
-  noBalanceButtons = false,
+  shouldShowBalanceButtons = true,
   label,
   handleBalance,
   exchangeRate = null,
@@ -125,7 +125,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        {!noBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
         {tokensModal && (
           <TokensModal

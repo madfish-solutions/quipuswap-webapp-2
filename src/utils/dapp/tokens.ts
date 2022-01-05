@@ -2,7 +2,7 @@ import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@ta
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@utils/defaults';
+import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@app.config';
 import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
 import {
@@ -17,6 +17,7 @@ import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
+import { InvalidTokensListError } from './tokens.errors';
 
 interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWithQSNetworkType, 'fa2TokenId'> {
   fa2TokenId?: string;
@@ -89,29 +90,35 @@ export const isTokenFa12 = memoizee(
   { promise: true }
 );
 
-export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) =>
-  fetch(ipfsToHttps(network.id === 'hangzhounet' ? TESTNET_TOKENS : MAINNET_TOKENS))
-    .then(async res => res.json())
-    .then(json => {
-      let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
-        {
-          ...TEZOS_TOKEN,
-          network: network.id
-        },
-        networksDefaultTokens[network.id]
-      ];
+export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
+  let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
+    {
+      ...TEZOS_TOKEN,
+      network: network.id
+    },
+    networksDefaultTokens[network.id]
+  ];
 
-      if (json.tokens?.length) {
-        tokens = tokens.concat(json.tokens);
-      }
+  if (addTokensFromLocalStorage) {
+    tokens = tokens.concat(getSavedTokens(network.id));
+  }
 
-      if (addTokensFromLocalStorage) {
-        tokens = getSavedTokens(network.id).concat(tokens);
-      }
+  return getUniqArray(tokens, getTokenSlug);
+};
 
-      return getUniqArray(tokens, getTokenSlug);
-    })
-    .catch(() => []);
+export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
+  let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
+
+  const response = await fetch(ipfsToHttps(network.type === 'test' ? TESTNET_TOKENS : MAINNET_TOKENS));
+  const json = await response.json();
+  if (json.tokens?.length) {
+    tokens = tokens.concat(json.tokens);
+  } else {
+    throw new InvalidTokensListError(json);
+  }
+
+  return getUniqArray(tokens, getTokenSlug);
+};
 
 export const saveCustomToken = (token: WhitelistedTokenWithQSNetworkType) => {
   window.localStorage.setItem(
