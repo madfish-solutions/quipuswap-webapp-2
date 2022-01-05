@@ -11,6 +11,7 @@ import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES, TEZOS_TOKEN } from '@app.config';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair } from '@utils/types';
 
@@ -81,7 +82,7 @@ export const hanldeTokenPairSelect = (
       };
       setTokenPair(res);
     } catch (err) {
-      updateToast(err);
+      updateToast(err as Error);
     }
   };
   void asyncFunc();
@@ -92,7 +93,7 @@ interface SubmitProps {
   values: VoteFormValues;
   dex?: FoundDex;
   tab: string;
-  updateToast: never;
+  confirmOperation: ReturnType<typeof useConfirmOperation>;
   handleErrorToast: (e: Error) => void;
   getBalance: () => void;
 }
@@ -188,7 +189,8 @@ export const unvoteOrRemoveVeto = async (
   tab: string,
   tezos: TezosToolkit,
   dex: FoundDex,
-  { updateToast, handleErrorToast }: Pick<IUseVotingToast, 'updateToast' | 'handleErrorToast'>,
+  { handleErrorToast }: Pick<IUseVotingToast, 'handleErrorToast'>,
+  confirmOperation: ReturnType<typeof useConfirmOperation>,
   getBalance: () => void,
   baker?: string
 ) => {
@@ -197,12 +199,7 @@ export const unvoteOrRemoveVeto = async (
 
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await op.confirmation();
-    // handleSuccessToast();
-    updateToast({
-      type: 'success',
-      render: updateToastText
-    });
+    await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
   } catch (e) {
     handleErrorToast(e);
@@ -215,7 +212,7 @@ export const submitForm = async ({
   dex,
   tab,
   handleErrorToast,
-  updateToast,
+  confirmOperation,
   getBalance
 }: SubmitProps) => {
   if (!dex) {
@@ -227,15 +224,10 @@ export const submitForm = async ({
 
     const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await op.confirmation();
-    // @ts-ignore
-    updateToast({
-      type: 'success',
-      render: updateToastText
-    });
+    await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
   } catch (e) {
-    handleErrorToast(e);
+    handleErrorToast(e as Error);
   }
 };
 
@@ -243,15 +235,14 @@ export const submitWithdraw = async (
   tezos: TezosToolkit,
   voteParams: TransferParams[],
   updateToast: (err: Error) => void,
-  handleSuccessToast: () => void,
+  confirmOperation: ReturnType<typeof useConfirmOperation>,
   getBalance: () => void
 ) => {
   try {
     const op = await batchify(tezos.wallet.batch([]), voteParams).send();
-    await op.confirmation();
-    handleSuccessToast();
+    await confirmOperation(op.opHash);
     getBalance();
   } catch (e) {
-    updateToast(e);
+    updateToast(e as Error);
   }
 };

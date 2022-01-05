@@ -4,12 +4,12 @@ import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
-import useUpdateToast from '@hooks/useUpdateToast';
 import { useNetwork, useTezos, useTokens } from '@utils/dapp';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
 
+import { useToasts } from './use-toasts';
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
 
 type TokenType = 'fa1.2' | 'fa2';
@@ -48,7 +48,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
-  const updateToast = useUpdateToast();
+  const { showErrorToast } = useToasts();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
     const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];
@@ -113,14 +113,12 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e);
-      updateToast({
-        type: 'error',
-        render: 'Token to token exchangers not loaded'
-      });
+
+      showErrorToast('Token to token exchangers not loaded');
 
       return undefined;
     }
-  }, [tokens, networkId, updateToast]);
+  }, [tokens, networkId, showErrorToast]);
 
   const tokensSWRKey = useMemo(() => tokens.map(getTokenSlug).join(','), [tokens]);
 
