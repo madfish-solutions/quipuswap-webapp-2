@@ -4,7 +4,7 @@ import { useFlowToasts } from '@hooks/use-flow-toasts';
 
 import { confirmOperation } from './confirm-operation.service';
 import { ConfirmOperationOptions } from './confirm-operation.types';
-import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operations.toast';
+import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
 
 export const useConfirmOperation = () => {
   const { showSuccessToast, showInfoToast, showErrorToast } = useFlowToasts();

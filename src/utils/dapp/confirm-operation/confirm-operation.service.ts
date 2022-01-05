@@ -4,7 +4,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { CONFIRM_TIMEOUT, SYNC_INTERVAL } from './confirm-operation.config';
 import { ConfirmationTimeoutError, ConfirmPollingCanceledError } from './confirm-operation.errors';
 import { ConfirmOperationOptions } from './confirm-operation.types';
-import { findOperation } from './confirm-operations.helpers';
+import { findOperation } from './confirm-operation.helpers';
 
 export const confirmOperation = async (
   tezos: TezosToolkit,
