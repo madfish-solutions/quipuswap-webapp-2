@@ -42,6 +42,9 @@ export const useRemoveLiquidityService = (
     });
     setTokenAOutput('');
     setTokenBOutput('');
+    setValidatedInputMessage(undefined);
+    setValidatedOutputMessageA(undefined);
+    setValidatedOutputMessageB(undefined);
   }, [dex, tokenA, tokenB]);
 
   const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
@@ -94,7 +97,7 @@ export const useRemoveLiquidityService = (
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lpTokenInput, pairInfo]);
+  }, [pairInfo, lpTokenInput, lpTokenBalance]);
 
   const handleBalance = (value: string) => setLpTokenInput(value);
 
