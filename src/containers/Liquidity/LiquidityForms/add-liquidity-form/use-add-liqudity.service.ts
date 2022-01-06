@@ -46,6 +46,8 @@ export const useAddLiquidityService = (
     tokenAInput: string,
     tokenB: WhitelistedToken,
     pairInfo: Nullable<PairInfo>,
+    tokenABalance: Nullable<BigNumber>,
+    tokenBBalance: Nullable<BigNumber>,
     setTokenAInput: Dispatch<SetStateAction<string>>,
     setTokenBInput: Dispatch<SetStateAction<string>>,
     setValidationMessageTokenA: Dispatch<SetStateAction<Undefined<string>>>,
@@ -99,12 +101,14 @@ export const useAddLiquidityService = (
       return;
     }
 
-    if (changedToken === LastChangedToken.tokenA) {
+    if (changedToken === LastChangedToken.tokenB) {
       tokensCalculations(
         tokenA,
         tokenAInput,
         tokenB,
         pairInfo,
+        tokenABalance,
+        tokenBBalance,
         setTokenAInput,
         setTokenBInput,
         setValidationMessageTokenA,
@@ -116,6 +120,8 @@ export const useAddLiquidityService = (
         tokenBInput,
         tokenA,
         pairInfo,
+        tokenABalance,
+        tokenBBalance,
         setTokenBInput,
         setTokenAInput,
         setValidationMessageTokenB,
@@ -145,6 +151,8 @@ export const useAddLiquidityService = (
       event.target.value,
       tokenB,
       pairInfo,
+      tokenABalance,
+      tokenBBalance,
       setTokenAInput,
       setTokenBInput,
       setValidationMessageTokenA,
@@ -160,6 +168,8 @@ export const useAddLiquidityService = (
       event.target.value,
       tokenA,
       pairInfo,
+      tokenBBalance,
+      tokenABalance,
       setTokenBInput,
       setTokenAInput,
       setValidationMessageTokenB,

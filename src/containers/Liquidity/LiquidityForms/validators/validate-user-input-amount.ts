@@ -4,7 +4,7 @@ import { i18n } from 'next-i18next';
 import { Nullable, Undefined } from '@utils/types';
 
 export const validateUserInputAmount = (inputValue: BigNumber, userBalance: Nullable<BigNumber>): Undefined<string> => {
-  if (userBalance && inputValue.gt(userBalance)) {
+  if (!userBalance || inputValue.gt(userBalance)) {
     return i18n?.t('common|Insufficient funds') || 'Insufficient funds';
   }
 
