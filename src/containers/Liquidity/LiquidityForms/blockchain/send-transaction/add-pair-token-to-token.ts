@@ -4,36 +4,35 @@ import BigNumber from 'bignumber.js';
 
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
-import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
-import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
+import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
+import { getValidPairParams } from '../../helpers/get-valid-pair-params';
 
-export const addLiquidityTokenToToken = async (
+export const addPairTokenToToken = async (
   tezos: TezosToolkit,
-  accountPkh: string,
   dex: FoundDex,
-  id: BigNumber,
-  tokenAInput: string,
+  accountPkh: string,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  totalSupply: BigNumber,
-  tokenAPool: BigNumber,
-  tokenBPool: BigNumber
+  tokenAInput: string,
+  tokenBInput: string
 ) => {
   const { address: dexAddress } = dex.contract;
-  const { decimals: decimalsA } = tokenA.metadata;
 
   const tokenABN = new BigNumber(tokenAInput);
-  const tokenAAmount = toDecimals(tokenABN, decimalsA);
-
-  const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
-  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
+  const tokenBBN = new BigNumber(tokenBInput);
+  const tokenAAmount = toDecimals(tokenABN, tokenA);
+  const tokenBAmount = toDecimals(tokenBBN, tokenB);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
-  const deadline = await getDeadline(tezos);
-  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, deadline);
+
+  const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
+
+  if (!validAddPairParams) {
+    return;
+  }
 
   return await (
     await batchOperations(tezos, [
@@ -41,7 +40,7 @@ export const addLiquidityTokenToToken = async (
       tokenBResetOperator,
       tokenAUpdateOperator,
       tokenBUpdateOperator,
-      investParams
+      validAddPairParams
     ])
   ).send();
 };

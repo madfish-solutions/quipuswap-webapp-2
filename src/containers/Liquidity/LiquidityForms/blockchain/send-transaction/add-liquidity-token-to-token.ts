@@ -4,35 +4,36 @@ import BigNumber from 'bignumber.js';
 
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
+import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
-import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
-import { getValidPairParams } from './get-valid-pair-params';
+import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
-export const addPairTokenToToken = async (
+export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
-  dex: FoundDex,
   accountPkh: string,
+  dex: FoundDex,
+  id: BigNumber,
+  tokenAInput: string,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  tokenAInput: string,
-  tokenBInput: string
+  totalSupply: BigNumber,
+  tokenAPool: BigNumber,
+  tokenBPool: BigNumber
 ) => {
   const { address: dexAddress } = dex.contract;
+  const { decimals: decimalsA } = tokenA.metadata;
 
   const tokenABN = new BigNumber(tokenAInput);
-  const tokenBBN = new BigNumber(tokenBInput);
-  const tokenAAmount = toDecimals(tokenABN, tokenA);
-  const tokenBAmount = toDecimals(tokenBBN, tokenB);
+  const tokenAAmount = toDecimals(tokenABN, decimalsA);
+
+  const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
+  const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
-
-  const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);
-
-  if (!validAddPairParams) {
-    return;
-  }
+  const deadline = await getDeadline(tezos);
+  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, deadline);
 
   return await (
     await batchOperations(tezos, [
@@ -40,7 +41,7 @@ export const addPairTokenToToken = async (
       tokenBResetOperator,
       tokenAUpdateOperator,
       tokenBUpdateOperator,
-      validAddPairParams
+      investParams
     ])
   ).send();
 };

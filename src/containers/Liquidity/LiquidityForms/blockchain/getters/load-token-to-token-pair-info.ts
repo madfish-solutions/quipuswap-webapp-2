@@ -2,9 +2,9 @@ import { FoundDex } from '@quipuswap/sdk';
 
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { PairInfo } from '../add-liquidity-form';
-import { newGetValidMichelTemplate } from './new-get-valid-michel-template';
-import { sortTokensPair } from './sort-tokens-pair';
+import { PairInfo } from '../../add-liquidity-form';
+import { newGetValidMichelTemplate } from '../../helpers/new-get-valid-michel-template';
+import { sortTokensPair } from '../../helpers/sort-tokens-pair';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');

@@ -166,10 +166,14 @@ export interface PoolTableType {
     token1: {
       icon: string;
       symbol: string;
+      id: string;
+      tokenId: string;
     };
     token2: {
       icon: string;
       symbol: string;
+      id: string;
+      tokenId: string;
     };
   };
   data: {

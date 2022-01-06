@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { WhitelistedToken } from '@utils/types';
 
-import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
+import { allowContractSpendYourTokens } from '../blockchain';
 
 const RESET_AMOUNT = 0;
 const RESET_AMOUNT_BN = new BigNumber(RESET_AMOUNT);

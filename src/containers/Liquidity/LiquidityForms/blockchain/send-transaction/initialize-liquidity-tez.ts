@@ -21,7 +21,5 @@ export const initializeLiquidityTez = async (
 
   const initializeLiquidityParams = await getInitializeLiquidityParams(tezos, factories, token, tokenValue, tezValue);
 
-  const walletOperation = await batchify(tezos.wallet.batch([]), initializeLiquidityParams).send();
-
-  return walletOperation.confirmation();
+  return await batchify(tezos.wallet.batch([]), initializeLiquidityParams).send();
 };

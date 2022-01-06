@@ -52,6 +52,7 @@
   "Minimal value is {{min}}": "Minimal value is {{min}}",
   "Maximal value is {{max}}": "Maximal value is {{max}}",
   "Value has to be a number between {{min}} and {{max}}": "Value has to be a number between {{min}} and {{max}}",
+  "deadlineOutOfRangeError": "Deadline has to be between 1m and 30 days (43200m)",
   "Error {{message}}": "Error: {{message}}",
   "Slippage": "Slippage",
   "Transaction deadline": "Transaction deadline"
