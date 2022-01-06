@@ -1,6 +1,11 @@
-export const ADD_LIQUIDITY_TEZ_MESSAGE = '';
-export const ADD_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE = '';
-export const ADD_PAIR_TOKEN_TO_TOKEN_MESSAGE = '';
-export const INITIALIZE_LIQUIDITY_TEZ_MESSAGE = '';
-export const REMOVE_LIQUIDITY_TEZ_MESSAGE = '';
-export const REMOVE_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE = '';
+export const getAddLiquidityMessage = (firstTokenName: string, secondTokenName: string) => {
+  return `The liquidity was invested to the ${firstTokenName}/${secondTokenName} pool!`;
+};
+
+export const getInitializeLiquidityMessage = (firstTokenName: string, secondTokenName: string) => {
+  return `The the new ${firstTokenName}/${secondTokenName} pool was launched!`;
+};
+
+export const getRemoveLiquidityMessage = (firstTokenName: string, secondTokenName: string) => {
+  return `The liquidity was removed from the ${firstTokenName}/${secondTokenName} pool!`;
+};

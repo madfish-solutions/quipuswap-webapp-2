@@ -4,7 +4,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TransactionOperation, TransactionWalletOperation } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -12,7 +12,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { REMOVE_LIQUIDITY_TEZ_MESSAGE, REMOVE_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE } from '../send-transaction-messages';
+import { getRemoveLiquidityMessage } from '../send-transaction-messages';
 import { validateUserInput, validateUserInputAmount } from '../validators';
 
 export const useRemoveLiquidityService = (
@@ -128,19 +128,25 @@ export const useRemoveLiquidityService = (
         tokenB
       );
 
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
+
       if (removeLiquidityTokenToTokenOperation instanceof TransactionOperation) {
         await confirmOperation(removeLiquidityTokenToTokenOperation.hash, {
-          message: REMOVE_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE
+          message: removeLiquidityMessage
         });
       } else if (removeLiquidityTokenToTokenOperation instanceof TransactionWalletOperation) {
-        await confirmOperation(removeLiquidityTokenToTokenOperation.opHash, {
-          message: REMOVE_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE
-        });
+        await confirmOperation(removeLiquidityTokenToTokenOperation.opHash, { message: removeLiquidityMessage });
       }
     } else {
       const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
 
-      await confirmOperation(removeLiquidityTezOperation.opHash, { message: REMOVE_LIQUIDITY_TEZ_MESSAGE });
+      const { name: tokenAName } = tokenA.metadata;
+      const { name: tokenBName } = tokenB.metadata;
+
+      const notTezosTokenName = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
+      await confirmOperation(removeLiquidityTezOperation.opHash, {
+        message: getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenName)
+      });
     }
   };
 
