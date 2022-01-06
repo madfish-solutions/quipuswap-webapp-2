@@ -8,8 +8,11 @@ export const validateUserInputAmount = (
   inputValue: BigNumber,
   userBalance: Nullable<BigNumber>
 ): Undefined<string> => {
-  const isWalletConnectedAndBalanceLoaded = userBalance && accountPkh;
-  if (isWalletConnectedAndBalanceLoaded && userBalance && inputValue.gt(userBalance)) {
+  if (!accountPkh) {
+    return undefined;
+  }
+
+  if (!userBalance || inputValue.gt(userBalance)) {
     return i18n?.t('common|Insufficient funds') || 'Insufficient funds';
   }
 

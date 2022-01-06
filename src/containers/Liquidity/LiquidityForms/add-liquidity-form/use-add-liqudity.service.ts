@@ -184,6 +184,7 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
+    setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       value,
       tokenA,
@@ -199,6 +200,7 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
+    setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       value,
       tokenB,
