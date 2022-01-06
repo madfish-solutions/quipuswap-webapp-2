@@ -4,14 +4,13 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { validateUserInput } from '@containers/Liquidity/LiquidityForms/validators/validate-user-input';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
+import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validateUserInputAmount } from '../validators';
+import { validateUserInput, validateUserInputAmount } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,

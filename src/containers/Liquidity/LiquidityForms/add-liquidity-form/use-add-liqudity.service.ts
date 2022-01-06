@@ -8,14 +8,8 @@ import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
-import {
-  addLiquidityTez,
-  addLiquidityTokenToToken,
-  addPairTokenToToken,
-  calculateTokenAmount,
-  initializeLiquidityTez,
-  sortTokensContracts
-} from '../helpers';
+import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
+import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateUserInputAmount, validateUserInput } from '../validators';
 import { LastChangedTokenEnum } from './last-changed-token.enum';

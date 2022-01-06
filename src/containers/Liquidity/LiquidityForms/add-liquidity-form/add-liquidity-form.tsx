@@ -5,11 +5,11 @@ import { Button } from '@quipuswap/ui-kit';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { useAddLiquidityService } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/use-add-liqudity.service';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
+import { useAddLiquidityService } from './use-add-liqudity.service';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const {

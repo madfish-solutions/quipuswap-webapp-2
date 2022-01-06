@@ -3,10 +3,11 @@ import { useState, useEffect } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { sortTokensContracts, getValidMichelTemplate, isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
-import { loadUserLpBalanceTez } from '@containers/Liquidity/LiquidityForms/helpers/load-user-lp-balance-tez';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { WhitelistedToken } from '@utils/types';
+
+import { loadUserLpBalanceTez } from '../blockchain';
+import { getValidMichelTemplate, isTezInPair, sortTokensContracts } from '../helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
