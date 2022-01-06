@@ -2,7 +2,7 @@ import { Token, batchify, initializeLiquidity as getInitializeLiquidityParams } 
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES } from '@app.config';
 import { QSMainNet } from '@utils/types';
 
 const FIRST_FACTORY_INDEX = 0;

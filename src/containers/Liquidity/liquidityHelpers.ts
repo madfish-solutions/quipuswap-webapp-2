@@ -10,7 +10,7 @@ import {
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES } from '@utils/defaults';
+import { FACTORIES } from '@app.config';
 import { fromDecimals, isTokenEqual, toDecimals } from '@utils/helpers';
 import { QSMainNet, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { FEE_RATE } from '@utils/defaults';
+import { FEE_RATE } from '@app.config';
 import { getTokenSlug, SwapParams } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 

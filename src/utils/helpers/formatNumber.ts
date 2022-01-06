@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_DECIMALS } from '@utils/defaults';
+import { DEFAULT_DECIMALS } from '@app.config';
 
 export interface FormatNumberOptinos {
   decimals?: number;

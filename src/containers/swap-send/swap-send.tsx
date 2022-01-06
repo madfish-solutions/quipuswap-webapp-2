@@ -82,7 +82,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   useEffect(() => {
     if (!amountsAreEqual(calculatedInputAmount, prevCalculatedInputAmountRef.current)) {
       setFieldValue(SwapField.INPUT_AMOUNT, calculatedInputAmount).then(() => {
-        setFieldTouched(SwapField.INPUT_AMOUNT, true);
+        validateField(SwapField.INPUT_AMOUNT);
+        if (calculatedInputAmount) {
+          setFieldTouched(SwapField.INPUT_AMOUNT, true);
+        }
       });
       prevCalculatedInputAmountRef.current = calculatedInputAmount;
     }
@@ -90,7 +93,15 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       setFieldValue(SwapField.OUTPUT_AMOUNT, calculatedOutputAmount);
       prevCalculatedOutputAmountRef.current = calculatedOutputAmount;
     }
-  }, [calculatedInputAmount, calculatedOutputAmount, inputAmount, outputAmount, setFieldValue, setFieldTouched]);
+  }, [
+    calculatedInputAmount,
+    calculatedOutputAmount,
+    inputAmount,
+    outputAmount,
+    setFieldValue,
+    setFieldTouched,
+    validateField
+  ]);
 
   const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken,
@@ -193,8 +204,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       ) {
         setValues(prevValues => ({
           ...prevValues,
-          token1: newInputToken,
-          outputToken: newOutputToken
+          [SwapField.INPUT_TOKEN]: newInputToken,
+          [SwapField.OUTPUT_TOKEN]: newOutputToken
         }));
         // eslint-disable-next-line no-console
         Promise.all([updateBalance(newInputToken), updateBalance(newOutputToken)]).catch(console.error);

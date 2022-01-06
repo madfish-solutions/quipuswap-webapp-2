@@ -2,13 +2,13 @@ import { batchify } from '@quipuswap/sdk';
 import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@app.config';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
   getAllowanceTransferParams,
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
-import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@utils/defaults';
 import { getTokenSlug } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
@@ -126,7 +126,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
           const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
           swapsParams.push(
             ttDexContract!.methods
-              .swap(ttdexSwapStepsParams, ttdexSwapInput, currentDexInput, accountPkh, deadline)
+              .swap(ttdexSwapStepsParams, ttdexSwapInput, currentDexInput, accountPkh, String(deadline))
               .toTransferParams({ storageLimit: 1000 })
           );
           ttdexSwapStepsParams = [];
@@ -186,7 +186,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
             .times(new BigNumber(1).minus(slippageTolerance))
             .integerValue(BigNumber.ROUND_FLOOR),
           recipient,
-          deadline.toFixed()
+          String(deadline)
         )
         .toTransferParams({ storageLimit: 1000 })
     );

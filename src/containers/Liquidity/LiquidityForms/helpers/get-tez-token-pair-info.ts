@@ -1,8 +1,9 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { PairInfo } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/pair-info.interface';
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN } from '@app.config';
 import { Nullable, WhitelistedToken } from '@utils/types';
+
+import { PairInfo } from '../add-liquidity-form/pair-info.interface';
 
 export const getTezTokenPairInfo = (
   dex: FoundDex,

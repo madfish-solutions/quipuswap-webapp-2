@@ -1,4 +1,4 @@
-import { TEZOS_TOKEN } from '@utils/defaults';
+import { TEZOS_TOKEN } from '@app.config';
 import { WhitelistedToken } from '@utils/types';
 
 export const transformWhitelistedTokenToAsset = (token: WhitelistedToken) =>

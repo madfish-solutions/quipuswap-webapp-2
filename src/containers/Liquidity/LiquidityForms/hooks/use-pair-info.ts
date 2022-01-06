@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
+import { TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { PairInfo } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/pair-info.interface';
 import { getTezTokenPairInfo } from '@containers/Liquidity/LiquidityForms/helpers/get-tez-token-pair-info';
 import { loadTokenToTokenPairInfo } from '@containers/Liquidity/LiquidityForms/helpers/load-token-to-token-pair-info';
-import { TOKEN_TO_TOKEN_DEX } from '@utils/defaults';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const usePairInfo = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
