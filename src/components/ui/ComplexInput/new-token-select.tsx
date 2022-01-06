@@ -95,12 +95,6 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   const handleAmountChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
     const numVal = new BigNumber(val || 0);
-    /* const indexOfDot = val.indexOf('.');
-    const assetDecimals = tokenDecimals ?? Infinity;
-    if (isFoundIndex(indexOfDot) && val.length - indexOfDot > assetDecimals + 1) {
-      val = val.substring(0, indexOfDot + assetDecimals + 1);
-      numVal = new BigNumber(val);
-    } */
 
     if (!numVal.isNaN() && numVal.gte(0)) {
       setLocalAmount(val);
