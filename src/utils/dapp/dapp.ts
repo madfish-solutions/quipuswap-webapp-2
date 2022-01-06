@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { NetworkType } from '@airgap/beacon-sdk';
-// @ts-ignore
-// eslint-disable-next-line import/no-unresolved
-import { NoTempleWalletError } from '@errors';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
@@ -19,6 +16,7 @@ import {
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK
 } from '@app.config';
+import { NoTempleWalletError } from '@app/errors/NoTempleWalletError.error';
 import { getBakers } from '@utils/dapp/bakers';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { getTokens, saveCustomToken } from '@utils/dapp/tokens';

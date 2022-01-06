@@ -34,10 +34,9 @@ module.exports = override(
     '@graphql': path.resolve(__dirname, 'src/graphql'),
 
     '@pages': path.resolve(__dirname, 'src/pages'),
-
     '@components': path.resolve(__dirname, 'src/components'),
     '@containers': path.resolve(__dirname, 'src/containers'),
-    '@errors': path.resolve(__dirname, 'src/errors'),
+    '@app/errors': path.resolve(__dirname, 'src/errors'),
     '@styles': path.resolve(__dirname, 'src/styles'),
     '@utils': path.resolve(__dirname, 'src/utils'),
     '@hooks': path.resolve(__dirname, 'src/hooks'),
