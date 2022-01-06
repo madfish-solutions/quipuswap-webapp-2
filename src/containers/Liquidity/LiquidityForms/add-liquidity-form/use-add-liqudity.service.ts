@@ -39,27 +39,23 @@ export const useAddLiquidityService = (
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
   const tokensCalculations = (
-    tokenAInput: string,
-    tokenA: WhitelistedToken,
-    tokenB: WhitelistedToken,
+    tokenXInput: string,
     pairInfo: Nullable<PairInfo>,
-    tokenABalance: Nullable<BigNumber>,
-    tokenBBalance: Nullable<BigNumber>,
-    setTokenAInput: Dispatch<SetStateAction<string>>,
-    setTokenBInput: Dispatch<SetStateAction<string>>,
-    setValidationMessageTokenA: Dispatch<SetStateAction<Undefined<string>>>,
-    setValidationMessageTokenB: Dispatch<SetStateAction<Undefined<string>>>
+    [tokenX, tokenY]: [WhitelistedToken, WhitelistedToken],
+    [tokenXBalance, tokenYBalance]: [Nullable<BigNumber>,Nullable<BigNumber>],
+    [setTokenXInput, setTokenYInput]: [Dispatch<SetStateAction<string>>,Dispatch<SetStateAction<string>>],
+    [setValidationMessageTokenX, setValidationMessageTokenY]: [Dispatch<SetStateAction<Undefined<string>>> ,Dispatch<SetStateAction<Undefined<string>>> ]
   ) => {
-    setTokenAInput(tokenAInput);
-
-    if (tokenAInput === '') {
-      setTokenBInput('');
-      setValidationMessageTokenA(undefined);
-      setValidationMessageTokenB(undefined);
-
+    setTokenXInput(tokenXInput);
+  
+    if (tokenXInput === '') {
+      setTokenYInput('');
+      setValidationMessageTokenX(undefined);
+      setValidationMessageTokenY(undefined);
+  
       return;
     }
-
+  
     if (
       !pairInfo ||
       pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
@@ -68,31 +64,36 @@ export const useAddLiquidityService = (
     ) {
       return;
     }
-
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
-
-    const tokenABN = new BigNumber(tokenAInput);
-    const tokenAAmount = toDecimals(tokenABN, tokenA);
-
-    const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
-    setValidationMessageTokenA(validationA);
-
-    if (validationA === 'Invalid input') {
-      setTokenBInput('');
-
+  
+    const { 
+      totalSupply,
+      tokenAPool: tokenXPool, 
+      tokenBPool: tokenYPool, 
+      tokenA: pairTokenX 
+    } = pairInfo;
+  
+    const tokenXBN = new BigNumber(tokenXInput);
+    const tokenXAmount = toDecimals(tokenXBN, tokenX);
+  
+    const validationX = validations(accountPkh, tokenXAmount, tokenXBalance);
+    setValidationMessageTokenX(validationX);
+  
+    if (validationX === 'Invalid input') {
+      setTokenYInput('');
+  
       return;
     }
-
-    const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
-    const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
-    const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
-
-    const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
-
-    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance);
-    setValidationMessageTokenB(validationB);
-
-    setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
+  
+    const isTokensOrderValid = tokenX.contractAddress === pairTokenX.contractAddress;
+    const validTokenXPool = isTokensOrderValid ? tokenXPool : tokenYPool;
+    const validTokenYPool = isTokensOrderValid ? tokenYPool : tokenXPool;
+  
+    const tokenYAmount = calculateTokenAmount(tokenXAmount, totalSupply, validTokenXPool, validTokenYPool);
+  
+    const validationY = validations(accountPkh, tokenYAmount, tokenYBalance);
+    setValidationMessageTokenY(validationY);
+  
+    setTokenYInput(fromDecimals(tokenYAmount, tokenY).toFixed());
   };
 
   useEffect(() => {
@@ -103,28 +104,20 @@ export const useAddLiquidityService = (
     if (lastEditedInput === LastChangedToken.tokenA) {
       tokensCalculations(
         tokenAInput,
-        tokenA,
-        tokenB,
         pairInfo,
-        tokenABalance,
-        tokenBBalance,
-        setTokenAInput,
-        setTokenBInput,
-        setValidationMessageTokenA,
-        setValidationMessageTokenB
+        [tokenA, tokenB],
+        [tokenABalance, tokenBBalance],
+        [setTokenAInput, setTokenBInput],
+        [setValidationMessageTokenA, setValidationMessageTokenB],
       );
     } else {
       tokensCalculations(
         tokenBInput,
-        tokenB,
-        tokenA,
         pairInfo,
-        tokenBBalance,
-        tokenABalance,
-        setTokenBInput,
-        setTokenAInput,
-        setValidationMessageTokenB,
-        setValidationMessageTokenA
+        [tokenB, tokenA],
+        [tokenBBalance, tokenABalance],
+        [setTokenBInput, setTokenAInput],
+        [setValidationMessageTokenB, setValidationMessageTokenA],
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -152,15 +145,11 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       event.target.value,
-      tokenA,
-      tokenB,
       pairInfo,
-      tokenABalance,
-      tokenBBalance,
-      setTokenAInput,
-      setTokenBInput,
-      setValidationMessageTokenA,
-      setValidationMessageTokenB
+      [tokenA, tokenB],
+      [tokenABalance, tokenBBalance],
+      [setTokenAInput, setTokenBInput],
+      [setValidationMessageTokenA, setValidationMessageTokenB],
     );
   };
 
@@ -168,15 +157,11 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       event.target.value,
-      tokenB,
-      tokenA,
       pairInfo,
-      tokenBBalance,
-      tokenABalance,
-      setTokenBInput,
-      setTokenAInput,
-      setValidationMessageTokenB,
-      setValidationMessageTokenA
+      [tokenB, tokenA],
+      [tokenBBalance, tokenABalance],
+      [setTokenBInput, setTokenAInput],
+      [setValidationMessageTokenB, setValidationMessageTokenA],
     );
   };
 
@@ -184,15 +169,11 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       value,
-      tokenA,
-      tokenB,
       pairInfo,
-      tokenABalance,
-      tokenBBalance,
-      setTokenAInput,
-      setTokenBInput,
-      setValidationMessageTokenA,
-      setValidationMessageTokenB
+      [tokenA, tokenB],
+      [tokenABalance, tokenBBalance],
+      [setTokenAInput, setTokenBInput],
+      [setValidationMessageTokenA, setValidationMessageTokenB],
     );
   };
 
@@ -200,15 +181,11 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       value,
-      tokenB,
-      tokenA,
       pairInfo,
-      tokenBBalance,
-      tokenABalance,
-      setTokenBInput,
-      setTokenAInput,
-      setValidationMessageTokenB,
-      setValidationMessageTokenA
+      [tokenB, tokenA],
+      [tokenBBalance, tokenABalance],
+      [setTokenBInput, setTokenAInput],
+      [setValidationMessageTokenB, setValidationMessageTokenA],
     );
   };
 
