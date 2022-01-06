@@ -1,13 +1,22 @@
 import React, { useMemo } from 'react';
 
-import { Button, Card, CardCell, ExternalLink, CurrencyAmount, Tooltip, Route, RouteProps } from '@quipuswap/ui-kit';
+import {
+  Button,
+  Card,
+  CardCell,
+  ExternalLink,
+  CurrencyAmount,
+  Tooltip,
+  Route,
+  RouteProps,
+  DollarEquivalent
+} from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import s from '@styles/CommonContainer.module.sass';
-import { useNetwork } from '@utils/dapp';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
@@ -92,11 +101,8 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const exchangeRates = useNewExchangeRates();
-  const network = useNetwork();
-  const inputTokenUsdExchangeRate =
-    network.type === 'main' ? inputToken && exchangeRates[getTokenSlug(inputToken)] : undefined;
-  const outputTokenUsdExchangeRate =
-    network.type === 'main' ? outputToken && exchangeRates[getTokenSlug(outputToken)] : undefined;
+  const inputTokenUsdExchangeRate = inputToken ? exchangeRates[getTokenSlug(inputToken)] : undefined;
+  const outputTokenUsdExchangeRate = outputToken ? exchangeRates[getTokenSlug(outputToken)] : undefined;
 
   const sellUsdRate = useMemo(
     () => (outputTokenUsdExchangeRate && sellRate ? sellRate.times(outputTokenUsdExchangeRate) : undefined),
@@ -133,13 +139,19 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <div className={s.cellAmount}>
           {sellRate && (
             <>
-              <CurrencyAmount amount="1" currency={inputToken ? getWhitelistedTokenSymbol(inputToken) : ''} />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount
-                amount={FormatNumber(sellRate)}
-                currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
-                dollarEquivalent={sellUsdRate?.toFixed(2)}
-              />
+              <div className={s.rateView}>
+                <CurrencyAmount amount="1" currency={inputToken ? getWhitelistedTokenSymbol(inputToken) : ''} />
+                <span className={s.equal}>=</span>
+                <CurrencyAmount
+                  amount={FormatNumber(sellRate)}
+                  currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
+                />
+              </div>
+              {sellUsdRate && (
+                <div className={s.usdEquityWrapper}>
+                  <DollarEquivalent dollarEquivalent={sellUsdRate.toFixed(2)} />
+                </div>
+              )}
             </>
           )}
         </div>
@@ -161,13 +173,19 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         <div className={s.cellAmount}>
           {buyRate && (
             <>
-              <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)} />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount
-                amount={FormatNumber(buyRate)}
-                currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
-                dollarEquivalent={buyUsdRate?.toFixed(2)}
-              />
+              <div className={s.rateView}>
+                <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)} />
+                <span className={s.equal}>=</span>
+                <CurrencyAmount
+                  amount={FormatNumber(buyRate)}
+                  currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
+                />
+              </div>
+              {buyUsdRate && (
+                <div className={s.usdEquityWrapper}>
+                  <DollarEquivalent dollarEquivalent={buyUsdRate.toFixed(2)} />
+                </div>
+              )}
             </>
           )}
         </div>

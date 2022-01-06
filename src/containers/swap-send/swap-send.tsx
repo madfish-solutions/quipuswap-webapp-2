@@ -369,13 +369,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
-  const shouldHideExchangeRates = network.type === 'test';
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
-  const inputExchangeRate =
-    inputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[inputTokenSlug];
-  const outputExchangeRate =
-    outputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[outputTokenSlug];
+  const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
+  const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors)) || !accountPkh;
 
   return (
