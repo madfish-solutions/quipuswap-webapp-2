@@ -5,12 +5,19 @@ import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import {
+  ADD_LIQUIDITY_TEZ_MESSAGE,
+  ADD_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE,
+  ADD_PAIR_TOKEN_TO_TOKEN_MESSAGE,
+  INITIALIZE_LIQUIDITY_TEZ_MESSAGE
+} from '../send-transaction-messages';
 import { validateUserInputAmount, validateUserInput } from '../validators';
 import { LastChangedTokenEnum } from './last-changed-token.enum';
 
@@ -27,6 +34,7 @@ export const useAddLiquidityService = (
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
+  const confirmOperation = useConfirmOperation();
 
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
@@ -265,21 +273,39 @@ export const useAddLiquidityService = (
     const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
     if (!pairInfo) {
-      return await addPairTokenToToken(tezos, dex, accountPkh, pairTokenA, pairTokenB, pairInputA, pairInputB);
-    }
+      const addPairTokenToTokenOperation = await addPairTokenToToken(
+        tezos,
+        dex,
+        accountPkh,
+        pairTokenA,
+        pairTokenB,
+        pairInputA,
+        pairInputB
+      );
 
-    return await addLiquidityTokenToToken(
-      tezos,
-      accountPkh,
-      dex,
-      pairInfo.id!,
-      pairInputA,
-      pairTokenA,
-      pairTokenB,
-      pairInfo.totalSupply,
-      pairInfo.tokenAPool,
-      pairInfo.tokenBPool
-    );
+      if (addPairTokenToTokenOperation) {
+        return await confirmOperation(addPairTokenToTokenOperation.opHash, {
+          message: ADD_PAIR_TOKEN_TO_TOKEN_MESSAGE
+        });
+      }
+    } else {
+      const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
+        tezos,
+        accountPkh,
+        dex,
+        pairInfo.id!,
+        pairInputA,
+        pairTokenA,
+        pairTokenB,
+        pairInfo.totalSupply,
+        pairInfo.tokenAPool,
+        pairInfo.tokenBPool
+      );
+
+      return await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
+        message: ADD_LIQUIDITY_TOKEN_TO_TOKEN_MESSAGE
+      });
+    }
   };
 
   const investTezosToToken = async () => {
@@ -295,9 +321,9 @@ export const useAddLiquidityService = (
       pairInfo && pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) && pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      await addLiquidityTez(tezos, dex, tezValue);
+      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
 
-      return;
+      return await confirmOperation(addLiquidityTezOperation.opHash, { message: ADD_LIQUIDITY_TEZ_MESSAGE });
     }
 
     const notTezToken = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenB : tokenA;
@@ -309,7 +335,18 @@ export const useAddLiquidityService = (
     };
     const notTezTokenBN = new BigNumber(notTezTokenInput);
     const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
-    await initializeLiquidityTez(tezos, networkId, token, tokenBValue, tezValue);
+
+    const initializeLiquidityTezOperation = await initializeLiquidityTez(
+      tezos,
+      networkId,
+      token,
+      tokenBValue,
+      tezValue
+    );
+
+    return await confirmOperation(initializeLiquidityTezOperation.opHash, {
+      message: INITIALIZE_LIQUIDITY_TEZ_MESSAGE
+    });
   };
 
   const handleAddLiquidity = async () => {
