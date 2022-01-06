@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
+import { getHref } from './get-swap-href.helper';
 import s from './PoolCardTable.module.sass';
 
 interface PoolCardItemProps {
@@ -81,7 +82,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
         <Button theme="secondary" className={s.button} href={pool.buttons.first.href} external>
           {t('home|Analytics')}
         </Button>
-        <Button href="/swap" className={s.button}>
+        <Button href={getHref(pool)} className={s.button}>
           {t('home|Trade')}
         </Button>
       </div>
