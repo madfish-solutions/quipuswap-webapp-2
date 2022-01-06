@@ -39,7 +39,7 @@ export const useAddLiquidityService = (
   const [tokenBInput, setTokenBInput] = useState('');
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
-  const [changedToken, setChangedToken] = useState<Nullable<LastChangedToken>>(null);
+  const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -77,7 +77,7 @@ export const useAddLiquidityService = (
     const tokenABN = new BigNumber(tokenAInput);
     const tokenAAmount = toDecimals(tokenABN, tokenA);
 
-    const validationA = validations(tokenAAmount, tokenABalance);
+    const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
     setValidationMessageTokenA(validationA);
 
     if (validationA === 'Invalid input') {
@@ -92,18 +92,18 @@ export const useAddLiquidityService = (
 
     const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
 
-    const validationB = validations(tokenBAmount, tokenBBalance);
+    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance);
     setValidationMessageTokenB(validationB);
 
     setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
   };
 
   useEffect(() => {
-    if (!changedToken) {
+    if (!lastEditedInput) {
       return;
     }
 
-    if (changedToken === LastChangedToken.tokenB) {
+    if (lastEditedInput === LastChangedToken.tokenA) {
       tokensCalculations(
         tokenAInput,
         tokenA,
@@ -131,23 +131,28 @@ export const useAddLiquidityService = (
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairInfo]);
+  }, [pairInfo, tokenABalance, tokenBBalance]);
 
   const handleSetTokenA = (token: WhitelistedToken) => {
     onTokenAChange(token);
-    setChangedToken(LastChangedToken.tokenA);
-    setTokenAInput('');
+    if (lastEditedInput === LastChangedToken.tokenA) {
+      setTokenBInput('');
+    } else {
+      setTokenAInput('');
+    }
   };
 
   const handleSetTokenB = (token: WhitelistedToken) => {
     onTokenBChange(token);
-    setChangedToken(LastChangedToken.tokenB);
-    setTokenBInput('');
+    if (lastEditedInput === LastChangedToken.tokenB) {
+      setTokenAInput('');
+    } else {
+      setTokenBInput('');
+    }
   };
 
   const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTokenAInput(event.target.value);
-
+    setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       event.target.value,
       tokenA,
@@ -163,6 +168,7 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       event.target.value,
       tokenB,
