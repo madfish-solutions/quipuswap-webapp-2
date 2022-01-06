@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import debouncePromise from 'debounce-promise';
 
 import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@app.config';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useNetwork, useEstimationToolkit } from '@utils/dapp';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
@@ -23,7 +23,7 @@ const DEBOUNCE_DELAY = 250;
 export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageTolerance, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
   const network = useNetwork();
-  const tezos = useTezos();
+  const tezos = useEstimationToolkit();
 
   const [swapFee, setSwapFee] = useState<BigNumber>();
   const updateSwapFee = useMemo(
