@@ -22,7 +22,9 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
-    validationMessage,
+    validatedInputMessage,
+    validatedOutputMessageA,
+    validatedOutputMessageB,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -40,7 +42,12 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
-  const isButtonDisabled = !accountPkh || Boolean(validationMessage) || Boolean(validationMessage) || !lpTokenInput;
+  const isButtonDisabled =
+    !accountPkh ||
+    Boolean(validatedInputMessage) ||
+    Boolean(validatedOutputMessageA) ||
+    Boolean(validatedOutputMessageB) ||
+    !lpTokenInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
 
@@ -59,7 +66,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         notFrozen
         id="liquidity-remove-input"
         className={s.input}
-        error={accountPkh ? validationMessage : undefined}
+        error={validatedInputMessage}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
@@ -71,6 +78,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         handleBalance={noop}
         shouldShowBalanceButtons={false}
         placeholder="0.0"
+        error={validatedOutputMessageA}
         disabled
         notSelectable
       />
@@ -83,6 +91,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         blackListedTokens={blackListedTokens}
         handleBalance={noop}
         shouldShowBalanceButtons={false}
+        error={validatedOutputMessageB}
         placeholder="0.0"
         disabled
         notSelectable

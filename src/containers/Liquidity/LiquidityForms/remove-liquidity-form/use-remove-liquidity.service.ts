@@ -10,7 +10,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 
 import { removeLiquidityTokenToToken, removeLiquidityTez } from '../helpers';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validations } from '../validators';
+import { validateOutputAmount, validations } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
@@ -28,7 +28,9 @@ export const useRemoveLiquidityService = (
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
-  const [validationMessage, setValidationMessage] = useState<Undefined<string>>();
+  const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
+  const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
+  const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [slippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
@@ -54,7 +56,7 @@ export const useRemoveLiquidityService = (
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
-      setValidationMessage(undefined);
+      setValidatedInputMessage(undefined);
 
       return;
     }
@@ -62,7 +64,7 @@ export const useRemoveLiquidityService = (
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
     const validatedInput = validations(lpTokenAmount, lpTokenBalance);
-    setValidationMessage(validatedInput);
+    setValidatedInputMessage(validatedInput);
 
     if (validatedInput === 'Invalid input') {
       setTokenAOutput('');
@@ -73,20 +75,22 @@ export const useRemoveLiquidityService = (
 
     const { decimals: decimalsA } = tokenA.metadata;
     const { decimals: decimalsB } = tokenB.metadata;
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA, tokenB: pairTokenB } = pairInfo;
+    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
 
-    const tokenAPerOneLp =
-      pairTokenA.contractAddress === tokenA.contractAddress
-        ? tokenAPool.dividedBy(totalSupply)
-        : tokenBPool.dividedBy(totalSupply);
-    const tokenBPerOneLp =
-      pairTokenB.contractAddress === tokenB.contractAddress
-        ? tokenBPool.dividedBy(totalSupply)
-        : tokenAPool.dividedBy(totalSupply);
+    const isTokensOrderValid = pairTokenA.contractAddress === tokenA.contractAddress;
+    const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
+    const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
+    const tokenAPerOneLp = validTokenAPool.dividedBy(totalSupply);
+    const tokenBPerOneLp = validTokenBPool.dividedBy(totalSupply);
     const amountTokenA = tokenAPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
     const amountTokenB = tokenBPerOneLp.multipliedBy(lpTokenAmount).integerValue(BigNumber.ROUND_DOWN);
 
+    const validatedOutputA = validateOutputAmount(amountTokenA);
+    const validatedOutputB = validateOutputAmount(amountTokenB);
+
+    setValidatedOutputMessageA(validatedOutputA);
+    setValidatedOutputMessageB(validatedOutputB);
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,7 +115,9 @@ export const useRemoveLiquidityService = (
   };
 
   return {
-    validationMessage,
+    validatedInputMessage,
+    validatedOutputMessageA,
+    validatedOutputMessageB,
     tokenPair,
     accountPkh,
     lpTokenInput,
