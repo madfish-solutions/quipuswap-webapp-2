@@ -11,7 +11,6 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { amountsAreEqual, getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { isFoundIndex } from '@utils/helpers/arrays';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
@@ -37,6 +36,8 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
+
+const MAX_BALANCE_DIGITS = 7;
 
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
@@ -92,14 +93,14 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   };
 
   const handleAmountChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-    let val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
-    let numVal = new BigNumber(val || 0);
-    const indexOfDot = val.indexOf('.');
+    const val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
+    const numVal = new BigNumber(val || 0);
+    /* const indexOfDot = val.indexOf('.');
     const assetDecimals = tokenDecimals ?? Infinity;
     if (isFoundIndex(indexOfDot) && val.length - indexOfDot > assetDecimals + 1) {
       val = val.substring(0, indexOfDot + assetDecimals + 1);
       numVal = new BigNumber(val);
-    }
+    } */
 
     if (!numVal.isNaN() && numVal.gte(0)) {
       setLocalAmount(val);
@@ -139,7 +140,10 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
       return balance.toFixed();
     }
     const integerLog = Math.floor(Math.log10(correctBalance.toNumber()));
-    const decimalPlaces = integerLog >= 0 ? Math.max(0, 6 - integerLog) : Math.max(6, -integerLog + 1);
+    const decimalPlaces =
+      integerLog >= 0
+        ? Math.max(0, MAX_BALANCE_DIGITS - 1 - integerLog)
+        : Math.max(MAX_BALANCE_DIGITS - 1, -integerLog + 1);
 
     return correctBalance.decimalPlaces(decimalPlaces, BigNumber.ROUND_DOWN).toFixed();
   }, [balance, tokenDecimals]);
