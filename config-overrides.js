@@ -33,17 +33,16 @@ module.exports = override(
     '@seo.config': path.resolve(__dirname, 'src/seo.config'),
     '@graphql': path.resolve(__dirname, 'src/graphql'),
 
-    // '@pages/home': path.resolve(__dirname, 'src/pages/home'),
-    '@pages/*': path.resolve(__dirname, 'src/pages/*'),
+    '@pages': path.resolve(__dirname, 'src/pages'),
 
-    '@components/*': path.resolve(__dirname, 'src/components/*'),
-    '@containers/*': path.resolve(__dirname, 'src/containers/*'),
-    '@errors/*': path.resolve(__dirname, 'src/errors/*'),
-    '@styles/*': path.resolve(__dirname, 'src/styles/*'),
-    '@utils/*': path.resolve(__dirname, 'src/utils/*'),
-    '@hooks/*': path.resolve(__dirname, 'src/hooks/*'),
-    '@providers/*': path.resolve(__dirname, 'src/providers/*'),
-    '@icons/*': path.resolve(__dirname, 'src/icons/*'),
-    '@images/*': path.resolve(__dirname, 'src/images/*')
+    '@components': path.resolve(__dirname, 'src/components'),
+    '@containers': path.resolve(__dirname, 'src/containers'),
+    '@errors': path.resolve(__dirname, 'src/errors'),
+    '@styles': path.resolve(__dirname, 'src/styles'),
+    '@utils': path.resolve(__dirname, 'src/utils'),
+    '@hooks': path.resolve(__dirname, 'src/hooks'),
+    '@providers': path.resolve(__dirname, 'src/providers'),
+    '@icons': path.resolve(__dirname, 'src/icons'),
+    '@images': path.resolve(__dirname, 'src/images')
   })
 );
