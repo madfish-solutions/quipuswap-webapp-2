@@ -9,6 +9,8 @@ import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@util
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { PoolTableType } from '@utils/types';
 
+import { getHref } from './get-swap-href.helper';
+
 export const useColumns = () => {
   const { t } = useTranslation(['home']);
 
@@ -84,12 +86,12 @@ export const useColumns = () => {
     },
     {
       id: 'poolButton',
-      accessor: ({ buttons }: PoolTableType) => (
+      accessor: ({ buttons, pair }: PoolTableType) => (
         <div className={s.last}>
           <Button theme="secondary" className={s.button} href={buttons.first.href ?? ''} external>
             {buttons.first.label}
           </Button>
-          <Button href={buttons.second.href ?? ''} className={s.button}>
+          <Button href={getHref({ pair })} className={s.button}>
             {buttons.second.label}
           </Button>
         </div>
