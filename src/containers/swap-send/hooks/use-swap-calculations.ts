@@ -27,7 +27,7 @@ export const useSwapCalculations = () => {
   const onInputPrequisitesChange = useCallback(
     (newOutputAmount: Undefined<BigNumber>, { inputToken: newInputToken, outputToken: newOutputToken }: SwapPair) => {
       if (newOutputAmount && newInputToken && newOutputToken) {
-        const rawNewOutputAmount = toDecimals(newOutputAmount, newOutputToken);
+        const rawNewOutputAmount = toDecimals(newOutputAmount, newOutputToken).integerValue(BigNumber.ROUND_FLOOR);
         const route = getRouteWithOutput({
           outputAmount: rawNewOutputAmount,
           startTokenSlug: getTokenSlug(newInputToken),
@@ -55,7 +55,7 @@ export const useSwapCalculations = () => {
   const onOutputPrequisitesChange = useCallback(
     (newInputAmount: Undefined<BigNumber>, { inputToken: newInputToken, outputToken: newOutputToken }: SwapPair) => {
       if (newInputAmount && newInputToken && newOutputToken) {
-        const rawNewInputAmount = toDecimals(newInputAmount, newInputToken);
+        const rawNewInputAmount = toDecimals(newInputAmount, newInputToken).integerValue(BigNumber.ROUND_FLOOR);
         const route = getRouteWithInput({
           inputAmount: rawNewInputAmount,
           startTokenSlug: getTokenSlug(newInputToken),
