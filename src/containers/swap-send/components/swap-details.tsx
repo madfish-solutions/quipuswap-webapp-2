@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
 import s from '@styles/CommonContainer.module.sass';
+import { useNetwork } from '@utils/dapp';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
@@ -91,16 +92,19 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
 }) => {
   const { t } = useTranslation(['common', 'swap']);
   const exchangeRates = useNewExchangeRates();
-  const inputTokenUsdExchangeRate = inputToken && exchangeRates[getTokenSlug(inputToken)];
-  const outputTokenUsdExchangeRate = outputToken && exchangeRates[getTokenSlug(outputToken)];
+  const network = useNetwork();
+  const inputTokenUsdExchangeRate =
+    network.type === 'main' ? inputToken && exchangeRates[getTokenSlug(inputToken)] : undefined;
+  const outputTokenUsdExchangeRate =
+    network.type === 'main' ? outputToken && exchangeRates[getTokenSlug(outputToken)] : undefined;
 
   const sellUsdRate = useMemo(
     () => (outputTokenUsdExchangeRate && sellRate ? sellRate.times(outputTokenUsdExchangeRate) : undefined),
     [outputTokenUsdExchangeRate, sellRate]
   );
   const buyUsdRate = useMemo(
-    () => (inputTokenUsdExchangeRate && sellRate ? sellRate.times(inputTokenUsdExchangeRate) : undefined),
-    [inputTokenUsdExchangeRate, sellRate]
+    () => (inputTokenUsdExchangeRate && buyRate ? buyRate.times(inputTokenUsdExchangeRate) : undefined),
+    [inputTokenUsdExchangeRate, buyRate]
   );
 
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
