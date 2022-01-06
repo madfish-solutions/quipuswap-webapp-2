@@ -114,6 +114,8 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   );
 
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
+  const inputTokenSymbol = getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN);
+  const outputTokenSymbol = getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN);
 
   return (
     <Card
@@ -140,12 +142,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           {sellRate && (
             <>
               <div className={s.rateView}>
-                <CurrencyAmount amount="1" currency={inputToken ? getWhitelistedTokenSymbol(inputToken) : ''} />
+                <CurrencyAmount amount="1" currency={inputTokenSymbol} />
                 <span className={s.equal}>=</span>
-                <CurrencyAmount
-                  amount={FormatNumber(sellRate)}
-                  currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
-                />
+                <CurrencyAmount amount={FormatNumber(sellRate)} currency={outputTokenSymbol} />
               </div>
               {sellUsdRate && (
                 <div className={s.usdEquityWrapper}>
@@ -174,12 +173,9 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           {buyRate && (
             <>
               <div className={s.rateView}>
-                <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)} />
+                <CurrencyAmount amount="1" currency={outputTokenSymbol} />
                 <span className={s.equal}>=</span>
-                <CurrencyAmount
-                  amount={FormatNumber(buyRate)}
-                  currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
-                />
+                <CurrencyAmount amount={FormatNumber(buyRate)} currency={inputTokenSymbol} />
               </div>
               {buyUsdRate && (
                 <div className={s.usdEquityWrapper}>
