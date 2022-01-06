@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import { DEFAULT_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE } from '@app.config';
+import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -69,7 +69,11 @@ export const useValidationSchema = () => {
       currentAction === SwapAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
     [SwapField.SLIPPAGE]: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
-    [SwapField.DEADLINE]: bigNumberSchema(1).default(new BigNumber(DEFAULT_DEADLINE_MINS)),
+    [SwapField.DEADLINE]: bigNumberSchema(
+      MIN_DEADLINE_MINS,
+      MAX_DEADLINE_MINS,
+      t('common|deadlineOutOfRangeError')
+    ).default(new BigNumber(DEFAULT_DEADLINE_MINS)),
     [SwapField.ACTION]: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
   });
 };
