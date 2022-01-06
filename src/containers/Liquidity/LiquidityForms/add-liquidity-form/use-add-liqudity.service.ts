@@ -10,9 +10,9 @@ import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
+import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../send-transaction-messages';
 import { validateUserInputAmount, validateUserInput } from '../validators';
 import { LastChangedTokenEnum } from './last-changed-token.enum';
 
