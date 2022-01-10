@@ -2,9 +2,9 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS } from '@app.config';
+import { DEFAULT_DEADLINE_SECONDS, LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
-import { getDeadline, toDecimals } from '@utils/helpers';
+import { toDecimals, getBlockchainTimestamp } from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 export const removeLiquidityTokenToToken = async (
@@ -18,7 +18,10 @@ export const removeLiquidityTokenToToken = async (
   tokenB: WhitelistedToken,
   transactionDuration: Undefined<BigNumber>
 ) => {
-  const transactionDeadline = await getDeadline(tezos, transactionDuration);
+  const transactionDurationInSeconds = transactionDuration
+    ? transactionDuration.multipliedBy(SECONDS_IN_MINUTE).toNumber()
+    : DEFAULT_DEADLINE_SECONDS;
+  const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;

@@ -2,8 +2,9 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { DEFAULT_DEADLINE_SECONDS, SECONDS_IN_MINUTE } from '@app.config';
 import { batchOperations } from '@utils/dapp/batch-operations';
-import { getDeadline, toDecimals } from '@utils/helpers';
+import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
@@ -19,9 +20,12 @@ export const addLiquidityTokenToToken = async (
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
   tokenBPool: BigNumber,
-  deadline: Undefined<BigNumber>
+  transactionDuration: Undefined<BigNumber>
 ) => {
-  const transactionDeadline = await getDeadline(tezos, deadline);
+  const transactionDurationInSeconds = transactionDuration
+    ? transactionDuration.multipliedBy(SECONDS_IN_MINUTE).toNumber()
+    : DEFAULT_DEADLINE_SECONDS;
+  const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
   const { address: dexAddress } = dex.contract;
   const { decimals: decimalsA } = tokenA.metadata;
