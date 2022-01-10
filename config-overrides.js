@@ -17,6 +17,19 @@ module.exports = override(
     output: {
       ...config.output,
       globalObject: 'this'
+    },
+    resolve: {
+      extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'], // other stuff
+      fallback: {
+        fs: false,
+        path: require.resolve('path-browserify'),
+        stream: require.resolve('stream-browserify'),
+        os: require.resolve('os-browserify/browser'),
+        http: require.resolve('stream-http'),
+        https: require.resolve('https-browserify'),
+        crypto: require.resolve('crypto-browserify'),
+        buffer: require.resolve('buffer')
+      }
     }
   }),
   useBabelRc(),

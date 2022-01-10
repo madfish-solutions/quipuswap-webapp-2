@@ -6,12 +6,12 @@ import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 
 import { SAVED_TERMS_KEY } from '@app.config';
 import { appi18n } from '@app.i18n';
-import { NoTempleWalletError } from '@app/errors/NoTempleWalletError.error';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import useUpdateToast from '@hooks/useUpdateToast';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { WalletType } from '@utils/types';
 
+import { NoTempleWalletError } from '../../../errors/NoTempleWalletError.error';
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
 

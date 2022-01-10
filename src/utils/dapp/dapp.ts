@@ -16,7 +16,6 @@ import {
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK
 } from '@app.config';
-import { NoTempleWalletError } from '@app/errors/NoTempleWalletError.error';
 import { getBakers } from '@utils/dapp/bakers';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { getTokens, saveCustomToken } from '@utils/dapp/tokens';
@@ -31,6 +30,7 @@ import {
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
+import { NoTempleWalletError } from '../../errors/NoTempleWalletError.error';
 import { getContract } from './getStorageInfo';
 import { getNetwork, setNetwork, toBeaconNetworkType } from './network';
 import { ReadOnlySigner } from './ReadOnlySigner';
