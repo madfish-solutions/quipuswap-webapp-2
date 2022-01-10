@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { ErrorLoadingWrapper } from '@components/error-loading';
+import { StateWrapper } from '@components/state-wrapper';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
@@ -165,12 +165,12 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>
-                    <ErrorLoadingWrapper
+                    <StateWrapper
                       isLoading={formattedBalance !== null}
                       fallback={<Skeleton className={s.balanceSkeleton} />}
                     >
                       {formattedBalance}
-                    </ErrorLoadingWrapper>
+                    </StateWrapper>
                   </div>
                 </div>
               )}
