@@ -17,6 +17,8 @@ import { validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
+const INVALID_INPUT = 'Invalid input';
+
 export const useAddLiquidityService = (
   dex: FoundDex,
   tokenA: WhitelistedToken,
@@ -77,7 +79,7 @@ export const useAddLiquidityService = (
     const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
     setValidationMessageTokenA(validationA);
 
-    if (validationA === 'Invalid input') {
+    if (validationA === INVALID_INPUT) {
       setTokenBInput('');
 
       return;
