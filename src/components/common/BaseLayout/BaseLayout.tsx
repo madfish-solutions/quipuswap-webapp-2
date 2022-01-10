@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 import { ColorModes, ToastWrapper, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -22,7 +22,7 @@ interface BaseLayoutProps {
   className?: string;
 }
 
-export const BaseLayout: React.FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
 
   useEffect(() => {

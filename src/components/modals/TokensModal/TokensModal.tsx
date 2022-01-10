@@ -16,6 +16,7 @@ import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { Standard } from '@graphql';
 import {
   useAddCustomToken,
   useNetwork,
@@ -32,6 +33,7 @@ import {
   localSearchToken,
   prepareTokenLogo
 } from '@utils/helpers';
+import { getStandardValue } from '@utils/helpers/token.standard';
 import { WhitelistedToken } from '@utils/types';
 
 import { AutoSave } from './AutoSave';
@@ -101,7 +103,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === 'fa2'));
+    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
   const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {
@@ -151,7 +153,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
             (searchLoading || tokensLoading) &&
             [1, 2, 3, 4, 5, 6, 7].map(x => <LoadingTokenCell key={x} />)}
           {allTokens.map(token => {
-            const { contractAddress, fa2TokenId, metadata } = token;
+            const { contractAddress, fa2TokenId, metadata, type } = token;
 
             return (
               <TokenCell
@@ -159,7 +161,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
-                tokenType={token.type}
+                tokenType={getStandardValue(type)}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}
               />

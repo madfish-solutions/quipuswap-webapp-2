@@ -20,8 +20,10 @@
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
       "@providers/*": ["providers/*"],
+
       "@icons/*": ["../public/svg/*"],
       "@images/*": ["../public/images/*"],
+
       "@client": ["client.tsx"],
       "@graphql": ["graphql.ts"],
       "@app.config": ["app.config.ts"],

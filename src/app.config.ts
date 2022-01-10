@@ -1,3 +1,4 @@
+import { Standard } from '@graphql';
 import { QSNetworkType, QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
@@ -53,7 +54,7 @@ export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
 export const TEZOS_TOKEN: WhitelistedToken = {
-  type: 'fa1.2',
+  type: Standard.Fa12,
   contractAddress: 'tez',
   metadata: {
     decimals: 6,
@@ -64,7 +65,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
 };
 
 export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
-  type: 'fa2',
+  type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
   metadata: {
@@ -76,7 +77,7 @@ export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
 };
 
 export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
-  type: 'fa2',
+  type: Standard.Fa2,
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
   metadata: {

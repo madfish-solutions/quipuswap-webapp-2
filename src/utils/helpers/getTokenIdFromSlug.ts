@@ -1,3 +1,4 @@
+import { Standard } from '@graphql';
 import { TokenId } from '@utils/types';
 
 export const getTokenIdFromSlug = (slug: string): TokenId => {
@@ -6,6 +7,6 @@ export const getTokenIdFromSlug = (slug: string): TokenId => {
   return {
     contractAddress,
     fa2TokenId: fa2TokenId ? +fa2TokenId : undefined,
-    type: fa2TokenId === undefined ? 'fa1.2' : 'fa2'
+    type: fa2TokenId === undefined ? Standard.Fa12 : Standard.Fa2
   };
 };
