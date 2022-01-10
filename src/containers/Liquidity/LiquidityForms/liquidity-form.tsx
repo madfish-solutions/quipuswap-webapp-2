@@ -59,7 +59,14 @@ export const LiquidityForm: FC = () => {
             onTokenBChange={handleChangeTokenB}
           />
         ) : (
-          <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
+          <RemoveLiquidityForm
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            onChangeTokensPair={handleChangeTokensPair}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
+          />
         )}
       </Card>
     </>

@@ -19,7 +19,8 @@ export const useRemoveLiquidityService = (
   dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
+  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
+  transactionDuration: Undefined<BigNumber>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -123,7 +124,8 @@ export const useRemoveLiquidityService = (
         tokenAOutput,
         tokenBOutput,
         tokenA,
-        tokenB
+        tokenB,
+        transactionDuration
       );
 
       const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);

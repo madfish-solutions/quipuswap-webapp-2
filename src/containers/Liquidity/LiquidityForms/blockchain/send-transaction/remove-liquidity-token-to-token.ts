@@ -18,6 +18,8 @@ export const removeLiquidityTokenToToken = async (
   tokenB: WhitelistedToken,
   transactionDuration: Undefined<BigNumber>
 ) => {
+  const transactionDeadline = await getDeadline(tezos, transactionDuration);
+
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
@@ -28,8 +30,6 @@ export const removeLiquidityTokenToToken = async (
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
-
-  const transactionDeadline = await getDeadline(tezos, transactionDuration);
 
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {

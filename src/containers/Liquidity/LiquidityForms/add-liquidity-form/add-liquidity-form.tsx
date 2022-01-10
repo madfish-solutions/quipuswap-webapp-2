@@ -81,7 +81,11 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenB}
         placeholder="0.0"
       />
-      {isDeadlineVisible && <DeadlineInput onChange={setTransactionDuration} />}
+      {isDeadlineVisible && (
+        <div className={s.deadline}>
+          <DeadlineInput onChange={setTransactionDuration} />
+        </div>
+      )}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>

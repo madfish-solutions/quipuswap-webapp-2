@@ -9,6 +9,8 @@ import { LP_TOKEN_DECIMALS } from '@app.config';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
+import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -18,7 +20,14 @@ import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 const DEFAULT_BALANCE = 0;
 const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
 
-export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
+export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
+  dex,
+  tokenA,
+  tokenB,
+  onChangeTokensPair,
+  transactionDuration,
+  setTransactionDuration
+}) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
@@ -37,7 +46,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     handleChange,
     handleBalance,
     handleSetTokenPair
-  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
+  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair, transactionDuration);
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
@@ -50,6 +59,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     !lpTokenInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+  const isDeadlineVisible = !isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
   return (
     <>
@@ -96,6 +106,11 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
+      {isDeadlineVisible && (
+        <div className={s.deadline}>
+          <DeadlineInput onChange={setTransactionDuration} />
+        </div>
+      )}
       <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
         Remove
       </Button>
