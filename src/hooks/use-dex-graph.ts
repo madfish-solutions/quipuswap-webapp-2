@@ -5,7 +5,7 @@ import constate from 'constate';
 import useSWR, { useSWRConfig } from 'swr';
 
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
-import { useNetwork, useTokens } from '@utils/dapp';
+import { useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
@@ -44,12 +44,11 @@ type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 
 const fallbackDexPools: DexPair[] = [];
 
-const DEX_POOLS_STALE_TIMEOUT = 60000;
-
 export const [DexGraphProvider, useDexGraph] = constate(() => {
   const [dataIsStale, setDataIsStale] = useState(false);
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
+  const tezos = useTezos();
   const { showErrorToast } = useToasts();
   const { mutate } = useSWRConfig();
 
@@ -128,12 +127,8 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { data: dexPools, error: dexPoolsError } = useSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
   const refresh = async () => mutate(['dexPools', networkId, tokensSWRKey]);
 
-  useEffect(() => {
-    setDataIsStale(false);
-    const timeout = setTimeout(() => setDataIsStale(true), DEX_POOLS_STALE_TIMEOUT);
-
-    return () => clearTimeout(timeout);
-  }, [dexPools]);
+  useOnBlock(tezos, () => setDataIsStale(true));
+  useEffect(() => setDataIsStale(false), [dexPools]);
 
   const dexGraph = useMemo(
     () =>
