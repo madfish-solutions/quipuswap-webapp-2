@@ -18,7 +18,6 @@ export const useLiquidityFormService = () => {
   const { tabId } = parseUrl(router.asPath);
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
-
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
   const [transactionDuration, setTransactionDuration] = useState<Undefined<BigNumber>>(
