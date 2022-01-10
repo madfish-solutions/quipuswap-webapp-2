@@ -1,25 +1,17 @@
 import React, { useMemo } from 'react';
 
-import {
-  Button,
-  Card,
-  CardCell,
-  ExternalLink,
-  CurrencyAmount,
-  Tooltip,
-  Route,
-  RouteProps,
-  DollarEquivalent
-} from '@quipuswap/ui-kit';
+import { Button, Card, CardCell, ExternalLink, CurrencyAmount, Tooltip, Route, RouteProps } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
-import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
+import { useNetwork } from '@utils/dapp';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
+
+import { RateView } from './rate-view';
 
 interface SwapDetailsProps {
   currentTab: string;
@@ -99,23 +91,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   buyRate,
   sellRate
 }) => {
+  const network = useNetwork();
   const { t } = useTranslation(['common', 'swap']);
-  const exchangeRates = useNewExchangeRates();
-  const inputTokenUsdExchangeRate = inputToken ? exchangeRates[getTokenSlug(inputToken)] : undefined;
-  const outputTokenUsdExchangeRate = outputToken ? exchangeRates[getTokenSlug(outputToken)] : undefined;
-
-  const sellUsdRate = useMemo(
-    () => (outputTokenUsdExchangeRate && sellRate ? sellRate.times(outputTokenUsdExchangeRate) : undefined),
-    [outputTokenUsdExchangeRate, sellRate]
-  );
-  const buyUsdRate = useMemo(
-    () => (inputTokenUsdExchangeRate && buyRate ? buyRate.times(inputTokenUsdExchangeRate) : undefined),
-    [inputTokenUsdExchangeRate, buyRate]
-  );
-
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
-  const inputTokenSymbol = getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN);
-  const outputTokenSymbol = getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN);
+
+  const fallbackInputToken = TEZOS_TOKEN;
+  const fallbackOutputToken = networksDefaultTokens[network.id];
+  const inputTokenWithFallback = inputToken ?? fallbackInputToken;
+  const outputTokenWithFallback = outputToken ?? fallbackOutputToken;
 
   return (
     <Card
@@ -138,22 +121,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <div className={s.cellAmount}>
-          {sellRate && (
-            <>
-              <div className={s.rateView}>
-                <CurrencyAmount amount="1" currency={inputTokenSymbol} />
-                <span className={s.equal}>=</span>
-                <CurrencyAmount amount={FormatNumber(sellRate)} currency={outputTokenSymbol} />
-              </div>
-              {sellUsdRate && (
-                <div className={s.usdEquityWrapper}>
-                  <DollarEquivalent dollarEquivalent={sellUsdRate.toFixed(2)} />
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
       </CardCell>
       <CardCell
         header={
@@ -169,22 +137,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <div className={s.cellAmount}>
-          {buyRate && (
-            <>
-              <div className={s.rateView}>
-                <CurrencyAmount amount="1" currency={outputTokenSymbol} />
-                <span className={s.equal}>=</span>
-                <CurrencyAmount amount={FormatNumber(buyRate)} currency={inputTokenSymbol} />
-              </div>
-              {buyUsdRate && (
-                <div className={s.usdEquityWrapper}>
-                  <DollarEquivalent dollarEquivalent={buyUsdRate.toFixed(2)} />
-                </div>
-              )}
-            </>
-          )}
-        </div>
+        <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
       </CardCell>
       <CardCell
         header={
