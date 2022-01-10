@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import s from '@styles/CommonContainer.module.sass';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';

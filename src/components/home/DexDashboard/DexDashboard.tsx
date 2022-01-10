@@ -13,6 +13,7 @@ import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@app.config';
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo, useNetwork } from '@utils/dapp';
+import { QSNetworkType } from '@utils/types';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
@@ -39,7 +40,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
     asyncLoad();
   }, []);
 
-  const desktopContentClassName = network.type === 'main' ? s.content : cx(s.content, s.testnet);
+  const desktopContentClassName = network.type === QSNetworkType.MAIN ? s.content : cx(s.content, s.testnet);
 
   return (
     <Section

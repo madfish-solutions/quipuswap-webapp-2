@@ -10,7 +10,7 @@ import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
