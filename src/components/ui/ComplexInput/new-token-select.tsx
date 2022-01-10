@@ -165,10 +165,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
                   <div className={cx(s.label2, s.price)}>
-                    <StateWrapper
-                      isLoading={!formattedBalance}
-                      fallback={<Skeleton className={s.balanceSkeleton} />}
-                    >
+                    <StateWrapper isLoading={!formattedBalance} fallback={<Skeleton className={s.balanceSkeleton} />}>
                       {formattedBalance}
                     </StateWrapper>
                   </div>
