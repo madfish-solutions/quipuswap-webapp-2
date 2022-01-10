@@ -7,7 +7,7 @@ import { toDecimals } from '@utils/helpers';
 import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
-import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
+import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,

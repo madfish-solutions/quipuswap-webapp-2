@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { useDexGraph } from '@hooks/use-dex-graph';
@@ -373,7 +374,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
-  const submitDisabled = !isEmptyArray(Object.keys(errors)) || !accountPkh;
+  const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   return (
     <>
@@ -439,9 +440,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           {shouldShowDeadlineInput && (
             <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
-          <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
-            {currentTabLabel}
-          </Button>
+          {accountPkh ? (
+            <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
+              {currentTabLabel}
+            </Button>
+          ) : (
+            <ConnectWalletButton className={s.connect} />
+          )}
         </Card>
         <SwapDetails
           currentTab={currentTabLabel}

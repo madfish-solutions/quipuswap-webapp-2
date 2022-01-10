@@ -150,12 +150,21 @@
     &:not(:last-child)
       margin-bottom: 16px
 
+.connect
+  display: flex
+  align-items: center
+  justify-content: center
+  margin: 0 0 0 auto
+  max-width: 280px
+
 @include media('>Lphone', '<=tablet')
   .cellCenter
     align-items: center
   .button
     margin-left: auto
     width: 180px
+  .connect
+    max-width: 180px
   .buttons
     flex-direction: row
     justify-content: flex-end
@@ -184,6 +193,8 @@
   .button
     margin-left: auto
     width: 180px
+  .connect
+    max-width: 180px
   .votingStats
     margin-bottom: 32px
   .buttons

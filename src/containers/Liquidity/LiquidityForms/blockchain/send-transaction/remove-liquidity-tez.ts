@@ -15,7 +15,5 @@ export const removeLiquidityTez = async (
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
   const removeLiquidityParams = await getRemoveLiquidityParams(tezos, dex, shares, slippageTolerance);
 
-  const walletOperation = await batchify(tezos.wallet.batch([]), removeLiquidityParams).send();
-
-  return walletOperation.confirmation();
+  return await batchify(tezos.wallet.batch([]), removeLiquidityParams).send();
 };

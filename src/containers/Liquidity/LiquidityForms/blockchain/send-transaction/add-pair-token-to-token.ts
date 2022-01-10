@@ -6,8 +6,8 @@ import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
-import { getTokensResetAndUpdateOperators } from './get-tokens-reset-and-update-operators';
-import { getValidPairParams } from './get-valid-pair-params';
+import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
+import { getValidPairParams } from '../../helpers/get-valid-pair-params';
 
 export const addPairTokenToToken = async (
   tezos: TezosToolkit,

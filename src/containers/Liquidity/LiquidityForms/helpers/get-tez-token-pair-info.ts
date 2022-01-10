@@ -1,8 +1,9 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { PairInfo } from '@containers/Liquidity/LiquidityForms/add-liquidity-form/pair-info.interface';
-import { sortTokensPair } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-pair';
 import { Nullable, WhitelistedToken } from '@utils/types';
+
+import { PairInfo } from '../add-liquidity-form';
+import { sortTokensPair } from './sort-tokens-pair';
 
 export const getTezTokenPairInfo = (
   dex: FoundDex,
