@@ -1,11 +1,7 @@
 import { Component, ErrorInfo } from 'react';
 
 export class ErrorBoundary extends Component {
-  state: { hasError: boolean; error: Error | null } = { hasError: false, error: null };
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true };
-  }
+  state: { error: Error | null } = {  error: null };
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // eslint-disable-next-line no-console
@@ -16,8 +12,8 @@ export class ErrorBoundary extends Component {
   }
 
   render() {
-    if (this.state.hasError) {
-      return <div>error={this.state.error ?? 'Something went wrong :('}</div>;
+    if (this.state.error != null) {
+      return <div>{this.state.error?.message ?? 'Error'}</div>;
     }
 
     return this.props.children;
