@@ -6,6 +6,8 @@ import BigNumber from 'bignumber.js';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
+import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -15,7 +17,15 @@ import { useAddLiquidityService } from './use-add-liqudity.service';
 const DEFAULT_BALANCE = 0;
 const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
 
-export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
+export const AddLiquidityForm: FC<AddFormInterface> = ({
+  dex,
+  tokenA,
+  tokenB,
+  onTokenAChange,
+  onTokenBChange,
+  deadline,
+  setDeadline
+}) => {
   const {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -31,7 +41,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
+  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange, deadline);
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
@@ -40,6 +50,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenB) || !tokenAInput || !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+  const isDeadlineVisible = !isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
   return (
     <>
@@ -70,6 +81,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={validationMessageTokenB}
         placeholder="0.0"
       />
+      {isDeadlineVisible && <DeadlineInput onChange={setDeadline} />}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>

@@ -11,8 +11,18 @@ import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
 
 export const LiquidityForm: FC = () => {
-  const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
-    useLiquidityFormService();
+  const {
+    dex,
+    tab,
+    handleChangeTab,
+    tokenA,
+    tokenB,
+    handleChangeTokenA,
+    handleChangeTokenB,
+    deadline,
+    setDeadline,
+    handleChangeTokensPair
+  } = useLiquidityFormService();
 
   if (!tokenA || !tokenB) {
     return <ErrorAlert error={new Error('Tokens should be defined')} />;
@@ -43,6 +53,8 @@ export const LiquidityForm: FC = () => {
             dex={dex}
             tokenA={tokenA}
             tokenB={tokenB}
+            deadline={deadline}
+            setDeadline={setDeadline}
             onTokenAChange={handleChangeTokenA}
             onTokenBChange={handleChangeTokenB}
           />
