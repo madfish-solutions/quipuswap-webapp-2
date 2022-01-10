@@ -1,5 +1,11 @@
 @import '@styles/variables';
 
+$dash-width: 6px;
+$dash-height: 3px;
+$column-gap: 1px;
+$animation-duration: 0.8s;
+$animation-smoothing: 0.5;
+
 .light {
   --main-color: #{$text-01};
   --secondary-color: #{$text-03};
@@ -33,21 +39,21 @@
 }
 
 .inline-loading {
-  --duration: 0.8s;
-  --smoothing: 0.5;
+  --duration: #{$animation-duration};
+  --smoothing: #{$animation-smoothing};
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-column-gap: 1px;
-     -moz-column-gap: 1px;
-          column-gap: 1px;
+  -webkit-column-gap: $column-gap;
+     -moz-column-gap: $column-gap;
+          column-gap: $column-gap;
   
   @include create-inline-loading-animation(4);
 }
 
 .dash {
-  width: 6px;
-  height: 3px;
+  width: $dash-width;
+  height: $dash-height;
   background-color: var(--main-color);
 }
 
