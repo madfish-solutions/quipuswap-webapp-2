@@ -23,8 +23,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   tokenB,
   onTokenAChange,
   onTokenBChange,
-  deadline,
-  setDeadline
+  transactionDuration,
+  setTransactionDuration
 }) => {
   const {
     validationMessageTokenA,
@@ -41,7 +41,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange, deadline);
+  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange, transactionDuration);
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
@@ -81,7 +81,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         error={validationMessageTokenB}
         placeholder="0.0"
       />
-      {isDeadlineVisible && <DeadlineInput onChange={setDeadline} />}
+      {isDeadlineVisible && <DeadlineInput onChange={setTransactionDuration} />}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>

@@ -21,7 +21,9 @@ export const useLiquidityFormService = () => {
 
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
-  const [deadline, setDeadline] = useState<Undefined<BigNumber>>(new BigNumber(DEFAULT_DEADLINE_MINS));
+  const [transactionDuration, setTransactionDuration] = useState<Undefined<BigNumber>>(
+    new BigNumber(DEFAULT_DEADLINE_MINS)
+  );
 
   const dex = useDexContract(tokenA, tokenB);
 
@@ -89,8 +91,8 @@ export const useLiquidityFormService = () => {
     tokenB,
     handleChangeTokenA,
     handleChangeTokenB,
-    deadline,
-    setDeadline,
+    transactionDuration,
+    setTransactionDuration,
     handleChangeTokensPair
   };
 };

@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { LP_TOKEN_DECIMALS } from '@app.config';
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
 import { getDeadline, toDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Undefined, WhitelistedToken } from '@utils/types';
 
 export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -15,7 +15,8 @@ export const removeLiquidityTokenToToken = async (
   tokenAOutput: string,
   tokenBOutput: string,
   tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenB: WhitelistedToken,
+  transactionDuration: Undefined<BigNumber>
 ) => {
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
@@ -28,7 +29,7 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
 
-  const deadline = await getDeadline(tezos);
+  const transactionDeadline = await getDeadline(tezos, transactionDuration);
 
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
@@ -40,5 +41,5 @@ export const removeLiquidityTokenToToken = async (
   const validTokenAAmount = isTokenAAddressesTheSame ? tokenAOutputAmount : tokenBOutputAmount;
   const validTokenBAmount = isTokenAAddressesTheSame ? tokenBOutputAmount : tokenAOutputAmount;
 
-  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, deadline).send();
+  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, transactionDeadline).send();
 };

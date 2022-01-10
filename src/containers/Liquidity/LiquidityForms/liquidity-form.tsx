@@ -19,8 +19,8 @@ export const LiquidityForm: FC = () => {
     tokenB,
     handleChangeTokenA,
     handleChangeTokenB,
-    deadline,
-    setDeadline,
+    transactionDuration,
+    setTransactionDuration,
     handleChangeTokensPair
   } = useLiquidityFormService();
 
@@ -53,8 +53,8 @@ export const LiquidityForm: FC = () => {
             dex={dex}
             tokenA={tokenA}
             tokenB={tokenB}
-            deadline={deadline}
-            setDeadline={setDeadline}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
             onTokenAChange={handleChangeTokenA}
             onTokenBChange={handleChangeTokenB}
           />

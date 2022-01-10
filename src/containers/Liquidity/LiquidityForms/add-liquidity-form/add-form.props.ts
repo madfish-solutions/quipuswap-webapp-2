@@ -7,8 +7,8 @@ export interface AddFormInterface {
   dex: FoundDex;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
-  deadline: Undefined<BigNumber>;
-  setDeadline: (newDeadline?: BigNumber) => void;
+  transactionDuration: Undefined<BigNumber>;
+  setTransactionDuration: (newDeadline?: BigNumber) => void;
   onTokenAChange: (token: WhitelistedToken) => void;
   onTokenBChange: (token: WhitelistedToken) => void;
 }

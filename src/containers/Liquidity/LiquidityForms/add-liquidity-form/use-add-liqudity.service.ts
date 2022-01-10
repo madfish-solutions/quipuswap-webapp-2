@@ -23,7 +23,7 @@ export const useAddLiquidityService = (
   tokenB: WhitelistedToken,
   onTokenAChange: (token: WhitelistedToken) => void,
   onTokenBChange: (token: WhitelistedToken) => void,
-  deadline: Undefined<BigNumber>
+  transactionDuration: Undefined<BigNumber>
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -213,7 +213,7 @@ export const useAddLiquidityService = (
     );
   };
 
-  const investTokenToToken = async (deadline: Undefined<BigNumber>) => {
+  const investTokenToToken = async (transactionDuration: Undefined<BigNumber>) => {
     if (!tezos || !accountPkh) {
       return;
     }
@@ -252,7 +252,7 @@ export const useAddLiquidityService = (
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
         pairInfo.tokenBPool,
-        deadline
+        transactionDuration
       );
 
       return await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
@@ -305,7 +305,7 @@ export const useAddLiquidityService = (
 
   const handleAddLiquidity = async () => {
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      return await investTokenToToken(deadline);
+      return await investTokenToToken(transactionDuration);
     }
 
     return await investTezosToToken();
