@@ -14,6 +14,7 @@ import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-su
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
+import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
@@ -78,7 +79,7 @@ export const useAddLiquidityService = (
     const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
     setValidationMessageTokenA(validationA);
 
-    if (validationA === 'Invalid input') {
+    if (validationA === INVALID_INPUT) {
       setTokenBInput('');
 
       return;
