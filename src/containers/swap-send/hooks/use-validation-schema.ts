@@ -28,6 +28,7 @@ export const useValidationSchema = () => {
         if (!inputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
+        const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
         const inputTokenBalance = balances[inputTokenSlug];
         let max: BigNumber | undefined = BigNumber.min(
@@ -37,7 +38,7 @@ export const useValidationSchema = () => {
         if (!max.isFinite()) {
           max = undefined;
         }
-        const min = fromDecimals(new BigNumber(1), inputToken.metadata.decimals);
+        const min = fromDecimals(new BigNumber(1), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)
             .test(
@@ -48,7 +49,17 @@ export const useValidationSchema = () => {
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
 
-        return bigNumberSchema(min, max).required(t(REQUIRE_FIELD_MESSAGE));
+        return bigNumberSchema(min, max)
+          .test(
+            'input-decimals-amount',
+            () =>
+              t('common|tokenDecimalsOverflowError', {
+                tokenSymbol: inputTokenSymbol,
+                decimalPlaces: inputTokenDecimals
+              }),
+            value => !(value instanceof BigNumber) || value.decimalPlaces() <= inputTokenDecimals
+          )
+          .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
     [SwapField.OUTPUT_AMOUNT]: objectSchema().when(
@@ -58,11 +69,20 @@ export const useValidationSchema = () => {
         if (!outputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
+        const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(1), outputToken.metadata.decimals), max).required(
-          t(REQUIRE_FIELD_MESSAGE)
-        );
+        return bigNumberSchema(fromDecimals(new BigNumber(1), outputTokenDecimals), max)
+          .test(
+            'output-decimals-amount',
+            () =>
+              t('common|tokenDecimalsOverflowError', {
+                tokenSymbol: outputTokenSymbol,
+                decimalPlaces: outputTokenDecimals
+              }),
+            value => !(value instanceof BigNumber) || value.decimalPlaces() <= outputTokenDecimals
+          )
+          .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
     [SwapField.RECIPIENT]: mixedSchema().when(SwapField.ACTION, (currentAction: SwapAction) =>

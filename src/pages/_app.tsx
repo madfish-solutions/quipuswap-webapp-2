@@ -9,8 +9,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { DexGraphProvider } from '@hooks/use-dex-graph';
+import { NewExchangeRatesProvider } from '@hooks/use-new-exchange-rate';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
-import { NewExchangeRatesProvider } from '@hooks/useNewExchangeRate';
 import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
 import { DEFAULT_SEO } from '@seo.config';

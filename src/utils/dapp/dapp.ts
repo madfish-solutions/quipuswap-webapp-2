@@ -24,6 +24,7 @@ import { isTokenEqual } from '@utils/helpers';
 import {
   QSMainNet,
   QSNetwork,
+  QSNetworkType,
   WhitelistedBaker,
   WhitelistedToken,
   WhitelistedTokenWithQSNetworkType
@@ -45,7 +46,7 @@ const beaconWallet =
         iconUrl: `${BASE_URL}/favicon.ico`,
         preferredNetwork: (() => {
           const net = getNetwork();
-          if (!(net.connectType === 'custom' && net.type === 'test')) {
+          if (!(net.connectType === 'custom' && net.type === QSNetworkType.TEST)) {
             return toBeaconNetworkType(net.id);
           }
 
@@ -119,7 +120,7 @@ const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork)
     }
     await beaconWallet.requestPermissions({
       network:
-        network.connectType === 'custom' && network.type === 'test'
+        network.connectType === 'custom' && network.type === QSNetworkType.TEST
           ? {
               type: NetworkType.CUSTOM,
               name: network.name,
