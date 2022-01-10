@@ -4,7 +4,7 @@ enum PromiseStatus {
   ERROR = 'ERROR'
 }
 
-export function wrapPromise<T>(promise: Promise<T>) {
+export const wrapPromise = <T>(promise: Promise<T>) => {
   let status = PromiseStatus.PENDING;
   let result: T;
   const suspender = promise.then(
