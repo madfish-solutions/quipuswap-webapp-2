@@ -14,10 +14,9 @@ import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-su
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
+import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
-
-const INVALID_INPUT = 'Invalid input';
 
 export const useAddLiquidityService = (
   dex: FoundDex,

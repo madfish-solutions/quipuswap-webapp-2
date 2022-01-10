@@ -14,8 +14,7 @@ import { getRemoveLiquidityMessage } from '../get-success-messages';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
 import { getOperationHash } from '../hooks/get-operation-hash';
 import { validations, validateOutputAmount } from '../validators';
-
-const INVALID_INPUT = 'Invalid input';
+import { INVALID_INPUT } from '../validators/validate-user-input';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
