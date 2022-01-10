@@ -6,11 +6,16 @@ export type Nullable<T> = T | null; // MayBe<T>
 
 export type QSMainNet = 'mainnet' | 'hangzhounet';
 
+export enum QSNetworkType {
+  MAIN = 'MAIN',
+  TEST = 'TEST'
+}
+
 export interface QSNetwork {
   id: QSMainNet;
   connectType: 'default' | 'custom';
   name: string;
-  type: 'main' | 'test';
+  type: QSNetworkType;
   rpcBaseURL: string;
   metadata: string;
   description: string;
