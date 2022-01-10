@@ -1,0 +1,82 @@
+@import '@styles/variables';
+
+.light {
+  --main-color: #{$text-01};
+  --secondary-color: #{$text-03};
+}
+
+.dark {
+  --main-color: #{$text-inverse};
+  --secondary-color: #{$text-03};
+}
+
+@mixin dash-index-animation($index, $quantity) {
+  .dash:nth-child(#{$index}) {
+    -webkit-animation-name: dash-animation;
+            animation-name: dash-animation;
+    -webkit-animation-duration: calc(var(--duration) * #{$quantity});
+            animation-duration: calc(var(--duration) * #{$quantity});
+    -webkit-animation-timing-function: linear;
+            animation-timing-function: linear;
+    -webkit-animation-delay: calc(var(--duration) * (#{$index} - 1) * var(--smoothing));
+            animation-delay: calc(var(--duration) * (#{$index} - 1) * var(--smoothing));
+    -webkit-animation-iteration-count: infinite;
+            animation-iteration-count: infinite;
+  }
+}
+
+
+@mixin create-inline-loading-animation($quantity) {
+  @for $i from 1 through $quantity {
+    @include dash-index-animation($i, $quantity);
+  }
+}
+
+.inline-loading {
+  --duration: 0.8s;
+  --smoothing: 0.5;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-column-gap: 1px;
+     -moz-column-gap: 1px;
+          column-gap: 1px;
+  
+  @include create-inline-loading-animation(4);
+}
+
+.dash {
+  width: 6px;
+  height: 3px;
+  background-color: var(--main-color);
+}
+
+@-webkit-keyframes dash-animation {
+  0% {
+    background-color: var(--main-color);
+  }
+  12.5% {
+    background-color: var(--secondary-color);
+  }
+  25% {
+    background-color: var(--main-color);
+  }
+  100% {
+    background-color: var(--main-color);
+  }
+}
+
+@keyframes dash-animation {
+  0% {
+    background-color: var(--main-color);
+  }
+  12.5% {
+    background-color: var(--secondary-color);
+  }
+  25% {
+    background-color: var(--main-color);
+  }
+  100% {
+    background-color: var(--main-color);
+  }
+}
