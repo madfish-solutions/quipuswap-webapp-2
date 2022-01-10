@@ -30,4 +30,4 @@ export const wrapPromise = <T>(promise: Promise<T>) => {
       }
     }
   };
-}
+};
