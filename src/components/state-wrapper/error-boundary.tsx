@@ -1,7 +1,7 @@
 import { Component, ErrorInfo } from 'react';
 
 export class ErrorBoundary extends Component {
-  state: { error: Error | null } = {  error: null };
+  state: { error: Error | null } = { error: null };
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // eslint-disable-next-line no-console
