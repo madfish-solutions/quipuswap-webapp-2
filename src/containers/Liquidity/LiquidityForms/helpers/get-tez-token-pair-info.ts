@@ -1,33 +1,25 @@
 import { FoundDex } from '@quipuswap/sdk';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { PairInfo } from '../add-liquidity-form';
-import { sortTokensPair } from './sort-tokens-pair';
+import { PairInfo } from '../add-liquidity-form/pair-info.interface';
 
 export const getTezTokenPairInfo = (
   dex: FoundDex,
   token1: WhitelistedToken,
   token2: WhitelistedToken
 ): Nullable<PairInfo> => {
-  const addresses = sortTokensPair(token1, token2);
-
-  if (!addresses) {
-    return null;
-  }
-
-  const isTokenA1 = addresses.tokenA.contractAddress === token1.contractAddress;
-  const tokenA = isTokenA1 ? token1 : token2;
-  const tokenB = isTokenA1 ? token2 : token1;
-  const tokenAPool = isTokenA1 ? 'tez_pool' : 'token_pool';
-  const tokenBPool = isTokenA1 ? 'token_pool' : 'tez_pool';
+  const isToken1Tezos = TEZOS_TOKEN.contractAddress === token1.contractAddress;
+  const tokenA = isToken1Tezos ? token1 : token2;
+  const tokenB = isToken1Tezos ? token2 : token1;
 
   return {
     id: null,
     tokenA,
     tokenB,
-    tokenAPool: dex.storage.storage[tokenAPool],
-    tokenBPool: dex.storage.storage[tokenBPool],
+    tokenAPool: dex.storage.storage.tez_pool,
+    tokenBPool: dex.storage.storage.token_pool,
     totalSupply: dex.storage.storage.total_supply
   };
 };

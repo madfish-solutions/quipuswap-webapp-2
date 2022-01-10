@@ -25,7 +25,7 @@ export const addPairTokenToToken = async (
   const tokenAAmount = toDecimals(tokenABN, tokenA);
   const tokenBAmount = toDecimals(tokenBBN, tokenB);
 
-  const [tokenAResetOperator, tokenBResetOperator, tokenAUpdateOperator, tokenBUpdateOperator] =
+  const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
 
   const validAddPairParams = getValidPairParams(dex, tokenA, tokenB, tokenAAmount, tokenBAmount);

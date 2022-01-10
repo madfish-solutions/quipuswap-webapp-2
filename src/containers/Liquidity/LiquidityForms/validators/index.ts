@@ -1,2 +1,2 @@
-export * from './validate-user-input-amount';
-export * from './validate-user-input';
+export * from './validations';
+export * from './validate-output-amount';

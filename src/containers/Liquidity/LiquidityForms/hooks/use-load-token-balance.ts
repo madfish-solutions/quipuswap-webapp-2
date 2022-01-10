@@ -5,13 +5,11 @@ import BigNumber from 'bignumber.js';
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-const DEFAULT_BALANCE = 0;
-
 export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const [tokenBalance, setTokenBalance] = useState<BigNumber>(new BigNumber(DEFAULT_BALANCE));
+  const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
 
   useEffect(() => {
     let isMounted = true;

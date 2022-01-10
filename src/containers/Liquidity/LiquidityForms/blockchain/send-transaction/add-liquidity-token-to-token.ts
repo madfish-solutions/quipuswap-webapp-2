@@ -37,10 +37,10 @@ export const addLiquidityTokenToToken = async (
 
   return await (
     await batchOperations(tezos, [
-      tokenAUpdateOperator,
-      tokenBUpdateOperator,
       tokenAResetOperator,
       tokenBResetOperator,
+      tokenAUpdateOperator,
+      tokenBUpdateOperator,
       investParams
     ])
   ).send();

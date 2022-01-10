@@ -2,13 +2,14 @@ import { i18n } from 'next-i18next';
 
 import { Undefined } from '@utils/types';
 
-const allowedSymbols = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
+const RE = /^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$/;
+export const INVALID_INPUT = 'Invalid input';
 
 export const validateUserInput = (input: string): Undefined<string> => {
-  for (const symbol of input) {
-    if (!allowedSymbols.includes(symbol)) {
-      return i18n?.t('common|Letters are not allowed') || 'Letters are not allowed';
-    }
+  const isInputValid = RE.test(input);
+
+  if (!isInputValid) {
+    return i18n?.t('common|Invalid input') || INVALID_INPUT;
   }
 
   return undefined;

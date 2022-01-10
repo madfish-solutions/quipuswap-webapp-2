@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
@@ -13,8 +13,10 @@ import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initial
 import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateUserInputAmount, validateUserInput } from '../validators';
-import { LastChangedTokenEnum } from './last-changed-token.enum';
+import { validations } from '../validators';
+import { INVALID_INPUT } from '../validators/validate-user-input';
+import { LastChangedToken } from './last-changed-token.enum';
+import { PairInfo } from './pair-info.interface';
 
 export const useAddLiquidityService = (
   dex: FoundDex,
@@ -35,156 +37,30 @@ export const useAddLiquidityService = (
   const [tokenBInput, setTokenBInput] = useState('');
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
-  const [changedToken, setChangedToken] = useState<Nullable<'tokenA' | 'tokenB'>>(null);
+  const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
-  useEffect(() => {
-    if (
-      !changedToken ||
-      !pairInfo ||
-      pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.totalSupply.eq(EMPTY_POOL_AMOUNT)
-    ) {
-      return;
-    }
+  const tokensCalculations = (
+    tokenAInput: string,
+    tokenA: WhitelistedToken,
+    tokenB: WhitelistedToken,
+    pairInfo: Nullable<PairInfo>,
+    tokenABalance: Nullable<BigNumber>,
+    tokenBBalance: Nullable<BigNumber>,
+    setTokenAInput: Dispatch<SetStateAction<string>>,
+    setTokenBInput: Dispatch<SetStateAction<string>>,
+    setValidationMessageTokenA: Dispatch<SetStateAction<Undefined<string>>>,
+    setValidationMessageTokenB: Dispatch<SetStateAction<Undefined<string>>>
+  ) => {
+    setTokenAInput(tokenAInput);
 
-    if (changedToken === LastChangedTokenEnum.tokenA) {
-      if (tokenAInput === '') {
-        setTokenBInput('');
-
-        return;
-      }
-
-      const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
-      const { decimals: decimalsA } = tokenA.metadata;
-      const { decimals: decimalsB } = tokenB.metadata;
-
-      const tokenABN = new BigNumber(tokenAInput);
-      const tokenAAmount = toDecimals(tokenABN, decimalsA);
-
-      const tokenBAmount =
-        tokenA.contractAddress === pairTokenA.contractAddress
-          ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
-          : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
-
-      setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
-    } else {
-      if (tokenBInput === '') {
-        setTokenAInput('');
-
-        return;
-      }
-
-      const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
-      const { decimals: decimalsA } = tokenA.metadata;
-      const { decimals: decimalsB } = tokenB.metadata;
-
-      const tokenBBN = new BigNumber(tokenBInput);
-      const tokenBAmount = toDecimals(tokenBBN, decimalsB);
-
-      const tokenAAmount =
-        tokenB.contractAddress === pairTokenB.contractAddress
-          ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
-          : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
-
-      setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairInfo]);
-
-  const handleSetTokenA = (token: WhitelistedToken) => {
-    onTokenAChange(token);
-    setChangedToken(LastChangedTokenEnum.tokenA);
-    setTokenAInput('');
-  };
-
-  const handleSetTokenB = (token: WhitelistedToken) => {
-    onTokenBChange(token);
-    setChangedToken(LastChangedTokenEnum.tokenB);
-    setTokenBInput('');
-  };
-
-  const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTokenAInput(event.target.value);
-
-    if (event.target.value === '') {
+    if (tokenAInput === '') {
       setTokenBInput('');
       setValidationMessageTokenA(undefined);
-
-      return;
-    }
-
-    const validatedInput = validateUserInput(event.target.value);
-    const validatedInputAmount = validateUserInputAmount(
-      toDecimals(new BigNumber(event.target.value), tokenA),
-      tokenABalance
-    );
-
-    if (validatedInput) {
-      setValidationMessageTokenA(validatedInput);
-      setTokenBInput('');
-
-      return;
-    } else if (validatedInputAmount) {
-      setValidationMessageTokenA(validatedInputAmount);
-      setTokenBInput('');
-
-      return;
-    }
-
-    if (
-      !pairInfo ||
-      pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.totalSupply.eq(EMPTY_POOL_AMOUNT)
-    ) {
-      return;
-    }
-
-    const { totalSupply, tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
-    const { decimals: decimalsA } = tokenA.metadata;
-    const { decimals: decimalsB } = tokenB.metadata;
-
-    const tokenABN = new BigNumber(event.target.value);
-    const tokenAAmount = toDecimals(tokenABN, decimalsA);
-
-    const tokenBAmount =
-      tokenA.contractAddress === pairTokenA.contractAddress
-        ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
-        : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
-
-    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
-    setValidationMessageTokenA(undefined);
-  };
-
-  const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTokenBInput(event.target.value);
-
-    if (event.target.value === '') {
-      setTokenAInput('');
       setValidationMessageTokenB(undefined);
 
       return;
     }
 
-    const validatedInput = validateUserInput(event.target.value);
-    const validatedInputAmount = validateUserInputAmount(
-      toDecimals(new BigNumber(event.target.value), tokenB),
-      tokenBBalance
-    );
-
-    if (validatedInput) {
-      setValidationMessageTokenB(validatedInput);
-      setTokenAInput('');
-
-      return;
-    } else if (validatedInputAmount) {
-      setValidationMessageTokenB(validatedInputAmount);
-      setTokenAInput('');
-
-      return;
-    }
-
     if (
       !pairInfo ||
       pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
@@ -194,66 +70,147 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { totalSupply, tokenAPool, tokenBPool, tokenB: pairTokenB } = pairInfo;
-    const { decimals: decimalsA } = tokenA.metadata;
-    const { decimals: decimalsB } = tokenB.metadata;
+    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
 
-    const tokenBBN = new BigNumber(event.target.value);
-    const tokenBAmount = toDecimals(tokenBBN, decimalsB);
+    const tokenABN = new BigNumber(tokenAInput);
+    const tokenAAmount = toDecimals(tokenABN, tokenA);
 
-    const tokenAAmount =
-      tokenB.contractAddress === pairTokenB.contractAddress
-        ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
-        : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
+    const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
+    setValidationMessageTokenA(validationA);
 
-    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
-    setValidationMessageTokenB(undefined);
+    if (validationA === INVALID_INPUT) {
+      setTokenBInput('');
+
+      return;
+    }
+
+    const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
+    const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
+    const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
+
+    const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
+
+    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance);
+    setValidationMessageTokenB(validationB);
+
+    setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
+  };
+
+  useEffect(() => {
+    if (!lastEditedInput) {
+      return;
+    }
+
+    if (lastEditedInput === LastChangedToken.tokenA) {
+      tokensCalculations(
+        tokenAInput,
+        tokenA,
+        tokenB,
+        pairInfo,
+        tokenABalance,
+        tokenBBalance,
+        setTokenAInput,
+        setTokenBInput,
+        setValidationMessageTokenA,
+        setValidationMessageTokenB
+      );
+    } else {
+      tokensCalculations(
+        tokenBInput,
+        tokenB,
+        tokenA,
+        pairInfo,
+        tokenBBalance,
+        tokenABalance,
+        setTokenBInput,
+        setTokenAInput,
+        setValidationMessageTokenB,
+        setValidationMessageTokenA
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairInfo, tokenABalance, tokenBBalance]);
+
+  const handleSetTokenA = (token: WhitelistedToken) => {
+    onTokenAChange(token);
+    if (lastEditedInput === LastChangedToken.tokenA) {
+      setTokenBInput('');
+    } else {
+      setTokenAInput('');
+    }
+  };
+
+  const handleSetTokenB = (token: WhitelistedToken) => {
+    onTokenBChange(token);
+    if (lastEditedInput === LastChangedToken.tokenB) {
+      setTokenAInput('');
+    } else {
+      setTokenBInput('');
+    }
+  };
+
+  const handleTokenAChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLastEditedInput(LastChangedToken.tokenA);
+    tokensCalculations(
+      event.target.value,
+      tokenA,
+      tokenB,
+      pairInfo,
+      tokenABalance,
+      tokenBBalance,
+      setTokenAInput,
+      setTokenBInput,
+      setValidationMessageTokenA,
+      setValidationMessageTokenB
+    );
+  };
+
+  const handleTokenBChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setLastEditedInput(LastChangedToken.tokenB);
+    tokensCalculations(
+      event.target.value,
+      tokenB,
+      tokenA,
+      pairInfo,
+      tokenBBalance,
+      tokenABalance,
+      setTokenBInput,
+      setTokenAInput,
+      setValidationMessageTokenB,
+      setValidationMessageTokenA
+    );
   };
 
   const handleTokenABalance = (value: string) => {
-    const tokenABN = new BigNumber(value);
-    const { decimals: decimalsA } = tokenA.metadata;
-
-    setTokenAInput(value);
-
-    if (!pairInfo) {
-      return;
-    }
-
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
-    const { decimals: decimalsB } = tokenB.metadata;
-
-    const tokenAAmount = toDecimals(tokenABN, decimalsA);
-
-    const tokenBAmount =
-      tokenA.contractAddress === pairTokenA.contractAddress
-        ? calculateTokenAmount(tokenAAmount, totalSupply, tokenAPool, tokenBPool)
-        : calculateTokenAmount(tokenAAmount, totalSupply, tokenBPool, tokenAPool);
-
-    setTokenBInput(fromDecimals(tokenBAmount, decimalsB).toFixed());
+    setLastEditedInput(LastChangedToken.tokenA);
+    tokensCalculations(
+      value,
+      tokenA,
+      tokenB,
+      pairInfo,
+      tokenABalance,
+      tokenBBalance,
+      setTokenAInput,
+      setTokenBInput,
+      setValidationMessageTokenA,
+      setValidationMessageTokenB
+    );
   };
 
   const handleTokenBBalance = (value: string) => {
-    const tokenBBN = new BigNumber(value);
-    const { decimals: decimalsB } = tokenB.metadata;
-
-    setTokenBInput(value);
-
-    if (!pairInfo) {
-      return;
-    }
-
-    const { tokenAPool, tokenBPool, totalSupply, tokenB: pairTokenB } = pairInfo;
-    const { decimals: decimalsA } = tokenA.metadata;
-
-    const tokenBAmount = toDecimals(tokenBBN, decimalsB);
-
-    const tokenAAmount =
-      tokenB.contractAddress === pairTokenB.contractAddress
-        ? calculateTokenAmount(tokenBAmount, totalSupply, tokenBPool, tokenAPool)
-        : calculateTokenAmount(tokenBAmount, totalSupply, tokenAPool, tokenBPool);
-
-    setTokenAInput(fromDecimals(tokenAAmount, decimalsA).toFixed());
+    setLastEditedInput(LastChangedToken.tokenB);
+    tokensCalculations(
+      value,
+      tokenB,
+      tokenA,
+      pairInfo,
+      tokenBBalance,
+      tokenABalance,
+      setTokenBInput,
+      setTokenAInput,
+      setValidationMessageTokenB,
+      setValidationMessageTokenA
+    );
   };
 
   const investTokenToToken = async () => {
@@ -347,10 +304,10 @@ export const useAddLiquidityService = (
 
   const handleAddLiquidity = async () => {
     if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
-      await investTokenToToken();
+      return await investTokenToToken();
     }
 
-    await investTezosToToken();
+    return await investTezosToToken();
   };
 
   return {
