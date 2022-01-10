@@ -9,6 +9,7 @@ import { Maybe } from '@graphql';
 import { useNetwork } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
+import { QSNetworkType } from '@utils/types';
 
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
@@ -65,7 +66,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {network.type === 'main' ? (
+      {network.type === QSNetworkType.MAIN ? (
         <>
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}

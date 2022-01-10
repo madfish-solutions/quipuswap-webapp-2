@@ -8,6 +8,7 @@ import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
 import { useNetwork } from '@utils/dapp';
+import { QSNetworkType } from '@utils/types';
 
 export const Home: FC = () => {
   const { t } = useTranslation(['common', 'home']);
@@ -18,7 +19,7 @@ export const Home: FC = () => {
       <News />
       <DexDashboard />
       <Opportunities />
-      {network.type === 'main' ? <TopPairs /> : null}
+      {network.type === QSNetworkType.MAIN ? <TopPairs /> : null}
       {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>

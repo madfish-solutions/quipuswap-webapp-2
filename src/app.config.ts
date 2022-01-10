@@ -1,4 +1,4 @@
-import { QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSNetworkType, QSMainNet, QSNetwork, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -120,7 +120,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
   connectType: 'default',
   name: 'Tezos Mainnet',
-  type: 'main',
+  type: QSNetworkType.MAIN,
   rpcBaseURL: MAINNET_RPC_URL,
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
@@ -130,7 +130,7 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   id: 'hangzhounet',
   connectType: 'default',
   name: 'Hangzhounet Testnet',
-  type: 'test',
+  type: QSNetworkType.TEST,
   rpcBaseURL: HANGZHOUNET_RPC_URL,
   metadata: METADATA_API_TESTNET,
   description: 'Hangzhounet testnet',

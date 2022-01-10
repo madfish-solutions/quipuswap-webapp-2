@@ -10,7 +10,7 @@ import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
@@ -370,13 +370,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
-  const shouldHideExchangeRates = network.type === 'test';
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
-  const inputExchangeRate =
-    inputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[inputTokenSlug];
-  const outputExchangeRate =
-    outputTokenSlug === undefined || shouldHideExchangeRates ? undefined : exchangeRates[outputTokenSlug];
+  const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
+  const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   return (

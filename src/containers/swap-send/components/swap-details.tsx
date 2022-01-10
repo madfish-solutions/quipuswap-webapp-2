@@ -4,12 +4,14 @@ import { Button, Card, CardCell, ExternalLink, CurrencyAmount, Tooltip, Route, R
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
-import { useNewExchangeRates } from '@hooks/useNewExchangeRate';
+import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
+import { useNetwork } from '@utils/dapp';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { DexPair, WhitelistedToken } from '@utils/types';
+
+import { RateView } from './rate-view';
 
 interface SwapDetailsProps {
   currentTab: string;
@@ -89,21 +91,14 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
   buyRate,
   sellRate
 }) => {
+  const network = useNetwork();
   const { t } = useTranslation(['common', 'swap']);
-  const exchangeRates = useNewExchangeRates();
-  const inputTokenUsdExchangeRate = inputToken && exchangeRates[getTokenSlug(inputToken)];
-  const outputTokenUsdExchangeRate = outputToken && exchangeRates[getTokenSlug(outputToken)];
-
-  const sellUsdRate = useMemo(
-    () => (outputTokenUsdExchangeRate && sellRate ? sellRate.times(outputTokenUsdExchangeRate) : undefined),
-    [outputTokenUsdExchangeRate, sellRate]
-  );
-  const buyUsdRate = useMemo(
-    () => (inputTokenUsdExchangeRate && sellRate ? sellRate.times(inputTokenUsdExchangeRate) : undefined),
-    [inputTokenUsdExchangeRate, sellRate]
-  );
-
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
+
+  const fallbackInputToken = TEZOS_TOKEN;
+  const fallbackOutputToken = networksDefaultTokens[network.id];
+  const inputTokenWithFallback = inputToken ?? fallbackInputToken;
+  const outputTokenWithFallback = outputToken ?? fallbackOutputToken;
 
   return (
     <Card
@@ -126,19 +121,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <div className={s.cellAmount}>
-          {sellRate && (
-            <>
-              <CurrencyAmount amount="1" currency={inputToken ? getWhitelistedTokenSymbol(inputToken) : ''} />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount
-                amount={FormatNumber(sellRate)}
-                currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)}
-                dollarEquivalent={sellUsdRate?.toFixed(2)}
-              />
-            </>
-          )}
-        </div>
+        <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
       </CardCell>
       <CardCell
         header={
@@ -154,19 +137,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
         }
         className={s.cell}
       >
-        <div className={s.cellAmount}>
-          {buyRate && (
-            <>
-              <CurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(outputToken ?? MAINNET_DEFAULT_TOKEN)} />
-              <span className={s.equal}>=</span>
-              <CurrencyAmount
-                amount={FormatNumber(buyRate)}
-                currency={getWhitelistedTokenSymbol(inputToken ?? TEZOS_TOKEN)}
-                dollarEquivalent={buyUsdRate?.toFixed(2)}
-              />
-            </>
-          )}
-        </div>
+        <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
       </CardCell>
       <CardCell
         header={
