@@ -6,8 +6,8 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { StateWrapper } from '@components/state-wrapper';
 import { TokensModal } from '@components/modals/TokensModal';
+import { StateWrapper } from '@components/state-wrapper';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';

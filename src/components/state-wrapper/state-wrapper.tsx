@@ -1,4 +1,5 @@
 import { FC, ReactElement, Suspense } from 'react';
+
 import { ErrorBoundary } from './error-boundary';
 
 export interface StateWrapperProps {
@@ -7,16 +8,13 @@ export interface StateWrapperProps {
 }
 
 export const StateWrapper: FC<StateWrapperProps> = ({ children, isLoading, fallback }) => {
-
   if (isLoading) {
     return fallback;
   }
 
   return (
     <ErrorBoundary>
-      <Suspense fallback={fallback}>
-        {children}
-      </Suspense>
+      <Suspense fallback={fallback}>{children}</Suspense>
     </ErrorBoundary>
-  )
+  );
 };
