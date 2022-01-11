@@ -67,7 +67,15 @@ export const useRemoveLiquidityService = (
     const lpTokenInputBN = new BigNumber(lpTokenInput);
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-    const validatedInput = validations(accountPkh, lpTokenAmount, lpTokenBalance, lpTokenInput, LP_TOKEN_DECIMALS);
+    const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
+    const validatedInput = validations(
+      accountPkh,
+      lpTokenAmount,
+      lpTokenBalance,
+      lpTokenInput,
+      LP_TOKEN_DECIMALS,
+      lpTokenSymbol
+    );
     setValidatedInputMessage(validatedInput);
 
     if (validatedInput === INVALID_INPUT) {
