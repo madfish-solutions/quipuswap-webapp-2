@@ -17,7 +17,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
 import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
@@ -347,7 +347,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     setFieldValue(SwapField.SLIPPAGE, newValue, true);
   };
 
-  const handleDeadlineChange = (newValue?: BigNumber) => {
+  const handleDeadlineChange = (newValue: Nullable<BigNumber>) => {
     setFieldTouched(SwapField.DEADLINE, true);
     setFieldValue(SwapField.DEADLINE, newValue, true);
   };
