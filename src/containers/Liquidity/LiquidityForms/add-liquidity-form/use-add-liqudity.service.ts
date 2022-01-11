@@ -223,7 +223,7 @@ export const useAddLiquidityService = (
     );
   };
 
-  const investTokenToToken = async (transactionDuration: Nullable<BigNumber>) => {
+  const investTokenToToken = async (transactionDuration: BigNumber) => {
     if (!tezos || !accountPkh) {
       return;
     }
