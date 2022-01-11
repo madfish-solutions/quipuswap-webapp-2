@@ -24,7 +24,7 @@ export const useAddLiquidityService = (
   tokenB: WhitelistedToken,
   onTokenAChange: (token: WhitelistedToken) => void,
   onTokenBChange: (token: WhitelistedToken) => void,
-  transactionDuration: Undefined<BigNumber>
+  transactionDuration: Nullable<BigNumber>
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -223,7 +223,7 @@ export const useAddLiquidityService = (
     );
   };
 
-  const investTokenToToken = async (transactionDuration: Undefined<BigNumber>) => {
+  const investTokenToToken = async (transactionDuration: Nullable<BigNumber>) => {
     if (!tezos || !accountPkh) {
       return;
     }

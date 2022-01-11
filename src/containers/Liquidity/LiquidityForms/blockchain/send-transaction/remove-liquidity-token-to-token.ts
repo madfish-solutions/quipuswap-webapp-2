@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { DEFAULT_DEADLINE_SECONDS, LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
 import { toDecimals, getBlockchainTimestamp } from '@utils/helpers';
-import { Undefined, WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -16,7 +16,7 @@ export const removeLiquidityTokenToToken = async (
   tokenBOutput: string,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  transactionDuration: Undefined<BigNumber>
+  transactionDuration: Nullable<BigNumber>
 ) => {
   const transactionDurationInSeconds = transactionDuration
     ? transactionDuration.multipliedBy(SECONDS_IN_MINUTE).toNumber()

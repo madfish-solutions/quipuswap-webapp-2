@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { DEFAULT_DEADLINE_SECONDS, SECONDS_IN_MINUTE } from '@app.config';
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
-import { Undefined, WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
@@ -20,7 +20,7 @@ export const addLiquidityTokenToToken = async (
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
   tokenBPool: BigNumber,
-  transactionDuration: Undefined<BigNumber>
+  transactionDuration: Nullable<BigNumber>
 ) => {
   const transactionDurationInSeconds = transactionDuration
     ? transactionDuration.multipliedBy(SECONDS_IN_MINUTE).toNumber()

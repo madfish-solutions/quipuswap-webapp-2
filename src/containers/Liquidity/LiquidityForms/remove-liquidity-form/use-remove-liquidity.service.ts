@@ -21,7 +21,7 @@ export const useRemoveLiquidityService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
-  transactionDuration: Undefined<BigNumber>
+  transactionDuration: Nullable<BigNumber>
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
