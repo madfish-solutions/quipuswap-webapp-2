@@ -1,20 +1,28 @@
 import { FC, ReactElement, Suspense } from 'react';
 
-import { ErrorBoundary } from './error-boundary';
+import { ErrorBoundary } from './error-boundary/error-boundary';
 
 export interface StateWrapperProps {
   isLoading?: boolean;
-  fallback: ReactElement;
+  loaderFallback: ReactElement;
+  isError?: boolean;
+  errorFallback?: ReactElement;
 }
 
-export const StateWrapper: FC<StateWrapperProps> = ({ children, isLoading, fallback }) => {
+export const StateWrapper: FC<StateWrapperProps> = ({
+  children,
+  isLoading,
+  loaderFallback,
+  isError,
+  errorFallback
+}) => {
   if (isLoading) {
-    return fallback;
+    return loaderFallback;
   }
 
   return (
-    <ErrorBoundary>
-      <Suspense fallback={fallback}>{children}</Suspense>
+    <ErrorBoundary isError={isError} fallback={errorFallback}>
+      <Suspense fallback={loaderFallback}>{children}</Suspense>
     </ErrorBoundary>
   );
 };
