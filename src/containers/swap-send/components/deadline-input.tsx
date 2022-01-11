@@ -11,7 +11,7 @@ import { Nullable } from '@utils/types';
 interface DeadlineInputProps {
   error?: string;
   value?: BigNumber;
-  onChange: (newValue?: BigNumber) => void;
+  onChange: (newValue: BigNumber) => void;
 }
 
 export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }) => {
