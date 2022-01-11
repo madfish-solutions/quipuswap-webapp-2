@@ -1,1 +1,1 @@
-export * from './dash-plug'
+export * from './dash-plug';

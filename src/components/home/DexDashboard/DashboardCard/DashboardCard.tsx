@@ -4,9 +4,9 @@ import { Tooltip, Skeleton, ColorModes, CurrencyAmount, ColorThemeContext } from
 import cx from 'classnames';
 
 import { StateWrapper } from '@components/state-wrapper';
+import { DashPlug } from '@components/ui/dash-plug';
 
 import s from './DashboardCard.module.sass';
-import { DashPlug } from '@components/ui/dash-plug';
 
 interface DashboardCardProps {
   volume: string;
@@ -39,11 +39,11 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateWrapper 
-        isLoading={loading} 
+      <StateWrapper
+        isLoading={loading}
         loaderFallback={<Skeleton className={s.skeleton} />}
         isError={true}
-        errorFallback={<DashPlug animation={false}/>}
+        errorFallback={<DashPlug animation={false} />}
       >
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
       </StateWrapper>

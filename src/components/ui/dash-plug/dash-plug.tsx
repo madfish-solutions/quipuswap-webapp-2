@@ -22,23 +22,24 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity }) =
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const wrapperClassName = cx(
-    s['inline-loading'], 
+    s['inline-loading'],
     {
-      [s.animation]: animation!==false,
+      [s.animation]: animation !== false
     },
     modeClass[colorThemeMode]
-  )
+  );
 
-  const iterator = useMemo(()=> {
+  const iterator = useMemo(() => {
     const quantity = Math.min(dashQuantity ?? DEFAULT_DASH_QUANTITY, MAX_DASH_QUANTITY);
-    return (new Array(quantity)).fill('')
-  }, [dashQuantity])
 
-  
-  
+    return new Array(quantity).fill('');
+  }, [dashQuantity]);
+
   return (
     <div className={wrapperClassName} style={{ transform: `scale(${zoom})` }}>
-      {iterator.map(_ => <div className={s.dash}></div>)}
+      {iterator.map(_ => (
+        <div className={s.dash}></div>
+      ))}
     </div>
   );
 };

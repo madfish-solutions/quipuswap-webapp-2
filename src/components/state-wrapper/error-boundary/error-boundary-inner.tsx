@@ -25,7 +25,7 @@ export class ErrorBoundaryInner extends Component<ErrorBoundaryInnerProps> {
 
   render() {
     if (this.state.error != null || this.props.isError) {
-      return this.props.fallback; 
+      return this.props.fallback;
     }
 
     return this.props.children;
