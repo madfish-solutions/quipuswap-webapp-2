@@ -20,9 +20,7 @@ export const useLiquidityFormService = () => {
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
-  const [transactionDuration, setTransactionDuration] = useState<Nullable<BigNumber>>(
-    new BigNumber(DEFAULT_DEADLINE_MINS)
-  );
+  const [transactionDuration, setTransactionDuration] = useState<BigNumber>(new BigNumber(DEFAULT_DEADLINE_MINS));
 
   const dex = useDexContract(tokenA, tokenB);
 

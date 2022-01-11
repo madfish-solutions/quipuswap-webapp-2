@@ -24,7 +24,7 @@ export const useAddLiquidityService = (
   tokenB: WhitelistedToken,
   onTokenAChange: (token: WhitelistedToken) => void,
   onTokenBChange: (token: WhitelistedToken) => void,
-  transactionDuration: Nullable<BigNumber>
+  transactionDuration: BigNumber
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
