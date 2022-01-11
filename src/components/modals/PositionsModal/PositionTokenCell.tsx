@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { Checkbox, TokenCell } from '@quipuswap/ui-kit';
-import { WhitelistedToken } from '@quipuswap/ui-kit/dist/utils/types';
 
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { WhitelistedToken } from '@utils/types';
 
 interface PositionTokenCellProps {
   token: WhitelistedToken;

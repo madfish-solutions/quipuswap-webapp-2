@@ -1,6 +1,7 @@
 import { ContractMethod, TezosToolkit, Wallet } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { Standard } from '@graphql';
 import { WhitelistedToken } from '@utils/types';
 
 export const allowContractSpendYourTokens = async (
@@ -12,7 +13,7 @@ export const allowContractSpendYourTokens = async (
 ): Promise<ContractMethod<Wallet>> => {
   const tokenContract = await tezos.wallet.at(token.contractAddress);
 
-  if (token.type === 'fa1.2') {
+  if (token.type === Standard.Fa12) {
     return tokenContract.methods.approve(spender, amount);
   }
 

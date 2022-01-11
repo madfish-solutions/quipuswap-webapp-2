@@ -1,6 +1,8 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { Standard } from '@graphql';
+
 export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null; // MayBe<T>
 
@@ -36,7 +38,7 @@ export interface WhitelistedTokenPair {
 }
 
 export interface WhitelistedToken {
-  type: 'fa1.2' | 'fa2';
+  type: Standard;
   contractAddress: string;
   // TODO: change the type to BigNumber
   fa2TokenId?: number;
@@ -103,7 +105,7 @@ export interface VoterType {
 export interface TokenDataType {
   token: {
     address: string;
-    type: 'fa1.2' | 'fa2';
+    type: Standard;
     id?: number | null;
     decimals: number;
   };
@@ -114,45 +116,6 @@ export interface TokenDataType {
 export interface TokenDataMap {
   first: TokenDataType;
   second: TokenDataType;
-}
-
-export interface LiquidityFormValues {
-  switcher: boolean;
-  balance1: BigNumber;
-  balance2: BigNumber;
-  balance3: BigNumber;
-  balanceA: BigNumber;
-  balanceB: BigNumber;
-  balanceTotalA: BigNumber;
-  balanceTotalB: BigNumber;
-  lpBalance: BigNumber;
-  frozenBalance: BigNumber;
-  lastChange: string;
-  estimateLP: BigNumber;
-  slippage: string;
-}
-
-export interface PoolShare {
-  unfrozen: BigNumber;
-  frozen: BigNumber;
-  total: BigNumber;
-}
-
-export interface WhitelistedStake {
-  id: number;
-  remaining: Date;
-  tokenPair: WhitelistedTokenPair;
-  totalValueLocked: string;
-  apy: string;
-  daily: string;
-  balance: string;
-  deposit: string;
-  earned: string;
-  earn: string;
-  tokenContract: string;
-  farmContract: string;
-  projectLink: string;
-  analyticsLink: string;
 }
 
 export interface VoteFormValues {

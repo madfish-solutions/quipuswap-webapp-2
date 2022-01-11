@@ -1,4 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import { Standard } from '@graphql';
 import { SortTokensContractsType, WhitelistedToken } from '@utils/types';
 
 export const sortTokensContracts = (
@@ -22,7 +23,7 @@ export const sortTokensContracts = (
     };
   }
 
-  if (tokenA.type === 'fa1.2' && tokenA.type === tokenB.type) {
+  if (tokenA.type === Standard.Fa12 && tokenA.type === tokenB.type) {
     if (tokenA.contractAddress < tokenB.contractAddress) {
       return {
         addressA: tokenA.contractAddress,
@@ -38,7 +39,7 @@ export const sortTokensContracts = (
     };
   }
 
-  if (tokenA.type === 'fa2' && tokenA.type === tokenB.type) {
+  if (tokenA.type === Standard.Fa2 && tokenA.type === tokenB.type) {
     if (tokenA.contractAddress < tokenB.contractAddress) {
       return {
         addressA: tokenA.contractAddress,
