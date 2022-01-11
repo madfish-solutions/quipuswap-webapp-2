@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { Standard } from '@graphql';
 import {
   useTezos,
   useTokens,
@@ -82,7 +83,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === 'fa2'));
+    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
   const handleTokenA = (

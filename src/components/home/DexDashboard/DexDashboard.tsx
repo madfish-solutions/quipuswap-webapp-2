@@ -37,7 +37,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
       const tokenInfo = await contract?.token_info.get(0);
       setTotalSupply(tokenInfo);
     };
-    asyncLoad();
+    void asyncLoad();
   }, []);
 
   const desktopContentClassName = network.type === QSNetworkType.MAIN ? s.content : cx(s.content, s.testnet);

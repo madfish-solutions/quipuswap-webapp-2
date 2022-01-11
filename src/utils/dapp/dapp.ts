@@ -16,6 +16,7 @@ import {
   LAST_USED_CONNECTION_KEY,
   MAINNET_NETWORK
 } from '@app.config';
+import { Standard } from '@graphql';
 import { getBakers } from '@utils/dapp/bakers';
 import { getBakerMetadata } from '@utils/dapp/bakersMetadata';
 import { getFallbackTokens, getTokens, saveCustomToken } from '@utils/dapp/tokens';
@@ -376,7 +377,7 @@ function useDApp() {
         const token: WhitelistedTokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
-          type: !isFa2 ? 'fa1.2' : 'fa2',
+          type: !isFa2 ? Standard.Fa12 : Standard.Fa2,
           fa2TokenId: !isFa2 ? undefined : tokenId || 0,
           network: network.id
         };

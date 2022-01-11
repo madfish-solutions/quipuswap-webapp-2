@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import { FC, useContext, useEffect } from 'react';
 
 import { ColorModes, ToastWrapper, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -7,11 +7,14 @@ import Script from 'next/script';
 
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
+import { TestNet } from '@components/common/TestNet';
 import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
+import { useNetwork } from '@utils/dapp';
+import { QSNetworkType } from '@utils/types';
 
 import s from './BaseLayout.module.sass';
 
@@ -22,7 +25,8 @@ interface BaseLayoutProps {
   className?: string;
 }
 
-export const BaseLayout: React.FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+  const network = useNetwork();
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
 
   useEffect(() => {
@@ -32,6 +36,8 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ title, description, imag
       document.querySelector('body')?.classList.remove(ColorModes.Dark);
     }
   }, [colorThemeMode]);
+
+  const isTestNet = network && network.type === QSNetworkType.TEST;
 
   return (
     <>
@@ -89,6 +95,7 @@ export const BaseLayout: React.FC<BaseLayoutProps> = ({ title, description, imag
             <Sidebar className={s.sidebar} />
             <Background className={s.background} />
             <main className={cx(s.wrapper, className)}>
+              {isTestNet && <TestNet />}
               <ToastWrapper />
               {children}
             </main>

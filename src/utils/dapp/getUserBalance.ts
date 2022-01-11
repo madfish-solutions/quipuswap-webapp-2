@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { KNOWN_LAMBDA_CONTRACTS } from '@app.config';
+import { Standard } from '@graphql';
 
 import { getReadOnlyTezos } from './getReadOnlyTezos';
 
@@ -17,7 +18,7 @@ export const getUserBalance = async (
   tezos: TezosToolkit,
   account: string,
   contractAddress: string,
-  type: 'fa1.2' | 'fa2' = 'fa1.2',
+  type: Standard = Standard.Fa12,
   tokenId = 0
 ) => {
   const newTezos = getReadOnlyTezos(tezos);
@@ -40,7 +41,7 @@ export const getUserBalance = async (
 
   let nat: BigNumber | undefined;
 
-  if (type === 'fa2') {
+  if (type === Standard.Fa2) {
     try {
       const response = await contract.views.balance_of([{ owner: account, token_id: tokenId }]).read(lambdaContract);
       nat = response[0].balance;

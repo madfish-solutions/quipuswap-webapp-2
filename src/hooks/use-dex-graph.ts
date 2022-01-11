@@ -5,6 +5,7 @@ import constate from 'constate';
 import useSWR, { useSWRConfig } from 'swr';
 
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
+import { Standard } from '@graphql';
 import { useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
@@ -12,11 +13,9 @@ import { DexPair } from '@utils/types';
 
 import { useToasts } from './use-toasts';
 
-type TokenType = 'fa1.2' | 'fa2';
-
 interface RawToken {
   address: string;
-  type: TokenType;
+  type: Standard;
   id?: string;
 }
 

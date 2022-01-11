@@ -1,6 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
+import { Standard } from '@graphql';
 import { WhitelistedToken } from '@utils/types';
 
 export const getValidPairParams = (
@@ -10,10 +11,10 @@ export const getValidPairParams = (
   tokenAInput: BigNumber,
   tokenBInput: BigNumber
 ) => {
-  const validTokenAType = tokenA.type === 'fa1.2' ? 'fa12' : 'fa2';
-  const validTokenBType = tokenB.type === 'fa1.2' ? 'fa12' : 'fa2';
+  const validTokenAType = tokenA.type === Standard.Fa12 ? Standard.Fa12 : Standard.Fa2;
+  const validTokenBType = tokenB.type === Standard.Fa12 ? Standard.Fa12 : Standard.Fa2;
 
-  if (tokenA.type === 'fa1.2' && tokenA.type === tokenB.type) {
+  if (tokenA.type === Standard.Fa12 && tokenA.type === tokenB.type) {
     return dex.contract.methods.addPair(
       validTokenAType,
       tokenA.contractAddress,
@@ -24,7 +25,7 @@ export const getValidPairParams = (
     );
   }
 
-  if (tokenA.type === 'fa2' && tokenA.type === tokenB.type) {
+  if (tokenA.type === Standard.Fa2 && tokenA.type === tokenB.type) {
     return dex.contract.methods.addPair(
       validTokenAType,
       tokenA.contractAddress,
@@ -37,7 +38,7 @@ export const getValidPairParams = (
     );
   }
 
-  if (tokenA.type === 'fa1.2' && tokenA.type !== tokenB.type) {
+  if (tokenA.type === Standard.Fa12 && tokenA.type !== tokenB.type) {
     return dex.contract.methods.addPair(
       validTokenAType,
       tokenA.contractAddress,
@@ -49,7 +50,7 @@ export const getValidPairParams = (
     );
   }
 
-  if (tokenA.type === 'fa2' && tokenA.type !== tokenB.type) {
+  if (tokenA.type === Standard.Fa2 && tokenA.type !== tokenB.type) {
     return dex.contract.methods.addPair(
       validTokenAType,
       tokenA.contractAddress,

@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@app.config';
+import { Standard } from '@graphql';
 import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
 import {
@@ -46,10 +47,10 @@ export const getTokenType = memoizee(
     const contract =
       typeof contractOrAddress === 'string' ? await getContract(tz, contractOrAddress) : contractOrAddress;
     if (contract.methods.approve) {
-      return 'fa1.2';
+      return Standard.Fa12;
     }
     if (contract.methods.update_operators) {
-      return 'fa2';
+      return Standard.Fa2;
     }
 
     return undefined;
@@ -152,7 +153,7 @@ export const getAllowanceTransferParams = async (
   spender: string,
   amount: BigNumber
 ) => {
-  if (token.type === 'fa2' || token.contractAddress === TEZOS_TOKEN.contractAddress) {
+  if (token.type === Standard.Fa2 || token.contractAddress === TEZOS_TOKEN.contractAddress) {
     return [];
   }
   const tokenContract = await getWalletContract(tezos.wallet, token.contractAddress);

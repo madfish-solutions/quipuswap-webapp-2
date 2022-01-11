@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { Standard } from '@graphql';
 import {
   fallbackToolkits,
   getTokenType,
@@ -50,10 +51,10 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
           try {
             const alreadyKnownToken = tokens.find(knownToken => getTokenSlug(knownToken) === rawSlug);
             const tokenType = alreadyKnownToken?.type ?? (await getTokenType(contractAddress, tezos));
-            if (tokenType === 'fa2') {
+            if (tokenType === Standard.Fa2) {
               return `${contractAddress}_${fa2TokenId ?? 0}`;
             }
-            if (tokenType === 'fa1.2') {
+            if (tokenType === Standard.Fa12) {
               return contractAddress;
             }
 
