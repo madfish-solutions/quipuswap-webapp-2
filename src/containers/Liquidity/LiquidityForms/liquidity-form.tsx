@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
+import { LiquidityDetails } from '@containers/Liquidity/LiquidityForms/liquidity-details';
 
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
@@ -50,6 +51,7 @@ export const LiquidityForm: FC = () => {
           <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
         )}
       </Card>
+      <LiquidityDetails dex={dex} tab={tab} tokenA={tokenA} tokenB={tokenB} />
     </>
   );
 };

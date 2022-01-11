@@ -124,6 +124,12 @@ export interface VoteFormValues {
   currentBacker?: string;
 }
 
+export interface PoolShare {
+  unfrozen: BigNumber;
+  frozen: BigNumber;
+  total: BigNumber;
+}
+
 export interface PoolTableType {
   id: number;
   xtzUsdQuote: string;
