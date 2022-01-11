@@ -12,7 +12,7 @@ export class ErrorBoundaryInner extends Component<ErrorBoundaryInnerProps> {
   }
 
   // eslint-disable-next-line
-  showErrorToast(err: string | Error) {}
+  showErrorToast(err: string | Error) { }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // eslint-disable-next-line no-console
@@ -25,11 +25,7 @@ export class ErrorBoundaryInner extends Component<ErrorBoundaryInnerProps> {
 
   render() {
     if (this.state.error != null || this.props.isError) {
-      if (this.props.fallback) {
-        return this.props.fallback;
-      }
-
-      return <div>{this.state.error?.message ?? 'Error'}</div>;
+      return this.props.fallback; 
     }
 
     return this.props.children;

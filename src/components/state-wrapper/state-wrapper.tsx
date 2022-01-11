@@ -6,7 +6,7 @@ export interface StateWrapperProps {
   isLoading?: boolean;
   loaderFallback: ReactElement;
   isError?: boolean;
-  errorFallback?: ReactElement;
+  errorFallback: ReactElement;
 }
 
 export const StateWrapper: FC<StateWrapperProps> = ({

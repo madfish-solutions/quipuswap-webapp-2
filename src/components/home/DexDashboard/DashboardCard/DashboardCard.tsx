@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { StateWrapper } from '@components/state-wrapper';
 
 import s from './DashboardCard.module.sass';
+import { DashPlug } from '@components/ui/dash-plug';
 
 interface DashboardCardProps {
   volume: string;
@@ -38,7 +39,12 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateWrapper isLoading={loading} loaderFallback={<Skeleton className={s.skeleton} />}>
+      <StateWrapper 
+        isLoading={loading} 
+        loaderFallback={<Skeleton className={s.skeleton} />}
+        isError={true}
+        errorFallback={<DashPlug animation={false}/>}
+      >
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
       </StateWrapper>
     </div>
