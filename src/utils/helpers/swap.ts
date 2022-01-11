@@ -3,6 +3,7 @@ import { OpKind, TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@app.config';
+import { Standard } from '@graphql';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
@@ -85,7 +86,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
     { type: tokenType, contractAddress: tokenAddress, fa2TokenId: tokenId }: TokenId,
     operator: string
   ) => {
-    if (tokenType !== 'fa2') {
+    if (tokenType !== Standard.Fa2) {
       return;
     }
     if (!fa2Operators[tokenAddress]) {

@@ -3,6 +3,7 @@ import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 import { Tabs, Card, Button, StickyBlock, SwapButton } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
@@ -35,17 +36,6 @@ interface SwapSendProps {
 
 const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
 
-const TabsContent = [
-  {
-    id: 'swap',
-    label: 'Swap'
-  },
-  {
-    id: 'send',
-    label: 'Send'
-  }
-];
-
 function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken) {
   const propsToCompare: (keyof WhitelistedTokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
 
@@ -63,10 +53,16 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     submitForm,
     touched
   } = useSwapFormik();
+  const { t } = useTranslation(['swap']);
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
   const initialTokens = useInitialTokensSlugs(fromToSlug, getRedirectionUrl);
   const initialFrom = initialTokens?.[0];
   const initialTo = initialTokens?.[1];
+
+  const TabsContent = [
+    { id: 'swap', label: t('swap|Swap') },
+    { id: 'send', label: t('swap|Send') }
+  ];
 
   const {
     dexRoute,
@@ -133,7 +129,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
-  const { dexGraph } = useDexGraph();
+  const { dexGraph, dataIsStale, refresh } = useDexGraph();
   const prevDexGraphRef = useRef<DexGraph>();
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
@@ -440,12 +436,16 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           {shouldShowDeadlineInput && (
             <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
-          {accountPkh ? (
+          {!accountPkh && <ConnectWalletButton className={s.connect} />}
+          {accountPkh && dataIsStale && (
+            <Button disabled={submitDisabled} onClick={refresh} className={s.button}>
+              {t('swap|Update Rates')}
+            </Button>
+          )}
+          {accountPkh && !dataIsStale && (
             <Button disabled={submitDisabled} type="submit" onClick={handleSubmit} className={s.button}>
               {currentTabLabel}
             </Button>
-          ) : (
-            <ConnectWalletButton className={s.connect} />
           )}
         </Card>
         <SwapDetails

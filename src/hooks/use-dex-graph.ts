@@ -1,22 +1,21 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
+import useSWR, { useSWRConfig } from 'swr';
 
 import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
-import { useNetwork, useTezos, useTokens } from '@utils/dapp';
+import { Standard } from '@graphql';
+import { useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
 
 import { useToasts } from './use-toasts';
-import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
-
-type TokenType = 'fa1.2' | 'fa2';
 
 interface RawToken {
   address: string;
-  type: TokenType;
+  type: Standard;
   id?: string;
 }
 
@@ -45,10 +44,12 @@ type RawPoolData = RawTTDexPoolData | RawTokenXtzPoolData;
 const fallbackDexPools: DexPair[] = [];
 
 export const [DexGraphProvider, useDexGraph] = constate(() => {
+  const [dataIsStale, setDataIsStale] = useState(false);
   const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
   const { showErrorToast } = useToasts();
+  const { mutate } = useSWRConfig();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
     const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];
@@ -122,11 +123,11 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
   const tokensSWRKey = useMemo(() => tokens.map(getTokenSlug).join(','), [tokens]);
 
-  const { data: dexPools, error: dexPoolsError } = useUpdateOnBlockSWR(
-    tezos,
-    ['dexPools', networkId, tokensSWRKey],
-    getDexPools
-  );
+  const { data: dexPools, error: dexPoolsError } = useSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
+  const refresh = async () => mutate(['dexPools', networkId, tokensSWRKey]);
+
+  useOnBlock(tezos, () => setDataIsStale(true));
+  useEffect(() => setDataIsStale(false), [dexPools]);
 
   const dexGraph = useMemo(
     () =>
@@ -158,6 +159,8 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   );
 
   return {
+    dataIsStale,
+    refresh,
     dexGraph,
     dexPools: dexPools ?? fallbackDexPools,
     dexPoolsLoading: !dexPools && !dexPoolsError
