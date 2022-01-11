@@ -10,17 +10,16 @@ import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
 import { fallbackTokenToTokenData, fromDecimals, getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
 import { PoolShare, TokenDataMap, WhitelistedToken } from '@utils/types';
 
-import s from '../Liquidity.module.sass';
-import { LiquidityTab } from './liquidity-tabs';
+import s from './liquidity-details.module.sass';
 
-interface LiquidityDetailsProps {
+interface Props {
   dex: FoundDex;
-  tab: LiquidityTab;
+  label: string;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
 }
 
-export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, tokenB }) => {
+export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const [tokensData, setTokensData] = useState<TokenDataMap>({
@@ -85,9 +84,9 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
   return (
     <Card
       header={{
-        content: `${tab.label} Liquidity Details`
+        content: `${label} Liquidity Details`
       }}
-      contentClassName={s.content}
+      contentClassName={s.LiquidityDetails}
     >
       <CardCell
         header={
@@ -102,9 +101,9 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
-        <div className={s.cellAmount}>
+        <div className={s.LiquidityDetails_CardCellAmount}>
           <CurrencyAmount amount="1" currency={tokenAName} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
@@ -127,9 +126,9 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
-        <div className={s.cellAmount}>
+        <div className={s.LiquidityDetails_CardCellAmount}>
           <CurrencyAmount amount="1" currency={tokenBName} />
           <span className={s.equal}>=</span>
           <CurrencyAmount
@@ -152,7 +151,7 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
         {!dex ? <Skeleton className={s.currency2} /> : <CurrencyAmount amount={balanceTotalA} currency={tokenAName} />}
       </CardCell>
@@ -169,7 +168,7 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
         {!dex ? <Skeleton className={s.currency2} /> : <CurrencyAmount amount={balanceTotalB} currency={tokenBName} />}
       </CardCell>
@@ -185,7 +184,7 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
         <CurrencyAmount amount={totalShare} />
       </CardCell>
@@ -201,36 +200,36 @@ export const LiquidityDetails: FC<LiquidityDetailsProps> = ({ dex, tab, tokenA, 
             />
           </>
         }
-        className={s.cell}
+        className={s.LiquidityDetails_CardCell}
       >
         <CurrencyAmount amount={frozenShare} />
       </CardCell>
-      <div className={s.detailsButtons}>
+      <div className={s.LiquidityDetails_DetailsButtons}>
         {dex ? (
           <Button
-            className={s.detailsButton}
+            className={s.LiquidityDetails_DetailsButtons_Button}
             theme="inverse"
             href={pairLink}
             external
-            icon={<ExternalLink className={s.linkIcon} />}
+            icon={<ExternalLink className={s.LiquidityDetails_DetailsButtons_Button_Icon} />}
           >
-            {t('liquidity|View Pair Analytics')}
+            {t('liquidity|Pair Analytics')}
           </Button>
         ) : (
-          <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />
+          <Skeleton className={cx(s.buttonSkel, s.LiquidityDetails_DetailsButtons_Button)} />
         )}
         {dex ? (
           <Button
-            className={s.detailsButton}
+            className={s.LiquidityDetails_DetailsButtons_Button}
             theme="inverse"
             href={contractLink}
             external
-            icon={<ExternalLink className={s.linkIcon} />}
+            icon={<ExternalLink className={s.LiquidityDetails_DetailsButtons_Button_Icon} />}
           >
-            {t('liquidity|View Pair Contract')}
+            {t('liquidity|Pair Contract')}
           </Button>
         ) : (
-          <Skeleton className={cx(s.buttonSkel, s.detailsButton)} />
+          <Skeleton className={cx(s.buttonSkel, s.LiquidityDetails_DetailsButtons_Button)} />
         )}
       </div>
     </Card>

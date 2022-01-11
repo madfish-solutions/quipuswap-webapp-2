@@ -3,10 +3,10 @@ import React, { FC } from 'react';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
-import { LiquidityDetails } from '@containers/Liquidity/LiquidityForms/liquidity-details';
 
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
+import { LiquidityDetails } from './liquidity-details';
 import { LiquidityTabs, TABS_CONTENT } from './liquidity-tabs';
 import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
@@ -51,7 +51,7 @@ export const LiquidityForm: FC = () => {
           <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
         )}
       </Card>
-      <LiquidityDetails dex={dex} tab={tab} tokenA={tokenA} tokenB={tokenB} />
+      <LiquidityDetails dex={dex} label={tab.label} tokenA={tokenA} tokenB={tokenB} />
     </>
   );
 };
