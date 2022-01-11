@@ -57,10 +57,6 @@ export const useRemoveLiquidityService = (
   };
 
   useEffect(() => {
-    if (!pairInfo) {
-      return;
-    }
-
     if (lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
@@ -71,13 +67,17 @@ export const useRemoveLiquidityService = (
     const lpTokenInputBN = new BigNumber(lpTokenInput);
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-    const validatedInput = validations(accountPkh, lpTokenAmount, lpTokenBalance);
+    const validatedInput = validations(accountPkh, lpTokenAmount, lpTokenBalance, lpTokenInput, LP_TOKEN_DECIMALS);
     setValidatedInputMessage(validatedInput);
 
     if (validatedInput === INVALID_INPUT) {
       setTokenAOutput('');
       setTokenBOutput('');
 
+      return;
+    }
+
+    if (!pairInfo) {
       return;
     }
 
