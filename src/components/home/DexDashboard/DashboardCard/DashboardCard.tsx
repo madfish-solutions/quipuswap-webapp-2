@@ -42,7 +42,6 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <StateWrapper
         isLoading={loading}
         loaderFallback={<Skeleton className={s.skeleton} />}
-        isError={true}
         errorFallback={<DashPlug animation={false} />}
       >
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
