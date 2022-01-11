@@ -38,7 +38,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateWrapper isLoading={loading} fallback={<Skeleton className={s.skeleton} />}>
+      <StateWrapper isLoading={loading} loaderFallback={<Skeleton className={s.skeleton} />}>
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
       </StateWrapper>
     </div>
