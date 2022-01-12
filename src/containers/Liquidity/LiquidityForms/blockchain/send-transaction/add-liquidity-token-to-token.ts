@@ -2,15 +2,13 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { increaseBySlippage } from '@containers/Liquidity/LiquidityForms/helpers';
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
 import { getDeadline } from '@utils/helpers/get-deadline';
 import { WhitelistedToken } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
-
-const PERCENTAGE = 100;
-const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -33,14 +31,14 @@ export const addLiquidityTokenToToken = async (
 
   const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
   const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
-  const fixedShares = shares
-    .multipliedBy(PERCENTAGE_BN.minus(slippage).dividedBy(PERCENTAGE_BN))
-    .integerValue(BigNumber.ROUND_DOWN);
+
+  const withDecimalsA = increaseBySlippage(tokenAAmount, slippage).integerValue(BigNumber.ROUND_DOWN);
+  const withDecimalsB = increaseBySlippage(tokenBAmount, slippage).integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
   const deadline = await getDeadline(tezos);
-  const investParams = dex.contract.methods.invest(id, fixedShares, tokenAAmount, tokenBAmount, deadline);
+  const investParams = dex.contract.methods.invest(id, shares, withDecimalsA, withDecimalsB, deadline);
 
   return await (
     await batchOperations(tezos, [

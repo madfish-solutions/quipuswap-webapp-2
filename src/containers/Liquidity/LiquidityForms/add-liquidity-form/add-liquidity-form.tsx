@@ -7,9 +7,9 @@ import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
-import { SlippageInput } from '@containers/swap-send/components/slippage-input';
 import { fromDecimals } from '@utils/helpers';
 
+import { LiquiditySlippage } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
@@ -77,7 +77,14 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       />
       {shouldShowSlippageInput && (
         <div className={s.mt}>
-          <SlippageInput slippage={slippage} onChange={handleChangeSlippage} />
+          <LiquiditySlippage
+            tokenA={tokenA}
+            tokenB={tokenB}
+            tokenAInput={tokenAInput}
+            tokenBInput={tokenBInput}
+            slippage={slippage}
+            onChange={handleChangeSlippage}
+          />
         </div>
       )}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
