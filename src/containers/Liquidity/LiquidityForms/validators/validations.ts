@@ -11,11 +11,12 @@ export const validations = (
   tokenAmount: BigNumber,
   userBalance: Nullable<BigNumber>,
   userInput: string,
-  decimals: number
+  decimals: number,
+  tokenSymbol: string
 ) => {
   return (
     validateUserInput(tokenAmount.toFixed()) ||
     validateUserInputAmount(accountPkh, tokenAmount, userBalance) ||
-    validateInputtedDecimals(userInput, decimals)
+    validateInputtedDecimals(userInput, decimals, tokenSymbol)
   );
 };
