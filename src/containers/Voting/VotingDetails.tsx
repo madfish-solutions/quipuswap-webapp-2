@@ -1,13 +1,14 @@
 import React, { useMemo } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Card, Button, Tooltip, CardCell, ExternalLink, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Card, Button, Tooltip, CardCell, ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
+import { CurrencyAmount } from '@components/common/currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 import { Undefined, VoterType, WhitelistedBaker, WhitelistedTokenPair } from '@utils/types';
 
 import { CandidateButton } from './CandidateButton';
@@ -29,7 +30,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
 
   const { totalVotes, totalVeto, votesToVeto } = useMemo(() => getVeteVetoInfo(dex), [dex]);
 
-  const pairLink = tokenPair.dex && `https://analytics.quipuswap.com/pairs/${tokenPair.dex?.contract.address}`;
+  const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex?.contract.address}`;
 
   return (
     <Card
@@ -74,7 +75,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         }
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={FormatNumber(totalVotes)} />
+        <CurrencyAmount amount={totalVotes} />
       </CardCell>
       <CardCell
         header={
@@ -88,7 +89,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         }
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={FormatNumber(totalVeto)} />
+        <CurrencyAmount amount={totalVeto} />
       </CardCell>
       <CardCell
         header={
@@ -110,7 +111,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         }
         className={cx(s.cellCenter, s.cell)}
       >
-        <CurrencyAmount amount={FormatNumber(votesToVeto)} />
+        <CurrencyAmount amount={votesToVeto} />
       </CardCell>
       {tokenPair.dex && (
         <div className={s.detailsButtons}>

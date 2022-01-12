@@ -1,7 +1,9 @@
 import React, { useContext } from 'react';
 
-import { Tooltip, Skeleton, ColorModes, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Tooltip, Skeleton, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+
+import { CurrencyAmount } from '@components/common/currency-amount';
 
 import s from './DashboardCard.module.sass';
 

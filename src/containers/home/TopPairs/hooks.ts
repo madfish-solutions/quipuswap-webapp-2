@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next';
 
+import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
 import { GetTokensPairsQuery, Token } from '@graphql';
 import { prepareTokenName, transformNodeToWhitelistedToken } from '@utils/helpers';
 
@@ -28,7 +29,7 @@ export const usePairs = (data?: GetTokensPairsQuery) => {
         buttons: {
           first: {
             label: t('home|Analytics'),
-            href: `https://analytics.quipuswap.com/pairs/${x?.node?.id}`,
+            href: `${QUIPUSWAP_ANALYTICS_PAIRS}/${x?.node?.id}`,
             external: true
           },
           second: {

@@ -1,17 +1,25 @@
 import React, { useMemo } from 'react';
 
-import { Button, Card, CardCell, ExternalLink, CurrencyAmount, Tooltip, Route, RouteProps } from '@quipuswap/ui-kit';
+import {
+  Button,
+  Card,
+  CardCell,
+  ExternalLink,
+  CurrencyAmount,
+  Tooltip,
+  Route,
+  RouteProps,
+  FormatNumber
+} from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { networksDefaultTokens, QUIPUSWAP_ANALYTICS_PAIRS, TEZOS_TOKEN } from '@app.config';
+import { RateView } from '@components/common/pair-details/rate-view';
 import s from '@styles/CommonContainer.module.sass';
 import { useNetwork } from '@utils/dapp';
 import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
-import { DexPair, WhitelistedToken } from '@utils/types';
-
-import { RateView } from './rate-view';
+import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
 
 interface SwapDetailsProps {
   currentTab: string;
@@ -20,8 +28,8 @@ interface SwapDetailsProps {
   inputToken?: WhitelistedToken;
   outputToken?: WhitelistedToken;
   route?: DexPair[];
-  buyRate?: BigNumber;
-  sellRate?: BigNumber;
+  buyRate: Nullable<BigNumber>;
+  sellRate: Nullable<BigNumber>;
 }
 
 const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute: DexPair[]) => {
@@ -123,6 +131,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         <RateView rate={sellRate} inputToken={inputTokenWithFallback} outputToken={outputTokenWithFallback} />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -139,6 +148,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         <RateView rate={buyRate} inputToken={outputTokenWithFallback} outputToken={inputTokenWithFallback} />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -160,6 +170,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
           currency="%"
         />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -174,6 +185,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         {fee && <CurrencyAmount amount={fee.toFixed()} currency="XTZ" />}
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -190,6 +202,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
       >
         <Route routes={routes} />
       </CardCell>
+
       {route.length > 0 && (
         <div className={s.detailsButtons}>
           {route.map(({ id, type: dexType, token1, token2 }) => (
@@ -197,7 +210,7 @@ export const SwapDetails: React.FC<SwapDetailsProps> = ({
               key={id}
               className={s.detailsButton}
               theme="inverse"
-              href={dexType === 'tokenxtz' ? `https://analytics.quipuswap.com/pairs/${id}` : '#'}
+              href={dexType === 'tokenxtz' ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${id}` : '#'}
               external
               icon={<ExternalLink className={s.linkIcon} />}
             >

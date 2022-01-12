@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Button, CurrencyAmount, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
+import { Button, FormatNumber, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
+import { CurrencyAmount } from '@components/common/currency-amount';
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';

@@ -1,6 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, FormatNumber } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -8,7 +8,6 @@ import { useTranslation } from 'next-i18next';
 import { Maybe } from '@graphql';
 import { useNetwork } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 import { QSNetworkType } from '@utils/types';
 
 import { DashboardCard } from './DashboardCard';

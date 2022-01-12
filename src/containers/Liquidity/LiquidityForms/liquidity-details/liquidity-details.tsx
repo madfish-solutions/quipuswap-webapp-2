@@ -1,14 +1,18 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Button, Card, CardCell, CurrencyAmount, ExternalLink, Skeleton, Tooltip } from '@quipuswap/ui-kit';
+import { Button, Card, CardCell, ExternalLink, Skeleton, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
+import { CurrencyAmount } from '@components/common/currency-amount';
+import { RateView } from '@components/common/pair-details/rate-view';
 import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
-import { fallbackTokenToTokenData, fromDecimals, getWhitelistedTokenSymbol, parseDecimals } from '@utils/helpers';
-import { PoolShare, TokenDataMap, WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getRateByBalances } from '@utils/helpers/rates';
+import { PoolShare, WhitelistedToken } from '@utils/types';
 
 import s from './liquidity-details.module.sass';
 
@@ -21,65 +25,25 @@ interface Props {
 
 export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
-
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(tokenA),
-    second: fallbackTokenToTokenData(tokenB)
-  });
-
-  const poolShare: PoolShare = useMemo(
-    () => ({
-      frozen: new BigNumber(888000000),
-      unfrozen: new BigNumber(888000000),
-      total: new BigNumber(888000000)
-    }),
-    []
-  );
-
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
-  const pairLink = useMemo(() => (!dex ? '#' : `https://analytics.quipuswap.com/pairs/${dex.contract.address}`), [dex]);
-  const contractLink = useMemo(() => (!dex ? '#' : `https://tzkt.io/${dex.contract.address}`), [dex]);
-  const tokenAName = useMemo(() => getWhitelistedTokenSymbol(tokenA), [tokenA]);
-  const tokenBName = useMemo(() => getWhitelistedTokenSymbol(tokenB), [tokenB]);
 
-  const balanceTotalA = useMemo(() => new BigNumber(pairInfo ? pairInfo.tokenAPool : 0).toString(), [pairInfo]);
-  const balanceTotalB = useMemo(() => new BigNumber(pairInfo ? pairInfo.tokenBPool : 0).toString(), [pairInfo]);
-  const totalShare = useMemo(
-    () => fromDecimals(poolShare?.total || new BigNumber(0), 6).toString() ?? '0',
-    [poolShare]
-  );
-  const frozenShare = useMemo(
-    () => fromDecimals(poolShare?.frozen || new BigNumber(0), 6).toString() ?? '0',
-    [poolShare]
-  );
-  const sellPrice = useMemo(
-    () =>
-      parseDecimals(
-        new BigNumber(tokensData.first.exchangeRate ?? 1).div(tokensData.second.exchangeRate ?? 1).toString(),
-        0,
-        Infinity,
-        tokenB.metadata.decimals
-      ),
-    [tokensData, tokenB.metadata.decimals]
-  );
-  const buyPrice = useMemo(
-    () =>
-      parseDecimals(
-        new BigNumber(tokensData.second.exchangeRate ?? 1).div(tokensData.first.exchangeRate ?? 1).toString(),
-        0,
-        Infinity,
-        tokenA.metadata.decimals
-      ),
-    [tokensData, tokenA.metadata.decimals]
-  );
+  const tokenAName = getWhitelistedTokenSymbol(tokenA);
+  const tokenBName = getWhitelistedTokenSymbol(tokenB);
 
-  useEffect(() => {
-    setTokensData(prevState => ({ ...prevState, first: fallbackTokenToTokenData(tokenA) }));
-  }, [tokenA]);
+  const balanceTotalA = pairInfo ? new BigNumber(pairInfo.tokenAPool) : null;
+  const balanceTotalB = pairInfo ? new BigNumber(pairInfo.tokenBPool) : null;
 
-  useEffect(() => {
-    setTokensData(prevState => ({ ...prevState, second: fallbackTokenToTokenData(tokenB) }));
-  }, [tokenB]);
+  const sellPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalA, balanceTotalB) : null;
+  const buyPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalB, balanceTotalA) : null;
+
+  const poolShare: PoolShare = {
+    frozen: new BigNumber(888000000),
+    unfrozen: new BigNumber(888000000),
+    total: new BigNumber(888000000)
+  };
+
+  const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
+  const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
 
   return (
     <Card
@@ -103,16 +67,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <div className={s.LiquidityDetails_CardCellAmount}>
-          <CurrencyAmount amount="1" currency={tokenAName} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={sellPrice}
-            currency={tokenBName}
-            dollarEquivalent={tokensData.first.exchangeRate ? `${tokensData.first.exchangeRate}` : undefined}
-          />
-        </div>
+        <RateView rate={sellPrice} inputToken={tokenA} outputToken={tokenB} />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -128,16 +85,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <div className={s.LiquidityDetails_CardCellAmount}>
-          <CurrencyAmount amount="1" currency={tokenBName} />
-          <span className={s.equal}>=</span>
-          <CurrencyAmount
-            amount={buyPrice}
-            currency={tokenAName}
-            dollarEquivalent={tokensData.second.exchangeRate ? `${tokensData.second.exchangeRate}` : undefined}
-          />
-        </div>
+        <RateView rate={buyPrice} inputToken={tokenB} outputToken={tokenA} />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -153,8 +103,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {!dex ? <Skeleton className={s.currency2} /> : <CurrencyAmount amount={balanceTotalA} currency={tokenAName} />}
+        {dex ? <CurrencyAmount amount={balanceTotalA} currency={tokenAName} /> : <Skeleton className={s.currency2} />}
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -170,8 +121,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {!dex ? <Skeleton className={s.currency2} /> : <CurrencyAmount amount={balanceTotalB} currency={tokenBName} />}
+        {dex ? <CurrencyAmount amount={balanceTotalB} currency={tokenBName} /> : <Skeleton className={s.currency2} />}
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -186,8 +138,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={totalShare} />
+        <CurrencyAmount amount={poolShare.total} />
       </CardCell>
+
       <CardCell
         header={
           <>
@@ -202,10 +155,11 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={frozenShare} />
+        <CurrencyAmount amount={poolShare.frozen} />
       </CardCell>
+
       <div className={s.LiquidityDetails_DetailsButtons}>
-        {dex ? (
+        {dex && pairLink ? (
           <Button
             className={s.LiquidityDetails_DetailsButtons_Button}
             theme="inverse"
@@ -218,7 +172,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         ) : (
           <Skeleton className={cx(s.buttonSkel, s.LiquidityDetails_DetailsButtons_Button)} />
         )}
-        {dex ? (
+        {dex && contractLink ? (
           <Button
             className={s.LiquidityDetails_DetailsButtons_Button}
             theme="inverse"

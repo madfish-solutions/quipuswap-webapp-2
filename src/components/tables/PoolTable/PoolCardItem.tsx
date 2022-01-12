@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 
-import { Bage, Button, Tooltip, ColorModes, TokensLogos, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Bage, Button, Tooltip, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { CurrencyAmount } from '@components/common/currency-amount';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 

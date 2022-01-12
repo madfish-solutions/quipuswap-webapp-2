@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
-import { Slippage, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Slippage } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
+import { CurrencyAmount } from '@components/common/currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
