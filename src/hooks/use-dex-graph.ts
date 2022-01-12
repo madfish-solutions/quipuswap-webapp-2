@@ -123,8 +123,12 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
   const tokensSWRKey = useMemo(() => tokens.map(getTokenSlug).join(','), [tokens]);
 
-  const { data: dexPools, error: dexPoolsError } = useSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
-  const refresh = async () => mutate(['dexPools', networkId, tokensSWRKey]);
+  const {
+    data: dexPools,
+    error: dexPoolsError,
+    isValidating
+  } = useSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
+  const refreshDexPools = async () => mutate(['dexPools', networkId, tokensSWRKey]);
 
   useOnBlock(tezos, () => setDataIsStale(true));
   useEffect(() => setDataIsStale(false), [dexPools]);
@@ -160,9 +164,9 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
   return {
     dataIsStale,
-    refresh,
+    refreshDexPools,
     dexGraph,
     dexPools: dexPools ?? fallbackDexPools,
-    dexPoolsLoading: !dexPools && !dexPoolsError
+    dexPoolsLoading: (!dexPools && !dexPoolsError) || isValidating
   };
 });
