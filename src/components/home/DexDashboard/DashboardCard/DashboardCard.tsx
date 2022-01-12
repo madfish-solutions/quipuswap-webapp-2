@@ -3,6 +3,9 @@ import React, { useContext } from 'react';
 import { Tooltip, Skeleton, ColorModes, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { StateWrapper } from '@components/state-wrapper';
+import { DashPlug } from '@components/ui/dash-plug';
+
 import s from './DashboardCard.module.sass';
 
 interface DashboardCardProps {
@@ -36,11 +39,13 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      {loading ? (
-        <Skeleton className={s.skeleton} />
-      ) : (
+      <StateWrapper
+        isLoading={loading}
+        loaderFallback={<Skeleton className={s.skeleton} />}
+        errorFallback={<DashPlug animation={false} />}
+      >
         <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
-      )}
+      </StateWrapper>
     </div>
   );
 };
