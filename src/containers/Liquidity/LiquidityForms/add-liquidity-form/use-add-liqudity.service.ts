@@ -13,7 +13,7 @@ import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initial
 import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validations } from '../validators';
+import { validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
@@ -321,9 +321,12 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
   return {
     validationMessageTokenA,
     validationMessageTokenB,
+    validationMessageTransactionDuration,
     accountPkh,
     tokenABalance,
     tokenBBalance,

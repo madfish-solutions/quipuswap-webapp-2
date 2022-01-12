@@ -29,6 +29,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   const {
     validationMessageTokenA,
     validationMessageTokenB,
+    validationMessageTransactionDuration,
     accountPkh,
     tokenABalance,
     tokenBBalance,
@@ -47,7 +48,12 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   const { decimals: decimalsB } = tokenB.metadata;
 
   const isButtonDisabled =
-    !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenB) || !tokenAInput || !tokenBInput;
+    !accountPkh ||
+    !tokenAInput ||
+    !tokenBInput ||
+    Boolean(validationMessageTokenA) ||
+    Boolean(validationMessageTokenB) ||
+    Boolean(validationMessageTransactionDuration);
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
   const isDeadlineVisible = !isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
@@ -83,7 +89,11 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       />
       {isDeadlineVisible && (
         <div className={s.deadline}>
-          <DeadlineInput onChange={setTransactionDuration} />
+          <DeadlineInput
+            onChange={setTransactionDuration}
+            error={validationMessageTransactionDuration}
+            value={transactionDuration}
+          />
         </div>
       )}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
