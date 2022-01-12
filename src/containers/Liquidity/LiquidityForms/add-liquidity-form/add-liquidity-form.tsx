@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { SlippageInput } from '@containers/swap-send/components/slippage-input';
 import { fromDecimals } from '@utils/helpers';
 
@@ -43,6 +44,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenB) || !tokenAInput || !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+  const shouldShowSlippageInput = !isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
 
   return (
     <>
@@ -73,7 +75,11 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={validationMessageTokenB}
         placeholder="0.0"
       />
-      <SlippageInput slippage={slippage} onChange={handleChangeSlippage} />
+      {shouldShowSlippageInput && (
+        <div className={s.mt}>
+          <SlippageInput slippage={slippage} onChange={handleChangeSlippage} />
+        </div>
+      )}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>

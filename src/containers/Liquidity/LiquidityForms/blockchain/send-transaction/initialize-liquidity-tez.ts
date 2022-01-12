@@ -11,8 +11,8 @@ export const initializeLiquidityTez = async (
   tezos: TezosToolkit,
   networkId: QSMainNet,
   token: Token,
-  tokenValue: BigNumber,
-  tezValue: BigNumber
+  tezValue: BigNumber,
+  tokenValue: BigNumber
 ) => {
   const factories = {
     fa1_2Factory: FACTORIES[networkId].fa1_2Factory[FIRST_FACTORY_INDEX],

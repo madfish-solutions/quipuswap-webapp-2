@@ -10,6 +10,7 @@ import { WhitelistedToken } from '@utils/types';
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
 const PERCENTAGE = 100;
+const PERCENTAGE_BN = new BigNumber(PERCENTAGE);
 
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -32,7 +33,9 @@ export const addLiquidityTokenToToken = async (
 
   const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
   const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
-  const fixedShares = shares.multipliedBy(slippage.dividedBy(PERCENTAGE));
+  const fixedShares = shares
+    .multipliedBy(PERCENTAGE_BN.minus(slippage).dividedBy(PERCENTAGE_BN))
+    .integerValue(BigNumber.ROUND_DOWN);
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);

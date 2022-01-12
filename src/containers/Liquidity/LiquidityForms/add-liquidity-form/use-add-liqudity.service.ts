@@ -3,13 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import {
-  DEFAULT_SLIPPAGE_PERCENTAGE,
-  EMPTY_POOL_AMOUNT,
-  LIQUIDITY_DEFAULT_SLIPPAGE,
-  TEZOS_TOKEN,
-  TOKEN_TO_TOKEN_DEX
-} from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -39,7 +33,7 @@ export const useAddLiquidityService = (
   const tokenBBalance = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
 
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(LIQUIDITY_DEFAULT_SLIPPAGE));
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
   const [tokenAInput, setTokenAInput] = useState('');
   const [tokenBInput, setTokenBInput] = useState('');
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
@@ -286,13 +280,15 @@ export const useAddLiquidityService = (
     const tezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenAInput : tokenBInput;
     const notTezTokenInput = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBInput : tokenAInput;
     const tezTokenBN = new BigNumber(tezTokenInput);
+    const notTezTokenBN = new BigNumber(notTezTokenInput);
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
+    const tokenValue = toDecimals(notTezTokenBN, notTezToken.metadata.decimals);
 
     const shouldAddLiquidity =
       pairInfo && pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) && pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
+      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, tokenValue);
 
       return await confirmOperation(addLiquidityTezOperation.opHash, {
         message: getAddLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezToken.metadata.name)
@@ -303,16 +299,7 @@ export const useAddLiquidityService = (
       contract: notTezToken.contractAddress,
       id: notTezToken.fa2TokenId
     };
-    const notTezTokenBN = new BigNumber(notTezTokenInput);
-    const tokenBValue = toDecimals(notTezTokenBN, notTezToken);
-
-    const initializeLiquidityTezOperation = await initializeLiquidityTez(
-      tezos,
-      networkId,
-      token,
-      tokenBValue,
-      tezValue
-    );
+    const initializeLiquidityTezOperation = await initializeLiquidityTez(tezos, networkId, token, tezValue, tokenValue);
 
     return await confirmOperation(initializeLiquidityTezOperation.opHash, {
       message: getInitializeLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezToken.metadata.name)
