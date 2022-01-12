@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface SlippageInputProps {
   error?: string;
@@ -22,7 +22,7 @@ const WHOLE_ITEM_PERCENT = 100;
 export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const { t } = useTranslation(['common']);
 
-  const handleChange = (newValue?: string) =>
+  const handleChange = (newValue: Nullable<string>) =>
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;

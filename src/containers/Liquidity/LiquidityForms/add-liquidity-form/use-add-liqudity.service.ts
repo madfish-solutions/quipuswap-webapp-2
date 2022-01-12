@@ -41,6 +41,7 @@ export const useAddLiquidityService = (
 
   const tokensCalculations = (
     tokenAInput: string,
+    tokenBInput: string,
     tokenA: WhitelistedToken,
     tokenB: WhitelistedToken,
     pairInfo: Nullable<PairInfo>,
@@ -60,6 +61,14 @@ export const useAddLiquidityService = (
 
       return;
     }
+    const tokenABN = new BigNumber(tokenAInput);
+    const tokenAAmount = toDecimals(tokenABN, tokenA);
+
+    const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
+    const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
+
+    const validationA = validations(accountPkh, tokenAAmount, tokenABalance, tokenAInput, decimalsA, symbolA);
+    setValidationMessageTokenA(validationA);
 
     if (
       !pairInfo ||
@@ -71,12 +80,6 @@ export const useAddLiquidityService = (
     }
 
     const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
-
-    const tokenABN = new BigNumber(tokenAInput);
-    const tokenAAmount = toDecimals(tokenABN, tokenA);
-
-    const validationA = validations(accountPkh, tokenAAmount, tokenABalance);
-    setValidationMessageTokenA(validationA);
 
     if (validationA === INVALID_INPUT) {
       setTokenBInput('');
@@ -90,7 +93,7 @@ export const useAddLiquidityService = (
 
     const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
 
-    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance);
+    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB);
     setValidationMessageTokenB(validationB);
 
     setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
@@ -104,6 +107,7 @@ export const useAddLiquidityService = (
     if (lastEditedInput === LastChangedToken.tokenA) {
       tokensCalculations(
         tokenAInput,
+        tokenBInput,
         tokenA,
         tokenB,
         pairInfo,
@@ -117,6 +121,7 @@ export const useAddLiquidityService = (
     } else {
       tokensCalculations(
         tokenBInput,
+        tokenAInput,
         tokenB,
         tokenA,
         pairInfo,
@@ -153,6 +158,7 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       event.target.value,
+      tokenBInput,
       tokenA,
       tokenB,
       pairInfo,
@@ -169,6 +175,7 @@ export const useAddLiquidityService = (
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       event.target.value,
+      tokenAInput,
       tokenB,
       tokenA,
       pairInfo,
@@ -182,9 +189,13 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
+    const { decimals } = tokenA.metadata;
+    const fixedValue = new BigNumber(value).toFixed(decimals);
+
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
-      value,
+      fixedValue,
+      tokenBInput,
       tokenA,
       tokenB,
       pairInfo,
@@ -198,9 +209,13 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
+    const { decimals } = tokenB.metadata;
+    const fixedValue = new BigNumber(value).toFixed(decimals);
+
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
-      value,
+      fixedValue,
+      tokenAInput,
       tokenB,
       tokenA,
       pairInfo,
