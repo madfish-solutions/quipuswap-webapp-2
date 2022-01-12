@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
-import { LP_TOKEN_DECIMALS } from '@app.config';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -57,7 +56,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={fromDecimals(lpTokenBalance, LP_TOKEN_DECIMALS).toFixed()}
+        balance={lpTokenBalance?.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}

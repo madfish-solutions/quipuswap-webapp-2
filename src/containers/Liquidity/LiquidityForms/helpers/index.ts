@@ -1,5 +1,5 @@
 export * from './calculate-token-amount';
-export * from './find-not-tez-token-in-pair';
+export * from './find-not-tez-token';
 export * from './find-token';
 export * from './get-liquidity-url';
 export * from './get-tokens-reset-and-update-operators';

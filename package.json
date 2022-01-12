@@ -88,7 +88,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint --fix",
+      "pre-commit": "yarn lint --fix && yarn tsc && yarn run build",
       "pre-push": "yarn tsc && yarn run build"
     }
   }

@@ -1,11 +1,12 @@
 import React, { useContext, useMemo } from 'react';
 
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
-import { Card, Button, Tooltip, ColorModes, VotingReward, ColorThemeContext, FormatNumber } from '@quipuswap/ui-kit';
+import { Card, Button, Tooltip, ColorModes, VotingReward, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
+import { FormatNumber } from '@utils/formatNumber';
 
 import { isRewardGreaterThenZero } from './isRewardGreaterThenZero';
 import s from './VotingStats.module.sass';

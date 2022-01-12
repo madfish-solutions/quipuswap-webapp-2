@@ -6,13 +6,13 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
+import { LP_TOKEN_DECIMALS, QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { CurrencyAmount } from '@components/common/currency-amount';
 import { RateView } from '@components/common/pair-details/rate-view';
-import { usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
+import { useLoadLpTokenBalance, usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { getRateByBalances } from '@utils/helpers/rates';
-import { PoolShare, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 import s from './liquidity-details.module.sass';
 
@@ -36,11 +36,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const sellPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalA, balanceTotalB) : null;
   const buyPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalB, balanceTotalA) : null;
 
-  const poolShare: PoolShare = {
-    frozen: new BigNumber(888000000),
-    unfrozen: new BigNumber(888000000),
-    total: new BigNumber(888000000)
-  };
+  const poolFrozen = new BigNumber(888000000);
+  const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
   const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
@@ -138,7 +135,11 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={poolShare.total} />
+        {poolTotal ? (
+          <CurrencyAmount amount={poolTotal} options={{ decimals: LP_TOKEN_DECIMALS }} />
+        ) : (
+          <Skeleton className={s.currency2} />
+        )}
       </CardCell>
 
       <CardCell
@@ -155,7 +156,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={poolShare.frozen} />
+        <CurrencyAmount amount={poolFrozen} />
       </CardCell>
 
       <div className={s.LiquidityDetails_DetailsButtons}>

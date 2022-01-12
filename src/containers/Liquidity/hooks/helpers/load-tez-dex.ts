@@ -2,7 +2,7 @@ import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { FACTORIES } from '@app.config';
-import { findNotTezTokenInPair } from '@containers/Liquidity/LiquidityForms/helpers';
+import { findNotTezToken } from '@containers/Liquidity/LiquidityForms/helpers';
 import { Nullable, QSMainNet, WhitelistedToken } from '@utils/types';
 
 export const loadTezDex = async ({
@@ -17,7 +17,10 @@ export const loadTezDex = async ({
   tokenB: WhitelistedToken;
 }): Promise<Nullable<FoundDex>> => {
   try {
-    const notTezToken = findNotTezTokenInPair(tokenA, tokenB);
+    const notTezToken = findNotTezToken([tokenA, tokenB]);
+    if (!notTezToken) {
+      return null;
+    }
     const token: Token = {
       contract: notTezToken.contractAddress,
       id: notTezToken.fa2TokenId

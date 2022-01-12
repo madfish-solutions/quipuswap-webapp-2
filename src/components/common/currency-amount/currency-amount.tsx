@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, DollarEquivalent, FormatNumber } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, DollarEquivalent } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { DASH_CHAR } from '@app.config';
+import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
 import { Nullable } from '@utils/types';
 
 import s from './currency-amount.module.sass';
@@ -16,6 +17,7 @@ export interface CurrencyAmountProps {
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;
+  options?: FormatNumberOptions;
 }
 
 const sizeClass = {
@@ -35,11 +37,12 @@ export const CurrencyAmount: React.FC<CurrencyAmountProps> = ({
   amount = null,
   currency,
   isLeftCurrency = false,
-  dollarEquivalent
+  dollarEquivalent,
+  options
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const value = amount !== null ? FormatNumber(amount) : DASH_CHAR;
+  const value = amount !== null ? FormatNumber(amount, options) : DASH_CHAR;
 
   const content = (
     <span
