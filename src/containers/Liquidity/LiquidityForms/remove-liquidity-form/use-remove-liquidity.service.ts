@@ -112,7 +112,10 @@ export const useRemoveLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, lpTokenInput, lpTokenBalance]);
 
-  const handleBalance = (value: string) => setLpTokenInput(value);
+  const handleBalance = (value: string) => {
+    const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
+    setLpTokenInput(fixedValue);
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
