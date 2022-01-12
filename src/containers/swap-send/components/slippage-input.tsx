@@ -22,9 +22,8 @@ const WHOLE_ITEM_PERCENT = 100;
 export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const { t } = useTranslation(['common']);
 
-  const handleChange = (newValue: Nullable<string>) => {
+  const handleChange = (newValue: Nullable<string>) =>
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
-  };
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 

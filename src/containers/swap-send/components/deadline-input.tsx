@@ -6,17 +6,18 @@ import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS } from '@app.config';
 import s from '@styles/CommonContainer.module.sass';
+import { Nullable } from '@utils/types';
 
 interface DeadlineInputProps {
   error?: string;
   value?: BigNumber;
-  onChange: (newValue?: BigNumber) => void;
+  onChange: (newValue: BigNumber) => void;
 }
 
 export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }) => {
   const { t } = useTranslation(['common']);
 
-  const handleChange = (newValue?: string) =>
+  const handleChange = (newValue: Nullable<string>) =>
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_DEADLINE_MINS));
 
   return (

@@ -65,10 +65,10 @@ export const useAddLiquidityService = (
     const tokenABN = new BigNumber(tokenAInput);
     const tokenAAmount = toDecimals(tokenABN, tokenA);
 
-    const { decimals: decimalsA } = tokenA.metadata;
-    const { decimals: decimalsB } = tokenB.metadata;
+    const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
+    const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
 
-    const validationA = validations(accountPkh, tokenAAmount, tokenABalance, tokenAInput, decimalsA);
+    const validationA = validations(accountPkh, tokenAAmount, tokenABalance, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
 
     if (
@@ -94,7 +94,7 @@ export const useAddLiquidityService = (
 
     const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
 
-    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB);
+    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB);
     setValidationMessageTokenB(validationB);
 
     setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
@@ -190,9 +190,12 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
+    const { decimals } = tokenA.metadata;
+    const fixedValue = new BigNumber(value).toFixed(decimals);
+
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
-      value,
+      fixedValue,
       tokenBInput,
       tokenA,
       tokenB,
@@ -207,9 +210,12 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
+    const { decimals } = tokenB.metadata;
+    const fixedValue = new BigNumber(value).toFixed(decimals);
+
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
-      value,
+      fixedValue,
       tokenAInput,
       tokenB,
       tokenA,
