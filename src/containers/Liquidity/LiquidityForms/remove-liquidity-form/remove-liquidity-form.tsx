@@ -34,6 +34,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
+    validationMessageTransactionDuration,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -53,10 +54,11 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
 
   const isButtonDisabled =
     !accountPkh ||
+    !lpTokenInput ||
     Boolean(validatedInputMessage) ||
     Boolean(validatedOutputMessageA) ||
     Boolean(validatedOutputMessageB) ||
-    !lpTokenInput;
+    Boolean(validationMessageTransactionDuration);
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
   const isDeadlineVisible = !isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
@@ -108,7 +110,11 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       />
       {isDeadlineVisible && (
         <div className={s.deadline}>
-          <DeadlineInput onChange={setTransactionDuration} />
+          <DeadlineInput
+            onChange={setTransactionDuration}
+            value={transactionDuration}
+            error={validationMessageTransactionDuration}
+          />
         </div>
       )}
       <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>

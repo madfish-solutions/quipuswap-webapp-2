@@ -13,7 +13,7 @@ import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
 import { getOperationHash } from '../hooks/get-operation-hash';
-import { validations, validateOutputAmount } from '../validators';
+import { validations, validateOutputAmount, validateTransactionDuration } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
 export const useRemoveLiquidityService = (
@@ -21,7 +21,7 @@ export const useRemoveLiquidityService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
-  transactionDuration: Nullable<BigNumber>
+  transactionDuration: BigNumber
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -151,10 +151,13 @@ export const useRemoveLiquidityService = (
     }
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
   return {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
+    validationMessageTransactionDuration,
     tokenPair,
     accountPkh,
     lpTokenInput,
