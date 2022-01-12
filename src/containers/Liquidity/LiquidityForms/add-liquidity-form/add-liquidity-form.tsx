@@ -6,6 +6,7 @@ import BigNumber from 'bignumber.js';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { SlippageInput } from '@containers/swap-send/components/slippage-input';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -20,6 +21,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     validationMessageTokenA,
     validationMessageTokenB,
     accountPkh,
+    slippage,
+    handleChangeSlippage,
     tokenABalance,
     tokenBBalance,
     tokenAInput,
@@ -70,6 +73,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={validationMessageTokenB}
         placeholder="0.0"
       />
+      <SlippageInput slippage={slippage} onChange={handleChangeSlippage} />
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>

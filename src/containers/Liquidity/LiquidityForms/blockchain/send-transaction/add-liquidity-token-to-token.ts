@@ -9,6 +9,8 @@ import { WhitelistedToken } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
+const PERCENTAGE = 100;
+
 export const addLiquidityTokenToToken = async (
   tezos: TezosToolkit,
   accountPkh: string,
@@ -19,7 +21,8 @@ export const addLiquidityTokenToToken = async (
   tokenB: WhitelistedToken,
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
-  tokenBPool: BigNumber
+  tokenBPool: BigNumber,
+  slippage: BigNumber
 ) => {
   const { address: dexAddress } = dex.contract;
   const { decimals: decimalsA } = tokenA.metadata;
@@ -29,11 +32,12 @@ export const addLiquidityTokenToToken = async (
 
   const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
   const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
+  const fixedShares = shares.multipliedBy(slippage.dividedBy(PERCENTAGE));
 
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
   const deadline = await getDeadline(tezos);
-  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, deadline);
+  const investParams = dex.contract.methods.invest(id, fixedShares, tokenAAmount, tokenBAmount, deadline);
 
   return await (
     await batchOperations(tezos, [
