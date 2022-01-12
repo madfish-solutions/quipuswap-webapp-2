@@ -8,14 +8,14 @@ import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { CurrencyAmount } from '@components/common/currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface SlippageInputProps {
   error?: string;
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
   slippage?: BigNumber;
-  onChange: (newValue?: BigNumber) => void;
+  onChange: (newValue: BigNumber) => void;
 }
 
 const WHOLE_ITEM_PERCENT = 100;
@@ -23,8 +23,8 @@ const WHOLE_ITEM_PERCENT = 100;
 export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
   const { t } = useTranslation(['common']);
 
-  const handleChange = (newValue?: string) =>
-    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
+  const handleChange = (newValue: Nullable<string>) =>
+    onChange(new BigNumber(newValue ? newValue : DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
