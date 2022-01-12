@@ -19,16 +19,11 @@ $max-dash-quantity: 8;
 
 @mixin dash-index-animation($index, $quantity) {
   .dash:nth-child(#{$index}) {
-    -webkit-animation-name: dash-animation;
-            animation-name: dash-animation;
-    -webkit-animation-duration: calc(var(--duration) * #{$quantity});
-            animation-duration: calc(var(--duration) * #{$quantity});
-    -webkit-animation-timing-function: linear;
-            animation-timing-function: linear;
-    -webkit-animation-delay: calc(var(--duration) * (#{$index} - 1) * var(--smoothing));
-            animation-delay: calc(var(--duration) * (#{$index} - 1) * var(--smoothing));
-    -webkit-animation-iteration-count: infinite;
-            animation-iteration-count: infinite;
+    animation-name: dash-animation;
+    animation-duration: calc(var(--duration) * #{$quantity});
+    animation-timing-function: linear;
+    animation-delay: calc(var(--duration) * (#{$index} - 1) * var(--smoothing));
+    animation-iteration-count: infinite;
   }
 }
 
@@ -40,12 +35,8 @@ $max-dash-quantity: 8;
 }
 
 .inline-loading {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-column-gap: $column-gap;
-     -moz-column-gap: $column-gap;
-          column-gap: $column-gap;
+  column-gap: $column-gap;
   
   &.animation {
     --duration: #{$animation-duration};
@@ -59,21 +50,6 @@ $max-dash-quantity: 8;
   width: $dash-width;
   height: $dash-height;
   background-color: var(--main-color);
-}
-
-@-webkit-keyframes dash-animation {
-  0% {
-    background-color: var(--main-color);
-  }
-  12.5% {
-    background-color: var(--secondary-color);
-  }
-  25% {
-    background-color: var(--main-color);
-  }
-  100% {
-    background-color: var(--main-color);
-  }
 }
 
 @keyframes dash-animation {
