@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 
-import { Slippage, CurrencyAmount } from '@quipuswap/ui-kit';
+import { Slippage } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { increaseBySlippage } from '@containers/Liquidity/LiquidityForms/helpers';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -50,15 +51,13 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       </label>
       <Slippage handleChange={handleChange} placeholder={slippage.toFixed()} />
       {error && <div className={s.simpleError}>{error}</div>}
-      <div className={s.receive}>
-        <div>
-          <span className={s.receiveLabel}>Max invested A:</span>
-          <CurrencyAmount amount={maxInvestedA.toFixed()} currency={getWhitelistedTokenSymbol(tokenA)} />
-        </div>
-        <div>
-          <span className={s.receiveLabel}>Max invested B:</span>
-          <CurrencyAmount amount={maxInvestedB.toFixed()} currency={getWhitelistedTokenSymbol(tokenB)} />
-        </div>
+      <div className={s.amountsWrapper}>
+        <span className={s.receiveLabel}>Max invested A:</span>
+        <StateCurrencyAmount amount={maxInvestedA.toFixed()} currency={getWhitelistedTokenSymbol(tokenA)} />
+      </div>
+      <div className={s.amountsWrapper}>
+        <span className={s.receiveLabel}>Max invested B:</span>
+        <StateCurrencyAmount amount={maxInvestedB.toFixed()} currency={getWhitelistedTokenSymbol(tokenB)} />
       </div>
     </>
   );
