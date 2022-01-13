@@ -3,15 +3,11 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
-import {
-  findNotTezToken,
-  getValidMichelTemplate,
-  isTezInPair,
-  sortTokensContracts
-} from '@containers/liquidity/liquidity-cards/helpers';
 import { getUserBalance } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
+
+import { findNotTezToken, getValidMichelTemplate, isTezInPair, sortTokensContracts } from '../../helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');

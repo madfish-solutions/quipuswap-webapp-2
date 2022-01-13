@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { DASH_CHAR } from '@app.config';
+import { DashPlug } from '@components/ui/dash-plug';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { FormatNumber } from '@utils/formatNumber';
 import { Nullable } from '@utils/types';
@@ -62,7 +62,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           :
           <Tooltip content={t('vote|Total number of LP tokens you own.')} />
         </span>
-        <span className={s.amount}>{balanceAmount ? FormatNumber(balanceAmount) : DASH_CHAR}</span>
+        <span className={s.amount}>{balanceAmount ? FormatNumber(balanceAmount) : <DashPlug />}</span>
       </div>
 
       <div className={s.item}>
@@ -73,7 +73,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
             content={t('vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.')}
           />
         </span>
-        <span className={s.amount}>{voteAmount ? FormatNumber(voteAmount.toFixed()) : DASH_CHAR}</span>
+        <span className={s.amount}>{voteAmount ? FormatNumber(voteAmount.toFixed()) : <DashPlug />}</span>
       </div>
 
       <div className={s.item}>
@@ -86,7 +86,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
             )}
           />
         </span>
-        <span className={s.amount}>{vetoAmount ? FormatNumber(vetoAmount.toFixed()) : DASH_CHAR}</span>
+        <span className={s.amount}>{vetoAmount ? FormatNumber(vetoAmount.toFixed()) : <DashPlug />}</span>
       </div>
 
       <Button

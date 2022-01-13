@@ -12,8 +12,8 @@ const LiquidityPage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('liquidity|liquidity page')}
-      description={t('liquidity|liquidity page description. Couple sentences...')}
+      title={t('liquidity|Liquidity page')}
+      description={t('liquidity|Liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Liquidity />

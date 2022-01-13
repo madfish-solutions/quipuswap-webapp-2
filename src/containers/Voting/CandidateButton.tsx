@@ -2,7 +2,8 @@ import React from 'react';
 
 import { Button } from '@quipuswap/ui-kit';
 
-import { DASH_CHAR, TZKT_EXPLORER_URL } from '@app.config';
+import { TZKT_EXPLORER_URL } from '@app.config';
+import { DashPlug } from '@components/ui/dash-plug';
 import { getWhitelistedBakerName } from '@utils/helpers';
 import { Undefined, WhitelistedBaker } from '@utils/types';
 
@@ -12,7 +13,7 @@ interface CandidateButtonProps {
 
 export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
   if (!candidate) {
-    return <div> {DASH_CHAR} </div>;
+    return <DashPlug animation={false} />;
   }
 
   const url = `${TZKT_EXPLORER_URL}/${candidate.address}`;

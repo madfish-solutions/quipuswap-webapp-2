@@ -3,9 +3,10 @@ import { useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { loadUserLpBalance } from '@containers/liquidity/liquidity-cards/blockchain/getters/load-user-lp-balance-tokens';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
+
+import { loadUserLpBalance } from '../blockchain/getters/load-user-lp-balance-tokens';
 
 export const useLoadLpTokenBalance = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
