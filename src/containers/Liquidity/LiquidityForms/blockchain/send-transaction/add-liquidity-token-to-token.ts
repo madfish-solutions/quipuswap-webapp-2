@@ -22,7 +22,10 @@ export const addLiquidityTokenToToken = async (
   tokenBPool: BigNumber,
   transactionDuration: BigNumber
 ) => {
-  const transactionDurationInSeconds = transactionDuration.multipliedBy(SECONDS_IN_MINUTE).toNumber();
+  const transactionDurationInSeconds = transactionDuration
+    .multipliedBy(SECONDS_IN_MINUTE)
+    .integerValue(BigNumber.ROUND_DOWN)
+    .toNumber();
   const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
 
   const { address: dexAddress } = dex.contract;
