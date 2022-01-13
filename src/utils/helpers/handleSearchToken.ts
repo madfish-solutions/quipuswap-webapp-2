@@ -1,12 +1,21 @@
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { hanldeTokenPairSelect } from '@containers/Liquidity/liquidityHelpers';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
+
+const handleTokenPairSelect = (
+  pair: WhitelistedTokenPair,
+  setTokenPair: (pair: WhitelistedTokenPair) => void,
+  handleTokenChange: (token: WhitelistedToken, tokenNum: 'first' | 'second') => void
+) => {
+  handleTokenChange(pair.token1, 'first');
+  handleTokenChange(pair.token2, 'second');
+  setTokenPair(pair);
+};
 
 interface SearchTokenType {
   tokens: WhitelistedToken[];
@@ -79,7 +88,7 @@ SearchTokenType) => {
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
-      hanldeTokenPairSelect(
+      handleTokenPairSelect(
         { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
         setTokenPair,
         handleTokenChangeWrapper

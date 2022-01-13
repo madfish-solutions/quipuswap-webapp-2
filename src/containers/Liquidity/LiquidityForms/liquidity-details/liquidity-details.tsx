@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Button, Card, CardCell, ExternalLink, Skeleton, Tooltip } from '@quipuswap/ui-kit';
+import { Card, CardCell, Skeleton, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { LP_TOKEN_DECIMALS, QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
+import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { CurrencyAmount } from '@components/common/currency-amount';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
+import { useLoadLiquidityShare } from '@containers/Liquidity/LiquidityForms/hooks/use-load-liquidity-share';
+import { LiquidityDetailsButtons } from '@containers/Liquidity/LiquidityForms/liquidity-details/components/liquidity-details-buttons';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { getRateByBalances } from '@utils/helpers/rates';
 import { WhitelistedToken } from '@utils/types';
@@ -25,6 +26,7 @@ interface Props {
 
 export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
+
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
 
   const tokenAName = getWhitelistedTokenSymbol(tokenA);
@@ -36,8 +38,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const sellPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalA, balanceTotalB) : null;
   const buyPrice = balanceTotalA && balanceTotalB ? getRateByBalances(balanceTotalB, balanceTotalA) : null;
 
-  const poolFrozen = new BigNumber(888000000);
   const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
+
+  const share = useLoadLiquidityShare(dex);
 
   const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
@@ -66,7 +69,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
       >
         <RateView rate={sellPrice} inputToken={tokenA} outputToken={tokenB} />
       </CardCell>
-
       <CardCell
         header={
           <>
@@ -84,7 +86,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
       >
         <RateView rate={buyPrice} inputToken={tokenB} outputToken={tokenA} />
       </CardCell>
-
       <CardCell
         header={
           <>
@@ -102,7 +103,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
       >
         {dex ? <CurrencyAmount amount={balanceTotalA} currency={tokenAName} /> : <Skeleton className={s.currency2} />}
       </CardCell>
-
       <CardCell
         header={
           <>
@@ -120,7 +120,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
       >
         {dex ? <CurrencyAmount amount={balanceTotalB} currency={tokenBName} /> : <Skeleton className={s.currency2} />}
       </CardCell>
-
       <CardCell
         header={
           <>
@@ -135,13 +134,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {poolTotal ? (
-          <CurrencyAmount amount={poolTotal} options={{ decimals: LP_TOKEN_DECIMALS }} />
-        ) : (
-          <Skeleton className={s.currency2} />
-        )}
+        {poolTotal ? <CurrencyAmount amount={share?.total || null} /> : <Skeleton className={s.currency2} />}
       </CardCell>
-
       <CardCell
         header={
           <>
@@ -156,37 +150,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={poolFrozen} />
+        <CurrencyAmount amount={share?.frozen || null} />
       </CardCell>
 
-      <div className={s.LiquidityDetails_DetailsButtons}>
-        {dex && pairLink ? (
-          <Button
-            className={s.LiquidityDetails_DetailsButtons_Button}
-            theme="inverse"
-            href={pairLink}
-            external
-            icon={<ExternalLink className={s.LiquidityDetails_DetailsButtons_Button_Icon} />}
-          >
-            {t('liquidity|Pair Analytics')}
-          </Button>
-        ) : (
-          <Skeleton className={cx(s.buttonSkel, s.LiquidityDetails_DetailsButtons_Button)} />
-        )}
-        {dex && contractLink ? (
-          <Button
-            className={s.LiquidityDetails_DetailsButtons_Button}
-            theme="inverse"
-            href={contractLink}
-            external
-            icon={<ExternalLink className={s.LiquidityDetails_DetailsButtons_Button_Icon} />}
-          >
-            {t('liquidity|Pair Contract')}
-          </Button>
-        ) : (
-          <Skeleton className={cx(s.buttonSkel, s.LiquidityDetails_DetailsButtons_Button)} />
-        )}
-      </div>
+      <LiquidityDetailsButtons dex={dex} contractLink={contractLink} pairLink={pairLink} />
     </Card>
   );
 };

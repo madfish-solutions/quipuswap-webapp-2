@@ -12,7 +12,7 @@ interface CandidateButtonProps {
 
 export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
   if (!candidate) {
-    return <div> ${DASH_CHAR} </div>;
+    return <div> {DASH_CHAR} </div>;
   }
 
   const url = `${TZKT_EXPLORER_URL}/${candidate.address}`;

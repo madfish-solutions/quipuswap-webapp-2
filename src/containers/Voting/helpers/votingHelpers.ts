@@ -17,7 +17,7 @@ import { QSMainNet, VoteFormValues, VoterType, WhitelistedTokenPair } from '@uti
 
 import { IUseVotingToast } from '../useVotingToast';
 
-export const hanldeTokenPairSelect = (
+export const handleTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
   setDex: (dex: FoundDex) => void,
@@ -39,8 +39,10 @@ export const hanldeTokenPairSelect = (
         contract: pair.token2.contractAddress,
         id: pair.token2.fa2TokenId
       };
+
       const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
       setDex(foundDex);
+
       const asyncRewards = async () => {
         if (!accountPkh) {
           return;
@@ -49,7 +51,9 @@ export const hanldeTokenPairSelect = (
         const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
         setRewards(rewards);
       };
-      asyncRewards();
+
+      await asyncRewards();
+
       const asyncVoter = async () => {
         if (!accountPkh) {
           return;
@@ -65,26 +69,27 @@ export const hanldeTokenPairSelect = (
           setVoter({} as VoterType);
         }
       };
-      asyncVoter();
+
+      await asyncVoter();
+
       let frozenBalance = '0';
       let totalBalance = '0';
       if (accountPkh) {
         const share = await getLiquidityShare(tezos, foundDex, accountPkh);
-
         frozenBalance = fromDecimals(share.frozen, TEZOS_TOKEN.metadata.decimals).toString();
         totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
       }
-      const res = {
+      setTokenPair({
         ...pair,
         frozenBalance,
         balance: totalBalance,
         dex: foundDex
-      };
-      setTokenPair(res);
+      });
     } catch (err) {
       updateToast(err as Error);
     }
   };
+
   void asyncFunc();
 };
 
