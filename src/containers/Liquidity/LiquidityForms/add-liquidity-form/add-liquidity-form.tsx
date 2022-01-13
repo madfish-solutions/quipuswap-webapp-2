@@ -6,11 +6,11 @@ import BigNumber from 'bignumber.js';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { isTezInPair } from '@containers/Liquidity/LiquidityForms/helpers';
 import { fromDecimals } from '@utils/helpers';
 
-import { LiquiditySlippage } from '../../liquidity-slippage';
+import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
+import { isTezInPair } from '../helpers';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
@@ -78,6 +78,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       {shouldShowSlippageInput && (
         <div className={s.mt}>
           <LiquiditySlippage
+            type={LiquiditySlippageType.ADD}
             tokenA={tokenA}
             tokenB={tokenB}
             tokenAInput={tokenAInput}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
+import { ArrowDown, Button, Plus } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
@@ -9,6 +9,7 @@ import { LP_TOKEN_DECIMALS } from '@app.config';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { LiquiditySlippage, LiquiditySlippageType } from '@containers/Liquidity/liquidity-slippage';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -33,6 +34,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     tokenABalance,
     tokenBBalance,
     lpTokenBalance,
+    slippage,
+    setSlippage,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -96,6 +99,17 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
+      <div className={s.mt}>
+        <LiquiditySlippage
+          type={LiquiditySlippageType.REMOVE}
+          tokenA={tokenA}
+          tokenB={tokenB}
+          tokenAInput={tokenAOutput}
+          tokenBInput={tokenBOutput}
+          slippage={slippage}
+          onChange={setSlippage}
+        />
+      </div>
       <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
         Remove
       </Button>

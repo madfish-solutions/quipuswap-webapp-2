@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LIQUIDITY_DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -30,13 +30,13 @@ export const useRemoveLiquidityService = (
   const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
   const confirmOperation = useConfirmOperation();
 
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
   const [tokenBOutput, setTokenBOutput] = useState<string>('');
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
-  const [slippage] = useState<BigNumber>(new BigNumber(LIQUIDITY_DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
@@ -135,7 +135,8 @@ export const useRemoveLiquidityService = (
         tokenAOutput,
         tokenBOutput,
         tokenA,
-        tokenB
+        tokenB,
+        slippage
       );
 
       const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
@@ -172,6 +173,8 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     lpTokenBalance,
+    slippage,
+    setSlippage,
     handleChange,
     handleBalance,
     handleSetTokenPair,

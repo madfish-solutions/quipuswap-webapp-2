@@ -5,12 +5,18 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
-import { increaseBySlippage } from '@containers/Liquidity/LiquidityForms/helpers';
+import { decreaseBySlippage, increaseBySlippage } from '@containers/Liquidity/LiquidityForms/helpers';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+export enum LiquiditySlippageType {
+  ADD = 'ADD',
+  REMOVE = 'REMOVE'
+}
+
 interface SlippageInputProps {
+  type: LiquiditySlippageType;
   error?: string;
   tokenAInput: string;
   tokenBInput: string;
@@ -23,6 +29,7 @@ interface SlippageInputProps {
 const DEFAULT_INVESTED_VALUE = 0;
 
 export const LiquiditySlippage: FC<SlippageInputProps> = ({
+  type,
   error,
   tokenAInput,
   tokenBInput,
@@ -40,8 +47,16 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
   const tokenBBN = new BigNumber(tokenBInput ? tokenBInput : DEFAULT_INVESTED_VALUE);
 
-  const maxInvestedA = increaseBySlippage(tokenABN, slippage);
-  const maxInvestedB = increaseBySlippage(tokenBBN, slippage);
+  const maxInvestedOrReceivedA =
+    type === LiquiditySlippageType.ADD
+      ? increaseBySlippage(tokenABN, slippage)
+      : decreaseBySlippage(tokenABN, slippage);
+  const maxInvestedOrReceivedB =
+    type === LiquiditySlippageType.ADD
+      ? increaseBySlippage(tokenBBN, slippage)
+      : decreaseBySlippage(tokenBBN, slippage);
+
+  const investedOrReceivedText = type === LiquiditySlippageType.ADD ? 'invested' : 'received';
 
   return (
     <>
@@ -52,12 +67,12 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.receive}>
         <div>
-          <span className={s.receiveLabel}>Max invested A:</span>
-          <CurrencyAmount amount={maxInvestedA.toFixed()} currency={getWhitelistedTokenSymbol(tokenA)} />
+          <span className={s.receiveLabel}>Max {investedOrReceivedText} A:</span>
+          <CurrencyAmount amount={maxInvestedOrReceivedA.toFixed()} currency={getWhitelistedTokenSymbol(tokenA)} />
         </div>
         <div>
-          <span className={s.receiveLabel}>Max invested B:</span>
-          <CurrencyAmount amount={maxInvestedB.toFixed()} currency={getWhitelistedTokenSymbol(tokenB)} />
+          <span className={s.receiveLabel}>Max {investedOrReceivedText} B:</span>
+          <CurrencyAmount amount={maxInvestedOrReceivedB.toFixed()} currency={getWhitelistedTokenSymbol(tokenB)} />
         </div>
       </div>
     </>

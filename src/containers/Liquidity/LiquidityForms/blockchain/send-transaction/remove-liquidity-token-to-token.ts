@@ -3,6 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
+import { decreaseBySlippage } from '@containers/Liquidity/LiquidityForms/helpers';
 import { sortTokensContracts } from '@containers/Liquidity/LiquidityForms/helpers/sort-tokens-contracts';
 import { getDeadline, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -15,7 +16,8 @@ export const removeLiquidityTokenToToken = async (
   tokenAOutput: string,
   tokenBOutput: string,
   tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenB: WhitelistedToken,
+  slippagePercentage: BigNumber
 ) => {
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
@@ -25,8 +27,12 @@ export const removeLiquidityTokenToToken = async (
   const tokenBOutputBN = new BigNumber(tokenBOutput);
 
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
+
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
+
+  const withDecimalsA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withDecimalsB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
   const deadline = await getDeadline(tezos);
 
@@ -37,8 +43,8 @@ export const removeLiquidityTokenToToken = async (
 
   const isTokenAAddressesTheSame = addresses.addressA === tokenA.contractAddress;
 
-  const validTokenAAmount = isTokenAAddressesTheSame ? tokenAOutputAmount : tokenBOutputAmount;
-  const validTokenBAmount = isTokenAAddressesTheSame ? tokenBOutputAmount : tokenAOutputAmount;
+  const validTokenAAmount = isTokenAAddressesTheSame ? withDecimalsA : withDecimalsB;
+  const validTokenBAmount = isTokenAAddressesTheSame ? withDecimalsB : withDecimalsA;
 
   return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, deadline).send();
 };
