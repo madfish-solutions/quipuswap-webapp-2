@@ -1,20 +1,20 @@
 import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Card, CardCell, Skeleton, Tooltip } from '@quipuswap/ui-kit';
+import { Card, CardCell, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { CurrencyAmount } from '@components/common/currency-amount';
 import { RateView } from '@components/common/pair-details/rate-view';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { useLoadLiquidityShare } from '@containers/Liquidity/hooks/use-load-liquidity-share';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
-import { useLoadLiquidityShare } from '@containers/Liquidity/LiquidityForms/hooks/use-load-liquidity-share';
-import { LiquidityDetailsButtons } from '@containers/Liquidity/LiquidityForms/liquidity-details/components/liquidity-details-buttons';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { getRateByBalances } from '@utils/helpers/rates';
 import { WhitelistedToken } from '@utils/types';
 
+import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
 
 interface Props {
@@ -101,7 +101,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {dex ? <CurrencyAmount amount={balanceTotalA} currency={tokenAName} /> : <Skeleton className={s.currency2} />}
+        <StateCurrencyAmount amount={balanceTotalA} currency={tokenAName} isLoading={!dex} />
       </CardCell>
       <CardCell
         header={
@@ -118,7 +118,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {dex ? <CurrencyAmount amount={balanceTotalB} currency={tokenBName} /> : <Skeleton className={s.currency2} />}
+        <StateCurrencyAmount amount={balanceTotalB} currency={tokenBName} isLoading={!dex} />
       </CardCell>
       <CardCell
         header={
@@ -134,7 +134,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        {poolTotal ? <CurrencyAmount amount={share?.total || null} /> : <Skeleton className={s.currency2} />}
+        <StateCurrencyAmount amount={share?.total || null} currency="" isLoading={!poolTotal} />
       </CardCell>
       <CardCell
         header={
@@ -150,7 +150,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <CurrencyAmount amount={share?.frozen || null} />
+        <StateCurrencyAmount amount={share?.frozen || null} currency="" />
       </CardCell>
 
       <LiquidityDetailsButtons dex={dex} contractLink={contractLink} pairLink={pairLink} />

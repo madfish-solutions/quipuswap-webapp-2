@@ -4,9 +4,9 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 
 import { ErrorAlert } from '@components/common/ErrorAlert';
 
+import { LiquidityDetails } from '../liquidity-details';
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
-import { LiquidityDetails } from './liquidity-details';
 import { LiquidityTabs, TABS_CONTENT } from './liquidity-tabs';
 import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';

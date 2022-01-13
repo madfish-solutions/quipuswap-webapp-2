@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext, Skeleton } from '@quipuswap/ui-kit';
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
+import { Skeleton } from '@components/common/Skeleton';
 import { TokensModal } from '@components/modals/TokensModal';
 import { StateWrapper } from '@components/state-wrapper';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';

@@ -9,10 +9,10 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { getOperationHash } from '../../hooks/get-operation-hash';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
 import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { getOperationHash } from '../hooks/get-operation-hash';
 import { validations, validateOutputAmount } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
