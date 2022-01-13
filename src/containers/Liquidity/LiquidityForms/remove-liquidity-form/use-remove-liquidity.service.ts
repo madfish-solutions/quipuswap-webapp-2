@@ -68,7 +68,15 @@ export const useRemoveLiquidityService = (
     const lpTokenInputBN = new BigNumber(lpTokenInput);
     const lpTokenAmount = toDecimals(lpTokenInputBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-    const validatedInput = validations(accountPkh, lpTokenAmount, lpTokenBalance, lpTokenInput, LP_TOKEN_DECIMALS);
+    const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
+    const validatedInput = validations(
+      accountPkh,
+      lpTokenAmount,
+      lpTokenBalance,
+      lpTokenInput,
+      LP_TOKEN_DECIMALS,
+      lpTokenSymbol
+    );
     setValidatedInputMessage(validatedInput);
 
     if (validatedInput === INVALID_INPUT) {
@@ -105,7 +113,10 @@ export const useRemoveLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, lpTokenInput, lpTokenBalance]);
 
-  const handleBalance = (value: string) => setLpTokenInput(value);
+  const handleBalance = (value: string) => {
+    const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
+    setLpTokenInput(fixedValue);
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
