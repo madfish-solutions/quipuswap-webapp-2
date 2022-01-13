@@ -42,7 +42,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       </h4>
       <StateCurrencyAmount
         amount={volume}
-        currency={currency!}
+        currency={currency}
         loaderFallback={<Skeleton className={s.skeleton} />}
         isLeftCurrency={currency === '$'}
         labelSize={size}
