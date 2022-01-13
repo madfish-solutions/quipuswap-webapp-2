@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { FC, useMemo } from 'react';
 
 import { Card, Route } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -28,7 +28,7 @@ interface SwapDetailsProps {
   sellRate?: BigNumber;
 }
 
-export const SwapDetails: React.FC<SwapDetailsProps> = ({
+export const SwapDetails: FC<SwapDetailsProps> = ({
   currentTab,
   fee,
   priceImpact,

@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { isExist } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { Undefined } from '@utils/types';
 
@@ -56,15 +57,16 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
     className
   );
 
-  const wrapIsLoading = isLoading ?? amount == null;
+  const wrapIsLoading = isLoading ?? !isExist(amount);
   const wrapLoaderFallback = loaderFallback ?? <DashPlug />;
   const wrapErrorFallback = errorFallback ?? <DashPlug animation={false} />;
 
-  const isLeftCurrencyExp = isLeftCurrency && currency;
+  const isLeftVisible = isLeftCurrency && currency;
+  const isRightVisible = !isLeftCurrency && currency;
 
   const content = (
     <span className={wrapClassName}>
-      {isLeftCurrencyExp && <Currency>{currency}</Currency>}
+      {isLeftVisible && <Currency>{currency}</Currency>}
 
       <StateWrapper
         isLoading={wrapIsLoading}
@@ -75,7 +77,7 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
         <span className={s.inner}>{FormatNumber(amount ?? 0)}</span>
       </StateWrapper>
 
-      {!isLeftCurrencyExp && <Currency>{currency}</Currency>}
+      {isRightVisible && <Currency>{currency}</Currency>}
     </span>
   );
 

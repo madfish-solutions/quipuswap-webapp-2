@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Button, ExternalLink } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
+import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { DexPair } from '@utils/types';
 
@@ -18,7 +19,7 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
 
   //TODO: Remove after handle swap pair without pool
   if (!route.length) {
-    return <></>;
+    return null;
   }
 
   return (
@@ -28,7 +29,7 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
           key={id}
           className={buttonClassName}
           theme="inverse"
-          href={dexType === 'tokenxtz' ? `https://analytics.quipuswap.com/pairs/${id}` : '#'}
+          href={dexType === 'tokenxtz' ? `${QUIPUSWAP_ANALYTICS_PAIRS}${id}` : '#'}
           external
           icon={<ExternalLink className={iconClassName} />}
         >

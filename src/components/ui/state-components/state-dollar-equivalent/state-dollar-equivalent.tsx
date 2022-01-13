@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { isExist } from '@utils/helpers';
 import { FormatNumber } from '@utils/helpers/formatNumber';
 import { Undefined } from '@utils/types';
 
@@ -29,7 +30,7 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const wrapIsLoading = isLoading ?? dollarEquivalent == null;
+  const wrapIsLoading = isLoading ?? !isExist(dollarEquivalent);
   const wrapLoaderFallback = loaderFallback ?? <DashPlug zoom={0.7} />;
   const wrapErrorFallback = errorFallback ?? <DashPlug zoom={0.7} animation={false} />;
 
