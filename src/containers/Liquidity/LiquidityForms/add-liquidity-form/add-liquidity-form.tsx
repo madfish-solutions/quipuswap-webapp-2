@@ -2,10 +2,13 @@ import React, { FC } from 'react';
 
 import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -70,9 +73,13 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={validationMessageTokenB}
         placeholder="0.0"
       />
-      <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
-        Add
-      </Button>
+      {accountPkh ? (
+        <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
+          Add
+        </Button>
+      ) : (
+        <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
+      )}
     </>
   );
 };

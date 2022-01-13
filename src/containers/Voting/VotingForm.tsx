@@ -3,6 +3,7 @@ import React, { useRef, useMemo, useState, useEffect } from 'react';
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
@@ -10,9 +11,11 @@ import { Field, FormSpy } from 'react-final-form';
 import { noop } from 'rxjs';
 
 import { FACTORIES, TEZOS_TOKEN } from '@app.config';
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
@@ -314,21 +317,27 @@ const RealForm: React.FC<VotingFormProps> = ({
           </Field>
         )}
         <div className={s.buttons}>
-          <Button
-            onClick={handleUnvoteOrRemoveveto}
-            className={s.button}
-            theme="secondary"
-            disabled={
-              currentTab.id === 'vote'
-                ? new BigNumber(voter?.vote ?? '0').eq(0)
-                : new BigNumber(voter?.veto ?? '0').eq(0)
-            }
-          >
-            {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
-          </Button>
-          <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
-            {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
-          </Button>
+          {accountPkh && (
+            <Button
+              onClick={handleUnvoteOrRemoveveto}
+              className={s.button}
+              theme="secondary"
+              disabled={
+                currentTab.id === 'vote'
+                  ? new BigNumber(voter?.vote ?? '0').eq(0)
+                  : new BigNumber(voter?.veto ?? '0').eq(0)
+              }
+            >
+              {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
+            </Button>
+          )}
+          {accountPkh ? (
+            <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
+              {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
+            </Button>
+          ) : (
+            <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
+          )}
         </div>
       </Card>
       <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
