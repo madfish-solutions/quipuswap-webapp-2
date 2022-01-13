@@ -112,12 +112,10 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
 
   const handleTokenChange = (selectedToken: WhitelistedToken) => {
     setTokensModal(false);
-    let val = localAmount.replace(/ /g, '').replace(/,/g, '.');
-    let numVal = new BigNumber(val || 0);
+    const val = localAmount.replace(/ /g, '').replace(/,/g, '.');
+    const numVal = new BigNumber(val || 0);
     if (!numVal.isNaN() && numVal.gte(0) && val !== '') {
-      val = numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed();
-      numVal = new BigNumber(val);
-      setLocalAmount(val);
+      setLocalAmount(numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed());
     }
     onTokenChange(selectedToken);
   };
