@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
+import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -24,6 +25,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    isNewPair,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
@@ -70,6 +72,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         error={validationMessageTokenB}
         placeholder="0.0"
       />
+      {isNewPair && <NewPairMessage className={s.mt24} />}
       <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
         Add
       </Button>
