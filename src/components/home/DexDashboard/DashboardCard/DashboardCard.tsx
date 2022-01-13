@@ -1,15 +1,15 @@
 import React, { useContext } from 'react';
 
-import { Tooltip, Skeleton, ColorModes, CurrencyAmount, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Tooltip, Skeleton, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { StateWrapper } from '@components/state-wrapper';
-import { DashPlug } from '@components/ui/dash-plug';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { Undefined } from '@utils/types';
 
 import s from './DashboardCard.module.sass';
 
 interface DashboardCardProps {
-  volume: string;
+  volume: Undefined<string>;
   size?: 'large' | 'extraLarge';
   label: React.ReactNode;
   currency?: string;
@@ -39,13 +39,13 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateWrapper
-        isLoading={loading}
+      <StateCurrencyAmount
+        amount={volume}
+        currency={currency!}
         loaderFallback={<Skeleton className={s.skeleton} />}
-        errorFallback={<DashPlug animation={false} />}
-      >
-        <CurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
-      </StateWrapper>
+        isLeftCurrency={currency === '$'}
+        labelSize={size}
+      />
     </div>
   );
 };
