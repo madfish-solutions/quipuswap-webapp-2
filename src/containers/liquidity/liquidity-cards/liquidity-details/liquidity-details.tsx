@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Card, CardCell, Tooltip } from '@quipuswap/ui-kit';
+import { CardCell, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { useLoadLiquidityShare } from '@containers/Liquidity/hooks/use-load-liquidity-share';
-import { useLoadLpTokenBalance, usePairInfo } from '@containers/Liquidity/LiquidityForms/hooks';
+import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
+import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { getRateByBalances } from '@utils/helpers/rates';
 import { WhitelistedToken } from '@utils/types';
@@ -19,12 +19,11 @@ import s from './liquidity-details.module.sass';
 
 interface Props {
   dex: FoundDex;
-  label: string;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
 }
 
-export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
+export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
@@ -46,12 +45,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
 
   return (
-    <Card
-      header={{
-        content: `${label} Liquidity Details`
-      }}
-      contentClassName={s.LiquidityDetails}
-    >
+    <>
       <CardCell
         header={
           <>
@@ -127,14 +121,14 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
             <Tooltip
               sizeT="small"
               content={t(
-                "liquidity|Total amount of this pool's LP tokens you will own after adding liquidity. LP (Liquidity Pool) tokens represent your current share in a pool."
+                "liquidity|Total amount of this pool's LP tokens you will own after adding liquidity. LP (liquidity Pool) tokens represent your current share in a pool."
               )}
             />
           </>
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={share?.total || null} currency="" isLoading={!poolTotal} />
+        <StateCurrencyAmount amount={share?.total || null} isLoading={!poolTotal} />
       </CardCell>
       <CardCell
         header={
@@ -150,10 +144,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, label, tokenA, tokenB }) => {
         }
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={share?.frozen || null} currency="" />
+        <StateCurrencyAmount amount={share?.frozen || null} />
       </CardCell>
 
       <LiquidityDetailsButtons dex={dex} contractLink={contractLink} pairLink={pairLink} />
-    </Card>
+    </>
   );
 };

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { loadUserLpBalance } from '@containers/Liquidity/LiquidityForms/blockchain/getters/load-user-lp-balance-tokens';
+import { loadUserLpBalance } from '@containers/liquidity/liquidity-cards/blockchain/getters/load-user-lp-balance-tokens';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 

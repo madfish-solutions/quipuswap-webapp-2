@@ -16,7 +16,7 @@ import s from './state-currency-amount.module.sass';
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amount: Nullable<BigNumber.Value>;
-  currency: string;
+  currency?: string;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;

@@ -2,7 +2,7 @@ import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { FACTORIES } from '@app.config';
-import { findNotTezToken } from '@containers/Liquidity/LiquidityForms/helpers';
+import { findNotTezToken } from '@containers/liquidity/liquidity-cards/helpers';
 import { Nullable, QSMainNet, WhitelistedToken } from '@utils/types';
 
 export const loadTezDex = async ({

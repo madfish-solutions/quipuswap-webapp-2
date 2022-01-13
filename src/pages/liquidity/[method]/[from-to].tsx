@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { Liquidity } from '@containers/Liquidity';
+import { Liquidity } from '@containers/liquidity';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const LiquidityPage: React.FC = () => {
@@ -12,8 +12,8 @@ const LiquidityPage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('liquidity|Liquidity page')}
-      description={t('liquidity|Liquidity page description. Couple sentences...')}
+      title={t('liquidity|liquidity page')}
+      description={t('liquidity|liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
       <Liquidity />

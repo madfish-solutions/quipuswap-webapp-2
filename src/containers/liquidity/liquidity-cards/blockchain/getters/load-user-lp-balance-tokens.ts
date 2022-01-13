@@ -8,7 +8,7 @@ import {
   getValidMichelTemplate,
   isTezInPair,
   sortTokensContracts
-} from '@containers/Liquidity/LiquidityForms/helpers';
+} from '@containers/liquidity/liquidity-cards/helpers';
 import { getUserBalance } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
