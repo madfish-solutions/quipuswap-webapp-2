@@ -4,9 +4,10 @@ import { FoundDex, getLiquidityShare } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
+import { isTezIncludes } from '@containers/liquidity/liquidity-cards/helpers';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
-import { Nullable } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface LiquidityShareResult {
   unfrozen: BigNumber;
@@ -14,7 +15,7 @@ interface LiquidityShareResult {
   total: BigNumber;
 }
 
-export const useLoadLiquidityShare = (dex: FoundDex) => {
+export const useLoadLiquidityShare = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -22,17 +23,18 @@ export const useLoadLiquidityShare = (dex: FoundDex) => {
 
   useEffect(() => {
     const loadShare = async () => {
-      if (tezos && accountPkh && dex) {
-        const { unfrozen, frozen, total } = await getLiquidityShare(tezos, dex, accountPkh);
-        setShare({
-          unfrozen: fromDecimals(unfrozen, LP_TOKEN_DECIMALS),
-          frozen: fromDecimals(frozen, LP_TOKEN_DECIMALS),
-          total: fromDecimals(total, LP_TOKEN_DECIMALS)
-        });
+      if (!tezos || !accountPkh || !dex || !isTezIncludes([tokenA, tokenB])) {
+        return;
       }
+      const { unfrozen, frozen, total } = await getLiquidityShare(tezos, dex, accountPkh);
+      setShare({
+        unfrozen: fromDecimals(unfrozen, LP_TOKEN_DECIMALS),
+        frozen: fromDecimals(frozen, LP_TOKEN_DECIMALS),
+        total: fromDecimals(total, LP_TOKEN_DECIMALS)
+      });
     };
     void loadShare();
-  }, [tezos, accountPkh, dex]);
+  }, [tezos, accountPkh, dex, tokenA, tokenB]);
 
   return share;
 };

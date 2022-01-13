@@ -7,7 +7,7 @@ import { getUserBalance } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { findNotTezToken, getValidMichelTemplate, isTezInPair, sortTokensContracts } from '../../helpers';
+import { findNotTezToken, getValidMichelTemplate, isTezIncludes, sortTokensContracts } from '../../helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
@@ -55,7 +55,7 @@ export const loadUserLpBalance = async (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken
 ) => {
-  const isTezosToTokenDex = isTezInPair(tokenA.contractAddress, tokenB.contractAddress);
+  const isTezosToTokenDex = isTezIncludes([tokenA, tokenB]);
   const notTezToken = findNotTezToken([tokenA, tokenB]);
 
   const balance: Nullable<BigNumber> =
