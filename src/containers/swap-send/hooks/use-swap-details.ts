@@ -66,7 +66,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
             slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
             ttDexAddress: TTDEX_CONTRACTS[network.id]
           })
-        : undefined,
+        : null,
     buyRate,
     sellRate
   };

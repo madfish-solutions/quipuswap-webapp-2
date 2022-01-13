@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
-import { CurrencyAmount } from '@components/common/currency-amount';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -33,7 +33,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
       ? outputAmount
           .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
           .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
-      : new BigNumber(0);
+      : null;
 
   return (
     <>
@@ -46,8 +46,8 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
         {slippage && (
           <>
             <span className={s.receiveLabel}>Minimum received:</span>
-            <CurrencyAmount
-              amount={minimumReceived.toFixed()}
+            <StateCurrencyAmount
+              amount={minimumReceived}
               currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
             />
           </>

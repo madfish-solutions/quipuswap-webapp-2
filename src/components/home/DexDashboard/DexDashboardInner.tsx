@@ -7,7 +7,6 @@ import { useTranslation } from 'next-i18next';
 
 import { Maybe } from '@graphql';
 import { useNetwork } from '@utils/dapp';
-import { FormatNumber } from '@utils/formatNumber';
 import { fromDecimals } from '@utils/helpers';
 import { QSNetworkType } from '@utils/types';
 
@@ -71,7 +70,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}
             size="extraLarge"
-            volume={FormatNumber(tvl)}
+            volume={tvl}
             tooltip={t(
               'home|TVL (Total Value Locked) represents the total amount of assets currently locked on a DeFi platform. In the case of a DEX it also represents the overall volume of liquidity.'
             )}
@@ -82,7 +81,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}
             size="extraLarge"
-            volume={FormatNumber(volume24h)}
+            volume={volume24h}
             tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
             label={t('home|Daily Volume')}
             currency="$"
@@ -91,7 +90,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}
             size="extraLarge"
-            volume={FormatNumber(transactions24h)}
+            volume={transactions24h}
             tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
             label={t('home|Daily Transaction')}
           />
@@ -100,7 +99,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
       <DashboardCard
         className={cx(s.card, modeClass[colorThemeMode])}
         size="extraLarge"
-        volume={FormatNumber(new BigNumber(totalSupply ?? '0').toNumber())}
+        volume={totalSupply ? totalSupply.toString() : null}
         tooltip={t('home|The current number of available QUIPU tokens.')}
         label={t('home|Total supply')}
         currency="QUIPU"

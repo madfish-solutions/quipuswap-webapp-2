@@ -21,7 +21,7 @@ import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/ty
 
 import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
-import { SwapDetails } from './components/swap-details';
+import { SwapDetails } from './components/swap-details/swap-details';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -129,7 +129,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
-  const { dexGraph, dataIsStale, refresh } = useDexGraph();
+  const { dexGraph, dataIsStale, refreshDexPools, dexPoolsLoading } = useDexGraph();
   const prevDexGraphRef = useRef<DexGraph>();
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
@@ -153,6 +153,12 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       })
     );
   }, [inputToken, outputToken, updateBalance]);
+
+  const refreshDexPoolsIfNecessary = () => {
+    if (dataIsStale && !dexPoolsLoading) {
+      refreshDexPools();
+    }
+  };
 
   useEffect(() => {
     if (prevAccountPkh.current !== accountPkh) {
@@ -259,63 +265,53 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const handleInputAmountChange = (newAmount: Undefined<BigNumber>) => {
+    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.INPUT_AMOUNT, true);
     setFieldValue(SwapField.INPUT_AMOUNT, newAmount, true);
     onInputAmountChange(newAmount);
   };
   const handleOutputAmountChange = (newAmount: Undefined<BigNumber>) => {
+    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.OUTPUT_AMOUNT, true);
     setFieldValue(SwapField.OUTPUT_AMOUNT, newAmount, true);
     onOutputAmountChange(newAmount);
   };
 
-  const handleSomeTokenChange = useCallback(
-    (fieldName: SwapTokensFieldName, amountFieldName: SwapAmountFieldName, newToken?: WhitelistedToken) => {
-      setFieldTouched(fieldName, true);
-      const valuesToSet: Partial<SwapFormValues> = {
-        [fieldName]: newToken
-      };
-      const amount = amountFieldName === SwapField.INPUT_AMOUNT ? inputAmount : outputAmount;
-      if (newToken && amount) {
-        setFieldTouched(amountFieldName, true);
-        valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
-      }
-      setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
-      if (newToken) {
-        updateBalance(newToken);
-      }
-      const newInputToken = fieldName === SwapField.INPUT_TOKEN ? newToken : inputToken;
-      const newOutputToken = fieldName === SwapField.OUTPUT_TOKEN ? newToken : outputToken;
-      onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
-      if (newInputToken && newOutputToken) {
-        onTokensSelected(newInputToken, newOutputToken);
-      }
-    },
-    [
-      setValues,
-      updateBalance,
-      setFieldTouched,
-      inputAmount,
-      outputAmount,
-      inputToken,
-      outputToken,
-      onTokensSelected,
-      onSwapPairChange
-    ]
-  );
+  const handleSomeTokenChange = (
+    fieldName: SwapTokensFieldName,
+    amountFieldName: SwapAmountFieldName,
+    newToken?: WhitelistedToken
+  ) => {
+    refreshDexPoolsIfNecessary();
+    setFieldTouched(fieldName, true);
+    const valuesToSet: Partial<SwapFormValues> = {
+      [fieldName]: newToken
+    };
+    const amount = amountFieldName === SwapField.INPUT_AMOUNT ? inputAmount : outputAmount;
+    if (newToken && amount) {
+      setFieldTouched(amountFieldName, true);
+      valuesToSet[amountFieldName] = amount.decimalPlaces(newToken.metadata.decimals);
+    }
+    setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
+    if (newToken) {
+      updateBalance(newToken);
+    }
+    const newInputToken = fieldName === SwapField.INPUT_TOKEN ? newToken : inputToken;
+    const newOutputToken = fieldName === SwapField.OUTPUT_TOKEN ? newToken : outputToken;
+    onSwapPairChange({ inputToken: newInputToken, outputToken: newOutputToken });
+    if (newInputToken && newOutputToken) {
+      onTokensSelected(newInputToken, newOutputToken);
+    }
+  };
 
-  const handleInputTokenChange = useCallback(
-    (newToken?: WhitelistedToken) => {
-      handleSomeTokenChange(SwapField.INPUT_TOKEN, SwapField.INPUT_AMOUNT, newToken);
-    },
-    [handleSomeTokenChange]
-  );
-  const handleOutputTokenChange = useCallback(
-    (newToken?: WhitelistedToken) => handleSomeTokenChange(SwapField.OUTPUT_TOKEN, SwapField.OUTPUT_AMOUNT, newToken),
-    [handleSomeTokenChange]
-  );
+  const handleInputTokenChange = (newToken?: WhitelistedToken) => {
+    handleSomeTokenChange(SwapField.INPUT_TOKEN, SwapField.INPUT_AMOUNT, newToken);
+  };
+  const handleOutputTokenChange = (newToken?: WhitelistedToken) =>
+    handleSomeTokenChange(SwapField.OUTPUT_TOKEN, SwapField.OUTPUT_AMOUNT, newToken);
 
-  const handleSwapButtonClick = useCallback(() => {
+  const handleSwapButtonClick = () => {
+    refreshDexPoolsIfNecessary();
     setValues(prevState => ({
       ...prevState,
       inputToken: outputToken,
@@ -327,7 +323,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     if (inputToken && outputToken) {
       onTokensSelected(outputToken, inputToken);
     }
-  }, [setValues, inputToken, outputToken, outputAmount, onTokensSelected, onSwapPairChange, onInputAmountChange]);
+  };
 
   const handleRecipientChange = useCallback(
     (newValue: string) => {
@@ -343,11 +339,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const handleSlippageChange = (newValue?: BigNumber) => {
+    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.SLIPPAGE, true);
     setFieldValue(SwapField.SLIPPAGE, newValue, true);
   };
 
   const handleDeadlineChange = (newValue?: BigNumber) => {
+    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.DEADLINE, true);
     setFieldValue(SwapField.DEADLINE, newValue, true);
   };
@@ -438,7 +436,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
           {!accountPkh && <ConnectWalletButton className={s.connect} />}
           {accountPkh && dataIsStale && (
-            <Button disabled={submitDisabled} onClick={refresh} className={s.button}>
+            <Button disabled={submitDisabled || dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}

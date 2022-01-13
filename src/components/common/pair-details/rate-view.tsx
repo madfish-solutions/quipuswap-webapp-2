@@ -1,15 +1,13 @@
 import { FC } from 'react';
 
-import { DollarEquivalent } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { CurrencyAmount } from '@components/common/currency-amount';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StateDollarEquivalent } from '@components/ui/state-components/state-dollar-equivalent';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import s from '@styles/CommonContainer.module.sass';
 import { getTokenSlug, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
-
-const USD_DECIMALS = 2;
 
 interface RateViewProps {
   rate: Nullable<BigNumber.Value>;
@@ -26,20 +24,17 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
 
   return (
     <div className={s.cellAmount}>
-      {rate && (
-        <>
-          <div className={s.rateView}>
-            <CurrencyAmount amount={1} currency={getWhitelistedTokenSymbol(inputToken)} />
-            <span className={s.equal}>=</span>
-            <CurrencyAmount amount={rate} currency={getWhitelistedTokenSymbol(outputToken)} />
-          </div>
-          {usdRate && (
-            <div className={s.usdEquityWrapper}>
-              <DollarEquivalent dollarEquivalent={usdRate.toFixed(USD_DECIMALS)} />
-            </div>
-          )}
-        </>
-      )}
+      <div className={s.rateView}>
+        <StateCurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(inputToken)} />
+
+        <span className={s.equal}>=</span>
+
+        <StateCurrencyAmount amount={rate} currency={getWhitelistedTokenSymbol(outputToken)} />
+      </div>
+
+      <div className={s.usdEquityWrapper}>
+        <StateDollarEquivalent dollarEquivalent={usdRate} />
+      </div>
     </div>
   );
 };
