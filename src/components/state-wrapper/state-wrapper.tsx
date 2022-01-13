@@ -6,7 +6,7 @@ export interface StateWrapperProps {
   isLoading?: boolean;
   loaderFallback: ReactElement;
   isError?: boolean;
-  errorFallback: ReactElement;
+  errorFallback?: ReactElement;
 }
 
 export const StateWrapper: FC<StateWrapperProps> = ({
@@ -21,7 +21,7 @@ export const StateWrapper: FC<StateWrapperProps> = ({
   }
 
   return (
-    <ErrorBoundary isError={isError} fallback={errorFallback}>
+    <ErrorBoundary isError={isError} fallback={errorFallback ?? <></>}>
       <Suspense fallback={loaderFallback}>{children}</Suspense>
     </ErrorBoundary>
   );

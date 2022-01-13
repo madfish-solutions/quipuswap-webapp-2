@@ -39,3 +39,4 @@ export * from './comparison';
 export * from './arrays';
 export * from './get-deadline';
 export * from './get-blockchain-timestamp';
+export * from './isExist';

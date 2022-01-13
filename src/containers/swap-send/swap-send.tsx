@@ -21,7 +21,7 @@ import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/ty
 
 import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
-import { SwapDetails } from './components/swap-details';
+import { SwapDetails } from './components/swap-details/swap-details';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';

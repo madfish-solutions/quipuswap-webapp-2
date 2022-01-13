@@ -1,8 +1,8 @@
 import { ReactElement } from 'react';
 
 export interface ErrorBoundaryProps {
-  fallback?: ReactElement;
   isError?: boolean;
+  fallback: ReactElement;
 }
 
 export interface ErrorBoundaryInnerProps extends ErrorBoundaryProps {
