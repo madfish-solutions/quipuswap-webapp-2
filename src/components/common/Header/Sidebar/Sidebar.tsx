@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { NetworkSelect } from '@components/common/NetworkSelect';
+import { NetworkSelect } from '@components/ui/components';
 
 import { Navigation } from '../Navigation';
 import { QPToken } from '../QPToken';
