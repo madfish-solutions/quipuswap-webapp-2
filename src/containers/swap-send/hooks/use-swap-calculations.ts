@@ -63,6 +63,7 @@ export const useSwapCalculations = () => {
           graph: dexGraph
         });
         try {
+          setDexRoute(route);
           setOutputAmount(
             route
               ? fromDecimals(
@@ -71,7 +72,6 @@ export const useSwapCalculations = () => {
                 )
               : undefined
           );
-          setDexRoute(route);
 
           return;
         } catch (e) {

@@ -1,0 +1,36 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.LiquidityDetails_CardCell
+    margin-bottom: 16px
+
+.LiquidityDetails_DetailsButtons
+  display: flex
+  justify-content: flex-end
+
+.LiquidityDetails_DetailsButtons_Button
+  display: flex
+  align-items: center
+  max-width: 100% !important
+  &:not(:first-child)
+    margin-left: 24px
+
+.LiquidityDetails_DetailsButtons_Button_Icon
+  margin-left: 8px
+
+@include media('>Lphone', '<=tablet')
+  .LiquidityDetails_DetailsButtons
+    flex-direction: row
+    .LiquidityDetails_DetailsButtons_Button
+      &:not(:first-child)
+        margin-left: 24px
+
+@include media('>Ltablet')
+  .LiquidityDetails_DetailsButtons
+    flex-direction: row
+    justify-content: flex-end
+    .LiquidityDetails_DetailsButtons_Button
+      max-width: 180px
+      &:not(:last-child)
+        margin-right: 24px
+

@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { TTDEX_CONTRACTS } from '@app.config';
 import { useNetwork } from '@utils/dapp';
 import { fromDecimals, getPriceImpact, getTokenOutput, toDecimals } from '@utils/helpers';
+import { getRateByInputOutput } from '@utils/helpers/rates';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
 import { useSwapFee } from './use-swap-fee';
@@ -28,8 +29,8 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
 
   const sellRate =
     inputToken && outputToken && inputAmount?.gt(0) && outputAmount
-      ? outputAmount.div(inputAmount).decimalPlaces(outputToken.metadata.decimals)
-      : undefined;
+      ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
+      : null;
 
   const buyRate = useMemo(() => {
     if (inputToken && outputToken && outputAmount?.gt(0) && dexRoute && dexRoute.length > 0) {
@@ -51,7 +52,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
       }
     }
 
-    return undefined;
+    return null;
   }, [dexRoute, inputToken, outputAmount, outputToken]);
 
   return {
@@ -65,7 +66,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
             slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
             ttDexAddress: TTDEX_CONTRACTS[network.id]
           })
-        : undefined,
+        : null,
     buyRate,
     sellRate
   };

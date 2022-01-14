@@ -18,7 +18,7 @@ export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
-    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_DEADLINE_MINS));
+    onChange(new BigNumber(newValue ? newValue : DEFAULT_DEADLINE_MINS));
 
   return (
     <>

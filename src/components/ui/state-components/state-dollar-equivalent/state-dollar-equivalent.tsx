@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { FormatNumber } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 import { Undefined } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';

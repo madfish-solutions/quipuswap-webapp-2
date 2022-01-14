@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { RateView } from '@components/common/pair-details/rate-view';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StatePriceImpact } from '@components/ui/state-components/price-impact';
@@ -12,20 +13,19 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
 import { useNetwork } from '@utils/dapp';
-import { DexPair, WhitelistedToken } from '@utils/types';
+import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
 
-import { RateView } from '../rate-view';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
 
 interface SwapDetailsProps {
   currentTab: string;
-  fee?: BigNumber;
-  priceImpact?: BigNumber;
+  fee: Nullable<BigNumber>;
+  priceImpact: Nullable<BigNumber>;
   inputToken?: WhitelistedToken;
   outputToken?: WhitelistedToken;
   route?: DexPair[];
-  buyRate?: BigNumber;
-  sellRate?: BigNumber;
+  buyRate: Nullable<BigNumber>;
+  sellRate: Nullable<BigNumber>;
 }
 
 export const SwapDetails: FC<SwapDetailsProps> = ({

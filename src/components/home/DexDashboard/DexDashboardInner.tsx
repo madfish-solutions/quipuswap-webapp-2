@@ -99,7 +99,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
       <DashboardCard
         className={cx(s.card, modeClass[colorThemeMode])}
         size="extraLarge"
-        volume={totalSupply ? totalSupply.toString() : undefined}
+        volume={totalSupply ? totalSupply.toString() : null}
         tooltip={t('home|The current number of available QUIPU tokens.')}
         label={t('home|Total supply')}
         currency="QUIPU"

@@ -2,12 +2,13 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { FormatNumber } from '@utils/helpers/formatNumber';
-import { Undefined } from '@utils/types';
+import { FormatNumber } from '@utils/formatNumber';
+import { Nullable } from '@utils/types';
 
 import { StateCurrencyAmount } from '../state-currency-amount';
+
 interface StatePriceImpactProps {
-  priceImpact: Undefined<BigNumber.Value>;
+  priceImpact: Nullable<BigNumber.Value>;
 }
 
 export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => {

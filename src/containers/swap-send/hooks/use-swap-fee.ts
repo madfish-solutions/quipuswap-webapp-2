@@ -6,7 +6,7 @@ import debouncePromise from 'debounce-promise';
 import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@app.config';
 import { useAccountPkh, useNetwork, useEstimationToolkit } from '@utils/dapp';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
-import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
+import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 interface SwapParams {
   inputToken: Undefined<WhitelistedToken>;
@@ -25,7 +25,8 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
   const network = useNetwork();
   const tezos = useEstimationToolkit();
 
-  const [swapFee, setSwapFee] = useState<BigNumber>();
+  const [swapFee, setSwapFee] = useState<Nullable<BigNumber>>(null);
+
   const updateSwapFee = useMemo(
     () =>
       debouncePromise(async () => {
@@ -46,7 +47,7 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
             // swap fee is reset below
           }
         }
-        setSwapFee(undefined);
+        setSwapFee(null);
       }, DEBOUNCE_DELAY),
     [accountPkh, dexChain, inputAmount, inputToken, network.id, recipient, slippageTolerance, tezos]
   );

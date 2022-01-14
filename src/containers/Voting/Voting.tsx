@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 import { noop } from 'rxjs';
 
-import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
+import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
 import { VotingStats } from '@components/voting/VotingStats';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -16,7 +16,7 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
 import { VoterType, TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { hanldeTokenPairSelect, submitForm, submitWithdraw } from './helpers/votingHelpers';
+import { handleTokenPairSelect, submitForm, submitWithdraw } from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
 import { VotingForm } from './VotingForm';
 
@@ -35,10 +35,10 @@ interface VotingProps {
   className?: string;
 }
 
-const fallbackTokenPair = {
+const fallbackTokenPair: WhitelistedTokenPair = {
   token1: TEZOS_TOKEN,
   token2: MAINNET_DEFAULT_TOKEN
-} as WhitelistedTokenPair;
+};
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { handleErrorToast } = useVotingToast();
@@ -85,11 +85,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     });
 
   useEffect(() => {
-    if (network.id === 'hangzhounet') {
+    if (network.id === HANGZHOUNET_NETWORK.id) {
       setTokenPair({
         token1: TEZOS_TOKEN,
         token2: HANGZHOUNET_DEFAULT_TOKEN
-      } as WhitelistedTokenPair);
+      });
     } else {
       setTokenPair(fallbackTokenPair);
     }
@@ -119,7 +119,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     if (tezos && tokenPair.token1 && tokenPair.token2) {
       handleTokenChangeWrapper(tokenPair.token1, 'first');
       handleTokenChangeWrapper(tokenPair.token2, 'second');
-      hanldeTokenPairSelect(
+      handleTokenPairSelect(
         tokenPair,
         setTokenPair,
         setDex,
@@ -143,22 +143,21 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useOnBlock(tezos, getBalance);
 
-  const amounts = accountPkh
-    ? [tokenPair.balance ?? '0', voter?.vote?.toFixed() ?? '0', voter?.veto?.toFixed() ?? '0']
-    : ['0', '0', '0'];
-
   return (
     <>
       <VotingStats
         pendingReward={accountPkh ? rewards : '0'}
-        amounts={amounts}
+        balanceAmount={tokenPair.balance || null}
+        voteAmount={voter?.vote || null}
+        vetoAmount={voter?.veto || null}
         className={s.votingStats}
         dex={dex}
         handleSubmit={(params: TransferParams[]) => {
           if (!tezos) {
             return;
           }
-          submitWithdraw(tezos, params, handleErrorToast, confirmOperation, getBalance);
+
+          return submitWithdraw(tezos, params, handleErrorToast, confirmOperation, getBalance);
         }}
       />
       <StickyBlock className={className}>

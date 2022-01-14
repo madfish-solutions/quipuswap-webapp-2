@@ -5,9 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { FormatNumber } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
-import { Undefined } from '@utils/types';
+import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
@@ -15,8 +15,8 @@ import s from './state-currency-amount.module.sass';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
-  amount: Undefined<BigNumber.Value>;
-  currency: string;
+  amount: Nullable<BigNumber.Value>;
+  currency?: string;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;

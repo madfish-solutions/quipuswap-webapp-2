@@ -33,7 +33,7 @@ import { required, validateMinMax, validateBalance, composeValidators } from '@u
 
 import { getCandidateInfo } from './helpers/getBackerInfo';
 import { getVoteVetoBalances } from './helpers/getVoteVetoBalance';
-import { hanldeTokenPairSelect, unvoteOrRemoveVeto } from './helpers/votingHelpers';
+import { handleTokenPairSelect, unvoteOrRemoveVeto } from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
 import { VotingDetails } from './VotingDetails';
 
@@ -262,7 +262,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                 handleTokenChange(pair.token1, 'first');
                 handleTokenChange(pair.token2, 'second');
                 setTokens([pair.token1, pair.token2]);
-                hanldeTokenPairSelect(
+                handleTokenPairSelect(
                   pair,
                   setTokenPair,
                   setDex,

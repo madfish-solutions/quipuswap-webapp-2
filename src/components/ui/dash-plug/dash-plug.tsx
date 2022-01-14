@@ -32,13 +32,13 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity }) =
   const iterator = useMemo(() => {
     const quantity = Math.min(dashQuantity ?? DEFAULT_DASH_QUANTITY, MAX_DASH_QUANTITY);
 
-    return new Array(quantity).fill('');
+    return new Array(quantity).fill(null).map((_, index) => index);
   }, [dashQuantity]);
 
   return (
     <div className={wrapperClassName} style={{ transform: `scale(${zoom})` }}>
-      {iterator.map(_ => (
-        <div className={s.dash}></div>
+      {iterator.map(key => (
+        <div className={s.dash} key={key} />
       ))}
     </div>
   );

@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { Liquidity } from '@containers/Liquidity';
+import { Liquidity } from '@containers/liquidity';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const LiquidityPage: React.FC = () => {

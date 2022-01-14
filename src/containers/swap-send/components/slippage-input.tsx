@@ -15,7 +15,7 @@ interface SlippageInputProps {
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
   slippage?: BigNumber;
-  onChange: (newValue?: BigNumber) => void;
+  onChange: (newValue: BigNumber) => void;
 }
 
 const WHOLE_ITEM_PERCENT = 100;
@@ -24,7 +24,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
-    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
+    onChange(new BigNumber(newValue ? newValue : DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
@@ -33,7 +33,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
       ? outputAmount
           .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
           .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
-      : undefined;
+      : null;
 
   return (
     <>

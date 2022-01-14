@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext, Skeleton } from '@quipuswap/ui-kit';
+import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
+import { Skeleton } from '@components/common/Skeleton';
 import { TokensModal } from '@components/modals/TokensModal';
 import { StateWrapper } from '@components/state-wrapper';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
@@ -111,12 +112,10 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
 
   const handleTokenChange = (selectedToken: WhitelistedToken) => {
     setTokensModal(false);
-    let val = localAmount.replace(/ /g, '').replace(/,/g, '.');
-    let numVal = new BigNumber(val || 0);
+    const val = localAmount.replace(/ /g, '').replace(/,/g, '.');
+    const numVal = new BigNumber(val || 0);
     if (!numVal.isNaN() && numVal.gte(0) && val !== '') {
-      val = numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed();
-      numVal = new BigNumber(val);
-      setLocalAmount(val);
+      setLocalAmount(numVal.decimalPlaces(selectedToken.metadata.decimals).toFixed());
     }
     onTokenChange(selectedToken);
   };

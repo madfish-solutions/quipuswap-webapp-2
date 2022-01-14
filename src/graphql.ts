@@ -61,9 +61,9 @@ export type Overview = {
   /** Actual price TEZ(XTZ) to $(USD). */
   xtzUsdQuote: Scalars['String'];
   /**
-   * Liquidity of `all pairs` on Quipuswap.
+   * liquidity of `all pairs` on Quipuswap.
    *
-   * Liquidity = `TEZ` + `token` pool.
+   * liquidity = `TEZ` + `token` pool.
    *
    * Count in muTEZ.
    */
@@ -136,9 +136,9 @@ export type Pair = {
    */
   volume7d: Scalars['Float'];
   /**
-   * Liquidity of `pair` on Quipuswap.
+   * liquidity of `pair` on Quipuswap.
    *
-   * Liquidity = `TEZ` + `token` pool.
+   * liquidity = `TEZ` + `token` pool.
    *
    * Count in muTEZ.
    */
@@ -392,9 +392,9 @@ export type Token = {
    */
   price: Scalars['String'];
   /**
-   * Liquidity of `Token` on Quipuswap.
+   * liquidity of `Token` on Quipuswap.
    *
-   * Liquidity = `TEZ` + `token` pool.
+   * liquidity = `TEZ` + `token` pool.
    *
    * Count in muTEZ.
    */

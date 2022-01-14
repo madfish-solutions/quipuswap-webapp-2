@@ -15,7 +15,7 @@
     "@airgap/beacon-sdk": "^2.3.0",
     "@apollo/client": "^3.3.21",
     "@quipuswap/sdk": "^2.2.1",
-    "@quipuswap/ui-kit": "^0.1.41",
+    "@quipuswap/ui-kit": "^0.1.42",
     "@taquito/beacon-wallet": "^9.2.0",
     "@taquito/michel-codec": "^11.0.1",
     "@taquito/taquito": "^9.2.0",
@@ -88,8 +88,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn lint --fix",
-      "pre-push": "yarn tsc && yarn run build"
+      "pre-commit": "yarn lint --fix && yarn tsc && yarn run build"
     }
   }
 }

@@ -1,12 +1,15 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { Card, Button, Tooltip, ColorModes, VotingReward, ColorThemeContext } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { DashPlug } from '@components/ui/dash-plug';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { FormatNumber } from '@utils/helpers/formatNumber';
+import { FormatNumber } from '@utils/formatNumber';
+import { Nullable } from '@utils/types';
 
 import { isRewardGreaterThenZero } from './isRewardGreaterThenZero';
 import s from './VotingStats.module.sass';
@@ -19,7 +22,9 @@ const modeClass = {
 interface VotingStatsProps {
   className?: string;
   pendingReward?: string;
-  amounts?: string[];
+  balanceAmount: Nullable<string>;
+  voteAmount: Nullable<BigNumber>;
+  vetoAmount: Nullable<BigNumber>;
   dex?: FoundDex;
   handleSubmit: (params: TransferParams[]) => void;
 }
@@ -27,7 +32,9 @@ interface VotingStatsProps {
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
   pendingReward = '0',
-  amounts = [],
+  balanceAmount,
+  voteAmount,
+  vetoAmount,
   dex,
   handleSubmit
 }) => {
@@ -35,30 +42,6 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-
-  const content = useMemo(
-    () => [
-      {
-        id: 0,
-        header: 'vote|Your LP',
-        amount: FormatNumber(amounts[0]),
-        tooltip: 'vote|Total number of LP tokens you own.'
-      },
-      {
-        id: 1,
-        header: 'vote|Your votes',
-        amount: FormatNumber(amounts[1]),
-        tooltip: 'vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.'
-      },
-      {
-        id: 2,
-        header: 'vote|Your vetos',
-        amount: FormatNumber(amounts[2]),
-        tooltip: 'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
-      }
-    ],
-    [amounts]
-  );
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
@@ -72,16 +55,40 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
         </div>
         <VotingReward />
       </div>
-      {content.map(({ id, header, amount, tooltip }) => (
-        <div key={id} className={s.item}>
-          <span className={s.header}>
-            {t(header)}
-            :
-            <Tooltip content={t(tooltip)} />
-          </span>
-          <span className={s.amount}>{amount}</span>
-        </div>
-      ))}
+
+      <div className={s.item}>
+        <span className={s.header}>
+          {t('vote|Your LP')}
+          :
+          <Tooltip content={t('vote|Total number of LP tokens you own.')} />
+        </span>
+        <span className={s.amount}>{balanceAmount ? FormatNumber(balanceAmount) : <DashPlug />}</span>
+      </div>
+
+      <div className={s.item}>
+        <span className={s.header}>
+          {t('vote|Your votes')}
+          :
+          <Tooltip
+            content={t('vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.')}
+          />
+        </span>
+        <span className={s.amount}>{voteAmount ? FormatNumber(voteAmount.toFixed()) : <DashPlug />}</span>
+      </div>
+
+      <div className={s.item}>
+        <span className={s.header}>
+          {t('vote|Your vetos')}
+          :
+          <Tooltip
+            content={t(
+              'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
+            )}
+          />
+        </span>
+        <span className={s.amount}>{vetoAmount ? FormatNumber(vetoAmount.toFixed()) : <DashPlug />}</span>
+      </div>
+
       <Button
         disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(pendingReward)}
         onClick={() => {

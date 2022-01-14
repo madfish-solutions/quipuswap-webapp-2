@@ -1,12 +1,13 @@
 import React from 'react';
 
-import { Button, CurrencyAmount, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
+import { Button, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { FormatNumber } from '@utils/formatNumber';
 import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { FormatNumber } from '@utils/helpers/formatNumber';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -46,7 +47,7 @@ export const useColumns = () => {
       id: 'tvl',
       accessor: ({ data: dataInside, xtzUsdQuote }: PoolTableType) => (
         <div className={s.links}>
-          <CurrencyAmount
+          <StateCurrencyAmount
             amount={FormatNumber(
               fromDecimals(new BigNumber(dataInside.tvl), 6)
                 .multipliedBy(new BigNumber(xtzUsdQuote))
@@ -70,7 +71,7 @@ export const useColumns = () => {
       id: 'volume24h',
       accessor: ({ data: dataInside, xtzUsdQuote }: PoolTableType) => (
         <>
-          <CurrencyAmount
+          <StateCurrencyAmount
             amount={FormatNumber(
               fromDecimals(new BigNumber(dataInside.tvl), 6)
                 .multipliedBy(new BigNumber(xtzUsdQuote))

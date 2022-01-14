@@ -1,0 +1,97 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.rebalance
+  margin-left: 8px
+
+.header
+  padding-top: 0
+  padding-bottom: 0
+
+.tabs
+  margin-bottom: -1px
+
+.content
+  padding: 40px 24px 24px
+  display: flex
+  flex-direction: column
+
+.iconButton
+  margin: 11px auto
+
+.mb24
+  margin-bottom: 24px
+
+.receive
+  margin-top: 16px
+
+.votingStats
+  margin-bottom: 24px
+
+.receiveLabel
+  margin-right: 8px
+  font-size: 0.857rem
+
+.button
+  margin-top: 40px
+  max-width: 280px
+
+.switcher
+  display: flex
+  align-items: center
+  margin-top: 24px
+  font-weight: 600
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+  .button
+    margin-top: 0
+    margin-left: 0
+    width: 100%
+    max-width: 280px
+    &:not(:last-child)
+      margin-bottom: 16px
+
+@include media('>Lphone', '<=tablet')
+  .cellCenter
+    align-items: center
+  .button
+    margin-left: auto
+    width: 180px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+  .detailsButtons
+    flex-direction: row
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+
+.LiquidityDetails
+  padding: 40px 24px 24px
+  display: flex
+  flex-direction: column
+
+@include media('>Ltablet')
+  .button
+    margin-left: auto
+    width: 180px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+    .button
+      max-width: 180px
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+
+.mt-24 
+  margin-top: 24px !important
