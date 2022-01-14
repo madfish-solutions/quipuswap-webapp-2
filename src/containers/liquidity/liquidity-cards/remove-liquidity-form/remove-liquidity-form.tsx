@@ -41,17 +41,24 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     handleSetTokenPair
   } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
+  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
+  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
 
   const isButtonDisabled =
     !accountPkh ||
+    !dex ||
+    !tokenA ||
+    !tokenB ||
     Boolean(validatedInputMessage) ||
     Boolean(validatedOutputMessageA) ||
     Boolean(validatedOutputMessageB) ||
     !lpTokenInput;
+
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+
+  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
+  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   return (
     <>
@@ -73,7 +80,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed()}
+        balance={balanceTokenA}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -87,7 +94,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed()}
+        balance={balanceTokenB}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
