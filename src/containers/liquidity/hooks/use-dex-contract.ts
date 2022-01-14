@@ -17,6 +17,8 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
   useEffect(() => {
     const load = async () => {
       if (!tezos || !tokenA || !tokenB) {
+        setDex(null);
+
         return;
       }
 

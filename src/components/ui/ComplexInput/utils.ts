@@ -1,7 +1,6 @@
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
-// eslint-disable-next-line max-len
-export const getBlackListedTokens = (tokenA: WhitelistedToken | undefined, tokenB: WhitelistedToken | undefined) => [
+export const getBlackListedTokens = (tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => [
   ...(tokenA ? [tokenA] : []),
   ...(tokenB ? [tokenB] : [])
 ];

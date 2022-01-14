@@ -11,27 +11,28 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface RateViewProps {
   rate: Nullable<BigNumber.Value>;
-  inputToken: WhitelistedToken;
-  outputToken: WhitelistedToken;
+  inputToken: Nullable<WhitelistedToken>;
+  outputToken: Nullable<WhitelistedToken>;
 }
 
 export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) => {
   const exchangeRates = useNewExchangeRates();
 
-  const outputTokenUsdExchangeRate = exchangeRates[getTokenSlug(outputToken)];
+  const outputTokenUsdExchangeRate = outputToken ? exchangeRates[getTokenSlug(outputToken)] : null;
+
   const usdRate =
     outputTokenUsdExchangeRate && rate ? new BigNumber(rate).times(outputTokenUsdExchangeRate) : undefined;
+
+  const currencyInputSymbol = inputToken ? getWhitelistedTokenSymbol(inputToken) : null;
+  const currencyOutputSymbol = outputToken ? getWhitelistedTokenSymbol(outputToken) : null;
 
   return (
     <div className={s.cellAmount}>
       <div className={s.rateView}>
-        <StateCurrencyAmount amount="1" currency={getWhitelistedTokenSymbol(inputToken)} />
-
+        <StateCurrencyAmount amount="1" currency={currencyInputSymbol} />
         <span className={s.equal}>=</span>
-
-        <StateCurrencyAmount amount={rate} currency={getWhitelistedTokenSymbol(outputToken)} />
+        <StateCurrencyAmount amount={rate} currency={currencyOutputSymbol} />
       </div>
-
       <div className={s.usdEquityWrapper}>
         <StateDollarEquivalent dollarEquivalent={usdRate} />
       </div>

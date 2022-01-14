@@ -11,7 +11,7 @@ import { Nullable } from '@utils/types';
 import s from '../liquidity-details.module.sass';
 
 interface Props {
-  dex: FoundDex;
+  dex: Nullable<FoundDex>;
   pairLink: Nullable<string>;
   contractLink: Nullable<string>;
 }
