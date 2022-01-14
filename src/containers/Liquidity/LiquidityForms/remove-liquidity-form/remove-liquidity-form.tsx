@@ -2,13 +2,16 @@ import React from 'react';
 
 import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
+import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
@@ -96,9 +99,13 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
-      <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-        Remove
-      </Button>
+      {accountPkh ? (
+        <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
+          Remove
+        </Button>
+      ) : (
+        <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
+      )}
     </>
   );
 };
