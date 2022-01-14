@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Plus, Button, ArrowDown } from '@quipuswap/ui-kit';
+import { ArrowDown, Button, Plus } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -10,23 +10,33 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
+import { isTezIncludes } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
 const DEFAULT_BALANCE = 0;
 const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
 
-export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
+export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
+  dex,
+  tokenA,
+  tokenB,
+  onChangeTokensPair,
+  transactionDuration,
+  setTransactionDuration
+}) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
+    validationMessageTransactionDuration,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -39,19 +49,21 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     handleChange,
     handleBalance,
     handleSetTokenPair
-  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
+  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair, transactionDuration);
 
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
   const isButtonDisabled =
     !accountPkh ||
+    !lpTokenInput ||
     Boolean(validatedInputMessage) ||
     Boolean(validatedOutputMessageA) ||
     Boolean(validatedOutputMessageB) ||
-    !lpTokenInput;
+    Boolean(validationMessageTransactionDuration);
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+  const isDeadlineVisible = !isTezIncludes([tokenA, tokenB]);
 
   return (
     <>
@@ -98,6 +110,15 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
         disabled
         notSelectable
       />
+      {isDeadlineVisible && (
+        <div className={CC.mt24}>
+          <DeadlineInput
+            onChange={setTransactionDuration}
+            value={transactionDuration}
+            error={validationMessageTransactionDuration}
+          />
+        </div>
+      )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
           Remove

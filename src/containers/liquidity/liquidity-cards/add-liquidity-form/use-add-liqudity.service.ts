@@ -13,7 +13,7 @@ import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initial
 import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { calculateTokenAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validations } from '../validators';
+import { validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
@@ -23,7 +23,8 @@ export const useAddLiquidityService = (
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
   onTokenAChange: (token: WhitelistedToken) => void,
-  onTokenBChange: (token: WhitelistedToken) => void
+  onTokenBChange: (token: WhitelistedToken) => void,
+  transactionDuration: BigNumber
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -266,7 +267,8 @@ export const useAddLiquidityService = (
         pairTokenB,
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
-        pairInfo.tokenBPool
+        pairInfo.tokenBPool,
+        transactionDuration
       );
 
       return await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
@@ -325,9 +327,12 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
   return {
     validationMessageTokenA,
     validationMessageTokenB,
+    validationMessageTransactionDuration,
     accountPkh,
     tokenABalance,
     tokenBBalance,

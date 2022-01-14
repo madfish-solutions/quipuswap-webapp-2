@@ -12,15 +12,16 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 import { getOperationHash } from '../../hooks/get-operation-hash';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
-import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validations, validateOutputAmount } from '../validators';
+import { useLoadLpTokenBalance, useLoadTokenBalance, usePairInfo } from '../hooks';
+import { validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
 export const useRemoveLiquidityService = (
   dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
+  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
+  transactionDuration: BigNumber
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -70,7 +71,7 @@ export const useRemoveLiquidityService = (
     const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
     const validatedInput = validations(
       accountPkh,
-      lpTokenAmount,
+      lpTokenInputBN,
       lpTokenBalance,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
@@ -135,7 +136,8 @@ export const useRemoveLiquidityService = (
         tokenAOutput,
         tokenBOutput,
         tokenA,
-        tokenB
+        tokenB,
+        transactionDuration
       );
 
       const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
@@ -160,10 +162,13 @@ export const useRemoveLiquidityService = (
     }
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
   return {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
+    validationMessageTransactionDuration,
     tokenPair,
     accountPkh,
     lpTokenInput,

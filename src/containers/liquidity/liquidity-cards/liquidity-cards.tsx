@@ -15,8 +15,18 @@ import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
 
 export const LiquidityCards: FC = () => {
-  const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
-    useLiquidityFormService();
+  const {
+    dex,
+    tab,
+    handleChangeTab,
+    tokenA,
+    tokenB,
+    handleChangeTokenA,
+    handleChangeTokenB,
+    handleChangeTokensPair,
+    transactionDuration,
+    setTransactionDuration
+  } = useLiquidityFormService();
 
   const isLoading = !dex;
   const isError = (dex && !tokenA) || !tokenB;
@@ -32,9 +42,18 @@ export const LiquidityCards: FC = () => {
         tokenB={tokenB!}
         onTokenAChange={handleChangeTokenA}
         onTokenBChange={handleChangeTokenB}
+        transactionDuration={transactionDuration}
+        setTransactionDuration={setTransactionDuration}
       />
     ) : (
-      <RemoveLiquidityForm dex={dex!} tokenA={tokenA!} tokenB={tokenB!} onChangeTokensPair={handleChangeTokensPair} />
+      <RemoveLiquidityForm
+        dex={dex!}
+        tokenA={tokenA!}
+        tokenB={tokenB!}
+        onChangeTokensPair={handleChangeTokensPair}
+        transactionDuration={transactionDuration}
+        setTransactionDuration={setTransactionDuration}
+      />
     );
   };
 
