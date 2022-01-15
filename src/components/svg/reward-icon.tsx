@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 
 import { ColorThemeContext } from '@providers/ColorThemeContext';
 
-export const VotingReward: React.FC<IconProps> = ({ className }) => {
+export const RewardIcon: React.FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (

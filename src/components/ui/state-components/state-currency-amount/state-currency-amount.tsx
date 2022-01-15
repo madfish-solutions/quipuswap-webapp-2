@@ -57,7 +57,7 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
     className
   );
 
-  const wrapIsLoading = isLoading ?? !isExist(amount);
+  const wrapIsLoading = isLoading ?? (!isExist(amount) || amount === '');
   const wrapLoaderFallback = loaderFallback ?? <DashPlug />;
   const wrapErrorFallback = errorFallback ?? <DashPlug animation={false} />;
 
@@ -74,7 +74,7 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{FormatNumber(amount ?? 0)}</span>
+        <span className={s.inner}>{FormatNumber(amount || 0)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}

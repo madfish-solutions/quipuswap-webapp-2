@@ -35,7 +35,6 @@ import { getCandidateInfo } from './helpers/getBackerInfo';
 import { getVoteVetoBalances } from './helpers/getVoteVetoBalance';
 import { handleTokenPairSelect, unvoteOrRemoveVeto } from './helpers/votingHelpers';
 import { useVotingToast } from './useVotingToast';
-import { VotingDetails } from './VotingDetails';
 
 const TabsContent = [
   {
@@ -341,7 +340,6 @@ const RealForm: React.FC<VotingFormProps> = ({
           )}
         </div>
       </Card>
-      <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
     </>
   );
 };

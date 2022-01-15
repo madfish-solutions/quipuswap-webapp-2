@@ -7,7 +7,7 @@ import { withTypes } from 'react-final-form';
 import { noop } from 'rxjs';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
-import { VotingStats } from '@components/voting/VotingStats';
+import { VotingDetails, VotingStats } from '@containers/voiting/structures';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
@@ -205,6 +205,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             />
           )}
         />
+
+        <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
       </StickyBlock>
     </>
   );
