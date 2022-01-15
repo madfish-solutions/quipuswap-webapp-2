@@ -1,14 +1,16 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, VotingReward } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Nullable, VotingReward } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { DashPlug } from '@components/ui/dash-plug';
 import { FormatNumber } from '@utils/formatNumber';
+import { isExist } from '@utils/helpers';
 
 import styles from './reward-item.module.scss';
 
 export interface RewardItemProps {
-  amount: string;
+  amount: Nullable<string>;
   description: string;
   currency: string;
 }
@@ -26,7 +28,7 @@ export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency 
       <div className={styles.rewardContent}>
         <span className={styles.rewardHeader}>{description}</span>
         <span className={styles.rewardAmount}>
-          {FormatNumber(amount)}
+          {isExist(amount) && amount !== '' ? FormatNumber(amount) : <DashPlug />}
           <span className={styles.rewardCurrency}>{currency}</span>
         </span>
       </div>

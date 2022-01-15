@@ -11,15 +11,15 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { CandidateButton } from '@containers/voiting/components';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
-import { VoterType, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, VoterType, WhitelistedTokenPair } from '@utils/types';
 
-import { getCandidateInfo, getVeteVetoInfo } from '../../../Voting/helpers/getBackerInfo';
+import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
 
 interface VotingDetailsProps {
   tokenPair: WhitelistedTokenPair;
-  dex?: FoundDex;
-  voter?: VoterType;
+  dex: Nullable<FoundDex>;
+  voter: Nullable<VoterType>;
 }
 
 export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, voter }) => {
@@ -27,9 +27,9 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
   const { data: bakers } = useBakers();
 
   const { currentCandidate, secondCandidate } = getCandidateInfo(dex, bakers);
-  const myCandidate = bakers.find(backer => backer.address === voter?.candidate);
+  const myCandidate = bakers.find(backer => backer.address === voter?.candidate) ?? null;
 
-  const { totalVotes, totalVeto, votesToVeto } = getVeteVetoInfo(dex);
+  const { totalVotes, totalVeto, votesToVeto } = getVotingInfo(dex);
 
   const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
 

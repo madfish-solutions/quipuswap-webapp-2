@@ -10,7 +10,7 @@ import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
 import { VotingStatsItem, RewardItem } from '../../components';
-import { isRewardGreaterThenZero } from '../../helpers/isRewardGreaterThenZero';
+import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
 import s from './voting-stats.module.scss';
 
 const modeClass = {
@@ -20,11 +20,11 @@ const modeClass = {
 
 interface VotingStatsProps {
   className?: string;
-  pendingReward?: string;
+  pendingReward: Nullable<string>;
   balanceAmount: Nullable<string>;
   voteAmount: Nullable<BigNumber>;
   vetoAmount: Nullable<BigNumber>;
-  dex?: FoundDex;
+  dex: Nullable<FoundDex>;
   handleSubmit: (params: TransferParams[]) => void;
 }
 
