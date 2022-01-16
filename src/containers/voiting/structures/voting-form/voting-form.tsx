@@ -40,43 +40,42 @@ import {
 } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
+interface TabsContent {
+  id: VotingTabs;
+  label: string;
+}
 const TabsContent = [
   {
-    id: 'vote',
+    id: VotingTabs.vote,
     label: 'Vote'
   },
   {
-    id: 'veto',
+    id: VotingTabs.veto,
     label: 'Veto'
   }
 ];
 
 interface VotingFormProps {
-  handleSubmit: () => void;
+  save: (arg: VoteFormValues) => void;
   debounce: number;
-  // eslint-disable-next-line
-  save: any;
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
-  // eslint-disable-next-line
-  tabsState: any;
+  tabsState: VotingTabs;
   rewards: string;
-  setRewards: Dispatch<SetStateAction<string>>;
   dex: Nullable<FoundDex>;
-  setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
-  voter?: VoterType;
-  // eslint-disable-next-line
-  setVoter: (voter: any) => void;
-  setTokens: (tokens: WhitelistedToken[]) => void;
+  voter: VoterType;
   tokenPair: WhitelistedTokenPair;
-  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
   tokensData: TokenDataMap;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  // eslint-disable-next-line
-  currentTab: any;
-  // eslint-disable-next-line
-  setTabsState: (val: any) => void;
+  currentTab: TabsContent;
+  setRewards: Dispatch<SetStateAction<string>>;
+  setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
+  setTokens: (tokens: WhitelistedToken[]) => void;
+  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
+  setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
+  setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
+  handleSubmit: () => void;
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
 }
 
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
@@ -225,7 +224,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       undefined,
       { shallow: true }
     );
-    setTabsState(val);
+    setTabsState(val as VotingTabs);
   };
 
   const isVetoUnevailable = !currentCandidate && currentTab.id === 'veto';

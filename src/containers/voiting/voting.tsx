@@ -192,24 +192,24 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
           render={({ handleSubmit, form }) => (
             <VotingForm
               form={form}
-              handleSubmit={handleSubmit}
               debounce={100}
               save={noop}
-              setTabsState={setTabsState}
               tabsState={tabsState}
               rewards={rewards}
-              setRewards={setRewards}
               voter={voter}
               dex={dex}
-              setDex={setDex}
-              setVoter={setVoter}
-              setTokens={setTokens}
               tokenPair={tokenPair}
-              setTokenPair={setTokenPair}
               tokensData={tokensData}
-              handleTokenChange={handleTokenChange}
               currentTab={currentTab}
+              setRewards={setRewards}
+              setDex={setDex}
+              setTokens={setTokens}
+              setTokenPair={setTokenPair}
+              setVoter={setVoter}
+              setTabsState={setTabsState}
               getBalance={getBalance}
+              handleSubmit={handleSubmit}
+              handleTokenChange={handleTokenChange}
             />
           )}
         />
