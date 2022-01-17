@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -16,7 +16,7 @@ import s from './state-currency-amount.module.sass';
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
   amount: Nullable<BigNumber.Value>;
-  currency?: string;
+  currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;
@@ -35,7 +35,7 @@ const modeClass = {
 
 const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
 
-export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
+export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
   labelSize = 'small',
   amount,
@@ -57,7 +57,7 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
     className
   );
 
-  const wrapIsLoading = isLoading ?? !isExist(amount);
+  const wrapIsLoading = isLoading ?? (!isExist(amount) || amount === '');
   const wrapLoaderFallback = loaderFallback ?? <DashPlug />;
   const wrapErrorFallback = errorFallback ?? <DashPlug animation={false} />;
 
@@ -74,7 +74,7 @@ export const StateCurrencyAmount: React.FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{FormatNumber(amount ?? 0)}</span>
+        <span className={s.inner}>{FormatNumber(amount || 0)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
