@@ -42,7 +42,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
-  const withdrawRewardOnClick = async () => {
+  const handleWithdrawReward = async () => {
     if (!tezos || !dex || !accountPkh) {
       return;
     }
@@ -74,7 +74,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
 
       <Button
         disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(pendingReward)}
-        onClick={withdrawRewardOnClick}
+        onClick={handleWithdrawReward}
         className={s.button}
       >
         {t('vote|Claim Reward')}
