@@ -36,19 +36,29 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     handleAddLiquidity
   } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
+  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
+  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
 
   const isButtonDisabled =
-    !accountPkh || Boolean(validationMessageTokenA) || Boolean(validationMessageTokenB) || !tokenAInput || !tokenBInput;
+    !accountPkh ||
+    !dex ||
+    !tokenA ||
+    !tokenB ||
+    Boolean(validationMessageTokenA) ||
+    Boolean(validationMessageTokenB) ||
+    !tokenAInput ||
+    !tokenBInput;
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
+
+  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
+  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed()}
+        balance={balanceTokenA}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -57,12 +67,13 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         handleBalance={handleTokenABalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={validationMessageTokenA}
+        disabled={!tokenB}
         placeholder="0.0"
       />
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed()}
+        balance={balanceTokenB}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
@@ -71,6 +82,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         handleBalance={handleTokenBBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={validationMessageTokenB}
+        disabled={!tokenA}
         placeholder="0.0"
       />
       {accountPkh ? (

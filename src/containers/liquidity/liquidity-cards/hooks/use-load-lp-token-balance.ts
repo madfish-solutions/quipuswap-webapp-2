@@ -8,17 +8,20 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { loadUserLpBalance } from '../blockchain/getters/load-user-lp-balance-tokens';
 
-export const useLoadLpTokenBalance = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+export const useLoadLpTokenBalance = (
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>
+) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
   const [lpTokenBalance, setLpTokenBalance] = useState<Nullable<BigNumber>>(null);
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     let isMounted = true;
     const getLpTokenBalance = async () => {
-      if (!tezos || !accountPkh) {
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
         setLpTokenBalance(null);
 
         return;
@@ -36,9 +39,7 @@ export const useLoadLpTokenBalance = (dex: FoundDex, tokenA: WhitelistedToken, t
     return () => {
       isMounted = false;
     };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tezos, accountPkh, dex]);
+  }, [tezos, accountPkh, dex, tokenA, tokenB]);
 
   return lpTokenBalance;
 };
