@@ -5,10 +5,10 @@ import { Button } from '@quipuswap/ui-kit';
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { DashPlug } from '@components/ui/dash-plug';
 import { getWhitelistedBakerName } from '@utils/helpers';
-import { Undefined, WhitelistedBaker } from '@utils/types';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
 interface CandidateButtonProps {
-  candidate: Undefined<WhitelistedBaker>;
+  candidate: Nullable<WhitelistedBaker>;
 }
 
 export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
