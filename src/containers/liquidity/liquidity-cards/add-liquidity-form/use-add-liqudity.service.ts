@@ -4,14 +4,15 @@ import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { calculatePoolRate } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-rate';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { fromDecimals, toDecimals } from '@utils/helpers';
+import { toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
-import { calculateTokenAmount, sortTokensContracts } from '../helpers';
+import { sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
@@ -79,7 +80,7 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
+    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
     if (validationA === INVALID_INPUT) {
       setTokenBInput('');
@@ -91,12 +92,14 @@ export const useAddLiquidityService = (
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
-    const tokenBAmount = calculateTokenAmount(tokenAAmount, totalSupply, validTokenAPool, validTokenBPool);
+    const tokenBAmount = calculatePoolRate(tokenAAmount, tokenA, tokenB, validTokenAPool, validTokenBPool);
 
-    const validationB = validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB);
+    const validationB = tokenBAmount
+      ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)
+      : undefined;
     setValidationMessageTokenB(validationB);
 
-    setTokenBInput(fromDecimals(tokenBAmount, tokenB).toFixed());
+    setTokenBInput(tokenBAmount ? tokenBAmount.toFixed() : '');
   };
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber } from '@utils/formatNumber';
+import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
@@ -20,6 +20,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;
+  options?: FormatNumberOptions;
 }
 
 const sizeClass = {
@@ -45,7 +46,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isLoading,
   loaderFallback,
   isError,
-  errorFallback
+  errorFallback,
+  options
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -74,7 +76,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{FormatNumber(amount!)}</span>
+        <span className={s.inner}>{FormatNumber(amount!, options)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
