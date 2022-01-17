@@ -11,7 +11,7 @@ import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, isExist } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
 import { RemoveFormInterface } from './remove-form.props';
@@ -49,9 +49,9 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA
     !dex ||
     !tokenA ||
     !tokenB ||
-    Boolean(validatedInputMessage) ||
-    Boolean(validatedOutputMessageA) ||
-    Boolean(validatedOutputMessageB) ||
+    isExist(validatedInputMessage) ||
+    isExist(validatedOutputMessageA) ||
+    isExist(validatedOutputMessageB) ||
     !lpTokenInput;
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);

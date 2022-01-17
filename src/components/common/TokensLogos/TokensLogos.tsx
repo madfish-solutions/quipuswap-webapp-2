@@ -3,6 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
+import { isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { FallbackLogo } from '../../svg/FallbackLogo';
@@ -45,13 +46,14 @@ export const TokensLogos: React.FC<TokensLogosProps> = props => {
           <FallbackLogo className={cx(s.image)} />
         )}
       </div>
+
       {secondTokenIcon && (
         <div className={cx(s.imageWrapper, s.secondImage, imageClassName)}>
           <TokenLogo src={secondTokenIcon} tokenSymbol={secondTokenSymbol} {...layoutBasedProps} />
         </div>
       )}
 
-      {secondTokenIcon === null && (
+      {!isExist(secondTokenIcon) && (
         <div className={cx(s.secondImage, imageClassName)}>
           <FallbackLogo className={cx(s.image)} />
         </div>
