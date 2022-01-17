@@ -33,7 +33,11 @@ const loadUserLpBalanceTokens = async (
 
   const userLpTokenBalance = await dex.storage.storage.ledger.get([accountPkh, pairId]);
 
-  return userLpTokenBalance.balance;
+  if (userLpTokenBalance) {
+    return userLpTokenBalance.balance;
+  }
+
+  return null;
 };
 
 const loadUserLpBalanceTez = async (

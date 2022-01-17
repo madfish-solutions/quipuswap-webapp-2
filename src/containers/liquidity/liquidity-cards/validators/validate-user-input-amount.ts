@@ -6,7 +6,7 @@ import { Nullable, Undefined } from '@utils/types';
 export const validateUserInputAmount = (
   accountPkh: Nullable<string>,
   inputValue: BigNumber,
-  userBalance: Nullable<BigNumber>
+  userBalance: Undefined<Nullable<BigNumber>>
 ): Undefined<string> => {
   if (!accountPkh) {
     return undefined;

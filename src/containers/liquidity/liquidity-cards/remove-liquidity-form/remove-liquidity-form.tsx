@@ -44,7 +44,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
+    shares,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -71,13 +71,13 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={lpTokenBalance?.toFixed()}
+        balance={shares?.total.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
-        notFrozen
+        frozenBalance={shares?.frozen.toFixed()}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}
@@ -121,7 +121,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-          Remove
+          Remove & Unvote
         </Button>
       ) : (
         <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />

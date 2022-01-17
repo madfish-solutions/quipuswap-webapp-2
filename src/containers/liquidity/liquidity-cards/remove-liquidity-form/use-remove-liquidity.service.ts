@@ -1,9 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
+import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { LIQUIDITY_DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
+import { getVotingParams } from '@containers/liquidity/liquidity-cards/helpers';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -12,7 +14,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 import { getOperationHash } from '../../hooks/get-operation-hash';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
-import { useLoadLpTokenBalance, useLoadTokenBalance, usePairInfo } from '../hooks';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
@@ -28,8 +30,8 @@ export const useRemoveLiquidityService = (
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
-  const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
   const confirmOperation = useConfirmOperation();
+  const shares = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -72,7 +74,7 @@ export const useRemoveLiquidityService = (
     const validatedInput = validations(
       accountPkh,
       lpTokenInputBN,
-      lpTokenBalance,
+      shares?.total,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
       lpTokenSymbol
@@ -111,7 +113,7 @@ export const useRemoveLiquidityService = (
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairInfo, lpTokenInput, lpTokenBalance]);
+  }, [pairInfo, lpTokenInput, shares]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
@@ -150,13 +152,21 @@ export const useRemoveLiquidityService = (
         });
       }
     } else {
+      const lpTokenInputBN = new BigNumber(lpTokenInput);
+
+      const voteParams = await getVotingParams(tezos, dex, accountPkh, lpTokenInputBN, shares);
       const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
+
+      const sentTransaction = await batchify(tezos.wallet.batch([]), [
+        ...voteParams,
+        ...removeLiquidityTezOperation
+      ]).send();
 
       const { name: tokenAName } = tokenA.metadata;
       const { name: tokenBName } = tokenB.metadata;
 
       const notTezosTokenName = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
-      await confirmOperation(removeLiquidityTezOperation.opHash, {
+      await confirmOperation(sentTransaction.opHash, {
         message: getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenName)
       });
     }
@@ -176,7 +186,7 @@ export const useRemoveLiquidityService = (
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
+    shares,
     handleChange,
     handleBalance,
     handleSetTokenPair,
