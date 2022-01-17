@@ -15,7 +15,7 @@ export const getCandidateInfo = (dex: Nullable<FoundDex>, bakers: Array<Whitelis
     };
   }
 
-  const currentCandidate = bakers.find(x => x.address === dex.storage.storage.current_candidate) || {
+  const currentCandidate = bakers.find(baker => baker.address === dex.storage.storage.current_candidate) || {
     address: dex.storage.storage.current_candidate
   };
 
