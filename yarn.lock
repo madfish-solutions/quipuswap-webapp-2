@@ -2083,10 +2083,10 @@
   dependencies:
     bignumber.js "^9.0.1"
 
-"@quipuswap/ui-kit@^0.1.42":
-  version "0.1.42"
-  resolved "https://registry.yarnpkg.com/@quipuswap/ui-kit/-/ui-kit-0.1.42.tgz#d90093ff15b15802cf569e102b7d061fdffbbd6d"
-  integrity sha512-Artw4tTOmASNbUBvAWULt51ujkndkGfkKtiOsDA6zw6FPWJjnwZbIu7BFLsVrHihbCi+s/CC1zhXsr5JYQI1iw==
+"@quipuswap/ui-kit@^0.1.43":
+  version "0.1.43"
+  resolved "https://registry.yarnpkg.com/@quipuswap/ui-kit/-/ui-kit-0.1.43.tgz#37aebf7cc7b549f789fd8f7ebceffd68ea25b419"
+  integrity sha512-5cVmy+qu/QPigCI4u5nqGyEioyDhhycWKfmXmoRnZ0pQg2dXBduIcMC7fNDEUR86IOWLpONhxuWkmmv+gfiJsw==
   dependencies:
     slick-carousel "^1.8.1"
 
