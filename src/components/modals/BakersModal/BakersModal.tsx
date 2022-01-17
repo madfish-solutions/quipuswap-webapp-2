@@ -16,9 +16,10 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 import { noop } from 'rxjs';
 
-import { useBakers } from '@utils/dapp';
-import { localSearchBaker } from '@utils/helpers';
+import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
+import { isEmptyArray, localSearchBaker } from '@utils/helpers';
 import { isFullBaker, WhitelistedBaker } from '@utils/types';
+import { isValidBakerAddress } from '@utils/validators';
 
 import s from './BakersModal.module.sass';
 
@@ -107,17 +108,43 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
   const { data: bakers, loading } = useBakers();
   const [filteredBakers, setFilteredBakers] = useState<WhitelistedBaker[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
+  const searchCustomBaker = useSearchCustomBaker();
+  const { data: searchBakers, loading: isSearching } = useSearchBakers();
 
   const handleInput = (values: FormValues) => {
     setInputValue(values.search ?? '');
   };
 
-  const handleTokenSearch = () => {
-    const isBakers = bakers.filter(baker => localSearchBaker(baker, inputValue));
-    setFilteredBakers(isBakers);
+  const searchAllBakers = (input: string) => {
+    const isBakers = bakers.filter(baker => localSearchBaker(baker, input));
+
+    if (!isEmptyArray(isBakers)) {
+      return setFilteredBakers(isBakers);
+    }
+    const emptyBakersArray: Array<WhitelistedBaker> = [];
+
+    if (!isValidBakerAddress(input)) {
+      return setFilteredBakers(emptyBakersArray);
+    }
+
+    if (!isEmptyArray(searchBakers)) {
+      return setFilteredBakers(searchBakers);
+    }
+
+    searchCustomBaker(input).then(() => {
+      if (!isEmptyArray(searchBakers)) {
+        return setFilteredBakers(searchBakers);
+      }
+
+      return setFilteredBakers(emptyBakersArray);
+    });
   };
 
-  const isEmptyBakers = filteredBakers.length === 0;
+  const handleTokenSearch = () => {
+    searchAllBakers(inputValue);
+  };
+
+  const isEmptyBakers = isEmptyArray(filteredBakers);
 
   // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
@@ -147,22 +174,23 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
               <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
-          {loading && [1, 2, 3, 4, 5, 6].map(x => <LoadingBakerCell key={x} />)}
-          {filteredBakers.map(baker => (
-            <BakerCell
-              key={baker.address}
-              bakerName={isFullBaker(baker) ? baker.name : baker.address}
-              bakerFee={isFullBaker(baker) ? baker.fee.toString() : ''}
-              bakerFreeSpace={isFullBaker(baker) ? baker.freeSpace.toString() : ''}
-              bakerLogo={isFullBaker(baker) ? baker.logo : ''}
-              tabIndex={0}
-              onClick={() => {
-                onChange(baker);
-                form.mutators.setValue('search', '');
-                setInputValue('');
-              }}
-            />
-          ))}
+          {loading && isSearching && [1, 2, 3, 4, 5, 6].map(x => <LoadingBakerCell key={x} />)}
+          {!isSearching &&
+            filteredBakers.map(baker => (
+              <BakerCell
+                key={baker.address}
+                bakerName={isFullBaker(baker) ? baker.name : baker.address}
+                bakerFee={isFullBaker(baker) ? baker.fee.toString() : ''}
+                bakerFreeSpace={isFullBaker(baker) ? baker.freeSpace.toString() : ''}
+                bakerLogo={isFullBaker(baker) ? baker.logo : ''}
+                tabIndex={0}
+                onClick={() => {
+                  onChange(baker);
+                  form.mutators.setValue('search', '');
+                  setInputValue('');
+                }}
+              />
+            ))}
         </Modal>
       )}
     />

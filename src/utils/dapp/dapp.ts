@@ -30,7 +30,7 @@ import {
   WhitelistedToken,
   WhitelistedTokenWithQSNetworkType
 } from '@utils/types';
-import { isValidContractAddress } from '@utils/validators';
+import { isValidBakerAddress, isValidContractAddress } from '@utils/validators';
 import { NoTempleWalletError } from 'errors';
 
 import { getContract } from './getStorageInfo';
@@ -413,12 +413,14 @@ function useDApp() {
   );
 
   const searchCustomBaker = useCallback(async (address: string) => {
-    if (isValidContractAddress(address)) {
+    if (isValidBakerAddress(address)) {
       setState(prevState => ({
         ...prevState,
         searchBakers: { loading: true, data: [] }
       }));
+
       const customBaker = await getBakerMetadata(address);
+
       if (customBaker) {
         const baker = {
           address: customBaker.address,
