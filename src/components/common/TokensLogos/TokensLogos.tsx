@@ -3,7 +3,7 @@ import React from 'react';
 import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
-import { isExist } from '@utils/helpers';
+import { isUndefined } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { FallbackLogo } from '../../svg/FallbackLogo';
@@ -53,7 +53,7 @@ export const TokensLogos: React.FC<TokensLogosProps> = props => {
         </div>
       )}
 
-      {!isExist(secondTokenIcon) && (
+      {!secondTokenIcon && !isUndefined(secondTokenIcon) && (
         <div className={cx(s.secondImage, imageClassName)}>
           <FallbackLogo className={cx(s.image)} />
         </div>

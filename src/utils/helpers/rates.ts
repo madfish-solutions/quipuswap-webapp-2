@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-const DECIMALS_FOR_BALANCES = 2;
+const DECIMALS_FOR_BALANCES = 8;
 
 export const divide = (input: BigNumber, output: BigNumber, decimals: number) =>
   output.div(input).decimalPlaces(decimals);
