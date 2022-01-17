@@ -1,7 +1,8 @@
 import React, { FC } from 'react';
 
-import { Card, Tabs, TokensLogos } from '@quipuswap/ui-kit';
+import { Card, Tabs } from '@quipuswap/ui-kit';
 
+import { TokensLogos } from '@components/common/TokensLogos';
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 
 import s from '../Liquidity.module.sass';
