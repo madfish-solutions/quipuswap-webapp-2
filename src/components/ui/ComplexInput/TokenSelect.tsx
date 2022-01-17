@@ -9,9 +9,9 @@ import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { formatBalance } from '@utils/helpers/format-balance';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
@@ -39,7 +39,7 @@ const themeClass = {
 
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
-  balance = '10.00',
+  balance = null,
   shouldShowBalanceButtons = true,
   label,
   handleBalance,
@@ -90,12 +90,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>
-              {account && (
+              {account && isExist(balance) && (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>
-                    <StateCurrencyAmount amount={balance} />
-                  </div>
+                  <div className={cx(s.label2, s.price)}>{formatBalance(balance)}</div>
                 </div>
               )}
             </div>

@@ -20,7 +20,6 @@ export interface QSNetwork {
   type: QSNetworkType;
   rpcBaseURL: string;
   metadata: string;
-  description: string;
   disabled: boolean;
 }
 
