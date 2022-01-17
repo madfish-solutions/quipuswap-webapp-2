@@ -339,13 +339,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const handleSlippageChange = (newValue?: BigNumber) => {
-    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.SLIPPAGE, true);
     setFieldValue(SwapField.SLIPPAGE, newValue, true);
   };
 
   const handleDeadlineChange = (newValue?: BigNumber) => {
-    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.DEADLINE, true);
     setFieldValue(SwapField.DEADLINE, newValue, true);
   };
