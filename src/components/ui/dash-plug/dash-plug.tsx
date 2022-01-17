@@ -14,11 +14,12 @@ interface DashPlugProps {
   zoom?: number;
   animation?: boolean;
   dashQuantity?: number;
+  className?: string;
 }
 const DEFAULT_DASH_QUANTITY = 4;
 const MAX_DASH_QUANTITY = 8;
 
-export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity }) => {
+export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const wrapperClassName = cx(
@@ -26,7 +27,8 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity }) =
     {
       [s.animation]: animation !== false
     },
-    modeClass[colorThemeMode]
+    modeClass[colorThemeMode],
+    className
   );
 
   const iterator = useMemo(() => {

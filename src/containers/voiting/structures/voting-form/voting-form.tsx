@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs, Button } from '@quipuswap/ui-kit';
@@ -14,6 +14,14 @@ import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import {
+  getCandidateInfo,
+  getVoteVetoBalances,
+  handleTokenPairSelect,
+  unvoteOrRemoveVeto
+} from '@containers/voiting/helpers';
+import { VotingTabs } from '@containers/voiting/tabs.enum';
+import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
@@ -27,53 +35,47 @@ import {
   WhitelistedToken,
   WhitelistedTokenPair,
   VoterType,
-  Undefined
+  Undefined,
+  Nullable
 } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
-import { getCandidateInfo } from './helpers/getBackerInfo';
-import { getVoteVetoBalances } from './helpers/getVoteVetoBalance';
-import { handleTokenPairSelect, unvoteOrRemoveVeto } from './helpers/votingHelpers';
-import { useVotingToast } from './useVotingToast';
-import { VotingDetails } from './VotingDetails';
-
+interface TabsContent {
+  id: VotingTabs;
+  label: string;
+}
 const TabsContent = [
   {
-    id: 'vote',
+    id: VotingTabs.vote,
     label: 'Vote'
   },
   {
-    id: 'veto',
+    id: VotingTabs.veto,
     label: 'Veto'
   }
 ];
 
 interface VotingFormProps {
-  handleSubmit: () => void;
+  save: (arg: VoteFormValues) => void;
   debounce: number;
-  // eslint-disable-next-line
-  save: any;
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
-  // eslint-disable-next-line
-  tabsState: any;
+  tabsState: VotingTabs;
   rewards: string;
-  setRewards: (reward: string) => void;
-  dex?: FoundDex;
-  setDex: (dex: FoundDex) => void;
-  voter?: VoterType;
-  // eslint-disable-next-line
-  setVoter: (voter: any) => void;
-  setTokens: (tokens: WhitelistedToken[]) => void;
+  dex: Nullable<FoundDex>;
+  voter: VoterType;
   tokenPair: WhitelistedTokenPair;
-  setTokenPair: (pair: WhitelistedTokenPair) => void;
   tokensData: TokenDataMap;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  // eslint-disable-next-line
-  currentTab: any;
-  // eslint-disable-next-line
-  setTabsState: (val: any) => void;
+  currentTab: TabsContent;
+  setRewards: Dispatch<SetStateAction<string>>;
+  setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
+  setTokens: (tokens: WhitelistedToken[]) => void;
+  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
+  setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
+  setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
+  handleSubmit: () => void;
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
 }
 
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
@@ -101,7 +103,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const { handleErrorToast } = useVotingToast();
+  const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
@@ -200,7 +202,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, { handleErrorToast }, confirmOperation, getBalance, voter?.candidate);
+    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter?.candidate);
   };
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
@@ -222,7 +224,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       undefined,
       { shallow: true }
     );
-    setTabsState(val);
+    setTabsState(val as VotingTabs);
   };
 
   const isVetoUnevailable = !currentCandidate && currentTab.id === 'veto';
@@ -268,7 +270,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   setDex,
                   setRewards,
                   setVoter,
-                  handleErrorToast,
+                  showErrorToast,
                   tezos,
                   accountPkh,
                   networkId
@@ -324,24 +326,23 @@ const RealForm: React.FC<VotingFormProps> = ({
               className={s.button}
               theme="secondary"
               disabled={
-                currentTab.id === 'vote'
+                currentTab.id === VotingTabs.vote
                   ? new BigNumber(voter?.vote ?? '0').eq(0)
                   : new BigNumber(voter?.veto ?? '0').eq(0)
               }
             >
-              {currentTab.id === 'vote' ? 'Unvote' : 'Remove veto'}
+              {currentTab.id === VotingTabs.vote ? 'Unvote' : 'Remove veto'}
             </Button>
           )}
           {accountPkh ? (
             <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
-              {currentTab.id === 'vote' && isBanned ? t('vote|Baker under Veto') : currentTab.label}
+              {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}
             </Button>
           ) : (
             <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
           )}
         </div>
       </Card>
-      <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
     </>
   );
 };
