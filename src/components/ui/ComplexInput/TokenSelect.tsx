@@ -9,7 +9,6 @@ import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { formatBalance } from '@utils/helpers/format-balance';
