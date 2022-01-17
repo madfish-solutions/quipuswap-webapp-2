@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
@@ -37,5 +37,7 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
     void load();
   }, [networkId, tezos, tokenA, tokenB]);
 
-  return dex;
+  const clearDex = useCallback(() => setDex(null), []);
+
+  return { dex, clearDex };
 };
