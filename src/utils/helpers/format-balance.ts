@@ -10,8 +10,8 @@ const formatDecimal = (decimals: string): string => {
   return decimals;
 };
 
-export const formatBalance = (value: number | string): string => {
-  const [integer, decimals] = typeof value === 'number' ? value.toString().split('.') : value.split('.');
+export const formatBalance = (value: string): string => {
+  const [integer, decimals] = value.split('.');
 
   if (integer === '0') {
     return value.toString();
