@@ -27,7 +27,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
   const { data: bakers } = useBakers();
 
   const { currentCandidate, secondCandidate } = getCandidateInfo(dex, bakers);
-  const myCandidate = bakers.find(backer => backer.address === voter?.candidate) ?? null;
+  const myCandidate = bakers.find(baker => baker.address === voter?.candidate) ?? null;
 
   const { totalVotes, totalVeto, votesToVeto } = getVotingInfo(dex);
 
