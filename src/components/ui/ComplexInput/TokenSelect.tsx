@@ -10,6 +10,7 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { formatBalance } from '@utils/helpers/format-balance';
 import { WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
@@ -89,9 +90,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               {account && (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
-                  </div>
+                  <div className={cx(s.label2, s.price)}>{formatBalance(balance)}</div>
                 </div>
               )}
             </div>
