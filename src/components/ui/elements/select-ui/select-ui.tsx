@@ -4,7 +4,7 @@ import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import Select, { Props as SelectProps } from 'react-select';
 
-import s from './select.module.sass';
+import s from './select-ui.module.sass';
 
 export interface SelectUIProps extends SelectProps {
   className?: string;
