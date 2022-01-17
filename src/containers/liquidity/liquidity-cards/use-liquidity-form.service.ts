@@ -20,7 +20,7 @@ export const useLiquidityFormService = () => {
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
 
-  const dex = useDexContract(tokenA, tokenB);
+  const { dex, clearDex } = useDexContract(tokenA, tokenB);
 
   // Initial set tokens
   useEffect(() => {
@@ -59,6 +59,7 @@ export const useLiquidityFormService = () => {
 
   const handleChangeTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
+    clearDex();
 
     if (tokenB) {
       void changeRoute(tab.id, token, tokenB);
@@ -66,6 +67,7 @@ export const useLiquidityFormService = () => {
   };
   const handleChangeTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
+    clearDex();
 
     if (tokenA) {
       void changeRoute(tab.id, tokenA, token);
@@ -75,6 +77,7 @@ export const useLiquidityFormService = () => {
   const handleChangeTokensPair = ({ token1, token2 }: WhitelistedTokenPair) => {
     setTokenA(token1);
     setTokenB(token2);
+    clearDex();
     void changeRoute(tab.id, token1, token2);
   };
 

@@ -15,16 +15,12 @@ export const loadTokenToTokenPairInfo = async (
   tokenB: WhitelistedToken
 ): Promise<Nullable<PairInfo>> => {
   const sortedTokens = sortTokensPair(tokenA, tokenB);
-
   const michelData = newGetValidMichelTemplate(sortedTokens);
   const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
-
   const id = await dex.storage.storage.token_to_id.get(key);
-
   if (!id) {
     return null;
   }
-
   const data = await dex.storage.storage.pairs.get(id);
 
   return {
