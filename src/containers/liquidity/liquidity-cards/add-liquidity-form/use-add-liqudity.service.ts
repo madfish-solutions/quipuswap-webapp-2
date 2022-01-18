@@ -3,7 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
@@ -41,6 +41,7 @@ export const useAddLiquidityService = (
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -270,7 +271,8 @@ export const useAddLiquidityService = (
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
         pairInfo.tokenBPool,
-        transactionDuration
+        transactionDuration,
+        slippage
       );
 
       return await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
@@ -346,6 +348,8 @@ export const useAddLiquidityService = (
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    slippage,
+    setSlippage,
     isNewPair,
     handleSetTokenA,
     handleSetTokenB,

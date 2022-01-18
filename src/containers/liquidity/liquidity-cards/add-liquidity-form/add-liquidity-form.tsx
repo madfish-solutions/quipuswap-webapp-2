@@ -9,10 +9,12 @@ import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { isTezIncludes } from '@containers/liquidity/liquidity-cards/helpers';
 import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
+import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
@@ -38,6 +40,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    slippage,
+    setSlippage,
     isNewPair,
     handleSetTokenA,
     handleSetTokenB,
@@ -66,6 +70,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
 
   const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
+
+  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
 
   return (
     <>
@@ -98,13 +104,28 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         disabled={!tokenA}
         placeholder="0.0"
       />
-      <div className={CC.mt24}>
-        <DeadlineInput
-          onChange={setTransactionDuration}
-          error={validationMessageTransactionDuration}
-          value={transactionDuration}
-        />
-      </div>
+      {isDeadlineAndSkippageVisible && (
+        <>
+          <div className={CC.mt24}>
+            <DeadlineInput
+              onChange={setTransactionDuration}
+              error={validationMessageTransactionDuration}
+              value={transactionDuration}
+            />
+          </div>
+          <div className={CC.mt24}>
+            <LiquiditySlippage
+              liquidityType={LiquiditySlippageType.ADD}
+              tokenA={tokenA}
+              tokenB={tokenB}
+              tokenAInput={tokenAInput}
+              tokenBInput={tokenBInput}
+              slippage={slippage}
+              onChange={setSlippage}
+            />
+          </div>
+        </>
+      )}
       {isNewPair && <NewPairMessage className={CC.mt24} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>

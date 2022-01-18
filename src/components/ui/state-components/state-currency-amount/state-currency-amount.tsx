@@ -20,6 +20,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;
+  amountDecimals?: number;
 }
 
 const sizeClass = {
@@ -45,7 +46,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isLoading,
   loaderFallback,
   isError,
-  errorFallback
+  errorFallback,
+  amountDecimals
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -74,7 +76,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{FormatNumber(amount || 0)}</span>
+        <span className={s.inner}>{FormatNumber(amount ?? 0, { decimals: amountDecimals })}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
