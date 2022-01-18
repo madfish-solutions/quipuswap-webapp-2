@@ -14,7 +14,7 @@ export const getVotingParams = async (
   lpTokenInputBN: BigNumber,
   shares: Nullable<LiquidityShareResult>
 ): Promise<TransferParams[]> => {
-  if (shares && lpTokenInputBN.gt(shares.unfrozen)) {
+  if (shares && lpTokenInputBN.gt(shares.unfrozen) && dex.storage) {
     const { total } = shares;
     const delta = total.minus(lpTokenInputBN);
     const deltaWithDecimals = toDecimals(delta, LP_TOKEN_DECIMALS);

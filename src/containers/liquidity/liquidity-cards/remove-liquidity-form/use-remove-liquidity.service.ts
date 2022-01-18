@@ -82,7 +82,7 @@ export const useRemoveLiquidityService = (
     const validatedInput = validations(
       accountPkh,
       lpTokenInputBN,
-      shares?.total,
+      shares?.total ?? null,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
       lpTokenSymbol
