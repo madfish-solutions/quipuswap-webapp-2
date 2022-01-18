@@ -11,7 +11,7 @@ import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
-import { useTezos, useTokens, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens } from '@utils/dapp';
+import { useTezos, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
 import {

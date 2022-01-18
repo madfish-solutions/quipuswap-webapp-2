@@ -14,7 +14,7 @@ import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
 import { DEFAULT_SEO } from '@seo.config';
-import { DAppProvider } from '@utils/dapp';
+import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
 import 'react-toastify/dist/ReactToastify.css';
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
@@ -107,17 +107,21 @@ const App = ({ Component, pageProps }: AppProps) => {
       </Head>
 
       <DAppProvider>
-        <ColorThemeProvider>
-          <BalancesProvider>
-            <ExchangeRatesProvider>
-              <NewExchangeRatesProvider>
-                <DexGraphProvider>
-                  <Component {...pageProps} />
-                </DexGraphProvider>
-              </NewExchangeRatesProvider>
-            </ExchangeRatesProvider>
-          </BalancesProvider>
-        </ColorThemeProvider>
+        <DAppBakerProvider>
+          <DAppTokensProvider>
+            <ColorThemeProvider>
+              <BalancesProvider>
+                <ExchangeRatesProvider>
+                  <NewExchangeRatesProvider>
+                    <DexGraphProvider>
+                      <Component {...pageProps} />
+                    </DexGraphProvider>
+                  </NewExchangeRatesProvider>
+                </ExchangeRatesProvider>
+              </BalancesProvider>
+            </ColorThemeProvider>
+          </DAppTokensProvider>
+        </DAppBakerProvider>
       </DAppProvider>
     </>
   );

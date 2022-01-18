@@ -7,3 +7,5 @@ export * from './useOnBlock';
 export * from './getStorageInfo';
 export * from './getUserBalance';
 export * from './getAllowance';
+export * from './dapp-bakers';
+export * from './dapp-tokens';

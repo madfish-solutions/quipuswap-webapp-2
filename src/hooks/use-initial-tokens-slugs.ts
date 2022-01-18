@@ -9,9 +9,9 @@ import {
   fallbackToolkits,
   getTokenType,
   useNetwork,
-  useAddCustomToken,
+  useTokens,
   useSearchCustomTokens,
-  useTokens
+  useAddCustomToken
 } from '@utils/dapp';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { QSMainNet } from '@utils/types';

@@ -18,13 +18,13 @@ import ReactModal from 'react-modal';
 
 import { Standard } from '@graphql';
 import {
-  useAddCustomToken,
   useNetwork,
+  useTezos,
+  getTokenType,
+  useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
-  useTezos,
-  useTokens,
-  getTokenType
+  useTokens
 } from '@utils/dapp';
 import {
   getWhitelistedTokenName,
