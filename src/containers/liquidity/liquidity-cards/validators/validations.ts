@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { validateInputtedDecimals } from '@containers/liquidity/liquidity-cards/validators/validate-inputted-decimals';
 import { Nullable } from '@utils/types';
 
+import { validateInputtedDecimals } from './validate-inputted-decimals';
 import { validateUserInput } from './validate-user-input';
 import { validateUserInputAmount } from './validate-user-input-amount';
 

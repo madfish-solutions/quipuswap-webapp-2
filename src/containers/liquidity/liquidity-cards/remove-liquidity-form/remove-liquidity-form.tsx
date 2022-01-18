@@ -45,7 +45,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
+    shares,
     slippage,
     setSlippage,
     handleRemoveLiquidity,
@@ -73,7 +73,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
   const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
-  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
+  const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
+  const isUnvoteVisible = !isDeadlineAndSlippageVisible && shares && new BigNumber(lpTokenInput).gt(shares.unfrozen);
 
   return (
     <>
@@ -81,13 +82,13 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={lpTokenBalance?.toFixed()}
+        balance={shares?.total.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
-        notFrozen
+        frozenBalance={shares?.frozen.toFixed()}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}
@@ -120,7 +121,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         disabled
         notSelectable
       />
-      {isDeadlineAndSkippageVisible && (
+      {isDeadlineAndSlippageVisible && (
         <>
           <div className={CC.mt24}>
             <DeadlineInput
@@ -144,7 +145,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-          Remove
+          Remove {isUnvoteVisible && '& Unvote'}
         </Button>
       ) : (
         <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
