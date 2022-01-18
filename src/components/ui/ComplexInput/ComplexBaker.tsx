@@ -5,7 +5,9 @@ import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { isFullBaker, WhitelistedBaker } from '@utils/types';
+import { getWhitelistedBakerName } from '@utils/helpers';
+import { isBackerNotEmpty } from '@utils/helpers/is-backer-not-empty';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
@@ -22,13 +24,16 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+const CHOOSE_BACKER = 'Choose Baker';
+
 export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, error, handleChange, value, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
-  const [baker, setBaker] = useState<WhitelistedBaker>();
+  const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
+  const buttonText = getWhitelistedBakerName(baker) ?? CHOOSE_BACKER;
 
   return (
     <div className={compoundClassName}>
@@ -41,7 +46,7 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
             handleChange(selectedBaker);
           }
           if (inputRef.current) {
-            inputRef.current.value = isFullBaker(selectedBaker) ? selectedBaker.name : '';
+            inputRef.current.value = isBackerNotEmpty(selectedBaker) ? selectedBaker.name : '';
           }
           setTokensModal(false);
         }}
@@ -56,11 +61,11 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, erro
           <input {...props} ref={inputRef} value={value} hidden />
           <div className={s.bakerInner}>
             <BakerLogo
-              bakerName={baker && isFullBaker(baker) ? baker.name : ''}
-              bakerIcon={baker && isFullBaker(baker) ? baker.logo : ''}
+              bakerName={baker && isBackerNotEmpty(baker) ? baker.name : ''}
+              bakerIcon={baker && isBackerNotEmpty(baker) ? baker.logo : ''}
             />
-            <h6 className={cx(s.token, s.bakerLabel)} title={baker && isFullBaker(baker) ? baker.name : 'Choose Baker'}>
-              {baker && isFullBaker(baker) ? baker.name : 'Choose Baker'}
+            <h6 className={cx(s.token, s.bakerLabel)} title={buttonText}>
+              {buttonText}
             </h6>
             <Shevron />
           </div>

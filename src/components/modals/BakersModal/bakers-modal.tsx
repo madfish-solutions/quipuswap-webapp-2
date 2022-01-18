@@ -4,7 +4,6 @@ import {
   Modal,
   Input,
   Search,
-  BakerCell,
   ColorModes,
   TokenNotFound,
   LoadingBakerCell,
@@ -16,12 +15,14 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 import { noop } from 'rxjs';
 
+import { BakerCell } from '@components/ui/components';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
 import { isEmptyArray, localSearchBaker } from '@utils/helpers';
-import { isFullBaker, WhitelistedBaker } from '@utils/types';
+import { isBackerNotEmpty } from '@utils/helpers/is-backer-not-empty';
+import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
-import s from './BakersModal.module.sass';
+import s from './bakers-modal.module.scss';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -131,20 +132,18 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
       return setFilteredBakers(searchBakers);
     }
 
-    searchCustomBaker(input).then(() => {
-      if (!isEmptyArray(searchBakers)) {
-        return setFilteredBakers(searchBakers);
-      }
-
-      return setFilteredBakers(emptyBakersArray);
-    });
+    setFilteredBakers(emptyBakersArray);
+    searchCustomBaker(input);
   };
 
   const handleTokenSearch = () => {
     searchAllBakers(inputValue);
   };
 
-  const isEmptyBakers = isEmptyArray(filteredBakers);
+  const isEmptyBakers = isEmptyArray(filteredBakers) && isEmptyArray(searchBakers);
+  const isLoading = loading || isSearching;
+
+  const bakerList = !isEmptyArray(filteredBakers) ? filteredBakers : searchBakers;
 
   // eslint-disable-next-line
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
@@ -174,15 +173,15 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
               <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
-          {loading && isSearching && [1, 2, 3, 4, 5, 6].map(x => <LoadingBakerCell key={x} />)}
-          {!isSearching &&
-            filteredBakers.map(baker => (
+          {isLoading && [1, 2, 3, 4, 5, 6].map(x => <LoadingBakerCell key={x} />)}
+          {!isLoading &&
+            bakerList.map(baker => (
               <BakerCell
                 key={baker.address}
-                bakerName={isFullBaker(baker) ? baker.name : baker.address}
-                bakerFee={isFullBaker(baker) ? baker.fee.toString() : ''}
-                bakerFreeSpace={isFullBaker(baker) ? baker.freeSpace.toString() : ''}
-                bakerLogo={isFullBaker(baker) ? baker.logo : ''}
+                bakerName={isBackerNotEmpty(baker) ? baker.name : baker.address}
+                bakerFee={isBackerNotEmpty(baker) ? baker.fee.toString() : ''}
+                bakerFreeSpace={isBackerNotEmpty(baker) ? baker.freeSpace.toString() : ''}
+                bakerLogo={isBackerNotEmpty(baker) ? baker.logo : ''}
                 tabIndex={0}
                 onClick={() => {
                   onChange(baker);

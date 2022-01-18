@@ -8,7 +8,7 @@ import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
 import { getBakers } from './bakers';
-import { getBakerMetadata } from './bakersMetadata';
+import { getBakerMetadata, isAddressBelongsToBaker } from './bakersMetadata';
 
 export interface DAppBakers {
   bakers: { data: WhitelistedBaker[]; loading: boolean; error?: string };
@@ -53,6 +53,18 @@ const useDappBakers = () => {
           ...prevState,
           searchBakers: { loading: false, data: [baker] }
         }));
+      } else {
+        const isBaker = await isAddressBelongsToBaker(address);
+
+        if (isBaker) {
+          const baker = {
+            address
+          };
+          setState(prevState => ({
+            ...prevState,
+            searchBakers: { loading: false, data: [baker] }
+          }));
+        }
       }
     }
   }, []);

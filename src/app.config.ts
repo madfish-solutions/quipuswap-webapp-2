@@ -16,6 +16,7 @@ export const QUIPUSWAP_ANALYTICS_TOKENS = 'https://analytics.quipuswap.com/token
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
 
 export const TZKT_EXPLORER_URL = 'https://tzkt.io';
+export const TZKT_API_DELEGATE_URL = 'https://api.tzkt.io/v1/delegates';
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
