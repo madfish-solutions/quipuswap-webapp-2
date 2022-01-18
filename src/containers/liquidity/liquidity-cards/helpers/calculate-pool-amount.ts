@@ -4,7 +4,7 @@ import { calculateTokenAmount } from '@containers/liquidity/liquidity-cards/help
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-export const calculatePoolRate = (
+export const calculatePoolAmount = (
   amountTokenA: BigNumber,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
@@ -15,5 +15,9 @@ export const calculatePoolRate = (
     return null;
   }
 
-  return calculateTokenAmount(fromDecimals(tokenAPool, tokenA), fromDecimals(tokenBPool, tokenB));
+  const pureRate = calculateTokenAmount(fromDecimals(tokenAPool, tokenA), fromDecimals(tokenBPool, tokenB));
+
+  const amount = amountTokenA.multipliedBy(pureRate);
+
+  return amount.decimalPlaces(tokenB.metadata.decimals, BigNumber.ROUND_DOWN);
 };

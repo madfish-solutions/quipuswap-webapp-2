@@ -9,7 +9,7 @@ import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { calculatePoolRate } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-rate';
+import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -39,8 +39,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
 
-  const sellPrice = calculatePoolRate(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
-  const buyPrice = calculatePoolRate(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
+  const sellPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
+  const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
 
   const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 

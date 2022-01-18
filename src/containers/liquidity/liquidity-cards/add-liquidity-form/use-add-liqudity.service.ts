@@ -4,7 +4,7 @@ import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { calculatePoolRate } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-rate';
+import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { toDecimals } from '@utils/helpers';
@@ -92,7 +92,7 @@ export const useAddLiquidityService = (
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
-    const tokenBAmount = calculatePoolRate(tokenAAmount, tokenA, tokenB, validTokenAPool, validTokenBPool);
+    const tokenBAmount = calculatePoolAmount(tokenABN, tokenA, tokenB, validTokenAPool, validTokenBPool);
 
     const validationB = tokenBAmount
       ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)

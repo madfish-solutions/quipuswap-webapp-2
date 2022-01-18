@@ -67,9 +67,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const dollarEquivalent = useMemo(
     () =>
       exchangeRate
-        ? new BigNumber(value ? value.toString() : DEFAULT_EXCHANGE_RATE)
-            .multipliedBy(new BigNumber(exchangeRate))
-            .toString()
+        ? new BigNumber(`${value}` || DEFAULT_EXCHANGE_RATE).multipliedBy(new BigNumber(exchangeRate)).toString()
         : '',
     [exchangeRate, value]
   );

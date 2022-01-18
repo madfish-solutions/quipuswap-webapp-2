@@ -5,8 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
+import { FormatNumberOptions } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
+import { formatValueBalance } from '@utils/helpers/format-balance';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
@@ -76,7 +77,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{FormatNumber(amount || 0, options)}</span>
+        <span className={s.inner}>{formatValueBalance(amount)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
