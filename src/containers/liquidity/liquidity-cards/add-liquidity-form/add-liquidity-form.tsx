@@ -108,7 +108,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       {shouldShowSlippageInput && (
         <div className={CC.mt24}>
           <LiquiditySlippage
-            type={LiquiditySlippageType.ADD}
+            liquidityType={LiquiditySlippageType.ADD}
             tokenA={tokenA}
             tokenB={tokenB}
             tokenAInput={tokenAInput}

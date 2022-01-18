@@ -10,7 +10,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { decreaseBySlippage, increaseBySlippage } from './liquidity-cards/helpers';
+import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
 
 export enum LiquiditySlippageType {
   ADD = 'ADD',
@@ -18,7 +18,7 @@ export enum LiquiditySlippageType {
 }
 
 interface SlippageInputProps {
-  type: LiquiditySlippageType;
+  liquidityType: LiquiditySlippageType;
   error?: string;
   tokenAInput: string;
   tokenBInput: string;
@@ -31,7 +31,7 @@ interface SlippageInputProps {
 const DEFAULT_INVESTED_VALUE = 0;
 
 export const LiquiditySlippage: FC<SlippageInputProps> = ({
-  type,
+  liquidityType,
   error,
   tokenAInput,
   tokenBInput,
@@ -49,16 +49,10 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
   const tokenBBN = new BigNumber(tokenBInput ? tokenBInput : DEFAULT_INVESTED_VALUE);
 
-  const maxInvestedOrReceivedA =
-    type === LiquiditySlippageType.ADD
-      ? increaseBySlippage(tokenABN, slippage)
-      : decreaseBySlippage(tokenABN, slippage);
-  const maxInvestedOrReceivedB =
-    type === LiquiditySlippageType.ADD
-      ? increaseBySlippage(tokenBBN, slippage)
-      : decreaseBySlippage(tokenBBN, slippage);
+  const maxInvestedOrReceivedA = increaseOrDecreaseBySlippage(liquidityType, tokenABN, slippage);
+  const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, slippage);
 
-  const investedOrReceivedText = type === LiquiditySlippageType.ADD ? 'invested' : 'received';
+  const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
 
   return (
     <>

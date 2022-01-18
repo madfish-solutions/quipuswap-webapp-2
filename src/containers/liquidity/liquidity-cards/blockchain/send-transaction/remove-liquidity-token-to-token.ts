@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
 import { decreaseBySlippage } from '@containers/liquidity/liquidity-cards/helpers';
-import { sortTokensContracts } from '@containers/liquidity/liquidity-cards/helpers/sort-tokens-contracts';
+import { getOrderedTokensAmounts } from '@containers/liquidity/liquidity-cards/helpers/get-ordered-tokens-amounts';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
@@ -37,18 +37,10 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
 
-  const withDecimalsA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
-  const withDecimalsB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
-  const addresses = sortTokensContracts(tokenA, tokenB);
-  if (!addresses) {
-    return;
-  }
+  const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 
-  const isTokenAAddressesTheSame = addresses.addressA === tokenA.contractAddress;
-
-  const validTokenAAmount = isTokenAAddressesTheSame ? withDecimalsA : withDecimalsB;
-  const validTokenBAmount = isTokenAAddressesTheSame ? withDecimalsB : withDecimalsA;
-
-  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, transactionDeadline).send();
+  return dex.contract.methods.divest(id, orderedAmountA, orderedAmountB, shares, transactionDeadline).send();
 };

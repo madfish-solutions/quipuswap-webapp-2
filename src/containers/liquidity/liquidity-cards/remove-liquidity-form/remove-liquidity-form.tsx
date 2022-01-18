@@ -124,7 +124,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       )}
       <div className={CC.mt24}>
         <LiquiditySlippage
-          type={LiquiditySlippageType.REMOVE}
+          liquidityType={LiquiditySlippageType.REMOVE}
           tokenA={tokenA}
           tokenB={tokenB}
           tokenAInput={tokenAOutput}
