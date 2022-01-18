@@ -17,11 +17,11 @@ import { validateOutputAmount, validateTransactionDuration, validations } from '
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
 export const useRemoveLiquidityService = (
-  dex: FoundDex,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
-  transactionDuration: BigNumber
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>,
+  transactionDuration: BigNumber,
+  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -41,6 +41,14 @@ export const useRemoveLiquidityService = (
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
   useEffect(() => {
+    if (!dex || !tokenA || !tokenB) {
+      setTokenAOutput('');
+      setTokenBOutput('');
+      setValidatedInputMessage(undefined);
+
+      return;
+    }
+
     setTokenPair({
       token1: tokenA,
       token2: tokenB,
@@ -58,7 +66,7 @@ export const useRemoveLiquidityService = (
   };
 
   useEffect(() => {
-    if (lpTokenInput === '') {
+    if (!dex || !tokenA || !tokenB || lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
       setValidatedInputMessage(undefined);
@@ -110,8 +118,7 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(validatedOutputB);
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pairInfo, lpTokenInput, lpTokenBalance]);
+  }, [pairInfo, lpTokenInput, lpTokenBalance, tokenA, tokenB, dex, accountPkh]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
@@ -127,20 +134,20 @@ export const useRemoveLiquidityService = (
 
     const { id } = pairInfo;
 
-    if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
+    if (dex!.contract.address === TOKEN_TO_TOKEN_DEX && id) {
       const removeLiquidityTokenToTokenOperation = await removeLiquidityTokenToToken(
         tezos,
-        dex,
+        dex!,
         id,
         lpTokenInput,
         tokenAOutput,
         tokenBOutput,
-        tokenA,
-        tokenB,
+        tokenA!,
+        tokenB!,
         transactionDuration
       );
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA!.metadata.name, tokenB!.metadata.name);
 
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation!);
 
@@ -150,12 +157,12 @@ export const useRemoveLiquidityService = (
         });
       }
     } else {
-      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
+      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex!, lpTokenInput, slippage);
 
-      const { name: tokenAName } = tokenA.metadata;
-      const { name: tokenBName } = tokenB.metadata;
+      const { name: tokenAName } = tokenA!.metadata;
+      const { name: tokenBName } = tokenB!.metadata;
 
-      const notTezosTokenName = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
+      const notTezosTokenName = tokenA!.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
       await confirmOperation(removeLiquidityTezOperation.opHash, {
         message: getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenName)
       });

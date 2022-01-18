@@ -1,31 +1,33 @@
 import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Button, Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { formatBalance } from '@utils/helpers/format-balance';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
   className?: string;
-  balance: string;
+  balance: Nullable<string>;
   exchangeRate?: string;
   label: string;
   error?: string;
   notSelectable?: boolean;
   handleChange?: (token: WhitelistedToken) => void;
   handleBalance: (value: string) => void;
-  token?: WhitelistedToken;
-  token2?: WhitelistedToken;
+  token: Nullable<WhitelistedToken>;
+  token2?: Nullable<WhitelistedToken>;
   blackListedTokens: WhitelistedToken[];
   setToken?: (token: WhitelistedToken) => void;
 }
@@ -37,7 +39,7 @@ const themeClass = {
 
 export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
-  balance = '10.00',
+  balance = null,
   shouldShowBalanceButtons = true,
   label,
   handleBalance,
@@ -76,6 +78,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
 
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
+  const disabled = !isExist(balance) || !isExist(token);
+
   return (
     <>
       <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
@@ -86,12 +90,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>
-              {account && (
+              {account && isExist(balance) && (
                 <div className={s.item2Line}>
                   <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(balance), token?.metadata.decimals ?? 3)}
-                  </div>
+                  <div className={cx(s.label2, s.price)}>{formatBalance(balance)}</div>
                 </div>
               )}
             </div>
@@ -102,6 +104,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               ref={inputRef}
               value={value}
               autoComplete="off"
+              disabled={disabled || props.disabled}
               {...props}
             />
             <Button

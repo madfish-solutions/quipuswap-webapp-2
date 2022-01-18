@@ -1,0 +1,32 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.content {
+  padding: 24px;
+  font-weight: 600;
+}
+
+.button {
+  width: 100%;
+  max-width: 280px;
+  margin-top: 40px;
+}
+
+@include media(">Ltablet") {
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .button {
+    width: 160px;
+    margin-top: auto;
+  }
+}
+
+@include media(">desktop") {
+  .button {
+    width: 160px;
+    margin-top: auto;
+  }
+}

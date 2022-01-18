@@ -1,12 +1,12 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { WhitelistedToken } from '@utils/types';
+import { Nullable, WhitelistedToken } from '@utils/types';
 
 export interface AddFormInterface {
-  dex: FoundDex;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
+  dex: Nullable<FoundDex>;
+  tokenA: Nullable<WhitelistedToken>;
+  tokenB: Nullable<WhitelistedToken>;
   transactionDuration: BigNumber;
   setTransactionDuration: (newDeadline: BigNumber) => void;
   onTokenAChange: (token: WhitelistedToken) => void;

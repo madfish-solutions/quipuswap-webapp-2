@@ -14,7 +14,6 @@ import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
 import s from '../../Liquidity.module.sass';
-import { isTezIncludes } from '../helpers';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
@@ -47,13 +46,16 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange, transactionDuration);
+  } = useAddLiquidityService(dex, tokenA, tokenB, transactionDuration, onTokenAChange, onTokenBChange);
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
+  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
+  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
 
   const isButtonDisabled =
+    !dex ||
     !accountPkh ||
+    !tokenA ||
+    !tokenB ||
     !tokenAInput ||
     !tokenBInput ||
     Boolean(validationMessageTokenA) ||
@@ -61,13 +63,15 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     Boolean(validationMessageTransactionDuration);
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
-  const isDeadlineVisible = !isTezIncludes([tokenA, tokenB]);
+
+  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
+  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed()}
+        balance={balanceTokenA}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -76,12 +80,13 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         handleBalance={handleTokenABalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={validationMessageTokenA}
+        disabled={!tokenB}
         placeholder="0.0"
       />
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed()}
+        balance={balanceTokenB}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
@@ -90,17 +95,16 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         handleBalance={handleTokenBBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         error={validationMessageTokenB}
+        disabled={!tokenA}
         placeholder="0.0"
       />
-      {isDeadlineVisible && (
-        <div className={CC.mt24}>
-          <DeadlineInput
-            onChange={setTransactionDuration}
-            error={validationMessageTransactionDuration}
-            value={transactionDuration}
-          />
-        </div>
-      )}
+      <div className={CC.mt24}>
+        <DeadlineInput
+          onChange={setTransactionDuration}
+          error={validationMessageTransactionDuration}
+          value={transactionDuration}
+        />
+      </div>
       {isNewPair && <NewPairMessage className={CC.mt24} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>

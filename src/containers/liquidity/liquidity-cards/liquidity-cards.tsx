@@ -2,10 +2,8 @@ import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
-import { ErrorAlert } from '@components/common/ErrorAlert';
-import { Skeleton } from '@components/common/Skeleton';
-import { StateWrapper } from '@components/state-wrapper';
-import { SomethingWentWrongError } from '@errors/SomethingWentWrongError.error';
+import { TokensLogos } from '@components/common/TokensLogos';
+import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
@@ -28,34 +26,7 @@ export const LiquidityCards: FC = () => {
     setTransactionDuration
   } = useLiquidityFormService();
 
-  const isLoading = !dex;
-  const isError = (dex && !tokenA) || !tokenB;
-  const isLoaded = dex && tokenA && tokenB;
-
-  const getFormContent = () => {
-    const isAddTabActive = tab.id === 'add';
-
-    return isAddTabActive ? (
-      <AddLiquidityForm
-        dex={dex!}
-        tokenA={tokenA!}
-        tokenB={tokenB!}
-        onTokenAChange={handleChangeTokenA}
-        onTokenBChange={handleChangeTokenB}
-        transactionDuration={transactionDuration}
-        setTransactionDuration={setTransactionDuration}
-      />
-    ) : (
-      <RemoveLiquidityForm
-        dex={dex!}
-        tokenA={tokenA!}
-        tokenB={tokenB!}
-        onChangeTokensPair={handleChangeTokensPair}
-        transactionDuration={transactionDuration}
-        setTransactionDuration={setTransactionDuration}
-      />
-    );
-  };
+  const isAddTabActive = tab.id === 'add';
 
   return (
     <>
@@ -73,29 +44,51 @@ export const LiquidityCards: FC = () => {
         }}
         contentClassName={s.content}
       >
-        <StateWrapper
-          isLoading={isLoading}
-          loaderFallback={<Skeleton width={450} height={500} />}
-          isError={isError}
-          errorFallback={<ErrorAlert error={new SomethingWentWrongError()} />}
-        >
-          {isLoaded && getFormContent()}
-        </StateWrapper>
+        {isAddTabActive ? (
+          <AddLiquidityForm
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
+            onTokenAChange={handleChangeTokenA}
+            onTokenBChange={handleChangeTokenB}
+          />
+        ) : (
+          <RemoveLiquidityForm
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
+            onChangeTokensPair={handleChangeTokensPair}
+          />
+        )}
       </Card>
       <Card
         header={{
-          content: `${tab.label} Liquidity Details`
+          content: (
+            <div className={s.poolDetailsHeader}>
+              {tokenA && tokenB && (
+                <>
+                  <TokensLogos
+                    firstTokenIcon={prepareTokenLogo(tokenA.metadata?.thumbnailUri)}
+                    firstTokenSymbol={getWhitelistedTokenSymbol(tokenA)}
+                    secondTokenIcon={prepareTokenLogo(tokenB.metadata?.thumbnailUri)}
+                    secondTokenSymbol={getWhitelistedTokenSymbol(tokenB)}
+                  />
+                  <span className={s.poolDetailsHeader_Title}>
+                    {getWhitelistedTokenName(tokenA)} / {getWhitelistedTokenName(tokenB)}
+                  </span>
+                </>
+              )}
+              <span className={s.poolDetailsHeader_Title}>Pool Details</span>
+            </div>
+          )
         }}
         contentClassName={s.LiquidityDetails}
       >
-        <StateWrapper
-          isLoading={isLoading}
-          loaderFallback={<Skeleton width={450} height={270} />}
-          isError={isError}
-          errorFallback={<ErrorAlert error={new SomethingWentWrongError()} />}
-        >
-          {isLoaded && <LiquidityDetails dex={dex!} tokenA={tokenA!} tokenB={tokenB!} />}
-        </StateWrapper>
+        <LiquidityDetails dex={dex} tokenA={tokenA} tokenB={tokenB} />
       </Card>
     </>
   );

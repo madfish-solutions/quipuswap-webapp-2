@@ -9,11 +9,20 @@ import { PairInfo } from '../add-liquidity-form';
 import { loadTokenToTokenPairInfo } from '../blockchain';
 import { getTezTokenPairInfo } from '../helpers';
 
-export const usePairInfo = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+export const usePairInfo = (
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>
+) => {
   const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
 
   useEffect(() => {
     const loadPairInfo = async () => {
+      if (!dex || !tokenA || !tokenB) {
+        setPairInfo(null);
+
+        return;
+      }
       const newPairInfo =
         dex.contract.address === TOKEN_TO_TOKEN_DEX
           ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)

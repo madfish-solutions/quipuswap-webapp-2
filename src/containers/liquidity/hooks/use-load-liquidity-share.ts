@@ -15,7 +15,11 @@ interface LiquidityShareResult {
   total: BigNumber;
 }
 
-export const useLoadLiquidityShare = (dex: FoundDex, tokenA: WhitelistedToken, tokenB: WhitelistedToken) => {
+export const useLoadLiquidityShare = (
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>
+) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -23,7 +27,7 @@ export const useLoadLiquidityShare = (dex: FoundDex, tokenA: WhitelistedToken, t
 
   useEffect(() => {
     const loadShare = async () => {
-      if (!tezos || !accountPkh || !dex || !isTezIncludes([tokenA, tokenB])) {
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB || !isTezIncludes([tokenA, tokenB])) {
         return;
       }
       const { unfrozen, frozen, total } = await getLiquidityShare(tezos, dex, accountPkh);

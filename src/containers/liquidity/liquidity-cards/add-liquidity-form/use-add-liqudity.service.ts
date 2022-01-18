@@ -21,12 +21,12 @@ import { PairInfo } from './pair-info.interface';
 const EMPTY_POOL = 0;
 
 export const useAddLiquidityService = (
-  dex: FoundDex,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>,
+  transactionDuration: BigNumber,
   onTokenAChange: (token: WhitelistedToken) => void,
-  onTokenBChange: (token: WhitelistedToken) => void,
-  transactionDuration: BigNumber
+  onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
@@ -103,7 +103,7 @@ export const useAddLiquidityService = (
   };
 
   useEffect(() => {
-    if (!lastEditedInput) {
+    if (!lastEditedInput || !tokenA || !tokenB) {
       return;
     }
 
@@ -162,8 +162,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenBInput,
-      tokenA,
-      tokenB,
+      tokenA!,
+      tokenB!,
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -179,8 +179,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenAInput,
-      tokenB,
-      tokenA,
+      tokenB!,
+      tokenA!,
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -192,15 +192,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
-    const { decimals } = tokenA.metadata;
+    const { decimals } = tokenA!.metadata;
     const fixedValue = new BigNumber(value).toFixed(decimals);
 
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       fixedValue,
       tokenBInput,
-      tokenA,
-      tokenB,
+      tokenA!,
+      tokenB!,
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -212,15 +212,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
-    const { decimals } = tokenB.metadata;
+    const { decimals } = tokenB!.metadata;
     const fixedValue = new BigNumber(value).toFixed(decimals);
 
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       fixedValue,
       tokenAInput,
-      tokenB,
-      tokenA,
+      tokenB!,
+      tokenA!,
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -232,7 +232,7 @@ export const useAddLiquidityService = (
   };
 
   const investTokenToToken = async () => {
-    if (!tezos || !accountPkh) {
+    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
       return;
     }
 
@@ -280,7 +280,7 @@ export const useAddLiquidityService = (
   };
 
   const investTezosToToken = async () => {
-    if (!tezos || !accountPkh) {
+    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
       return;
     }
 
@@ -322,7 +322,7 @@ export const useAddLiquidityService = (
   };
 
   const handleAddLiquidity = async () => {
-    if (dex.contract.address === TOKEN_TO_TOKEN_DEX) {
+    if (dex!.contract.address === TOKEN_TO_TOKEN_DEX) {
       return await investTokenToToken();
     }
 
