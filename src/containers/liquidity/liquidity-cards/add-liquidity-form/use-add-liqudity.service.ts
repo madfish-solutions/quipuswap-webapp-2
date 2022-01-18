@@ -18,6 +18,8 @@ import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
+const EMPTY_POOL = 0;
+
 export const useAddLiquidityService = (
   dex: FoundDex,
   tokenA: WhitelistedToken,
@@ -329,6 +331,12 @@ export const useAddLiquidityService = (
 
   const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
 
+  const isNewPair =
+    !pairInfo ||
+    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
+    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
+    pairInfo.totalSupply.eq(EMPTY_POOL);
+
   return {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -338,6 +346,7 @@ export const useAddLiquidityService = (
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    isNewPair,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
