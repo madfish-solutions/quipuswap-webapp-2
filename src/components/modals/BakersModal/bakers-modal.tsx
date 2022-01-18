@@ -120,11 +120,10 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
     const localFilteredBakers = bakers.filter(baker => localSearchBaker(baker, inputValue));
 
     setFilteredBakers(localFilteredBakers);
-    
+
     if (isEmptyArray(localFilteredBakers) && isValidBakerAddress(inputValue)) {
       searchCustomBaker(inputValue);
     }
-
   };
 
   const isEmptyBakers = isEmptyArray(filteredBakers) && isEmptyArray(searchBakers);
