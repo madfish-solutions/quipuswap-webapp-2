@@ -14,7 +14,7 @@ import {
   useAddCustomToken
 } from '@utils/dapp';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
-import { QSMainNet } from '@utils/types';
+import { QSNets } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 type TokensSlugs = [string, string];
@@ -25,11 +25,11 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
   const { data: tokens, loading: tokensLoading } = useTokens();
   const searchCustomTokens = useSearchCustomTokens();
   const addCustomToken = useAddCustomToken();
-  const prevNetworkIdRef = useRef<QSMainNet | undefined>();
+  const prevNetworkIdRef = useRef<QSNets | undefined>();
 
   const getInitialTokens = useCallback(
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    async (_key: string, networkId: QSMainNet, tokensSlug = ''): Promise<TokensSlugs> => {
+    async (_key: string, networkId: QSNets, tokensSlug = ''): Promise<TokensSlugs> => {
       const fallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
         getTokenSlug(networksDefaultTokens[networkId])

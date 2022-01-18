@@ -4,7 +4,7 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { Standard } from '@graphql';
-import { isTokenEqual } from '@utils/helpers';
+import { isEmptyArray, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenWithQSNetworkType } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
@@ -31,7 +31,7 @@ const useDappTokens = () => {
   useEffect(() => {
     setState(prevState => {
       const prevTokens = prevState.tokens.data;
-      const fallbackTokens = prevTokens.length === 0 ? getFallbackTokens(network, true) : prevTokens;
+      const fallbackTokens = isEmptyArray(prevTokens) ? getFallbackTokens(network, true) : prevTokens;
 
       return {
         ...prevState,
@@ -74,8 +74,8 @@ const useDappTokens = () => {
         const token: WhitelistedTokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
-          type: !isFa2 ? Standard.Fa12 : Standard.Fa2,
-          fa2TokenId: !isFa2 ? undefined : tokenId || 0,
+          type: isFa2 ? Standard.Fa2 : Standard.Fa12,
+          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
           network: network.id
         };
         setState(prevState => ({

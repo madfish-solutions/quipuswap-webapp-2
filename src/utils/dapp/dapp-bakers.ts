@@ -48,7 +48,7 @@ const useDappBakers = () => {
           fee: customBaker.fee,
           freeSpace: new BigNumber(customBaker.freeSpace),
           votes: 0
-        } as WhitelistedBaker;
+        };
         setState(prevState => ({
           ...prevState,
           searchBakers: { loading: false, data: [baker] }

@@ -3,7 +3,9 @@ import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@app.config';
-import { QSNetwork, QSNetworkType } from '@utils/types';
+import { NoBeaconWallet, WalletNotConected } from '@errors';
+import { isDefaultConnectType, isNetworkMainnet } from '@utils/helpers';
+import { LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
 import { getNetwork, toBeaconNetworkType } from '../network';
 import { ReadOnlySigner } from '../ReadOnlySigner';
@@ -18,17 +20,18 @@ export const beaconWallet =
         iconUrl: `${BASE_URL}/favicon.ico`,
         preferredNetwork: (() => {
           const net = getNetwork();
-          if (!(net.connectType === 'custom' && net.type === QSNetworkType.TEST)) {
-            return toBeaconNetworkType(net.id);
+
+          if (isDefaultConnectType(net) || isNetworkMainnet(net)) {
+            return toBeaconNetworkType(QSNets.mainnet);
           }
 
-          return toBeaconNetworkType('mainnet');
+          return toBeaconNetworkType(net.id);
         })()
       });
 
-export const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork) => {
+export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: QSNetwork) => {
   if (!beaconWallet) {
-    throw new Error('Cannot use beacon out of window');
+    throw new NoBeaconWallet();
   }
 
   const activeAccount = await beaconWallet.client.getActiveAccount();
@@ -36,28 +39,27 @@ export const connectWalletBeacon = async (forcePermission: boolean, network: QSN
     if (activeAccount) {
       await beaconWallet.clearActiveAccount();
     }
-    await beaconWallet.requestPermissions({
-      network:
-        network.connectType === 'custom' && network.type === QSNetworkType.TEST
-          ? {
-              type: NetworkType.CUSTOM,
-              name: network.name,
-              rpcUrl: network.rpcBaseURL
-            }
-          : { type: toBeaconNetworkType(network.id) }
-    });
+    const network =
+      isDefaultConnectType(qsNetwork) || isNetworkMainnet(qsNetwork)
+        ? { type: toBeaconNetworkType(qsNetwork.id) }
+        : {
+            type: NetworkType.CUSTOM,
+            name: qsNetwork.name,
+            rpcUrl: qsNetwork.rpcBaseURL
+          };
+    await beaconWallet.requestPermissions({ network });
   }
 
-  const tezos = new TezosToolkit(rpcClients[network.id]);
+  const tezos = new TezosToolkit(rpcClients[qsNetwork.id]);
   tezos.setPackerProvider(michelEncoder);
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();
   if (!activeAcc) {
-    throw new Error('Not connected');
+    throw new WalletNotConected();
   }
 
   tezos.setSignerProvider(new ReadOnlySigner(activeAcc.address, activeAcc.publicKey));
-  localStorage.setItem(LAST_USED_CONNECTION_KEY, 'beacon');
+  localStorage.setItem(LAST_USED_CONNECTION_KEY, LastUsedConnectionKey.BEACON);
   localStorage.setItem(LAST_USED_ACCOUNT_KEY, activeAcc.accountIdentifier);
 
   return { pkh: activeAcc.address, pk: activeAcc.publicKey, toolkit: tezos };

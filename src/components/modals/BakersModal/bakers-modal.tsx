@@ -116,28 +116,15 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
     setInputValue(values.search ?? '');
   };
 
-  const searchAllBakers = (input: string) => {
-    const isBakers = bakers.filter(baker => localSearchBaker(baker, input));
-
-    if (!isEmptyArray(isBakers)) {
-      return setFilteredBakers(isBakers);
-    }
-    const emptyBakersArray: Array<WhitelistedBaker> = [];
-
-    if (!isValidBakerAddress(input)) {
-      return setFilteredBakers(emptyBakersArray);
-    }
-
-    if (!isEmptyArray(searchBakers)) {
-      return setFilteredBakers(searchBakers);
-    }
-
-    setFilteredBakers(emptyBakersArray);
-    searchCustomBaker(input);
-  };
-
   const handleTokenSearch = () => {
-    searchAllBakers(inputValue);
+    const localFilteredBakers = bakers.filter(baker => localSearchBaker(baker, inputValue));
+
+    setFilteredBakers(localFilteredBakers);
+    
+    if (isEmptyArray(localFilteredBakers) && isValidBakerAddress(inputValue)) {
+      searchCustomBaker(inputValue);
+    }
+
   };
 
   const isEmptyBakers = isEmptyArray(filteredBakers) && isEmptyArray(searchBakers);

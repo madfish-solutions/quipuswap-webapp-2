@@ -6,7 +6,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { UseToasts } from '@hooks/use-toasts';
 import { fromDecimals } from '@utils/helpers';
-import { VoterType, QSMainNet, Nullable, WhitelistedTokenPair } from '@utils/types';
+import { VoterType, QSNets, Nullable, WhitelistedTokenPair } from '@utils/types';
 
 export const handleTokenPairSelect = async (
   pair: WhitelistedTokenPair,
@@ -17,7 +17,7 @@ export const handleTokenPairSelect = async (
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  networkId: QSMainNet
+  networkId: QSNets
 ) => {
   if (!tezos || !networkId) {
     setTokenPair(pair);

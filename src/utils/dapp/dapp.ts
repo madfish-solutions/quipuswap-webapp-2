@@ -6,7 +6,7 @@ import constate from 'constate';
 import useSWR from 'swr';
 
 import { APP_NAME, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@app.config';
-import { QSMainNet, QSNetwork } from '@utils/types';
+import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@utils/types';
 
 import { beaconWallet, connectWalletBeacon } from './connect-wallet/connect-beacon-wallet';
 import { connectWalletTemple } from './connect-wallet/connect-temple-wallet';
@@ -19,15 +19,15 @@ import { ReadOnlySigner } from './ReadOnlySigner';
 const net = getNetwork();
 
 export interface DAppType {
-  connectionType: 'beacon' | 'temple' | null;
-  tezos: TezosToolkit | null;
-  accountPkh: string | null;
-  accountPublicKey: string | null;
-  templeWallet: TempleWallet | null;
+  connectionType: Nullable<LastUsedConnectionKey>;
+  tezos: Nullable<TezosToolkit>;
+  accountPkh: Nullable<string>;
+  accountPublicKey: Nullable<string>;
+  templeWallet: Nullable<TempleWallet>;
   network: QSNetwork;
 }
 
-export const fallbackToolkits: Record<QSMainNet, TezosToolkit> = {
+export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
   hangzhounet: new TezosToolkit(rpcClients.hangzhounet),
   mainnet: new TezosToolkit(rpcClients.mainnet)
 };
@@ -78,9 +78,9 @@ function useDApp() {
             console.log(error);
           }
 
-          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === 'temple' ? perm : null);
+          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
 
-          if (lastUsedConnection === 'temple') {
+          if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
             const { pkh, pk, tezos } = await getTempleWalletState(wlt, net.id);
             setState(prevState => ({
               ...prevState,
@@ -88,7 +88,7 @@ function useDApp() {
               tezos,
               accountPkh: pkh,
               accountPublicKey: pk,
-              connectionType: wlt.connected ? 'temple' : null
+              connectionType: wlt.connected ? LastUsedConnectionKey.TEMPLE : null
             }));
           } else {
             setState(prevState => ({
@@ -105,12 +105,12 @@ function useDApp() {
         }
       }
 
-      if (lastUsedConnection !== 'beacon') {
+      if (lastUsedConnection !== LastUsedConnectionKey.BEACON) {
         setFallbackState();
       }
     });
     const lastUsedAccount = localStorage.getItem(LAST_USED_ACCOUNT_KEY);
-    if (localStorage.getItem(LAST_USED_CONNECTION_KEY) === 'beacon' && lastUsedAccount) {
+    if (localStorage.getItem(LAST_USED_CONNECTION_KEY) === LastUsedConnectionKey.BEACON && lastUsedAccount) {
       if (!beaconWallet) {
         return;
       }
@@ -134,7 +134,7 @@ function useDApp() {
             templeWallet: null,
             accountPkh: value.address,
             accountPublicKey: value.publicKey,
-            connectionType: 'beacon',
+            connectionType: LastUsedConnectionKey.BEACON,
             tezos: toolkit,
             network: net
           }));
@@ -148,7 +148,10 @@ function useDApp() {
   }, [setFallbackState]);
 
   useEffect(() => {
-    if (templeInitialAvailable === false && localStorage.getItem(LAST_USED_CONNECTION_KEY) === 'temple') {
+    if (
+      templeInitialAvailable === false &&
+      localStorage.getItem(LAST_USED_CONNECTION_KEY) === LastUsedConnectionKey.TEMPLE
+    ) {
       setFallbackState();
     }
   }, [setFallbackState, templeInitialAvailable]);
@@ -193,7 +196,7 @@ function useDApp() {
       const { pkh, pk, toolkit, wallet } = await connectWalletTemple(forcePermission, network);
       setState(prevState => ({
         ...prevState,
-        connectionType: 'temple',
+        connectionType: LastUsedConnectionKey.TEMPLE,
         tezos: toolkit,
         accountPkh: pkh,
         accountPublicKey: pk,
@@ -210,7 +213,7 @@ function useDApp() {
 
       setState(prevState => ({
         ...prevState,
-        connectionType: 'beacon',
+        connectionType: LastUsedConnectionKey.BEACON,
         tezos: toolkit,
         accountPkh: pkh,
         accountPublicKey: pk,
@@ -245,7 +248,7 @@ function useDApp() {
   }, []);
 
   const estimationToolkit = useMemo(() => {
-    if (accountPkh && accountPublicKey && connectionType === 'beacon') {
+    if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
       const cloneTezosToolkit = new TezosToolkit(tezos!.rpc);
       cloneTezosToolkit.setPackerProvider(michelEncoder);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
