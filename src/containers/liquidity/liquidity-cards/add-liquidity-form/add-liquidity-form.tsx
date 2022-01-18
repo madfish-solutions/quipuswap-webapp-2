@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -41,6 +42,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     tokenBInput,
     slippage,
     setSlippage,
+    isNewPair,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
@@ -116,6 +118,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
           />
         </div>
       )}
+      {isNewPair && <NewPairMessage className={CC.mt24} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
           Add

@@ -1,0 +1,19 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.pairMessage
+  padding: 8px 16px
+  font-size: 1em
+  line-height: 1.714
+  border: 1px solid #EA2424
+  border-radius: 8px
+
+.light
+  color: $text-01
+
+.dark
+  color: $text-inverse
+
+@include media('>SDesktop')
+  .pairMessage
+    padding: 12px 16px
