@@ -3,7 +3,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
-import { sortTokensContracts } from '@containers/liquidity/liquidity-cards/helpers/sort-tokens-contracts';
+import { decreaseBySlippage } from '@containers/liquidity/liquidity-cards/helpers';
+import { getOrderedTokensAmounts } from '@containers/liquidity/liquidity-cards/helpers/get-ordered-tokens-amounts';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
@@ -16,7 +17,8 @@ export const removeLiquidityTokenToToken = async (
   tokenBOutput: string,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken,
-  transactionDuration: BigNumber
+  transactionDuration: BigNumber,
+  slippagePercentage: BigNumber
 ) => {
   const transactionDurationInSeconds = transactionDuration
     .multipliedBy(SECONDS_IN_MINUTE)
@@ -35,15 +37,10 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
 
-  const addresses = sortTokensContracts(tokenA, tokenB);
-  if (!addresses) {
-    return;
-  }
+  const withSlippageA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
-  const isTokenAAddressesTheSame = addresses.addressA === tokenA.contractAddress;
+  const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 
-  const validTokenAAmount = isTokenAAddressesTheSame ? tokenAOutputAmount : tokenBOutputAmount;
-  const validTokenBAmount = isTokenAAddressesTheSame ? tokenBOutputAmount : tokenAOutputAmount;
-
-  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, transactionDeadline).send();
+  return dex.contract.methods.divest(id, orderedAmountA, orderedAmountB, shares, transactionDeadline).send();
 };

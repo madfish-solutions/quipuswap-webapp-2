@@ -5,14 +5,17 @@ import BigNumber from 'bignumber.js';
 import { LP_TOKEN_DECIMALS } from '@app.config';
 import { toDecimals } from '@utils/helpers';
 
+const PERCENTAGE = 100;
+
 export const removeLiquidityTez = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   lpTokenInput: string,
-  slippageTolerance: BigNumber
+  slippagePercentage: BigNumber
 ) => {
+  const slippageInDecimals = slippagePercentage.dividedBy(PERCENTAGE);
   const lpTokenBN = new BigNumber(lpTokenInput);
   const shares = toDecimals(lpTokenBN, LP_TOKEN_DECIMALS).integerValue(BigNumber.ROUND_UP);
 
-  return await getRemoveLiquidityParams(tezos, dex, shares, slippageTolerance);
+  return await getRemoveLiquidityParams(tezos, dex, shares, slippageInDecimals);
 };

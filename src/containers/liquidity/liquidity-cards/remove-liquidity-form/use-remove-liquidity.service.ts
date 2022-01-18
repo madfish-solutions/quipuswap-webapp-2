@@ -3,27 +3,27 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LIQUIDITY_DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { getVotingParams } from '@containers/liquidity/liquidity-cards/helpers';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash } from '../../hooks/get-operation-hash';
+import { useLoadLiquidityShare } from '../../hooks/use-load-liquidity-share';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
+import { getVotingParams } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 
 export const useRemoveLiquidityService = (
-  dex: FoundDex,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void,
-  transactionDuration: BigNumber
+  dex: Nullable<FoundDex>,
+  tokenA: Nullable<WhitelistedToken>,
+  tokenB: Nullable<WhitelistedToken>,
+  transactionDuration: BigNumber,
+  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -39,10 +39,18 @@ export const useRemoveLiquidityService = (
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
-  const [slippage] = useState<BigNumber>(new BigNumber(LIQUIDITY_DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   useEffect(() => {
+    if (!dex || !tokenA || !tokenB) {
+      setTokenAOutput('');
+      setTokenBOutput('');
+      setValidatedInputMessage(undefined);
+
+      return;
+    }
+
     setTokenPair({
       token1: tokenA,
       token2: tokenB,
@@ -60,7 +68,7 @@ export const useRemoveLiquidityService = (
   };
 
   useEffect(() => {
-    if (lpTokenInput === '') {
+    if (!dex || !tokenA || !tokenB || lpTokenInput === '') {
       setTokenAOutput('');
       setTokenBOutput('');
       setValidatedInputMessage(undefined);
@@ -123,7 +131,7 @@ export const useRemoveLiquidityService = (
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !pairInfo) {
+    if (!tezos || !accountPkh || !pairInfo || !dex || !tokenA || !tokenB) {
       return;
     }
 
@@ -139,12 +147,13 @@ export const useRemoveLiquidityService = (
         tokenBOutput,
         tokenA,
         tokenB,
-        transactionDuration
+        transactionDuration,
+        slippage
       );
 
       const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
 
-      const hash = getOperationHash(removeLiquidityTokenToTokenOperation!);
+      const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
         await confirmOperation(hash, {
@@ -187,6 +196,8 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     shares,
+    slippage,
+    setSlippage,
     handleChange,
     handleBalance,
     handleSetTokenPair,

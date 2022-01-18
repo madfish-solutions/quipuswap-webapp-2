@@ -3,6 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { SECONDS_IN_MINUTE } from '@app.config';
+import { increaseBySlippage } from '@containers/liquidity/liquidity-cards/helpers';
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
@@ -20,7 +21,8 @@ export const addLiquidityTokenToToken = async (
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
   tokenBPool: BigNumber,
-  transactionDuration: BigNumber
+  transactionDuration: BigNumber,
+  slippagePercentage: BigNumber
 ) => {
   const transactionDurationInSeconds = transactionDuration
     .multipliedBy(SECONDS_IN_MINUTE)
@@ -37,9 +39,12 @@ export const addLiquidityTokenToToken = async (
   const shares = tokenAAmount.multipliedBy(totalSupply).idiv(tokenAPool);
   const tokenBAmount = shares.multipliedBy(tokenBPool).div(totalSupply).integerValue(BigNumber.ROUND_UP);
 
+  const withDecimalsA = increaseBySlippage(tokenAAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withDecimalsB = increaseBySlippage(tokenBAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+
   const [tokenAUpdateOperator, tokenBUpdateOperator, tokenAResetOperator, tokenBResetOperator] =
     await getTokensResetAndUpdateOperators(tezos, tokenA, tokenB, dexAddress, accountPkh, tokenAAmount, tokenBAmount);
-  const investParams = dex.contract.methods.invest(id, shares, tokenAAmount, tokenBAmount, transactionDeadline);
+  const investParams = dex.contract.methods.invest(id, shares, withDecimalsA, withDecimalsB, transactionDeadline);
 
   return await (
     await batchOperations(tezos, [

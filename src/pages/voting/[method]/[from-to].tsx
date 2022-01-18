@@ -5,7 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { BaseLayout } from '@components/common/BaseLayout';
-import { Voting } from '@containers/Voting';
+import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 

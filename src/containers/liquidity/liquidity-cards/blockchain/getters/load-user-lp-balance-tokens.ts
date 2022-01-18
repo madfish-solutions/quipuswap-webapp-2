@@ -18,7 +18,7 @@ const loadUserLpBalanceTokens = async (
   dex: FoundDex,
   tokenA: WhitelistedToken,
   tokenB: WhitelistedToken
-) => {
+): Promise<Nullable<BigNumber>> => {
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
     return null;
@@ -33,11 +33,7 @@ const loadUserLpBalanceTokens = async (
 
   const userLpTokenBalance = await dex.storage.storage.ledger.get([accountPkh, pairId]);
 
-  if (userLpTokenBalance) {
-    return userLpTokenBalance.balance;
-  }
-
-  return null;
+  return userLpTokenBalance?.balance || null;
 };
 
 const loadUserLpBalanceTez = async (

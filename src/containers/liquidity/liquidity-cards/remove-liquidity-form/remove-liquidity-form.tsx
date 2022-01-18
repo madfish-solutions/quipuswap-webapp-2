@@ -10,12 +10,13 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { isTezIncludes } from '@containers/liquidity/liquidity-cards/helpers';
 import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, isExist } from '@utils/helpers';
 
+import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
-import { isTezIncludes } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
@@ -45,25 +46,34 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenABalance,
     tokenBBalance,
     shares,
+    slippage,
+    setSlippage,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
     handleSetTokenPair
-  } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair, transactionDuration);
+  } = useRemoveLiquidityService(dex, tokenA, tokenB, transactionDuration, onChangeTokensPair);
 
-  const { decimals: decimalsA } = tokenA.metadata;
-  const { decimals: decimalsB } = tokenB.metadata;
+  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
+  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
 
   const isButtonDisabled =
+    !dex ||
+    !tokenA ||
+    !tokenB ||
     !accountPkh ||
     !lpTokenInput ||
-    Boolean(validatedInputMessage) ||
-    Boolean(validatedOutputMessageA) ||
-    Boolean(validatedOutputMessageB) ||
-    Boolean(validationMessageTransactionDuration);
+    isExist(validatedInputMessage) ||
+    isExist(validatedOutputMessageA) ||
+    isExist(validatedOutputMessageB);
+
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
-  const isDeadlineVisible = !isTezIncludes([tokenA, tokenB]);
+
+  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
+  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
+
+  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
 
   return (
     <>
@@ -85,7 +95,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed()}
+        balance={balanceTokenA}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -99,7 +109,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed()}
+        balance={balanceTokenB}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
@@ -110,14 +120,27 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         disabled
         notSelectable
       />
-      {isDeadlineVisible && (
-        <div className={CC.mt24}>
-          <DeadlineInput
-            onChange={setTransactionDuration}
-            value={transactionDuration}
-            error={validationMessageTransactionDuration}
-          />
-        </div>
+      {isDeadlineAndSkippageVisible && (
+        <>
+          <div className={CC.mt24}>
+            <DeadlineInput
+              onChange={setTransactionDuration}
+              error={validationMessageTransactionDuration}
+              value={transactionDuration}
+            />
+          </div>
+          <div className={CC.mt24}>
+            <LiquiditySlippage
+              liquidityType={LiquiditySlippageType.ADD}
+              tokenA={tokenA}
+              tokenB={tokenB}
+              tokenAInput={tokenAOutput}
+              tokenBInput={tokenBOutput}
+              slippage={slippage}
+              onChange={setSlippage}
+            />
+          </div>
+        </>
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>

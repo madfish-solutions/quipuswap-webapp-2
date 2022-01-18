@@ -339,13 +339,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   );
 
   const handleSlippageChange = (newValue?: BigNumber) => {
-    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.SLIPPAGE, true);
     setFieldValue(SwapField.SLIPPAGE, newValue, true);
   };
 
   const handleDeadlineChange = (newValue?: BigNumber) => {
-    refreshDexPoolsIfNecessary();
     setFieldTouched(SwapField.DEADLINE, true);
     setFieldValue(SwapField.DEADLINE, newValue, true);
   };
@@ -372,7 +370,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   return (
     <>
-      {/* TODO: add swap chart */}
       <StickyBlock className={className}>
         <Card
           header={{
@@ -434,9 +431,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           {shouldShowDeadlineInput && (
             <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
-          {!accountPkh && <ConnectWalletButton className={s.connect} />}
+          {!accountPkh && <ConnectWalletButton className={s.button} />}
           {accountPkh && dataIsStale && (
-            <Button disabled={submitDisabled || dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
+            <Button disabled={submitDisabled} loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}

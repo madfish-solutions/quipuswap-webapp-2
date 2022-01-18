@@ -123,21 +123,19 @@ export const NETWORK_ID_KEY = 'networkId';
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
   connectType: 'default',
-  name: 'Tezos Mainnet',
+  name: 'Mainnet',
   type: QSNetworkType.MAIN,
   rpcBaseURL: MAINNET_RPC_URL,
   metadata: METADATA_API_MAINNET,
-  description: 'Tezos mainnet',
   disabled: false
 };
 export const HANGZHOUNET_NETWORK: QSNetwork = {
   id: 'hangzhounet',
   connectType: 'default',
-  name: 'Hangzhounet Testnet',
+  name: 'Hangzhounet',
   type: QSNetworkType.TEST,
   rpcBaseURL: HANGZHOUNET_RPC_URL,
   metadata: METADATA_API_TESTNET,
-  description: 'Hangzhounet testnet',
   disabled: false
 };
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
