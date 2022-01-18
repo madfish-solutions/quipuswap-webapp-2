@@ -39,7 +39,7 @@ export * from './comparison';
 export * from './arrays';
 export * from './get-deadline';
 export * from './get-blockchain-timestamp';
-export * from './isExist';
 export * from './is-backer-not-empty';
 export * from './is-default-connect-type';
 export * from './is-network-mainnet';
+export * from './type-checks';

@@ -1,8 +1,8 @@
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import { isBackerNotEmpty } from './is-backer-not-empty';
-import { isExist } from './isExist';
 import { shortize } from './shortize';
+import { isExist } from './type-checks';
 
 export function getWhitelistedBakerName(baker: WhitelistedBaker, sliceAmount?: number, charsLength?: number): string;
 export function getWhitelistedBakerName(

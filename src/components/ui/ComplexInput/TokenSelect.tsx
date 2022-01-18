@@ -16,6 +16,8 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 
 import s from './ComplexInput.module.sass';
 
+const DEFAULT_EXCHANGE_RATE = 0;
+
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
   className?: string;
@@ -65,7 +67,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const dollarEquivalent = useMemo(
     () =>
       exchangeRate
-        ? new BigNumber(value ? value.toString() : 0).multipliedBy(new BigNumber(exchangeRate)).toString()
+        ? new BigNumber(value ? value.toString() : DEFAULT_EXCHANGE_RATE)
+            .multipliedBy(new BigNumber(exchangeRate))
+            .toString()
         : '',
     [exchangeRate, value]
   );
@@ -79,6 +83,12 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
   const disabled = !isExist(balance) || !isExist(token);
+
+  const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
+  const firstTokenSymbol = token ? getWhitelistedTokenSymbol(token) : 'TOKEN';
+
+  const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
+  const secondTokenSymbol = token2 ? getWhitelistedTokenSymbol(token2) : token2;
 
   return (
     <>
@@ -115,10 +125,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               textClassName={s.item4Inner}
             >
               <TokensLogos
-                firstTokenIcon={token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null}
-                firstTokenSymbol={token ? getWhitelistedTokenSymbol(token) : 'TOKEN'}
-                secondTokenIcon={token2 && prepareTokenLogo(token2.metadata.thumbnailUri)}
-                secondTokenSymbol={token2 && getWhitelistedTokenSymbol(token2)}
+                firstTokenIcon={firstTokenIcon}
+                firstTokenSymbol={firstTokenSymbol}
+                secondTokenIcon={secondTokenIcon}
+                secondTokenSymbol={secondTokenSymbol}
               />
               <h6 className={cx(s.token)}>
                 {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
