@@ -13,6 +13,7 @@ import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
+import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { isTezIncludes } from '../helpers';
 import { AddFormInterface } from './add-form.props';
@@ -39,6 +40,8 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    slippage,
+    setSlippage,
     isNewPair,
     handleSetTokenA,
     handleSetTokenB,
@@ -62,6 +65,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
   const isDeadlineVisible = !isTezIncludes([tokenA, tokenB]);
+  const shouldShowSlippageInput = !isTezIncludes([tokenA, tokenB]);
 
   return (
     <>
@@ -98,6 +102,19 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
             onChange={setTransactionDuration}
             error={validationMessageTransactionDuration}
             value={transactionDuration}
+          />
+        </div>
+      )}
+      {shouldShowSlippageInput && (
+        <div className={CC.mt24}>
+          <LiquiditySlippage
+            liquidityType={LiquiditySlippageType.ADD}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            tokenAInput={tokenAInput}
+            tokenBInput={tokenBInput}
+            slippage={slippage}
+            onChange={setSlippage}
           />
         </div>
       )}

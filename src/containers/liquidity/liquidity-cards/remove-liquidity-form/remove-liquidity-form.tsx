@@ -14,6 +14,7 @@ import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals } from '@utils/helpers';
 
+import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { isTezIncludes } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
@@ -45,6 +46,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenABalance,
     tokenBBalance,
     lpTokenBalance,
+    slippage,
+    setSlippage,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -119,6 +122,17 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
           />
         </div>
       )}
+      <div className={CC.mt24}>
+        <LiquiditySlippage
+          liquidityType={LiquiditySlippageType.REMOVE}
+          tokenA={tokenA}
+          tokenB={tokenB}
+          tokenAInput={tokenAOutput}
+          tokenBInput={tokenBOutput}
+          slippage={slippage}
+          onChange={setSlippage}
+        />
+      </div>
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
           Remove
