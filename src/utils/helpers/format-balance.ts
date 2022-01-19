@@ -1,8 +1,19 @@
+import BigNumber from 'bignumber.js';
+
+import { FormatNumber } from '@utils/formatNumber';
+import { bigNumberToString } from '@utils/helpers/big-number-to-string';
+import { Nullable } from '@utils/types';
+
+const FIRST_POSITION = 0;
+const ONE_ELEMENT = 1;
 const DEFAULT_BALANCE_LENGTH = 7;
+const ZERO_STRING = '0';
+
+const isZeroString = (value: string) => value === ZERO_STRING;
 
 const formatDecimal = (decimals: string): string => {
-  if (decimals[decimals.length - 1] === '0') {
-    const decimals_ = decimals.slice(0, decimals.length - 1);
+  if (isZeroString(decimals[decimals.length - ONE_ELEMENT])) {
+    const decimals_ = decimals.slice(FIRST_POSITION, decimals.length - ONE_ELEMENT);
 
     return formatDecimal(decimals_);
   }
@@ -13,14 +24,17 @@ const formatDecimal = (decimals: string): string => {
 export const formatBalance = (value: string): string => {
   const [integer, decimals] = value.split('.');
 
-  if (integer === '0') {
+  if (isZeroString(integer)) {
     return value.toString();
   } else if (integer.length < DEFAULT_BALANCE_LENGTH) {
-    const decimals_ = decimals.slice(0, DEFAULT_BALANCE_LENGTH - integer.length);
+    const decimals_ = decimals ? decimals.slice(FIRST_POSITION, DEFAULT_BALANCE_LENGTH - integer.length) : ZERO_STRING;
     const formatedDecimal = formatDecimal(decimals_);
 
-    return formatedDecimal ? `${integer}.${formatedDecimal}` : integer;
+    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : integer;
   } else {
-    return integer;
+    return FormatNumber(integer);
   }
 };
+
+export const formatValueBalance = (value: Nullable<BigNumber.Value>) =>
+  value ? formatBalance(bigNumberToString(new BigNumber(value))) : '';
