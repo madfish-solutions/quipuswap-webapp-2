@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { FormatNumber } from '@utils/formatNumber';
+import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { StateCurrencyAmount } from '../state-currency-amount';
@@ -10,11 +10,20 @@ import { StateCurrencyAmount } from '../state-currency-amount';
 interface StatePriceImpactProps {
   priceImpact: Nullable<BigNumber.Value>;
 }
+const PRICE_IMPACT_DECIMALS = 2;
 
 export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => {
-  const wrapPriceImpact = new BigNumber(priceImpact ?? NaN);
+  const wrapPriceImpact = isNull(priceImpact) ? null : new BigNumber(priceImpact);
 
-  const amount = wrapPriceImpact.lt(0.01) ? '<0.01' : FormatNumber(priceImpact ?? 0, { decimals: 2 });
+  const aliternativeView = wrapPriceImpact?.lt(0.01) ? '<0.01' : null;
 
-  return <StateCurrencyAmount isLoading={wrapPriceImpact.isNaN()} amount={amount} currency="%" />;
+  return (
+    <StateCurrencyAmount
+      isLoading={isNull(priceImpact)}
+      amount={priceImpact}
+      aliternativeView={aliternativeView}
+      amountDecimals={PRICE_IMPACT_DECIMALS}
+      currency="%"
+    />
+  );
 };
