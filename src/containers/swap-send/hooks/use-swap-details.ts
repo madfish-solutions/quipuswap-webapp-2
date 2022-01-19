@@ -11,6 +11,7 @@ import {
   getPriceImpact,
   getTokenOutput,
   getTokenSlug,
+  isEmptyArray,
   toDecimals
 } from '@utils/helpers';
 import { getRateByInputOutput } from '@utils/helpers/rates';
@@ -30,7 +31,7 @@ interface SwapDetailsParams {
 }
 
 const WHOLE_ITEM_PERCENT = 100;
-const ZERO = 0;
+const MINIMAL_INPUT_AMOUNT = 0;
 const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
 export const useSwapDetails = (params: SwapDetailsParams) => {
@@ -40,12 +41,12 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
   const swapFee = useSwapFee({ ...params, dexChain: dexRoute });
 
   const sellRate =
-    inputToken && outputToken && inputAmount?.gt(ZERO) && outputAmount
+    inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
       ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
       : null;
 
   const buyRate = useMemo(() => {
-    if (inputToken && outputToken && outputAmount?.gt(ZERO) && dexRoute && dexRoute.length > ZERO) {
+    if (inputToken && outputToken && outputAmount?.gt(MINIMAL_INPUT_AMOUNT) && dexRoute && !isEmptyArray(dexRoute)) {
       try {
         const maxReverseInputRoute = getMaxInputRoute({
           startTokenSlug: getTokenSlug(outputToken),

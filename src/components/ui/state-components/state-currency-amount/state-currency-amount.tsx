@@ -38,7 +38,7 @@ const modeClass = {
 const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
 
 const EPSILON = '0.01';
-const EMPTY_AMOUNT = 0;
+const FALLBACK_AMOUNT = 0;
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -81,7 +81,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{isSmallAmount ? `<${EPSILON}` : formatValueBalance(amount || EMPTY_AMOUNT)}</span>
+        <span className={s.inner}>{isSmallAmount ? `<${EPSILON}` : formatValueBalance(amount || FALLBACK_AMOUNT)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
