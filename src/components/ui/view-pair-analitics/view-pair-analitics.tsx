@@ -29,7 +29,7 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
           key={id}
           className={buttonClassName}
           theme="inverse"
-          href={dexType === 'tokenxtz' ? `${QUIPUSWAP_ANALYTICS_PAIRS}${id}` : '#'}
+          href={dexType === 'tokenxtz' ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${id}` : '#'}
           external
           icon={<ExternalLink className={iconClassName} />}
         >
