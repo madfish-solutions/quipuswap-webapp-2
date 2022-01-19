@@ -5,8 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber } from '@utils/formatNumber';
+import { FormatNumberOptions } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
+import { formatValueBalance } from '@utils/helpers/format-balance';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
@@ -20,6 +21,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
   dollarEquivalent?: string;
+  options?: FormatNumberOptions;
 }
 
 const sizeClass = {
@@ -36,6 +38,7 @@ const modeClass = {
 const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
 
 const EPSILON = '0.01';
+const EMPTY_AMOUNT = 0;
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -47,7 +50,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isLoading,
   loaderFallback,
   isError,
-  errorFallback
+  errorFallback,
+  options
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -77,7 +81,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{isSmallAmount ? `<${EPSILON}` : FormatNumber(amount || 0)}</span>
+        <span className={s.inner}>{isSmallAmount ? `<${EPSILON}` : formatValueBalance(amount || EMPTY_AMOUNT)}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
