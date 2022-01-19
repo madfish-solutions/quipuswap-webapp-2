@@ -9,6 +9,11 @@ export const isAddress = async (value: string) => {
   return isAddr && !isContract ? undefined : i18n?.t('common|You entered not a valid address');
 };
 
+export const isValidAddress = (value: string) => validateAddress(value) === ValidationResult.VALID;
+
+export const isValidBakerAddress = (value: string) =>
+  validateAddress(value) === ValidationResult.VALID || validateContractAddress(value) === ValidationResult.VALID;
+
 export const addressSchema = () =>
   stringSchema().test(
     'valid-address',
