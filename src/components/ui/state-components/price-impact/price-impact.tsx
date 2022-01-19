@@ -2,6 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { StateCurrencyAmount } from '../state-currency-amount';
@@ -11,5 +12,5 @@ interface StatePriceImpactProps {
 }
 
 export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => {
-  return <StateCurrencyAmount isLoading={priceImpact === null} amount={priceImpact} currency="%" />;
+  return <StateCurrencyAmount isLoading={isNull(priceImpact)} amount={priceImpact} currency="%" />;
 };
