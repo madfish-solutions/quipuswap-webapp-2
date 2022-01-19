@@ -10,17 +10,13 @@ const deadlinePresets = [
   { label: '3h', value: '180' }
 ];
 
-export interface TransactionDeadlineProps {
+interface Props {
   className?: string;
   handleChange: (value: Nullable<string>) => void;
   placeholder?: string;
 }
 
-export const TransactionDeadline: React.FC<TransactionDeadlineProps> = ({
-  className,
-  handleChange,
-  placeholder = 'CUSTOM'
-}) => (
+export const TransactionDeadline: React.FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
   <PresetsAmountInput
     className={className}
     decimals={2}
