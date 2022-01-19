@@ -1,5 +1,5 @@
 import { Standard } from '@graphql';
-import { QSMainNet, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -16,6 +16,7 @@ export const QUIPUSWAP_ANALYTICS_TOKENS = 'https://analytics.quipuswap.com/token
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
 
 export const TZKT_EXPLORER_URL = 'https://tzkt.io';
+export const TZKT_API_DELEGATE_URL = 'https://api.tzkt.io/v1/delegates';
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
@@ -91,7 +92,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
   }
 };
 
-export const networksDefaultTokens: Record<QSMainNet, WhitelistedToken> = {
+export const networksDefaultTokens: Record<QSNets, WhitelistedToken> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
@@ -107,13 +108,14 @@ export const FACTORIES = {
   }
 };
 
-export const TTDEX_CONTRACTS: Partial<Record<QSMainNet, string>> = {
+export const TTDEX_CONTRACTS: Partial<Record<QSNets, string>> = {
   hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC'
 };
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
+export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
@@ -121,8 +123,8 @@ export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
 export const NETWORK_ID_KEY = 'networkId';
 export const MAINNET_NETWORK: QSNetwork = {
-  id: 'mainnet',
-  connectType: 'default',
+  id: QSNets.mainnet,
+  connectType: ConnectType.DEFAULT,
   name: 'Mainnet',
   type: QSNetworkType.MAIN,
   rpcBaseURL: MAINNET_RPC_URL,
@@ -130,8 +132,8 @@ export const MAINNET_NETWORK: QSNetwork = {
   disabled: false
 };
 export const HANGZHOUNET_NETWORK: QSNetwork = {
-  id: 'hangzhounet',
-  connectType: 'default',
+  id: QSNets.hangzhounet,
+  connectType: ConnectType.DEFAULT,
   name: 'Hangzhounet',
   type: QSNetworkType.TEST,
   rpcBaseURL: HANGZHOUNET_RPC_URL,
@@ -140,9 +142,9 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
 };
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
-export const CHAIN_ID_MAPPING = new Map<QSMainNet, string>([
-  ['mainnet', 'NetXdQprcVkpaWU'],
-  ['hangzhounet', 'NetXZSsxBpMQeAT']
+export const CHAIN_ID_MAPPING = new Map<QSNets, string>([
+  [QSNets.mainnet, 'NetXdQprcVkpaWU'],
+  [QSNets.hangzhounet, 'NetXZSsxBpMQeAT']
 ]);
 
 export const TOKEN_TO_TOKEN_DEX = 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC';

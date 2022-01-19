@@ -10,12 +10,12 @@ import ReactModal from 'react-modal';
 import { Standard } from '@graphql';
 import {
   useTezos,
-  useTokens,
   getTokenType,
   useNetwork,
-  useSearchTokens,
   useAddCustomToken,
-  useSearchCustomTokens
+  useSearchCustomTokens,
+  useSearchTokens,
+  useTokens
 } from '@utils/dapp';
 import { isTokenEqual, localSearchToken, WhitelistedOrCustomToken } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
