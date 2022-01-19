@@ -3,9 +3,19 @@ import { useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { TTDEX_CONTRACTS } from '@app.config';
+import { useDexGraph } from '@hooks/use-dex-graph';
 import { useNetwork } from '@utils/dapp';
-import { fromDecimals, getPriceImpact, getTokenOutput, toDecimals } from '@utils/helpers';
+import {
+  fromDecimals,
+  getMaxTokenInput,
+  getPriceImpact,
+  getTokenOutput,
+  getTokenSlug,
+  isEmptyArray,
+  toDecimals
+} from '@utils/helpers';
 import { getRateByInputOutput } from '@utils/helpers/rates';
+import { getMaxInputRoute, getRouteWithInput } from '@utils/routing';
 import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
 
 import { useSwapFee } from './use-swap-fee';
@@ -21,39 +31,56 @@ interface SwapDetailsParams {
 }
 
 const WHOLE_ITEM_PERCENT = 100;
+const MINIMAL_INPUT_AMOUNT = 0;
+const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
+  const { dexGraph } = useDexGraph();
   const network = useNetwork();
   const swapFee = useSwapFee({ ...params, dexChain: dexRoute });
 
   const sellRate =
-    inputToken && outputToken && inputAmount?.gt(0) && outputAmount
+    inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
       ? getRateByInputOutput(inputAmount, outputAmount, outputToken.metadata.decimals)
       : null;
 
   const buyRate = useMemo(() => {
-    if (inputToken && outputToken && outputAmount?.gt(0) && dexRoute && dexRoute.length > 0) {
-      const reversedRoute = [...dexRoute].reverse();
+    if (inputToken && outputToken && outputAmount?.gt(MINIMAL_INPUT_AMOUNT) && dexRoute && !isEmptyArray(dexRoute)) {
       try {
-        const tokenBAmount = outputAmount;
-        const tokenAAmount = fromDecimals(
-          getTokenOutput({
-            inputToken: outputToken,
-            inputAmount: toDecimals(outputAmount, outputToken),
-            dexChain: reversedRoute
-          }),
-          inputToken
+        const maxReverseInputRoute = getMaxInputRoute({
+          startTokenSlug: getTokenSlug(outputToken),
+          endTokenSlug: getTokenSlug(inputToken),
+          graph: dexGraph
+        })!;
+        const maxReverseInput = getMaxTokenInput(outputToken, maxReverseInputRoute);
+        const probeReverseInput = BigNumber.minimum(
+          toDecimals(new BigNumber(DEFAULT_REVERSE_INPUT_AMOUNT), outputToken),
+          maxReverseInput
         );
 
-        return tokenAAmount.div(tokenBAmount).decimalPlaces(inputToken.metadata.decimals);
+        const reverseDexChain = getRouteWithInput({
+          inputAmount: probeReverseInput,
+          startTokenSlug: getTokenSlug(outputToken),
+          endTokenSlug: getTokenSlug(inputToken),
+          graph: dexGraph
+        })!;
+        const probeReverseOutput = getTokenOutput({
+          inputToken: outputToken,
+          inputAmount: probeReverseInput,
+          dexChain: reverseDexChain
+        });
+
+        return fromDecimals(probeReverseOutput, inputToken)
+          .dividedBy(fromDecimals(probeReverseInput, outputToken))
+          .decimalPlaces(inputToken.metadata.decimals);
       } catch (_) {
         // return statement is below
       }
     }
 
     return null;
-  }, [dexRoute, inputToken, outputAmount, outputToken]);
+  }, [dexRoute, inputToken, outputAmount, outputToken, dexGraph]);
 
   return {
     swapFee,

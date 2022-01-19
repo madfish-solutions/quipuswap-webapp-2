@@ -13,8 +13,18 @@ import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
 
 export const LiquidityCards: FC = () => {
-  const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
-    useLiquidityFormService();
+  const {
+    dex,
+    tab,
+    handleChangeTab,
+    tokenA,
+    tokenB,
+    handleChangeTokenA,
+    handleChangeTokenB,
+    handleChangeTokensPair,
+    transactionDuration,
+    setTransactionDuration
+  } = useLiquidityFormService();
 
   const isAddTabActive = tab.id === 'add';
 
@@ -39,11 +49,20 @@ export const LiquidityCards: FC = () => {
             dex={dex}
             tokenA={tokenA}
             tokenB={tokenB}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
             onTokenAChange={handleChangeTokenA}
             onTokenBChange={handleChangeTokenB}
           />
         ) : (
-          <RemoveLiquidityForm dex={dex} tokenA={tokenA} tokenB={tokenB} onChangeTokensPair={handleChangeTokensPair} />
+          <RemoveLiquidityForm
+            dex={dex}
+            tokenA={tokenA}
+            tokenB={tokenB}
+            transactionDuration={transactionDuration}
+            setTransactionDuration={setTransactionDuration}
+            onChangeTokensPair={handleChangeTokensPair}
+          />
         )}
       </Card>
       <Card

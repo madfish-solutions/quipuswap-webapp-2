@@ -2,10 +2,11 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS } from '@app.config';
-import { sortTokensContracts } from '@containers/liquidity/liquidity-cards/helpers/sort-tokens-contracts';
-import { getDeadline, toDecimals } from '@utils/helpers';
+import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
+import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
+
+import { decreaseBySlippage, getOrderedTokensAmounts } from '../../helpers';
 
 export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,
@@ -15,8 +16,16 @@ export const removeLiquidityTokenToToken = async (
   tokenAOutput: string,
   tokenBOutput: string,
   tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenB: WhitelistedToken,
+  transactionDuration: BigNumber,
+  slippagePercentage: BigNumber
 ) => {
+  const transactionDurationInSeconds = transactionDuration
+    .multipliedBy(SECONDS_IN_MINUTE)
+    .integerValue(BigNumber.ROUND_DOWN)
+    .toNumber();
+  const transactionDeadline = (await getBlockchainTimestamp(tezos, transactionDurationInSeconds)).toString();
+
   const { decimals: decimalsA } = tokenA.metadata;
   const { decimals: decimalsB } = tokenB.metadata;
 
@@ -28,17 +37,10 @@ export const removeLiquidityTokenToToken = async (
   const tokenAOutputAmount = toDecimals(tokenAOutputBN, decimalsA);
   const tokenBOutputAmount = toDecimals(tokenBOutputBN, decimalsB);
 
-  const deadline = await getDeadline(tezos);
+  const withSlippageA = decreaseBySlippage(tokenAOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
+  const withSlippageB = decreaseBySlippage(tokenBOutputAmount, slippagePercentage).integerValue(BigNumber.ROUND_DOWN);
 
-  const addresses = sortTokensContracts(tokenA, tokenB);
-  if (!addresses) {
-    return;
-  }
+  const { orderedAmountA, orderedAmountB } = getOrderedTokensAmounts(tokenA, tokenB, withSlippageA, withSlippageB);
 
-  const isTokenAAddressesTheSame = addresses.addressA === tokenA.contractAddress;
-
-  const validTokenAAmount = isTokenAAddressesTheSame ? tokenAOutputAmount : tokenBOutputAmount;
-  const validTokenBAmount = isTokenAAddressesTheSame ? tokenBOutputAmount : tokenAOutputAmount;
-
-  return dex.contract.methods.divest(id, validTokenAAmount, validTokenBAmount, shares, deadline).send();
+  return dex.contract.methods.divest(id, orderedAmountA, orderedAmountB, shares, transactionDeadline).send();
 };

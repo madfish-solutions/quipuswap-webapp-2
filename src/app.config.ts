@@ -1,5 +1,5 @@
 import { Standard } from '@graphql';
-import { QSNetworkType, QSNets, QSNetwork, WhitelistedToken, ConnectType } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -32,6 +32,7 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const SECONDS_IN_MINUTE = 60;
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
 export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
 export const LIQUIDITY_DEFAULT_SLIPPAGE = 0;
