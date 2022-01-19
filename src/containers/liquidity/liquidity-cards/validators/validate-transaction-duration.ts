@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { i18n } from 'next-i18next';
 
-const MAX_TRANSACTION_DURATION = 43200;
-const MAX_TRANSACTION_DURATION_BN = new BigNumber(MAX_TRANSACTION_DURATION);
+const MAX_TRANSACTION_DURATION_MINUTES = 43200;
+const MAX_TRANSACTION_DURATION_BN = new BigNumber(MAX_TRANSACTION_DURATION_MINUTES);
 
 export const validateTransactionDuration = (transactionDuration: BigNumber) => {
   if (transactionDuration.gt(MAX_TRANSACTION_DURATION_BN)) {

@@ -5,14 +5,14 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { DeadlineInput } from '@components/common/deadline-input/deadline-input';
 import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { isTezIncludes } from '@containers/liquidity/liquidity-cards/helpers';
-import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
+import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, isExist } from '@utils/helpers';
 
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
@@ -62,16 +62,17 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     !tokenB ||
     !tokenAInput ||
     !tokenBInput ||
-    Boolean(validationMessageTokenA) ||
-    Boolean(validationMessageTokenB) ||
-    Boolean(validationMessageTransactionDuration);
+    isExist(validationMessageTokenA) ||
+    isExist(validationMessageTokenB) ||
+    isExist(validationMessageTransactionDuration);
+
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
 
   const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
-  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
+  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
   return (
     <>
@@ -106,14 +107,14 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       />
       {isDeadlineAndSkippageVisible && (
         <>
-          <div className={CC.mt24}>
+          <div className={s['mt-24']}>
             <DeadlineInput
               onChange={setTransactionDuration}
               error={validationMessageTransactionDuration}
               value={transactionDuration}
             />
           </div>
-          <div className={CC.mt24}>
+          <div className={s['mt-24']}>
             <LiquiditySlippage
               liquidityType={LiquiditySlippageType.ADD}
               tokenA={tokenA}
@@ -126,7 +127,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
           </div>
         </>
       )}
-      {isNewPair && <NewPairMessage className={CC.mt24} />}
+      {isNewPair && <NewPairMessage className={s['mt-24']} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
           Add

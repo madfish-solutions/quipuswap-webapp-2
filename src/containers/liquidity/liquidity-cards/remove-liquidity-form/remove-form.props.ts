@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
@@ -8,6 +10,6 @@ export interface RemoveFormInterface {
   tokenA: Nullable<WhitelistedToken>;
   tokenB: Nullable<WhitelistedToken>;
   transactionDuration: BigNumber;
-  setTransactionDuration: (newDeadline: BigNumber) => void;
+  setTransactionDuration: Dispatch<SetStateAction<BigNumber>>;
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void;
 }

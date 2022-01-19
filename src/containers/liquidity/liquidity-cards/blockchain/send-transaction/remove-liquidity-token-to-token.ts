@@ -3,10 +3,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
-import { decreaseBySlippage } from '@containers/liquidity/liquidity-cards/helpers';
-import { getOrderedTokensAmounts } from '@containers/liquidity/liquidity-cards/helpers/get-ordered-tokens-amounts';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
+
+import { decreaseBySlippage, getOrderedTokensAmounts } from '../../helpers';
 
 export const removeLiquidityTokenToToken = async (
   tezos: TezosToolkit,

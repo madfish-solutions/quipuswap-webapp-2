@@ -1,12 +1,13 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { Tabs, Card, Button, StickyBlock, SwapButton } from '@quipuswap/ui-kit';
+import { Button, Card, StickyBlock, SwapButton, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { DeadlineInput } from '@components/common/deadline-input';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { useDexGraph } from '@hooks/use-dex-graph';
@@ -19,7 +20,6 @@ import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWh
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
-import { DeadlineInput } from './components/deadline-input';
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details/swap-details';
 import { useSwapCalculations } from './hooks/use-swap-calculations';

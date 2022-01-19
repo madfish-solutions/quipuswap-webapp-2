@@ -9,12 +9,12 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { useLoadLiquidityShare } from '../../hooks';
 import { getOperationHash } from '../../hooks/get-operation-hash';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
-import { useLoadLpTokenBalance, useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateOutputAmount, validateTransactionDuration, validations } from '../validators';
-import { INVALID_INPUT } from '../validators/validate-user-input';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import { INVALID_INPUT, validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: Nullable<FoundDex>,
@@ -28,7 +28,7 @@ export const useRemoveLiquidityService = (
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
-  const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
+  const shares = useLoadLiquidityShare(dex, tokenA, tokenB);
   const confirmOperation = useConfirmOperation();
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
@@ -80,7 +80,7 @@ export const useRemoveLiquidityService = (
     const validatedInput = validations(
       accountPkh,
       lpTokenInputBN,
-      lpTokenBalance,
+      shares?.total ?? null,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
       lpTokenSymbol
@@ -118,7 +118,7 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(validatedOutputB);
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-  }, [pairInfo, lpTokenInput, lpTokenBalance, tokenA, tokenB, dex, accountPkh]);
+  }, [pairInfo, lpTokenInput, shares, tokenA, tokenB, dex, accountPkh]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
@@ -184,8 +184,8 @@ export const useRemoveLiquidityService = (
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
     slippage,
+    shares,
     setSlippage,
     handleChange,
     handleBalance,

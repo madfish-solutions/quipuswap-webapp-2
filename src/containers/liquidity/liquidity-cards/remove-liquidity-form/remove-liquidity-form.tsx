@@ -7,16 +7,16 @@ import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { DeadlineInput } from '@components/common/deadline-input/deadline-input';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
-import { isTezIncludes } from '@containers/liquidity/liquidity-cards/helpers';
-import { DeadlineInput } from '@containers/swap-send/components/deadline-input';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals, isExist } from '@utils/helpers';
 
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
+import { isTezIncluded } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
@@ -45,8 +45,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
     slippage,
+    shares,
     setSlippage,
     handleRemoveLiquidity,
     handleChange,
@@ -73,7 +73,8 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
   const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
-  const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncludes([tokenA, tokenB]);
+  const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
+  const isUnvoteVisible = !isDeadlineAndSlippageVisible && shares && new BigNumber(lpTokenInput).gt(shares?.unfrozen);
 
   return (
     <>
@@ -81,7 +82,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={lpTokenBalance?.toFixed()}
+        balance={shares?.total?.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
@@ -120,7 +121,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         disabled
         notSelectable
       />
-      {isDeadlineAndSkippageVisible && (
+      {isDeadlineAndSlippageVisible && (
         <>
           <div className={CC.mt24}>
             <DeadlineInput
@@ -144,7 +145,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-          Remove
+          Remove {isUnvoteVisible && '& Unvote'}
         </Button>
       ) : (
         <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
