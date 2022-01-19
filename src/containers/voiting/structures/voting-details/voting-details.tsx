@@ -34,7 +34,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
   const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertialCenter);
-
+  
   return (
     <Card
       header={{
