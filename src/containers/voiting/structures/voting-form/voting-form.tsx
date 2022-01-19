@@ -27,7 +27,7 @@ import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import {
   TokenDataMap,
@@ -198,11 +198,11 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleUnvoteOrRemoveveto = async () => {
-    if (!tezos || !dex) {
+    if (!tezos || !dex || isNull(voter.candidate)) {
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter?.candidate);
+    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
   };
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
