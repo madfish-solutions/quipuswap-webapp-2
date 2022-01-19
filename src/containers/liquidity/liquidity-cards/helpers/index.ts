@@ -9,6 +9,7 @@ export * from './get-tez-token-pair-info';
 export * from './get-tokens-reset-and-update-operators';
 export * from './get-valid-michel-template';
 export * from './get-valid-pair-params';
+export * from './get-voting-params';
 export * from './increase-by-slippage';
 export * from './increase-or-decrease-by-slippage';
 export * from './is-tez-included';
