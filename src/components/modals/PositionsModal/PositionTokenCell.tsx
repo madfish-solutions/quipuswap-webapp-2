@@ -14,8 +14,8 @@ interface PositionTokenCellProps {
 export const PositionTokenCell: React.FC<PositionTokenCellProps> = ({ token, onClick, isChecked }) => (
   <TokenCell
     tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-    tokenName={getWhitelistedTokenSymbol(token)}
-    tokenSymbol={getWhitelistedTokenName(token)}
+    tokenName={getWhitelistedTokenName(token)}
+    tokenSymbol={getWhitelistedTokenSymbol(token)}
     tabIndex={0}
     onClick={() => onClick()}
   >
