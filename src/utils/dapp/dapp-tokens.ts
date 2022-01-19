@@ -61,7 +61,7 @@ const useDappTokens = () => {
 
           return null;
         }
-        const isFa2 = !!type.methods.update_operators;
+        const isFa2 = Boolean(type.methods.update_operators);
         const customToken = await getTokenMetadata(network, address, tokenId);
         if (!customToken) {
           setState(prevState => ({
