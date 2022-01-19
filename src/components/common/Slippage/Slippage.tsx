@@ -10,13 +10,13 @@ const slippagePresets = [
   { label: '3 %', value: '3' }
 ];
 
-export interface SlippageProps {
+interface Props {
   className?: string;
   handleChange: (value: Nullable<string>) => void;
   placeholder?: string;
 }
 
-export const Slippage: React.FC<SlippageProps> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
+export const Slippage: React.FC<Props> = ({ className, handleChange, placeholder = 'CUSTOM' }) => (
   <PresetsAmountInput
     className={className}
     defaultValue={slippagePresets[0].value}

@@ -9,10 +9,10 @@ import s from './PresetsAmountInput.module.sass';
 
 interface AmountPreset {
   label: string;
-  value?: string;
+  value: Nullable<string>;
 }
 
-export interface PresetsAmountInputProps {
+interface Props {
   className?: string;
   decimals?: number;
   defaultValue: Nullable<string>;
@@ -29,7 +29,10 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const PresetsAmountInput: React.FC<PresetsAmountInputProps> = ({
+const INPUT_BUTTON_ID = 'input';
+type ActiveButtonId = number | typeof INPUT_BUTTON_ID;
+
+export const PresetsAmountInput: React.FC<Props> = ({
   className,
   decimals,
   defaultValue,
@@ -42,12 +45,12 @@ export const PresetsAmountInput: React.FC<PresetsAmountInputProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const presetMatchesDefaultValue = ({ label, value = label }: AmountPreset) => defaultValue === value;
+  const presetMatchesDefaultValue = ({ label, value }: AmountPreset) => defaultValue === value ?? label;
   const shouldMakePresetActive = presets.some(presetMatchesDefaultValue);
   const defaultActiveButton = shouldMakePresetActive ? presets.findIndex(presetMatchesDefaultValue) : 'input';
   const defaultCustomValue = shouldMakePresetActive ? null : defaultValue;
 
-  const [activeButton, setActiveButton] = useState<number | 'input'>(defaultActiveButton);
+  const [activeButton, setActiveButton] = useState<ActiveButtonId>(defaultActiveButton);
   const [customValue, setCustomValue] = useState(defaultCustomValue);
 
   const handleCustomValueChange = useCallback(
@@ -61,7 +64,7 @@ export const PresetsAmountInput: React.FC<PresetsAmountInputProps> = ({
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.buttons}>
-        {presets.map(({ label, value = label }, index) => (
+        {presets.map(({ label, value }, index) => (
           <button
             key={label}
             type="button"
@@ -69,7 +72,7 @@ export const PresetsAmountInput: React.FC<PresetsAmountInputProps> = ({
             onClick={() => {
               setActiveButton(index);
               handleCustomValueChange(null);
-              handleChange(value);
+              handleChange(value ?? label);
             }}
           >
             <span className={s.buttonInner}>{label}</span>
