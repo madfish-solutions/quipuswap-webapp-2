@@ -5,8 +5,7 @@ import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { getWhitelistedBakerName } from '@utils/helpers';
-import { isBackerNotEmpty } from '@utils/helpers';
+import { getWhitelistedBakerName, isBackerNotEmpty } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import s from './ComplexInput.module.sass';

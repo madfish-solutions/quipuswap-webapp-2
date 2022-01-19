@@ -17,8 +17,7 @@ import { noop } from 'rxjs';
 
 import { BakerCell } from '@components/ui/components';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
-import { isEmptyArray, localSearchBaker } from '@utils/helpers';
-import { isBackerNotEmpty } from '@utils/helpers';
+import { isEmptyArray, localSearchBaker, isBackerNotEmpty } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
