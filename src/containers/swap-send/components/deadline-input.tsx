@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 
-import { TransactionDeadline } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS } from '@app.config';
+import { TransactionDeadline } from '@components/common/TransactionDeadline';
 import s from '@styles/CommonContainer.module.sass';
 import { Nullable } from '@utils/types';
 
