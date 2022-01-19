@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Maybe } from '@graphql';
 import { useNetwork } from '@utils/dapp';
-import { fromDecimals } from '@utils/helpers';
+import { calculateRateAmount, isExist } from '@utils/helpers';
 import { QSNetworkType } from '@utils/types';
 
 import { DashboardCard } from './DashboardCard';
@@ -39,29 +39,9 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   const network = useNetwork();
 
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const tvl: string = useMemo(
-    () =>
-      loading
-        ? '0'
-        : fromDecimals(new BigNumber(totalLiquidity ?? '0'), 6)
-            .multipliedBy(new BigNumber(xtzUsdQuote ?? '0'))
-            .toFixed(0),
-    [totalLiquidity, xtzUsdQuote, loading]
-  );
-
-  const volume24h: string = useMemo(
-    () =>
-      loading
-        ? '0'
-        : fromDecimals(new BigNumber(volume24 ?? '0'), 6)
-            .multipliedBy(new BigNumber(xtzUsdQuote ?? '0'))
-            .toFixed(0),
-    [xtzUsdQuote, loading, volume24]
-  );
-  const transactions24h: string = useMemo(
-    () => (loading ? '0' : new BigNumber(trasactionsCount24h ?? '0').toString()),
-    [trasactionsCount24h, loading]
-  );
+  const tvl = isExist(totalLiquidity) && isExist(xtzUsdQuote) ? calculateRateAmount(totalLiquidity, xtzUsdQuote) : null;
+  const volume24h = isExist(volume24) && isExist(xtzUsdQuote) ? calculateRateAmount(volume24, xtzUsdQuote) : null;
+  const transactions24h = trasactionsCount24h?.toString() ?? null;
 
   return (
     <>
@@ -76,7 +56,6 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
             )}
             label={t('home|TVL')}
             currency="$"
-            loading={loading}
           />
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}
@@ -85,7 +64,6 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
             tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
             label={t('home|Daily Volume')}
             currency="$"
-            loading={loading}
           />
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}
