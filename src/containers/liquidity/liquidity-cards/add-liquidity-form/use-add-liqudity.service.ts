@@ -3,7 +3,7 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
@@ -14,15 +14,18 @@ import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initial
 import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validations } from '../validators';
+import { validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
+
+const EMPTY_POOL = 0;
 
 export const useAddLiquidityService = (
   dex: Nullable<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
+  transactionDuration: BigNumber,
   onTokenAChange: (token: WhitelistedToken) => void,
   onTokenBChange: (token: WhitelistedToken) => void
 ) => {
@@ -39,6 +42,7 @@ export const useAddLiquidityService = (
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -269,7 +273,9 @@ export const useAddLiquidityService = (
         pairTokenB,
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
-        pairInfo.tokenBPool
+        pairInfo.tokenBPool,
+        transactionDuration,
+        slippage
       );
 
       return await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
@@ -328,14 +334,26 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
+  const isNewPair =
+    !pairInfo ||
+    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
+    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
+    pairInfo.totalSupply.eq(EMPTY_POOL);
+
   return {
     validationMessageTokenA,
     validationMessageTokenB,
+    validationMessageTransactionDuration,
     accountPkh,
     tokenABalance,
     tokenBBalance,
     tokenAInput,
     tokenBInput,
+    slippage,
+    setSlippage,
+    isNewPair,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,

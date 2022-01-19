@@ -1,25 +1,26 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
+import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LIQUIDITY_DEFAULT_SLIPPAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { getOperationHash } from '../../hooks/get-operation-hash';
+import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { getRemoveLiquidityMessage } from '../get-success-messages';
-import { usePairInfo, useLoadLpTokenBalance, useLoadTokenBalance } from '../hooks';
-import { validations, validateOutputAmount } from '../validators';
-import { INVALID_INPUT } from '../validators/validate-user-input';
+import { getVotingParams } from '../helpers';
+import { useLoadTokenBalance, usePairInfo } from '../hooks';
+import { INVALID_INPUT, validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: Nullable<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
+  transactionDuration: BigNumber,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
 ) => {
   const tezos = useTezos();
@@ -27,8 +28,8 @@ export const useRemoveLiquidityService = (
   const pairInfo = usePairInfo(dex, tokenA, tokenB);
   const tokenABalance = useLoadTokenBalance(tokenA);
   const tokenBBalance = useLoadTokenBalance(tokenB);
-  const lpTokenBalance = useLoadLpTokenBalance(dex, tokenA, tokenB);
   const confirmOperation = useConfirmOperation();
+  const shares = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -36,8 +37,8 @@ export const useRemoveLiquidityService = (
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
-  const [slippage] = useState<BigNumber>(new BigNumber(LIQUIDITY_DEFAULT_SLIPPAGE));
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   useEffect(() => {
     if (!dex || !tokenA || !tokenB) {
@@ -78,8 +79,8 @@ export const useRemoveLiquidityService = (
     const lpTokenSymbol = `${tokenA.metadata.symbol}/${tokenB.metadata.symbol} LP`;
     const validatedInput = validations(
       accountPkh,
-      lpTokenAmount,
-      lpTokenBalance,
+      lpTokenInputBN,
+      shares?.total ?? null,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
       lpTokenSymbol
@@ -117,7 +118,8 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(validatedOutputB);
     setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
     setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
-  }, [pairInfo, lpTokenInput, lpTokenBalance, tokenA, tokenB, dex, accountPkh]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pairInfo, lpTokenInput, shares]);
 
   const handleBalance = (value: string) => {
     const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
@@ -127,27 +129,29 @@ export const useRemoveLiquidityService = (
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => setLpTokenInput(event.target.value);
 
   const handleRemoveLiquidity = async () => {
-    if (!tezos || !accountPkh || !pairInfo) {
+    if (!tezos || !accountPkh || !pairInfo || !dex || !tokenA || !tokenB) {
       return;
     }
 
     const { id } = pairInfo;
 
-    if (dex!.contract.address === TOKEN_TO_TOKEN_DEX && id) {
+    if (dex.contract.address === TOKEN_TO_TOKEN_DEX && id) {
       const removeLiquidityTokenToTokenOperation = await removeLiquidityTokenToToken(
         tezos,
-        dex!,
+        dex,
         id,
         lpTokenInput,
         tokenAOutput,
         tokenBOutput,
-        tokenA!,
-        tokenB!
+        tokenA,
+        tokenB,
+        transactionDuration,
+        slippage
       );
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA!.metadata.name, tokenB!.metadata.name);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
 
-      const hash = getOperationHash(removeLiquidityTokenToTokenOperation!);
+      const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
         await confirmOperation(hash, {
@@ -155,22 +159,33 @@ export const useRemoveLiquidityService = (
         });
       }
     } else {
-      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex!, lpTokenInput, slippage);
+      const lpTokenInputBN = new BigNumber(lpTokenInput);
 
-      const { name: tokenAName } = tokenA!.metadata;
-      const { name: tokenBName } = tokenB!.metadata;
+      const voteParams = await getVotingParams(tezos, dex, accountPkh, lpTokenInputBN, shares);
+      const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
 
-      const notTezosTokenName = tokenA!.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
-      await confirmOperation(removeLiquidityTezOperation.opHash, {
+      const sentTransaction = await batchify(tezos.wallet.batch([]), [
+        ...voteParams,
+        ...removeLiquidityTezOperation
+      ]).send();
+
+      const { name: tokenAName } = tokenA.metadata;
+      const { name: tokenBName } = tokenB.metadata;
+
+      const notTezosTokenName = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
+      await confirmOperation(sentTransaction.opHash, {
         message: getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenName)
       });
     }
   };
 
+  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+
   return {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
+    validationMessageTransactionDuration,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -178,7 +193,9 @@ export const useRemoveLiquidityService = (
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    lpTokenBalance,
+    slippage,
+    shares,
+    setSlippage,
     handleChange,
     handleBalance,
     handleSetTokenPair,
