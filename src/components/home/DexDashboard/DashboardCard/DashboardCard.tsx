@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, Tooltip } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { Nullable } from '@utils/types';
 

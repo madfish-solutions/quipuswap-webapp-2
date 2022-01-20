@@ -1,6 +1,8 @@
 import { FC } from 'react';
 
-import { CardCell, Tooltip } from '@quipuswap/ui-kit';
+import { CardCell } from '@quipuswap/ui-kit';
+
+import { Tooltip } from '../components/tooltip';
 interface DetailsCardCellProps {
   cellName: string;
   tooltipContent: string;
@@ -13,7 +15,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({ children, cellName, 
       header={
         <>
           {cellName}
-          <Tooltip sizeT="small" content={tooltipContent} />
+          <Tooltip content={tooltipContent} />
         </>
       }
       className={className}

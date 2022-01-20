@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
 
-import { TokensLogos, ColorModes, ColorThemeContext, TEZOS_TOKEN, Tooltip, Baker } from '@quipuswap/ui-kit';
+import { TokensLogos, ColorModes, ColorThemeContext, TEZOS_TOKEN, Baker } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { Tooltip } from '../tooltip';
 import s from './baker-cell.module.scss';
 
 const modeClass = {
@@ -71,14 +72,14 @@ export const BakerCell: React.FC<BakerCellProps> = ({
           <div className={s.bakerBlock}>
             <div className={s.caption}>
               {feeLabel}
-              <Tooltip sizeT="small" content={feeTooltipText} />
+              <Tooltip content={feeTooltipText} />
             </div>
             <div className={s.label1}>{bakerFee} %</div>
           </div>
           <div className={s.bakerBlock}>
             <div className={s.caption}>
               {spaceLabel}
-              <Tooltip sizeT="small" content={spaceTooltipText} />
+              <Tooltip content={spaceTooltipText} />
             </div>
             <div>
               <span className={s.label1}>{bakerFreeSpace}</span>{' '}

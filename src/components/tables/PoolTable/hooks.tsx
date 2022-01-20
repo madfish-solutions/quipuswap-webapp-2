@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { Button, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
+import { Button, TokensLogos } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
+import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
@@ -35,7 +36,6 @@ export const useColumns = () => {
         <div className={s.links}>
           {t('home|TVL')}
           <Tooltip
-            sizeT="small"
             content={t(
               'TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.'
             )}
@@ -58,7 +58,7 @@ export const useColumns = () => {
       Header: (
         <div className={s.links}>
           {t('home|Volume 24h')}
-          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+          <Tooltip content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
       ),
       id: 'volume24h',
