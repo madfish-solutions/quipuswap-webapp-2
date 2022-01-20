@@ -1,19 +1,19 @@
-import React, { useRef, useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
-import { Card, Tabs, Button } from '@quipuswap/ui-kit';
+import { Card, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
-import { noop } from 'rxjs';
 
 import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { Button } from '@components/ui/elements/button';
 import {
   getCandidateInfo,
   getVoteVetoBalances,
@@ -27,7 +27,7 @@ import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import {
   TokenDataMap,
@@ -108,8 +108,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const networkId = useNetwork().id;
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
@@ -117,12 +115,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   const [isFormError, setIsFormError] = useState<boolean>(false);
   const [isBakerChoosen, setIsBakerChoosen] = useState(false);
 
-  const timeout = useRef(setTimeout(noop, 0));
-
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
-  // eslint-disable-next-line
-  let promise: any;
 
   const handleInputChange = async () => {
     if (!tezos) {
@@ -149,29 +143,8 @@ const RealForm: React.FC<VotingFormProps> = ({
     }
   };
 
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    handleInputChange();
-    promise = save(values);
-    await promise;
-    setSubm(false);
-  };
-
   useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
+    handleInputChange();
     // eslint-disable-next-line
   }, [values.balance1, values.selectedBaker, tokenPair, dex, currentTab]);
 
@@ -198,11 +171,11 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleUnvoteOrRemoveveto = async () => {
-    if (!tezos || !dex) {
+    if (!tezos || !dex || isNull(voter.candidate)) {
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter?.candidate);
+    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
   };
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
@@ -234,6 +207,12 @@ const RealForm: React.FC<VotingFormProps> = ({
   const isVoteOrVetoButtonDisabled = () =>
     !values.balance1 || isBackerBanned || isFormError || isBackerChooseRequired || isVetoUnevailable;
 
+  const availableBalance = currentTab.id === 'vote' ? availableVoteBalance : availableVetoBalance;
+
+  const validateBalance_ = accountPkh ? validateBalance(new BigNumber(availableBalance)) : () => undefined;
+
+  const validate = composeValidators(validateMinMax(0, Infinity), validateBalance_);
+
   return (
     <>
       <Card
@@ -247,12 +226,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       >
         <Field
           name="balance1"
-          validate={composeValidators(
-            validateMinMax(0, Infinity),
-            accountPkh
-              ? validateBalance(new BigNumber(tokenPair.balance ? tokenPair.balance : Infinity))
-              : () => undefined
-          )}
+          validate={validate}
           parse={v => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
         >
           {({ input, meta }) => (
@@ -276,7 +250,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   networkId
                 );
               }}
-              balance={currentTab.id === 'vote' ? availableVoteBalance : availableVetoBalance}
+              balance={availableBalance}
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
               }}
@@ -286,7 +260,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               id="liquidity-remove-input"
               label={currentTab.label}
               className={s.input}
-              error={errorInterceptor((meta.touched && meta.error) || meta.submitError)}
+              error={errorInterceptor((meta.dirty && meta.error) || meta.submitError)}
             />
           )}
         </Field>

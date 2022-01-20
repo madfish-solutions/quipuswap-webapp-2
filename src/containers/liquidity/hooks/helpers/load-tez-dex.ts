@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 
 import { FACTORIES } from '@app.config';
 import { findNotTezToken } from '@containers/liquidity/liquidity-cards/helpers';
-import { Nullable, QSMainNet, WhitelistedToken } from '@utils/types';
+import { Nullable, QSNets, WhitelistedToken } from '@utils/types';
 
 export const loadTezDex = async ({
   tezos,
@@ -12,7 +12,7 @@ export const loadTezDex = async ({
   tokenB
 }: {
   tezos: TezosToolkit;
-  networkId: QSMainNet;
+  networkId: QSNets;
   tokenA: WhitelistedToken;
   tokenB: WhitelistedToken;
 }): Promise<Nullable<FoundDex>> => {

@@ -22,7 +22,7 @@ interface PoolTableProps {
 
 const pageSize = MAX_ITEMS_PER_PAGE;
 
-const poolMobileItem = (pool: PoolTableType) => <PoolCardItem key={pool.pair.name} pool={pool} />;
+export const poolMobileItem = (pool: PoolTableType) => <PoolCardItem key={pool.pair.name} pool={pool} />;
 
 const modeClass = {
   [ColorModes.Light]: s.light,

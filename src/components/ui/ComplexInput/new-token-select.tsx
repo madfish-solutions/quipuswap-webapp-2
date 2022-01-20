@@ -1,21 +1,19 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { Skeleton } from '@components/common/Skeleton';
 import { TokensModal } from '@components/modals/TokensModal';
-import { StateWrapper } from '@components/state-wrapper';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { amountsAreEqual, getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { amountsAreEqual, getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
-import { DashPlug } from '../dash-plug';
+import { Button } from '../elements/button';
+import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
 interface NewTokenSelectProps {
@@ -40,8 +38,6 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const MAX_BALANCE_DIGITS = 7;
-
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
   className,
@@ -58,7 +54,6 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   token,
   blackListedTokens
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -126,22 +121,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     handleAmountChangeIfNeeded(newValue);
   };
 
-  const formattedBalance = useMemo(() => {
-    if (!balance) {
-      return balance;
-    }
-    const correctBalance = balance.decimalPlaces(tokenDecimals ?? 3);
-    if (balance.eq(0)) {
-      return balance.toFixed();
-    }
-    const integerLog = Math.floor(Math.log10(correctBalance.toNumber()));
-    const decimalPlaces =
-      integerLog >= 0
-        ? Math.max(0, MAX_BALANCE_DIGITS - 1 - integerLog)
-        : Math.max(MAX_BALANCE_DIGITS - 1, -integerLog + 1);
-
-    return correctBalance.decimalPlaces(decimalPlaces, BigNumber.ROUND_DOWN).toFixed();
-  }, [balance, tokenDecimals]);
+  const preparedBalance = isExist(tokenDecimals) && isExist(balance) ? balance.toFixed(tokenDecimals) : null;
 
   return (
     <>
@@ -158,22 +138,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
-            <div className={s.item2}>
-              {account && (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>
-                    <StateWrapper
-                      isLoading={!formattedBalance}
-                      loaderFallback={<Skeleton className={s.balanceSkeleton} />}
-                      errorFallback={<DashPlug animation={false} />}
-                    >
-                      {formattedBalance}
-                    </StateWrapper>
-                  </div>
-                </div>
-              )}
-            </div>
+            <div className={s.item2}>{account && <Balance balance={preparedBalance} colorMode={colorThemeMode} />}</div>
             <input
               className={cx(s.item3, s.input)}
               onFocus={handleFocus}

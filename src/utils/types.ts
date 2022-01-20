@@ -6,16 +6,23 @@ import { Standard } from '@graphql';
 export type Undefined<T> = T | undefined;
 export type Nullable<T> = T | null; // MayBe<T>
 
-export type QSMainNet = 'mainnet' | 'hangzhounet';
+export enum QSNets {
+  mainnet = 'mainnet',
+  hangzhounet = 'hangzhounet'
+}
 
 export enum QSNetworkType {
   MAIN = 'MAIN',
   TEST = 'TEST'
 }
 
+export enum ConnectType {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM'
+}
 export interface QSNetwork {
-  id: QSMainNet;
-  connectType: 'default' | 'custom';
+  id: QSNets;
+  connectType: ConnectType;
   name: string;
   type: QSNetworkType;
   rpcBaseURL: string;
@@ -45,7 +52,7 @@ export interface WhitelistedToken {
 }
 
 export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
-  network?: QSMainNet;
+  network?: QSNets;
 }
 
 export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
@@ -98,7 +105,7 @@ export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 export interface VoterType {
   vote: BigNumber;
   veto: BigNumber;
-  candidate: string;
+  candidate: Nullable<string>;
 }
 
 export interface TokenDataType {
@@ -164,4 +171,9 @@ export interface SortTokensContractsType {
   addressA: string;
   addressB: string;
   type: 'Left-Left' | 'Right-Right' | 'Left-Right';
+}
+
+export enum LastUsedConnectionKey {
+  TEMPLE = 'TEMPLE',
+  BEACON = 'BEACON'
 }

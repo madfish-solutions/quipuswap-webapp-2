@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { Button, TokensLogos, Tooltip } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
+import { TokensLogos, Tooltip } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
+import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { FormatNumber } from '@utils/formatNumber';
-import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -48,12 +47,7 @@ export const useColumns = () => {
       accessor: ({ data: dataInside, xtzUsdQuote }: PoolTableType) => (
         <div className={s.links}>
           <StateCurrencyAmount
-            amount={FormatNumber(
-              fromDecimals(new BigNumber(dataInside.tvl), 6)
-                .multipliedBy(new BigNumber(xtzUsdQuote))
-                .integerValue()
-                .toString()
-            )}
+            amount={calculateRateAmount(dataInside.tvl, xtzUsdQuote)}
             currency="$"
             isLeftCurrency
             className={s.cardAmount}
@@ -72,12 +66,7 @@ export const useColumns = () => {
       accessor: ({ data: dataInside, xtzUsdQuote }: PoolTableType) => (
         <>
           <StateCurrencyAmount
-            amount={FormatNumber(
-              fromDecimals(new BigNumber(dataInside.tvl), 6)
-                .multipliedBy(new BigNumber(xtzUsdQuote))
-                .integerValue()
-                .toString()
-            )}
+            amount={calculateRateAmount(dataInside.volume24h, xtzUsdQuote)}
             currency="$"
             isLeftCurrency
             className={s.cardAmount}

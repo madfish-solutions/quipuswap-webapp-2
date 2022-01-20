@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 import {
-  Button,
   ColorModes,
   ColorThemeContext,
   LoadingTokenCell,
@@ -16,15 +15,16 @@ import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { Button } from '@components/ui/elements/button';
 import { Standard } from '@graphql';
 import {
-  useAddCustomToken,
   useNetwork,
+  useTezos,
+  getTokenType,
+  useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
-  useTezos,
-  useTokens,
-  getTokenType
+  useTokens
 } from '@utils/dapp';
 import {
   getWhitelistedTokenName,

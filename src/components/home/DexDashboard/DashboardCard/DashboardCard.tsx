@@ -3,7 +3,6 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext, Tooltip } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { Skeleton } from '@components/common/Skeleton';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { Nullable } from '@utils/types';
 
@@ -40,13 +39,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateCurrencyAmount
-        amount={volume}
-        currency={currency}
-        loaderFallback={<Skeleton className={s.skeleton} />}
-        isLeftCurrency={currency === '$'}
-        labelSize={size}
-      />
+      <StateCurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
     </div>
   );
 };

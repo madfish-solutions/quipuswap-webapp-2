@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+
+import { Button } from '@components/ui/elements/button';
 
 import { SocialLinksData } from './content';
 import s from './Socials.module.sass';

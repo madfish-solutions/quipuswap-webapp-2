@@ -1,16 +1,17 @@
 import React, { FC, useCallback, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
-import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
+import { Checkbox, Modal } from '@quipuswap/ui-kit';
 import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@app.config';
+import { Button } from '@components/ui/elements/button';
+import { NoTempleWallet } from '@errors';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { WalletType } from '@utils/types';
-import { NoTempleWalletError } from 'errors';
 
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
@@ -59,7 +60,7 @@ export const WalletModal: FC = () => {
         closeAccountInfoModal();
         closeConnectWalletModal();
       } catch (err) {
-        if (err instanceof NoTempleWalletError) {
+        if (err instanceof NoTempleWallet) {
           openInstallTempleWalletModal();
         } else {
           const authenticationWasRejected =

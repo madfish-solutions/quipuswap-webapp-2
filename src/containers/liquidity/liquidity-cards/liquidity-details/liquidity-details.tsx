@@ -12,7 +12,7 @@ import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liqu
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isExist } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, isExist, isNull } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -116,7 +116,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount amount={share?.total || null} isLoading={!poolTotal} />
+            <StateCurrencyAmount amount={share?.total || null} isLoading={isNull(poolTotal)} />
           </DetailsCardCell>
 
           <DetailsCardCell

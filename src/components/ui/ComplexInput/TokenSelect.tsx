@@ -1,9 +1,8 @@
 import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
 
-import { Button, Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -11,9 +10,10 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { formatBalance } from '@utils/helpers/format-balance';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { Button } from '../elements/button';
+import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
 const DEFAULT_EXCHANGE_RATE = 0;
@@ -57,7 +57,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   blackListedTokens,
   ...props
 }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
@@ -99,14 +98,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
-            <div className={s.item2}>
-              {account && isExist(balance) && (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>{t('common|Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>{formatBalance(balance)}</div>
-                </div>
-              )}
-            </div>
+            <div className={s.item2}>{account && <Balance balance={balance} colorMode={colorThemeMode} />}</div>
             <input
               className={cx(s.item3, s.input)}
               onFocus={() => setActive(true)}
@@ -140,19 +132,19 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </div>
         {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
-        {tokensModal && (
-          <TokensModal
-            blackListedTokens={blackListedTokens}
-            isOpen={tokensModal}
-            onRequestClose={() => setTokensModal(false)}
-            onChange={selectedToken => {
-              setToken?.(selectedToken);
-              handleChange?.(selectedToken);
-              setTokensModal(false);
-            }}
-          />
-        )}
       </div>
+      {tokensModal && (
+        <TokensModal
+          blackListedTokens={blackListedTokens}
+          isOpen={tokensModal}
+          onRequestClose={() => setTokensModal(false)}
+          onChange={selectedToken => {
+            setToken?.(selectedToken);
+            handleChange?.(selectedToken);
+            setTokensModal(false);
+          }}
+        />
+      )}
     </>
   );
 };

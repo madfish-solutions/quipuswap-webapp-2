@@ -1,7 +1,7 @@
 @import "@styles/variables"
 @import "@styles/breakpoints"
 
-.pairMessage
+.alarmMessage
   padding: 8px 16px
   font-size: 1em
   line-height: 1.714
@@ -10,10 +10,12 @@
 
 .light
   color: $text-01
+  background: $ui-01
 
 .dark
   color: $text-inverse
+  background: $ui-06
 
 @include media('>SDesktop')
-  .pairMessage
+  .alarmMessage
     padding: 12px 16px

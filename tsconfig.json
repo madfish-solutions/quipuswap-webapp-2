@@ -14,7 +14,7 @@
     "paths": {
       "@components/*": ["components/*"],
       "@containers/*": ["containers/*"],
-      "@errors/*": ["errors/*"],
+      "@errors": ["errors/index.ts"],
       "@content/*": ["content/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],

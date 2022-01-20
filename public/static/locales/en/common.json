@@ -56,5 +56,6 @@
   "deadlineOutOfRangeError": "Deadline has to be between 1m and 30 days (43200m)",
   "Error {{message}}": "Error: {{message}}",
   "Slippage": "Slippage",
-  "Transaction deadline": "Transaction deadline"
+  "Transaction deadline": "Transaction deadline",
+  "You are on Test net now!": "You are on Test net now!"
 }
