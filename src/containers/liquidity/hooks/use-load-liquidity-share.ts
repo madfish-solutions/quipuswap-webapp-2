@@ -24,18 +24,24 @@ export const useLoadLiquidityShare = (
 
   const [share, setShare] = useState<Nullable<LiquidityShareResult>>(null);
 
+  const loadShare = async (
+    dex: Nullable<FoundDex>,
+    tokenA: Nullable<WhitelistedToken>,
+    tokenB: Nullable<WhitelistedToken>
+  ) => {
+    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+      return;
+    }
+
+    const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, dex, tokenA, tokenB);
+
+    setShare(userLiquidityShares);
+  };
+
   useEffect(() => {
-    const loadShare = async () => {
-      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
-        return;
-      }
-
-      const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, dex, tokenA, tokenB);
-
-      setShare(userLiquidityShares);
-    };
-    void loadShare();
+    void loadShare(dex, tokenA, tokenB);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dex, tokenA, tokenB]);
 
-  return share;
+  return { share, updateLiquidityShares: loadShare };
 };

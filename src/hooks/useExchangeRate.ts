@@ -20,7 +20,7 @@ export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
   const { showErrorToast } = useToasts();
 
   const getExchangeRates = async () =>
-    fetch('https://api.templewallet.com/api/exchange-rates')
+    fetch(' https://templewallet-backend-neae6.ondigitalocean.app/api/exchange-rates')
       .then(async res => res.json())
       .then((rawExchangeRates: RawExchangeRateEntry[]) =>
         rawExchangeRates.map(({ tokenAddress, ...restProps }) => ({

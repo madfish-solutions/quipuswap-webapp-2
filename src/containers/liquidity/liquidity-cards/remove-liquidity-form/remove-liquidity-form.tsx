@@ -45,7 +45,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    shares,
+    share,
     slippage,
     setSlippage,
     handleRemoveLiquidity,
@@ -74,7 +74,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
-  const isUnvoteVisible = !isDeadlineAndSlippageVisible && shares && new BigNumber(lpTokenInput).gt(shares.unfrozen);
+  const isUnvoteVisible = !isDeadlineAndSlippageVisible && share && new BigNumber(lpTokenInput).gt(share.unfrozen);
 
   return (
     <>
@@ -82,13 +82,13 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={shares?.total.toFixed()}
+        balance={share?.total.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
-        frozenBalance={shares?.frozen.toFixed()}
+        frozenBalance={share?.frozen.toFixed()}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}

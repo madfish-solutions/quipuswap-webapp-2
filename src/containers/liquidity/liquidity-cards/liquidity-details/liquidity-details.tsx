@@ -44,7 +44,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
-  const share = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
