@@ -12,7 +12,7 @@ import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liqu
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -37,6 +37,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
   const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
+
+  const fixedTokenAPool = tokenAPool && tokenA && fromDecimals(tokenAPool, tokenA).toFixed();
+  const fixedTokenBPool = tokenBPool && tokenB && fromDecimals(tokenBPool, tokenB).toFixed();
 
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
@@ -83,7 +86,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         )}
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={tokenAPool} currency={tokenAName} isLoading={!dex} />
+        <StateCurrencyAmount amount={fixedTokenAPool} currency={tokenAName} isLoading={!dex} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -94,7 +97,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         )}
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={tokenBPool} currency={tokenBName} isLoading={!dex} />
+        <StateCurrencyAmount amount={fixedTokenBPool} currency={tokenBName} isLoading={!dex} />
       </DetailsCardCell>
 
       {accountPkh && (
