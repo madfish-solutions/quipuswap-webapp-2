@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext, FC } from 'react';
 
-import { Button, LogoButton, ColorModes, MenuClosed, MenuOpened, ColorThemeContext } from '@quipuswap/ui-kit';
+import { LogoButton, ColorModes, MenuClosed, MenuOpened, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { Menu } from '@components/common/Header/Menu';
 import { ColorModeSwitcher } from '@components/ui/components';
+import { Button } from '@components/ui/elements/button';
 
 import s from './Header.module.sass';
 

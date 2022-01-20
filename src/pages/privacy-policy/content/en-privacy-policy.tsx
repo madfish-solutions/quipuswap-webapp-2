@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { Button } from '@components/ui/elements/button';
 import s from '@styles/PrivacyPolicy.module.sass';
 
 export const EnPrivacyPolicy: React.FC = () => (

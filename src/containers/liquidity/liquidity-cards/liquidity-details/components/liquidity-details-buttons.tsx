@@ -1,11 +1,12 @@
 import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import { Button, ExternalLink } from '@quipuswap/ui-kit';
+import { ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Skeleton } from '@components/common/Skeleton';
+import { Button } from '@components/ui/elements/button';
 import { Nullable } from '@utils/types';
 
 import s from '../liquidity-details.module.sass';

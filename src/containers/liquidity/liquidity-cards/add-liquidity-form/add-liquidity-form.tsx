@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -10,6 +9,7 @@ import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { Button } from '@components/ui/elements/button';
 import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals, isExist } from '@utils/helpers';

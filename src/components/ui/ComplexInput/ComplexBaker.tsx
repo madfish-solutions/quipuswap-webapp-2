@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
-import { Button, Shevron, BakerLogo, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Shevron, BakerLogo, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
@@ -8,6 +8,7 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { getWhitelistedBakerName, isBackerNotEmpty } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
+import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
