@@ -5,9 +5,9 @@ import cx from 'classnames';
 
 import { DashPlug } from '@components/ui/dash-plug';
 import { FormatNumber } from '@utils/formatNumber';
+import { formatBalance, isNull } from '@utils/helpers';
 
 import styles from './voting-stats-item.module.scss';
-import { formatBalance, isNull } from '@utils/helpers';
 
 export interface VotingStatsItemProps {
   value: Nullable<string>;
@@ -26,19 +26,17 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-
-
-const VotingStatsItemValue:FC<VotingStatsItemValueProps> = ({value, isLp}) => {
-  if(isNull(value)) {
-    return <DashPlug className={styles.dash} />
+const VotingStatsItemValue: FC<VotingStatsItemValueProps> = ({ value, isLp }) => {
+  if (isNull(value)) {
+    return <DashPlug className={styles.dash} />;
   }
 
-  if(isLp) {
-    return <Fragment>{formatBalance(value)}</Fragment>
+  if (isLp) {
+    return <Fragment>{formatBalance(value)}</Fragment>;
   } else {
-    return <Fragment>{FormatNumber(value)}</Fragment>
+    return <Fragment>{FormatNumber(value)}</Fragment>;
   }
-}
+};
 
 export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, tooltip, isLp }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -51,7 +49,7 @@ export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, too
         <Tooltip content={tooltip} />
       </span>
       <span className={styles.amount}>
-        <VotingStatsItemValue value={value} isLp={isLp ?? null}/>
+        <VotingStatsItemValue value={value} isLp={isLp ?? null} />
       </span>
     </div>
   );
