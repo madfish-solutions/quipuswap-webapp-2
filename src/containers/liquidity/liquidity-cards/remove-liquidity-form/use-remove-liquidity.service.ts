@@ -25,7 +25,7 @@ export const useRemoveLiquidityService = (
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-  const pairInfo = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
@@ -181,7 +181,8 @@ export const useRemoveLiquidityService = (
     await Promise.all([
       updateTokenABalance(tokenA),
       updateTokenBBalance(tokenB),
-      updateLiquidityShares(dex, tokenA, tokenB)
+      updateLiquidityShares(dex, tokenA, tokenB),
+      updatePairInfo(dex, tokenA, tokenB)
     ]);
   };
 

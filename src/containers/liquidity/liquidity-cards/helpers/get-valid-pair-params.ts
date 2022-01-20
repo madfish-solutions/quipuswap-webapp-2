@@ -11,8 +11,8 @@ export const getValidPairParams = (
   tokenAInput: BigNumber,
   tokenBInput: BigNumber
 ) => {
-  const validTokenAType = tokenA.type === Standard.Fa12 ? Standard.Fa12 : Standard.Fa2;
-  const validTokenBType = tokenB.type === Standard.Fa12 ? Standard.Fa12 : Standard.Fa2;
+  const validTokenAType = tokenA.type === Standard.Fa12 ? 'fa12' : 'fa2';
+  const validTokenBType = tokenB.type === Standard.Fa12 ? 'fa12' : 'fa2';
 
   if (tokenA.type === Standard.Fa12 && tokenA.type === tokenB.type) {
     return dex.contract.methods.addPair(

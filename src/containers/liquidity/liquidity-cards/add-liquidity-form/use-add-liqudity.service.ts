@@ -32,7 +32,7 @@ export const useAddLiquidityService = (
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
-  const pairInfo = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
@@ -246,7 +246,12 @@ export const useAddLiquidityService = (
     const pairInputA = addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
     const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
 
-    if (!pairInfo) {
+    if (
+      !pairInfo ||
+      pairInfo.tokenAPool.eq(EMPTY_POOL) ||
+      pairInfo.tokenBPool.eq(EMPTY_POOL) ||
+      pairInfo.totalSupply.eq(EMPTY_POOL)
+    ) {
       const addPairTokenToTokenOperation = await addPairTokenToToken(
         tezos,
         dex,
@@ -283,11 +288,10 @@ export const useAddLiquidityService = (
       });
     }
 
-    await updateTokenABalance(tokenA);
-    await updateTokenBBalance(tokenB);
     setLastEditedInput(null);
     setTokenAInput('');
     setTokenBInput('');
+    await Promise.all([updateTokenABalance(tokenA), updateTokenBBalance(tokenB), updatePairInfo(dex, tokenA, tokenB)]);
   };
 
   const investTezosToToken = async () => {

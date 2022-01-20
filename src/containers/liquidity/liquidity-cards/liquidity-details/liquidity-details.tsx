@@ -31,10 +31,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
 
-  const { tokenAPool, tokenBPool } = usePairInfo(dex, tokenA, tokenB) || {
-    tokenAPool: null,
-    tokenBPool: null
-  };
+  const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
+
+  const tokenAPool = pairInfo?.tokenAPool ?? null;
+  const tokenBPool = pairInfo?.tokenBPool ?? null;
 
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
