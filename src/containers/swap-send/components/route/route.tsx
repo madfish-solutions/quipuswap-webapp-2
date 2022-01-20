@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { Fragment, useContext } from 'react';
 
 import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -29,12 +29,12 @@ export const Route: React.FC<Props> = ({ routes, className }) => {
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {routes.map((route, index) => (
-        <React.Fragment key={route.id}>
+        <Fragment key={route.id}>
           <Button external href={route.link} className={s.route} theme="quaternary">
             {route.name}
           </Button>
           {!isLastElementIndex(index, routes) && <span className={s.divider}>&gt;</span>}
-        </React.Fragment>
+        </Fragment>
       ))}
     </div>
   );
