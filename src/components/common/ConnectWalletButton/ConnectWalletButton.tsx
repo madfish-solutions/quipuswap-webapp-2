@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
-
+import { Button } from '@components/ui/elements/button';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { shortize } from '@utils/helpers';

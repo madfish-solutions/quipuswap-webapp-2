@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { Button, Card, StickyBlock, SwapButton, Tabs } from '@quipuswap/ui-kit';
+import { Card, StickyBlock, SwapButton, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -10,6 +10,7 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { DeadlineInput } from '@components/common/deadline-input';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
+import { Button } from '@components/ui/elements/button';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';

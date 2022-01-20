@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useContext, useState, FC, HTMLProps } from 'react';
 
-import { Button, Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -10,6 +10,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
+import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 const modeClass = {

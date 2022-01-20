@@ -1,11 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 
-import { Button, ColorModes, ColorThemeContext, Preloader, TFooter } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Preloader, TFooter } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { Skeleton } from '@components/common/Skeleton';
 import { poolMobileItem } from '@components/tables/PoolTable';
 import { useColumns } from '@components/tables/PoolTable/hooks';
+import { Button } from '@components/ui/elements/button';
 import { getUniqueKey, isEmptyArray } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 import { usePagination, useSortBy, useTable } from 'react-table';

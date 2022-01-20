@@ -1,11 +1,12 @@
 import React, { useContext } from 'react';
 
 import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
-import { Card, Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { Button } from '@components/ui/elements/button';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
