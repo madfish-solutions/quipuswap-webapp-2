@@ -30,7 +30,7 @@ interface VotingStatsProps {
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
   className,
-  pendingReward = '0',
+  pendingReward,
   balanceAmount,
   voteAmount,
   vetoAmount,
@@ -60,6 +60,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
             value={balanceAmount}
             itemName={t('vote|Your LP')}
             tooltip={t('vote|Total number of LP tokens you own.')}
+            isLp
           />
 
           <VotingStatsItem

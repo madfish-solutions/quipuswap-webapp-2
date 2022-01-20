@@ -154,7 +154,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     <Fragment>
       <VotingStats
         pendingReward={accountPkh ? rewards : null}
-        balanceAmount={'0'} //{tokenPair.balance ?? null}
+        balanceAmount={tokenPair.balance ?? null}
         voteAmount={voter?.vote ?? null}
         vetoAmount={voter?.veto ?? null}
         className={s.votingStats}
