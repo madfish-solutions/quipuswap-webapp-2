@@ -14,14 +14,14 @@ export const getCandidateInfo = (dex: Nullable<FoundDex>, bakers: Array<Whitelis
       secondCandidate: null
     };
   }
+  const { current_delegated, current_candidate } = dex.storage.storage;
 
-  const currentCandidate = bakers.find(baker => baker.address === dex.storage.storage.current_delegated) || {
-    address: dex.storage.storage.current_delegated
-  };
+  const emptyCurrentDelegated = { address: current_delegated };
+  const emptyCurrentCandidate = { address: current_candidate };
 
-  const secondCandidate = bakers.find(x => x.address === dex.storage.storage.current_candidate) || {
-    address: dex.storage.storage.current_candidate
-  };
+  const currentCandidate = bakers.find(baker => baker.address === current_delegated) || emptyCurrentDelegated;
+
+  const secondCandidate = bakers.find(baker => baker.address === current_candidate) || emptyCurrentCandidate;
 
   return {
     currentCandidate,

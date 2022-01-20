@@ -82,7 +82,6 @@ export const Table: React.FC<TablePropsT> = ({
     getTableBodyProps,
     headerGroups,
     prepareRow,
-    // pagination
     page,
     canPreviousPage,
     canNextPage,
@@ -177,7 +176,7 @@ export const Table: React.FC<TablePropsT> = ({
                 })}
               </tbody>
             </table>
-            <div className={cx(s.footer, s.desktop, { [s.smallFooter]: !isShowPagination && pageCount !== 0 })}>
+            <div className={cx(s.footer, s.desktop, { [s.smallFooter]: !isShowPagination && !pageCount })}>
               <TFooter
                 isShowPagination={isShowPagination}
                 previousPage={previousPage}
@@ -191,7 +190,7 @@ export const Table: React.FC<TablePropsT> = ({
           </div>
         </div>
         <div className={cx(s.mobile, modeClass[colorThemeMode], s.table)}>
-          {data.length === 0 || loading ? (
+          {isEmptyArray(data) || loading ? (
             <div className={s.preloaderWrapper}>
               <Preloader className={s.preloader} />
             </div>
@@ -213,7 +212,7 @@ export const Table: React.FC<TablePropsT> = ({
       {!disabled && (
         <div
           className={cx(s.footer, s.mobileFooter, modeClass[colorThemeMode], {
-            [s.smallFooter]: !isShowPagination && pageCount !== 0
+            [s.smallFooter]: !isShowPagination && !pageCount
           })}
         >
           <TFooter

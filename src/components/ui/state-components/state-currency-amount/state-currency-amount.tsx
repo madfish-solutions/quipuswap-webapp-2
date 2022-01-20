@@ -69,6 +69,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
+  const view = aliternativeView ?? FormatNumber(amount ?? 0, { decimals: amountDecimals });
+
   const content = (
     <span className={wrapClassName}>
       {isLeftVisible && <Currency>{currency}</Currency>}
@@ -79,7 +81,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{aliternativeView ?? FormatNumber(amount ?? 0, { decimals: amountDecimals })}</span>
+        <span className={s.inner}>{view}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}

@@ -16,12 +16,15 @@ export interface ColorModeSwitcherProps {
 export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = ({ id, className }) => {
   const { colorThemeMode, setColorThemeMode } = useContext(ColorThemeContext);
 
+  const idLightMode = colorThemeMode === ColorModes.Light;
+  const idDarkMode = colorThemeMode === ColorModes.Dark;
+
   return (
     <div className={cx(styles.root, className)}>
       <button
         type="button"
-        className={cx(styles.button, styles.light, { [styles.active]: colorThemeMode === ColorModes.Light })}
-        disabled={colorThemeMode === ColorModes.Light}
+        className={cx(styles.button, styles.light, { [styles.active]: idLightMode })}
+        disabled={idLightMode}
         onClick={setColorThemeMode}
       >
         <LightMode id={id} className={styles.icon} />
@@ -29,8 +32,8 @@ export const ColorModeSwitcher: React.FC<ColorModeSwitcherProps> = ({ id, classN
       <span className={styles.divider}>/</span>
       <button
         type="button"
-        className={cx(styles.button, styles.dark, { [styles.active]: colorThemeMode === ColorModes.Dark })}
-        disabled={colorThemeMode === ColorModes.Dark}
+        className={cx(styles.button, styles.dark, { [styles.active]: idDarkMode })}
+        disabled={idDarkMode}
         onClick={setColorThemeMode}
       >
         <DarkMode id={id} className={styles.icon} />
