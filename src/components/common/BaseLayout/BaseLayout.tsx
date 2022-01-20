@@ -3,6 +3,7 @@ import { FC, useContext, useEffect } from 'react';
 import { ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { NextSeo } from 'next-seo';
+import Head from 'next/head';
 import Script from 'next/script';
 
 import { Header } from '@components/common/Header';
@@ -35,6 +36,14 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
 
   return (
     <>
+      <Head>
+        {colorThemeMode === ColorModes.Dark ? (
+          <link rel="icon" id="favicon" href="http://localhost:3000/dark-favicon.ico?" />
+        ) : (
+          <link rel="icon" id="favicon" href="http://localhost:3000/light-favicon.ico" />
+        )}
+      </Head>
+
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS}`} />
       <Script>
         {`window.dataLayer = window.dataLayer || [];
