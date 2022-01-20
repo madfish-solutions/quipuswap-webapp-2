@@ -1,15 +1,16 @@
 import React, { FC } from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { DeadlineInput } from '@components/common/deadline-input/deadline-input';
-import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { Button } from '@components/ui/elements/button';
 import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals, isExist } from '@utils/helpers';
@@ -31,6 +32,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   transactionDuration,
   setTransactionDuration
 }) => {
+  const { t } = useTranslation(['liquidity']);
   const {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -127,7 +129,12 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
           </div>
         </>
       )}
-      {isNewPair && <NewPairMessage className={s['mt-24']} />}
+      {isNewPair && (
+        <AlarmMessage
+          message={t("liquidity|Note! The pool doesn't exist. You will create the new one.")}
+          className={s['mt-24']}
+        />
+      )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
           Add

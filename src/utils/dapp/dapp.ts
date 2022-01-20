@@ -16,8 +16,6 @@ import { rpcClients } from './connect-wallet/rpc-clients';
 import { getNetwork, setNetwork } from './network';
 import { ReadOnlySigner } from './ReadOnlySigner';
 
-const net = getNetwork();
-
 export interface DAppType {
   connectionType: Nullable<LastUsedConnectionKey>;
   tezos: Nullable<TezosToolkit>;
@@ -42,7 +40,7 @@ function useDApp() {
       accountPkh: null,
       accountPublicKey: null,
       templeWallet: null,
-      network: net
+      network: getNetwork()
     }
   );
 
@@ -80,8 +78,9 @@ function useDApp() {
 
           const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
 
+          const netFromStorage = getNetwork();
           if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
-            const { pkh, pk, tezos } = await getTempleWalletState(wlt, net.id);
+            const { pkh, pk, tezos } = await getTempleWalletState(wlt, netFromStorage.id);
             setState(prevState => ({
               ...prevState,
               templeWallet: wlt,
@@ -93,7 +92,7 @@ function useDApp() {
           } else {
             setState(prevState => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkits[net.id],
+              tezos: prevState.tezos ?? fallbackToolkits[netFromStorage.id],
               templeWallet: wlt
             }));
           }
@@ -125,7 +124,8 @@ function useDApp() {
             return;
           }
 
-          const toolkit = new TezosToolkit(rpcClients[net.id]);
+          const netFromStorage = getNetwork();
+          const toolkit = new TezosToolkit(rpcClients[netFromStorage.id]);
           toolkit.setPackerProvider(michelEncoder);
           toolkit.setWalletProvider(beaconWallet);
 
@@ -136,7 +136,7 @@ function useDApp() {
             accountPublicKey: value.publicKey,
             connectionType: LastUsedConnectionKey.BEACON,
             tezos: toolkit,
-            network: net
+            network: netFromStorage
           }));
         })
         .catch(e => {
@@ -177,14 +177,15 @@ function useDApp() {
     if (templeWallet && templeWallet.connected) {
       TempleWallet.onPermissionChange(perm => {
         if (!perm) {
+          const netFromStorage = getNetwork();
           setState(prevState => ({
             ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
-            tezos: fallbackToolkits[net.id],
+            tezos: fallbackToolkits[netFromStorage.id],
             accountPkh: null,
             accountPublicKey: null,
             connectionType: null,
-            network: net
+            network: netFromStorage
           }));
         }
       });

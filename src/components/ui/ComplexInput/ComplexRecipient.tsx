@@ -1,6 +1,6 @@
 import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
-import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
@@ -8,6 +8,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { useToasts } from '@hooks/use-toasts';
 
+import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 interface ComplexRecipientProps extends HTMLProps<HTMLTextAreaElement> {

@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
-
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { DashPlug } from '@components/ui/dash-plug';
+import { Button } from '@components/ui/elements/button';
 import { getWhitelistedBakerName, isExist } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 

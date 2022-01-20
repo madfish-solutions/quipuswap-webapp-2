@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 
-import { Bage, Button, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Bage, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Tooltip } from '@components/ui/components/tooltip';
+import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';

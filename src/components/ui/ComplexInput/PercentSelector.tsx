@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
 import { Nullable } from '@utils/types';
 
+import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 interface PercentSelectorProps {

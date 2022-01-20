@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
-import { Card, Tabs, Button } from '@quipuswap/ui-kit';
+import { Card, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
@@ -13,6 +13,7 @@ import { FACTORIES, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { Button } from '@components/ui/elements/button';
 import {
   getCandidateInfo,
   getVoteVetoBalances,

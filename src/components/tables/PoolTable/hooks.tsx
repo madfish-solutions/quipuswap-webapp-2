@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { Button, TokensLogos } from '@quipuswap/ui-kit';
+import { TokensLogos } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import s from '@components/tables/PoolTable/PoolTable.module.sass';
 import { Tooltip } from '@components/ui/components/tooltip';
+import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
