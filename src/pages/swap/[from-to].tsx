@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
+import { TestnetAlert } from '@components/common/testnet-alert';
 import { SwapSend } from '@containers/swap-send';
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -20,6 +21,7 @@ const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
       description={t('swap|Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
+      <TestnetAlert />
       <SwapSend fromToSlug={fromToSlug} />
     </BaseLayout>
   );
