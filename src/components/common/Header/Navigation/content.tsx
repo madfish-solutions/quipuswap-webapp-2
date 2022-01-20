@@ -12,6 +12,7 @@ interface LinkInterface {
   href?: string;
   as?: string;
   label: React.ReactNode;
+  target?: string;
   Icon?: React.FC<{ className?: string; id?: string }>;
 }
 
@@ -79,32 +80,38 @@ export const makeNavigationData = (network: QSNets): NavigationDataProps[] => [
       {
         id: 0,
         href: 'https://analytics.quipuswap.com/',
-        label: 'Analytics'
+        label: 'Analytics',
+        target: '_blank'
       },
       {
         id: 1,
         href: 'https://story.madfish.solutions/category/quipuswap/',
-        label: 'About'
+        label: 'About',
+        target: '_blank'
       },
       {
         id: 2,
         href: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
-        label: 'Audit'
+        label: 'Audit',
+        target: '_blank'
       },
       {
         id: 3,
         href: 'https://madfish.crunch.help/quipu-swap',
-        label: 'Help'
+        label: 'Help',
+        target: '_blank'
       },
       {
         id: 4,
         href: 'https://docs.quipuswap.com/',
-        label: 'Docs'
+        label: 'Docs',
+        target: '_blank'
       },
       {
         id: 5,
         href: 'https://story.madfish.solutions/',
-        label: 'Blog'
+        label: 'Blog',
+        target: '_blank'
       },
       {
         id: 6,

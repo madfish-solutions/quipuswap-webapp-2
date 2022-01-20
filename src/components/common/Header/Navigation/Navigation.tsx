@@ -67,7 +67,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     className={cx(s.linkInner, modeClass[colorThemeMode])}
-                    target="_blank"
+                    target={link.target}
                     rel="noreferrer noopener"
                     onFocus={() => setIsInnerMenuOpened(true)}
                   >

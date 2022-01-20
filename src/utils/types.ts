@@ -105,7 +105,7 @@ export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 export interface VoterType {
   vote: BigNumber;
   veto: BigNumber;
-  candidate: string;
+  candidate: Nullable<string>;
 }
 
 export interface TokenDataType {

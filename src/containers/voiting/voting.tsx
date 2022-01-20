@@ -153,10 +153,10 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   return (
     <Fragment>
       <VotingStats
-        pendingReward={accountPkh ? rewards : '0'}
-        balanceAmount={tokenPair.balance || null}
-        voteAmount={voter?.vote || null}
-        vetoAmount={voter?.veto || null}
+        pendingReward={accountPkh ? rewards : null}
+        balanceAmount={tokenPair.balance ?? null}
+        voteAmount={voter?.vote ?? null}
+        vetoAmount={voter?.veto ?? null}
         className={s.votingStats}
         dex={dex}
         handleSubmit={(params: TransferParams[]) => {

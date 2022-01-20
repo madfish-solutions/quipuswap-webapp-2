@@ -113,7 +113,7 @@ export const unvoteOrRemoveVeto = async (
   showErrorToast: UseToasts['showErrorToast'],
   confirmOperation: ReturnType<typeof useConfirmOperation>,
   getBalance: () => void,
-  baker?: string
+  baker: string
 ) => {
   try {
     const { params, text: updateToastText } = await unvoteOrUnveto(tab, tezos, dex, baker);
