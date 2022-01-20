@@ -8,9 +8,10 @@ import { TEZOS_TOKEN } from '@app.config';
 import { PositionsModal } from '@components/modals/PositionsModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
@@ -37,9 +38,9 @@ const themeClass = {
 
 export const PositionSelect: FC<PositionSelectProps> = ({
   className,
-  balance = '10.00',
+  balance,
   shouldShowBalanceButtons = true,
-  frozenBalance = '10.00',
+  frozenBalance,
   label,
   balanceLabel,
   handleBalance,
@@ -98,16 +99,14 @@ export const PositionSelect: FC<PositionSelectProps> = ({
               {notFrozen ? (
                 ''
               ) : (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>{t('common|Frozen Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(frozenBalance))}</div>
-                </div>
+                <Balance balance={frozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
               )}
               {shouldShowBalanceButtons ? (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>{balanceLabel ?? t('common|Total Balance')}:</div>
-                  <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance))}</div>
-                </div>
+                <Balance
+                  balance={balance}
+                  text={balanceLabel ?? t('common|Total Balance')}
+                  colorMode={colorThemeMode}
+                />
               ) : (
                 <div className={s.item2Line} />
               )}
@@ -147,7 +146,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        {shouldShowBalanceButtons && <PercentSelector value={balance ?? null} handleBalance={handleBalance} />}
         <ComplexError error={error} />
       </div>
     </>

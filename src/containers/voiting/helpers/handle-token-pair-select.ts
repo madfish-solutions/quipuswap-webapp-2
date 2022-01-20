@@ -2,8 +2,9 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { FoundDex, findDex, estimateReward, getLiquidityShare } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
+import BigNumber from 'bignumber.js';
 
-import { FACTORIES, TEZOS_TOKEN } from '@app.config';
+import { FACTORIES, LP_TOKEN_DECIMALS, TEZOS_TOKEN } from '@app.config';
 import { UseToasts } from '@hooks/use-toasts';
 import { fromDecimals } from '@utils/helpers';
 import { VoterType, QSNets, Nullable, WhitelistedTokenPair } from '@utils/types';
@@ -43,17 +44,21 @@ export const handleTokenPairSelect = async (
 
       if (voter) {
         setVoter({
-          veto: fromDecimals(voter.veto, TEZOS_TOKEN.metadata.decimals),
+          veto: fromDecimals(voter.veto, LP_TOKEN_DECIMALS),
           candidate: voter.candidate,
-          vote: fromDecimals(voter.vote, TEZOS_TOKEN.metadata.decimals)
+          vote: fromDecimals(voter.vote, LP_TOKEN_DECIMALS)
         });
       } else {
-        setVoter({} as VoterType);
+        setVoter({
+          veto: new BigNumber(0),
+          candidate: null,
+          vote: new BigNumber(0)
+        });
       }
 
       const share = await getLiquidityShare(tezos, foundDex, accountPkh);
-      const frozenBalance = fromDecimals(share.frozen, TEZOS_TOKEN.metadata.decimals).toString();
-      const totalBalance = fromDecimals(share.total, TEZOS_TOKEN.metadata.decimals).toString();
+      const frozenBalance = fromDecimals(share.frozen, LP_TOKEN_DECIMALS).toString();
+      const totalBalance = fromDecimals(share.total, LP_TOKEN_DECIMALS).toString();
 
       setTokenPair({
         ...pair,

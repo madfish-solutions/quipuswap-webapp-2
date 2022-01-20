@@ -2,9 +2,6 @@ import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
-import { TokensLogos } from '@components/common/TokensLogos';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
 import { LiquidityDetails } from './liquidity-details';
@@ -69,19 +66,6 @@ export const LiquidityCards: FC = () => {
         header={{
           content: (
             <div className={s.poolDetailsHeader}>
-              {tokenA && tokenB && (
-                <>
-                  <TokensLogos
-                    firstTokenIcon={prepareTokenLogo(tokenA.metadata?.thumbnailUri)}
-                    firstTokenSymbol={getWhitelistedTokenSymbol(tokenA)}
-                    secondTokenIcon={prepareTokenLogo(tokenB.metadata?.thumbnailUri)}
-                    secondTokenSymbol={getWhitelistedTokenSymbol(tokenB)}
-                  />
-                  <span className={s.poolDetailsHeader_Title}>
-                    {getWhitelistedTokenName(tokenA)} / {getWhitelistedTokenName(tokenB)}
-                  </span>
-                </>
-              )}
               <span className={s.poolDetailsHeader_Title}>Pool Details</span>
             </div>
           )

@@ -13,13 +13,11 @@ const modeClass = {
 interface DashPlugProps {
   zoom?: number;
   animation?: boolean;
-  dashQuantity?: number;
   className?: string;
 }
-const DEFAULT_DASH_QUANTITY = 4;
-const MAX_DASH_QUANTITY = 8;
+const DASH_QUANTITY = 4;
 
-export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity, className }) => {
+export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const wrapperClassName = cx(
@@ -32,10 +30,8 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, dashQuantity, cla
   );
 
   const iterator = useMemo(() => {
-    const quantity = Math.min(dashQuantity ?? DEFAULT_DASH_QUANTITY, MAX_DASH_QUANTITY);
-
-    return new Array(quantity).fill(null).map((_, index) => index);
-  }, [dashQuantity]);
+    return new Array(DASH_QUANTITY).fill(null).map((_, index) => index);
+  }, []);
 
   return (
     <div className={wrapperClassName} style={{ transform: `scale(${zoom})` }}>

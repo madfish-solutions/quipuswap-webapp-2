@@ -14,5 +14,5 @@ export const ConfirmationSuccessToast: FC<ConfirmationToastProps> = ({ hash, mes
 };
 
 export const TransactionSendedToast: FC<ConfirmationToastProps> = ({ hash }) => {
-  return <div>Transaction {shortize(hash)} sended to blockchain</div>;
+  return <div>Transaction {shortize(hash)} send to blockchain</div>;
 };
