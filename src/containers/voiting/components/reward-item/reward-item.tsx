@@ -28,7 +28,7 @@ export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency 
       <div className={styles.rewardContent}>
         <span className={styles.rewardHeader}>{description}</span>
         <span className={styles.rewardAmount}>
-          {isExist(amount) && amount !== '' ? FormatNumber(amount) : <DashPlug />}
+          {isExist(amount) && amount !== '' ? FormatNumber(amount) : <DashPlug zoom={1.45} />}
           <span className={styles.rewardCurrency}>{currency}</span>
         </span>
       </div>
