@@ -1,5 +1,6 @@
 import constate from 'constate';
 
+import { EXCHANGE_RATES_URL } from '@app.config';
 import { useTezos } from '@utils/dapp';
 
 import { useToasts } from './use-toasts';
@@ -20,7 +21,7 @@ export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
   const { showErrorToast } = useToasts();
 
   const getExchangeRates = async () =>
-    fetch(' https://templewallet-backend-neae6.ondigitalocean.app/api/exchange-rates')
+    fetch(EXCHANGE_RATES_URL)
       .then(async res => res.json())
       .then((rawExchangeRates: RawExchangeRateEntry[]) =>
         rawExchangeRates.map(({ tokenAddress, ...restProps }) => ({

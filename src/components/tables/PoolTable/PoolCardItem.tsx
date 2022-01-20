@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import { Bage, Button, Tooltip, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -25,6 +24,9 @@ const modeClass = {
 export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const tvl = calculateRateAmount(pool.data.tvl, pool.xtzUsdQuote);
+  const volume24h = calculateRateAmount(pool.data.volume24h, pool.xtzUsdQuote);
 
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
@@ -52,15 +54,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
           />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          <StateCurrencyAmount
-            amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
-              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
-              .integerValue()
-              .toString()}
-            currency="$"
-            isLeftCurrency
-            className={s.cardAmount}
-          />
+          <StateCurrencyAmount amount={tvl} currency="$" isLeftCurrency className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
@@ -69,14 +63,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
           <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
-          <StateCurrencyAmount
-            className={s.cardAmount}
-            amount={fromDecimals(new BigNumber(pool.data.volume24h), 6)
-              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
-              .integerValue()
-              .toString()}
-          />
+          <StateCurrencyAmount amount={volume24h} currency="$" isLeftCurrency className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>

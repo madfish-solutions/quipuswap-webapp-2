@@ -12,7 +12,7 @@ import {
   QSNetwork,
   TokenId,
   WhitelistedTokenWithQSNetworkType,
-  QSMainNet,
+  QSNets,
   QSNetworkType
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
@@ -25,7 +25,7 @@ interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWith
   fa2TokenId?: string;
 }
 
-export const getSavedTokens = (networkId?: QSMainNet) => {
+export const getSavedTokens = (networkId?: QSNets) => {
   const allRawTokens: Array<RawWhitelistedTokenWithQSNetworkType> =
     typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
 

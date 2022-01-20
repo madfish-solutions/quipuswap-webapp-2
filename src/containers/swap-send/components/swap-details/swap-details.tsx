@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { Card, Route } from '@quipuswap/ui-kit';
+import { Card } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
@@ -15,6 +15,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useNetwork } from '@utils/dapp';
 import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
 
+import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
 
 interface SwapDetailsProps {

@@ -1,6 +1,6 @@
 const ERROR_MESSAGE = 'Something went wrong';
 
-export class SomethingWentWrongError extends Error {
+export class SomethingWentWrong extends Error {
   constructor() {
     super(ERROR_MESSAGE);
   }

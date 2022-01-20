@@ -5,9 +5,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumberOptions } from '@utils/formatNumber';
+import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
-import { formatValueBalance } from '@utils/helpers/format-balance';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
@@ -23,6 +22,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   dollarEquivalent?: string;
   amountDecimals?: number;
   options?: FormatNumberOptions;
+  aliternativeView?: Nullable<string>;
 }
 
 const sizeClass = {
@@ -38,9 +38,6 @@ const modeClass = {
 
 const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
 
-const EPSILON = '0.01';
-const FALLBACK_AMOUNT = 0;
-
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
   labelSize = 'small',
@@ -53,7 +50,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  options
+  aliternativeView
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -71,7 +68,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
-  const isSmallAmount = amount && new BigNumber(amount).lte(EPSILON);
+
+  const view = aliternativeView ?? FormatNumber(amount ?? 0, { decimals: amountDecimals });
 
   const content = (
     <span className={wrapClassName}>
@@ -83,7 +81,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{isSmallAmount ? `<${EPSILON}` : formatValueBalance(amount || FALLBACK_AMOUNT)}</span>
+        <span className={s.inner}>{view}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
