@@ -31,10 +31,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
 
-  const { tokenAPool, tokenBPool } = usePairInfo(dex, tokenA, tokenB) || {
-    tokenAPool: null,
-    tokenBPool: null
-  };
+  const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
+
+  const tokenAPool = pairInfo?.tokenAPool ?? null;
+  const tokenBPool = pairInfo?.tokenBPool ?? null;
 
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
@@ -44,7 +44,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
-  const share = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
