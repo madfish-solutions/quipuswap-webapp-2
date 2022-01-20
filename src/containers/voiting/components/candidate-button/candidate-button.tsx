@@ -15,7 +15,6 @@ export const CandidateButton = ({ candidate }: CandidateButtonProps) => {
   if (!isExist(candidate) || !isExist(candidate.address)) {
     return <DashPlug animation={false} />;
   }
-  // console.log(candidate)
 
   const url = `${TZKT_EXPLORER_URL}/${candidate.address}`;
 
