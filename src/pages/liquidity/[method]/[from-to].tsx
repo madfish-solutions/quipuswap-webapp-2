@@ -4,6 +4,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
+import { TestnetAlert } from '@components/common/testnet-alert';
 import { Liquidity } from '@containers/liquidity';
 import s from '@styles/SwapLiquidity.module.sass';
 
@@ -16,6 +17,7 @@ const LiquidityPage: React.FC = () => {
       description={t('liquidity|Liquidity page description. Couple sentences...')}
       className={s.wrapper}
     >
+      <TestnetAlert />
       <Liquidity />
     </BaseLayout>
   );

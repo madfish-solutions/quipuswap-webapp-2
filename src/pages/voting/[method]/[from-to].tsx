@@ -5,6 +5,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { BaseLayout } from '@components/common/BaseLayout';
+import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
@@ -18,6 +19,7 @@ const VotePage: React.FC = () => {
       description={t('vote|Vote page description. Couple sentences...')}
       className={s.wrapper}
     >
+      <TestnetAlert />
       <Voting />
     </BaseLayout>
   );

@@ -4,9 +4,9 @@ import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { DeadlineInput } from '@components/common/deadline-input/deadline-input';
-import { NewPairMessage } from '@components/common/new-pair-message';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -127,7 +127,9 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
           </div>
         </>
       )}
-      {isNewPair && <NewPairMessage className={s['mt-24']} />}
+      {isNewPair && (
+        <AlarmMessage message="Note! The pool doesn't exist. You will create the new one." className={s['mt-24']} />
+      )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
           Add
