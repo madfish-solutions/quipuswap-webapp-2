@@ -33,8 +33,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
 
-  const tokenAPool = pairInfo?.tokenAPool ?? null;
-  const tokenBPool = pairInfo?.tokenBPool ?? null;
+  const isTokensOrderValid = tokenA?.contractAddress === pairInfo?.tokenA.contractAddress;
+
+  const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
+  const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
 
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
