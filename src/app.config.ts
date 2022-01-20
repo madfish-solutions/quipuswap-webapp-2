@@ -22,7 +22,7 @@ export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/5
 export const CLOUDFLARE_IPFS = 'https://cloudflare-ipfs.com/ipfs';
 export const BAKERS_HTTP = 'https://services.tzkt.io/v1/avatars';
 export const IPFS = 'ipfs';
-export const IPFS_IO = 'https://ipfs.io/ipfs/';
+export const IPFS_GATEWAY = process.env.NEXT_PUBLIC_IPFS_GATEWAY!;
 
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
@@ -64,7 +64,7 @@ export const TEZOS_TOKEN: WhitelistedToken = {
     decimals: 6,
     name: 'Tezos',
     symbol: 'TEZ',
-    thumbnailUri: 'https://ipfs.io/ipfs/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222'
+    thumbnailUri: `${IPFS_GATEWAY}/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222`
   }
 };
 
@@ -88,7 +88,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
     decimals: 6,
     symbol: 'QUIPU',
     name: 'Quipuswap Governance Token',
-    thumbnailUri: 'https://ipfs.io/ipfs/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP'
+    thumbnailUri: `${IPFS_GATEWAY}/QmcSH2iaipU1kqcQfZhV5b2CL6Rm8Q8agRwdk1xq38Y3sP`
   }
 };
 
