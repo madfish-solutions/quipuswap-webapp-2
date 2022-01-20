@@ -131,19 +131,19 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </div>
         {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
-        {tokensModal && (
-          <TokensModal
-            blackListedTokens={blackListedTokens}
-            isOpen={tokensModal}
-            onRequestClose={() => setTokensModal(false)}
-            onChange={selectedToken => {
-              setToken?.(selectedToken);
-              handleChange?.(selectedToken);
-              setTokensModal(false);
-            }}
-          />
-        )}
       </div>
+      {tokensModal && (
+        <TokensModal
+          blackListedTokens={blackListedTokens}
+          isOpen={tokensModal}
+          onRequestClose={() => setTokensModal(false)}
+          onChange={selectedToken => {
+            setToken?.(selectedToken);
+            handleChange?.(selectedToken);
+            setTokensModal(false);
+          }}
+        />
+      )}
     </>
   );
 };
