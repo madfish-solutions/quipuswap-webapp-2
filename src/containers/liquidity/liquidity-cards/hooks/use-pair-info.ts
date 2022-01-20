@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
@@ -16,23 +16,23 @@ export const usePairInfo = (
 ) => {
   const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
 
-  const loadPairInfo = async (
-    dex: Nullable<FoundDex>,
-    tokenA: Nullable<WhitelistedToken>,
-    tokenB: Nullable<WhitelistedToken>
-  ) => {
-    if (!dex || !tokenA || !tokenB) {
-      setPairInfo(null);
+  const loadPairInfo = useCallback(
+    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+      if (!dex || !tokenA || !tokenB) {
+        setPairInfo(null);
 
-      return;
-    }
-    const newPairInfo =
-      dex.contract.address === TOKEN_TO_TOKEN_DEX
-        ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
-        : getTezTokenPairInfo(dex, tokenA, tokenB);
+        return;
+      }
+      const newPairInfo =
+        dex.contract.address === TOKEN_TO_TOKEN_DEX
+          ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
+          : getTezTokenPairInfo(dex, tokenA, tokenB);
 
-    setPairInfo(newPairInfo);
-  };
+      setPairInfo(newPairInfo);
+    },
+    []
+  );
+
   useEffect(() => {
     void loadPairInfo(dex, tokenA, tokenB);
     // Waiting for DEX changing because it is loading asynchronously

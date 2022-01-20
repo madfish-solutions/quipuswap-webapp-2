@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
@@ -11,21 +11,24 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
 
   const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
 
-  const getTokenBalance = async (token: Nullable<WhitelistedToken>) => {
-    if (!tezos || !accountPkh || !token) {
-      return;
-    }
+  const getTokenBalance = useCallback(
+    async (token: Nullable<WhitelistedToken>) => {
+      if (!tezos || !accountPkh || !token) {
+        return;
+      }
 
-    const { contractAddress, type, fa2TokenId } = token;
+      const { contractAddress, type, fa2TokenId } = token;
 
-    const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
+      const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
-    if (userTokenABalance) {
-      setTokenBalance(userTokenABalance);
-    }
+      if (userTokenABalance) {
+        setTokenBalance(userTokenABalance);
+      }
 
-    return userTokenABalance;
-  };
+      return userTokenABalance;
+    },
+    [accountPkh, tezos]
+  );
 
   useEffect(() => {
     void getTokenBalance(token);

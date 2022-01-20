@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
@@ -24,19 +24,18 @@ export const useLoadLiquidityShare = (
 
   const [share, setShare] = useState<Nullable<LiquidityShareResult>>(null);
 
-  const loadShare = async (
-    dex: Nullable<FoundDex>,
-    tokenA: Nullable<WhitelistedToken>,
-    tokenB: Nullable<WhitelistedToken>
-  ) => {
-    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
-      return;
-    }
+  const loadShare = useCallback(
+    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+      if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+        return;
+      }
 
-    const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, dex, tokenA, tokenB);
+      const userLiquidityShares = await loadUserLiquidiytShares(tezos, accountPkh, dex, tokenA, tokenB);
 
-    setShare(userLiquidityShares);
-  };
+      setShare(userLiquidityShares);
+    },
+    [tezos, accountPkh]
+  );
 
   useEffect(() => {
     void loadShare(dex, tokenA, tokenB);
