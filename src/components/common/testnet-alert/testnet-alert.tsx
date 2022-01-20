@@ -15,7 +15,7 @@ export const TestnetAlert: FC = () => {
 
   return isTestNet ? (
     <div className={s.testNet}>
-      <AlarmMessage message={t('common|You are on Test net now!')} className={s.AlarmMessage} />
+      <AlarmMessage message={t('common|You are on Testnet now!')} className={s.AlarmMessage} />
     </div>
   ) : null;
 };
