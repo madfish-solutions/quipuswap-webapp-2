@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { Button } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
@@ -31,6 +32,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   transactionDuration,
   setTransactionDuration
 }) => {
+  const { t } = useTranslation(['liquidity']);
   const {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -128,7 +130,10 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
         </>
       )}
       {isNewPair && (
-        <AlarmMessage message="Note! The pool doesn't exist. You will create the new one." className={s['mt-24']} />
+        <AlarmMessage
+          message={t("liquidity|Note! The pool doesn't exist. You will create the new one.")}
+          className={s['mt-24']}
+        />
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleAddLiquidity} disabled={isButtonDisabled}>
