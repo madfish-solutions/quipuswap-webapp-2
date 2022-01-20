@@ -12,7 +12,7 @@ import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liqu
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
+import { getWhitelistedTokenSymbol, isExist, isNull } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -33,8 +33,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
 
-  const tokenAPool = pairInfo?.tokenAPool ?? null;
-  const tokenBPool = pairInfo?.tokenBPool ?? null;
+  const isTokensOrderValid = tokenA?.contractAddress === pairInfo?.tokenA.contractAddress;
+
+  const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
+  const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
 
   const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
   const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
@@ -81,7 +83,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         )}
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={tokenAPool} currency={tokenAName} isLoading={isNull(dex)} />
+        <StateCurrencyAmount
+          amount={tokenAPool}
+          currency={tokenAName}
+          isLoading={isExist(dex) || isExist(tokenA)}
+          amountDecimals={tokenA?.metadata.decimals}
+        />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -92,7 +99,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         )}
         className={s.LiquidityDetails_CardCell}
       >
-        <StateCurrencyAmount amount={tokenBPool} currency={tokenBName} isLoading={isNull(dex)} />
+        <StateCurrencyAmount
+          amount={tokenBPool}
+          currency={tokenBName}
+          isLoading={isExist(dex) || isExist(tokenB)}
+          amountDecimals={tokenB?.metadata.decimals}
+        />
       </DetailsCardCell>
 
       {accountPkh && (
