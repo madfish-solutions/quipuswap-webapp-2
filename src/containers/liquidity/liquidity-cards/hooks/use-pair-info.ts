@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
@@ -16,8 +16,8 @@ export const usePairInfo = (
 ) => {
   const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
 
-  useEffect(() => {
-    const loadPairInfo = async () => {
+  const loadPairInfo = useCallback(
+    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
       if (!dex || !tokenA || !tokenB) {
         setPairInfo(null);
 
@@ -29,11 +29,15 @@ export const usePairInfo = (
           : getTezTokenPairInfo(dex, tokenA, tokenB);
 
       setPairInfo(newPairInfo);
-    };
-    void loadPairInfo();
+    },
+    []
+  );
+
+  useEffect(() => {
+    void loadPairInfo(dex, tokenA, tokenB);
     // Waiting for DEX changing because it is loading asynchronously
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dex]);
 
-  return pairInfo;
+  return { pairInfo, updatePairInfo: loadPairInfo };
 };

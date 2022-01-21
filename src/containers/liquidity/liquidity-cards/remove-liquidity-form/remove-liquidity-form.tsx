@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ArrowDown, Button, Plus } from '@quipuswap/ui-kit';
+import { ArrowDown, Plus } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -11,6 +11,7 @@ import { DeadlineInput } from '@components/common/deadline-input/deadline-input'
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
+import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals, isExist } from '@utils/helpers';
 
@@ -45,7 +46,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    shares,
+    share,
     slippage,
     setSlippage,
     handleRemoveLiquidity,
@@ -74,7 +75,7 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
   const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
-  const isUnvoteVisible = !isDeadlineAndSlippageVisible && shares && new BigNumber(lpTokenInput).gt(shares.unfrozen);
+  const isUnvoteVisible = !isDeadlineAndSlippageVisible && share && new BigNumber(lpTokenInput).gt(share.unfrozen);
 
   return (
     <>
@@ -82,13 +83,13 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={shares?.total.toFixed()}
+        balance={share?.total.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
-        frozenBalance={shares?.frozen.toFixed()}
+        frozenBalance={share?.frozen.toFixed()}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}

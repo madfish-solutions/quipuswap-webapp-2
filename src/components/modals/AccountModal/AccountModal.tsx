@@ -1,11 +1,12 @@
 import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
 
-import { Copy, Modal, Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Copy, Modal, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import { CheckMark } from '@components/svg/CheckMark';
+import { Button } from '@components/ui/elements/button';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';

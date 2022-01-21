@@ -1,9 +1,11 @@
 import { useContext } from 'react';
 
-import { Bage, Button, Tooltip, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Bage, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { Tooltip } from '@components/ui/components/tooltip';
+import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
@@ -47,7 +49,6 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
         <div className={s.cardCellText}>
           {t('home|TVL')}
           <Tooltip
-            sizeT="small"
             content={t(
               'TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.'
             )}
@@ -60,7 +61,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
           {t('home|Volume 24h')}
-          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+          <Tooltip content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
           <StateCurrencyAmount amount={volume24h} currency="$" isLeftCurrency className={s.cardAmount} />

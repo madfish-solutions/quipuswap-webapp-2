@@ -1,6 +1,6 @@
 import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
 
-import { Button, Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -12,6 +12,7 @@ import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
@@ -131,19 +132,19 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         </div>
         {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
         <ComplexError error={error} />
-        {tokensModal && (
-          <TokensModal
-            blackListedTokens={blackListedTokens}
-            isOpen={tokensModal}
-            onRequestClose={() => setTokensModal(false)}
-            onChange={selectedToken => {
-              setToken?.(selectedToken);
-              handleChange?.(selectedToken);
-              setTokensModal(false);
-            }}
-          />
-        )}
       </div>
+      {tokensModal && (
+        <TokensModal
+          blackListedTokens={blackListedTokens}
+          isOpen={tokensModal}
+          onRequestClose={() => setTokensModal(false)}
+          onChange={selectedToken => {
+            setToken?.(selectedToken);
+            handleChange?.(selectedToken);
+            setTokensModal(false);
+          }}
+        />
+      )}
     </>
   );
 };

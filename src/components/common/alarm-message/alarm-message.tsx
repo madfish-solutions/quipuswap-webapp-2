@@ -18,7 +18,5 @@ const themeClass = {
 export const AlarmMessage: FC<Props> = ({ message, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(className, s.alarmMessage, themeClass[colorThemeMode]);
-
-  return <div className={compoundClassName}>{message}</div>;
+  return <div className={cx(className, s.alarmMessage, themeClass[colorThemeMode])}>{message}</div>;
 };

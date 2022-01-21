@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
@@ -11,9 +11,8 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
 
   const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
 
-  useEffect(() => {
-    let isMounted = true;
-    const getTokenBalance = async () => {
+  const getTokenBalance = useCallback(
+    async (token: Nullable<WhitelistedToken>) => {
       if (!tezos || !accountPkh || !token) {
         return;
       }
@@ -22,16 +21,19 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
 
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
-      if (userTokenABalance && isMounted) {
+      if (userTokenABalance) {
         setTokenBalance(userTokenABalance);
       }
-    };
-    void getTokenBalance();
 
-    return () => {
-      isMounted = false;
-    };
+      return userTokenABalance;
+    },
+    [accountPkh, tezos]
+  );
+
+  useEffect(() => {
+    void getTokenBalance(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, token]);
 
-  return tokenBalance;
+  return { tokenBalance, updateTokenBalance: getTokenBalance };
 };
