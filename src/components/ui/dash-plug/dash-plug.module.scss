@@ -34,8 +34,6 @@ $dash-quantity: 4;
 }
 
 .inline-loading {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   column-gap: $column-gap;
 
@@ -48,8 +46,8 @@ $dash-quantity: 4;
 }
 
 .dash {
-  width: $dash-width;
-  height: $dash-height;
+  width: calc( $dash-width * var(--zoom));
+  height: calc(  $dash-height * var(--zoom));
   background-color: var(--main-color);
 }
 
