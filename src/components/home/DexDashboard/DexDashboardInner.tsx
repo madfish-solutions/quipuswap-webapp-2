@@ -7,8 +7,7 @@ import { useTranslation } from 'next-i18next';
 
 import { NETWORK } from '@app.config';
 import { Maybe } from '@graphql';
-import { calculateRateAmount, isExist } from '@utils/helpers';
-import { QSNetworkType } from '@utils/types';
+import { calculateRateAmount, isExist, isNetworkMainnet } from '@utils/helpers';
 
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
@@ -44,7 +43,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {NETWORK.type === QSNetworkType.MAIN ? (
+      {isNetworkMainnet(NETWORK) ? (
         <>
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}

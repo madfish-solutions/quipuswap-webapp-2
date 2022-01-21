@@ -4,7 +4,7 @@ import memoizee from 'memoizee';
 
 import { MAINNET_TOKENS, networksDefaultTokens, SAVED_TOKENS_KEY, TESTNET_TOKENS, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
+import { getTokenSlug, ipfsToHttps, isNetworkMainnet, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
 import {
   WhitelistedToken,
@@ -12,8 +12,7 @@ import {
   QSNetwork,
   TokenId,
   WhitelistedTokenWithQSNetworkType,
-  QSNets,
-  QSNetworkType
+  QSNets
 } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
@@ -111,7 +110,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(network.type === QSNetworkType.TEST ? TESTNET_TOKENS : MAINNET_TOKENS));
+  const response = await fetch(ipfsToHttps(isNetworkMainnet(network) ? MAINNET_TOKENS : TESTNET_TOKENS));
   const json = await response.json();
   if (json.tokens?.length) {
     tokens = tokens.concat(json.tokens);

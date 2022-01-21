@@ -5,9 +5,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Run development servers for mainnet or hangzhounet:
 
 ```bash
-npm run dev:local:{network_name}
+npm run dev:{network_name}
 # or
-yarn dev:local:{network_name}
+yarn dev:{network_name}
 ```
 
 where `{network_name}` is either mainnet or hangzhounet

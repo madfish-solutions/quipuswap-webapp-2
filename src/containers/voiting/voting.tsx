@@ -93,13 +93,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     });
 
   useEffect(() => {
-    setTokenPair({
-      token1: TEZOS_TOKEN,
-      token2: networksDefaultTokens[NETWORK_ID]
-    });
-  }, []);
-
-  useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
       handleSearchToken({
         tokens,

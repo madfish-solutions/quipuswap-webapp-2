@@ -9,7 +9,7 @@ import { DexDashboard } from '@components/home/DexDashboard';
 import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
-import { QSNetworkType } from '@utils/types';
+import { isNetworkMainnet } from '@utils/helpers';
 
 export const Home: FC = () => {
   const { t } = useTranslation(['common', 'home']);
@@ -20,7 +20,7 @@ export const Home: FC = () => {
       <News />
       <DexDashboard />
       <Opportunities />
-      {NETWORK.type === QSNetworkType.MAIN ? <TopPairs /> : null}
+      {isNetworkMainnet(NETWORK) ? <TopPairs /> : null}
       {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>

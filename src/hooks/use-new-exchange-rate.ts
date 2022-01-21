@@ -3,8 +3,7 @@ import constate from 'constate';
 
 import { NETWORK, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { getTokenSlug } from '@utils/helpers';
-import { QSNetworkType } from '@utils/types';
+import { getTokenSlug, isNetworkMainnet } from '@utils/helpers';
 
 import { useExchangeRates } from './useExchangeRate';
 
@@ -18,7 +17,7 @@ export const [NewExchangeRatesProvider, useNewExchangeRates] = constate(() => {
       fa2TokenId: tokenId,
       type: tokenId === undefined ? Standard.Fa12 : Standard.Fa2
     });
-    if (tokenSlug !== getTokenSlug(TEZOS_TOKEN) || NETWORK.type === QSNetworkType.MAIN) {
+    if (tokenSlug !== getTokenSlug(TEZOS_TOKEN) || isNetworkMainnet(NETWORK)) {
       acc[tokenSlug] = new BigNumber(exchangeRate);
     }
 
