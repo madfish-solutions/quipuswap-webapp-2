@@ -16,7 +16,7 @@ import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
-import { useAccountPkh, useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
@@ -126,7 +126,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const exchangeRates = useNewExchangeRates();
   const tezos = useTezos();
   const { data: tokens } = useTokens();
-  const network = useNetwork();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
 
@@ -135,7 +134,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const prevInitialFromRef = useRef<string>();
   const prevInitialToRef = useRef<string>();
   const prevAccountPkh = useRef<string | null>(null);
-  const prevNetworkRef = useRef(network);
 
   useEffect(() => void validateField(SwapField.INPUT_AMOUNT), [validateField, maxInputAmounts, balances]);
   useEffect(() => void validateField(SwapField.OUTPUT_AMOUNT), [validateField, maxOutputAmounts]);
@@ -238,13 +236,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     await submitForm();
     resetTokensAmounts();
   };
-
-  useEffect(() => {
-    if (network.id !== prevNetworkRef.current.id) {
-      resetTokensAmounts();
-    }
-    prevNetworkRef.current = network;
-  }, [network, resetTokensAmounts]);
 
   const handleTabSwitch = useCallback(
     (newTabId: string) => {

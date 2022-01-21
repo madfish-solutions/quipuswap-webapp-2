@@ -3,9 +3,15 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE, EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import {
+  DEFAULT_SLIPPAGE_PERCENTAGE,
+  EMPTY_POOL_AMOUNT,
+  NETWORK_ID,
+  TEZOS_TOKEN,
+  TOKEN_TO_TOKEN_DEX
+} from '@app.config';
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
@@ -30,7 +36,6 @@ export const useAddLiquidityService = (
   onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
-  const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
@@ -324,7 +329,7 @@ export const useAddLiquidityService = (
 
       const initializeLiquidityTezOperation = await initializeLiquidityTez(
         tezos,
-        networkId,
+        NETWORK_ID,
         token,
         tokenBValue,
         tezValue

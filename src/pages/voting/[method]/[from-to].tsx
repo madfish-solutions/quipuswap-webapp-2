@@ -3,7 +3,7 @@ import React from 'react';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
+import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
@@ -34,7 +34,7 @@ export const getServerSideProps = async ({
 }) => {
   const splittedTokens = query['from-to'].split('-');
   const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(MAINNET_DEFAULT_TOKEN);
+  const to = getWhitelistedTokenSymbol(networksDefaultTokens[NETWORK_ID]);
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 

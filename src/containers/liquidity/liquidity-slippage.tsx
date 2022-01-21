@@ -4,15 +4,9 @@ import { Slippage } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import {
-  DEFAULT_SLIPPAGE_PERCENTAGE,
-  HANGZHOUNET_DEFAULT_TOKEN,
-  MAINNET_DEFAULT_TOKEN,
-  TEZOS_TOKEN
-} from '@app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
-import { useNetwork } from '@utils/dapp';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
@@ -48,8 +42,6 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
 
-  const network = useNetwork().id;
-
   const handleChange = (newValue: Nullable<string>) => {
     onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
   };
@@ -61,7 +53,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, slippage);
 
   const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
-  const DEFAULT_STABLE_TOKEN = network === 'mainnet' ? MAINNET_DEFAULT_TOKEN : HANGZHOUNET_DEFAULT_TOKEN;
+  const DEFAULT_STABLE_TOKEN = networksDefaultTokens[NETWORK_ID];
 
   return (
     <>

@@ -2,12 +2,12 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@app.config';
+import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY, NETWORK, NETWORK_ID } from '@app.config';
 import { NoBeaconWallet, WalletNotConected } from '@errors';
 import { isDefaultConnectType, isNetworkMainnet } from '@utils/helpers';
 import { LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
-import { getNetwork, toBeaconNetworkType } from '../network';
+import { toBeaconNetworkType } from '../network';
 import { ReadOnlySigner } from '../ReadOnlySigner';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
@@ -19,13 +19,11 @@ export const beaconWallet =
         name: APP_NAME,
         iconUrl: `${BASE_URL}/favicon.ico`,
         preferredNetwork: (() => {
-          const net = getNetwork();
-
-          if (isDefaultConnectType(net) || isNetworkMainnet(net)) {
+          if (isDefaultConnectType(NETWORK) || isNetworkMainnet(NETWORK)) {
             return toBeaconNetworkType(QSNets.mainnet);
           }
 
-          return toBeaconNetworkType(net.id);
+          return toBeaconNetworkType(NETWORK_ID);
         })()
       });
 
