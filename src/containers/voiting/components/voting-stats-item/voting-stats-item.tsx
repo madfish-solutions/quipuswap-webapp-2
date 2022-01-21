@@ -1,8 +1,9 @@
 import { FC, Fragment, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, Nullable, Tooltip } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Nullable } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { Tooltip } from '@components/ui/components/tooltip';
 import { DashPlug } from '@components/ui/dash-plug';
 import { FormatNumber } from '@utils/formatNumber';
 import { formatBalance, isNull } from '@utils/helpers';
