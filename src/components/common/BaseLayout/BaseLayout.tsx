@@ -6,6 +6,7 @@ import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Script from 'next/script';
 
+import { BASE_URL } from '@app.config';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
@@ -15,7 +16,6 @@ import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
 
 import s from './BaseLayout.module.sass';
-import { BASE_URL } from '@app.config';
 
 interface BaseLayoutProps {
   title?: string;
@@ -35,7 +35,7 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     }
   }, [colorThemeMode]);
 
-  const isDarkFavicon = colorThemeMode === ColorModes.Dark
+  const isDarkFavicon = colorThemeMode === ColorModes.Dark;
 
   return (
     <>
