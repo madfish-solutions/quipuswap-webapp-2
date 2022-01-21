@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
-import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useToasts } from '@hooks/use-toasts';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
-import { getTokenSlug, swap, toDecimals } from '@utils/helpers';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { getTokenSlug, getWhitelistedTokenSymbol, swap, toDecimals } from '@utils/helpers';
+import { getSwapMessage } from '@utils/helpers/get-success-messages';
 import { getRouteWithInput } from '@utils/routing';
 
 import { SwapAction, SwapField, SwapFormValues } from '../utils/types';
@@ -26,12 +27,12 @@ const SECS_IN_MIN = 60;
 
 export const useSwapFormik = () => {
   const validationSchema = useValidationSchema();
-  const { t } = useTranslation(['common', 'swap']);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const network = useNetwork();
-  const { showLoaderToast, showSuccessToast, showErrorToast } = useToasts();
+  const { showErrorToast } = useToasts();
+  const confirmOperation = useConfirmOperation();
 
   const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
     if (!tezos || !accountPkh) {
@@ -41,10 +42,9 @@ export const useSwapFormik = () => {
     const { inputAmount, inputToken, outputToken, recipient, slippage, action, deadline } =
       formValues as SwapFormValues;
 
-    showLoaderToast();
     const rawInputAmount = toDecimals(inputAmount, inputToken);
     try {
-      await swap(tezos, accountPkh, {
+      const walletOperation = await swap(tezos, accountPkh, {
         deadlineTimespan: deadline.times(SECS_IN_MIN).integerValue(BigNumber.ROUND_HALF_UP).toNumber(),
         inputAmount: rawInputAmount,
         inputToken: inputToken,
@@ -58,7 +58,9 @@ export const useSwapFormik = () => {
         })!,
         ttDexAddress: TTDEX_CONTRACTS[network.id]
       });
-      showSuccessToast(t('swap|Swap completed!'));
+      await confirmOperation(walletOperation.opHash, {
+        message: getSwapMessage(getWhitelistedTokenSymbol(inputToken), getWhitelistedTokenSymbol(outputToken))
+      });
     } catch (e) {
       showErrorToast(e as Error);
       throw e;

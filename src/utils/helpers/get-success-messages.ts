@@ -9,3 +9,7 @@ export const getInitializeLiquidityMessage = (firstTokenName: string, secondToke
 export const getRemoveLiquidityMessage = (firstTokenName: string, secondTokenName: string) => {
   return `The liquidity was removed from the ${firstTokenName}/${secondTokenName} pool!`;
 };
+
+export const getSwapMessage = (firstTokenName: string, secondTokenName: string) => {
+  return `Swap ${firstTokenName} to ${secondTokenName} was completed!`;
+};
