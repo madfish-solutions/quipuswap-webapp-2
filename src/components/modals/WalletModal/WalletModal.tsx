@@ -1,8 +1,8 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { Checkbox, Modal } from '@quipuswap/ui-kit';
-import { NotGrantedTempleWalletError } from '@temple-wallet/dapp';
+import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@app.config';
@@ -13,8 +13,11 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { WalletType } from '@utils/types';
 
-import { Wallets } from './content';
+import { Temple, Beacon } from './content';
 import s from './WalletModal.module.sass';
+
+const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
+const INSTALL_TEMPLE = 'Install Temple';
 
 interface WalletProps {
   className?: string;
@@ -23,21 +26,28 @@ interface WalletProps {
   label: string;
   onClick: (walletType: WalletType) => void;
   disabled?: boolean;
+  available?: boolean;
 }
 
-export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = false }) => (
-  <Button
-    className={s.button}
-    innerClassName={s.buttonInner}
-    textClassName={s.buttonContent}
-    theme="secondary"
-    onClick={() => onClick(id)}
-    disabled={disabled}
-  >
-    <Icon className={s.icon} />
-    <span>{label}</span>
-  </Button>
-);
+export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = false, available }) => {
+  return (
+    <Button
+      className={s.button}
+      innerClassName={s.buttonInner}
+      textClassName={s.buttonContent}
+      theme="secondary"
+      external
+      href={available === false ? TEMPLE_WALLET_LINK : undefined}
+      onClick={() => {
+        available && onClick(id);
+      }}
+      disabled={disabled}
+    >
+      <Icon className={s.icon} />
+      <span>{label}</span>
+    </Button>
+  );
+};
 
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
@@ -48,6 +58,11 @@ export const WalletModal: FC = () => {
   const { closeAccountInfoModal } = useConnectModalsState();
   const connectWithBeacon = useConnectWithBeacon();
   const connectWithTemple = useConnectWithTemple();
+  const [isTempleInstalled, setIsTempleInstalled] = useState(true);
+
+  useEffect(() => {
+    TempleWallet.isAvailable().then(setIsTempleInstalled);
+  }, []);
 
   const handleConnectClick = useCallback(
     async (walletType: WalletType) => {
@@ -116,9 +131,21 @@ export const WalletModal: FC = () => {
         </div>
       </div>
       <div className={s.wallets}>
-        {Wallets.map(({ id, Icon, label }) => (
-          <Wallet key={id} id={id} Icon={Icon} label={label} onClick={handleConnectClick} disabled={!check1} />
-        ))}
+        <Wallet
+          available={isTempleInstalled}
+          id={Temple.id}
+          Icon={Temple.Icon}
+          label={isTempleInstalled ? Temple.label : INSTALL_TEMPLE}
+          onClick={handleConnectClick}
+          disabled={!check1}
+        />
+        <Wallet
+          id={Beacon.id}
+          Icon={Beacon.Icon}
+          label={Beacon.label}
+          onClick={handleConnectClick}
+          disabled={!check1}
+        />
       </div>
     </Modal>
   );
