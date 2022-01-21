@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'reac
 
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
+import { FormApi } from 'final-form';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 import { noop } from 'rxjs';
@@ -13,7 +14,7 @@ import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
+import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData, isNull } from '@utils/helpers';
 import {
   VoterType,
   TokenDataMap,
@@ -47,6 +48,10 @@ const fallbackTokenPair: WhitelistedTokenPair = {
   token2: MAINNET_DEFAULT_TOKEN
 };
 
+interface pForm {
+  form: Nullable<FormApi<VoteFormValues, Partial<VoteFormValues>>>;
+}
+
 export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -77,6 +82,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
+
+  const [pointerForm, setPointerForm] = useState<pForm>({ form: null });
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
@@ -141,6 +148,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, tokenPair]);
 
+  const cleanUp = useCallback(() => {
+    if (!isNull(pointerForm.form)) {
+      pointerForm.form.mutators.setValue('balance1', null);
+    }
+  }, [pointerForm]);
+
   useEffect(() => {
     if (initialLoad && token1 && token2) {
       getBalance();
@@ -181,7 +194,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               tab: currentTab.id,
               confirmOperation,
               showErrorToast,
-              getBalance
+              getBalance,
+              cleanUp
             });
           }}
           mutators={{
@@ -189,29 +203,35 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               changeValue(state, field, () => value);
             }
           }}
-          render={({ handleSubmit, form }) => (
-            <VotingForm
-              form={form}
-              debounce={100}
-              save={noop}
-              tabsState={tabsState}
-              rewards={rewards}
-              voter={voter}
-              dex={dex}
-              tokenPair={tokenPair}
-              tokensData={tokensData}
-              currentTab={currentTab}
-              setRewards={setRewards}
-              setDex={setDex}
-              setTokens={setTokens}
-              setTokenPair={setTokenPair}
-              setVoter={setVoter}
-              setTabsState={setTabsState}
-              getBalance={getBalance}
-              handleSubmit={handleSubmit}
-              handleTokenChange={handleTokenChange}
-            />
-          )}
+          render={({ handleSubmit, form }) => {
+            if (!pointerForm) {
+              setPointerForm({ form });
+            }
+
+            return (
+              <VotingForm
+                form={form}
+                debounce={100}
+                save={noop}
+                tabsState={tabsState}
+                rewards={rewards}
+                voter={voter}
+                dex={dex}
+                tokenPair={tokenPair}
+                tokensData={tokensData}
+                currentTab={currentTab}
+                setRewards={setRewards}
+                setDex={setDex}
+                setTokens={setTokens}
+                setTokenPair={setTokenPair}
+                setVoter={setVoter}
+                setTabsState={setTabsState}
+                getBalance={getBalance}
+                handleSubmit={handleSubmit}
+                handleTokenChange={handleTokenChange}
+              />
+            );
+          }}
         />
 
         <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
