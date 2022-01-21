@@ -2,13 +2,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-Run development servers for mainnet and hangzhounet:
+Run development servers for mainnet or hangzhounet:
 
 ```bash
-npm run dev:local:mainnet
+npm run dev:local:{network_name}
 # or
-yarn dev:local:hangzhounet
+yarn dev:local:{network_name}
 ```
+
+where `{network_name}` is either mainnet or hangzhounet
 
 Mainnet version of app will be available at http://localhost:3000 and hangzhounet version will be available at http://localhost:3002
 

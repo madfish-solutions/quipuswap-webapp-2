@@ -20,6 +20,21 @@ module.exports = withReactSvg({
         permanent: true
       },
       {
+        source: '/liquidity',
+        destination: `/liquidity/add/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true
+      },
+      {
+        source: '/liquidity/add',
+        destination: `/liquidity/add/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true
+      },
+      {
+        source: '/liquidity/remove',
+        destination: `/liquidity/remove/${process.env.DEFAULT_SWAP_URI}`,
+        permanent: true
+      },
+      {
         source: '/voting',
         destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
         permanent: true
