@@ -47,7 +47,7 @@
         transform: translateY(-50%) rotate(180deg)
   \:global(.customSelect__option)
     background-color: transparent
-    transition: background-color $animationTime
+    transition: background-color $colorChangeAnimationTime
     padding: 8px 16px
     cursor: pointer
     color: $text-02
@@ -83,6 +83,7 @@
     &:hover
       \:global(.customSelect__option--is-focused)
         background-color: $hover-light-row
+        color: $text-01
 
 .dark
   \:global(.customSelect__control)
@@ -103,3 +104,4 @@
     &:hover
       \:global(.customSelect__option--is-focused)
         background-color: $hover-dark-row
+        color: $text-inverse
