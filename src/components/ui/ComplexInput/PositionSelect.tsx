@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, HTMLProps, FC } from 'react';
+import React, { useRef, useState, useContext, HTMLProps, FC, Fragment, useEffect } from 'react';
 
 import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -11,6 +11,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
@@ -26,6 +27,7 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   notSelectable1?: WhitelistedToken;
   notSelectable2?: WhitelistedToken;
+  tokensUpdading?: boolean;
   handleChange?: (tokenPair: WhitelistedTokenPair) => void;
   handleBalance: (value: string) => void;
   tokenPair: Nullable<WhitelistedTokenPair>;
@@ -54,6 +56,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   tokenPair,
   setTokenPair,
   notFrozen,
+  tokensUpdading,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -61,7 +64,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [tokensLoading, setTokensLoading] = useState<boolean>(false);
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {
@@ -72,6 +75,11 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const token1 = tokenPair?.token1 ?? TEZOS_TOKEN;
   const token2 = tokenPair?.token2 ?? TEZOS_TOKEN;
+  useEffect(() => {
+    if (tokenPair?.token2) {
+      setTokensLoading(false);
+    }
+  }, [tokenPair?.token2]);
 
   return (
     <>
@@ -79,6 +87,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
+          setTokensLoading(true);
           setTokenPair(selectedToken);
           if (handleChange) {
             handleChange(selectedToken);
@@ -129,21 +138,27 @@ export const PositionSelect: FC<PositionSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos
-                firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
-                secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
-              />
-              <h6 className={cx(s.token)}>
-                {tokenPair
-                  ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(
-                      tokenPair.token2,
-                      5
-                    )}`
-                  : 'Select LP'}
-              </h6>
-              <Shevron />
+              {tokensUpdading || tokensLoading ? (
+                <DashPlug zoom={2} />
+              ) : (
+                <Fragment>
+                  <TokensLogos
+                    firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+                    firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+                    secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+                    secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+                  />
+                  <h6 className={cx(s.token)}>
+                    {tokenPair
+                      ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(
+                          tokenPair.token2,
+                          5
+                        )}`
+                      : 'Select LP'}
+                  </h6>
+                  <Shevron />
+                </Fragment>
+              )}
             </Button>
           </div>
         </div>

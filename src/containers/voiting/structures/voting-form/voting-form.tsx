@@ -27,7 +27,7 @@ import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
+import { isAssetEqual, parseDecimals, isNull, getTokenSlug } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import {
   TokenDataMap,
@@ -56,8 +56,6 @@ const TabsContent = [
 ];
 
 interface VotingFormProps {
-  save: (arg: VoteFormValues) => void;
-  debounce: number;
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
   tabsState: VotingTabs;
@@ -67,6 +65,7 @@ interface VotingFormProps {
   tokenPair: WhitelistedTokenPair;
   tokensData: TokenDataMap;
   currentTab: TabsContent;
+  tokensUpdading: boolean;
   setRewards: Dispatch<SetStateAction<string>>;
   setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
   setTokens: (tokens: WhitelistedToken[]) => void;
@@ -82,8 +81,6 @@ const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZO
 
 const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
-  debounce,
-  save,
   values,
   form,
   tabsState,
@@ -99,7 +96,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   tokensData,
   currentTab,
   setTabsState,
-  getBalance
+  getBalance,
+  tokensUpdading
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
@@ -192,11 +190,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleSetActiveId = (val: string) => {
-    router.replace(
-      `/voting/${val}/${getWhitelistedTokenSymbol(tokenPair.token1)}-${getWhitelistedTokenSymbol(tokenPair.token2)}`,
-      undefined,
-      { shallow: true }
-    );
+    router.replace(`/voting/${val}/${getTokenSlug(tokenPair.token1)}-${getTokenSlug(tokenPair.token2)}`, undefined, {
+      shallow: true
+    });
     setTabsState(val as VotingTabs);
   };
 
@@ -260,6 +256,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               id="liquidity-remove-input"
               label={currentTab.label}
               className={s.input}
+              tokensUpdading={tokensUpdading}
               error={errorInterceptor((meta.dirty && meta.error) || meta.submitError)}
             />
           )}
