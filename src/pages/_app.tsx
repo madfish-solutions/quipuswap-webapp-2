@@ -94,7 +94,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         {/* Fonts */}
         <link href="/fonts/style.css" rel="stylesheet" />
         {/* Favicons */}
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" id="favicon" href="/favicon.ico" />
         <link rel="icon" href="/favicon-32x32.png" type="image/png" />
         <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
         <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
