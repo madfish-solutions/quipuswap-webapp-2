@@ -52,6 +52,14 @@ interface pForm {
   form: Nullable<FormApi<VoteFormValues, Partial<VoteFormValues>>>;
 }
 
+const pointerForm: pForm = { form: null };
+
+const cleanUp = () => {
+  if (!isNull(pointerForm.form)) {
+    pointerForm.form.mutators.setValue('balance1', null);
+  }
+};
+
 export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -82,8 +90,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
-
-  const [pointerForm, setPointerForm] = useState<pForm>({ form: null });
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
@@ -148,12 +154,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, tokenPair]);
 
-  const cleanUp = useCallback(() => {
-    if (!isNull(pointerForm.form)) {
-      pointerForm.form.mutators.setValue('balance1', null);
-    }
-  }, [pointerForm]);
-
   useEffect(() => {
     if (initialLoad && token1 && token2) {
       getBalance();
@@ -204,8 +204,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             }
           }}
           render={({ handleSubmit, form }) => {
-            if (!pointerForm) {
-              setPointerForm({ form });
+            if (isNull(pointerForm.form)) {
+              pointerForm.form = form;
             }
 
             return (
