@@ -30,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
-        <NetworkSelect className={s.button} />
+        <NetworkSelect className={cx(s.button, s.select)} />
         <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
           {t('common|Old version')}
         </Button>
