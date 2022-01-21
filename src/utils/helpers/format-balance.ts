@@ -23,7 +23,7 @@ const formatDecimal = (decimals: string): string => {
 
 export const formatIntegerWithDecimals = (value: string) => {
   const [integer, decimals] = value.split('.');
-  const formatedDecimals = formatDecimal(decimals);
+  const formatedDecimals = decimals ? formatDecimal(decimals): null;
 
   return formatedDecimals ? `${integer}.${formatedDecimals}` : integer;
 };
