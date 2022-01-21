@@ -3,9 +3,10 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { fromDecimals, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
@@ -20,11 +21,12 @@ export const useRemoveLiquidityService = (
   dex: Nullable<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
-  transactionDuration: BigNumber,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const { deadline } = useDeadline();
+  const { slippage } = useSlippage();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
@@ -38,7 +40,6 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   useEffect(() => {
     if (!dex || !tokenA || !tokenB) {
@@ -145,7 +146,7 @@ export const useRemoveLiquidityService = (
         tokenBOutput,
         tokenA,
         tokenB,
-        transactionDuration,
+        deadline,
         slippage
       );
 
@@ -186,7 +187,7 @@ export const useRemoveLiquidityService = (
     ]);
   };
 
-  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+  const validationMessageTransactionDuration = validateTransactionDuration(deadline);
 
   return {
     validatedInputMessage,
@@ -200,9 +201,7 @@ export const useRemoveLiquidityService = (
     tokenBOutput,
     tokenABalance,
     tokenBBalance,
-    slippage,
     share,
-    setSlippage,
     handleChange,
     handleBalance,
     handleSetTokenPair,

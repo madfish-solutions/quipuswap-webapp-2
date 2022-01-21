@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 
-import { Slippage } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
@@ -10,9 +9,11 @@ import {
   MAINNET_DEFAULT_TOKEN,
   TEZOS_TOKEN
 } from '@app.config';
+import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { useNetwork } from '@utils/dapp';
+import { useSlippage } from '@utils/dapp/slippage-deadline';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
@@ -24,34 +25,33 @@ export enum LiquiditySlippageType {
 }
 
 interface SlippageInputProps {
+  className?: string;
   liquidityType: LiquiditySlippageType;
   error?: string;
   tokenAInput: string;
   tokenBInput: string;
   tokenA: Nullable<WhitelistedToken>;
   tokenB: Nullable<WhitelistedToken>;
-  slippage: BigNumber;
-  onChange: (newValue: BigNumber) => void;
 }
 
 const DEFAULT_INVESTED_VALUE = 0;
 
 export const LiquiditySlippage: FC<SlippageInputProps> = ({
+  className,
   liquidityType,
   error,
   tokenAInput,
   tokenBInput,
   tokenA,
-  tokenB,
-  slippage,
-  onChange
+  tokenB
 }) => {
   const { t } = useTranslation(['common']);
 
   const network = useNetwork().id;
+  const { slippage, setSlippage, slippageActiveButton, setSlippageActiveButton, slippagePresets } = useSlippage();
 
   const handleChange = (newValue: Nullable<string>) => {
-    onChange(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
+    setSlippage(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
   };
 
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
@@ -68,7 +68,18 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       <label htmlFor="deadline" className={s.inputLabel}>
         {t('common|Slippage')}
       </label>
-      <Slippage handleChange={handleChange} placeholder={slippage.toFixed()} />
+      <NewPresetsAmountInput
+        className={className}
+        decimals={2}
+        value={slippage}
+        handleChange={handleChange}
+        min={0}
+        placeholder={slippage.toFixed()}
+        presets={slippagePresets}
+        activeButton={slippageActiveButton}
+        setActiveButton={setSlippageActiveButton}
+        unit="%"
+      />
       {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.amountWrapper}>
         <span className={s.receiveLabel}>Max {investedOrReceivedText} A:</span>
