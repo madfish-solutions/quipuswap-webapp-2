@@ -15,6 +15,7 @@ import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
 
 import s from './BaseLayout.module.sass';
+import { BASE_URL } from '@app.config';
 
 interface BaseLayoutProps {
   title?: string;
@@ -34,13 +35,15 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     }
   }, [colorThemeMode]);
 
+  const isDarkFavicon = colorThemeMode === ColorModes.Dark
+
   return (
     <>
       <Head>
-        {colorThemeMode === ColorModes.Dark ? (
-          <link rel="icon" id="favicon" href="http://localhost:3000/dark-favicon.ico?" />
+        {isDarkFavicon ? (
+          <link rel="icon" href={`${BASE_URL}favicon.ico`} />
         ) : (
-          <link rel="icon" id="favicon" href="http://localhost:3000/light-favicon.ico" />
+          <link rel="icon" href={`${BASE_URL}light-favicon.ico`} />
         )}
       </Head>
 
