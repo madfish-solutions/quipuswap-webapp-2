@@ -12,11 +12,8 @@ import {
   LAST_USED_CONNECTION_KEY,
   NETWORK,
   networksBaseUrls,
-  networksDefaultTokens,
-  NETWORK_ID,
-  TEZOS_TOKEN
+  NETWORK_ID
 } from '@app.config';
-import { getTokenSlug } from '@utils/helpers';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@utils/types';
 
 import { beaconWallet, connectWalletBeacon } from './connect-wallet/connect-beacon-wallet';
@@ -235,15 +232,17 @@ function useDApp() {
 
   const changeNetwork = useCallback(
     (networkNew: QSNetwork) => {
+      if (networkNew.id === NETWORK_ID) {
+        return;
+      }
+
       const currentPath = router.asPath;
       const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
       if (urlWithSlugsRegexResult === null) {
         window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
       } else {
         const basePath = urlWithSlugsRegexResult[1];
-        window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}/${getTokenSlug(
-          TEZOS_TOKEN
-        )}-${getTokenSlug(networksDefaultTokens[networkNew.id])}`;
+        window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}`;
       }
 
       setState(prevState => ({
