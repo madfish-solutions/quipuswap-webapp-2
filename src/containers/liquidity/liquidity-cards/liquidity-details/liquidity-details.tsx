@@ -77,10 +77,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
       <DetailsCardCell
         cellName={t('liquidity|{{tokenAName}} Locked', { tokenAName })}
-        tooltipContent={t(
-          'liquidity|The amount of {{tokenAName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.',
-          { tokenAName }
-        )}
+        tooltipContent={t('liquidity|The amount of {{tokenAName}} locked in the pool by liquidity providers.', {
+          tokenAName
+        })}
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
@@ -93,10 +92,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
       <DetailsCardCell
         cellName={t('liquidity|{{tokenBName}} Locked', { tokenBName })}
-        tooltipContent={t(
-          'liquidity|The amount of {{tokenBName}} that you lock in a liquidity pool. You add equal volumes of both tokens, according to the current exchange rate.',
-          { tokenBName }
-        )}
+        tooltipContent={t('liquidity|The amount of {{tokenBName}} locked in the pool by liquidity providers.', {
+          tokenBName
+        })}
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
