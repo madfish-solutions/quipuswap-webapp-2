@@ -14,6 +14,7 @@ import { Socials } from '../Socials';
 import { fixNetworkSelector, getSecondElement, NETWORK_SELECTOR_VALUE_CONTAINER } from './sidebar.helpels';
 import s from './Sidebar.module.sass';
 
+const FIRST_INDEX = 0;
 interface SidebarProps {
   className?: string;
 }
@@ -34,7 +35,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
     const networkSelector = getSecondElement(NETWORK_SELECTOR_VALUE_CONTAINER);
 
     const observer = new ResizeObserver(entries => {
-      const { target: sidebar } = entries[0];
+      const { target: sidebar } = entries[FIRST_INDEX];
       fixNetworkSelector(sidebar as HTMLDivElement, networkSelector);
     });
 
