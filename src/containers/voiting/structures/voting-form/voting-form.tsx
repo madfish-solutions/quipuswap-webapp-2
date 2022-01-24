@@ -204,8 +204,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const isBackerChooseRequired = !isBakerChoosen && currentTab.id === VotingTabs.vote;
   const isBackerBanned = currentTab.id === VotingTabs.vote && isBanned;
 
-
-
   const isVoteOrVetoButtonDisabled = () =>
     !values.balance1 || isBackerBanned || isFormError || isBackerChooseRequired || isVetoUnavailable;
 
