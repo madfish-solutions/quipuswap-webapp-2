@@ -8,6 +8,7 @@ import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { DeadlineInput } from '@components/common/deadline-input';
+import { PageTitle } from '@components/common/page-title';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { Button } from '@components/ui/elements/button';
@@ -362,6 +363,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   return (
     <>
+      <PageTitle>{t('swap|Swap')}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{
