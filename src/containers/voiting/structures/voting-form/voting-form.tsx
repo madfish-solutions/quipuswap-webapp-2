@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs } from '@quipuswap/ui-kit';
@@ -23,7 +23,6 @@ import {
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
@@ -147,6 +146,10 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [values.balance1, values.selectedBaker, tokenPair, dex, currentTab]);
 
   useEffect(() => {
+    form.mutators.setValue('balance1', form.getFieldState('balance1')!.value);
+  }, [currentTab, dex, form]);
+
+  useEffect(() => {
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
@@ -176,10 +179,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
   };
 
-  const { availableVoteBalance, availableVetoBalance } = useMemo(
-    () => getVoteVetoBalances(tokenPair, voter),
-    [tokenPair, voter]
-  );
+  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, voter);
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
@@ -310,7 +310,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}
             </Button>
           ) : (
-            <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
+            <ConnectWalletButton className={cx(s.connect, s['mt-24'])} />
           )}
         </div>
       </Card>
