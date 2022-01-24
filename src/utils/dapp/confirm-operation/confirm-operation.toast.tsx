@@ -17,7 +17,7 @@ const ExplorerHashLink: FC<{ hash: string }> = ({ hash }) => {
   );
 };
 
-const TRANSACTION = 'transaction';
+const TRANSACTION = 'Transaction';
 const TRANSACTION_SEND = 'send to blockchain';
 const TRANSACTION_CONFIMED = 'has been confirmed';
 

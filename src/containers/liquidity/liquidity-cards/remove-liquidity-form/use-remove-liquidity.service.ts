@@ -6,12 +6,11 @@ import BigNumber from 'bignumber.js';
 import { DEFAULT_SLIPPAGE_PERCENTAGE, LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { fromDecimals, toDecimals } from '@utils/helpers';
+import { fromDecimals, getRemoveLiquidityMessage, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
-import { getRemoveLiquidityMessage } from '../get-success-messages';
 import { getVotingParams } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateOutputAmount, validateTransactionDuration, validations } from '../validators';
