@@ -173,7 +173,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
-  const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance  : null
+  const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
   return (
     <Fragment>
