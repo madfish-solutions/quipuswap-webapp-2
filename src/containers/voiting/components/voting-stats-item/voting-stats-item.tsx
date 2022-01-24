@@ -1,11 +1,10 @@
-import { FC, Fragment, useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext, Nullable } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 import { DashPlug } from '@components/ui/dash-plug';
-import { FormatNumber } from '@utils/formatNumber';
 import { formatBalance, isNull } from '@utils/helpers';
 
 import styles from './voting-stats-item.module.scss';
@@ -14,12 +13,6 @@ export interface VotingStatsItemProps {
   value: Nullable<string>;
   itemName: string;
   tooltip: string;
-  isLp?: boolean;
-}
-
-interface VotingStatsItemValueProps {
-  value: Nullable<string>;
-  isLp: Nullable<boolean>;
 }
 
 const modeClass = {
@@ -27,20 +20,10 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const VotingStatsItemValue: FC<VotingStatsItemValueProps> = ({ value, isLp }) => {
-  if (isNull(value)) {
-    return <DashPlug className={styles.dash} />;
-  }
-
-  if (isLp) {
-    return <Fragment>{formatBalance(value)}</Fragment>;
-  } else {
-    return <Fragment>{FormatNumber(value)}</Fragment>;
-  }
-};
-
-export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, tooltip, isLp }) => {
+export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, tooltip }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const contentVallue = isNull(value) ? <DashPlug className={styles.dash} /> : formatBalance(value);
 
   return (
     <div className={cx(modeClass[colorThemeMode], styles.item)}>
@@ -49,9 +32,7 @@ export const VotingStatsItem: FC<VotingStatsItemProps> = ({ value, itemName, too
         :
         <Tooltip content={tooltip} />
       </span>
-      <span className={styles.amount}>
-        <VotingStatsItemValue value={value} isLp={isLp ?? null} />
-      </span>
+      <span className={styles.amount}>{contentVallue}</span>
     </div>
   );
 };

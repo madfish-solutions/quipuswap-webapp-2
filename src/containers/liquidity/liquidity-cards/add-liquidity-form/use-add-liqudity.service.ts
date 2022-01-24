@@ -4,16 +4,14 @@ import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { toDecimals } from '@utils/helpers';
+import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
-import { sortTokensContracts } from '../helpers';
+import { calculatePoolAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';

@@ -21,6 +21,13 @@ const formatDecimal = (decimals: string): string => {
   return decimals;
 };
 
+export const formatIntegerWithDecimals = (value: string) => {
+  const [integer, decimals] = value.split('.');
+  const formatedDecimals = decimals ? formatDecimal(decimals) : null;
+
+  return formatedDecimals ? `${integer}.${formatedDecimals}` : integer;
+};
+
 export const formatBalance = (value: string): string => {
   const [integer, decimals] = value.split('.');
 

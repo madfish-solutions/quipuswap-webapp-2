@@ -2,18 +2,20 @@ import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'reac
 
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
+import { FormApi } from 'final-form';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
-import { noop } from 'rxjs';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
+import { PageTitle } from '@components/common/page-title';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData } from '@utils/helpers';
+import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData, isNull } from '@utils/helpers';
 import {
   VoterType,
   TokenDataMap,
@@ -47,7 +49,20 @@ const fallbackTokenPair: WhitelistedTokenPair = {
   token2: MAINNET_DEFAULT_TOKEN
 };
 
+interface pForm {
+  form: Nullable<FormApi<VoteFormValues, Partial<VoteFormValues>>>;
+}
+
+const pointerForm: pForm = { form: null };
+
+const cleanUp = () => {
+  if (!isNull(pointerForm.form)) {
+    pointerForm.form.mutators.setValue('balance1', null);
+  }
+};
+
 export const Voting: React.FC<VotingProps> = ({ className }) => {
+  const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const tezos = useTezos();
@@ -69,7 +84,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const [voter, setVoter] = useState<Nullable<VoterType>>(null);
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
-  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs); // TODO: Change to routes
+  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
   const { from, to } = useRouterPair({
     page: `voting/${router.query.method}`,
     urlLoaded,
@@ -77,11 +92,14 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
+  const [isTokenLoading, setTokenLoading] = useState(true);
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
-    handleTokenChange({
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+    let isMounted = true;
+    setTokenLoading(true);
+    await handleTokenChange({
       token,
       tokenNumber,
       // @ts-ignore
@@ -90,6 +108,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       accountPkh: accountPkh!,
       setTokensData
     });
+    if (isMounted) {
+      setTokenLoading(false);
+    }
+
+    return () => (isMounted = false);
+  };
 
   useEffect(() => {
     if (network.id === HANGZHOUNET_NETWORK.id) {
@@ -152,6 +176,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   return (
     <Fragment>
+      <PageTitle>{t('common|Voting')}</PageTitle>
       <VotingStats
         pendingReward={accountPkh ? rewards : null}
         balanceAmount={tokenPair.balance ?? null}
@@ -181,7 +206,8 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               tab: currentTab.id,
               confirmOperation,
               showErrorToast,
-              getBalance
+              getBalance,
+              cleanUp
             });
           }}
           mutators={{
@@ -189,29 +215,34 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
               changeValue(state, field, () => value);
             }
           }}
-          render={({ handleSubmit, form }) => (
-            <VotingForm
-              form={form}
-              debounce={100}
-              save={noop}
-              tabsState={tabsState}
-              rewards={rewards}
-              voter={voter}
-              dex={dex}
-              tokenPair={tokenPair}
-              tokensData={tokensData}
-              currentTab={currentTab}
-              setRewards={setRewards}
-              setDex={setDex}
-              setTokens={setTokens}
-              setTokenPair={setTokenPair}
-              setVoter={setVoter}
-              setTabsState={setTabsState}
-              getBalance={getBalance}
-              handleSubmit={handleSubmit}
-              handleTokenChange={handleTokenChange}
-            />
-          )}
+          render={({ handleSubmit, form }) => {
+            if (isNull(pointerForm.form)) {
+              pointerForm.form = form;
+            }
+
+            return (
+              <VotingForm
+                form={form}
+                tabsState={tabsState}
+                rewards={rewards}
+                voter={voter}
+                dex={dex}
+                tokenPair={tokenPair}
+                tokensData={tokensData}
+                currentTab={currentTab}
+                tokensUpdading={isTokenLoading}
+                setRewards={setRewards}
+                setDex={setDex}
+                setTokens={setTokens}
+                setTokenPair={setTokenPair}
+                setVoter={setVoter}
+                setTabsState={setTabsState}
+                getBalance={getBalance}
+                handleSubmit={handleSubmit}
+                handleTokenChange={handleTokenChange}
+              />
+            );
+          }}
         />
 
         <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />

@@ -3,13 +3,15 @@ import { FC, useContext, useEffect } from 'react';
 import { ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { NextSeo } from 'next-seo';
+import Head from 'next/head';
 import Script from 'next/script';
 
+import { BASE_URL } from '@app.config';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
-import { Background } from '@components/svg/Background';
+import { Background } from '@components/ui/deskop-background';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
 
@@ -33,8 +35,18 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     }
   }, [colorThemeMode]);
 
+  const isDarkFavicon = colorThemeMode === ColorModes.Dark;
+
   return (
     <>
+      <Head>
+        {isDarkFavicon ? (
+          <link rel="icon" href={`${BASE_URL}favicon.ico`} />
+        ) : (
+          <link rel="icon" href={`${BASE_URL}light-favicon.ico`} />
+        )}
+      </Head>
+
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS}`} />
       <Script>
         {`window.dataLayer = window.dataLayer || [];
