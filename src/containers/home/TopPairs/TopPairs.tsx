@@ -29,7 +29,7 @@ export const TopPairs: FC<TopPairsProps> = ({ className }) => {
         >
           <PoolTable
             fetch={fetchPairsData}
-            loading={!!isNotLoaded}
+            loading={Boolean(isNotLoaded)}
             totalCount={data?.pairs?.totalCount ?? 0}
             data={
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
