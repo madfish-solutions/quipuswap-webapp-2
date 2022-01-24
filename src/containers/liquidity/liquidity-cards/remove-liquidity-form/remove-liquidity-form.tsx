@@ -12,7 +12,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals, isExist } from '@utils/helpers';
+import { isExist } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
@@ -21,8 +21,7 @@ import { isTezIncluded } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
-const DEFAULT_BALANCE = 0;
-const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
+const DEFAULT_BALANCE = '0';
 
 export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
@@ -46,9 +45,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     handleSetTokenPair
   } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
 
-  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
-  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
-
   const isButtonDisabled =
     !dex ||
     !tokenA ||
@@ -61,9 +57,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
-
-  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
-  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
   const isUnvoteVisible = !isDeadlineAndSlippageVisible && share && new BigNumber(lpTokenInput).gt(share.unfrozen);
@@ -88,7 +81,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={balanceTokenA}
+        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -102,7 +95,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={balanceTokenB}
+        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
