@@ -14,6 +14,7 @@ import {
   networksBaseUrls,
   NETWORK_ID
 } from '@app.config';
+import { isNull } from '@utils/helpers';
 import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@utils/types';
 
 import { beaconWallet, connectWalletBeacon } from './connect-wallet/connect-beacon-wallet';
@@ -238,7 +239,7 @@ function useDApp() {
 
       const currentPath = router.asPath;
       const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
-      if (urlWithSlugsRegexResult === null) {
+      if (isNull(urlWithSlugsRegexResult)) {
         window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
       } else {
         const basePath = urlWithSlugsRegexResult[1];

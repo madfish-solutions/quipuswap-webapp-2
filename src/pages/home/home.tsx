@@ -2,14 +2,13 @@ import { FC } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
-import { NETWORK } from '@app.config';
+import { IS_NETWORK_MAINNET } from '@app.config';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { DexDashboard } from '@components/home/DexDashboard';
 import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
 import { TopPairs } from '@containers/home/TopPairs';
-import { isNetworkMainnet } from '@utils/helpers';
 
 export const Home: FC = () => {
   const { t } = useTranslation(['common', 'home']);
@@ -20,7 +19,7 @@ export const Home: FC = () => {
       <News />
       <DexDashboard />
       <Opportunities />
-      {isNetworkMainnet(NETWORK) && <TopPairs />}
+      {IS_NETWORK_MAINNET && <TopPairs />}
       {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>

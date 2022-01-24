@@ -152,6 +152,7 @@ const networks: Record<QSNets, QSNetwork> = {
   [QSNets.hangzhounet]: HANGZHOUNET_NETWORK
 };
 export const NETWORK = networks[NETWORK_ID];
+export const IS_NETWORK_MAINNET = NETWORK_ID === QSNets.mainnet;
 
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const CHAIN_ID_MAPPING = new Map<QSNets, string>([

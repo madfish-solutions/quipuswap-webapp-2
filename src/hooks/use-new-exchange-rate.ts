@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { NETWORK, TEZOS_TOKEN } from '@app.config';
+import { IS_NETWORK_MAINNET, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { getTokenSlug, isNetworkMainnet } from '@utils/helpers';
+import { getTokenSlug } from '@utils/helpers';
 
 import { useExchangeRates } from './useExchangeRate';
 
@@ -17,7 +17,7 @@ export const [NewExchangeRatesProvider, useNewExchangeRates] = constate(() => {
       fa2TokenId: tokenId,
       type: tokenId === undefined ? Standard.Fa12 : Standard.Fa2
     });
-    if (tokenSlug !== getTokenSlug(TEZOS_TOKEN) || isNetworkMainnet(NETWORK)) {
+    if (tokenSlug !== getTokenSlug(TEZOS_TOKEN) || IS_NETWORK_MAINNET) {
       acc[tokenSlug] = new BigNumber(exchangeRate);
     }
 

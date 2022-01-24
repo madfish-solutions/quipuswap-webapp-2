@@ -5,9 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { NETWORK } from '@app.config';
+import { IS_NETWORK_MAINNET } from '@app.config';
 import { Maybe } from '@graphql';
-import { calculateRateAmount, isExist, isNetworkMainnet } from '@utils/helpers';
+import { calculateRateAmount, isExist } from '@utils/helpers';
 
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
@@ -43,7 +43,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {isNetworkMainnet(NETWORK) ? (
+      {IS_NETWORK_MAINNET ? (
         <>
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}

@@ -2,9 +2,17 @@ import { NetworkType } from '@airgap/beacon-sdk';
 import { BeaconWallet } from '@taquito/beacon-wallet';
 import { TezosToolkit } from '@taquito/taquito';
 
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY, NETWORK, NETWORK_ID } from '@app.config';
+import {
+  APP_NAME,
+  BASE_URL,
+  IS_NETWORK_MAINNET,
+  LAST_USED_ACCOUNT_KEY,
+  LAST_USED_CONNECTION_KEY,
+  NETWORK,
+  NETWORK_ID
+} from '@app.config';
 import { NoBeaconWallet, WalletNotConected } from '@errors';
-import { isDefaultConnectType, isNetworkMainnet } from '@utils/helpers';
+import { isDefaultConnectType } from '@utils/helpers';
 import { LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
 import { toBeaconNetworkType } from '../network';
@@ -19,7 +27,7 @@ export const beaconWallet =
         name: APP_NAME,
         iconUrl: `${BASE_URL}/favicon.ico`,
         preferredNetwork: (() => {
-          if (isDefaultConnectType(NETWORK) || isNetworkMainnet(NETWORK)) {
+          if (isDefaultConnectType(NETWORK) || IS_NETWORK_MAINNET) {
             return toBeaconNetworkType(QSNets.mainnet);
           }
 
@@ -38,7 +46,7 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
       await beaconWallet.clearActiveAccount();
     }
     const network =
-      isDefaultConnectType(qsNetwork) || isNetworkMainnet(qsNetwork)
+      isDefaultConnectType(qsNetwork) || IS_NETWORK_MAINNET
         ? { type: toBeaconNetworkType(qsNetwork.id) }
         : {
             type: NetworkType.CUSTOM,

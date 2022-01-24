@@ -9,11 +9,10 @@ import { useTranslation } from 'next-i18next';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL, NETWORK } from '@app.config';
+import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@app.config';
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo } from '@utils/dapp';
-import { isNetworkMainnet } from '@utils/helpers';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
@@ -39,7 +38,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
     void asyncLoad();
   }, []);
 
-  const desktopContentClassName = isNetworkMainnet(NETWORK) ? s.content : cx(s.content, s.testnet);
+  const desktopContentClassName = IS_NETWORK_MAINNET ? s.content : cx(s.content, s.testnet);
 
   return (
     <Section
