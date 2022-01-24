@@ -3,7 +3,6 @@ const INDEX_OF_SIDEBAR_NETWORK_SELECTOR_VALUE_CONTAINER = 1;
 const WIDTH = 'width';
 const PX = 'px';
 const NORMAL_WIDTH = 163;
-const WIDTH_WHEN_SIDEBAR_SCROLLABLE = 155;
 
 const handleNetworkSelectorDecrease = (networkSelector: HTMLDivElement, width: number) => {
   networkSelector.style.setProperty(WIDTH, `${NORMAL_WIDTH - width}${PX}`);
@@ -14,7 +13,7 @@ const handleNetworkSelectorIncrease = (networkSelector: HTMLDivElement) => {
 };
 
 const isElementScrolable = (element: HTMLElement) => element.scrollHeight > element.clientHeight;
-const changingWidth = (element: HTMLElement) => element.offsetWidth - element.clientWidth
+const changingWidth = (element: HTMLElement) => element.offsetWidth - element.clientWidth;
 
 export const fixNetworkSelector = (sidebar: HTMLDivElement, networkSelector: HTMLDivElement) => {
   if (isElementScrolable(sidebar)) {
