@@ -54,10 +54,34 @@ interface pForm {
 }
 
 const pointerForm: pForm = { form: null };
+const BALANCE1 = 'balance1';
+const SELECTED_BAKER = 'selectedBaker';
 
-const cleanUp = () => {
+const cleanUp = (tab: VotingTabs) => {
   if (!isNull(pointerForm.form)) {
-    pointerForm.form.mutators.setValue('balance1', null);
+    pointerForm.form.mutators.setValue(BALANCE1, null);
+    if (tab === VotingTabs.vote) {
+      pointerForm.form.mutators.setValue(SELECTED_BAKER, null);
+      bakerCleaner.run();
+    }
+  }
+};
+
+export interface BakerCleaner {
+  set: (key: string, inner: () => void) => void;
+  inners: Record<string, () => void>;
+  run: () => void;
+}
+
+const bakerCleaner: BakerCleaner = {
+  set: (key: string, inner: () => void) => {
+    bakerCleaner.inners[key] = inner;
+  },
+  inners: {},
+  run: () => {
+    for (const key in bakerCleaner.inners) {
+      bakerCleaner.inners[key]();
+    }
   }
 };
 
@@ -216,7 +240,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             }
           }}
           render={({ handleSubmit, form }) => {
-            if (isNull(pointerForm.form)) {
+            if (pointerForm.form !== form) {
               pointerForm.form = form;
             }
 
@@ -240,6 +264,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
                 getBalance={getBalance}
                 handleSubmit={handleSubmit}
                 handleTokenChange={handleTokenChange}
+                bakerCleaner={bakerCleaner}
               />
             );
           }}

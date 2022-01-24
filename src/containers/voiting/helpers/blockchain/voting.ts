@@ -17,7 +17,7 @@ interface SubmitProps {
   confirmOperation: ReturnType<typeof useConfirmOperation>;
   showErrorToast: UseToasts['showErrorToast'];
   getBalance: () => void;
-  cleanUp: () => void;
+  cleanUp: (tab: VotingTabs) => void;
 }
 
 interface IBatchParamsAndToastText {
@@ -149,7 +149,7 @@ export const submitForm = async ({
 
     await confirmOperation(op.opHash, { message: updateToastText });
     getBalance();
-    cleanUp();
+    cleanUp(tab);
   } catch (e) {
     showErrorToast(e as Error);
   }
