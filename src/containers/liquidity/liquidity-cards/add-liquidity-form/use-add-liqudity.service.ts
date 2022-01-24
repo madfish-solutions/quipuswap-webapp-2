@@ -350,11 +350,11 @@ export const useAddLiquidityService = (
 
   const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
 
-  const isNewPair =
-    !pairInfo ||
-    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
-    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
-    pairInfo.totalSupply.eq(EMPTY_POOL);
+  const isPoolExistsButEmpty =
+    pairInfo &&
+    (pairInfo.tokenAPool.eq(EMPTY_POOL) || pairInfo.tokenBPool.eq(EMPTY_POOL) || pairInfo.totalSupply.eq(EMPTY_POOL));
+
+  const isNewPair = dex && (!pairInfo || isPoolExistsButEmpty);
 
   return {
     validationMessageTokenA,

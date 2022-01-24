@@ -124,16 +124,16 @@ export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({
       />
       {isDeadlineAndSlippageVisible && (
         <>
-          <div className={CC.mt24}>
+          <div className={s['mt-24']}>
             <DeadlineInput
               onChange={setTransactionDuration}
               error={validationMessageTransactionDuration}
               value={transactionDuration}
             />
           </div>
-          <div className={CC.mt24}>
+          <div className={s['mt-24']}>
             <LiquiditySlippage
-              liquidityType={LiquiditySlippageType.ADD}
+              liquidityType={LiquiditySlippageType.REMOVE}
               tokenA={tokenA}
               tokenB={tokenB}
               tokenAInput={tokenAOutput}
