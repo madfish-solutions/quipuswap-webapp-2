@@ -19,25 +19,21 @@ export const TopPairs: FC<TopPairsProps> = ({ className }) => {
 
   const pairData = usePairs(data);
 
-  return (
-    <>
-      {!error ? (
-        <Section
-          header={t('home|Top Pairs')}
-          description={t('home|The most popular Trading Pairs by trading volume')}
-          className={className}
-        >
-          <PoolTable
-            fetch={fetchPairsData}
-            loading={!!isNotLoaded}
-            totalCount={data?.pairs?.totalCount ?? 0}
-            data={
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              isNotLoaded ? [] : (pairData as any)
-            }
-          />
-        </Section>
-      ) : null}
-    </>
-  );
+  return !error ? (
+    <Section
+      header={t('home|Top Pairs')}
+      description={t('home|The most popular Trading Pairs by trading volume')}
+      className={className}
+    >
+      <PoolTable
+        fetch={fetchPairsData}
+        loading={!!isNotLoaded}
+        totalCount={data?.pairs?.totalCount ?? 0}
+        data={
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          isNotLoaded ? [] : (pairData as any)
+        }
+      />
+    </Section>
+  ) : null;
 };
