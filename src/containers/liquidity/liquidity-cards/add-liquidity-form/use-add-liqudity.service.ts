@@ -13,11 +13,10 @@ import {
 import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { toDecimals } from '@utils/helpers';
+import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage } from '../get-success-messages';
 import { sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateTransactionDuration, validations } from '../validators';

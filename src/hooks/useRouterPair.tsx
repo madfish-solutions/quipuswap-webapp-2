@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getTokenSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 interface RouterPairType {
@@ -31,8 +31,8 @@ export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: 
   const { from, to } = params;
   useEffect(() => {
     if (urlLoaded && initialLoad && token1 && token2) {
-      const fromToken = getWhitelistedTokenSymbol(token1, 36);
-      const toToken = getWhitelistedTokenSymbol(token2, 36);
+      const fromToken = getTokenSlug(token1);
+      const toToken = getTokenSlug(token2);
       const url = `/${page}/${fromToken}-${toToken}`;
       router.replace(url, undefined, { shallow: true });
     }

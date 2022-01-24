@@ -8,7 +8,7 @@ import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getTokenSlug, isEmptyArray } from '@utils/helpers';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);
@@ -33,8 +33,8 @@ export const getServerSideProps = async ({
   query: { 'from-to': string; method: string };
 }) => {
   const splittedTokens = query['from-to'].split('-');
-  const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(networksDefaultTokens[NETWORK_ID]);
+  const from = getTokenSlug(TEZOS_TOKEN);
+  const to = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 
@@ -50,12 +50,7 @@ export const getServerSideProps = async ({
     };
   }
 
-  if (
-    splittedTokens.length > 0 &&
-    splittedTokens[0] !== TEZOS_TOKEN.contractAddress &&
-    splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol &&
-    splittedTokens[0] !== TEZOS_TOKEN.metadata.name
-  ) {
+  if (!isEmptyArray(splittedTokens) && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,

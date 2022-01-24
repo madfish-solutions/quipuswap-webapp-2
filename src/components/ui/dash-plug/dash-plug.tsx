@@ -1,4 +1,4 @@
-import { FC, useContext, useMemo } from 'react';
+import { FC, useContext, useLayoutEffect, useMemo, useRef } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -20,6 +20,8 @@ const DASH_QUANTITY = 4;
 export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const container = useRef<HTMLDivElement>(null);
+
   const wrapperClassName = cx(
     s['inline-loading'],
     {
@@ -29,12 +31,16 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className }) => {
     className
   );
 
+  useLayoutEffect(() => {
+    container.current?.style.setProperty('--zoom', `${zoom ?? 1}`);
+  }, [zoom]);
+
   const iterator = useMemo(() => {
     return new Array(DASH_QUANTITY).fill(null).map((_, index) => index);
   }, []);
 
   return (
-    <div className={wrapperClassName} style={{ transform: `scale(${zoom})` }}>
+    <div ref={container} className={wrapperClassName}>
       {iterator.map(key => (
         <div className={s.dash} key={key} />
       ))}

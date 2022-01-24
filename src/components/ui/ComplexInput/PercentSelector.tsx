@@ -2,6 +2,7 @@ import React from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { formatIntegerWithDecimals } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -12,10 +13,13 @@ interface PercentSelectorProps {
   value: Nullable<string>;
 }
 
+const multipliedByPercent = (value: string, percent: number) =>
+  formatIntegerWithDecimals(new BigNumber(value).times(percent).toFixed());
+
 export const PercentSelector: React.FC<PercentSelectorProps> = ({ handleBalance, value }) => {
-  const handle25 = () => handleBalance(new BigNumber(value!).times(0.25).toFixed());
-  const handle50 = () => handleBalance(new BigNumber(value!).times(0.5).toFixed());
-  const handle75 = () => handleBalance(new BigNumber(value!).times(0.75).toFixed());
+  const handle25 = () => handleBalance(multipliedByPercent(value!, 0.25));
+  const handle50 = () => handleBalance(multipliedByPercent(value!, 0.5));
+  const handle75 = () => handleBalance(multipliedByPercent(value!, 0.75));
   const handleMAX = () => handleBalance(value!);
 
   const disabled = value === null;
