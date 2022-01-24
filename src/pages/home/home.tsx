@@ -20,7 +20,7 @@ export const Home: FC = () => {
       <News />
       <DexDashboard />
       <Opportunities />
-      {isNetworkMainnet(NETWORK) && <TopPairs /> }
+      {isNetworkMainnet(NETWORK) && <TopPairs />}
       {/* TODO: Implement it. */}
       {/* <TopFarmings /> */}
     </BaseLayout>
