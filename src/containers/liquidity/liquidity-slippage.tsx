@@ -7,7 +7,9 @@ import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
   HANGZHOUNET_DEFAULT_TOKEN,
   MAINNET_DEFAULT_TOKEN,
-  TEZOS_TOKEN
+  TEZOS_TOKEN,
+  PRESET_AMOUNT_INPUT_DECIMALS,
+  MINIMUM_PRESET_AMOUNT_INPUT_VALUE
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -35,6 +37,7 @@ interface SlippageInputProps {
 }
 
 const DEFAULT_INVESTED_VALUE = 0;
+const SLIPPAGE_UNIT = '%';
 
 export const LiquiditySlippage: FC<SlippageInputProps> = ({
   className,
@@ -50,9 +53,8 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   const network = useNetwork().id;
   const { slippage, setSlippage, slippageActiveButton, setSlippageActiveButton, slippagePresets } = useSlippage();
 
-  const handleChange = (newValue: Nullable<string>) => {
-    setSlippage(newValue ? new BigNumber(newValue) : new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
-  };
+  const handleChange = (newValue: Nullable<string>) =>
+    setSlippage(new BigNumber(newValue || DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokenABN = new BigNumber(tokenAInput ? tokenAInput : DEFAULT_INVESTED_VALUE);
   const tokenBBN = new BigNumber(tokenBInput ? tokenBInput : DEFAULT_INVESTED_VALUE);
@@ -70,15 +72,15 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       </label>
       <NewPresetsAmountInput
         className={className}
-        decimals={2}
+        decimals={PRESET_AMOUNT_INPUT_DECIMALS}
         value={slippage}
         handleChange={handleChange}
-        min={0}
+        min={MINIMUM_PRESET_AMOUNT_INPUT_VALUE}
         placeholder={slippage.toFixed()}
         presets={slippagePresets}
         activeButton={slippageActiveButton}
         setActiveButton={setSlippageActiveButton}
-        unit="%"
+        unit={SLIPPAGE_UNIT}
       />
       {error && <div className={s.simpleError}>{error}</div>}
       <div className={s.amountWrapper}>

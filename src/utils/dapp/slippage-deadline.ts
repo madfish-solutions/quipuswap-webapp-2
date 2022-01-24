@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE, DEFAULT_DEADLINE_MINS } from './../../app.config';
+import { DEFAULT_SLIPPAGE_PERCENTAGE, DEFAULT_DEADLINE_MINS } from '@app.config';
 
 const useDeadlineAndSlippage = () => {
   const slippagePresets = useMemo(
@@ -23,8 +23,8 @@ const useDeadlineAndSlippage = () => {
     []
   );
 
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
-  const [deadline, setDeadline] = useState<BigNumber>(new BigNumber(DEFAULT_DEADLINE_MINS));
+  const [slippage, setSlippage] = useState(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
+  const [deadline, setDeadline] = useState(new BigNumber(DEFAULT_DEADLINE_MINS));
   const [slippageActiveButton, setSlippageActiveButton] = useState('0');
   const [deadlineActiveButton, setDeadlineActiveButton] = useState('0');
 

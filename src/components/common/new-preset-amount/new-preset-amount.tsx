@@ -1,4 +1,4 @@
-import React, { useContext, useCallback, Dispatch, SetStateAction } from 'react';
+import React, { useContext, Dispatch, SetStateAction, FC } from 'react';
 
 import { AssetInput, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -32,7 +32,10 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const NewPresetsAmountInput: React.FC<Props> = ({
+const DEFAULT_PLACEHOLDER = 'CUSTOM';
+const INPUT = 'input';
+
+export const NewPresetsAmountInput: FC<Props> = ({
   className,
   value,
   handleChange,
@@ -41,18 +44,26 @@ export const NewPresetsAmountInput: React.FC<Props> = ({
   decimals,
   min,
   max,
-  placeholder = 'CUSTOM',
+  placeholder = DEFAULT_PLACEHOLDER,
   presets,
   unit
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const handleCustomValueChange = useCallback(
-    (val: Nullable<string>) => {
-      handleChange(val);
-    },
-    [handleChange]
-  );
+  const handleCustomValueChange = (val: Nullable<string>) => handleChange(val);
+
+  const handlePresetClick = (index: number, value: Nullable<string>, label: string) => {
+    setActiveButton(index.toString());
+    handleCustomValueChange(null);
+    handleChange(value ?? label);
+  };
+
+  const handleAssetInputChange = (val: Nullable<string>) => {
+    setActiveButton(INPUT);
+    handleCustomValueChange(val);
+  };
+
+  const isInputActive = activeButton === INPUT;
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
@@ -61,12 +72,8 @@ export const NewPresetsAmountInput: React.FC<Props> = ({
           <button
             key={label}
             type="button"
-            className={cx(s.button, { [s.active]: index === +activeButton })}
-            onClick={() => {
-              setActiveButton(index.toString());
-              handleCustomValueChange(null);
-              handleChange(value ?? label);
-            }}
+            className={cx(s.button, { [s.active]: index === Number(activeButton) })}
+            onClick={() => handlePresetClick(index, value, label)}
           >
             <span className={s.buttonInner}>{label}</span>
           </button>
@@ -77,13 +84,10 @@ export const NewPresetsAmountInput: React.FC<Props> = ({
           inputSize="small"
           value={value.toFixed()}
           placeholder={placeholder}
-          active={activeButton === 'input'}
+          active={isInputActive}
           min={min}
           max={max}
-          onChange={val => {
-            setActiveButton('input');
-            handleCustomValueChange(val);
-          }}
+          onChange={handleAssetInputChange}
         />
         {unit && <span className={s.unit}>{unit}</span>}
       </div>

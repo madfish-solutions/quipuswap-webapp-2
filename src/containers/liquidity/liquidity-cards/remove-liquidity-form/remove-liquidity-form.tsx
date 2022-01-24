@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 
 import { ArrowDown, Plus } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -24,7 +24,7 @@ import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 const DEFAULT_BALANCE = 0;
 const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
 
-export const RemoveLiquidityForm: React.FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
+export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
   const {
