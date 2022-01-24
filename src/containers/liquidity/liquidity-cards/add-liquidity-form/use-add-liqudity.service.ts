@@ -3,15 +3,15 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_SLIPPAGE_PERCENTAGE, EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
+import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { sortTokensContracts } from '../helpers';
+import { calculatePoolAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateTransactionDuration, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
@@ -24,13 +24,14 @@ export const useAddLiquidityService = (
   dex: Nullable<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
-  transactionDuration: BigNumber,
   onTokenAChange: (token: WhitelistedToken) => void,
   onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
   const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
+  const { deadline } = useDeadline();
+  const { slippage } = useSlippage();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
@@ -41,7 +42,6 @@ export const useAddLiquidityService = (
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
-  const [slippage, setSlippage] = useState<BigNumber>(new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE));
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -278,7 +278,7 @@ export const useAddLiquidityService = (
         pairInfo.totalSupply,
         pairInfo.tokenAPool,
         pairInfo.tokenBPool,
-        transactionDuration,
+        deadline,
         slippage
       );
 
@@ -348,7 +348,7 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
-  const validationMessageTransactionDuration = validateTransactionDuration(transactionDuration);
+  const validationMessageTransactionDuration = validateTransactionDuration(deadline);
 
   const isNewPair =
     !pairInfo ||
@@ -365,8 +365,6 @@ export const useAddLiquidityService = (
     tokenBBalance,
     tokenAInput,
     tokenBInput,
-    slippage,
-    setSlippage,
     isNewPair,
     handleSetTokenA,
     handleSetTokenB,
