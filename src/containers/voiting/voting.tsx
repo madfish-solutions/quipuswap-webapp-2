@@ -5,7 +5,6 @@ import { StickyBlock } from '@quipuswap/ui-kit';
 import { FormApi } from 'final-form';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
-import { noop } from 'rxjs';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
@@ -82,7 +81,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const [voter, setVoter] = useState<Nullable<VoterType>>(null);
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
-  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs); // TODO: Change to routes
+  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
   const { from, to } = useRouterPair({
     page: `voting/${router.query.method}`,
     urlLoaded,
@@ -90,11 +89,14 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
+  const [isTokenLoading, setTokenLoading] = useState(true);
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') =>
-    handleTokenChange({
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+    let isMounted = true;
+    setTokenLoading(true);
+    await handleTokenChange({
       token,
       tokenNumber,
       // @ts-ignore
@@ -103,6 +105,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       accountPkh: accountPkh!,
       setTokensData
     });
+    if (isMounted) {
+      setTokenLoading(false);
+    }
+
+    return () => (isMounted = false);
+  };
 
   useEffect(() => {
     if (network.id === HANGZHOUNET_NETWORK.id) {
@@ -211,8 +219,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
             return (
               <VotingForm
                 form={form}
-                debounce={100}
-                save={noop}
                 tabsState={tabsState}
                 rewards={rewards}
                 voter={voter}
@@ -220,6 +226,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
                 tokenPair={tokenPair}
                 tokensData={tokensData}
                 currentTab={currentTab}
+                tokensUpdading={isTokenLoading}
                 setRewards={setRewards}
                 setDex={setDex}
                 setTokens={setTokens}
