@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
@@ -15,20 +17,23 @@ export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
   const { t } = useTranslation(['common']);
 
-  const showErrorToast = (err: Error | string) => {
-    if (err instanceof Error) {
-      updateToast({
-        type: 'error',
-        render: `${err.name}: ${err.message}`
-      });
-    }
-    if (typeof err === 'string') {
-      updateToast({
-        type: 'error',
-        render: err
-      });
-    }
-  };
+  const showErrorToast = useCallback(
+    (err: Error | string) => {
+      if (err instanceof Error) {
+        updateToast({
+          type: 'error',
+          render: `${err.name}: ${err.message}`
+        });
+      }
+      if (typeof err === 'string') {
+        updateToast({
+          type: 'error',
+          render: err
+        });
+      }
+    },
+    [updateToast]
+  );
 
   const showLoaderToast = () => {
     updateToast({

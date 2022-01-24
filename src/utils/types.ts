@@ -83,7 +83,6 @@ export interface WhitelistedTokenMetadata {
 interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
-  totalSupply: BigNumber;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   id: string | number;
