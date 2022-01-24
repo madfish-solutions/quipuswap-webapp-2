@@ -64,7 +64,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [tokensLoading, setTokensLoading] = useState<boolean>(false);
+  const [tokensLoading, setTokensLoading] = useState(false);
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {

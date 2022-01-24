@@ -8,7 +8,7 @@ import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
-import { getTokenSlug } from '@utils/helpers';
+import { getTokenSlug, isEmptyArray } from '@utils/helpers';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);
@@ -50,7 +50,7 @@ export const getServerSideProps = async ({
     };
   }
 
-  if (splittedTokens.length > 0 && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
+  if (!isEmptyArray(splittedTokens) && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
