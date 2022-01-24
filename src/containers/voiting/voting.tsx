@@ -3,10 +3,12 @@ import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'reac
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { FormApi } from 'final-form';
+import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
+import { PageTitle } from '@components/common/page-title';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -60,6 +62,7 @@ const cleanUp = () => {
 };
 
 export const Voting: React.FC<VotingProps> = ({ className }) => {
+  const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const tezos = useTezos();
@@ -173,6 +176,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   return (
     <Fragment>
+      <PageTitle>{t('common|Voting')}</PageTitle>
       <VotingStats
         pendingReward={accountPkh ? rewards : null}
         balanceAmount={tokenPair.balance ?? null}
