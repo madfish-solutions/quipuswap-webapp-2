@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useLayoutEffect, useRef } from 'react';
 
 import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -11,8 +11,10 @@ import { Button } from '@components/ui/elements/button';
 import { Navigation } from '../Navigation';
 import { QPToken } from '../QPToken';
 import { Socials } from '../Socials';
+import { fixNetworkSelector, getSecondElement, NETWORK_SELECTOR_VALUE_CONTAINER } from './sidebar.helpels';
 import s from './Sidebar.module.sass';
 
+const FIRST_INDEX = 0;
 interface SidebarProps {
   className?: string;
 }
@@ -26,8 +28,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const sidebarDiv = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const { current: sidebarEl } = sidebarDiv;
+    const networkSelector = getSecondElement(NETWORK_SELECTOR_VALUE_CONTAINER);
+
+    const observer = new ResizeObserver(entries => {
+      const { target: sidebar } = entries[FIRST_INDEX];
+      fixNetworkSelector(sidebar as HTMLDivElement, networkSelector);
+    });
+
+    observer.observe(sidebarEl!);
+
+    return () => {
+      observer.unobserve(sidebarEl!);
+    };
+  }, []);
+
   return (
-    <div className={cx(s.root, modeClass[colorThemeMode], className)}>
+    <div ref={sidebarDiv} className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={cx(s.button, s.select)} />
