@@ -15,5 +15,6 @@ export * from './increase-or-decrease-by-slippage';
 export * from './is-tez-included';
 export * from './new-get-valid-michel-template';
 export * from './parse-url';
+export * from './remove-extra-zeros';
 export * from './sort-tokens-contracts';
 export * from './sort-tokens-pair';
