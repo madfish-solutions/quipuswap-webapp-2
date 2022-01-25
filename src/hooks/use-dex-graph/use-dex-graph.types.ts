@@ -5,16 +5,6 @@ export enum RawDexType {
   LiquidityBaking = 'LiquidityBaking'
 }
 
-/*
-dexType: DexTypeEnum;
-  dexAddress: string;
-  dexId?: BigNumber;
-  aTokenSlug: string;
-  bTokenSlug: string;
-  aTokenPool: BigNumber;
-  bTokenPool: BigNumber;
-*/
-
 export interface RawDexPool {
   dexType: RawDexType;
   dexAddress: string;

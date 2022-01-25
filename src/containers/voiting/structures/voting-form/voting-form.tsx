@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs } from '@quipuswap/ui-kit';
@@ -9,7 +9,7 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
 
-import { FACTORIES, TEZOS_TOKEN } from '@app.config';
+import { FACTORIES, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
@@ -18,14 +18,14 @@ import {
   getCandidateInfo,
   getVoteVetoBalances,
   handleTokenPairSelect,
-  unvoteOrRemoveVeto
+  unvoteOrRemoveVeto,
+  BakerCleaner
 } from '@containers/voiting/helpers';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import CC from '@styles/CommonContainer.module.sass';
 import s from '@styles/CommonContainer.module.sass';
-import { useTezos, useNetwork, useAccountPkh, useBakers } from '@utils/dapp';
+import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { isAssetEqual, parseDecimals, isNull, getTokenSlug } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
@@ -73,10 +73,12 @@ interface VotingFormProps {
   setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
   setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<void>;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  bakerCleaner: BakerCleaner;
 }
 
+const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
 const RealForm: React.FC<VotingFormProps> = ({
@@ -97,7 +99,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   currentTab,
   setTabsState,
   getBalance,
-  tokensUpdading
+  tokensUpdading,
+  bakerCleaner
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
@@ -105,7 +108,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const confirmOperation = useConfirmOperation();
   const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
-  const networkId = useNetwork().id;
   const router = useRouter();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
@@ -115,6 +117,8 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
+
+  useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
   const handleInputChange = async () => {
     if (!tezos) {
@@ -133,7 +137,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       if (isAssetSame) {
         return;
       }
-      const tempDex = await findDex(tezos, FACTORIES[networkId], toAsset);
+      const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
       if (tempDex && tempDex !== dex) {
         setDex(tempDex);
       }
@@ -147,6 +151,10 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [values.balance1, values.selectedBaker, tokenPair, dex, currentTab]);
 
   useEffect(() => {
+    form.mutators.setValue('balance1', form.getFieldState('balance1')!.value);
+  }, [currentTab, dex, form]);
+
+  useEffect(() => {
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
@@ -154,21 +162,14 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [accountPkh, closeConnectWalletModal]);
 
   const handleVoteOrVeto = async () => {
-    if (!tezos || !dex) {
+    if (!tezos || !dex || !values.balance1) {
       return;
     }
 
-    if (!values.balance1) {
-      // throw form validation error
-      handleSubmit();
-
-      return;
-    }
-    form.resumeValidation();
-    handleSubmit();
+    await handleSubmit();
   };
 
-  const handleUnvoteOrRemoveveto = async () => {
+  const handleUnvoteOrRemoveVeto = async () => {
     if (!tezos || !dex || isNull(voter.candidate)) {
       return;
     }
@@ -176,10 +177,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
   };
 
-  const { availableVoteBalance, availableVetoBalance } = useMemo(
-    () => getVoteVetoBalances(tokenPair, voter),
-    [tokenPair, voter]
-  );
+  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, voter);
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
@@ -243,7 +241,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                   showErrorToast,
                   tezos,
                   accountPkh,
-                  networkId
+                  NETWORK_ID
                 );
               }}
               balance={availableBalance}
@@ -269,6 +267,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt12}
+                cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
@@ -293,7 +292,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         <div className={s.buttons}>
           {accountPkh && (
             <Button
-              onClick={handleUnvoteOrRemoveveto}
+              onClick={handleUnvoteOrRemoveVeto}
               className={s.button}
               theme="secondary"
               disabled={
@@ -310,7 +309,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}
             </Button>
           ) : (
-            <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />
+            <ConnectWalletButton className={cx(s.connect, s['mt-24'])} />
           )}
         </div>
       </Card>

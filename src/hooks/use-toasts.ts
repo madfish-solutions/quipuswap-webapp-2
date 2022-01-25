@@ -1,21 +1,18 @@
 import { useCallback } from 'react';
 
-import { useTranslation } from 'react-i18next';
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
-import useUpdateToast from './useUpdateToast';
+import { useUpdateToast } from './useUpdateToast';
 
 export interface UseToasts {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;
   showErrorToast: (err: Error | string) => void;
-  showLoaderToast: () => void;
-  showSuccessToast: (render?: ToastContent) => void;
-  showInfoToast: (render?: ToastContent) => void;
+  showSuccessToast: (render: ToastContent) => void;
+  showInfoToast: (render: ToastContent) => void;
 }
 
 export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
-  const { t } = useTranslation(['common']);
 
   const showErrorToast = useCallback(
     (err: Error | string) => {
@@ -35,21 +32,14 @@ export const useToasts = (): UseToasts => {
     [updateToast]
   );
 
-  const showLoaderToast = () => {
-    updateToast({
-      type: 'info',
-      render: t('common|Loading')
-    });
-  };
-
-  const showInfoToast = (render?: ToastContent) => {
+  const showInfoToast = (render: ToastContent) => {
     updateToast({
       type: 'info',
       render
     });
   };
 
-  const showSuccessToast = (render?: ToastContent) => {
+  const showSuccessToast = (render: ToastContent) => {
     updateToast({
       type: 'success',
       render
@@ -59,7 +49,6 @@ export const useToasts = (): UseToasts => {
   return {
     updateToast,
     showInfoToast,
-    showLoaderToast,
     showSuccessToast,
     showErrorToast
   };

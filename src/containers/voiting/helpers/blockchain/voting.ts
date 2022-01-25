@@ -15,9 +15,6 @@ interface SubmitProps {
   dex: Nullable<FoundDex>;
   tab: VotingTabs;
   confirmOperation: ReturnType<typeof useConfirmOperation>;
-  showErrorToast: UseToasts['showErrorToast'];
-  getBalance: () => void;
-  cleanUp: () => void;
 }
 
 interface IBatchParamsAndToastText {
@@ -128,29 +125,14 @@ export const unvoteOrRemoveVeto = async (
   }
 };
 
-export const submitForm = async ({
-  tezos,
-  values,
-  dex,
-  tab,
-  showErrorToast,
-  confirmOperation,
-  getBalance,
-  cleanUp
-}: SubmitProps) => {
+export const submitForm = async ({ tezos, values, dex, tab, confirmOperation }: SubmitProps) => {
   if (!dex) {
     return;
   }
 
-  try {
-    const { params, text: updateToastText } = await getBatchParamsAndToastText(tab, tezos, dex, values);
+  const { params, text: updateToastText } = await getBatchParamsAndToastText(tab, tezos, dex, values);
 
-    const op = await batchify(tezos.wallet.batch([]), params).send();
+  const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await confirmOperation(op.opHash, { message: updateToastText });
-    getBalance();
-    cleanUp();
-  } catch (e) {
-    showErrorToast(e as Error);
-  }
+  return await confirmOperation(op.opHash, { message: updateToastText });
 };

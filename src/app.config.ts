@@ -26,7 +26,15 @@ export const IPFS_GATEWAY = process.env.NEXT_PUBLIC_IPFS_GATEWAY!;
 
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
 export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
-export const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL!;
+
+export const NETWORK_ID = (process.env.NEXT_PUBLIC_NETWORK ?? QSNets.mainnet) as QSNets;
+export const MAINNET_BASE_URL = process.env.NEXT_PUBLIC_MAINNET_BASE_URL!;
+export const HANGZHOUNET_BASE_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_BASE_URL!;
+export const BASE_URL = NETWORK_ID === QSNets.mainnet ? MAINNET_BASE_URL : HANGZHOUNET_BASE_URL;
+export const networksBaseUrls = {
+  [QSNets.mainnet]: MAINNET_BASE_URL,
+  [QSNets.hangzhounet]: HANGZHOUNET_BASE_URL
+};
 
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
@@ -42,6 +50,9 @@ export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
+
+export const PRESET_AMOUNT_INPUT_DECIMALS = 2;
+export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
 
 export const READ_ONLY_SIGNER_PK = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK!;
 export const READ_ONLY_SIGNER_PK_HASH = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH!;
@@ -108,7 +119,7 @@ export const FACTORIES = {
   }
 };
 
-export const TTDEX_CONTRACTS: Partial<Record<QSNets, string>> = {
+const TTDEX_CONTRACTS: Partial<Record<QSNets, string>> = {
   hangzhounet: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC'
 };
 
@@ -125,8 +136,7 @@ export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
 export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
 export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
-export const NETWORK_ID_KEY = 'networkId';
-export const MAINNET_NETWORK: QSNetwork = {
+const MAINNET_NETWORK: QSNetwork = {
   id: QSNets.mainnet,
   connectType: ConnectType.DEFAULT,
   name: 'Mainnet',
@@ -135,7 +145,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   metadata: METADATA_API_MAINNET,
   disabled: false
 };
-export const HANGZHOUNET_NETWORK: QSNetwork = {
+const HANGZHOUNET_NETWORK: QSNetwork = {
   id: QSNets.hangzhounet,
   connectType: ConnectType.DEFAULT,
   name: 'Hangzhounet',
@@ -144,13 +154,19 @@ export const HANGZHOUNET_NETWORK: QSNetwork = {
   metadata: METADATA_API_TESTNET,
   disabled: false
 };
+const networks: Record<QSNets, QSNetwork> = {
+  [QSNets.mainnet]: MAINNET_NETWORK,
+  [QSNets.hangzhounet]: HANGZHOUNET_NETWORK
+};
+export const NETWORK = networks[NETWORK_ID];
+export const IS_NETWORK_MAINNET = NETWORK_ID === QSNets.mainnet;
+
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
-export const DEFAULT_NETWORK = MAINNET_NETWORK;
 export const CHAIN_ID_MAPPING = new Map<QSNets, string>([
   [QSNets.mainnet, 'NetXdQprcVkpaWU'],
   [QSNets.hangzhounet, 'NetXZSsxBpMQeAT']
 ]);
 
-export const TOKEN_TO_TOKEN_DEX = 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC';
+export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const LP_TOKEN_DECIMALS = 6;

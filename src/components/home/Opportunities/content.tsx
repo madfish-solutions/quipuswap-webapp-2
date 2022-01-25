@@ -28,7 +28,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     ),
     button: {
       label: <Trans ns="home">Start Trading</Trans>,
-      href: '/swap/TEZ-QUIPU'
+      href: '/swap'
     }
   },
   {
@@ -58,7 +58,7 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
     ),
     button: {
       label: <Trans ns="home">Add Liquidity</Trans>,
-      href: '/liquidity/add/TEZ-QUIPU'
+      href: '/liquidity/add'
     }
   }
 ];

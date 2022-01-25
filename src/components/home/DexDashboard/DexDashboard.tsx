@@ -9,11 +9,10 @@ import { useTranslation } from 'next-i18next';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
-import { MAINNET_NETWORK, MAINNET_DEFAULT_TOKEN } from '@app.config';
+import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@app.config';
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
-import { getStorageInfo, useNetwork } from '@utils/dapp';
-import { QSNetworkType } from '@utils/types';
+import { getStorageInfo } from '@utils/dapp';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
@@ -25,13 +24,12 @@ interface DexDashboardProps {
 export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
   const { loading, data, error } = useGetHomeOverviewQuery();
-  const network = useNetwork();
   const [totalSupply, setTotalSupply] = useState<BigNumber>();
 
   useEffect(() => {
     const asyncLoad = async () => {
       // TODO: change after deploy token to testnet
-      const tezos = new TezosToolkit(MAINNET_NETWORK.rpcBaseURL);
+      const tezos = new TezosToolkit(MAINNET_RPC_URL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       // @ts-ignore
       const tokenInfo = await contract?.token_info.get(0);
@@ -40,7 +38,7 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
     void asyncLoad();
   }, []);
 
-  const desktopContentClassName = network.type === QSNetworkType.MAIN ? s.content : cx(s.content, s.testnet);
+  const desktopContentClassName = IS_NETWORK_MAINNET ? s.content : cx(s.content, s.testnet);
 
   return (
     <Section

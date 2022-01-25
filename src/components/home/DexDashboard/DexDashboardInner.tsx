@@ -5,10 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { IS_NETWORK_MAINNET } from '@app.config';
 import { Maybe } from '@graphql';
-import { useNetwork } from '@utils/dapp';
 import { calculateRateAmount, isExist } from '@utils/helpers';
-import { QSNetworkType } from '@utils/types';
 
 import { DashboardCard } from './DashboardCard';
 import s from './DexDashboard.module.sass';
@@ -36,7 +35,6 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
   loading = false
 }) => {
   const { t } = useTranslation(['home']);
-  const network = useNetwork();
 
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tvl = isExist(totalLiquidity) && isExist(xtzUsdQuote) ? calculateRateAmount(totalLiquidity, xtzUsdQuote) : null;
@@ -45,7 +43,7 @@ export const DexDashboardInner: React.FC<DexDashboardInnerProps> = ({
 
   return (
     <>
-      {network.type === QSNetworkType.MAIN ? (
+      {IS_NETWORK_MAINNET ? (
         <>
           <DashboardCard
             className={cx(s.card, modeClass[colorThemeMode])}

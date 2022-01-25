@@ -7,12 +7,12 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { NETWORK } from '@app.config';
 import { Button } from '@components/ui/elements/button';
 import { Standard } from '@graphql';
 import {
   useTezos,
   getTokenType,
-  useNetwork,
   useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
@@ -49,7 +49,6 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
   const { data: tokens } = useTokens();
-  const network = useNetwork();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
   const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
@@ -63,13 +62,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
 
   const handleTokenSearch = useCallback(() => {
     const isTokens = tokens.filter((token: WhitelistedToken) =>
-      localSearchToken(token as WhitelistedOrCustomToken, network, inputValue, +inputToken)
+      localSearchToken(token as WhitelistedOrCustomToken, NETWORK, inputValue, +inputToken)
     );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, +inputToken);
     }
-  }, [inputToken, inputValue, network, tokens, searchCustomToken]);
+  }, [inputToken, inputValue, tokens, searchCustomToken]);
 
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0 && searchTokens.length === 0,

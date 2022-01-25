@@ -2,15 +2,15 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 
+import { NETWORK_ID } from '@app.config';
 import { loadT2tDex } from '@containers/liquidity/hooks/helpers/load-t2t-dex';
 import { loadTezDex } from '@containers/liquidity/hooks/helpers/load-tez-dex';
 import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
-import { useNetwork, useTezos } from '@utils/dapp';
+import { useTezos } from '@utils/dapp';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
   const tezos = useTezos();
-  const networkId = useNetwork().id;
 
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
@@ -25,7 +25,7 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
       const newDex = isTezIncluded([tokenA, tokenB])
         ? await loadTezDex({
             tezos,
-            networkId,
+            networkId: NETWORK_ID,
             tokenA,
             tokenB
           })
@@ -35,7 +35,7 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
     };
 
     void load();
-  }, [networkId, tezos, tokenA, tokenB]);
+  }, [tezos, tokenA, tokenB]);
 
   const clearDex = useCallback(() => setDex(null), []);
 

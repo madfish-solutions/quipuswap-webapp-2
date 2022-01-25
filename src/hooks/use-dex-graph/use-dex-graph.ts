@@ -3,9 +3,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { DEX_POOLS_URLS } from '@app.config';
+import { DEX_POOLS_URLS, NETWORK_ID } from '@app.config';
 import { useWebSocket } from '@hooks/use-web-socket';
-import { useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { getTokenIdFromSlug, getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
@@ -16,11 +16,10 @@ const fallbackRawDexPools: RawDexPool[] = [];
 
 export const [DexGraphProvider, useDexGraph] = constate(() => {
   const [dataIsStale, setDataIsStale] = useState(false);
-  const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
 
-  const { data: rawDexPools, loading: dexPoolsLoading } = useWebSocket(DEX_POOLS_URLS[networkId], fallbackRawDexPools);
+  const { data: rawDexPools, loading: dexPoolsLoading } = useWebSocket(DEX_POOLS_URLS[NETWORK_ID], fallbackRawDexPools);
   const prevDexPoolsLoadingRef = useRef(dexPoolsLoading);
   const dexPools = useMemo(
     () =>

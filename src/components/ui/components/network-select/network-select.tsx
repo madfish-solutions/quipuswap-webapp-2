@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Props as SelectProps } from 'react-select';
 
-import { ALL_NETWORKS } from '@app.config';
-import { useChangeNetwork, useNetwork } from '@utils/dapp';
+import { ALL_NETWORKS, NETWORK } from '@app.config';
+import { useChangeNetwork } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
 import { SelectUI } from '../../elements';
@@ -13,7 +13,6 @@ interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
 }
 
 export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, className }) => {
-  const net = useNetwork();
   const changeNetwork = useChangeNetwork();
 
   const selectValues = useMemo(() => ALL_NETWORKS.map(el => ({ value: el.id, label: el.name })), []);
@@ -32,7 +31,7 @@ export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, cla
   return (
     <SelectUI
       options={selectValues}
-      value={{ value: net.id, label: net.name }}
+      value={{ value: NETWORK.id, label: NETWORK.name }}
       onChange={handleSwitchNetwork}
       menuPlacement={menuPlacement}
       className={className}
