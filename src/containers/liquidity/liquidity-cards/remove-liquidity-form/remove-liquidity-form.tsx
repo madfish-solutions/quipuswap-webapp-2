@@ -31,7 +31,8 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -57,7 +58,9 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     !lpTokenInput ||
     isExist(validatedInputMessage) ||
     isExist(validatedOutputMessageA) ||
-    isExist(validatedOutputMessageB);
+    isExist(validatedOutputMessageB) ||
+    isExist(validationMessageDeadline) ||
+    isExist(validationMessageSlippage);
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
@@ -116,7 +119,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       {isDeadlineAndSlippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageTransactionDuration} />
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
           <div className={s['mt-24']}>
             <LiquiditySlippage
@@ -125,6 +128,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
               tokenB={tokenB}
               tokenAInput={tokenAOutput}
               tokenBInput={tokenBOutput}
+              error={validationMessageSlippage}
             />
           </div>
         </>
