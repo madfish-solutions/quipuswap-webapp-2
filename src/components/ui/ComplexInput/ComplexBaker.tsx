@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { BakerCleaner } from '@containers/voiting';
+import { BakerCleaner } from '@containers/voiting/helpers/bakerCleaner';
 import { getWhitelistedBakerName, isBackerNotEmpty } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -18,7 +18,7 @@ interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   id?: string;
   handleChange?: (baker: WhitelistedBaker) => void;
-  cleanBakerWrap: BakerCleaner;
+  cleanBaker: BakerCleaner;
 }
 
 const modeClass = {
@@ -26,8 +26,8 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const CHOOSE_BACKER = 'Choose Baker';
-const BAKER_CLEAN_UP = 'bakerCleanUp';
+const DEFAULT_BUTTON_LABEL = 'Choose Baker';
+const KEY_BAKER_CLEAN_UP = 'bakerCleanUp';
 
 export const ComplexBaker: FC<ComplexBakerProps> = ({
   className,
@@ -36,7 +36,7 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({
   error,
   handleChange,
   value,
-  cleanBakerWrap,
+  cleanBaker,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -44,10 +44,10 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({
   const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => cleanBakerWrap.set(BAKER_CLEAN_UP, () => setBaker(null)), [cleanBakerWrap]);
+  useEffect(() => cleanBaker.set(KEY_BAKER_CLEAN_UP, () => setBaker(null)), [cleanBaker]);
 
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
-  const buttonText = getWhitelistedBakerName(baker) ?? CHOOSE_BACKER;
+  const buttonText = getWhitelistedBakerName(baker) ?? DEFAULT_BUTTON_LABEL;
 
   return (
     <div className={compoundClassName}>
