@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'reac
 
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
-import { FormApi } from 'final-form';
+import { FormApi, Mutator } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
@@ -25,7 +25,7 @@ import {
   Nullable
 } from '@utils/types';
 
-import { handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
+import { bakerCleaner, handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
 import { VotingDetails, VotingForm, VotingStats } from './structures';
 import { VotingTabs } from './tabs.enum';
 
@@ -51,15 +51,23 @@ const fallbackTokenPair: WhitelistedTokenPair = {
   token2: defaultToken
 };
 
+// TODO: Refactor solution of BakerCleaner
+
 interface pForm {
   form: Nullable<FormApi<VoteFormValues, Partial<VoteFormValues>>>;
 }
 
 const pointerForm: pForm = { form: null };
+const BALANCE1 = 'balance1';
+const SELECTED_BAKER = 'selectedBaker';
 
-const cleanUp = () => {
+const cleanUp = (tab: VotingTabs) => {
   if (!isNull(pointerForm.form)) {
-    pointerForm.form.mutators.setValue('balance1', null);
+    pointerForm.form.mutators.setValue(BALANCE1, null);
+    if (tab === VotingTabs.vote) {
+      pointerForm.form.mutators.setValue(SELECTED_BAKER, null);
+      bakerCleaner.run();
+    }
   }
 };
 
@@ -118,7 +126,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
-      handleSearchToken({
+      void handleSearchToken({
         tokens,
         tezos: tezos!,
         network: NETWORK,
@@ -137,10 +145,10 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
-      handleTokenChangeWrapper(tokenPair.token1, 'first');
-      handleTokenChangeWrapper(tokenPair.token2, 'second');
-      handleTokenPairSelect(
+    const loadBalances = async () => {
+      await handleTokenChangeWrapper(tokenPair.token1, 'first');
+      await handleTokenChangeWrapper(tokenPair.token2, 'second');
+      await handleTokenPairSelect(
         tokenPair,
         setTokenPair,
         setDex,
@@ -151,19 +159,92 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         accountPkh,
         NETWORK_ID
       );
+    };
+
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      void loadBalances();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
-      getBalance();
+      void getBalance();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh]);
 
   useOnBlock(tezos, getBalance);
   const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
+
+  const handleClaimReward = async (params: TransferParams[]) => {
+    if (!tezos) {
+      return;
+    }
+
+    try {
+      await submitWithdraw(tezos, params, confirmOperation);
+      getBalance();
+    } catch (e) {
+      showErrorToast(e);
+    }
+  };
+
+  const handleVote = async (values: VoteFormValues) => {
+    if (!tezos) {
+      return;
+    }
+
+    try {
+      await submitForm({
+        tezos,
+        values,
+        dex,
+        tab: currentTab.id,
+        confirmOperation
+      });
+      getBalance();
+      cleanUp(currentTab.id);
+    } catch (e) {
+      showErrorToast(e);
+    }
+  };
+
+  const mutators: { [key: string]: Mutator<VoteFormValues, Partial<VoteFormValues>> } = {
+    setValue: ([field, value], state, { changeValue }) => {
+      changeValue(state, field, () => value);
+    }
+  };
+
+  const handleFormRender = (handleSubmit: () => Promise<void>, form: FormApi<VoteFormValues>) => {
+    if (pointerForm.form !== form) {
+      pointerForm.form = form;
+    }
+
+    return (
+      <VotingForm
+        form={form}
+        tabsState={tabsState}
+        rewards={rewards}
+        voter={voter}
+        dex={dex}
+        tokenPair={tokenPair}
+        tokensData={tokensData}
+        currentTab={currentTab}
+        tokensUpdading={isTokenLoading}
+        setRewards={setRewards}
+        setDex={setDex}
+        setTokens={setTokens}
+        setTokenPair={setTokenPair}
+        setVoter={setVoter}
+        setTabsState={setTabsState}
+        getBalance={getBalance}
+        handleSubmit={handleSubmit}
+        handleTokenChange={handleTokenChange}
+        bakerCleaner={bakerCleaner}
+      />
+    );
+  };
 
   return (
     <Fragment>
@@ -175,67 +256,15 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         vetoAmount={voter?.veto ?? null}
         className={s.votingStats}
         dex={dex}
-        handleSubmit={(params: TransferParams[]) => {
-          if (!tezos) {
-            return;
-          }
-
-          return submitWithdraw(tezos, params, showErrorToast, confirmOperation, getBalance);
-        }}
+        onClaimReward={handleClaimReward}
       />
 
       <StickyBlock className={className}>
         <Form
-          onSubmit={values => {
-            if (!tezos) {
-              return;
-            }
-            void submitForm({
-              tezos,
-              values,
-              dex,
-              tab: currentTab.id,
-              confirmOperation,
-              showErrorToast,
-              getBalance,
-              cleanUp
-            });
-          }}
-          mutators={{
-            setValue: ([field, value], state, { changeValue }) => {
-              changeValue(state, field, () => value);
-            }
-          }}
-          render={({ handleSubmit, form }) => {
-            if (isNull(pointerForm.form)) {
-              pointerForm.form = form;
-            }
-
-            return (
-              <VotingForm
-                form={form}
-                tabsState={tabsState}
-                rewards={rewards}
-                voter={voter}
-                dex={dex}
-                tokenPair={tokenPair}
-                tokensData={tokensData}
-                currentTab={currentTab}
-                tokensUpdading={isTokenLoading}
-                setRewards={setRewards}
-                setDex={setDex}
-                setTokens={setTokens}
-                setTokenPair={setTokenPair}
-                setVoter={setVoter}
-                setTabsState={setTabsState}
-                getBalance={getBalance}
-                handleSubmit={handleSubmit}
-                handleTokenChange={handleTokenChange}
-              />
-            );
-          }}
+          onSubmit={handleVote}
+          mutators={mutators}
+          render={({ handleSubmit, form }) => handleFormRender(handleSubmit as () => Promise<void>, form)}
         />
-
         <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
       </StickyBlock>
     </Fragment>

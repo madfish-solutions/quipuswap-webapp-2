@@ -18,7 +18,8 @@ import {
   getCandidateInfo,
   getVoteVetoBalances,
   handleTokenPairSelect,
-  unvoteOrRemoveVeto
+  unvoteOrRemoveVeto,
+  BakerCleaner
 } from '@containers/voiting/helpers';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
@@ -72,10 +73,12 @@ interface VotingFormProps {
   setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
   setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<void>;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  bakerCleaner: BakerCleaner;
 }
 
+const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
 const RealForm: React.FC<VotingFormProps> = ({
@@ -96,7 +99,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   currentTab,
   setTabsState,
   getBalance,
-  tokensUpdading
+  tokensUpdading,
+  bakerCleaner
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
@@ -113,6 +117,8 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
+
+  useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
   const handleInputChange = async () => {
     if (!tezos) {
@@ -156,21 +162,14 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [accountPkh, closeConnectWalletModal]);
 
   const handleVoteOrVeto = async () => {
-    if (!tezos || !dex) {
+    if (!tezos || !dex || !values.balance1) {
       return;
     }
 
-    if (!values.balance1) {
-      // throw form validation error
-      handleSubmit();
-
-      return;
-    }
-    form.resumeValidation();
-    handleSubmit();
+    await handleSubmit();
   };
 
-  const handleUnvoteOrRemoveveto = async () => {
+  const handleUnvoteOrRemoveVeto = async () => {
     if (!tezos || !dex || isNull(voter.candidate)) {
       return;
     }
@@ -268,6 +267,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt12}
+                cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
@@ -292,7 +292,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         <div className={s.buttons}>
           {accountPkh && (
             <Button
-              onClick={handleUnvoteOrRemoveveto}
+              onClick={handleUnvoteOrRemoveVeto}
               className={s.button}
               theme="secondary"
               disabled={

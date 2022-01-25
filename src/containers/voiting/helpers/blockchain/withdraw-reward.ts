@@ -6,15 +6,9 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 export const submitWithdraw = async (
   tezos: TezosToolkit,
   voteParams: TransferParams[],
-  handleErrorToast: (err: Error) => void,
-  confirmOperation: ReturnType<typeof useConfirmOperation>,
-  getBalance: () => void
+  confirmOperation: ReturnType<typeof useConfirmOperation>
 ) => {
-  try {
-    const op = await batchify(tezos.wallet.batch([]), voteParams).send();
-    await confirmOperation(op.opHash);
-    getBalance();
-  } catch (e) {
-    handleErrorToast(e as Error);
-  }
+  const op = await batchify(tezos.wallet.batch([]), voteParams).send();
+
+  return await confirmOperation(op.opHash);
 };
