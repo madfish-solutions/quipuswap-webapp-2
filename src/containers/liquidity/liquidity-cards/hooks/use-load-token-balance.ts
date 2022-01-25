@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
+import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
@@ -22,7 +23,7 @@ export const useLoadTokenBalance = (token: Nullable<WhitelistedToken>) => {
       const userTokenABalance = await getUserBalance(tezos, accountPkh, contractAddress, type, fa2TokenId);
 
       if (userTokenABalance) {
-        setTokenBalance(userTokenABalance);
+        setTokenBalance(fromDecimals(userTokenABalance, token));
       }
 
       return userTokenABalance;

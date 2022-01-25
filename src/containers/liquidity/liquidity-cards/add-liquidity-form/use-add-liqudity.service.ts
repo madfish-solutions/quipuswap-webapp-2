@@ -65,13 +65,18 @@ export const useAddLiquidityService = (
       return;
     }
     const tokenABN = new BigNumber(tokenAInput);
-    const tokenAAmount = toDecimals(tokenABN, tokenA);
 
     const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
     const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
 
-    const validationA = validations(accountPkh, tokenAAmount, tokenABalance, tokenAInput, decimalsA, symbolA);
+    const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
+
+    if (validationA === INVALID_INPUT) {
+      setTokenBInput('');
+
+      return;
+    }
 
     if (
       !pairInfo ||
@@ -84,12 +89,6 @@ export const useAddLiquidityService = (
 
     const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
-    if (validationA === INVALID_INPUT) {
-      setTokenBInput('');
-
-      return;
-    }
-
     const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
@@ -99,6 +98,7 @@ export const useAddLiquidityService = (
     const validationB = tokenBAmount
       ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)
       : undefined;
+
     setValidationMessageTokenB(validationB);
 
     setTokenBInput(tokenBAmount ? tokenBAmount.toFixed() : '');
