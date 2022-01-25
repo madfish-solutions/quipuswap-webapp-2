@@ -5,8 +5,8 @@ import cx from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { NETWORK_ID } from '@app.config';
 import { isActivePath } from '@components/common/Header/Navigation/utils';
-import { useNetwork } from '@utils/dapp';
 
 import { makeNavigationData } from './content';
 import s from './Navigation.module.sass';
@@ -23,13 +23,12 @@ interface NavigationProps {
 
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
   const router = useRouter();
-  const network = useNetwork();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isInnerMenuOpened, setIsInnerMenuOpened] = useState(false);
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    const navigationData = makeNavigationData(network.id);
+    const navigationData = makeNavigationData(NETWORK_ID);
     navigationData.forEach(({ id, href, label, Icon, links, as }) => {
       if (href) {
         result.push(
@@ -82,7 +81,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
     });
 
     return result;
-  }, [network.id, colorThemeMode, iconId, isInnerMenuOpened, router.pathname]);
+  }, [colorThemeMode, iconId, isInnerMenuOpened, router.pathname]);
 
   return <nav className={cx(s.root, className)}>{content}</nav>;
 };

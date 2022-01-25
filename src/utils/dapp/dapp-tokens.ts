@@ -3,13 +3,14 @@ import { useState, useCallback, useEffect } from 'react';
 import constate from 'constate';
 import useSWR from 'swr';
 
+import { NETWORK, NETWORK_ID } from '@app.config';
 import { Standard } from '@graphql';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenWithQSNetworkType } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getTokens, getFallbackTokens, getContract, getTokenMetadata, saveCustomToken } from '.';
-import { useNetwork, useTezos } from './dapp';
+import { useTezos } from './dapp';
 
 export interface DAppTokens {
   tokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
@@ -23,22 +24,21 @@ const useDappTokens = () => {
   });
 
   const tezos = useTezos();
-  const network = useNetwork();
 
-  const getTokensData = useCallback(async () => getTokens(network, true), [network]);
-  const { data: tokensData, error: tokensError } = useSWR(['tokens-initial-data', network], getTokensData);
+  const getTokensData = useCallback(async () => getTokens(NETWORK, true), []);
+  const { data: tokensData, error: tokensError } = useSWR(['tokens-initial-data', NETWORK], getTokensData);
 
   useEffect(() => {
     setState(prevState => {
       const prevTokens = prevState.tokens.data;
-      const fallbackTokens = isEmptyArray(prevTokens) ? getFallbackTokens(network, true) : prevTokens;
+      const fallbackTokens = isEmptyArray(prevTokens) ? getFallbackTokens(NETWORK, true) : prevTokens;
 
       return {
         ...prevState,
         tokens: { loading: !tokensData && !tokensError, data: tokensData ?? fallbackTokens }
       };
     });
-  }, [tokensData, tokensError, network]);
+  }, [tokensData, tokensError]);
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<WhitelistedToken | null> => {
@@ -62,7 +62,7 @@ const useDappTokens = () => {
           return null;
         }
         const isFa2 = Boolean(type.methods.update_operators);
-        const customToken = await getTokenMetadata(network, address, tokenId);
+        const customToken = await getTokenMetadata(NETWORK, address, tokenId);
         if (!customToken) {
           setState(prevState => ({
             ...prevState,
@@ -76,7 +76,7 @@ const useDappTokens = () => {
           metadata: customToken,
           type: isFa2 ? Standard.Fa2 : Standard.Fa12,
           fa2TokenId: isFa2 ? tokenId || 0 : undefined,
-          network: network.id
+          network: NETWORK_ID
         };
         setState(prevState => ({
           ...prevState,
@@ -91,7 +91,7 @@ const useDappTokens = () => {
 
       return null;
     },
-    [tezos, network]
+    [tezos]
   );
 
   const addCustomToken = useCallback(

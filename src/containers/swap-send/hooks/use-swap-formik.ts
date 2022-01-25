@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 
-import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TTDEX_CONTRACTS } from '@app.config';
+import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useToasts } from '@hooks/use-toasts';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { getTokenSlug, getWhitelistedTokenSymbol, swap, toDecimals } from '@utils/helpers';
 import { getSwapMessage } from '@utils/helpers/get-success-messages';
@@ -30,7 +30,6 @@ export const useSwapFormik = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
-  const network = useNetwork();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
 
@@ -56,7 +55,7 @@ export const useSwapFormik = () => {
           graph: dexGraph,
           inputAmount: rawInputAmount
         })!,
-        ttDexAddress: TTDEX_CONTRACTS[network.id]
+        ttDexAddress: TOKEN_TO_TOKEN_DEX
       });
       await confirmOperation(walletOperation.opHash, {
         message: getSwapMessage(getWhitelistedTokenSymbol(inputToken), getWhitelistedTokenSymbol(outputToken))

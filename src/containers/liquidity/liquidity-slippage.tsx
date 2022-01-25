@@ -5,16 +5,15 @@ import { useTranslation } from 'next-i18next';
 
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
-  HANGZHOUNET_DEFAULT_TOKEN,
-  MAINNET_DEFAULT_TOKEN,
   TEZOS_TOKEN,
   PRESET_AMOUNT_INPUT_DECIMALS,
-  MINIMUM_PRESET_AMOUNT_INPUT_VALUE
+  MINIMUM_PRESET_AMOUNT_INPUT_VALUE,
+  networksDefaultTokens,
+  NETWORK_ID
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
-import { useNetwork } from '@utils/dapp';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -50,7 +49,6 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
 
-  const network = useNetwork().id;
   const { slippage, setSlippage, slippageActiveButton, setSlippageActiveButton, slippagePresets } = useSlippage();
 
   const handleChange = (newValue: Nullable<string>) =>
@@ -63,7 +61,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   const maxInvestedOrReceivedB = increaseOrDecreaseBySlippage(liquidityType, tokenBBN, slippage);
 
   const investedOrReceivedText = liquidityType === LiquiditySlippageType.ADD ? 'invested' : 'received';
-  const DEFAULT_STABLE_TOKEN = network === 'mainnet' ? MAINNET_DEFAULT_TOKEN : HANGZHOUNET_DEFAULT_TOKEN;
+  const DEFAULT_STABLE_TOKEN = networksDefaultTokens[NETWORK_ID];
 
   return (
     <>

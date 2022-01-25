@@ -2,9 +2,8 @@ import { useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { TTDEX_CONTRACTS } from '@app.config';
+import { TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
-import { useNetwork } from '@utils/dapp';
 import {
   fromDecimals,
   getMaxTokenInput,
@@ -37,7 +36,6 @@ const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
   const { dexGraph } = useDexGraph();
-  const network = useNetwork();
   const swapFee = useSwapFee({ ...params, dexChain: dexRoute });
 
   const sellRate =
@@ -91,7 +89,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
             inputAmount: toDecimals(inputAmount, inputToken),
             dexChain: dexRoute,
             slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
-            ttDexAddress: TTDEX_CONTRACTS[network.id]
+            ttDexAddress: TOKEN_TO_TOKEN_DEX
           })
         : null,
     buyRate,

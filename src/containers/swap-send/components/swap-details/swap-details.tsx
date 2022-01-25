@@ -4,7 +4,7 @@ import { Card } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
@@ -12,7 +12,6 @@ import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
-import { useNetwork } from '@utils/dapp';
 import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
 
 import { Route } from '../route';
@@ -39,12 +38,11 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   buyRate,
   sellRate
 }) => {
-  const network = useNetwork();
   const { t } = useTranslation(['common', 'swap']);
   const routes = useMemo(() => (inputToken ? dexRouteToQuipuUiKitRoute(inputToken, route) : []), [inputToken, route]);
 
   const fallbackInputToken = TEZOS_TOKEN;
-  const fallbackOutputToken = networksDefaultTokens[network.id];
+  const fallbackOutputToken = networksDefaultTokens[NETWORK_ID];
   const inputTokenWithFallback = inputToken ?? fallbackInputToken;
   const outputTokenWithFallback = outputToken ?? fallbackOutputToken;
 

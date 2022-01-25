@@ -3,8 +3,8 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
@@ -28,7 +28,6 @@ export const useAddLiquidityService = (
   onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
-  const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
@@ -323,7 +322,7 @@ export const useAddLiquidityService = (
 
       const initializeLiquidityTezOperation = await initializeLiquidityTez(
         tezos,
-        networkId,
+        NETWORK_ID,
         token,
         tokenBValue,
         tezValue

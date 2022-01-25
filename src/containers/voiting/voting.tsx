@@ -7,13 +7,13 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 
-import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
+import { NETWORK, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { PageTitle } from '@components/common/page-title';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
-import { useTezos, useNetwork, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
+import { useTezos, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData, isNull } from '@utils/helpers';
 import {
@@ -44,9 +44,11 @@ interface VotingProps {
   className?: string;
 }
 
+const defaultToken = networksDefaultTokens[NETWORK_ID];
+
 const fallbackTokenPair: WhitelistedTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: MAINNET_DEFAULT_TOKEN
+  token2: defaultToken
 };
 
 interface pForm {
@@ -66,16 +68,15 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
   const tezos = useTezos();
-  const network = useNetwork();
   const exchangeRates = useExchangeRates();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
   const [tokensData, setTokensData] = useState<TokenDataMap>({
     first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(MAINNET_DEFAULT_TOKEN)
+    second: fallbackTokenToTokenData(defaultToken)
   });
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, MAINNET_DEFAULT_TOKEN]);
+  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
   const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
   const { Form } = withTypes<VoteFormValues>();
@@ -116,22 +117,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   };
 
   useEffect(() => {
-    if (network.id === HANGZHOUNET_NETWORK.id) {
-      setTokenPair({
-        token1: TEZOS_TOKEN,
-        token2: HANGZHOUNET_DEFAULT_TOKEN
-      });
-    } else {
-      setTokenPair(fallbackTokenPair);
-    }
-  }, [network]);
-
-  useEffect(() => {
     if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
       handleSearchToken({
         tokens,
         tezos: tezos!,
-        network,
+        network: NETWORK,
         from,
         to,
         fixTokenFrom: TEZOS_TOKEN,
@@ -159,18 +149,18 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         showErrorToast,
         tezos,
         accountPkh,
-        network.id
+        NETWORK_ID
       );
     }
     // eslint-disable-next-line
-  }, [tezos, accountPkh, network.id, tokenPair]);
+  }, [tezos, accountPkh, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
       getBalance();
     }
     // eslint-disable-next-line
-  }, [tezos, accountPkh, network.id]);
+  }, [tezos, accountPkh]);
 
   useOnBlock(tezos, getBalance);
 

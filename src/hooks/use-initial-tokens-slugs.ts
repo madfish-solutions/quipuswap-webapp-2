@@ -1,44 +1,34 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
-import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import {
-  fallbackToolkits,
-  getTokenType,
-  useNetwork,
-  useTokens,
-  useSearchCustomTokens,
-  useAddCustomToken
-} from '@utils/dapp';
+import { fallbackToolkits, getTokenType, useTokens, useSearchCustomTokens, useAddCustomToken } from '@utils/dapp';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
-import { QSNets } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 type TokensSlugs = [string, string];
 
 export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
-  const network = useNetwork();
   const router = useRouter();
   const { data: tokens, loading: tokensLoading } = useTokens();
   const searchCustomTokens = useSearchCustomTokens();
   const addCustomToken = useAddCustomToken();
-  const prevNetworkIdRef = useRef<QSNets | undefined>();
 
   const getInitialTokens = useCallback(
     // eslint-disable-next-line sonarjs/cognitive-complexity
-    async (_key: string, networkId: QSNets, tokensSlug = ''): Promise<TokensSlugs> => {
+    async (_key: string, tokensSlug = ''): Promise<TokensSlugs> => {
       const fallbackTokensSlugs: TokensSlugs = [
         getTokenSlug(TEZOS_TOKEN),
-        getTokenSlug(networksDefaultTokens[networkId])
+        getTokenSlug(networksDefaultTokens[NETWORK_ID])
       ];
       const rawSlugs: string[] = tokensSlug.split('-').slice(0, 2);
       while (rawSlugs.length < 2) {
         rawSlugs.push('');
       }
-      const tezos = fallbackToolkits[networkId];
+      const tezos = fallbackToolkits[NETWORK_ID];
       const tokensSlugs = await Promise.all(
         rawSlugs.map(async (rawSlug, index) => {
           if (!rawSlug || isValidTokenSlug(rawSlug) !== true) {
@@ -79,12 +69,10 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
   );
 
   const tokensKey = tokens.map(token => getTokenSlug(token)).join(',');
-  const { data: initialTokensSlugs } = useSWR(['initial-tokens', network.id, fromToSlug, tokensKey], getInitialTokens);
+  const { data: initialTokensSlugs } = useSWR(['initial-tokens', fromToSlug, tokensKey], getInitialTokens);
 
   useEffect(() => {
-    const prevNetworkId = prevNetworkIdRef.current;
-
-    if (prevNetworkId === network.id || tokensLoading || !initialTokensSlugs) {
+    if (tokensLoading || !initialTokensSlugs) {
       return;
     }
     const newTokensSlug = initialTokensSlugs.join('-');
@@ -103,12 +91,10 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
         });
       }
     });
-    prevNetworkIdRef.current = network.id;
   }, [
     addCustomToken,
     fromToSlug,
     initialTokensSlugs,
-    network.id,
     getRedirectionUrl,
     router,
     searchCustomTokens,

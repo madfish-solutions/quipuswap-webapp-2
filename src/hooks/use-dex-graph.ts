@@ -4,9 +4,9 @@ import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import useSWR, { useSWRConfig } from 'swr';
 
-import { FACTORIES, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
+import { FACTORIES, NETWORK_ID, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { useNetwork, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
@@ -45,17 +45,16 @@ const fallbackDexPools: DexPair[] = [];
 
 export const [DexGraphProvider, useDexGraph] = constate(() => {
   const [dataIsStale, setDataIsStale] = useState(false);
-  const { id: networkId } = useNetwork();
   const { data: tokens } = useTokens();
   const tezos = useTezos();
   const { showErrorToast } = useToasts();
   const { mutate } = useSWRConfig();
 
   const getDexPools = useCallback(async (): Promise<DexPair[] | undefined> => {
-    const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[networkId];
+    const { fa1_2Factory: fa12Factory, fa2Factory } = FACTORIES[NETWORK_ID];
 
     try {
-      const result = await fetch(`${POOLS_LIST_API}/api/${networkId}/pools`);
+      const result = await fetch(`${POOLS_LIST_API}/api/${NETWORK_ID}/pools`);
       if (result.status >= 400) {
         throw new Error(`Response has status ${result.status}`);
       }
@@ -119,16 +118,12 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
       return undefined;
     }
-  }, [tokens, networkId, showErrorToast]);
+  }, [tokens, showErrorToast]);
 
   const tokensSWRKey = useMemo(() => tokens.map(getTokenSlug).join(','), [tokens]);
 
-  const {
-    data: dexPools,
-    error: dexPoolsError,
-    isValidating
-  } = useSWR(['dexPools', networkId, tokensSWRKey], getDexPools);
-  const refreshDexPools = async () => mutate(['dexPools', networkId, tokensSWRKey]);
+  const { data: dexPools, error: dexPoolsError, isValidating } = useSWR(['dexPools', tokensSWRKey], getDexPools);
+  const refreshDexPools = async () => mutate(['dexPools', tokensSWRKey]);
 
   useOnBlock(tezos, () => setDataIsStale(true));
   useEffect(() => setDataIsStale(false), [dexPools]);

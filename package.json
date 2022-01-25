@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 next dev -p 3000",
+    "dev:hangzhounet": "cross-env NEXT_PUBLIC_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./src --ext .ts,.tsx",
@@ -68,6 +69,7 @@
     "@types/react-select": "^4.0.17",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
+    "cross-env": "^7.0.3",
     "eslint": "^8.4.1",
     "eslint-config-next": "^11.0.1",
     "eslint-config-react-app": "^7.0.0",
