@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import { Plus } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -12,7 +11,7 @@ import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals, isExist } from '@utils/helpers';
+import { isExist } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
@@ -20,15 +19,15 @@ import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
-const DEFAULT_BALANCE = 0;
-const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
+const DEFAULT_BALANCE = '0';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const { t } = useTranslation(['liquidity']);
   const {
     validationMessageTokenA,
     validationMessageTokenB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     accountPkh,
     tokenABalance,
     tokenBBalance,
@@ -44,9 +43,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     handleAddLiquidity
   } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
-  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
-  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
-
   const isButtonDisabled =
     !dex ||
     !accountPkh ||
@@ -56,13 +52,11 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     !tokenBInput ||
     isExist(validationMessageTokenA) ||
     isExist(validationMessageTokenB) ||
-    isExist(validationMessageTransactionDuration);
+    isExist(validationMessageDeadline) ||
+    isExist(validationMessageSlippage);
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
-
-  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
-  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
 
   const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
@@ -70,7 +64,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     <>
       <TokenSelect
         label="Input"
-        balance={balanceTokenA}
+        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -85,7 +79,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={balanceTokenB}
+        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
@@ -100,7 +94,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       {isDeadlineAndSkippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageTransactionDuration} />
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
           <div className={s['mt-24']}>
             <LiquiditySlippage
@@ -109,6 +103,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
               tokenB={tokenB}
               tokenAInput={tokenAInput}
               tokenBInput={tokenBInput}
+              error={validationMessageSlippage}
             />
           </div>
         </>

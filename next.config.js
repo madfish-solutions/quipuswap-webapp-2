@@ -16,22 +16,37 @@ module.exports = withReactSvg({
     return [
       {
         source: '/swap',
-        destination: `/swap/${process.env.DEFAULT_SWAP_URI}`,
+        destination: `/swap/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/liquidity',
+        destination: `/liquidity/add/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/liquidity/add',
+        destination: `/liquidity/add/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/liquidity/remove',
+        destination: `/liquidity/remove/${process.env.DEFAULT_TOKENS_SLUGS}`,
         permanent: true
       },
       {
         source: '/voting',
-        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_TOKENS_SLUGS}`,
         permanent: true
       },
       {
         source: '/voting/vote',
-        destination: `/voting/vote/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
+        destination: `/voting/vote/${process.env.DEFAULT_TOKENS_SLUGS}`,
         permanent: true
       },
       {
         source: '/voting/veto',
-        destination: `/voting/veto/${process.env.DEFAULT_ADD_LIQUIDITY_URI}`,
+        destination: `/voting/veto/${process.env.DEFAULT_TOKENS_SLUGS}`,
         permanent: true
       }
     ];

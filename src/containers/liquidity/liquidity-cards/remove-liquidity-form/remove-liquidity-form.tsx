@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import { ArrowDown, Plus } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
@@ -12,7 +11,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
-import { fromDecimals, isExist } from '@utils/helpers';
+import { isExist } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
@@ -21,8 +20,7 @@ import { isTezIncluded } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
-const DEFAULT_BALANCE = 0;
-const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
+const DEFAULT_BALANCE = '0';
 
 export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
@@ -31,7 +29,8 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     tokenPair,
     accountPkh,
     lpTokenInput,
@@ -46,9 +45,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     handleSetTokenPair
   } = useRemoveLiquidityService(dex, tokenA, tokenB, onChangeTokensPair);
 
-  const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
-  const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
-
   const isButtonDisabled =
     !dex ||
     !tokenA ||
@@ -57,16 +53,14 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     !lpTokenInput ||
     isExist(validatedInputMessage) ||
     isExist(validatedOutputMessageA) ||
-    isExist(validatedOutputMessageB);
+    isExist(validatedOutputMessageB) ||
+    isExist(validationMessageDeadline) ||
+    isExist(validationMessageSlippage);
 
   const blackListedTokens = getBlackListedTokens(tokenA, tokenB);
   const shouldShowBalanceButtons = Boolean(accountPkh);
 
-  const balanceTokenA = decimalsA ? fromDecimals(tokenABalance ?? DEFAULT_BALANCE_BN, decimalsA).toFixed() : null;
-  const balanceTokenB = decimalsB ? fromDecimals(tokenBBalance ?? DEFAULT_BALANCE_BN, decimalsB).toFixed() : null;
-
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
-  const isUnvoteVisible = !isDeadlineAndSlippageVisible && share && new BigNumber(lpTokenInput).gt(share.unfrozen);
 
   return (
     <>
@@ -74,7 +68,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={share?.total.toFixed()}
+        balance={share?.unfrozen.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
@@ -88,7 +82,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={balanceTokenA}
+        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -102,7 +96,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={balanceTokenB}
+        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
@@ -116,7 +110,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       {isDeadlineAndSlippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageTransactionDuration} />
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
           <div className={s['mt-24']}>
             <LiquiditySlippage
@@ -125,13 +119,14 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
               tokenB={tokenB}
               tokenAInput={tokenAOutput}
               tokenBInput={tokenBOutput}
+              error={validationMessageSlippage}
             />
           </div>
         </>
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-          Remove {isUnvoteVisible && '& Unvote'}
+          Remove
         </Button>
       ) : (
         <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />

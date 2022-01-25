@@ -41,7 +41,6 @@ export * from './get-deadline';
 export * from './get-blockchain-timestamp';
 export * from './is-backer-not-empty';
 export * from './is-default-connect-type';
-export * from './is-network-mainnet';
 export * from './type-checks';
 export * from './calculate-rate-amount';
 export * from './format-balance';

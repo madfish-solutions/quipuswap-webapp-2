@@ -1,10 +1,11 @@
-import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
+import React, { FC, HTMLProps, useContext, useEffect, useRef, useState } from 'react';
 
 import { Shevron, BakerLogo, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { BakerCleaner } from '@containers/voiting/helpers';
 import { getWhitelistedBakerName, isBackerNotEmpty } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -17,6 +18,7 @@ interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   id?: string;
   handleChange?: (baker: WhitelistedBaker) => void;
+  cleanBaker: BakerCleaner;
 }
 
 const modeClass = {
@@ -24,16 +26,28 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const CHOOSE_BACKER = 'Choose Baker';
+const DEFAULT_BUTTON_LABEL = 'Choose Baker';
+const KEY_BAKER_CLEAN_UP = 'bakerCleanUp';
 
-export const ComplexBaker: FC<ComplexBakerProps> = ({ className, label, id, error, handleChange, value, ...props }) => {
+export const ComplexBaker: FC<ComplexBakerProps> = ({
+  className,
+  label,
+  id,
+  error,
+  handleChange,
+  value,
+  cleanBaker,
+  ...props
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => cleanBaker.set(KEY_BAKER_CLEAN_UP, () => setBaker(null)), [cleanBaker]);
+
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
-  const buttonText = getWhitelistedBakerName(baker) ?? CHOOSE_BACKER;
+  const buttonText = getWhitelistedBakerName(baker) ?? DEFAULT_BUTTON_LABEL;
 
   return (
     <div className={compoundClassName}>

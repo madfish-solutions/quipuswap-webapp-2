@@ -3,8 +3,8 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'reac
 import { FoundDex, Token } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { useAccountPkh, useNetwork, useTezos } from '@utils/dapp';
+import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
@@ -13,7 +13,7 @@ import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateTransactionDuration, validations } from '../validators';
+import { validateDeadline, validateSlippage, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
@@ -28,7 +28,6 @@ export const useAddLiquidityService = (
   onTokenBChange: (token: WhitelistedToken) => void
 ) => {
   const tezos = useTezos();
-  const networkId = useNetwork().id;
   const accountPkh = useAccountPkh();
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
@@ -66,13 +65,18 @@ export const useAddLiquidityService = (
       return;
     }
     const tokenABN = new BigNumber(tokenAInput);
-    const tokenAAmount = toDecimals(tokenABN, tokenA);
 
     const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
     const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
 
-    const validationA = validations(accountPkh, tokenAAmount, tokenABalance, tokenAInput, decimalsA, symbolA);
+    const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
+
+    if (validationA === INVALID_INPUT) {
+      setTokenBInput('');
+
+      return;
+    }
 
     if (
       !pairInfo ||
@@ -85,12 +89,6 @@ export const useAddLiquidityService = (
 
     const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
-    if (validationA === INVALID_INPUT) {
-      setTokenBInput('');
-
-      return;
-    }
-
     const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
@@ -100,6 +98,7 @@ export const useAddLiquidityService = (
     const validationB = tokenBAmount
       ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)
       : undefined;
+
     setValidationMessageTokenB(validationB);
 
     setTokenBInput(tokenBAmount ? tokenBAmount.toFixed() : '');
@@ -323,7 +322,7 @@ export const useAddLiquidityService = (
 
       const initializeLiquidityTezOperation = await initializeLiquidityTez(
         tezos,
-        networkId,
+        NETWORK_ID,
         token,
         tokenBValue,
         tezValue
@@ -348,18 +347,20 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
-  const validationMessageTransactionDuration = validateTransactionDuration(deadline);
+  const validationMessageDeadline = validateDeadline(deadline);
+  const validationMessageSlippage = validateSlippage(slippage);
 
   const isPoolExistsButEmpty =
     pairInfo &&
     (pairInfo.tokenAPool.eq(EMPTY_POOL) || pairInfo.tokenBPool.eq(EMPTY_POOL) || pairInfo.totalSupply.eq(EMPTY_POOL));
 
-  const isNewPair = dex && (!pairInfo || isPoolExistsButEmpty);
+  const isNewPair = dex && isPoolExistsButEmpty;
 
   return {
     validationMessageTokenA,
     validationMessageTokenB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     accountPkh,
     tokenABalance,
     tokenBBalance,

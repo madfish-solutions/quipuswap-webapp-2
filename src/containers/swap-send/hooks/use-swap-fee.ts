@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import debouncePromise from 'debounce-promise';
 
-import { TEZOS_TOKEN, TTDEX_CONTRACTS } from '@app.config';
-import { useAccountPkh, useNetwork, useEstimationToolkit } from '@utils/dapp';
+import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
 import { estimateSwapFee, fromDecimals, toDecimals } from '@utils/helpers';
 import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
@@ -22,7 +22,6 @@ const DEBOUNCE_DELAY = 250;
 
 export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageTolerance, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
-  const network = useNetwork();
   const tezos = useEstimationToolkit();
 
   const [swapFee, setSwapFee] = useState<Nullable<BigNumber>>(null);
@@ -38,7 +37,7 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
               dexChain,
               recipient,
               slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
-              ttDexAddress: TTDEX_CONTRACTS[network.id]
+              ttDexAddress: TOKEN_TO_TOKEN_DEX
             });
             setSwapFee(fromDecimals(rawNewFee, TEZOS_TOKEN));
 
@@ -49,7 +48,7 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
         }
         setSwapFee(null);
       }, DEBOUNCE_DELAY),
-    [accountPkh, dexChain, inputAmount, inputToken, network.id, recipient, slippageTolerance, tezos]
+    [accountPkh, dexChain, inputAmount, inputToken, recipient, slippageTolerance, tezos]
   );
   useEffect(() => void updateSwapFee(), [updateSwapFee]);
 

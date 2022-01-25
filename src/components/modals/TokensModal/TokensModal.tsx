@@ -15,10 +15,10 @@ import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { NETWORK } from '@app.config';
 import { Button } from '@components/ui/elements/button';
 import { Standard } from '@graphql';
 import {
-  useNetwork,
   useTezos,
   getTokenType,
   useAddCustomToken,
@@ -61,7 +61,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const tezos = useTezos();
-  const network = useNetwork();
   const { Form } = withTypes<FormValues>();
   const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
@@ -76,23 +75,23 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   };
 
   const handleTokenSearch = useCallback(() => {
-    if (!network || !tezos) {
+    if (!tezos) {
       return;
     }
     // eslint-disable-next-line
-    const isTokens = tokens.filter((token: any) => localSearchToken(token, network, inputValue, inputToken));
+    const isTokens = tokens.filter((token: any) => localSearchToken(token, NETWORK, inputValue, inputToken));
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
       searchCustomToken(inputValue, inputToken);
     }
-  }, [inputValue, inputToken, network, tezos, searchCustomToken, tokens]);
+  }, [inputValue, inputToken, tezos, searchCustomToken, tokens]);
 
   const isEmptyTokens = useMemo(
     () => filteredTokens.length === 0 && searchTokens.length === 0,
     [searchTokens, filteredTokens]
   );
 
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, network, handleTokenSearch]);
+  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
   const allTokens = useMemo(
     () =>

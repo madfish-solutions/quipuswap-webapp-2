@@ -44,7 +44,7 @@ export const makeNavigationData = (network: QSNets): NavigationDataProps[] => [
   {
     id: 3,
     href: '/voting/[method]/[from-to]',
-    as: '/voting/vote/TEZ-QUIPU',
+    as: `/voting/vote/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
   },
