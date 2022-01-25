@@ -6,6 +6,7 @@ import cx from 'classnames';
 
 import { TEZOS_TOKEN } from '@app.config';
 import { TokensModal } from '@components/modals/TokensModal';
+import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
@@ -169,9 +170,9 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        {showBalanceButtons && (
+        <Scaffolding showChild={showBalanceButtons} className={s.scaffoldingPercentSelector}>
           <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
-        )}
+        </Scaffolding>
         <ComplexError error={error} />
       </div>
     </>

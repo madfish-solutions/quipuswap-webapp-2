@@ -17,6 +17,11 @@ export interface BalanceProps {
   text?: string;
 }
 
+const themeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
   const { t } = useTranslation();
 
@@ -31,7 +36,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
   return (
     <div className={styles.item2Line}>
       <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
-      <div className={cx(colorMode, styles.label2, styles.price)}>
+      <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
         <StateWrapper isLoading={!formattedBalance} loaderFallback={<DashPlug />}>
           {formattedBalance}
         </StateWrapper>

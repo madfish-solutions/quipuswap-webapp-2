@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 
 import { ArrowDown, Plus } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';

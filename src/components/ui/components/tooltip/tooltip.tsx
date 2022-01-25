@@ -23,7 +23,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, className, ...props }
   return (
     <Tippy className={compoundClassName} duration={0} {...props} content={content}>
       <div className={cx(s.wrapper, s.small, className)}>
-        <Info className={s.info} />
+        <Info className={cx(s.info, modeClass[colorThemeMode])} />
       </div>
     </Tippy>
   );
