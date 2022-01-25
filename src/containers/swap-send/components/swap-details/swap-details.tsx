@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { Card } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
@@ -96,7 +97,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         tooltipContent={t(
           "swap|When a direct swap is impossible (no liquidity pool for the pair exists yet) QuipuSwap's algorithm will conduct the swap in several transactions, picking the most beneficial chain of trades."
         )}
-        className={s.cell}
+        className={cx(s.cell, s.routeLine)}
       >
         {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug />}
       </DetailsCardCell>

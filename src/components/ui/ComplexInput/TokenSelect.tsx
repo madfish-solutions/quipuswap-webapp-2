@@ -6,6 +6,7 @@ import cx from 'classnames';
 
 import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
+import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
@@ -130,7 +131,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </Button>
           </div>
         </div>
-        {shouldShowBalanceButtons && <PercentSelector value={balance} handleBalance={handleBalance} />}
+        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+          <PercentSelector value={balance} handleBalance={handleBalance} />
+        </Scaffolding>
         <ComplexError error={error} />
       </div>
       {tokensModal && (

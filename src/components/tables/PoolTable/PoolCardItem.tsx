@@ -1,13 +1,14 @@
 import { useContext } from 'react';
 
-import { Bage, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Bage, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { TokensLogos } from '@components/common/TokensLogos';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { calculateRateAmount, getTokensPairName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -41,7 +42,7 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
             secondTokenSymbol={getWhitelistedTokenSymbol(pool.token2)}
             className={s.tokenLogo}
           />
-          {pool.pair.name}
+          {getTokensPairName(pool.token1, pool.token2)}
         </div>
         {isSponsored && <Bage text={t('home|Sponsored')} />}
       </div>

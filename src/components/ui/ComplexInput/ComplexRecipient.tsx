@@ -69,7 +69,7 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
         </label>
       )}
       <div className={s.background}>
-        <div className={s.shape}>
+        <div className={cx(s.shape, s.fdrr)}>
           <TextareaAutosize
             minRows={1}
             maxRows={6}
@@ -81,15 +81,16 @@ export const ComplexRecipient: FC<ComplexRecipientProps> = ({
             ref={inputRef}
             {...props}
           />
+          {'readText' in navigator.clipboard && (
+            <div className={s.paste}>
+              <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn}>
+                {t('common|Paste')}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-      {'readText' in navigator.clipboard && (
-        <div className={s.controls}>
-          <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn}>
-            {t('common|Paste')}
-          </Button>
-        </div>
-      )}
+
       {!readOnly && <ComplexError error={error} />}
     </div>
   );

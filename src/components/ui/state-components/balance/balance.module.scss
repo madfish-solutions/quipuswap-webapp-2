@@ -24,13 +24,13 @@
 }
 
 .light {
-	.price {
+	&.price {
 		color: $text-01
 	}
 }
 
 .dark {
-	.price {
+	&.price {
     color: $text-inverse
 	}
 }

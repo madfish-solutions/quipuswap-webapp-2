@@ -31,6 +31,7 @@ const modeClass = {
 
 const INPUT_BUTTON_ID = 'input';
 type ActiveButtonId = number | typeof INPUT_BUTTON_ID;
+const lengthHidden = 3;
 
 export const PresetsAmountInput: React.FC<Props> = ({
   className,
@@ -60,6 +61,8 @@ export const PresetsAmountInput: React.FC<Props> = ({
     },
     [handleChange]
   );
+
+  const wrapUnit = customValue ? (customValue?.length < lengthHidden ? unit : null) : unit;
 
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
@@ -92,7 +95,7 @@ export const PresetsAmountInput: React.FC<Props> = ({
             handleCustomValueChange(val);
           }}
         />
-        {unit && <span className={s.unit}>{unit}</span>}
+        {unit && <span className={s.unit}>{wrapUnit}</span>}
       </div>
     </div>
   );

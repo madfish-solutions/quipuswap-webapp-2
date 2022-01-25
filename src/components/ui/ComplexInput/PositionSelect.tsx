@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import { TEZOS_TOKEN } from '@app.config';
 import { PositionsModal } from '@components/modals/PositionsModal';
+import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
@@ -106,9 +107,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
-              {notFrozen ? (
-                ''
-              ) : (
+              {!notFrozen && shouldShowBalanceButtons && (
                 <Balance balance={frozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
               )}
               {shouldShowBalanceButtons ? (
@@ -162,7 +161,9 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             </Button>
           </div>
         </div>
-        {shouldShowBalanceButtons && <PercentSelector value={balance ?? null} handleBalance={handleBalance} />}
+        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+          <PercentSelector value={balance ?? null} handleBalance={handleBalance} />
+        </Scaffolding>
         <ComplexError error={error} />
       </div>
     </>

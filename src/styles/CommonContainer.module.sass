@@ -54,6 +54,9 @@
 .iconButton
   margin: 11px auto
 
+.routeLine
+  row-gap: 4px
+
 .receive
   display: flex
   margin-top: 16px
@@ -173,6 +176,7 @@
   max-width: 280px
 
 @include media('>Lphone', '<=tablet')
+  .routeLine,
   .cellCenter
     align-items: center
   .button
@@ -198,7 +202,13 @@
         margin-top: 0
         margin-left: 32px
 
+@include media('>tablet', '<Ltablet')
+  .routeLine
+    align-items: flex-start
+
 @include media('>Ltablet')
+  .routeLine
+    align-items: center
   .farmingControllerContent
     flex-wrap: nowrap
   .searchInput

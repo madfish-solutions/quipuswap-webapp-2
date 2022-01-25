@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 
+import { Plus } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
