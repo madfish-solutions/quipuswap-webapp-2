@@ -18,9 +18,9 @@ import {
   getCandidateInfo,
   getVoteVetoBalances,
   handleTokenPairSelect,
-  unvoteOrRemoveVeto
+  unvoteOrRemoveVeto,
+  BakerCleaner
 } from '@containers/voiting/helpers';
-import { BakerCleaner } from '@containers/voiting/helpers/bakerCleaner';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
