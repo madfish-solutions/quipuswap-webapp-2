@@ -13,7 +13,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { INVALID_INPUT, validateOutputAmount, validateTransactionDuration, validations } from '../validators';
+import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
 export const useRemoveLiquidityService = (
   dex: Nullable<FoundDex>,
@@ -179,13 +179,15 @@ export const useRemoveLiquidityService = (
     ]);
   };
 
-  const validationMessageTransactionDuration = validateTransactionDuration(deadline);
+  const validationMessageDeadline = validateDeadline(deadline);
+  const validationMessageSlippage = validateSlippage(slippage);
 
   return {
     validatedInputMessage,
     validatedOutputMessageA,
     validatedOutputMessageB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     tokenPair,
     accountPkh,
     lpTokenInput,

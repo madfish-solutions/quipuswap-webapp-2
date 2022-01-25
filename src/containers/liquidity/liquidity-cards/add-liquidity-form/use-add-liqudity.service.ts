@@ -13,7 +13,7 @@ import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
-import { validateTransactionDuration, validations } from '../validators';
+import { validateDeadline, validateSlippage, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
@@ -347,7 +347,8 @@ export const useAddLiquidityService = (
     return await investTezosToToken();
   };
 
-  const validationMessageTransactionDuration = validateTransactionDuration(deadline);
+  const validationMessageDeadline = validateDeadline(deadline);
+  const validationMessageSlippage = validateSlippage(slippage);
 
   const isPoolExistsButEmpty =
     pairInfo &&
@@ -358,7 +359,8 @@ export const useAddLiquidityService = (
   return {
     validationMessageTokenA,
     validationMessageTokenB,
-    validationMessageTransactionDuration,
+    validationMessageDeadline,
+    validationMessageSlippage,
     accountPkh,
     tokenABalance,
     tokenBBalance,
