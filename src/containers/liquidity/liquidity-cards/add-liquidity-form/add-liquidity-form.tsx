@@ -6,7 +6,6 @@ import { useTranslation } from 'next-i18next';
 
 import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { DeadlineInput } from '@components/common/deadline-input/deadline-input';
 import { Plus } from '@components/svg/Plus';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
@@ -15,6 +14,7 @@ import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
 import { fromDecimals, isExist } from '@utils/helpers';
 
+import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
@@ -23,15 +23,7 @@ import { useAddLiquidityService } from './use-add-liqudity.service';
 const DEFAULT_BALANCE = 0;
 const DEFAULT_BALANCE_BN = new BigNumber(DEFAULT_BALANCE);
 
-export const AddLiquidityForm: FC<AddFormInterface> = ({
-  dex,
-  tokenA,
-  tokenB,
-  onTokenAChange,
-  onTokenBChange,
-  transactionDuration,
-  setTransactionDuration
-}) => {
+export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const { t } = useTranslation(['liquidity']);
   const {
     validationMessageTokenA,
@@ -42,8 +34,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     tokenBBalance,
     tokenAInput,
     tokenBInput,
-    slippage,
-    setSlippage,
     isNewPair,
     handleSetTokenA,
     handleSetTokenB,
@@ -52,7 +42,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
     handleTokenABalance,
     handleTokenBBalance,
     handleAddLiquidity
-  } = useAddLiquidityService(dex, tokenA, tokenB, transactionDuration, onTokenAChange, onTokenBChange);
+  } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   const { decimals: decimalsA } = tokenA?.metadata ?? { decimals: null };
   const { decimals: decimalsB } = tokenB?.metadata ?? { decimals: null };
@@ -110,11 +100,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
       {isDeadlineAndSkippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <DeadlineInput
-              onChange={setTransactionDuration}
-              error={validationMessageTransactionDuration}
-              value={transactionDuration}
-            />
+            <LiquidityDeadline error={validationMessageTransactionDuration} />
           </div>
           <div className={s['mt-24']}>
             <LiquiditySlippage
@@ -123,8 +109,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
               tokenB={tokenB}
               tokenAInput={tokenAInput}
               tokenBInput={tokenBInput}
-              slippage={slippage}
-              onChange={setSlippage}
             />
           </div>
         </>
