@@ -186,7 +186,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       await submitWithdraw(tezos, params, confirmOperation);
       getBalance();
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
     }
   };
 
@@ -206,7 +206,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       getBalance();
       cleanUp(currentTab.id);
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
     }
   };
 
