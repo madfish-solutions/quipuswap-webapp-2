@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { BakersModal } from '@components/modals/BakersModal';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
-import { BakerCleaner } from '@containers/voiting/helpers/bakerCleaner';
+import { BakerCleaner } from '@containers/voiting/helpers';
 import { getWhitelistedBakerName, isBackerNotEmpty } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 

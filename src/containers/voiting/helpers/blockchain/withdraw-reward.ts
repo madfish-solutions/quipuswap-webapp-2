@@ -7,14 +7,15 @@ export const submitWithdraw = async (
   tezos: TezosToolkit,
   voteParams: TransferParams[],
   handleErrorToast: (err: Error) => void,
-  confirmOperation: ReturnType<typeof useConfirmOperation>,
-  getBalance: () => void
+  confirmOperation: ReturnType<typeof useConfirmOperation>
 ) => {
   try {
     const op = await batchify(tezos.wallet.batch([]), voteParams).send();
-    await confirmOperation(op.opHash);
-    getBalance();
+
+    return await confirmOperation(op.opHash);
   } catch (e) {
     handleErrorToast(e as Error);
+
+    return Promise.reject(e);
   }
 };

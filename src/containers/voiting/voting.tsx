@@ -9,7 +9,6 @@ import { withTypes } from 'react-final-form';
 
 import { MAINNET_DEFAULT_TOKEN, HANGZHOUNET_DEFAULT_TOKEN, TEZOS_TOKEN, HANGZHOUNET_NETWORK } from '@app.config';
 import { PageTitle } from '@components/common/page-title';
-import { bakerCleaner } from '@containers/voiting/helpers/bakerCleaner';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
@@ -26,7 +25,7 @@ import {
   Nullable
 } from '@utils/types';
 
-import { handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
+import { bakerCleaner, handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
 import { VotingDetails, VotingForm, VotingStats } from './structures';
 import { VotingTabs } from './tabs.enum';
 
@@ -156,10 +155,10 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
   const getBalance = useCallback(() => {
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
-      void handleTokenChangeWrapper(tokenPair.token1, 'first');
-      void handleTokenChangeWrapper(tokenPair.token2, 'second');
-      void handleTokenPairSelect(
+    const loadBalances = async () => {
+      await handleTokenChangeWrapper(tokenPair.token1, 'first');
+      await handleTokenChangeWrapper(tokenPair.token2, 'second');
+      await handleTokenPairSelect(
         tokenPair,
         setTokenPair,
         setDex,
@@ -170,25 +169,30 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         accountPkh,
         network.id
       );
+    };
+
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      void loadBalances();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh, network.id, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
-      getBalance();
+      void getBalance();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh, network.id]);
 
   useOnBlock(tezos, getBalance);
 
-  const handleClaimReward = (params: TransferParams[]) => {
+  const handleClaimReward = async (params: TransferParams[]) => {
     if (!tezos) {
       return;
     }
 
-    return submitWithdraw(tezos, params, showErrorToast, confirmOperation, getBalance);
+    await submitWithdraw(tezos, params, showErrorToast, confirmOperation);
+    getBalance();
   };
 
   const handleVote = (values: VoteFormValues) => {
@@ -201,10 +205,13 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       values,
       dex,
       tab: currentTab.id,
-      confirmOperation,
-      showErrorToast,
-      getBalance
-    }).then(() => cleanUp(currentTab.id));
+      confirmOperation
+    })
+      .then(() => {
+        getBalance();
+        cleanUp(currentTab.id);
+      })
+      .catch(showErrorToast);
   };
 
   const mutators: { [key: string]: Mutator<VoteFormValues, Partial<VoteFormValues>> } = {
