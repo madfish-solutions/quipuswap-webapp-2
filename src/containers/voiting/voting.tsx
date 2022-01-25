@@ -191,27 +191,32 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       return;
     }
 
-    await submitWithdraw(tezos, params, showErrorToast, confirmOperation);
-    getBalance();
+    try {
+      await submitWithdraw(tezos, params, confirmOperation);
+      getBalance();
+    } catch (e) {
+      showErrorToast(e);
+    }
   };
 
-  const handleVote = (values: VoteFormValues) => {
+  const handleVote = async (values: VoteFormValues) => {
     if (!tezos) {
       return;
     }
 
-    return submitForm({
-      tezos,
-      values,
-      dex,
-      tab: currentTab.id,
-      confirmOperation
-    })
-      .then(() => {
-        getBalance();
-        cleanUp(currentTab.id);
-      })
-      .catch(showErrorToast);
+    try {
+      await submitForm({
+        tezos,
+        values,
+        dex,
+        tab: currentTab.id,
+        confirmOperation
+      });
+      getBalance();
+      cleanUp(currentTab.id);
+    } catch (e) {
+      showErrorToast(e);
+    }
   };
 
   const mutators: { [key: string]: Mutator<VoteFormValues, Partial<VoteFormValues>> } = {
