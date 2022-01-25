@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
 
 import { Token, findDex, FoundDex } from '@quipuswap/sdk';
 import { Card, Tabs } from '@quipuswap/ui-kit';
@@ -145,6 +145,10 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [values.balance1, values.selectedBaker, tokenPair, dex, currentTab]);
 
   useEffect(() => {
+    form.mutators.setValue('balance1', form.getFieldState('balance1')!.value);
+  }, [currentTab, dex, form]);
+
+  useEffect(() => {
     if (connectWalletModalOpen && accountPkh) {
       closeConnectWalletModal();
     }
@@ -174,10 +178,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
   };
 
-  const { availableVoteBalance, availableVetoBalance } = useMemo(
-    () => getVoteVetoBalances(tokenPair, voter),
-    [tokenPair, voter]
-  );
+  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, voter);
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
