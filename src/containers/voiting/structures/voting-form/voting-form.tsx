@@ -14,13 +14,13 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
-import { BakerCleaner } from '@containers/voiting';
 import {
   getCandidateInfo,
   getVoteVetoBalances,
   handleTokenPairSelect,
   unvoteOrRemoveVeto
 } from '@containers/voiting/helpers';
+import { BakerCleaner } from '@containers/voiting/helpers/bakerCleaner';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -79,7 +79,7 @@ interface VotingFormProps {
   bakerCleaner: BakerCleaner;
 }
 
-const IS_BAKER_CHOOSEN_TO_FALSE = 'isBakerChoosenToFalse';
+const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
 const RealForm: React.FC<VotingFormProps> = ({
@@ -120,7 +120,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
 
-  useEffect(() => bakerCleaner.set(IS_BAKER_CHOOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
+  useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
   const handleInputChange = async () => {
     if (!tezos) {
@@ -167,7 +167,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     await handleSubmit();
   };
 
-  const handleUnvoteOrRemoveveto = async () => {
+  const handleUnvoteOrRemoveVeto = async () => {
     if (!tezos || !dex || isNull(voter.candidate)) {
       return;
     }
@@ -268,7 +268,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt12}
-                cleanBakerWrap={bakerCleaner}
+                cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {
@@ -293,7 +293,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         <div className={s.buttons}>
           {accountPkh && (
             <Button
-              onClick={handleUnvoteOrRemoveveto}
+              onClick={handleUnvoteOrRemoveVeto}
               className={s.button}
               theme="secondary"
               disabled={

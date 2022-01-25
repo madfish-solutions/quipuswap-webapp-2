@@ -26,7 +26,7 @@ interface VotingStatsProps {
   voteAmount: Nullable<BigNumber>;
   vetoAmount: Nullable<BigNumber>;
   dex: Nullable<FoundDex>;
-  handleSubmit: (params: TransferParams[]) => void;
+  onClaimReward: (params: TransferParams[]) => void;
 }
 
 export const VotingStats: React.FC<VotingStatsProps> = ({
@@ -36,7 +36,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
   voteAmount,
   vetoAmount,
   dex,
-  handleSubmit
+  onClaimReward
 }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -48,7 +48,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
       return;
     }
     const params = await withdrawReward(tezos, dex, accountPkh);
-    handleSubmit(params);
+    onClaimReward(params);
   };
 
   return (
