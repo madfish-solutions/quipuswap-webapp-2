@@ -59,7 +59,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
   const shouldShowBalanceButtons = Boolean(accountPkh);
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
-  const isUnvoteVisible = !isDeadlineAndSlippageVisible && share && new BigNumber(lpTokenInput).gt(share.unfrozen);
 
   return (
     <>
@@ -67,7 +66,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={share?.total.toFixed()}
+        balance={share?.unfrozen.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
@@ -124,7 +123,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
-          Remove {isUnvoteVisible && '& Unvote'}
+          Remove
         </Button>
       ) : (
         <ConnectWalletButton className={cx(CC.connect, s['mt-24'])} />

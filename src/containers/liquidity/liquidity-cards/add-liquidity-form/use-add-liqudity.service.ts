@@ -353,7 +353,7 @@ export const useAddLiquidityService = (
     pairInfo &&
     (pairInfo.tokenAPool.eq(EMPTY_POOL) || pairInfo.tokenBPool.eq(EMPTY_POOL) || pairInfo.totalSupply.eq(EMPTY_POOL));
 
-  const isNewPair = dex && (!pairInfo || isPoolExistsButEmpty);
+  const isNewPair = dex && isPoolExistsButEmpty;
 
   return {
     validationMessageTokenA,

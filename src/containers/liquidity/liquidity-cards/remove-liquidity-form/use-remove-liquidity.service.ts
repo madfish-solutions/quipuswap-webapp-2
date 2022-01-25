@@ -12,7 +12,6 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
-import { getVotingParams } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateOutputAmount, validateTransactionDuration, validations } from '../validators';
 
@@ -80,7 +79,7 @@ export const useRemoveLiquidityService = (
     const validatedInput = validations(
       accountPkh,
       lpTokenInputBN,
-      share?.total ?? null,
+      share?.unfrozen ?? null,
       lpTokenInput,
       LP_TOKEN_DECIMALS,
       lpTokenSymbol
@@ -159,15 +158,9 @@ export const useRemoveLiquidityService = (
         });
       }
     } else {
-      const lpTokenInputBN = new BigNumber(lpTokenInput);
-
-      const voteParams = await getVotingParams(tezos, dex, accountPkh, lpTokenInputBN, share);
       const removeLiquidityTezOperation = await removeLiquidityTez(tezos, dex, lpTokenInput, slippage);
 
-      const sentTransaction = await batchify(tezos.wallet.batch([]), [
-        ...voteParams,
-        ...removeLiquidityTezOperation
-      ]).send();
+      const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
       const { name: tokenAName } = tokenA.metadata;
       const { name: tokenBName } = tokenB.metadata;
