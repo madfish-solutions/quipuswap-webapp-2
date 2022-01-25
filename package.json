@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 next dev -p 3000",
-    "dev:hangzhounet": "cross-env NEXT_PUBLIC_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 next dev -p 3002",
+    "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3000",
+    "dev:hangzhounet": "cross-env NEXT_PUBLIC_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3002",
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./src --ext .ts,.tsx",
