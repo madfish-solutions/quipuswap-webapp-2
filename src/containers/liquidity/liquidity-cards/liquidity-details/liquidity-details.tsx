@@ -1,25 +1,20 @@
 import React, { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
-import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { calculatePoolAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-pool-amount';
-import { useLoadLpTokenBalance, usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
+import { useLoadLpTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isExist, isNull } from '@utils/helpers';
+import { isExist, isNull } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
-
-const ONE_TOKEN = 1;
-const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
+import { useLiquidityDetailsService } from './use-liqiudity-details.service';
 
 interface Props {
   dex: Nullable<FoundDex>;
@@ -30,26 +25,11 @@ interface Props {
 export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
-
-  const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
-
-  const isTokensOrderValid = tokenA?.contractAddress === pairInfo?.tokenA.contractAddress;
-
-  const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
-  const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
-
-  const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
-  const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
-
-  const sellPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
-  const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
-
+  const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
   const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
-  const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
-
-  const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
-  const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
+  const { tokenAName, tokenBName, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
+    useLiquidityDetailsService(dex, tokenA, tokenB);
 
   return (
     <>
@@ -83,9 +63,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          amount={tokenAPool}
+          balanceRule
+          amount={fixedTokenAPoll}
           currency={tokenAName}
-          isLoading={isExist(dex) || isExist(tokenA)}
+          isLoading={!isExist(dex) || !isExist(tokenA)}
           amountDecimals={tokenA?.metadata.decimals}
         />
       </DetailsCardCell>
@@ -98,9 +79,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          amount={tokenBPool}
+          balanceRule
+          amount={fixedTokenBPoll}
           currency={tokenBName}
-          isLoading={isExist(dex) || isExist(tokenB)}
+          isLoading={!isExist(dex) || !isExist(tokenB)}
           amountDecimals={tokenB?.metadata.decimals}
         />
       </DetailsCardCell>
@@ -114,7 +96,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount amount={share?.total || null} isLoading={isNull(poolTotal)} />
+            <StateCurrencyAmount balanceRule amount={share?.total || null} isLoading={isNull(poolTotal)} />
           </DetailsCardCell>
 
           <DetailsCardCell
@@ -124,7 +106,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount amount={share?.frozen || null} />
+            <StateCurrencyAmount balanceRule amount={share?.frozen || null} />
           </DetailsCardCell>
         </>
       )}

@@ -6,7 +6,7 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { StateDollarEquivalent } from '@components/ui/state-components/state-dollar-equivalent';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import s from '@styles/CommonContainer.module.sass';
-import { getTokenSlug, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getTokenSlug, getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface RateViewProps {
@@ -20,8 +20,7 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
 
   const outputTokenUsdExchangeRate = outputToken ? exchangeRates[getTokenSlug(outputToken)] : null;
 
-  const usdRate =
-    outputTokenUsdExchangeRate && rate ? new BigNumber(rate).times(outputTokenUsdExchangeRate) : undefined;
+  const usdRate = outputTokenUsdExchangeRate && rate ? new BigNumber(rate).times(outputTokenUsdExchangeRate) : null;
 
   const currencyInputSymbol = inputToken ? getWhitelistedTokenSymbol(inputToken) : null;
   const currencyOutputSymbol = outputToken ? getWhitelistedTokenSymbol(outputToken) : null;
@@ -31,10 +30,10 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
       <div className={s.rateView}>
         <StateCurrencyAmount amount="1" currency={currencyInputSymbol} />
         <span className={s.equal}>=</span>
-        <StateCurrencyAmount amount={rate} currency={currencyOutputSymbol} />
+        <StateCurrencyAmount isError={isNull(rate)} amount={rate} currency={currencyOutputSymbol} />
       </div>
       <div className={s.usdEquityWrapper}>
-        <StateDollarEquivalent dollarEquivalent={usdRate} />
+        <StateDollarEquivalent isError={isNull(usdRate)} dollarEquivalent={usdRate} />
       </div>
     </div>
   );

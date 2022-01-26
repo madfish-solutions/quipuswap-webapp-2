@@ -152,7 +152,8 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   useEffect(() => {
     form.mutators.setValue('balance1', form.getFieldState('balance1')!.value);
-  }, [currentTab, dex, form]);
+    // eslint-disable-next-line
+  }, [currentTab, dex]);
 
   useEffect(() => {
     if (connectWalletModalOpen && accountPkh) {
@@ -266,7 +267,7 @@ const RealForm: React.FC<VotingFormProps> = ({
                 {...input}
                 label="Baker"
                 id="voting-baker"
-                className={s.mt12}
+                className={s.mt24}
                 cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);

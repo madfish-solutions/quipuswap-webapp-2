@@ -34,6 +34,7 @@ const modeClass = {
 
 const DEFAULT_PLACEHOLDER = 'CUSTOM';
 const INPUT = 'input';
+const MAX_UNIT_VISIBLE_LENGTH = 3;
 
 export const NewPresetsAmountInput: FC<Props> = ({
   className,
@@ -65,6 +66,8 @@ export const NewPresetsAmountInput: FC<Props> = ({
 
   const isInputActive = activeButton === INPUT;
 
+  const wrapUnit = !value || value.toFixed().length < MAX_UNIT_VISIBLE_LENGTH ? unit : null;
+
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.buttons}>
@@ -89,7 +92,7 @@ export const NewPresetsAmountInput: FC<Props> = ({
           max={max}
           onChange={handleAssetInputChange}
         />
-        {unit && <span className={s.unit}>{unit}</span>}
+        {unit && <span className={s.unit}>{wrapUnit}</span>}
       </div>
     </div>
   );

@@ -105,9 +105,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second', quite = false) => {
     let isMounted = true;
-    setTokenLoading(true);
+    if (!quite) {
+      setTokenLoading(true);
+    }
     await handleTokenChange({
       token,
       tokenNumber,
@@ -115,9 +117,10 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       exchangeRates,
       tezos: tezos!,
       accountPkh: accountPkh!,
-      setTokensData
+      setTokensData,
+      quite
     });
-    if (isMounted) {
+    if (isMounted && !quite) {
       setTokenLoading(false);
     }
 
@@ -144,28 +147,32 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
-  const getBalance = useCallback(() => {
-    const loadBalances = async () => {
-      await handleTokenChangeWrapper(tokenPair.token1, 'first');
-      await handleTokenChangeWrapper(tokenPair.token2, 'second');
-      await handleTokenPairSelect(
-        tokenPair,
-        setTokenPair,
-        setDex,
-        setRewards,
-        setVoter,
-        showErrorToast,
-        tezos,
-        accountPkh,
-        NETWORK_ID
-      );
-    };
+  const getBalance = useCallback(
+    (quite = false) => {
+      const loadBalances = async () => {
+        await handleTokenChangeWrapper(tokenPair.token1, 'first', quite);
+        await handleTokenChangeWrapper(tokenPair.token2, 'second', quite);
+        await handleTokenPairSelect(
+          tokenPair,
+          setTokenPair,
+          setDex,
+          setRewards,
+          setVoter,
+          showErrorToast,
+          tezos,
+          accountPkh,
+          NETWORK_ID,
+          quite
+        );
+      };
 
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
-      void loadBalances();
-    }
+      if (tezos && tokenPair.token1 && tokenPair.token2) {
+        void loadBalances();
+      }
+    },
     // eslint-disable-next-line
-  }, [tezos, accountPkh, tokenPair]);
+    [tezos, accountPkh, tokenPair, showErrorToast]
+  );
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
@@ -174,7 +181,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [tezos, accountPkh]);
 
-  useOnBlock(tezos, getBalance);
+  const reloadBalances = useCallback(() => {
+    getBalance(true);
+  }, [getBalance]);
+
+  useOnBlock(tezos, reloadBalances);
+
   const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
   const handleClaimReward = async (params: TransferParams[]) => {
@@ -186,7 +198,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       await submitWithdraw(tezos, params, confirmOperation);
       getBalance();
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
     }
   };
 
@@ -206,7 +218,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       getBalance();
       cleanUp(currentTab.id);
     } catch (e) {
-      showErrorToast(e);
+      showErrorToast(e as Error);
     }
   };
 

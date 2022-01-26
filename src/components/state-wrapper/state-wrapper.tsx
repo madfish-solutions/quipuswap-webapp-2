@@ -16,6 +16,10 @@ export const StateWrapper: FC<StateWrapperProps> = ({
   isError,
   errorFallback
 }) => {
+  if (isError) {
+    return errorFallback!;
+  }
+
   if (isLoading) {
     return loaderFallback;
   }

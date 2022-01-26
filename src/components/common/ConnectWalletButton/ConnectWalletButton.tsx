@@ -18,7 +18,7 @@ export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ classN
   if (ready && accountPkh) {
     return (
       <Button className={className} onClick={openAccountInfoModal} title={accountPkh}>
-        {shortize(accountPkh, 7)}
+        {shortize(accountPkh)}
       </Button>
     );
   }

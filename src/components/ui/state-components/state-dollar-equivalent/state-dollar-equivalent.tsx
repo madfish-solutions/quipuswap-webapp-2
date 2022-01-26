@@ -7,13 +7,13 @@ import cx from 'classnames';
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
 import { FormatNumber } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
-import { Undefined } from '@utils/types';
+import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
 import s from './state-dollar-equivalent.module.sass';
 
 export interface StateDollarEquivalentProps extends Partial<StateWrapperProps> {
-  dollarEquivalent: Undefined<BigNumber.Value>;
+  dollarEquivalent: Nullable<BigNumber.Value>;
 }
 
 const modeClass = {

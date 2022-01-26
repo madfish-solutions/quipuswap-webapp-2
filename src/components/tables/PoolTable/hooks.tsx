@@ -7,7 +7,7 @@ import s from '@components/tables/PoolTable/PoolTable.module.sass';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { calculateRateAmount, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { calculateRateAmount, getTokensPairName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -17,7 +17,7 @@ export const useColumns = () => {
 
   return [
     {
-      Header: t('home|Name'),
+      Header: <div className={s.links}>{t('home|Name')}</div>,
       id: 'name',
       accessor: ({ token1, token2, pair }: PoolTableType) => (
         <div className={s.links}>
@@ -28,7 +28,7 @@ export const useColumns = () => {
             secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
             className={s.tokenLogo}
           />
-          <span className={s.cardCellText}>{pair.name}</span>
+          <span className={s.cardCellText}>{getTokensPairName(token1, token2)}</span>
         </div>
       )
     },
