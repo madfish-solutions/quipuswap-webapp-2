@@ -1,13 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import {
-  ColorModes,
-  ColorThemeContext,
-  LoadingTokenCell,
-  Modal,
-  TokenCell,
-  TokenNotFound
-} from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, LoadingTokenCell, Modal, TokenCell, TokenNotFound } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
