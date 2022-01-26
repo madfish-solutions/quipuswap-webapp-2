@@ -145,6 +145,7 @@ export const WalletModal: FC = () => {
           label={Beacon.label}
           onClick={handleConnectClick}
           disabled={!check1}
+          available={true}
         />
       </div>
     </Modal>
