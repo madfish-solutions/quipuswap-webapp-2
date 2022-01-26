@@ -1,33 +1,27 @@
 import React, { useContext } from 'react';
-import {
-  Button,
-  Madfish,
-  ColorModes,
-  NetworkSelect,
-  LanguageSwitcher,
-  ColorModeSwitcher,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+
+import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+
+import { NetworkSelect, ColorModeSwitcher } from '@components/ui/components';
+import { Button } from '@components/ui/elements/button';
 
 import { Navigation } from '../Navigation';
-import { Socials } from '../Socials';
 import { QPToken } from '../QPToken';
+import { Socials } from '../Socials';
 import s from './Menu.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-type MenuProps = {
-  className?: string
-};
+interface MenuProps {
+  className?: string;
+}
 
-export const Menu: React.FC<MenuProps> = ({
-  className,
-}) => {
+export const Menu: React.FC<MenuProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -38,7 +32,6 @@ export const Menu: React.FC<MenuProps> = ({
         <div className={s.row}>
           <QPToken />
           <div className={cx(s.mb0, s.row)}>
-            <LanguageSwitcher direction="up" />
             <div className={s.ml24}>
               <ColorModeSwitcher id="mobile" />
             </div>
@@ -49,15 +42,9 @@ export const Menu: React.FC<MenuProps> = ({
           <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
             {t('common|Old version')}
           </Button>
-
         </div>
         <div className={s.row}>
-          <Button
-            href="https://www.madfish.solutions/"
-            external
-            theme="clean"
-            className={s.madfish}
-          >
+          <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
             <Madfish />
           </Button>
 

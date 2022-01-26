@@ -1,8 +1,7 @@
-import {
-  BAKERS_API,
-} from '@utils/defaults';
+import { BAKERS_API } from '@app.config';
 
-export const getBakers = async () => fetch(BAKERS_API)
-  .then((res) => res.json())
-  .then((json) => json)
-  .catch(() => ([]));
+export const getBakers = async () =>
+  fetch(BAKERS_API)
+    .then(async res => res.json())
+    .then(json => json)
+    .catch(() => []);

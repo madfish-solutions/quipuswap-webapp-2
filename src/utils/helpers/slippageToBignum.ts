@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
-export const slippageToNum = (str?: string) => (str ? +str.split('%')[0].trim() : 0.5);
+const slippageToParseable = (str?: string) => (str ? str.split('%')[0].trim() : '0.5');
 
-export const slippageToBignum = (
-  percentage:string,
-) => new BigNumber(slippageToNum(percentage) / 100);
+export const slippageToNum = (str?: string) => +slippageToParseable(str);
+
+export const slippageToBignum = (percentage: string) => new BigNumber(slippageToParseable(percentage));

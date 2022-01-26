@@ -1,32 +1,40 @@
-type NewsDataProps = {
-  id: number
-  sponsored?: boolean
-}[];
+interface NewsWithoutLink {
+  id: number;
+  img: string;
+}
 
-export const NewsData: NewsDataProps = [
+interface NewsWithLink {
+  id: number;
+  img: string;
+  url: string;
+  external?: boolean;
+}
+
+export type News = NewsWithoutLink | NewsWithLink;
+
+export const isNewsWithLink = (news: News): news is NewsWithLink => 'url' in news;
+
+export const NewsData: News[] = [
   {
     id: 0,
+    img: '/images/news1.png'
   },
   {
     id: 1,
+    img: '/images/news2.png',
+    url: 'https://story.madfish.solutions/quipuswap-governance-token-airdrop-announcement/',
+    external: true
   },
   {
     id: 2,
+    img: '/images/news3.png',
+    url: 'https://story.madfish.solutions/quipuswap-tokenomics-guide-quipu-learn-everything-about-our-governance-token/',
+    external: true
   },
   {
     id: 3,
-  },
-  {
-    id: 4,
-  },
-  {
-    id: 5,
-  },
-  {
-    id: 6,
-  },
-  {
-    id: 7,
-    sponsored: true,
-  },
+    img: '/images/news4.png',
+    url: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
+    external: true
+  }
 ];

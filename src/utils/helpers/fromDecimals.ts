@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-export const fromDecimals = (num:BigNumber, decimals: number) : BigNumber => num.div(
-  new BigNumber(10)
-    .pow(
-      new BigNumber(decimals),
-    ),
-);
+import { WhitelistedToken } from '@utils/types';
+
+export const fromDecimals = (num: BigNumber, decimalsOrToken: number | WhitelistedToken) =>
+  num.div(
+    new BigNumber(10).pow(typeof decimalsOrToken === 'number' ? decimalsOrToken : decimalsOrToken.metadata.decimals)
+  );

@@ -1,15 +1,18 @@
 import React from 'react';
+
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { BaseLayout } from '@layouts/BaseLayout';
-import { SwapSend } from '@containers/SwapSend';
-
+import { BaseLayout } from '@components/common/BaseLayout';
+import { TestnetAlert } from '@components/common/testnet-alert';
+import { SwapSend } from '@containers/swap-send';
 import s from '@styles/SwapLiquidity.module.sass';
 
-const SwapSendPage: React.FC = () => {
+interface SwapSendPageProps {
+  fromToSlug?: string;
+}
+
+const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
   const { t } = useTranslation(['common', 'swap']);
 
   return (
@@ -18,36 +21,23 @@ const SwapSendPage: React.FC = () => {
       description={t('swap|Swap page description. Couple sentences...')}
       className={s.wrapper}
     >
-      <SwapSend />
+      <TestnetAlert />
+      <SwapSend fromToSlug={fromToSlug} />
     </BaseLayout>
   );
 };
 
-export const getServerSideProps = async (props:any) => {
+// @ts-ignore
+export const getServerSideProps = async props => {
   const { locale, query } = props;
-  const splittedTokens = query['from-to'].split('-');
-  let from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(STABLE_TOKEN);
-  const isSoleToken = splittedTokens.length < 2;
-  const isNoTokens = splittedTokens.length < 1;
 
-  if (
-    (isSoleToken && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) || splittedTokens[1] === ''
-  ) [from] = splittedTokens;
-
-  if (isNoTokens || isSoleToken || splittedTokens[1] === '') {
-    return {
-      redirect: {
-        destination: `/swap/${from}-${to}`,
-        permanent: true,
-      },
-    };
-  }
-  return ({
+  return {
     props: {
-      ...await serverSideTranslations(locale, ['common', 'swap']),
-    },
-  });
+      ...(await serverSideTranslations(locale, ['common', 'swap'])),
+      fromToSlug: query['from-to']
+    }
+  };
 };
 
+// eslint-disable-next-line import/no-default-export
 export default SwapSendPage;

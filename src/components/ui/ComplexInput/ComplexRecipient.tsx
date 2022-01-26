@@ -1,27 +1,29 @@
-import React, { useContext, useRef } from 'react';
-import TextareaAutosize from 'react-textarea-autosize';
-import { useTranslation } from 'next-i18next';
-import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import React, { FC, HTMLProps, useContext, useRef, useState } from 'react';
+
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+import TextareaAutosize from 'react-textarea-autosize';
 
-import useUpdateToast from '@hooks/useUpdateToast';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { useToasts } from '@hooks/use-toasts';
 
+import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
-type ComplexRecipientProps = {
-  className?: string,
-  label?:string,
-  error?: string
-  handleInput: (value: string) => void
-} & React.HTMLProps<HTMLTextAreaElement>;
+interface ComplexRecipientProps extends HTMLProps<HTMLTextAreaElement> {
+  className?: string;
+  label?: string;
+  error?: string;
+  handleInput: (value: string) => void;
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
+export const ComplexRecipient: FC<ComplexRecipientProps> = ({
   className,
   label,
   id,
@@ -32,17 +34,17 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [focused, setActive] = React.useState<boolean>(false);
+  const [focused, setActive] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const updateToast = useUpdateToast();
+  const { showErrorToast } = useToasts();
 
   const compoundClassName = cx(
     { [s.focused]: focused },
     modeClass[colorThemeMode],
     { [s.error]: !readOnly && !!error },
     { [s.readOnly]: readOnly },
-    className,
+    className
   );
 
   const focusInput = () => {
@@ -53,32 +55,21 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
 
   const handlePaste = async () => {
     try {
-      handleInput(
-        await navigator.clipboard.readText(),
-      );
+      handleInput(await navigator.clipboard.readText());
     } catch (err) {
-      updateToast({
-        type: 'error',
-        render: `${err.name}: ${err.message}`,
-      });
+      showErrorToast(err as Error);
     }
   };
 
   return (
-    // eslint-disable-next-line max-len
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions
-    <div
-      className={compoundClassName}
-      onClick={focusInput}
-    >
+    <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
       {label && (
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
       )}
       <div className={s.background}>
-
-        <div className={s.shape}>
+        <div className={cx(s.shape, s.fdrr)}>
           <TextareaAutosize
             minRows={1}
             maxRows={6}
@@ -90,19 +81,17 @@ export const ComplexRecipient: React.FC<ComplexRecipientProps> = ({
             ref={inputRef}
             {...props}
           />
+          {'readText' in navigator.clipboard && (
+            <div className={s.paste}>
+              <Button disabled={readOnly} onClick={handlePaste} theme="inverse" className={s.btn}>
+                {t('common|Paste')}
+              </Button>
+            </div>
+          )}
         </div>
       </div>
-      <div className={s.controls}>
-        <Button
-          disabled={readOnly}
-          onClick={handlePaste}
-          theme="inverse"
-          className={s.btn}
-        >
-          {t('common|Paste')}
-        </Button>
-      </div>
-      {!readOnly && (<ComplexError error={error} />)}
+
+      {!readOnly && <ComplexError error={error} />}
     </div>
   );
 };

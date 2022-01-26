@@ -1,0 +1,73 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.reward {
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 24px;
+  border-radius: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.rewardContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.rewardAmount {
+  display: flex;
+  align-items: center;
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+
+.rewardCurrency {
+  margin-left: 8px;
+}
+
+.light {
+  &.reward {
+    border: 2px dashed $hover-primary-01-fallback;
+    color: $text-01;
+  }
+}
+
+.dark {
+  &.reward {
+    border: 2px dashed $hover-primary-02-fallback;
+    color: $text-inverse;
+  }
+}
+
+@include media(">phone") {
+  .rewardAmount {
+    font-size: 1.714rem;
+  }
+}
+
+@include media(">Lphone", "<=Ltablet") {
+  .rewardAmount {
+    font-size: 2.286rem;
+  }
+}
+
+@include media(">Lphone") {
+  .rewardContent {
+    margin-right: 32px;
+  }
+}
+
+@include media(">Ltablet") {
+  .reward {
+    margin-bottom: 0px;
+  }
+  .rewardAmount {
+    font-size: 1.714rem;
+  }
+}
+
+@include media(">desktop") {
+  .rewardAmount {
+    font-size: 2.286rem;
+  }
+}

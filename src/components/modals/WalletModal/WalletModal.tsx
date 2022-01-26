@@ -1,110 +1,110 @@
-import React, { useCallback, useState } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
+import { Checkbox, Modal } from '@quipuswap/ui-kit';
+import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
-import { Button, Checkbox, Modal } from '@quipuswap/ui-kit';
 
-import { WalletType } from '@utils/types';
-import {
-  TEMPLE_WALLET_NOT_INSTALLED_MESSAGE,
-  useConnectWithBeacon,
-  useConnectWithTemple,
-} from '@utils/dapp';
-import { SAVED_ANALYTICS_KEY, SAVED_TERMS_KEY } from '@utils/defaults';
+import { SAVED_TERMS_KEY } from '@app.config';
+import { Button } from '@components/ui/elements/button';
+import { NoTempleWallet } from '@errors';
+import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import useUpdateToast from '@hooks/useUpdateToast';
+import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
+import { WalletType } from '@utils/types';
 
-import { Wallets } from './content';
+import { Temple, Beacon } from './content';
 import s from './WalletModal.module.sass';
 
-type WalletProps = {
-  className?: string
-  id: WalletType
-  Icon: React.FC<{ className?: string }>
-  label: string
-  onClick: (walletType: WalletType) => void
-  disabled?: boolean
+const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
+const INSTALL_TEMPLE = 'Install Temple';
+
+interface WalletProps {
+  className?: string;
+  id: WalletType;
+  Icon: FC<{ className?: string }>;
+  label: string;
+  onClick: (walletType: WalletType) => void;
+  disabled?: boolean;
+  available?: boolean;
+}
+
+export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = false, available }) => {
+  return (
+    <Button
+      className={s.button}
+      innerClassName={s.buttonInner}
+      textClassName={s.buttonContent}
+      theme="secondary"
+      external
+      href={available === false ? TEMPLE_WALLET_LINK : undefined}
+      onClick={() => {
+        available && onClick(id);
+      }}
+      disabled={disabled}
+    >
+      <Icon className={s.icon} />
+      <span>{label}</span>
+    </Button>
+  );
 };
 
-export const Wallet: React.FC<WalletProps> = ({
-  id,
-  Icon,
-  label,
-  onClick,
-  disabled = false,
-}) => (
-  <Button
-    className={s.button}
-    innerClassName={s.buttonInner}
-    textClassName={s.buttonContent}
-    theme="secondary"
-    onClick={() => onClick(id)}
-    disabled={disabled}
-  >
-    <Icon className={s.icon} />
-    <span>
-      {label}
-    </span>
-  </Button>
-);
-
-export const WalletModal: React.FC = () => {
+export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
-  const updateToast = useUpdateToast();
+  const { showErrorToast } = useToasts();
   const [check1, setCheck1] = useState<boolean>(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
-  const [check2, setCheck2] = useState<boolean>(localStorage.getItem(SAVED_ANALYTICS_KEY) === 'true' ?? false);
 
-  const {
-    connectWalletModalOpen,
-    closeConnectWalletModal,
-    openInstallTempleWalletModal,
-  } = useConnectModalsState();
+  const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
   const { closeAccountInfoModal } = useConnectModalsState();
   const connectWithBeacon = useConnectWithBeacon();
   const connectWithTemple = useConnectWithTemple();
+  const [isTempleInstalled, setIsTempleInstalled] = useState(true);
 
-  const handleConnectClick = useCallback(async (walletType: WalletType) => {
-    try {
-      if (walletType === WalletType.BEACON) {
-        await connectWithBeacon(true);
-      } else {
-        await connectWithTemple(true);
-      }
-      closeAccountInfoModal();
-      closeConnectWalletModal();
-    } catch (e) {
-      if (e.message === TEMPLE_WALLET_NOT_INSTALLED_MESSAGE) {
-        openInstallTempleWalletModal();
-      } else {
-        const authenticationWasRejected = (e.name === 'NotGrantedTempleWalletError') || (e instanceof AbortedBeaconError);
-        if (!authenticationWasRejected) {
-          updateToast({
-            type: 'error',
-            render: t('common|errorWhileConnectingWallet', {
+  useEffect(() => {
+    TempleWallet.isAvailable().then(setIsTempleInstalled);
+  }, []);
+
+  const handleConnectClick = useCallback(
+    async (walletType: WalletType) => {
+      try {
+        if (walletType === WalletType.BEACON) {
+          await connectWithBeacon(true);
+        } else {
+          await connectWithTemple(true);
+        }
+        closeAccountInfoModal();
+        closeConnectWalletModal();
+      } catch (err) {
+        if (err instanceof NoTempleWallet) {
+          openInstallTempleWalletModal();
+        } else {
+          const authenticationWasRejected =
+            err instanceof NotGrantedTempleWalletError || err instanceof AbortedBeaconError;
+          if (!authenticationWasRejected) {
+            const errorMessage = t('common|errorWhileConnectingWallet', {
               walletName: walletType === WalletType.BEACON ? 'Beacon' : 'Temple Wallet',
-              error: e.message,
-            }),
-          });
+              error: (err as Error).message
+            });
+
+            showErrorToast(errorMessage);
+          }
         }
       }
-    }
-  }, [
-    closeAccountInfoModal,
-    closeConnectWalletModal,
-    connectWithBeacon,
-    connectWithTemple,
-    openInstallTempleWalletModal,
-    t,
-    updateToast,
-  ]);
+    },
+    [
+      closeAccountInfoModal,
+      closeConnectWalletModal,
+      connectWithBeacon,
+      connectWithTemple,
+      openInstallTempleWalletModal,
+      t,
+      showErrorToast
+    ]
+  );
 
   const handleCheck1 = () => {
     setCheck1(!check1);
     localStorage.setItem(SAVED_TERMS_KEY, `${!check1}`);
-  };
-
-  const handleCheck2 = () => {
-    setCheck2(!check2);
-    localStorage.setItem(SAVED_ANALYTICS_KEY, `${!check2}`);
   };
 
   return (
@@ -117,74 +117,36 @@ export const WalletModal: React.FC = () => {
     >
       <div className={s.terms}>
         <div className={s.def}>
-          <Button
-            control={
-              <Checkbox checked={check1} />
-            }
-            onClick={handleCheck1}
-            theme="quaternary"
-            className={s.btn}
-          >
+          <Button control={<Checkbox checked={check1} />} onClick={handleCheck1} theme="quaternary" className={s.btn}>
             <div className={s.btnText}>{t('common|Accept terms')}</div>
           </Button>
-          {t('common|I have read and agree to the')}
-          {' '}
-          <Button
-            className={s.defText}
-            theme="underlined"
-            href="#"
-            external
-          >
+          {t('common|I have read and agree to the')}{' '}
+          <Button className={s.defText} theme="underlined" href="/terms-of-service" external>
             {t('common|Terms of Usage')}
-          </Button>
-          {' '}
-          {t('common|and')}
-          {' '}
-          <Button
-            className={s.defText}
-            theme="underlined"
-            href="#"
-            external
-          >
+          </Button>{' '}
+          {t('common|and')}{' '}
+          <Button className={s.defText} theme="underlined" href="/privacy-policy" external>
             {t('common|Privacy Policy')}
           </Button>
         </div>
-        <div className={s.def}>
-          <Button
-            control={
-              <Checkbox checked={check2} />
-            }
-            onClick={handleCheck2}
-            theme="quaternary"
-            className={s.btn}
-          >
-            <div className={s.btnText}>{t('common|Analytics')}</div>
-          </Button>
-          {t('common|I agree to the')}
-          {' '}
-          <Button
-            className={s.defText}
-            theme="underlined"
-            href="#"
-            external
-          >
-            {t('common|anonymous information collecting')}
-          </Button>
-
-        </div>
       </div>
       <div className={s.wallets}>
-        {Wallets.map(({ id, Icon, label }) => (
-          <Wallet
-            key={id}
-            id={id}
-            Icon={Icon}
-            label={label}
-            onClick={handleConnectClick}
-            disabled={!check1}
-          />
-        ))}
-
+        <Wallet
+          available={isTempleInstalled}
+          id={Temple.id}
+          Icon={Temple.Icon}
+          label={isTempleInstalled ? Temple.label : INSTALL_TEMPLE}
+          onClick={handleConnectClick}
+          disabled={!check1}
+        />
+        <Wallet
+          id={Beacon.id}
+          Icon={Beacon.Icon}
+          label={Beacon.label}
+          onClick={handleConnectClick}
+          disabled={!check1}
+          available={true}
+        />
       </div>
     </Modal>
   );

@@ -1,23 +1,23 @@
 import React from 'react';
-import { Beacon, Temple } from '@quipuswap/ui-kit';
+
+import { Beacon as BeaconIcon, Temple as TempleIcon } from '@quipuswap/ui-kit';
 
 import { WalletType } from '@utils/types';
 
-type WalletsProps = {
-  id: WalletType
-  Icon: React.FC<{ className?: string }>
-  label: string
-}[];
+interface WalletProps {
+  id: WalletType;
+  Icon: React.FC<{ className?: string }>;
+  label: string;
+}
 
-export const Wallets: WalletsProps = [
-  {
-    id: WalletType.TEMPLE,
-    Icon: Temple,
-    label: 'Temple Wallet',
-  },
-  {
-    id: WalletType.BEACON,
-    Icon: Beacon,
-    label: 'Beacon',
-  },
-];
+export const Temple: WalletProps = {
+  id: WalletType.TEMPLE,
+  Icon: TempleIcon,
+  label: 'Temple Wallet'
+};
+
+export const Beacon: WalletProps = {
+  id: WalletType.BEACON,
+  Icon: BeaconIcon,
+  label: 'Beacon'
+};
