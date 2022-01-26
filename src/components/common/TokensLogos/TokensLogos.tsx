@@ -31,14 +31,15 @@ interface FillTokensLogosProps extends TokensLogosPropsAbstraction {
 export type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
 export const TokensLogos: React.FC<TokensLogosProps> = props => {
-  const { firstTokenIcon, firstTokenSymbol, secondTokenIcon, secondTokenSymbol, className, imageClassName, loading } = props;
+  const { firstTokenIcon, firstTokenSymbol, secondTokenIcon, secondTokenSymbol, className, imageClassName, loading } =
+    props;
 
   const compoundClassName = cx(s.root, { [s.pairs]: secondTokenIcon }, className);
 
   const layoutBasedProps =
     props.layout === 'fill' ? { layout: 'fill' as const } : { layout: 'fixed' as const, size: props.width };
 
-  const wrapLoading = loading === true
+  const wrapLoading = loading === true;
 
   return (
     <div className={compoundClassName}>
@@ -56,7 +57,7 @@ export const TokensLogos: React.FC<TokensLogosProps> = props => {
         </div>
       )}
 
-      {isNull(secondTokenIcon) ||  (secondTokenIcon && wrapLoading) && (
+      {(isNull(secondTokenIcon) || (secondTokenIcon && wrapLoading)) && (
         <div className={cx(s.secondImage, imageClassName)}>
           <FallbackLogo className={cx(s.image)} />
         </div>
