@@ -13,6 +13,7 @@ import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
+import { isNull } from '@utils/helpers';
 import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
 
 import { Route } from '../route';
@@ -87,7 +88,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         tooltipContent={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
         className={s.cell}
       >
-        <StateCurrencyAmount amount={fee} currency="XTZ" />
+        <StateCurrencyAmount isError={isNull(sellRate) && isNull(buyRate)} amount={fee} currency="XTZ" />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -97,7 +98,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         )}
         className={cx(s.cell, s.routeLine)}
       >
-        {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug />}
+        {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug animation={false} />}
       </DetailsCardCell>
 
       <ViewPairAnlitics
