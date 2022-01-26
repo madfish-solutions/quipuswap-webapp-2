@@ -49,6 +49,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
             <StateCurrencyAmount
               amount={minimumReceived}
               currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
+              balanceRule
             />
           </>
         )}
