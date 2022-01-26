@@ -11,7 +11,7 @@ import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } fro
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { calculatePoolAmount, sortTokensContracts } from '../helpers';
+import { calculatePoolAmount, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { INVALID_INPUT } from '../validators/validate-user-input';
@@ -195,7 +195,7 @@ export const useAddLiquidityService = (
 
   const handleTokenABalance = (value: string) => {
     const { decimals } = tokenA!.metadata;
-    const fixedValue = new BigNumber(value).toFixed(decimals);
+    const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
@@ -215,7 +215,7 @@ export const useAddLiquidityService = (
 
   const handleTokenBBalance = (value: string) => {
     const { decimals } = tokenB!.metadata;
-    const fixedValue = new BigNumber(value).toFixed(decimals);
+    const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(

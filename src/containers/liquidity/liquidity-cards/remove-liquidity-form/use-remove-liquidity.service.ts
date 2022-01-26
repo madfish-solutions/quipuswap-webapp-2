@@ -12,6 +12,7 @@ import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@ut
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
+import { removeExtraZeros } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
@@ -121,7 +122,7 @@ export const useRemoveLiquidityService = (
   }, [pairInfo, lpTokenInput, share]);
 
   const handleBalance = (value: string) => {
-    const fixedValue = new BigNumber(value).toFixed(LP_TOKEN_DECIMALS);
+    const fixedValue = removeExtraZeros(value, LP_TOKEN_DECIMALS);
     setLpTokenInput(fixedValue);
   };
 
