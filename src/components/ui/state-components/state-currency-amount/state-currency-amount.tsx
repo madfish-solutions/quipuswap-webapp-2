@@ -6,7 +6,7 @@ import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
 import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
-import { isExist } from '@utils/helpers';
+import { formatValueBalance, isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
@@ -23,6 +23,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   amountDecimals?: number;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
+  balanceRule?: boolean;
 }
 
 const sizeClass = {
@@ -50,7 +51,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView
+  aliternativeView,
+  balanceRule
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -69,7 +71,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const view = aliternativeView ?? FormatNumber(amount ?? 0, { decimals: amountDecimals });
+  const FormattedNumber = balanceRule
+    ? formatValueBalance(amount)
+    : FormatNumber(amount ?? 0, { decimals: amountDecimals });
 
   const content = (
     <span className={wrapClassName}>
@@ -81,7 +85,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{view}</span>
+        <span className={s.inner}>{aliternativeView ?? FormattedNumber}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}
