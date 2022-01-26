@@ -116,7 +116,7 @@ export interface TokenDataType {
     decimals: number;
   };
   balance: string;
-  exchangeRate?: string;
+  exchangeRate: Nullable<string>;
 }
 
 export interface TokenDataMap {

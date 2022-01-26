@@ -7,5 +7,6 @@ export const fallbackTokenToTokenData = (token: WhitelistedToken): TokenDataType
     id: token.fa2TokenId,
     decimals: token.metadata.decimals
   },
-  balance: '0'
+  balance: '0',
+  exchangeRate: null
 });

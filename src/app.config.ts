@@ -1,5 +1,7 @@
+import { ContractOrAddress } from '@quipuswap/sdk/src/types';
+
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
+import { ConnectType, QSNets, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -108,7 +110,17 @@ export const networksDefaultTokens: Record<QSNets, WhitelistedToken> = {
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
 
-export const FACTORIES = {
+interface FactoryNet {
+  fa1_2Factory: ContractOrAddress[];
+  fa2Factory: ContractOrAddress[];
+}
+
+interface FactoriesMap {
+  mainnet: FactoryNet;
+  hangzhounet: FactoryNet;
+}
+
+export const FACTORIES: FactoriesMap = {
   mainnet: {
     fa1_2Factory: ['KT1FWHLMk5tHbwuSsp31S4Jum4dTVmkXpfJw', 'KT1Lw8hCoaBrHeTeMXbqHPG4sS4K1xn7yKcD'],
     fa2Factory: ['KT1PvEyN1xCFCgorN92QCfYjw3axS6jawCiJ', 'KT1SwH9P1Tx8a58Mm6qBExQFTcy2rwZyZiXS']

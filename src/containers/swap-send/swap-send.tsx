@@ -17,7 +17,7 @@ import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
-import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useAccountPkh, useOnBlock, useTokens } from '@utils/dapp';
 import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
@@ -125,7 +125,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
 
   const { balances, updateBalance } = useBalances();
   const exchangeRates = useNewExchangeRates();
-  const tezos = useTezos();
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const { label: currentTabLabel } = TabsContent.find(({ id }) => id === action)!;
@@ -145,9 +144,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         if (token) {
           try {
             await updateBalance(token);
-          } catch (e) {
+          } catch (error) {
             // eslint-disable-next-line no-console
-            console.error(e);
+            console.error(error);
           }
         }
       })
@@ -224,7 +223,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     prevDexGraphRef.current = dexGraph;
   }, [dexGraph, inputToken, outputToken, updateSwapLimits]);
 
-  useOnBlock(tezos, updateSelectedTokensBalances);
+  useOnBlock(updateSelectedTokensBalances);
 
   const resetTokensAmounts = useCallback(() => {
     setFieldTouched(SwapField.INPUT_AMOUNT, false);

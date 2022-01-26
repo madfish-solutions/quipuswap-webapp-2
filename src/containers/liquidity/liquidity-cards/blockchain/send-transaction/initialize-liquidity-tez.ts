@@ -2,7 +2,7 @@ import { Token, batchify, initializeLiquidity as getInitializeLiquidityParams } 
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { FACTORIES } from '@app.config';
+import { FACTORIES, NETWORK_ID } from '@app.config';
 import { QSNets } from '@utils/types';
 
 const FIRST_FACTORY_INDEX = 0;
@@ -15,8 +15,8 @@ export const initializeLiquidityTez = async (
   tezValue: BigNumber
 ) => {
   const factories = {
-    fa1_2Factory: FACTORIES[networkId].fa1_2Factory[FIRST_FACTORY_INDEX],
-    fa2Factory: FACTORIES[networkId].fa2Factory[FIRST_FACTORY_INDEX]
+    fa1_2Factory: FACTORIES[NETWORK_ID].fa1_2Factory[FIRST_FACTORY_INDEX],
+    fa2Factory: FACTORIES[NETWORK_ID].fa2Factory[FIRST_FACTORY_INDEX]
   };
 
   const initializeLiquidityParams = await getInitializeLiquidityParams(tezos, factories, token, tokenValue, tezValue);

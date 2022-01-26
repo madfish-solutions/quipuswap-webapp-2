@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js';
 
 import { TEZOS_TOKEN } from '@app.config';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
-import { UseToasts } from '@hooks/use-toasts';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { toDecimals } from '@utils/helpers';
 import { Nullable, VoteFormValues } from '@utils/types';
@@ -108,21 +107,14 @@ export const unvoteOrRemoveVeto = async (
   tab: VotingTabs,
   tezos: TezosToolkit,
   dex: FoundDex,
-  showErrorToast: UseToasts['showErrorToast'],
   confirmOperation: ReturnType<typeof useConfirmOperation>,
-  getBalance: () => void,
   baker: string
 ) => {
-  try {
-    const { params, text: updateToastText } = await unvoteOrUnveto(tab, tezos, dex, baker);
+  const { params, text: updateToastText } = await unvoteOrUnveto(tab, tezos, dex, baker);
 
-    const op = await batchify(tezos.wallet.batch([]), params).send();
+  const op = await batchify(tezos.wallet.batch([]), params).send();
 
-    await confirmOperation(op.opHash, { message: updateToastText });
-    getBalance();
-  } catch (e) {
-    showErrorToast(e as Error);
-  }
+  await confirmOperation(op.opHash, { message: updateToastText });
 };
 
 export const submitForm = async ({ tezos, values, dex, tab, confirmOperation }: SubmitProps) => {

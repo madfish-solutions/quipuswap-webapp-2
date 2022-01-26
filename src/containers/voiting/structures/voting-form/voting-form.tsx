@@ -1,6 +1,6 @@
-import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
+import React, { Dispatch, FC, SetStateAction, useEffect, useState } from 'react';
 
-import { Token, findDex, FoundDex } from '@quipuswap/sdk';
+import { findDex, FoundDex, Token } from '@quipuswap/sdk';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -14,31 +14,17 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
-import {
-  getCandidateInfo,
-  getVoteVetoBalances,
-  handleTokenPairSelect,
-  unvoteOrRemoveVeto,
-  BakerCleaner
-} from '@containers/voiting/helpers';
+import { BakerCleaner, getCandidateInfo, getVoteVetoBalances, unvoteOrRemoveVeto } from '@containers/voiting/helpers';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
-import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
+import { useAccountPkh, useBakers, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, isNull, getTokenSlug } from '@utils/helpers';
+import { getTokenSlug, isAssetEqual, isNull, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
-import {
-  TokenDataMap,
-  VoteFormValues,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-  VoterType,
-  Undefined,
-  Nullable
-} from '@utils/types';
-import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
+import { Nullable, TokenDataMap, Undefined, VoteFormValues, VoterType, WhitelistedTokenPair } from '@utils/types';
+import { composeValidators, required, validateBalance, validateMinMax } from '@utils/validators';
 
 interface TabsContent {
   id: VotingTabs;
@@ -66,41 +52,33 @@ interface VotingFormProps {
   tokensData: TokenDataMap;
   currentTab: TabsContent;
   tokensUpdading: boolean;
-  setRewards: Dispatch<SetStateAction<string>>;
   setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
-  setTokens: (tokens: WhitelistedToken[]) => void;
-  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
-  setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
+  onChangeTokenPair: (pair: WhitelistedTokenPair) => void;
+  onUnvoteOrRemoveVeto: () => void;
   setTabsState: (val: VotingTabs) => void;
-  getBalance: () => void;
   handleSubmit: () => Promise<void>;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
   bakerCleaner: BakerCleaner;
 }
 
 const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
-const RealForm: React.FC<VotingFormProps> = ({
+const RealForm: FC<VotingFormProps> = ({
   handleSubmit,
   values,
   form,
   tabsState,
-  setRewards,
   setDex,
   dex,
-  setTokens,
-  setVoter,
+  onChangeTokenPair,
   voter,
   tokenPair,
-  setTokenPair,
-  handleTokenChange,
   tokensData,
   currentTab,
   setTabsState,
-  getBalance,
   tokensUpdading,
-  bakerCleaner
+  bakerCleaner,
+  onUnvoteOrRemoveVeto
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
@@ -175,7 +153,13 @@ const RealForm: React.FC<VotingFormProps> = ({
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
+    try {
+      await unvoteOrRemoveVeto(currentTab.id, tezos, dex, confirmOperation, voter.candidate);
+    } catch (error) {
+      showErrorToast(error as Error);
+    }
+
+    onUnvoteOrRemoveVeto();
   };
 
   const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, voter);
@@ -229,22 +213,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               {...input}
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
-              setTokenPair={pair => {
-                handleTokenChange(pair.token1, 'first');
-                handleTokenChange(pair.token2, 'second');
-                setTokens([pair.token1, pair.token2]);
-                handleTokenPairSelect(
-                  pair,
-                  setTokenPair,
-                  setDex,
-                  setRewards,
-                  setVoter,
-                  showErrorToast,
-                  tezos,
-                  accountPkh,
-                  NETWORK_ID
-                );
-              }}
+              setTokenPair={onChangeTokenPair}
               balance={availableBalance}
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
@@ -318,5 +287,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   );
 };
 
+// TODO: Remove any
 // eslint-disable-next-line
 export const VotingForm = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={RealForm} />;

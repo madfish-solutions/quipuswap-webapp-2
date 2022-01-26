@@ -1,7 +1,6 @@
 import constate from 'constate';
 
 import { EXCHANGE_RATES_URL } from '@app.config';
-import { useTezos } from '@utils/dapp';
 
 import { useToasts } from './use-toasts';
 import useUpdateOnBlockSWR from './useUpdateOnBlockSWR';
@@ -17,7 +16,6 @@ interface ExchangeRateEntry extends RawExchangeRateEntry {
 }
 
 export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
-  const tezos = useTezos();
   const { showErrorToast } = useToasts();
 
   const getExchangeRates = async () =>
@@ -29,11 +27,13 @@ export const [ExchangeRatesProvider, useExchangeRates] = constate(() => {
           tokenAddress: tokenAddress ?? 'tez'
         }))
       )
-      .catch(() => {
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
         showErrorToast('Exchange Rates not loaded');
       });
 
-  const { data: exchangeRates } = useUpdateOnBlockSWR(tezos, ['exchange-rates'], getExchangeRates, {
+  const { data: exchangeRates } = useUpdateOnBlockSWR(['exchange-rates'], getExchangeRates, {
     refreshInterval: 30000
   });
 

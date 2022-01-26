@@ -1,9 +1,12 @@
 import { useEffect, useRef } from 'react';
 
-import { TezosToolkit } from '@taquito/taquito';
 import { Subscription } from '@taquito/taquito/dist/types/subscribe/interface';
 
-export const useOnBlock = (tezos: TezosToolkit | null, callback: (hash: string) => void) => {
+import { useTezos } from '@utils/dapp/dapp';
+
+export const useOnBlock = (callback: (hash: string) => void) => {
+  const tezos = useTezos();
+
   const blockHashRef = useRef<string | undefined>();
 
   useEffect(() => {
@@ -22,6 +25,7 @@ export const useOnBlock = (tezos: TezosToolkit | null, callback: (hash: string) 
         }
         blockHashRef.current = hash;
       });
+
       sub.on('error', (err: Error) => {
         if (process.env.NODE_ENV === 'development') {
           // eslint-disable-next-line

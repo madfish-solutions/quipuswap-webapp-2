@@ -32,7 +32,8 @@ export const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute
                 id: fa2TokenId,
                 decimals
               },
-              balance: '0'
+              balance: '0',
+              exchangeRate: null
             })
           }
         ],
@@ -51,7 +52,8 @@ export const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute
               id: inputToken.fa2TokenId,
               decimals: inputToken.metadata.decimals
             },
-            balance: '0'
+            balance: '0',
+            exchangeRate: null
           })
         }
       ],

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'react';
+import { FC, Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FoundDex, TransferParams } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
@@ -7,25 +7,29 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 
-import { NETWORK, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { NETWORK_ID, networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import { PageTitle } from '@components/common/page-title';
+import { getRewards } from '@containers/voiting/helpers/get-rewards';
+import { getShareBalances } from '@containers/voiting/helpers/get-shares-balances';
+import { getVoter } from '@containers/voiting/helpers/get-voter';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
-import { useTezos, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
+import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData, isNull } from '@utils/helpers';
+import { getDex } from '@utils/dapp/get-dex';
+import { fallbackTokenToTokenData, isEmptyArray, isNull } from '@utils/helpers';
 import {
-  VoterType,
+  Nullable,
   TokenDataMap,
   VoteFormValues,
+  VoterType,
   WhitelistedToken,
-  WhitelistedTokenPair,
-  Nullable
+  WhitelistedTokenPair
 } from '@utils/types';
 
-import { bakerCleaner, handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
+import { bakerCleaner, handleSearchToken, handleTokenChange, submitForm, submitWithdraw } from './helpers';
 import { VotingDetails, VotingForm, VotingStats } from './structures';
 import { VotingTabs } from './tabs.enum';
 
@@ -51,6 +55,8 @@ const fallbackTokenPair: WhitelistedTokenPair = {
   token2: defaultToken
 };
 
+const DEFAULT_REWARDS = '0';
+
 // TODO: Refactor solution of BakerCleaner
 
 interface pForm {
@@ -71,7 +77,7 @@ const cleanUp = (tab: VotingTabs) => {
   }
 };
 
-export const Voting: React.FC<VotingProps> = ({ className }) => {
+export const Voting: FC<VotingProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -80,18 +86,21 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
+
   const [tokensData, setTokensData] = useState<TokenDataMap>({
     first: fallbackTokenToTokenData(TEZOS_TOKEN),
     second: fallbackTokenToTokenData(defaultToken)
   });
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
+  const [initialLoad, setInitialLoad] = useState(false);
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
   const { Form } = withTypes<VoteFormValues>();
-  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [rewards, setRewards] = useState<string>('0');
+  const [urlLoaded, setUrlLoaded] = useState(true);
+  const [rewards, setRewards] = useState(DEFAULT_REWARDS);
   const [voter, setVoter] = useState<Nullable<VoterType>>(null);
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
+  const [isTokenLoading, setTokenLoading] = useState(true);
+
   const router = useRouter();
   const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
   const { from, to } = useRouterPair({
@@ -101,22 +110,28 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
-  const [isTokenLoading, setTokenLoading] = useState(true);
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
   const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
     let isMounted = true;
+    if (!exchangeRates) {
+      return;
+    }
     setTokenLoading(true);
-    await handleTokenChange({
+    const data = await handleTokenChange({
       token,
-      tokenNumber,
-      // @ts-ignore
       exchangeRates,
-      tezos: tezos!,
-      accountPkh: accountPkh!,
-      setTokensData
+      tezos,
+      accountPkh
     });
+    if (data) {
+      setTokensData(prevState => ({
+        ...prevState,
+        [tokenNumber]: data
+      }));
+    }
+
     if (isMounted) {
       setTokenLoading(false);
     }
@@ -124,12 +139,45 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     return () => (isMounted = false);
   };
 
+  const loadPair = useCallback(async () => {
+    const secondAsset = {
+      contract: tokenPair.token2.contractAddress,
+      id: tokenPair.token2.fa2TokenId
+    };
+
+    const foundDex = await getDex(tezos, secondAsset);
+    setDex(foundDex);
+
+    if (!foundDex || !accountPkh) {
+      setTokenPair({
+        ...tokenPair,
+        frozenBalance: undefined,
+        balance: undefined,
+        dex: undefined
+      });
+    }
+
+    const rewards = await getRewards(tezos, foundDex, accountPkh);
+    setRewards(rewards || DEFAULT_REWARDS);
+
+    const voter = await getVoter(accountPkh, foundDex);
+    setVoter(voter);
+
+    const shareBalances = await getShareBalances(tezos, foundDex, accountPkh);
+    if (shareBalances) {
+      const { frozenBalance, totalBalance } = shareBalances;
+      setTokenPair({
+        ...tokenPair,
+        frozenBalance,
+        balance: totalBalance
+      });
+    }
+  }, [accountPkh, tezos, tokenPair]);
+
   useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+    if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
       void handleSearchToken({
         tokens,
-        tezos: tezos!,
-        network: NETWORK,
         from,
         to,
         fixTokenFrom: TEZOS_TOKEN,
@@ -144,37 +192,63 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
-  const getBalance = useCallback(() => {
-    const loadBalances = async () => {
-      await handleTokenChangeWrapper(tokenPair.token1, 'first');
-      await handleTokenChangeWrapper(tokenPair.token2, 'second');
-      await handleTokenPairSelect(
-        tokenPair,
-        setTokenPair,
-        setDex,
-        setRewards,
-        setVoter,
-        showErrorToast,
-        tezos,
-        accountPkh,
-        NETWORK_ID
-      );
+  const updateTokens = useCallback(() => {
+    const load = async () => {
+      try {
+        await handleTokenChangeWrapper(tokenPair.token1, 'first');
+        await handleTokenChangeWrapper(tokenPair.token2, 'second');
+
+        await loadPair();
+      } catch (error) {
+        showErrorToast(error as Error);
+      }
     };
 
     if (tezos && tokenPair.token1 && tokenPair.token2) {
-      void loadBalances();
+      void load();
+    }
+    // eslint-disable-next-line
+  }, [tezos, accountPkh, tokenPair, loadPair]);
+
+  // TODO: Implement it
+  const updateTokensBalances = useCallback(async () => {
+    const load = async () => {
+      if (!exchangeRates || !tokenPair.token1) {
+        return;
+      }
+      const data = await Promise.all([
+        await handleTokenChange({
+          token: tokenPair.token1,
+          exchangeRates,
+          tezos,
+          accountPkh
+        }),
+        await handleTokenChange({
+          token: tokenPair.token2,
+          exchangeRates,
+          tezos,
+          accountPkh
+        })
+      ]);
+      // eslint-disable-next-line no-console
+      console.log('data', data);
+    };
+
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      await load();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh, tokenPair]);
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
-      void getBalance();
+      void updateTokens();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh]);
 
-  useOnBlock(tezos, getBalance);
+  useOnBlock(updateTokensBalances);
+
   const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
   const handleClaimReward = async (params: TransferParams[]) => {
@@ -184,7 +258,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
     try {
       await submitWithdraw(tezos, params, confirmOperation);
-      getBalance();
+      updateTokens();
     } catch (e) {
       showErrorToast(e as Error);
     }
@@ -203,7 +277,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         tab: currentTab.id,
         confirmOperation
       });
-      getBalance();
+      updateTokens();
       cleanUp(currentTab.id);
     } catch (e) {
       showErrorToast(e as Error);
@@ -216,6 +290,15 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     }
   };
 
+  const handleChangeTokenPair = (pair: WhitelistedTokenPair) => {
+    setTokens([pair.token1, pair.token2]);
+    void updateTokens();
+  };
+
+  const handleUnvoteOrRemoveVeto = () => {
+    void updateTokens();
+  };
+
   const handleFormRender = (handleSubmit: () => Promise<void>, form: FormApi<VoteFormValues>) => {
     if (pointerForm.form !== form) {
       pointerForm.form = form;
@@ -226,21 +309,18 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         form={form}
         tabsState={tabsState}
         rewards={rewards}
-        voter={voter}
+        voter={voter!}
         dex={dex}
         tokenPair={tokenPair}
         tokensData={tokensData}
         currentTab={currentTab}
         tokensUpdading={isTokenLoading}
-        setRewards={setRewards}
         setDex={setDex}
-        setTokens={setTokens}
-        setTokenPair={setTokenPair}
-        setVoter={setVoter}
+        onChangeTokenPair={handleChangeTokenPair}
+        onUnvoteOrRemoveVeto={handleUnvoteOrRemoveVeto}
         setTabsState={setTabsState}
-        getBalance={getBalance}
+        updateTokens={updateTokens}
         handleSubmit={handleSubmit}
-        handleTokenChange={handleTokenChange}
         bakerCleaner={bakerCleaner}
       />
     );
