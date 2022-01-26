@@ -1,12 +1,28 @@
-import { WhitelistedBaker } from '@utils/types';
-import { shortize } from './shortize';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
-export const getWhitelistedBakerName = (
-  baker:WhitelistedBaker,
-  sliceAmount: number = 10,
-) : string => (
-  baker.name?.length > sliceAmount + 2
-    ? `${baker.name.slice(0, sliceAmount)}...`
-    : baker.name
-) ?? shortize(baker.address)
-  ?? 'Baker';
+import { isBackerNotEmpty } from './is-backer-not-empty';
+import { shortize } from './shortize';
+import { isExist } from './type-checks';
+
+export function getWhitelistedBakerName(baker: WhitelistedBaker, sliceAmount?: number, charsLength?: number): string;
+export function getWhitelistedBakerName(
+  baker: Nullable<WhitelistedBaker>,
+  sliceAmount?: number,
+  charsLength?: number
+): Nullable<string>;
+
+export function getWhitelistedBakerName(
+  baker: WhitelistedBaker | Nullable<WhitelistedBaker>,
+  sliceAmount = 10,
+  charsLength = 5
+): string | Nullable<string> {
+  if (!isExist(baker)) {
+    return null;
+  }
+
+  if (isBackerNotEmpty(baker)) {
+    return baker.name.length > sliceAmount + 2 ? `${baker.name.slice(0, sliceAmount)}...` : baker.name;
+  }
+
+  return shortize(baker.address, charsLength);
+}

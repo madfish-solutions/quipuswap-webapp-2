@@ -1,0 +1,51 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.root
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+
+.amount
+  display: flex
+  align-items: center
+  column-gap: 8px
+  font-weight: 600
+  line-height: 1.14
+
+.currency
+    color: $text-03
+
+.inner
+  margin-right: 4px
+  transition: color $colorChangeAnimationTime
+
+.isLeftCurrency
+  .inner
+    margin-right: 0
+    margin-left: 4px
+
+.light
+  .inner
+    color: $text-01
+
+.dark
+  .inner
+    color: $text-inverse
+
+.large, .extraLarge
+  font-size: 1.286rem
+  line-height: 1.33
+
+.small
+  font-size: 1rem
+
+@include media('>Ltablet')
+  .extraLarge
+    font-size: 1.857rem
+    line-height: 1.4
+
+@include media('>desktop')
+  .extraLarge
+    font-size: 2.286rem
+    line-height: 1.5

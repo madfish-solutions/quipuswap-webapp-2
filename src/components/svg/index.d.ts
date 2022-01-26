@@ -1,4 +1,4 @@
-type IconProps = {
-  id?: string
-  className?: string
-};
+interface IconProps {
+  id?: string;
+  className?: string;
+}

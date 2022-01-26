@@ -1,38 +1,36 @@
-import React, { useContext } from 'react';
-import {
-  Bage,
-  Button,
-  Tooltip,
-  ColorModes,
-  TokensLogos,
-  CurrencyAmount,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
-import BigNumber from 'bignumber.js';
-import cx from 'classnames';
+import { useContext } from 'react';
 
-import { fromDecimals, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { Bage, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
+
+import { TokensLogos } from '@components/common/TokensLogos';
+import { Tooltip } from '@components/ui/components/tooltip';
+import { Button } from '@components/ui/elements/button';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { calculateRateAmount, getTokensPairName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
+import { getHref } from './get-swap-href.helper';
 import s from './PoolCardTable.module.sass';
 
-type PoolCardItemProps = {
-  pool: PoolTableType
-  isSponsored?: boolean
-};
+interface PoolCardItemProps {
+  pool: PoolTableType;
+  isSponsored?: boolean;
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const PoolCardItem: React.FC<PoolCardItemProps> = ({
-  pool,
-  isSponsored,
-}) => {
+export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored }) => {
   const { t } = useTranslation(['home']);
   const { colorThemeMode } = useContext(ColorThemeContext);
+
+  const tvl = calculateRateAmount(pool.data.tvl, pool.xtzUsdQuote);
+  const volume24h = calculateRateAmount(pool.data.volume24h, pool.xtzUsdQuote);
+
   return (
     <div className={cx(modeClass[colorThemeMode], s.card)}>
       <div className={cx(s.cardCellItem, s.tokenLogoBlock)}>
@@ -44,56 +42,37 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({
             secondTokenSymbol={getWhitelistedTokenSymbol(pool.token2)}
             className={s.tokenLogo}
           />
-          {pool.pair.name}
+          {getTokensPairName(pool.token1, pool.token2)}
         </div>
-        {isSponsored && (<Bage text={t('home|Sponsored')} />)}
+        {isSponsored && <Bage text={t('home|Sponsored')} />}
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
           {t('home|TVL')}
-          <Tooltip sizeT="small" content={t('TVL (Total Value Locked) represents the total amount of a specific token locked on QuiuSwap across different pools.')} />
+          <Tooltip
+            content={t(
+              'TVL (Total Value Locked) represents the total amount of a specific token locked on QuipuSwap across different pools.'
+            )}
+          />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          <CurrencyAmount
-            amount={fromDecimals(new BigNumber(pool.data.tvl), 6)
-              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
-              .integerValue()
-              .toString()}
-            currency="$"
-            isLeftCurrency
-            className={s.cardAmount}
-          />
+          <StateCurrencyAmount amount={tvl} currency="$" isLeftCurrency className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.textItem, s.cardCellItem)}>
         <div className={s.cardCellText}>
           {t('home|Volume 24h')}
-          <Tooltip sizeT="small" content={t('A total amount of funds that were swapped via each pool today.')} />
+          <Tooltip content={t('A total amount of funds that were swapped via each pool today.')} />
         </div>
         <div className={cx(s.bold, s.cardCellText)}>
-          $
-          <CurrencyAmount
-            className={s.cardAmount}
-            amount={fromDecimals(new BigNumber(pool.data.volume24h), 6)
-              .multipliedBy(new BigNumber(pool.xtzUsdQuote))
-              .integerValue()
-              .toString()}
-          />
+          <StateCurrencyAmount amount={volume24h} currency="$" isLeftCurrency className={s.cardAmount} />
         </div>
       </div>
       <div className={cx(s.links, s.cardCellItem, s.buttons)}>
-        <Button
-          theme="secondary"
-          className={s.button}
-          href={pool.buttons.first.href}
-          external
-        >
+        <Button theme="secondary" className={s.button} href={pool.buttons.first.href} external>
           {t('home|Analytics')}
         </Button>
-        <Button
-          href="/swap"
-          className={s.button}
-        >
+        <Button href={getHref(pool)} className={s.button}>
           {t('home|Trade')}
         </Button>
       </div>

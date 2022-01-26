@@ -1,1 +1,1 @@
-export * from './BakersModal';
+export * from './bakers-modal';

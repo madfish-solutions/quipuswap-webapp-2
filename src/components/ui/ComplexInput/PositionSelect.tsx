@@ -1,54 +1,50 @@
-import React, {
-  useRef,
-  useState,
-  useContext,
-} from 'react';
-import {
-  Button,
-  Shevron,
-  ColorModes,
-  TokensLogos,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+import React, { useRef, useState, useContext, HTMLProps, FC, Fragment, useEffect } from 'react';
+
+import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
-import { TEZOS_TOKEN } from '@utils/defaults';
-import { getWhitelistedTokenSymbol, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { TEZOS_TOKEN } from '@app.config';
 import { PositionsModal } from '@components/modals/PositionsModal';
-import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { DashPlug } from '../dash-plug';
+import { Button } from '../elements/button';
+import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
-type PositionSelectProps = {
-  noBalanceButtons?: boolean
-  className?: string
-  balance?: string
-  balanceLabel?: string
-  frozenBalance?: string
-  notFrozen?:boolean
-  label: string
-  error?: string
-  notSelectable1?: WhitelistedToken
-  notSelectable2?: WhitelistedToken
-  handleChange?: (tokenPair:WhitelistedTokenPair) => void
-  handleBalance: (value: string) => void
-  tokenPair?: WhitelistedTokenPair,
-  setTokenPair: (tokenPair:WhitelistedTokenPair) => void
-} & React.HTMLProps<HTMLInputElement>;
+interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
+  shouldShowBalanceButtons?: boolean;
+  className?: string;
+  balance?: string;
+  balanceLabel?: string;
+  frozenBalance?: string;
+  notFrozen?: boolean;
+  label: string;
+  error?: string;
+  notSelectable1?: WhitelistedToken;
+  notSelectable2?: WhitelistedToken;
+  tokensUpdading?: boolean;
+  handleChange?: (tokenPair: WhitelistedTokenPair) => void;
+  handleBalance: (value: string) => void;
+  tokenPair: Nullable<WhitelistedTokenPair>;
+  setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
+}
 
 const themeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const PositionSelect: React.FC<PositionSelectProps> = ({
+export const PositionSelect: FC<PositionSelectProps> = ({
   className,
-  balance = '10.00',
-  noBalanceButtons = false,
-  frozenBalance = '10.00',
+  balance,
+  shouldShowBalanceButtons = true,
+  frozenBalance,
   label,
   balanceLabel,
   handleBalance,
@@ -61,6 +57,7 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   tokenPair,
   setTokenPair,
   notFrozen,
+  tokensUpdading,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -68,13 +65,8 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const compoundClassName = cx(
-    { [s.focused]: focused },
-    { [s.error]: !!error },
-    themeClass[colorThemeMode],
-    className,
-  );
+  const [tokensLoading, setTokensLoading] = useState(false);
+  const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {
     if (inputRef?.current) {
@@ -84,27 +76,30 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
 
   const token1 = tokenPair?.token1 ?? TEZOS_TOKEN;
   const token2 = tokenPair?.token2 ?? TEZOS_TOKEN;
+  useEffect(() => {
+    if (tokenPair?.token2) {
+      setTokensLoading(false);
+    }
+  }, [tokenPair?.token2]);
 
   return (
     <>
       <PositionsModal
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
-        onChange={(selectedToken) => {
+        onChange={selectedToken => {
+          setTokensLoading(true);
           setTokenPair(selectedToken);
-          if (handleChange) handleChange(selectedToken);
+          if (handleChange) {
+            handleChange(selectedToken);
+          }
           setTokensModal(false);
         }}
         initialPair={tokenPair}
         notSelectable1={notSelectable1}
         notSelectable2={notSelectable2}
       />
-      {/* eslint-disable-next-line max-len */}
-      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions */}
-      <div
-        className={compoundClassName}
-        onClick={focusInput}
-      >
+      <div className={compoundClassName} onClick={focusInput}>
         <label htmlFor={id} className={s.label}>
           {label}
         </label>
@@ -112,36 +107,28 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
-              {notFrozen ? '' : (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>
-                    {t('common|Frozen Balance')}
-                    :
-                  </div>
-                  <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(frozenBalance))}
-                  </div>
-
-                </div>
+              {!notFrozen && shouldShowBalanceButtons && (
+                <Balance balance={frozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
               )}
-              {!noBalanceButtons ? (
-                <div className={s.item2Line}>
-                  <div className={s.caption}>
-                    {balanceLabel ?? t('common|Total Balance')}
-                    :
-                  </div>
-                  <div className={cx(s.label2, s.price)}>
-                    {prettyPrice(parseFloat(balance))}
-                  </div>
-                </div>
-              ) : (<div className={s.item2Line} />)}
+              {shouldShowBalanceButtons ? (
+                <Balance
+                  balance={balance}
+                  text={balanceLabel ?? t('common|Total Balance')}
+                  colorMode={colorThemeMode}
+                />
+              ) : (
+                <div className={s.item2Line} />
+              )}
             </div>
             <input
+              autoComplete="off"
               className={cx(s.item3, s.input)}
               onFocus={() => setActive(true)}
               onBlur={() => setActive(false)}
               ref={inputRef}
               value={value}
+              placeholder="0.0"
+              autoFocus
               {...props}
             />
             <Button
@@ -150,20 +137,33 @@ export const PositionSelect: React.FC<PositionSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos
-                firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
-                secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
-              />
-              <h6 className={cx(s.token)}>
-                {tokenPair ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(tokenPair.token2, 5)}` : 'Select LP'}
-              </h6>
-              <Shevron />
+              {tokensUpdading || tokensLoading ? (
+                <DashPlug zoom={2} />
+              ) : (
+                <Fragment>
+                  <TokensLogos
+                    firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+                    firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+                    secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+                    secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+                  />
+                  <h6 className={cx(s.token)}>
+                    {tokenPair
+                      ? `${getWhitelistedTokenSymbol(tokenPair.token1, 5)} / ${getWhitelistedTokenSymbol(
+                          tokenPair.token2,
+                          5
+                        )}`
+                      : 'Select LP'}
+                  </h6>
+                  <Shevron />
+                </Fragment>
+              )}
             </Button>
           </div>
         </div>
-        {!noBalanceButtons && (<PercentSelector value={balance} handleBalance={handleBalance} />)}
+        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+          <PercentSelector value={balance ?? null} handleBalance={handleBalance} />
+        </Scaffolding>
         <ComplexError error={error} />
       </div>
     </>

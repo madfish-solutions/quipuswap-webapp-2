@@ -1,13 +1,14 @@
 import React from 'react';
+
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { STABLE_TOKEN, TEZOS_TOKEN } from '@utils/defaults';
-import { BaseLayout } from '@layouts/BaseLayout';
-import { Voting } from '@containers/Voting';
-
+import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { BaseLayout } from '@components/common/BaseLayout';
+import { TestnetAlert } from '@components/common/testnet-alert';
+import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
+import { getTokenSlug, isEmptyArray } from '@utils/helpers';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);
@@ -18,16 +19,22 @@ const VotePage: React.FC = () => {
       description={t('vote|Vote page description. Couple sentences...')}
       className={s.wrapper}
     >
+      <TestnetAlert />
       <Voting />
     </BaseLayout>
   );
 };
 
-export const getServerSideProps = async (props:any) => {
-  const { locale, query } = props;
+export const getServerSideProps = async ({
+  locale,
+  query
+}: {
+  locale: string;
+  query: { 'from-to': string; method: string };
+}) => {
   const splittedTokens = query['from-to'].split('-');
-  const from = getWhitelistedTokenSymbol(TEZOS_TOKEN);
-  const to = getWhitelistedTokenSymbol(STABLE_TOKEN);
+  const from = getTokenSlug(TEZOS_TOKEN);
+  const to = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 
@@ -38,29 +45,26 @@ export const getServerSideProps = async (props:any) => {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
-  if (splittedTokens.length > 0
-    && (splittedTokens[0] !== TEZOS_TOKEN.contractAddress
-    && splittedTokens[0] !== TEZOS_TOKEN.metadata.symbol
-    && splittedTokens[0] !== TEZOS_TOKEN.metadata.name)
-  ) {
+  if (!isEmptyArray(splittedTokens) && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
     return {
       redirect: {
         destination: `/voting/${method}/${from}-${to}`,
-        permanent: false,
-      },
+        permanent: false
+      }
     };
   }
 
-  return ({
+  return {
     props: {
-      ...await serverSideTranslations(locale, ['common', 'vote']),
-    },
-  });
+      ...(await serverSideTranslations(locale, ['common', 'vote']))
+    }
+  };
 };
 
+// eslint-disable-next-line import/no-default-export
 export default VotePage;

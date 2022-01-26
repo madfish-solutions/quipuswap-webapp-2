@@ -1,33 +1,28 @@
 import React, { useContext } from 'react';
-import {
-  Button,
-  Madfish,
-  ColorModes,
-  ColorThemeContext,
-} from '@quipuswap/ui-kit';
-import { useTranslation } from 'next-i18next';
+
+import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { NetworkSelect } from '@components/common/NetworkSelect';
+import { NetworkSelect } from '@components/ui/components';
+import { Button } from '@components/ui/elements/button';
 
 import { Navigation } from '../Navigation';
-import { Socials } from '../Socials';
 import { QPToken } from '../QPToken';
+import { Socials } from '../Socials';
 import s from './Sidebar.module.sass';
 
-type SidebarProps = {
-  className?: string
-};
+interface SidebarProps {
+  className?: string;
+}
 
 const modeClass = {
   [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark,
+  [ColorModes.Dark]: s.dark
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  className,
-}) => {
+export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -35,7 +30,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
-        <NetworkSelect className={s.button} />
+        <NetworkSelect className={cx(s.button, s.select)} />
         <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
           {t('common|Old version')}
         </Button>
@@ -44,12 +39,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <footer className={s.footer}>
         <QPToken className={s.token} id="desktop" />
         <Socials className={s.socials} id="desktop" />
-        <Button
-          href="https://www.madfish.solutions/"
-          external
-          theme="clean"
-          className={s.madfish}
-        >
+        <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
           <Madfish />
         </Button>
       </footer>

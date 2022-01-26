@@ -1,185 +1,179 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-export type QSMainNet =
-  | 'mainnet'
-  | 'hangzhounet';
+import { Standard } from '@graphql';
 
+export type Undefined<T> = T | undefined;
+export type Nullable<T> = T | null; // MayBe<T>
+
+export enum QSNets {
+  mainnet = 'mainnet',
+  hangzhounet = 'hangzhounet'
+}
+
+export enum QSNetworkType {
+  MAIN = 'MAIN',
+  TEST = 'TEST'
+}
+
+export enum ConnectType {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM'
+}
 export interface QSNetwork {
-  id: QSMainNet
-  connectType: 'default' | 'custom'
-  name: string
-  type: 'main' | 'test'
-  rpcBaseURL: string
-  metadata: string
-  description: string
-  disabled: boolean
+  id: QSNets;
+  connectType: ConnectType;
+  name: string;
+  type: QSNetworkType;
+  rpcBaseURL: string;
+  metadata: string;
+  disabled: boolean;
 }
 
 export enum WalletType {
   BEACON = 'beacon',
-  TEMPLE = 'temple',
+  TEMPLE = 'temple'
 }
 
 export interface WhitelistedTokenPair {
-  balance?: string,
-  frozenBalance?: string,
-  token1: WhitelistedToken,
-  token2: WhitelistedToken,
-  dex: FoundDex
+  balance?: string;
+  frozenBalance?: string;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  dex?: FoundDex;
 }
 
 export interface WhitelistedToken {
-  type: 'fa1.2' | 'fa2'
-  contractAddress: string
-  fa2TokenId?: number
-  metadata: WhitelistedTokenMetadata
+  type: Standard;
+  contractAddress: string;
+  // TODO: change the type to BigNumber
+  fa2TokenId?: number;
+  metadata: WhitelistedTokenMetadata;
 }
 
-export type WhitelistedTokenWithQSNetworkType = WhitelistedToken & { network?: QSMainNet };
-
-export type TokenId = Pick<
-WhitelistedToken,
-'contractAddress' | 'fa2TokenId' | 'type'
->;
-
-export interface WhitelistedBaker {
-  name: string,
-  address: string,
-  logo: string,
-  votes: number,
-  fee: number,
-  freeSpace: BigNumber
+export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
+  network?: QSNets;
 }
 
-export type WhitelistedTokenMetadata = {
-  decimals: number
-  symbol: string
-  name: string
-  thumbnailUri: string
-};
+export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
 
-export type VoterType = {
-  vote: string,
-  veto: string,
-  candidate: string
-};
+export interface WhitelistedBakerEmpty {
+  address: string;
+}
 
-export type TokenDataType = {
+export interface WhitelistedBakerFull extends WhitelistedBakerEmpty {
+  name: string;
+  logo: string;
+  votes: number;
+  fee: number;
+  freeSpace: BigNumber;
+}
+
+export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
+
+export const isFullBaker = (baker: WhitelistedBaker): baker is WhitelistedBakerFull => baker && 'name' in baker;
+
+export interface WhitelistedTokenMetadata {
+  decimals: number;
+  symbol: string;
+  name: string;
+  thumbnailUri: string;
+}
+
+interface CommonDexPairProps {
+  token1Pool: BigNumber;
+  token2Pool: BigNumber;
+  totalSupply: BigNumber;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
+  id: string | number;
+  type: 'ttdex' | 'tokenxtz';
+}
+
+interface TTDexPairProps extends CommonDexPairProps {
+  id: number;
+  type: 'ttdex';
+}
+
+interface TokenXtzDexPairProps extends CommonDexPairProps {
+  id: string;
+  type: 'tokenxtz';
+}
+
+export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
+
+export interface VoterType {
+  vote: BigNumber;
+  veto: BigNumber;
+  candidate: Nullable<string>;
+}
+
+export interface TokenDataType {
   token: {
-    address: string,
-    type: 'fa1.2' | 'fa2',
-    id?: number | null
-    decimals: number,
-  },
-  balance: string,
-  exchangeRate?: string
-};
+    address: string;
+    type: Standard;
+    id?: number | null;
+    decimals: number;
+  };
+  balance: string;
+  exchangeRate?: string;
+}
 
-export type TokenDataMap = {
-  first: TokenDataType,
-  second: TokenDataType
-};
+export interface TokenDataMap {
+  first: TokenDataType;
+  second: TokenDataType;
+}
 
-export type SwapFormValues = {
-  lastChange: 'balance1' | 'balance2'
-  balance1: BigNumber
-  balance2: BigNumber
-  recipient: string
-  slippage: string
-};
+export interface VoteFormValues {
+  balance1: number;
+  selectedBaker: string;
+  currentBacker?: string;
+}
 
-export type LiquidityFormValues = {
-  switcher: boolean
-  balance1: BigNumber
-  balance2: BigNumber
-  balance3: BigNumber
-  balanceA: BigNumber
-  balanceB: BigNumber
-  balanceTotalA: BigNumber
-  balanceTotalB: BigNumber
-  lpBalance: BigNumber
-  frozenBalance: BigNumber
-  lastChange: string
-  estimateLP: BigNumber
-  slippage: string
-};
-
-export type PoolShare = {
-  unfrozen:BigNumber,
-  frozen:BigNumber,
-  total:BigNumber
-};
-
-export type WhitelistedFarm = {
-  id: number
-  remaining: Date
-  tokenPair: WhitelistedTokenPair
-  totalValueLocked: string
-  apy: string
-  daily: string
-  balance: string
-  deposit: string
-  earned: string
-  multiplier: string
-  tokenContract: string
-  farmContract: string
-  projectLink: string
-  analyticsLink: string
-};
-
-export type WhitelistedStake = {
-  id: number,
-  remaining: Date
-  tokenPair: WhitelistedTokenPair
-  totalValueLocked: string
-  apy: string
-  daily: string
-  balance: string
-  deposit: string
-  earned: string
-  earn: string
-  tokenContract: string
-  farmContract: string
-  projectLink: string
-  analyticsLink: string
-};
-
-export type VoteFormValues = {
-  balance1: number
-  selectedBaker: string
-  method:'first' | 'second'
-};
-
-export type PoolTableType = {
-  id: number,
-  xtzUsdQuote: string,
-  token1: WhitelistedToken,
-  token2: WhitelistedToken,
+export interface PoolTableType {
+  id: number;
+  xtzUsdQuote: string;
+  token1: WhitelistedToken;
+  token2: WhitelistedToken;
   pair: {
-    name: string,
+    name: string;
     token1: {
-      icon: string,
-      symbol: string,
-    },
+      icon: string;
+      symbol: string;
+      id: string;
+      tokenId: string;
+    };
     token2: {
-      icon: string,
-      symbol: string,
-    },
-  },
+      icon: string;
+      symbol: string;
+      id: string;
+      tokenId: string;
+    };
+  };
   data: {
-    tvl: number,
-    volume24h: number,
-  },
+    tvl: number;
+    volume24h: number;
+  };
   buttons: {
     first: {
-      label: string,
-      href: string,
-      external: boolean,
-    },
+      label: string;
+      href: string;
+      external: boolean;
+    };
     second: {
-      label: string,
-      href: string,
-    },
-  },
-};
+      label: string;
+      href: string;
+    };
+  };
+}
+
+export interface SortTokensContractsType {
+  addressA: string;
+  addressB: string;
+  type: 'Left-Left' | 'Right-Right' | 'Left-Right';
+}
+
+export enum LastUsedConnectionKey {
+  TEMPLE = 'TEMPLE',
+  BEACON = 'BEACON'
+}
