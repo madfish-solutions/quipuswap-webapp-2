@@ -18,7 +18,8 @@ export const handleTokenPairSelect = async (
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
-  networkId: QSNets
+  networkId: QSNets,
+  quite = false
 ) => {
   if (!tezos || !networkId) {
     setTokenPair(pair);
