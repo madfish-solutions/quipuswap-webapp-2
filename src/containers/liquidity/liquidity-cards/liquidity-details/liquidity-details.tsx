@@ -63,6 +63,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
+          balanceRule
           amount={fixedTokenAPoll}
           currency={tokenAName}
           isLoading={!isExist(dex) || !isExist(tokenA)}
@@ -78,6 +79,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
+          balanceRule
           amount={fixedTokenBPoll}
           currency={tokenBName}
           isLoading={!isExist(dex) || !isExist(tokenB)}
@@ -94,7 +96,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount amount={share?.total || null} isLoading={isNull(poolTotal)} />
+            <StateCurrencyAmount balanceRule amount={share?.total || null} isLoading={isNull(poolTotal)} />
           </DetailsCardCell>
 
           <DetailsCardCell
@@ -104,7 +106,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount amount={share?.frozen || null} />
+            <StateCurrencyAmount balanceRule amount={share?.frozen || null} />
           </DetailsCardCell>
         </>
       )}
