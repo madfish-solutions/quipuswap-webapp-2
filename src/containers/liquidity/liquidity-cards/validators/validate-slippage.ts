@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { i18n } from 'next-i18next';
 
-const MAX_SLIPPAGE = 100;
+const MAX_SLIPPAGE = 30;
 
 export const validateSlippage = (slippage: BigNumber) => {
   if (slippage.gt(MAX_SLIPPAGE)) {
