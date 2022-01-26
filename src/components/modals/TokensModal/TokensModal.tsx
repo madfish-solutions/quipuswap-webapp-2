@@ -5,7 +5,6 @@ import {
   ColorThemeContext,
   LoadingTokenCell,
   Modal,
-  Pen,
   TokenCell,
   TokenNotFound
 } from '@quipuswap/ui-kit';
@@ -16,7 +15,6 @@ import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
 import { NETWORK } from '@app.config';
-import { Button } from '@components/ui/elements/button';
 import { Standard } from '@graphql';
 import {
   useTezos,
@@ -128,13 +126,6 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
         <Modal
           title={t('common|Search token')}
           header={<AutoSave form={form} save={handleInput} isSecondInput={isSoleFa2Token} />}
-          footer={
-            <Button className={s.modalButton} theme="inverse">
-              {/*TODO: Impelement it*/}
-              Manage Lists
-              <Pen className={s.penIcon} />
-            </Button>
-          }
           className={themeClass[colorThemeMode]}
           modalClassName={s.tokenModal}
           containerClassName={s.tokenModal}
