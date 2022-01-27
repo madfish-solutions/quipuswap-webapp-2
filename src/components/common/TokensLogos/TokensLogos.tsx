@@ -39,25 +39,23 @@ export const TokensLogos: React.FC<TokensLogosProps> = props => {
   const layoutBasedProps =
     props.layout === 'fill' ? { layout: 'fill' as const } : { layout: 'fixed' as const, size: props.width };
 
-  const wrapLoading = loading === true;
-
   return (
     <div className={compoundClassName}>
       <div className={cx(s.imageWrapper, imageClassName)}>
-        {isExist(firstTokenIcon) && !wrapLoading ? (
+        {isExist(firstTokenIcon) && !loading ? (
           <TokenLogo src={firstTokenIcon} tokenSymbol={firstTokenSymbol} {...layoutBasedProps} />
         ) : (
           <FallbackLogo className={cx(s.image)} />
         )}
       </div>
 
-      {isExist(secondTokenIcon) && !wrapLoading && (
+      {isExist(secondTokenIcon) && !loading && (
         <div className={cx(s.imageWrapper, s.secondImage, imageClassName)}>
           <TokenLogo src={secondTokenIcon} tokenSymbol={secondTokenSymbol} {...layoutBasedProps} />
         </div>
       )}
 
-      {(isNull(secondTokenIcon) || (secondTokenIcon && wrapLoading)) && (
+      {(isNull(secondTokenIcon) || (secondTokenIcon && loading)) && (
         <div className={cx(s.secondImage, imageClassName)}>
           <FallbackLogo className={cx(s.image)} />
         </div>
