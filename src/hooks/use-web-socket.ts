@@ -1,42 +1,57 @@
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, useEffect, useRef, useState } from 'react';
 
-import { useToasts } from '@hooks/use-toasts';
-
-interface ReturnType<T> {
+interface SuccessReturnType<T> {
   data: T;
-  hasFailed: boolean;
-  loading: boolean;
+  errorEvent: null;
+  initLoading: false;
 }
 
-export function useWebSocket<T>(webSocketUrl: string): ReturnType<T | undefined>;
-export function useWebSocket<T>(webSocketUrl: string, defaultData: T): ReturnType<T>;
-export function useWebSocket<T>(webSocketUrl: string, defaultData?: T) {
+interface ErrorReturnType {
+  data: null;
+  errorEvent: Event;
+  initLoading: false;
+}
+
+interface InitLoadingReturnType {
+  data: null;
+  errorEvent: null;
+  initLoading: true;
+}
+
+type ReturnType<T> = SuccessReturnType<T> | ErrorReturnType | InitLoadingReturnType;
+
+export function useWebSocket<T>(
+  webSocketUrl: string,
+  onSuccess?: Dispatch<T>,
+  onError?: Dispatch<Event>
+): ReturnType<T> {
   const webSocketRef = useRef<WebSocket>();
 
-  const { showErrorToast } = useToasts();
-
-  const [data, setData] = useState(defaultData);
-  const [loading, setLoading] = useState(true);
-  const [hasFailed, setHasFailed] = useState(false);
+  const [state, setState] = useState<ReturnType<T>>({ data: null, errorEvent: null, initLoading: true });
+  const initLoadingRef = useRef(true);
 
   useEffect(() => {
-    setLoading(true);
+    setState({ data: null, errorEvent: null, initLoading: true });
+    initLoadingRef.current = true;
     webSocketRef.current = new WebSocket(webSocketUrl);
 
     webSocketRef.current.onerror = (errorEvent: Event) => {
-      showErrorToast(`Caught error of type ${errorEvent.type} from socket ${webSocketUrl}`);
-      setHasFailed(true);
-      setLoading(false);
+      setState({ data: null, errorEvent, initLoading: false });
+      initLoadingRef.current = false;
+      onError?.(errorEvent);
     };
 
     webSocketRef.current.onmessage = (event: MessageEvent<string>) => {
-      const parsedData: T = JSON.parse(event.data);
-      setData(parsedData);
-      setLoading(false);
+      const data = JSON.parse(event.data);
+      setState({ data, errorEvent: null, initLoading: false });
+      if (initLoadingRef.current) {
+        initLoadingRef.current = false;
+        onSuccess?.(data);
+      }
     };
 
     return () => webSocketRef.current?.close();
-  }, [webSocketUrl, showErrorToast]);
+  }, [webSocketUrl, onSuccess, onError]);
 
-  return { data, hasFailed, loading };
+  return state;
 }

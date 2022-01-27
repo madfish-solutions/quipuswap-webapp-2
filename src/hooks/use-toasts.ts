@@ -32,19 +32,25 @@ export const useToasts = (): UseToasts => {
     [updateToast]
   );
 
-  const showInfoToast = (render: ToastContent) => {
-    updateToast({
-      type: 'info',
-      render
-    });
-  };
+  const showInfoToast = useCallback(
+    (render: ToastContent) => {
+      updateToast({
+        type: 'info',
+        render
+      });
+    },
+    [updateToast]
+  );
 
-  const showSuccessToast = (render: ToastContent) => {
-    updateToast({
-      type: 'success',
-      render
-    });
-  };
+  const showSuccessToast = useCallback(
+    (render: ToastContent) => {
+      updateToast({
+        type: 'success',
+        render
+      });
+    },
+    [updateToast]
+  );
 
   return {
     updateToast,
