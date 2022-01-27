@@ -12,7 +12,7 @@ export const getOrderedTokensAmounts = (
 ) => {
   const addresses = sortTokensContracts(tokenA, tokenB);
 
-  const isTokenOrdersValid = addresses.addressA === tokenA.contractAddress;
+  const isTokenOrdersValid = !addresses.isRevert;
 
   return {
     orderedAmountA: isTokenOrdersValid ? tokenAAmount : tokenBAmount,
