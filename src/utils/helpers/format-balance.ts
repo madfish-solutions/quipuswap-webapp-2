@@ -33,13 +33,11 @@ export const formatBalance = (value: string): string => {
 
   if (isZeroString(integer)) {
     return value.toString();
-  } else if (integer.length < DEFAULT_BALANCE_LENGTH) {
+  } else {
     const decimals_ = decimals ? decimals.slice(FIRST_POSITION, DEFAULT_BALANCE_LENGTH - integer.length) : ZERO_STRING;
     const formatedDecimal = formatDecimal(decimals_);
 
-    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : integer;
-  } else {
-    return FormatNumber(integer);
+    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : FormatNumber(integer);
   }
 };
 
