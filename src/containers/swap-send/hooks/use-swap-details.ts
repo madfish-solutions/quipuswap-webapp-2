@@ -51,7 +51,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
           endTokenSlug: getTokenSlug(inputToken),
           graph: dexGraph
         })!;
-        const maxReverseInput = getMaxTokenInput(outputToken, maxReverseInputRoute);
+        const maxReverseInput = getMaxTokenInput(inputToken, maxReverseInputRoute);
         const probeReverseInput = BigNumber.minimum(
           toDecimals(new BigNumber(DEFAULT_REVERSE_INPUT_AMOUNT), outputToken),
           maxReverseInput
