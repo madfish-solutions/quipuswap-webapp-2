@@ -3,10 +3,6 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
-import { getTokenSlug } from '@utils/helpers';
-import { QSNets } from '@utils/types';
-
 interface LinkInterface {
   id: number;
   href?: string;
@@ -20,7 +16,7 @@ interface NavigationDataProps extends LinkInterface {
   links?: LinkInterface[];
 }
 
-export const makeNavigationData = (network: QSNets): NavigationDataProps[] => [
+export const navigationData: NavigationDataProps[] = [
   {
     id: 0,
     href: '/',
@@ -29,22 +25,22 @@ export const makeNavigationData = (network: QSNets): NavigationDataProps[] => [
   },
   {
     id: 1,
-    href: '/swap/[from-to]',
-    as: `/swap/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
+    href: '/swap',
+    as: `/swap`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIconSidebar
   },
   {
     id: 2,
-    href: '/liquidity/[method]/[from-to]',
-    as: `/liquidity/add/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
+    href: '/liquidity/[method]',
+    as: `/liquidity/add`,
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },
   {
     id: 3,
-    href: '/voting/[method]/[from-to]',
-    as: `/voting/vote/${getTokenSlug(TEZOS_TOKEN)}-${getTokenSlug(networksDefaultTokens[network])}`,
+    href: '/voting/[method]',
+    as: `/voting/vote`,
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
   },
