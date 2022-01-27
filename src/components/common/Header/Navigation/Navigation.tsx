@@ -5,10 +5,9 @@ import cx from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { NETWORK_ID } from '@app.config';
 import { isActivePath } from '@components/common/Header/Navigation/utils';
 
-import { makeNavigationData } from './content';
+import { navigationData } from './content';
 import s from './Navigation.module.sass';
 
 const modeClass = {
@@ -28,7 +27,6 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    const navigationData = makeNavigationData(NETWORK_ID);
     navigationData.forEach(({ id, href, label, Icon, links, as }) => {
       if (href) {
         result.push(
