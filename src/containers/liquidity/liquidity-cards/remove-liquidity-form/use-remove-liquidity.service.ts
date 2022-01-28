@@ -148,7 +148,7 @@ export const useRemoveLiquidityService = (
         deadline,
         slippage
       );
-      
+
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
