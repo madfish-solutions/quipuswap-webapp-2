@@ -62,7 +62,7 @@ export const Button: React.FC<ButtonProps> = ({
     </ButtonContent>
   );
 
-  if ('href' in props && isUndefined(props.href)) {
+  if ('href' in props && !isUndefined(props.href)) {
     const anchorProps = {
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,
