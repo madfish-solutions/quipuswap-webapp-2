@@ -42,7 +42,7 @@ export const addPairTokenToToken = async (
       tokenBUpdateOperator,
       validAddPairParams,
       tokenAResetOperator,
-      tokenBResetOperator,
+      tokenBResetOperator
     ])
   ).send();
 };
