@@ -11,7 +11,7 @@ const ExplorerHashLink: FC<{ hash: string }> = ({ hash }) => {
   const linkText = shortize(hash);
 
   return (
-    <Button themeOposite href={link} external theme="underlined">
+    <Button href={link} external theme="underlined">
       {linkText}
     </Button>
   );

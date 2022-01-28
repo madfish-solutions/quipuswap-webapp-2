@@ -34,12 +34,6 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const getOpositeColorTheme = (modeClass: Record<ColorModes, string>, colorThemeMode: ColorModes) => {
-  const colorMode = colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light;
-
-  return modeClass[colorMode];
-};
-
 export const Button: React.FC<ButtonProps> = ({
   loading,
   type = 'button',
@@ -56,9 +50,7 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const colorTheme = !themeOposite ? modeClass[colorThemeMode] : getOpositeColorTheme(modeClass, colorThemeMode);
-
-  const compoundClassName = cx(className, s.root, colorTheme, themeClass[theme], {
+  const compoundClassName = cx(className, s.root, modeClass[colorThemeMode], themeClass[theme], {
     [s.loading]: loading
   });
 
