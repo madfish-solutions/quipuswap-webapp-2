@@ -8,6 +8,8 @@ import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
 import { estimateSwapFee, fromDecimals, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
+import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
+
 interface SwapParams {
   inputToken: Undefined<WhitelistedToken>;
   inputAmount: Undefined<BigNumber>;
@@ -18,12 +20,6 @@ interface SwapParams {
 }
 
 const WHOLE_ITEM_PERCENT = 100;
-
-export class SwapFeeNotEnoughParametersError extends Error {
-  constructor() {
-    super('Input amount and exchangers chain should be specified. Also wallet should be connected');
-  }
-}
 
 export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageTolerance, recipient }: SwapParams) => {
   const accountPkh = useAccountPkh();
