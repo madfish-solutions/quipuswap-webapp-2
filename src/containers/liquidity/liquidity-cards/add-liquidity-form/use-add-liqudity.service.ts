@@ -239,10 +239,10 @@ export const useAddLiquidityService = (
     }
 
     const { isRevert } = sortTokensContracts(tokenA, tokenB);
-    const pairTokenA = isRevert ? tokenA : tokenB;
-    const pairTokenB = isRevert ? tokenB : tokenA;
-    const pairInputA = isRevert ? tokenAInput : tokenBInput;
-    const pairInputB = isRevert ? tokenBInput : tokenAInput;
+    const pairTokenA = !isRevert ? tokenA : tokenB;
+    const pairTokenB = !isRevert ? tokenB : tokenA;
+    const pairInputA = !isRevert ? tokenAInput : tokenBInput;
+    const pairInputB = !isRevert ? tokenBInput : tokenAInput;
 
     if (
       !pairInfo ||
