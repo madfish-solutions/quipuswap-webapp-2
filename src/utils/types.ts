@@ -56,6 +56,7 @@ export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
 }
 
 export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
   address: string;
@@ -170,6 +171,9 @@ export interface PoolTableType {
 export interface SortTokensContractsType {
   addressA: string;
   addressB: string;
+  idA: Nullable<number>;
+  idB: Nullable<number>;
+  isRevert?: boolean;
   type: 'Left-Left' | 'Right-Right' | 'Left-Right';
 }
 

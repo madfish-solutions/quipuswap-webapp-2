@@ -238,11 +238,11 @@ export const useAddLiquidityService = (
       return;
     }
 
-    const { addressA, addressB } = sortTokensContracts(tokenA, tokenB);
-    const pairTokenA = addressA === tokenA.contractAddress ? tokenA : tokenB;
-    const pairTokenB = addressB === tokenB.contractAddress ? tokenB : tokenA;
-    const pairInputA = addressA === tokenA.contractAddress ? tokenAInput : tokenBInput;
-    const pairInputB = addressB === tokenB.contractAddress ? tokenBInput : tokenAInput;
+    const { isRevert } = sortTokensContracts(tokenA, tokenB);
+    const pairTokenA = isRevert ? tokenB : tokenA;
+    const pairTokenB = isRevert ? tokenA : tokenB;
+    const pairInputA = isRevert ? tokenBInput : tokenAInput;
+    const pairInputB = isRevert ? tokenAInput : tokenBInput;
 
     if (
       !pairInfo ||
