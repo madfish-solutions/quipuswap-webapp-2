@@ -7,7 +7,7 @@ import { PageTitle } from '@components/common/page-title';
 import { LiquidityCards } from '@containers/liquidity/liquidity-cards';
 import { useLiquidityFormService } from '@containers/liquidity/liquidity-cards/use-liquidity-form.service';
 import { DeadlineAndSlippageProvider } from '@utils/dapp/slippage-deadline';
-import { getTokensLabel } from '@utils/helpers/get-tokens-label';
+import { getTokensOptionalPairName } from '@utils/helpers';
 
 interface LiquidityProps {
   className?: string;
@@ -18,7 +18,7 @@ export const Liquidity: FC<LiquidityProps> = ({ className }) => {
 
   const { tokenA, tokenB } = useLiquidityFormService();
 
-  const title = `${t('common|Liquidity')} ${getTokensLabel(tokenA, tokenB)}`;
+  const title = `${t('common|Liquidity')} ${getTokensOptionalPairName(tokenA, tokenB)}`;
 
   return (
     <DeadlineAndSlippageProvider>

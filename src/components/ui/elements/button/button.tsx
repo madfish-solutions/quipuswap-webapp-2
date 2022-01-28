@@ -3,6 +3,8 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { isUndefined } from '@utils/helpers';
+
 import { ButtonContent } from './button-content';
 import s from './button.module.sass';
 
@@ -60,7 +62,7 @@ export const Button: React.FC<ButtonProps> = ({
     </ButtonContent>
   );
 
-  if ('href' in props && props.href !== undefined) {
+  if ('href' in props && isUndefined(props.href)) {
     const anchorProps = {
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,

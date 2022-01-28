@@ -34,12 +34,12 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
-        <QPToken className={s.token} id="desktop" />
-        <Socials className={s.socials} id="desktop" />
-        <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
+        <QPToken id="desktop" />
+        <Socials id="desktop" />
+        <Button href="https://www.madfish.solutions/" external theme="clean">
           <Madfish />
         </Button>
-        <Button external href="https://v1.quipuswap.com/" theme="secondary" className={cx(s.button, s.oldVersion)}>
+        <Button external href="https://v1.quipuswap.com/" theme="secondary" className={s.button}>
           {t('common|Old version')}
         </Button>
       </footer>

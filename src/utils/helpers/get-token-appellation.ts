@@ -1,5 +1,5 @@
 import { TEZOS_TOKEN } from '@app.config';
-import { WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Optional, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 import { shortize } from './shortize';
@@ -52,4 +52,11 @@ export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) =
 
 export const getTokensPairName = (tokenX: WhitelistedToken, tokenY: WhitelistedToken) => {
   return `${getTokenAppellation(tokenX)} / ${getTokenAppellation(tokenY)}`;
+};
+
+export const getTokensOptionalPairName = (
+  inputToken: Optional<WhitelistedToken>,
+  outputToken: Optional<WhitelistedToken>
+) => {
+  return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };
