@@ -262,7 +262,7 @@ export const useAddLiquidityService = (
 
       if (addPairTokenToTokenOperation) {
         await confirmOperation(addPairTokenToTokenOperation.opHash, {
-          message: getAddLiquidityMessage(pairTokenA.metadata.name, pairTokenA.metadata.name)
+          message: getAddLiquidityMessage(pairTokenA.metadata.name, pairTokenB.metadata.name)
         });
       }
     } else {
