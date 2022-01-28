@@ -33,8 +33,8 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
       const tezos = new TezosToolkit(MAINNET_RPC_URL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       // @ts-ignore
-      const tokenInfo = await contract?.token_info.get(0);
-      setTotalSupply(fromDecimals(tokenInfo, MAINNET_DEFAULT_TOKEN));
+      const rawTotalSupply = await contract?.token_info.get(0);
+      setTotalSupply(fromDecimals(rawTotalSupply, MAINNET_DEFAULT_TOKEN));
     };
     void asyncLoad();
   }, []);
