@@ -12,6 +12,7 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface SlippageInputProps {
   error?: string;
+  loading: boolean;
   outputAmount?: BigNumber;
   outputToken?: WhitelistedToken;
   slippage?: BigNumber;
@@ -20,7 +21,14 @@ interface SlippageInputProps {
 
 const WHOLE_ITEM_PERCENT = 100;
 
-export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onChange, slippage, outputToken }) => {
+export const SlippageInput: FC<SlippageInputProps> = ({
+  error,
+  outputAmount,
+  onChange,
+  slippage,
+  outputToken,
+  loading
+}) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
@@ -48,6 +56,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({ error, outputAmount, onC
             <span className={s.receiveLabel}>Minimum received:</span>
             <StateCurrencyAmount
               amount={minimumReceived}
+              isError={!minimumReceived && !loading}
               currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
               balanceRule
             />
