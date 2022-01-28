@@ -1,3 +1,4 @@
+import { TEZOS_TOKEN } from '@app.config';
 import { WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
@@ -30,6 +31,10 @@ const parseAddresOrGetField = (metadata: WhitelistedTokenMetadata, field: Metada
 };
 
 export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) => {
+  if (token.contractAddress === TEZOS_TOKEN.contractAddress) {
+    return TEZOS_TOKEN.metadata.symbol;
+  }
+
   const shortAddressOrSymbol = parseAddresOrGetField(token.metadata, MetadataTokenField.symbol);
 
   if (shortAddressOrSymbol) {

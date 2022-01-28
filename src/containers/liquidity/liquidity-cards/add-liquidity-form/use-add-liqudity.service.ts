@@ -321,7 +321,7 @@ export const useAddLiquidityService = (
 
       const notTezTokenAppelation = getTokenAppellation(notTezToken);
 
-      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezTokenAppelation);
+      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenAppelation);
 
       await confirmOperation(addLiquidityTezOperation.opHash, {
         message: addLiquidityMessage
@@ -345,7 +345,7 @@ export const useAddLiquidityService = (
       const notTezTokenAppelation = getTokenAppellation(notTezToken);
 
       const initializeLiquidityMessage = getInitializeLiquidityMessage(
-        TEZOS_TOKEN.metadata.name,
+        TEZOS_TOKEN.metadata.symbol,
         notTezTokenAppelation
       );
 

@@ -11,6 +11,7 @@ export type ButtonProps = {
   type?: 'button' | 'submit' | 'reset' | undefined;
   theme?: keyof typeof themeClass;
   external?: boolean;
+  themeOposite?: boolean;
   className?: string;
   innerClassName?: string;
   textClassName?: string;
@@ -33,6 +34,12 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
+const getOpositeColorTheme = (modeClass: Record<ColorModes, string>, colorThemeMode: ColorModes) => {
+  const colorMode = colorThemeMode === ColorModes.Light ? ColorModes.Dark : ColorModes.Light;
+
+  return modeClass[colorMode];
+};
+
 export const Button: React.FC<ButtonProps> = ({
   loading,
   type = 'button',
@@ -44,11 +51,14 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   icon,
   control,
+  themeOposite,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(className, s.root, modeClass[colorThemeMode], themeClass[theme], {
+  const colorTheme = !themeOposite ? modeClass[colorThemeMode] : getOpositeColorTheme(modeClass, colorThemeMode);
+
+  const compoundClassName = cx(className, s.root, colorTheme, themeClass[theme], {
     [s.loading]: loading
   });
 

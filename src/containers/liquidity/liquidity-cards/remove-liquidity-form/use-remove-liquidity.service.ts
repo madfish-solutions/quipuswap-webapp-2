@@ -3,7 +3,7 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
@@ -148,14 +148,15 @@ export const useRemoveLiquidityService = (
         deadline,
         slippage
       );
-      const tokenAAppellation = getTokenAppellation(tokenA);
-      const tokenBAppellation = getTokenAppellation(tokenB);
-
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
-
+      
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
+        const tokenAAppellation = getTokenAppellation(tokenA);
+        const tokenBAppellation = getTokenAppellation(tokenB);
+
+        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+
         await confirmOperation(hash, {
           message: removeLiquidityMessage
         });
@@ -168,10 +169,7 @@ export const useRemoveLiquidityService = (
       const tokenAAppellation = getTokenAppellation(tokenA);
       const tokenBAppellation = getTokenAppellation(tokenB);
 
-      const notTezosTokenAppelation =
-        tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBAppellation : tokenAAppellation;
-
-      const removeLiquidityMessage = getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenAppelation);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
 
       await confirmOperation(sentTransaction.opHash, {
         message: removeLiquidityMessage
