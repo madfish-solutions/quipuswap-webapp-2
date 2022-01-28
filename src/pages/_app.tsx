@@ -16,7 +16,6 @@ import { BalancesProvider } from '@providers/BalancesProvider';
 import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
 import { debounce } from '@utils/helpers';
-import 'react-toastify/dist/ReactToastify.css';
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
