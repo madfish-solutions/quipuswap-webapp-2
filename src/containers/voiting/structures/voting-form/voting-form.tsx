@@ -65,7 +65,6 @@ interface VotingFormProps {
   tokenPair: WhitelistedTokenPair;
   tokensData: TokenDataMap;
   currentTab: TabsContent;
-  tokensUpdading: boolean;
   setRewards: Dispatch<SetStateAction<string>>;
   setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
   setTokens: (tokens: WhitelistedToken[]) => void;
@@ -99,7 +98,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   currentTab,
   setTabsState,
   getBalance,
-  tokensUpdading,
   bakerCleaner
   // eslint-disable-next-line
 }) => {
@@ -256,7 +254,6 @@ const RealForm: React.FC<VotingFormProps> = ({
               id="liquidity-remove-input"
               label={currentTab.label}
               className={s.input}
-              tokensUpdading={tokensUpdading}
               error={errorInterceptor((meta.dirty && meta.error) || meta.submitError)}
             />
           )}

@@ -15,7 +15,6 @@ interface TokenChangeType {
   tezos: TezosToolkit;
   accountPkh: string;
   setTokensData: React.Dispatch<React.SetStateAction<TokenDataMap>>;
-  quite?: boolean;
 }
 
 export const handleTokenChange = async ({
@@ -24,13 +23,9 @@ export const handleTokenChange = async ({
   exchangeRates,
   tezos,
   accountPkh,
-  setTokensData,
-  quite
+  setTokensData
 }: // eslint-disable-next-line sonarjs/cognitive-complexity
 TokenChangeType) => {
-  if (!exchangeRates || !exchangeRates.find) {
-    return;
-  }
   let finalBalance = '0';
   if (tezos && accountPkh) {
     try {
@@ -42,6 +37,26 @@ TokenChangeType) => {
       // eslint-disable-next-line
       console.error(e);
     }
+  }
+
+  setTokensData(prevState => {
+    return {
+      ...prevState,
+      [tokenNumber]: {
+        token: {
+          address: token.contractAddress,
+          type: token.type,
+          id: token.fa2TokenId,
+          decimals: token.metadata.decimals
+        },
+        balance: finalBalance,
+        exchangeRate: tokenExchangeRate?.exchangeRate ?? null
+      }
+    };
+  });
+
+  if (!exchangeRates || !exchangeRates.find) {
+    return;
   }
 
   const tokenExchangeRate = exchangeRates.find(el => {
@@ -62,34 +77,10 @@ TokenChangeType) => {
   });
 
   setTokensData(prevState => {
-    if (quite) {
-      return prevState[tokenNumber].token.address === token.contractAddress
-        ? // Update only balances
-          {
-            ...prevState,
-            [tokenNumber]: {
-              ...prevState[tokenNumber],
-              balance: finalBalance,
-              exchangeRate: tokenExchangeRate?.exchangeRate ?? null
-            }
-          }
-        : // Do not update anything
-          {
-            ...prevState
-          };
-    }
-
-    // Update all token data
     return {
       ...prevState,
       [tokenNumber]: {
-        token: {
-          address: token.contractAddress,
-          type: token.type,
-          id: token.fa2TokenId,
-          decimals: token.metadata.decimals
-        },
-        balance: finalBalance,
+        ...prevState[tokenNumber],
         exchangeRate: tokenExchangeRate?.exchangeRate ?? null
       }
     };

@@ -20,7 +20,8 @@ import {
   handleTokenChange,
   fallbackTokenToTokenData,
   isNull,
-  getTokensOptionalPairName
+  getTokensOptionalPairName,
+  isEmptyArray
 } from '@utils/helpers';
 import {
   VoterType,
@@ -107,15 +108,10 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     token1: tokenPair.token1,
     token2: tokenPair.token2
   });
-  const [isTokenLoading, setTokenLoading] = useState(true);
 
   const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second', quite = false) => {
-    let isMounted = true;
-    if (!quite) {
-      setTokenLoading(true);
-    }
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
     await handleTokenChange({
       token,
       tokenNumber,
@@ -123,18 +119,12 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       exchangeRates,
       tezos: tezos!,
       accountPkh: accountPkh!,
-      setTokensData,
-      quite
+      setTokensData
     });
-    if (isMounted && !quite) {
-      setTokenLoading(false);
-    }
-
-    return () => (isMounted = false);
   };
 
   useEffect(() => {
-    if (from && to && !initialLoad && tokens.length > 0 && exchangeRates) {
+    if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
       void handleSearchToken({
         tokens,
         tezos: tezos!,
@@ -153,27 +143,32 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     // eslint-disable-next-line
   }, [from, to, initialLoad, tokens, exchangeRates]);
 
-  const getBalance = useCallback(
-    (quite = false) => {
-      const loadBalances = async () => {
-        await handleTokenChangeWrapper(tokenPair.token1, 'first', quite);
-        await handleTokenChangeWrapper(tokenPair.token2, 'second', quite);
-        await handleTokenPairSelect(
-          tokenPair,
-          setTokenPair,
-          setDex,
-          setRewards,
-          setVoter,
-          showErrorToast,
-          tezos,
-          accountPkh,
-          NETWORK_ID,
-          quite
-        );
-      };
+  const handleTokensChange = async () => {
+    await Promise.all([
+      handleTokenChangeWrapper(tokenPair.token1, 'first'),
+      handleTokenChangeWrapper(tokenPair.token2, 'second')
+    ]);
+  };
 
+  const getBalances = useCallback(async () => {
+    await handleTokenPairSelect(
+      tokenPair,
+      setTokenPair,
+      setDex,
+      setRewards,
+      setVoter,
+      showErrorToast,
+      tezos,
+      accountPkh,
+      NETWORK_ID
+    );
+  }, [tokenPair, showErrorToast, tezos, accountPkh]);
+
+  const getBalance = useCallback(
+    () => {
       if (tezos && tokenPair.token1 && tokenPair.token2) {
-        void loadBalances();
+        handleTokensChange();
+        getBalances();
       }
     },
     // eslint-disable-next-line
@@ -182,14 +177,14 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
 
   useEffect(() => {
     if (initialLoad && token1 && token2) {
-      void getBalance();
+      void getBalances();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh]);
 
   const reloadBalances = useCallback(() => {
-    getBalance(true);
-  }, [getBalance]);
+    getBalances();
+  }, [getBalances]);
 
   useOnBlock(tezos, reloadBalances);
 
@@ -249,7 +244,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         tokenPair={tokenPair}
         tokensData={tokensData}
         currentTab={currentTab}
-        tokensUpdading={isTokenLoading}
         setRewards={setRewards}
         setDex={setDex}
         setTokens={setTokens}
@@ -258,7 +252,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         setTabsState={setTabsState}
         getBalance={getBalance}
         handleSubmit={handleSubmit}
-        handleTokenChange={handleTokenChange}
+        handleTokenChange={handleTokenChangeWrapper}
         bakerCleaner={bakerCleaner}
       />
     );
