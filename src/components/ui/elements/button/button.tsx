@@ -11,6 +11,7 @@ export type ButtonProps = {
   type?: 'button' | 'submit' | 'reset' | undefined;
   theme?: keyof typeof themeClass;
   external?: boolean;
+  themeOposite?: boolean;
   className?: string;
   innerClassName?: string;
   textClassName?: string;
@@ -44,6 +45,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   icon,
   control,
+  themeOposite,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);

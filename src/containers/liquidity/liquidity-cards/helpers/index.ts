@@ -12,7 +12,6 @@ export * from './get-valid-pair-params';
 export * from './get-voting-params';
 export * from './increase-by-slippage';
 export * from './increase-or-decrease-by-slippage';
-export * from './is-tez-included';
 export * from './new-get-valid-michel-template';
 export * from './parse-url';
 export * from './remove-extra-zeros';

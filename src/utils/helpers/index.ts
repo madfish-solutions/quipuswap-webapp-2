@@ -46,3 +46,4 @@ export * from './calculate-rate-amount';
 export * from './format-balance';
 export * from './get-success-messages';
 export * from './get-table-pair-name';
+export * from './is-tez-included';

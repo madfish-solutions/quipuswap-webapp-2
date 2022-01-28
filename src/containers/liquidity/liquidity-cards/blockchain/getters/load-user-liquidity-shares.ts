@@ -3,10 +3,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@app.config';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, isTezIncluded } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { getValidMichelTemplate, isTezIncluded, sortTokensContracts } from '../../helpers';
+import { getValidMichelTemplate, sortTokensContracts } from '../../helpers';
 
 interface LiquidityShares {
   frozen: BigNumber;

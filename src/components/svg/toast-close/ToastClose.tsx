@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@providers/ColorThemeContext';
+import { ColorThemeContext } from '@quipuswap/ui-kit';
 
 export const ToastClose: React.FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
@@ -27,8 +27,8 @@ export const ToastClose: React.FC<IconProps> = ({ className }) => {
           y2="7.20206"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stopColor={themeColors.fill1Inverse} />
-          <stop offset="1" stopColor={themeColors.fill2Inverse} />
+          <stop stopColor={themeColors.fill1} />
+          <stop offset="1" stopColor={themeColors.fill2} />
         </linearGradient>
       </defs>
     </svg>
