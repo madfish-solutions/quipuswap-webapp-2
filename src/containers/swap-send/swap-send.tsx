@@ -19,6 +19,7 @@ import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
+import { getTokensLabel } from '@utils/helpers/get-tokens-label';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
@@ -361,9 +362,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
+  const title = `${t('swap|Swap')} ${getTokensLabel(inputToken, outputToken)}`;
+
   return (
     <>
-      <PageTitle>{t('swap|Swap')}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{

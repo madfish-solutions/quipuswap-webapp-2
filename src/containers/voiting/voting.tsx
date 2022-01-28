@@ -16,6 +16,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { handleSearchToken, handleTokenChange, fallbackTokenToTokenData, isNull } from '@utils/helpers';
+import { getTokensLabel } from '@utils/helpers/get-tokens-label';
 import {
   VoterType,
   TokenDataMap,
@@ -258,9 +259,11 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     );
   };
 
+  const title = `${t('common|Voting')} ${getTokensLabel(tokenPair.token1, tokenPair.token2)}`;
+
   return (
     <Fragment>
-      <PageTitle>{t('common|Voting')}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <VotingStats
         pendingReward={accountPkh ? rewards : null}
         balanceAmount={balanceAmount}
