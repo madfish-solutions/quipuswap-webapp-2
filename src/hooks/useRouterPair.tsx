@@ -34,7 +34,7 @@ export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: 
       const fromToken = getTokenSlug(token1);
       const toToken = getTokenSlug(token2);
       const url = `/${page}/${fromToken}-${toToken}`;
-      router.replace(url, undefined, { shallow: true });
+      router.replace(url, undefined, { shallow: true, scroll: false });
     }
     // eslint-disable-next-line
   }, [token1, token2]);

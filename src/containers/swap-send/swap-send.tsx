@@ -118,7 +118,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenSlug(inputToken)}-${getTokenSlug(outputToken)}`;
       if (router.asPath !== newRoute) {
-        router.replace(newRoute);
+        router.replace(newRoute, undefined, { shallow: true, scroll: false });
       }
     },
     [router, updateSwapLimits]
