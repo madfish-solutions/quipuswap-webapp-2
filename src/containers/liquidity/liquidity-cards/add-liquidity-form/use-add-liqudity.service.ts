@@ -7,7 +7,7 @@ import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage, toDecimals } from '@utils/helpers';
+import { getAddLiquidityMessage, getInitializeLiquidityMessage, isNull, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
@@ -41,6 +41,12 @@ export const useAddLiquidityService = (
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
+
+  const isPoolNotExist =
+    isNull(pairInfo) ||
+    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
+    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
+    pairInfo.totalSupply.eq(EMPTY_POOL);
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -78,16 +84,11 @@ export const useAddLiquidityService = (
       return;
     }
 
-    if (
-      !pairInfo ||
-      pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
-      pairInfo.totalSupply.eq(EMPTY_POOL_AMOUNT)
-    ) {
+    if (isPoolNotExist) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
+    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo!;
 
     const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
@@ -244,12 +245,7 @@ export const useAddLiquidityService = (
     const pairInputA = isRevert ? tokenBInput : tokenAInput;
     const pairInputB = isRevert ? tokenAInput : tokenBInput;
 
-    if (
-      !pairInfo ||
-      pairInfo.tokenAPool.eq(EMPTY_POOL) ||
-      pairInfo.tokenBPool.eq(EMPTY_POOL) ||
-      pairInfo.totalSupply.eq(EMPTY_POOL)
-    ) {
+    if (isPoolNotExist) {
       const addPairTokenToTokenOperation = await addPairTokenToToken(
         tezos,
         dex,
@@ -270,13 +266,13 @@ export const useAddLiquidityService = (
         tezos,
         accountPkh,
         dex,
-        pairInfo.id!,
+        pairInfo!.id!,
         pairInputA,
         pairTokenA,
         pairTokenB,
-        pairInfo.totalSupply,
-        pairInfo.tokenAPool,
-        pairInfo.tokenBPool,
+        pairInfo!.totalSupply,
+        pairInfo!.tokenAPool,
+        pairInfo!.tokenBPool,
         deadline,
         slippage
       );
@@ -350,11 +346,7 @@ export const useAddLiquidityService = (
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
 
-  const isPoolExistsButEmpty =
-    pairInfo &&
-    (pairInfo.tokenAPool.eq(EMPTY_POOL) || pairInfo.tokenBPool.eq(EMPTY_POOL) || pairInfo.totalSupply.eq(EMPTY_POOL));
-
-  const isNewPair = dex && isPoolExistsButEmpty;
+  const isNewPair = dex && isPoolNotExist;
 
   return {
     validationMessageTokenA,
