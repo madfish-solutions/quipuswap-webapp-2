@@ -7,7 +7,7 @@ import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { Slippage } from '@components/common/Slippage';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface SlippageInputProps {
@@ -20,6 +20,7 @@ interface SlippageInputProps {
 }
 
 const WHOLE_ITEM_PERCENT = 100;
+const EMPTY_OUTPUT_AMOUNT = 0;
 
 export const SlippageInput: FC<SlippageInputProps> = ({
   error,
@@ -37,10 +38,13 @@ export const SlippageInput: FC<SlippageInputProps> = ({
   const tokenDecimals = outputToken?.metadata.decimals ?? 0;
 
   const minimumReceived =
-    slippage && outputAmount
-      ? outputAmount
-          .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
-          .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR)
+    slippage && outputAmount?.gt(EMPTY_OUTPUT_AMOUNT)
+      ? BigNumber.maximum(
+          outputAmount
+            .times(new BigNumber(1).minus(slippage.div(WHOLE_ITEM_PERCENT)))
+            .decimalPlaces(tokenDecimals, BigNumber.ROUND_FLOOR),
+          fromDecimals(new BigNumber(1), tokenDecimals)
+        )
       : null;
 
   return (
