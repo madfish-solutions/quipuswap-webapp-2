@@ -9,6 +9,14 @@ enum MetadataTokenField {
   symbol = 'symbol'
 }
 
+const shortizeTokenAppellation = (viewName: string, sliceAmount: number) => {
+  if (viewName.length > sliceAmount + 2) {
+    return `${viewName.slice(0, sliceAmount)}...`;
+  } else {
+    return viewName;
+  }
+};
+
 const parseAddresOrGetField = (metadata: WhitelistedTokenMetadata, field: MetadataTokenField) => {
   if (isExist(metadata[field])) {
     if (isValidTokenSlug(metadata[field]) === true) {
@@ -21,22 +29,22 @@ const parseAddresOrGetField = (metadata: WhitelistedTokenMetadata, field: Metada
   return null;
 };
 
-const getTokenNameForTokensPairName = (token: WhitelistedToken) => {
-  const shortAddressOrName = parseAddresOrGetField(token.metadata, MetadataTokenField.name);
-
-  if (shortAddressOrName) {
-    return shortAddressOrName;
-  }
-
+export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) => {
   const shortAddressOrSymbol = parseAddresOrGetField(token.metadata, MetadataTokenField.symbol);
 
   if (shortAddressOrSymbol) {
-    return shortAddressOrSymbol;
+    return shortizeTokenAppellation(shortAddressOrSymbol, sliceAmount);
+  }
+
+  const shortAddressOrName = parseAddresOrGetField(token.metadata, MetadataTokenField.name);
+
+  if (shortAddressOrName) {
+    return shortizeTokenAppellation(shortAddressOrName, sliceAmount);
   }
 
   return shortize(token.contractAddress);
 };
 
 export const getTokensPairName = (tokenX: WhitelistedToken, tokenY: WhitelistedToken) => {
-  return `${getTokenNameForTokensPairName(tokenX)} / ${getTokenNameForTokensPairName(tokenY)}`;
+  return `${getTokenAppellation(tokenX)} / ${getTokenAppellation(tokenY)}`;
 };
