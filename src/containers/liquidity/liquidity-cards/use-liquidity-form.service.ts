@@ -43,7 +43,7 @@ export const useLiquidityFormService = () => {
 
   const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
-    await router.replace(liqUrl, undefined, { shallow: true });
+    await router.replace(liqUrl, undefined, { shallow: true, scroll: false });
   };
 
   const handleChangeTab = (tabId: LiquidityTabs) => {

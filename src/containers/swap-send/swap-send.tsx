@@ -18,7 +18,14 @@ import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
+import {
+  amountsAreEqual,
+  getTokenIdFromSlug,
+  getTokensOptionalPairName,
+  getTokenSlug,
+  isEmptyArray,
+  makeWhitelistedToken
+} from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
@@ -117,7 +124,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenSlug(inputToken)}-${getTokenSlug(outputToken)}`;
       if (router.asPath !== newRoute) {
-        router.replace(newRoute);
+        router.replace(newRoute, undefined, { shallow: true, scroll: false });
       }
     },
     [router, updateSwapLimits]
@@ -361,9 +368,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
+  const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
+
   return (
     <>
-      <PageTitle>{t('swap|Swap')}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{
@@ -438,7 +447,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
         </Card>
         <SwapDetails
-          currentTab={currentTabLabel}
           fee={swapFee}
           priceImpact={priceImpact}
           inputToken={inputToken}

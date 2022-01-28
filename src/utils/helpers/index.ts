@@ -45,5 +45,5 @@ export * from './type-checks';
 export * from './calculate-rate-amount';
 export * from './format-balance';
 export * from './get-success-messages';
-export * from './get-table-pair-name';
+export * from './get-token-appellation';
 export * from './is-tez-included';

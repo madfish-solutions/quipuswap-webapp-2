@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -22,7 +22,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
+export const Sidebar: FC<SidebarProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -31,16 +31,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ className }) => {
       <div className={s.wallet}>
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={cx(s.button, s.select)} />
-        <Button external href="https://quipuswap.com/" theme="secondary" className={s.button}>
-          {t('common|Old version')}
-        </Button>
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
-        <QPToken className={s.token} id="desktop" />
-        <Socials className={s.socials} id="desktop" />
-        <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
+        <QPToken id="desktop" />
+        <Socials id="desktop" />
+        <Button href="https://www.madfish.solutions/" external theme="clean">
           <Madfish />
+        </Button>
+        <Button external href="https://v1.quipuswap.com/" theme="secondary" className={s.button}>
+          {t('common|Old version')}
         </Button>
       </footer>
     </div>
