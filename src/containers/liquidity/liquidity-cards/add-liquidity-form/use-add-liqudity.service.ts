@@ -7,7 +7,7 @@ import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage, isNull, toDecimals } from '@utils/helpers';
+import { getAddLiquidityMessage, getInitializeLiquidityMessage, getTokenAppellation, isNull, toDecimals } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
@@ -257,8 +257,13 @@ export const useAddLiquidityService = (
       );
 
       if (addPairTokenToTokenOperation) {
+        const tokenAAppellation = getTokenAppellation(pairTokenA);
+        const tokenBAppellation = getTokenAppellation(pairTokenB);
+
+        const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenAAppellation, tokenBAppellation);
+
         await confirmOperation(addPairTokenToTokenOperation.opHash, {
-          message: getAddLiquidityMessage(pairTokenA.metadata.name, pairTokenB.metadata.name)
+          message: initializeLiquidityMessage
         });
       }
     } else {
@@ -277,8 +282,13 @@ export const useAddLiquidityService = (
         slippage
       );
 
+      const tokenAAppellation = getTokenAppellation(pairTokenA);
+      const tokenBAppellation = getTokenAppellation(pairTokenB);
+
+      const addLiquidityMessage = getAddLiquidityMessage(tokenAAppellation, tokenBAppellation);
+
       await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
-        message: getAddLiquidityMessage(pairTokenA.metadata.name, pairTokenB.metadata.name)
+        message: addLiquidityMessage
       });
     }
 
@@ -305,8 +315,12 @@ export const useAddLiquidityService = (
     if (shouldAddLiquidity) {
       const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
 
+      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+
+      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenAppelation);
+
       await confirmOperation(addLiquidityTezOperation.opHash, {
-        message: getAddLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezToken.metadata.name)
+        message: addLiquidityMessage
       });
     } else {
       const token: Token = {
@@ -324,8 +338,15 @@ export const useAddLiquidityService = (
         tezValue
       );
 
+      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+
+      const initializeLiquidityMessage = getInitializeLiquidityMessage(
+        TEZOS_TOKEN.metadata.symbol,
+        notTezTokenAppelation
+      );
+
       await confirmOperation(initializeLiquidityTezOperation.opHash, {
-        message: getInitializeLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezToken.metadata.name)
+        message: initializeLiquidityMessage
       });
     }
 

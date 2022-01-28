@@ -9,9 +9,8 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
-import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
-import { isExist } from '@utils/helpers';
+import { isTezIncluded, isExist } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';

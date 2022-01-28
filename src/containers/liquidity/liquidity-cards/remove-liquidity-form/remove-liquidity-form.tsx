@@ -11,12 +11,11 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
-import { isExist } from '@utils/helpers';
+import { isExist, isTezIncluded } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
-import { isTezIncluded } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 

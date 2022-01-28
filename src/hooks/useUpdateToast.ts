@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-import { toastContent } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import { UpdateOptions, toast } from 'react-toastify';
+
+import { toastContent } from '@components/ui/toast-wrapper';
 
 const DEFAULT_AUTOCLOSE_TIMER = 5000;
 

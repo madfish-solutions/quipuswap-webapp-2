@@ -6,7 +6,7 @@ import { useDexGraph } from '@hooks/use-dex-graph';
 import { useToasts } from '@hooks/use-toasts';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { getTokenSlug, getWhitelistedTokenSymbol, swap, toDecimals } from '@utils/helpers';
+import { getTokenAppellation, getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getSwapMessage } from '@utils/helpers/get-success-messages';
 import { getRouteWithInput } from '@utils/routing';
 
@@ -57,8 +57,14 @@ export const useSwapFormik = () => {
         })!,
         ttDexAddress: TOKEN_TO_TOKEN_DEX
       });
+
+      const inputTokenAppelation = getTokenAppellation(inputToken);
+      const outputTokenAppelation = getTokenAppellation(outputToken);
+
+      const swapMessage = getSwapMessage(inputTokenAppelation, outputTokenAppelation);
+
       await confirmOperation(walletOperation.opHash, {
-        message: getSwapMessage(getWhitelistedTokenSymbol(inputToken), getWhitelistedTokenSymbol(outputToken))
+        message: swapMessage
       });
     } catch (e) {
       showErrorToast(e as Error);

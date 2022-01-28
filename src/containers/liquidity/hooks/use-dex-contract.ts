@@ -5,8 +5,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { NETWORK_ID } from '@app.config';
 import { loadT2tDex } from '@containers/liquidity/hooks/helpers/load-t2t-dex';
 import { loadTezDex } from '@containers/liquidity/hooks/helpers/load-tez-dex';
-import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import { useTezos } from '@utils/dapp';
+import { isTezIncluded } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
