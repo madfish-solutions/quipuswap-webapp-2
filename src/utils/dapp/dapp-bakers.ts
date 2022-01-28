@@ -64,6 +64,11 @@ const useDappBakers = () => {
             ...prevState,
             searchBakers: { loading: false, data: [baker] }
           }));
+        } else {
+          setState(prevState => ({
+            ...prevState,
+            searchBakers: { loading: false, data: [] }
+          }));
         }
       }
     }

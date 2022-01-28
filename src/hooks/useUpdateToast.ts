@@ -4,7 +4,7 @@ import { toastContent } from '@quipuswap/ui-kit';
 import { useRouter } from 'next/router';
 import { UpdateOptions, toast } from 'react-toastify';
 
-const DEFAULT_AUTOCLOSE_TIMER = 5000;
+const DEFAULT_AUTOCLOSE_TIMER = 15000;
 
 export const useUpdateToast = () => {
   const toastIdRef = useRef<string | number>();
