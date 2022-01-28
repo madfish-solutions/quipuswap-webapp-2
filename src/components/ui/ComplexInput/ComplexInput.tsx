@@ -40,7 +40,7 @@ const themeClass = {
 
 export const ComplexInput: FC<ComplexInputProps> = ({
   className,
-  balance = '10.00',
+  balance,
   label,
   handleBalance,
   exchangeRate = null,
@@ -99,12 +99,12 @@ export const ComplexInput: FC<ComplexInputProps> = ({
             {mode === 'select' && (
               <div className={s.item2Line}>
                 <div className={s.caption}>{t('common|Frozen Balance')}:</div>
-                <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance), decimals)}</div>
+                <div className={cx(s.label2, s.price)}>{balance && prettyPrice(parseFloat(balance), decimals)}</div>
               </div>
             )}
             <div className={s.item2Line}>
               <div className={s.caption}>{t('common|Total Balance')}:</div>
-              <div className={cx(s.label2, s.price)}>{prettyPrice(parseFloat(balance), decimals)}</div>
+              <div className={cx(s.label2, s.price)}>{balance && prettyPrice(parseFloat(balance), decimals)}</div>
             </div>
           </div>
           <input
@@ -138,7 +138,7 @@ export const ComplexInput: FC<ComplexInputProps> = ({
           </Button>
         </div>
       </div>
-      {!readOnly && handleBalance && <PercentSelector value={balance} handleBalance={handleBalance} />}
+      {balance && !readOnly && handleBalance && <PercentSelector value={balance} handleBalance={handleBalance} />}
       {!readOnly && <ComplexError error={error} />}
     </div>
   );
