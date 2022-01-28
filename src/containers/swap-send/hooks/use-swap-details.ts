@@ -36,7 +36,7 @@ const DEFAULT_REVERSE_INPUT_AMOUNT = 1;
 export const useSwapDetails = (params: SwapDetailsParams) => {
   const { dexRoute, inputToken, outputToken, inputAmount, outputAmount, slippageTolerance } = params;
   const { dexGraph } = useDexGraph();
-  const swapFee = useSwapFee({ ...params, dexChain: dexRoute });
+  const { data: swapFee = null, error: swapFeeError } = useSwapFee({ ...params, dexChain: dexRoute });
 
   const sellRate =
     inputToken && outputToken && inputAmount?.gt(MINIMAL_INPUT_AMOUNT) && outputAmount
@@ -82,6 +82,7 @@ export const useSwapDetails = (params: SwapDetailsParams) => {
 
   return {
     swapFee,
+    swapFeeError,
     priceImpact:
       inputToken && inputAmount && dexRoute && slippageTolerance
         ? getPriceImpact({

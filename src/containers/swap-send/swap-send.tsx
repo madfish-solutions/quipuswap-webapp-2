@@ -102,7 +102,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     validateField
   ]);
 
-  const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken,
     outputToken,
     inputAmount,
@@ -440,6 +440,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         <SwapDetails
           currentTab={currentTabLabel}
           fee={swapFee}
+          feeError={swapFeeError}
           priceImpact={priceImpact}
           inputToken={inputToken}
           outputToken={outputToken}
