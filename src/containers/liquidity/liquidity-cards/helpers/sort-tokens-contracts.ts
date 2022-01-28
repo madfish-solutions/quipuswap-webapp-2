@@ -20,7 +20,7 @@ export const sortTokensContracts = (
     };
   }
 
-  if (isTokenTypeFa12(tokenB) && isTokenTypeFa2(tokenA)) {
+  if (isTokenTypeFa2(tokenA) && isTokenTypeFa12(tokenB)) {
     return {
       addressA: tokenB.contractAddress,
       idA: null,
