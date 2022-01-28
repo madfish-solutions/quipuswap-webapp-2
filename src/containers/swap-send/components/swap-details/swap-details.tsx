@@ -20,7 +20,6 @@ import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
 
 interface SwapDetailsProps {
-  currentTab: string;
   fee: Nullable<BigNumber>;
   priceImpact: Nullable<BigNumber>;
   inputToken?: WhitelistedToken;
@@ -31,7 +30,6 @@ interface SwapDetailsProps {
 }
 
 export const SwapDetails: FC<SwapDetailsProps> = ({
-  currentTab,
   fee,
   priceImpact,
   inputToken,
@@ -51,7 +49,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   return (
     <Card
       header={{
-        content: `${currentTab} Details`
+        content: `Exchange Details`
       }}
       contentClassName={s.content}
     >

@@ -438,7 +438,6 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
         </Card>
         <SwapDetails
-          currentTab={currentTabLabel}
           fee={swapFee}
           priceImpact={priceImpact}
           inputToken={inputToken}
