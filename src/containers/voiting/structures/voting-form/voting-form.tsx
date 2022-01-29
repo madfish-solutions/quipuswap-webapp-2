@@ -15,6 +15,7 @@ import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
 import { getCandidateInfo, getVoteVetoBalances, unvoteOrRemoveVeto, BakerCleaner } from '@containers/voiting/helpers';
+import { useVoter } from '@containers/voiting/helpers/voting.provider';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -28,7 +29,6 @@ import {
   VoteFormValues,
   WhitelistedToken,
   WhitelistedTokenPair,
-  VoterType,
   Undefined,
   Nullable
 } from '@utils/types';
@@ -53,9 +53,7 @@ interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
   tabsState: VotingTabs;
-  rewards: string;
   dex: Nullable<FoundDex>;
-  voter: VoterType;
   tokenPair: WhitelistedTokenPair;
   tokensData: TokenDataMap;
   currentTab: TabsContent;
@@ -80,7 +78,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   setDex,
   dex,
   setTokens,
-  voter,
   tokenPair,
   setTokenPair,
   handleTokenChange,
@@ -105,6 +102,7 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
+  const { candidate, vote, veto } = useVoter();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -159,14 +157,14 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleUnvoteOrRemoveVeto = async () => {
-    if (!tezos || !dex || isNull(voter.candidate)) {
+    if (!tezos || !dex || isNull(candidate)) {
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, voter.candidate);
+    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, candidate);
   };
 
-  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, voter);
+  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, { vote });
 
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
@@ -285,9 +283,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               className={s.button}
               theme="secondary"
               disabled={
-                currentTab.id === VotingTabs.vote
-                  ? new BigNumber(voter?.vote ?? '0').eq(0)
-                  : new BigNumber(voter?.veto ?? '0').eq(0)
+                currentTab.id === VotingTabs.vote ? new BigNumber(vote ?? '0').eq(0) : new BigNumber(veto ?? '0').eq(0)
               }
             >
               {currentTab.id === VotingTabs.vote ? 'Unvote' : 'Remove veto'}

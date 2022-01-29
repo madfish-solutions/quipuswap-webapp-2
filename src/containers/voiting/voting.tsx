@@ -88,7 +88,7 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
   const { Form } = withTypes<VoteFormValues>();
-  const { rewards, setRewards } = useRewards();
+  const { setRewards } = useRewards();
   const { setVoter } = useVoter();
 
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
@@ -220,16 +220,13 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
       <VotingForm
         form={form}
         tabsState={tabsState}
-        rewards={rewards}
         dex={dex}
         tokenPair={tokenPair}
         tokensData={tokensData}
         currentTab={currentTab}
-        setRewards={setRewards}
         setDex={setDex}
         setTokens={setTokens}
         setTokenPair={setTokenPair}
-        setVoter={setVoter}
         setTabsState={setTabsState}
         getBalance={getBalance}
         handleSubmit={handleSubmit}

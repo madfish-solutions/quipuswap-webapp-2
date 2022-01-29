@@ -6,8 +6,8 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Button } from '@components/ui/elements/button';
-import { useClaimRewards } from '@containers/voiting/helpers';
 import { useRewards, useVoter } from '@containers/voiting/helpers/voting.provider';
+import { useClaimRewards } from '@containers/voiting/hooks';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
@@ -35,8 +35,12 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className, balanceAmou
   const { vote, veto } = useVoter();
 
   const handleWithdrawReward = useClaimRewards();
+
   const voteAmount = vote?.toFixed() ?? null;
   const vetoAmount = veto?.toFixed() ?? null;
+
+  const isButtonDisabled = !tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards);
+  const handleClick = async () => handleWithdrawReward(dex);
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
@@ -65,11 +69,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className, balanceAmou
           />
         </div>
 
-        <Button
-          disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards)}
-          onClick={async () => handleWithdrawReward(dex)}
-          className={s.button}
-        >
+        <Button disabled={isButtonDisabled} onClick={handleClick} className={s.button}>
           {t('vote|Claim Reward')}
         </Button>
       </div>
