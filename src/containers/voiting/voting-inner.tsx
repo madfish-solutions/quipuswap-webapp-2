@@ -8,8 +8,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { getTokensOptionalPairName } from '@utils/helpers';
 
 import { useTokensPair } from './helpers/voting.provider';
-import { VotingDetails, VotingStats } from './structures';
-import { WrappedVotingForm } from './structures/voting-form/wrapped-voting-form';
+import { VotingDetails, VotingStats, WrappedVotingForm } from './structures';
 
 interface VotingProps {
   className?: string;

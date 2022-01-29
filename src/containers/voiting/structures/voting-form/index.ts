@@ -1,1 +1,1 @@
-export * from './voting-form';
+export * from './wrapped-voting-form';
