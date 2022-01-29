@@ -1,6 +1,5 @@
-import React from 'react';
+import { FC } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Card, ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -10,23 +9,19 @@ import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { CandidateButton } from '@containers/voiting/components';
-import { useVoter } from '@containers/voiting/helpers/voting.provider';
+import { useTokensPair, useVoter, useVotingDex } from '@containers/voiting/helpers/voting.provider';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
-import { Nullable, WhitelistedTokenPair } from '@utils/types';
 
 import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
 
-interface VotingDetailsProps {
-  tokenPair: WhitelistedTokenPair;
-  dex: Nullable<FoundDex>;
-}
-
-export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex }) => {
+export const VotingDetails: FC = () => {
   const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
   const { candidate } = useVoter();
+  const { tokenPair } = useTokensPair();
+  const { dex } = useVotingDex();
 
   const { currentCandidate, secondCandidate } = getCandidateInfo(dex, bakers);
   const myCandidate = bakers.find(baker => baker.address === candidate) ?? null;

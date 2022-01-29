@@ -6,7 +6,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { Field, FormSpy } from 'react-final-form';
 
 import { FACTORIES, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
@@ -15,23 +14,16 @@ import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
 import { getCandidateInfo, getVoteVetoBalances, unvoteOrRemoveVeto, BakerCleaner } from '@containers/voiting/helpers';
-import { useVoter } from '@containers/voiting/helpers/voting.provider';
+import { useTokensData, useTokensPair, useVoter, useVotingRouting } from '@containers/voiting/helpers/voting.provider';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, isNull, getTokenSlug } from '@utils/helpers';
+import { isAssetEqual, parseDecimals, isNull } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
-import {
-  TokenDataMap,
-  VoteFormValues,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-  Undefined,
-  Nullable
-} from '@utils/types';
+import { VoteFormValues, Undefined, Nullable } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
 interface TabsContent {
@@ -52,18 +44,10 @@ const TabsContent = [
 interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
-  tabsState: VotingTabs;
   dex: Nullable<FoundDex>;
-  tokenPair: WhitelistedTokenPair;
-  tokensData: TokenDataMap;
-  currentTab: TabsContent;
   setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
-  setTokens: (tokens: WhitelistedToken[]) => void;
-  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
-  setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
   handleSubmit: () => Promise<void>;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
   bakerCleaner: BakerCleaner;
 }
 
@@ -74,16 +58,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
   values,
   form,
-  tabsState,
   setDex,
   dex,
-  setTokens,
-  tokenPair,
-  setTokenPair,
-  handleTokenChange,
-  tokensData,
-  currentTab,
-  setTabsState,
   getBalance,
   bakerCleaner
   // eslint-disable-next-line
@@ -93,7 +69,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const confirmOperation = useConfirmOperation();
   const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
-  const router = useRouter();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();
   const [isBanned, setIsBanned] = useState<boolean>(false);
@@ -103,6 +78,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
   const { candidate, vote, veto } = useVoter();
+  const { tokensData } = useTokensData();
+  const { tokenPair } = useTokensPair();
+  const { tabsState, handleSetActiveId, currentTab } = useVotingRouting();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -172,14 +150,6 @@ const RealForm: React.FC<VotingFormProps> = ({
     }
 
     return value;
-  };
-
-  const handleSetActiveId = (val: string) => {
-    router.replace(`/voting/${val}/${getTokenSlug(tokenPair.token1)}-${getTokenSlug(tokenPair.token2)}`, undefined, {
-      shallow: true,
-      scroll: false
-    });
-    setTabsState(val as VotingTabs);
   };
 
   const isVetoUnavailable = !currentCandidate && currentTab.id === VotingTabs.veto;

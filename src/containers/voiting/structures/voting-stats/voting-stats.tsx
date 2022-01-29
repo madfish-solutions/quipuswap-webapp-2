@@ -1,15 +1,13 @@
 import React, { useContext } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Button } from '@components/ui/elements/button';
-import { useRewards, useVoter } from '@containers/voiting/helpers/voting.provider';
+import { useRewards, useTokensPair, useVoter, useVotingDex } from '@containers/voiting/helpers/voting.provider';
 import { useClaimRewards } from '@containers/voiting/hooks';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable } from '@utils/types';
 
 import { VotingStatsItem, RewardItem } from '../../components';
 import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
@@ -22,24 +20,26 @@ const modeClass = {
 
 interface VotingStatsProps {
   className?: string;
-  balanceAmount: Nullable<string>;
-  dex: Nullable<FoundDex>;
 }
 
-export const VotingStats: React.FC<VotingStatsProps> = ({ className, balanceAmount, dex }) => {
+export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { rewards } = useRewards();
   const { vote, veto } = useVoter();
+  const { dex } = useVotingDex();
+  const { tokenPair } = useTokensPair();
 
-  const handleWithdrawReward = useClaimRewards();
+  const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
   const voteAmount = vote?.toFixed() ?? null;
   const vetoAmount = veto?.toFixed() ?? null;
 
   const isButtonDisabled = !tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards);
+
+  const handleWithdrawReward = useClaimRewards();
   const handleClick = async () => handleWithdrawReward(dex);
 
   return (

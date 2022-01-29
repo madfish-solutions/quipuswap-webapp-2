@@ -1,56 +1,36 @@
-import { useMemo, useState, useEffect, useCallback, Fragment } from 'react';
+import { useEffect, useCallback, Fragment } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { FormApi, Mutator } from 'final-form';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { withTypes } from 'react-final-form';
 
-import { NETWORK, networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { PageTitle } from '@components/common/page-title';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
-import { useRouterPair } from '@hooks/useRouterPair';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import {
-  handleSearchToken,
-  handleTokenChange,
-  fallbackTokenToTokenData,
-  isNull,
-  getTokensOptionalPairName,
-  isEmptyArray
-} from '@utils/helpers';
-import { TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair, Nullable } from '@utils/types';
+import { handleSearchToken, isNull, getTokensOptionalPairName, isEmptyArray } from '@utils/helpers';
+import { VoteFormValues, Nullable } from '@utils/types';
 
 import { bakerCleaner, handleTokenPairSelect, submitForm } from './helpers';
-import { useRewards, useVoter } from './helpers/voting.provider';
+import {
+  useRewards,
+  useTokensPair,
+  useVoter,
+  useVotingDex,
+  useVotingHandlers,
+  useVotingRouting,
+  useVotingTokens
+} from './helpers/voting.provider';
 import { VotingDetails, VotingForm, VotingStats } from './structures';
 import { VotingTabs } from './tabs.enum';
-
-const TabsContent = [
-  {
-    id: VotingTabs.vote,
-    label: 'Vote'
-  },
-  {
-    id: VotingTabs.veto,
-    label: 'Veto'
-  }
-];
 
 interface VotingProps {
   className?: string;
 }
-
-const defaultToken = networksDefaultTokens[NETWORK_ID];
-
-const fallbackTokenPair: WhitelistedTokenPair = {
-  token1: TEZOS_TOKEN,
-  token2: defaultToken
-};
 
 // TODO: Refactor solution of BakerCleaner
 
@@ -81,42 +61,17 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   const { data: tokens } = useTokens();
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(defaultToken)
-  });
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
-  const [dex, setDex] = useState<Nullable<FoundDex>>(null);
+  const { token1, token2, setTokens } = useVotingTokens();
+  const { dex, setDex } = useVotingDex();
   const { Form } = withTypes<VoteFormValues>();
   const { setRewards } = useRewards();
   const { setVoter } = useVoter();
 
-  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
-  const router = useRouter();
-  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
-  const { from, to } = useRouterPair({
-    page: `voting/${router.query.method}`,
-    urlLoaded,
-    initialLoad,
-    token1: tokenPair.token1,
-    token2: tokenPair.token2
-  });
+  const { tokenPair, setTokenPair } = useTokensPair();
 
-  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
+  const { setUrlLoaded, initialLoad, setInitialLoad, from, to, currentTab } = useVotingRouting();
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
-    await handleTokenChange({
-      token,
-      tokenNumber,
-      // @ts-ignore
-      exchangeRates,
-      tezos: tezos!,
-      accountPkh: accountPkh!,
-      setTokensData
-    });
-  };
+  const { handleTokenChangeWrapper } = useVotingHandlers();
 
   useEffect(() => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
@@ -157,7 +112,7 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
       accountPkh,
       NETWORK_ID
     );
-  }, [tokenPair, showErrorToast, tezos, accountPkh, setVoter, setRewards]);
+  }, [tokenPair, showErrorToast, tezos, accountPkh, setVoter, setRewards, setDex, setTokenPair]);
 
   const getBalance = useCallback(
     () => {
@@ -182,8 +137,6 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   }, [getBalances]);
 
   useOnBlock(tezos, reloadBalances);
-
-  const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
   const handleVote = async (values: VoteFormValues) => {
     if (!tezos) {
@@ -219,15 +172,8 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
     return (
       <VotingForm
         form={form}
-        tabsState={tabsState}
         dex={dex}
-        tokenPair={tokenPair}
-        tokensData={tokensData}
-        currentTab={currentTab}
         setDex={setDex}
-        setTokens={setTokens}
-        setTokenPair={setTokenPair}
-        setTabsState={setTabsState}
         getBalance={getBalance}
         handleSubmit={handleSubmit}
         handleTokenChange={handleTokenChangeWrapper}
@@ -241,7 +187,7 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   return (
     <Fragment>
       <PageTitle>{title}</PageTitle>
-      <VotingStats balanceAmount={balanceAmount} className={s.votingStats} dex={dex} />
+      <VotingStats className={s.votingStats} />
 
       <StickyBlock className={className}>
         <Form
@@ -249,7 +195,7 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
           mutators={mutators}
           render={({ handleSubmit, form }) => handleFormRender(handleSubmit as () => Promise<void>, form)}
         />
-        <VotingDetails tokenPair={tokenPair} dex={dex} />
+        <VotingDetails />
       </StickyBlock>
     </Fragment>
   );
