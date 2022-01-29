@@ -1,15 +1,16 @@
-import { useExchangeRates } from "@hooks/useExchangeRate";
-import { useAccountPkh, useTezos } from "@utils/dapp";
-import { handleTokenChange, TokenNumber } from "@utils/helpers";
-import { TokenDataMap, WhitelistedToken } from "@utils/types";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from 'react';
+
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useAccountPkh, useTezos } from '@utils/dapp';
+import { handleTokenChange, TokenNumber } from '@utils/helpers';
+import { TokenDataMap, WhitelistedToken } from '@utils/types';
 
 export const useHandleTokenChange = (setTokensData: Dispatch<SetStateAction<TokenDataMap>>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const exchangeRates = useExchangeRates();
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: TokenNumber) => {
+  return async (token: WhitelistedToken, tokenNumber: TokenNumber) => {
     if (!tezos || !accountPkh) {
       return;
     }
@@ -23,6 +24,4 @@ export const useHandleTokenChange = (setTokensData: Dispatch<SetStateAction<Toke
       setTokensData
     });
   };
-
-  return handleTokenChangeWrapper
-}
+};

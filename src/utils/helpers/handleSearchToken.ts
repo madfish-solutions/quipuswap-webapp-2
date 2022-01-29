@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
@@ -26,10 +28,10 @@ interface SearchTokenType {
   to: string;
   fixTokenFrom?: WhitelistedToken;
   handleTokenChange: (token: WhitelistedToken, tokenNumber: TokenNumber) => void;
-  setTokens: React.Dispatch<React.SetStateAction<WhitelistedToken[]>>;
-  setInitialLoad: React.Dispatch<React.SetStateAction<boolean>>;
-  setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-  setTokenPair?: React.Dispatch<React.SetStateAction<WhitelistedTokenPair>>;
+  setTokens: Dispatch<SetStateAction<WhitelistedToken[]>>;
+  setInitialLoad: Dispatch<SetStateAction<boolean>>;
+  setUrlLoaded: Dispatch<SetStateAction<boolean>>;
+  setTokenPair?: Dispatch<SetStateAction<WhitelistedTokenPair>>;
   searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<WhitelistedToken | null>;
 }
 
