@@ -1,6 +1,6 @@
-import React, { useState, useEffect, SetStateAction, Dispatch } from 'react';
+import { useState, useEffect } from 'react';
 
-import { Token, findDex, FoundDex } from '@quipuswap/sdk';
+import { Token, findDex } from '@quipuswap/sdk';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -19,6 +19,7 @@ import {
   useAvailableBalances,
   useTokensData,
   useTokensPair,
+  useVotingDex,
   useVotingHandlers,
   useVotingRouting
 } from '@containers/voiting/helpers/voting.provider';
@@ -28,7 +29,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { isAssetEqual, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
-import { VoteFormValues, Undefined, Nullable } from '@utils/types';
+import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
 interface TabsContent {
@@ -49,8 +50,6 @@ const TabsContent = [
 interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
-  dex: Nullable<FoundDex>;
-  setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
   getBalance: () => void;
   handleSubmit: () => Promise<void>;
   bakerCleaner: BakerCleaner;
@@ -63,8 +62,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
   values,
   form,
-  setDex,
-  dex,
   getBalance,
   bakerCleaner
   // eslint-disable-next-line
@@ -79,6 +76,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   const [isBakerChoosen, setIsBakerChoosen] = useState(false);
 
   const { data: bakers } = useBakers();
+
+  const { dex, setDex } = useVotingDex();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
   const { tokensData } = useTokensData();
   const { tokenPair } = useTokensPair();

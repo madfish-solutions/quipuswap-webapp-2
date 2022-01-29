@@ -52,7 +52,7 @@ export const WrappedVotingForm: FC = () => {
   const accountPkh = useAccountPkh();
   const searchCustomToken = useSearchCustomTokens();
   const { token1, token2, setTokens } = useVotingTokens();
-  const { dex, setDex } = useVotingDex();
+  const { setDex } = useVotingDex();
   const { Form } = withTypes<VoteFormValues>();
   const { setRewards } = useRewards();
   const { setVoter } = useVoter();
@@ -141,17 +141,7 @@ export const WrappedVotingForm: FC = () => {
       pointerForm.form = form;
     }
 
-    return (
-      <VotingForm
-        form={form}
-        dex={dex}
-        setDex={setDex}
-        getBalance={getBalance}
-        handleSubmit={handleSubmit}
-        handleTokenChange={handleTokenChange}
-        bakerCleaner={bakerCleaner}
-      />
-    );
+    return <VotingForm form={form} getBalance={getBalance} handleSubmit={handleSubmit} bakerCleaner={bakerCleaner} />;
   };
 
   return (
