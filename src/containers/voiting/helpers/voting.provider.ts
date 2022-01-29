@@ -6,7 +6,7 @@ import constate from 'constate';
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { fallbackTokenToTokenData, handleTokenChange } from '@utils/helpers';
+import { fallbackTokenToTokenData, handleTokenChange, TokenNumber } from '@utils/helpers';
 import { Nullable, TokenDataMap, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks/use-voting-router';
@@ -46,7 +46,7 @@ const useVotingService = () => {
 
   const exchangeRates = useExchangeRates();
 
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: 'first' | 'second') => {
+  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: TokenNumber) => {
     if (!tezos || !accountPkh) {
       return;
     }

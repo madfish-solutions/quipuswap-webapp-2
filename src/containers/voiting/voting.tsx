@@ -12,7 +12,7 @@ import { useExchangeRates } from '@hooks/useExchangeRate';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useOnBlock, useAccountPkh, useSearchCustomTokens, useTokens } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { handleSearchToken, isNull, getTokensOptionalPairName, isEmptyArray } from '@utils/helpers';
+import { handleSearchToken, isNull, getTokensOptionalPairName, isEmptyArray, TokenNumber } from '@utils/helpers';
 import { VoteFormValues, Nullable } from '@utils/types';
 
 import { bakerCleaner, handleTokenPairSelect, submitForm } from './helpers';
@@ -95,8 +95,8 @@ export const VotingInner: React.FC<VotingProps> = ({ className }) => {
 
   const handleTokensChange = async () => {
     await Promise.all([
-      handleTokenChangeWrapper(tokenPair.token1, 'first'),
-      handleTokenChangeWrapper(tokenPair.token2, 'second')
+      handleTokenChangeWrapper(tokenPair.token1, TokenNumber.FIRST),
+      handleTokenChangeWrapper(tokenPair.token2, TokenNumber.SECOND)
     ]);
   };
 

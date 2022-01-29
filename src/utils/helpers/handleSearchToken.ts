@@ -3,6 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import { TEZOS_TOKEN } from '@app.config';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { TokenNumber } from './handleTokenChange';
 import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
@@ -10,10 +11,10 @@ import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
 const handleTokenPairSelect = (
   pair: WhitelistedTokenPair,
   setTokenPair: (pair: WhitelistedTokenPair) => void,
-  handleTokenChange: (token: WhitelistedToken, tokenNum: 'first' | 'second') => void
+  handleTokenChange: (token: WhitelistedToken, tokenNum: TokenNumber) => void
 ) => {
-  handleTokenChange(pair.token1, 'first');
-  handleTokenChange(pair.token2, 'second');
+  handleTokenChange(pair.token1, TokenNumber.FIRST);
+  handleTokenChange(pair.token2, TokenNumber.SECOND);
   setTokenPair(pair);
 };
 
@@ -24,7 +25,7 @@ interface SearchTokenType {
   from: string;
   to: string;
   fixTokenFrom?: WhitelistedToken;
-  handleTokenChangeWrapper: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
+  handleTokenChangeWrapper: (token: WhitelistedToken, tokenNumber: TokenNumber) => void;
   setTokens: React.Dispatch<React.SetStateAction<WhitelistedToken[]>>;
   setInitialLoad: React.Dispatch<React.SetStateAction<boolean>>;
   setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -73,7 +74,7 @@ SearchTokenType) => {
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChangeWrapper(resTo, 'second');
+      handleTokenChangeWrapper(resTo, TokenNumber.SECOND);
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -82,7 +83,7 @@ SearchTokenType) => {
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChangeWrapper(resFrom, 'first');
+    handleTokenChangeWrapper(resFrom, TokenNumber.FIRST);
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {

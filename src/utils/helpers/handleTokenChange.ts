@@ -8,9 +8,14 @@ import { TokenDataMap, WhitelistedToken } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';
 
+export enum TokenNumber {
+  FIRST = 'first',
+  SECOND = 'second'
+}
+
 interface TokenChangeType {
   token: WhitelistedToken;
-  tokenNumber: 'first' | 'second';
+  tokenNumber: TokenNumber;
   exchangeRates: Array<{ tokenAddress: string; tokenId?: number; exchangeRate: string }>;
   tezos: TezosToolkit;
   accountPkh: string;
