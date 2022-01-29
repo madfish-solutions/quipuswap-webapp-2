@@ -13,15 +13,20 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
-import { getCandidateInfo, getVoteVetoBalances, unvoteOrRemoveVeto, BakerCleaner } from '@containers/voiting/helpers';
-import { useTokensData, useTokensPair, useVoter, useVotingRouting } from '@containers/voiting/helpers/voting.provider';
+import { UnvoteButton } from '@containers/voiting/components';
+import { getCandidateInfo, BakerCleaner } from '@containers/voiting/helpers';
+import {
+  useAvailableBalances,
+  useTokensData,
+  useTokensPair,
+  useVotingHandlers,
+  useVotingRouting
+} from '@containers/voiting/helpers/voting.provider';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
-import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
-import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, isNull } from '@utils/helpers';
+import { isAssetEqual, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { VoteFormValues, Undefined, Nullable } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
@@ -65,8 +70,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const { showErrorToast } = useToasts();
-  const confirmOperation = useConfirmOperation();
   const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -77,10 +80,11 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const { data: bakers } = useBakers();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
-  const { candidate, vote, veto } = useVoter();
   const { tokensData } = useTokensData();
   const { tokenPair } = useTokensPair();
   const { tabsState, handleSetActiveId, currentTab } = useVotingRouting();
+  const { handleTokenPairChange } = useVotingHandlers();
+  const { availableBalance } = useAvailableBalances();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -134,16 +138,6 @@ const RealForm: React.FC<VotingFormProps> = ({
     await handleSubmit();
   };
 
-  const handleUnvoteOrRemoveVeto = async () => {
-    if (!tezos || !dex || isNull(candidate)) {
-      return;
-    }
-
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, getBalance, candidate);
-  };
-
-  const { availableVoteBalance, availableVetoBalance } = getVoteVetoBalances(tokenPair, { vote });
-
   const errorInterceptor = (value: Undefined<string>): Undefined<string> => {
     if (isFormError !== Boolean(value)) {
       setIsFormError(Boolean(value));
@@ -158,8 +152,6 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const isVoteOrVetoButtonDisabled = () =>
     !values.balance1 || isBackerBanned || isFormError || isBackerChooseRequired || isVetoUnavailable;
-
-  const availableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
 
   const validateBalance_ = accountPkh ? validateBalance(new BigNumber(availableBalance)) : () => undefined;
 
@@ -186,22 +178,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               {...input}
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
-              setTokenPair={pair => {
-                // handleTokenChange(pair.token1, 'first');
-                // handleTokenChange(pair.token2, 'second');
-                // setTokens([pair.token1, pair.token2]);
-                // handleTokenPairSelect(
-                //   pair,
-                //   setTokenPair,
-                //   setDex,
-                //   setRewards,
-                //   setVoter,
-                //   showErrorToast,
-                //   tezos,
-                //   accountPkh,
-                //   NETWORK_ID
-                // );
-              }}
+              setTokenPair={handleTokenPairChange}
               balance={availableBalance}
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
@@ -247,18 +224,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           </Field>
         )}
         <div className={s.buttons}>
-          {accountPkh && (
-            <Button
-              onClick={handleUnvoteOrRemoveVeto}
-              className={s.button}
-              theme="secondary"
-              disabled={
-                currentTab.id === VotingTabs.vote ? new BigNumber(vote ?? '0').eq(0) : new BigNumber(veto ?? '0').eq(0)
-              }
-            >
-              {currentTab.id === VotingTabs.vote ? 'Unvote' : 'Remove veto'}
-            </Button>
-          )}
+          {accountPkh && <UnvoteButton getBalance={getBalance} className={s.button} />}
           {accountPkh ? (
             <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
               {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}

@@ -7,7 +7,7 @@ import { PageTitle } from '@components/common/page-title';
 import s from '@styles/CommonContainer.module.sass';
 import { getTokensOptionalPairName } from '@utils/helpers';
 
-import { useTokensPair } from './helpers/voting.provider';
+import { useVotingTokens } from './helpers/voting.provider';
 import { VotingDetails, VotingStats, WrappedVotingForm } from './structures';
 
 interface VotingProps {
@@ -16,9 +16,9 @@ interface VotingProps {
 
 export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
-  const { tokenPair } = useTokensPair();
+  const { token1, token2 } = useVotingTokens();
 
-  const title = `${t('common|Voting')} ${getTokensOptionalPairName(tokenPair.token1, tokenPair.token2)}`;
+  const title = `${t('common|Voting')} ${getTokensOptionalPairName(token1, token2)}`;
 
   return (
     <Fragment>

@@ -1,13 +1,18 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
 
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
-import { fallbackTokenToTokenData } from '@utils/helpers';
+import { useToasts } from '@hooks/use-toasts';
+import { useAccountPkh, useTezos } from '@utils/dapp';
+import { fallbackTokenToTokenData, TokenNumber } from '@utils/helpers';
 import { Nullable, TokenDataMap, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useHandleTokenChange, useVotingRouter } from '../hooks';
+import { VotingTabs } from '../tabs.enum';
+import { getVoteVetoBalances } from './get-voting-balance';
+import { handleTokenPairSelect } from './handle-token-pair-select';
 
 const initialVoter: VoterType = {
   vote: null,
@@ -23,6 +28,10 @@ const fallbackTokenPair: WhitelistedTokenPair = {
 };
 
 const useVotingService = () => {
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const { showErrorToast } = useToasts();
+
   const [isTokenChanging, setisTokenChanging] = useState(false);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
@@ -39,7 +48,31 @@ const useVotingService = () => {
 
   const votingRouting = useVotingRouter(tokenPair);
 
+  const { availableVoteBalance, availableVetoBalance } = useMemo(
+    () => getVoteVetoBalances(tokenPair, voter),
+    [tokenPair, voter]
+  );
+  const availableBalance =
+    votingRouting.currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
+
   const handleTokenChange = useHandleTokenChange(setTokensData);
+
+  const handleTokenPairChange = (pair: WhitelistedTokenPair) => {
+    setTokens([pair.token1, pair.token2]);
+    handleTokenChange(pair.token1, TokenNumber.FIRST);
+    handleTokenChange(pair.token2, TokenNumber.SECOND);
+    handleTokenPairSelect(
+      pair,
+      setTokenPair,
+      setDex,
+      setRewards,
+      setVoter,
+      showErrorToast,
+      tezos,
+      accountPkh,
+      NETWORK_ID
+    );
+  };
 
   return {
     loading: {
@@ -62,6 +95,12 @@ const useVotingService = () => {
       setDex
     },
 
+    availableBalances: {
+      availableVoteBalance,
+      availableVetoBalance,
+      availableBalance
+    },
+
     tokenPair: {
       tokenPair,
       setTokenPair
@@ -78,7 +117,8 @@ const useVotingService = () => {
 
     votingRouting,
     handlers: {
-      handleTokenChange
+      handleTokenChange,
+      handleTokenPairChange
     }
   };
 };
@@ -91,6 +131,8 @@ export const [
   useVoter,
 
   useVotingDex,
+
+  useAvailableBalances,
 
   useTokensPair,
   useTokensData,
@@ -106,6 +148,8 @@ export const [
   v => v.voter,
 
   v => v.dex,
+
+  v => v.availableBalances,
 
   v => v.tokenPair,
   v => v.tokensData,
