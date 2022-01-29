@@ -1,14 +1,36 @@
-import { batchify } from '@quipuswap/sdk';
-import { TezosToolkit, TransferParams } from '@taquito/taquito';
+import { useCallback } from 'react';
 
+import { batchify, FoundDex, withdrawReward } from '@quipuswap/sdk';
+
+import { useToasts } from '@hooks/use-toasts';
+import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { Nullable } from '@utils/types';
 
-export const submitWithdraw = async (
-  tezos: TezosToolkit,
-  voteParams: TransferParams[],
-  confirmOperation: ReturnType<typeof useConfirmOperation>
-) => {
-  const op = await batchify(tezos.wallet.batch([]), voteParams).send();
+export const useClaimRewards = () => {
+  const tezos = useTezos();
+  const accountPkh = useAccountPkh();
+  const confirmOperation = useConfirmOperation();
+  const { showErrorToast } = useToasts();
 
-  return await confirmOperation(op.opHash);
+  return useCallback(
+    async (dex: Nullable<FoundDex>) => {
+      if (!tezos || !dex || !accountPkh) {
+        return null;
+      }
+
+      try {
+        const claimParams = await withdrawReward(tezos, dex, accountPkh);
+
+        const op = await batchify(tezos.wallet.batch([]), claimParams).send();
+
+        return await confirmOperation(op.opHash);
+      } catch (e) {
+        showErrorToast(e as Error);
+
+        return null;
+      }
+    },
+    [tezos, accountPkh, confirmOperation, showErrorToast]
+  );
 };

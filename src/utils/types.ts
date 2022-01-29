@@ -105,8 +105,8 @@ interface TokenXtzDexPairProps extends CommonDexPairProps {
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
 export interface VoterType {
-  vote: BigNumber;
-  veto: BigNumber;
+  vote: Nullable<BigNumber>;
+  veto: Nullable<BigNumber>;
   candidate: Nullable<string>;
 }
 

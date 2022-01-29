@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useEffect, useCallback, Fragment } from 'react';
+import { useMemo, useState, useEffect, useCallback, Fragment } from 'react';
 
-import { FoundDex, TransferParams } from '@quipuswap/sdk';
+import { FoundDex } from '@quipuswap/sdk';
 import { StickyBlock } from '@quipuswap/ui-kit';
 import { FormApi, Mutator } from 'final-form';
 import { useTranslation } from 'next-i18next';
@@ -23,16 +23,10 @@ import {
   getTokensOptionalPairName,
   isEmptyArray
 } from '@utils/helpers';
-import {
-  VoterType,
-  TokenDataMap,
-  VoteFormValues,
-  WhitelistedToken,
-  WhitelistedTokenPair,
-  Nullable
-} from '@utils/types';
+import { TokenDataMap, VoteFormValues, WhitelistedToken, WhitelistedTokenPair, Nullable } from '@utils/types';
 
-import { bakerCleaner, handleTokenPairSelect, submitForm, submitWithdraw } from './helpers';
+import { bakerCleaner, handleTokenPairSelect, submitForm } from './helpers';
+import { useRewards, useVoter } from './helpers/voting.provider';
 import { VotingDetails, VotingForm, VotingStats } from './structures';
 import { VotingTabs } from './tabs.enum';
 
@@ -78,7 +72,7 @@ const cleanUp = (tab: VotingTabs) => {
   }
 };
 
-export const Voting: React.FC<VotingProps> = ({ className }) => {
+export const VotingInner: React.FC<VotingProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -92,12 +86,13 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
     second: fallbackTokenToTokenData(defaultToken)
   });
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
   const { Form } = withTypes<VoteFormValues>();
+  const { rewards, setRewards } = useRewards();
+  const { setVoter } = useVoter();
+
   const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [rewards, setRewards] = useState<string>('0');
-  const [voter, setVoter] = useState<Nullable<VoterType>>(null);
+  const [initialLoad, setInitialLoad] = useState<boolean>(false);
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const router = useRouter();
   const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
@@ -162,7 +157,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
       accountPkh,
       NETWORK_ID
     );
-  }, [tokenPair, showErrorToast, tezos, accountPkh]);
+  }, [tokenPair, showErrorToast, tezos, accountPkh, setVoter, setRewards]);
 
   const getBalance = useCallback(
     () => {
@@ -189,19 +184,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   useOnBlock(tezos, reloadBalances);
 
   const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
-
-  const handleClaimReward = async (params: TransferParams[]) => {
-    if (!tezos) {
-      return;
-    }
-
-    try {
-      await submitWithdraw(tezos, params, confirmOperation);
-      getBalance();
-    } catch (e) {
-      showErrorToast(e as Error);
-    }
-  };
 
   const handleVote = async (values: VoteFormValues) => {
     if (!tezos) {
@@ -239,7 +221,6 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
         form={form}
         tabsState={tabsState}
         rewards={rewards}
-        voter={voter}
         dex={dex}
         tokenPair={tokenPair}
         tokensData={tokensData}
@@ -263,15 +244,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
   return (
     <Fragment>
       <PageTitle>{title}</PageTitle>
-      <VotingStats
-        pendingReward={accountPkh ? rewards : null}
-        balanceAmount={balanceAmount}
-        voteAmount={voter?.vote ?? null}
-        vetoAmount={voter?.veto ?? null}
-        className={s.votingStats}
-        dex={dex}
-        onClaimReward={handleClaimReward}
-      />
+      <VotingStats balanceAmount={balanceAmount} className={s.votingStats} dex={dex} />
 
       <StickyBlock className={className}>
         <Form
@@ -279,7 +252,7 @@ export const Voting: React.FC<VotingProps> = ({ className }) => {
           mutators={mutators}
           render={({ handleSubmit, form }) => handleFormRender(handleSubmit as () => Promise<void>, form)}
         />
-        <VotingDetails tokenPair={tokenPair} dex={dex} voter={voter} />
+        <VotingDetails tokenPair={tokenPair} dex={dex} />
       </StickyBlock>
     </Fragment>
   );

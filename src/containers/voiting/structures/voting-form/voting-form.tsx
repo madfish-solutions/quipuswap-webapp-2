@@ -14,13 +14,7 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
-import {
-  getCandidateInfo,
-  getVoteVetoBalances,
-  handleTokenPairSelect,
-  unvoteOrRemoveVeto,
-  BakerCleaner
-} from '@containers/voiting/helpers';
+import { getCandidateInfo, getVoteVetoBalances, unvoteOrRemoveVeto, BakerCleaner } from '@containers/voiting/helpers';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -65,11 +59,9 @@ interface VotingFormProps {
   tokenPair: WhitelistedTokenPair;
   tokensData: TokenDataMap;
   currentTab: TabsContent;
-  setRewards: Dispatch<SetStateAction<string>>;
   setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>;
   setTokens: (tokens: WhitelistedToken[]) => void;
   setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>;
-  setVoter: Dispatch<SetStateAction<Nullable<VoterType>>>;
   setTabsState: (val: VotingTabs) => void;
   getBalance: () => void;
   handleSubmit: () => Promise<void>;
@@ -85,11 +77,9 @@ const RealForm: React.FC<VotingFormProps> = ({
   values,
   form,
   tabsState,
-  setRewards,
   setDex,
   dex,
   setTokens,
-  setVoter,
   voter,
   tokenPair,
   setTokenPair,
@@ -229,20 +219,20 @@ const RealForm: React.FC<VotingFormProps> = ({
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
               setTokenPair={pair => {
-                handleTokenChange(pair.token1, 'first');
-                handleTokenChange(pair.token2, 'second');
-                setTokens([pair.token1, pair.token2]);
-                handleTokenPairSelect(
-                  pair,
-                  setTokenPair,
-                  setDex,
-                  setRewards,
-                  setVoter,
-                  showErrorToast,
-                  tezos,
-                  accountPkh,
-                  NETWORK_ID
-                );
+                // handleTokenChange(pair.token1, 'first');
+                // handleTokenChange(pair.token2, 'second');
+                // setTokens([pair.token1, pair.token2]);
+                // handleTokenPairSelect(
+                //   pair,
+                //   setTokenPair,
+                //   setDex,
+                //   setRewards,
+                //   setVoter,
+                //   showErrorToast,
+                //   tezos,
+                //   accountPkh,
+                //   NETWORK_ID
+                // );
               }}
               balance={availableBalance}
               handleBalance={value => {
