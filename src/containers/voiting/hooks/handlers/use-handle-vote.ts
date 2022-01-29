@@ -3,9 +3,9 @@ import { useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { VoteFormValues } from '@utils/types';
 
-import { submitForm } from '../helpers';
-import { useVotingDex, useVotingRouting } from '../helpers/voting.provider';
-import { VotingTabs } from '../tabs.enum';
+import { submitForm } from '../../helpers';
+import { useVotingDex, useVotingRouting } from '../../helpers/voting.provider';
+import { VotingTabs } from '../../tabs.enum';
 
 export const useHandleVote = (getBalance: () => void, cleanUp: (tab: VotingTabs) => void) => {
   const tezos = useTezos();

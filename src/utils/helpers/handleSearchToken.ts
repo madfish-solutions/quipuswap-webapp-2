@@ -25,7 +25,7 @@ interface SearchTokenType {
   from: string;
   to: string;
   fixTokenFrom?: WhitelistedToken;
-  handleTokenChangeWrapper: (token: WhitelistedToken, tokenNumber: TokenNumber) => void;
+  handleTokenChange: (token: WhitelistedToken, tokenNumber: TokenNumber) => void;
   setTokens: React.Dispatch<React.SetStateAction<WhitelistedToken[]>>;
   setInitialLoad: React.Dispatch<React.SetStateAction<boolean>>;
   setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,7 +40,7 @@ export const handleSearchToken = async ({
   from,
   to,
   fixTokenFrom,
-  handleTokenChangeWrapper,
+  handleTokenChange,
   setTokens,
   setInitialLoad,
   setUrlLoaded,
@@ -74,7 +74,7 @@ SearchTokenType) => {
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChangeWrapper(resTo, TokenNumber.SECOND);
+      handleTokenChange(resTo, TokenNumber.SECOND);
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -83,7 +83,7 @@ SearchTokenType) => {
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChangeWrapper(resFrom, TokenNumber.FIRST);
+    handleTokenChange(resFrom, TokenNumber.FIRST);
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {
@@ -92,7 +92,7 @@ SearchTokenType) => {
       handleTokenPairSelect(
         { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
         setTokenPair,
-        handleTokenChangeWrapper
+        handleTokenChange
       );
     }
   }

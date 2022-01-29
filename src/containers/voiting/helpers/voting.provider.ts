@@ -4,12 +4,10 @@ import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
 
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
-import { useExchangeRates } from '@hooks/useExchangeRate';
-import { useAccountPkh, useTezos } from '@utils/dapp';
-import { fallbackTokenToTokenData, handleTokenChange, TokenNumber } from '@utils/helpers';
+import { fallbackTokenToTokenData } from '@utils/helpers';
 import { Nullable, TokenDataMap, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { useVotingRouter } from '../hooks/use-voting-router';
+import { useHandleTokenChange, useVotingRouter } from '../hooks';
 
 const initialVoter: VoterType = {
   vote: null,
@@ -25,9 +23,6 @@ const fallbackTokenPair: WhitelistedTokenPair = {
 };
 
 const useVotingService = () => {
-  const tezos = useTezos();
-  const accountPkh = useAccountPkh();
-
   const [isTokenChanging, setisTokenChanging] = useState(false);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
@@ -44,22 +39,7 @@ const useVotingService = () => {
 
   const votingRouting = useVotingRouter(tokenPair);
 
-  const exchangeRates = useExchangeRates();
-
-  const handleTokenChangeWrapper = async (token: WhitelistedToken, tokenNumber: TokenNumber) => {
-    if (!tezos || !accountPkh) {
-      return;
-    }
-    await handleTokenChange({
-      token,
-      tokenNumber,
-      // @ts-ignore
-      exchangeRates,
-      tezos,
-      accountPkh,
-      setTokensData
-    });
-  };
+  const handleTokenChange = useHandleTokenChange(setTokensData);
 
   return {
     loading: {
@@ -98,7 +78,7 @@ const useVotingService = () => {
 
     votingRouting,
     handlers: {
-      handleTokenChangeWrapper
+      handleTokenChange
     }
   };
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
@@ -19,7 +19,7 @@ interface TokenChangeType {
   exchangeRates: Array<{ tokenAddress: string; tokenId?: number; exchangeRate: string }>;
   tezos: TezosToolkit;
   accountPkh: string;
-  setTokensData: React.Dispatch<React.SetStateAction<TokenDataMap>>;
+  setTokensData: Dispatch<SetStateAction<TokenDataMap>>;
 }
 
 export const handleTokenChange = async ({

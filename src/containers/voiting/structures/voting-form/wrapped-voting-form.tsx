@@ -20,7 +20,7 @@ import {
   useVotingRouting,
   useVotingTokens
 } from '../../helpers/voting.provider';
-import { useHandleVote } from '../../hooks/use-handle-vote';
+import { useHandleVote } from '../../hooks';
 import { VotingTabs } from '../../tabs.enum';
 import { VotingForm } from './voting-form';
 
@@ -61,7 +61,7 @@ export const WrappedVotingForm: FC = () => {
 
   const { setUrlLoaded, initialLoad, setInitialLoad, from, to } = useVotingRouting();
 
-  const { handleTokenChangeWrapper } = useVotingHandlers();
+  const { handleTokenChange } = useVotingHandlers();
 
   useEffect(() => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
@@ -77,7 +77,7 @@ export const WrappedVotingForm: FC = () => {
         setTokens,
         setTokenPair,
         searchCustomToken,
-        handleTokenChangeWrapper
+        handleTokenChange
       });
     }
     // eslint-disable-next-line
@@ -85,8 +85,8 @@ export const WrappedVotingForm: FC = () => {
 
   const handleTokensChange = async () => {
     await Promise.all([
-      handleTokenChangeWrapper(tokenPair.token1, TokenNumber.FIRST),
-      handleTokenChangeWrapper(tokenPair.token2, TokenNumber.SECOND)
+      handleTokenChange(tokenPair.token1, TokenNumber.FIRST),
+      handleTokenChange(tokenPair.token2, TokenNumber.SECOND)
     ]);
   };
 
@@ -148,7 +148,7 @@ export const WrappedVotingForm: FC = () => {
         setDex={setDex}
         getBalance={getBalance}
         handleSubmit={handleSubmit}
-        handleTokenChange={handleTokenChangeWrapper}
+        handleTokenChange={handleTokenChange}
         bakerCleaner={bakerCleaner}
       />
     );
