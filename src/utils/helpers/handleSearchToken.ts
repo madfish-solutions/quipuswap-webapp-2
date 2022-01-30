@@ -5,20 +5,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import { TEZOS_TOKEN } from '@app.config';
 import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { TokenNumber } from './handleTokenChange';
 import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
-
-const handleTokenPairSelect = (
-  pair: WhitelistedTokenPair,
-  setTokenPair: (pair: WhitelistedTokenPair) => void,
-  handleTokenChange: (token: WhitelistedToken, tokenNum: TokenNumber) => void
-) => {
-  handleTokenChange(pair.token1, TokenNumber.FIRST);
-  handleTokenChange(pair.token2, TokenNumber.SECOND);
-  setTokenPair(pair);
-};
 
 interface SearchTokenType {
   tokens: WhitelistedToken[];
@@ -27,7 +16,6 @@ interface SearchTokenType {
   from: string;
   to: string;
   fixTokenFrom?: WhitelistedToken;
-  handleTokenChange: (token: WhitelistedToken, tokenNumber: TokenNumber) => void;
   setTokens: Dispatch<SetStateAction<WhitelistedToken[]>>;
   setInitialLoad: Dispatch<SetStateAction<boolean>>;
   setUrlLoaded: Dispatch<SetStateAction<boolean>>;
@@ -42,7 +30,6 @@ export const handleSearchToken = async ({
   from,
   to,
   fixTokenFrom,
-  handleTokenChange,
   setTokens,
   setInitialLoad,
   setUrlLoaded,
@@ -76,7 +63,6 @@ SearchTokenType) => {
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChange(resTo, TokenNumber.SECOND);
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -85,17 +71,12 @@ SearchTokenType) => {
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChange(resFrom, TokenNumber.FIRST);
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
-      handleTokenPairSelect(
-        { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
-        setTokenPair,
-        handleTokenChange
-      );
+      setTokenPair({ token1: res[0], token2: res[1] } as WhitelistedTokenPair);
     }
   }
 };

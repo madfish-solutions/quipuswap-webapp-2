@@ -4,7 +4,7 @@ import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
 import { getUserBalance } from '@utils/dapp';
-import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { Nullable, TokenDataMap, WhitelistedToken } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';
 
@@ -31,7 +31,7 @@ export const handleTokenChange = async ({
   setTokensData
 }: // eslint-disable-next-line sonarjs/cognitive-complexity
 TokenChangeType) => {
-  let finalBalance = '0';
+  let finalBalance: Nullable<string> = null;
   if (tezos && accountPkh) {
     try {
       const balance = await getUserBalance(tezos, accountPkh, token.contractAddress, token.type, token.fa2TokenId);

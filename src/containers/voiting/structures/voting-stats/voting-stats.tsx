@@ -5,9 +5,16 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Button } from '@components/ui/elements/button';
-import { useRewards, useTokensPair, useVoter, useVotingDex } from '@containers/voiting/helpers/voting.provider';
+import {
+  useRewards,
+  useTokensPair,
+  useVoter,
+  useVotingDex,
+  useVotingLoading
+} from '@containers/voiting/helpers/voting.provider';
 import { useClaimRewards } from '@containers/voiting/hooks';
 import { useAccountPkh, useTezos } from '@utils/dapp';
+import { isNull } from '@utils/helpers';
 
 import { VotingStatsItem, RewardItem } from '../../components';
 import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
@@ -31,20 +38,23 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
   const { vote, veto } = useVoter();
   const { dex } = useVotingDex();
   const { tokenPair } = useTokensPair();
+  const { isVotingLoading } = useVotingLoading();
 
-  const balanceAmount = accountPkh && tokenPair.balance ? tokenPair.balance : null;
+  const balanceAmount = !isVotingLoading && accountPkh && tokenPair.balance ? tokenPair.balance : null;
 
-  const voteAmount = vote?.toFixed() ?? null;
-  const vetoAmount = veto?.toFixed() ?? null;
+  const voteAmount = isVotingLoading || isNull(vote) ? null : vote.toFixed();
+  const vetoAmount = isVotingLoading || isNull(veto) ? null : veto.toFixed();
 
-  const isButtonDisabled = !tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards);
+  const rewardAmount = isVotingLoading ? null : rewards;
+
+  const isButtonDisabled = isVotingLoading || !tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards);
 
   const handleWithdrawReward = useClaimRewards();
   const handleClick = async () => handleWithdrawReward(dex);
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <RewardItem description={t('vote|Your Pending Rewards')} amount={rewards} currency="TEZ" />
+      <RewardItem description={t('vote|Your Pending Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>
         <div className={s.votingsStatsItemContainer}>

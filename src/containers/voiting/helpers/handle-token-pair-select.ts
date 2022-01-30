@@ -69,8 +69,8 @@ export const handleTokenPairSelect = async (
     } else {
       setTokenPair({
         ...pair,
-        frozenBalance: '0',
-        balance: '0',
+        frozenBalance: null,
+        balance: null,
         dex: foundDex
       });
     }

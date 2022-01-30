@@ -17,12 +17,14 @@ import { UnvoteButton } from '@containers/voiting/components';
 import { getCandidateInfo, BakerCleaner } from '@containers/voiting/helpers';
 import {
   useAvailableBalances,
-  useTokensData,
+  useTokensLoading,
   useTokensPair,
   useVotingDex,
   useVotingHandlers,
-  useVotingRouting
+  useVotingRouting,
+  useVotingTokens
 } from '@containers/voiting/helpers/voting.provider';
+import { TabsContent } from '@containers/voiting/hooks';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
@@ -32,25 +34,9 @@ import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
-interface TabsContent {
-  id: VotingTabs;
-  label: string;
-}
-const TabsContent = [
-  {
-    id: VotingTabs.vote,
-    label: 'Vote'
-  },
-  {
-    id: VotingTabs.veto,
-    label: 'Veto'
-  }
-];
-
 interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
-  getBalance: () => void;
   handleSubmit: () => Promise<void>;
   bakerCleaner: BakerCleaner;
 }
@@ -62,7 +48,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
   values,
   form,
-  getBalance,
   bakerCleaner
   // eslint-disable-next-line
 }) => {
@@ -79,11 +64,12 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const { dex, setDex } = useVotingDex();
   const { currentCandidate } = getCandidateInfo(dex, bakers);
-  const { tokensData } = useTokensData();
+  const { token1 } = useVotingTokens();
   const { tokenPair } = useTokensPair();
   const { tabsState, handleSetActiveId, currentTab } = useVotingRouting();
-  const { handleTokenPairChange } = useVotingHandlers();
+  const { handleTokenPairSelectChange } = useVotingHandlers();
   const { availableBalance } = useAvailableBalances();
+  const tokensUpdading = useTokensLoading();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -91,7 +77,7 @@ const RealForm: React.FC<VotingFormProps> = ({
     if (!tezos) {
       return;
     }
-    const currentTokenA = tokenDataToToken(tokensData.first);
+    const currentTokenA = tokenDataToToken(token1);
     if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
       return;
     }
@@ -152,7 +138,8 @@ const RealForm: React.FC<VotingFormProps> = ({
   const isVoteOrVetoButtonDisabled = () =>
     !values.balance1 || isBackerBanned || isFormError || isBackerChooseRequired || isVetoUnavailable;
 
-  const validateBalance_ = accountPkh ? validateBalance(new BigNumber(availableBalance)) : () => undefined;
+  const validateBalance_ =
+    accountPkh && availableBalance ? validateBalance(new BigNumber(availableBalance)) : () => undefined;
 
   const validate = composeValidators(validateMinMax(0, Infinity), validateBalance_);
 
@@ -177,11 +164,12 @@ const RealForm: React.FC<VotingFormProps> = ({
               {...input}
               notSelectable1={TEZOS_TOKEN}
               tokenPair={tokenPair}
-              setTokenPair={handleTokenPairChange}
+              setTokenPair={handleTokenPairSelectChange}
               balance={availableBalance}
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
               }}
+              tokensUpdading={tokensUpdading}
               shouldShowBalanceButtons={Boolean(accountPkh)}
               balanceLabel={t('vote|Available balance')}
               notFrozen
@@ -223,7 +211,7 @@ const RealForm: React.FC<VotingFormProps> = ({
           </Field>
         )}
         <div className={s.buttons}>
-          {accountPkh && <UnvoteButton getBalance={getBalance} className={s.button} />}
+          {accountPkh && <UnvoteButton className={s.button} />}
           {accountPkh ? (
             <Button onClick={handleVoteOrVeto} className={s.button} disabled={isVoteOrVetoButtonDisabled()}>
               {currentTab.id === VotingTabs.vote && isBanned ? t('vote|Baker under Veto') : currentTab.label}

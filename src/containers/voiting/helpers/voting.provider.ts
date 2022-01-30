@@ -1,15 +1,16 @@
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
 
-import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
-import { useAccountPkh, useTezos } from '@utils/dapp';
-import { fallbackTokenToTokenData, TokenNumber } from '@utils/helpers';
-import { Nullable, TokenDataMap, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { useExchangeRates } from '@hooks/useExchangeRate';
+import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
+import { handleSearchToken, isEmptyArray, isNull } from '@utils/helpers';
+import { Nullable, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { useHandleTokenChange, useVotingRouter } from '../hooks';
+import { useVotingRouter } from '../hooks';
 import { VotingTabs } from '../tabs.enum';
 import { getVoteVetoBalances } from './get-voting-balance';
 import { handleTokenPairSelect } from './handle-token-pair-select';
@@ -24,7 +25,9 @@ const defaultToken = networksDefaultTokens[NETWORK_ID];
 
 const fallbackTokenPair: WhitelistedTokenPair = {
   token1: TEZOS_TOKEN,
-  token2: defaultToken
+  token2: defaultToken,
+  balance: null,
+  frozenBalance: null
 };
 
 const useVotingService = () => {
@@ -32,7 +35,12 @@ const useVotingService = () => {
   const accountPkh = useAccountPkh();
   const { showErrorToast } = useToasts();
 
-  const [isTokenChanging, setisTokenChanging] = useState(false);
+  const { data: tokens } = useTokens();
+  const searchCustomToken = useSearchCustomTokens();
+
+  const exchangeRates = useExchangeRates();
+
+  const [isTokenChanging, setIsTokenChanging] = useState(false);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
   const [voter, setVoter] = useState<VoterType>(initialVoter);
@@ -41,43 +49,93 @@ const useVotingService = () => {
 
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
-  const [tokensData, setTokensData] = useState<TokenDataMap>({
-    first: fallbackTokenToTokenData(TEZOS_TOKEN),
-    second: fallbackTokenToTokenData(defaultToken)
-  });
 
-  const votingRouting = useVotingRouter(tokenPair);
+  const {
+    urlLoaded,
+    setUrlLoaded,
+    initialLoad,
+    setInitialLoad,
+    from,
+    to,
+    tabsState,
+    currentTab,
+    setTabsState,
+    handleSetActiveId
+  } = useVotingRouter(token1, token2);
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
     () => getVoteVetoBalances(tokenPair, voter),
     [tokenPair, voter]
   );
-  const availableBalance =
-    votingRouting.currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
 
-  const handleTokenChange = useHandleTokenChange(setTokensData);
+  const availableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
 
-  const handleTokenPairChange = (pair: WhitelistedTokenPair) => {
+  const tokenPairSelect = useCallback(
+    async (pair: WhitelistedTokenPair) => {
+      handleTokenPairSelect(
+        pair,
+        setTokenPair,
+        setDex,
+        setRewards,
+        setVoter,
+        showErrorToast,
+        tezos,
+        accountPkh,
+        NETWORK_ID
+      );
+    },
+    [tezos, accountPkh, showErrorToast]
+  );
+
+  const handleTokenPairSelectChange = (pair: WhitelistedTokenPair) => {
     setTokens([pair.token1, pair.token2]);
-    handleTokenChange(pair.token1, TokenNumber.FIRST);
-    handleTokenChange(pair.token2, TokenNumber.SECOND);
-    handleTokenPairSelect(
-      pair,
-      setTokenPair,
-      setDex,
-      setRewards,
-      setVoter,
-      showErrorToast,
-      tezos,
-      accountPkh,
-      NETWORK_ID
-    );
+    tokenPairSelect(pair);
   };
 
+  const getBalances = useCallback(async () => tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
+
+  useEffect(() => {
+    if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
+      void handleSearchToken({
+        tokens,
+        tezos: tezos!,
+        network: NETWORK,
+        from,
+        to,
+        fixTokenFrom: TEZOS_TOKEN,
+        setInitialLoad,
+        setUrlLoaded,
+        setTokens,
+        setTokenPair,
+        searchCustomToken
+      });
+    }
+    // eslint-disable-next-line
+  }, [from, to, initialLoad, tokens, exchangeRates]);
+
+  useEffect(() => {
+    if (initialLoad && token1 && token2) {
+      void getBalances();
+    }
+    // eslint-disable-next-line
+  }, [tezos, accountPkh]);
+
+  const updateBalances = useCallback(() => {
+    if (tezos && tokenPair.token1 && tokenPair.token2) {
+      getBalances();
+    }
+  }, [tezos, tokenPair, getBalances]);
+
+  useOnBlock(tezos, updateBalances);
+
+  const isVotingLoading = useMemo(() => {
+    return !urlLoaded || !initialLoad || isTokenChanging || isNull(dex) || isNull(voter.vote) || isNull(rewards);
+  }, [urlLoaded, initialLoad, isTokenChanging, dex, rewards, voter.vote]);
+
   return {
-    loading: {
+    tokensLoading: {
       isTokenChanging,
-      setisTokenChanging
+      setIsTokenChanging
     },
     rewards: {
       rewards,
@@ -105,20 +163,30 @@ const useVotingService = () => {
       tokenPair,
       setTokenPair
     },
-    tokensData: {
-      tokensData,
-      setTokensData
-    },
     tokens: {
       token1,
       token2,
       setTokens
     },
 
-    votingRouting,
+    votingRouting: {
+      urlLoaded,
+      setUrlLoaded,
+      initialLoad,
+      setInitialLoad,
+      from,
+      to,
+      tabsState,
+      currentTab,
+      setTabsState,
+      handleSetActiveId
+    },
     handlers: {
-      handleTokenChange,
-      handleTokenPairChange
+      handleTokenPairSelectChange,
+      updateBalances
+    },
+    votingLoading: {
+      isVotingLoading
     }
   };
 };
@@ -135,14 +203,15 @@ export const [
   useAvailableBalances,
 
   useTokensPair,
-  useTokensData,
-  useVotingTokens, //TODO: try to delete
+  useVotingTokens,
 
   useVotingRouting,
-  useVotingHandlers
+  useVotingHandlers,
+
+  useVotingLoading
 ] = constate(
   useVotingService,
-  v => v.loading,
+  v => v.tokensLoading,
 
   v => v.rewards,
   v => v.voter,
@@ -152,9 +221,10 @@ export const [
   v => v.availableBalances,
 
   v => v.tokenPair,
-  v => v.tokensData,
-  v => v.tokens, // TODO: try to delete
+  v => v.tokens,
 
   v => v.votingRouting,
-  v => v.handlers
+  v => v.handlers,
+
+  v => v.votingLoading
 );

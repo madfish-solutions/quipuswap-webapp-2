@@ -1,16 +1,24 @@
 import BigNumber from 'bignumber.js';
 
-import { VoterType, WhitelistedTokenPair } from '@utils/types';
+import { isNull } from '@utils/helpers';
+import { Nullable, VoterType, WhitelistedTokenPair } from '@utils/types';
 
 export interface VoteVetoBalances {
-  availableVoteBalance: string;
-  availableVetoBalance: string;
+  availableVoteBalance: Nullable<string>;
+  availableVetoBalance: Nullable<string>;
 }
 
 export const getVoteVetoBalances = (
   tokenPair: WhitelistedTokenPair,
   { vote }: Pick<VoterType, 'vote'>
 ): VoteVetoBalances => {
+  if (isNull(vote)) {
+    return {
+      availableVoteBalance: null,
+      availableVetoBalance: null
+    };
+  }
+
   if (!tokenPair.balance || !tokenPair.frozenBalance) {
     return {
       availableVoteBalance: '0',

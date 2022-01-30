@@ -1,4 +1,14 @@
-import React, { useRef, useState, useContext, HTMLProps, FC, Fragment, useEffect } from 'react';
+import React, {
+  useRef,
+  useState,
+  useContext,
+  HTMLProps,
+  FC,
+  Fragment,
+  useEffect,
+  SetStateAction,
+  Dispatch
+} from 'react';
 
 import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -21,7 +31,7 @@ import s from './ComplexInput.module.sass';
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
   className?: string;
-  balance?: string;
+  balance?: Nullable<string>;
   balanceLabel?: string;
   frozenBalance?: string;
   notFrozen?: boolean;
@@ -29,11 +39,14 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   notSelectable1?: WhitelistedToken;
   notSelectable2?: WhitelistedToken;
-  tokensUpdading?: boolean;
   handleChange?: (tokenPair: WhitelistedTokenPair) => void;
   handleBalance: (value: string) => void;
   tokenPair: Nullable<WhitelistedTokenPair>;
   setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
+  tokensUpdading?: {
+    isTokenChanging: boolean;
+    setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
+  };
 }
 
 const themeClass = {
@@ -66,7 +79,6 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [tokensLoading, setTokensLoading] = useState(false);
   const compoundClassName = cx({ [s.focused]: focused }, { [s.error]: !!error }, themeClass[colorThemeMode], className);
 
   const focusInput = () => {
@@ -78,12 +90,13 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const token1 = tokenPair?.token1 ?? TEZOS_TOKEN;
   const token2 = tokenPair?.token2 ?? TEZOS_TOKEN;
   useEffect(() => {
-    if (tokenPair?.token2) {
-      setTokensLoading(false);
+    if (tokensUpdading && tokenPair?.token2) {
+      tokensUpdading.setIsTokenChanging(false);
     }
+    // eslint-disable-next-line
   }, [tokenPair?.token2]);
 
-  const isTokensLoading = tokensUpdading || tokensLoading;
+  const isTokensLoading = tokensUpdading?.isTokenChanging;
 
   return (
     <>
@@ -91,7 +104,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
-          setTokensLoading(true);
+          tokensUpdading?.setIsTokenChanging(true);
           setTokenPair(selectedToken);
           if (handleChange) {
             handleChange(selectedToken);
