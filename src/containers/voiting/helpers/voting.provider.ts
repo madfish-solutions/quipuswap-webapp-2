@@ -68,7 +68,7 @@ const useVotingService = () => {
     [tokenPair, voter]
   );
 
-  const availableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
+  const localAvailableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
 
   const tokenPairSelect = useCallback(
     async (pair: WhitelistedTokenPair) => {
@@ -131,6 +131,8 @@ const useVotingService = () => {
   const isVotingLoading = useMemo(() => {
     return !urlLoaded || !initialLoad || isTokenChanging || isNull(dex) || isNull(voter.vote) || isNull(rewards);
   }, [urlLoaded, initialLoad, isTokenChanging, dex, rewards, voter.vote]);
+
+  const availableBalance = isVotingLoading ? null : localAvailableBalance
 
   return {
     tokensLoading: {
