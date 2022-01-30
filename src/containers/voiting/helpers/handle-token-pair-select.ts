@@ -9,21 +9,27 @@ import { UseToasts } from '@hooks/use-toasts';
 import { fromDecimals } from '@utils/helpers';
 import { VoterType, QSNets, Nullable, WhitelistedTokenPair } from '@utils/types';
 
+interface HandleTokenPairSelectReturnType {
+  tokenPair: WhitelistedTokenPair;
+  rewards: Nullable<string>;
+  dex: Nullable<FoundDex>;
+  voter: VoterType;
+}
+
 export const handleTokenPairSelect = async (
   pair: WhitelistedTokenPair,
   setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>,
-  setDex: Dispatch<SetStateAction<Nullable<FoundDex>>>,
-  setRewards: Dispatch<SetStateAction<Nullable<string>>>,
-  setVoter: Dispatch<SetStateAction<VoterType>>,
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
   networkId: QSNets
-) => {
+): Promise<Nullable<HandleTokenPairSelectReturnType>> => {
+  const result: HandleTokenPairSelectReturnType = {} as HandleTokenPairSelectReturnType;
+
   if (!tezos || !networkId) {
     setTokenPair(pair);
 
-    return;
+    return null;
   }
 
   try {
@@ -33,48 +39,54 @@ export const handleTokenPairSelect = async (
     };
 
     const foundDex = await findDex(tezos, FACTORIES[networkId], secondAsset);
-    setDex(foundDex);
+
+    result.dex = foundDex;
 
     if (accountPkh) {
       const res = await estimateReward(tezos, foundDex, accountPkh);
       const rewards = fromDecimals(res, TEZOS_TOKEN.metadata.decimals).toString();
-      setRewards(rewards);
+
+      result.rewards = rewards;
 
       const voter = await foundDex.storage.storage.voters.get(accountPkh);
 
       if (voter) {
-        setVoter({
+        result.voter = {
           veto: fromDecimals(voter.veto, LP_TOKEN_DECIMALS),
           candidate: voter.candidate,
           vote: fromDecimals(voter.vote, LP_TOKEN_DECIMALS)
-        });
+        };
       } else {
-        setVoter({
+        result.voter = {
           veto: new BigNumber(0),
           candidate: null,
           vote: new BigNumber(0)
-        });
+        };
       }
 
       const share = await getLiquidityShare(tezos, foundDex, accountPkh);
       const frozenBalance = fromDecimals(share.frozen, LP_TOKEN_DECIMALS).toString();
       const totalBalance = fromDecimals(share.total, LP_TOKEN_DECIMALS).toString();
 
-      setTokenPair({
+      result.tokenPair = {
         ...pair,
         frozenBalance,
         balance: totalBalance,
         dex: foundDex
-      });
+      };
     } else {
-      setTokenPair({
+      result.tokenPair = {
         ...pair,
         frozenBalance: null,
         balance: null,
         dex: foundDex
-      });
+      };
     }
+
+    return result;
   } catch (err) {
     showErrorToast(err as Error);
+
+    return null;
   }
 };

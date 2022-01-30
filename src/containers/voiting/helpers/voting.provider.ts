@@ -7,7 +7,7 @@ import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.co
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
-import { handleSearchToken, isEmptyArray, isNull } from '@utils/helpers';
+import { handleSearchToken, isEmptyArray, isExist, isNull } from '@utils/helpers';
 import { Nullable, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks';
@@ -72,17 +72,15 @@ const useVotingService = () => {
 
   const tokenPairSelect = useCallback(
     async (pair: WhitelistedTokenPair) => {
-      handleTokenPairSelect(
-        pair,
-        setTokenPair,
-        setDex,
-        setRewards,
-        setVoter,
-        showErrorToast,
-        tezos,
-        accountPkh,
-        NETWORK_ID
-      );
+      handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(data => {
+        if (isExist(data)) {
+          const { tokenPair, rewards, dex, voter } = data;
+          setRewards(rewards);
+          setDex(dex);
+          setVoter(voter);
+          setTokenPair(tokenPair);
+        }
+      });
     },
     [tezos, accountPkh, showErrorToast]
   );
@@ -129,10 +127,10 @@ const useVotingService = () => {
   useOnBlock(tezos, updateBalances);
 
   const isVotingLoading = useMemo(() => {
-    return !urlLoaded || !initialLoad || isTokenChanging || isNull(dex) || isNull(voter.vote) || isNull(rewards);
-  }, [urlLoaded, initialLoad, isTokenChanging, dex, rewards, voter.vote]);
+    return !urlLoaded || !initialLoad || isTokenChanging || isNull(dex);
+  }, [urlLoaded, initialLoad, isTokenChanging, dex]);
 
-  const availableBalance = isVotingLoading ? null : localAvailableBalance
+  const availableBalance = isVotingLoading ? null : localAvailableBalance;
 
   return {
     tokensLoading: {
