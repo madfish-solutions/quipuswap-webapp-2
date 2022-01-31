@@ -20,7 +20,6 @@ import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initial
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
-import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
@@ -83,12 +82,6 @@ export const useAddLiquidityService = (
 
     const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
-
-    if (validationA === INVALID_INPUT) {
-      setTokenBInput('');
-
-      return;
-    }
 
     if (isPoolNotExist) {
       return;
