@@ -5,7 +5,9 @@ import { useTranslation } from 'next-i18next';
 
 import { PageTitle } from '@components/common/page-title';
 import { LiquidityCards } from '@containers/liquidity/liquidity-cards';
+import { useLiquidityFormService } from '@containers/liquidity/liquidity-cards/use-liquidity-form.service';
 import { DeadlineAndSlippageProvider } from '@utils/dapp/slippage-deadline';
+import { getTokensOptionalPairName } from '@utils/helpers';
 
 interface LiquidityProps {
   className?: string;
@@ -14,9 +16,13 @@ interface LiquidityProps {
 export const Liquidity: FC<LiquidityProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
 
+  const { tokenA, tokenB } = useLiquidityFormService();
+
+  const title = `${t('common|Liquidity')} ${getTokensOptionalPairName(tokenA, tokenB)}`;
+
   return (
     <DeadlineAndSlippageProvider>
-      <PageTitle>{t('common|Liquidity')}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <LiquidityCards />
       </StickyBlock>

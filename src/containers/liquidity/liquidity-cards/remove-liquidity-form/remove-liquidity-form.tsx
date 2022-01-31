@@ -11,12 +11,11 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
-import { isExist } from '@utils/helpers';
+import { isExist, isTezIncluded } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
-import { isTezIncluded } from '../helpers';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
@@ -110,9 +109,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       {isDeadlineAndSlippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-          <div className={s['mt-24']}>
             <LiquiditySlippage
               liquidityType={LiquiditySlippageType.REMOVE}
               tokenA={tokenA}
@@ -121,6 +117,9 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
               tokenBInput={tokenBOutput}
               error={validationMessageSlippage}
             />
+          </div>
+          <div className={s['mt-24']}>
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
         </>
       )}

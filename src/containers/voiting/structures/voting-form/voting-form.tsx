@@ -190,7 +190,8 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const handleSetActiveId = (val: string) => {
     router.replace(`/voting/${val}/${getTokenSlug(tokenPair.token1)}-${getTokenSlug(tokenPair.token2)}`, undefined, {
-      shallow: true
+      shallow: true,
+      scroll: false
     });
     setTabsState(val as VotingTabs);
   };

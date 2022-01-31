@@ -3,11 +3,11 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage } from '@utils/helpers';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
@@ -149,11 +149,14 @@ export const useRemoveLiquidityService = (
         slippage
       );
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenA.metadata.name, tokenB.metadata.name);
-
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
+        const tokenAAppellation = getTokenAppellation(tokenA);
+        const tokenBAppellation = getTokenAppellation(tokenB);
+
+        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+
         await confirmOperation(hash, {
           message: removeLiquidityMessage
         });
@@ -163,12 +166,13 @@ export const useRemoveLiquidityService = (
 
       const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
-      const { name: tokenAName } = tokenA.metadata;
-      const { name: tokenBName } = tokenB.metadata;
+      const tokenAAppellation = getTokenAppellation(tokenA);
+      const tokenBAppellation = getTokenAppellation(tokenB);
 
-      const notTezosTokenName = tokenA.contractAddress === TEZOS_TOKEN.contractAddress ? tokenBName : tokenAName;
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+
       await confirmOperation(sentTransaction.opHash, {
-        message: getRemoveLiquidityMessage(TEZOS_TOKEN.metadata.name, notTezosTokenName)
+        message: removeLiquidityMessage
       });
     }
     setLpTokenInput('');
