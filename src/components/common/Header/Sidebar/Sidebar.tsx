@@ -34,9 +34,9 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
       </div>
       <Navigation className={s.navigation} iconId="desktop" />
       <footer className={s.footer}>
-        <QPToken id="desktop" />
-        <Socials id="desktop" />
-        <Button href="https://www.madfish.solutions/" external theme="clean">
+        <QPToken className={s.mb16} id="desktop" />
+        <Socials className={s.mb16} id="desktop" />
+        <Button className={s.mb16} href="https://www.madfish.solutions/" external theme="clean">
           <Madfish />
         </Button>
         <Button external href="https://v1.quipuswap.com/" theme="secondary" className={s.button}>
