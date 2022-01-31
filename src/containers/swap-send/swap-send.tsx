@@ -427,6 +427,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
           <SlippageInput
             error={touchedFieldsErrors.slippage}
+            loading={dexPoolsLoading}
             outputAmount={outputAmount}
             onChange={handleSlippageChange}
             slippage={slippage}
