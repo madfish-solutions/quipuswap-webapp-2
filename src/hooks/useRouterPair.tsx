@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { getTokenSlug } from '@utils/helpers';
+import { getTokenPairSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 interface RouterPairType {
@@ -32,9 +32,7 @@ export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: 
 
   useEffect(() => {
     if (urlLoaded && initialLoad && token1 && token2) {
-      const fromToken = getTokenSlug(token1);
-      const toToken = getTokenSlug(token2);
-      const url = `/${page}/${fromToken}-${toToken}`;
+      const url = `/${page}/${getTokenPairSlug(token1, token2)}`;
       router.replace(url, undefined, { shallow: true, scroll: false });
     }
     // eslint-disable-next-line

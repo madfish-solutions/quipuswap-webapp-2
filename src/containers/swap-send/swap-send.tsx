@@ -24,7 +24,8 @@ import {
   getTokensOptionalPairName,
   getTokenSlug,
   isEmptyArray,
-  makeWhitelistedToken
+  makeWhitelistedToken,
+  getTokenPairSlug
 } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
@@ -109,7 +110,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     validateField
   ]);
 
-  const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken,
     outputToken,
     inputAmount,
@@ -122,7 +123,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const onTokensSelected = useCallback(
     (inputToken: WhitelistedToken, outputToken: WhitelistedToken) => {
       updateSwapLimits(inputToken, outputToken);
-      const newRoute = `/swap/${getTokenSlug(inputToken)}-${getTokenSlug(outputToken)}`;
+      const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
       if (router.asPath !== newRoute) {
         router.replace(newRoute, undefined, { shallow: true, scroll: false });
       }
@@ -448,6 +449,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
         </Card>
         <SwapDetails
           fee={swapFee}
+          feeError={swapFeeError}
           priceImpact={priceImpact}
           inputToken={inputToken}
           outputToken={outputToken}

@@ -3,7 +3,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useRouterPair } from '@hooks/useRouterPair';
-import { getTokenSlug } from '@utils/helpers';
+import { getTokenPairSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 import { VotingTabs } from '../tabs.enum';
@@ -42,7 +42,7 @@ export const useVotingRouter = (token1: WhitelistedToken, token2: WhitelistedTok
 
   const handleSetActiveId = useCallback(
     async (val: string) => {
-      await router.replace(`/voting/${val}/${getTokenSlug(token1)}-${getTokenSlug(token2)}`, undefined, {
+      await router.replace(`/${VOTING}/${val}/${getTokenPairSlug(token1, token2)}`, undefined, {
         shallow: true,
         scroll: false
       });

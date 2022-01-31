@@ -8,7 +8,7 @@ import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy } from 'react-final-form';
 
-import { FACTORIES, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { FACTORIES, LP_TOKEN_DECIMALS, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
@@ -154,11 +154,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         }}
         contentClassName={s.content}
       >
-        <Field
-          name="balance1"
-          validate={validate}
-          parse={v => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
-        >
+        <Field name="balance1" validate={validate} parse={v => parseDecimals(v, 0, Infinity, LP_TOKEN_DECIMALS)}>
           {({ input, meta }) => (
             <PositionSelect
               {...input}
