@@ -15,7 +15,6 @@ export const APOLLO_CLIENT_ENDPOINT = process.env.NEXT_PUBLIC_APOLLO_CLIENT_ENDP
 export const QUIPUSWAP_ANALYTICS_TOKENS = 'https://analytics.quipuswap.com/tokens';
 export const QUIPUSWAP_ANALYTICS_PAIRS = 'https://analytics.quipuswap.com/pairs';
 
-export const TZKT_EXPLORER_URL = 'https://tzkt.io';
 export const TZKT_API_DELEGATE_URL = 'https://api.tzkt.io/v1/delegates';
 
 export const TEMPLEWALLET_IMG = 'https://img.templewallet.com/insecure/fill/50/50/ce/0/plain';
@@ -128,6 +127,12 @@ export const DEX_POOLS_URLS = {
   mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,
   hangzhounet: process.env.NEXT_PUBLIC_HANGZHOUNET_POOLS_URL!
 };
+
+const tzktExplorerUrls = {
+  [QSNets.mainnet]: 'https://tzkt.io',
+  [QSNets.hangzhounet]: 'https://hangzhounet.tzkt.io'
+};
+export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;

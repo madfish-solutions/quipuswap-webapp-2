@@ -13,6 +13,7 @@ import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@app
 import { Section } from '@components/home/Section';
 import { useGetHomeOverviewQuery } from '@graphql';
 import { getStorageInfo } from '@utils/dapp';
+import { fromDecimals } from '@utils/helpers';
 
 import s from './DexDashboard.module.sass';
 import { DexDashboardInner } from './DexDashboardInner';
@@ -32,8 +33,8 @@ export const DexDashboard: React.FC<DexDashboardProps> = ({ className }) => {
       const tezos = new TezosToolkit(MAINNET_RPC_URL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       // @ts-ignore
-      const tokenInfo = await contract?.token_info.get(0);
-      setTotalSupply(tokenInfo);
+      const rawTotalSupply = await contract?.token_info.get(0);
+      setTotalSupply(fromDecimals(rawTotalSupply, MAINNET_DEFAULT_TOKEN));
     };
     void asyncLoad();
   }, []);

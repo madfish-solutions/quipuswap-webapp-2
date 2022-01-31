@@ -1,6 +1,6 @@
 import { FC, useContext, useEffect } from 'react';
 
-import { ColorModes, ColorThemeContext, ToastWrapper } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
@@ -12,6 +12,7 @@ import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/ui/deskop-background';
+import { ToastWrapper } from '@components/ui/toast-wrapper';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
 

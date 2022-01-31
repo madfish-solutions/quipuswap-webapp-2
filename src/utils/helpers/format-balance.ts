@@ -32,12 +32,18 @@ export const formatBalance = (value: string): string => {
   const [integer, decimals] = value.split('.');
 
   if (isZeroString(integer)) {
-    return value.toString();
+    const formatedDecimal = decimals ? formatDecimal(decimals) : null;
+
+    if (formatedDecimal) {
+      return value;
+    }
+
+    return ZERO_STRING;
   } else if (integer.length < DEFAULT_BALANCE_LENGTH) {
     const decimals_ = decimals ? decimals.slice(FIRST_POSITION, DEFAULT_BALANCE_LENGTH - integer.length) : ZERO_STRING;
     const formatedDecimal = formatDecimal(decimals_);
 
-    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : integer;
+    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : FormatNumber(integer);
   } else {
     return FormatNumber(integer);
   }

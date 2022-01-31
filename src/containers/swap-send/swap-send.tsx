@@ -18,7 +18,15 @@ import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { amountsAreEqual, getTokenIdFromSlug, getTokenSlug, isEmptyArray, makeWhitelistedToken } from '@utils/helpers';
+import {
+  amountsAreEqual,
+  getTokenIdFromSlug,
+  getTokensOptionalPairName,
+  getTokenSlug,
+  isEmptyArray,
+  makeWhitelistedToken,
+  getTokenPairSlug
+} from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
 
@@ -102,7 +110,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     validateField
   ]);
 
-  const { swapFee, priceImpact, buyRate, sellRate } = useSwapDetails({
+  const { swapFee, swapFeeError, priceImpact, buyRate, sellRate } = useSwapDetails({
     inputToken,
     outputToken,
     inputAmount,
@@ -115,9 +123,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const onTokensSelected = useCallback(
     (inputToken: WhitelistedToken, outputToken: WhitelistedToken) => {
       updateSwapLimits(inputToken, outputToken);
-      const newRoute = `/swap/${getTokenSlug(inputToken)}-${getTokenSlug(outputToken)}`;
+      const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
       if (router.asPath !== newRoute) {
-        router.replace(newRoute);
+        router.replace(newRoute, undefined, { shallow: true, scroll: false });
       }
     },
     [router, updateSwapLimits]
@@ -361,9 +369,11 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
   const outputExchangeRate = outputTokenSlug === undefined ? undefined : exchangeRates[outputTokenSlug];
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
+  const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
+
   return (
     <>
-      <PageTitle>{t('swap|Swap')}</PageTitle>
+      <PageTitle>{title}</PageTitle>
       <StickyBlock className={className}>
         <Card
           header={{
@@ -438,8 +448,8 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
         </Card>
         <SwapDetails
-          currentTab={currentTabLabel}
           fee={swapFee}
+          feeError={swapFeeError}
           priceImpact={priceImpact}
           inputToken={inputToken}
           outputToken={outputToken}
