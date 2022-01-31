@@ -5,8 +5,7 @@ import cx from 'classnames';
 
 import { DashPlug } from '@components/ui/dash-plug';
 import { useAccountPkh } from '@utils/dapp';
-import { FormatNumber } from '@utils/formatNumber';
-import { isExist, isNull } from '@utils/helpers';
+import { formatBalance, isExist, isNull } from '@utils/helpers';
 
 import styles from './reward-item.module.scss';
 
@@ -29,7 +28,7 @@ export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency 
 
   const content =
     !isNull(accountPkh) && isExist(amount) && amount !== '' ? (
-      FormatNumber(amount)
+      formatBalance(amount)
     ) : (
       <DashPlug animation={Boolean(accountPkh)} zoom={REWARD_DASH_ZOOM} />
     );
