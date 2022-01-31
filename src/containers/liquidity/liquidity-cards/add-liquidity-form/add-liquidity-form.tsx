@@ -18,8 +18,6 @@ import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
-const DEFAULT_BALANCE = '0';
-
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const { t } = useTranslation(['liquidity']);
   const {
@@ -63,7 +61,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
     <>
       <TokenSelect
         label="Input"
-        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={tokenABalance?.toFixed() ?? null}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -78,7 +76,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={tokenBBalance?.toFixed() ?? null}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}

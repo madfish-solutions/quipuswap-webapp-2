@@ -19,8 +19,6 @@ import s from '../../Liquidity.module.sass';
 import { RemoveFormInterface } from './remove-form.props';
 import { useRemoveLiquidityService } from './use-remove-liquidity.service';
 
-const DEFAULT_BALANCE = '0';
-
 export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, tokenB, onChangeTokensPair }) => {
   const { t } = useTranslation(['common', 'liquidity']);
 
@@ -67,7 +65,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={share?.unfrozen.toFixed()}
+        balance={share?.unfrozen.toFixed() ?? null}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
@@ -81,7 +79,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={tokenABalance?.toFixed() ?? null}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -95,7 +93,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={tokenBBalance?.toFixed() ?? null}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
