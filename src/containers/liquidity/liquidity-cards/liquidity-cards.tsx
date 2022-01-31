@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
+import { Nullable, WhitelistedToken } from '@utils/types';
+
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
 import { LiquidityDetails } from './liquidity-details';
@@ -9,9 +11,13 @@ import { LiquidityTabs, TABS_CONTENT } from './liquidity-tabs';
 import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
 
-export const LiquidityCards: FC = () => {
+interface Props {
+  onTokensChange: (token1: Nullable<WhitelistedToken>, token2: Nullable<WhitelistedToken>) => void;
+}
+
+export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
   const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
-    useLiquidityFormService();
+    useLiquidityFormService({ onTokensChange });
 
   const isAddTabActive = tab.id === 'add';
 

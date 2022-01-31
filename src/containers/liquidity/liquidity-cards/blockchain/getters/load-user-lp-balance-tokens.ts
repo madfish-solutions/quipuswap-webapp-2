@@ -26,7 +26,7 @@ const loadUserLpBalanceTokens = async (
 
   const michelData = getValidMichelTemplate(addresses);
   const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
-  const pairId = await dex.storage.storage.token_to_id.get(key);
+  const pairId = await dex.storage.storage.token_to_id?.get(key);
   if (!pairId) {
     return null;
   }
