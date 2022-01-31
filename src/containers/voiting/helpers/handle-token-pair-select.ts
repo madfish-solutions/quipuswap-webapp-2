@@ -9,7 +9,7 @@ import { UseToasts } from '@hooks/use-toasts';
 import { fromDecimals } from '@utils/helpers';
 import { VoterType, QSNets, Nullable, WhitelistedTokenPair } from '@utils/types';
 
-interface HandleTokenPairSelectReturnType {
+export interface HandleTokenPairSelectReturnType {
   tokenPair: WhitelistedTokenPair;
   rewards: Nullable<string>;
   dex: Nullable<FoundDex>;

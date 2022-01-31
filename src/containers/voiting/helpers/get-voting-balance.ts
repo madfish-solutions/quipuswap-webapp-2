@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { isNull } from '@utils/helpers';
+import { isExist, isNull } from '@utils/helpers';
 import { Nullable, VoterType, WhitelistedTokenPair } from '@utils/types';
 
 export interface VoteVetoBalances {
@@ -10,9 +10,9 @@ export interface VoteVetoBalances {
 
 export const getVoteVetoBalances = (
   tokenPair: WhitelistedTokenPair,
-  { vote }: Pick<VoterType, 'vote'>
+  voter: Pick<VoterType, 'vote'>
 ): VoteVetoBalances => {
-  if (isNull(vote)) {
+  if (!isExist(voter) || isNull(voter.vote)) {
     return {
       availableVoteBalance: null,
       availableVetoBalance: null
@@ -25,6 +25,8 @@ export const getVoteVetoBalances = (
       availableVetoBalance: '0'
     };
   }
+
+  const { vote } = voter;
 
   const availableVoteBalance = new BigNumber(tokenPair.balance)
     .minus(new BigNumber(tokenPair.frozenBalance))

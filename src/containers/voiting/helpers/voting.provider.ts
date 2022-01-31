@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
@@ -7,13 +7,13 @@ import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.co
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
-import { handleSearchToken, isEmptyArray, isExist, isNull } from '@utils/helpers';
+import { handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
 import { Nullable, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks';
 import { VotingTabs } from '../tabs.enum';
 import { getVoteVetoBalances } from './get-voting-balance';
-import { handleTokenPairSelect } from './handle-token-pair-select';
+import { handleTokenPairSelect, HandleTokenPairSelectReturnType } from './handle-token-pair-select';
 
 const initialVoter: VoterType = {
   vote: null,
@@ -29,7 +29,7 @@ const fallbackTokenPair: WhitelistedTokenPair = {
   balance: null,
   frozenBalance: null
 };
-
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const useVotingService = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -49,6 +49,7 @@ const useVotingService = () => {
 
   const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
   const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
+  const tokensRef = useRef<[WhitelistedToken, WhitelistedToken]>([token1, token2]);
 
   const {
     urlLoaded,
@@ -68,19 +69,30 @@ const useVotingService = () => {
     [tokenPair, voter]
   );
 
+  useEffect(() => {
+    tokensRef.current = [token1, token2];
+  }, [token1, token2]);
+
   const localAvailableBalance = currentTab.id === VotingTabs.vote ? availableVoteBalance : availableVetoBalance;
+
+  const dataSetter = (data: Nullable<HandleTokenPairSelectReturnType>) => {
+    if (isExist(data)) {
+      const { tokenPair, rewards, dex, voter } = data;
+
+      const [token1, token2] = tokensRef.current;
+
+      if (isTokenEqual(tokenPair.token1, token1) && isTokenEqual(tokenPair.token2, token2)) {
+        setRewards(rewards);
+        setDex(dex);
+        setVoter(voter);
+        setTokenPair(tokenPair);
+      }
+    }
+  };
 
   const tokenPairSelect = useCallback(
     async (pair: WhitelistedTokenPair) => {
-      handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(data => {
-        if (isExist(data)) {
-          const { tokenPair, rewards, dex, voter } = data;
-          setRewards(rewards);
-          setDex(dex);
-          setVoter(voter);
-          setTokenPair(tokenPair);
-        }
-      });
+      handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
     [tezos, accountPkh, showErrorToast]
   );
@@ -142,9 +154,9 @@ const useVotingService = () => {
       setRewards
     },
     voter: {
-      vote: voter.vote,
-      veto: voter.veto,
-      candidate: voter.candidate,
+      vote: voter?.vote ?? null,
+      veto: voter?.veto ?? null,
+      candidate: voter?.candidate ?? null,
       setVoter
     },
 
