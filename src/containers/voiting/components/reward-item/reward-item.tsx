@@ -4,8 +4,9 @@ import { ColorModes, ColorThemeContext, Nullable, VotingReward } from '@quipuswa
 import cx from 'classnames';
 
 import { DashPlug } from '@components/ui/dash-plug';
+import { useAccountPkh } from '@utils/dapp';
 import { FormatNumber } from '@utils/formatNumber';
-import { isExist } from '@utils/helpers';
+import { isExist, isNull } from '@utils/helpers';
 
 import styles from './reward-item.module.scss';
 
@@ -20,15 +21,25 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const REWARD_DASH_ZOOM = 1.45;
+
 export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const accountPkh = useAccountPkh();
+
+  const content =
+    !isNull(accountPkh) && isExist(amount) && amount !== '' ? (
+      FormatNumber(amount)
+    ) : (
+      <DashPlug animation={Boolean(accountPkh)} zoom={REWARD_DASH_ZOOM} />
+    );
 
   return (
     <div className={cx(modeClass[colorThemeMode], styles.reward)}>
       <div className={styles.rewardContent}>
         <span className={styles.rewardHeader}>{description}</span>
         <span className={styles.rewardAmount}>
-          {isExist(amount) && amount !== '' ? FormatNumber(amount) : <DashPlug zoom={1.45} />}
+          {content}
           <span className={styles.rewardCurrency}>{currency}</span>
         </span>
       </div>
