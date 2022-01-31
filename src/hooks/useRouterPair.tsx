@@ -29,13 +29,14 @@ export const useRouterPair = ({ page, urlLoaded, initialLoad, token1, token2 }: 
   }
   const params = Object.fromEntries(new Map(urlSearchParams.map((x, i) => [i === 0 ? 'from' : 'to', x])));
   const { from, to } = params;
+
   useEffect(() => {
     if (urlLoaded && initialLoad && token1 && token2) {
       const url = `/${page}/${getTokenPairSlug(token1, token2)}`;
       router.replace(url, undefined, { shallow: true, scroll: false });
     }
     // eslint-disable-next-line
-  }, [token1, token2]);
+  }, [urlLoaded, initialLoad, token1, token2]);
 
   return { from, to };
 };

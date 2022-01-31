@@ -37,8 +37,8 @@ export enum WalletType {
 }
 
 export interface WhitelistedTokenPair {
-  balance?: string;
-  frozenBalance?: string;
+  balance?: Nullable<string>;
+  frozenBalance?: Nullable<string>;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   dex?: FoundDex;
@@ -105,8 +105,8 @@ interface TokenXtzDexPairProps extends CommonDexPairProps {
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
 export interface VoterType {
-  vote: BigNumber;
-  veto: BigNumber;
+  vote: Nullable<BigNumber>;
+  veto: Nullable<BigNumber>;
   candidate: Nullable<string>;
 }
 
@@ -117,7 +117,7 @@ export interface TokenDataType {
     id?: number | null;
     decimals: number;
   };
-  balance: string;
+  balance: Nullable<string>;
   exchangeRate?: string;
 }
 

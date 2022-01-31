@@ -1,21 +1,25 @@
-import React from 'react';
+import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
 import { getUserBalance } from '@utils/dapp';
-import { TokenDataMap, WhitelistedToken } from '@utils/types';
+import { Nullable, TokenDataMap, WhitelistedToken } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';
 
+export enum TokenNumber {
+  FIRST = 'first',
+  SECOND = 'second'
+}
+
 interface TokenChangeType {
   token: WhitelistedToken;
-  tokenNumber: 'first' | 'second';
+  tokenNumber: TokenNumber;
   exchangeRates: Array<{ tokenAddress: string; tokenId?: number; exchangeRate: string }>;
   tezos: TezosToolkit;
   accountPkh: string;
-  setTokensData: React.Dispatch<React.SetStateAction<TokenDataMap>>;
-  quite?: boolean;
+  setTokensData: Dispatch<SetStateAction<TokenDataMap>>;
 }
 
 export const handleTokenChange = async ({
@@ -24,14 +28,10 @@ export const handleTokenChange = async ({
   exchangeRates,
   tezos,
   accountPkh,
-  setTokensData,
-  quite
+  setTokensData
 }: // eslint-disable-next-line sonarjs/cognitive-complexity
 TokenChangeType) => {
-  if (!exchangeRates || !exchangeRates.find) {
-    return;
-  }
-  let finalBalance = '0';
+  let finalBalance: Nullable<string> = null;
   if (tezos && accountPkh) {
     try {
       const balance = await getUserBalance(tezos, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
@@ -42,6 +42,26 @@ TokenChangeType) => {
       // eslint-disable-next-line
       console.error(e);
     }
+  }
+
+  setTokensData(prevState => {
+    return {
+      ...prevState,
+      [tokenNumber]: {
+        token: {
+          address: token.contractAddress,
+          type: token.type,
+          id: token.fa2TokenId,
+          decimals: token.metadata.decimals
+        },
+        balance: finalBalance,
+        exchangeRate: tokenExchangeRate?.exchangeRate ?? null
+      }
+    };
+  });
+
+  if (!exchangeRates || !exchangeRates.find) {
+    return;
   }
 
   const tokenExchangeRate = exchangeRates.find(el => {
@@ -62,34 +82,10 @@ TokenChangeType) => {
   });
 
   setTokensData(prevState => {
-    if (quite) {
-      return prevState[tokenNumber].token.address === token.contractAddress
-        ? // Update only balances
-          {
-            ...prevState,
-            [tokenNumber]: {
-              ...prevState[tokenNumber],
-              balance: finalBalance,
-              exchangeRate: tokenExchangeRate?.exchangeRate ?? null
-            }
-          }
-        : // Do not update anything
-          {
-            ...prevState
-          };
-    }
-
-    // Update all token data
     return {
       ...prevState,
       [tokenNumber]: {
-        token: {
-          address: token.contractAddress,
-          type: token.type,
-          id: token.fa2TokenId,
-          decimals: token.metadata.decimals
-        },
-        balance: finalBalance,
+        ...prevState[tokenNumber],
         exchangeRate: tokenExchangeRate?.exchangeRate ?? null
       }
     };
