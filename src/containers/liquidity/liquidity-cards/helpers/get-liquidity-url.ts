@@ -1,4 +1,4 @@
-import { getTokenSlug } from '@utils/helpers';
+import { getTokenPairSlug } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 const LIQUIDITY_URL = '/liquidity';
@@ -16,8 +16,5 @@ export const getLiquidityUrl = (
     return `${LIQUIDITY_URL}/${tabId}`;
   }
 
-  const from = getTokenSlug(tokenA);
-  const to = getTokenSlug(tokenB);
-
-  return `${LIQUIDITY_URL}/${tabId}/${from}-${to}`;
+  return `${LIQUIDITY_URL}/${tabId}/${getTokenPairSlug(tokenA, tokenB)}`;
 };

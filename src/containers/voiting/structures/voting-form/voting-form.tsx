@@ -27,7 +27,7 @@ import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { isAssetEqual, parseDecimals, isNull, getTokenSlug } from '@utils/helpers';
+import { isAssetEqual, parseDecimals, isNull, getTokenPairSlug } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import {
   TokenDataMap,
@@ -103,6 +103,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   bakerCleaner
   // eslint-disable-next-line
 }) => {
+  const { token1, token2 } = tokenPair;
   const { t } = useTranslation(['common', 'vote']);
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
@@ -128,10 +129,10 @@ const RealForm: React.FC<VotingFormProps> = ({
     if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
       return;
     }
-    if (tezos && tokenPair) {
+    if (tezos) {
       const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId ?? undefined
+        contract: token2.contractAddress,
+        id: token2.fa2TokenId ?? undefined
       };
       const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
       if (isAssetSame) {
@@ -189,7 +190,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   };
 
   const handleSetActiveId = (val: string) => {
-    router.replace(`/voting/${val}/${getTokenSlug(tokenPair.token1)}-${getTokenSlug(tokenPair.token2)}`, undefined, {
+    router.replace(`/voting/${val}/${getTokenPairSlug(token1, token2)}`, undefined, {
       shallow: true,
       scroll: false
     });
@@ -220,11 +221,7 @@ const RealForm: React.FC<VotingFormProps> = ({
         }}
         contentClassName={s.content}
       >
-        <Field
-          name="balance1"
-          validate={validate}
-          parse={v => parseDecimals(v, 0, Infinity, tokenPair.token1.metadata.decimals)}
-        >
+        <Field name="balance1" validate={validate} parse={v => parseDecimals(v, 0, Infinity, token1.metadata.decimals)}>
           {({ input, meta }) => (
             <PositionSelect
               {...input}
