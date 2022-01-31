@@ -1,10 +1,11 @@
 import React, { useContext, useMemo } from 'react';
 
-import { ColorModes, ColorThemeContext, QuipuToken } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { MAINNET_DEFAULT_TOKEN } from '@app.config';
+import { QuipuToken } from '@components/svg/quipu-token';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 
 import s from './QPToken.module.sass';
