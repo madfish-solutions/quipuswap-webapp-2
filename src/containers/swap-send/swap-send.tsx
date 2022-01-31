@@ -63,11 +63,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     touched
   } = useSwapFormik();
   const { t } = useTranslation(['swap']);
-  const fromToSlug = URL_WITH_SLUGS_REGEX.exec(router.asPath)?.[2] ?? '';
+  const [, , fromToSlug] = URL_WITH_SLUGS_REGEX.exec(router.asPath) ?? [];
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
-  const initialTokens = useInitialTokensSlugs(fromToSlug, getRedirectionUrl);
-  const initialFrom = initialTokens?.[0];
-  const initialTo = initialTokens?.[1];
+  const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
 
   const TabsContent = [
     { id: 'swap', label: t('swap|Swap') },
