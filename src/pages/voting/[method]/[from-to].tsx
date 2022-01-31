@@ -8,7 +8,7 @@ import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
 import s from '@styles/Voting.module.sass';
-import { getTokenSlug, isEmptyArray } from '@utils/helpers';
+import { getTokenPairSlug, isEmptyArray } from '@utils/helpers';
 
 const VotePage: React.FC = () => {
   const { t } = useTranslation(['common', 'vote']);
@@ -33,8 +33,7 @@ export const getServerSideProps = async ({
   query: { 'from-to': string; method: string };
 }) => {
   const splittedTokens = query['from-to'].split('-');
-  const from = getTokenSlug(TEZOS_TOKEN);
-  const to = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
+  const tokenPairSlug = getTokenPairSlug(TEZOS_TOKEN, networksDefaultTokens[NETWORK_ID]);
   const isSoleToken = splittedTokens.length < 2;
   const isNoTokens = splittedTokens.length < 1;
 
@@ -44,7 +43,7 @@ export const getServerSideProps = async ({
   if (isNoTokens || isSoleToken || splittedTokens[1] === '' || !isQueryMethod) {
     return {
       redirect: {
-        destination: `/voting/${method}/${from}-${to}`,
+        destination: `/voting/${method}/${tokenPairSlug}`,
         permanent: false
       }
     };
@@ -53,7 +52,7 @@ export const getServerSideProps = async ({
   if (!isEmptyArray(splittedTokens) && splittedTokens[0] !== TEZOS_TOKEN.contractAddress) {
     return {
       redirect: {
-        destination: `/voting/${method}/${from}-${to}`,
+        destination: `/voting/${method}/${tokenPairSlug}`,
         permanent: false
       }
     };

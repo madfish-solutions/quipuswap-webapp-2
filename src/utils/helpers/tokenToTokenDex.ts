@@ -4,20 +4,20 @@ import { FEE_RATE } from '@app.config';
 import { getTokenSlug, SwapParams } from '@utils/helpers';
 import { TokenId, DexPair } from '@utils/types';
 
+import { getTokenPairSlug } from './get-token-pair-slug';
+
 const feeDenominator = new BigNumber(1000);
 const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times(feeDenominator));
 
 export class InputOverflowError extends Error {
   constructor(inputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
-    const pairName = `${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
-    super(`Input amount (${inputAmount.toFixed()} exceeds maximal one on pair ${pairName}`);
+    super(`Input amount (${inputAmount.toFixed()} exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
   }
 }
 
 export class OutputOverflowError extends Error {
   constructor(outputAmount: BigNumber, { token1, token2 }: Pick<DexPair, 'token1' | 'token2'>) {
-    const pairName = `${getTokenSlug(token1)}-${getTokenSlug(token2)}`;
-    super(`Output amount (${outputAmount.toFixed()} exceeds maximal one on pair ${pairName}`);
+    super(`Output amount (${outputAmount.toFixed()} exceeds maximal one on pair ${getTokenPairSlug(token1, token2)}`);
   }
 }
 

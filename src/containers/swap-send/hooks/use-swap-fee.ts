@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import useUpdateOnBlockSWR from '@hooks/useUpdateOnBlockSWR';
 import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
-import { estimateSwapFee, fromDecimals, getTokenSlug, toDecimals } from '@utils/helpers';
+import { estimateSwapFee, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
@@ -45,8 +45,7 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
     [dexChain, inputAmount, inputToken, slippageTolerance, tezos]
   );
 
-  const dexChainSWRKey =
-    dexChain?.map(({ token1, token2 }) => `${getTokenSlug(token1)}-${getTokenSlug(token2)}`).join(',') ?? null;
+  const dexChainSWRKey = dexChain?.map(({ token1, token2 }) => getTokenPairSlug(token1, token2)).join(',') ?? null;
 
   return useUpdateOnBlockSWR(
     tezos,
