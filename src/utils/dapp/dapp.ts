@@ -39,7 +39,7 @@ export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
 
-const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
+export const URL_WITH_SLUGS_REGEX = /(.*)\/([a-z_0-9]+-[a-z_0-9]+)/i;
 
 function useDApp() {
   const router = useRouter();
