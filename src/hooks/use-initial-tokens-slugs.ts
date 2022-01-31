@@ -77,7 +77,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     }
     const newTokensSlug = initialTokensSlugs.join('-');
     if (getRedirectionUrl && fromToSlug !== newTokensSlug) {
-      router.replace(getRedirectionUrl(newTokensSlug));
+      router.replace(getRedirectionUrl(newTokensSlug), undefined, { shallow: true, scroll: false });
     }
     initialTokensSlugs.forEach(tokenSlug => {
       const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();

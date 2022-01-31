@@ -4,7 +4,8 @@ import BigNumber from 'bignumber.js';
 import { Standard } from '@graphql';
 
 export type Undefined<T> = T | undefined;
-export type Nullable<T> = T | null; // MayBe<T>
+export type Nullable<T> = T | null;
+export type Optional<T> = T | null | undefined;
 
 export enum QSNets {
   mainnet = 'mainnet',

@@ -5,7 +5,7 @@ import { UpdateOptions, toast } from 'react-toastify';
 
 import { toastContent } from '@components/ui/toast-wrapper';
 
-const DEFAULT_AUTOCLOSE_TIMER = 5000;
+const DEFAULT_AUTOCLOSE_TIMER = 15000;
 
 export const useUpdateToast = () => {
   const toastIdRef = useRef<string | number>();

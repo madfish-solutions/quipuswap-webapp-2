@@ -109,9 +109,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       {isDeadlineAndSlippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-          <div className={s['mt-24']}>
             <LiquiditySlippage
               liquidityType={LiquiditySlippageType.REMOVE}
               tokenA={tokenA}
@@ -120,6 +117,9 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
               tokenBInput={tokenBOutput}
               error={validationMessageSlippage}
             />
+          </div>
+          <div className={s['mt-24']}>
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
         </>
       )}

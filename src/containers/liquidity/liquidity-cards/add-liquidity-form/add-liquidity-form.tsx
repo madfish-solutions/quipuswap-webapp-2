@@ -93,9 +93,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       {isDeadlineAndSkippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-          <div className={s['mt-24']}>
             <LiquiditySlippage
               liquidityType={LiquiditySlippageType.ADD}
               tokenA={tokenA}
@@ -104,6 +101,9 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
               tokenBInput={tokenBInput}
               error={validationMessageSlippage}
             />
+          </div>
+          <div className={s['mt-24']}>
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
         </>
       )}

@@ -46,7 +46,7 @@ export const EnPrivacyPolicy: React.FC = () => {
         website: <span className={s.list}>Madfish Solutions</span> decides “why” and “how” your Personal Data is
         processed in connection with the Interface. If you have additional questions or require more information about
         this Privacy Policy, do not hesitate to contact{' '}
-        <Button theme="inverse" href="info@madfish.solutions" external>
+        <Button theme="inverse" href="mailto:info@madfish.solutions" external>
           info@madfish.solutions
         </Button>
         .
@@ -275,7 +275,7 @@ export const EnPrivacyPolicy: React.FC = () => {
       <br />
       <p className={s.big}>
         We welcome your comments or questions about this Policy, and you may contact us at{' '}
-        <Button theme="inverse" href="info@madfish.solutions" external>
+        <Button theme="inverse" href="mailto:info@madfish.solutions" external>
           info@madfish.solutions
         </Button>
       </p>
