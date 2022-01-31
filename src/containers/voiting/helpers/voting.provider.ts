@@ -58,9 +58,9 @@ const useVotingService = () => {
     setInitialLoad,
     from,
     to,
-    tabsState,
+    votingTab,
     currentTab,
-    setTabsState,
+    setVotingTab,
     handleSetActiveId
   } = useVotingRouter(token1, token2);
 
@@ -188,9 +188,9 @@ const useVotingService = () => {
       setInitialLoad,
       from,
       to,
-      tabsState,
+      votingTab,
       currentTab,
-      setTabsState,
+      setVotingTab,
       handleSetActiveId
     },
     handlers: {

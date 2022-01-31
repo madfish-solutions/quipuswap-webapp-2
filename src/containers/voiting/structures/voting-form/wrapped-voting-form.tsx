@@ -7,7 +7,7 @@ import { isNull } from '@utils/helpers';
 import { VoteFormValues, Nullable } from '@utils/types';
 
 import { bakerCleaner } from '../../helpers';
-import { useVotingHandlers } from '../../helpers/voting.provider';
+import { useVotingHandlers, useVotingRouting } from '../../helpers/voting.provider';
 import { useHandleVote } from '../../hooks';
 import { VotingTabs } from '../../tabs.enum';
 import { VotingForm } from './voting-form';
@@ -37,7 +37,15 @@ export const WrappedVotingForm: FC = () => {
 
   const { updateBalances } = useVotingHandlers();
 
-  const handleVote = useHandleVote(updateBalances, cleanUp);
+  const handleVote = useHandleVote();
+
+  const { currentTab } = useVotingRouting();
+
+  const handleVoteSubmit = async (values: VoteFormValues) => {
+    await handleVote(values);
+    updateBalances();
+    cleanUp(currentTab.id);
+  };
 
   const mutators: { [key: string]: Mutator<VoteFormValues, Partial<VoteFormValues>> } = {
     setValue: ([field, value], state, { changeValue }) => {
@@ -55,7 +63,7 @@ export const WrappedVotingForm: FC = () => {
 
   return (
     <Form
-      onSubmit={handleVote}
+      onSubmit={handleVoteSubmit}
       mutators={mutators}
       render={({ handleSubmit, form }) => handleFormRender(handleSubmit as () => Promise<void>, form)}
     />

@@ -21,6 +21,8 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const REWARD_DASH_ZOOM = 1.45;
+
 export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const accountPkh = useAccountPkh();
@@ -29,7 +31,7 @@ export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency 
     !isNull(accountPkh) && isExist(amount) && amount !== '' ? (
       FormatNumber(amount)
     ) : (
-      <DashPlug animation={Boolean(accountPkh)} zoom={1.45} />
+      <DashPlug animation={Boolean(accountPkh)} zoom={REWARD_DASH_ZOOM} />
     );
 
   return (

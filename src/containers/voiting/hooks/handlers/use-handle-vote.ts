@@ -5,9 +5,8 @@ import { VoteFormValues } from '@utils/types';
 
 import { submitForm } from '../../helpers';
 import { useVotingDex, useVotingRouting } from '../../helpers/voting.provider';
-import { VotingTabs } from '../../tabs.enum';
 
-export const useHandleVote = (getBalance: () => void, cleanUp: (tab: VotingTabs) => void) => {
+export const useHandleVote = () => {
   const tezos = useTezos();
   const confirmOperation = useConfirmOperation();
   const { dex } = useVotingDex();
@@ -27,9 +26,6 @@ export const useHandleVote = (getBalance: () => void, cleanUp: (tab: VotingTabs)
         tab: currentTab.id,
         confirmOperation
       });
-
-      getBalance();
-      cleanUp(currentTab.id);
     } catch (e) {
       showErrorToast(e as Error);
     }

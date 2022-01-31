@@ -28,9 +28,9 @@ export const TabsContent = [
 
 export const useVotingRouter = (token1: WhitelistedToken, token2: WhitelistedToken) => {
   const router = useRouter();
-  const [urlLoaded, setUrlLoaded] = useState<boolean>(true);
-  const [initialLoad, setInitialLoad] = useState<boolean>(false);
-  const [tabsState, setTabsState] = useState<VotingTabs>(router.query.method as VotingTabs);
+  const [urlLoaded, setUrlLoaded] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(false);
+  const [votingTab, setVotingTab] = useState<VotingTabs>(router.query.method as VotingTabs);
 
   const { from, to } = useRouterPair({
     page: `${VOTING}/${router.query.method}`,
@@ -41,17 +41,17 @@ export const useVotingRouter = (token1: WhitelistedToken, token2: WhitelistedTok
   });
 
   const handleSetActiveId = useCallback(
-    (val: string) => {
-      router.replace(`/voting/${val}/${getTokenSlug(token1)}-${getTokenSlug(token2)}`, undefined, {
+    async (val: string) => {
+      await router.replace(`/voting/${val}/${getTokenSlug(token1)}-${getTokenSlug(token2)}`, undefined, {
         shallow: true,
         scroll: false
       });
-      setTabsState(val as VotingTabs);
+      setVotingTab(val as VotingTabs);
     },
     [token1, token2, router]
   );
 
-  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === tabsState)!, [tabsState]);
+  const currentTab = useMemo(() => TabsContent.find(({ id }) => id === votingTab)!, [votingTab]);
 
   return {
     urlLoaded,
@@ -60,9 +60,9 @@ export const useVotingRouter = (token1: WhitelistedToken, token2: WhitelistedTok
     setInitialLoad,
     from,
     to,
-    tabsState,
+    votingTab,
     currentTab,
-    setTabsState,
+    setVotingTab,
     handleSetActiveId
   };
 };

@@ -20,6 +20,8 @@ export interface UnvoteButtonProps {
   className: string;
 }
 
+const EMPTY_POOL = 0;
+
 export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
   const tezos = useTezos();
   const { showErrorToast } = useToasts();
@@ -34,15 +36,16 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
       return;
     }
 
-    unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, updateBalances, candidate);
+    await unvoteOrRemoveVeto(currentTab.id, tezos, dex, showErrorToast, confirmOperation, updateBalances, candidate);
   };
 
-  const isButtonDisabled =
-    currentTab.id === VotingTabs.vote ? new BigNumber(vote ?? '0').eq(0) : new BigNumber(veto ?? '0').eq(0);
+  const isVoteTab = currentTab.id === VotingTabs.vote;
+  const value = isVoteTab ? vote : veto;
+  const isButtonDisabled = new BigNumber(value ?? '0').eq(EMPTY_POOL);
 
   return (
     <Button onClick={handleUnvoteOrRemoveVeto} className={className} theme="secondary" disabled={isButtonDisabled}>
-      {currentTab.id === VotingTabs.vote ? 'Unvote' : 'Remove veto'}
+      {isVoteTab ? 'Unvote' : 'Remove veto'}
     </Button>
   );
 };

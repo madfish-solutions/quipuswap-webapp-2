@@ -43,7 +43,7 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   handleBalance: (value: string) => void;
   tokenPair: Nullable<WhitelistedTokenPair>;
   setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
-  tokensUpdading?: {
+  tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
   };
@@ -71,7 +71,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   tokenPair,
   setTokenPair,
   notFrozen,
-  tokensUpdading,
+  tokensUpdating,
   ...props
 }) => {
   const { t } = useTranslation(['common']);
@@ -90,13 +90,13 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const token1 = tokenPair?.token1 ?? TEZOS_TOKEN;
   const token2 = tokenPair?.token2 ?? TEZOS_TOKEN;
   useEffect(() => {
-    if (tokensUpdading && tokenPair?.token2) {
-      tokensUpdading.setIsTokenChanging(false);
+    if (tokensUpdating && tokenPair?.token2) {
+      tokensUpdating.setIsTokenChanging(false);
     }
     // eslint-disable-next-line
   }, [tokenPair?.token2]);
 
-  const isTokensLoading = tokensUpdading?.isTokenChanging;
+  const isTokensLoading = tokensUpdating?.isTokenChanging;
 
   return (
     <>
@@ -104,7 +104,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         isOpen={tokensModal}
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
-          tokensUpdading?.setIsTokenChanging(true);
+          tokensUpdating?.setIsTokenChanging(true);
           setTokenPair(selectedToken);
           if (handleChange) {
             handleChange(selectedToken);

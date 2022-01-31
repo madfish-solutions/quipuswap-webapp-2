@@ -66,10 +66,10 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { currentCandidate } = getCandidateInfo(dex, bakers);
   const { token1 } = useVotingTokens();
   const { tokenPair } = useTokensPair();
-  const { tabsState, handleSetActiveId, currentTab } = useVotingRouting();
+  const { votingTab, handleSetActiveId, currentTab } = useVotingRouting();
   const { handleTokenPairSelectChange } = useVotingHandlers();
   const { availableBalance } = useAvailableBalances();
-  const tokensUpdading = useTokensLoading();
+  const tokensUpdating = useTokensLoading();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -148,7 +148,7 @@ const RealForm: React.FC<VotingFormProps> = ({
       <Card
         header={{
           content: (
-            <Tabs values={TabsContent} activeId={tabsState} setActiveId={handleSetActiveId} className={s.tabs} />
+            <Tabs values={TabsContent} activeId={votingTab} setActiveId={handleSetActiveId} className={s.tabs} />
           ),
           className: s.header
         }}
@@ -169,7 +169,7 @@ const RealForm: React.FC<VotingFormProps> = ({
               handleBalance={value => {
                 form.mutators.setValue('balance1', toSixDecimals(value));
               }}
-              tokensUpdading={tokensUpdading}
+              tokensUpdating={tokensUpdating}
               shouldShowBalanceButtons={Boolean(accountPkh)}
               balanceLabel={t('vote|Available balance')}
               notFrozen
