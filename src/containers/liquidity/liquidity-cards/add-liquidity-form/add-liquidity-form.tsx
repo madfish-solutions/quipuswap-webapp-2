@@ -57,11 +57,14 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
 
   const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
+  const fixedBalanceA = tokenABalance?.toFixed() ?? null;
+  const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
+
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={tokenABalance?.toFixed() ?? null}
+        balance={fixedBalanceA}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -76,7 +79,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={tokenBBalance?.toFixed() ?? null}
+        balance={fixedBalanceB}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}

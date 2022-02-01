@@ -59,13 +59,17 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
+  const fixedUnfrozenBalance = share?.unfrozen.toFixed() ?? null;
+  const fixedBalanceA = tokenABalance?.toFixed() ?? null;
+  const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
+
   return (
     <>
       <PositionSelect
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={share?.unfrozen.toFixed() ?? null}
+        balance={fixedUnfrozenBalance}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}
@@ -79,7 +83,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <ArrowDown className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={tokenABalance?.toFixed() ?? null}
+        balance={fixedBalanceA}
         token={tokenA}
         value={tokenAOutput}
         blackListedTokens={blackListedTokens}
@@ -93,7 +97,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Output"
-        balance={tokenBBalance?.toFixed() ?? null}
+        balance={fixedBalanceB}
         token={tokenB}
         value={tokenBOutput}
         blackListedTokens={blackListedTokens}
