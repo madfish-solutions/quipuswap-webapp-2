@@ -17,7 +17,7 @@ import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
-import { URL_WITH_SLUGS_REGEX, useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
 import {
   amountsAreEqual,
   getTokenIdFromSlug,
@@ -63,7 +63,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     touched
   } = useSwapFormik();
   const { t } = useTranslation(['swap']);
-  const [, , fromToSlug] = URL_WITH_SLUGS_REGEX.exec(router.asPath) ?? [];
+  const fromToSlug = (router.query['from-to'] as string) ?? '';
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
   const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
 
