@@ -8,11 +8,7 @@ import { TestnetAlert } from '@components/common/testnet-alert';
 import { SwapSend } from '@containers/swap-send';
 import s from '@styles/SwapLiquidity.module.sass';
 
-interface SwapSendPageProps {
-  fromToSlug?: string;
-}
-
-const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
+const SwapSendPage: React.FC = () => {
   const { t } = useTranslation(['common', 'swap']);
 
   return (
@@ -22,19 +18,18 @@ const SwapSendPage: React.FC<SwapSendPageProps> = ({ fromToSlug }) => {
       className={s.wrapper}
     >
       <TestnetAlert />
-      <SwapSend fromToSlug={fromToSlug} />
+      <SwapSend />
     </BaseLayout>
   );
 };
 
 // @ts-ignore
 export const getServerSideProps = async props => {
-  const { locale, query } = props;
+  const { locale } = props;
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'swap'])),
-      fromToSlug: query['from-to']
+      ...(await serverSideTranslations(locale, ['common', 'swap']))
     }
   };
 };
