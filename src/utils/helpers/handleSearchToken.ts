@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
@@ -7,16 +9,6 @@ import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
 
-const handleTokenPairSelect = (
-  pair: WhitelistedTokenPair,
-  setTokenPair: (pair: WhitelistedTokenPair) => void,
-  handleTokenChange: (token: WhitelistedToken, tokenNum: 'first' | 'second') => void
-) => {
-  handleTokenChange(pair.token1, 'first');
-  handleTokenChange(pair.token2, 'second');
-  setTokenPair(pair);
-};
-
 interface SearchTokenType {
   tokens: WhitelistedToken[];
   tezos?: TezosToolkit;
@@ -24,11 +16,10 @@ interface SearchTokenType {
   from: string;
   to: string;
   fixTokenFrom?: WhitelistedToken;
-  handleTokenChangeWrapper: (token: WhitelistedToken, tokenNumber: 'first' | 'second') => void;
-  setTokens: React.Dispatch<React.SetStateAction<WhitelistedToken[]>>;
-  setInitialLoad: React.Dispatch<React.SetStateAction<boolean>>;
-  setUrlLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-  setTokenPair?: React.Dispatch<React.SetStateAction<WhitelistedTokenPair>>;
+  setTokens: Dispatch<SetStateAction<WhitelistedToken[]>>;
+  setInitialLoad: Dispatch<SetStateAction<boolean>>;
+  setUrlLoaded: Dispatch<SetStateAction<boolean>>;
+  setTokenPair?: Dispatch<SetStateAction<WhitelistedTokenPair>>;
   searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<WhitelistedToken | null>;
 }
 
@@ -39,7 +30,6 @@ export const handleSearchToken = async ({
   from,
   to,
   fixTokenFrom,
-  handleTokenChangeWrapper,
   setTokens,
   setInitialLoad,
   setUrlLoaded,
@@ -73,7 +63,6 @@ SearchTokenType) => {
     if (to) {
       const resTo = await searchPart(to);
       res = [resTo];
-      handleTokenChangeWrapper(resTo, 'second');
     }
     let resFrom;
     if (!fixTokenFrom) {
@@ -82,17 +71,12 @@ SearchTokenType) => {
       resFrom = fixTokenFrom;
     }
     res = [resFrom, ...res];
-    handleTokenChangeWrapper(resFrom, 'first');
   }
   setUrlLoaded(true);
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
-      handleTokenPairSelect(
-        { token1: res[0], token2: res[1] } as WhitelistedTokenPair,
-        setTokenPair,
-        handleTokenChangeWrapper
-      );
+      setTokenPair({ token1: res[0], token2: res[1] } as WhitelistedTokenPair);
     }
   }
 };

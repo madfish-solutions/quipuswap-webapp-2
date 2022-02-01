@@ -5,7 +5,13 @@ import { SortTokensContractsType } from '@utils/types';
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const taquitoUtils = require('@taquito/utils');
 
-export const getValidMichelTemplate = ({ addressA, addressB, type }: SortTokensContractsType): MichelsonData => {
+export const getValidMichelTemplate = ({
+  addressA,
+  addressB,
+  type,
+  idA,
+  idB
+}: SortTokensContractsType): MichelsonData => {
   const tokenAAddressBytes = taquitoUtils.b58decode(addressA);
   const tokenBAddressBytes = taquitoUtils.b58decode(addressB);
 
@@ -37,7 +43,7 @@ export const getValidMichelTemplate = ({ addressA, addressB, type }: SortTokensC
             args: [
               {
                 prim: 'Pair',
-                args: [{ bytes: tokenBAddressBytes }, { int: '0' }]
+                args: [{ bytes: tokenBAddressBytes }, { int: `${idB}` }]
               }
             ]
           }
@@ -52,7 +58,7 @@ export const getValidMichelTemplate = ({ addressA, addressB, type }: SortTokensC
             args: [
               {
                 prim: 'Pair',
-                args: [{ bytes: tokenAAddressBytes }, { int: '0' }]
+                args: [{ bytes: tokenAAddressBytes }, { int: `${idA}` }]
               }
             ]
           },
@@ -61,7 +67,7 @@ export const getValidMichelTemplate = ({ addressA, addressB, type }: SortTokensC
             args: [
               {
                 prim: 'Pair',
-                args: [{ bytes: tokenBAddressBytes }, { int: '0' }]
+                args: [{ bytes: tokenBAddressBytes }, { int: `${idB}` }]
               }
             ]
           }

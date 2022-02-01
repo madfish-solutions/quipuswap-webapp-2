@@ -1,14 +1,20 @@
 import React, { useContext } from 'react';
 
-import { FoundDex, TransferParams, withdrawReward } from '@quipuswap/sdk';
 import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { Button } from '@components/ui/elements/button';
+import {
+  useRewards,
+  useTokensPair,
+  useVoter,
+  useVotingDex,
+  useVotingLoading
+} from '@containers/voiting/helpers/voting.provider';
+import { useClaimRewards } from '@containers/voiting/hooks';
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable } from '@utils/types';
+import { isNull } from '@utils/helpers';
 
 import { VotingStatsItem, RewardItem } from '../../components';
 import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
@@ -21,39 +27,34 @@ const modeClass = {
 
 interface VotingStatsProps {
   className?: string;
-  pendingReward: Nullable<string>;
-  balanceAmount: Nullable<string>;
-  voteAmount: Nullable<BigNumber>;
-  vetoAmount: Nullable<BigNumber>;
-  dex: Nullable<FoundDex>;
-  onClaimReward: (params: TransferParams[]) => void;
 }
 
-export const VotingStats: React.FC<VotingStatsProps> = ({
-  className,
-  pendingReward,
-  balanceAmount,
-  voteAmount,
-  vetoAmount,
-  dex,
-  onClaimReward
-}) => {
+export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
   const { t } = useTranslation(['vote']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+  const { rewards } = useRewards();
+  const { vote, veto } = useVoter();
+  const { dex } = useVotingDex();
+  const { tokenPair } = useTokensPair();
+  const { isVotingLoading } = useVotingLoading();
 
-  const handleWithdrawReward = async () => {
-    if (!tezos || !dex || !accountPkh) {
-      return;
-    }
-    const params = await withdrawReward(tezos, dex, accountPkh);
-    onClaimReward(params);
-  };
+  const balanceAmount = !isVotingLoading && accountPkh && tokenPair.balance ? tokenPair.balance : null;
+
+  const voteAmount = isVotingLoading || isNull(vote) ? null : vote.toFixed();
+  const vetoAmount = isVotingLoading || isNull(veto) ? null : veto.toFixed();
+
+  const rewardAmount = isVotingLoading ? null : rewards;
+
+  const isButtonDisabled = isVotingLoading || !tezos || !accountPkh || !dex || !isRewardGreaterThenZero(rewards);
+
+  const handleWithdrawReward = useClaimRewards();
+  const handleClick = async () => handleWithdrawReward(dex);
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <RewardItem description={t('vote|Your Pending Rewards')} amount={pendingReward} currency="TEZ" />
+      <RewardItem description={t('vote|Your Pending Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>
         <div className={s.votingsStatsItemContainer}>
@@ -64,13 +65,13 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           />
 
           <VotingStatsItem
-            value={voteAmount?.toFixed() ?? null}
+            value={voteAmount}
             itemName={t('vote|Your votes')}
             tooltip={t('vote|The amount of votes cast. You have to lock your LP tokens to cast a vote for a baker.')}
           />
 
           <VotingStatsItem
-            value={vetoAmount?.toFixed() ?? null}
+            value={vetoAmount}
             itemName={t('vote|Your vetos')}
             tooltip={t(
               'vote|The amount of shares cast to veto a baker. You have to lock your LP tokens to veto a baker.'
@@ -78,11 +79,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({
           />
         </div>
 
-        <Button
-          disabled={!tezos || !accountPkh || !dex || !isRewardGreaterThenZero(pendingReward)}
-          onClick={handleWithdrawReward}
-          className={s.button}
-        >
+        <Button disabled={isButtonDisabled} onClick={handleClick} className={s.button}>
           {t('vote|Claim Reward')}
         </Button>
       </div>

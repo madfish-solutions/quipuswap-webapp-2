@@ -3,6 +3,8 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { isUndefined } from '@utils/helpers';
+
 import { ButtonContent } from './button-content';
 import s from './button.module.sass';
 
@@ -11,6 +13,7 @@ export type ButtonProps = {
   type?: 'button' | 'submit' | 'reset' | undefined;
   theme?: keyof typeof themeClass;
   external?: boolean;
+  themeOposite?: boolean;
   className?: string;
   innerClassName?: string;
   textClassName?: string;
@@ -44,6 +47,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   icon,
   control,
+  themeOposite,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -58,7 +62,7 @@ export const Button: React.FC<ButtonProps> = ({
     </ButtonContent>
   );
 
-  if ('href' in props) {
+  if ('href' in props && !isUndefined(props.href)) {
     const anchorProps = {
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,

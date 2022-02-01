@@ -9,7 +9,11 @@ import { useDexContract } from '../hooks';
 import { findToken, getLiquidityUrl, parseUrl } from './helpers';
 import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
-export const useLiquidityFormService = () => {
+export const useLiquidityFormService = ({
+  onTokensChange
+}: {
+  onTokensChange: (token1: Nullable<WhitelistedToken>, token2: Nullable<WhitelistedToken>) => void;
+}) => {
   const router = useRouter();
   const { data: tokens, loading } = useTokens();
 
@@ -18,6 +22,10 @@ export const useLiquidityFormService = () => {
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
+
+  const handleUpdateTitle = (token1: Nullable<WhitelistedToken>, token2: Nullable<WhitelistedToken>) => {
+    onTokensChange(token1, token2);
+  };
 
   const { dex, clearDex } = useDexContract(tokenA, tokenB);
 
@@ -38,12 +46,13 @@ export const useLiquidityFormService = () => {
     if (validTokenB) {
       setTokenB(validTokenB);
     }
+    handleUpdateTitle(validTokenA, validTokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
   const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
-    await router.replace(liqUrl, undefined, { shallow: true });
+    await router.replace(liqUrl, undefined, { shallow: true, scroll: false });
   };
 
   const handleChangeTab = (tabId: LiquidityTabs) => {
@@ -59,6 +68,7 @@ export const useLiquidityFormService = () => {
   const handleChangeTokenA = (token: WhitelistedToken) => {
     setTokenA(token);
     clearDex();
+    handleUpdateTitle(token, tokenB);
 
     if (tokenB) {
       void changeRoute(tab.id, token, tokenB);
@@ -67,6 +77,7 @@ export const useLiquidityFormService = () => {
   const handleChangeTokenB = (token: WhitelistedToken) => {
     setTokenB(token);
     clearDex();
+    handleUpdateTitle(tokenA, token);
 
     if (tokenA) {
       void changeRoute(tab.id, tokenA, token);
@@ -77,6 +88,7 @@ export const useLiquidityFormService = () => {
     setTokenA(token1);
     setTokenB(token2);
     clearDex();
+    handleUpdateTitle(token1, token2);
     void changeRoute(tab.id, token1, token2);
   };
 

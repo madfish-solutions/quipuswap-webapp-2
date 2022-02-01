@@ -9,17 +9,14 @@ import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
-import { isTezIncluded } from '@containers/liquidity/liquidity-cards/helpers';
 import CC from '@styles/CommonContainer.module.sass';
-import { isExist } from '@utils/helpers';
+import { isTezIncluded, isExist } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
 import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
-
-const DEFAULT_BALANCE = '0';
 
 export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
   const { t } = useTranslation(['liquidity']);
@@ -60,11 +57,14 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
 
   const isDeadlineAndSkippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
+  const fixedBalanceA = tokenABalance?.toFixed() ?? null;
+  const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
+
   return (
     <>
       <TokenSelect
         label="Input"
-        balance={tokenABalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={fixedBalanceA}
         token={tokenA}
         setToken={handleSetTokenA}
         value={tokenAInput}
@@ -79,7 +79,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       <Plus className={s.iconButton} />
       <TokenSelect
         label="Input"
-        balance={tokenBBalance?.toFixed() ?? DEFAULT_BALANCE}
+        balance={fixedBalanceB}
         token={tokenB}
         setToken={handleSetTokenB}
         value={tokenBInput}
@@ -94,9 +94,6 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
       {isDeadlineAndSkippageVisible && (
         <>
           <div className={s['mt-24']}>
-            <LiquidityDeadline error={validationMessageDeadline} />
-          </div>
-          <div className={s['mt-24']}>
             <LiquiditySlippage
               liquidityType={LiquiditySlippageType.ADD}
               tokenA={tokenA}
@@ -105,6 +102,9 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
               tokenBInput={tokenBInput}
               error={validationMessageSlippage}
             />
+          </div>
+          <div className={s['mt-24']}>
+            <LiquidityDeadline error={validationMessageDeadline} />
           </div>
         </>
       )}

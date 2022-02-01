@@ -84,6 +84,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       <div className={s.amountWrapper}>
         <span className={s.receiveLabel}>Max {investedOrReceivedText} A:</span>
         <StateCurrencyAmount
+          balanceRule
           amount={maxInvestedOrReceivedA}
           amountDecimals={tokenA?.metadata.decimals}
           currency={getWhitelistedTokenSymbol(tokenA ?? TEZOS_TOKEN)}
@@ -92,6 +93,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
       <div className={s.amountWrapper}>
         <span className={s.receiveLabel}>Max {investedOrReceivedText} B:</span>
         <StateCurrencyAmount
+          balanceRule
           amount={maxInvestedOrReceivedB}
           amountDecimals={tokenB?.metadata.decimals}
           currency={getWhitelistedTokenSymbol(tokenB ?? DEFAULT_STABLE_TOKEN)}

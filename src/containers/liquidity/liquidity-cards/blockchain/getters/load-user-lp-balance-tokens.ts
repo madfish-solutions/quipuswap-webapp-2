@@ -4,10 +4,10 @@ import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
 import { getUserBalance } from '@utils/dapp';
-import { fromDecimals } from '@utils/helpers';
+import { fromDecimals, isTezIncluded } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
-import { findNotTezToken, getValidMichelTemplate, isTezIncluded, sortTokensContracts } from '../../helpers';
+import { findNotTezToken, getValidMichelTemplate, sortTokensContracts } from '../../helpers';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const MichelCodec = require('@taquito/michel-codec');
@@ -26,7 +26,7 @@ const loadUserLpBalanceTokens = async (
 
   const michelData = getValidMichelTemplate(addresses);
   const key = Buffer.from(MichelCodec.packData(michelData)).toString('hex');
-  const pairId = await dex.storage.storage.token_to_id.get(key);
+  const pairId = await dex.storage.storage.token_to_id?.get(key);
   if (!pairId) {
     return null;
   }

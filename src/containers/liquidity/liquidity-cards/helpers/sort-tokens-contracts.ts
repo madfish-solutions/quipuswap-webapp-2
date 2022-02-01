@@ -1,77 +1,55 @@
-/* eslint-disable sonarjs/no-duplicate-string */
 import { Standard } from '@graphql';
-import { SortTokensContractsType, WhitelistedToken } from '@utils/types';
+import { isExist } from '@utils/helpers';
+import { SortTokensContractsType, SortType, TokenId, TokenIdFa2 } from '@utils/types';
 
-export const sortTokensContracts = (
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
-  // eslint-disable-next-line sonarjs/cognitive-complexity
-): SortTokensContractsType => {
-  if (tokenA.type < tokenB.type) {
-    return {
-      addressA: tokenA.contractAddress,
-      addressB: tokenB.contractAddress,
-      type: 'Left-Right'
-    };
-  }
+const isTokenTypeFa2 = (token: TokenId): token is TokenIdFa2 =>
+  token.type.toUpperCase() === Standard.Fa2 || ('fa2TokenId' in token && isExist(token.fa2TokenId));
+const isTokenTypeFa12 = (token: TokenId) => !isTokenTypeFa2(token);
 
-  if (tokenB.type < tokenA.type) {
-    return {
-      addressA: tokenB.contractAddress,
-      addressB: tokenA.contractAddress,
-      type: 'Left-Right'
-    };
-  }
+const getSort = (tokenA: TokenId, tokenB: TokenId, type: SortType): SortTokensContractsType => ({
+  addressA: tokenA.contractAddress,
+  idA: isTokenTypeFa2(tokenA) ? tokenA.fa2TokenId : null,
+  addressB: tokenB.contractAddress,
+  idB: isTokenTypeFa2(tokenB) ? tokenB.fa2TokenId : null,
+  type
+});
 
-  if (tokenA.type === Standard.Fa12 && tokenA.type === tokenB.type) {
+const getRevertSort = (tokenA: TokenId, tokenB: TokenId, type: SortType): SortTokensContractsType => ({
+  ...getSort(tokenA, tokenB, type),
+  isRevert: true
+});
+
+export const sortTokensContracts = (tokenA: TokenId, tokenB: TokenId): SortTokensContractsType => {
+  if (isTokenTypeFa12(tokenA)) {
+    if (isTokenTypeFa2(tokenB)) {
+      return getSort(tokenA, tokenB, SortType.LeftRight);
+    }
+
+    // isTokenTypeFa12(tokenA) && isTokenTypeFa12(tokenB)
     if (tokenA.contractAddress < tokenB.contractAddress) {
-      return {
-        addressA: tokenA.contractAddress,
-        addressB: tokenB.contractAddress,
-        type: 'Left-Left'
-      };
+      return getSort(tokenA, tokenB, SortType.LeftLeft);
     }
 
-    return {
-      addressA: tokenB.contractAddress,
-      addressB: tokenA.contractAddress,
-      type: 'Left-Left'
-    };
+    return getRevertSort(tokenB, tokenA, SortType.LeftLeft);
   }
 
-  if (tokenA.type === Standard.Fa2 && tokenA.type === tokenB.type) {
-    if (tokenA.contractAddress < tokenB.contractAddress) {
-      return {
-        addressA: tokenA.contractAddress,
-        addressB: tokenB.contractAddress,
-        type: 'Right-Right'
-      };
-    }
-
-    if (tokenA.contractAddress > tokenB.contractAddress) {
-      return {
-        addressA: tokenB.contractAddress,
-        addressB: tokenA.contractAddress,
-        type: 'Right-Right'
-      };
-    }
-
-    if (tokenA.contractAddress === tokenB.contractAddress) {
-      if (tokenA.fa2TokenId && tokenB.fa2TokenId && tokenA.fa2TokenId < tokenB.fa2TokenId) {
-        return {
-          addressA: tokenA.contractAddress,
-          addressB: tokenB.contractAddress,
-          type: 'Right-Right'
-        };
-      }
-
-      return {
-        addressA: tokenB.contractAddress,
-        addressB: tokenA.contractAddress,
-        type: 'Right-Right'
-      };
-    }
+  // isTokenTypeFa2(tokenA)
+  if (isTokenTypeFa12(tokenB)) {
+    return getRevertSort(tokenB, tokenA, SortType.LeftRight);
   }
 
-  throw new Error('Impossible to sort tokens');
+  if (tokenA.contractAddress < tokenB.contractAddress) {
+    return getSort(tokenA, tokenB, SortType.RightRight);
+  }
+
+  if (tokenA.contractAddress > tokenB.contractAddress) {
+    return getRevertSort(tokenB, tokenA, SortType.RightRight);
+  }
+
+  // tokenA.contractAddress === tokenB.contractAddress
+  if (tokenA.fa2TokenId! < tokenB.fa2TokenId!) {
+    return getSort(tokenA, tokenB, SortType.RightRight);
+  }
+
+  return getRevertSort(tokenB, tokenA, SortType.RightRight);
 };

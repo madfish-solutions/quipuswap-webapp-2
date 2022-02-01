@@ -19,7 +19,7 @@ export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => 
 
   return (
     <StateCurrencyAmount
-      isLoading={isNull(priceImpact)}
+      isError={isNull(priceImpact)}
       amount={priceImpact}
       aliternativeView={aliternativeView}
       amountDecimals={PRICE_IMPACT_DECIMALS}

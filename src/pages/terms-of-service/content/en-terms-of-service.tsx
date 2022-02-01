@@ -270,7 +270,7 @@ export const EnTermsOfService: React.FC = () => (
     <p className={s.big}>
       We will use our best efforts to resolve any potential disputes through informal, good-faith negotiations. If a
       potential dispute arises, you must contact us by sending an email to{' '}
-      <Button theme="inverse" href="info@madfish.solutions" external>
+      <Button theme="inverse" href="mailto:info@madfish.solutions" external>
         info@madfish.solutions
       </Button>{' '}
       so that we can attempt to resolve it without resorting to formal dispute resolution. If we aren’t able to reach an
@@ -295,7 +295,7 @@ export const EnTermsOfService: React.FC = () => (
     <br />
     <p className={s.big}>
       If you have any questions, claims, complaints, or suggestions, please, contact us at{' '}
-      <Button theme="inverse" href="info@madfish.solutions" external>
+      <Button theme="inverse" href="mailto:info@madfish.solutions" external>
         info@madfish.solutions
       </Button>
     </p>

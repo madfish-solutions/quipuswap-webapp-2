@@ -13,14 +13,14 @@ import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
-import { DexPair, Nullable, WhitelistedToken } from '@utils/types';
+import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
 
 interface SwapDetailsProps {
-  currentTab: string;
   fee: Nullable<BigNumber>;
+  feeError: Undefined<Error>;
   priceImpact: Nullable<BigNumber>;
   inputToken?: WhitelistedToken;
   outputToken?: WhitelistedToken;
@@ -30,8 +30,8 @@ interface SwapDetailsProps {
 }
 
 export const SwapDetails: FC<SwapDetailsProps> = ({
-  currentTab,
   fee,
+  feeError,
   priceImpact,
   inputToken,
   outputToken,
@@ -50,7 +50,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
   return (
     <Card
       header={{
-        content: `${currentTab} Details`
+        content: `Exchange Details`
       }}
       contentClassName={s.content}
     >
@@ -87,7 +87,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         tooltipContent={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
         className={s.cell}
       >
-        <StateCurrencyAmount amount={fee} currency="XTZ" />
+        <StateCurrencyAmount balanceRule isError={Boolean(feeError)} amount={fee} currency="TEZ" />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -97,7 +97,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         )}
         className={cx(s.cell, s.routeLine)}
       >
-        {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug />}
+        {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug animation={false} />}
       </DetailsCardCell>
 
       <ViewPairAnlitics

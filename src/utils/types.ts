@@ -4,7 +4,8 @@ import BigNumber from 'bignumber.js';
 import { Standard } from '@graphql';
 
 export type Undefined<T> = T | undefined;
-export type Nullable<T> = T | null; // MayBe<T>
+export type Nullable<T> = T | null;
+export type Optional<T> = T | null | undefined;
 
 export enum QSNets {
   mainnet = 'mainnet',
@@ -36,8 +37,8 @@ export enum WalletType {
 }
 
 export interface WhitelistedTokenPair {
-  balance?: string;
-  frozenBalance?: string;
+  balance?: Nullable<string>;
+  frozenBalance?: Nullable<string>;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   dex?: FoundDex;
@@ -56,6 +57,7 @@ export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
 }
 
 export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
   address: string;
@@ -103,8 +105,8 @@ interface TokenXtzDexPairProps extends CommonDexPairProps {
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
 export interface VoterType {
-  vote: BigNumber;
-  veto: BigNumber;
+  vote: Nullable<BigNumber>;
+  veto: Nullable<BigNumber>;
   candidate: Nullable<string>;
 }
 
@@ -115,7 +117,7 @@ export interface TokenDataType {
     id?: number | null;
     decimals: number;
   };
-  balance: string;
+  balance: Nullable<string>;
   exchangeRate?: string;
 }
 
@@ -167,10 +169,19 @@ export interface PoolTableType {
   };
 }
 
+export enum SortType {
+  LeftLeft = 'Left-Left',
+  RightRight = 'Right-Right',
+  LeftRight = 'Left-Right'
+}
+
 export interface SortTokensContractsType {
   addressA: string;
   addressB: string;
-  type: 'Left-Left' | 'Right-Right' | 'Left-Right';
+  idA: Nullable<number>;
+  idB: Nullable<number>;
+  isRevert?: boolean;
+  type: SortType;
 }
 
 export enum LastUsedConnectionKey {

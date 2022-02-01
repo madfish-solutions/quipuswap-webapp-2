@@ -4,10 +4,8 @@
 .root
   display: none
 
-.madfish
-  margin: 24px 0 0 16px
-  display: flex
-  //padding: 0
+.footerItem
+  margin-bottom: 16px
 
 @include media('>SDesktop')
   .root
@@ -51,12 +49,12 @@
   .navigation
     margin-bottom: auto
   .footer
-    margin-top: 32px
-  .token
-    padding: 16px
-  .socials
+    margin: 32px 8px 4px 16px
     display: flex
-    justify-content: center
+    flex-direction: column
+    align-items: center
+    height: 180px
+    justify-content: space-between
   .light
     border-right: 1px solid $ui-03
     background-color: $ui-02

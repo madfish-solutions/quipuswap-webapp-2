@@ -7,12 +7,12 @@ import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { UseToasts } from '@hooks/use-toasts';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { toDecimals } from '@utils/helpers';
-import { Nullable, VoteFormValues } from '@utils/types';
+import { VoteFormValues } from '@utils/types';
 
 interface SubmitProps {
   tezos: TezosToolkit;
   values: VoteFormValues;
-  dex: Nullable<FoundDex>;
+  dex: FoundDex;
   tab: VotingTabs;
   confirmOperation: ReturnType<typeof useConfirmOperation>;
 }
@@ -126,10 +126,6 @@ export const unvoteOrRemoveVeto = async (
 };
 
 export const submitForm = async ({ tezos, values, dex, tab, confirmOperation }: SubmitProps) => {
-  if (!dex) {
-    return;
-  }
-
   const { params, text: updateToastText } = await getBatchParamsAndToastText(tab, tezos, dex, values);
 
   const op = await batchify(tezos.wallet.batch([]), params).send();
