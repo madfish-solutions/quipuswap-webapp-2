@@ -17,7 +17,8 @@ export const useLiquidityFormService = ({
   const router = useRouter();
   const { data: tokens, loading } = useTokens();
 
-  const { tabId } = parseUrl(router.asPath);
+  const url = router.asPath;
+  const { tabId } = parseUrl(url);
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
@@ -35,7 +36,7 @@ export const useLiquidityFormService = ({
       return;
     }
 
-    const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(router.asPath);
+    const { contractTokenA, idTokenA, contractTokenB, idTokenB } = parseUrl(url);
 
     const validTokenA = findToken(contractTokenA, idTokenA, tokens);
     if (validTokenA) {
@@ -48,7 +49,7 @@ export const useLiquidityFormService = ({
     }
     handleUpdateTitle(validTokenA, validTokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loading]);
+  }, [loading, url, tokens]);
 
   const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
