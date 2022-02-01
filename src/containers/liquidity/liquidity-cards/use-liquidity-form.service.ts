@@ -12,9 +12,11 @@ import { getTabById, LiquidityTabs } from './liquidity-tabs';
 const handleSearchPromise = async (
   searchPromise: Promise<WhitelistedToken | null>,
   setToken: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
-  tokenDirtyRef: MutableRefObject<boolean>
+  tokenDirtyRef: MutableRefObject<boolean>,
+  setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
   try {
+    setLoading(true);
     const token = await searchPromise;
     if (token && !tokenDirtyRef.current) {
       setToken(token);
@@ -22,6 +24,8 @@ const handleSearchPromise = async (
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('Error while getting token metadata', e);
+  } finally {
+    setLoading(false);
   }
 };
 
@@ -40,6 +44,8 @@ export const useLiquidityFormService = ({
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
   const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
   const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
+  const [tokenALoading, setTokenALoading] = useState(false);
+  const [tokenBLoading, setTokenBLoading] = useState(false);
   const tokenADirtyRef = useRef(false);
   const tokenBDirtyRef = useRef(false);
 
@@ -61,14 +67,24 @@ export const useLiquidityFormService = ({
     if (validTokenA) {
       setTokenA(validTokenA);
     } else {
-      handleSearchPromise(searchCustomTokens(contractTokenA, Number(idTokenA), true), setTokenA, tokenADirtyRef);
+      handleSearchPromise(
+        searchCustomTokens(contractTokenA, Number(idTokenA), true),
+        setTokenA,
+        tokenADirtyRef,
+        setTokenALoading
+      );
     }
 
     const validTokenB = findToken(contractTokenB, idTokenB, tokens);
     if (validTokenB) {
       setTokenB(validTokenB);
     } else {
-      handleSearchPromise(searchCustomTokens(contractTokenB, Number(idTokenB), true), setTokenB, tokenBDirtyRef);
+      handleSearchPromise(
+        searchCustomTokens(contractTokenB, Number(idTokenB), true),
+        setTokenB,
+        tokenBDirtyRef,
+        setTokenBLoading
+      );
     }
     handleUpdateTitle(validTokenA, validTokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -126,6 +142,8 @@ export const useLiquidityFormService = ({
     dex,
     tokenA,
     tokenB,
+    tokenALoading,
+    tokenBLoading,
     handleChangeTokenA,
     handleChangeTokenB,
     handleChangeTokensPair
