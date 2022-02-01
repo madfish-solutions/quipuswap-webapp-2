@@ -10,7 +10,7 @@ import { findToken, getLiquidityUrl, parseUrl } from './helpers';
 import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
 const handleSearchPromise = async (
-  searchPromise: Promise<WhitelistedToken | null>,
+  searchPromise: Promise<Nullable<WhitelistedToken>>,
   setToken: Dispatch<SetStateAction<Nullable<WhitelistedToken>>>,
   tokenDirtyRef: MutableRefObject<boolean>,
   setLoading: Dispatch<SetStateAction<boolean>>
