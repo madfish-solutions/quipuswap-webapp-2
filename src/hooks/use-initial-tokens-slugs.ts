@@ -28,14 +28,15 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
   const addCustomToken = useAddCustomToken();
 
   const getInitialTokens = useCallback(
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     async (_key: string, tokensSlug = ''): Promise<TokensSlugs> => {
-      const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-').slice(0, 2);
+      const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-');
       const tezos = fallbackToolkits[NETWORK_ID];
 
-      return Promise.all(
+      const [tokenSlug1, tokenSlug2] = await Promise.all(
         [rawSlug1, rawSlug2].map(async (rawSlug, index) => {
           if (isValidTokenSlug(rawSlug) !== true) {
-            return FALLBACK_TOKENS_SLUGS[index];
+            return undefined;
           }
           if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
             return rawSlug.toLowerCase();
@@ -57,13 +58,22 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
             if (tokenType === Standard.Fa2 && (await fa2TokenExists(tezos, contractAddress, fa2TokenId))) {
               return getTokenSlug({ type: tokenType, fa2TokenId, contractAddress });
             }
-
-            return FALLBACK_TOKENS_SLUGS[index];
-          } catch (e) {
-            return FALLBACK_TOKENS_SLUGS[index];
+          } catch {
+            // return statement is below
           }
+
+          return undefined;
         })
-      ) as Promise<[string, string]>;
+      );
+
+      if (tokenSlug1 === tokenSlug2) {
+        return FALLBACK_TOKENS_SLUGS;
+      }
+
+      return [
+        tokenSlug1 ?? (tokenSlug2 === FALLBACK_TOKENS_SLUGS[0] ? FALLBACK_TOKENS_SLUGS[1] : FALLBACK_TOKENS_SLUGS[0]),
+        tokenSlug2 ?? (tokenSlug1 === FALLBACK_TOKENS_SLUGS[1] ? FALLBACK_TOKENS_SLUGS[0] : FALLBACK_TOKENS_SLUGS[1])
+      ];
     },
     [tokens]
   );
