@@ -92,12 +92,12 @@ interface CommonDexPairProps {
   type: 'ttdex' | 'tokenxtz';
 }
 
-interface TTDexPairProps extends CommonDexPairProps {
+export interface TTDexPairProps extends CommonDexPairProps {
   id: number;
   type: 'ttdex';
 }
 
-interface TokenXtzDexPairProps extends CommonDexPairProps {
+export interface TokenXtzDexPairProps extends CommonDexPairProps {
   id: string;
   type: 'tokenxtz';
 }
