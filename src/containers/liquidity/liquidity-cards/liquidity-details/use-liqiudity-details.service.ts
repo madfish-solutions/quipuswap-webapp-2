@@ -2,8 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { fromDecimals, getTokenSymbol } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 import { calculatePoolAmount } from '../helpers';
 import { usePairInfo } from '../hooks';
@@ -13,8 +13,8 @@ const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
 
 export const useLiquidityDetailsService = (
   dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>
 ) => {
   const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
 
@@ -26,8 +26,8 @@ export const useLiquidityDetailsService = (
   const fixedTokenAPoll = tokenA && tokenAPool && fromDecimals(tokenAPool, tokenA);
   const fixedTokenBPoll = tokenB && tokenBPool && fromDecimals(tokenBPool, tokenB);
 
-  const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
-  const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
+  const tokenAName = tokenA ? getTokenSymbol(tokenA) : null;
+  const tokenBName = tokenB ? getTokenSymbol(tokenB) : null;
 
   const sellPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
   const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);

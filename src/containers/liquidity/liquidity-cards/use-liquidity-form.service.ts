@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useTokens } from '@utils/dapp';
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { useDexContract } from '../hooks';
 import { findToken, getLiquidityUrl, parseUrl } from './helpers';
@@ -12,7 +12,7 @@ import { getTabById, LiquidityTabs } from './liquidity-tabs';
 export const useLiquidityFormService = ({
   onTokensChange
 }: {
-  onTokensChange: (token1: Nullable<WhitelistedToken>, token2: Nullable<WhitelistedToken>) => void;
+  onTokensChange: (token1: Nullable<Token>, token2: Nullable<Token>) => void;
 }) => {
   const router = useRouter();
   const { data: tokens, loading } = useTokens();
@@ -20,10 +20,10 @@ export const useLiquidityFormService = ({
   const { tabId } = parseUrl(router.asPath);
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
-  const [tokenA, setTokenA] = useState<Nullable<WhitelistedToken>>(null);
-  const [tokenB, setTokenB] = useState<Nullable<WhitelistedToken>>(null);
+  const [tokenA, setTokenA] = useState<Nullable<Token>>(null);
+  const [tokenB, setTokenB] = useState<Nullable<Token>>(null);
 
-  const handleUpdateTitle = (token1: Nullable<WhitelistedToken>, token2: Nullable<WhitelistedToken>) => {
+  const handleUpdateTitle = (token1: Nullable<Token>, token2: Nullable<Token>) => {
     onTokensChange(token1, token2);
   };
 
@@ -50,7 +50,7 @@ export const useLiquidityFormService = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading]);
 
-  const changeRoute = async (tabId: LiquidityTabs, _tokenA: WhitelistedToken, _tokenB: WhitelistedToken) => {
+  const changeRoute = async (tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
     await router.replace(liqUrl, undefined, { shallow: true, scroll: false });
   };
@@ -65,7 +65,7 @@ export const useLiquidityFormService = ({
     }
   };
 
-  const handleChangeTokenA = (token: WhitelistedToken) => {
+  const handleChangeTokenA = (token: Token) => {
     setTokenA(token);
     clearDex();
     handleUpdateTitle(token, tokenB);
@@ -74,7 +74,7 @@ export const useLiquidityFormService = ({
       void changeRoute(tab.id, token, tokenB);
     }
   };
-  const handleChangeTokenB = (token: WhitelistedToken) => {
+  const handleChangeTokenB = (token: Token) => {
     setTokenB(token);
     clearDex();
     handleUpdateTitle(tokenA, token);
@@ -84,7 +84,7 @@ export const useLiquidityFormService = ({
     }
   };
 
-  const handleChangeTokensPair = ({ token1, token2 }: WhitelistedTokenPair) => {
+  const handleChangeTokensPair = ({ token1, token2 }: TokenPair) => {
     setTokenA(token1);
     setTokenB(token2);
     clearDex();

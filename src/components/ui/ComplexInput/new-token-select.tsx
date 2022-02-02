@@ -10,8 +10,8 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { amountsAreEqual, getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { Undefined, WhitelistedToken } from '@utils/types';
+import { amountsAreEqual, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { Undefined, Token } from '@utils/types';
 
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
@@ -26,12 +26,12 @@ interface NewTokenSelectProps {
   label: string;
   error?: string;
   selectable?: boolean;
-  token?: WhitelistedToken;
-  blackListedTokens: WhitelistedToken[];
+  token?: Token;
+  blackListedTokens: Token[];
   id?: string;
   placeholder?: string;
   onAmountChange: (value: Undefined<BigNumber>) => void;
-  onTokenChange: (token: WhitelistedToken) => void;
+  onTokenChange: (token: Token) => void;
 }
 
 const themeClass = {
@@ -106,7 +106,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
 
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
-  const handleTokenChange = (selectedToken: WhitelistedToken) => {
+  const handleTokenChange = (selectedToken: Token) => {
     setTokensModal(false);
     const val = localAmount.replace(/ /g, '').replace(/,/g, '.');
     const numVal = new BigNumber(val || 0);
@@ -163,9 +163,9 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                     ? prepareTokenLogo(token.metadata?.thumbnailUri)
                     : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
                 }
-                firstTokenSymbol={token ? getWhitelistedTokenSymbol(token) : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+                firstTokenSymbol={token ? getTokenSymbol(token) : getTokenSymbol(TEZOS_TOKEN)}
               />
-              <h6 className={cx(s.token)}>{token ? getWhitelistedTokenSymbol(token) : 'SELECT'}</h6>
+              <h6 className={cx(s.token)}>{token ? getTokenSymbol(token) : 'SELECT'}</h6>
               {selectable && <Shevron />}
             </Button>
           </div>

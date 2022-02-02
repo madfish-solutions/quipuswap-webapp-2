@@ -6,15 +6,15 @@ import useSWR from 'swr';
 import { NETWORK, NETWORK_ID } from '@app.config';
 import { Standard } from '@graphql';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenWithQSNetworkType } from '@utils/types';
+import { Token, TokenWithQSNetworkType } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getTokens, getFallbackTokens, getContract, getTokenMetadata, saveCustomToken } from '.';
 import { useTezos } from './dapp';
 
 export interface DAppTokens {
-  tokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
-  searchTokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
+  tokens: { data: Token[]; loading: boolean; error?: string };
+  searchTokens: { data: Token[]; loading: boolean; error?: string };
 }
 
 const useDappTokens = () => {
@@ -41,7 +41,7 @@ const useDappTokens = () => {
   }, [tokensData, tokensError]);
 
   const searchCustomToken = useCallback(
-    async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<WhitelistedToken | null> => {
+    async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<Token | null> => {
       if (isValidContractAddress(address)) {
         setState(prevState => ({
           ...prevState,
@@ -71,9 +71,10 @@ const useDappTokens = () => {
 
           return null;
         }
-        const token: WhitelistedTokenWithQSNetworkType = {
+        const token: TokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
+          isWhitelisted: false,
           type: isFa2 ? Standard.Fa2 : Standard.Fa12,
           fa2TokenId: isFa2 ? tokenId || 0 : undefined,
           network: NETWORK_ID
@@ -95,7 +96,7 @@ const useDappTokens = () => {
   );
 
   const addCustomToken = useCallback(
-    (token: WhitelistedTokenWithQSNetworkType) => {
+    (token: TokenWithQSNetworkType) => {
       saveCustomToken(token);
       setState(prevState => ({
         ...prevState,

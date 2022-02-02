@@ -20,8 +20,8 @@ import { PositionsModal } from '@components/modals/PositionsModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
@@ -37,12 +37,12 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   notFrozen?: boolean;
   label: string;
   error?: string;
-  notSelectable1?: WhitelistedToken;
-  notSelectable2?: WhitelistedToken;
-  handleChange?: (tokenPair: WhitelistedTokenPair) => void;
+  notSelectable1?: Token;
+  notSelectable2?: Token;
+  handleChange?: (tokenPair: TokenPair) => void;
   handleBalance: (value: string) => void;
-  tokenPair: Nullable<WhitelistedTokenPair>;
-  setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
+  tokenPair: Nullable<TokenPair>;
+  setTokenPair: (tokenPair: TokenPair) => void;
   tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
@@ -155,16 +155,16 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             >
               <TokensLogos
                 firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+                firstTokenSymbol={getTokenSymbol(token1)}
                 secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+                secondTokenSymbol={getTokenSymbol(token2)}
                 loading={isTokensLoading}
               />
               <h6 className={cx(s.token, s.tokensSelect)}>
                 {tokenPair ? (
                   <Fragment>
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token2, 5)}
+                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
+                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
                   </Fragment>
                 ) : (
                   'Select LP'

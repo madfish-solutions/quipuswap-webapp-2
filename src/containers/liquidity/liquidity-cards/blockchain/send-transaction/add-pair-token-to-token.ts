@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 import { getValidPairParams } from '../../helpers/get-valid-pair-params';
@@ -13,8 +13,8 @@ export const addPairTokenToToken = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   accountPkh: string,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenA: Token,
+  tokenB: Token,
   tokenAInput: string,
   tokenBInput: string
 ) => {

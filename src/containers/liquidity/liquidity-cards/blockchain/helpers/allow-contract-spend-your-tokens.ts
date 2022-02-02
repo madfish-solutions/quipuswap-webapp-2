@@ -2,11 +2,11 @@ import { ContractMethod, TezosToolkit, Wallet } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 export const allowContractSpendYourTokens = async (
   tezos: TezosToolkit,
-  token: WhitelistedToken,
+  token: Token,
   spender: string,
   amount: BigNumber.Value,
   owner: string

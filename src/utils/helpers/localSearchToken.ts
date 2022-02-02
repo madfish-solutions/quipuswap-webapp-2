@@ -1,11 +1,11 @@
-import { QSNetwork, WhitelistedToken } from '@utils/types';
+import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@utils/types';
 
-export interface WhitelistedOrCustomToken extends WhitelistedToken {
-  network: string;
+export interface TokenWithRequiredNetwork extends TokenWithQSNetworkType {
+  network: QSNets;
 }
 
 export const localSearchToken = (
-  { metadata, contractAddress, fa2TokenId, network: tokenNetwork }: WhitelistedOrCustomToken,
+  { metadata, contractAddress, fa2TokenId, network: tokenNetwork }: TokenWithRequiredNetwork,
   network: QSNetwork,
   oldInput: string,
   oldInputToken: number

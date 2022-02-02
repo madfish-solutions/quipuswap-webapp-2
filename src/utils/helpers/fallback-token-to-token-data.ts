@@ -1,6 +1,6 @@
-import { TokenDataType, WhitelistedToken } from '@utils/types';
+import { TokenDataType, Token } from '@utils/types';
 
-export const fallbackTokenToTokenData = (token: WhitelistedToken): TokenDataType => ({
+export const fallbackTokenToTokenData = (token: Token): TokenDataType => ({
   token: {
     address: token.contractAddress,
     type: token.type,

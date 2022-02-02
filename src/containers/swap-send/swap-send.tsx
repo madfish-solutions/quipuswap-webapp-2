@@ -24,11 +24,11 @@ import {
   getTokensOptionalPairName,
   getTokenSlug,
   isEmptyArray,
-  makeWhitelistedToken,
+  makeToken,
   getTokenPairSlug
 } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Undefined, Token, TokenMetadata } from '@utils/types';
 
 import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details/swap-details';
@@ -45,8 +45,8 @@ interface SwapSendProps {
 
 const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
 
-function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken) {
-  const propsToCompare: (keyof WhitelistedTokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
+function tokensMetadataIsSame(token1: Token, token2: Token) {
+  const propsToCompare: (keyof TokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
 
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
@@ -119,7 +119,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   });
 
   const onTokensSelected = useCallback(
-    (inputToken: WhitelistedToken, outputToken: WhitelistedToken) => {
+    (inputToken: Token, outputToken: Token) => {
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
       if (router.asPath !== newRoute) {
@@ -181,13 +181,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     if ((initialFrom || initialTo) && (prevInitialFrom !== initialFrom || prevInitialTo !== initialTo)) {
       const valuesToChange: Partial<SwapFormValues> = {};
       if (initialFrom) {
-        const newInputToken = makeWhitelistedToken(getTokenIdFromSlug(initialFrom), tokens);
+        const newInputToken = makeToken(getTokenIdFromSlug(initialFrom), tokens);
         valuesToChange[SwapField.INPUT_TOKEN] = newInputToken;
         // eslint-disable-next-line no-console
         updateBalance(newInputToken).catch(console.error);
       }
       if (initialTo) {
-        const newOutputToken = makeWhitelistedToken(getTokenIdFromSlug(initialTo), tokens);
+        const newOutputToken = makeToken(getTokenIdFromSlug(initialTo), tokens);
         valuesToChange[SwapField.OUTPUT_TOKEN] = newOutputToken;
         // eslint-disable-next-line no-console
         updateBalance(newOutputToken).catch(console.error);
@@ -259,7 +259,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   );
 
   const blackListedTokens = useMemo(
-    () => [inputToken, outputToken].filter((x): x is WhitelistedToken => !!x),
+    () => [inputToken, outputToken].filter((x): x is Token => !!x),
     [inputToken, outputToken]
   );
 
@@ -279,7 +279,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   const handleSomeTokenChange = (
     fieldName: SwapTokensFieldName,
     amountFieldName: SwapAmountFieldName,
-    newToken?: WhitelistedToken
+    newToken?: Token
   ) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(fieldName, true);
@@ -303,10 +303,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     }
   };
 
-  const handleInputTokenChange = (newToken?: WhitelistedToken) => {
+  const handleInputTokenChange = (newToken?: Token) => {
     handleSomeTokenChange(SwapField.INPUT_TOKEN, SwapField.INPUT_AMOUNT, newToken);
   };
-  const handleOutputTokenChange = (newToken?: WhitelistedToken) =>
+  const handleOutputTokenChange = (newToken?: Token) =>
     handleSomeTokenChange(SwapField.OUTPUT_TOKEN, SwapField.OUTPUT_AMOUNT, newToken);
 
   const handleSwapButtonClick = () => {

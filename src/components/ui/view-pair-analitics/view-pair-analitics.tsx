@@ -4,7 +4,7 @@ import { ExternalLink } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getTokenSymbol } from '@utils/helpers';
 import { DexPair } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -36,8 +36,8 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
           icon={<ExternalLink className={iconClassName} />}
         >
           {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
-            tokenA: getWhitelistedTokenSymbol(token1),
-            tokenB: getWhitelistedTokenSymbol(token2)
+            tokenA: getTokenSymbol(token1),
+            tokenB: getTokenSymbol(token2)
           })}
         </Button>
       ))}

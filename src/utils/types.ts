@@ -36,27 +36,28 @@ export enum WalletType {
   TEMPLE = 'temple'
 }
 
-export interface WhitelistedTokenPair {
+export interface TokenPair {
   balance?: Nullable<string>;
   frozenBalance?: Nullable<string>;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
   dex?: FoundDex;
 }
 
-export interface WhitelistedToken {
+export interface Token {
   type: Standard;
   contractAddress: string;
   // TODO: change the type to BigNumber
   fa2TokenId?: number;
-  metadata: WhitelistedTokenMetadata;
+  isWhitelisted: Nullable<boolean>;
+  metadata: TokenMetadata;
 }
 
-export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
+export interface TokenWithQSNetworkType extends Token {
   network?: QSNets;
 }
 
-export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
 export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
@@ -75,7 +76,7 @@ export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
 
 export const isFullBaker = (baker: WhitelistedBaker): baker is WhitelistedBakerFull => baker && 'name' in baker;
 
-export interface WhitelistedTokenMetadata {
+export interface TokenMetadata {
   decimals: number;
   symbol: string;
   name: string;
@@ -86,8 +87,8 @@ interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
   totalSupply: BigNumber;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
   id: string | number;
   type: 'ttdex' | 'tokenxtz';
 }
@@ -135,8 +136,8 @@ export interface VoteFormValues {
 export interface PoolTableType {
   id: number;
   xtzUsdQuote: string;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
   pair: {
     name: string;
     token1: {

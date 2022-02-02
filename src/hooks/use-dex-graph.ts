@@ -7,7 +7,7 @@ import useSWR, { useSWRConfig } from 'swr';
 import { FACTORIES, NETWORK_ID, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
 import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
+import { getTokenSlug, makeToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair } from '@utils/types';
 
@@ -63,7 +63,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
       return rawTTDexPools
         .map(rawPool => {
           const { tokenAPool, tokenBPool, totalSupply, tokenA } = rawPool;
-          const token1 = makeWhitelistedToken(
+          const token1 = makeToken(
             {
               contractAddress: tokenA.address,
               type: tokenA.type,
@@ -73,7 +73,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
           );
           const token2 =
             rawPool.type === 'ttdex'
-              ? makeWhitelistedToken(
+              ? makeToken(
                   {
                     contractAddress: rawPool.tokenB.address,
                     type: rawPool.tokenB.type,

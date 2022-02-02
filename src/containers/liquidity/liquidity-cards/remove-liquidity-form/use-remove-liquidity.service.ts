@@ -8,7 +8,7 @@ import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation } from '@utils/helpers';
-import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, Undefined, Token, TokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
@@ -18,9 +18,9 @@ import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, val
 
 export const useRemoveLiquidityService = (
   dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  onChangeTokensPair: (tokensPair: TokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -38,7 +38,7 @@ export const useRemoveLiquidityService = (
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
-  const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+  const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
 
   useEffect(() => {
     if (!dex || !tokenA || !tokenB) {
@@ -61,7 +61,7 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(undefined);
   }, [dex, tokenA, tokenB]);
 
-  const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
+  const handleSetTokenPair = (tokensPair: TokenPair) => {
     onChangeTokensPair(tokensPair);
   };
 

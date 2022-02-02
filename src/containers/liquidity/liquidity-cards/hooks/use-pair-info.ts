@@ -3,21 +3,17 @@ import { useCallback, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 
 import { TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 import { PairInfo } from '../add-liquidity-form';
 import { loadTokenToTokenPairInfo } from '../blockchain';
 import { getTezTokenPairInfo } from '../helpers';
 
-export const usePairInfo = (
-  dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>
-) => {
+export const usePairInfo = (dex: Nullable<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
 
   const loadPairInfo = useCallback(
-    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+    async (dex: Nullable<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
       if (!dex || !tokenA || !tokenB) {
         setPairInfo(null);
 

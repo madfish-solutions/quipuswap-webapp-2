@@ -1,10 +1,10 @@
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 export interface IPositionsModalProps {
-  onChange: (tokenPair: WhitelistedTokenPair) => void;
-  initialPair: Nullable<WhitelistedTokenPair>;
-  notSelectable1?: WhitelistedToken;
-  notSelectable2?: WhitelistedToken;
+  onChange: (tokenPair: TokenPair) => void;
+  initialPair: Nullable<TokenPair>;
+  notSelectable1?: Token;
+  notSelectable2?: Token;
 }
 
 export interface HeaderProps {
@@ -21,6 +21,6 @@ export interface HeaderProps {
 export interface FormValues {
   search: string;
   tokenId: string;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
 }

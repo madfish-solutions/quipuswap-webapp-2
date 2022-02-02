@@ -8,7 +8,7 @@ import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
 import { handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
-import { Nullable, VoterType, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { Nullable, VoterType, Token, TokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks';
 import { VotingTabs } from '../tabs.enum';
@@ -23,7 +23,7 @@ const initialVoter: VoterType = {
 
 const defaultToken = networksDefaultTokens[NETWORK_ID];
 
-const fallbackTokenPair: WhitelistedTokenPair = {
+const fallbackTokenPair: TokenPair = {
   token1: TEZOS_TOKEN,
   token2: defaultToken,
   balance: null,
@@ -47,9 +47,9 @@ const useVotingService = () => {
 
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
-  const [tokenPair, setTokenPair] = useState<WhitelistedTokenPair>(fallbackTokenPair);
-  const [[token1, token2], setTokens] = useState<WhitelistedToken[]>([TEZOS_TOKEN, defaultToken]);
-  const tokensRef = useRef<[WhitelistedToken, WhitelistedToken]>([token1, token2]);
+  const [tokenPair, setTokenPair] = useState<TokenPair>(fallbackTokenPair);
+  const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, defaultToken]);
+  const tokensRef = useRef<[Token, Token]>([token1, token2]);
 
   const {
     urlLoaded,
@@ -91,13 +91,13 @@ const useVotingService = () => {
   };
 
   const tokenPairSelect = useCallback(
-    async (pair: WhitelistedTokenPair) => {
+    async (pair: TokenPair) => {
       handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
     [tezos, accountPkh, showErrorToast]
   );
 
-  const handleTokenPairSelectChange = (pair: WhitelistedTokenPair) => {
+  const handleTokenPairSelectChange = (pair: TokenPair) => {
     setTokens([pair.token1, pair.token2]);
     tokenPairSelect(pair);
   };

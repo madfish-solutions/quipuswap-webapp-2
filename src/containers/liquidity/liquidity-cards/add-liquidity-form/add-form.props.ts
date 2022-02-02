@@ -1,11 +1,11 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 export interface AddFormInterface {
   dex: Nullable<FoundDex>;
-  tokenA: Nullable<WhitelistedToken>;
-  tokenB: Nullable<WhitelistedToken>;
-  onTokenAChange: (token: WhitelistedToken) => void;
-  onTokenBChange: (token: WhitelistedToken) => void;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
+  onTokenAChange: (token: Token) => void;
+  onTokenBChange: (token: Token) => void;
 }

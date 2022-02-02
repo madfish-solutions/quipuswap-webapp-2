@@ -18,8 +18,8 @@ import {
   useSearchTokens,
   useTokens
 } from '@utils/dapp';
-import { isTokenEqual, localSearchToken, WhitelistedOrCustomToken } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { isTokenEqual, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
+import { Token, TokenPair } from '@utils/types';
 
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
@@ -50,7 +50,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   const { Form } = withTypes<FormValues>();
   const { data: tokens } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
-  const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
+  const [filteredTokens, setFilteredTokens] = useState<Token[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [inputToken, setInputToken] = useState<string>('');
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
@@ -61,8 +61,8 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   };
 
   const handleTokenSearch = useCallback(() => {
-    const isTokens = tokens.filter((token: WhitelistedToken) =>
-      localSearchToken(token as WhitelistedOrCustomToken, NETWORK, inputValue, +inputToken)
+    const isTokens = tokens.filter((token: Token) =>
+      localSearchToken(token as TokenWithRequiredNetwork, NETWORK, inputValue, +inputToken)
     );
     setFilteredTokens(isTokens);
     if (inputValue.length > 0 && isTokens.length === 0) {
@@ -86,11 +86,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
-  const handleTokenA = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenA = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (!notSelectable1) {
       if (values.token2 && values.token1) {
         form.mutators.setValue('token1', values.token2);
@@ -103,11 +99,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     }
   };
 
-  const handleTokenB = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenB = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (!notSelectable2) {
       if (!values.token2) {
         form.mutators.setValue('token2', token);
@@ -117,11 +109,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     }
   };
 
-  const handleTokenListItem = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenListItem = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (searchTokens.length > 0) {
       addCustomToken(token);
     }
@@ -160,7 +148,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                   onChange({
                     token1: values.token1,
                     token2: values.token2
-                  } as WhitelistedTokenPair)
+                  } as TokenPair)
                 }
                 disabled={!values.token2 || !values.token1}
                 className={s.modalButton}
@@ -179,7 +167,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                 onChange({
                   token1: values.token1,
                   token2: values.token2
-                } as WhitelistedTokenPair);
+                } as TokenPair);
               }
               if (onRequestClose) {
                 onRequestClose(e);

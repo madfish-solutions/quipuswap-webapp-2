@@ -1,5 +1,5 @@
 import { TEZOS_TOKEN } from '@app.config';
-import { Optional, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Optional, Token, TokenMetadata } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 import { shortize } from './shortize';
@@ -18,7 +18,7 @@ const shortizeTokenAppellation = (viewName: string, sliceAmount: number) => {
   }
 };
 
-const parseAddresOrGetField = (metadata: WhitelistedTokenMetadata, field: MetadataTokenField) => {
+const parseAddresOrGetField = (metadata: TokenMetadata, field: MetadataTokenField) => {
   if (isExist(metadata[field])) {
     if (isValidTokenSlug(metadata[field]) === true) {
       return shortize(metadata[field]);
@@ -30,7 +30,7 @@ const parseAddresOrGetField = (metadata: WhitelistedTokenMetadata, field: Metada
   return null;
 };
 
-export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) => {
+export const getTokenAppellation = (token: Token, sliceAmount = 10) => {
   if (token.contractAddress === TEZOS_TOKEN.contractAddress) {
     return TEZOS_TOKEN.metadata.symbol;
   }
@@ -50,13 +50,10 @@ export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) =
   return shortize(token.contractAddress);
 };
 
-export const getTokensPairName = (tokenX: WhitelistedToken, tokenY: WhitelistedToken) => {
+export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
   return `${getTokenAppellation(tokenX)} / ${getTokenAppellation(tokenY)}`;
 };
 
-export const getTokensOptionalPairName = (
-  inputToken: Optional<WhitelistedToken>,
-  outputToken: Optional<WhitelistedToken>
-) => {
+export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };

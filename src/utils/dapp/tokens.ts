@@ -13,31 +13,26 @@ import {
 import { Standard } from '@graphql';
 import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
-import {
-  WhitelistedToken,
-  WhitelistedTokenPair,
-  QSNetwork,
-  TokenId,
-  WhitelistedTokenWithQSNetworkType,
-  QSNets
-} from '@utils/types';
+import { Token, TokenPair, QSNetwork, TokenId, TokenWithQSNetworkType, QSNets, Nullable } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
 import { getContract } from './getStorageInfo';
 import { InvalidTokensListError } from './tokens.errors';
 
-interface RawWhitelistedTokenWithQSNetworkType extends Omit<WhitelistedTokenWithQSNetworkType, 'fa2TokenId'> {
+interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2TokenId' | 'isWhitelisted'> {
   fa2TokenId?: string;
+  isWhitelisted?: Nullable<boolean>;
 }
 
 export const getSavedTokens = (networkId?: QSNets) => {
-  const allRawTokens: Array<RawWhitelistedTokenWithQSNetworkType> =
-    typeof window !== undefined ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]') : [];
+  const allRawTokens: Array<RawTokenWithQSNetworkType> =
+    typeof window === 'undefined' ? [] : JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]');
 
-  const allTokens: WhitelistedTokenWithQSNetworkType[] = allRawTokens.map(({ fa2TokenId, ...restProps }) => ({
+  const allTokens: TokenWithQSNetworkType[] = allRawTokens.map(({ fa2TokenId, ...restProps }) => ({
     ...restProps,
-    fa2TokenId: fa2TokenId === undefined ? undefined : Number(fa2TokenId)
+    fa2TokenId: fa2TokenId === undefined ? undefined : Number(fa2TokenId),
+    isWhitelisted: null
   }));
 
   return networkId
@@ -99,7 +94,7 @@ export const isTokenFa12 = memoizee(
 );
 
 export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
-  let tokens: Array<WhitelistedTokenWithQSNetworkType> = [
+  let tokens: Array<TokenWithQSNetworkType> = [
     {
       ...TEZOS_TOKEN,
       network: network.id
@@ -120,7 +115,16 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   const response = await fetch(ipfsToHttps(IS_NETWORK_MAINNET ? MAINNET_TOKENS : TESTNET_TOKENS));
   const json = await response.json();
   if (json.tokens?.length) {
-    tokens = tokens.concat(json.tokens);
+    // TODO: remove 'any' type as soon as fa2TokenId type is changed to BigNumber
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const whitelistedTokens: Token[] = json.tokens.map((token: any) => ({
+      ...token,
+      isWhitelisted: true
+    }));
+
+    tokens = tokens
+      .filter(fallbackToken => !whitelistedTokens.some(token => isTokenEqual(fallbackToken, token)))
+      .concat(whitelistedTokens);
   } else {
     throw new InvalidTokensListError(json);
   }
@@ -128,13 +132,10 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   return getUniqArray(tokens, getTokenSlug);
 };
 
-export const saveCustomToken = (token: WhitelistedTokenWithQSNetworkType) => {
+export const saveCustomToken = (token: TokenWithQSNetworkType) => {
   window.localStorage.setItem(
     SAVED_TOKENS_KEY,
-    JSON.stringify([
-      token,
-      ...getSavedTokens().filter((x: WhitelistedTokenWithQSNetworkType) => !isTokenEqual(x, token))
-    ])
+    JSON.stringify([token, ...getSavedTokens().filter((x: TokenWithQSNetworkType) => !isTokenEqual(x, token))])
   );
 };
 
@@ -142,8 +143,8 @@ export const saveCustomToken = (token: WhitelistedTokenWithQSNetworkType) => {
 // export const mergeTokensToPair = (tokens1, tokens2) =>
 // [{token1[0]:tokens2[0]},{token1[1]:tokens2[0]},{token1[2]:tokens2[0]},{token1[0]:tokens2[1]},...]
 
-export const mergeTokensToPair = (tokens1: WhitelistedToken[], tokens2: WhitelistedToken[]): WhitelistedTokenPair[] => {
-  const pair = { token1: tokens1[0], token2: tokens2[0] } as WhitelistedTokenPair;
+export const mergeTokensToPair = (tokens1: Token[], tokens2: Token[]): TokenPair[] => {
+  const pair = { token1: tokens1[0], token2: tokens2[0] } as TokenPair;
 
   return [pair];
 };

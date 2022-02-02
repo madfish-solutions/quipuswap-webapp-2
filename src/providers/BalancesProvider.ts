@@ -5,7 +5,7 @@ import constate from 'constate';
 
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals, getTokenSlug } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 export const [BalancesProvider, useBalances] = constate(() => {
   const tezos = useTezos();
@@ -15,7 +15,7 @@ export const [BalancesProvider, useBalances] = constate(() => {
 
   useEffect(() => setBalances({}), [accountPkh]);
 
-  const updateBalance = async (token: WhitelistedToken) => {
+  const updateBalance = async (token: Token) => {
     if (accountPkh) {
       const balance = await getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
 

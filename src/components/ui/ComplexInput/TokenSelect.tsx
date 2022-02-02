@@ -10,8 +10,8 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
@@ -27,12 +27,12 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   label: string;
   error?: string;
   notSelectable?: boolean;
-  handleChange?: (token: WhitelistedToken) => void;
+  handleChange?: (token: Token) => void;
   handleBalance: (value: string) => void;
-  token: Nullable<WhitelistedToken>;
-  token2?: Nullable<WhitelistedToken>;
-  blackListedTokens: WhitelistedToken[];
-  setToken?: (token: WhitelistedToken) => void;
+  token: Nullable<Token>;
+  token2?: Nullable<Token>;
+  blackListedTokens: Token[];
+  setToken?: (token: Token) => void;
 }
 
 const themeClass = {
@@ -85,10 +85,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const disabled = !isExist(balance) || !isExist(token);
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
-  const firstTokenSymbol = token ? getWhitelistedTokenSymbol(token) : 'TOKEN';
+  const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
 
   const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getWhitelistedTokenSymbol(token2) : token2;
+  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : token2;
 
   return (
     <>
@@ -124,8 +124,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                 secondTokenSymbol={secondTokenSymbol}
               />
               <h6 className={cx(s.token)}>
-                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
-                {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
+                {token ? getTokenSymbol(token) : 'SELECT'}
+                {token2 && ` / ${getTokenSymbol(token2)}`}
               </h6>
               {!notSelectable && <Shevron />}
             </Button>

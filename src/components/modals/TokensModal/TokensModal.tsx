@@ -17,15 +17,9 @@ import {
   useSearchTokens,
   useTokens
 } from '@utils/dapp';
-import {
-  getWhitelistedTokenName,
-  getWhitelistedTokenSymbol,
-  isTokenEqual,
-  localSearchToken,
-  prepareTokenLogo
-} from '@utils/helpers';
+import { getTokenName, getTokenSymbol, isTokenEqual, localSearchToken, prepareTokenLogo } from '@utils/helpers';
 import { getStandardValue } from '@utils/helpers/token.standard';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
@@ -37,8 +31,8 @@ const themeClass = {
 
 // eslint-disable-next-line import/no-named-as-default-member
 interface TokensModalProps extends ReactModal.Props {
-  onChange: (token: WhitelistedToken) => void;
-  blackListedTokens: WhitelistedToken[];
+  onChange: (token: Token) => void;
+  blackListedTokens: Token[];
 }
 
 interface FormValues {
@@ -55,7 +49,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
   const { Form } = withTypes<FormValues>();
   const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
-  const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
+  const [filteredTokens, setFilteredTokens] = useState<Token[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [inputToken, setInputToken] = useState<number>(0);
   const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
@@ -96,7 +90,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
     getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
-  const handleTokenSelect = (form: FormApi<FormValues>, token: WhitelistedToken) => {
+  const handleTokenSelect = (form: FormApi<FormValues>, token: Token) => {
     onChange(token);
     if (searchTokens.length > 0) {
       addCustomToken(token);
@@ -142,8 +136,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
-                tokenName={getWhitelistedTokenName(token)}
-                tokenSymbol={getWhitelistedTokenSymbol(token)}
+                tokenName={getTokenName(token)}
+                tokenSymbol={getTokenSymbol(token)}
                 tokenType={getStandardValue(type)}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@app.config';
 import { fromDecimals, isTezIncluded } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 import { getValidMichelTemplate, sortTokensContracts } from '../../helpers';
 
@@ -21,8 +21,8 @@ const loadUserLpBalanceTokens = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenA: Token,
+  tokenB: Token
 ): Promise<Nullable<LiquidityShares>> => {
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
@@ -77,8 +77,8 @@ export const loadUserLiquidiytShares = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenA: Token,
+  tokenB: Token
 ) => {
   const isTezosToTokenDex = isTezIncluded([tokenA, tokenB]);
 

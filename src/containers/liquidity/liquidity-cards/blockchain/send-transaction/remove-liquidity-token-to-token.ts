@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { decreaseBySlippage, getOrderedTokensAmounts } from '../../helpers';
 
@@ -15,8 +15,8 @@ export const removeLiquidityTokenToToken = async (
   lpTokenInput: string,
   tokenAOutput: string,
   tokenBOutput: string,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenA: Token,
+  tokenB: Token,
   transactionDuration: BigNumber,
   slippagePercentage: BigNumber
 ) => {

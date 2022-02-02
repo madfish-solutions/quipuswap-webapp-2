@@ -2,12 +2,12 @@ import BigNumber from 'bignumber.js';
 
 import { calculateTokenAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-token-amount';
 import { fromDecimals } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 export const calculatePoolAmount = (
   amountTokenA: BigNumber,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
   tokenAPool: Nullable<BigNumber>,
   tokenBPool: Nullable<BigNumber>
 ): Nullable<BigNumber> => {
