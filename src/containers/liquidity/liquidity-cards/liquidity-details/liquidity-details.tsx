@@ -3,13 +3,14 @@ import React, { FC } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
 
+import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
+import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { useLoadLpTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { isExist, isNull } from '@utils/helpers';
+import { isExist } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -26,7 +27,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
   const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
-  const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
   const { tokenAName, tokenBName, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
     useLiquidityDetailsService(dex, tokenA, tokenB);
@@ -67,7 +67,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           amount={fixedTokenAPoll}
           currency={tokenAName}
           isLoading={!isExist(dex) || !isExist(tokenA)}
+          isError={fixedTokenAPoll?.eq(EMPTY_POOL_AMOUNT)}
           amountDecimals={tokenA?.metadata.decimals}
+          errorFallback={<DashPlug animation={false} />}
         />
       </DetailsCardCell>
 
@@ -83,7 +85,9 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           amount={fixedTokenBPoll}
           currency={tokenBName}
           isLoading={!isExist(dex) || !isExist(tokenB)}
+          isError={fixedTokenBPoll?.eq(EMPTY_POOL_AMOUNT)}
           amountDecimals={tokenB?.metadata.decimals}
+          errorFallback={<DashPlug animation={false} />}
         />
       </DetailsCardCell>
 
@@ -96,7 +100,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.total || null} isLoading={isNull(poolTotal)} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={share?.total || null}
+              isError={share?.total.eq(EMPTY_POOL_AMOUNT)}
+              errorFallback={<DashPlug animation={false} />}
+            />
           </DetailsCardCell>
 
           <DetailsCardCell
@@ -106,7 +115,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.frozen || null} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={share?.frozen || null}
+              isError={share?.frozen.eq(EMPTY_POOL_AMOUNT)}
+              errorFallback={<DashPlug animation={false} />}
+            />
           </DetailsCardCell>
         </>
       )}

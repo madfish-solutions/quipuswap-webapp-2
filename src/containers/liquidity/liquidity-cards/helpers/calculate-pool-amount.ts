@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 
+import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { calculateTokenAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-token-amount';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
@@ -11,7 +12,14 @@ export const calculatePoolAmount = (
   tokenAPool: Nullable<BigNumber>,
   tokenBPool: Nullable<BigNumber>
 ): Nullable<BigNumber> => {
-  if (!tokenAPool || !tokenBPool || !tokenA || !tokenB) {
+  if (
+    !tokenA ||
+    !tokenB ||
+    !tokenAPool ||
+    !tokenBPool ||
+    tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
+    tokenBPool.eq(EMPTY_POOL_AMOUNT)
+  ) {
     return null;
   }
 

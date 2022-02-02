@@ -59,7 +59,6 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
-  const fixedUnfrozenBalance = share?.unfrozen.toFixed() ?? null;
   const fixedBalanceA = tokenABalance?.toFixed() ?? null;
   const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
 
@@ -69,7 +68,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         label="Select LP"
         tokenPair={tokenPair}
         setTokenPair={handleSetTokenPair}
-        balance={fixedUnfrozenBalance}
+        balance={share?.unfrozen.toFixed()}
         handleBalance={handleBalance}
         shouldShowBalanceButtons={shouldShowBalanceButtons}
         onChange={handleChange}

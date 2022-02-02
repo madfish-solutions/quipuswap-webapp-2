@@ -33,11 +33,20 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
     return formatBalance(balance);
   }, [balance]);
 
+  const isError = useMemo(() => {
+    return formattedBalance === '0';
+  }, [formattedBalance]);
+
   return (
     <div className={styles.item2Line}>
       <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
       <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
-        <StateWrapper isLoading={!formattedBalance} loaderFallback={<DashPlug />}>
+        <StateWrapper
+          isLoading={!formattedBalance}
+          isError={isError}
+          loaderFallback={<DashPlug />}
+          errorFallback={<DashPlug animation={false} />}
+        >
           {formattedBalance}
         </StateWrapper>
       </div>
