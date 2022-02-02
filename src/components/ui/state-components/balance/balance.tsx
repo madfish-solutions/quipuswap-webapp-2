@@ -33,9 +33,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
     return formatBalance(balance);
   }, [balance]);
 
-  const isError = useMemo(() => {
-    return formattedBalance === '0';
-  }, [formattedBalance]);
+  const isError = formattedBalance === '0';
 
   return (
     <div className={styles.item2Line}>
