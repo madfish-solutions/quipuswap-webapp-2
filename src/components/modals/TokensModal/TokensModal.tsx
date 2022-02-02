@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
-import { ColorModes, ColorThemeContext, LoadingTokenCell, Modal, TokenCell, TokenNotFound } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, LoadingTokenCell, Modal, TokenNotFound } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
@@ -8,6 +8,7 @@ import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
 import { NETWORK } from '@app.config';
+import { TokenCell } from '@components/modals/Modal';
 import { Standard } from '@graphql';
 import {
   useTezos,
@@ -24,7 +25,6 @@ import {
   localSearchToken,
   prepareTokenLogo
 } from '@utils/helpers';
-import { getStandardValue } from '@utils/helpers/token.standard';
 import { WhitelistedToken } from '@utils/types';
 
 import { AutoSave } from './AutoSave';
@@ -144,7 +144,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
-                tokenType={getStandardValue(type)}
+                tokenType={type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}
               />
