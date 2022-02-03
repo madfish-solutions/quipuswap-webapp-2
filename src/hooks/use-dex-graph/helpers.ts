@@ -32,26 +32,32 @@ export const rawDexToDexPair = (
   };
 };
 
+const withSlug = (dexGraph: DexGraph, tokenSlug: string) => {
+  if (!dexGraph[tokenSlug]) {
+    return {
+      ...dexGraph,
+      [tokenSlug]: { edges: {} }
+    };
+  }
+
+  return dexGraph;
+};
+
 export const dexPairsToSwapGraph = (dexPairs: DexPair[]) => {
   const swappablePairs = dexPairs.filter(
     ({ token1Pool, token2Pool }) => !token1Pool.eq(EMPTY_POOL_AMOUNT) && !token2Pool.eq(EMPTY_POOL_AMOUNT)
   );
 
-  const dexGraph: DexGraph = {};
-
-  swappablePairs.forEach(pair => {
+  return swappablePairs.reduce<DexGraph>((dexGraph, pair) => {
     const token1Slug = getTokenSlug(pair.token1);
     const token2Slug = getTokenSlug(pair.token2);
 
-    if (!dexGraph[token1Slug]) {
-      dexGraph[token1Slug] = { edges: {} };
-    }
-    if (!dexGraph[token2Slug]) {
-      dexGraph[token2Slug] = { edges: {} };
-    }
-    dexGraph[token1Slug].edges[token2Slug] = pair;
+    dexGraph = withSlug(dexGraph, token1Slug);
     dexGraph[token2Slug].edges[token1Slug] = pair;
-  });
 
-  return dexGraph;
+    dexGraph = withSlug(dexGraph, token2Slug);
+    dexGraph[token1Slug].edges[token2Slug] = pair;
+
+    return dexGraph;
+  }, {});
 };
