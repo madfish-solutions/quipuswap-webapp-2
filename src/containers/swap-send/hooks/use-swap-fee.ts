@@ -28,16 +28,21 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
   const updateSwapFee = useCallback(
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
       if (senderPkh && inputToken && dexChain && inputAmount) {
-        const rawNewFee = await estimateSwapFee(tezos!, senderPkh, {
-          inputToken,
-          inputAmount: toDecimals(inputAmount, inputToken),
-          dexChain,
-          recipient: recipientPkh,
-          slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
-          ttDexAddress: TOKEN_TO_TOKEN_DEX
-        });
+        try {
+          const rawNewFee = await estimateSwapFee(tezos!, senderPkh, {
+            inputToken,
+            inputAmount: toDecimals(inputAmount, inputToken),
+            dexChain,
+            recipient: recipientPkh,
+            slippageTolerance: slippageTolerance?.div(WHOLE_ITEM_PERCENT),
+            ttDexAddress: TOKEN_TO_TOKEN_DEX
+          });
 
-        return fromDecimals(rawNewFee, TEZOS_TOKEN);
+          return fromDecimals(rawNewFee, TEZOS_TOKEN);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.error('Estimate Fee Error:', error);
+        }
       }
 
       throw new SwapFeeNotEnoughParametersError();

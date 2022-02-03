@@ -42,9 +42,9 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     <>
       <Head>
         {isDarkFavicon ? (
-          <link rel="icon" href={`${BASE_URL}favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
-          <link rel="icon" href={`${BASE_URL}light-favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
         )}
       </Head>
 

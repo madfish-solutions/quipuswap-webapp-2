@@ -1,6 +1,5 @@
-import React from 'react';
+import { FC } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
 import { Card, ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -10,31 +9,40 @@ import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { CandidateButton } from '@containers/voiting/components';
+import { useTokensPair, useVoter, useVotingDex, useVotingLoading } from '@containers/voiting/helpers/voting.provider';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
-import { Nullable, VoterType, WhitelistedTokenPair } from '@utils/types';
 
 import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
 
-interface VotingDetailsProps {
-  tokenPair: WhitelistedTokenPair;
-  dex: Nullable<FoundDex>;
-  voter: Nullable<VoterType>;
-}
-
-export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, voter }) => {
+export const VotingDetails: FC = () => {
   const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
+  const { candidate } = useVoter();
+  const { tokenPair } = useTokensPair();
+  const { dex } = useVotingDex();
+
+  const { isVotingLoading } = useVotingLoading();
 
   const { currentCandidate, secondCandidate } = getCandidateInfo(dex, bakers);
-  const myCandidate = bakers.find(baker => baker.address === voter?.candidate) ?? null;
+  const myCandidate = bakers.find(baker => baker.address === candidate) ?? null;
 
   const { totalVotes, totalVeto, votesToVeto } = getVotingInfo(dex);
 
   const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertialCenter);
+
+  const isVotingLoaded = !isVotingLoading;
+
+  const wrapCurrentCandidate = isVotingLoaded ? currentCandidate : null;
+  const wrapSecondCandidate = isVotingLoaded ? secondCandidate : null;
+  const wrapMyCandidate = isVotingLoaded ? myCandidate : null;
+
+  const totalVotesAmount = isVotingLoaded ? totalVotes : null;
+  const totalVetoAmount = isVotingLoaded ? totalVeto : null;
+  const votesToVetoAmount = isVotingLoaded ? votesToVeto : null;
 
   return (
     <Card
@@ -48,7 +56,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         tooltipContent={t('vote|Current baker elected by simple majority of votes.')}
         className={CardCellClassName}
       >
-        <CandidateButton candidate={currentCandidate} />
+        <CandidateButton candidate={wrapCurrentCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -58,7 +66,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         )}
         className={CardCellClassName}
       >
-        <CandidateButton candidate={secondCandidate} />
+        <CandidateButton candidate={wrapSecondCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -66,7 +74,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         tooltipContent={t('vote|The total amount of votes cast to elect a baker in the pool.')}
         className={CardCellClassName}
       >
-        <StateCurrencyAmount amount={totalVotes} />
+        <StateCurrencyAmount amount={totalVotesAmount} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -74,7 +82,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         tooltipContent={t('vote|The total amount of shares cast so far to veto the current baker.')}
         className={CardCellClassName}
       >
-        <StateCurrencyAmount amount={totalVeto} />
+        <StateCurrencyAmount amount={totalVetoAmount} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -82,7 +90,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         tooltipContent={t('vote|The candidate you voted for.')}
         className={CardCellClassName}
       >
-        <CandidateButton candidate={myCandidate} />
+        <CandidateButton candidate={wrapMyCandidate} />
       </DetailsCardCell>
 
       <DetailsCardCell
@@ -90,7 +98,7 @@ export const VotingDetails: React.FC<VotingDetailsProps> = ({ tokenPair, dex, vo
         tooltipContent={t('vote|This much more votes needed to veto a delegate.')}
         className={CardCellClassName}
       >
-        <StateCurrencyAmount amount={votesToVeto} />
+        <StateCurrencyAmount amount={votesToVetoAmount} />
       </DetailsCardCell>
 
       {tokenPair.dex && (

@@ -41,7 +41,6 @@ import { SwapAmountFieldName, SwapField, SwapFormValues, SwapTokensFieldName } f
 
 interface SwapSendProps {
   className?: string;
-  fromToSlug?: string;
 }
 
 const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
@@ -52,7 +51,7 @@ function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
-const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, fromToSlug, router }) => {
+const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, router }) => {
   const {
     errors,
     values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
@@ -64,10 +63,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
     touched
   } = useSwapFormik();
   const { t } = useTranslation(['swap']);
+  const fromToSlug = (router.query['from-to'] as string) ?? '';
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
-  const initialTokens = useInitialTokensSlugs(fromToSlug, getRedirectionUrl);
-  const initialFrom = initialTokens?.[0];
-  const initialTo = initialTokens?.[1];
+  const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
 
   const TabsContent = [
     { id: 'swap', label: t('swap|Swap') },
@@ -427,6 +425,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, from
           )}
           <SlippageInput
             error={touchedFieldsErrors.slippage}
+            loading={dexPoolsLoading}
             outputAmount={outputAmount}
             onChange={handleSlippageChange}
             slippage={slippage}

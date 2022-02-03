@@ -37,8 +37,8 @@ export enum WalletType {
 }
 
 export interface WhitelistedTokenPair {
-  balance?: string;
-  frozenBalance?: string;
+  balance?: Nullable<string>;
+  frozenBalance?: Nullable<string>;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   dex?: FoundDex;
@@ -104,8 +104,8 @@ interface TokenXtzDexPairProps extends CommonDexPairProps {
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
 
 export interface VoterType {
-  vote: BigNumber;
-  veto: BigNumber;
+  vote: Nullable<BigNumber>;
+  veto: Nullable<BigNumber>;
   candidate: Nullable<string>;
 }
 
@@ -116,7 +116,7 @@ export interface TokenDataType {
     id?: number | null;
     decimals: number;
   };
-  balance: string;
+  balance: Nullable<string>;
   exchangeRate?: string;
 }
 
@@ -168,13 +168,19 @@ export interface PoolTableType {
   };
 }
 
+export enum SortType {
+  LeftLeft = 'Left-Left',
+  RightRight = 'Right-Right',
+  LeftRight = 'Left-Right'
+}
+
 export interface SortTokensContractsType {
   addressA: string;
   addressB: string;
   idA: Nullable<number>;
   idB: Nullable<number>;
   isRevert?: boolean;
-  type: 'Left-Left' | 'Right-Right' | 'Left-Right';
+  type: SortType;
 }
 
 export enum LastUsedConnectionKey {

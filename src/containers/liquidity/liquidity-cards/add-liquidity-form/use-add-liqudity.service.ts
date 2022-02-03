@@ -7,14 +7,19 @@ import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage, getTokenAppellation, isNull, toDecimals } from '@utils/helpers';
+import {
+  getAddLiquidityMessage,
+  getInitializeLiquidityMessage,
+  getTokenAppellation,
+  isNull,
+  toDecimals
+} from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
-import { INVALID_INPUT } from '../validators/validate-user-input';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
@@ -77,12 +82,6 @@ export const useAddLiquidityService = (
 
     const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
-
-    if (validationA === INVALID_INPUT) {
-      setTokenBInput('');
-
-      return;
-    }
 
     if (isPoolNotExist) {
       return;

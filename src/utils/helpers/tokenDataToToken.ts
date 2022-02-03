@@ -1,7 +1,7 @@
-import { TokenDataType, WhitelistedToken } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
-export const tokenDataToToken = (tokenData: TokenDataType): WhitelistedToken =>
+export const tokenDataToToken = (token: WhitelistedToken): WhitelistedToken =>
   ({
-    contractAddress: tokenData.token.address,
-    fa2TokenId: tokenData.token.id ?? undefined
+    contractAddress: token.contractAddress,
+    fa2TokenId: token.fa2TokenId ?? undefined
   } as WhitelistedToken);
