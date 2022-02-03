@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { getTokenIdFromSlug, getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { DexPair, WhitelistedToken } from '@utils/types';
+import { DexPair, DexPairType, WhitelistedToken } from '@utils/types';
 
 import { RawDexPool, RawDexType } from './use-dex-graph.types';
 
@@ -18,7 +18,7 @@ export const rawDexToDexPair = (
       token1: makeWhitelistedToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
       token2: makeWhitelistedToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
       id: dexAddress,
-      type: 'tokenxtz'
+      type: DexPairType.TokenToXtz
     };
   }
 
@@ -28,7 +28,7 @@ export const rawDexToDexPair = (
     token1: makeWhitelistedToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
     token2: makeWhitelistedToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
     id: Number(dexId!),
-    type: 'ttdex'
+    type: DexPairType.TokenToToken
   };
 };
 
