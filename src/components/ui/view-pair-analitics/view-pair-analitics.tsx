@@ -4,8 +4,8 @@ import { ExternalLink } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { DexPair, DexPairType, TokenXtzDexPairProps } from '@utils/types';
+import { getWhitelistedTokenSymbol, isTokenToTezosDex } from '@utils/helpers';
+import { DexPair } from '@utils/types';
 
 import { Button } from '../elements/button';
 
@@ -27,23 +27,21 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
   return (
     <div className={className}>
       {/* TODO: remove filtering and specify URL for token/token analytics as soon as it is implemented */}
-      {route
-        .filter((dex): dex is TokenXtzDexPairProps => dex.type === DexPairType.tokenxtz)
-        .map(({ id, token1, token2 }) => (
-          <Button
-            key={id}
-            className={buttonClassName}
-            theme="inverse"
-            href={`${QUIPUSWAP_ANALYTICS_PAIRS}/${id}`}
-            external
-            icon={<ExternalLink className={iconClassName} />}
-          >
-            {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
-              tokenA: getWhitelistedTokenSymbol(token1),
-              tokenB: getWhitelistedTokenSymbol(token2)
-            })}
-          </Button>
-        ))}
+      {route.filter(isTokenToTezosDex).map(({ id, token1, token2 }) => (
+        <Button
+          key={id}
+          className={buttonClassName}
+          theme="inverse"
+          href={`${QUIPUSWAP_ANALYTICS_PAIRS}/${id}`}
+          external
+          icon={<ExternalLink className={iconClassName} />}
+        >
+          {t('common|View {{tokenA}}/{{tokenB}} Pair Analytics', {
+            tokenA: getWhitelistedTokenSymbol(token1),
+            tokenB: getWhitelistedTokenSymbol(token2)
+          })}
+        </Button>
+      ))}
     </div>
   );
 };

@@ -2,9 +2,11 @@ import BigNumber from 'bignumber.js';
 
 import { FEE_RATE } from '@app.config';
 import { getTokenSlug, SwapParams } from '@utils/helpers';
-import { TokenId, DexPair, DexPairType } from '@utils/types';
+import { TokenId, DexPair } from '@utils/types';
 
 import { getTokenPairSlug } from './get-token-pair-slug';
+import { isTokenToTezosDex } from './is-token-to-tezos-dex';
+import { isTokenToTokenDex } from './is-token-to-token-dex';
 
 const feeDenominator = new BigNumber(1000);
 const feeNumerator = feeDenominator.minus(new BigNumber(FEE_RATE).div(100).times(feeDenominator));
@@ -49,7 +51,8 @@ export const getDexPairsAfterSwap = ({ inputToken, inputAmount, dexChain }: Swap
 export const getTokenOutput = ({ inputToken, inputAmount, dexChain }: SwapParams) => {
   let currentToken = inputToken;
   let intermediateInputAmount = inputAmount;
-  dexChain.forEach(({ token1, token2, token1Pool, token2Pool, type }) => {
+  dexChain.forEach(pair => {
+    const { token1, token2, token1Pool, token2Pool } = pair;
     const shouldSell = getTokenSlug(currentToken) === getTokenSlug(token1);
     const inputLiquidity = shouldSell ? token1Pool : token2Pool;
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
@@ -58,12 +61,13 @@ export const getTokenOutput = ({ inputToken, inputAmount, dexChain }: SwapParams
     const numerator = inputWithFee.times(outputLiquidity);
     const denominator = inputLiquidity.times(feeDenominator).plus(inputWithFee);
     const formulaOutputAmount = numerator.idiv(denominator);
-    const formulaOutputAmountIsValid =
-      type === DexPairType.tokenxtz ? formulaOutputAmount.lte(outputLiquidity.idiv(3)) : !formulaOutputAmount.isNaN();
+    const formulaOutputAmountIsValid = isTokenToTezosDex(pair)
+      ? formulaOutputAmount.lte(outputLiquidity.idiv(3))
+      : !formulaOutputAmount.isNaN();
 
     if (formulaOutputAmountIsValid) {
       intermediateInputAmount = formulaOutputAmount;
-    } else if (type === DexPairType.ttdex) {
+    } else if (isTokenToTokenDex(pair)) {
       intermediateInputAmount = outputLiquidity.minus(1);
     } else if (intermediateInputAmount.isFinite()) {
       throw new OutputOverflowError(formulaOutputAmount, { token1, token2 });
@@ -81,12 +85,12 @@ export const getTokenInput = (outputToken: TokenId, outputAmount: BigNumber, dex
   let currentToken = outputToken;
   let intermediateOutputAmount = outputAmount;
   [...dexChain].reverse().forEach((pair, index) => {
-    const { token1, token2, token1Pool, token2Pool, type } = pair;
+    const { token1, token2, token1Pool, token2Pool } = pair;
     const shouldSell = getTokenSlug(currentToken) === getTokenSlug(token2);
     const inputLiquidity = shouldSell ? token1Pool : token2Pool;
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
     const inputToken = shouldSell ? token1 : token2;
-    const maxOutputAmount = type === DexPairType.ttdex ? outputLiquidity.minus(1) : outputLiquidity.idiv(3);
+    const maxOutputAmount = isTokenToTokenDex(pair) ? outputLiquidity.minus(1) : outputLiquidity.idiv(3);
     if (intermediateOutputAmount.gt(maxOutputAmount)) {
       throw new OutputOverflowError(intermediateOutputAmount, { token1, token2 });
     }
@@ -115,16 +119,16 @@ export const getMaxTokenInput = (outputToken: TokenId, dexChain: DexPair[]) => {
   let intermediateMaxTokenInput = new BigNumber(Infinity);
   let intermediateOutputToken = outputToken;
   reversedDexChain.forEach(pair => {
-    const { token1, token2, token1Pool, token2Pool, type } = pair;
+    const { token1, token2, token1Pool, token2Pool } = pair;
     const shouldSell = getTokenSlug(intermediateOutputToken) === getTokenSlug(token2);
     const outputLiquidity = shouldSell ? token2Pool : token1Pool;
 
-    if (type === DexPairType.ttdex && intermediateMaxTokenInput.gte(outputLiquidity.minus(1))) {
+    if (isTokenToTokenDex(pair) && intermediateMaxTokenInput.gte(outputLiquidity.minus(1))) {
       intermediateMaxTokenInput = new BigNumber(Infinity);
     } else {
       const maxOutput = BigNumber.min(
         intermediateMaxTokenInput,
-        type === DexPairType.ttdex ? outputLiquidity.minus(1) : outputLiquidity.idiv(3)
+        isTokenToTokenDex(pair) ? outputLiquidity.minus(1) : outputLiquidity.idiv(3)
       );
       try {
         intermediateMaxTokenInput = getTokenInput(intermediateOutputToken, maxOutput, [pair]).minus(1);

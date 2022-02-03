@@ -7,7 +7,7 @@ import useSWR, { useSWRConfig } from 'swr';
 import { FACTORIES, NETWORK_ID, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
 import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
+import { getTokenSlug, isTokenToTokenDex, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair, DexPairType } from '@utils/types';
 
@@ -106,7 +106,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
         })
         .filter(
           pool =>
-            pool.type === DexPairType.ttdex ||
+            isTokenToTokenDex(pool) ||
             fa12Factory.includes(pool.factoryAddress) ||
             fa2Factory.includes(pool.factoryAddress)
         );
