@@ -181,9 +181,9 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             {!values[PositionsModalFormField.SECOND_TOKEN] &&
               allTokens
                 .filter(
-                  x =>
+                  token =>
                     !values[PositionsModalFormField.FIRST_TOKEN] ||
-                    !isTokenEqual(x, values[PositionsModalFormField.FIRST_TOKEN])
+                    !isTokenEqual(token, values[PositionsModalFormField.FIRST_TOKEN])
                 )
                 .map(token => (
                   <PositionTokenCell
