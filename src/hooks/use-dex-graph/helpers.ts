@@ -53,10 +53,10 @@ export const dexPairsToSwapGraph = (dexPairs: DexPair[]) => {
     const token2Slug = getTokenSlug(pair.token2);
 
     dexGraph = withSlug(dexGraph, token1Slug);
-    dexGraph[token2Slug].edges[token1Slug] = pair;
+    dexGraph[token1Slug].edges[token2Slug] = pair;
 
     dexGraph = withSlug(dexGraph, token2Slug);
-    dexGraph[token1Slug].edges[token2Slug] = pair;
+    dexGraph[token2Slug].edges[token1Slug] = pair;
 
     return dexGraph;
   }, {});
