@@ -11,7 +11,7 @@ import {
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
 import { getTokenSlug } from '@utils/helpers';
-import { TokenId, DexPair } from '@utils/types';
+import { TokenId, DexPair, DexPairType } from '@utils/types';
 
 import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { getTokenOutput } from './tokenToTokenDex';
@@ -122,8 +122,8 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
         minOut = new BigNumber(1);
       }
 
-      if (prevDex?.type === 'ttdex') {
-        if (currentDex.type === 'tokenxtz') {
+      if (prevDex?.type === DexPairType.ttdex) {
+        if (currentDex.type === DexPairType.tokenxtz) {
           const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
           swapsParams.push(
             ttDexContract!.methods
@@ -144,7 +144,7 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
             pair_id: currentDex.id
           });
         }
-      } else if (currentDex.type === 'tokenxtz') {
+      } else if (currentDex.type === DexPairType.tokenxtz) {
         const tokenToXtzContract = await getWalletContract(tezos.wallet, currentDex.id);
         if (currentToken.contractAddress === TEZOS_TOKEN.contractAddress) {
           swapsParams.push(

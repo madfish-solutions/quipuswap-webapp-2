@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
 import { getWhitelistedTokenSymbol } from '@utils/helpers';
-import { DexPair, TokenXtzDexPairProps } from '@utils/types';
+import { DexPair, DexPairType, TokenXtzDexPairProps } from '@utils/types';
 
 import { Button } from '../elements/button';
 
@@ -28,8 +28,8 @@ export const ViewPairAnlitics: FC<ViewPairAnliticsProps> = ({ route, iconClassNa
     <div className={className}>
       {/* TODO: remove filtering and specify URL for token/token analytics as soon as it is implemented */}
       {route
-        .filter((dex): dex is TokenXtzDexPairProps => dex.type === 'tokenxtz')
-        .map(({ id, type: dexType, token1, token2 }) => (
+        .filter((dex): dex is TokenXtzDexPairProps => dex.type === DexPairType.tokenxtz)
+        .map(({ id, token1, token2 }) => (
           <Button
             key={id}
             className={buttonClassName}
