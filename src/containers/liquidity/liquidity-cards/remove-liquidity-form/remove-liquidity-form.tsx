@@ -59,6 +59,8 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
+  const isTezInPair = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
+
   const fixedUnfrozenBalance = share?.unfrozen.toFixed() ?? null;
   const fixedBalanceA = tokenABalance?.toFixed() ?? null;
   const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
@@ -76,6 +78,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
         frozenBalance={share?.frozen.toFixed()}
+        notFrozen={Boolean(isTezInPair)}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}

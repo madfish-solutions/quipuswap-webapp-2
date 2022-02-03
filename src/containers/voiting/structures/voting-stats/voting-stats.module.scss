@@ -9,11 +9,12 @@
 .right {
   display: flex;
   flex-direction: column;
-  height: 132px;
+  height: 236.5px
 }
 
 .votingsStatsItemContainer {
   display: flex;
+  flex-direction: column;
   column-gap: 64px;
 }
 
@@ -23,6 +24,15 @@
   margin-top: 40px;
 
   margin-left: auto;
+}
+
+@include media(">Lphone") {
+  .right {
+    height: 143.5px;
+  }
+  .votingsStatsItemContainer {
+    flex-direction: row;
+  }
 }
 
 @include media(">Ltablet") {

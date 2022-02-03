@@ -25,7 +25,8 @@ import {
   getTokenSlug,
   isEmptyArray,
   makeWhitelistedToken,
-  getTokenPairSlug
+  getTokenPairSlug,
+  isTokenToTokenDex
 } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
@@ -360,7 +361,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     {}
   );
 
-  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
+  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(isTokenToTokenDex);
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
@@ -436,7 +437,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
           )}
           {!accountPkh && <ConnectWalletButton className={s.button} />}
           {accountPkh && dataIsStale && (
-            <Button disabled={submitDisabled} loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
+            <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}
