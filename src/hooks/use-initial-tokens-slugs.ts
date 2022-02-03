@@ -20,7 +20,9 @@ type TokensSlugs = [string, string];
 
 const DEFAULT_FA2_TOKEN_ID = 0;
 const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
-const FALLBACK_TOKENS_SLUGS: TokensSlugs = [TEZOS_TOKEN_SLUG, getTokenSlug(networksDefaultTokens[NETWORK_ID])];
+const token1FallbackSlug = TEZOS_TOKEN_SLUG;
+const token2FallbackSlug = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
+const FALLBACK_TOKENS_SLUGS: TokensSlugs = [token1FallbackSlug, token2FallbackSlug];
 
 export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const router = useRouter();
@@ -73,7 +75,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
         return FALLBACK_TOKENS_SLUGS;
       }
       if (token1Slug === token2Slug) {
-        token2Slug = token1Slug === FALLBACK_TOKENS_SLUGS[0] ? FALLBACK_TOKENS_SLUGS[1] : FALLBACK_TOKENS_SLUGS[0];
+        token2Slug = token1Slug === token1FallbackSlug ? token2FallbackSlug : token1FallbackSlug;
       }
 
       return [token1Slug, token2Slug];
