@@ -83,14 +83,13 @@ export interface WhitelistedTokenMetadata {
 }
 
 export enum DexPairType {
-  ttdex = 'ttdex',
-  tokenxtz = 'tokenxtz'
+  TokenToToken = 'TokenToToken',
+  TokenToXtz = 'TokenToXtz'
 }
 
 interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
-  totalSupply: BigNumber;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
   id: string | number;
@@ -99,12 +98,12 @@ interface CommonDexPairProps {
 
 export interface TTDexPairProps extends CommonDexPairProps {
   id: number;
-  type: DexPairType.ttdex;
+  type: DexPairType.TokenToToken;
 }
 
 export interface TokenXtzDexPairProps extends CommonDexPairProps {
   id: string;
-  type: DexPairType.tokenxtz;
+  type: DexPairType.TokenToXtz;
 }
 
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;

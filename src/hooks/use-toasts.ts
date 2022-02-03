@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
 import { useUpdateToast } from './useUpdateToast';
@@ -12,34 +14,43 @@ export interface UseToasts {
 export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
 
-  const showErrorToast = (err: Error | string) => {
-    if (err instanceof Error) {
-      updateToast({
-        type: 'error',
-        render: `${err.name}: ${err.message}`
-      });
-    }
-    if (typeof err === 'string') {
-      updateToast({
-        type: 'error',
-        render: err
-      });
-    }
-  };
+  const showErrorToast = useCallback(
+    (err: Error | string) => {
+      if (err instanceof Error) {
+        updateToast({
+          type: 'error',
+          render: `${err.name}: ${err.message}`
+        });
+      }
+      if (typeof err === 'string') {
+        updateToast({
+          type: 'error',
+          render: err
+        });
+      }
+    },
+    [updateToast]
+  );
 
-  const showInfoToast = (render: ToastContent) => {
-    updateToast({
-      type: 'info',
-      render
-    });
-  };
+  const showInfoToast = useCallback(
+    (render: ToastContent) => {
+      updateToast({
+        type: 'info',
+        render
+      });
+    },
+    [updateToast]
+  );
 
-  const showSuccessToast = (render: ToastContent) => {
-    updateToast({
-      type: 'success',
-      render
-    });
-  };
+  const showSuccessToast = useCallback(
+    (render: ToastContent) => {
+      updateToast({
+        type: 'success',
+        render
+      });
+    },
+    [updateToast]
+  );
 
   return {
     updateToast,
