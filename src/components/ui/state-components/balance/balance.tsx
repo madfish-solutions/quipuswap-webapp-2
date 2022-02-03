@@ -33,7 +33,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
     return formatBalance(balance);
   }, [balance]);
 
-  const isError = formattedBalance === '0';
+  const isError = !Boolean(formattedBalance);
 
   return (
     <div className={styles.item2Line}>
