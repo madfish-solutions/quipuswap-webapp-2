@@ -1,9 +1,9 @@
 import { FC, useContext } from 'react';
 
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { Skeleton } from '@components/common/Skeleton';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 
 import s from './ModalCell.module.sass';
 
