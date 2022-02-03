@@ -33,10 +33,10 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
       const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-');
       const tezos = fallbackToolkits[NETWORK_ID];
 
-      const [tokenSlug1, tokenSlug2] = await Promise.all(
+      const tokensSlugs = await Promise.all(
         [rawSlug1, rawSlug2].map(async (rawSlug, index) => {
           if (isValidTokenSlug(rawSlug) !== true) {
-            return undefined;
+            return FALLBACK_TOKENS_SLUGS[index];
           }
           if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
             return rawSlug.toLowerCase();
@@ -66,14 +66,16 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
         })
       );
 
-      if (tokenSlug1 === tokenSlug2) {
+      const token1Slug = tokensSlugs[0];
+      let token2Slug = tokensSlugs[1];
+      if (!token1Slug || !token2Slug) {
         return FALLBACK_TOKENS_SLUGS;
       }
+      if (token1Slug === token2Slug) {
+        token2Slug = token1Slug === FALLBACK_TOKENS_SLUGS[0] ? FALLBACK_TOKENS_SLUGS[1] : FALLBACK_TOKENS_SLUGS[0];
+      }
 
-      return [
-        tokenSlug1 ?? (tokenSlug2 === FALLBACK_TOKENS_SLUGS[0] ? FALLBACK_TOKENS_SLUGS[1] : FALLBACK_TOKENS_SLUGS[0]),
-        tokenSlug2 ?? (tokenSlug1 === FALLBACK_TOKENS_SLUGS[1] ? FALLBACK_TOKENS_SLUGS[0] : FALLBACK_TOKENS_SLUGS[1])
-      ];
+      return [token1Slug, token2Slug];
     },
     [tokens]
   );
