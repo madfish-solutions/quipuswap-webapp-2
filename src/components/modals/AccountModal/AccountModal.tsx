@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
+import { useRef, useState, useEffect, useContext, useCallback, FC } from 'react';
 
 import { Copy, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -19,7 +19,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const AccountModal: React.FC = () => {
+export const AccountModal: FC = () => {
   const { t } = useTranslation(['common']);
   const accountPkh = useAccountPkh();
   const disconnect = useDisconnect();

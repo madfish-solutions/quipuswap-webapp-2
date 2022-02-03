@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useContext, useCallback, FC } from 'react';
+import { useMemo, useState, useEffect, useContext, useCallback, FC } from 'react';
 
 import { Plus, ColorModes, TokenNotFound, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';

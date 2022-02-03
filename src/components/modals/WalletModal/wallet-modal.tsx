@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
 import { Checkbox } from '@quipuswap/ui-kit';
@@ -23,9 +23,7 @@ const INSTALL_TEMPLE = 'Install Temple';
 export const WalletModal: FC = () => {
   const { t } = useTranslation(['common']);
   const { showErrorToast } = useToasts();
-  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(
-    localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false
-  );
+  const [isTermsAccepted, setIsTermsAccepted] = useState(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
   const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
   const { closeAccountInfoModal } = useConnectModalsState();
