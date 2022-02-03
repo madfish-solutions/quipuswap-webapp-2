@@ -96,12 +96,17 @@ const useDappTokens = () => {
 
   const addCustomToken = useCallback(
     (token: WhitelistedTokenWithQSNetworkType) => {
+      const isTokenInList = tokens.data.some(token_ => isTokenEqual(token_, token));
+      if (isTokenInList) {
+        return;
+      }
+
       saveCustomToken(token);
       setState(prevState => ({
         ...prevState,
         tokens: {
           ...tokens,
-          data: [...tokens.data.filter(alreadyPresentToken => !isTokenEqual(alreadyPresentToken, token)), token]
+          data: [...tokens.data, token]
         },
         searchTokens: { loading: false, data: [] }
       }));

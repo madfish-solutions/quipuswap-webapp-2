@@ -1,83 +1,61 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
 
-import { validateMinMax } from '@utils/validators';
+import { parseNumber } from '@utils/helpers';
+import { validateMinMaxNonStrict } from '@utils/validators';
 
+import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '../constants';
+import { useSaveFunction } from '../use-save-function';
 import s from './PositionsModal.module.sass';
-import { HeaderProps } from './PositionsModal.types';
+import { HeaderProps, PositionsModalFormField } from './PositionsModal.types';
 
 export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
+  useSaveFunction(save, values, debounce);
 
-  const timeout = useRef<NodeJS.Timeout>();
-  const promise = useRef<Promise<never>>();
-
-  const saveFunc = useCallback(async () => {
-    if (promise) {
-      // TODO: Remove this fucking shit
-      // eslint-disable-next-line @typescript-eslint/await-thenable
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    promise.current = save(values);
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    await promise;
-    setSubm(false);
-  }, [save, values]);
-
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-  }, [values, debounce, saveFunc]);
+  const setFormValue = useCallback(
+    (field: PositionsModalFormField, value: string | number) => form.mutators.setValue(field, value),
+    [form]
+  );
 
   return (
     <div className={s.inputs}>
-      <Field name="search">
+      <Field name={PositionsModalFormField.SEARCH}>
         {({ input, meta }) => (
-          <>
-            <Input
-              {...input}
-              StartAdornment={Search}
-              className={s.modalInput}
-              placeholder={t('common|Search')}
-              error={meta.error}
-              readOnly={values.token1 && values.token2}
-            />
-          </>
+          <Input
+            {...input}
+            StartAdornment={Search}
+            className={s.modalInput}
+            placeholder={t('common|Search')}
+            error={meta.error}
+            readOnly={values.token1 && values.token2}
+          />
         )}
       </Field>
       {isSecondInput && (
-        <Field name="tokenId" validate={validateMinMax(0, 100)}>
+        <Field
+          name={PositionsModalFormField.TOKEN_ID}
+          validate={validateMinMaxNonStrict(MIN_TOKEN_ID, MAX_TOKEN_ID)}
+          parse={value => parseNumber(value, MIN_TOKEN_ID, MAX_TOKEN_ID)}
+        >
           {({ input, meta }) => (
             <NumberInput
               {...input}
               className={s.modalInput}
               placeholder={t('common|Token ID')}
-              step={1}
-              min={0}
-              max={100}
-              readOnly={values.token1 && values.token2}
+              step={STEP}
+              min={MIN_TOKEN_ID}
+              max={MAX_TOKEN_ID}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
-                form.mutators.setValue('tokenId', Math.min(Number(input.value) + 1, 100));
+                setFormValue(PositionsModalFormField.TOKEN_ID, Math.min(Number(input.value), MAX_TOKEN_ID));
               }}
               onDecrementClick={() => {
-                form.mutators.setValue('tokenId', Math.max(Number(input.value) - 1, 1));
+                setFormValue(PositionsModalFormField.TOKEN_ID, Math.max(Number(input.value), MIN_TOKEN_ID));
               }}
             />
           )}

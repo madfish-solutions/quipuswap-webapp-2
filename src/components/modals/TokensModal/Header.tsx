@@ -1,60 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field } from 'react-final-form';
-import { noop } from 'rxjs';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
 import { parseNumber } from '@utils/helpers';
-import { validateMinMax } from '@utils/validators';
+import { validateMinMaxNonStrict } from '@utils/validators';
+
+import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '../constants';
+import { useSaveFunction } from '../use-save-function';
+import { FormValues, TokensModalFormField } from './types';
 
 export interface HeaderProps {
   isSecondInput: boolean;
   debounce: number;
   save: never;
   values: never;
-  form: never;
+  form: FormApi<FormValues, Partial<FormValues>>;
 }
 
 export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
+  useSaveFunction(save, values, debounce);
 
-  const timeout = useRef(setTimeout(noop, 0));
-  let promise: Promise<never>;
-
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    // @ts-ignore
-    promise = save(values);
-    await promise;
-    setSubm(false);
-  };
-
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-    // eslint-disable-next-line
-  }, [debounce, values]);
+  const setFormValue = useCallback(
+    (field: TokensModalFormField, value: string | number) => form.mutators.setValue(field, value),
+    [form]
+  );
 
   return (
     <div className={s.inputs}>
-      <Field name="search">
+      <Field name={TokensModalFormField.SEARCH}>
         {({ input, meta }) => (
           <Input
             {...input}
@@ -67,27 +46,27 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
         )}
       </Field>
       {isSecondInput && (
-        <Field name="tokenId" validate={validateMinMax(0, 100)} parse={value => parseNumber(value, 0, 100)}>
+        <Field
+          name={TokensModalFormField.TOKEN_ID}
+          validate={validateMinMaxNonStrict(MIN_TOKEN_ID, MAX_TOKEN_ID)}
+          parse={value => parseNumber(value, MIN_TOKEN_ID, MAX_TOKEN_ID)}
+        >
           {({ input, meta }) => (
-            <>
-              <NumberInput
-                {...input}
-                className={s.modalInput}
-                placeholder={t('common|Token ID')}
-                step={1}
-                min={0}
-                max={100}
-                error={(meta.touched && meta.error) || meta.submitError}
-                onIncrementClick={() => {
-                  // @ts-ignore
-                  form.mutators.setValue('tokenId', +input.value + 1 > 100 ? 100 : +input.value + 1);
-                }}
-                onDecrementClick={() => {
-                  // @ts-ignore
-                  form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
-                }}
-              />
-            </>
+            <NumberInput
+              {...input}
+              className={s.modalInput}
+              placeholder={t('common|Token ID')}
+              step={STEP}
+              min={MIN_TOKEN_ID}
+              max={MAX_TOKEN_ID}
+              error={(meta.touched && meta.error) || meta.submitError}
+              onIncrementClick={() => {
+                setFormValue(TokensModalFormField.TOKEN_ID, Math.min(Number(input.value), MAX_TOKEN_ID));
+              }}
+              onDecrementClick={() => {
+                setFormValue(TokensModalFormField.TOKEN_ID, Math.max(Number(input.value), MIN_TOKEN_ID));
+              }}
+            />
           )}
         </Field>
       )}

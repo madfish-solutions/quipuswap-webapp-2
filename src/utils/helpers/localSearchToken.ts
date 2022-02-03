@@ -1,7 +1,7 @@
 import { QSNetwork, WhitelistedToken } from '@utils/types';
 
 export interface WhitelistedOrCustomToken extends WhitelistedToken {
-  network: string;
+  network?: string;
 }
 
 export const localSearchToken = (

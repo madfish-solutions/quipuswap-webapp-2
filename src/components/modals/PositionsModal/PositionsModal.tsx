@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useContext, useCallback, FC } from 'react';
+import React, { useContext, FC } from 'react';
 
 import { Plus, Modal, ColorModes, TokenNotFound, LoadingTokenCell, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -7,23 +7,16 @@ import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
-import { NETWORK } from '@app.config';
 import { Button } from '@components/ui/elements/button';
-import { Standard } from '@graphql';
-import {
-  useTezos,
-  getTokenType,
-  useAddCustomToken,
-  useSearchCustomTokens,
-  useSearchTokens,
-  useTokens
-} from '@utils/dapp';
-import { isTokenEqual, localSearchToken, WhitelistedOrCustomToken } from '@utils/helpers';
+import { useAddCustomToken } from '@utils/dapp';
+import { isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
+import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
+import { useTokensSearchService } from '../use-tokens-search.service';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
-import { FormValues, IPositionsModalProps } from './PositionsModal.types';
+import { FormValues, IPositionsModalProps, PositionsModalFormField } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
 
 const themeClass = {
@@ -39,52 +32,17 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
   onRequestClose,
   notSelectable1 = undefined,
   notSelectable2 = undefined,
+  blackListedTokens = [],
   initialPair,
   ...props
 }) => {
   const addCustomToken = useAddCustomToken();
-  const searchCustomToken = useSearchCustomTokens();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
-  const tezos = useTezos();
   const { Form } = withTypes<FormValues>();
-  const { data: tokens } = useTokens();
-  const { data: searchTokens, loading: searchLoading } = useSearchTokens();
-  const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
-  const [inputValue, setInputValue] = useState<string>('');
-  const [inputToken, setInputToken] = useState<string>('');
-  const [isSoleFa2Token, setSoleFa2Token] = useState<boolean>(false);
 
-  const handleInput = (values: FormValues) => {
-    setInputValue(values.search ?? '');
-    setInputToken(isSoleFa2Token ? values.tokenId : '');
-  };
-
-  const handleTokenSearch = useCallback(() => {
-    const isTokens = tokens.filter((token: WhitelistedToken) =>
-      localSearchToken(token as WhitelistedOrCustomToken, NETWORK, inputValue, +inputToken)
-    );
-    setFilteredTokens(isTokens);
-    if (inputValue.length > 0 && isTokens.length === 0) {
-      searchCustomToken(inputValue, +inputToken);
-    }
-  }, [inputToken, inputValue, tokens, searchCustomToken]);
-
-  const isEmptyTokens = useMemo(
-    () => filteredTokens.length === 0 && searchTokens.length === 0,
-    [searchTokens, filteredTokens]
-  );
-
-  useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
-
-  const allTokens = useMemo(
-    () => (inputValue.length > 0 && filteredTokens.length === 0 ? searchTokens : filteredTokens),
-    [inputValue, filteredTokens, searchTokens]
-  );
-
-  useEffect(() => {
-    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
-  }, [inputValue, tezos]);
+  const { handleInput, isSoleFa2Token, allTokens, searchTokens, isTokensNotFound, isTokensLoading, resetSearchValues } =
+    useTokensSearchService<FormValues>(blackListedTokens);
 
   const handleTokenA = (
     token: WhitelistedToken,
@@ -92,13 +50,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     values: FormValues
   ) => {
     if (!notSelectable1) {
-      if (values.token2 && values.token1) {
-        form.mutators.setValue('token1', values.token2);
-        form.mutators.setValue('token2', undefined);
-      } else if (!values.token1) {
-        form.mutators.setValue('token1', token);
+      if (values[PositionsModalFormField.SECOND_TOKEN] && values[PositionsModalFormField.FIRST_TOKEN]) {
+        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, values[PositionsModalFormField.SECOND_TOKEN]);
+        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, undefined);
+      } else if (!values[PositionsModalFormField.FIRST_TOKEN]) {
+        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, token);
       } else {
-        form.mutators.setValue('token1', undefined);
+        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, undefined);
       }
     }
   };
@@ -109,10 +67,10 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     values: FormValues
   ) => {
     if (!notSelectable2) {
-      if (!values.token2) {
-        form.mutators.setValue('token2', token);
+      if (!values[PositionsModalFormField.SECOND_TOKEN]) {
+        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, token);
       } else {
-        form.mutators.setValue('token2', undefined);
+        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, undefined);
       }
     }
   };
@@ -125,15 +83,14 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     if (searchTokens.length > 0) {
       addCustomToken(token);
     }
-    if (!values.token1) {
-      form.mutators.setValue('token1', token);
-    } else if (!values.token2) {
-      form.mutators.setValue('token2', token);
+    if (!values[PositionsModalFormField.FIRST_TOKEN]) {
+      form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, token);
+    } else if (!values[PositionsModalFormField.SECOND_TOKEN]) {
+      form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, token);
     }
-    form.mutators.setValue('search', '');
-    form.mutators.setValue('tokenId', '');
-    setInputValue('');
-    setInputToken('');
+    form.mutators.setValue(PositionsModalFormField.SEARCH, DEFAULT_SEARCH_VALUE);
+    form.mutators.setValue(PositionsModalFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
+    resetSearchValues();
   };
 
   return (
@@ -145,24 +102,24 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
         }
       }}
       initialValues={{
-        token1: initialPair?.token1,
-        token2: initialPair?.token2
+        [PositionsModalFormField.FIRST_TOKEN]: initialPair?.token1,
+        [PositionsModalFormField.SECOND_TOKEN]: initialPair?.token2
       }}
       render={
         //eslint-disable-next-line sonarjs/cognitive-complexity
         ({ form, values }) => (
           <Modal
             title={t('common|Your Positions')}
-            header={<AutoSave form={form} debounce={1000} save={handleInput} isSecondInput={isSoleFa2Token} />}
+            header={<AutoSave form={form} debounce={200} save={handleInput} isSecondInput={isSoleFa2Token} />}
             footer={
               <Button
                 onClick={() =>
                   onChange({
-                    token1: values.token1,
-                    token2: values.token2
+                    token1: values[PositionsModalFormField.FIRST_TOKEN],
+                    token2: values[PositionsModalFormField.SECOND_TOKEN]
                   } as WhitelistedTokenPair)
                 }
-                disabled={!values.token2 || !values.token1}
+                disabled={!values[PositionsModalFormField.SECOND_TOKEN] || !values[PositionsModalFormField.FIRST_TOKEN]}
                 className={s.modalButton}
                 theme="primary"
               >
@@ -175,10 +132,10 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             cardClassName={cx(s.tokenModal, s.maxHeight)}
             contentClassName={cx(s.tokenModal)}
             onRequestClose={e => {
-              if (values.token1 && values.token2) {
+              if (values[PositionsModalFormField.FIRST_TOKEN] && values[PositionsModalFormField.SECOND_TOKEN]) {
                 onChange({
-                  token1: values.token1,
-                  token2: values.token2
+                  token1: values[PositionsModalFormField.FIRST_TOKEN],
+                  token2: values[PositionsModalFormField.SECOND_TOKEN]
                 } as WhitelistedTokenPair);
               }
               if (onRequestClose) {
@@ -187,7 +144,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             }}
             {...props}
           >
-            <Field name="token1" initialValue={notSelectable1}>
+            <Field name={PositionsModalFormField.FIRST_TOKEN} initialValue={notSelectable1}>
               {({ input }) => {
                 const token = input.value;
                 if (!token) {
@@ -197,13 +154,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                 return <PositionTokenCell token={token} onClick={() => handleTokenA(token, form, values)} isChecked />;
               }}
             </Field>
-            {values.token1 && (
+            {values[PositionsModalFormField.FIRST_TOKEN] && (
               <div className={s.listItem}>
                 <Plus className={s.iconButton} />
                 <div className={s.listText}>Search another Token</div>
               </div>
             )}
-            <Field initialValue={notSelectable2} name="token2">
+            <Field name={PositionsModalFormField.SECOND_TOKEN} initialValue={notSelectable2}>
               {({ input }) => {
                 const token = input.value;
                 if (!token) {
@@ -213,22 +170,26 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                 return <PositionTokenCell token={token} onClick={() => handleTokenB(token, form, values)} isChecked />;
               }}
             </Field>
-            {isEmptyTokens && !searchLoading && (
+            {isTokensNotFound && (
               <div className={s.tokenNotFound}>
                 <TokenNotFound />
                 <div className={s.notFoundLabel}>{t('common|No tokens found')}</div>
               </div>
             )}
-            {isEmptyTokens && searchLoading && [1, 2, 3, 4, 5, 6].map(x => <LoadingTokenCell key={x} />)}
-            {!values.token2 &&
+            {isTokensLoading && MOCK_LOADING_ARRAY.map(x => <LoadingTokenCell key={x} />)}
+            {!values[PositionsModalFormField.SECOND_TOKEN] &&
               allTokens
-                .filter(x => !values.token1 || !isTokenEqual(x, values.token1))
+                .filter(
+                  x =>
+                    !values[PositionsModalFormField.FIRST_TOKEN] ||
+                    !isTokenEqual(x, values[PositionsModalFormField.FIRST_TOKEN])
+                )
                 .map(token => {
                   const { contractAddress, fa2TokenId } = token;
 
                   return (
                     <PositionTokenCell
-                      key={`${contractAddress}_${fa2TokenId ?? 0}`}
+                      key={`${contractAddress}_${fa2TokenId ?? DEFAULT_TOKEN_ID}`}
                       token={token}
                       onClick={() => handleTokenListItem(token, form, values)}
                       isChecked={false}
