@@ -7,9 +7,9 @@ import useSWR, { useSWRConfig } from 'swr';
 import { FACTORIES, NETWORK_ID, POOLS_LIST_API, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
 import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
-import { getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
+import { getTokenSlug, isTokenToTokenDex, makeWhitelistedToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { DexPair } from '@utils/types';
+import { DexPair, DexPairType } from '@utils/types';
 
 import { useToasts } from './use-toasts';
 
@@ -20,7 +20,7 @@ interface RawToken {
 }
 
 interface RawCommonPoolData {
-  type: 'ttdex' | 'tokenxtz';
+  type: DexPairType;
   totalSupply: string;
   tokenAPool: string;
   tokenBPool: string;
@@ -28,13 +28,13 @@ interface RawCommonPoolData {
 }
 
 interface RawTTDexPoolData extends RawCommonPoolData {
-  type: 'ttdex';
+  type: DexPairType.ttdex;
   tokenB: RawToken;
   id: number;
 }
 
 interface RawTokenXtzPoolData extends RawCommonPoolData {
-  type: 'tokenxtz';
+  type: DexPairType.tokenxtz;
   address: string;
   factoryAddress: string;
 }
@@ -72,7 +72,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             tokens
           );
           const token2 =
-            rawPool.type === 'ttdex'
+            rawPool.type === DexPairType.ttdex
               ? makeWhitelistedToken(
                   {
                     contractAddress: rawPool.tokenB.address,
@@ -91,22 +91,22 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
             token2
           };
 
-          return rawPool.type === 'ttdex'
+          return rawPool.type === DexPairType.ttdex
             ? {
                 ...commonPoolProps,
                 id: rawPool.id,
-                type: 'ttdex' as const
+                type: DexPairType.ttdex as const
               }
             : {
                 ...commonPoolProps,
                 id: rawPool.address,
                 factoryAddress: rawPool.factoryAddress,
-                type: 'tokenxtz' as const
+                type: DexPairType.tokenxtz as const
               };
         })
         .filter(
           pool =>
-            pool.type === 'ttdex' ||
+            isTokenToTokenDex(pool) ||
             fa12Factory.includes(pool.factoryAddress) ||
             fa2Factory.includes(pool.factoryAddress)
         );
