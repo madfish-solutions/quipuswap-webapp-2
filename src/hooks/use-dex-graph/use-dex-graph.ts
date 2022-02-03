@@ -22,7 +22,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     [showErrorToast]
   );
 
-  const [displayedRawDexPools, setDisplayedRawDexPools] = useState<RawDexPool[] | null>(null);
+  const [displayedRawDexPools, setDisplayedRawDexPools] = useState<Nullable<RawDexPool[]>>(null);
   const { data: rawDexPools, initLoading: dexPoolsLoading } = useWebSocket<RawDexPool[]>(
     DEX_POOLS_URLS[NETWORK_ID],
     setDisplayedRawDexPools,
