@@ -6,6 +6,7 @@ import { DEX_POOLS_URLS, NETWORK_ID } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
 import { useWebSocket } from '@hooks/use-web-socket';
 import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { Nullable } from '@utils/types';
 
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
 import { RawDexPool, RawDexType } from './use-dex-graph.types';
