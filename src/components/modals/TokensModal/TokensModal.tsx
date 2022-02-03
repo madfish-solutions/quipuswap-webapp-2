@@ -13,6 +13,7 @@ import { getStandardValue } from '@utils/helpers/token.standard';
 import { WhitelistedToken } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
+import { getTokenKey } from '../get-token-key';
 import { useTokensSearchService } from '../use-tokens-search.service';
 import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
@@ -75,11 +76,11 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
           )}
           {isTokensLoading && MOCK_LOADING_ARRAY.map(x => <LoadingTokenCell key={x} />)}
           {allTokens.map(token => {
-            const { contractAddress, fa2TokenId, metadata, type } = token;
+            const { metadata, type } = token;
 
             return (
               <TokenCell
-                key={`${contractAddress}_${fa2TokenId ?? DEFAULT_TOKEN_ID}`}
+                key={getTokenKey(token)}
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}

@@ -52,10 +52,10 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
               max={MAX_TOKEN_ID}
               error={(meta.touched && meta.error) || meta.submitError}
               onIncrementClick={() => {
-                setFormValue(PositionsModalFormField.TOKEN_ID, Math.min(Number(input.value), MAX_TOKEN_ID));
+                setFormValue(PositionsModalFormField.TOKEN_ID, Math.min(Number(input.value) + STEP, MAX_TOKEN_ID));
               }}
               onDecrementClick={() => {
-                setFormValue(PositionsModalFormField.TOKEN_ID, Math.max(Number(input.value), MIN_TOKEN_ID));
+                setFormValue(PositionsModalFormField.TOKEN_ID, Math.max(Number(input.value) - STEP, MIN_TOKEN_ID));
               }}
             />
           )}

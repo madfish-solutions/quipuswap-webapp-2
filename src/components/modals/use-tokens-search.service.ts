@@ -8,13 +8,14 @@ import { isEmptyString } from '@utils/helpers/strings';
 import { WhitelistedToken } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from './constants';
+import { getTokenKey } from './get-token-key';
 
 const uniqTokens = (tokens: Array<WhitelistedToken>) => {
   const contractAddressMap = new Map<string, number>();
   const _ = 1;
 
   return tokens.filter(token => {
-    const key = token.contractAddress;
+    const key = getTokenKey(token);
     const value = contractAddressMap.get(key);
     if (value) {
       return false;
@@ -43,7 +44,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
 
   const handleInput = (values: Type) => {
     setInputValue(values.search ?? DEFAULT_SEARCH_VALUE);
-    setInputToken(isSoleFa2Token ? Number(values.tokenId) : DEFAULT_TOKEN_ID);
+    setInputToken(isSoleFa2Token && Boolean(values.tokenId) ? Number(values.tokenId) : DEFAULT_TOKEN_ID);
   };
 
   const resetSearchValues = () => {
@@ -59,6 +60,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
     const isTokens = tokens.filter((token: WhitelistedToken) =>
       localSearchToken(token, NETWORK, inputValue, inputToken)
     );
+
     setFilteredTokens(isTokens);
     if (!isEmptyString(inputValue) && isEmptyArray(isTokens)) {
       searchCustomToken(inputValue, inputToken);

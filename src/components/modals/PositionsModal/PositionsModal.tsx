@@ -13,6 +13,7 @@ import { isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
+import { getTokenKey } from '../get-token-key';
 import { useTokensSearchService } from '../use-tokens-search.service';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
@@ -184,18 +185,14 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                     !values[PositionsModalFormField.FIRST_TOKEN] ||
                     !isTokenEqual(x, values[PositionsModalFormField.FIRST_TOKEN])
                 )
-                .map(token => {
-                  const { contractAddress, fa2TokenId } = token;
-
-                  return (
-                    <PositionTokenCell
-                      key={`${contractAddress}_${fa2TokenId ?? DEFAULT_TOKEN_ID}`}
-                      token={token}
-                      onClick={() => handleTokenListItem(token, form, values)}
-                      isChecked={false}
-                    />
-                  );
-                })}
+                .map(token => (
+                  <PositionTokenCell
+                    key={getTokenKey(token)}
+                    token={token}
+                    onClick={() => handleTokenListItem(token, form, values)}
+                    isChecked={false}
+                  />
+                ))}
           </Modal>
         )
       }
