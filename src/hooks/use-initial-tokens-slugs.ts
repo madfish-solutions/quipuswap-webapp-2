@@ -19,7 +19,8 @@ import { isValidTokenSlug } from '@utils/validators';
 type TokensSlugs = [string, string];
 
 const DEFAULT_FA2_TOKEN_ID = 0;
-const FALLBACK_TOKENS_SLUGS: TokensSlugs = [getTokenSlug(TEZOS_TOKEN), getTokenSlug(networksDefaultTokens[NETWORK_ID])];
+const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
+const FALLBACK_TOKENS_SLUGS: TokensSlugs = [TEZOS_TOKEN_SLUG, getTokenSlug(networksDefaultTokens[NETWORK_ID])];
 
 export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const router = useRouter();
@@ -38,8 +39,8 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
           if (isValidTokenSlug(rawSlug) !== true) {
             return FALLBACK_TOKENS_SLUGS[index];
           }
-          if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
-            return rawSlug.toLowerCase();
+          if (rawSlug.toLowerCase() === TEZOS_TOKEN_SLUG.toLowerCase()) {
+            return TEZOS_TOKEN_SLUG;
           }
 
           const isKnownToken = tokens.find(knownToken => getTokenSlug(knownToken) === rawSlug);
