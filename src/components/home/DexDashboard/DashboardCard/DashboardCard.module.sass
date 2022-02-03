@@ -2,7 +2,7 @@
 @import "@styles/breakpoints"
 
 .root
-  padding: 24px 24px 0px 24px
+  padding: 12px 24px
   display: flex
   flex-direction: column
   align-items: center
@@ -10,7 +10,7 @@
 .skeleton
   width: 100px
   height: 36px
-  
+
 .header
   display: flex
   color: $text-03 !important
@@ -18,6 +18,15 @@
   margin-bottom: 8px
   align-items: center
 
+.currencyAmount
+  min-height: 23.94px
+
+@include media('<Lphone')
+  .root
+    &:first-child
+      padding-top: 0
+    &:last-child
+      padding-bottom: 0
 @include media('>Lphone')
   .root
     padding: 24px
