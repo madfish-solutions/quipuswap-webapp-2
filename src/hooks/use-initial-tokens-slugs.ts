@@ -5,11 +5,24 @@ import useSWR from 'swr';
 
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { fallbackToolkits, getTokenType, useTokens, useSearchCustomTokens, useAddCustomToken } from '@utils/dapp';
+import {
+  fallbackToolkits,
+  getTokenType,
+  useTokens,
+  useSearchCustomTokens,
+  useAddCustomToken,
+  fa2TokenExists
+} from '@utils/dapp';
 import { getTokenIdFromSlug, getTokenSlug } from '@utils/helpers';
 import { isValidTokenSlug } from '@utils/validators';
 
 type TokensSlugs = [string, string];
+
+const DEFAULT_FA2_TOKEN_ID = 0;
+const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
+const token1FallbackSlug = TEZOS_TOKEN_SLUG;
+const token2FallbackSlug = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
+const FALLBACK_TOKENS_SLUGS: TokensSlugs = [token1FallbackSlug, token2FallbackSlug];
 
 export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
   const router = useRouter();
@@ -20,47 +33,49 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
   const getInitialTokens = useCallback(
     // eslint-disable-next-line sonarjs/cognitive-complexity
     async (_key: string, tokensSlug = ''): Promise<TokensSlugs> => {
-      const fallbackTokensSlugs: TokensSlugs = [
-        getTokenSlug(TEZOS_TOKEN),
-        getTokenSlug(networksDefaultTokens[NETWORK_ID])
-      ];
-      const rawSlugs: string[] = tokensSlug.split('-').slice(0, 2);
-      while (rawSlugs.length < 2) {
-        rawSlugs.push('');
-      }
+      const [rawSlug1 = '', rawSlug2 = ''] = tokensSlug.split('-');
       const tezos = fallbackToolkits[NETWORK_ID];
+
       const tokensSlugs = await Promise.all(
-        rawSlugs.map(async (rawSlug, index) => {
-          if (!rawSlug || isValidTokenSlug(rawSlug) !== true) {
-            return fallbackTokensSlugs[index];
+        [rawSlug1, rawSlug2].map(async (rawSlug, index) => {
+          if (isValidTokenSlug(rawSlug) !== true) {
+            return FALLBACK_TOKENS_SLUGS[index];
           }
-          if (rawSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase()) {
-            return rawSlug.toLowerCase();
+          if (rawSlug.toLowerCase() === TEZOS_TOKEN_SLUG.toLowerCase()) {
+            return TEZOS_TOKEN_SLUG;
           }
-          const { contractAddress, fa2TokenId } = getTokenIdFromSlug(rawSlug);
+
+          const isKnownToken = tokens.find(knownToken => getTokenSlug(knownToken) === rawSlug);
+          if (isKnownToken) {
+            return rawSlug;
+          }
+
+          const { contractAddress, fa2TokenId = DEFAULT_FA2_TOKEN_ID } = getTokenIdFromSlug(rawSlug);
           try {
-            const alreadyKnownToken = tokens.find(knownToken => getTokenSlug(knownToken) === rawSlug);
-            const tokenType = alreadyKnownToken?.type ?? (await getTokenType(contractAddress, tezos));
-            if (tokenType === Standard.Fa2) {
-              return `${contractAddress}_${fa2TokenId ?? 0}`;
-            }
+            const tokenType = await getTokenType(contractAddress, tezos);
+
             if (tokenType === Standard.Fa12) {
               return contractAddress;
             }
 
-            return undefined;
-          } catch (e) {
-            return undefined;
+            if (tokenType === Standard.Fa2 && (await fa2TokenExists(tezos, contractAddress, fa2TokenId))) {
+              return getTokenSlug({ type: tokenType, fa2TokenId, contractAddress });
+            }
+          } catch {
+            // return statement is below
           }
+
+          return undefined;
         })
       );
+
       const token1Slug = tokensSlugs[0];
       let token2Slug = tokensSlugs[1];
       if (!token1Slug || !token2Slug) {
-        return fallbackTokensSlugs;
+        return FALLBACK_TOKENS_SLUGS;
       }
       if (token1Slug === token2Slug) {
-        token2Slug = token1Slug === fallbackTokensSlugs[0] ? fallbackTokensSlugs[1] : fallbackTokensSlugs[0];
+        token2Slug = token1Slug === token1FallbackSlug ? token2FallbackSlug : token1FallbackSlug;
       }
 
       return [token1Slug, token2Slug];

@@ -13,6 +13,7 @@ import { useAccountPkh } from '@utils/dapp';
 import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
@@ -31,6 +32,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   handleBalance: (value: string) => void;
   token: Nullable<WhitelistedToken>;
   token2?: Nullable<WhitelistedToken>;
+  tokensLoading?: boolean;
   blackListedTokens: WhitelistedToken[];
   setToken?: (token: WhitelistedToken) => void;
 }
@@ -56,6 +58,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   token2,
   setToken,
   blackListedTokens,
+  tokensLoading,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -124,8 +127,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                 secondTokenSymbol={secondTokenSymbol}
               />
               <h6 className={cx(s.token)}>
-                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
-                {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
+                {tokensLoading ? (
+                  <DashPlug zoom={1.45} animation />
+                ) : (
+                  <>
+                    {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
+                    {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
+                  </>
+                )}
               </h6>
               {!notSelectable && <Shevron />}
             </Button>

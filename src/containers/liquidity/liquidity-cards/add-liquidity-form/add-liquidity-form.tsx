@@ -18,7 +18,15 @@ import s from '../../Liquidity.module.sass';
 import { AddFormInterface } from './add-form.props';
 import { useAddLiquidityService } from './use-add-liqudity.service';
 
-export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, onTokenAChange, onTokenBChange }) => {
+export const AddLiquidityForm: FC<AddFormInterface> = ({
+  dex,
+  tokenA,
+  tokenB,
+  tokenALoading,
+  tokenBLoading,
+  onTokenAChange,
+  onTokenBChange
+}) => {
   const { t } = useTranslation(['liquidity']);
   const {
     validationMessageTokenA,
@@ -66,6 +74,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         label="Input"
         balance={fixedBalanceA}
         token={tokenA}
+        tokensLoading={tokenALoading}
         setToken={handleSetTokenA}
         value={tokenAInput}
         onChange={handleTokenAChange}
@@ -81,6 +90,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({ dex, tokenA, tokenB, on
         label="Input"
         balance={fixedBalanceB}
         token={tokenB}
+        tokensLoading={tokenBLoading}
         setToken={handleSetTokenB}
         value={tokenBInput}
         onChange={handleTokenBChange}
