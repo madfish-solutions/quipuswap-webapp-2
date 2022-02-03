@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -12,7 +12,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const LoadingTokenCell: React.FC = () => {
+export const LoadingTokenCell: FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(modeClass[colorThemeMode], s.loading, s.listItem, s.splitRow);

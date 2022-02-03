@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { Bage } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -24,7 +24,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const TokenCell: React.FC<TokenCellProps> = ({
+export const TokenCell: FC<TokenCellProps> = ({
   onClick,
   tabIndex,
   children,

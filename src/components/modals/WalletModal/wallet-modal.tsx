@@ -1,11 +1,12 @@
 import React, { FC, useCallback, useEffect, useState } from 'react';
 
 import { AbortedBeaconError } from '@airgap/beacon-sdk';
-import { Checkbox, Modal } from '@quipuswap/ui-kit';
+import { Checkbox } from '@quipuswap/ui-kit';
 import { NotGrantedTempleWalletError, TempleWallet } from '@temple-wallet/dapp';
 import { useTranslation } from 'next-i18next';
 
 import { SAVED_TERMS_KEY } from '@app.config';
+import { Modal } from '@components/modals/Modal';
 import { WalletButton } from '@components/modals/WalletModal/wallet-button';
 import { Button } from '@components/ui/elements/button';
 import { NoTempleWallet } from '@errors';

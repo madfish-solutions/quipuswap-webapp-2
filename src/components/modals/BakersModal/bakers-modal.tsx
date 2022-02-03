@@ -1,21 +1,13 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 
-import {
-  Modal,
-  Input,
-  Search,
-  ColorModes,
-  TokenNotFound,
-  LoadingBakerCell,
-  ColorThemeContext,
-  TEZOS_TOKEN
-} from '@quipuswap/ui-kit';
+import { Input, Search, ColorModes, TokenNotFound, ColorThemeContext, TEZOS_TOKEN } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 import { noop } from 'rxjs';
 
+import { LoadingBakerCell, Modal } from '@components/modals/Modal';
 import { BakerCell } from '@components/ui/components';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
 import { isEmptyArray, localSearchBaker, isBackerNotEmpty, formatBalance } from '@utils/helpers';

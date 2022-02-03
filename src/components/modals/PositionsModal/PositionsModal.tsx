@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, useContext, useCallback, FC } from 'react';
 
-import { Plus, Modal, ColorModes, TokenNotFound, LoadingTokenCell, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Plus, ColorModes, TokenNotFound, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
@@ -8,6 +8,7 @@ import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
 import { NETWORK } from '@app.config';
+import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
 import { Standard } from '@graphql';
 import {
