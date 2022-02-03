@@ -9,6 +9,7 @@
 .right {
   display: flex;
   flex-direction: column;
+  height: 236.5px
 }
 
 .votingsStatsItemContainer {
@@ -26,6 +27,9 @@
 }
 
 @include media(">Lphone") {
+  .right {
+    height: 143.5px;
+  }
   .votingsStatsItemContainer {
     flex-direction: row;
   }
