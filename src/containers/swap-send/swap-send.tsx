@@ -436,7 +436,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
           )}
           {!accountPkh && <ConnectWalletButton className={s.button} />}
           {accountPkh && dataIsStale && (
-            <Button disabled={submitDisabled} loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
+            <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}
