@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
-import ReactModal from 'react-modal';
+import { Props } from 'react-modal';
 
 import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
@@ -29,7 +29,7 @@ const themeClass = {
 // eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
+export const PositionsModal: FC<IPositionsModalProps & Props> = ({
   onChange,
   onRequestClose,
   notSelectable1 = undefined,
@@ -95,6 +95,38 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     resetSearchValues();
   };
 
+  const handleSelect = (values: FormValues) => {
+    onChange({
+      token1: values[PMFormField.FIRST_TOKEN],
+      token2: values[PMFormField.SECOND_TOKEN]
+    } as WhitelistedTokenPair);
+  };
+
+  const checkFirstTokenSame = (values: FormValues) =>
+    initialPair?.token1 &&
+    values[PMFormField.FIRST_TOKEN] &&
+    isTokenEqual(values[PMFormField.FIRST_TOKEN], initialPair.token1);
+  const checkSecondTokenSame = (values: FormValues) =>
+    initialPair?.token2 &&
+    values[PMFormField.SECOND_TOKEN] &&
+    isTokenEqual(values[PMFormField.SECOND_TOKEN], initialPair.token2);
+
+  const isSelectDisabled = (values: FormValues) => {
+    const isFirstTokenSameOrDontChoosen = checkFirstTokenSame(values);
+    const isSecondTokenSameOrDontChoosen = checkSecondTokenSame(values);
+
+    return isFirstTokenSameOrDontChoosen && isSecondTokenSameOrDontChoosen;
+  };
+
+  const shouldSubmitOnRequest = (values: FormValues) => {
+    const isFirstTokenSame = checkFirstTokenSame(values);
+    const isSecondTokenSame = checkSecondTokenSame(values);
+
+    return (
+      values[PMFormField.FIRST_TOKEN] && values[PMFormField.SECOND_TOKEN] && (!isFirstTokenSame || !isSecondTokenSame)
+    );
+  };
+
   return (
     <Form
       onSubmit={handleInput}
@@ -115,13 +147,8 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             header={<AutoSave form={form} debounce={DEBOUNCE_MS} save={handleInput} isSecondInput={isSoleFa2Token} />}
             footer={
               <Button
-                onClick={() =>
-                  onChange({
-                    token1: values[PMFormField.FIRST_TOKEN],
-                    token2: values[PMFormField.SECOND_TOKEN]
-                  } as WhitelistedTokenPair)
-                }
-                disabled={!values[PMFormField.SECOND_TOKEN] || !values[PMFormField.FIRST_TOKEN]}
+                onClick={() => handleSelect(values)}
+                disabled={isSelectDisabled(values)}
                 className={s.modalButton}
                 theme="primary"
               >
@@ -134,11 +161,8 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             cardClassName={cx(s.tokenModal, s.maxHeight)}
             contentClassName={cx(s.tokenModal)}
             onRequestClose={e => {
-              if (values[PMFormField.FIRST_TOKEN] && values[PMFormField.SECOND_TOKEN]) {
-                onChange({
-                  token1: values[PMFormField.FIRST_TOKEN],
-                  token2: values[PMFormField.SECOND_TOKEN]
-                } as WhitelistedTokenPair);
+              if (shouldSubmitOnRequest(values)) {
+                handleSelect(values);
               }
               if (onRequestClose) {
                 onRequestClose(e);
