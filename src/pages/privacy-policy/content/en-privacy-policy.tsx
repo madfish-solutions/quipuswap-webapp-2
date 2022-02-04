@@ -37,8 +37,8 @@ export const EnPrivacyPolicy: React.FC = () => {
       <br />
       <p className={s.big}>
         IF YOU ARE UNWILLING TO AGREE TO THIS PRIVACY POLICY, OR YOU DO NOT HAVE THE RIGHT, POWER, AND AUTHORITY TO ACT
-        ON BEHALF OF AND BIND THE BUSINESS, ORGANIZATION, OR OTHER ENTITY YOU REPRESENT, DO NOT ACCESS OR OTHERWISE USE
-        THE INTERFACE.
+        ON BEHALF OF AND BIND THE BUSINESS, ORGANIZATION, OR OTHER ENTITY YOU REPRESENT AND WARRANT, DO NOT ACCESS OR
+        OTHERWISE USE THE INTERFACE.
       </p>
       <br />
       <p className={s.big}>
@@ -81,20 +81,20 @@ export const EnPrivacyPolicy: React.FC = () => {
         <br />
         <br />
         <ol className={s.ol}>
-          <li>You represent that you are at least eighteen years old;</li>
+          <li>You represent and warrant that you are at least eighteen years old;</li>
           <li>
             You have the full right, power, and authority to enter into and comply with the terms and conditions of this
             Agreement on behalf of yourself and any company or legal entity for which you may access or use the
             Interface;
           </li>
           <li>
-            You further represent that you are not a citizen, resident, or member of any jurisdiction or group where
-            your use of the Interface would be illegal or otherwise violate any applicable law;
+            You further represent and warrant that you are not a citizen, resident, or member of any jurisdiction or
+            group where your use of the Interface would be illegal or otherwise violate any applicable law;
           </li>
           <li>
-            You further represent that your access and use of the Interface will fully comply with all applicable laws
-            and regulations and that you will not access or use the Interface to conduct, promote, or otherwise
-            facilitate any illegal activity.
+            You further represent and warrant that your access and use of the Interface will fully comply with all
+            applicable laws and regulations and that you will not access or use the Interface to conduct, promote, or
+            otherwise facilitate any illegal activity.
           </li>
         </ol>
       </div>

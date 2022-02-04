@@ -1,60 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
-import { Field } from 'react-final-form';
-import { noop } from 'rxjs';
+import { Field, FieldMetaState } from 'react-final-form';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
 import { parseNumber } from '@utils/helpers';
-import { validateMinMax } from '@utils/validators';
+import { validateMinMaxNonStrict } from '@utils/validators';
+
+import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '../constants';
+import { useSaveFunction } from '../use-save-function';
+import { FormValues, TMFormField } from './types';
 
 export interface HeaderProps {
   isSecondInput: boolean;
   debounce: number;
   save: never;
   values: never;
-  form: never;
+  form: FormApi<FormValues, Partial<FormValues>>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
+export const Header: FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
-  const [, setVal] = useState(values);
-  const [, setSubm] = useState<boolean>(false);
+  useSaveFunction(save, values, debounce);
 
-  const timeout = useRef(setTimeout(noop, 0));
-  let promise: Promise<never>;
+  const setFormValue = useCallback(
+    (field: TMFormField, value: string | number) => form.mutators.setValue(field, value),
+    [form]
+  );
 
-  const saveFunc = async () => {
-    if (promise) {
-      await promise;
-    }
-    setVal(values);
-    setSubm(true);
-    // @ts-ignore
-    promise = save(values);
-    await promise;
-    setSubm(false);
-  };
+  const handleIncrement = (value: string) =>
+    setFormValue(TMFormField.TOKEN_ID, Math.min(Number(value) + STEP, MAX_TOKEN_ID));
+  const handleDecrement = (value: string) =>
+    setFormValue(TMFormField.TOKEN_ID, Math.max(Number(value) - STEP, MIN_TOKEN_ID));
 
-  useEffect(() => {
-    if (timeout.current) {
-      clearTimeout(timeout.current);
-    }
-    timeout.current = setTimeout(saveFunc, debounce);
-
-    return () => {
-      if (timeout.current) {
-        clearTimeout(timeout.current);
-      }
-    };
-    // eslint-disable-next-line
-  }, [debounce, values]);
+  const isError = (meta: FieldMetaState<string>) => (meta.touched && meta.error) || meta.submitError;
 
   return (
     <div className={s.inputs}>
-      <Field name="search">
+      <Field name={TMFormField.SEARCH}>
         {({ input, meta }) => (
           <Input
             {...input}
@@ -67,27 +53,23 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
         )}
       </Field>
       {isSecondInput && (
-        <Field name="tokenId" validate={validateMinMax(0, 100)} parse={value => parseNumber(value, 0, 100)}>
+        <Field
+          name={TMFormField.TOKEN_ID}
+          validate={validateMinMaxNonStrict(MIN_TOKEN_ID, MAX_TOKEN_ID)}
+          parse={value => parseNumber(value, MIN_TOKEN_ID, MAX_TOKEN_ID)}
+        >
           {({ input, meta }) => (
-            <>
-              <NumberInput
-                {...input}
-                className={s.modalInput}
-                placeholder={t('common|Token ID')}
-                step={1}
-                min={0}
-                max={100}
-                error={(meta.touched && meta.error) || meta.submitError}
-                onIncrementClick={() => {
-                  // @ts-ignore
-                  form.mutators.setValue('tokenId', +input.value + 1 > 100 ? 100 : +input.value + 1);
-                }}
-                onDecrementClick={() => {
-                  // @ts-ignore
-                  form.mutators.setValue('tokenId', +input.value - 1 < 1 ? 1 : +input.value - 1);
-                }}
-              />
-            </>
+            <NumberInput
+              {...input}
+              className={s.modalInput}
+              placeholder={t('common|Token ID')}
+              step={STEP}
+              min={MIN_TOKEN_ID}
+              max={MAX_TOKEN_ID}
+              error={isError(meta)}
+              onIncrementClick={() => handleIncrement(input.value)}
+              onDecrementClick={() => handleDecrement(input.value)}
+            />
           )}
         </Field>
       )}

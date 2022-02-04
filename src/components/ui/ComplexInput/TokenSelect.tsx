@@ -1,6 +1,6 @@
-import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
+import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -10,13 +10,7 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import {
-  getTokenInputAmountCap,
-  getWhitelistedTokenSymbol,
-  isExist,
-  prepareTokenLogo,
-  prettyPrice
-} from '@utils/helpers';
+import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { DashPlug } from '../dash-plug';
@@ -96,10 +90,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const disabled = !isExist(balance) || !isExist(token);
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
-  const firstTokenSymbol = token ? getWhitelistedTokenSymbol(token) : 'TOKEN';
+  const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
 
   const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getWhitelistedTokenSymbol(token2) : token2;
+  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : null;
 
   const amountCap = token2 ? NO_CAP_AMOUNT : getTokenInputAmountCap(token);
 
@@ -141,8 +135,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   <DashPlug zoom={1.45} animation />
                 ) : (
                   <>
-                    {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
-                    {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
+                    {token ? getTokenSymbol(token) : 'SELECT'}
+                    {token2 && ` / ${getTokenSymbol(token2)}`}
                   </>
                 )}
               </h6>
