@@ -58,10 +58,10 @@ export const useSwapFormik = () => {
         ttDexAddress: TOKEN_TO_TOKEN_DEX
       });
 
-      const inputTokenAppelation = getTokenSymbol(inputToken);
-      const outputTokenAppelation = getTokenSymbol(outputToken);
+      const inputTokenSymbol = getTokenSymbol(inputToken);
+      const outputTokenSymbol = getTokenSymbol(outputToken);
 
-      const swapMessage = getSwapMessage(inputTokenAppelation, outputTokenAppelation);
+      const swapMessage = getSwapMessage(inputTokenSymbol, outputTokenSymbol);
 
       await confirmOperation(walletOperation.opHash, {
         message: swapMessage
