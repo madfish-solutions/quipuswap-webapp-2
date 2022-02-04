@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import constate from 'constate';
 
 import { DEX_POOLS_URLS, NETWORK_ID } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
 import { useWebSocket } from '@hooks/use-web-socket';
-import { useOnBlock, useTezos, useTokens } from '@utils/dapp';
+import { useTokens } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
@@ -15,7 +15,6 @@ const fallbackRawDexPools: RawDexPool[] = [];
 
 export const [DexGraphProvider, useDexGraph] = constate(() => {
   const { data: tokens } = useTokens();
-  const tezos = useTezos();
   const { showErrorToast } = useToasts();
 
   const handleLoadError = useCallback(
@@ -36,15 +35,12 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
 
     return quipuswapRawDexPools.map(rawDexPool => rawDexToDexPair(rawDexPool, tokens));
   }, [displayedRawDexPools, tokens]);
-  const [dataIsStale, setDataIsStale] = useState(false);
 
   const refreshDexPools = useCallback(
     () => setDisplayedRawDexPools(rawDexPools),
     [setDisplayedRawDexPools, rawDexPools]
   );
-
-  useOnBlock(tezos, () => setDataIsStale(true));
-  useEffect(() => setDataIsStale(false), [displayedRawDexPools]);
+  const dataIsStale = displayedRawDexPools !== rawDexPools;
 
   const dexGraph = useMemo(() => dexPairsToSwapGraph(displayedDexPools), [displayedDexPools]);
 
