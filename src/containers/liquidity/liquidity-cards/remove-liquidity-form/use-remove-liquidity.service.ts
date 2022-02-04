@@ -3,11 +3,11 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation } from '@utils/helpers';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation, isNull } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
@@ -39,6 +39,12 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+
+  const isPoolNotExist =
+    isNull(pairInfo) ||
+    pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
+    pairInfo.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
+    pairInfo.totalSupply.eq(EMPTY_POOL_AMOUNT);
 
   useEffect(() => {
     if (!dex || !tokenA || !tokenB) {
@@ -193,6 +199,8 @@ export const useRemoveLiquidityService = (
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
 
+  const isNewPair = dex && isPoolNotExist;
+
   return {
     validatedInputMessage,
     validatedOutputMessageA,
@@ -207,6 +215,7 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     share,
+    isNewPair,
     handleChange,
     handleBalance,
     handleSetTokenPair,
