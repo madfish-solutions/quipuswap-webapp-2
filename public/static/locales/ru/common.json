@@ -57,5 +57,7 @@
   "Error {{message}}": "Error: {{message}}",
   "Slippage": "Slippage",
   "Transaction deadline": "Transaction deadline",
-  "You are on Test net now!": "You are on Test net now!"
+  "You are on Test net now!": "You are on Test net now!",
+  "FA 1.2": "FA 1.2",
+  "FA 2.0": "FA 2.0"
 }

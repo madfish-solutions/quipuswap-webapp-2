@@ -49,5 +49,6 @@ export * from './get-success-messages';
 export * from './get-token-appellation';
 export * from './get-token-pair-slug';
 export * from './is-tez-included';
+export * from './token-type';
 export * from './is-token-to-tezos-dex';
 export * from './is-token-to-token-dex';

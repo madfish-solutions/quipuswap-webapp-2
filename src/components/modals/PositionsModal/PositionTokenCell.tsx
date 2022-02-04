@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { Checkbox, TokenCell } from '@quipuswap/ui-kit';
+import { Checkbox } from '@quipuswap/ui-kit';
 
+import { TokenCell } from '@components/modals/Modal';
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
