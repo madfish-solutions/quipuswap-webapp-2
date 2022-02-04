@@ -10,7 +10,13 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  getTokenInputAmountCap,
+  getWhitelistedTokenSymbol,
+  isExist,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { DashPlug } from '../dash-plug';
@@ -19,6 +25,7 @@ import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
 const DEFAULT_EXCHANGE_RATE = 0;
+const NO_CAP_AMOUNT = new BigNumber('0');
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
@@ -60,6 +67,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   blackListedTokens,
   tokensLoading,
   ...props
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -92,6 +100,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
 
   const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
   const secondTokenSymbol = token2 ? getWhitelistedTokenSymbol(token2) : token2;
+
+  const amountCap = token2 ? NO_CAP_AMOUNT : getTokenInputAmountCap(token);
 
   return (
     <>
@@ -141,7 +151,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance} handleBalance={handleBalance} />
+          <PercentSelector amountCap={amountCap} value={balance} handleBalance={handleBalance} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>
