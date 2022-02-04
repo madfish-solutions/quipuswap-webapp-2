@@ -163,7 +163,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                     ? prepareTokenLogo(token.metadata?.thumbnailUri)
                     : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
                 }
-                firstTokenSymbol={getTokenSymbol(token)}
+                firstTokenSymbol={getTokenSymbol(token ? token : TEZOS_TOKEN)}
               />
               <h6 className={cx(s.token)}>{token ? getTokenSymbol(token) : 'SELECT'}</h6>
               {selectable && <Shevron />}
