@@ -18,7 +18,7 @@ export const PositionTokenCell: React.FC<PositionTokenCellProps> = ({ token, onC
     tokenName={getTokenName(token)}
     tokenSymbol={getTokenName(token)}
     tabIndex={0}
-    onClick={() => onClick()}
+    onClick={onClick}
   >
     <Checkbox checked={isChecked} />
   </TokenCell>

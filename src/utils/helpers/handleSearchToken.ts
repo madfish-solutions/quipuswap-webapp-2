@@ -7,7 +7,7 @@ import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types'
 
 import { isTokenEqual } from './isTokenEqual';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
-import { localSearchToken, WhitelistedOrCustomToken } from './localSearchToken';
+import { localSearchToken } from './localSearchToken';
 
 interface SearchTokenType {
   tokens: WhitelistedToken[];
@@ -45,7 +45,7 @@ SearchTokenType) => {
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
       .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
-      .filter(token => localSearchToken(token as WhitelistedOrCustomToken, network, inputValue, +inputToken));
+      .filter(token => localSearchToken(token, network, inputValue, +inputToken));
     if (isTokens.length === 0) {
       return searchCustomToken(inputValue, +inputToken, true).then(x => {
         if (x) {
