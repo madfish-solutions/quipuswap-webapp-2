@@ -10,7 +10,7 @@ import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import {
   getAddLiquidityMessage,
   getInitializeLiquidityMessage,
-  getTokenAppellation,
+  getTokenSymbol,
   isNull,
   toDecimals
 } from '@utils/helpers';
@@ -256,8 +256,8 @@ export const useAddLiquidityService = (
       );
 
       if (addPairTokenToTokenOperation) {
-        const tokenAAppellation = getTokenAppellation(pairTokenA);
-        const tokenBAppellation = getTokenAppellation(pairTokenB);
+        const tokenAAppellation = getTokenSymbol(pairTokenA);
+        const tokenBAppellation = getTokenSymbol(pairTokenB);
 
         const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenAAppellation, tokenBAppellation);
 
@@ -281,8 +281,8 @@ export const useAddLiquidityService = (
         slippage
       );
 
-      const tokenAAppellation = getTokenAppellation(pairTokenA);
-      const tokenBAppellation = getTokenAppellation(pairTokenB);
+      const tokenAAppellation = getTokenSymbol(pairTokenA);
+      const tokenBAppellation = getTokenSymbol(pairTokenB);
 
       const addLiquidityMessage = getAddLiquidityMessage(tokenAAppellation, tokenBAppellation);
 
@@ -314,7 +314,7 @@ export const useAddLiquidityService = (
     if (shouldAddLiquidity) {
       const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
 
-      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+      const notTezTokenAppelation = getTokenSymbol(notTezToken);
 
       const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenAppelation);
 
@@ -337,7 +337,7 @@ export const useAddLiquidityService = (
         tezValue
       );
 
-      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+      const notTezTokenAppelation = getTokenSymbol(notTezToken);
 
       const initializeLiquidityMessage = getInitializeLiquidityMessage(
         TEZOS_TOKEN.metadata.symbol,

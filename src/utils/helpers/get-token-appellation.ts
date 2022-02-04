@@ -54,8 +54,18 @@ const parseAndShortize = (
   return null;
 };
 
-export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) => {
-  if (token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase()) {
+const isTezosToken = (token: WhitelistedToken) =>
+  token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
+
+const TOKEN_LENGTH = 10;
+const TOKEN_NAME = 'TOKEN';
+const TOKEN_SYMBOL = 'TOKEN';
+
+export const getTokenSymbol = (token: Optional<WhitelistedToken>, sliceAmount = TOKEN_LENGTH) => {
+  if (!token) {
+    return TOKEN_SYMBOL;
+  }
+  if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
 
@@ -74,8 +84,29 @@ export const getTokenAppellation = (token: WhitelistedToken, sliceAmount = 10) =
   return shortize(token.contractAddress);
 };
 
+export const getTokenName = (token: Optional<WhitelistedToken>, sliceAmount = TOKEN_LENGTH) => {
+  if (!token) {
+    return TOKEN_NAME;
+  }
+  if (isTezosToken(token)) {
+    return TEZOS_TOKEN.metadata.name;
+  }
+
+  const shortAddressOrName = parseAndShortize(token.metadata, MetadataTokenField.name, sliceAmount);
+  if (shortAddressOrName) {
+    return shortAddressOrName;
+  }
+
+  const shortAddressOrSymbol = parseAndShortize(token.metadata, MetadataTokenField.symbol, sliceAmount);
+  if (shortAddressOrSymbol) {
+    return shortAddressOrSymbol;
+  }
+
+  return shortize(token.contractAddress);
+};
+
 export const getTokensPairName = (tokenX: WhitelistedToken, tokenY: WhitelistedToken) => {
-  return `${getTokenAppellation(tokenX)} / ${getTokenAppellation(tokenY)}`;
+  return `${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`;
 };
 
 export const getTokensOptionalPairName = (

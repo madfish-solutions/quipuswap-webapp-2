@@ -6,7 +6,7 @@ import { useDexGraph } from '@hooks/use-dex-graph';
 import { useToasts } from '@hooks/use-toasts';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { getTokenAppellation, getTokenSlug, swap, toDecimals } from '@utils/helpers';
+import { getTokenSymbol, getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getSwapMessage } from '@utils/helpers/get-success-messages';
 import { getRouteWithInput } from '@utils/routing';
 
@@ -58,8 +58,8 @@ export const useSwapFormik = () => {
         ttDexAddress: TOKEN_TO_TOKEN_DEX
       });
 
-      const inputTokenAppelation = getTokenAppellation(inputToken);
-      const outputTokenAppelation = getTokenAppellation(outputToken);
+      const inputTokenAppelation = getTokenSymbol(inputToken);
+      const outputTokenAppelation = getTokenSymbol(outputToken);
 
       const swapMessage = getSwapMessage(inputTokenAppelation, outputTokenAppelation);
 

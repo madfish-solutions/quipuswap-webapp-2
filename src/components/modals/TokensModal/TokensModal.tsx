@@ -11,20 +11,14 @@ import { NETWORK } from '@app.config';
 import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
 import { Standard } from '@graphql';
 import {
-  useTezos,
   getTokenType,
   useAddCustomToken,
   useSearchCustomTokens,
   useSearchTokens,
+  useTezos,
   useTokens
 } from '@utils/dapp';
-import {
-  getWhitelistedTokenName,
-  getWhitelistedTokenSymbol,
-  isTokenEqual,
-  localSearchToken,
-  prepareTokenLogo
-} from '@utils/helpers';
+import { getTokenName, getTokenSymbol, isTokenEqual, localSearchToken, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 import { AutoSave } from './AutoSave';
@@ -142,8 +136,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
               <TokenCell
                 key={`${contractAddress}_${fa2TokenId ?? 0}`}
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
-                tokenName={getWhitelistedTokenName(token)}
-                tokenSymbol={getWhitelistedTokenSymbol(token)}
+                tokenName={getTokenName(token)}
+                tokenSymbol={getTokenSymbol(token)}
                 tokenType={type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}
