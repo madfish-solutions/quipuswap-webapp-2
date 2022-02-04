@@ -1,10 +1,10 @@
 interface NewsWithoutLink {
-  id: number;
+  id: string;
   img: string;
 }
 
 interface NewsWithLink {
-  id: number;
+  id: string;
   img: string;
   url: string;
   external?: boolean;
@@ -16,28 +16,29 @@ export const isNewsWithLink = (news: News): news is NewsWithLink => 'url' in new
 
 export const NewsData: News[] = [
   {
-    id: 0,
+    id: 'major-update',
     img: '/images/major-update.png'
   },
   {
-    id: 1,
-    img: '/images/open-source-dex.png'
+    id: 'tokens-security-audit',
+    img: '/images/tokens-security-audit.png',
+    external: true
   },
   {
-    id: 2,
+    id: 'quipu-airdrop',
     img: '/images/quipu-airdrop.png',
     url: 'https://story.madfish.solutions/quipuswap-governance-token-airdrop-announcement/',
     external: true
   },
   {
-    id: 3,
+    id: 'tokenomics-guide',
     img: '/images/tokenomics-guide.png',
     url: 'https://story.madfish.solutions/quipuswap-tokenomics-guide-quipu-learn-everything-about-our-governance-token/',
     external: true
   },
   {
-    id: 4,
-    img: '/images/security-audit.png',
+    id: 'quipuswap-security-audit',
+    img: '/images/quipuswap-security-audit.png',
     url: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
     external: true
   }
