@@ -1,4 +1,3 @@
-
 import { useContext, FC } from 'react';
 
 import { Plus, ColorModes, TokenNotFound, ColorThemeContext } from '@quipuswap/ui-kit';

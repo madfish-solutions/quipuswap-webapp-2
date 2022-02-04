@@ -7,10 +7,9 @@ import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
 import { useAddCustomToken } from '@utils/dapp';
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
-import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
-
 import { WhitelistedToken } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
