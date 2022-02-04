@@ -8,7 +8,7 @@ export interface IPositionsModalProps {
   blackListedTokens?: WhitelistedToken[];
 }
 
-export enum PositionsModalFormField {
+export enum PMFormField {
   FIRST_TOKEN = 'firstToken',
   SECOND_TOKEN = 'secondToken',
   SEARCH = 'search',
@@ -27,8 +27,8 @@ export interface HeaderProps {
 }
 
 export interface FormValues {
-  [PositionsModalFormField.SEARCH]: string;
-  [PositionsModalFormField.TOKEN_ID]: string;
-  [PositionsModalFormField.FIRST_TOKEN]: WhitelistedToken;
-  [PositionsModalFormField.SECOND_TOKEN]: WhitelistedToken;
+  [PMFormField.SEARCH]: string;
+  [PMFormField.TOKEN_ID]: string;
+  [PMFormField.FIRST_TOKEN]: WhitelistedToken;
+  [PMFormField.SECOND_TOKEN]: WhitelistedToken;
 }

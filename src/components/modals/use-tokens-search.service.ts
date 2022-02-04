@@ -11,8 +11,8 @@ import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from './constants';
 import { getTokenKey } from './get-token-key';
 
 const uniqTokens = (tokens: Array<WhitelistedToken>) => {
-  const contractAddressMap = new Map<string, number>();
-  const _ = 1;
+  const contractAddressMap = new Map<string, boolean>();
+  const FLAG = true;
 
   return tokens.filter(token => {
     const key = getTokenKey(token);
@@ -20,7 +20,7 @@ const uniqTokens = (tokens: Array<WhitelistedToken>) => {
     if (value) {
       return false;
     } else {
-      contractAddressMap.set(key, _);
+      contractAddressMap.set(key, FLAG);
 
       return true;
     }

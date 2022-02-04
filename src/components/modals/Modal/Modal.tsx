@@ -2,14 +2,14 @@ import { FC, MouseEvent, ReactNode, useContext, useState } from 'react';
 
 import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import ReactModal from 'react-modal';
+import ReactModal, { Props } from 'react-modal';
 
 import { Button } from '@components/ui/elements/button';
 
 import { PopupClose } from '../../svg/PopupClose';
 import s from './Modal.module.sass';
 
-export interface ModalProps extends ReactModal.Props {
+export interface ModalProps extends Props {
   innerClassName?: string;
   withCloseButton?: boolean;
   containerClassName?: string;
@@ -44,7 +44,7 @@ export const Modal: FC<ModalProps> = ({
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const [start, setStart] = useState();
+  const [start, setStart] = useState<EventTarget>();
 
   // eslint-disable-next-line
   const appElement: any = typeof window !== 'undefined' ? document.querySelector('#__next')! : undefined;
@@ -57,7 +57,6 @@ export const Modal: FC<ModalProps> = ({
   };
 
   const handleMouseDown = (event: MouseEvent<HTMLDivElement>) => {
-    // @ts-ignore
     setStart(event.target);
   };
 

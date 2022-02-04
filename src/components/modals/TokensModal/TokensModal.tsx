@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext, TokenNotFound } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -17,7 +17,7 @@ import { getTokenKey } from '../get-token-key';
 import { useTokensSearchService } from '../use-tokens-search.service';
 import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
-import { FormValues, TokensModalFormField } from './types';
+import { FormValues, TMFormField } from './types';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -30,7 +30,7 @@ interface TokensModalProps extends ReactModal.Props {
   blackListedTokens: WhitelistedToken[];
 }
 
-export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedTokens = [], ...props }) => {
+export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens = [], ...props }) => {
   const addCustomToken = useAddCustomToken();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
@@ -44,8 +44,8 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
     if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);
     }
-    form.mutators.setValue(TokensModalFormField.SEARCH, DEFAULT_SEARCH_VALUE);
-    form.mutators.setValue(TokensModalFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
+    form.mutators.setValue(TMFormField.SEARCH, DEFAULT_SEARCH_VALUE);
+    form.mutators.setValue(TMFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
     resetSearchValues();
   };
 

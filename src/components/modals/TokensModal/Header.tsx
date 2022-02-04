@@ -1,9 +1,9 @@
-import React, { useCallback } from 'react';
+import { FC, useCallback } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
-import { Field } from 'react-final-form';
+import { Field, FieldMetaState } from 'react-final-form';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
 import { parseNumber } from '@utils/helpers';
@@ -11,7 +11,7 @@ import { validateMinMaxNonStrict } from '@utils/validators';
 
 import { MAX_TOKEN_ID, MIN_TOKEN_ID, STEP } from '../constants';
 import { useSaveFunction } from '../use-save-function';
-import { FormValues, TokensModalFormField } from './types';
+import { FormValues, TMFormField } from './types';
 
 export interface HeaderProps {
   isSecondInput: boolean;
@@ -21,19 +21,26 @@ export interface HeaderProps {
   form: FormApi<FormValues, Partial<FormValues>>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
+export const Header: FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {
   const { t } = useTranslation(['common']);
 
   useSaveFunction(save, values, debounce);
 
   const setFormValue = useCallback(
-    (field: TokensModalFormField, value: string | number) => form.mutators.setValue(field, value),
+    (field: TMFormField, value: string | number) => form.mutators.setValue(field, value),
     [form]
   );
 
+  const handleIncrement = (value: string) =>
+    setFormValue(TMFormField.TOKEN_ID, Math.min(Number(value) + STEP, MAX_TOKEN_ID));
+  const handleDecrement = (value: string) =>
+    setFormValue(TMFormField.TOKEN_ID, Math.max(Number(value) - STEP, MIN_TOKEN_ID));
+
+  const isError = (meta: FieldMetaState<string>) => (meta.touched && meta.error) || meta.submitError;
+
   return (
     <div className={s.inputs}>
-      <Field name={TokensModalFormField.SEARCH}>
+      <Field name={TMFormField.SEARCH}>
         {({ input, meta }) => (
           <Input
             {...input}
@@ -47,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
       </Field>
       {isSecondInput && (
         <Field
-          name={TokensModalFormField.TOKEN_ID}
+          name={TMFormField.TOKEN_ID}
           validate={validateMinMaxNonStrict(MIN_TOKEN_ID, MAX_TOKEN_ID)}
           parse={value => parseNumber(value, MIN_TOKEN_ID, MAX_TOKEN_ID)}
         >
@@ -59,13 +66,9 @@ export const Header: React.FC<HeaderProps> = ({ isSecondInput, debounce, save, v
               step={STEP}
               min={MIN_TOKEN_ID}
               max={MAX_TOKEN_ID}
-              error={(meta.touched && meta.error) || meta.submitError}
-              onIncrementClick={() => {
-                setFormValue(TokensModalFormField.TOKEN_ID, Math.min(Number(input.value) + STEP, MAX_TOKEN_ID));
-              }}
-              onDecrementClick={() => {
-                setFormValue(TokensModalFormField.TOKEN_ID, Math.max(Number(input.value) - STEP, MIN_TOKEN_ID));
-              }}
+              error={isError(meta)}
+              onIncrementClick={() => handleIncrement(input.value)}
+              onDecrementClick={() => handleDecrement(input.value)}
             />
           )}
         </Field>

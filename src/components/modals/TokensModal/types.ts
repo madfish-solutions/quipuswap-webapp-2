@@ -1,9 +1,9 @@
-export enum TokensModalFormField {
+export enum TMFormField {
   SEARCH = 'search',
   TOKEN_ID = 'tokenId'
 }
 
 export interface FormValues {
-  [TokensModalFormField.SEARCH]: string;
-  [TokensModalFormField.TOKEN_ID]: number | string;
+  [TMFormField.SEARCH]: string;
+  [TMFormField.TOKEN_ID]: number | string;
 }

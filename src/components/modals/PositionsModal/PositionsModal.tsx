@@ -13,12 +13,12 @@ import { useAddCustomToken } from '@utils/dapp';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
-import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
+import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
 import { useTokensSearchService } from '../use-tokens-search.service';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
-import { FormValues, IPositionsModalProps, PositionsModalFormField } from './PositionsModal.types';
+import { FormValues, IPositionsModalProps, PMFormField } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
 
 const themeClass = {
@@ -52,13 +52,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     values: FormValues
   ) => {
     if (!notSelectable1) {
-      if (values[PositionsModalFormField.SECOND_TOKEN] && values[PositionsModalFormField.FIRST_TOKEN]) {
-        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, values[PositionsModalFormField.SECOND_TOKEN]);
-        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, undefined);
-      } else if (!values[PositionsModalFormField.FIRST_TOKEN]) {
-        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, token);
+      if (values[PMFormField.SECOND_TOKEN] && values[PMFormField.FIRST_TOKEN]) {
+        form.mutators.setValue(PMFormField.FIRST_TOKEN, values[PMFormField.SECOND_TOKEN]);
+        form.mutators.setValue(PMFormField.SECOND_TOKEN, undefined);
+      } else if (!values[PMFormField.FIRST_TOKEN]) {
+        form.mutators.setValue(PMFormField.FIRST_TOKEN, token);
       } else {
-        form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, undefined);
+        form.mutators.setValue(PMFormField.FIRST_TOKEN, undefined);
       }
     }
   };
@@ -69,10 +69,10 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     values: FormValues
   ) => {
     if (!notSelectable2) {
-      if (!values[PositionsModalFormField.SECOND_TOKEN]) {
-        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, token);
+      if (!values[PMFormField.SECOND_TOKEN]) {
+        form.mutators.setValue(PMFormField.SECOND_TOKEN, token);
       } else {
-        form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, undefined);
+        form.mutators.setValue(PMFormField.SECOND_TOKEN, undefined);
       }
     }
   };
@@ -85,13 +85,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);
     }
-    if (!values[PositionsModalFormField.FIRST_TOKEN]) {
-      form.mutators.setValue(PositionsModalFormField.FIRST_TOKEN, token);
-    } else if (!values[PositionsModalFormField.SECOND_TOKEN]) {
-      form.mutators.setValue(PositionsModalFormField.SECOND_TOKEN, token);
+    if (!values[PMFormField.FIRST_TOKEN]) {
+      form.mutators.setValue(PMFormField.FIRST_TOKEN, token);
+    } else if (!values[PMFormField.SECOND_TOKEN]) {
+      form.mutators.setValue(PMFormField.SECOND_TOKEN, token);
     }
-    form.mutators.setValue(PositionsModalFormField.SEARCH, DEFAULT_SEARCH_VALUE);
-    form.mutators.setValue(PositionsModalFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
+    form.mutators.setValue(PMFormField.SEARCH, DEFAULT_SEARCH_VALUE);
+    form.mutators.setValue(PMFormField.TOKEN_ID, DEFAULT_TOKEN_ID);
     resetSearchValues();
   };
 
@@ -104,24 +104,24 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
         }
       }}
       initialValues={{
-        [PositionsModalFormField.FIRST_TOKEN]: initialPair?.token1,
-        [PositionsModalFormField.SECOND_TOKEN]: initialPair?.token2
+        [PMFormField.FIRST_TOKEN]: initialPair?.token1,
+        [PMFormField.SECOND_TOKEN]: initialPair?.token2
       }}
       render={
         //eslint-disable-next-line sonarjs/cognitive-complexity
         ({ form, values }) => (
           <Modal
             title={t('common|Your Positions')}
-            header={<AutoSave form={form} debounce={200} save={handleInput} isSecondInput={isSoleFa2Token} />}
+            header={<AutoSave form={form} debounce={DEBOUNCE_MS} save={handleInput} isSecondInput={isSoleFa2Token} />}
             footer={
               <Button
                 onClick={() =>
                   onChange({
-                    token1: values[PositionsModalFormField.FIRST_TOKEN],
-                    token2: values[PositionsModalFormField.SECOND_TOKEN]
+                    token1: values[PMFormField.FIRST_TOKEN],
+                    token2: values[PMFormField.SECOND_TOKEN]
                   } as WhitelistedTokenPair)
                 }
-                disabled={!values[PositionsModalFormField.SECOND_TOKEN] || !values[PositionsModalFormField.FIRST_TOKEN]}
+                disabled={!values[PMFormField.SECOND_TOKEN] || !values[PMFormField.FIRST_TOKEN]}
                 className={s.modalButton}
                 theme="primary"
               >
@@ -134,10 +134,10 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             cardClassName={cx(s.tokenModal, s.maxHeight)}
             contentClassName={cx(s.tokenModal)}
             onRequestClose={e => {
-              if (values[PositionsModalFormField.FIRST_TOKEN] && values[PositionsModalFormField.SECOND_TOKEN]) {
+              if (values[PMFormField.FIRST_TOKEN] && values[PMFormField.SECOND_TOKEN]) {
                 onChange({
-                  token1: values[PositionsModalFormField.FIRST_TOKEN],
-                  token2: values[PositionsModalFormField.SECOND_TOKEN]
+                  token1: values[PMFormField.FIRST_TOKEN],
+                  token2: values[PMFormField.SECOND_TOKEN]
                 } as WhitelistedTokenPair);
               }
               if (onRequestClose) {
@@ -146,7 +146,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
             }}
             {...props}
           >
-            <Field name={PositionsModalFormField.FIRST_TOKEN} initialValue={notSelectable1}>
+            <Field name={PMFormField.FIRST_TOKEN} initialValue={notSelectable1}>
               {({ input }) => {
                 const token = input.value;
                 if (!token) {
@@ -156,13 +156,13 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
                 return <PositionTokenCell token={token} onClick={() => handleTokenA(token, form, values)} isChecked />;
               }}
             </Field>
-            {values[PositionsModalFormField.FIRST_TOKEN] && (
+            {values[PMFormField.FIRST_TOKEN] && (
               <div className={s.listItem}>
                 <Plus className={s.iconButton} />
                 <div className={s.listText}>Search another Token</div>
               </div>
             )}
-            <Field name={PositionsModalFormField.SECOND_TOKEN} initialValue={notSelectable2}>
+            <Field name={PMFormField.SECOND_TOKEN} initialValue={notSelectable2}>
               {({ input }) => {
                 const token = input.value;
                 if (!token) {
@@ -179,12 +179,10 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
               </div>
             )}
             {isTokensLoading && MOCK_LOADING_ARRAY.map(x => <LoadingTokenCell key={x} />)}
-            {!values[PositionsModalFormField.SECOND_TOKEN] &&
+            {!values[PMFormField.SECOND_TOKEN] &&
               allTokens
                 .filter(
-                  token =>
-                    !values[PositionsModalFormField.FIRST_TOKEN] ||
-                    !isTokenEqual(token, values[PositionsModalFormField.FIRST_TOKEN])
+                  token => !values[PMFormField.FIRST_TOKEN] || !isTokenEqual(token, values[PMFormField.FIRST_TOKEN])
                 )
                 .map(token => (
                   <PositionTokenCell
