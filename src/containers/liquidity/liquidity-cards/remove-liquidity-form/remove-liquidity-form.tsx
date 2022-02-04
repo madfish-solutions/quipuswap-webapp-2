@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
@@ -36,6 +37,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     tokenABalance,
     tokenBBalance,
     share,
+    isNewPair,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -127,6 +129,12 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
             <LiquidityDeadline error={validationMessageDeadline} />
           </div>
         </>
+      )}
+      {isNewPair && (
+        <AlarmMessage
+          message={t("liquidity|Note! The pool doesn't exist. You will create the new one.")}
+          className={s['mt-24']}
+        />
       )}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
