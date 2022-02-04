@@ -5,6 +5,14 @@ export interface IPositionsModalProps {
   initialPair: Nullable<WhitelistedTokenPair>;
   notSelectable1?: WhitelistedToken;
   notSelectable2?: WhitelistedToken;
+  blackListedTokens?: WhitelistedToken[];
+}
+
+export enum PMFormField {
+  FIRST_TOKEN = 'firstToken',
+  SECOND_TOKEN = 'secondToken',
+  SEARCH = 'search',
+  TOKEN_ID = 'tokenId'
 }
 
 export interface HeaderProps {
@@ -19,8 +27,8 @@ export interface HeaderProps {
 }
 
 export interface FormValues {
-  search: string;
-  tokenId: string;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  [PMFormField.SEARCH]: string;
+  [PMFormField.TOKEN_ID]: string;
+  [PMFormField.FIRST_TOKEN]: WhitelistedToken;
+  [PMFormField.SECOND_TOKEN]: WhitelistedToken;
 }
