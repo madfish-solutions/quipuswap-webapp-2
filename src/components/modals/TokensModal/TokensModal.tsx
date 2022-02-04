@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, LoadingTokenCell, Modal, TokenCell, TokenNotFound } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, TokenNotFound } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
@@ -9,7 +9,8 @@ import ReactModal from 'react-modal';
 
 import { useAddCustomToken } from '@utils/dapp';
 import { getWhitelistedTokenName, getWhitelistedTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
-import { getStandardValue } from '@utils/helpers/token.standard';
+import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
+
 import { WhitelistedToken } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
@@ -84,7 +85,7 @@ export const TokensModal: React.FC<TokensModalProps> = ({ onChange, blackListedT
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getWhitelistedTokenName(token)}
                 tokenSymbol={getWhitelistedTokenSymbol(token)}
-                tokenType={getStandardValue(type)}
+                tokenType={type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}
               />

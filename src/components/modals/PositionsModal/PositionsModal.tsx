@@ -1,15 +1,17 @@
-import React, { useContext, FC } from 'react';
 
-import { Plus, Modal, ColorModes, TokenNotFound, LoadingTokenCell, ColorThemeContext } from '@quipuswap/ui-kit';
+import { useContext, FC } from 'react';
+
+import { Plus, ColorModes, TokenNotFound, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
+import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
 import { useAddCustomToken } from '@utils/dapp';
-import { isTokenEqual } from '@utils/helpers';
+import { isEmptyArray, isTokenEqual } from '@utils/helpers';
 import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
@@ -81,7 +83,7 @@ export const PositionsModal: FC<IPositionsModalProps & ReactModal.Props> = ({
     form: FormApi<FormValues, Partial<FormValues>>,
     values: FormValues
   ) => {
-    if (searchTokens.length > 0) {
+    if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);
     }
     if (!values[PositionsModalFormField.FIRST_TOKEN]) {
