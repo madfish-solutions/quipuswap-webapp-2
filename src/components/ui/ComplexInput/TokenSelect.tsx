@@ -1,4 +1,4 @@
-import React, { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
+import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
 import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
@@ -88,10 +88,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const disabled = !isExist(balance) || !isExist(token);
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
-  const firstTokenSymbol = getTokenSymbol(token);
+  const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
 
   const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = getTokenSymbol(token2);
+  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : null;
 
   return (
     <>

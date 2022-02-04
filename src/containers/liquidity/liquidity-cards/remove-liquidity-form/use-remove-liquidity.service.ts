@@ -152,10 +152,10 @@ export const useRemoveLiquidityService = (
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
-        const tokenAAppellation = getTokenSymbol(tokenA);
-        const tokenBAppellation = getTokenSymbol(tokenB);
+        const tokenASymbol = getTokenSymbol(tokenA);
+        const tokenBSymbol = getTokenSymbol(tokenB);
 
-        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
         await confirmOperation(hash, {
           message: removeLiquidityMessage
@@ -166,10 +166,10 @@ export const useRemoveLiquidityService = (
 
       const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
-      const tokenAAppellation = getTokenSymbol(tokenA);
-      const tokenBAppellation = getTokenSymbol(tokenB);
+      const tokenASymbol = getTokenSymbol(tokenA);
+      const tokenBSymbol = getTokenSymbol(tokenB);
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
       await confirmOperation(sentTransaction.opHash, {
         message: removeLiquidityMessage

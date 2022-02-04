@@ -1,14 +1,4 @@
-import React, {
-  Dispatch,
-  FC,
-  Fragment,
-  HTMLProps,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useRef,
-  useState
-} from 'react';
+import { Dispatch, FC, Fragment, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
 import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import cx from 'classnames';

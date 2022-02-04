@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ColorModes, ColorThemeContext, Shevron, TokensLogos } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';

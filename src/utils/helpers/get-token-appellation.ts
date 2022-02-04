@@ -58,13 +58,8 @@ const isTezosToken = (token: WhitelistedToken) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;
-const TOKEN_NAME = 'TOKEN';
-const TOKEN_SYMBOL = 'TOKEN';
 
-export const getTokenSymbol = (token: Optional<WhitelistedToken>, sliceAmount = TOKEN_LENGTH) => {
-  if (!token) {
-    return TOKEN_SYMBOL;
-  }
+export const getTokenSymbol = (token: WhitelistedToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
@@ -84,10 +79,7 @@ export const getTokenSymbol = (token: Optional<WhitelistedToken>, sliceAmount = 
   return shortize(token.contractAddress);
 };
 
-export const getTokenName = (token: Optional<WhitelistedToken>, sliceAmount = TOKEN_LENGTH) => {
-  if (!token) {
-    return TOKEN_NAME;
-  }
+export const getTokenName = (token: WhitelistedToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.name;
   }
