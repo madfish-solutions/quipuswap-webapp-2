@@ -40,6 +40,7 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
     () => setDisplayedRawDexPools(rawDexPools),
     [setDisplayedRawDexPools, rawDexPools]
   );
+
   const dataIsStale = displayedRawDexPools !== rawDexPools;
 
   const dexGraph = useMemo(() => dexPairsToSwapGraph(displayedDexPools), [displayedDexPools]);
