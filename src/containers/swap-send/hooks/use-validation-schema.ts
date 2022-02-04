@@ -7,7 +7,8 @@ import {
   MAX_DEADLINE_MINS,
   MAX_SLIPPAGE_PERCENTAGE,
   MIN_DEADLINE_MINS,
-  TEZOS_TOKEN
+  TEZOS_TOKEN,
+  TEZ_TO_LEAVE
 } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug, isTokenEqual } from '@utils/helpers';
@@ -16,79 +17,49 @@ import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
 import { SwapAction, SwapField } from '../utils/types';
-import { useEstimateTezosCap } from './use-estimate-tezos-cap';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
+const TOKEN_ATOM_RAW_AMOUNT = 1;
 const EMPTY_BALANCE_AMOUNT = 0;
-const ONE_TOKEN_ATOM_RAW_AMOUNT = 1;
 
 export const useValidationSchema = () => {
   const { t } = useTranslation(['common', 'swap']);
   const { maxInputAmounts, maxOutputAmounts } = useSwapLimits();
   const { balances } = useBalances();
-  const estimateTezosCap = useEstimateTezosCap();
 
   return objectSchema().shape({
     [SwapField.INPUT_TOKEN]: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
     [SwapField.OUTPUT_TOKEN]: objectSchema().required(t(REQUIRE_FIELD_MESSAGE)),
     [SwapField.INPUT_AMOUNT]: objectSchema().when(
-      [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN, SwapField.DEADLINE, SwapField.SLIPPAGE, SwapField.RECIPIENT],
+      [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (
-        inputToken?: WhitelistedToken,
-        outputToken?: WhitelistedToken,
-        deadlineTimespanMins?: BigNumber,
-        slippagePercentage?: BigNumber,
-        recipient?: string
-      ) => {
+      (inputToken?: WhitelistedToken, outputToken?: WhitelistedToken) => {
         if (!inputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
         const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
         const inputTokenBalance = balances[inputTokenSlug];
+        const unlimitedBalanceMaxInput =
+          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity);
+        const inputTokenCap = isTokenEqual(inputToken, TEZOS_TOKEN) ? TEZ_TO_LEAVE : new BigNumber(0);
         let max: BigNumber | undefined = BigNumber.min(
-          inputTokenBalance ?? new BigNumber(Infinity),
-          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity)
+          inputTokenBalance
+            ? BigNumber.maximum(EMPTY_BALANCE_AMOUNT, inputTokenBalance.minus(inputTokenCap))
+            : new BigNumber(Infinity),
+          unlimitedBalanceMaxInput
         );
         if (!max.isFinite()) {
           max = undefined;
         }
-        const min = fromDecimals(new BigNumber(ONE_TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
-
-        const tezosCapTestFunction = isTokenEqual(inputToken, TEZOS_TOKEN)
-          ? async (value: unknown) => {
-              if (!(value instanceof BigNumber)) {
-                return true;
-              }
-
-              const tezosCap = await estimateTezosCap({
-                inputToken,
-                outputToken,
-                deadlineTimespanMins,
-                slippagePercentage,
-                recipient
-              });
-              // eslint-disable-next-line no-console
-              console.log('tezos cap', tezosCap.toFixed());
-
-              const tezosCapMax = BigNumber.maximum(
-                EMPTY_BALANCE_AMOUNT,
-                inputTokenBalance?.minus(tezosCap) ?? EMPTY_BALANCE_AMOUNT
-              );
-
-              return value.isLessThanOrEqualTo(tezosCapMax);
-            }
-          : async () => true;
-
-        if (inputTokenBalance?.eq(EMPTY_BALANCE_AMOUNT)) {
+        const min = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
+        if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)
             .test(
               'balance',
               () => t('common|Insufficient funds'),
               value => !(value instanceof BigNumber) || value.eq(EMPTY_BALANCE_AMOUNT)
             )
-            .test('tezos-cap', 'pizdets', tezosCapTestFunction)
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
 
@@ -102,7 +73,6 @@ export const useValidationSchema = () => {
               }),
             value => !(value instanceof BigNumber) || value.decimalPlaces() <= inputTokenDecimals
           )
-          .test('tezos-cap', 'pizdets', tezosCapTestFunction)
           .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
@@ -116,7 +86,7 @@ export const useValidationSchema = () => {
         const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(ONE_TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
+        return bigNumberSchema(fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
           .test(
             'output-decimals-amount',
             () =>

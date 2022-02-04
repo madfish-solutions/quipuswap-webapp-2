@@ -4,13 +4,20 @@ import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { TEZOS_TOKEN } from '@app.config';
+import { TEZOS_TOKEN, TEZ_TO_LEAVE } from '@app.config';
 import { TokensModal } from '@components/modals/TokensModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { amountsAreEqual, getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  amountsAreEqual,
+  getWhitelistedTokenSymbol,
+  isExist,
+  isTokenEqual,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -38,6 +45,8 @@ const themeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
+
+const noInputCap = new BigNumber('0');
 
 export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   amount,
@@ -123,6 +132,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
   };
 
   const preparedBalance = isExist(tokenDecimals) && isExist(balance) ? balance.toFixed(tokenDecimals) : null;
+  const inputCap = token && isTokenEqual(token, TEZOS_TOKEN) ? TEZ_TO_LEAVE : noInputCap;
 
   return (
     <>
@@ -171,7 +181,11 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
           </div>
         </div>
         <Scaffolding showChild={showBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
+          <PercentSelector
+            value={balance?.toFixed() ?? '0'}
+            handleBalance={handlePercentageSelect}
+            inputCap={inputCap}
+          />
         </Scaffolding>
         <ComplexError error={error} />
       </div>
