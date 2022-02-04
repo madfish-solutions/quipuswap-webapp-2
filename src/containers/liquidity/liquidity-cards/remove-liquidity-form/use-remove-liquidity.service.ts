@@ -116,8 +116,14 @@ export const useRemoveLiquidityService = (
 
     setValidatedOutputMessageA(validatedOutputA);
     setValidatedOutputMessageB(validatedOutputB);
-    setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
-    setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+
+    if (!isNaN(amountTokenA.toNumber())) {
+      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
+    }
+
+    if (!isNaN(amountTokenB.toNumber())) {
+      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, lpTokenInput, share]);
 
