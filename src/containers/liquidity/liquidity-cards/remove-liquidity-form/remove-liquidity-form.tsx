@@ -130,12 +130,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
           </div>
         </>
       )}
-      {isNewPair && (
-        <AlarmMessage
-          message={t("liquidity|Note! The pool doesn't exist. You will create the new one.")}
-          className={s['mt-24']}
-        />
-      )}
+      {isNewPair && <AlarmMessage message={t("liquidity|Note! The pool doesn't exist")} className={s['mt-24']} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
           Remove
