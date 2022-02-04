@@ -1,16 +1,6 @@
-import React, {
-  useRef,
-  useState,
-  useContext,
-  HTMLProps,
-  FC,
-  Fragment,
-  useEffect,
-  SetStateAction,
-  Dispatch
-} from 'react';
+import { Dispatch, FC, Fragment, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -20,7 +10,7 @@ import { PositionsModal } from '@components/modals/PositionsModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { DashPlug } from '../dash-plug';
@@ -155,16 +145,16 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             >
               <TokensLogos
                 firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
+                firstTokenSymbol={getTokenSymbol(token1)}
                 secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
+                secondTokenSymbol={getTokenSymbol(token2)}
                 loading={isTokensLoading}
               />
               <h6 className={cx(s.token, s.tokensSelect)}>
                 {tokenPair ? (
                   <Fragment>
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token2, 5)}
+                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
+                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
                   </Fragment>
                 ) : (
                   'Select LP'

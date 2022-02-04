@@ -8,7 +8,7 @@ import { TokensLogos } from '@components/common/TokensLogos';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { calculateRateAmount, getTokensPairName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { calculateRateAmount, getTokensPairName, getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
@@ -37,9 +37,9 @@ export const PoolCardItem: React.FC<PoolCardItemProps> = ({ pool, isSponsored })
         <div className={s.links}>
           <TokensLogos
             firstTokenIcon={prepareTokenLogo(pool.token1.metadata.thumbnailUri)}
-            firstTokenSymbol={getWhitelistedTokenSymbol(pool.token1)}
+            firstTokenSymbol={getTokenSymbol(pool.token1)}
             secondTokenIcon={prepareTokenLogo(pool.token2.metadata.thumbnailUri)}
-            secondTokenSymbol={getWhitelistedTokenSymbol(pool.token2)}
+            secondTokenSymbol={getTokenSymbol(pool.token2)}
             className={s.tokenLogo}
           />
           {getTokensPairName(pool.token1, pool.token2)}

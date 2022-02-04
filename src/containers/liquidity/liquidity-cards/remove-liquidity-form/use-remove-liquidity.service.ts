@@ -7,7 +7,7 @@ import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.c
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation, isNull } from '@utils/helpers';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isNull } from '@utils/helpers';
 import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
@@ -164,10 +164,10 @@ export const useRemoveLiquidityService = (
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
-        const tokenAAppellation = getTokenAppellation(tokenA);
-        const tokenBAppellation = getTokenAppellation(tokenB);
+        const tokenASymbol = getTokenSymbol(tokenA);
+        const tokenBSymbol = getTokenSymbol(tokenB);
 
-        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
         await confirmOperation(hash, {
           message: removeLiquidityMessage
@@ -178,10 +178,10 @@ export const useRemoveLiquidityService = (
 
       const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
-      const tokenAAppellation = getTokenAppellation(tokenA);
-      const tokenBAppellation = getTokenAppellation(tokenB);
+      const tokenASymbol = getTokenSymbol(tokenA);
+      const tokenBSymbol = getTokenSymbol(tokenB);
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
       await confirmOperation(sentTransaction.opHash, {
         message: removeLiquidityMessage
