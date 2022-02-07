@@ -11,7 +11,7 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { getMessageNotWhitelistedToken } from '@utils/helpers/isWhitelistedToken';
+import { getMessageNotWhitelistedToken } from '@utils/helpers/is-whitelisted-token';
 import { Nullable, Token } from '@utils/types';
 
 import { Danger } from '../components/danger';

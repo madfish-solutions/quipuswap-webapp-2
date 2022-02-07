@@ -11,7 +11,7 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/isWhitelistedToken';
+import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/is-whitelisted-token';
 import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { Danger } from '../components/danger';

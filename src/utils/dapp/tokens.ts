@@ -11,7 +11,7 @@ import {
   TEZOS_TOKEN
 } from '@app.config';
 import { Standard } from '@graphql';
-import { getTokenSlug, ipfsToHttps, isTokenEqual } from '@utils/helpers';
+import { getTokenSlug, ipfsToHttps, isClient, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
 import { Token, TokenPair, QSNetwork, TokenId, TokenWithQSNetworkType, QSNets, Nullable } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
@@ -26,8 +26,9 @@ interface RawTokenWithQSNetworkType extends Omit<TokenWithQSNetworkType, 'fa2Tok
 }
 
 export const getSavedTokens = (networkId?: QSNets) => {
-  const allRawTokens: Array<RawTokenWithQSNetworkType> =
-    typeof window === 'undefined' ? [] : JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]');
+  const allRawTokens: Array<RawTokenWithQSNetworkType> = isClient
+    ? JSON.parse(window.localStorage.getItem(SAVED_TOKENS_KEY) || '[]')
+    : [];
 
   const allTokens: TokenWithQSNetworkType[] = allRawTokens.map(({ fa2TokenId, ...restProps }) => ({
     ...restProps,
