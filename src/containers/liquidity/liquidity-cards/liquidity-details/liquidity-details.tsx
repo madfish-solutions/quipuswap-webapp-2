@@ -10,14 +10,14 @@ import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liqu
 import { useLoadLpTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
 import { isExist, isNull } from '@utils/helpers';
-import { Nullable, Token } from '@utils/types';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
 import { useLiquidityDetailsService } from './use-liqiudity-details.service';
 
 interface Props {
-  dex: Nullable<FoundDex>;
+  dex: Optional<FoundDex>;
   tokenA: Nullable<Token>;
   tokenB: Nullable<Token>;
 }

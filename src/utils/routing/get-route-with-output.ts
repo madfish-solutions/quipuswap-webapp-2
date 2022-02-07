@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { getTokenIdFromSlug, getMarketQuotient, getTokenInput } from '@utils/helpers';
 import { DexPair, Undefined } from '@utils/types';
 
-import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
 import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { getRoutesList } from './get-routes-list';
 import { CommonRouteProblemParams } from './types';
@@ -17,13 +17,7 @@ const getRouteWithOutputProblemMemoKey = ({ outputAmount, ...commonParams }: Rou
   [outputAmount?.toFixed(), getCommonRouteProblemMemoKey(commonParams)].join(',');
 
 export const getRouteWithOutput = memoizee(
-  ({
-    startTokenSlug,
-    endTokenSlug,
-    graph,
-    outputAmount,
-    depth = DEFAULT_ROUTE_SEARCH_DEPTH
-  }: RouteWithOutputProblemParams) => {
+  ({ startTokenSlug, endTokenSlug, graph, outputAmount, depth = MAX_HOPS_COUNT }: RouteWithOutputProblemParams) => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
     const inputToken = getTokenIdFromSlug(startTokenSlug);

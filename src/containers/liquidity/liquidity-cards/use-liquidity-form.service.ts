@@ -112,7 +112,7 @@ export const useLiquidityFormService = ({
     handleUpdateTitle(token, tokenB);
 
     if (tokenB) {
-      void changeRoute(tab.id, token, tokenB);
+      void (tab.id, token, tokenB);
     }
   };
   const handleChangeTokenB = (token: Token) => {

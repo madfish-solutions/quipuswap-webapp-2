@@ -8,5 +8,6 @@
   "Swap page description. Couple sentences...": "Swap page description. Couple sentences...",
   "Swap": "Swap",
   "Send": "Send",
-  "Update Rates": "Update Rates"
+  "Update Rates": "Update Rates",
+  "noRouteFoundError": "The exchange route can't be built for the provided token. Maybe one of the tokens you exchange isn't listed or there is no path shorter than {{maxHopsCount}} hops."
 }

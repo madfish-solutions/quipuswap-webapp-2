@@ -6,10 +6,13 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { DeadlineInput } from '@components/common/deadline-input';
 import { PageTitle } from '@components/common/page-title';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import complexInputStyles from '@components/ui/ComplexInput/ComplexInput.module.sass';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { Button } from '@components/ui/elements/button';
 import { useDexGraph } from '@hooks/use-dex-graph';
@@ -52,6 +55,7 @@ function tokensMetadataIsSame(token1: Token, token2: Token) {
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, router }) => {
   const {
     errors,
@@ -369,6 +373,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
+  const noRouteFound = !dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
 
   return (
     <>
@@ -435,6 +440,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
           {shouldShowDeadlineInput && (
             <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
+          <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
+            <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />
+          </div>
           {!accountPkh && <ConnectWalletButton className={s.button} />}
           {accountPkh && dataIsStale && (
             <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>

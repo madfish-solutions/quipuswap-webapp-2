@@ -41,7 +41,7 @@ export interface TokenPair {
   frozenBalance?: Nullable<string>;
   token1: Token;
   token2: Token;
-  dex?: FoundDex;
+  dex?: Nullable<FoundDex>;
 }
 
 export interface Token {

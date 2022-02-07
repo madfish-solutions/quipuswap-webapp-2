@@ -51,6 +51,7 @@ export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
+export const MAX_HOPS_COUNT = 5;
 
 export const TEZ_TO_LEAVE = new BigNumber('0.1');
 

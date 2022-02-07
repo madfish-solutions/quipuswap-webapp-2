@@ -12,6 +12,7 @@ import { CandidateButton } from '@containers/voiting/components';
 import { useTokensPair, useVoter, useVotingDex, useVotingLoading } from '@containers/voiting/helpers/voting.provider';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
+import { isNull } from '@utils/helpers';
 
 import { getCandidateInfo, getVotingInfo } from '../../helpers';
 import styles from './voting-details.module.scss';
@@ -106,7 +107,7 @@ export const VotingDetails: FC = () => {
           <Button
             className={s.detailsButton}
             theme="inverse"
-            href={pairLink}
+            href={isNull(pairLink) ? undefined : pairLink}
             external
             icon={<ExternalLink className={s.linkIcon} />}
           >
