@@ -2,10 +2,10 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { fromDecimals, getTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getTokenSymbol, isTezIncluded } from '@utils/helpers';
 import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
-import { calculatePoolAmount } from '../helpers';
+import { calculatePoolAmount, checkIsPoolEmpty } from '../helpers';
 import { usePairInfo } from '../hooks';
 
 const ONE_TOKEN = 1;
@@ -32,7 +32,10 @@ export const useLiquidityDetailsService = (
   const sellPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
   const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
 
-  const pairLink = dex ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}` : null;
+  const pairLink =
+    dex && isTezIncluded([tokenA, tokenB]) && !checkIsPoolEmpty(pairInfo)
+      ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}`
+      : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
 
   return {
