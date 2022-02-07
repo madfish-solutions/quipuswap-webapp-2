@@ -15,6 +15,7 @@ import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
 import s from './bakers-modal.module.scss';
+import { fixBakerFee } from './fix-baker-fee';
 
 const themeClass = {
   [ColorModes.Light]: s.light,
@@ -131,7 +132,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
   const getBakerName = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? baker.name : baker.address);
-  const getBakerFee = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? baker.fee.toString() : '');
+  const getBakerFee = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? fixBakerFee(baker.fee) : '');
   const getBakerLogo = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? baker.logo : '');
   const getBakerFreeSpace = (baker: WhitelistedBaker) => {
     if (isBackerNotEmpty(baker)) {
