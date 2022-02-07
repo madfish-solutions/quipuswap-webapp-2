@@ -12,12 +12,12 @@ import { Nullable, WhitelistedToken } from '@utils/types';
 export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
   const tezos = useTezos();
 
-  const [dex, setDex] = useState<Nullable<FoundDex>>(null);
+  const [dex, setDex] = useState<Nullable<FoundDex>>(undefined as never as null); //TODO: remove
 
   useEffect(() => {
     const load = async () => {
       if (!tezos || !tokenA || !tokenB) {
-        setDex(null);
+        setDex(undefined as never as null);
 
         return;
       }
@@ -37,7 +37,7 @@ export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nulla
     void load();
   }, [tezos, tokenA, tokenB]);
 
-  const clearDex = useCallback(() => setDex(null), []);
+  const clearDex = useCallback(() => setDex(undefined as never as null), []);
 
   return { dex, clearDex };
 };

@@ -14,12 +14,12 @@ export const usePairInfo = (
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>
 ) => {
-  const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
+  const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(undefined as never as null);
 
   const loadPairInfo = useCallback(
     async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
       if (!dex || !tokenA || !tokenB) {
-        setPairInfo(null);
+        setPairInfo(undefined as never as null);
 
         return;
       }

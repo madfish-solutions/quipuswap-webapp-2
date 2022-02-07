@@ -39,15 +39,22 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+  const [isNewPair, setIsNewPair] = useState(false);
 
   const isPoolNotExist =
     isNull(pairInfo) ||
-    pairInfo.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
-    pairInfo.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
-    pairInfo.totalSupply.eq(EMPTY_POOL_AMOUNT);
+    pairInfo?.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
+    pairInfo?.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
+    pairInfo?.totalSupply.eq(EMPTY_POOL_AMOUNT);
 
   useEffect(() => {
-    if (!dex || !tokenA || !tokenB) {
+    const isNewPool = isNull(dex) || (dex && isPoolNotExist);
+
+    setIsNewPair(isNewPool);
+  }, [isPoolNotExist, dex]);
+
+  useEffect(() => {
+    if (!tokenA || !tokenB) {
       setTokenAOutput('');
       setTokenBOutput('');
       setValidatedInputMessage(undefined);
@@ -198,8 +205,6 @@ export const useRemoveLiquidityService = (
 
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
-
-  const isNewPair = dex && isPoolNotExist;
 
   return {
     validatedInputMessage,

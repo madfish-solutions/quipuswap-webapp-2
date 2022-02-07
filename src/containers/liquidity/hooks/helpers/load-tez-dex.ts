@@ -30,7 +30,7 @@ export const loadTezDex = async ({
   } catch (error) {
     // TODO: Add Toaster
     // eslint-disable-next-line no-console
-    console.log('error', error);
+    return null;
   }
 
   return null;

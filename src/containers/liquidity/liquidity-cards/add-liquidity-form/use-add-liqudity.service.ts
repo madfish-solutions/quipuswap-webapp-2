@@ -46,12 +46,19 @@ export const useAddLiquidityService = (
   const [validationMessageTokenA, setValidationMessageTokenA] = useState<Undefined<string>>();
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
+  const [isNewPair, setIsNewPair] = useState(false);
 
   const isPoolNotExist =
     isNull(pairInfo) ||
-    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
-    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
-    pairInfo.totalSupply.eq(EMPTY_POOL);
+    pairInfo?.tokenAPool.eq(EMPTY_POOL) ||
+    pairInfo?.tokenBPool.eq(EMPTY_POOL) ||
+    pairInfo?.totalSupply.eq(EMPTY_POOL);
+
+  useEffect(() => {
+    const isNewPool = isNull(dex) || (dex && isPoolNotExist);
+
+    setIsNewPair(isNewPool);
+  }, [isPoolNotExist, dex]);
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -365,8 +372,6 @@ export const useAddLiquidityService = (
 
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
-
-  const isNewPair = dex && isPoolNotExist;
 
   return {
     validationMessageTokenA,
