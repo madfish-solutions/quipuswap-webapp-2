@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { getTokenIdFromSlug, getMaxTokenInput, getTokenOutput, isEmptyArray } from '@utils/helpers';
 import { DexPair, Undefined } from '@utils/types';
 
-import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
 import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { getRoutesList } from './get-routes-list';
 import { CommonRouteProblemParams } from './types';
@@ -13,7 +13,7 @@ const defaultMaxTokenInput = new BigNumber(Infinity);
 
 export const getMaxOutputRoute = memoizee(
   (
-    { startTokenSlug, endTokenSlug, graph, depth = DEFAULT_ROUTE_SEARCH_DEPTH }: CommonRouteProblemParams,
+    { startTokenSlug, endTokenSlug, graph, depth = MAX_HOPS_COUNT }: CommonRouteProblemParams,
     maxTokenInput = defaultMaxTokenInput
   ): Undefined<DexPair[]> => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
