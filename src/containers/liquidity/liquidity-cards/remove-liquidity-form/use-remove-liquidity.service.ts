@@ -26,7 +26,7 @@ export const useRemoveLiquidityService = (
   const accountPkh = useAccountPkh();
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
-  const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, isLoading, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
@@ -39,7 +39,6 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
-  const [isNewPair, setIsNewPair] = useState(false);
 
   const isPoolNotExist =
     isNull(pairInfo) ||
@@ -47,11 +46,7 @@ export const useRemoveLiquidityService = (
     pairInfo?.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
     pairInfo?.totalSupply.eq(EMPTY_POOL_AMOUNT);
 
-  useEffect(() => {
-    const isNewPool = isNull(dex) || (dex && isPoolNotExist);
-
-    setIsNewPair(isNewPool);
-  }, [isPoolNotExist, dex]);
+  const isPoolLoadingFinished = !isLoading;
 
   useEffect(() => {
     if (!tokenA || !tokenB) {
@@ -220,7 +215,8 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     share,
-    isNewPair,
+    isPoolNotExist,
+    isPoolLoadingFinished,
     handleChange,
     handleBalance,
     handleSetTokenPair,

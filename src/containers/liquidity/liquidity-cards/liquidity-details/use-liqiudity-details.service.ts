@@ -2,11 +2,11 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
+import { usePairInfo } from '@containers/liquidity/liquidity-cards/hooks';
 import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { calculatePoolAmount } from '../helpers';
-import { usePairInfo } from '../hooks';
 
 const ONE_TOKEN = 1;
 const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
