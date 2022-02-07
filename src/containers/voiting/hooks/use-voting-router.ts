@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useRouterPair } from '@hooks/useRouterPair';
 import { getTokenPairSlug } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { VotingTabs } from '../tabs.enum';
 
@@ -26,7 +26,7 @@ export const TabsContent = [
   }
 ];
 
-export const useVotingRouter = (token1: WhitelistedToken, token2: WhitelistedToken) => {
+export const useVotingRouter = (token1: Token, token2: Token) => {
   const router = useRouter();
   const [urlLoaded, setUrlLoaded] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);

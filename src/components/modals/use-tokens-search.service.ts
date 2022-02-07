@@ -3,14 +3,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NETWORK } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenType, useSearchCustomTokens, useSearchTokens, useTezos, useTokens } from '@utils/dapp';
-import { isEmptyArray, isTokenEqual, localSearchToken } from '@utils/helpers';
+import { isEmptyArray, isTokenEqual, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from './constants';
 import { getTokenKey } from './get-token-key';
 
-const uniqTokens = (tokens: Array<WhitelistedToken>) => {
+const uniqTokens = (tokens: Array<Token>) => {
   const contractAddressMap = new Map<string, boolean>();
   const FLAG = true;
 
@@ -28,7 +28,7 @@ const uniqTokens = (tokens: Array<WhitelistedToken>) => {
 };
 
 export const useTokensSearchService = <Type extends { search: string; tokenId: number | string }>(
-  blackListedTokens: Array<WhitelistedToken>
+  blackListedTokens: Array<Token>
 ) => {
   const tezos = useTezos();
 
@@ -37,7 +37,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
   const { data: tokens, loading: tokensLoading } = useTokens();
   const { data: searchTokens, loading: searchLoading } = useSearchTokens();
 
-  const [filteredTokens, setFilteredTokens] = useState<WhitelistedToken[]>([]);
+  const [filteredTokens, setFilteredTokens] = useState<Token[]>([]);
   const [inputValue, setInputValue] = useState(DEFAULT_SEARCH_VALUE);
   const [inputToken, setInputToken] = useState(DEFAULT_TOKEN_ID);
   const [isSoleFa2Token, setSoleFa2Token] = useState(false);
@@ -57,8 +57,8 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
       return;
     }
 
-    const isTokens = tokens.filter((token: WhitelistedToken) =>
-      localSearchToken(token, NETWORK, inputValue, inputToken)
+    const isTokens = tokens.filter((token: Token) =>
+      localSearchToken(token as TokenWithRequiredNetwork, NETWORK, inputValue, inputToken)
     );
 
     setFilteredTokens(isTokens);
@@ -74,7 +74,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
-  const isCurrentToken = (token: WhitelistedToken) =>
+  const isCurrentToken = (token: Token) =>
     token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken;
 
   const allTokens = useMemo(

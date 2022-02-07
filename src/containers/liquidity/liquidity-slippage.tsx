@@ -16,7 +16,7 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import s from '@styles/CommonContainer.module.sass';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
 import { getTokenSymbol } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
 
@@ -31,8 +31,8 @@ interface SlippageInputProps {
   error?: string;
   tokenAInput: string;
   tokenBInput: string;
-  tokenA: Nullable<WhitelistedToken>;
-  tokenB: Nullable<WhitelistedToken>;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
 }
 
 const DEFAULT_INVESTED_VALUE = 0;

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 export enum SwapAction {
   SWAP = 'swap',
@@ -23,8 +23,8 @@ export type SwapAmountFieldName = SwapField.INPUT_AMOUNT | SwapField.OUTPUT_AMOU
 export type SwapTokensFieldName = SwapField.INPUT_TOKEN | SwapField.OUTPUT_TOKEN;
 
 export interface SwapFormValues {
-  [SwapField.INPUT_TOKEN]: WhitelistedToken;
-  [SwapField.OUTPUT_TOKEN]: WhitelistedToken;
+  [SwapField.INPUT_TOKEN]: Token;
+  [SwapField.OUTPUT_TOKEN]: Token;
   [SwapField.INPUT_AMOUNT]: BigNumber;
   [SwapField.OUTPUT_AMOUNT]: BigNumber;
   [SwapField.RECIPIENT]: string;

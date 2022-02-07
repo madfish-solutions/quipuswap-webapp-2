@@ -11,8 +11,10 @@ import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { getMessageNotWhitelistedToken } from '@utils/helpers/is-whitelisted-token';
+import { Nullable, Token } from '@utils/types';
 
+import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
@@ -28,12 +30,12 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   label: string;
   error?: string;
   notSelectable?: boolean;
-  handleChange?: (token: WhitelistedToken) => void;
+  handleChange?: (token: Token) => void;
   handleBalance: (value: string) => void;
-  token: Nullable<WhitelistedToken>;
+  token: Nullable<Token>;
   tokensLoading?: boolean;
-  blackListedTokens: WhitelistedToken[];
-  setToken?: (token: WhitelistedToken) => void;
+  blackListedTokens: Token[];
+  setToken?: (token: Token) => void;
 }
 
 const themeClass = {
@@ -90,6 +92,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const tokenSelectSymbol = token ? getTokenSymbol(token) : 'SELECT';
   const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
+  const notWhitelistedMessage = token ? getMessageNotWhitelistedToken(token) : null;
+
   return (
     <>
       <div className={compoundClassName} onClick={focusInput} onKeyPress={focusInput} role="button" tabIndex={0}>
@@ -110,17 +114,20 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               disabled={disabled || props.disabled}
               {...props}
             />
-            <Button
-              disabled={notSelectable}
-              onClick={() => !notSelectable && setTokensModal(true)}
-              theme="quaternary"
-              className={s.item4}
-              textClassName={s.item4Inner}
-            >
-              <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
-              <h6 className={cx(s.token)}>{tokenLabel}</h6>
-              {!notSelectable && <Shevron />}
-            </Button>
+            <div className={s.dangerContainer}>
+              {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
+              <Button
+                disabled={notSelectable}
+                onClick={() => !notSelectable && setTokensModal(true)}
+                theme="quaternary"
+                className={s.item4}
+                textClassName={s.item4Inner}
+              >
+                <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                <h6 className={cx(s.token)}>{tokenLabel}</h6>
+                {!notSelectable && <Shevron />}
+              </Button>
+            </div>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>

@@ -7,9 +7,9 @@ import { loadT2tDex } from '@containers/liquidity/hooks/helpers/load-t2t-dex';
 import { loadTezDex } from '@containers/liquidity/hooks/helpers/load-tez-dex';
 import { useTezos } from '@utils/dapp';
 import { isTezIncluded } from '@utils/helpers';
-import { Nullable, WhitelistedToken, Optional } from '@utils/types';
+import { Nullable, Token, Optional } from '@utils/types';
 
-export const useDexContract = (tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+export const useDexContract = (tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const tezos = useTezos();
 
   const [dex, setDex] = useState<Optional<FoundDex>>(undefined); //TODO: remove

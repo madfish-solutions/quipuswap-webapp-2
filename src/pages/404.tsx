@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
+import { SITE_DESCRIPTION } from '@seo.config';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const modeClass = {
@@ -20,7 +21,7 @@ const NotFound: React.FC = () => {
   return (
     <BaseLayout
       title={t('common|Page Not Found')}
-      description={t('common|Page not found description. Couple sentences...')}
+      description={t(`common|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper404, modeClass[colorThemeMode])}
     >
       <div className={s.statusCode}>404</div>

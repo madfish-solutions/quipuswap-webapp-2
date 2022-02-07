@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 export interface PairInfo {
   id: Nullable<BigNumber>;
-  tokenA: WhitelistedToken;
-  tokenB: WhitelistedToken;
+  tokenA: Token;
+  tokenB: Token;
   totalSupply: BigNumber;
   tokenAPool: BigNumber;
   tokenBPool: BigNumber;

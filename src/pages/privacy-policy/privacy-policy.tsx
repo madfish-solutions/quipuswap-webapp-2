@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
 
 import { EnPrivacyPolicy } from './content/en-privacy-policy';
@@ -21,8 +22,8 @@ export const PrivacyPolicy: FC = () => {
 
   return (
     <BaseLayout
-      title={t('privacy|Privacy Policy')}
-      description={t('privacy|Privacy Policy page description. Couple sentences...')}
+      title={t(`privacy|Privacy Policy - ${SITE_TITLE}`)}
+      description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
       <Card>

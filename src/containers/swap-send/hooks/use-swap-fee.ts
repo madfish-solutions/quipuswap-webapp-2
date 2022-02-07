@@ -6,12 +6,12 @@ import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import useUpdateOnBlockSWR from '@hooks/useUpdateOnBlockSWR';
 import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
 import { estimateSwapFee, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@utils/helpers';
-import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
+import { DexPair, Nullable, Undefined, Token } from '@utils/types';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
 
 interface SwapParams {
-  inputToken: Undefined<WhitelistedToken>;
+  inputToken: Undefined<Token>;
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
   dexChain: Undefined<DexPair[]>;

@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Liquidity } from '@containers/liquidity';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/SwapLiquidity.module.sass';
 
 const LiquidityPage: React.FC = () => {
@@ -13,8 +14,8 @@ const LiquidityPage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('liquidity|Liquidity page')}
-      description={t('liquidity|Liquidity page description. Couple sentences...')}
+      title={t(`liquidity|Liquidity - ${SITE_TITLE}`)}
+      description={t(`liquidity|${SITE_DESCRIPTION}`)}
       className={s.wrapper}
     >
       <TestnetAlert />

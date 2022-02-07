@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -72,9 +72,10 @@ export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
-export const TEZOS_TOKEN: WhitelistedToken = {
+export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
   contractAddress: 'tez',
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     name: 'Tezos',
@@ -83,10 +84,11 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   }
 };
 
-export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
+export const MAINNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     symbol: 'QUIPU',
@@ -95,10 +97,11 @@ export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
   }
 };
 
-export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
+export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     symbol: 'QUIPU',
@@ -107,7 +110,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
   }
 };
 
-export const networksDefaultTokens: Record<QSNets, WhitelistedToken> = {
+export const networksDefaultTokens: Record<QSNets, Token> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };

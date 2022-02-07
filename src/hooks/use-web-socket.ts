@@ -1,4 +1,6 @@
-import { Dispatch, useEffect, useRef, useState } from 'react';
+import { Dispatch, useCallback, useEffect, useRef, useState } from 'react';
+
+import { useIsMountedRef } from './use-is-mounted';
 
 interface SuccessReturnType<T> {
   data: T;
@@ -26,11 +28,12 @@ export function useWebSocket<T>(
   onError?: Dispatch<Event>
 ): ReturnType<T> {
   const webSocketRef = useRef<WebSocket>();
+  const isMountedRef = useIsMountedRef();
 
   const [state, setState] = useState<ReturnType<T>>({ data: null, errorEvent: null, initLoading: true });
   const initLoadingRef = useRef(true);
 
-  useEffect(() => {
+  const initializeWebSocket = useCallback(() => {
     setState({ data: null, errorEvent: null, initLoading: true });
     initLoadingRef.current = true;
     webSocketRef.current = new WebSocket(webSocketUrl);
@@ -50,8 +53,18 @@ export function useWebSocket<T>(
       }
     };
 
+    webSocketRef.current.onclose = (e: CloseEvent) => {
+      if (isMountedRef.current) {
+        initializeWebSocket();
+      }
+    };
+  }, [webSocketUrl, onSuccess, onError, isMountedRef]);
+
+  useEffect(() => {
+    initializeWebSocket();
+
     return () => webSocketRef.current?.close();
-  }, [webSocketUrl, onSuccess, onError]);
+  }, [initializeWebSocket]);
 
   return state;
 }
