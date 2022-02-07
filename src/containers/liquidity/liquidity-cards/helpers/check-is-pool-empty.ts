@@ -4,7 +4,7 @@ import { Optional } from '@utils/types';
 
 import { PairInfo } from '../add-liquidity-form';
 
-export const checkIsPoolEmpty = (pairInfo: Optional<PairInfo>): boolean =>
+export const checkIsPoolEmpty = (pairInfo: Optional<PairInfo>) =>
   Boolean(
     isNull(pairInfo) ||
       pairInfo?.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
