@@ -7,7 +7,7 @@ import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { Slippage } from '@components/common/Slippage';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
-import { getMinimalOutput, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getMinimalOutput, getTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 interface SlippageInputProps {
@@ -48,7 +48,7 @@ export const SlippageInput: FC<SlippageInputProps> = ({
             <StateCurrencyAmount
               amount={minimumReceived}
               isError={!minimumReceived && !loading}
-              currency={outputToken ? getWhitelistedTokenSymbol(outputToken) : ''}
+              currency={outputToken ? getTokenSymbol(outputToken) : ''}
               balanceRule
             />
           </>

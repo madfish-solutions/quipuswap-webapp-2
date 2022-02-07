@@ -9,7 +9,7 @@ import ReactModal from 'react-modal';
 
 import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
 import { useAddCustomToken } from '@utils/dapp';
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
+import { getTokenName, getTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
@@ -82,8 +82,8 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens 
               <TokenCell
                 key={getTokenKey(token)}
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
-                tokenName={getWhitelistedTokenName(token)}
-                tokenSymbol={getWhitelistedTokenSymbol(token)}
+                tokenName={getTokenName(token)}
+                tokenSymbol={getTokenSymbol(token)}
                 tokenType={type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}

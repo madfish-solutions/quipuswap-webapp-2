@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { fromDecimals, getWhitelistedTokenSymbol } from '@utils/helpers';
+import { fromDecimals, getTokenSymbol } from '@utils/helpers';
 import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { calculatePoolAmount } from '../helpers';
@@ -26,8 +26,8 @@ export const useLiquidityDetailsService = (
   const fixedTokenAPoll = tokenA && tokenAPool && fromDecimals(tokenAPool, tokenA);
   const fixedTokenBPoll = tokenB && tokenBPool && fromDecimals(tokenBPool, tokenB);
 
-  const tokenAName = tokenA ? getWhitelistedTokenSymbol(tokenA) : null;
-  const tokenBName = tokenB ? getWhitelistedTokenSymbol(tokenB) : null;
+  const tokenASymbol = tokenA ? getTokenSymbol(tokenA) : null;
+  const tokenBSymbol = tokenB ? getTokenSymbol(tokenB) : null;
 
   const sellPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenA, tokenB, tokenAPool, tokenBPool);
   const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
@@ -38,8 +38,8 @@ export const useLiquidityDetailsService = (
   return {
     fixedTokenAPoll,
     fixedTokenBPoll,
-    tokenAName,
-    tokenBName,
+    tokenASymbol,
+    tokenBSymbol,
     sellPrice,
     buyPrice,
     pairLink,

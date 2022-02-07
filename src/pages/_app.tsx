@@ -43,14 +43,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     };
   }, []);
 
-  const languageAlternates: { hrefLang: string; href: string }[] = [];
-  router.locales?.forEach(el => {
-    languageAlternates.push({
-      hrefLang: el,
-      href: `${DEFAULT_SEO.WEBSITE_URL}${el}${router.pathname}`
-    });
-  });
-
   const description = DEFAULT_SEO.DESCRIPTION;
 
   return (
@@ -81,7 +73,6 @@ const App = ({ Component, pageProps }: AppProps) => {
           site: DEFAULT_SEO.TWITTER.SITE,
           cardType: DEFAULT_SEO.TWITTER.CARD_TYPE
         }}
-        languageAlternates={languageAlternates.length > 0 ? languageAlternates : undefined}
         additionalMetaTags={[
           {
             property: 'image',

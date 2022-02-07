@@ -1,6 +1,6 @@
 import { RouteProps } from '@quipuswap/ui-kit';
 
-import { getTokenSlug, getWhitelistedTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
+import { getTokenSlug, getTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
 import { DexPair, WhitelistedToken } from '@utils/types';
 
 export const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute: DexPair[]) => {
@@ -24,7 +24,7 @@ export const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute
           ...displayedRoute,
           {
             id: index + 1,
-            name: getWhitelistedTokenSymbol(newCurrentToken),
+            name: getTokenSymbol(newCurrentToken),
             link: transformTokenDataToAnalyticsLink({
               token: {
                 address: contractAddress,
@@ -43,7 +43,7 @@ export const dexRouteToQuipuUiKitRoute = (inputToken: WhitelistedToken, dexRoute
       displayedRoute: [
         {
           id: 0,
-          name: getWhitelistedTokenSymbol(inputToken),
+          name: getTokenSymbol(inputToken),
           link: transformTokenDataToAnalyticsLink({
             token: {
               address: inputToken.contractAddress,

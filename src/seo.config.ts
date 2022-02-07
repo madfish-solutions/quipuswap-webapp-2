@@ -1,13 +1,18 @@
+const SITE_NAME = 'QuipuSwap';
+const IMAGE = 'quipuswap.png';
+const TITLE = `${SITE_NAME} - Tezos DEX with on-chain governance for baking rewards`;
+const DESCRIPTION =
+  'Decentralized exchange for the Tezos based tokens. Create liquidity pairs, swap tokens, participate in farming activities. The DEX is open source and audited.';
+
 export const DEFAULT_SEO = {
-  TITLE: 'QuipuSwap - decentralized  DEX and AMM protocol for Tezos',
-  DESCRIPTION:
-    'Add and Trade any Tezos based tokens, add liquidity, earn trading fees and baking rewards, participate in governance and use liquidity tokens in farming projects.',
-  SITE_NAME: 'QuipuSwap',
-  WEBSITE_URL: 'https://quipuswap-landing.vercel.app/', // Slash in the end is necessary
-  IMAGE: 'og_image.jpg',
+  TITLE,
+  DESCRIPTION,
+  SITE_NAME,
+  WEBSITE_URL: 'https://quipuswap.com/', // Slash in the end is necessary
+  IMAGE,
   OG: {
     TYPE: 'website',
-    SITE_NAME: 'QuipuSwap - decentralized  DEX and AMM protocol for Tezos'
+    SITE_NAME: TITLE
   },
   TWITTER: {
     HANDLE: '@madfishofficial',
