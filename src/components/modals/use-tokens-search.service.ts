@@ -74,7 +74,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
-  const isCurrentToken = (token: WhitelistedToken) =>
+  const isCurrentToken = (token: Token) =>
     token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken;
 
   const allTokens = useMemo(

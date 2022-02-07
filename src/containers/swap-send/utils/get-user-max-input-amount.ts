@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 
 import { getTokenInputAmountCap } from '@utils/helpers';
-import { Optional, WhitelistedToken } from '@utils/types';
+import { Optional, Token } from '@utils/types';
 
 const EMPTY_BALANCE_AMOUNT = 0;
 
 export const getUserMaxInputAmount = (
-  inputToken: WhitelistedToken,
+  inputToken: Token,
   balance: Optional<BigNumber>,
   maxInputAmount: Optional<BigNumber>
 ) => {

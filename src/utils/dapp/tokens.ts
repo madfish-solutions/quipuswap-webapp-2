@@ -117,14 +117,12 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   if (json.tokens?.length) {
     // TODO: remove 'any' type as soon as fa2TokenId type is changed to BigNumber
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const whitelistedTokens: Token[] = json.tokens.map((token: any) => ({
+    const Tokens: Token[] = json.tokens.map((token: any) => ({
       ...token,
       isWhitelisted: true
     }));
 
-    tokens = tokens
-      .filter(fallbackToken => !whitelistedTokens.some(token => isTokenEqual(fallbackToken, token)))
-      .concat(whitelistedTokens);
+    tokens = tokens.filter(fallbackToken => !Tokens.some(token => isTokenEqual(fallbackToken, token))).concat(Tokens);
   } else {
     throw new InvalidTokensListError(json);
   }

@@ -24,7 +24,7 @@ export * from './handleSearchToken';
 export * from './localSearchSortSymbol';
 export * from './isAssetEqual';
 export * from './transformTokenDataToAnalyticsLink';
-export * from './transformNodeToWhitelistedToken';
+export * from './transformNodeToToken';
 export * from './preparePairName';
 export * from './isClient';
 export * from './get-token-slug';
