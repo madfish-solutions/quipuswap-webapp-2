@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron, TokensLogos } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -10,7 +10,14 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { amountsAreEqual, getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  amountsAreEqual,
+  getTokenInputAmountCap,
+  getTokenSymbol,
+  isExist,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -163,15 +170,19 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                     ? prepareTokenLogo(token.metadata?.thumbnailUri)
                     : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
                 }
-                firstTokenSymbol={token ? getWhitelistedTokenSymbol(token) : getWhitelistedTokenSymbol(TEZOS_TOKEN)}
+                firstTokenSymbol={getTokenSymbol(token ? token : TEZOS_TOKEN)}
               />
-              <h6 className={cx(s.token)}>{token ? getWhitelistedTokenSymbol(token) : 'SELECT'}</h6>
+              <h6 className={cx(s.token)}>{token ? getTokenSymbol(token) : 'SELECT'}</h6>
               {selectable && <Shevron />}
             </Button>
           </div>
         </div>
         <Scaffolding showChild={showBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
+          <PercentSelector
+            value={balance?.toFixed() ?? '0'}
+            handleBalance={handlePercentageSelect}
+            amountCap={getTokenInputAmountCap(token)}
+          />
         </Scaffolding>
         <ComplexError error={error} />
       </div>

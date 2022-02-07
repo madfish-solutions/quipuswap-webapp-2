@@ -11,5 +11,5 @@ export const Background: React.FC<IconProps> = ({ className }) => {
     return null;
   }
 
-  return <img src={`/svg/Desktop${colorThemeMode}.svg`} alt="background" className={className} />;
+  return <img src={`/svg/Desktop${colorThemeMode}.png`} alt="background" className={className} />;
 };

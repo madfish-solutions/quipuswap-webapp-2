@@ -1,6 +1,6 @@
-import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
+import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -10,9 +10,10 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getWhitelistedTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
+import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
@@ -30,7 +31,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   handleChange?: (token: WhitelistedToken) => void;
   handleBalance: (value: string) => void;
   token: Nullable<WhitelistedToken>;
-  token2?: Nullable<WhitelistedToken>;
+  tokensLoading?: boolean;
   blackListedTokens: WhitelistedToken[];
   setToken?: (token: WhitelistedToken) => void;
 }
@@ -53,9 +54,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   id,
   handleChange,
   token,
-  token2,
   setToken,
   blackListedTokens,
+  tokensLoading,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -85,10 +86,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const disabled = !isExist(balance) || !isExist(token);
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
-  const firstTokenSymbol = token ? getWhitelistedTokenSymbol(token) : 'TOKEN';
-
-  const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getWhitelistedTokenSymbol(token2) : token2;
+  const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
+  const tokenSelectSymbol = token ? getTokenSymbol(token) : 'SELECT';
+  const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
   return (
     <>
@@ -117,22 +117,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos
-                firstTokenIcon={firstTokenIcon}
-                firstTokenSymbol={firstTokenSymbol}
-                secondTokenIcon={secondTokenIcon}
-                secondTokenSymbol={secondTokenSymbol}
-              />
-              <h6 className={cx(s.token)}>
-                {token ? getWhitelistedTokenSymbol(token) : 'SELECT'}
-                {token2 && ` / ${getWhitelistedTokenSymbol(token2)}`}
-              </h6>
+              <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+              <h6 className={cx(s.token)}>{tokenLabel}</h6>
               {!notSelectable && <Shevron />}
             </Button>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance} handleBalance={handleBalance} />
+          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>

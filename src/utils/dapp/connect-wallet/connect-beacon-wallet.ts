@@ -13,7 +13,7 @@ import {
 } from '@app.config';
 import { NoBeaconWallet, WalletNotConected } from '@errors';
 import { isDefaultConnectType } from '@utils/helpers';
-import { LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
+import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
 import { toBeaconNetworkType } from '../network';
 import { ReadOnlySigner } from '../ReadOnlySigner';
@@ -27,7 +27,7 @@ export const beaconWallet =
         name: APP_NAME,
         iconUrl: `${BASE_URL}/favicon.ico`,
         preferredNetwork: (() => {
-          if (isDefaultConnectType(NETWORK) || IS_NETWORK_MAINNET) {
+          if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
             return toBeaconNetworkType(QSNets.mainnet);
           }
 

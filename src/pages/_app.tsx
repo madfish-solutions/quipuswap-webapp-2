@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { ColorThemeProvider } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeProvider } from '@quipuswap/ui-kit';
 import { appWithTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DefaultSeo } from 'next-seo';
@@ -15,7 +15,7 @@ import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
 import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
-import { debounce } from '@utils/helpers';
+import { debounce, isClient } from '@utils/helpers';
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
@@ -25,6 +25,10 @@ const HEIGHT_EMPTY = 0;
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
+
+  if (isClient && localStorage.getItem('theme') === ColorModes.Dark) {
+    document.querySelector('body')?.classList.add('dark');
+  }
 
   useEffect(() => {
     // prevents flashing
@@ -42,14 +46,6 @@ const App = ({ Component, pageProps }: AppProps) => {
       window.removeEventListener('resize', debouncedHandleResize);
     };
   }, []);
-
-  const languageAlternates: { hrefLang: string; href: string }[] = [];
-  router.locales?.forEach(el => {
-    languageAlternates.push({
-      hrefLang: el,
-      href: `${DEFAULT_SEO.WEBSITE_URL}${el}${router.pathname}`
-    });
-  });
 
   const description = DEFAULT_SEO.DESCRIPTION;
 
@@ -81,7 +77,6 @@ const App = ({ Component, pageProps }: AppProps) => {
           site: DEFAULT_SEO.TWITTER.SITE,
           cardType: DEFAULT_SEO.TWITTER.CARD_TYPE
         }}
-        languageAlternates={languageAlternates.length > 0 ? languageAlternates : undefined}
         additionalMetaTags={[
           {
             property: 'image',
@@ -94,15 +89,6 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link href="/fonts/style.css" rel="stylesheet" />
         {/* Favicons */}
         <link rel="icon" id="favicon" href="/favicon.ico" />
-        <link rel="icon" href="/favicon-32x32.png" type="image/png" />
-        <link rel="apple-touch-icon" sizes="48x48" href="/icons/icon-48x48.png" />
-        <link rel="apple-touch-icon" sizes="72x72" href="/icons/icon-72x72.png" />
-        <link rel="apple-touch-icon" sizes="96x96" href="/icons/icon-96x96.png" />
-        <link rel="apple-touch-icon" sizes="144x144" href="/icons/icon-144x144.png" />
-        <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192x192.png" />
-        <link rel="apple-touch-icon" sizes="256x256" href="/icons/icon-256x256.png" />
-        <link rel="apple-touch-icon" sizes="384x384" href="/icons/icon-384x384.png" />
-        <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512x512.png" />
       </Head>
 
       <DAppProvider>

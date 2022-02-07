@@ -9,3 +9,4 @@ export * from './getUserBalance';
 export * from './getAllowance';
 export * from './dapp-bakers';
 export * from './dapp-tokens';
+export * from './fa2-token-exists';

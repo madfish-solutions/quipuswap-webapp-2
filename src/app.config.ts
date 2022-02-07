@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { Standard } from '@graphql';
 import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
 
@@ -49,6 +51,9 @@ export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
+export const MAX_HOPS_COUNT = 5;
+
+export const TEZ_TO_LEAVE = new BigNumber('0.1');
 
 export const PRESET_AMOUNT_INPUT_DECIMALS = 2;
 export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
@@ -123,6 +128,11 @@ const TTDEX_CONTRACTS = {
   [QSNets.mainnet]: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi'
 };
 
+export const DEX_POOLS_URLS = {
+  mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,
+  hangzhounet: process.env.NEXT_PUBLIC_HANGZHOUNET_POOLS_URL!
+};
+
 const tzktExplorerUrls = {
   [QSNets.mainnet]: 'https://tzkt.io',
   [QSNets.hangzhounet]: 'https://hangzhounet.tzkt.io'
@@ -131,7 +141,6 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
-export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;

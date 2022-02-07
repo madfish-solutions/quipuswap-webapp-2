@@ -5,17 +5,17 @@ import { useTranslation } from 'next-i18next';
 
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
-  TEZOS_TOKEN,
-  PRESET_AMOUNT_INPUT_DECIMALS,
   MINIMUM_PRESET_AMOUNT_INPUT_VALUE,
+  NETWORK_ID,
   networksDefaultTokens,
-  NETWORK_ID
+  PRESET_AMOUNT_INPUT_DECIMALS,
+  TEZOS_TOKEN
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
-import { getWhitelistedTokenSymbol } from '@utils/helpers';
+import { getTokenSymbol } from '@utils/helpers';
 import { Nullable, WhitelistedToken } from '@utils/types';
 
 import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
@@ -87,7 +87,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
           balanceRule
           amount={maxInvestedOrReceivedA}
           amountDecimals={tokenA?.metadata.decimals}
-          currency={getWhitelistedTokenSymbol(tokenA ?? TEZOS_TOKEN)}
+          currency={getTokenSymbol(tokenA ?? TEZOS_TOKEN)}
         />
       </div>
       <div className={s.amountWrapper}>
@@ -96,7 +96,7 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
           balanceRule
           amount={maxInvestedOrReceivedB}
           amountDecimals={tokenB?.metadata.decimals}
-          currency={getWhitelistedTokenSymbol(tokenB ?? DEFAULT_STABLE_TOKEN)}
+          currency={getTokenSymbol(tokenB ?? DEFAULT_STABLE_TOKEN)}
         />
       </div>
     </>

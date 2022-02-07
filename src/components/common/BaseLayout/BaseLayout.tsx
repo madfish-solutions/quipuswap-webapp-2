@@ -11,7 +11,7 @@ import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
-import { Background } from '@components/ui/deskop-background';
+import { Background } from '@components/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
@@ -42,10 +42,11 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     <>
       <Head>
         {isDarkFavicon ? (
-          <link rel="icon" href={`${BASE_URL}favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
-          <link rel="icon" href={`${BASE_URL}light-favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
         )}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
 
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS}`} />

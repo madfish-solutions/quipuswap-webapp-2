@@ -1,1 +1,0 @@
-export const DEFAULT_ROUTE_SEARCH_DEPTH = 5;

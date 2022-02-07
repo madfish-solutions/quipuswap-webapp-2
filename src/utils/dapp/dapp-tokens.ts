@@ -11,11 +11,15 @@ import { isValidContractAddress } from '@utils/validators';
 
 import { getTokens, getFallbackTokens, getContract, getTokenMetadata, saveCustomToken } from '.';
 import { useTezos } from './dapp';
+import { InvalidFa2TokenIdError, TokenMetadataError } from './dapp-tokens.errors';
+import { fa2TokenExists } from './fa2-token-exists';
 
 export interface DAppTokens {
   tokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
   searchTokens: { data: WhitelistedToken[]; loading: boolean; error?: string };
 }
+
+const DEFAULT_FA2_TOKEN_ID = 0;
 
 const useDappTokens = () => {
   const [{ tokens, searchTokens }, setState] = useState<DAppTokens>({
@@ -42,40 +46,32 @@ const useDappTokens = () => {
 
   const searchCustomToken = useCallback(
     async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<WhitelistedToken | null> => {
-      if (isValidContractAddress(address)) {
-        setState(prevState => ({
-          ...prevState,
-          searchTokens: { loading: true, data: [] }
-        }));
-        let type;
-        try {
-          type = await getContract(tezos!, address);
-        } catch (e) {
-          type = null;
-        }
-        if (!type) {
-          setState(prevState => ({
-            ...prevState,
-            searchTokens: { loading: false, data: [] }
-          }));
+      if (!isValidContractAddress(address)) {
+        return null;
+      }
 
-          return null;
+      setState(prevState => ({
+        ...prevState,
+        searchTokens: { loading: true, data: [] }
+      }));
+      try {
+        const tokenContract = await getContract(tezos!, address);
+
+        const isFa2 = Boolean(tokenContract.methods.update_operators);
+        if (isFa2 && !(await fa2TokenExists(tezos!, address, tokenId ?? DEFAULT_FA2_TOKEN_ID))) {
+          throw new InvalidFa2TokenIdError(address, tokenId ?? DEFAULT_FA2_TOKEN_ID);
         }
-        const isFa2 = Boolean(type.methods.update_operators);
+
         const customToken = await getTokenMetadata(NETWORK, address, tokenId);
         if (!customToken) {
-          setState(prevState => ({
-            ...prevState,
-            searchTokens: { loading: false, data: [] }
-          }));
-
-          return null;
+          throw new TokenMetadataError();
         }
+
         const token: WhitelistedTokenWithQSNetworkType = {
           contractAddress: address,
           metadata: customToken,
           type: isFa2 ? Standard.Fa2 : Standard.Fa12,
-          fa2TokenId: isFa2 ? tokenId || 0 : undefined,
+          fa2TokenId: isFa2 ? tokenId || DEFAULT_FA2_TOKEN_ID : undefined,
           network: NETWORK_ID
         };
         setState(prevState => ({
@@ -87,21 +83,31 @@ const useDappTokens = () => {
         }
 
         return token;
-      }
+      } catch {
+        setState(prevState => ({
+          ...prevState,
+          searchTokens: { loading: false, data: [] }
+        }));
 
-      return null;
+        return null;
+      }
     },
     [tezos]
   );
 
   const addCustomToken = useCallback(
     (token: WhitelistedTokenWithQSNetworkType) => {
+      const isTokenInList = tokens.data.some(token_ => isTokenEqual(token_, token));
+      if (isTokenInList) {
+        return;
+      }
+
       saveCustomToken(token);
       setState(prevState => ({
         ...prevState,
         tokens: {
           ...tokens,
-          data: [...tokens.data.filter(alreadyPresentToken => !isTokenEqual(alreadyPresentToken, token)), token]
+          data: [...tokens.data, token]
         },
         searchTokens: { loading: false, data: [] }
       }));
