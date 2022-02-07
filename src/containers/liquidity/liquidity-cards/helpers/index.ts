@@ -1,5 +1,6 @@
 export * from './calculate-pool-amount';
 export * from './calculate-token-amount';
+export * from './check-is-pool-empty';
 export * from './decrease-by-slippage';
 export * from './find-not-tez-token';
 export * from './find-token';

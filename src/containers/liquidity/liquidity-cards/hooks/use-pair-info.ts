@@ -3,32 +3,34 @@ import { useCallback, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 
 import { TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { isNull, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { PairInfo } from '../add-liquidity-form';
 import { loadTokenToTokenPairInfo } from '../blockchain';
 import { getTezTokenPairInfo } from '../helpers';
 
 export const usePairInfo = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>
 ) => {
-  const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(undefined as never as null);
+  const [pairInfo, setPairInfo] = useState<Optional<PairInfo>>(undefined);
 
   const loadPairInfo = useCallback(
-    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
-      if (!dex || !tokenA || !tokenB) {
-        setPairInfo(undefined as never as null);
+    async (dex: Optional<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+      if (isUndefined(dex)) {
+        setPairInfo(undefined);
+      } else if (isNull(dex) || isNull(tokenA) || isNull(tokenB)) {
+        setPairInfo(null);
+      } else {
+        const newPairInfo =
+          dex.contract.address === TOKEN_TO_TOKEN_DEX
+            ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
+            : getTezTokenPairInfo(dex, tokenA, tokenB);
 
-        return;
+        setPairInfo(newPairInfo);
       }
-      const newPairInfo =
-        dex.contract.address === TOKEN_TO_TOKEN_DEX
-          ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
-          : getTezTokenPairInfo(dex, tokenA, tokenB);
-
-      setPairInfo(newPairInfo);
     },
     []
   );

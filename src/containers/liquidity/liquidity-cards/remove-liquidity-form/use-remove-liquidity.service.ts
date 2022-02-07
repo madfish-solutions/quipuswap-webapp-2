@@ -3,21 +3,22 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation, isNull } from '@utils/helpers';
-import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation } from '@utils/helpers';
+import { Nullable, Optional, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { removeExtraZeros } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
+import { checkIsPoolEmpty } from './../helpers/check-is-pool-empty';
 
 export const useRemoveLiquidityService = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
   onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
@@ -39,19 +40,8 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
-  const [isNewPair, setIsNewPair] = useState(false);
 
-  const isPoolNotExist =
-    isNull(pairInfo) ||
-    pairInfo?.tokenAPool.eq(EMPTY_POOL_AMOUNT) ||
-    pairInfo?.tokenBPool.eq(EMPTY_POOL_AMOUNT) ||
-    pairInfo?.totalSupply.eq(EMPTY_POOL_AMOUNT);
-
-  useEffect(() => {
-    const isNewPool = isNull(dex) || (dex && isPoolNotExist);
-
-    setIsNewPair(isNewPool);
-  }, [isPoolNotExist, dex]);
+  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
 
   useEffect(() => {
     if (!tokenA || !tokenB) {
@@ -220,7 +210,7 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     share,
-    isNewPair,
+    isPoolNotExist,
     handleChange,
     handleBalance,
     handleSetTokenPair,
