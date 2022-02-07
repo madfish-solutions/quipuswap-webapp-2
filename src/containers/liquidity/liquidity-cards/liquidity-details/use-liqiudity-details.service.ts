@@ -5,7 +5,7 @@ import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { fromDecimals, getTokenSymbol, isTezIncluded } from '@utils/helpers';
 import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
-import { calculatePoolAmount, checkIsPoolEmpty } from '../helpers';
+import { calculatePoolAmount, checkIsPoolExists } from '../helpers';
 import { usePairInfo } from '../hooks';
 
 const ONE_TOKEN = 1;
@@ -33,7 +33,7 @@ export const useLiquidityDetailsService = (
   const buyPrice = calculatePoolAmount(ONE_TOKEN_BN, tokenB, tokenA, tokenBPool, tokenAPool);
 
   const pairLink =
-    dex && isTezIncluded([tokenA, tokenB]) && !checkIsPoolEmpty(pairInfo)
+    dex && isTezIncluded([tokenA, tokenB]) && !checkIsPoolExists(pairInfo)
       ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}`
       : null;
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;

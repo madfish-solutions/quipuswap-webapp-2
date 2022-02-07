@@ -15,7 +15,7 @@ import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { removeExtraZeros } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
-import { checkIsPoolEmpty } from './../helpers/check-is-pool-empty';
+import { checkIsPoolExists } from '../helpers/check-is-pool-exists';
 
 export const useRemoveLiquidityService = (
   dex: Optional<FoundDex>,
@@ -41,7 +41,7 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
 
-  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
+  const isPoolNotExist = checkIsPoolExists(pairInfo);
 
   useEffect(() => {
     if (!tokenA || !tokenB) {

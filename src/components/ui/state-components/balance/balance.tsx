@@ -33,6 +33,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
     return formatBalance(balance);
   }, [balance]);
 
+  const isLoading = !formattedBalance;
   const isError = !Boolean(formattedBalance);
 
   return (
@@ -40,7 +41,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
       <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
       <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
         <StateWrapper
-          isLoading={!formattedBalance}
+          isLoading={isLoading}
           isError={isError}
           loaderFallback={<DashPlug />}
           errorFallback={<DashPlug animation={false} />}

@@ -31,6 +31,16 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { tokenASymbol, tokenBSymbol, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
     useLiquidityDetailsService(dex, tokenA, tokenB);
 
+  const isLoading = !isExist(dex) || !isExist(tokenB);
+
+  const isErrorA = fixedTokenAPoll?.eq(EMPTY_POOL_AMOUNT);
+  const isErrorB = fixedTokenBPoll?.eq(EMPTY_POOL_AMOUNT);
+  const isErrorTotal = share?.total.eq(EMPTY_POOL_AMOUNT);
+  const isErrorFrozen = share?.frozen.eq(EMPTY_POOL_AMOUNT);
+
+  const totalAmount = share?.total ?? null;
+  const frozenAmount = share?.frozen ?? null;
+
   return (
     <>
       <DetailsCardCell
@@ -66,8 +76,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenAPoll}
           currency={tokenASymbol}
-          isLoading={!isExist(dex) || !isExist(tokenA)}
-          isError={fixedTokenAPoll?.eq(EMPTY_POOL_AMOUNT)}
+          isLoading={isLoading}
+          isError={isErrorA}
           amountDecimals={tokenA?.metadata.decimals}
           errorFallback={<DashPlug animation={false} />}
         />
@@ -84,8 +94,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenBPoll}
           currency={tokenBSymbol}
-          isLoading={!isExist(dex) || !isExist(tokenB)}
-          isError={fixedTokenBPoll?.eq(EMPTY_POOL_AMOUNT)}
+          isLoading={isLoading}
+          isError={isErrorB}
           amountDecimals={tokenB?.metadata.decimals}
           errorFallback={<DashPlug animation={false} />}
         />
@@ -102,8 +112,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           >
             <StateCurrencyAmount
               balanceRule
-              amount={share?.total || null}
-              isError={share?.total.eq(EMPTY_POOL_AMOUNT)}
+              amount={totalAmount}
+              isError={isErrorTotal}
               errorFallback={<DashPlug animation={false} />}
             />
           </DetailsCardCell>
@@ -117,8 +127,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           >
             <StateCurrencyAmount
               balanceRule
-              amount={share?.frozen || null}
-              isError={share?.frozen.eq(EMPTY_POOL_AMOUNT)}
+              amount={frozenAmount}
+              isError={isErrorFrozen}
               errorFallback={<DashPlug animation={false} />}
             />
           </DetailsCardCell>

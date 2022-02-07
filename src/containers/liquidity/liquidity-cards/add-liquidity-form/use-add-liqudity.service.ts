@@ -17,7 +17,7 @@ import {
 import { Nullable, Optional, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolEmpty } from '../helpers';
+import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
@@ -47,7 +47,7 @@ export const useAddLiquidityService = (
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
-  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
+  const isPoolNotExist = checkIsPoolExists(pairInfo);
 
   const tokensCalculations = (
     tokenAInput: string,
