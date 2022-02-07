@@ -5,7 +5,7 @@
   "scripts": {
     "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3000",
     "dev:hangzhounet": "cross-env NEXT_PUBLIC_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3002",
-    "pre-build": "node -v && npm -v && yarn -v && yarn && node ./scripts/build.js",
+    "pre-build": "node -v && npm -v && yarn -v && yarn clear && yarn && node ./scripts/build.js",
     "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
     "build": "yarn pre-build && next build",
     "start": "next start",
@@ -88,7 +88,7 @@
     "i18next-parser": "^4.2.0",
     "prettier": "^2.5.1",
     "sonarjs": "^1.0.0",
-    "typescript": "4.3.5"
+    "typescript": "^4.5.5"
   },
   "husky": {
     "hooks": {
