@@ -10,7 +10,14 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { amountsAreEqual, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  amountsAreEqual,
+  getTokenInputAmountCap,
+  getTokenSymbol,
+  isExist,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { Undefined, WhitelistedToken } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -171,7 +178,11 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
           </div>
         </div>
         <Scaffolding showChild={showBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance?.toFixed() ?? '0'} handleBalance={handlePercentageSelect} />
+          <PercentSelector
+            value={balance?.toFixed() ?? '0'}
+            handleBalance={handlePercentageSelect}
+            amountCap={getTokenInputAmountCap(token)}
+          />
         </Scaffolding>
         <ComplexError error={error} />
       </div>

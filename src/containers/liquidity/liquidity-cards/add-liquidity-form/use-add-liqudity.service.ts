@@ -7,7 +7,13 @@ import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { getAddLiquidityMessage, getInitializeLiquidityMessage, getTokenSymbol, toDecimals } from '@utils/helpers';
+import {
+  getAddLiquidityMessage,
+  getInitializeLiquidityMessage,
+  getTokenInputAmountCap,
+  getTokenSymbol,
+  toDecimals
+} from '@utils/helpers';
 import { Nullable, Optional, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
@@ -16,6 +22,8 @@ import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
+
+const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
@@ -68,7 +76,9 @@ export const useAddLiquidityService = (
     const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
     const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
 
-    const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
+    const maxTokenAInput =
+      tokenABalance && BigNumber.maximum(tokenABalance.minus(getTokenInputAmountCap(tokenA)), EMPTY_BALANCE_AMOUNT);
+    const validationA = validations(accountPkh, tokenABN, maxTokenAInput, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
 
     if (isPoolNotExist) {
@@ -83,8 +93,10 @@ export const useAddLiquidityService = (
 
     const tokenBAmount = calculatePoolAmount(tokenABN, tokenA, tokenB, validTokenAPool, validTokenBPool);
 
+    const maxTokenBInput =
+      tokenBBalance && BigNumber.maximum(tokenBBalance.minus(getTokenInputAmountCap(tokenB)), EMPTY_BALANCE_AMOUNT);
     const validationB = tokenBAmount
-      ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)
+      ? validations(accountPkh, tokenBAmount, maxTokenBInput, tokenBInput, decimalsB, symbolB)
       : undefined;
 
     setValidationMessageTokenB(validationB);
