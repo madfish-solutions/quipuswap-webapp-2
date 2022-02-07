@@ -17,23 +17,28 @@ export const usePairInfo = (
 ) => {
   const [pairInfo, setPairInfo] = useState<Optional<PairInfo>>(undefined);
 
-  const loadPairInfo = useCallback(
+  const getPairInfo = useCallback(
     async (dex: Optional<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
       if (isUndefined(dex)) {
-        setPairInfo(undefined);
-      } else if (isNull(dex) || isNull(tokenA) || isNull(tokenB)) {
-        setPairInfo(null);
-      } else {
-        const newPairInfo =
-          dex.contract.address === TOKEN_TO_TOKEN_DEX
-            ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
-            : getTezTokenPairInfo(dex, tokenA, tokenB);
-
-        setPairInfo(newPairInfo);
+        return undefined;
       }
+
+      if (isNull(dex) || isNull(tokenA) || isNull(tokenB)) {
+        return null;
+      }
+
+      return dex.contract.address === TOKEN_TO_TOKEN_DEX
+        ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
+        : getTezTokenPairInfo(dex, tokenA, tokenB);
     },
     []
   );
+
+  const loadPairInfo = async (
+    dex: Optional<FoundDex>,
+    tokenA: Nullable<WhitelistedToken>,
+    tokenB: Nullable<WhitelistedToken>
+  ) => setPairInfo(await getPairInfo(dex, tokenA, tokenB));
 
   useEffect(() => {
     void loadPairInfo(dex, tokenA, tokenB);
