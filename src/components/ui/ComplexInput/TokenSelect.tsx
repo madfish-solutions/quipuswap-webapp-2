@@ -19,7 +19,6 @@ import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
 
 const DEFAULT_EXCHANGE_RATE = 0;
-const NO_CAP_AMOUNT = new BigNumber('0');
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
@@ -32,7 +31,6 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   handleChange?: (token: WhitelistedToken) => void;
   handleBalance: (value: string) => void;
   token: Nullable<WhitelistedToken>;
-  token2?: Nullable<WhitelistedToken>;
   tokensLoading?: boolean;
   blackListedTokens: WhitelistedToken[];
   setToken?: (token: WhitelistedToken) => void;
@@ -56,12 +54,10 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   id,
   handleChange,
   token,
-  token2,
   setToken,
   blackListedTokens,
   tokensLoading,
   ...props
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -91,11 +87,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
   const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
-
-  const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : null;
-
-  const amountCap = token2 ? NO_CAP_AMOUNT : getTokenInputAmountCap(token);
+  const tokenSelectSymbol = token ? getTokenSymbol(token) : 'SELECT';
+  const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
   return (
     <>
@@ -124,28 +117,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos
-                firstTokenIcon={firstTokenIcon}
-                firstTokenSymbol={firstTokenSymbol}
-                secondTokenIcon={secondTokenIcon}
-                secondTokenSymbol={secondTokenSymbol}
-              />
-              <h6 className={cx(s.token)}>
-                {tokensLoading ? (
-                  <DashPlug zoom={1.45} animation />
-                ) : (
-                  <>
-                    {token ? getTokenSymbol(token) : 'SELECT'}
-                    {token2 && ` / ${getTokenSymbol(token2)}`}
-                  </>
-                )}
-              </h6>
+              <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+              <h6 className={cx(s.token)}>{tokenLabel}</h6>
               {!notSelectable && <Shevron />}
             </Button>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector amountCap={amountCap} value={balance} handleBalance={handleBalance} />
+          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>
