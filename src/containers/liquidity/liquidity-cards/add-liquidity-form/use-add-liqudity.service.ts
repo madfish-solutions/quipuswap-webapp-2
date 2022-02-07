@@ -276,13 +276,13 @@ export const useAddLiquidityService = (
         tezos,
         accountPkh,
         dex,
-        pairInfo!.id!,
+        pairInfo.id!,
         pairInputA,
         pairTokenA,
         pairTokenB,
-        pairInfo!.totalSupply,
-        pairInfo!.tokenAPool,
-        pairInfo!.tokenBPool,
+        pairInfo.totalSupply,
+        pairInfo.tokenAPool,
+        pairInfo.tokenBPool,
         deadline,
         slippage
       );
