@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
@@ -10,7 +10,7 @@ import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
 import { useAccountPkh } from '@utils/dapp';
-import { isExist } from '@utils/helpers';
+import { isNull, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -31,10 +31,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { tokenASymbol, tokenBSymbol, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
     useLiquidityDetailsService(dex, tokenA, tokenB);
 
-  const isLoading = !isExist(dex) || !isExist(tokenB);
+  const isDexExists = isUndefined(dex);
+  const isLoadingA = isDexExists || isNull(tokenA);
+  const isLoadingB = isDexExists || isNull(tokenB);
 
-  const isErrorA = fixedTokenAPoll?.eq(EMPTY_POOL_AMOUNT);
-  const isErrorB = fixedTokenBPoll?.eq(EMPTY_POOL_AMOUNT);
+  const isErrorA = Boolean(!isLoadingA && (!fixedTokenAPoll || fixedTokenAPoll.eq(EMPTY_POOL_AMOUNT)));
+  const isErrorB = Boolean(!isLoadingB && (!fixedTokenBPoll || fixedTokenBPoll.eq(EMPTY_POOL_AMOUNT)));
   const isErrorTotal = share?.total.eq(EMPTY_POOL_AMOUNT);
   const isErrorFrozen = share?.frozen.eq(EMPTY_POOL_AMOUNT);
 
@@ -76,7 +78,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenAPoll}
           currency={tokenASymbol}
-          isLoading={isLoading}
+          isLoading={isLoadingA}
           isError={isErrorA}
           amountDecimals={tokenA?.metadata.decimals}
           errorFallback={<DashPlug animation={false} />}
@@ -94,7 +96,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenBPoll}
           currency={tokenBSymbol}
-          isLoading={isLoading}
+          isLoading={isLoadingB}
           isError={isErrorB}
           amountDecimals={tokenB?.metadata.decimals}
           errorFallback={<DashPlug animation={false} />}

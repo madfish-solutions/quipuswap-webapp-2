@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import { StateWrapper } from '@components/state-wrapper';
 import { DashPlug } from '@components/ui/dash-plug';
-import { formatBalance, isExist } from '@utils/helpers';
+import { formatBalance, isExist, isNull, isUndefined } from '@utils/helpers';
 import { Nullable, Undefined } from '@utils/types';
 
 import styles from './balance.module.scss';
@@ -27,14 +27,14 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
 
   const formattedBalance = useMemo(() => {
     if (!isExist(balance)) {
-      return null;
+      return undefined;
     }
 
     return formatBalance(balance);
   }, [balance]);
 
-  const isLoading = !formattedBalance;
-  const isError = !Boolean(formattedBalance);
+  const isLoading = isUndefined(formattedBalance);
+  const isError = isNull(formattedBalance);
 
   return (
     <div className={styles.item2Line}>

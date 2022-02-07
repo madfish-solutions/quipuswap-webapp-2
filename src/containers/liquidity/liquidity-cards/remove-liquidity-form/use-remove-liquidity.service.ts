@@ -13,9 +13,9 @@ import { Nullable, Optional, Undefined, WhitelistedToken, WhitelistedTokenPair }
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
 import { removeExtraZeros } from '../helpers';
+import { checkIsPoolExists } from '../helpers/check-is-pool-exists';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
-import { checkIsPoolExists } from '../helpers/check-is-pool-exists';
 
 export const useRemoveLiquidityService = (
   dex: Optional<FoundDex>,
@@ -31,7 +31,7 @@ export const useRemoveLiquidityService = (
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
-  const { share, updateLiquidityShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -62,10 +62,11 @@ export const useRemoveLiquidityService = (
     setValidatedInputMessage(undefined);
     setValidatedOutputMessageA(undefined);
     setValidatedOutputMessageB(undefined);
-  }, [dex, tokenA, tokenB]);
+  }, [clearShares, dex, tokenA, tokenB]);
 
   const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
     onChangeTokensPair(tokensPair);
+    clearShares();
   };
 
   useEffect(() => {
