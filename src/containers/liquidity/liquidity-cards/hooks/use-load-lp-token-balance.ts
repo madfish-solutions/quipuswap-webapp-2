@@ -4,12 +4,12 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { loadUserLpBalance } from '../blockchain/getters/load-user-lp-balance-tokens';
 
 export const useLoadLpTokenBalance = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>
 ) => {

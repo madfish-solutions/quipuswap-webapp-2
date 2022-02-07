@@ -41,7 +41,7 @@ export interface WhitelistedTokenPair {
   frozenBalance?: Nullable<string>;
   token1: WhitelistedToken;
   token2: WhitelistedToken;
-  dex?: FoundDex;
+  dex?: Nullable<FoundDex>;
 }
 
 export interface WhitelistedToken {
