@@ -7,7 +7,7 @@
     "dev:hangzhounet": "cross-env NEXT_PUBLIC_NETWORK=hangzhounet DEFAULT_TOKENS_SLUGS=tez-KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3002",
     "pre-build": "node -v && npm -v && yarn -v && yarn clear && yarn && node ./scripts/build.js",
     "clear": "node ./scripts/clear.js && rm -rf ./node_modules",
-    "build": "yarn pre-build && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
