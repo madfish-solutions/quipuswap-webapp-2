@@ -2,20 +2,14 @@ import BigNumber from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
-import {
-  DEFAULT_DEADLINE_MINS,
-  MAX_DEADLINE_MINS,
-  MAX_SLIPPAGE_PERCENTAGE,
-  MIN_DEADLINE_MINS,
-  TEZOS_TOKEN,
-  TEZ_TO_LEAVE
-} from '@app.config';
+import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
-import { fromDecimals, getTokenSlug, isTokenEqual } from '@utils/helpers';
+import { fromDecimals, getTokenSlug } from '@utils/helpers';
 import { WhitelistedToken } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
+import { getUserMaxInputAmount } from '../utils/get-user-max-input-amount';
 import { SwapAction, SwapField } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
@@ -40,18 +34,12 @@ export const useValidationSchema = () => {
         const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
         const inputTokenBalance = balances[inputTokenSlug];
-        const unlimitedBalanceMaxInput =
-          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity);
-        const inputTokenCap = isTokenEqual(inputToken, TEZOS_TOKEN) ? TEZ_TO_LEAVE : new BigNumber(0);
-        let max: BigNumber | undefined = BigNumber.min(
-          inputTokenBalance
-            ? BigNumber.maximum(EMPTY_BALANCE_AMOUNT, inputTokenBalance.minus(inputTokenCap))
-            : new BigNumber(Infinity),
-          unlimitedBalanceMaxInput
+
+        const max = getUserMaxInputAmount(
+          inputToken,
+          inputTokenBalance,
+          outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]
         );
-        if (!max.isFinite()) {
-          max = undefined;
-        }
         const min = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)

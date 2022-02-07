@@ -54,7 +54,7 @@ const parseAndShortize = (
   return null;
 };
 
-const isTezosToken = (token: WhitelistedToken) =>
+export const isTezosToken = (token: WhitelistedToken) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;
