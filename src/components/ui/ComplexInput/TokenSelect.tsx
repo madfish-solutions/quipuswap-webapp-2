@@ -10,7 +10,7 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, Token } from '@utils/types';
 
 import { DashPlug } from '../dash-plug';
@@ -31,7 +31,6 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   handleChange?: (token: Token) => void;
   handleBalance: (value: string) => void;
   token: Nullable<Token>;
-  token2?: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
   setToken?: (token: Token) => void;
@@ -55,7 +54,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   id,
   handleChange,
   token,
-  token2,
   setToken,
   blackListedTokens,
   tokensLoading,
@@ -89,9 +87,8 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
 
   const firstTokenIcon = token ? prepareTokenLogo(token.metadata?.thumbnailUri) : null;
   const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
-
-  const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : null;
+  const tokenSelectSymbol = token ? getTokenSymbol(token) : 'SELECT';
+  const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
   return (
     <>
@@ -120,28 +117,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               className={s.item4}
               textClassName={s.item4Inner}
             >
-              <TokensLogos
-                firstTokenIcon={firstTokenIcon}
-                firstTokenSymbol={firstTokenSymbol}
-                secondTokenIcon={secondTokenIcon}
-                secondTokenSymbol={secondTokenSymbol}
-              />
-              <h6 className={cx(s.token)}>
-                {tokensLoading ? (
-                  <DashPlug zoom={1.45} animation />
-                ) : (
-                  <>
-                    {token ? getTokenSymbol(token) : 'SELECT'}
-                    {token2 && ` / ${getTokenSymbol(token2)}`}
-                  </>
-                )}
-              </h6>
+              <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+              <h6 className={cx(s.token)}>{tokenLabel}</h6>
               {!notSelectable && <Shevron />}
             </Button>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector value={balance} handleBalance={handleBalance} />
+          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>

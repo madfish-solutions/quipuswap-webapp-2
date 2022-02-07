@@ -74,9 +74,17 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
 
   useEffect(() => handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
+  const isCurrentToken = (token: WhitelistedToken) =>
+    token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken;
+
   const allTokens = useMemo(
-    () => uniqTokens(filteredTokens.concat(searchTokens)).filter(x => !blackListedTokens.find(y => isTokenEqual(x, y))),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => {
+      const targetTokens = !isEmptyArray(filteredTokens) ? filteredTokens : searchTokens.filter(isCurrentToken);
+      const uniqTokens_ = uniqTokens(targetTokens);
+
+      return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
+      // inputValue is needed
+    }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [inputValue, filteredTokens, searchTokens, blackListedTokens]
   );
 

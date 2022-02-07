@@ -2,6 +2,8 @@ import { BigNumber } from 'bignumber.js';
 import { i18n } from 'next-i18next';
 import { object, SchemaOf } from 'yup';
 
+import { Optional } from '@utils/types';
+
 const basicBigNumberSchema: SchemaOf<BigNumber> = object()
   .shape({})
   .test(
@@ -10,10 +12,10 @@ const basicBigNumberSchema: SchemaOf<BigNumber> = object()
     value => !value || value instanceof BigNumber
   ) as SchemaOf<BigNumber>;
 
-export const bigNumberSchema = (min?: BigNumber.Value, max?: BigNumber.Value, message?: string) => {
+export const bigNumberSchema = (min?: Optional<BigNumber.Value>, max?: Optional<BigNumber.Value>, message?: string) => {
   const schema = basicBigNumberSchema.clone();
-  const actualMin = min && new BigNumber(min).isFinite() ? new BigNumber(min) : undefined;
-  const actualMax = max && new BigNumber(max).isFinite() ? new BigNumber(max) : undefined;
+  const actualMin = min && new BigNumber(min).isFinite() ? new BigNumber(min) : null;
+  const actualMax = max && new BigNumber(max).isFinite() ? new BigNumber(max) : null;
 
   if (actualMin && actualMax) {
     return schema.test(

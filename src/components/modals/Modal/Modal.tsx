@@ -4,9 +4,9 @@ import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import ReactModal, { Props } from 'react-modal';
 
+import { CloseIcon } from '@components/svg/close-icon';
 import { Button } from '@components/ui/elements/button';
 
-import { PopupClose } from '../../svg/PopupClose';
 import s from './Modal.module.sass';
 
 export interface ModalProps extends Props {
@@ -64,7 +64,7 @@ export const Modal: FC<ModalProps> = ({
     content: <h5>{title}</h5>,
     button: (
       <Button className={s.closeButton} onClick={onRequestClose} theme="quaternary">
-        <PopupClose />
+        <CloseIcon />
       </Button>
     )
   };

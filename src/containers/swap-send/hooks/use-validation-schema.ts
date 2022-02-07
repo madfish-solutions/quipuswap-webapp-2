@@ -9,9 +9,12 @@ import { Token } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
+import { getUserMaxInputAmount } from '../utils/get-user-max-input-amount';
 import { SwapAction, SwapField } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
+const TOKEN_ATOM_RAW_AMOUNT = 1;
+const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useValidationSchema = () => {
   const { t } = useTranslation(['common', 'swap']);
@@ -31,20 +34,19 @@ export const useValidationSchema = () => {
         const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
         const inputTokenBalance = balances[inputTokenSlug];
-        let max: BigNumber | undefined = BigNumber.min(
-          inputTokenBalance ?? new BigNumber(Infinity),
-          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity)
+
+        const max = getUserMaxInputAmount(
+          inputToken,
+          inputTokenBalance,
+          outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]
         );
-        if (!max.isFinite()) {
-          max = undefined;
-        }
-        const min = fromDecimals(new BigNumber(1), inputTokenDecimals);
+        const min = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)
             .test(
               'balance',
               () => t('common|Insufficient funds'),
-              value => !(value instanceof BigNumber) || value.eq(0)
+              value => !(value instanceof BigNumber) || value.eq(EMPTY_BALANCE_AMOUNT)
             )
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
@@ -72,7 +74,7 @@ export const useValidationSchema = () => {
         const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(1), outputTokenDecimals), max)
+        return bigNumberSchema(fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
           .test(
             'output-decimals-amount',
             () =>
