@@ -11,8 +11,10 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/isWhitelistedToken';
 import { Nullable, Token, TokenPair } from '@utils/types';
 
+import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
@@ -88,6 +90,8 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const isTokensLoading = tokensUpdating?.isTokenChanging;
 
+  const notWhitelistedMessage = getMessageNotWhitelistedTokenPair(token1, token2);
+
   return (
     <>
       <PositionsModal
@@ -137,31 +141,34 @@ export const PositionSelect: FC<PositionSelectProps> = ({
               autoFocus
               {...props}
             />
-            <Button
-              onClick={() => setTokensModal(true)}
-              theme="quaternary"
-              className={s.item4}
-              textClassName={s.item4Inner}
-            >
-              <TokensLogos
-                firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getTokenSymbol(token1)}
-                secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getTokenSymbol(token2)}
-                loading={isTokensLoading}
-              />
-              <h6 className={cx(s.token, s.tokensSelect)}>
-                {tokenPair ? (
-                  <Fragment>
-                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                    {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
-                  </Fragment>
-                ) : (
-                  'Select LP'
-                )}
-              </h6>
-              <Shevron />
-            </Button>
+            <div className={s.dangerContainer}>
+              {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
+              <Button
+                onClick={() => setTokensModal(true)}
+                theme="quaternary"
+                className={s.item4}
+                textClassName={s.item4Inner}
+              >
+                <TokensLogos
+                  firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+                  firstTokenSymbol={getTokenSymbol(token1)}
+                  secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+                  secondTokenSymbol={getTokenSymbol(token2)}
+                  loading={isTokensLoading}
+                />
+                <h6 className={cx(s.token, s.tokensSelect)}>
+                  {tokenPair ? (
+                    <Fragment>
+                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
+                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
+                    </Fragment>
+                  ) : (
+                    'Select LP'
+                  )}
+                </h6>
+                <Shevron />
+              </Button>
+            </div>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>

@@ -50,6 +50,12 @@
   margin-right: -8px
   z-index: 1
 
+.dangerContainer
+  display: flex
+  align-items: center
+  column-gap: 14px
+  order: 1
+
 .item1
   order: 2
   white-space: nowrap
@@ -234,13 +240,17 @@
     flex-grow: 1
     flex-basis: 20%
   .item4
-    margin-top: 8px
     display: flex
     align-items: center
     justify-content: flex-end
     order: 4
     flex-basis: content
-    margin-left: 32px
+  .dangerContainer
+    display: flex
+    align-items: center
+    column-gap: 14px
+    order: 4
+    margin-left: 6px
   .recipient
     min-height: 26px
     line-height: 1.4
