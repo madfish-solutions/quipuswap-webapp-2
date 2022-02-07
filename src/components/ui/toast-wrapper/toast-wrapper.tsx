@@ -5,14 +5,14 @@ import cx from 'classnames';
 import { ToastContainer, ToastContentProps, TypeOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { ToastClose } from '@components/svg/toast-close';
+import { CloseIcon } from '@components/svg/close-icon';
 
 import { Button } from '../elements/button';
 import s from './toast-wrapper.module.sass';
 
 const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (
   <Button className={s.closeButton} onClick={closeToast} theme="quaternary">
-    <ToastClose />
+    <CloseIcon />
   </Button>
 );
 

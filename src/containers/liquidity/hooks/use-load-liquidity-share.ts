@@ -4,7 +4,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { loadUserLiquidiytShares } from '../liquidity-cards/blockchain/getters/load-user-liquidity-shares';
 
@@ -15,7 +15,7 @@ export interface LiquidityShareResult {
 }
 
 export const useLoadLiquidityShare = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>
 ) => {
@@ -25,7 +25,7 @@ export const useLoadLiquidityShare = (
   const [share, setShare] = useState<Nullable<LiquidityShareResult>>(null);
 
   const loadShare = useCallback(
-    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+    async (dex: Optional<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
       if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
         return;
       }

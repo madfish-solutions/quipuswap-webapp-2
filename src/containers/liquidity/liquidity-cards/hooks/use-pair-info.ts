@@ -3,35 +3,42 @@ import { useCallback, useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 
 import { TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { isNull, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, WhitelistedToken } from '@utils/types';
 
 import { PairInfo } from '../add-liquidity-form';
 import { loadTokenToTokenPairInfo } from '../blockchain';
 import { getTezTokenPairInfo } from '../helpers';
 
 export const usePairInfo = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>
 ) => {
-  const [pairInfo, setPairInfo] = useState<Nullable<PairInfo>>(null);
+  const [pairInfo, setPairInfo] = useState<Optional<PairInfo>>(undefined);
 
-  const loadPairInfo = useCallback(
-    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
-      if (!dex || !tokenA || !tokenB) {
-        setPairInfo(null);
-
-        return;
+  const getPairInfo = useCallback(
+    async (dex: Optional<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+      if (isUndefined(dex)) {
+        return undefined;
       }
-      const newPairInfo =
-        dex.contract.address === TOKEN_TO_TOKEN_DEX
-          ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
-          : getTezTokenPairInfo(dex, tokenA, tokenB);
 
-      setPairInfo(newPairInfo);
+      if (isNull(dex) || isNull(tokenA) || isNull(tokenB)) {
+        return null;
+      }
+
+      return dex.contract.address === TOKEN_TO_TOKEN_DEX
+        ? await loadTokenToTokenPairInfo(dex, tokenA, tokenB)
+        : getTezTokenPairInfo(dex, tokenA, tokenB);
     },
     []
   );
+
+  const loadPairInfo = async (
+    dex: Optional<FoundDex>,
+    tokenA: Nullable<WhitelistedToken>,
+    tokenB: Nullable<WhitelistedToken>
+  ) => setPairInfo(await getPairInfo(dex, tokenA, tokenB));
 
   useEffect(() => {
     void loadPairInfo(dex, tokenA, tokenB);

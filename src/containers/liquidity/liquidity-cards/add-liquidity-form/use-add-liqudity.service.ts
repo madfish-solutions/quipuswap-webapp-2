@@ -12,23 +12,21 @@ import {
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
   getTokenSymbol,
-  isNull,
   toDecimals
 } from '@utils/helpers';
-import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, Undefined, WhitelistedToken } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts } from '../helpers';
+import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolEmpty } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
-const EMPTY_POOL = 0;
 const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
-  dex: Nullable<FoundDex>,
+  dex: Optional<FoundDex>,
   tokenA: Nullable<WhitelistedToken>,
   tokenB: Nullable<WhitelistedToken>,
   onTokenAChange: (token: WhitelistedToken) => void,
@@ -49,18 +47,14 @@ export const useAddLiquidityService = (
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
-  const isPoolNotExist =
-    isNull(pairInfo) ||
-    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
-    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
-    pairInfo.totalSupply.eq(EMPTY_POOL);
+  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
 
   const tokensCalculations = (
     tokenAInput: string,
     tokenBInput: string,
     tokenA: WhitelistedToken,
     tokenB: WhitelistedToken,
-    pairInfo: Nullable<PairInfo>,
+    pairInfo: Optional<PairInfo>,
     tokenABalance: Nullable<BigNumber>,
     tokenBBalance: Nullable<BigNumber>,
     setTokenAInput: Dispatch<SetStateAction<string>>,
@@ -369,8 +363,6 @@ export const useAddLiquidityService = (
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
 
-  const isNewPair = dex && isPoolNotExist;
-
   return {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -381,7 +373,7 @@ export const useAddLiquidityService = (
     tokenBBalance,
     tokenAInput,
     tokenBInput,
-    isNewPair,
+    isPoolNotExist,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,
