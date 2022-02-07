@@ -42,6 +42,7 @@ export * from './is-default-connect-type';
 export * from './type-checks';
 export * from './calculate-rate-amount';
 export * from './format-balance';
+export * from './get-token-input-amount-cap';
 export * from './get-minimal-output';
 export * from './get-success-messages';
 export * from './get-token-appellation';

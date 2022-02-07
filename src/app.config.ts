@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { Standard } from '@graphql';
 import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
 
@@ -49,6 +51,8 @@ export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
+
+export const TEZ_TO_LEAVE = new BigNumber('0.1');
 
 export const PRESET_AMOUNT_INPUT_DECIMALS = 2;
 export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
