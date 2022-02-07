@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { allowContractSpendYourTokens } from '../blockchain';
 
@@ -10,8 +10,8 @@ const RESET_AMOUNT_BN = new BigNumber(RESET_AMOUNT);
 
 export const getTokensResetAndUpdateOperators = async (
   tezos: TezosToolkit,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenA: Token,
+  tokenB: Token,
   dexAddress: string,
   accountPkh: string,
   tokenAAmount: BigNumber,

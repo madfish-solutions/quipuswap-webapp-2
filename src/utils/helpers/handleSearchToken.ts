@@ -3,24 +3,24 @@ import { Dispatch, SetStateAction } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { QSNetwork, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { QSNetwork, Token, TokenPair } from '@utils/types';
 
-import { isTokenEqual } from './isTokenEqual';
+import { isTokenEqual } from './is-token-equal';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
-import { localSearchToken } from './localSearchToken';
+import { localSearchToken, TokenWithRequiredNetwork } from './localSearchToken';
 
 interface SearchTokenType {
-  tokens: WhitelistedToken[];
+  tokens: Token[];
   tezos?: TezosToolkit;
   network: QSNetwork;
   from: string;
   to: string;
-  fixTokenFrom?: WhitelistedToken;
-  setTokens: Dispatch<SetStateAction<WhitelistedToken[]>>;
+  fixTokenFrom?: Token;
+  setTokens: Dispatch<SetStateAction<Token[]>>;
   setInitialLoad: Dispatch<SetStateAction<boolean>>;
   setUrlLoaded: Dispatch<SetStateAction<boolean>>;
-  setTokenPair?: Dispatch<SetStateAction<WhitelistedTokenPair>>;
-  searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<WhitelistedToken | null>;
+  setTokenPair?: Dispatch<SetStateAction<TokenPair>>;
+  searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<Token | null>;
 }
 
 export const handleSearchToken = async ({
@@ -39,13 +39,13 @@ export const handleSearchToken = async ({
 SearchTokenType) => {
   setInitialLoad(true);
   setUrlLoaded(false);
-  const searchPart = async (str: string | string[]): Promise<WhitelistedToken> => {
+  const searchPart = async (str: string | string[]): Promise<Token> => {
     const strStr = Array.isArray(str) ? str[0] : str;
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
       .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
-      .filter(token => localSearchToken(token, network, inputValue, +inputToken));
+      .filter(token => localSearchToken(token as TokenWithRequiredNetwork, network, inputValue, +inputToken));
     if (isTokens.length === 0) {
       return searchCustomToken(inputValue, +inputToken, true).then(x => {
         if (x) {
@@ -58,7 +58,7 @@ SearchTokenType) => {
 
     return isTokens[0];
   };
-  let res: WhitelistedToken[] = [];
+  let res: Token[] = [];
   if (from) {
     if (to) {
       const resTo = await searchPart(to);
@@ -76,7 +76,7 @@ SearchTokenType) => {
   if (!isTokenEqual(res[0], res[1])) {
     setTokens(res);
     if (setTokenPair && tezos) {
-      setTokenPair({ token1: res[0], token2: res[1] } as WhitelistedTokenPair);
+      setTokenPair({ token1: res[0], token2: res[1] } as TokenPair);
     }
   }
 };

@@ -1,22 +1,22 @@
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT } from '@app.config';
-import { getTokenIdFromSlug, getTokenSlug, makeWhitelistedToken } from '@utils/helpers';
+import { getTokenIdFromSlug, getTokenSlug, makeToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { DexPair, DexPairType, WhitelistedToken } from '@utils/types';
+import { DexPair, DexPairType, Token } from '@utils/types';
 
 import { RawDexPool, RawDexType } from './use-dex-graph.types';
 
 export const rawDexToDexPair = (
   { dexType, dexId, aTokenPool, aTokenSlug, bTokenPool, bTokenSlug, dexAddress }: RawDexPool,
-  knownTokens: WhitelistedToken[]
+  knownTokens: Token[]
 ): DexPair => {
   if (dexType === RawDexType.QuipuSwap) {
     return {
       token1Pool: new BigNumber(aTokenPool),
       token2Pool: new BigNumber(bTokenPool),
-      token1: makeWhitelistedToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
-      token2: makeWhitelistedToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
+      token1: makeToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
+      token2: makeToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
       id: dexAddress,
       type: DexPairType.TokenToXtz
     };
@@ -25,8 +25,8 @@ export const rawDexToDexPair = (
   return {
     token1Pool: new BigNumber(aTokenPool),
     token2Pool: new BigNumber(bTokenPool),
-    token1: makeWhitelistedToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
-    token2: makeWhitelistedToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
+    token1: makeToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
+    token2: makeToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
     id: Number(dexId!),
     type: DexPairType.TokenToToken
   };

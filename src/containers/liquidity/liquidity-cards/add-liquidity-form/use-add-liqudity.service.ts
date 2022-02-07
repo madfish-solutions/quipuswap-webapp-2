@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { FoundDex, Token } from '@quipuswap/sdk';
+import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
@@ -14,7 +14,7 @@ import {
   getTokenSymbol,
   toDecimals
 } from '@utils/helpers';
-import { Nullable, Optional, Undefined, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolEmpty } from '../helpers';
@@ -27,10 +27,10 @@ const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>,
-  onTokenAChange: (token: WhitelistedToken) => void,
-  onTokenBChange: (token: WhitelistedToken) => void
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  onTokenAChange: (token: Token) => void,
+  onTokenBChange: (token: Token) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -52,8 +52,8 @@ export const useAddLiquidityService = (
   const tokensCalculations = (
     tokenAInput: string,
     tokenBInput: string,
-    tokenA: WhitelistedToken,
-    tokenB: WhitelistedToken,
+    tokenA: Token,
+    tokenB: Token,
     pairInfo: Optional<PairInfo>,
     tokenABalance: Nullable<BigNumber>,
     tokenBBalance: Nullable<BigNumber>,
@@ -141,7 +141,7 @@ export const useAddLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, tokenABalance, tokenBBalance]);
 
-  const handleSetTokenA = (token: WhitelistedToken) => {
+  const handleSetTokenA = (token: Token) => {
     onTokenAChange(token);
     if (lastEditedInput === LastChangedToken.tokenA) {
       setTokenBInput('');
@@ -150,7 +150,7 @@ export const useAddLiquidityService = (
     }
   };
 
-  const handleSetTokenB = (token: WhitelistedToken) => {
+  const handleSetTokenB = (token: Token) => {
     onTokenBChange(token);
     if (lastEditedInput === LastChangedToken.tokenB) {
       setTokenAInput('');
@@ -322,7 +322,7 @@ export const useAddLiquidityService = (
         message: addLiquidityMessage
       });
     } else {
-      const token: Token = {
+      const token: QuipuswapSdkToken = {
         contract: notTezToken.contractAddress,
         id: notTezToken.fa2TokenId
       };

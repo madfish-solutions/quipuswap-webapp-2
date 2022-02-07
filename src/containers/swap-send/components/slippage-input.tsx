@@ -8,13 +8,13 @@ import { Slippage } from '@components/common/Slippage';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { getMinimalOutput, getTokenSymbol } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
 interface SlippageInputProps {
   error?: string;
   loading: boolean;
   outputAmount?: BigNumber;
-  outputToken?: WhitelistedToken;
+  outputToken?: Token;
   slippage?: BigNumber;
   onChange: (newValue: BigNumber) => void;
 }

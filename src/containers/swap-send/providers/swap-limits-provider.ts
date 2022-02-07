@@ -6,16 +6,11 @@ import constate from 'constate';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { fromDecimals, getMaxTokenInput, getTokenOutput, getTokenSlug } from '@utils/helpers';
 import { getMaxInputRoute, getMaxOutputRoute } from '@utils/routing';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 type TokensAmounts = Record<string, Record<string, BigNumber>>;
 
-const updateTokensAmounts = (
-  prevAmounts: TokensAmounts,
-  token1: WhitelistedToken,
-  token2: WhitelistedToken,
-  amount: BigNumber
-) => ({
+const updateTokensAmounts = (prevAmounts: TokensAmounts, token1: Token, token2: Token, amount: BigNumber) => ({
   ...prevAmounts,
   [getTokenSlug(token1)]: {
     ...(prevAmounts[getTokenSlug(token1)] ?? {}),
@@ -29,15 +24,15 @@ export const [SwapLimitsProvider, useSwapLimits] = constate(() => {
   const [maxInputAmounts, setMaxInputAmounts] = useState<TokensAmounts>({});
   const [maxOutputAmounts, setMaxOutputAmounts] = useState<TokensAmounts>({});
 
-  const updateMaxInputAmount = (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+  const updateMaxInputAmount = (token1: Token, token2: Token, amount: BigNumber) => {
     setMaxInputAmounts(prevValue => updateTokensAmounts(prevValue, token1, token2, amount));
   };
 
-  const updateMaxOutputAmount = (token1: WhitelistedToken, token2: WhitelistedToken, amount: BigNumber) => {
+  const updateMaxOutputAmount = (token1: Token, token2: Token, amount: BigNumber) => {
     setMaxOutputAmounts(prevValue => updateTokensAmounts(prevValue, token1, token2, amount));
   };
 
-  const updateSwapLimits = (token1: WhitelistedToken, token2: WhitelistedToken) => {
+  const updateSwapLimits = (token1: Token, token2: Token) => {
     const startTokenSlug = getTokenSlug(token1);
     const endTokenSlug = getTokenSlug(token2);
     try {

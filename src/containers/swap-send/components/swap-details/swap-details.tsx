@@ -13,7 +13,7 @@ import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
-import { DexPair, Nullable, Undefined, WhitelistedToken } from '@utils/types';
+import { DexPair, Nullable, Undefined, Token } from '@utils/types';
 
 import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
@@ -22,8 +22,8 @@ interface SwapDetailsProps {
   fee: Nullable<BigNumber>;
   feeError: Undefined<Error>;
   priceImpact: Nullable<BigNumber>;
-  inputToken?: WhitelistedToken;
-  outputToken?: WhitelistedToken;
+  inputToken?: Token;
+  outputToken?: Token;
   route?: DexPair[];
   buyRate: Nullable<BigNumber>;
   sellRate: Nullable<BigNumber>;

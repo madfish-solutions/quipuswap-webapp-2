@@ -6,7 +6,7 @@ import { SECONDS_IN_MINUTE } from '@app.config';
 import { increaseBySlippage } from '@containers/liquidity/liquidity-cards/helpers';
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 
@@ -16,8 +16,8 @@ export const addLiquidityTokenToToken = async (
   dex: FoundDex,
   id: BigNumber,
   tokenAInput: string,
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenA: Token,
+  tokenB: Token,
   totalSupply: BigNumber,
   tokenAPool: BigNumber,
   tokenBPool: BigNumber,

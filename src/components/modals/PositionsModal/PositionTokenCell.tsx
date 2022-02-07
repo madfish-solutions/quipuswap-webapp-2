@@ -4,10 +4,10 @@ import { Checkbox } from '@quipuswap/ui-kit';
 
 import { TokenCell } from '@components/modals/Modal';
 import { getTokenName, getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 interface PositionTokenCellProps {
-  token: WhitelistedToken;
+  token: Token;
   onClick: () => void;
   isChecked: boolean;
 }

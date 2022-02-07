@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 export const localSearchSortSymbol = (
-  { metadata: metadataA, fa2TokenId: fa2TokenIdA }: WhitelistedToken,
-  { metadata: metadataB, fa2TokenId: fa2TokenIdB }: WhitelistedToken,
+  { metadata: metadataA, fa2TokenId: fa2TokenIdA }: Token,
+  { metadata: metadataB, fa2TokenId: fa2TokenIdB }: Token,
   input: string,
   inputToken: string
 ) => {

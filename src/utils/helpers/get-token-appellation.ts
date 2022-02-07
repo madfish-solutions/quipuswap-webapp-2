@@ -1,5 +1,5 @@
 import { TEZOS_TOKEN } from '@app.config';
-import { Nullable, Optional, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Nullable, Optional, Token, TokenMetadata } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 import { shortize } from './shortize';
@@ -13,10 +13,7 @@ enum MetadataTokenField {
   symbol = 'symbol'
 }
 
-const parseAddresOrGetField = (
-  metadata: WhitelistedTokenMetadata,
-  field: MetadataTokenField
-): [Nullable<string>, isAddress] => {
+const parseAddresOrGetField = (metadata: TokenMetadata, field: MetadataTokenField): [Nullable<string>, isAddress] => {
   if (isExist(metadata[field])) {
     if (isValidTokenSlug(metadata[field]) === true) {
       return [shortize(metadata[field]), true];
@@ -37,7 +34,7 @@ const shortizeTokenAppellation = (viewName: string, sliceAmount: number) => {
 };
 
 const parseAndShortize = (
-  metadata: WhitelistedTokenMetadata,
+  metadata: TokenMetadata,
   field: MetadataTokenField,
   sliceAmount: number
 ): Nullable<string> => {
@@ -54,12 +51,12 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: WhitelistedToken) =>
+export const isTezosToken = (token: Token) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;
 
-export const getTokenSymbol = (token: WhitelistedToken, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
@@ -79,7 +76,7 @@ export const getTokenSymbol = (token: WhitelistedToken, sliceAmount = TOKEN_LENG
   return shortize(token.contractAddress);
 };
 
-export const getTokenName = (token: WhitelistedToken, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.name;
   }
@@ -97,13 +94,10 @@ export const getTokenName = (token: WhitelistedToken, sliceAmount = TOKEN_LENGTH
   return shortize(token.contractAddress);
 };
 
-export const getTokensPairName = (tokenX: WhitelistedToken, tokenY: WhitelistedToken) => {
+export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
   return `${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`;
 };
 
-export const getTokensOptionalPairName = (
-  inputToken: Optional<WhitelistedToken>,
-  outputToken: Optional<WhitelistedToken>
-) => {
+export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };

@@ -11,7 +11,7 @@ import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
 import { useAddCustomToken } from '@utils/dapp';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
@@ -46,11 +46,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
   const { handleInput, isSoleFa2Token, allTokens, searchTokens, isTokensNotFound, isTokensLoading, resetSearchValues } =
     useTokensSearchService<FormValues>(blackListedTokens);
 
-  const handleTokenA = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenA = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (!notSelectable1) {
       if (values[PMFormField.SECOND_TOKEN] && values[PMFormField.FIRST_TOKEN]) {
         form.mutators.setValue(PMFormField.FIRST_TOKEN, values[PMFormField.SECOND_TOKEN]);
@@ -63,11 +59,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
     }
   };
 
-  const handleTokenB = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenB = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (!notSelectable2) {
       if (!values[PMFormField.SECOND_TOKEN]) {
         form.mutators.setValue(PMFormField.SECOND_TOKEN, token);
@@ -77,11 +69,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
     }
   };
 
-  const handleTokenListItem = (
-    token: WhitelistedToken,
-    form: FormApi<FormValues, Partial<FormValues>>,
-    values: FormValues
-  ) => {
+  const handleTokenListItem = (token: Token, form: FormApi<FormValues, Partial<FormValues>>, values: FormValues) => {
     if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);
     }

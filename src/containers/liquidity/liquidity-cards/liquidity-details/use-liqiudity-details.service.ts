@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { fromDecimals, getTokenSymbol, isTezIncluded } from '@utils/helpers';
-import { Nullable, Optional, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { calculatePoolAmount, checkIsPoolEmpty } from '../helpers';
 import { usePairInfo } from '../hooks';
@@ -13,8 +13,8 @@ const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
 
 export const useLiquidityDetailsService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>
 ) => {
   const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
 
