@@ -109,6 +109,13 @@ export const navigationData: NavigationDataProps[] = [
         label: 'Blog',
         target: '_blank'
       },
+
+      {
+        id: 8,
+        href: 'https://madfish.canny.io/quipuswap-feature-requests',
+        label: 'Feedback',
+        target: '_blank'
+      },
       {
         id: 6,
         href: '/terms-of-service',
@@ -118,7 +125,8 @@ export const navigationData: NavigationDataProps[] = [
         id: 7,
         href: '/privacy-policy',
         label: 'Privacy Policy'
-      }
+      },
+
     ]
   }
 ];
