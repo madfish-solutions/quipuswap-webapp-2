@@ -83,6 +83,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
       const uniqTokens_ = uniqTokens(targetTokens);
 
       return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
+      // inputValue is needed
     }, // eslint-disable-next-line react-hooks/exhaustive-deps
     [inputValue, filteredTokens, searchTokens, blackListedTokens]
   );

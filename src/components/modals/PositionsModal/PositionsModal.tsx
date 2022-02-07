@@ -11,7 +11,7 @@ import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
 import { useAddCustomToken } from '@utils/dapp';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
-import { WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { WhitelistedToken } from '@utils/types';
 
 import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
@@ -99,7 +99,7 @@ export const PositionsModal: FC<IPositionsModalProps & Props> = ({
     onChange({
       token1: values[PMFormField.FIRST_TOKEN],
       token2: values[PMFormField.SECOND_TOKEN]
-    } as WhitelistedTokenPair);
+    });
   };
 
   const checkFirstTokenSame = (values: FormValues) =>
