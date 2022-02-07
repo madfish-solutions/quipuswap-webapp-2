@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { ColorThemeProvider } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeProvider } from '@quipuswap/ui-kit';
 import { appWithTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { DefaultSeo } from 'next-seo';
@@ -15,7 +15,7 @@ import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
 import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
-import { debounce } from '@utils/helpers';
+import { debounce, isClient } from '@utils/helpers';
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
@@ -25,6 +25,10 @@ const HEIGHT_EMPTY = 0;
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
+
+  if (isClient && localStorage.getItem('theme') === ColorModes.Dark) {
+    document.querySelector('body')?.classList.add('dark');
+  }
 
   useEffect(() => {
     // prevents flashing
