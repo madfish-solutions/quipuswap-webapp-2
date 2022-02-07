@@ -125,8 +125,7 @@ export const navigationData: NavigationDataProps[] = [
         id: 7,
         href: '/privacy-policy',
         label: 'Privacy Policy'
-      },
-
+      }
     ]
   }
 ];
