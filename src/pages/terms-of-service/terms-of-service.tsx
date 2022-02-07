@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/Terms.module.sass';
 
 import { EnTermsOfService } from './content/en-terms-of-service';
@@ -21,8 +22,8 @@ export const TermsOfService: FC = () => {
 
   return (
     <BaseLayout
-      title={t('terms|Terms of Usage')}
-      description={t('terms|Terms of Usage page description. Couple sentences...')}
+      title={t(`terms|Terms of Usage - ${SITE_TITLE}`)}
+      description={t(`terms|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
       <Card>

@@ -7,6 +7,7 @@ import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { Voting } from '@containers/voiting';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/Voting.module.sass';
 import { getTokenPairSlug, isEmptyArray } from '@utils/helpers';
 
@@ -15,8 +16,8 @@ const VotePage: React.FC = () => {
 
   return (
     <BaseLayout
-      title={t('vote|Vote page')}
-      description={t('vote|Vote page description. Couple sentences...')}
+      title={t(`vote|Vote page - ${SITE_TITLE}`)}
+      description={t(`vote|${SITE_DESCRIPTION}`)}
       className={s.wrapper}
     >
       <TestnetAlert />
