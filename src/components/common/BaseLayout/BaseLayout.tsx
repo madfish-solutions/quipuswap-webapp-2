@@ -42,10 +42,11 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
     <>
       <Head>
         {isDarkFavicon ? (
-          <link rel="icon" href={`${BASE_URL}favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
-          <link rel="icon" href={`${BASE_URL}light-favicon.ico`} />
+          <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
         )}
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
 
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_ANALYTICS}`} />

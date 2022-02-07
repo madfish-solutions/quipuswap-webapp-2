@@ -83,24 +83,28 @@ export interface TokenMetadata {
   thumbnailUri: string;
 }
 
+export enum DexPairType {
+  TokenToToken = 'TokenToToken',
+  TokenToXtz = 'TokenToXtz'
+}
+
 interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
-  totalSupply: BigNumber;
   token1: Token;
   token2: Token;
   id: string | number;
-  type: 'ttdex' | 'tokenxtz';
+  type: DexPairType;
 }
 
-interface TTDexPairProps extends CommonDexPairProps {
+export interface TTDexPairProps extends CommonDexPairProps {
   id: number;
-  type: 'ttdex';
+  type: DexPairType.TokenToToken;
 }
 
-interface TokenXtzDexPairProps extends CommonDexPairProps {
+export interface TokenXtzDexPairProps extends CommonDexPairProps {
   id: string;
-  type: 'tokenxtz';
+  type: DexPairType.TokenToXtz;
 }
 
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;

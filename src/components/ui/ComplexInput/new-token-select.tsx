@@ -1,6 +1,6 @@
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, TokensLogos, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron, TokensLogos } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -163,7 +163,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
                     ? prepareTokenLogo(token.metadata?.thumbnailUri)
                     : prepareTokenLogo(TEZOS_TOKEN.metadata.thumbnailUri)
                 }
-                firstTokenSymbol={token ? getTokenSymbol(token) : getTokenSymbol(TEZOS_TOKEN)}
+                firstTokenSymbol={getTokenSymbol(token ? token : TEZOS_TOKEN)}
               />
               <h6 className={cx(s.token)}>{token ? getTokenSymbol(token) : 'SELECT'}</h6>
               {selectable && <Shevron />}

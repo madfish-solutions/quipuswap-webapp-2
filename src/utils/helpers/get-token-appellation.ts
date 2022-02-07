@@ -51,8 +51,13 @@ const parseAndShortize = (
   return null;
 };
 
-export const getTokenAppellation = (token: Token, sliceAmount = 10) => {
-  if (token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase()) {
+const isTezosToken = (token: Token) =>
+  token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
+
+const TOKEN_LENGTH = 10;
+
+export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+  if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
 
@@ -71,8 +76,26 @@ export const getTokenAppellation = (token: Token, sliceAmount = 10) => {
   return shortize(token.contractAddress);
 };
 
+export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+  if (isTezosToken(token)) {
+    return TEZOS_TOKEN.metadata.name;
+  }
+
+  const shortAddressOrName = parseAndShortize(token.metadata, MetadataTokenField.name, sliceAmount);
+  if (shortAddressOrName) {
+    return shortAddressOrName;
+  }
+
+  const shortAddressOrSymbol = parseAndShortize(token.metadata, MetadataTokenField.symbol, sliceAmount);
+  if (shortAddressOrSymbol) {
+    return shortAddressOrSymbol;
+  }
+
+  return shortize(token.contractAddress);
+};
+
 export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
-  return `${getTokenAppellation(tokenX)} / ${getTokenAppellation(tokenY)}`;
+  return `${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`;
 };
 
 export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {

@@ -1,6 +1,6 @@
-import React, { useRef, useMemo, useState, useContext, HTMLProps } from 'react';
+import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -13,6 +13,7 @@ import { useAccountPkh } from '@utils/dapp';
 import { getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { Nullable, Token } from '@utils/types';
 
+import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
 import s from './ComplexInput.module.sass';
@@ -31,6 +32,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   handleBalance: (value: string) => void;
   token: Nullable<Token>;
   token2?: Nullable<Token>;
+  tokensLoading?: boolean;
   blackListedTokens: Token[];
   setToken?: (token: Token) => void;
 }
@@ -56,6 +58,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   token2,
   setToken,
   blackListedTokens,
+  tokensLoading,
   ...props
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -88,7 +91,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   const firstTokenSymbol = token ? getTokenSymbol(token) : 'TOKEN';
 
   const secondTokenIcon = token2 ? prepareTokenLogo(token2.metadata.thumbnailUri) : token2;
-  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : token2;
+  const secondTokenSymbol = token2 ? getTokenSymbol(token2) : null;
 
   return (
     <>
@@ -124,8 +127,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                 secondTokenSymbol={secondTokenSymbol}
               />
               <h6 className={cx(s.token)}>
-                {token ? getTokenSymbol(token) : 'SELECT'}
-                {token2 && ` / ${getTokenSymbol(token2)}`}
+                {tokensLoading ? (
+                  <DashPlug zoom={1.45} animation />
+                ) : (
+                  <>
+                    {token ? getTokenSymbol(token) : 'SELECT'}
+                    {token2 && ` / ${getTokenSymbol(token2)}`}
+                  </>
+                )}
               </h6>
               {!notSelectable && <Shevron />}
             </Button>

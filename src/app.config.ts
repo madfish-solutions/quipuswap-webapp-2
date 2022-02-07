@@ -126,6 +126,11 @@ const TTDEX_CONTRACTS = {
   [QSNets.mainnet]: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi'
 };
 
+export const DEX_POOLS_URLS = {
+  mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,
+  hangzhounet: process.env.NEXT_PUBLIC_HANGZHOUNET_POOLS_URL!
+};
+
 const tzktExplorerUrls = {
   [QSNets.mainnet]: 'https://tzkt.io',
   [QSNets.hangzhounet]: 'https://hangzhounet.tzkt.io'
@@ -134,7 +139,6 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
-export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;

@@ -16,8 +16,18 @@ interface Props {
 }
 
 export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
-  const { dex, tab, handleChangeTab, tokenA, tokenB, handleChangeTokenA, handleChangeTokenB, handleChangeTokensPair } =
-    useLiquidityFormService({ onTokensChange });
+  const {
+    dex,
+    tab,
+    handleChangeTab,
+    tokenA,
+    tokenB,
+    tokenALoading,
+    tokenBLoading,
+    handleChangeTokenA,
+    handleChangeTokenB,
+    handleChangeTokensPair
+  } = useLiquidityFormService({ onTokensChange });
 
   const isAddTabActive = tab.id === 'add';
 
@@ -42,6 +52,8 @@ export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {
             dex={dex}
             tokenA={tokenA}
             tokenB={tokenB}
+            tokenALoading={tokenALoading}
+            tokenBLoading={tokenBLoading}
             onTokenAChange={handleChangeTokenA}
             onTokenBChange={handleChangeTokenB}
           />

@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
@@ -36,6 +37,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     tokenABalance,
     tokenBBalance,
     share,
+    isNewPair,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -59,6 +61,8 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
+  const isTezInPair = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
+
   const fixedUnfrozenBalance = share?.unfrozen.toFixed() ?? null;
   const fixedBalanceA = tokenABalance?.toFixed() ?? null;
   const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
@@ -76,6 +80,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
         frozenBalance={share?.frozen.toFixed()}
+        notFrozen={Boolean(isTezInPair)}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}
@@ -125,6 +130,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
           </div>
         </>
       )}
+      {isNewPair && <AlarmMessage message={t("liquidity|Note! The pool doesn't exist")} className={s['mt-24']} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
           Remove

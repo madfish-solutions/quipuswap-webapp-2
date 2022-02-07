@@ -1,16 +1,6 @@
-import React, {
-  useRef,
-  useState,
-  useContext,
-  HTMLProps,
-  FC,
-  Fragment,
-  useEffect,
-  SetStateAction,
-  Dispatch
-} from 'react';
+import { Dispatch, FC, Fragment, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 

@@ -1,16 +1,11 @@
-import { Standard } from '@graphql';
-import { isExist } from '@utils/helpers';
-import { SortTokensContractsType, SortType, TokenId, TokenIdFa2 } from '@utils/types';
-
-const isTokenTypeFa2 = (token: TokenId): token is TokenIdFa2 =>
-  token.type.toUpperCase() === Standard.Fa2 || ('fa2TokenId' in token && isExist(token.fa2TokenId));
-const isTokenTypeFa12 = (token: TokenId) => !isTokenTypeFa2(token);
+import { isTokenFa12, isTokenFa2 } from '@utils/helpers';
+import { SortTokensContractsType, SortType, TokenId } from '@utils/types';
 
 const getSort = (tokenA: TokenId, tokenB: TokenId, type: SortType): SortTokensContractsType => ({
   addressA: tokenA.contractAddress,
-  idA: isTokenTypeFa2(tokenA) ? tokenA.fa2TokenId : null,
+  idA: isTokenFa2(tokenA) ? tokenA.fa2TokenId : null,
   addressB: tokenB.contractAddress,
-  idB: isTokenTypeFa2(tokenB) ? tokenB.fa2TokenId : null,
+  idB: isTokenFa2(tokenB) ? tokenB.fa2TokenId : null,
   type
 });
 
@@ -20,8 +15,8 @@ const getRevertSort = (tokenA: TokenId, tokenB: TokenId, type: SortType): SortTo
 });
 
 export const sortTokensContracts = (tokenA: TokenId, tokenB: TokenId): SortTokensContractsType => {
-  if (isTokenTypeFa12(tokenA)) {
-    if (isTokenTypeFa2(tokenB)) {
+  if (isTokenFa12(tokenA)) {
+    if (isTokenFa2(tokenB)) {
       return getSort(tokenA, tokenB, SortType.LeftRight);
     }
 
@@ -34,7 +29,7 @@ export const sortTokensContracts = (tokenA: TokenId, tokenB: TokenId): SortToken
   }
 
   // isTokenTypeFa2(tokenA)
-  if (isTokenTypeFa12(tokenB)) {
+  if (isTokenFa12(tokenB)) {
     return getRevertSort(tokenB, tokenA, SortType.LeftRight);
   }
 

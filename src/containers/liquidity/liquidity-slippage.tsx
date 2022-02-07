@@ -5,11 +5,11 @@ import { useTranslation } from 'next-i18next';
 
 import {
   DEFAULT_SLIPPAGE_PERCENTAGE,
-  TEZOS_TOKEN,
-  PRESET_AMOUNT_INPUT_DECIMALS,
   MINIMUM_PRESET_AMOUNT_INPUT_VALUE,
+  NETWORK_ID,
   networksDefaultTokens,
-  NETWORK_ID
+  PRESET_AMOUNT_INPUT_DECIMALS,
+  TEZOS_TOKEN
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
