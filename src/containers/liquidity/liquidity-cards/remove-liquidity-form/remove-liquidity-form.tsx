@@ -85,6 +85,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}
+        isPoolNotExists={isPoolNotExist}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect

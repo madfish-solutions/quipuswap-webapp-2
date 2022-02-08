@@ -7,13 +7,12 @@ import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol } from '@utils/helpers';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
-import { removeExtraZeros } from '../helpers';
-import { checkIsPoolExists } from '../helpers/check-is-pool-exists';
+import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
@@ -41,7 +40,7 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
 
-  const isPoolNotExist = checkIsPoolExists(pairInfo);
+  const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   useEffect(() => {
     if (!tokenA || !tokenB) {
@@ -62,7 +61,7 @@ export const useRemoveLiquidityService = (
     setValidatedInputMessage(undefined);
     setValidatedOutputMessageA(undefined);
     setValidatedOutputMessageB(undefined);
-  }, [clearShares, dex, tokenA, tokenB]);
+  }, [dex, tokenA, tokenB]);
 
   const handleSetTokenPair = (tokensPair: TokenPair) => {
     onChangeTokensPair(tokensPair);
