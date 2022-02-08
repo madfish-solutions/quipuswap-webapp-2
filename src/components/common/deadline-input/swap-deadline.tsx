@@ -24,7 +24,7 @@ export const SwapDeadline: FC<Props> = ({ error, onChange, value }) => {
   return (
     <>
       <label htmlFor="deadline" className={s.inputLabel}>
-        {t('common|Transaction deadline')}
+        <span>{t('common|Transaction deadline')}</span>
         <Tooltip
           content={t(
             'common|Set the transaction execution deadline. If reached before the transaction is executed, the transaction will be aborted.'
