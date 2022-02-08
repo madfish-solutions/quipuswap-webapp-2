@@ -8,7 +8,7 @@ import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
 import { MAX_HOPS_COUNT } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { DeadlineInput } from '@components/common/deadline-input';
+import { SwapDeadline } from '@components/common/deadline-input';
 import { PageTitle } from '@components/common/page-title';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
@@ -34,8 +34,8 @@ import {
 import { DexGraph } from '@utils/routing';
 import { Undefined, Token, TokenMetadata } from '@utils/types';
 
-import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details/swap-details';
+import { SwapSlippage } from './components/swap-slippage';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -429,7 +429,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
               error={touchedFieldsErrors.recipient}
             />
           )}
-          <SlippageInput
+          <SwapSlippage
             error={touchedFieldsErrors.slippage}
             loading={dexPoolsLoading}
             outputAmount={outputAmount}
@@ -438,7 +438,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
             outputToken={outputToken}
           />
           {shouldShowDeadlineInput && (
-            <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+            <SwapDeadline error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
           <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
             <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />

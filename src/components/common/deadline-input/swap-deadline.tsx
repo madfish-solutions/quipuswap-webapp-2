@@ -5,16 +5,17 @@ import { useTranslation } from 'next-i18next';
 
 import { DEFAULT_DEADLINE_MINS } from '@app.config';
 import { TransactionDeadline } from '@components/common/TransactionDeadline';
+import { Tooltip } from '@components/ui/components/tooltip';
 import s from '@styles/CommonContainer.module.sass';
 import { Nullable } from '@utils/types';
 
-interface DeadlineInputProps {
+interface Props {
   error?: string;
   value?: BigNumber;
   onChange: (newValue: BigNumber) => void;
 }
 
-export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }) => {
+export const SwapDeadline: FC<Props> = ({ error, onChange, value }) => {
   const { t } = useTranslation(['common']);
 
   const handleChange = (newValue: Nullable<string>) =>
@@ -24,6 +25,11 @@ export const DeadlineInput: FC<DeadlineInputProps> = ({ error, onChange, value }
     <>
       <label htmlFor="deadline" className={s.inputLabel}>
         {t('common|Transaction deadline')}
+        <Tooltip
+          content={t(
+            'common|Set the transaction execution deadline. If reached before the transaction is executed, the transaction will be aborted.'
+          )}
+        />
       </label>
       <TransactionDeadline handleChange={handleChange} placeholder={value?.toFixed()} />
       {error && <div className={s.simpleError}>{error}</div>}
