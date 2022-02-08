@@ -4,9 +4,10 @@ import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import Script from 'next/script';
 
-import { BASE_URL } from '@app.config';
+import { BASE_URL, QUIPUSWAP } from '@app.config';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
@@ -26,6 +27,7 @@ interface BaseLayoutProps {
 }
 
 export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+  const canonicalURL = QUIPUSWAP + useRouter().asPath;
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
 
   useEffect(() => {
@@ -46,6 +48,7 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
         ) : (
           <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
         )}
+        <link rel="canonical" href={canonicalURL} />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>
 
