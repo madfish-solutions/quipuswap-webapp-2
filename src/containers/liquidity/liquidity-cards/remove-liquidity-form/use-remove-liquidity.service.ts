@@ -7,15 +7,14 @@ import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol } from '@utils/helpers';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Undefined, Token, TokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
-import { removeExtraZeros } from '../helpers';
+import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
-import { checkIsPoolEmpty } from './../helpers/check-is-pool-empty';
 
 export const useRemoveLiquidityService = (
   dex: Optional<FoundDex>,
@@ -31,7 +30,7 @@ export const useRemoveLiquidityService = (
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
-  const { share, updateLiquidityShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -41,7 +40,7 @@ export const useRemoveLiquidityService = (
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
   const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
 
-  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
+  const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   useEffect(() => {
     if (!tokenA || !tokenB) {
@@ -66,6 +65,7 @@ export const useRemoveLiquidityService = (
 
   const handleSetTokenPair = (tokensPair: TokenPair) => {
     onChangeTokensPair(tokensPair);
+    clearShares();
   };
 
   useEffect(() => {

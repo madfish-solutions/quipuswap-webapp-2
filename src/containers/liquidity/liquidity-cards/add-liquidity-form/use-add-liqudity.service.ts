@@ -12,12 +12,13 @@ import {
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
   getTokenSymbol,
+  isUndefined,
   toDecimals
 } from '@utils/helpers';
 import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolEmpty } from '../helpers';
+import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
@@ -37,8 +38,16 @@ export const useAddLiquidityService = (
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
-  const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
-  const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
+  const {
+    tokenBalance: tokenABalance,
+    updateTokenBalance: updateTokenABalance,
+    clearBalance: clearBalanceA
+  } = useLoadTokenBalance(tokenA);
+  const {
+    tokenBalance: tokenBBalance,
+    updateTokenBalance: updateTokenBBalance,
+    clearBalance: clearBalanceB
+  } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
 
   const [tokenAInput, setTokenAInput] = useState('');
@@ -47,7 +56,7 @@ export const useAddLiquidityService = (
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
-  const isPoolNotExist = checkIsPoolEmpty(pairInfo);
+  const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   const tokensCalculations = (
     tokenAInput: string,
@@ -143,6 +152,7 @@ export const useAddLiquidityService = (
 
   const handleSetTokenA = (token: Token) => {
     onTokenAChange(token);
+    clearBalanceA();
     if (lastEditedInput === LastChangedToken.tokenA) {
       setTokenBInput('');
     } else {
@@ -152,6 +162,7 @@ export const useAddLiquidityService = (
 
   const handleSetTokenB = (token: Token) => {
     onTokenBChange(token);
+    clearBalanceB();
     if (lastEditedInput === LastChangedToken.tokenB) {
       setTokenAInput('');
     } else {

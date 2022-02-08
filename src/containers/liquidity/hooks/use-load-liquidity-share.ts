@@ -33,10 +33,12 @@ export const useLoadLiquidityShare = (dex: Optional<FoundDex>, tokenA: Nullable<
     [tezos, accountPkh]
   );
 
+  const clearShares = useCallback(() => setShare(null), []);
+
   useEffect(() => {
     void loadShare(dex, tokenA, tokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dex, tokenA, tokenB]);
 
-  return { share, updateLiquidityShares: loadShare };
+  return { share, updateLiquidityShares: loadShare, clearShares };
 };

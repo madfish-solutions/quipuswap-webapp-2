@@ -31,10 +31,12 @@ export const useLoadTokenBalance = (token: Nullable<Token>) => {
     [accountPkh, tezos]
   );
 
+  const clearBalance = useCallback(() => setTokenBalance(null), []);
+
   useEffect(() => {
     void getTokenBalance(token);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, token]);
 
-  return { tokenBalance, updateTokenBalance: getTokenBalance };
+  return { tokenBalance, updateTokenBalance: getTokenBalance, clearBalance };
 };

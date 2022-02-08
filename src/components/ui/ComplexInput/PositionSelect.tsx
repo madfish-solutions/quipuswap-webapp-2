@@ -39,6 +39,7 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
   };
+  isPoolNotExists?: boolean;
 }
 
 const themeClass = {
@@ -64,7 +65,9 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   setTokenPair,
   notFrozen,
   tokensUpdating,
+  isPoolNotExists,
   ...props
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -92,6 +95,9 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const notWhitelistedMessage = getMessageNotWhitelistedTokenPair(token1, token2);
 
+  const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
+  const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;
+
   return (
     <>
       <PositionsModal
@@ -118,11 +124,11 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
               {!notFrozen && shouldShowBalanceButtons && (
-                <Balance balance={frozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
+                <Balance balance={wrapFrozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
               )}
               {shouldShowBalanceButtons ? (
                 <Balance
-                  balance={balance}
+                  balance={wrapAvailableBalance}
                   text={balanceLabel ?? t('common|Total Balance')}
                   colorMode={colorThemeMode}
                 />

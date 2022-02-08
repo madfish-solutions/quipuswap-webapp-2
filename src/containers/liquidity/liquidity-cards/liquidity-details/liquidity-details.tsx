@@ -1,15 +1,15 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
 
+import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { useLoadLpTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { isExist, isNull } from '@utils/helpers';
+import { isNull, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
@@ -26,10 +26,30 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
   const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
-  const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
-  const { tokenASymbol, tokenBSymbol, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
-    useLiquidityDetailsService(dex, tokenA, tokenB);
+  const {
+    tokenASymbol,
+    tokenBSymbol,
+    sellPrice,
+    buyPrice,
+    fixedTokenAPoll,
+    fixedTokenBPoll,
+    pairLink,
+    contractLink,
+    isPoolNotExists
+  } = useLiquidityDetailsService(dex, tokenA, tokenB);
+
+  const isDexNotExists = isUndefined(dex);
+  const isLoadingA = isDexNotExists || isNull(tokenA);
+  const isLoadingB = isDexNotExists || isNull(tokenB);
+  const isLoadingShares = isNull(share);
+
+  const isErrorA = Boolean(!isLoadingA && (!fixedTokenAPoll || fixedTokenAPoll.eq(EMPTY_POOL_AMOUNT)));
+  const isErrorB = Boolean(!isLoadingB && (!fixedTokenBPoll || fixedTokenBPoll.eq(EMPTY_POOL_AMOUNT)));
+  const isErrorShares = isPoolNotExists;
+
+  const totalAmount = share?.total ?? null;
+  const frozenAmount = share?.frozen ?? null;
 
   return (
     <>
@@ -66,7 +86,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenAPoll}
           currency={tokenASymbol}
-          isLoading={!isExist(dex) || !isExist(tokenA)}
+          isLoading={isLoadingA}
+          isError={isErrorA}
           amountDecimals={tokenA?.metadata.decimals}
         />
       </DetailsCardCell>
@@ -82,7 +103,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           balanceRule
           amount={fixedTokenBPoll}
           currency={tokenBSymbol}
-          isLoading={!isExist(dex) || !isExist(tokenB)}
+          isLoading={isLoadingB}
+          isError={isErrorB}
           amountDecimals={tokenB?.metadata.decimals}
         />
       </DetailsCardCell>
@@ -96,7 +118,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.total || null} isLoading={isNull(poolTotal)} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={totalAmount}
+              isLoading={isLoadingShares || isLoadingA}
+              isError={isErrorShares}
+            />
           </DetailsCardCell>
 
           <DetailsCardCell
@@ -106,7 +133,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.frozen || null} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={frozenAmount}
+              isLoading={isLoadingShares || isLoadingB}
+              isError={isErrorShares}
+            />
           </DetailsCardCell>
         </>
       )}
