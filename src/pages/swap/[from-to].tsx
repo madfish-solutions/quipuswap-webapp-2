@@ -15,7 +15,7 @@ const SwapSendPage: React.FC = () => {
   return (
     <BaseLayout
       title={t(`swap|Swap page - ${SITE_TITLE}`)}
-      description={t(`'swap|${SITE_DESCRIPTION}'`)}
+      description={t(`'swap|${SITE_DESCRIPTION}`)}
       className={s.wrapper}
     >
       <TestnetAlert />

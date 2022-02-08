@@ -12,6 +12,7 @@ import {
   TEZOS_TOKEN
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
+import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
@@ -25,7 +26,7 @@ export enum LiquiditySlippageType {
   REMOVE = 'REMOVE'
 }
 
-interface SlippageInputProps {
+interface Props {
   className?: string;
   liquidityType: LiquiditySlippageType;
   error?: string;
@@ -38,7 +39,7 @@ interface SlippageInputProps {
 const DEFAULT_INVESTED_VALUE = 0;
 const SLIPPAGE_UNIT = '%';
 
-export const LiquiditySlippage: FC<SlippageInputProps> = ({
+export const LiquiditySlippage: FC<Props> = ({
   className,
   liquidityType,
   error,
@@ -66,7 +67,12 @@ export const LiquiditySlippage: FC<SlippageInputProps> = ({
   return (
     <>
       <label htmlFor="deadline" className={s.inputLabel}>
-        {t('common|Slippage')}
+        <span>{t('common|Slippage')}</span>
+        <Tooltip
+          content={t(
+            'common|Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.'
+          )}
+        />
       </label>
       <NewPresetsAmountInput
         className={className}
