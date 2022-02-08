@@ -81,11 +81,11 @@ export const useAddLiquidityService = (
     const validationA = validations(accountPkh, tokenABN, maxTokenAInput, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
 
-    if (isPoolNotExist) {
+    if (isPoolNotExist || !pairInfo) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo!;
+    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
     const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
