@@ -1,43 +1,63 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
 
+import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { useLoadLpTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useAccountPkh } from '@utils/dapp';
-import { isExist, isNull } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { isNull, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
 import { useLiquidityDetailsService } from './use-liqiudity-details.service';
 
 interface Props {
-  dex: Nullable<FoundDex>;
-  tokenA: Nullable<WhitelistedToken>;
-  tokenB: Nullable<WhitelistedToken>;
+  dex: Optional<FoundDex>;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
 }
 
 export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
   const { t } = useTranslation(['common', 'liquidity']);
   const accountPkh = useAccountPkh();
   const { share } = useLoadLiquidityShare(dex, tokenA, tokenB);
-  const poolTotal = useLoadLpTokenBalance(dex, tokenA, tokenB);
 
-  const { tokenAName, tokenBName, sellPrice, buyPrice, fixedTokenAPoll, fixedTokenBPoll, pairLink, contractLink } =
-    useLiquidityDetailsService(dex, tokenA, tokenB);
+  const {
+    tokenASymbol,
+    tokenBSymbol,
+    sellPrice,
+    buyPrice,
+    fixedTokenAPoll,
+    fixedTokenBPoll,
+    pairLink,
+    contractLink,
+    isPoolNotExists
+  } = useLiquidityDetailsService(dex, tokenA, tokenB);
+
+  const isDexNotExists = isUndefined(dex);
+  const isLoadingA = isDexNotExists || isNull(tokenA);
+  const isLoadingB = isDexNotExists || isNull(tokenB);
+  const isLoadingShares = isNull(share);
+
+  const isErrorA = Boolean(!isLoadingA && (!fixedTokenAPoll || fixedTokenAPoll.eq(EMPTY_POOL_AMOUNT)));
+  const isErrorB = Boolean(!isLoadingB && (!fixedTokenBPoll || fixedTokenBPoll.eq(EMPTY_POOL_AMOUNT)));
+  const isErrorShares = isPoolNotExists;
+
+  const totalAmount = share?.total ?? null;
+  const frozenAmount = share?.frozen ?? null;
 
   return (
     <>
       <DetailsCardCell
         cellName={t('common|Sell Price')}
         tooltipContent={t(
-          'common|The amount of {{tokenBName}} you receive for 1 {{tokenAName}}, according to the current exchange rate.',
-          { tokenAName, tokenBName }
+          'common|The amount of {{tokenBSymbol}} you receive for 1 {{tokenASymbol}}, according to the current exchange rate.',
+          { tokenASymbol, tokenBSymbol }
         )}
         className={s.LiquidityDetails_CardCell}
       >
@@ -47,8 +67,8 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
       <DetailsCardCell
         cellName={t('common|Buy Price')}
         tooltipContent={t(
-          'common|The amount of {{tokenAName}} you receive for 1 {{tokenBName}}, according to the current exchange rate.',
-          { tokenAName, tokenBName }
+          'common|The amount of {{tokenASymbol}} you receive for 1 {{tokenBSymbol}}, according to the current exchange rate.',
+          { tokenASymbol, tokenBSymbol }
         )}
         className={s.LiquidityDetails_CardCell}
       >
@@ -56,33 +76,35 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={t('liquidity|{{tokenAName}} Locked', { tokenAName })}
-        tooltipContent={t('liquidity|The amount of {{tokenAName}} locked in the pool by liquidity providers.', {
-          tokenAName
+        cellName={t('liquidity|{{tokenASymbol}} Locked', { tokenASymbol })}
+        tooltipContent={t('liquidity|The amount of {{tokenASymbol}} locked in the pool by liquidity providers.', {
+          tokenASymbol
         })}
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
           balanceRule
           amount={fixedTokenAPoll}
-          currency={tokenAName}
-          isLoading={!isExist(dex) || !isExist(tokenA)}
+          currency={tokenASymbol}
+          isLoading={isLoadingA}
+          isError={isErrorA}
           amountDecimals={tokenA?.metadata.decimals}
         />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={t('liquidity|{{tokenBName}} Locked', { tokenBName })}
-        tooltipContent={t('liquidity|The amount of {{tokenBName}} locked in the pool by liquidity providers.', {
-          tokenBName
+        cellName={t('liquidity|{{tokenBSymbol}} Locked', { tokenBSymbol })}
+        tooltipContent={t('liquidity|The amount of {{tokenBSymbol}} locked in the pool by liquidity providers.', {
+          tokenBSymbol
         })}
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
           balanceRule
           amount={fixedTokenBPoll}
-          currency={tokenBName}
-          isLoading={!isExist(dex) || !isExist(tokenB)}
+          currency={tokenBSymbol}
+          isLoading={isLoadingB}
+          isError={isErrorB}
           amountDecimals={tokenB?.metadata.decimals}
         />
       </DetailsCardCell>
@@ -96,7 +118,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.total || null} isLoading={isNull(poolTotal)} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={totalAmount}
+              isLoading={isLoadingShares || isLoadingA}
+              isError={isErrorShares}
+            />
           </DetailsCardCell>
 
           <DetailsCardCell
@@ -106,7 +133,12 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             )}
             className={s.LiquidityDetails_CardCell}
           >
-            <StateCurrencyAmount balanceRule amount={share?.frozen || null} />
+            <StateCurrencyAmount
+              balanceRule
+              amount={frozenAmount}
+              isLoading={isLoadingShares || isLoadingB}
+              isError={isErrorShares}
+            />
           </DetailsCardCell>
         </>
       )}

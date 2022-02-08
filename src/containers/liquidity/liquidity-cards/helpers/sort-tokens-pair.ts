@@ -1,10 +1,10 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Standard } from '@graphql';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 export const sortTokensPair = (
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken
+  tokenA: Token,
+  tokenB: Token
   // eslint-disable-next-line sonarjs/cognitive-complexity
 ) => {
   if (tokenA.type < tokenB.type) {

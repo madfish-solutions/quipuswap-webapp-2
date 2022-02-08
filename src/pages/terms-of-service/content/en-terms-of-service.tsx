@@ -62,19 +62,19 @@ export const EnTermsOfService: React.FC = () => (
       <br />
       <br />
       <ol className={s.ol}>
-        <li>You represent that you are at least eighteen years old;</li>
+        <li>You represent and warrant that you are at least eighteen years old;</li>
         <li>
           You have the full right, power, and authority to enter into and comply with the terms and conditions of this
           Agreement on behalf of yourself and any company or legal entity for which you may access or use the Interface;
         </li>
         <li>
-          You further represent that you are not a citizen, resident, or member of any jurisdiction or group where your
-          use of the Interface would be illegal or otherwise violate any applicable law;
+          You further represent and warrant that you are not a citizen, resident, or member of any jurisdiction or group
+          where your use of the Interface would be illegal or otherwise violate any applicable law;
         </li>
         <li>
-          You further represent that your access and use of the Interface will fully comply with all applicable laws and
-          regulations and that you will not access or use the Interface to conduct, promote, or otherwise facilitate any
-          illegal activity.
+          You further represent and warrant that your access and use of the Interface will fully comply with all
+          applicable laws and regulations and that you will not access or use the Interface to conduct, promote, or
+          otherwise facilitate any illegal activity.
         </li>
       </ol>
     </div>
@@ -145,7 +145,7 @@ export const EnTermsOfService: React.FC = () => (
       particular purpose. You acknowledge and agree that your use of the Interface is at your own risk.
     </p>
     <p className={cx(s.big, s.mt40)}>
-      <span className={s.list}>6.2.</span> We do not represent or warrant that access to the Interface will be
+      <span className={s.list}>6.2.</span> We do not represent and warrant that access to the Interface will be
       continuous, uninterrupted, timely, or secure; that the information contained in the Interface will be accurate,
       reliable, complete, or current; or that the Interface will be free from errors, defects, viruses, or other harmful
       elements. No advice, information, or statement that we make should be treated as creating any warranty concerning
@@ -155,7 +155,8 @@ export const EnTermsOfService: React.FC = () => (
     <h4 className={s.mt40}>7. Assumption of Risk</h4>
     <br />
     <p className={s.big}>
-      <span className={s.list}>7.1.</span> By accessing and using the Interface, you represent that you understand
+      <span className={s.list}>7.1.</span> By accessing and using the Interface, you represent and warrant that you
+      understand
     </p>
     <br />
     <ul className={s.ul}>
@@ -164,9 +165,9 @@ export const EnTermsOfService: React.FC = () => (
     </ul>
     <br />
     <p className={s.big}>
-      <span className={s.list}>7.2.</span> You further represent that you have a working knowledge of the usage and
-      intricacies of blockchain-based digital assets, including, without limitation, FA1.2 and FA2 token standards
-      available on the Tezos blockchain.
+      <span className={s.list}>7.2.</span> You further represent and warrant that you have a working knowledge of the
+      usage and intricacies of blockchain-based digital assets, including, without limitation, FA1.2 and FA2 token
+      standards available on the Tezos blockchain.
     </p>
     <br />
     <p className={s.big}>
@@ -280,8 +281,8 @@ export const EnTermsOfService: React.FC = () => (
     <h4 className={s.mt40}>14. Governing Law</h4>
     <br />
     <p className={s.big}>
-      You agree that the laws of Ukraine, without regard to principles of conflict of laws, govern the Terms and any
-      dispute between you and us.
+      You agree that the laws of British Virgin Islands, without regard to principles of conflict of laws, govern the
+      Terms and any dispute between you and us.
     </p>
     <h4 className={s.mt40}>15. Entire Agreement</h4>
     <br />

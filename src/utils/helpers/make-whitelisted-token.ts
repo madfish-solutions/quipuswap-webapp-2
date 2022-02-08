@@ -1,9 +1,9 @@
 import { Standard } from '@graphql';
-import { TokenId, WhitelistedToken } from '@utils/types';
+import { TokenId, Token } from '@utils/types';
 
 import { shortize } from './shortize';
 
-export const makeWhitelistedToken = (tokenId: TokenId, knownTokens: WhitelistedToken[]) => {
+export const makeToken = (tokenId: TokenId, knownTokens: Token[]) => {
   const { fa2TokenId, contractAddress, type } = tokenId;
   const matchingToken = knownTokens.find(
     ({ fa2TokenId: knownTokenId, contractAddress: knownTokenAddress }) =>
@@ -15,6 +15,7 @@ export const makeWhitelistedToken = (tokenId: TokenId, knownTokens: WhitelistedT
     type,
     contractAddress,
     fa2TokenId,
+    isWhitelisted: false,
     metadata: {
       decimals: 0,
       symbol: fallbackSymbol,

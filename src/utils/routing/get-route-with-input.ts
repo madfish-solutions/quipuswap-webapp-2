@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { getTokenSlug, getTokenIdFromSlug, getMarketQuotient, getTokenOutput } from '@utils/helpers';
 import { DexPair } from '@utils/types';
 
-import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
 import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { CommonRouteProblemParams } from './types';
 
@@ -40,7 +40,7 @@ export function getRoutesTreeWithInput(
     startTokenSlug,
     endTokenSlug,
     graph,
-    depth = DEFAULT_ROUTE_SEARCH_DEPTH,
+    depth = MAX_HOPS_COUNT,
     inputAmount = new BigNumber(1)
   }: RouteWithInputProblemParams,
   shouldUseImaginaryAmount: boolean,

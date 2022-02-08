@@ -5,13 +5,16 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
+import { getUserMaxInputAmount } from '../utils/get-user-max-input-amount';
 import { SwapAction, SwapField } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
+const TOKEN_ATOM_RAW_AMOUNT = 1;
+const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useValidationSchema = () => {
   const { t } = useTranslation(['common', 'swap']);
@@ -24,27 +27,26 @@ export const useValidationSchema = () => {
     [SwapField.INPUT_AMOUNT]: objectSchema().when(
       [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (inputToken?: WhitelistedToken, outputToken?: WhitelistedToken) => {
+      (inputToken?: Token, outputToken?: Token) => {
         if (!inputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
         const { decimals: inputTokenDecimals, symbol: inputTokenSymbol } = inputToken.metadata;
         const inputTokenSlug = getTokenSlug(inputToken);
         const inputTokenBalance = balances[inputTokenSlug];
-        let max: BigNumber | undefined = BigNumber.min(
-          inputTokenBalance ?? new BigNumber(Infinity),
-          (outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]) ?? new BigNumber(Infinity)
+
+        const max = getUserMaxInputAmount(
+          inputToken,
+          inputTokenBalance,
+          outputToken && maxInputAmounts[inputTokenSlug]?.[getTokenSlug(outputToken)]
         );
-        if (!max.isFinite()) {
-          max = undefined;
-        }
-        const min = fromDecimals(new BigNumber(1), inputTokenDecimals);
+        const min = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), inputTokenDecimals);
         if (inputTokenBalance?.eq(0)) {
           return bigNumberSchema(min)
             .test(
               'balance',
               () => t('common|Insufficient funds'),
-              value => !(value instanceof BigNumber) || value.eq(0)
+              value => !(value instanceof BigNumber) || value.eq(EMPTY_BALANCE_AMOUNT)
             )
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
@@ -65,14 +67,14 @@ export const useValidationSchema = () => {
     [SwapField.OUTPUT_AMOUNT]: objectSchema().when(
       [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (inputToken?: WhitelistedToken, outputToken?: WhitelistedToken) => {
+      (inputToken?: Token, outputToken?: Token) => {
         if (!outputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
         const { decimals: outputTokenDecimals, symbol: outputTokenSymbol } = outputToken.metadata;
         const max = inputToken && maxOutputAmounts[getTokenSlug(inputToken)]?.[getTokenSlug(outputToken)];
 
-        return bigNumberSchema(fromDecimals(new BigNumber(1), outputTokenDecimals), max)
+        return bigNumberSchema(fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), outputTokenDecimals), max)
           .test(
             'output-decimals-amount',
             () =>

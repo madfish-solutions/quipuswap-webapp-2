@@ -51,7 +51,7 @@ export const UnvoteButton: FC<UnvoteButtonProps> = ({ className }) => {
       showErrorToast,
       confirmOperation,
       updateBalances,
-      wrapCandidate!
+      wrapCandidate
     );
   };
 

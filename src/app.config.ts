@@ -1,12 +1,14 @@
+import BigNumber from 'bignumber.js';
+
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, WhitelistedToken } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
 export const DEFAULT_DECIMALS = 6;
 export const EMPTY_POOL_AMOUNT = 0;
 
-export const QUIPUSWAP = 'https://quipuswap.com/';
+export const QUIPUSWAP = 'https://quipuswap.com';
 export const QUIPUSWAP_TRADE = 'https://quipuswap.com/swap';
 export const QUIPUSWAP_INVEST = 'https://quipuswap.com/invest/add-liquidity';
 
@@ -49,6 +51,9 @@ export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
+export const MAX_HOPS_COUNT = 5;
+
+export const TEZ_TO_LEAVE = new BigNumber('0.1');
 
 export const PRESET_AMOUNT_INPUT_DECIMALS = 2;
 export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
@@ -67,9 +72,10 @@ export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
-export const TEZOS_TOKEN: WhitelistedToken = {
+export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
   contractAddress: 'tez',
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     name: 'Tezos',
@@ -78,10 +84,11 @@ export const TEZOS_TOKEN: WhitelistedToken = {
   }
 };
 
-export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
+export const MAINNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     symbol: 'QUIPU',
@@ -90,10 +97,11 @@ export const MAINNET_DEFAULT_TOKEN: WhitelistedToken = {
   }
 };
 
-export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
+export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
+  isWhitelisted: true,
   metadata: {
     decimals: 6,
     symbol: 'QUIPU',
@@ -102,7 +110,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: WhitelistedToken = {
   }
 };
 
-export const networksDefaultTokens: Record<QSNets, WhitelistedToken> = {
+export const networksDefaultTokens: Record<QSNets, Token> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
@@ -123,6 +131,11 @@ const TTDEX_CONTRACTS = {
   [QSNets.mainnet]: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi'
 };
 
+export const DEX_POOLS_URLS = {
+  mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,
+  hangzhounet: process.env.NEXT_PUBLIC_HANGZHOUNET_POOLS_URL!
+};
+
 const tzktExplorerUrls = {
   [QSNets.mainnet]: 'https://tzkt.io',
   [QSNets.hangzhounet]: 'https://hangzhounet.tzkt.io'
@@ -131,7 +144,6 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
-export const POOLS_LIST_API = process.env.NEXT_PUBLIC_POOLS_LIST_API!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;

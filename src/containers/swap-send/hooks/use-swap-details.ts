@@ -15,13 +15,13 @@ import {
 } from '@utils/helpers';
 import { getRateByInputOutput } from '@utils/helpers/rates';
 import { getMaxInputRoute, getRouteWithInput } from '@utils/routing';
-import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
+import { DexPair, Undefined, Token } from '@utils/types';
 
 import { useSwapFee } from './use-swap-fee';
 
 interface SwapDetailsParams {
-  inputToken: Undefined<WhitelistedToken>;
-  outputToken: Undefined<WhitelistedToken>;
+  inputToken: Undefined<Token>;
+  outputToken: Undefined<Token>;
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
   slippageTolerance: Undefined<BigNumber>;

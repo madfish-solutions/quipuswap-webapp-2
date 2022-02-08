@@ -1,16 +1,6 @@
-import React, {
-  useRef,
-  useState,
-  useContext,
-  HTMLProps,
-  FC,
-  Fragment,
-  useEffect,
-  SetStateAction,
-  Dispatch
-} from 'react';
+import { Dispatch, FC, Fragment, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
-import { Shevron, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -20,9 +10,11 @@ import { PositionsModal } from '@components/modals/PositionsModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { Nullable, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/is-whitelisted-token';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
+import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
 import { Button } from '../elements/button';
 import { Balance } from '../state-components/balance';
@@ -37,16 +29,17 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   notFrozen?: boolean;
   label: string;
   error?: string;
-  notSelectable1?: WhitelistedToken;
-  notSelectable2?: WhitelistedToken;
-  handleChange?: (tokenPair: WhitelistedTokenPair) => void;
+  notSelectable1?: Token;
+  notSelectable2?: Token;
+  handleChange?: (tokenPair: TokenPair) => void;
   handleBalance: (value: string) => void;
-  tokenPair: Nullable<WhitelistedTokenPair>;
-  setTokenPair: (tokenPair: WhitelistedTokenPair) => void;
+  tokenPair: Nullable<TokenPair>;
+  setTokenPair: (tokenPair: TokenPair) => void;
   tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
   };
+  isPoolNotExists?: boolean;
 }
 
 const themeClass = {
@@ -72,7 +65,9 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   setTokenPair,
   notFrozen,
   tokensUpdating,
+  isPoolNotExists,
   ...props
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -97,6 +92,11 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   }, [tokenPair?.token2]);
 
   const isTokensLoading = tokensUpdating?.isTokenChanging;
+
+  const notWhitelistedMessage = getMessageNotWhitelistedTokenPair(token1, token2);
+
+  const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
+  const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;
 
   return (
     <>
@@ -124,11 +124,11 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             <div className={cx(s.item1, s.label2)} />
             <div className={s.item2}>
               {!notFrozen && shouldShowBalanceButtons && (
-                <Balance balance={frozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
+                <Balance balance={wrapFrozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
               )}
               {shouldShowBalanceButtons ? (
                 <Balance
-                  balance={balance}
+                  balance={wrapAvailableBalance}
                   text={balanceLabel ?? t('common|Total Balance')}
                   colorMode={colorThemeMode}
                 />
@@ -147,31 +147,34 @@ export const PositionSelect: FC<PositionSelectProps> = ({
               autoFocus
               {...props}
             />
-            <Button
-              onClick={() => setTokensModal(true)}
-              theme="quaternary"
-              className={s.item4}
-              textClassName={s.item4Inner}
-            >
-              <TokensLogos
-                firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
-                firstTokenSymbol={getWhitelistedTokenSymbol(token1)}
-                secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
-                secondTokenSymbol={getWhitelistedTokenSymbol(token2)}
-                loading={isTokensLoading}
-              />
-              <h6 className={cx(s.token, s.tokensSelect)}>
-                {tokenPair ? (
-                  <Fragment>
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                    {isTokensLoading ? <DashPlug /> : getWhitelistedTokenSymbol(tokenPair.token2, 5)}
-                  </Fragment>
-                ) : (
-                  'Select LP'
-                )}
-              </h6>
-              <Shevron />
-            </Button>
+            <div className={s.dangerContainer}>
+              {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
+              <Button
+                onClick={() => setTokensModal(true)}
+                theme="quaternary"
+                className={s.item4}
+                textClassName={s.item4Inner}
+              >
+                <TokensLogos
+                  firstTokenIcon={prepareTokenLogo(token1.metadata?.thumbnailUri)}
+                  firstTokenSymbol={getTokenSymbol(token1)}
+                  secondTokenIcon={prepareTokenLogo(token2.metadata?.thumbnailUri)}
+                  secondTokenSymbol={getTokenSymbol(token2)}
+                  loading={isTokensLoading}
+                />
+                <h6 className={cx(s.token, s.tokensSelect)}>
+                  {tokenPair ? (
+                    <Fragment>
+                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
+                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
+                    </Fragment>
+                  ) : (
+                    'Select LP'
+                  )}
+                </h6>
+                <Shevron />
+              </Button>
+            </div>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>

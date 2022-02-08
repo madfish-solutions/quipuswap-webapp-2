@@ -40,7 +40,13 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
       <h4 className={s.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
-      <StateCurrencyAmount amount={volume} currency={currency} isLeftCurrency={currency === '$'} labelSize={size} />
+      <StateCurrencyAmount
+        className={s.currencyAmount}
+        amount={volume}
+        currency={currency}
+        isLeftCurrency={currency === '$'}
+        labelSize={size}
+      />
     </div>
   );
 };

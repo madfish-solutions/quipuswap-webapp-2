@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
 import { GetTokensPairsQuery, Token } from '@graphql';
-import { prepareTokenName, transformNodeToWhitelistedToken } from '@utils/helpers';
+import { prepareTokenName, transformNodeToToken } from '@utils/helpers';
 
 export const usePairs = (data?: GetTokensPairsQuery) => {
   const { t } = useTranslation(['home']);
@@ -14,8 +14,8 @@ export const usePairs = (data?: GetTokensPairsQuery) => {
       const token2 = x?.node?.token2 as Token;
 
       return {
-        token1: transformNodeToWhitelistedToken(token1),
-        token2: transformNodeToWhitelistedToken(token2),
+        token1: transformNodeToToken(token1),
+        token2: transformNodeToToken(token2),
         xtzUsdQuote: data?.overview.xtzUsdQuote,
         pair: {
           name: `${prepareTokenName(token1)} / ${prepareTokenName(token2)}`,

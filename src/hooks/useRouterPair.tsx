@@ -3,14 +3,14 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { getTokenPairSlug } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 interface RouterPairType {
   page: string;
   urlLoaded: boolean;
   initialLoad: boolean;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
 }
 
 const pairString = '[from-to]';

@@ -36,27 +36,28 @@ export enum WalletType {
   TEMPLE = 'temple'
 }
 
-export interface WhitelistedTokenPair {
+export interface TokenPair {
   balance?: Nullable<string>;
   frozenBalance?: Nullable<string>;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
-  dex?: FoundDex;
+  token1: Token;
+  token2: Token;
+  dex?: Nullable<FoundDex>;
 }
 
-export interface WhitelistedToken {
+export interface Token {
   type: Standard;
   contractAddress: string;
   // TODO: change the type to BigNumber
   fa2TokenId?: number;
-  metadata: WhitelistedTokenMetadata;
+  isWhitelisted: Nullable<boolean>;
+  metadata: TokenMetadata;
 }
 
-export interface WhitelistedTokenWithQSNetworkType extends WhitelistedToken {
+export interface TokenWithQSNetworkType extends Token {
   network?: QSNets;
 }
 
-export type TokenId = Pick<WhitelistedToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
 export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
@@ -75,31 +76,35 @@ export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
 
 export const isFullBaker = (baker: WhitelistedBaker): baker is WhitelistedBakerFull => baker && 'name' in baker;
 
-export interface WhitelistedTokenMetadata {
+export interface TokenMetadata {
   decimals: number;
   symbol: string;
   name: string;
   thumbnailUri: string;
 }
 
+export enum DexPairType {
+  TokenToToken = 'TokenToToken',
+  TokenToXtz = 'TokenToXtz'
+}
+
 interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
-  totalSupply: BigNumber;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
   id: string | number;
-  type: 'ttdex' | 'tokenxtz';
+  type: DexPairType;
 }
 
-interface TTDexPairProps extends CommonDexPairProps {
+export interface TTDexPairProps extends CommonDexPairProps {
   id: number;
-  type: 'ttdex';
+  type: DexPairType.TokenToToken;
 }
 
-interface TokenXtzDexPairProps extends CommonDexPairProps {
+export interface TokenXtzDexPairProps extends CommonDexPairProps {
   id: string;
-  type: 'tokenxtz';
+  type: DexPairType.TokenToXtz;
 }
 
 export type DexPair = TTDexPairProps | TokenXtzDexPairProps;
@@ -135,8 +140,8 @@ export interface VoteFormValues {
 export interface PoolTableType {
   id: number;
   xtzUsdQuote: string;
-  token1: WhitelistedToken;
-  token2: WhitelistedToken;
+  token1: Token;
+  token2: Token;
   pair: {
     name: string;
     token1: {

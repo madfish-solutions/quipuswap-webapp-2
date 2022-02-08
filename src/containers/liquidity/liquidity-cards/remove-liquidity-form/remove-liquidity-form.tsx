@@ -5,6 +5,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { AlarmMessage } from '@components/common/alarm-message';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
@@ -36,6 +37,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
     tokenABalance,
     tokenBBalance,
     share,
+    isPoolNotExist,
     handleRemoveLiquidity,
     handleChange,
     handleBalance,
@@ -59,9 +61,12 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
 
   const isDeadlineAndSlippageVisible = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
 
-  const fixedUnfrozenBalance = share?.unfrozen.toFixed() ?? null;
+  const isTezInPair = tokenA && tokenB && !isTezIncluded([tokenA, tokenB]);
+
   const fixedBalanceA = tokenABalance?.toFixed() ?? null;
   const fixedBalanceB = tokenBBalance?.toFixed() ?? null;
+  const fixedUnfrozenBalance = share?.unfrozen.toFixed();
+  const fixedFrozenBalance = share?.frozen.toFixed();
 
   return (
     <>
@@ -75,10 +80,12 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
         onChange={handleChange}
         value={lpTokenInput}
         balanceLabel={t('vote|Available balance')}
-        frozenBalance={share?.frozen.toFixed()}
+        frozenBalance={fixedFrozenBalance}
+        notFrozen={Boolean(isTezInPair)}
         id="liquidity-remove-input"
         className={s.input}
         error={validatedInputMessage}
+        isPoolNotExists={isPoolNotExist}
       />
       <ArrowDown className={s.iconButton} />
       <TokenSelect
@@ -125,6 +132,7 @@ export const RemoveLiquidityForm: FC<RemoveFormInterface> = ({ dex, tokenA, toke
           </div>
         </>
       )}
+      {isPoolNotExist && <AlarmMessage message={t("liquidity|Note! The pool doesn't exist")} className={s['mt-24']} />}
       {accountPkh ? (
         <Button className={s.button} onClick={handleRemoveLiquidity} disabled={isButtonDisabled}>
           Remove

@@ -1,6 +1,6 @@
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-import { FoundDex, Token } from '@quipuswap/sdk';
+import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
@@ -10,35 +10,44 @@ import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import {
   getAddLiquidityMessage,
   getInitializeLiquidityMessage,
-  getTokenAppellation,
-  isNull,
+  getTokenInputAmountCap,
+  getTokenSymbol,
+  isUndefined,
   toDecimals
 } from '@utils/helpers';
-import { Nullable, Undefined, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
-import { calculatePoolAmount, removeExtraZeros, sortTokensContracts } from '../helpers';
+import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { validateDeadline, validateSlippage, validations } from '../validators';
 import { LastChangedToken } from './last-changed-token.enum';
 import { PairInfo } from './pair-info.interface';
 
-const EMPTY_POOL = 0;
+const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
-  dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>,
-  onTokenAChange: (token: WhitelistedToken) => void,
-  onTokenBChange: (token: WhitelistedToken) => void
+  dex: Optional<FoundDex>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  onTokenAChange: (token: Token) => void,
+  onTokenBChange: (token: Token) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
   const { pairInfo, updatePairInfo } = usePairInfo(dex, tokenA, tokenB);
-  const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
-  const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
+  const {
+    tokenBalance: tokenABalance,
+    updateTokenBalance: updateTokenABalance,
+    clearBalance: clearBalanceA
+  } = useLoadTokenBalance(tokenA);
+  const {
+    tokenBalance: tokenBBalance,
+    updateTokenBalance: updateTokenBBalance,
+    clearBalance: clearBalanceB
+  } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
 
   const [tokenAInput, setTokenAInput] = useState('');
@@ -47,18 +56,14 @@ export const useAddLiquidityService = (
   const [validationMessageTokenB, setValidationMessageTokenB] = useState<Undefined<string>>();
   const [lastEditedInput, setLastEditedInput] = useState<Nullable<LastChangedToken>>(null);
 
-  const isPoolNotExist =
-    isNull(pairInfo) ||
-    pairInfo.tokenAPool.eq(EMPTY_POOL) ||
-    pairInfo.tokenBPool.eq(EMPTY_POOL) ||
-    pairInfo.totalSupply.eq(EMPTY_POOL);
+  const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   const tokensCalculations = (
     tokenAInput: string,
     tokenBInput: string,
-    tokenA: WhitelistedToken,
-    tokenB: WhitelistedToken,
-    pairInfo: Nullable<PairInfo>,
+    tokenA: Token,
+    tokenB: Token,
+    pairInfo: Optional<PairInfo>,
     tokenABalance: Nullable<BigNumber>,
     tokenBBalance: Nullable<BigNumber>,
     setTokenAInput: Dispatch<SetStateAction<string>>,
@@ -80,14 +85,16 @@ export const useAddLiquidityService = (
     const { decimals: decimalsA, symbol: symbolA } = tokenA.metadata;
     const { decimals: decimalsB, symbol: symbolB } = tokenB.metadata;
 
-    const validationA = validations(accountPkh, tokenABN, tokenABalance, tokenAInput, decimalsA, symbolA);
+    const maxTokenAInput =
+      tokenABalance && BigNumber.maximum(tokenABalance.minus(getTokenInputAmountCap(tokenA)), EMPTY_BALANCE_AMOUNT);
+    const validationA = validations(accountPkh, tokenABN, maxTokenAInput, tokenAInput, decimalsA, symbolA);
     setValidationMessageTokenA(validationA);
 
-    if (isPoolNotExist) {
+    if (isPoolNotExist || !pairInfo) {
       return;
     }
 
-    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo!;
+    const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
     const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
@@ -95,8 +102,10 @@ export const useAddLiquidityService = (
 
     const tokenBAmount = calculatePoolAmount(tokenABN, tokenA, tokenB, validTokenAPool, validTokenBPool);
 
+    const maxTokenBInput =
+      tokenBBalance && BigNumber.maximum(tokenBBalance.minus(getTokenInputAmountCap(tokenB)), EMPTY_BALANCE_AMOUNT);
     const validationB = tokenBAmount
-      ? validations(accountPkh, tokenBAmount, tokenBBalance, tokenBInput, decimalsB, symbolB)
+      ? validations(accountPkh, tokenBAmount, maxTokenBInput, tokenBInput, decimalsB, symbolB)
       : undefined;
 
     setValidationMessageTokenB(validationB);
@@ -141,8 +150,9 @@ export const useAddLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, tokenABalance, tokenBBalance]);
 
-  const handleSetTokenA = (token: WhitelistedToken) => {
+  const handleSetTokenA = (token: Token) => {
     onTokenAChange(token);
+    clearBalanceA();
     if (lastEditedInput === LastChangedToken.tokenA) {
       setTokenBInput('');
     } else {
@@ -150,8 +160,9 @@ export const useAddLiquidityService = (
     }
   };
 
-  const handleSetTokenB = (token: WhitelistedToken) => {
+  const handleSetTokenB = (token: Token) => {
     onTokenBChange(token);
+    clearBalanceB();
     if (lastEditedInput === LastChangedToken.tokenB) {
       setTokenAInput('');
     } else {
@@ -256,10 +267,10 @@ export const useAddLiquidityService = (
       );
 
       if (addPairTokenToTokenOperation) {
-        const tokenAAppellation = getTokenAppellation(pairTokenA);
-        const tokenBAppellation = getTokenAppellation(pairTokenB);
+        const tokenASymbol = getTokenSymbol(pairTokenA);
+        const tokenBSymbol = getTokenSymbol(pairTokenB);
 
-        const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenAAppellation, tokenBAppellation);
+        const initializeLiquidityMessage = getInitializeLiquidityMessage(tokenASymbol, tokenBSymbol);
 
         await confirmOperation(addPairTokenToTokenOperation.opHash, {
           message: initializeLiquidityMessage
@@ -281,10 +292,10 @@ export const useAddLiquidityService = (
         slippage
       );
 
-      const tokenAAppellation = getTokenAppellation(pairTokenA);
-      const tokenBAppellation = getTokenAppellation(pairTokenB);
+      const tokenASymbol = getTokenSymbol(pairTokenA);
+      const tokenBSymbol = getTokenSymbol(pairTokenB);
 
-      const addLiquidityMessage = getAddLiquidityMessage(tokenAAppellation, tokenBAppellation);
+      const addLiquidityMessage = getAddLiquidityMessage(tokenASymbol, tokenBSymbol);
 
       await confirmOperation(addLiquidityTokenToTokenOperation.opHash, {
         message: addLiquidityMessage
@@ -314,15 +325,15 @@ export const useAddLiquidityService = (
     if (shouldAddLiquidity) {
       const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
 
-      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+      const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenAppelation);
+      const addLiquidityMessage = getAddLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenSymbol);
 
       await confirmOperation(addLiquidityTezOperation.opHash, {
         message: addLiquidityMessage
       });
     } else {
-      const token: Token = {
+      const token: QuipuswapSdkToken = {
         contract: notTezToken.contractAddress,
         id: notTezToken.fa2TokenId
       };
@@ -337,12 +348,9 @@ export const useAddLiquidityService = (
         tezValue
       );
 
-      const notTezTokenAppelation = getTokenAppellation(notTezToken);
+      const notTezTokenSymbol = getTokenSymbol(notTezToken);
 
-      const initializeLiquidityMessage = getInitializeLiquidityMessage(
-        TEZOS_TOKEN.metadata.symbol,
-        notTezTokenAppelation
-      );
+      const initializeLiquidityMessage = getInitializeLiquidityMessage(TEZOS_TOKEN.metadata.symbol, notTezTokenSymbol);
 
       await confirmOperation(initializeLiquidityTezOperation.opHash, {
         message: initializeLiquidityMessage
@@ -366,8 +374,6 @@ export const useAddLiquidityService = (
   const validationMessageDeadline = validateDeadline(deadline);
   const validationMessageSlippage = validateSlippage(slippage);
 
-  const isNewPair = dex && isPoolNotExist;
-
   return {
     validationMessageTokenA,
     validationMessageTokenB,
@@ -378,7 +384,7 @@ export const useAddLiquidityService = (
     tokenBBalance,
     tokenAInput,
     tokenBInput,
-    isNewPair,
+    isPoolNotExist,
     handleSetTokenA,
     handleSetTokenB,
     handleTokenAChange,

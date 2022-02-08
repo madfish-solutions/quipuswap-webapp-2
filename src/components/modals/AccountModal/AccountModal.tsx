@@ -1,10 +1,11 @@
-import React, { useRef, useState, useEffect, useContext, useCallback } from 'react';
+import { useRef, useState, useEffect, useContext, useCallback, FC } from 'react';
 
-import { Copy, Modal, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Copy, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { Modal } from '@components/modals/Modal';
 import { CheckMark } from '@components/svg/CheckMark';
 import { Button } from '@components/ui/elements/button';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
@@ -18,7 +19,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const AccountModal: React.FC = () => {
+export const AccountModal: FC = () => {
   const { t } = useTranslation(['common']);
   const accountPkh = useAccountPkh();
   const disconnect = useDisconnect();

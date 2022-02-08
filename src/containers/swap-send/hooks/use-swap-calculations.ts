@@ -5,13 +5,13 @@ import BigNumber from 'bignumber.js';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { amountsAreEqual, fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexGraph, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
-import { DexPair, Undefined, WhitelistedToken } from '@utils/types';
+import { DexPair, Undefined, Token } from '@utils/types';
 
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
-  inputToken?: WhitelistedToken;
-  outputToken?: WhitelistedToken;
+  inputToken?: Token;
+  outputToken?: Token;
 }
 
 export const useSwapCalculations = () => {

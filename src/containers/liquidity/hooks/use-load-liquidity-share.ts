@@ -4,7 +4,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { useAccountPkh, useTezos } from '@utils/dapp';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { loadUserLiquidiytShares } from '../liquidity-cards/blockchain/getters/load-user-liquidity-shares';
 
@@ -14,18 +14,14 @@ export interface LiquidityShareResult {
   total: BigNumber;
 }
 
-export const useLoadLiquidityShare = (
-  dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>
-) => {
+export const useLoadLiquidityShare = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
   const [share, setShare] = useState<Nullable<LiquidityShareResult>>(null);
 
   const loadShare = useCallback(
-    async (dex: Nullable<FoundDex>, tokenA: Nullable<WhitelistedToken>, tokenB: Nullable<WhitelistedToken>) => {
+    async (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
       if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
         return;
       }
@@ -37,10 +33,12 @@ export const useLoadLiquidityShare = (
     [tezos, accountPkh]
   );
 
+  const clearShares = useCallback(() => setShare(null), []);
+
   useEffect(() => {
     void loadShare(dex, tokenA, tokenB);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tezos, accountPkh, dex, tokenA, tokenB]);
 
-  return { share, updateLiquidityShares: loadShare };
+  return { share, updateLiquidityShares: loadShare, clearShares };
 };

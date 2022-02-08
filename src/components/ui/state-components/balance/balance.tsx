@@ -6,13 +6,13 @@ import { useTranslation } from 'next-i18next';
 
 import { StateWrapper } from '@components/state-wrapper';
 import { DashPlug } from '@components/ui/dash-plug';
-import { formatBalance, isExist } from '@utils/helpers';
-import { Nullable, Undefined } from '@utils/types';
+import { formatBalance, isExist, isNull, isUndefined } from '@utils/helpers';
+import { Optional } from '@utils/types';
 
 import styles from './balance.module.scss';
 
 export interface BalanceProps {
-  balance: Undefined<Nullable<string>>;
+  balance: Optional<string>;
   colorMode: ColorModes;
   text?: string;
 }
@@ -33,11 +33,20 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
     return formatBalance(balance);
   }, [balance]);
 
+  const isLoading = isNull(balance);
+
+  const isError = isUndefined(balance);
+
   return (
     <div className={styles.item2Line}>
       <div className={styles.caption}>{text ?? t('common|Balance')}:</div>
       <div className={cx(themeClass[colorMode], styles.label2, styles.price)}>
-        <StateWrapper isLoading={!formattedBalance} loaderFallback={<DashPlug />}>
+        <StateWrapper
+          isLoading={isLoading}
+          isError={isError}
+          loaderFallback={<DashPlug />}
+          errorFallback={<DashPlug animation={false} />}
+        >
           {formattedBalance}
         </StateWrapper>
       </div>

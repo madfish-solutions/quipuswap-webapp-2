@@ -6,10 +6,13 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { DeadlineInput } from '@components/common/deadline-input';
+import { SwapDeadline } from '@components/common/deadline-input';
 import { PageTitle } from '@components/common/page-title';
 import { ComplexRecipient } from '@components/ui/ComplexInput';
+import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
+import complexInputStyles from '@components/ui/ComplexInput/ComplexInput.module.sass';
 import { NewTokenSelect } from '@components/ui/ComplexInput/new-token-select';
 import { Button } from '@components/ui/elements/button';
 import { useDexGraph } from '@hooks/use-dex-graph';
@@ -24,14 +27,15 @@ import {
   getTokensOptionalPairName,
   getTokenSlug,
   isEmptyArray,
-  makeWhitelistedToken,
-  getTokenPairSlug
+  makeToken,
+  getTokenPairSlug,
+  isTokenToTokenDex
 } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
-import { Undefined, WhitelistedToken, WhitelistedTokenMetadata } from '@utils/types';
+import { Undefined, Token, TokenMetadata } from '@utils/types';
 
-import { SlippageInput } from './components/slippage-input';
 import { SwapDetails } from './components/swap-details/swap-details';
+import { SwapSlippage } from './components/swap-slippage';
 import { useSwapCalculations } from './hooks/use-swap-calculations';
 import { useSwapDetails } from './hooks/use-swap-details';
 import { useSwapFormik } from './hooks/use-swap-formik';
@@ -45,12 +49,13 @@ interface SwapSendProps {
 
 const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
 
-function tokensMetadataIsSame(token1: WhitelistedToken, token2: WhitelistedToken) {
-  const propsToCompare: (keyof WhitelistedTokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
+function tokensMetadataIsSame(token1: Token, token2: Token) {
+  const propsToCompare: (keyof TokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
 
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, router }) => {
   const {
     errors,
@@ -119,7 +124,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   });
 
   const onTokensSelected = useCallback(
-    (inputToken: WhitelistedToken, outputToken: WhitelistedToken) => {
+    (inputToken: Token, outputToken: Token) => {
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
       if (router.asPath !== newRoute) {
@@ -181,13 +186,13 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     if ((initialFrom || initialTo) && (prevInitialFrom !== initialFrom || prevInitialTo !== initialTo)) {
       const valuesToChange: Partial<SwapFormValues> = {};
       if (initialFrom) {
-        const newInputToken = makeWhitelistedToken(getTokenIdFromSlug(initialFrom), tokens);
+        const newInputToken = makeToken(getTokenIdFromSlug(initialFrom), tokens);
         valuesToChange[SwapField.INPUT_TOKEN] = newInputToken;
         // eslint-disable-next-line no-console
         updateBalance(newInputToken).catch(console.error);
       }
       if (initialTo) {
-        const newOutputToken = makeWhitelistedToken(getTokenIdFromSlug(initialTo), tokens);
+        const newOutputToken = makeToken(getTokenIdFromSlug(initialTo), tokens);
         valuesToChange[SwapField.OUTPUT_TOKEN] = newOutputToken;
         // eslint-disable-next-line no-console
         updateBalance(newOutputToken).catch(console.error);
@@ -259,7 +264,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   );
 
   const blackListedTokens = useMemo(
-    () => [inputToken, outputToken].filter((x): x is WhitelistedToken => !!x),
+    () => [inputToken, outputToken].filter((x): x is Token => !!x),
     [inputToken, outputToken]
   );
 
@@ -279,7 +284,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   const handleSomeTokenChange = (
     fieldName: SwapTokensFieldName,
     amountFieldName: SwapAmountFieldName,
-    newToken?: WhitelistedToken
+    newToken?: Token
   ) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(fieldName, true);
@@ -303,10 +308,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     }
   };
 
-  const handleInputTokenChange = (newToken?: WhitelistedToken) => {
+  const handleInputTokenChange = (newToken?: Token) => {
     handleSomeTokenChange(SwapField.INPUT_TOKEN, SwapField.INPUT_AMOUNT, newToken);
   };
-  const handleOutputTokenChange = (newToken?: WhitelistedToken) =>
+  const handleOutputTokenChange = (newToken?: Token) =>
     handleSomeTokenChange(SwapField.OUTPUT_TOKEN, SwapField.OUTPUT_AMOUNT, newToken);
 
   const handleSwapButtonClick = () => {
@@ -360,7 +365,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     {}
   );
 
-  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(({ type }) => type === 'ttdex');
+  const shouldShowDeadlineInput = !dexRoute || dexRoute?.some(isTokenToTokenDex);
   const swapInputError = touchedFieldsErrors[SwapField.INPUT_TOKEN] ?? touchedFieldsErrors[SwapField.INPUT_AMOUNT];
   const swapOutputError = touchedFieldsErrors[SwapField.OUTPUT_TOKEN] ?? touchedFieldsErrors[SwapField.OUTPUT_AMOUNT];
   const inputExchangeRate = inputTokenSlug === undefined ? undefined : exchangeRates[inputTokenSlug];
@@ -368,6 +373,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   const submitDisabled = !isEmptyArray(Object.keys(errors));
 
   const title = `${t('swap|Swap')} ${getTokensOptionalPairName(inputToken, outputToken)}`;
+  const noRouteFound = !dexRoute && inputToken && outputToken && (inputAmount || outputAmount);
 
   return (
     <>
@@ -423,7 +429,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
               error={touchedFieldsErrors.recipient}
             />
           )}
-          <SlippageInput
+          <SwapSlippage
             error={touchedFieldsErrors.slippage}
             loading={dexPoolsLoading}
             outputAmount={outputAmount}
@@ -432,11 +438,14 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
             outputToken={outputToken}
           />
           {shouldShowDeadlineInput && (
-            <DeadlineInput error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
+            <SwapDeadline error={touchedFieldsErrors.deadline} onChange={handleDeadlineChange} value={deadline} />
           )}
+          <div className={cx({ [complexInputStyles.error]: noRouteFound })}>
+            <ComplexError error={t('swap|noRouteFoundError', { maxHopsCount: MAX_HOPS_COUNT })} />
+          </div>
           {!accountPkh && <ConnectWalletButton className={s.button} />}
           {accountPkh && dataIsStale && (
-            <Button disabled={submitDisabled} loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
+            <Button loading={dexPoolsLoading} onClick={refreshDexPools} className={s.button}>
               {t('swap|Update Rates')}
             </Button>
           )}

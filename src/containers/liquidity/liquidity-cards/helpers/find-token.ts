@@ -1,10 +1,6 @@
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { Nullable, Token } from '@utils/types';
 
-export const findToken = (
-  contractToken: string,
-  idToken: string,
-  tokens: WhitelistedToken[]
-): Nullable<WhitelistedToken> =>
+export const findToken = (contractToken: string, idToken: string, tokens: Token[]): Nullable<Token> =>
   tokens.find(token => {
     if (contractToken !== token.contractAddress) {
       return false;

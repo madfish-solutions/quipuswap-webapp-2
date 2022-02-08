@@ -6,13 +6,13 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { StateDollarEquivalent } from '@components/ui/state-components/state-dollar-equivalent';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import s from '@styles/CommonContainer.module.sass';
-import { getTokenSlug, getWhitelistedTokenSymbol, isNull } from '@utils/helpers';
-import { Nullable, WhitelistedToken } from '@utils/types';
+import { getTokenSlug, getTokenSymbol, isNull } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 interface RateViewProps {
   rate: Nullable<BigNumber.Value>;
-  inputToken: Nullable<WhitelistedToken>;
-  outputToken: Nullable<WhitelistedToken>;
+  inputToken: Nullable<Token>;
+  outputToken: Nullable<Token>;
 }
 
 export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) => {
@@ -22,8 +22,8 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
 
   const usdRate = outputTokenUsdExchangeRate && rate ? new BigNumber(rate).times(outputTokenUsdExchangeRate) : null;
 
-  const currencyInputSymbol = inputToken ? getWhitelistedTokenSymbol(inputToken) : null;
-  const currencyOutputSymbol = outputToken ? getWhitelistedTokenSymbol(outputToken) : null;
+  const currencyInputSymbol = inputToken ? getTokenSymbol(inputToken) : null;
+  const currencyOutputSymbol = outputToken ? getTokenSymbol(outputToken) : null;
 
   return (
     <div className={s.cellAmount}>

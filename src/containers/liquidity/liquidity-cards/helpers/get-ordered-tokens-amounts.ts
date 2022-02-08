@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-import { WhitelistedToken } from '@utils/types';
+import { Token } from '@utils/types';
 
 import { sortTokensContracts } from './sort-tokens-contracts';
 
 export const getOrderedTokensAmounts = (
-  tokenA: WhitelistedToken,
-  tokenB: WhitelistedToken,
+  tokenA: Token,
+  tokenB: Token,
   tokenAAmount: BigNumber,
   tokenBAmount: BigNumber
 ) => {

@@ -7,20 +7,20 @@ import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
-import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenAppellation } from '@utils/helpers';
-import { Nullable, Undefined, WhitelistedToken, WhitelistedTokenPair } from '@utils/types';
+import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, Undefined, Token, TokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
-import { removeExtraZeros } from '../helpers';
+import { removeExtraZeros, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
 import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, validateSlippage } from '../validators';
 
 export const useRemoveLiquidityService = (
-  dex: Nullable<FoundDex>,
-  tokenA: Nullable<WhitelistedToken>,
-  tokenB: Nullable<WhitelistedToken>,
-  onChangeTokensPair: (tokensPair: WhitelistedTokenPair) => void
+  dex: Optional<FoundDex>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  onChangeTokensPair: (tokensPair: TokenPair) => void
 ) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
@@ -30,7 +30,7 @@ export const useRemoveLiquidityService = (
   const { tokenBalance: tokenABalance, updateTokenBalance: updateTokenABalance } = useLoadTokenBalance(tokenA);
   const { tokenBalance: tokenBBalance, updateTokenBalance: updateTokenBBalance } = useLoadTokenBalance(tokenB);
   const confirmOperation = useConfirmOperation();
-  const { share, updateLiquidityShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
+  const { share, updateLiquidityShares, clearShares } = useLoadLiquidityShare(dex, tokenA, tokenB);
 
   const [lpTokenInput, setLpTokenInput] = useState<string>('');
   const [tokenAOutput, setTokenAOutput] = useState<string>('');
@@ -38,10 +38,12 @@ export const useRemoveLiquidityService = (
   const [validatedInputMessage, setValidatedInputMessage] = useState<Undefined<string>>();
   const [validatedOutputMessageA, setValidatedOutputMessageA] = useState<Undefined<string>>();
   const [validatedOutputMessageB, setValidatedOutputMessageB] = useState<Undefined<string>>();
-  const [tokenPair, setTokenPair] = useState<Nullable<WhitelistedTokenPair>>(null);
+  const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
+
+  const isPoolNotExist = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
   useEffect(() => {
-    if (!dex || !tokenA || !tokenB) {
+    if (!tokenA || !tokenB) {
       setTokenAOutput('');
       setTokenBOutput('');
       setValidatedInputMessage(undefined);
@@ -61,8 +63,9 @@ export const useRemoveLiquidityService = (
     setValidatedOutputMessageB(undefined);
   }, [dex, tokenA, tokenB]);
 
-  const handleSetTokenPair = (tokensPair: WhitelistedTokenPair) => {
+  const handleSetTokenPair = (tokensPair: TokenPair) => {
     onChangeTokensPair(tokensPair);
+    clearShares();
   };
 
   useEffect(() => {
@@ -116,8 +119,14 @@ export const useRemoveLiquidityService = (
 
     setValidatedOutputMessageA(validatedOutputA);
     setValidatedOutputMessageB(validatedOutputB);
-    setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
-    setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+
+    if (!isNaN(amountTokenA.toNumber())) {
+      setTokenAOutput(fromDecimals(amountTokenA, decimalsA).toFixed());
+    }
+
+    if (!isNaN(amountTokenB.toNumber())) {
+      setTokenBOutput(fromDecimals(amountTokenB, decimalsB).toFixed());
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, lpTokenInput, share]);
 
@@ -152,10 +161,10 @@ export const useRemoveLiquidityService = (
       const hash = getOperationHash(removeLiquidityTokenToTokenOperation);
 
       if (hash) {
-        const tokenAAppellation = getTokenAppellation(tokenA);
-        const tokenBAppellation = getTokenAppellation(tokenB);
+        const tokenASymbol = getTokenSymbol(tokenA);
+        const tokenBSymbol = getTokenSymbol(tokenB);
 
-        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+        const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
         await confirmOperation(hash, {
           message: removeLiquidityMessage
@@ -166,10 +175,10 @@ export const useRemoveLiquidityService = (
 
       const sentTransaction = await batchify(tezos.wallet.batch([]), removeLiquidityTezOperation).send();
 
-      const tokenAAppellation = getTokenAppellation(tokenA);
-      const tokenBAppellation = getTokenAppellation(tokenB);
+      const tokenASymbol = getTokenSymbol(tokenA);
+      const tokenBSymbol = getTokenSymbol(tokenB);
 
-      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenAAppellation, tokenBAppellation);
+      const removeLiquidityMessage = getRemoveLiquidityMessage(tokenASymbol, tokenBSymbol);
 
       await confirmOperation(sentTransaction.opHash, {
         message: removeLiquidityMessage
@@ -201,6 +210,7 @@ export const useRemoveLiquidityService = (
     tokenABalance,
     tokenBBalance,
     share,
+    isPoolNotExist,
     handleChange,
     handleBalance,
     handleSetTokenPair,

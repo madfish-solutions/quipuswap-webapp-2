@@ -1,20 +1,15 @@
 import memoizee from 'memoizee';
 
+import { MAX_HOPS_COUNT } from '@app.config';
 import { getTokenIdFromSlug, getMaxTokenInput } from '@utils/helpers';
 import { DexPair, Undefined } from '@utils/types';
 
-import { DEFAULT_ROUTE_SEARCH_DEPTH } from './constants';
 import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { getRoutesList } from './get-routes-list';
 import { CommonRouteProblemParams } from './types';
 
 export const getMaxInputRoute = memoizee(
-  ({
-    startTokenSlug,
-    endTokenSlug,
-    graph,
-    depth = DEFAULT_ROUTE_SEARCH_DEPTH
-  }: CommonRouteProblemParams): Undefined<DexPair[]> => {
+  ({ startTokenSlug, endTokenSlug, graph, depth = MAX_HOPS_COUNT }: CommonRouteProblemParams): Undefined<DexPair[]> => {
     const routes = getRoutesList(startTokenSlug, endTokenSlug, graph, depth);
     const outputToken = getTokenIdFromSlug(endTokenSlug);
 

@@ -7,18 +7,18 @@ import BigNumber from 'bignumber.js';
 import { FACTORIES, LP_TOKEN_DECIMALS, TEZOS_TOKEN } from '@app.config';
 import { UseToasts } from '@hooks/use-toasts';
 import { fromDecimals } from '@utils/helpers';
-import { VoterType, QSNets, Nullable, WhitelistedTokenPair } from '@utils/types';
+import { VoterType, QSNets, Nullable, TokenPair } from '@utils/types';
 
 export interface HandleTokenPairSelectReturnType {
-  tokenPair: WhitelistedTokenPair;
+  tokenPair: TokenPair;
   rewards: Nullable<string>;
   dex: Nullable<FoundDex>;
   voter: VoterType;
 }
 
 export const handleTokenPairSelect = async (
-  pair: WhitelistedTokenPair,
-  setTokenPair: Dispatch<SetStateAction<WhitelistedTokenPair>>,
+  pair: TokenPair,
+  setTokenPair: Dispatch<SetStateAction<TokenPair>>,
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,

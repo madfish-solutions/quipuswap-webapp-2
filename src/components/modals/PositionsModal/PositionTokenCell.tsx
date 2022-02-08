@@ -1,23 +1,24 @@
-import React from 'react';
+import { FC } from 'react';
 
-import { Checkbox, TokenCell } from '@quipuswap/ui-kit';
+import { Checkbox } from '@quipuswap/ui-kit';
 
-import { getWhitelistedTokenName, getWhitelistedTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { WhitelistedToken } from '@utils/types';
+import { TokenCell } from '@components/modals/Modal';
+import { getTokenName, getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 interface PositionTokenCellProps {
-  token: WhitelistedToken;
+  token: Token;
   onClick: () => void;
   isChecked: boolean;
 }
 
-export const PositionTokenCell: React.FC<PositionTokenCellProps> = ({ token, onClick, isChecked }) => (
+export const PositionTokenCell: FC<PositionTokenCellProps> = ({ token, onClick, isChecked }) => (
   <TokenCell
     tokenIcon={prepareTokenLogo(token.metadata?.thumbnailUri)}
-    tokenName={getWhitelistedTokenName(token)}
-    tokenSymbol={getWhitelistedTokenSymbol(token)}
+    tokenName={getTokenName(token)}
+    tokenSymbol={getTokenSymbol(token)}
     tabIndex={0}
-    onClick={() => onClick()}
+    onClick={onClick}
   >
     <Checkbox checked={isChecked} />
   </TokenCell>
