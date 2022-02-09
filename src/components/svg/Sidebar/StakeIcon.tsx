@@ -1,6 +1,5 @@
+import { ColorThemeContext } from '@quipuswap/ui-kit';
 import React, { useContext } from 'react';
-
-import { ColorThemeContext } from '@providers/ColorThemeContext';
 
 export const StakeIcon: React.FC<IconProps> = ({ id, className }) => {
   const { themeColors } = useContext(ColorThemeContext);
