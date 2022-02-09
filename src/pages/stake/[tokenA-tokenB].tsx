@@ -2,13 +2,13 @@ import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { StakeItem } from '@containers/stake';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -33,7 +33,7 @@ const StakeItemPage: FC = () => {
 export default StakeItemPage;
 
 // @ts-ignore
-export const getServerSideProps = async (props) => {
+export const getServerSideProps = async props => {
   const { locale } = props;
 
   return {
