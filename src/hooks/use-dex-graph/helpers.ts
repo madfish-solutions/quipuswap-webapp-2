@@ -1,34 +1,58 @@
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT } from '@app.config';
-import { getTokenIdFromSlug, getTokenSlug, makeToken } from '@utils/helpers';
+import { Standard } from '@graphql';
+import { getTokenSlug, makeToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
 import { DexPair, DexPairType, Token } from '@utils/types';
 
-import { RawDexPool, RawDexType } from './use-dex-graph.types';
+import { RawDexPool, RawDexTokenStandard, RawDexType } from './use-dex-graph.types';
+
+const rawDexPoolTokenSlugToTokenId = (tokenSlug: string, tokenStandard?: RawDexTokenStandard) => {
+  const [contractAddress, rawTokenId] = tokenSlug.split('_');
+
+  return {
+    fa2TokenId: tokenStandard === RawDexTokenStandard.FA2 ? Number(rawTokenId) : undefined,
+    type: tokenStandard === RawDexTokenStandard.FA2 ? Standard.Fa2 : Standard.Fa12,
+    contractAddress
+  };
+};
 
 export const rawDexToDexPair = (
-  { dexType, dexId, aTokenPool, aTokenSlug, bTokenPool, bTokenSlug, dexAddress }: RawDexPool,
+  {
+    dexType,
+    dexId,
+    aTokenPool,
+    aTokenSlug,
+    aTokenStandard,
+    bTokenPool,
+    bTokenSlug,
+    bTokenStandard,
+    dexAddress
+  }: RawDexPool,
   knownTokens: Token[]
-): DexPair => {
+) => {
+  const aTokenId = rawDexPoolTokenSlugToTokenId(aTokenSlug, aTokenStandard);
+  const bTokenId = rawDexPoolTokenSlugToTokenId(bTokenSlug, bTokenStandard);
+
   if (dexType === RawDexType.QuipuSwap) {
     return {
       token1Pool: new BigNumber(aTokenPool),
       token2Pool: new BigNumber(bTokenPool),
-      token1: makeToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
-      token2: makeToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
+      token1: makeToken(aTokenId, knownTokens),
+      token2: makeToken(bTokenId, knownTokens),
       id: dexAddress,
-      type: DexPairType.TokenToXtz
+      type: DexPairType.TokenToXtz as const
     };
   }
 
   return {
     token1Pool: new BigNumber(aTokenPool),
     token2Pool: new BigNumber(bTokenPool),
-    token1: makeToken(getTokenIdFromSlug(aTokenSlug), knownTokens),
-    token2: makeToken(getTokenIdFromSlug(bTokenSlug), knownTokens),
+    token1: makeToken(aTokenId, knownTokens),
+    token2: makeToken(bTokenId, knownTokens),
     id: Number(dexId!),
-    type: DexPairType.TokenToToken
+    type: DexPairType.TokenToToken as const
   };
 };
 
