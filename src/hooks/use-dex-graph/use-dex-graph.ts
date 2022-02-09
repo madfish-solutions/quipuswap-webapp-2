@@ -9,7 +9,7 @@ import { useTokens } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
-import { RawDexPool, RawDexType } from './use-dex-graph.types';
+import { RawDexPool, RawDexPoolsResponse, RawDexType } from './use-dex-graph.types';
 
 const fallbackRawDexPools: RawDexPool[] = [];
 
@@ -23,11 +23,15 @@ export const [DexGraphProvider, useDexGraph] = constate(() => {
   );
 
   const [displayedRawDexPools, setDisplayedRawDexPools] = useState<Nullable<RawDexPool[]>>(null);
-  const { data: rawDexPools, initLoading: dexPoolsLoading } = useWebSocket<RawDexPool[]>(
+  const handleSuccess = useCallback((response: RawDexPoolsResponse) => {
+    setDisplayedRawDexPools(response.routePairs);
+  }, []);
+  const { data: rawDexPoolsResponse, initLoading: dexPoolsLoading } = useWebSocket<RawDexPoolsResponse>(
     DEX_POOLS_URLS[NETWORK_ID],
-    setDisplayedRawDexPools,
+    handleSuccess,
     handleLoadError
   );
+  const rawDexPools = rawDexPoolsResponse?.routePairs ?? null;
   const displayedDexPools = useMemo(() => {
     const quipuswapRawDexPools = (displayedRawDexPools ?? fallbackRawDexPools).filter(
       ({ dexType }) => dexType === RawDexType.QuipuSwap || dexType === RawDexType.QuipuSwapTokenToTokenDex
