@@ -1,3 +1,7 @@
+import { StakeListItem } from "./structures";
+
 export const StakeList = () => {
-  return <h1>Coming soon!</h1>;
+  return <div>
+    <StakeListItem/>
+  </div>;
 };
