@@ -4,7 +4,7 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 
 import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
-import { fromDecimals, getTokenSlug } from '@utils/helpers';
+import { fromDecimals, getTokenSlug, isTezosToken } from '@utils/helpers';
 import { Token } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
@@ -51,7 +51,13 @@ export const useValidationSchema = () => {
             .required(t(REQUIRE_FIELD_MESSAGE));
         }
 
-        return bigNumberSchema(min, max)
+        return bigNumberSchema(
+          min,
+          max,
+          max && isTezosToken(inputToken)
+            ? t('swap|valueOutOfRangeError', { min: min.toFixed(), max: max.toFixed() })
+            : undefined
+        )
           .test(
             'input-decimals-amount',
             () =>
