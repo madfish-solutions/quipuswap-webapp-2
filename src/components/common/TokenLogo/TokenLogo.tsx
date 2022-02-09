@@ -34,6 +34,12 @@ export const TokenLogo: React.FC<Props> = ({ src, tokenSymbol, layout = 'fixed',
   return loadError ? (
     <FallbackLogo className={s.image} />
   ) : (
-    <img {...layoutBasedProps} onError={handleLoadError} src={src} alt={`${tokenSymbol}`} className={s.image} />
+    <img
+      onError={handleLoadError}
+      src={src}
+      alt={`${tokenSymbol}`}
+      className={s.image}
+      style={{ ...layoutBasedProps }}
+    />
   );
 };

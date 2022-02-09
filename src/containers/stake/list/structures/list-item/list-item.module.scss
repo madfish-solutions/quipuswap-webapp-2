@@ -1,0 +1,57 @@
+.card {
+  padding: 24px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 24px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+}
+
+.itemLeftHeader {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.tooltip {
+  margin-left: -5px;
+}
+
+.rewardTarget {
+  margin-top: 16px;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
+
+.cardCell {
+  row-gap: 6px;
+}
+
+
+.right {
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+  justify-content: space-between;
+}
+
+.links {
+  display: flex;
+  column-gap: 24px;
+}
+
+.button {
+  
+}
