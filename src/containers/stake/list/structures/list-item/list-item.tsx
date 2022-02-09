@@ -1,3 +1,3 @@
 export const StakeListItem = () => {
-    return <h1>StakeListItem</h1>
-}
+  return <h1>StakeListItem</h1>;
+};
