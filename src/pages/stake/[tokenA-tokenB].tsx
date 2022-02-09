@@ -8,6 +8,7 @@ import { StakeItem } from '@containers/stake';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const modeClass = {
   [ColorModes.Light]: s.light,
@@ -30,3 +31,14 @@ const StakeItemPage: FC = () => {
 };
 // eslint-disable-next-line import/no-default-export
 export default StakeItemPage;
+
+// @ts-ignore
+export const getServerSideProps = async (props) => {
+  const { locale } = props;
+
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'stake']))
+    }
+  };
+};
