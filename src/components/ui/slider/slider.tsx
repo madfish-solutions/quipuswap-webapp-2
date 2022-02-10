@@ -38,17 +38,16 @@ const modeClass = {
 
 interface SliderProps {
   className?: string;
-  slides: Array<ReactNode>;
 }
 
-export const Slider: FC<SliderProps> = ({ className, slides }) => {
+export const Slider: FC<SliderProps> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], s.root);
 
   return (
     <Card className={compoundClassnames} isV2>
-      <ReactSlider {...SliderSettings}>{slides}</ReactSlider>
+      <ReactSlider {...SliderSettings}>{children}</ReactSlider>
     </Card>
   );
 };
