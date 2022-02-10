@@ -8,6 +8,7 @@ import { TestnetAlert } from '@components/common/testnet-alert';
 import { DexDashboard } from '@components/home/DexDashboard';
 import { News } from '@components/home/News';
 import { Opportunities } from '@components/home/Opportunities';
+import { Slider } from '@components/ui/slider';
 import { TopPairs } from '@containers/home/TopPairs';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 
@@ -18,6 +19,7 @@ export const Home: FC = () => {
     <BaseLayout title={t(`home|${SITE_TITLE}`)} description={t(`home|${SITE_DESCRIPTION}`)}>
       <TestnetAlert />
       <News />
+      <Slider />
       <DexDashboard />
       <Opportunities />
       {IS_NETWORK_MAINNET && <TopPairs />}
