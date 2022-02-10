@@ -41,8 +41,8 @@ export const TokensLogosAndSymbols: FC<TokensLogosAndSymbolsProps> = props => {
   const firstTokenIcon = tokenA.metadata.thumbnailUri;
   const firstTokenSymbol = getTokenSymbol(tokenA);
 
-  const secondTokenIcon = isTokenPair ? tokenB.metadata.thumbnailUri : null;
-  const secondTokenSymbol = isTokenPair ? getTokenSymbol(tokenB) : null;
+  const secondTokenIcon = isTokenPair ? tokenB.metadata.thumbnailUri : undefined;
+  const secondTokenSymbol = isTokenPair ? getTokenSymbol(tokenB) : undefined;
 
   const symbols = isTokenPair ? getTokensPairName(tokenA, tokenB) : firstTokenSymbol;
 

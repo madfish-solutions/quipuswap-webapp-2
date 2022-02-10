@@ -16,14 +16,18 @@
   position: relative;
   object-fit: contain;
   border-radius: 50%;
-  height: 48px;
-  width: 48px;
 }
 
 .imageWrapper {
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 48px;
+  width: 48px;
+  svg {
+    height: 48px;
+    width: 48px;
+  }
 }
 
 .secondImage {
