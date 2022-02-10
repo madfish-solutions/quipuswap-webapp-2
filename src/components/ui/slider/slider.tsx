@@ -1,10 +1,10 @@
-import React, { FC, ReactNode, useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import ReactSlider from 'react-slick';
 
-import s from './slider.module.scss';
+import styles from './slider.module.scss';
 
 const SliderSettings = {
   slidesToShow: 4,
@@ -28,12 +28,12 @@ const SliderSettings = {
       }
     }
   ],
-  customPaging: () => <div className={s.dot} />
+  customPaging: () => <div className={styles.dot} />
 };
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 interface SliderProps {
@@ -43,7 +43,7 @@ interface SliderProps {
 export const Slider: FC<SliderProps> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassnames = cx(className, modeClass[colorThemeMode], s.root);
+  const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
 
   return (
     <Card className={compoundClassnames} isV2>
