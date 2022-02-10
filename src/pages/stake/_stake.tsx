@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { StakeList } from '@containers/stake';
+import { StakeDataProvider, StakeListDataProvider } from '@containers/stake/providers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
@@ -24,7 +25,11 @@ export const Stake: FC = () => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <StakeList />
+      <StakeDataProvider>
+        <StakeListDataProvider>
+          <StakeList />
+        </StakeListDataProvider>
+      </StakeDataProvider>
     </BaseLayout>
   );
 };
