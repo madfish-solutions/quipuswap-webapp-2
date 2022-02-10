@@ -36,7 +36,7 @@
       "decimals": 6,
       "symbol": "USDS",
       "name": "Stably USD",
-      "thumbnailUri": "https://quipuswap.com/tokens/stably.png"
+      "thumbnailUri": "ipfs://Qmb2GiHN9EjcrN29J6y9PsXu3ZDosXTv6uLUWGZfRRSzS2/stably.png"
     }
   },
   {
@@ -69,7 +69,7 @@
       "decimals": 6,
       "symbol": "USDtz",
       "name": "USDtez",
-      "thumbnailUri": "https://quipuswap.com/tokens/usdtz.png"
+      "thumbnailUri": "ipfs://Qmb2GiHN9EjcrN29J6y9PsXu3ZDosXTv6uLUWGZfRRSzS2/usdtz.png"
     }
   },
   {
@@ -80,7 +80,7 @@
       "decimals": 18,
       "symbol": "ETHtz",
       "name": "ETHtez",
-      "thumbnailUri": "https://quipuswap.com/tokens/ethtz.png"
+      "thumbnailUri": "ipfs://Qmb2GiHN9EjcrN29J6y9PsXu3ZDosXTv6uLUWGZfRRSzS2/ethtz.png"
     }
   },
   {
@@ -252,7 +252,7 @@
       "decimals": 3,
       "symbol": "SMAK",
       "name": "SmartLink",
-      "thumbnailUri": "https://quipuswap.com/tokens/smak.png"
+      "thumbnailUri": "ipfs://Qmb2GiHN9EjcrN29J6y9PsXu3ZDosXTv6uLUWGZfRRSzS2/smak.png"
     }
   },
   {
