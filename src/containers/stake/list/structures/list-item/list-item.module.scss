@@ -1,3 +1,5 @@
+@import "@styles/breakpoints";
+
 .card {
   padding: 24px;
 }
@@ -31,14 +33,24 @@
 
 .stats {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   row-gap: 12px;
+}
+
+.CardCellHeader {
+  white-space: nowrap;
 }
 
 .cardCell {
   row-gap: 6px;
 }
 
+.stakeStats,
+.userData {
+  display: flex;
+  flex-direction: column;
+  row-gap: 12px;
+}
 
 .right {
   display: flex;
@@ -52,6 +64,148 @@
   column-gap: 24px;
 }
 
-.button {
-  
+@include media(">phone", "<Lphone") {
+  .stats {
+    flex-direction: column;
+    row-gap: 24px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .stakeStats,
+  .userData {
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}
+
+@include media(">=Lphone", "<=tablet") {
+  .stats {
+    flex-direction: row;
+    column-gap: 42px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .stakeStats,
+  .userData {
+    width: 50%;
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}
+
+@include media(">tablet", "<Ltablet") {
+  .container {
+    flex-direction: row;
+    row-gap: 24px;
+  }
+
+  .left {
+    width: calc(100% - 260px);
+  }
+
+  .stats {
+    margin-top: 16px;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 24px;
+  }
+
+  .cardCell {
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 16px;
+  }
+
+  .stakeStats,
+  .userData {
+    row-gap: 16px;
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
+}
+
+@include media(">=Ltablet") {
+  .container {
+    flex-direction: row;
+    row-gap: 24px;
+  }
+
+  .rewardTarget {
+    margin-top: 0px;
+  }
+
+  .left {
+    width: calc(100% - 260px);
+  }
+
+  .stats {
+    flex-direction: row;
+    justify-content: flex-start;
+    column-gap: 48px;
+  }
+
+  .cardCell {
+    flex-direction: column;
+    justify-content: space-between;
+    column-gap: 16px;
+  }
+
+  .stakeStats,
+  .userData {
+    flex-direction: row;
+    column-gap: 32px;
+  }
+
+  .stakeStats {
+    position: relative;
+    &:after {
+      content: "";
+      position: absolute;
+
+      width: 1px;
+      height: 80%;
+
+      left: calc(100% + 24px);
+      top: 50%;
+      transform: translateY(-50%);
+
+      background: #8b90a0;
+    }
+  }
+
+  .right {
+    align-items: flex-end;
+  }
+
+  .button {
+    width: 160px;
+  }
 }
