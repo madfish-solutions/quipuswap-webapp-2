@@ -47,12 +47,6 @@ export const navigationData: NavigationDataProps[] = [
     Icon: VotingIcon
   },
   // {
-  //   id: 4,
-  //   href: '/stake',
-  //   label: <Trans ns="common">Stake</Trans>,
-  //   Icon: StakeIcon,
-  // },
-  // {
   //   id: 5,
   //   href: '/farm',
   //   label: <Trans ns="common">Farm</Trans>,
