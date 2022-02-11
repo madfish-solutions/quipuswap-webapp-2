@@ -1,19 +1,11 @@
 import { NextPageContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 
+import { makeRedirectSwapSendPage } from '@factories/redirect-swap-send-page';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
 import { SwapTabAction } from '@utils/types';
 
-const RedirectSwapPage = () => {
-  const router = useRouter();
-
-  if (typeof window !== 'undefined') {
-    router.push(makeSwapOrSendRedirectionUrl(router.query, SwapTabAction.SWAP));
-  }
-
-  return null;
-};
+const RedirectSwapPage = makeRedirectSwapSendPage(SwapTabAction.SWAP);
 
 export const getServerSideProps = async (ctx: NextPageContext) => {
   if (ctx.res) {
