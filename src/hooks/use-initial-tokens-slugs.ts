@@ -24,7 +24,10 @@ const token1FallbackSlug = TEZOS_TOKEN_SLUG;
 const token2FallbackSlug = getTokenSlug(networksDefaultTokens[NETWORK_ID]);
 const FALLBACK_TOKENS_SLUGS: TokensSlugs = [token1FallbackSlug, token2FallbackSlug];
 
-export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (fromToSlug: string) => string) => {
+export const useInitialTokensSlugs = (
+  fromToSlug?: string,
+  getRedirectionUrl?: (token1Slug: string, token2Slug: string) => string
+) => {
   const router = useRouter();
   const { data: tokens, loading: tokensLoading } = useTokens();
   const searchCustomTokens = useSearchCustomTokens();
@@ -92,7 +95,7 @@ export const useInitialTokensSlugs = (fromToSlug?: string, getRedirectionUrl?: (
     }
     const newTokensSlug = initialTokensSlugs.join('-');
     if (getRedirectionUrl && fromToSlug !== newTokensSlug) {
-      router.replace(getRedirectionUrl(newTokensSlug), undefined, { shallow: true, scroll: false });
+      router.replace(getRedirectionUrl(...initialTokensSlugs), undefined, { shallow: true, scroll: false });
     }
     initialTokensSlugs.forEach(tokenSlug => {
       const isTez = tokenSlug.toLowerCase() === getTokenSlug(TEZOS_TOKEN).toLowerCase();

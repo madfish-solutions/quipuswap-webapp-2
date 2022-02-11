@@ -6,6 +6,7 @@ import { Trans } from 'next-i18next';
 interface LinkInterface {
   id: number;
   href?: string;
+  matchHrefs?: string[];
   as?: string;
   label: React.ReactNode;
   target?: string;
@@ -26,6 +27,7 @@ export const navigationData: NavigationDataProps[] = [
   {
     id: 1,
     href: '/swap',
+    matchHrefs: ['/swap', '/send'],
     as: `/swap`,
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIconSidebar
