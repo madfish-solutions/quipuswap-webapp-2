@@ -1,4 +1,5 @@
 @import "styles/_variables";
+@import "styles/_breakpoints";
 
 .dot {
   border-radius: 2px;
@@ -7,6 +8,7 @@
 }
 
 .root {
+  padding-top: 22px;
   :global(.slick-dots) {
     position: static;
     display: flex !important;
@@ -54,5 +56,12 @@
 
   :global(.customSelect__single-value) {
     color: $hover-primary-02-fallback
+  }
+}
+
+@include media('>tablet') {
+  .root {
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 }
