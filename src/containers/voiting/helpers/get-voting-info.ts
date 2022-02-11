@@ -1,5 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 import { TEZOS_TOKEN } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 
 import { fromDecimals } from '@utils/helpers';
 import { Nullable } from '@utils/types';
@@ -9,8 +10,6 @@ export interface VotingInfo {
   totalVeto: string;
   votesToVeto: string;
 }
-
-const ZERO = 0;
 
 export const getVotingInfo = (dex: Nullable<FoundDex>): VotingInfo => {
   if (!dex?.storage?.storage) {
@@ -30,7 +29,7 @@ export const getVotingInfo = (dex: Nullable<FoundDex>): VotingInfo => {
     TEZOS_TOKEN.metadata.decimals
   );
 
-  const votesToVeto = votesToVetoBN.gt(ZERO) ? votesToVetoBN.toFixed() : '0';
+  const votesToVeto = BigNumber.maximum(votesToVetoBN, '0').toFixed();
 
   return {
     totalVotes,
