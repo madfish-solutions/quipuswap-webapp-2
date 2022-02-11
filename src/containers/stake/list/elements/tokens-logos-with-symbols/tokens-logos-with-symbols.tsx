@@ -9,7 +9,7 @@ import { Token } from '@utils/types';
 
 import styles from './tokens-logos-with-symbols.module.scss';
 
-interface TokensLogosAndSymbolsPropsAbstraction {
+interface PropsAbstraction {
   tokenA: Token;
   tokenB?: Token;
   className?: string;
@@ -17,18 +17,18 @@ interface TokensLogosAndSymbolsPropsAbstraction {
   loading?: boolean;
 }
 
-interface FixedTokensLogosAndSymbolsProps extends TokensLogosAndSymbolsPropsAbstraction {
+interface FixedProps extends PropsAbstraction {
   layout?: 'fixed';
   width?: number;
 }
 
-interface FillTokensLogosAndSymbolsProps extends TokensLogosAndSymbolsPropsAbstraction {
+interface FillProps extends PropsAbstraction {
   layout: 'fill';
 }
 
-export type TokensLogosAndSymbolsProps = FixedTokensLogosAndSymbolsProps | FillTokensLogosAndSymbolsProps;
+type Props = FixedProps | FillProps;
 
-export const TokensLogosAndSymbols: FC<TokensLogosAndSymbolsProps> = props => {
+export const TokensLogosAndSymbols: FC<Props> = props => {
   const { tokenA, tokenB, className, imageClassName, loading } = props;
 
   const isTokenPair = isExist(tokenB);

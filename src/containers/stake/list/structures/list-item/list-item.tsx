@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { Card } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
@@ -12,6 +11,7 @@ import { Token } from '@utils/types';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../elements';
 import { eStakeStatus, StakeStatus } from '../../elements/stake-status';
+import { getDollarEquivalent } from '../../helpers';
 import styles from './list-item.module.scss';
 
 const ICON_SIZE = 48;
@@ -42,7 +42,7 @@ const MY_DEPOSIT_TOOLTIP = 'My Deposit tooltip';
 const MY_EARNED = 'My Earned';
 const MY_EARNED_TOOLTIP = 'My Erned tooltip';
 
-interface StakeListItemProps {
+interface Props {
   tokenA: Token;
   tokenB: Token;
   stakeStatus: eStakeStatus;
@@ -59,10 +59,7 @@ interface StakeListItemProps {
   depositTokenUrl: string;
 }
 
-const getDollarEquivalent = (value: string, exhangeRate: string) =>
-  new BigNumber(value).times(new BigNumber(exhangeRate)).toFixed();
-
-export const StakeListItem: FC<StakeListItemProps> = ({
+export const StakeListItem: FC<Props> = ({
   tokenA,
   tokenB,
   stakeStatus,
@@ -80,48 +77,36 @@ export const StakeListItem: FC<StakeListItemProps> = ({
 }) => {
   const accountPkh = useAccountPkh();
 
-  const TOKEN_A = tokenA;
-  const TOKEN_B = tokenB;
+  const isPairFull = isExist(tokenB);
 
-  const isPairFull = isExist(TOKEN_B);
+  const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
-  const STAKE_STATUS = stakeStatus;
+  const tvlDollarEquivalent = getDollarEquivalent(tvl, depositExhangeRate);
 
-  const REWARD_TOKEN = rewardToken;
+  const aprAmount = `${apr}%`;
+  const apyAmount = `${apy}%`;
 
-  const LOCKED_TOKEN_SYMBOL = isPairFull ? getTokensPairName(TOKEN_A, TOKEN_B) : getTokenSymbol(TOKEN_A);
-  const TVL_AMOUNT = tvl;
-  const LOCKED_TOKEN_DOLLAR_EQUIVALENT = getDollarEquivalent(tvl, depositExhangeRate);
+  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExhangeRate);
 
-  const APR_AMOUNT = `${apr}%`;
-  const APY_AMOUNT = `${apy}%`;
+  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExhangeRate);
 
-  const MY_BALANCE_AMOUNT = myBalance;
-  const MY_BALANCE_DOLLAR_EQUIVALENT = getDollarEquivalent(myBalance, depositExhangeRate);
+  const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
+  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExhangeRate);
 
-  const MY_DEPOSIT_AMOUNT = depositBalance;
-  const MY_DEPOSIT_DOLLAR_EQUIVALENT = getDollarEquivalent(myBalance, depositExhangeRate);
-
-  const MY_EARNED_TOKEN_SYMBOL = getTokenSymbol(REWARD_TOKEN);
-  const MY_EARNED_AMOUNT = earnBalance;
-  const MY_EARNED_DOLLAR_EQUIVALENT = getDollarEquivalent(earnBalance, earnExhangeRate);
-
-  const TOKEN_CONTRACT_URL = stakeUrl;
-  const STAKE_CONTRACT_URL = depositTokenUrl;
-  const SELECT_LINK = isPairFull ? `stake/${getTokenPairSlug(TOKEN_A, TOKEN_B)}` : getTokenSlug(TOKEN_A);
+  const selectLink = isPairFull ? `stake/${getTokenPairSlug(tokenA, tokenB)}` : getTokenSlug(tokenA);
 
   return (
     <Card className={styles.card}>
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
-            <TokensLogosAndSymbols width={ICON_SIZE} tokenA={TOKEN_A} tokenB={TOKEN_B} />
-            <StakeStatus status={STAKE_STATUS} />
+            <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
+            <StakeStatus status={stakeStatus} />
             <Tooltip className={styles.tooltip} content={FULL_CARD_TOOLTIP_TEXT} />
           </div>
 
           <div className={styles.rewardTarget}>
-            <RewardTarget token={REWARD_TOKEN} />
+            <RewardTarget token={rewardToken} />
           </div>
 
           <div className={styles.stats}>
@@ -134,9 +119,9 @@ export const StakeListItem: FC<StakeListItemProps> = ({
               >
                 <StateCurrencyAmount
                   balanceRule
-                  amount={TVL_AMOUNT}
-                  currency={LOCKED_TOKEN_SYMBOL}
-                  dollarEquivalent={LOCKED_TOKEN_DOLLAR_EQUIVALENT}
+                  amount={tvl}
+                  currency={depositTokenSymbol}
+                  dollarEquivalent={tvlDollarEquivalent}
                 />
               </ListItemCardCell>
 
@@ -146,7 +131,7 @@ export const StakeListItem: FC<StakeListItemProps> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                {APR_AMOUNT}
+                {aprAmount}
               </ListItemCardCell>
 
               <ListItemCardCell
@@ -155,7 +140,7 @@ export const StakeListItem: FC<StakeListItemProps> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                {APY_AMOUNT}
+                {apyAmount}
               </ListItemCardCell>
             </div>
 
@@ -169,9 +154,9 @@ export const StakeListItem: FC<StakeListItemProps> = ({
                 >
                   <StateCurrencyAmount
                     balanceRule
-                    amount={MY_BALANCE_AMOUNT}
-                    currency={LOCKED_TOKEN_SYMBOL}
-                    dollarEquivalent={MY_BALANCE_DOLLAR_EQUIVALENT}
+                    amount={myBalance}
+                    currency={depositTokenSymbol}
+                    dollarEquivalent={myBalanceDollarEquivalent}
                   />
                 </ListItemCardCell>
 
@@ -183,9 +168,9 @@ export const StakeListItem: FC<StakeListItemProps> = ({
                 >
                   <StateCurrencyAmount
                     balanceRule
-                    amount={MY_DEPOSIT_AMOUNT}
-                    currency={LOCKED_TOKEN_SYMBOL}
-                    dollarEquivalent={MY_DEPOSIT_DOLLAR_EQUIVALENT}
+                    amount={depositBalance}
+                    currency={depositTokenSymbol}
+                    dollarEquivalent={myDepositDollarEquivalent}
                   />
                 </ListItemCardCell>
 
@@ -197,9 +182,9 @@ export const StakeListItem: FC<StakeListItemProps> = ({
                 >
                   <StateCurrencyAmount
                     balanceRule
-                    amount={MY_EARNED_AMOUNT}
-                    currency={MY_EARNED_TOKEN_SYMBOL}
-                    dollarEquivalent={MY_EARNED_DOLLAR_EQUIVALENT}
+                    amount={earnBalance}
+                    currency={MyEarnTokenSymbol}
+                    dollarEquivalent={myEarnDollarEquivalent}
                   />
                 </ListItemCardCell>
               </div>
@@ -208,16 +193,16 @@ export const StakeListItem: FC<StakeListItemProps> = ({
         </div>
         <div className={styles.right}>
           <div className={styles.links}>
-            <Button href={TOKEN_CONTRACT_URL} external theme={LINKS_THEME} title={TOKEN_CONTRACT}>
+            <Button href={depositTokenUrl} external theme={LINKS_THEME} title={TOKEN_CONTRACT}>
               {TOKEN_CONTRACT}
             </Button>
 
-            <Button href={STAKE_CONTRACT_URL} external theme={LINKS_THEME} title={STAKE_CONTRACT}>
+            <Button href={stakeUrl} external theme={LINKS_THEME} title={STAKE_CONTRACT}>
               {STAKE_CONTRACT}
             </Button>
           </div>
 
-          <Button className={styles.button} href={SELECT_LINK}>
+          <Button className={styles.button} href={selectLink}>
             {SELECT}
           </Button>
         </div>

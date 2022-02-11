@@ -1,10 +1,10 @@
 import { TokenNotFound } from '@quipuswap/ui-kit';
 
-import styles from './stake-list-error.module.scss';
+import styles from './empty-stake-list.module.scss';
 
 const NO_DATA = 'No Data!';
 
-export const StakeListError = () => {
+export const EmptyStakeList = () => {
   return (
     <div className={styles.listWrapper}>
       <TokenNotFound />

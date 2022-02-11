@@ -2,9 +2,8 @@ import { useState } from 'react';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { StateWrapper } from '@components/state-wrapper';
-import { isEmptyArray } from '@utils/helpers';
 
-import { eStakeStatus, StakeListSkeleton, StakeListError } from './elements';
+import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './elements';
 import { Iterator } from './helpers/iterator';
 import styles from './stake-list.page.module.scss';
 import { StakeListItem } from './structures';
@@ -37,13 +36,14 @@ export const StakeList = () => {
 
   return (
     <div>
-      <StateWrapper
-        isError={isEmptyArray(mock)}
-        errorFallback={<StakeListError />}
-        isLoading={loading}
-        loaderFallback={<StakeListSkeleton />}
-      >
-        <Iterator render={StakeListItem} data={mock} isGrouped wrapperClassName={styles.list} />
+      <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
+        <Iterator
+          data={mock}
+          render={StakeListItem}
+          fallback={<EmptyStakeList />}
+          isGrouped
+          wrapperClassName={styles.list}
+        />
       </StateWrapper>
     </div>
   );
