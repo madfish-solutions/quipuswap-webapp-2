@@ -17,6 +17,7 @@ export const makeSwapOrSendRedirectionUrl = (query: NextPageContext['query'], ac
 
   const from = legacyFrom ?? defaultFrom;
   const to = legacyTo ?? defaultTo;
+  const tab = action ?? SwapTabAction.SWAP;
 
-  return `/${action === SwapTabAction.SEND ? 'send' : 'swap'}/${from}-${to}`;
+  return `/${tab}/${from}-${to}`;
 };
