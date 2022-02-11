@@ -9,29 +9,31 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { getTokenSymbol, getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getSwapMessage } from '@utils/helpers/get-success-messages';
 import { getRouteWithInput } from '@utils/routing';
+import { SwapTabAction } from '@utils/types';
 
-import { SwapAction, SwapField, SwapFormValues } from '../utils/types';
+import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';
 
 const initialErrors = {
   inputAmount: 'Required',
   outputAmount: 'Required'
 };
-const initialValues: Partial<SwapFormValues> = {
-  [SwapField.ACTION]: SwapAction.SWAP,
-  [SwapField.SLIPPAGE]: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
-  [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
-};
 
 const SECS_IN_MIN = 60;
 
-export const useSwapFormik = () => {
+export const useSwapFormik = (initialAction = SwapTabAction.SWAP) => {
   const validationSchema = useValidationSchema();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const { dexGraph } = useDexGraph();
   const { showErrorToast } = useToasts();
   const confirmOperation = useConfirmOperation();
+
+  const initialValues: Partial<SwapFormValues> = {
+    [SwapField.ACTION]: initialAction,
+    [SwapField.SLIPPAGE]: new BigNumber(DEFAULT_SLIPPAGE_PERCENTAGE),
+    [SwapField.DEADLINE]: new BigNumber(DEFAULT_DEADLINE_MINS)
+  };
 
   const handleSubmit = async (formValues: Partial<SwapFormValues>) => {
     if (!tezos || !accountPkh) {

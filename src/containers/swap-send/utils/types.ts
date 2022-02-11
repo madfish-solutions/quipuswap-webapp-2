@@ -1,11 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Token } from '@utils/types';
-
-export enum SwapAction {
-  SWAP = 'swap',
-  SEND = 'send'
-}
+import { SwapTabAction, Token } from '@utils/types';
 
 export enum SwapField {
   INPUT_AMOUNT = 'inputAmount',
@@ -30,5 +25,5 @@ export interface SwapFormValues {
   [SwapField.RECIPIENT]: string;
   [SwapField.SLIPPAGE]: BigNumber;
   [SwapField.DEADLINE]: BigNumber;
-  [SwapField.ACTION]: SwapAction;
+  [SwapField.ACTION]: SwapTabAction;
 }

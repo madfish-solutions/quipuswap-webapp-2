@@ -11,7 +11,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/SwapLiquidity.module.sass';
 import { SwapTabAction } from '@utils/types';
 
-const SwapPage: React.FC = () => {
+const SendPage: React.FC = () => {
   const { t } = useTranslation(['common', 'swap']);
 
   return (
@@ -21,7 +21,7 @@ const SwapPage: React.FC = () => {
       className={s.wrapper}
     >
       <TestnetAlert />
-      <SwapSend initialAction={SwapTabAction.SWAP} />
+      <SwapSend initialAction={SwapTabAction.SEND} />
     </BaseLayout>
   );
 };
@@ -37,4 +37,4 @@ export const getServerSideProps = async (props: NextPageContext) => {
 };
 
 // eslint-disable-next-line import/no-default-export
-export default SwapPage;
+export default SendPage;

@@ -31,8 +31,9 @@ import {
   getTokenPairSlug,
   isTokenToTokenDex
 } from '@utils/helpers';
+import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
 import { DexGraph } from '@utils/routing';
-import { Undefined, Token, TokenMetadata } from '@utils/types';
+import { SwapTabAction, Undefined, Token, TokenMetadata } from '@utils/types';
 
 import { SwapDetails } from './components/swap-details/swap-details';
 import { SwapSlippage } from './components/swap-slippage';
@@ -45,9 +46,8 @@ import { SwapAmountFieldName, SwapField, SwapFormValues, SwapTokensFieldName } f
 
 interface SwapSendProps {
   className?: string;
+  initialAction?: SwapTabAction;
 }
-
-const getRedirectionUrl = (fromToSlug: string) => `/swap/${fromToSlug}`;
 
 function tokensMetadataIsSame(token1: Token, token2: Token) {
   const propsToCompare: (keyof TokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
@@ -56,7 +56,7 @@ function tokensMetadataIsSame(token1: Token, token2: Token) {
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, router }) => {
+const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, initialAction, router }) => {
   const {
     errors,
     values: { deadline, inputToken, outputToken, inputAmount, outputAmount, action, recipient, slippage },
@@ -66,15 +66,20 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
     setFieldTouched,
     submitForm,
     touched
-  } = useSwapFormik();
+  } = useSwapFormik(initialAction);
   const { t } = useTranslation(['swap']);
   const fromToSlug = (router.query['from-to'] as string) ?? '';
   const { maxInputAmounts, maxOutputAmounts, updateSwapLimits } = useSwapLimits();
+
+  const getRedirectionUrl = useCallback(
+    (from: string, to: string) => makeSwapOrSendRedirectionUrl({ from, to }, action),
+    [action]
+  );
   const [initialFrom, initialTo] = useInitialTokensSlugs(fromToSlug, getRedirectionUrl) ?? [];
 
   const TabsContent = [
-    { id: 'swap', label: t('swap|Swap') },
-    { id: 'send', label: t('swap|Send') }
+    { id: SwapTabAction.SWAP, label: t('swap|Swap') },
+    { id: SwapTabAction.SEND, label: t('swap|Send') }
   ];
 
   const {
@@ -252,15 +257,24 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, rout
   const handleTabSwitch = useCallback(
     (newTabId: string) => {
       const valuesToSet: Partial<SwapFormValues> = {
-        action: newTabId as SwapFormValues[SwapField.ACTION]
+        action: newTabId as SwapTabAction
       };
-      if (newTabId === 'swap') {
+      if (newTabId === SwapTabAction.SWAP) {
         valuesToSet.recipient = undefined;
       }
 
       setValues(prevValues => ({ ...prevValues, ...valuesToSet }));
+      router.replace(
+        makeSwapOrSendRedirectionUrl(
+          {
+            from: inputToken && getTokenSlug(inputToken),
+            to: outputToken && getTokenSlug(outputToken)
+          },
+          valuesToSet.action
+        )
+      );
     },
-    [setValues]
+    [setValues, router, inputToken, outputToken]
   );
 
   const blackListedTokens = useMemo(
