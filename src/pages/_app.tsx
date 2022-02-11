@@ -13,7 +13,7 @@ import { NewExchangeRatesProvider } from '@hooks/use-new-exchange-rate';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
-import { TokenPairProvider } from '@providers/TokenPairProvider';
+import { TokenPairProvider } from '@providers/token-pair-provider';
 import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
 import { debounce, isClient } from '@utils/helpers';

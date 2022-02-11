@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-import { useTokensSearchService } from '@components/modals/use-tokens-search.service';
+import { useTokensSearchService } from '@hooks/use-tokens-search.service';
 import { getTokenIdFromSlug } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
 import { isValidTokenSlug } from '@utils/validators';
@@ -11,10 +11,11 @@ interface TokenSlugSearchState {
 }
 
 const DEFAULT_TOKEN_ID = 0;
+const ALL_TOKENS_ARE_WHITELISTED: Token[] = [];
 
 export const useTokenSlugSearch = (tokenSlug: Optional<string>): TokenSlugSearchState => {
   const { searchLoading, tokensLoading, handleInput, isSoleFa2Token, allTokens, resetSearchValues, searchTokens } =
-    useTokensSearchService([]);
+    useTokensSearchService(ALL_TOKENS_ARE_WHITELISTED);
   const prevIsSoleFa2TokenRef = useRef(isSoleFa2Token);
 
   const slugTokenId = tokenSlug && isValidTokenSlug(tokenSlug) === true ? getTokenIdFromSlug(tokenSlug) : null;

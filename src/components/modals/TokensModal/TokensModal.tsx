@@ -8,13 +8,13 @@ import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
 import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
+import { useTokensSearchService } from '@hooks/use-tokens-search.service';
 import { useAddCustomToken } from '@utils/dapp';
 import { getTokenName, getTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
 import { Token } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
-import { useTokensSearchService } from '../use-tokens-search.service';
 import { AutoSave } from './AutoSave';
 import s from './TokensModal.module.sass';
 import { FormValues, TMFormField } from './types';

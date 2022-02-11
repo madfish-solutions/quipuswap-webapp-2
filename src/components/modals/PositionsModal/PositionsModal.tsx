@@ -9,13 +9,13 @@ import { Props } from 'react-modal';
 
 import { LoadingTokenCell, Modal } from '@components/modals/Modal';
 import { Button } from '@components/ui/elements/button';
+import { useTokensSearchService } from '@hooks/use-tokens-search.service';
 import { useAddCustomToken } from '@utils/dapp';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
 import { Token } from '@utils/types';
 
 import { DEBOUNCE_MS, DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
-import { useTokensSearchService } from '../use-tokens-search.service';
 import { Header } from './PositionModalHeader';
 import s from './PositionsModal.module.sass';
 import { FormValues, IPositionsModalProps, PMFormField } from './PositionsModal.types';

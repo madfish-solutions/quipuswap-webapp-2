@@ -7,8 +7,8 @@ import { isEmptyArray, isTokenEqual, localSearchToken, TokenWithRequiredNetwork 
 import { isEmptyString } from '@utils/helpers/strings';
 import { Token } from '@utils/types';
 
-import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from './constants';
-import { getTokenKey } from './get-token-key';
+import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID } from '../components/modals/constants';
+import { getTokenKey } from '../components/modals/get-token-key';
 
 const uniqTokens = (tokens: Array<Token>) => {
   const contractAddressMap = new Map<string, boolean>();
