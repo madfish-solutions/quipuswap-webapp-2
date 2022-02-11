@@ -4,14 +4,14 @@ import { CardCell } from '@quipuswap/ui-kit';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 
-interface ListItemCardCellProps {
+interface Props {
   cellName: string;
   tooltip: string;
   cellNameClassName: string;
   cardCellClassName: string;
 }
 
-export const ListItemCardCell: FC<ListItemCardCellProps> = ({
+export const ListItemCardCell: FC<Props> = ({
   cellName,
   tooltip,
   cellNameClassName,

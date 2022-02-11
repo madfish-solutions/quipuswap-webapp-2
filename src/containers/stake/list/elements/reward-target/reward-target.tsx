@@ -10,7 +10,7 @@ import { Token } from '@utils/types';
 
 import styles from './reward-target.module.scss';
 
-interface RewardTargetProps {
+interface Props {
   token: Token;
 }
 
@@ -21,7 +21,7 @@ const themeClass = {
 
 const EARN = 'Earn';
 
-export const RewardTarget: FC<RewardTargetProps> = ({ token }) => {
+export const RewardTarget: FC<Props> = ({ token }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const tokenIcon = token.metadata.thumbnailUri;

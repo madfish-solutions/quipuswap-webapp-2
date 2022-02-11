@@ -25,7 +25,7 @@ const gradients = {
   [eStakeStatus.PAUSED]: 'linear-gradient(98deg, #FF6B00 0%, #F9A605 100%)'
 };
 
-interface StakeStatusProps {
+interface Props {
   status: eStakeStatus;
 }
 
@@ -34,7 +34,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StakeStatus: FC<StakeStatusProps> = ({ status }) => {
+export const StakeStatus: FC<Props> = ({ status }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
