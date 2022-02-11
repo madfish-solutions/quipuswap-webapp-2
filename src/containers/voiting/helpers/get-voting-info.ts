@@ -10,6 +10,8 @@ export interface VotingInfo {
   votesToVeto: string;
 }
 
+const ZERO = 0;
+
 export const getVotingInfo = (dex: Nullable<FoundDex>): VotingInfo => {
   if (!dex?.storage?.storage) {
     return {
@@ -23,10 +25,12 @@ export const getVotingInfo = (dex: Nullable<FoundDex>): VotingInfo => {
 
   const totalVeto = fromDecimals(dex.storage.storage.veto, TEZOS_TOKEN.metadata.decimals).toFixed();
 
-  const votesToVeto = fromDecimals(
+  const votesToVetoBN = fromDecimals(
     dex.storage.storage.total_votes.dividedToIntegerBy(3).minus(dex.storage.storage.veto),
     TEZOS_TOKEN.metadata.decimals
-  ).toFixed();
+  );
+
+  const votesToVeto = votesToVetoBN.gt(ZERO) ? votesToVetoBN.toFixed() : '0';
 
   return {
     totalVotes,
