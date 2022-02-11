@@ -17,6 +17,11 @@ export enum QSNetworkType {
   TEST = 'TEST'
 }
 
+export enum SwapTabAction {
+  SWAP = 'swap',
+  SEND = 'send'
+}
+
 export enum ConnectType {
   DEFAULT = 'DEFAULT',
   CUSTOM = 'CUSTOM'

@@ -15,11 +15,6 @@ module.exports = withReactSvg({
   async redirects() {
     return [
       {
-        source: '/swap',
-        destination: `/swap/${process.env.DEFAULT_TOKENS_SLUGS}`,
-        permanent: true
-      },
-      {
         source: '/liquidity',
         destination: `/liquidity/add/${process.env.DEFAULT_TOKENS_SLUGS}`,
         permanent: true
@@ -47,6 +42,61 @@ module.exports = withReactSvg({
       {
         source: '/voting/veto',
         destination: `/voting/veto/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/invest/add-liquidity',
+        destination: `/liquidity/add/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/invest/add-liquidity/:token',
+        destination: '/liquidity/add/tez-:token',
+        permanent: true
+      },
+      {
+        source: '/invest/remove-liquidity',
+        destination: `/liquidity/remove/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/invest/remove-liquidity/:token',
+        destination: '/liquidity/remove/tez-:token',
+        permanent: true
+      },
+      {
+        source: '/invest/add-token',
+        destination: `/liquidity/add/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/governance/vote-baker',
+        destination: `/voting/vote/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/governance/vote-baker/:token',
+        destination: '/voting/vote/tez-:token',
+        permanent: true
+      },
+      {
+        source: '/governance/veto',
+        destination: `/voting/veto/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/governance/veto/:token',
+        destination: '/voting/veto/tez-:token',
+        permanent: true
+      },
+      {
+        source: '/governance/rewards',
+        destination: `/voting/vote/${process.env.DEFAULT_TOKENS_SLUGS}`,
+        permanent: true
+      },
+      {
+        source: '/governance/rewards/:token',
+        destination: '/voting/vote/tez-:token',
         permanent: true
       }
     ];

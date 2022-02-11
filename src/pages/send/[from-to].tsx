@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { makeSwapSendPage } from '@factories/swap-send-page';
 import { SwapTabAction } from '@utils/types';
 
-const SwapPage = makeSwapSendPage(SwapTabAction.SWAP);
+const SendPage = makeSwapSendPage(SwapTabAction.SEND);
 
 export const getServerSideProps = async (props: NextPageContext) => {
   const { locale } = props;
@@ -17,4 +17,4 @@ export const getServerSideProps = async (props: NextPageContext) => {
 };
 
 // eslint-disable-next-line import/no-default-export
-export default SwapPage;
+export default SendPage;
