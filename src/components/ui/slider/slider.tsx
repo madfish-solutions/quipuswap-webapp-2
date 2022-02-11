@@ -36,11 +36,11 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface SliderProps {
+interface Props {
   className?: string;
 }
 
-export const Slider: FC<SliderProps> = ({ className, children }) => {
+export const Slider: FC<Props> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
