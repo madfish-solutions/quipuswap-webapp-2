@@ -5,12 +5,12 @@ import { mixed as mixedSchema, object as objectSchema, string as stringSchema } 
 import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug, isTezosToken } from '@utils/helpers';
-import { Token } from '@utils/types';
+import { SwapTabAction, Token } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
 import { getUserMaxInputAmount } from '../utils/get-user-max-input-amount';
-import { SwapAction, SwapField } from '../utils/types';
+import { SwapField } from '../utils/types';
 
 const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
 const TOKEN_ATOM_RAW_AMOUNT = 1;
@@ -93,8 +93,8 @@ export const useValidationSchema = () => {
           .required(t(REQUIRE_FIELD_MESSAGE));
       }
     ),
-    [SwapField.RECIPIENT]: mixedSchema().when(SwapField.ACTION, (currentAction: SwapAction) =>
-      currentAction === SwapAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
+    [SwapField.RECIPIENT]: mixedSchema().when(SwapField.ACTION, (currentAction: SwapTabAction) =>
+      currentAction === SwapTabAction.SWAP ? mixedSchema() : addressSchema().required(t(REQUIRE_FIELD_MESSAGE))
     ),
     [SwapField.SLIPPAGE]: bigNumberSchema(0, MAX_SLIPPAGE_PERCENTAGE).required(t(REQUIRE_FIELD_MESSAGE)),
     [SwapField.DEADLINE]: bigNumberSchema(
@@ -102,6 +102,6 @@ export const useValidationSchema = () => {
       MAX_DEADLINE_MINS,
       t('common|deadlineOutOfRangeError')
     ).default(new BigNumber(DEFAULT_DEADLINE_MINS)),
-    [SwapField.ACTION]: stringSchema().oneOf([SwapAction.SWAP, SwapAction.SEND]).required()
+    [SwapField.ACTION]: stringSchema().oneOf([SwapTabAction.SWAP, SwapTabAction.SEND]).required()
   });
 };

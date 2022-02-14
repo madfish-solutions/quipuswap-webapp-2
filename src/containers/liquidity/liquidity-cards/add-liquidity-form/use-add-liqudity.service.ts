@@ -4,7 +4,7 @@ import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { useAccountPkh, useTezos } from '@utils/dapp';
+import { useAccountPkh, useTezos, useEstimationToolkit } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import {
@@ -34,6 +34,7 @@ export const useAddLiquidityService = (
   onTokenBChange: (token: Token) => void
 ) => {
   const tezos = useTezos();
+  const estimatedTezos = useEstimationToolkit();
   const accountPkh = useAccountPkh();
   const { deadline } = useDeadline();
   const { slippage } = useSlippage();
@@ -309,7 +310,7 @@ export const useAddLiquidityService = (
   };
 
   const investTezosToToken = async () => {
-    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB) {
+    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB || !estimatedTezos) {
       return;
     }
 
@@ -323,7 +324,7 @@ export const useAddLiquidityService = (
       pairInfo && pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) && pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
-      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue);
+      const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
 
       const notTezTokenSymbol = getTokenSymbol(notTezToken);
 

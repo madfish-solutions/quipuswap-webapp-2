@@ -27,7 +27,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    navigationData.forEach(({ id, href, label, Icon, links, as }) => {
+    navigationData.forEach(({ id, href, label, Icon, links, as, matchHrefs = [href] }) => {
       if (href) {
         result.push(
           <Link key={id} href={href} as={as}>
@@ -36,7 +36,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
               className={cx(
                 s.link,
                 {
-                  [s.active]: isActivePath(router.pathname, href)
+                  [s.active]: matchHrefs.some(matchHref => isActivePath(router.pathname, matchHref!))
                 },
                 modeClass[colorThemeMode]
               )}

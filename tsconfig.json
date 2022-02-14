@@ -16,6 +16,7 @@
       "@containers/*": ["containers/*"],
       "@errors": ["errors/index.ts"],
       "@content/*": ["content/*"],
+      "@factories/*": ["factories/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
