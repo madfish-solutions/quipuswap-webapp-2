@@ -10,5 +10,6 @@
   "Send": "Send",
   "Update Rates": "Update Rates",
   "noRouteFoundError": "The exchange route can't be built for the provided token. Maybe one of the tokens you exchange isn't listed or there is no path shorter than {{maxHopsCount}} hops.",
-  "valueOutOfRangeError": "Value has to be a number between {{min}} and {{max}}. Note: you need at least 0.1 TEZ to be left on your wallet to swap"
+  "valueOutOfRangeError": "Value has to be a number between {{min}} and {{max}}. Note: you need at least 0.1 TEZ to be left on your wallet to swap",
+  "priceImpactWarning": "Note! Your price impact is {{priceImpact}}%. Double check the output amount and/or try to split the exchange to the smaller trades."
 }
