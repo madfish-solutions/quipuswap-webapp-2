@@ -9,8 +9,8 @@ import { useAccountPkh } from '@utils/dapp';
 import { getTokenPairSlug, getTokenSlug, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 import { Token } from '@utils/types';
 
-import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../elements';
-import { eStakeStatus, StakeStatus } from '../../elements/stake-status';
+import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
+import { eStakeStatus, StakeStatus } from '../../components/stake-status';
 import { getDollarEquivalent } from '../../helpers';
 import styles from './list-item.module.scss';
 
