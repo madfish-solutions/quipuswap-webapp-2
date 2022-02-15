@@ -6,6 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { StakeItem } from '@containers/stake';
+import { StakeDataProvider } from '@containers/stake/providers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
@@ -25,7 +26,9 @@ const StakeItemPage: FC = () => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <StakeItem />
+      <StakeDataProvider>
+        <StakeItem />
+      </StakeDataProvider>
     </BaseLayout>
   );
 };
