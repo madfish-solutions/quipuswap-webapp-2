@@ -1,0 +1,48 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  row-gap: 16px;
+  flex-wrap: wrap;
+  padding: 24px;
+  margin-bottom: 48px;
+}
+
+.childrenContainer {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 32px;
+  row-gap: 16px;
+}
+
+.userInfoContainer {
+  display: flex;
+  justify-content: space-between;
+  align-self: stretch;
+  flex-direction: column;
+  row-gap: 40px;
+}
+
+.button {
+  align-self: start;
+  max-width: 280px;
+}
+
+@include media(">SDesktop") {
+  .userRewards {
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: auto auto;
+  }
+
+  .infoContainer {
+    display: flex;
+    column-gap: 32px;
+  }
+
+  .button {
+    align-self: end;
+  }
+}
