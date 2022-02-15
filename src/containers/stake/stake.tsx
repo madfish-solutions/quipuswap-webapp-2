@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { UserInfo } from '@components/common/user-info';
+import { UserRewardInfo } from '@components/common/user-reward-info';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 
@@ -15,7 +15,7 @@ interface Props {
 export const Stake: FC<Props> = ({ amount = '1000000', currency = '$' }) => {
   return (
     <>
-      <UserInfo>
+      <UserRewardInfo>
         <div>
           <span className={styles.title}>Your Share</span>
           <StateCurrencyAmount
@@ -40,7 +40,7 @@ export const Stake: FC<Props> = ({ amount = '1000000', currency = '$' }) => {
             TZKT
           </Button>
         </div>
-      </UserInfo>
+      </UserRewardInfo>
       <StakeList />
     </>
   );

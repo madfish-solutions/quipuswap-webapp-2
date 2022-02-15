@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 
-import styles from './user-rewards.module.scss';
+import styles from './user-pending-rewards.module.scss';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -16,7 +16,7 @@ interface Props {
   amount: string;
 }
 
-export const UserRewards: FC<Props> = ({ amount }) => {
+export const UserPendingRewards: FC<Props> = ({ amount }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
