@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { StateWrapper } from '@components/state-wrapper';
@@ -63,12 +63,14 @@ export const StakeList = () => {
   const [data, setData] = useState([...MOCK, ...MOCK, ...MOCK, ...MOCK, ...MOCK, ...MOCK]);
   const [loading, setLoading] = useState(true);
 
-  setTimeout(() => {
-    if (Math.random() < 0.3) {
-      setData([]);
-    }
-    setLoading(false);
-  }, 1500);
+  useEffect(() => {
+    setTimeout(() => {
+      if (Math.random() < 0.3) {
+        setData([]);
+      }
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   return (
     <div>
