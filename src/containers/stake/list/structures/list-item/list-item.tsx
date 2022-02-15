@@ -30,7 +30,7 @@ const TVL_TOOLTIP = 'tvl tooltip';
 const APR = 'APR';
 const APR_TOOLTIP = 'apr tooltip';
 
-const APY = 'My Balance';
+const APY = 'APY';
 const APY_TOOLTIP = 'apy tooltip';
 
 const MY_BALANCE = 'My Balance';
@@ -44,7 +44,7 @@ const MY_EARNED_TOOLTIP = 'My Erned tooltip';
 
 interface Props {
   tokenA: Token;
-  tokenB: Token;
+  tokenB?: Token;
   stakeStatus: eStakeStatus;
   rewardToken: Token;
   tvl: string;
