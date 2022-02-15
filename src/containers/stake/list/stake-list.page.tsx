@@ -8,15 +8,15 @@ import { Iterator } from './helpers/iterator';
 import styles from './stake-list.page.module.scss';
 import { StakeListItem } from './structures';
 
-const mock = [
+const MOCK = [
   {
     tokenA: TEZOS_TOKEN,
     tokenB: MAINNET_DEFAULT_TOKEN,
     stakeStatus: eStakeStatus.ACTIVE,
     rewardToken: MAINNET_DEFAULT_TOKEN,
-    tvl: '100000',
-    apr: 4.23,
-    apy: 12.34,
+    tvl: '' + Math.random() * 10000000,
+    apr: Math.random() * 10000,
+    apy: Math.random() * 100000,
     myBalance: '1000000',
     depositBalance: '1000000',
     earnBalance: '1000000',
@@ -24,16 +24,16 @@ const mock = [
     depositExhangeRate: '0.0257213123',
     // eslint-disable-next-line sonarjs/no-duplicate-string
     earnExhangeRate: '0.2321123213',
-    stakeUrl: '',
-    depositTokenUrl: ''
+    stakeUrl: 'https://google.com',
+    depositTokenUrl: 'https://yahoo.com'
   },
   {
     tokenA: MAINNET_DEFAULT_TOKEN,
     stakeStatus: eStakeStatus.ACTIVE,
     rewardToken: TEZOS_TOKEN,
-    tvl: '100000',
-    apr: 678,
-    apy: 23567,
+    tvl: '' + Math.random() * 10000000,
+    apr: Math.random() * 10000,
+    apy: Math.random() * 100000,
     myBalance: '1000000',
     depositBalance: '1000000',
     earnBalance: '1000000',
@@ -46,9 +46,9 @@ const mock = [
     tokenA: TEZOS_TOKEN,
     stakeStatus: eStakeStatus.PAUSED,
     rewardToken: MAINNET_DEFAULT_TOKEN,
-    tvl: '100000',
-    apr: 98,
-    apy: 423,
+    tvl: '' + Math.random() * 10000000,
+    apr: Math.random() * 10000,
+    apy: Math.random() * 100000,
     myBalance: '1000000',
     depositBalance: '1000000',
     earnBalance: '1000000',
@@ -60,9 +60,13 @@ const mock = [
 ];
 
 export const StakeList = () => {
+  const [data, setData] = useState([...MOCK, ...MOCK, ...MOCK, ...MOCK, ...MOCK, ...MOCK]);
   const [loading, setLoading] = useState(true);
 
   setTimeout(() => {
+    if (Math.random() < 0.3) {
+      setData([]);
+    }
     setLoading(false);
   }, 1500);
 
@@ -70,7 +74,7 @@ export const StakeList = () => {
     <div>
       <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
         <Iterator
-          data={mock}
+          data={data}
           render={StakeListItem}
           fallback={<EmptyStakeList />}
           isGrouped
