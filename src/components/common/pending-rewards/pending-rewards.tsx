@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { Cup } from '@components/svg/cup';
+import { Goblet } from '@components/svg/goblet';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 
 import styles from './pending-rewards.module.scss';
@@ -42,7 +42,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
           isLeftCurrency={currency === '$'}
         />
       </div>
-      <Cup />
+      <Goblet />
     </div>
   );
 };

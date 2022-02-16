@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 
 import { ColorThemeContext } from '@quipuswap/ui-kit';
 
-export const Cup: FC<IconProps> = ({ className }) => {
+export const Goblet: FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (

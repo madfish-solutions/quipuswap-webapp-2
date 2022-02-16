@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { noop } from 'rxjs';
 
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
-import { StakingRewardsAccumulated } from '@components/common/staking-rewards-accumulated';
+import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
 
 import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './components';
@@ -48,7 +48,7 @@ export const StakeList = () => {
 
   return (
     <div>
-      <StakingRewardsAccumulated
+      <StakingRewardsList
         pendingRewardAmount={mockRewards.pendingRewardAmount}
         pendingRewardCurrency={mockRewards.pendingRewardCurrency}
         rewardItemTitle={mockRewards.rewardItemTitle}
