@@ -1,8 +1,11 @@
-import { FC, useContext } from 'react';
+import { FC, useContext, useState } from 'react';
 
-import { ColorModes, ColorThemeContext, VotingReward } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
+import { Cup } from '@components/svg/cup';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 
 import styles from './pending-rewards.module.scss';
@@ -13,19 +16,33 @@ const modeClass = {
 };
 
 interface Props {
-  pendingRewardAmount: string;
+  amount: BigNumber;
+  currency: string;
 }
 
-export const PendingRewards: FC<Props> = ({ pendingRewardAmount }) => {
+export const PendingRewards: FC<Props> = ({ amount, currency }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { t } = useTranslation(['stake']);
+
+  const [loading, setLoading] = useState(true);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 1500);
 
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
       <div>
-        <span className={styles.title}>Your Pending Rewards</span>
-        <StateCurrencyAmount className={styles.amount} amount={pendingRewardAmount} currency="$" isLeftCurrency />
+        <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
+        <StateCurrencyAmount
+          className={styles.amount}
+          amount={amount}
+          isLoading={loading}
+          currency={currency}
+          isLeftCurrency={currency === '$'}
+        />
       </div>
-      <VotingReward /> {/* TODO: Rename */}
+      <Cup />
     </div>
   );
 };

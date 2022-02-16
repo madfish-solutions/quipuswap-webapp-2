@@ -1,6 +1,10 @@
 @import "@styles/variables";
 @import "@styles/breakpoints";
 
+.card {
+  margin-bottom: 48px;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
@@ -8,7 +12,6 @@
   row-gap: 16px;
   flex-wrap: wrap;
   padding: 24px;
-  margin-bottom: 48px;
 }
 
 .childrenContainer {

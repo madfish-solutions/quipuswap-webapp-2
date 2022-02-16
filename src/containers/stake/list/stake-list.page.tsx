@@ -1,6 +1,10 @@
 import { useState } from 'react';
 
+import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
+
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
+import { StakingRewardsAccumulated } from '@components/common/staking-rewards-accumulated';
 import { StateWrapper } from '@components/state-wrapper';
 
 import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './components';
@@ -27,6 +31,14 @@ const mock = [
   }
 ];
 
+const mockRewards = {
+  pendingRewardAmount: new BigNumber('10000.123'),
+  pendingRewardCurrency: '$',
+  rewardItemTitle: 'Your Claimed',
+  rewardItemAmount: new BigNumber('1231123.123'),
+  rewardItemCurrency: '$'
+};
+
 export const StakeList = () => {
   const [loading, setLoading] = useState(true);
 
@@ -36,6 +48,15 @@ export const StakeList = () => {
 
   return (
     <div>
+      <StakingRewardsAccumulated
+        pendingRewardAmount={mockRewards.pendingRewardAmount}
+        pendingRewardCurrency={mockRewards.pendingRewardCurrency}
+        rewardItemTitle={mockRewards.rewardItemTitle}
+        rewardItemAmount={mockRewards.rewardItemAmount}
+        rewardItemCurrency={mockRewards.rewardItemCurrency}
+        onHarvestAll={noop}
+      />
+
       <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
         <Iterator
           data={mock}
