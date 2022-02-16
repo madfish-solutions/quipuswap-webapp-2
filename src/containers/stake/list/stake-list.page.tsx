@@ -14,14 +14,15 @@ export const StakeList = observer(() => {
   const stakingStore = useStakingStore();
 
   useEffect(() => {
-    void stakingStore.loadList();
+    void stakingStore.list.load();
+    void stakingStore.stats.load();
   }, [stakingStore]);
 
   return (
     <div>
-      <StateWrapper isLoading={stakingStore.isLoading} loaderFallback={<StakeListSkeleton />}>
+      <StateWrapper isLoading={stakingStore.list.isLoading} loaderFallback={<StakeListSkeleton />}>
         <Iterator
-          data={stakingStore.rawList}
+          data={stakingStore.list.data || []}
           render={StakeListItem}
           fallback={<EmptyStakeList />}
           isGrouped

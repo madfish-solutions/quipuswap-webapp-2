@@ -1,36 +1,19 @@
 import { Nullable } from '@quipuswap/ui-kit';
-import { action, makeObservable, observable } from 'mobx';
 
-import { StakeItem } from '@api/staking';
+import { StakeStats } from '@api/staking';
 import { getStakesList } from '@api/staking/getStakesList';
+import { getStakesStats } from '@api/staking/getStakesStats';
 
+import { LoadingErrorData } from './LoadingErrorData';
 import { RootStore } from './RootStore';
 
 export class StakingStore {
   root: RootStore;
-  rawList: StakeItem[] = [];
-  isLoading = false;
-  error: Nullable<Error> = null;
+
+  list = new LoadingErrorData(getStakesList, []);
+  stats = new LoadingErrorData<Nullable<StakeStats>>(getStakesStats, null);
 
   constructor(root: RootStore) {
     this.root = root;
-    makeObservable(this, {
-      loadList: action,
-      rawList: observable,
-      isLoading: observable,
-      error: observable
-    });
-  }
-
-  async loadList() {
-    this.isLoading = true;
-    try {
-      this.rawList = await getStakesList();
-      this.error = null;
-    } catch (error) {
-      this.error = error as Error;
-      this.rawList = [];
-    }
-    this.isLoading = false;
   }
 }
