@@ -3,9 +3,9 @@ import { useTranslation } from 'next-i18next';
 import { mixed as mixedSchema, object as objectSchema, string as stringSchema } from 'yup';
 
 import { DEFAULT_DEADLINE_MINS, MAX_DEADLINE_MINS, MAX_SLIPPAGE_PERCENTAGE, MIN_DEADLINE_MINS } from '@app.config';
-import { SwapTabAction, RawToken } from '@interfaces/types';
 import { useBalances } from '@providers/BalancesProvider';
 import { fromDecimals, getTokenSlug, isTezosToken } from '@utils/helpers';
+import { SwapTabAction, Token } from '@utils/types';
 import { addressSchema, bigNumberSchema } from '@utils/validators';
 
 import { useSwapLimits } from '../providers/swap-limits-provider';
@@ -27,7 +27,7 @@ export const useValidationSchema = () => {
     [SwapField.INPUT_AMOUNT]: objectSchema().when(
       [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (inputToken?: RawToken, outputToken?: RawToken) => {
+      (inputToken?: Token, outputToken?: Token) => {
         if (!inputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }
@@ -73,7 +73,7 @@ export const useValidationSchema = () => {
     [SwapField.OUTPUT_AMOUNT]: objectSchema().when(
       [SwapField.INPUT_TOKEN, SwapField.OUTPUT_TOKEN],
       // @ts-ignore
-      (inputToken?: RawToken, outputToken?: RawToken) => {
+      (inputToken?: Token, outputToken?: Token) => {
         if (!outputToken) {
           return bigNumberSchema().required(t(REQUIRE_FIELD_MESSAGE));
         }

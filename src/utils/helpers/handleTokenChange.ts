@@ -3,8 +3,8 @@ import { Dispatch, SetStateAction } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { Nullable, TokenDataMap, RawToken } from '@interfaces/types';
 import { getUserBalance } from '@utils/dapp';
+import { Nullable, TokenDataMap, Token } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';
 
@@ -14,7 +14,7 @@ export enum TokenNumber {
 }
 
 interface TokenChangeType {
-  token: RawToken;
+  token: Token;
   tokenNumber: TokenNumber;
   exchangeRates: Array<{ tokenAddress: string; tokenId?: number; exchangeRate: string }>;
   tezos: TezosToolkit;

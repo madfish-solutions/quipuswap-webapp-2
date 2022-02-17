@@ -4,7 +4,6 @@ import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { Nullable, Optional, Undefined, RawToken } from '@interfaces/types';
 import { useAccountPkh, useTezos, useEstimationToolkit } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
@@ -17,6 +16,7 @@ import {
   isUndefined,
   toDecimals
 } from '@utils/helpers';
+import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
@@ -29,10 +29,10 @@ const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<RawToken>,
-  tokenB: Nullable<RawToken>,
-  onTokenAChange: (token: RawToken) => void,
-  onTokenBChange: (token: RawToken) => void
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
+  onTokenAChange: (token: Token) => void,
+  onTokenBChange: (token: Token) => void
 ) => {
   const tezos = useTezos();
   const estimatedTezos = useEstimationToolkit();
@@ -63,8 +63,8 @@ export const useAddLiquidityService = (
   const tokensCalculations = (
     tokenAInput: string,
     tokenBInput: string,
-    tokenA: RawToken,
-    tokenB: RawToken,
+    tokenA: Token,
+    tokenB: Token,
     pairInfo: Optional<PairInfo>,
     tokenABalance: Nullable<BigNumber>,
     tokenBBalance: Nullable<BigNumber>,
@@ -152,7 +152,7 @@ export const useAddLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, tokenABalance, tokenBBalance]);
 
-  const handleSetTokenA = (token: RawToken) => {
+  const handleSetTokenA = (token: Token) => {
     onTokenAChange(token);
     clearBalanceA();
     if (lastEditedInput === LastChangedToken.tokenA) {
@@ -162,7 +162,7 @@ export const useAddLiquidityService = (
     }
   };
 
-  const handleSetTokenB = (token: RawToken) => {
+  const handleSetTokenB = (token: Token) => {
     onTokenBChange(token);
     clearBalanceB();
     if (lastEditedInput === LastChangedToken.tokenB) {

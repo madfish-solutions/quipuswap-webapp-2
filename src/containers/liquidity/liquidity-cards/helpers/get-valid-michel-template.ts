@@ -1,6 +1,6 @@
 import { MichelsonData } from '@taquito/michel-codec';
 
-import { SortTokensContractsType } from '@interfaces/types';
+import { SortTokensContractsType } from '@utils/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const taquitoUtils = require('@taquito/utils');

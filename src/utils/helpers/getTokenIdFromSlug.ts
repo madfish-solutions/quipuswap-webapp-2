@@ -1,5 +1,5 @@
 import { Standard } from '@graphql';
-import { TokenId } from '@interfaces/types';
+import { TokenId } from '@utils/types';
 
 export const getTokenIdFromSlug = (slug: string): TokenId => {
   const [contractAddress, fa2TokenId] = slug.split('_');

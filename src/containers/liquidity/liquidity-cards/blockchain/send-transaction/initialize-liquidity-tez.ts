@@ -3,7 +3,7 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { FACTORIES } from '@app.config';
-import { QSNets } from '@interfaces/types';
+import { QSNets } from '@utils/types';
 
 const FIRST_FACTORY_INDEX = 0;
 

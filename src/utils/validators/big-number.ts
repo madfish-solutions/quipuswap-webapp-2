@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { i18n } from 'next-i18next';
 import { object, SchemaOf } from 'yup';
 
-import { Optional } from '@interfaces/types';
+import { Optional } from '@utils/types';
 
 const basicBigNumberSchema: SchemaOf<BigNumber> = object()
   .shape({})

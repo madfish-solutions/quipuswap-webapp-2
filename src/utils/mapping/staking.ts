@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 
 import { RawStakeItem, RawStakeStats, StakeItem, StakeStats } from '@api/staking';
-import { RawToken } from '@interfaces/types';
+import { Token } from '@utils/types';
 
-const mapToken = (raw: RawToken): RawToken => ({
+const mapToken = (raw: Token): Token => ({
   ...raw,
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId)
 });

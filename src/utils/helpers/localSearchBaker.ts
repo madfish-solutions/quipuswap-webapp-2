@@ -1,4 +1,4 @@
-import { isFullBaker, WhitelistedBaker } from '@interfaces/types';
+import { isFullBaker, WhitelistedBaker } from '@utils/types';
 
 export const localSearchBaker = (baker: WhitelistedBaker, input: string) => {
   const search = input.toLowerCase();

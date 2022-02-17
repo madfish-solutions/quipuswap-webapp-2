@@ -1,7 +1,7 @@
 import { Nullable } from '@quipuswap/ui-kit';
 import { action, makeObservable, observable } from 'mobx';
 
-import { Undefined } from '@interfaces/types';
+import { Undefined } from '@utils/types';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;

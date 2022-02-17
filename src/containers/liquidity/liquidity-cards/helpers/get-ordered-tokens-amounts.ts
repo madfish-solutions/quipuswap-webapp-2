@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 
-import { RawToken } from '@interfaces/types';
+import { Token } from '@utils/types';
 
 import { sortTokensContracts } from './sort-tokens-contracts';
 
 export const getOrderedTokensAmounts = (
-  tokenA: RawToken,
-  tokenB: RawToken,
+  tokenA: Token,
+  tokenB: Token,
   tokenAAmount: BigNumber,
   tokenBAmount: BigNumber
 ) => {

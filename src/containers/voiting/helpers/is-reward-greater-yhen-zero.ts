@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 const Zero = new BigNumber(0);
 

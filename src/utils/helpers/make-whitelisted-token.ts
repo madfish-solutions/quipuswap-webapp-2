@@ -1,9 +1,9 @@
 import { Standard } from '@graphql';
-import { TokenId, RawToken } from '@interfaces/types';
+import { TokenId, Token } from '@utils/types';
 
 import { shortize } from './shortize';
 
-export const makeToken = (tokenId: TokenId, knownTokens: RawToken[]) => {
+export const makeToken = (tokenId: TokenId, knownTokens: Token[]) => {
   const { fa2TokenId, contractAddress, type } = tokenId;
   const matchingToken = knownTokens.find(
     ({ fa2TokenId: knownTokenId, contractAddress: knownTokenAddress }) =>

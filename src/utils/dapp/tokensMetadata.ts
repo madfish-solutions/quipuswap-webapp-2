@@ -1,4 +1,4 @@
-import { QSNetwork } from '@interfaces/types';
+import { QSNetwork } from '@utils/types';
 
 interface RawTokenMetadata {
   token_id?: string;

@@ -1,13 +1,13 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { Nullable, Optional, RawToken } from '@interfaces/types';
+import { Nullable, Optional, Token } from '@utils/types';
 
 export interface AddFormInterface {
   dex: Optional<FoundDex>;
-  tokenA: Nullable<RawToken>;
-  tokenB: Nullable<RawToken>;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
   tokenALoading: boolean;
   tokenBLoading: boolean;
-  onTokenAChange: (token: RawToken) => void;
-  onTokenBChange: (token: RawToken) => void;
+  onTokenAChange: (token: Token) => void;
+  onTokenBChange: (token: Token) => void;
 }

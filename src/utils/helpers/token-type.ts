@@ -1,6 +1,6 @@
 import { Standard } from '@graphql';
-import { TokenId, TokenIdFa2 } from '@interfaces/types';
 import { isExist } from '@utils/helpers/type-checks';
+import { TokenId, TokenIdFa2 } from '@utils/types';
 
 export const isTokenTypeFa2 = (type: Standard): type is Standard.Fa2 => type.toUpperCase() === Standard.Fa2;
 

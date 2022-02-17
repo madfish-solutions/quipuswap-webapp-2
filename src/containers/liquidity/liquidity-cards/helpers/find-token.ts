@@ -1,6 +1,6 @@
-import { Nullable, RawToken } from '@interfaces/types';
+import { Nullable, Token } from '@utils/types';
 
-export const findToken = (contractToken: string, idToken: string, tokens: RawToken[]): Nullable<RawToken> =>
+export const findToken = (contractToken: string, idToken: string, tokens: Token[]): Nullable<Token> =>
   tokens.find(token => {
     if (contractToken !== token.contractAddress) {
       return false;

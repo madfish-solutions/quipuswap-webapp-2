@@ -7,8 +7,8 @@ import { Skeleton } from '@components/common/Skeleton';
 import { poolMobileItem } from '@components/tables/PoolTable';
 import { useColumns } from '@components/tables/PoolTable/hooks';
 import { Button } from '@components/ui/elements/button';
-import { PoolTableType } from '@interfaces/types';
 import { getUniqueKey, isEmptyArray } from '@utils/helpers';
+import { PoolTableType } from '@utils/types';
 import { usePagination, useSortBy, useTable } from 'react-table';
 
 import s from './table.module.sass';

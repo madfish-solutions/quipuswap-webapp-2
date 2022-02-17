@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import { PresetsAmountInput } from '../PresetsAmountInput';
 

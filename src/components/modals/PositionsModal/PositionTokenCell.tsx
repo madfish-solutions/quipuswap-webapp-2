@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { Checkbox } from '@quipuswap/ui-kit';
 
 import { TokenCell } from '@components/modals/Modal';
-import { RawToken } from '@interfaces/types';
 import { getTokenName, getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 interface PositionTokenCellProps {
-  token: RawToken;
+  token: Token;
   onClick: () => void;
   isChecked: boolean;
 }

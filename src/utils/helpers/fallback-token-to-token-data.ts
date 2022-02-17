@@ -1,6 +1,6 @@
-import { TokenDataType, RawToken } from '@interfaces/types';
+import { TokenDataType, Token } from '@utils/types';
 
-export const fallbackTokenToTokenData = (token: RawToken): TokenDataType => ({
+export const fallbackTokenToTokenData = (token: Token): TokenDataType => ({
   token: {
     address: token.contractAddress,
     type: token.type,

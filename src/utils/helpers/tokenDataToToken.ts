@@ -1,7 +1,7 @@
-import { RawToken } from '@interfaces/types';
+import { Token } from '@utils/types';
 
-export const tokenDataToToken = (token: RawToken): RawToken =>
+export const tokenDataToToken = (token: Token): Token =>
   ({
     contractAddress: token.contractAddress,
     fa2TokenId: token.fa2TokenId ?? undefined
-  } as RawToken);
+  } as Token);

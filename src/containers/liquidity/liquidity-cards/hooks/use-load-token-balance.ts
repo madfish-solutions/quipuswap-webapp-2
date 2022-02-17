@@ -2,18 +2,18 @@ import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { Nullable, RawToken } from '@interfaces/types';
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
-export const useLoadTokenBalance = (token: Nullable<RawToken>) => {
+export const useLoadTokenBalance = (token: Nullable<Token>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
   const [tokenBalance, setTokenBalance] = useState<Nullable<BigNumber>>(null);
 
   const getTokenBalance = useCallback(
-    async (token: Nullable<RawToken>) => {
+    async (token: Nullable<Token>) => {
       if (!tezos || !accountPkh || !token) {
         return;
       }

@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { MAX_ITEMS_PER_PAGE } from '@app.config';
 import { useColumns } from '@components/tables/PoolTable/hooks';
-import { PoolTableType } from '@interfaces/types';
+import { PoolTableType } from '@utils/types';
 
 import { PoolCardItem } from './PoolCardItem';
 import s from './PoolTable.module.sass';

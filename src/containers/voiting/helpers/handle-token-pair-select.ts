@@ -6,8 +6,8 @@ import BigNumber from 'bignumber.js';
 
 import { FACTORIES, LP_TOKEN_DECIMALS, TEZOS_TOKEN } from '@app.config';
 import { UseToasts } from '@hooks/use-toasts';
-import { VoterType, QSNets, Nullable, TokenPair } from '@interfaces/types';
 import { fromDecimals } from '@utils/helpers';
+import { VoterType, QSNets, Nullable, TokenPair } from '@utils/types';
 
 export interface HandleTokenPairSelectReturnType {
   tokenPair: TokenPair;

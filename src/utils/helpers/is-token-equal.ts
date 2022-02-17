@@ -1,4 +1,4 @@
-import { RawToken } from '@interfaces/types';
+import { Token } from '@utils/types';
 
-export const isTokenEqual = (a: RawToken, b: RawToken) =>
+export const isTokenEqual = (a: Token, b: Token) =>
   a.contractAddress === b.contractAddress && a.fa2TokenId === b.fa2TokenId;

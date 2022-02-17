@@ -11,9 +11,9 @@ import {
   TEZOS_TOKEN
 } from '@app.config';
 import { Standard } from '@graphql';
-import { RawToken, TokenPair, QSNetwork, TokenId, TokenWithQSNetworkType, QSNets, Nullable } from '@interfaces/types';
 import { getTokenSlug, ipfsToHttps, isClient, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
+import { Token, TokenPair, QSNetwork, TokenId, TokenWithQSNetworkType, QSNets, Nullable } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
@@ -118,7 +118,7 @@ export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: 
   if (json.tokens?.length) {
     // TODO: remove 'any' type as soon as fa2TokenId type is changed to BigNumber
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const Tokens: RawToken[] = json.tokens.map((token: any) => ({
+    const Tokens: Token[] = json.tokens.map((token: any) => ({
       ...token,
       isWhitelisted: true
     }));
@@ -142,7 +142,7 @@ export const saveCustomToken = (token: TokenWithQSNetworkType) => {
 // export const mergeTokensToPair = (tokens1, tokens2) =>
 // [{token1[0]:tokens2[0]},{token1[1]:tokens2[0]},{token1[2]:tokens2[0]},{token1[0]:tokens2[1]},...]
 
-export const mergeTokensToPair = (tokens1: RawToken[], tokens2: RawToken[]): TokenPair[] => {
+export const mergeTokensToPair = (tokens1: Token[], tokens2: Token[]): TokenPair[] => {
   const pair = { token1: tokens1[0], token2: tokens2[0] } as TokenPair;
 
   return [pair];

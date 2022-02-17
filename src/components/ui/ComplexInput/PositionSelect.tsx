@@ -10,9 +10,9 @@ import { PositionsModal } from '@components/modals/PositionsModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { Nullable, RawToken, TokenPair } from '@interfaces/types';
 import { getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
 import { getMessageNotWhitelistedTokenPair } from '@utils/helpers/is-whitelisted-token';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
@@ -29,8 +29,8 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   notFrozen?: boolean;
   label: string;
   error?: string;
-  notSelectable1?: RawToken;
-  notSelectable2?: RawToken;
+  notSelectable1?: Token;
+  notSelectable2?: Token;
   handleChange?: (tokenPair: TokenPair) => void;
   handleBalance: (value: string) => void;
   tokenPair: Nullable<TokenPair>;

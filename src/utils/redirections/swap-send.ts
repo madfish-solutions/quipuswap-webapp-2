@@ -1,8 +1,8 @@
 import { NextPageContext } from 'next';
 
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
-import { Optional, SwapTabAction } from '@interfaces/types';
 import { getTokenSlug } from '@utils/helpers';
+import { Optional, SwapTabAction } from '@utils/types';
 
 const TEZOS_TOKEN_SLUG = getTokenSlug(TEZOS_TOKEN);
 const DEFAULT_TOKEN_SLUG = getTokenSlug(networksDefaultTokens[NETWORK_ID]);

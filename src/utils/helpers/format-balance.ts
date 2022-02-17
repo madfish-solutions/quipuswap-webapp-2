@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable } from '@interfaces/types';
 import { FormatNumber } from '@utils/formatNumber';
 import { bigNumberToString } from '@utils/helpers/big-number-to-string';
+import { Nullable } from '@utils/types';
 
 const FIRST_POSITION = 0;
 const ONE_ELEMENT = 1;

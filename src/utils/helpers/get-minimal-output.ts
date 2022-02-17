@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Optional } from '@interfaces/types';
+import { Optional } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';
 

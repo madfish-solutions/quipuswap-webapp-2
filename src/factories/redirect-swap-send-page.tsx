@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 
-import { SwapTabAction } from '@interfaces/types';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
+import { SwapTabAction } from '@utils/types';
 
 export const makeRedirectSwapSendPage = (action: SwapTabAction) => {
   return () => {

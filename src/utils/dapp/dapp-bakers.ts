@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { WhitelistedBaker } from '@interfaces/types';
+import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
 import { getBakers } from './bakers';

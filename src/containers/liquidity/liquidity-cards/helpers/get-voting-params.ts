@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
 import { LiquidityShareResult } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { Nullable } from '@interfaces/types';
 import { toDecimals } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 export const getVotingParams = async (
   tezos: TezosToolkit,

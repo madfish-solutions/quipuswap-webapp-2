@@ -8,9 +8,9 @@ import { withTypes } from 'react-final-form';
 import ReactModal from 'react-modal';
 
 import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
-import { RawToken } from '@interfaces/types';
 import { useAddCustomToken } from '@utils/dapp';
 import { getTokenName, getTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
 import { getTokenKey } from '../get-token-key';
@@ -26,8 +26,8 @@ const themeClass = {
 
 // eslint-disable-next-line import/no-named-as-default-member
 interface TokensModalProps extends ReactModal.Props {
-  onChange: (token: RawToken) => void;
-  blackListedTokens: RawToken[];
+  onChange: (token: Token) => void;
+  blackListedTokens: Token[];
 }
 
 export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens = [], ...props }) => {
@@ -39,7 +39,7 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens 
   const { searchTokens, isSoleFa2Token, allTokens, handleInput, isTokensNotFound, isTokensLoading, resetSearchValues } =
     useTokensSearchService<FormValues>(blackListedTokens);
 
-  const handleTokenSelect = (form: FormApi<FormValues>, token: RawToken) => {
+  const handleTokenSelect = (form: FormApi<FormValues>, token: Token) => {
     onChange(token);
     if (!isEmptyArray(searchTokens)) {
       addCustomToken(token);

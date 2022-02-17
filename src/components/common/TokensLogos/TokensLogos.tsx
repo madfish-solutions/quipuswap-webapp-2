@@ -3,8 +3,8 @@ import React from 'react';
 import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
-import { Nullable } from '@interfaces/types';
 import { isExist, isNull } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 import { FallbackLogo } from '../../svg/FallbackLogo';
 import s from './TokensLogos.module.sass';

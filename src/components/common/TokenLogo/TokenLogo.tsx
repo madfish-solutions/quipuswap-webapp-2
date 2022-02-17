@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import { FallbackLogo } from '../../svg/FallbackLogo';
 import s from './TokenLogo.module.sass';

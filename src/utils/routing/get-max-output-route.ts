@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
 import { MAX_HOPS_COUNT } from '@app.config';
-import { DexPair, Undefined } from '@interfaces/types';
 import { getTokenIdFromSlug, getMaxTokenInput, getTokenOutput, isEmptyArray } from '@utils/helpers';
+import { DexPair, Undefined } from '@utils/types';
 
 import { getCommonRouteProblemMemoKey } from './get-common-route-problem-memo-key';
 import { getRoutesList } from './get-routes-list';

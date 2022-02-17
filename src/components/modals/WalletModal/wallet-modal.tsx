@@ -12,8 +12,8 @@ import { Button } from '@components/ui/elements/button';
 import { NoTempleWallet } from '@errors';
 import { useToasts } from '@hooks/use-toasts';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { WalletType } from '@interfaces/types';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
+import { WalletType } from '@utils/types';
 
 import { Beacon, Temple } from './content';
 import s from './WalletModal.module.sass';

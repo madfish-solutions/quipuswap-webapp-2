@@ -1,6 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { Nullable, RawToken } from '@interfaces/types';
+import { Nullable, Token } from '@utils/types';
 
 import { PairInfo } from '../../add-liquidity-form';
 import { newGetValidMichelTemplate } from '../../helpers/new-get-valid-michel-template';
@@ -11,8 +11,8 @@ const MichelCodec = require('@taquito/michel-codec');
 
 export const loadTokenToTokenPairInfo = async (
   dex: FoundDex,
-  tokenA: RawToken,
-  tokenB: RawToken
+  tokenA: Token,
+  tokenB: Token
 ): Promise<Nullable<PairInfo>> => {
   const sortedTokens = sortTokensPair(tokenA, tokenB);
   const michelData = newGetValidMichelTemplate(sortedTokens);

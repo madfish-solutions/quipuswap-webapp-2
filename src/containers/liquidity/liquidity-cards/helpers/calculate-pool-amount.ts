@@ -1,15 +1,15 @@
 import BigNumber from 'bignumber.js';
 
 import { calculateTokenAmount } from '@containers/liquidity/liquidity-cards/helpers/calculate-token-amount';
-import { Nullable, RawToken } from '@interfaces/types';
-import { fromDecimals, isNull } from '@utils/helpers';
+import { defined, fromDecimals, isNull } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 import { checkIsPoolEmpty } from './check-is-pool-empty';
 
 export const calculatePoolAmount = (
   amountTokenA: BigNumber,
-  tokenA: Nullable<RawToken>,
-  tokenB: Nullable<RawToken>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
   tokenAPool: Nullable<BigNumber>,
   tokenBPool: Nullable<BigNumber>
 ): Nullable<BigNumber> => {
@@ -17,7 +17,10 @@ export const calculatePoolAmount = (
     return null;
   }
 
-  const pureRate = calculateTokenAmount(fromDecimals(tokenAPool, tokenA), fromDecimals(tokenBPool, tokenB));
+  const pureRate = calculateTokenAmount(
+    fromDecimals(defined(tokenAPool), tokenA),
+    fromDecimals(defined(tokenBPool), tokenB)
+  );
 
   const amount = amountTokenA.multipliedBy(pureRate);
 

@@ -1,5 +1,5 @@
-import { SortTokensContractsType, SortType, TokenId } from '@interfaces/types';
 import { isTokenFa12, isTokenFa2 } from '@utils/helpers';
+import { SortTokensContractsType, SortType, TokenId } from '@utils/types';
 
 const getSort = (tokenA: TokenId, tokenB: TokenId, type: SortType): SortTokensContractsType => ({
   addressA: tokenA.contractAddress,

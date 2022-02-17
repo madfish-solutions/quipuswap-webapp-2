@@ -1,6 +1,6 @@
 import { BlockResponse, OperationEntry } from '@taquito/rpc';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 export const findOperation = (block: BlockResponse, opHash: string): Nullable<OperationEntry> => {
   for (let i = 3; i >= 0; i--) {

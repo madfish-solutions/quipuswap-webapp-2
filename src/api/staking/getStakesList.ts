@@ -1,9 +1,10 @@
+import { STALKING_API_URL } from '@app.config';
 import { RawStakeItem } from '@interfaces/staking';
 
-const STALKING_API_URL = 'http://localhost:4444/list';
+const STALKING_LIST_API_URL = `${STALKING_API_URL}/list`;
 
-export const getStakesList = async (): Promise<RawStakeItem[]> => {
-  const res = await fetch(`${STALKING_API_URL}`);
+export const getStakesList = async () => {
+  const res = await fetch(STALKING_LIST_API_URL);
 
   return (await res.json()) as RawStakeItem[];
 };

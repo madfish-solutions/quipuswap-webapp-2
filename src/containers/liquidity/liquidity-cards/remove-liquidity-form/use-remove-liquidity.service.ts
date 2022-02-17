@@ -4,11 +4,11 @@ import { batchify, FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, TOKEN_TO_TOKEN_DEX } from '@app.config';
-import { Nullable, Optional, Undefined, RawToken, TokenPair } from '@interfaces/types';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import { fromDecimals, toDecimals, getRemoveLiquidityMessage, getTokenSymbol, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, Undefined, Token, TokenPair } from '@utils/types';
 
 import { getOperationHash, useLoadLiquidityShare } from '../../hooks';
 import { removeLiquidityTez, removeLiquidityTokenToToken } from '../blockchain';
@@ -18,8 +18,8 @@ import { INVALID_INPUT, validateDeadline, validateOutputAmount, validations, val
 
 export const useRemoveLiquidityService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<RawToken>,
-  tokenB: Nullable<RawToken>,
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>,
   onChangeTokensPair: (tokensPair: TokenPair) => void
 ) => {
   const tezos = useTezos();

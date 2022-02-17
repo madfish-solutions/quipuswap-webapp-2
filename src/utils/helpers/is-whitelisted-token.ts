@@ -1,12 +1,12 @@
-import { Nullable, RawToken } from '@interfaces/types';
+import { Nullable, Token } from '@utils/types';
 
 import { getTokenSymbol } from './get-token-appellation';
 
-export const isWhitelisted = (token: RawToken): boolean => {
+export const isWhitelisted = (token: Token): boolean => {
   return Boolean(token.isWhitelisted);
 };
 
-export const getMessageNotWhitelistedToken = (token: RawToken): Nullable<string> => {
+export const getMessageNotWhitelistedToken = (token: Token): Nullable<string> => {
   if (!isWhitelisted(token)) {
     const tokenA = getTokenSymbol(token);
 
@@ -16,7 +16,7 @@ export const getMessageNotWhitelistedToken = (token: RawToken): Nullable<string>
   return null;
 };
 
-export const getMessageNotWhitelistedTokenPair = (token1: RawToken, token2: RawToken): Nullable<string> => {
+export const getMessageNotWhitelistedTokenPair = (token1: Token, token2: Token): Nullable<string> => {
   if (!isWhitelisted(token1) && !isWhitelisted(token2)) {
     const symbolA = getTokenSymbol(token1);
     const symbolB = getTokenSymbol(token1);

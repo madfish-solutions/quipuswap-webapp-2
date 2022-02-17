@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { Nullable, TokenMetadata } from '@interfaces/types';
+import { Nullable, TokenMetadata } from '@utils/types';
 
 interface TokenAbstract {
   contractAddress: string;
@@ -18,5 +18,5 @@ export interface TokenFa2 extends TokenAbstract {
   fa2TokenId: BigNumber;
 }
 
-// TODO: Use it
-export type Token = TokenFa12 | TokenFa2;
+// TODO: Rename it & Use it
+export type NewToken = TokenFa12 | TokenFa2;

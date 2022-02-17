@@ -3,9 +3,9 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS } from '@app.config';
-import { Nullable, RawToken } from '@interfaces/types';
 import { getUserBalance } from '@utils/dapp';
 import { fromDecimals, isTezIncluded } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 import { findNotTezToken, getValidMichelTemplate, sortTokensContracts } from '../../helpers';
 
@@ -16,8 +16,8 @@ const loadUserLpBalanceTokens = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: RawToken,
-  tokenB: RawToken
+  tokenA: Token,
+  tokenB: Token
 ): Promise<Nullable<BigNumber>> => {
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
@@ -36,7 +36,7 @@ const loadUserLpBalanceTokens = async (
   return userLpTokenBalance?.balance || null;
 };
 
-const loadUserLpBalanceTez = async (tezos: TezosToolkit, accountPkh: string, dex: FoundDex, notTezToken: RawToken) => {
+const loadUserLpBalanceTez = async (tezos: TezosToolkit, accountPkh: string, dex: FoundDex, notTezToken: Token) => {
   const { address } = dex.contract;
   const { type, fa2TokenId } = notTezToken;
 
@@ -47,8 +47,8 @@ export const loadUserLpBalance = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: RawToken,
-  tokenB: RawToken
+  tokenA: Token,
+  tokenB: Token
 ) => {
   const isTezosToTokenDex = isTezIncluded([tokenA, tokenB]);
   const notTezToken = findNotTezToken([tokenA, tokenB]);

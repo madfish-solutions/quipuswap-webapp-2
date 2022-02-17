@@ -3,16 +3,12 @@ import { useEffect, useState } from 'react';
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { Nullable, Optional, RawToken } from '@interfaces/types';
 import { useAccountPkh, useTezos } from '@utils/dapp';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { loadUserLpBalance } from '../blockchain/getters/load-user-lp-balance-tokens';
 
-export const useLoadLpTokenBalance = (
-  dex: Optional<FoundDex>,
-  tokenA: Nullable<RawToken>,
-  tokenB: Nullable<RawToken>
-) => {
+export const useLoadLpTokenBalance = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 

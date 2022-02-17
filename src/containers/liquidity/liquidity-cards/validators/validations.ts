@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import { validateInputtedDecimals } from './validate-inputted-decimals';
 import { validateUserInput } from './validate-user-input';

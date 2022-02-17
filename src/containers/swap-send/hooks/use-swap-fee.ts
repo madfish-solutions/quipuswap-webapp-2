@@ -4,14 +4,14 @@ import BigNumber from 'bignumber.js';
 
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import useUpdateOnBlockSWR from '@hooks/useUpdateOnBlockSWR';
-import { DexPair, Nullable, Undefined, RawToken } from '@interfaces/types';
 import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
 import { defined, estimateSwapFee, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@utils/helpers';
+import { DexPair, Nullable, Undefined, Token } from '@utils/types';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
 
 interface SwapParams {
-  inputToken: Undefined<RawToken>;
+  inputToken: Undefined<Token>;
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
   dexChain: Undefined<DexPair[]>;

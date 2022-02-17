@@ -2,15 +2,15 @@ import { useEffect } from 'react';
 
 import { useRouter } from 'next/router';
 
-import { RawToken } from '@interfaces/types';
 import { getTokenPairSlug } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 interface RouterPairType {
   page: string;
   urlLoaded: boolean;
   initialLoad: boolean;
-  token1: RawToken;
-  token2: RawToken;
+  token1: Token;
+  token2: Token;
 }
 
 const pairString = '[from-to]';

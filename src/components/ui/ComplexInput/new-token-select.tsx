@@ -9,7 +9,6 @@ import { TokensModal } from '@components/modals/TokensModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
-import { Undefined, RawToken } from '@interfaces/types';
 import { useAccountPkh } from '@utils/dapp';
 import {
   amountsAreEqual,
@@ -20,6 +19,7 @@ import {
   prepareTokenLogo,
   prettyPrice
 } from '@utils/helpers';
+import { Undefined, Token } from '@utils/types';
 
 import { Danger } from '../components/danger';
 import { Button } from '../elements/button';
@@ -35,12 +35,12 @@ interface NewTokenSelectProps {
   label: string;
   error?: string;
   selectable?: boolean;
-  token?: RawToken;
-  blackListedTokens: RawToken[];
+  token?: Token;
+  blackListedTokens: Token[];
   id?: string;
   placeholder?: string;
   onAmountChange: (value: Undefined<BigNumber>) => void;
-  onTokenChange: (token: RawToken) => void;
+  onTokenChange: (token: Token) => void;
 }
 
 const themeClass = {
@@ -115,7 +115,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
 
   const equivalentContent = dollarEquivalent ? `= $ ${prettyPrice(parseFloat(dollarEquivalent))}` : '';
 
-  const handleTokenChange = (selectedToken: RawToken) => {
+  const handleTokenChange = (selectedToken: Token) => {
     setTokensModal(false);
     const val = localAmount.replace(/ /g, '').replace(/,/g, '.');
     const numVal = new BigNumber(val || 0);

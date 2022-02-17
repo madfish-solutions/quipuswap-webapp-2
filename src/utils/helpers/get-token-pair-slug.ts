@@ -1,4 +1,4 @@
-import { TokenId } from '@interfaces/types';
+import { TokenId } from '@utils/types';
 
 import { getTokenSlug } from './get-token-slug';
 

@@ -27,11 +27,11 @@ import {
 import { TabsContent } from '@containers/voiting/hooks';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useConnectModalsState } from '@hooks/useConnectModalsState';
-import { VoteFormValues, Undefined } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { isAssetEqual, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
+import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
 
 interface VotingFormProps {

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import { Card, Tabs } from '@quipuswap/ui-kit';
 
-import { Nullable, RawToken } from '@interfaces/types';
+import { Nullable, Token } from '@utils/types';
 
 import s from '../Liquidity.module.sass';
 import { AddLiquidityForm } from './add-liquidity-form';
@@ -12,7 +12,7 @@ import { RemoveLiquidityForm } from './remove-liquidity-form';
 import { useLiquidityFormService } from './use-liquidity-form.service';
 
 interface Props {
-  onTokensChange: (token1: Nullable<RawToken>, token2: Nullable<RawToken>) => void;
+  onTokensChange: (token1: Nullable<Token>, token2: Nullable<Token>) => void;
 }
 
 export const LiquidityCards: FC<Props> = ({ onTokensChange }) => {

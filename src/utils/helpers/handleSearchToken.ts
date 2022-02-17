@@ -3,24 +3,24 @@ import { Dispatch, SetStateAction } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { QSNetwork, RawToken, TokenPair } from '@interfaces/types';
+import { QSNetwork, Token, TokenPair } from '@utils/types';
 
 import { isTokenEqual } from './is-token-equal';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
 import { localSearchToken, TokenWithRequiredNetwork } from './localSearchToken';
 
 interface SearchTokenType {
-  tokens: RawToken[];
+  tokens: Token[];
   tezos?: TezosToolkit;
   network: QSNetwork;
   from: string;
   to: string;
-  fixTokenFrom?: RawToken;
-  setTokens: Dispatch<SetStateAction<RawToken[]>>;
+  fixTokenFrom?: Token;
+  setTokens: Dispatch<SetStateAction<Token[]>>;
   setInitialLoad: Dispatch<SetStateAction<boolean>>;
   setUrlLoaded: Dispatch<SetStateAction<boolean>>;
   setTokenPair?: Dispatch<SetStateAction<TokenPair>>;
-  searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<RawToken | null>;
+  searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<Token | null>;
 }
 
 export const handleSearchToken = async ({
@@ -39,7 +39,7 @@ export const handleSearchToken = async ({
 SearchTokenType) => {
   setInitialLoad(true);
   setUrlLoaded(false);
-  const searchPart = async (str: string | string[]): Promise<RawToken> => {
+  const searchPart = async (str: string | string[]): Promise<Token> => {
     const strStr = Array.isArray(str) ? str[0] : str;
     const inputValue = strStr.split('_')[0];
     const inputToken = strStr.split('_')[1] ?? 0;
@@ -58,7 +58,7 @@ SearchTokenType) => {
 
     return isTokens[0];
   };
-  let res: RawToken[] = [];
+  let res: Token[] = [];
   if (from) {
     if (to) {
       const resTo = await searchPart(to);

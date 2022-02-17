@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { Nullable } from '@interfaces/types';
 import { formatIntegerWithDecimals } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';

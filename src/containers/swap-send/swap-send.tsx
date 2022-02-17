@@ -18,7 +18,6 @@ import { Button } from '@components/ui/elements/button';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useInitialTokensSlugs } from '@hooks/use-initial-tokens-slugs';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
-import { SwapTabAction, Undefined, RawToken, TokenMetadata } from '@interfaces/types';
 import { useBalances } from '@providers/BalancesProvider';
 import s from '@styles/CommonContainer.module.sass';
 import { useAccountPkh, useOnBlock, useTezos, useTokens } from '@utils/dapp';
@@ -36,6 +35,7 @@ import {
 } from '@utils/helpers';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
 import { DexGraph } from '@utils/routing';
+import { SwapTabAction, Undefined, Token, TokenMetadata } from '@utils/types';
 
 import { SwapDetails } from './components/swap-details/swap-details';
 import { SwapSlippage } from './components/swap-slippage';
@@ -51,7 +51,7 @@ interface SwapSendProps {
   initialAction?: SwapTabAction;
 }
 
-function tokensMetadataIsSame(token1: RawToken, token2: RawToken) {
+function tokensMetadataIsSame(token1: Token, token2: Token) {
   const propsToCompare: (keyof TokenMetadata)[] = ['decimals', 'name', 'symbol', 'thumbnailUri'];
 
   return propsToCompare.every(propName => token1.metadata[propName] === token2.metadata[propName]);
@@ -133,7 +133,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
   });
 
   const onTokensSelected = useCallback(
-    (inputToken: RawToken, outputToken: RawToken) => {
+    (inputToken: Token, outputToken: Token) => {
       updateSwapLimits(inputToken, outputToken);
       const newRoute = `/swap/${getTokenPairSlug(inputToken, outputToken)}`;
       if (router.asPath !== newRoute) {
@@ -282,7 +282,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
   );
 
   const blackListedTokens = useMemo(
-    () => [inputToken, outputToken].filter((x): x is RawToken => !!x),
+    () => [inputToken, outputToken].filter((x): x is Token => !!x),
     [inputToken, outputToken]
   );
 
@@ -302,7 +302,7 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
   const handleSomeTokenChange = (
     fieldName: SwapTokensFieldName,
     amountFieldName: SwapAmountFieldName,
-    newToken?: RawToken
+    newToken?: Token
   ) => {
     refreshDexPoolsIfNecessary();
     setFieldTouched(fieldName, true);
@@ -326,10 +326,10 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
     }
   };
 
-  const handleInputTokenChange = (newToken?: RawToken) => {
+  const handleInputTokenChange = (newToken?: Token) => {
     handleSomeTokenChange(SwapField.INPUT_TOKEN, SwapField.INPUT_AMOUNT, newToken);
   };
-  const handleOutputTokenChange = (newToken?: RawToken) =>
+  const handleOutputTokenChange = (newToken?: Token) =>
     handleSomeTokenChange(SwapField.OUTPUT_TOKEN, SwapField.OUTPUT_AMOUNT, newToken);
 
   const handleSwapButtonClick = () => {

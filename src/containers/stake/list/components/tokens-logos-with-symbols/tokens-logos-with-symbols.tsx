@@ -4,14 +4,14 @@ import { FallbackLogo } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
-import { Optional, RawToken } from '@interfaces/types';
 import { getTokensPairName, getTokenSymbol, isExist, isNull } from '@utils/helpers';
+import { Optional, Token } from '@utils/types';
 
 import styles from './tokens-logos-with-symbols.module.scss';
 
 interface PropsAbstraction {
-  tokenA: RawToken;
-  tokenB: Optional<RawToken>;
+  tokenA: Token;
+  tokenB: Optional<Token>;
   className?: string;
   imageClassName?: string;
   loading?: boolean;

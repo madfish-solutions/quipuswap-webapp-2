@@ -1,11 +1,11 @@
-import { Nullable, RawToken, TokenPair } from '@interfaces/types';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 export interface IPositionsModalProps {
   onChange: (tokenPair: TokenPair) => void;
   initialPair: Nullable<TokenPair>;
-  notSelectable1?: RawToken;
-  notSelectable2?: RawToken;
-  blackListedTokens?: RawToken[];
+  notSelectable1?: Token;
+  notSelectable2?: Token;
+  blackListedTokens?: Token[];
 }
 
 export enum PMFormField {
@@ -29,6 +29,6 @@ export interface HeaderProps {
 export interface FormValues {
   [PMFormField.SEARCH]: string;
   [PMFormField.TOKEN_ID]: string;
-  [PMFormField.FIRST_TOKEN]: RawToken;
-  [PMFormField.SECOND_TOKEN]: RawToken;
+  [PMFormField.FIRST_TOKEN]: Token;
+  [PMFormField.SECOND_TOKEN]: Token;
 }

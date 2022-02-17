@@ -14,8 +14,8 @@ import {
   networksBaseUrls,
   NETWORK_ID
 } from '@app.config';
-import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@interfaces/types';
 import { isNull } from '@utils/helpers';
+import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@utils/types';
 
 import { beaconWallet, connectWalletBeacon } from './connect-wallet/connect-beacon-wallet';
 import { connectWalletTemple } from './connect-wallet/connect-temple-wallet';

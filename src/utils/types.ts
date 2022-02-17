@@ -44,12 +44,12 @@ export enum WalletType {
 export interface TokenPair {
   balance?: Nullable<string>;
   frozenBalance?: Nullable<string>;
-  token1: RawToken;
-  token2: RawToken;
+  token1: Token;
+  token2: Token;
   dex?: Nullable<FoundDex>;
 }
 
-export interface RawToken {
+export interface Token {
   type: Standard;
   contractAddress: string;
   fa2TokenId?: number;
@@ -57,11 +57,11 @@ export interface RawToken {
   metadata: TokenMetadata;
 }
 
-export interface TokenWithQSNetworkType extends RawToken {
+export interface TokenWithQSNetworkType extends Token {
   network?: QSNets;
 }
 
-export type TokenId = Pick<RawToken, 'contractAddress' | 'fa2TokenId' | 'type'>;
+export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
 export type TokenIdFa2 = Required<TokenId>;
 
 export interface WhitelistedBakerEmpty {
@@ -95,8 +95,8 @@ export enum DexPairType {
 interface CommonDexPairProps {
   token1Pool: BigNumber;
   token2Pool: BigNumber;
-  token1: RawToken;
-  token2: RawToken;
+  token1: Token;
+  token2: Token;
   id: string | number;
   type: DexPairType;
 }
@@ -144,8 +144,8 @@ export interface VoteFormValues {
 export interface PoolTableType {
   id: number;
   xtzUsdQuote: string;
-  token1: RawToken;
-  token2: RawToken;
+  token1: Token;
+  token2: Token;
   pair: {
     name: string;
     token1: {

@@ -1,6 +1,6 @@
 import { FoundDex } from '@quipuswap/sdk';
 
-import { Nullable, WhitelistedBaker } from '@interfaces/types';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
 export interface CandidateInfo {
   currentCandidate: Nullable<WhitelistedBaker>;

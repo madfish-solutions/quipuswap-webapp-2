@@ -2,8 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { Nullable, Optional, RawToken } from '@interfaces/types';
 import { fromDecimals, getTokenSymbol, isTezIncluded, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { calculatePoolAmount, checkIsPoolNotExists } from '../helpers';
 import { usePairInfo } from '../hooks';
@@ -13,8 +13,8 @@ const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
 
 export const useLiquidityDetailsService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<RawToken>,
-  tokenB: Nullable<RawToken>
+  tokenA: Nullable<Token>,
+  tokenB: Nullable<Token>
 ) => {
   const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
 

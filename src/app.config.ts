@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, RawToken } from '@interfaces/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -72,7 +72,7 @@ export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
-export const TEZOS_TOKEN: RawToken = {
+export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
   contractAddress: 'tez',
   isWhitelisted: true,
@@ -84,7 +84,7 @@ export const TEZOS_TOKEN: RawToken = {
   }
 };
 
-export const MAINNET_DEFAULT_TOKEN: RawToken = {
+export const MAINNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -97,7 +97,7 @@ export const MAINNET_DEFAULT_TOKEN: RawToken = {
   }
 };
 
-export const HANGZHOUNET_DEFAULT_TOKEN: RawToken = {
+export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
@@ -110,7 +110,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: RawToken = {
   }
 };
 
-export const networksDefaultTokens: Record<QSNets, RawToken> = {
+export const networksDefaultTokens: Record<QSNets, Token> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };
@@ -145,6 +145,7 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
+export const STALKING_API_URL = process.env.NEXT_PUBLIC_STALKING_API_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;

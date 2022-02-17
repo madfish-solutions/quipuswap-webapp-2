@@ -8,9 +8,9 @@ import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
-import { Nullable, Optional, RawToken } from '@interfaces/types';
 import { useAccountPkh } from '@utils/dapp';
 import { isNull, isUndefined } from '@utils/helpers';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
@@ -18,8 +18,8 @@ import { useLiquidityDetailsService } from './use-liqiudity-details.service';
 
 interface Props {
   dex: Optional<FoundDex>;
-  tokenA: Nullable<RawToken>;
-  tokenB: Nullable<RawToken>;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
 }
 
 export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {

@@ -1,4 +1,4 @@
-import { Nullable, Optional, Undefined } from '@interfaces/types';
+import { Nullable, Optional, Undefined } from '@utils/types';
 
 export const isNull = <T>(value: Nullable<T>): value is null => value === null;
 

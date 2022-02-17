@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Skeleton } from '@components/common/Skeleton';
 import { Button } from '@components/ui/elements/button';
-import { Nullable, Optional } from '@interfaces/types';
+import { Nullable, Optional } from '@utils/types';
 
 import s from '../liquidity-details.module.sass';
 

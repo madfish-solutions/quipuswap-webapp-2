@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { TokenDataType } from '@interfaces/types';
+import { TokenDataType } from '@utils/types';
 
 import { isTokenDataAddressTez } from './isTokenDataAddressTez';
 import { toNat } from './toNat';

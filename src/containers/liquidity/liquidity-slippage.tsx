@@ -14,10 +14,10 @@ import {
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { Nullable, RawToken } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
 import { getTokenSymbol } from '@utils/helpers';
+import { Nullable, Token } from '@utils/types';
 
 import { increaseOrDecreaseBySlippage } from './liquidity-cards/helpers';
 
@@ -32,8 +32,8 @@ interface Props {
   error?: string;
   tokenAInput: string;
   tokenBInput: string;
-  tokenA: Nullable<RawToken>;
-  tokenB: Nullable<RawToken>;
+  tokenA: Nullable<Token>;
+  tokenB: Nullable<Token>;
 }
 
 const DEFAULT_INVESTED_VALUE = 0;

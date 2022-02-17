@@ -3,7 +3,7 @@ import React, { useContext, useState, useCallback } from 'react';
 import { AssetInput, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import s from './PresetsAmountInput.module.sass';
 

@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { RawToken } from '@interfaces/types';
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { defined, fromDecimals, getTokenSlug } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 export const [BalancesProvider, useBalances] = constate(() => {
   const tezos = useTezos();
@@ -15,7 +15,7 @@ export const [BalancesProvider, useBalances] = constate(() => {
 
   useEffect(() => setBalances({}), [accountPkh]);
 
-  const updateBalance = async (token: RawToken) => {
+  const updateBalance = async (token: Token) => {
     if (accountPkh) {
       const balance = await getUserBalance(
         defined(tezos),

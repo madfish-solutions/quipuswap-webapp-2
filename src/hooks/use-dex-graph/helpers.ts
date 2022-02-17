@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { Standard } from '@graphql';
-import { DexPair, DexPairType, RawToken } from '@interfaces/types';
 import { getTokenSlug, makeToken } from '@utils/helpers';
 import { DexGraph } from '@utils/routing';
+import { DexPair, DexPairType, Token } from '@utils/types';
 
 import { RawDexPool, RawDexTokenStandard, RawDexType } from './use-dex-graph.types';
 
@@ -30,7 +30,7 @@ export const rawDexToDexPair = (
     bTokenStandard,
     dexAddress
   }: RawDexPool,
-  knownTokens: RawToken[]
+  knownTokens: Token[]
 ) => {
   const aTokenId = rawDexPoolTokenSlugToTokenId(aTokenSlug, aTokenStandard);
   const bTokenId = rawDexPoolTokenSlugToTokenId(bTokenSlug, bTokenStandard);

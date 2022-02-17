@@ -4,7 +4,7 @@ import { AssetInput, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import s from '../PresetsAmountInput/PresetsAmountInput.module.sass';
 

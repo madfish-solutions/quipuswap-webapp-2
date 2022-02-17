@@ -2,16 +2,16 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState
 
 import { useRouter } from 'next/router';
 
-import { Nullable, RawToken, TokenPair } from '@interfaces/types';
 import { useSearchCustomTokens, useTokens } from '@utils/dapp';
+import { Nullable, Token, TokenPair } from '@utils/types';
 
 import { useDexContract } from '../hooks';
 import { findToken, getLiquidityUrl, parseUrl } from './helpers';
 import { getTabById, LiquidityTabs } from './liquidity-tabs';
 
 const handleSearchPromise = async (
-  searchPromise: Promise<Nullable<RawToken>>,
-  setToken: Dispatch<SetStateAction<Nullable<RawToken>>>,
+  searchPromise: Promise<Nullable<Token>>,
+  setToken: Dispatch<SetStateAction<Nullable<Token>>>,
   tokenDirtyRef: MutableRefObject<boolean>,
   setLoading: Dispatch<SetStateAction<boolean>>
 ) => {
@@ -32,7 +32,7 @@ const handleSearchPromise = async (
 export const useLiquidityFormService = ({
   onTokensChange
 }: {
-  onTokensChange: (token1: Nullable<RawToken>, token2: Nullable<RawToken>) => void;
+  onTokensChange: (token1: Nullable<Token>, token2: Nullable<Token>) => void;
 }) => {
   const router = useRouter();
   const { data: tokens, loading } = useTokens();
@@ -42,14 +42,14 @@ export const useLiquidityFormService = ({
   const { tabId } = parseUrl(url);
 
   const [tab, setTab] = useState(getTabById(tabId as LiquidityTabs));
-  const [tokenA, setTokenA] = useState<Nullable<RawToken>>(null);
-  const [tokenB, setTokenB] = useState<Nullable<RawToken>>(null);
+  const [tokenA, setTokenA] = useState<Nullable<Token>>(null);
+  const [tokenB, setTokenB] = useState<Nullable<Token>>(null);
   const [tokenALoading, setTokenALoading] = useState(false);
   const [tokenBLoading, setTokenBLoading] = useState(false);
   const tokenADirtyRef = useRef(false);
   const tokenBDirtyRef = useRef(false);
 
-  const handleUpdateTitle = (token1: Nullable<RawToken>, token2: Nullable<RawToken>) => {
+  const handleUpdateTitle = (token1: Nullable<Token>, token2: Nullable<Token>) => {
     onTokensChange(token1, token2);
   };
 
@@ -90,7 +90,7 @@ export const useLiquidityFormService = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loading, url, tokens, searchCustomTokens]);
 
-  const changeRoute = async (tabId: LiquidityTabs, _tokenA: RawToken, _tokenB: RawToken) => {
+  const changeRoute = async (tabId: LiquidityTabs, _tokenA: Token, _tokenB: Token) => {
     const liqUrl = getLiquidityUrl(tabId || tab.id, _tokenA, _tokenB);
     await router.replace(liqUrl, undefined, { shallow: true, scroll: false });
   };
@@ -105,7 +105,7 @@ export const useLiquidityFormService = ({
     }
   };
 
-  const handleChangeTokenA = (token: RawToken) => {
+  const handleChangeTokenA = (token: Token) => {
     setTokenA(token);
     tokenADirtyRef.current = true;
     clearDex();
@@ -115,7 +115,7 @@ export const useLiquidityFormService = ({
       void (tab.id, token, tokenB);
     }
   };
-  const handleChangeTokenB = (token: RawToken) => {
+  const handleChangeTokenB = (token: Token) => {
     setTokenB(token);
     tokenBDirtyRef.current = true;
     clearDex();

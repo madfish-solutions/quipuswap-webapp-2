@@ -5,7 +5,7 @@ import cx from 'classnames';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { Nullable } from '@interfaces/types';
+import { Nullable } from '@utils/types';
 
 import s from './DashboardCard.module.sass';
 

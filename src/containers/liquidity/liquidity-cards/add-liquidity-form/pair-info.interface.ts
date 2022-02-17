@@ -1,11 +1,11 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable, RawToken } from '@interfaces/types';
+import { Nullable, Token } from '@utils/types';
 
 export interface PairInfo {
   id: Nullable<BigNumber>;
-  tokenA: RawToken;
-  tokenB: RawToken;
+  tokenA: Token;
+  tokenB: Token;
   totalSupply: BigNumber;
   tokenAPool: BigNumber;
   tokenBPool: BigNumber;

@@ -3,9 +3,9 @@ import { useCallback } from 'react';
 import { batchify, FoundDex, withdrawReward } from '@quipuswap/sdk';
 
 import { useToasts } from '@hooks/use-toasts';
-import { Nullable } from '@interfaces/types';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { Nullable } from '@utils/types';
 
 export const useClaimRewards = () => {
   const tezos = useTezos();

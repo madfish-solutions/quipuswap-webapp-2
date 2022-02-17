@@ -2,8 +2,8 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TEZOS_TOKEN } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { Nullable } from '@interfaces/types';
 import { fromDecimals } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 export interface VotingInfo {
   totalVotes: string;

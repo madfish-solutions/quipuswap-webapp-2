@@ -4,7 +4,6 @@ import BigNumber from 'bignumber.js';
 
 import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
-import { TokenId, DexPair } from '@interfaces/types';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
@@ -12,6 +11,7 @@ import {
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
 import { getTokenSlug } from '@utils/helpers';
+import { TokenId, DexPair } from '@utils/types';
 
 import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { isTokenToTezosDex } from './is-token-to-tezos-dex';
