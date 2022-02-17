@@ -7,6 +7,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Goblet } from '@components/svg/goblet';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { useAccountPkh } from '@utils/dapp';
 
 import styles from './pending-rewards.module.scss';
 
@@ -21,8 +22,9 @@ interface Props {
 }
 
 export const PendingRewards: FC<Props> = ({ amount, currency }) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
+  const accountPkh = useAccountPkh();
   const { t } = useTranslation(['stake']);
+  const { colorThemeMode } = useContext(ColorThemeContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -32,15 +34,21 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
 
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
-      <div>
-        <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
-        <StateCurrencyAmount
-          className={styles.amount}
-          amount={amount}
-          isLoading={loading}
-          currency={currency}
-          isLeftCurrency={currency === '$'}
-        />
+      <div className={styles.container}>
+        {accountPkh ? (
+          <>
+            <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
+            <StateCurrencyAmount
+              className={styles.amount}
+              amount={amount}
+              currency={currency}
+              isLeftCurrency={currency === '$'}
+              isLoading={loading}
+            />
+          </>
+        ) : (
+          <span className={styles.amount}>{t('stake|You might win a lot')}</span>
+        )}
       </div>
       <Goblet />
     </div>

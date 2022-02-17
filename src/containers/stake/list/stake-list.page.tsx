@@ -48,14 +48,16 @@ export const StakeList = () => {
 
   return (
     <div>
-      <StakingRewardsList
-        pendingRewardAmount={mockRewards.pendingRewardAmount}
-        pendingRewardCurrency={mockRewards.pendingRewardCurrency}
-        rewardItemTitle={mockRewards.rewardItemTitle}
-        rewardItemAmount={mockRewards.rewardItemAmount}
-        rewardItemCurrency={mockRewards.rewardItemCurrency}
-        onHarvestAll={noop}
-      />
+      <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton className={styles.mb48} />}>
+        <StakingRewardsList
+          pendingRewardAmount={mockRewards.pendingRewardAmount}
+          pendingRewardCurrency={mockRewards.pendingRewardCurrency}
+          rewardItemTitle={mockRewards.rewardItemTitle}
+          rewardItemAmount={mockRewards.rewardItemAmount}
+          rewardItemCurrency={mockRewards.rewardItemCurrency}
+          onHarvestAll={noop}
+        />
+      </StateWrapper>
 
       <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
         <Iterator

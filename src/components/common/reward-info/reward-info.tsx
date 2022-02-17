@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { Card } from '@components/ui/card';
 import { Button } from '@components/ui/elements/button';
 
+import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { PendingRewards } from '../pending-rewards';
 import styles from './reward-info.module.scss';
 
@@ -27,9 +28,11 @@ export const RewardInfo: FC<Props> = ({ amount, onButtonClick, currency, header,
         <PendingRewards amount={amount} currency={currency} />
         <div className={styles.userInfoContainer}>
           <div className={styles.childrenContainer}>{children}</div>
-          <Button className={styles.button} onClick={onButtonClick}>
-            {buttonText}
-          </Button>
+          <ConnectWalletOrDoSomething>
+            <Button className={styles.button} onClick={onButtonClick}>
+              {buttonText}
+            </Button>
+          </ConnectWalletOrDoSomething>
         </div>
       </div>
     </Card>
