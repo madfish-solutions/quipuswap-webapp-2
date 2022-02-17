@@ -6,7 +6,8 @@ import { Slider } from '@components/ui/slider';
 import { TopStats } from '@components/ui/top-stats';
 import { useStakingStore } from '@hooks/stores/use-staking-store';
 import { useToasts } from '@hooks/use-toasts';
-import { bigNumberToString } from '@utils/helpers';
+
+import styles from './list-stats.module.scss';
 
 export const ListStats: FC = observer(() => {
   const { showErrorToast } = useToasts();
@@ -28,29 +29,33 @@ export const ListStats: FC = observer(() => {
     }
   }, [showErrorToast, stakingStore.stats.error]);
 
-  const totalValueLocked = stakingStore.stats.data?.totalValueLocked
-    ? bigNumberToString(stakingStore.stats.data?.totalValueLocked)
-    : '?';
+  const amount = stakingStore.stats.data;
 
-  const totalDailyReward = stakingStore.stats.data?.totalDailyReward
-    ? bigNumberToString(stakingStore.stats.data?.totalDailyReward)
-    : '?';
-
-  const totalPendingReward = stakingStore.stats.data?.totalPendingReward
-    ? bigNumberToString(stakingStore.stats.data?.totalPendingReward)
-    : '?';
-
-  const totalClaimedReward = stakingStore.stats.data?.totalClaimedReward
-    ? bigNumberToString(stakingStore.stats.data?.totalClaimedReward)
-    : '?';
+  const stats = [
+    {
+      title: 'Total Value  Locked',
+      amount: amount?.totalValueLocked
+    },
+    {
+      title: 'Total Daily Reward',
+      amount: amount?.totalDailyReward
+    },
+    {
+      title: 'Total Pending Reward',
+      amount: amount?.totalPendingReward
+    },
+    {
+      title: 'Total Claimed Reward',
+      amount: amount?.totalClaimedReward
+    }
+  ];
 
   return (
-    <div style={{ marginBottom: 32 }}>
+    <div className={styles.listStats}>
       <Slider>
-        <TopStats title="Total Value  Locked" amount={totalValueLocked} />
-        <TopStats title="Total Daily Reward" amount={totalDailyReward} />
-        <TopStats title="Total Pending Reward" amount={totalPendingReward} />
-        <TopStats title="Total Claimed Reward" amount={totalClaimedReward} />
+        {stats.map(({ title, amount }) => (
+          <TopStats title={title} amount={amount} key={title} />
+        ))}
       </Slider>
     </div>
   );

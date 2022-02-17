@@ -1,8 +1,8 @@
 import { Nullable } from '@quipuswap/ui-kit';
 
-import { RawStakeStats, StakeStats } from '@api/staking';
 import { getStakesList } from '@api/staking/getStakesList';
 import { getStakesStats } from '@api/staking/getStakesStats';
+import { RawStakeStats, StakeStats } from '@interfaces/staking';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking';
 
 import { LoadingErrorData } from './LoadingErrorData';

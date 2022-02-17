@@ -1,1 +1,2 @@
-export * from '@interfaces/staking';
+export * from './getStakesList';
+export * from './getStakesStats';

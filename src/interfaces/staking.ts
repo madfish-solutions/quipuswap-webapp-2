@@ -37,7 +37,7 @@ export interface RawStakeItem {
   depositTokenUrl: string;
 }
 
-export interface StakeItem {
+interface AbstractStakeItem {
   id: string;
   tokenA: Token;
   tokenB: Undefined<Token>;
@@ -51,3 +51,17 @@ export interface StakeItem {
   stakeUrl: string;
   depositTokenUrl: string;
 }
+
+interface NoUserStakeItem extends AbstractStakeItem {
+  myBalance: null;
+  depositBalance: null;
+  earnBalance: null;
+}
+
+interface UserStakeItem extends AbstractStakeItem {
+  myBalance: BigNumber;
+  depositBalance: BigNumber;
+  earnBalance: BigNumber;
+}
+
+export type StakeItem = NoUserStakeItem | UserStakeItem;
