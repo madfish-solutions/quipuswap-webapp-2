@@ -40,7 +40,7 @@ export interface RawStakeItem {
 export interface StakeItem {
   id: string;
   tokenA: Token;
-  tokenB: Nullable<Token>;
+  tokenB: Undefined<Token>;
   stakeStatus: StakeStatus;
   rewardToken: Token;
   tvl: BigNumber;

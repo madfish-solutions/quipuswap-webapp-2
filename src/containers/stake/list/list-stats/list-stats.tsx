@@ -6,7 +6,7 @@ import { Slider } from '@components/ui/slider';
 import { TopStats } from '@components/ui/top-stats';
 import { useStakingStore } from '@hooks/stores/use-staking-store';
 import { useToasts } from '@hooks/use-toasts';
-import { bigNumberToString } from '@utils/helpers/big-number-to-string';
+import { bigNumberToString } from '@utils/helpers';
 
 export const ListStats: FC = observer(() => {
   const { showErrorToast } = useToasts();

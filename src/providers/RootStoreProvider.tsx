@@ -1,6 +1,8 @@
-import React, { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
 
 import { enableStaticRendering } from 'mobx-react-lite';
+
+import { Undefined } from '@utils/types';
 
 import { RootStore } from '../stores/RootStore';
 
@@ -8,7 +10,7 @@ enableStaticRendering(typeof window === 'undefined');
 
 let store: RootStore;
 
-const StoreContext = createContext<RootStore | undefined>(undefined);
+const StoreContext = createContext<Undefined<RootStore>>(undefined);
 StoreContext.displayName = 'RootStoreContext';
 
 export const useRootStore = () => {

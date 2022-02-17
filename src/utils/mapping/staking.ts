@@ -11,7 +11,7 @@ const mapToken = (raw: Token): Token => ({
 const mapStakeItem = (raw: RawStakeItem): StakeItem => ({
   ...raw,
   tokenA: mapToken(raw.tokenA),
-  tokenB: raw.tokenB ? mapToken(raw.tokenB) : null,
+  tokenB: raw.tokenB ? mapToken(raw.tokenB) : undefined,
   rewardToken: mapToken(raw.rewardToken),
   tvl: new BigNumber(raw.tvl),
   apr: raw.apr ? new BigNumber(raw.apr) : null,

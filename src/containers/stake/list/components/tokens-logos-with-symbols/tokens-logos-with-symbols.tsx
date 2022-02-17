@@ -5,13 +5,13 @@ import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
 import { getTokensPairName, getTokenSymbol, isExist, isNull } from '@utils/helpers';
-import { Optional, Token } from '@utils/types';
+import { Token } from '@utils/types';
 
 import styles from './tokens-logos-with-symbols.module.scss';
 
 interface PropsAbstraction {
   tokenA: Token;
-  tokenB: Optional<Token>;
+  tokenB?: Token;
   className?: string;
   imageClassName?: string;
   loading?: boolean;

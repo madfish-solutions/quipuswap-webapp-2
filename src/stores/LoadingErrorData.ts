@@ -25,15 +25,16 @@ export class LoadingErrorData<RawData, Data> {
   }
 
   async load() {
-    this.isLoading = true;
     try {
+      this.isLoading = true;
       this.rawData = await this.getDate();
       this.data = this.mapping(this.rawData);
       this.error = null;
     } catch (error) {
       this.error = error as Error;
       this.data = this.defaultData;
+    } finally {
+      this.isLoading = false;
     }
-    this.isLoading = false;
   }
 }

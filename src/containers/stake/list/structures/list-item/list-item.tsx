@@ -6,8 +6,7 @@ import { StakeItem } from '@api/staking';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
-import { bigNumberToString } from '@utils/helpers/big-number-to-string';
+import { getTokensPairName, getTokenSymbol, isExist, bigNumberToString } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import { StakeStatusBox } from '../../components/stake-status-box';
