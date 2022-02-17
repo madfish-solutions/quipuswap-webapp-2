@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import styles from './bage.module.sass';
+import styles from './bage.module.scss';
 
 interface Props {
   className?: string;
