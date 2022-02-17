@@ -1,25 +1,24 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
+import { noop } from 'rxjs';
 
 import { RewardInfo } from '../reward-info';
 
-interface Props {
-  pendingRewardAmount: BigNumber;
-  pendingRewardCurrency: string;
-  rewardItemTitle: string;
-  rewardItemAmount: BigNumber;
-  rewardItemCurrency: string;
-  onHarvestAll: () => void;
-}
+const mock = {
+  pendingRewardAmount: new BigNumber('100.123'),
+  pendingRewardCurrency: '$'
+};
 
-export const StakingRewardsList: FC<Props> = ({ pendingRewardAmount, pendingRewardCurrency, onHarvestAll }) => {
+export const StakingRewardsList: FC = () => {
+  const onHarvestAll = noop;
+
   return (
     <RewardInfo
-      amount={pendingRewardAmount}
+      amount={mock.pendingRewardAmount}
       onButtonClick={onHarvestAll}
       buttonText="Harvest All"
-      currency={pendingRewardCurrency}
+      currency={mock.pendingRewardCurrency}
     />
   );
 };

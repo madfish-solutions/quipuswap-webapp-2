@@ -24,15 +24,21 @@
 .userInfoContainer {
   display: flex;
   justify-content: space-between;
-  align-self: stretch;
+  align-self: flex-end;
   flex-direction: column;
   row-gap: 40px;
 }
 
 .button {
-  align-self: start;
-  max-width: 280px;
+  width: 160px;
 }
+
+@include media(">phone") {
+  .button {
+    width: 160px;
+  }
+}
+
 
 @include media(">SDesktop") {
   .userRewards {
