@@ -396,6 +396,54 @@
     "contractAddress": "KT1KRvNVubq64ttPbQarxec5XdS6ZQU4DVD2"
   },
   {
+    "network": "NetXdQprcVkpaWU",
+    "type": "fa2",
+    "fa2TokenId": 0,
+    "contractAddress": "KT1AM3PV1cwmGRw28DVTgsjjsjHvmL6z4rGh",
+    "metadata": {
+      "name": "akaSwap DAO",
+      "symbol": "akaDAO",
+      "decimals": 6,
+      "thumbnailUri": "ipfs://QmSpZ1rPgHMPpxUsBCFUM7oERHmDVXUz219no27jWqceH6"
+    }
+  },
+  {
+    "network": "NetXdQprcVkpaWU",
+    "type": "fa2",
+    "fa2TokenId": 1,
+    "contractAddress": "KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF",
+    "metadata": {
+      "name": "Minerals",
+      "symbol": "MIN",
+      "decimals": 9,
+      "thumbnailUri": "ipfs://QmXJdLDEec56EfJVtWW2XRcYBfkmWVHbCRBDAi7YTigisB"
+    }
+  },
+  {
+    "network": "NetXdQprcVkpaWU",
+    "type": "fa2",
+    "fa2TokenId": 2,
+    "contractAddress": "KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF",
+    "metadata": {
+      "name": "Energy",
+      "symbol": "ENR",
+      "decimals": 9,
+      "thumbnailUri": "ipfs://QmVjjDCrjBkETrWgXeL8NDg4DG2Qbi2hdQRpnWiCdS4qwg"
+    }
+  },
+  {
+    "network": "NetXdQprcVkpaWU",
+    "type": "fa2",
+    "fa2TokenId": 3,
+    "contractAddress": "KT1ErKVqEhG9jxXgUG2KGLW3bNM7zXHX8SDF",
+    "metadata": {
+      "name": "Machinery",
+      "symbol": "MCH",
+      "decimals": 9,
+      "thumbnailUri": "ipfs://QmUYksqRFqUA5LUfxFs1oWLmP8Ti2SdyPAq5u72aAQLN7D"
+    }
+  },
+  {
     "network": "NetXxkAx4woPLyu",
     "type": "fa2",
     "contractAddress": "KT1DaKxkR1LdnXW1tr7yozdwEAiSQDpCLUBj",
