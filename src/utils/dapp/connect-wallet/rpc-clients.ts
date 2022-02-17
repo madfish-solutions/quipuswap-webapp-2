@@ -1,5 +1,5 @@
 import { HANGZHOUNET_RPC_URL, MAINNET_RPC_URL } from '@app.config';
-import { QSNets } from '@utils/types';
+import { QSNets } from '@interfaces/types';
 
 import { FastRpcClient } from '../taquito-fast-rpc';
 

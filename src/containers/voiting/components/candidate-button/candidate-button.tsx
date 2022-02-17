@@ -3,8 +3,8 @@ import React from 'react';
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { DashPlug } from '@components/ui/dash-plug';
 import { Button } from '@components/ui/elements/button';
+import { Nullable, WhitelistedBaker } from '@interfaces/types';
 import { getWhitelistedBakerName, isExist } from '@utils/helpers';
-import { Nullable, WhitelistedBaker } from '@utils/types';
 
 interface CandidateButtonProps {
   candidate: Nullable<WhitelistedBaker>;

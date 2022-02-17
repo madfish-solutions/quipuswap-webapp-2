@@ -1,4 +1,4 @@
-import { TokenDataType } from '@utils/types';
+import { TokenDataType } from '@interfaces/types';
 
 import { isTokenDataAddressTez } from './isTokenDataAddressTez';
 

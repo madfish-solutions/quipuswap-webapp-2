@@ -9,9 +9,9 @@ import { noop } from 'rxjs';
 
 import { LoadingBakerCell, Modal } from '@components/modals/Modal';
 import { BakerCell } from '@components/ui/components';
+import { WhitelistedBaker } from '@interfaces/types';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
 import { isEmptyArray, localSearchBaker, isBackerNotEmpty, formatBalance } from '@utils/helpers';
-import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
 import s from './bakers-modal.module.scss';

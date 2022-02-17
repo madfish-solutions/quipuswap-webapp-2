@@ -5,9 +5,9 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { Nullable } from '@interfaces/types';
 import { FormatNumber } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
-import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
 import s from './state-dollar-equivalent.module.sass';

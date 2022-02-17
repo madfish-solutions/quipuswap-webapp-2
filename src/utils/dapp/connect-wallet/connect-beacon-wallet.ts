@@ -12,8 +12,8 @@ import {
   NETWORK_ID
 } from '@app.config';
 import { NoBeaconWallet, WalletNotConected } from '@errors';
+import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@interfaces/types';
 import { isDefaultConnectType } from '@utils/helpers';
-import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
 import { toBeaconNetworkType } from '../network';
 import { ReadOnlySigner } from '../ReadOnlySigner';

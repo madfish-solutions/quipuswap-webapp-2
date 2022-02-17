@@ -1,4 +1,4 @@
-import { isFullBaker, WhitelistedBaker, WhitelistedBakerFull } from '@utils/types';
+import { isFullBaker, WhitelistedBaker, WhitelistedBakerFull } from '@interfaces/types';
 
 import { isExist } from './type-checks';
 

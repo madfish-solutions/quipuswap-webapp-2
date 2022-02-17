@@ -1,7 +1,7 @@
 import { useToasts } from '@hooks/use-toasts';
+import { VoteFormValues } from '@interfaces/types';
 import { useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { VoteFormValues } from '@utils/types';
 
 import { submitForm } from '../../helpers';
 import { useVotingDex, useVotingRouting } from '../../helpers/voting.provider';

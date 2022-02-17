@@ -3,8 +3,8 @@ import { FC } from 'react';
 import { FormApi, Mutator } from 'final-form';
 import { withTypes } from 'react-final-form';
 
+import { VoteFormValues, Nullable } from '@interfaces/types';
 import { isNull } from '@utils/helpers';
-import { VoteFormValues, Nullable } from '@utils/types';
 
 import { bakerCleaner } from '../../helpers';
 import { useVotingHandlers, useVotingRouting } from '../../helpers/voting.provider';

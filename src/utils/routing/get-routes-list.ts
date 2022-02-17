@@ -1,5 +1,5 @@
+import { DexPair } from '@interfaces/types';
 import { getTokenSlug } from '@utils/helpers';
-import { DexPair } from '@utils/types';
 
 import { DexGraph } from './types';
 

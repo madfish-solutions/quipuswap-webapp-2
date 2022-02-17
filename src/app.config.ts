@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, RawToken } from '@interfaces/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -72,7 +72,7 @@ export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
-export const TEZOS_TOKEN: Token = {
+export const TEZOS_TOKEN: RawToken = {
   type: Standard.Fa12,
   contractAddress: 'tez',
   isWhitelisted: true,
@@ -84,7 +84,7 @@ export const TEZOS_TOKEN: Token = {
   }
 };
 
-export const MAINNET_DEFAULT_TOKEN: Token = {
+export const MAINNET_DEFAULT_TOKEN: RawToken = {
   type: Standard.Fa2,
   contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
   fa2TokenId: 0,
@@ -97,7 +97,7 @@ export const MAINNET_DEFAULT_TOKEN: Token = {
   }
 };
 
-export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
+export const HANGZHOUNET_DEFAULT_TOKEN: RawToken = {
   type: Standard.Fa2,
   contractAddress: 'KT1VowcKqZFGhdcDZA3UN1vrjBLmxV5bxgfJ',
   fa2TokenId: 0,
@@ -110,7 +110,7 @@ export const HANGZHOUNET_DEFAULT_TOKEN: Token = {
   }
 };
 
-export const networksDefaultTokens: Record<QSNets, Token> = {
+export const networksDefaultTokens: Record<QSNets, RawToken> = {
   mainnet: MAINNET_DEFAULT_TOKEN,
   hangzhounet: HANGZHOUNET_DEFAULT_TOKEN
 };

@@ -3,8 +3,8 @@ import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useRouterPair } from '@hooks/useRouterPair';
+import { RawToken } from '@interfaces/types';
 import { getTokenPairSlug } from '@utils/helpers';
-import { Token } from '@utils/types';
 
 import { VotingTabs } from '../tabs.enum';
 
@@ -26,7 +26,7 @@ export const TabsContent = [
   }
 ];
 
-export const useVotingRouter = (token1: Token, token2: Token) => {
+export const useVotingRouter = (token1: RawToken, token2: RawToken) => {
   const router = useRouter();
   const [urlLoaded, setUrlLoaded] = useState(true);
   const [initialLoad, setInitialLoad] = useState(false);

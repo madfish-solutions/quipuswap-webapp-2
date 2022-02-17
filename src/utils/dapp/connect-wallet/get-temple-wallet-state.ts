@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 
-import { QSNets } from '@utils/types';
+import { QSNets } from '@interfaces/types';
 
 import { ReadOnlySigner } from '../ReadOnlySigner';
 import { michelEncoder } from './michel-encoder';

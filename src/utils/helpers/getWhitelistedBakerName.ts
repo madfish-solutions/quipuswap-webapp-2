@@ -1,4 +1,4 @@
-import { Nullable, WhitelistedBaker } from '@utils/types';
+import { Nullable, WhitelistedBaker } from '@interfaces/types';
 
 import { isBackerNotEmpty } from './is-backer-not-empty';
 import { shortize } from './shortize';

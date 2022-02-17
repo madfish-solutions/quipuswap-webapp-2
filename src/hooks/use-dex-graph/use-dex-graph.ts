@@ -5,8 +5,8 @@ import constate from 'constate';
 import { DEX_POOLS_URLS, NETWORK_ID } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
 import { useWebSocket } from '@hooks/use-web-socket';
+import { Nullable } from '@interfaces/types';
 import { useTokens } from '@utils/dapp';
-import { Nullable } from '@utils/types';
 
 import { dexPairsToSwapGraph, rawDexToDexPair } from './helpers';
 import { RawDexPool, RawDexPoolsResponse, RawDexType } from './use-dex-graph.types';

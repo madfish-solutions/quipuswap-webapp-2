@@ -2,8 +2,8 @@ import { TempleWallet } from '@temple-wallet/dapp';
 
 import { APP_NAME, LAST_USED_CONNECTION_KEY } from '@app.config';
 import { NoTempleWallet } from '@errors';
+import { LastUsedConnectionKey, QSNetwork } from '@interfaces/types';
 import { isDefaultConnectType } from '@utils/helpers';
-import { LastUsedConnectionKey, QSNetwork } from '@utils/types';
 
 import { getTempleWalletState } from './get-temple-wallet-state';
 

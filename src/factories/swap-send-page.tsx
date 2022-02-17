@@ -5,9 +5,9 @@ import { useTranslation } from 'next-i18next';
 import { BaseLayout } from '@components/common/BaseLayout';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { SwapSend } from '@containers/swap-send';
+import { SwapTabAction } from '@interfaces/types';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/SwapLiquidity.module.sass';
-import { SwapTabAction } from '@utils/types';
 
 export const makeSwapSendPage = (action: SwapTabAction) => {
   return () => {

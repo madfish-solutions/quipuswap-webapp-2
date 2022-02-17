@@ -3,15 +3,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useDexGraph } from '@hooks/use-dex-graph';
+import { DexPair, Undefined, RawToken } from '@interfaces/types';
 import { amountsAreEqual, fromDecimals, getTokenInput, getTokenOutput, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexGraph, getRouteWithInput, getRouteWithOutput } from '@utils/routing';
-import { DexPair, Undefined, Token } from '@utils/types';
 
 import { SwapAmountFieldName, SwapField } from '../utils/types';
 
 interface SwapPair {
-  inputToken?: Token;
-  outputToken?: Token;
+  inputToken?: RawToken;
+  outputToken?: RawToken;
 }
 
 export const useSwapCalculations = () => {

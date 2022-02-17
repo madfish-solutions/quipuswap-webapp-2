@@ -4,12 +4,12 @@ import { useFormik } from 'formik';
 import { DEFAULT_DEADLINE_MINS, DEFAULT_SLIPPAGE_PERCENTAGE, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
 import { useToasts } from '@hooks/use-toasts';
+import { SwapTabAction } from '@interfaces/types';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { getTokenSymbol, getTokenSlug, swap, toDecimals } from '@utils/helpers';
 import { getSwapMessage } from '@utils/helpers/get-success-messages';
 import { getRouteWithInput } from '@utils/routing';
-import { SwapTabAction } from '@utils/types';
 
 import { SwapField, SwapFormValues } from '../utils/types';
 import { useValidationSchema } from './use-validation-schema';

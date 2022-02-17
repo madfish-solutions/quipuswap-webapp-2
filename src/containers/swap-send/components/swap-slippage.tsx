@@ -7,15 +7,15 @@ import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { Slippage } from '@components/common/Slippage';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { Nullable, RawToken } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
 import { getMinimalOutput, getTokenSymbol } from '@utils/helpers';
-import { Nullable, Token } from '@utils/types';
 
 interface Props {
   error?: string;
   loading: boolean;
   outputAmount?: BigNumber;
-  outputToken?: Token;
+  outputToken?: RawToken;
   slippage?: BigNumber;
   onChange: (newValue: BigNumber) => void;
 }

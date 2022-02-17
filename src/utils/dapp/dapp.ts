@@ -14,8 +14,8 @@ import {
   networksBaseUrls,
   NETWORK_ID
 } from '@app.config';
+import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@interfaces/types';
 import { isNull } from '@utils/helpers';
-import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@utils/types';
 
 import { beaconWallet, connectWalletBeacon } from './connect-wallet/connect-beacon-wallet';
 import { connectWalletTemple } from './connect-wallet/connect-temple-wallet';
@@ -259,7 +259,10 @@ function useDApp() {
 
   const estimationToolkit = useMemo(() => {
     if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
-      const cloneTezosToolkit = new TezosToolkit(tezos!.rpc);
+      if (!tezos?.rpc) {
+        throw new Error('Tezos RPC in undefined');
+      }
+      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
       cloneTezosToolkit.setPackerProvider(michelEncoder);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 

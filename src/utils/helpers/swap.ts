@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { DEFAULT_DEADLINE_MINS, TEZOS_TOKEN } from '@app.config';
 import { Standard } from '@graphql';
+import { TokenId, DexPair } from '@interfaces/types';
 import {
   getWalletContract,
   makeAddOperatorsTransferMethod,
@@ -11,7 +12,6 @@ import {
   makeRemoveOperatorsTransferMethod
 } from '@utils/dapp';
 import { getTokenSlug } from '@utils/helpers';
-import { TokenId, DexPair } from '@utils/types';
 
 import { getBlockchainTimestamp } from './get-blockchain-timestamp';
 import { isTokenToTezosDex } from './is-token-to-tezos-dex';
@@ -94,10 +94,12 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
     if (!fa2Operators[tokenAddress]) {
       fa2Operators[tokenAddress] = {};
     }
-    if (!fa2Operators[tokenAddress][tokenId!]) {
-      fa2Operators[tokenAddress][tokenId!] = [];
+    if (tokenId !== undefined) {
+      if (!fa2Operators[tokenAddress][tokenId]) {
+        fa2Operators[tokenAddress][tokenId] = [];
+      }
+      fa2Operators[tokenAddress][tokenId].push(operator);
     }
-    fa2Operators[tokenAddress][tokenId!].push(operator);
   };
   const deadline = await getBlockchainTimestamp(tezos, deadlineTimespan);
 

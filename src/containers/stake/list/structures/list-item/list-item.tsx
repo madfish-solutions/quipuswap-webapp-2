@@ -7,9 +7,10 @@ import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
+import { bigNumberToString } from '@utils/helpers/big-number-to-string';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
-import { StakeStatus } from '../../components/stake-status';
+import { StakeStatusBox } from '../../components/stake-status-box';
 import { getDollarEquivalent } from '../../helpers';
 import styles from './list-item.module.scss';
 
@@ -41,17 +42,13 @@ export const StakeListItem: FC<StakeItem> = ({
   tvl,
   apr,
   apy,
-  depositExhangeRate
+  depositExchangeRate
 }) => {
   const isPairFull = isExist(tokenB);
-
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
-
-  const tvlDollarEquivalent = getDollarEquivalent(tvl, depositExhangeRate);
-
-  const aprAmount = `${apr}%`;
-  const apyAmount = `${apy}%`;
-
+  const tvlDollarEquivalent = getDollarEquivalent(bigNumberToString(tvl), bigNumberToString(depositExchangeRate));
+  const aprAmount = apr ? `${bigNumberToString(apr)}%` : '?';
+  const apyAmount = apy ? `${bigNumberToString(apy)}%` : '?';
   const selectLink = `stake/${id}`;
 
   return (
@@ -60,7 +57,7 @@ export const StakeListItem: FC<StakeItem> = ({
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StakeStatus status={stakeStatus} />
+            <StakeStatusBox status={stakeStatus} />
             <Tooltip className={styles.tooltip} content={FULL_CARD_TOOLTIP_TEXT} />
           </div>
 

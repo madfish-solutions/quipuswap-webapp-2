@@ -1,5 +1,5 @@
 import { BAKERS_API, TZKT_API_DELEGATE_URL } from '@app.config';
-import { Nullable } from '@utils/types';
+import { Nullable } from '@interfaces/types';
 
 interface BakerMetadataResponse {
   name: string;

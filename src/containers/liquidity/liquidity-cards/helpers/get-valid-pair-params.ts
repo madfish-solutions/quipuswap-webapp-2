@@ -2,12 +2,12 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
 export const getValidPairParams = (
   dex: FoundDex,
-  tokenA: Token,
-  tokenB: Token,
+  tokenA: RawToken,
+  tokenB: RawToken,
   tokenAInput: BigNumber,
   tokenBInput: BigNumber
 ) => {

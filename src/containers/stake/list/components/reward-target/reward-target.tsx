@@ -5,13 +5,13 @@ import cx from 'classnames';
 
 import { TokenLogo } from '@components/common/TokenLogo';
 import { ArrowDown } from '@components/svg/ArrowDown';
+import { RawToken } from '@interfaces/types';
 import { getTokenSymbol } from '@utils/helpers';
-import { Token } from '@utils/types';
 
 import styles from './reward-target.module.scss';
 
 interface Props {
-  token: Token;
+  token: RawToken;
 }
 
 const themeClass = {

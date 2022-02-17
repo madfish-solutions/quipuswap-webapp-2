@@ -2,8 +2,8 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { Nullable } from '@interfaces/types';
 import { isNull } from '@utils/helpers';
-import { Nullable } from '@utils/types';
 
 import { StateCurrencyAmount } from '../state-currency-amount';
 

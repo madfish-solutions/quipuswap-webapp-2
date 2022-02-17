@@ -7,8 +7,8 @@ import s from '@components/tables/PoolTable/PoolTable.module.sass';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { PoolTableType } from '@interfaces/types';
 import { calculateRateAmount, getTokensPairName, getTokenSymbol, prepareTokenLogo } from '@utils/helpers';
-import { PoolTableType } from '@utils/types';
 
 import { getHref } from './get-swap-href.helper';
 

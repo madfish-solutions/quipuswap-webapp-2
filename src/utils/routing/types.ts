@@ -1,4 +1,4 @@
-import { DexPair } from '@utils/types';
+import { DexPair } from '@interfaces/types';
 
 export interface Vertex {
   edges: Record<string, DexPair>;

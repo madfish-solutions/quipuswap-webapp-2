@@ -9,10 +9,10 @@ import { TokensModal } from '@components/modals/TokensModal';
 import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
+import { Nullable, RawToken } from '@interfaces/types';
 import { useAccountPkh } from '@utils/dapp';
 import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
 import { getMessageNotWhitelistedToken } from '@utils/helpers/is-whitelisted-token';
-import { Nullable, Token } from '@utils/types';
 
 import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
@@ -30,12 +30,12 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   label: string;
   error?: string;
   notSelectable?: boolean;
-  handleChange?: (token: Token) => void;
+  handleChange?: (token: RawToken) => void;
   handleBalance: (value: string) => void;
-  token: Nullable<Token>;
+  token: Nullable<RawToken>;
   tokensLoading?: boolean;
-  blackListedTokens: Token[];
-  setToken?: (token: Token) => void;
+  blackListedTokens: RawToken[];
+  setToken?: (token: RawToken) => void;
 }
 
 const themeClass = {

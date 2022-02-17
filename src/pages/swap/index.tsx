@@ -2,8 +2,8 @@ import { NextPageContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { makeRedirectSwapSendPage } from '@factories/redirect-swap-send-page';
+import { SwapTabAction } from '@interfaces/types';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
-import { SwapTabAction } from '@utils/types';
 
 const RedirectSwapPage = makeRedirectSwapSendPage(SwapTabAction.SWAP);
 

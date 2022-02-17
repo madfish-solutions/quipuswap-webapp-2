@@ -1,8 +1,8 @@
 import { TEZOS_TOKEN } from '@app.config';
 import { Standard, Token as GraphQLToken } from '@graphql';
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
-export const transformNodeToToken = (token?: GraphQLToken): Token => {
+export const transformNodeToToken = (token?: GraphQLToken): RawToken => {
   if (!token) {
     return TEZOS_TOKEN;
   }

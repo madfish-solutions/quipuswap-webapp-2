@@ -2,7 +2,7 @@ import { NextPageContext } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { makeSwapSendPage } from '@factories/swap-send-page';
-import { SwapTabAction } from '@utils/types';
+import { SwapTabAction } from '@interfaces/types';
 
 const SwapPage = makeSwapSendPage(SwapTabAction.SWAP);
 

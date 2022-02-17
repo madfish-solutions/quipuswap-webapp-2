@@ -6,8 +6,8 @@ import { useTranslation } from 'next-i18next';
 import { DEFAULT_DEADLINE_MINS } from '@app.config';
 import { TransactionDeadline } from '@components/common/TransactionDeadline';
 import { Tooltip } from '@components/ui/components/tooltip';
+import { Nullable } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
-import { Nullable } from '@utils/types';
 
 interface Props {
   error?: string;

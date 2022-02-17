@@ -3,8 +3,8 @@ import React, { useCallback, useMemo } from 'react';
 import { Props as SelectProps } from 'react-select';
 
 import { ALL_NETWORKS, NETWORK } from '@app.config';
+import { Nullable } from '@interfaces/types';
 import { useChangeNetwork } from '@utils/dapp';
-import { Nullable } from '@utils/types';
 
 import { SelectUI } from '../../elements';
 

@@ -5,9 +5,9 @@ import BigNumber from 'bignumber.js';
 import { TEZOS_TOKEN } from '@app.config';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { UseToasts } from '@hooks/use-toasts';
+import { VoteFormValues } from '@interfaces/types';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { toDecimals } from '@utils/helpers';
-import { VoteFormValues } from '@utils/types';
 
 interface SubmitProps {
   tezos: TezosToolkit;

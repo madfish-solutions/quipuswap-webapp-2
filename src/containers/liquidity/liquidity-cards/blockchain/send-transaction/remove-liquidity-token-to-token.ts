@@ -3,8 +3,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { LP_TOKEN_DECIMALS, SECONDS_IN_MINUTE } from '@app.config';
+import { RawToken } from '@interfaces/types';
 import { getBlockchainTimestamp, toDecimals } from '@utils/helpers';
-import { Token } from '@utils/types';
 
 import { decreaseBySlippage, getOrderedTokensAmounts } from '../../helpers';
 
@@ -15,8 +15,8 @@ export const removeLiquidityTokenToToken = async (
   lpTokenInput: string,
   tokenAOutput: string,
   tokenBOutput: string,
-  tokenA: Token,
-  tokenB: Token,
+  tokenA: RawToken,
+  tokenB: RawToken,
   transactionDuration: BigNumber,
   slippagePercentage: BigNumber
 ) => {

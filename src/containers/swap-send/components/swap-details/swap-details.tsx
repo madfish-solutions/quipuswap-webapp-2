@@ -12,8 +12,8 @@ import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StatePriceImpact } from '@components/ui/state-components/price-impact';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
+import { DexPair, Nullable, Undefined, RawToken } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
-import { DexPair, Nullable, Undefined, Token } from '@utils/types';
 
 import { Route } from '../route';
 import { dexRouteToQuipuUiKitRoute } from './swap-details.helpers';
@@ -22,8 +22,8 @@ interface SwapDetailsProps {
   fee: Nullable<BigNumber>;
   feeError: Undefined<Error>;
   priceImpact: Nullable<BigNumber>;
-  inputToken?: Token;
-  outputToken?: Token;
+  inputToken?: RawToken;
+  outputToken?: RawToken;
   route?: DexPair[];
   buyRate: Nullable<BigNumber>;
   sellRate: Nullable<BigNumber>;

@@ -2,9 +2,9 @@ import { FoundDex } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { RawToken } from '@interfaces/types';
 import { batchOperations } from '@utils/dapp/batch-operations';
 import { toDecimals } from '@utils/helpers';
-import { Token } from '@utils/types';
 
 import { getTokensResetAndUpdateOperators } from '../../helpers/get-tokens-reset-and-update-operators';
 import { getValidPairParams } from '../../helpers/get-valid-pair-params';
@@ -13,8 +13,8 @@ export const addPairTokenToToken = async (
   tezos: TezosToolkit,
   dex: FoundDex,
   accountPkh: string,
-  tokenA: Token,
-  tokenB: Token,
+  tokenA: RawToken,
+  tokenB: RawToken,
   tokenAInput: string,
   tokenBInput: string
 ) => {

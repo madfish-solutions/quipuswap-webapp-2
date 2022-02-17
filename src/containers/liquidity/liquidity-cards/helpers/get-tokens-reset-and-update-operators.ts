@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
 import { allowContractSpendYourTokens } from '../blockchain';
 
@@ -10,8 +10,8 @@ const RESET_AMOUNT_BN = new BigNumber(RESET_AMOUNT);
 
 export const getTokensResetAndUpdateOperators = async (
   tezos: TezosToolkit,
-  tokenA: Token,
-  tokenB: Token,
+  tokenA: RawToken,
+  tokenB: RawToken,
   dexAddress: string,
   accountPkh: string,
   tokenAAmount: BigNumber,

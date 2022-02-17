@@ -1,4 +1,4 @@
-import { TokenDataType } from '@utils/types';
+import { TokenDataType } from '@interfaces/types';
 
 export const transformTokenDataToAnalyticsLink = (token: TokenDataType) => {
   const id = token.token.id !== undefined ? `_${token.token.id}` : '';

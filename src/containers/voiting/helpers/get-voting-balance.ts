@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
+import { Nullable, VoterType, TokenPair } from '@interfaces/types';
 import { isExist, isNull } from '@utils/helpers';
-import { Nullable, VoterType, TokenPair } from '@utils/types';
 
 export interface VoteVetoBalances {
   availableVoteBalance: Nullable<string>;

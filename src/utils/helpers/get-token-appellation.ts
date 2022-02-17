@@ -1,5 +1,5 @@
 import { TEZOS_TOKEN } from '@app.config';
-import { Nullable, Optional, Token, TokenMetadata } from '@utils/types';
+import { Nullable, Optional, RawToken, TokenMetadata } from '@interfaces/types';
 import { isValidTokenSlug } from '@utils/validators';
 
 import { shortize } from './shortize';
@@ -51,12 +51,12 @@ const parseAndShortize = (
   return null;
 };
 
-export const isTezosToken = (token: Token) =>
+export const isTezosToken = (token: RawToken) =>
   token.contractAddress.toLocaleLowerCase() === TEZOS_TOKEN.contractAddress.toLocaleLowerCase();
 
 const TOKEN_LENGTH = 10;
 
-export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenSymbol = (token: RawToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.symbol;
   }
@@ -76,7 +76,7 @@ export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   return shortize(token.contractAddress);
 };
 
-export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+export const getTokenName = (token: RawToken, sliceAmount = TOKEN_LENGTH) => {
   if (isTezosToken(token)) {
     return TEZOS_TOKEN.metadata.name;
   }
@@ -94,10 +94,10 @@ export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   return shortize(token.contractAddress);
 };
 
-export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
+export const getTokensPairName = (tokenX: RawToken, tokenY: RawToken) => {
   return `${getTokenSymbol(tokenX)} / ${getTokenSymbol(tokenY)}`;
 };
 
-export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
+export const getTokensOptionalPairName = (inputToken: Optional<RawToken>, outputToken: Optional<RawToken>) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };

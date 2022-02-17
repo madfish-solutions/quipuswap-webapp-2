@@ -1,10 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
 export const localSearchSortSymbol = (
-  { metadata: metadataA, fa2TokenId: fa2TokenIdA }: Token,
-  { metadata: metadataB, fa2TokenId: fa2TokenIdB }: Token,
+  { metadata: metadataA, fa2TokenId: fa2TokenIdA }: RawToken,
+  { metadata: metadataB, fa2TokenId: fa2TokenIdB }: RawToken,
   input: string,
   inputToken: string
 ) => {

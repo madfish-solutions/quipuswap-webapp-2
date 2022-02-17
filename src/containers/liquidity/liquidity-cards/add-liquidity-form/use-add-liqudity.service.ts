@@ -4,10 +4,12 @@ import { FoundDex, Token as QuipuswapSdkToken } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, NETWORK_ID, TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
+import { Nullable, Optional, Undefined, RawToken } from '@interfaces/types';
 import { useAccountPkh, useTezos, useEstimationToolkit } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import {
+  defined,
   getAddLiquidityMessage,
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
@@ -15,7 +17,6 @@ import {
   isUndefined,
   toDecimals
 } from '@utils/helpers';
-import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
@@ -28,10 +29,10 @@ const EMPTY_BALANCE_AMOUNT = 0;
 
 export const useAddLiquidityService = (
   dex: Optional<FoundDex>,
-  tokenA: Nullable<Token>,
-  tokenB: Nullable<Token>,
-  onTokenAChange: (token: Token) => void,
-  onTokenBChange: (token: Token) => void
+  tokenA: Nullable<RawToken>,
+  tokenB: Nullable<RawToken>,
+  onTokenAChange: (token: RawToken) => void,
+  onTokenBChange: (token: RawToken) => void
 ) => {
   const tezos = useTezos();
   const estimatedTezos = useEstimationToolkit();
@@ -62,8 +63,8 @@ export const useAddLiquidityService = (
   const tokensCalculations = (
     tokenAInput: string,
     tokenBInput: string,
-    tokenA: Token,
-    tokenB: Token,
+    tokenA: RawToken,
+    tokenB: RawToken,
     pairInfo: Optional<PairInfo>,
     tokenABalance: Nullable<BigNumber>,
     tokenBBalance: Nullable<BigNumber>,
@@ -151,7 +152,7 @@ export const useAddLiquidityService = (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairInfo, tokenABalance, tokenBBalance]);
 
-  const handleSetTokenA = (token: Token) => {
+  const handleSetTokenA = (token: RawToken) => {
     onTokenAChange(token);
     clearBalanceA();
     if (lastEditedInput === LastChangedToken.tokenA) {
@@ -161,7 +162,7 @@ export const useAddLiquidityService = (
     }
   };
 
-  const handleSetTokenB = (token: Token) => {
+  const handleSetTokenB = (token: RawToken) => {
     onTokenBChange(token);
     clearBalanceB();
     if (lastEditedInput === LastChangedToken.tokenB) {
@@ -176,8 +177,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenBInput,
-      tokenA!,
-      tokenB!,
+      defined(tokenA),
+      defined(tokenB),
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -193,8 +194,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenAInput,
-      tokenB!,
-      tokenA!,
+      defined(tokenB),
+      defined(tokenA),
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -206,15 +207,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
-    const { decimals } = tokenA!.metadata;
+    const { decimals } = defined(tokenA).metadata;
     const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       fixedValue,
       tokenBInput,
-      tokenA!,
-      tokenB!,
+      defined(tokenA),
+      defined(tokenB),
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -226,15 +227,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
-    const { decimals } = tokenB!.metadata;
+    const { decimals } = defined(tokenB).metadata;
     const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       fixedValue,
       tokenAInput,
-      tokenB!,
-      tokenA!,
+      defined(tokenB),
+      defined(tokenA),
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -278,17 +279,20 @@ export const useAddLiquidityService = (
         });
       }
     } else {
+      if (!pairInfo || !pairInfo.id) {
+        throw new Error('PairInfo is undefined');
+      }
       const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
         tezos,
         accountPkh,
         dex,
-        pairInfo!.id!,
+        pairInfo.id,
         pairInputA,
         pairTokenA,
         pairTokenB,
-        pairInfo!.totalSupply,
-        pairInfo!.tokenAPool,
-        pairInfo!.tokenBPool,
+        pairInfo.totalSupply,
+        pairInfo.tokenAPool,
+        pairInfo.tokenBPool,
         deadline,
         slippage
       );
@@ -365,7 +369,7 @@ export const useAddLiquidityService = (
   };
 
   const handleAddLiquidity = async () => {
-    if (dex!.contract.address === TOKEN_TO_TOKEN_DEX) {
+    if (defined(dex).contract.address === TOKEN_TO_TOKEN_DEX) {
       return await investTokenToToken();
     }
 

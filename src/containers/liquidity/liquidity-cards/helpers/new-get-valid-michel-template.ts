@@ -1,13 +1,13 @@
 import { MichelsonData } from '@taquito/michel-codec';
 
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 const taquitoUtils = require('@taquito/utils');
 
 interface GetValidMichelTemplate {
-  tokenA: Token;
-  tokenB: Token;
+  tokenA: RawToken;
+  tokenB: RawToken;
   type: string;
 }
 

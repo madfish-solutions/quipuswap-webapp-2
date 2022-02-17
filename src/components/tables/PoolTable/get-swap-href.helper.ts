@@ -1,4 +1,4 @@
-import { PoolTableType } from '@utils/types';
+import { PoolTableType } from '@interfaces/types';
 type Pair = Pick<PoolTableType, 'pair'>;
 
 export const getHref = ({ pair }: Pair) => {

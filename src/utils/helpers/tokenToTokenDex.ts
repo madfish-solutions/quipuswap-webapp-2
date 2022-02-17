@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
 import { FEE_RATE } from '@app.config';
+import { TokenId, DexPair } from '@interfaces/types';
 import { getTokenSlug, SwapParams } from '@utils/helpers';
-import { TokenId, DexPair } from '@utils/types';
 
 import { getTokenPairSlug } from './get-token-pair-slug';
 import { isTokenToTezosDex } from './is-token-to-tezos-dex';

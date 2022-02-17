@@ -5,8 +5,8 @@ import useSWR from 'swr';
 
 import { NETWORK, NETWORK_ID } from '@app.config';
 import { Standard } from '@graphql';
+import { RawToken, TokenWithQSNetworkType } from '@interfaces/types';
 import { isEmptyArray, isTokenEqual } from '@utils/helpers';
-import { Token, TokenWithQSNetworkType } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getTokens, getFallbackTokens, getContract, getTokenMetadata, saveCustomToken } from '.';
@@ -15,8 +15,8 @@ import { InvalidFa2TokenIdError, TokenMetadataError } from './dapp-tokens.errors
 import { fa2TokenExists } from './fa2-token-exists';
 
 export interface DAppTokens {
-  tokens: { data: Token[]; loading: boolean; error?: string };
-  searchTokens: { data: Token[]; loading: boolean; error?: string };
+  tokens: { data: RawToken[]; loading: boolean; error?: string };
+  searchTokens: { data: RawToken[]; loading: boolean; error?: string };
 }
 
 const DEFAULT_FA2_TOKEN_ID = 0;
@@ -45,7 +45,7 @@ const useDappTokens = () => {
   }, [tokensData, tokensError]);
 
   const searchCustomToken = useCallback(
-    async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<Token | null> => {
+    async (address: string, tokenId?: number, saveAfterSearch?: boolean): Promise<RawToken | null> => {
       if (!isValidContractAddress(address)) {
         return null;
       }
@@ -55,10 +55,13 @@ const useDappTokens = () => {
         searchTokens: { loading: true, data: [] }
       }));
       try {
-        const tokenContract = await getContract(tezos!, address);
+        if (!tezos) {
+          throw new Error('Tezos is undefined');
+        }
+        const tokenContract = await getContract(tezos, address);
 
         const isFa2 = Boolean(tokenContract.methods.update_operators);
-        if (isFa2 && !(await fa2TokenExists(tezos!, address, tokenId ?? DEFAULT_FA2_TOKEN_ID))) {
+        if (isFa2 && !(await fa2TokenExists(tezos, address, tokenId ?? DEFAULT_FA2_TOKEN_ID))) {
           throw new InvalidFa2TokenIdError(address, tokenId ?? DEFAULT_FA2_TOKEN_ID);
         }
 

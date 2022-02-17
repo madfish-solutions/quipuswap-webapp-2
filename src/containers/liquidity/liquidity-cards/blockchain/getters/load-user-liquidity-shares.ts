@@ -3,8 +3,8 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { EMPTY_POOL_AMOUNT, LP_TOKEN_DECIMALS } from '@app.config';
+import { Nullable, RawToken } from '@interfaces/types';
 import { fromDecimals, isTezIncluded } from '@utils/helpers';
-import { Nullable, Token } from '@utils/types';
 
 import { getValidMichelTemplate, sortTokensContracts } from '../../helpers';
 
@@ -21,8 +21,8 @@ const loadUserLpBalanceTokens = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: Token,
-  tokenB: Token
+  tokenA: RawToken,
+  tokenB: RawToken
 ): Promise<Nullable<LiquidityShares>> => {
   const addresses = sortTokensContracts(tokenA, tokenB);
   if (!addresses) {
@@ -77,8 +77,8 @@ export const loadUserLiquidiytShares = async (
   tezos: TezosToolkit,
   accountPkh: string,
   dex: FoundDex,
-  tokenA: Token,
-  tokenB: Token
+  tokenA: RawToken,
+  tokenB: RawToken
 ) => {
   const isTezosToTokenDex = isTezIncluded([tokenA, tokenB]);
 

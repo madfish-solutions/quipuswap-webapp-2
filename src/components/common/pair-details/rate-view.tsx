@@ -5,14 +5,14 @@ import BigNumber from 'bignumber.js';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StateDollarEquivalent } from '@components/ui/state-components/state-dollar-equivalent';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
+import { Nullable, RawToken } from '@interfaces/types';
 import s from '@styles/CommonContainer.module.sass';
 import { getTokenSlug, getTokenSymbol, isNull } from '@utils/helpers';
-import { Nullable, Token } from '@utils/types';
 
 interface RateViewProps {
   rate: Nullable<BigNumber.Value>;
-  inputToken: Nullable<Token>;
-  outputToken: Nullable<Token>;
+  inputToken: Nullable<RawToken>;
+  outputToken: Nullable<RawToken>;
 }
 
 export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) => {

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 import s from '@components/modals/WalletModal/WalletModal.module.sass';
 import { Button } from '@components/ui/elements/button';
-import { WalletType } from '@utils/types';
+import { WalletType } from '@interfaces/types';
 
 const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 

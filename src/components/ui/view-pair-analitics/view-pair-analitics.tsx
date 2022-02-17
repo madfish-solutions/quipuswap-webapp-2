@@ -4,8 +4,8 @@ import { ExternalLink } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS } from '@app.config';
+import { DexPair } from '@interfaces/types';
 import { getTokenSymbol, isTokenToTezosDex } from '@utils/helpers';
-import { DexPair } from '@utils/types';
 
 import { Button } from '../elements/button';
 

@@ -1,17 +1,23 @@
 import { Nullable } from '@quipuswap/ui-kit';
 import { action, makeObservable, observable } from 'mobx';
 
-import { Undefined } from '@utils/types';
+import { Undefined } from '@interfaces/types';
 
-export class LoadingErrorData<T> {
-  data: Undefined<T>;
+export class LoadingErrorData<RawData, Data> {
+  rawData: Undefined<RawData>;
+  data: Data;
   isLoading = false;
   error: Nullable<Error> = null;
 
-  constructor(private getDate: () => Promise<T>, private defaultData?: T) {
+  constructor(
+    private defaultData: Data,
+    private getDate: () => Promise<RawData>,
+    private mapping: (data: RawData) => Data
+  ) {
     this.data = defaultData;
     makeObservable(this, {
       load: action,
+      rawData: observable,
       data: observable,
       isLoading: observable,
       error: observable
@@ -21,7 +27,8 @@ export class LoadingErrorData<T> {
   async load() {
     this.isLoading = true;
     try {
-      this.data = await this.getDate();
+      this.rawData = await this.getDate();
+      this.data = this.mapping(this.rawData);
       this.error = null;
     } catch (error) {
       this.error = error as Error;

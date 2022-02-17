@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { TOKEN_TO_TOKEN_DEX } from '@app.config';
 import { useDexGraph } from '@hooks/use-dex-graph';
+import { DexPair, Undefined, RawToken } from '@interfaces/types';
 import {
   fromDecimals,
   getMaxTokenInput,
@@ -15,13 +16,12 @@ import {
 } from '@utils/helpers';
 import { getRateByInputOutput } from '@utils/helpers/rates';
 import { getMaxInputRoute, getRouteWithInput } from '@utils/routing';
-import { DexPair, Undefined, Token } from '@utils/types';
 
 import { useSwapFee } from './use-swap-fee';
 
 interface SwapDetailsParams {
-  inputToken: Undefined<Token>;
-  outputToken: Undefined<Token>;
+  inputToken: Undefined<RawToken>;
+  outputToken: Undefined<RawToken>;
   inputAmount: Undefined<BigNumber>;
   outputAmount: Undefined<BigNumber>;
   slippageTolerance: Undefined<BigNumber>;

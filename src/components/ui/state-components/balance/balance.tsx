@@ -6,8 +6,8 @@ import { useTranslation } from 'next-i18next';
 
 import { StateWrapper } from '@components/state-wrapper';
 import { DashPlug } from '@components/ui/dash-plug';
+import { Optional } from '@interfaces/types';
 import { formatBalance, isExist, isNull, isUndefined } from '@utils/helpers';
-import { Optional } from '@utils/types';
 
 import styles from './balance.module.scss';
 

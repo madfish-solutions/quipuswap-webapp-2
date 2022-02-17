@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { i18n } from 'next-i18next';
 
-import { Nullable, Undefined } from '@utils/types';
+import { Nullable, Undefined } from '@interfaces/types';
 
 export const validateUserInputAmount = (
   accountPkh: Nullable<string>,

@@ -1,4 +1,4 @@
-import { ConnectType, QSNetwork } from '@utils/types';
+import { ConnectType, QSNetwork } from '@interfaces/types';
 
 export const isDefaultConnectType = (network: QSNetwork) => {
   return network.connectType === ConnectType.DEFAULT;

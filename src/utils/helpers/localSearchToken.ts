@@ -1,4 +1,4 @@
-import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@utils/types';
+import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@interfaces/types';
 
 import { isExist } from './type-checks';
 

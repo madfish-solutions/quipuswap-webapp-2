@@ -6,9 +6,9 @@ import constate from 'constate';
 import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
+import { Nullable, VoterType, RawToken, TokenPair } from '@interfaces/types';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
-import { handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
-import { Nullable, VoterType, Token, TokenPair } from '@utils/types';
+import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
 
 import { useVotingRouter } from '../hooks';
 import { VotingTabs } from '../tabs.enum';
@@ -48,8 +48,8 @@ const useVotingService = () => {
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
   const [tokenPair, setTokenPair] = useState<TokenPair>(fallbackTokenPair);
-  const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, defaultToken]);
-  const tokensRef = useRef<[Token, Token]>([token1, token2]);
+  const [[token1, token2], setTokens] = useState<RawToken[]>([TEZOS_TOKEN, defaultToken]);
+  const tokensRef = useRef<[RawToken, RawToken]>([token1, token2]);
 
   const {
     urlLoaded,
@@ -108,7 +108,7 @@ const useVotingService = () => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
       void handleSearchToken({
         tokens,
-        tezos: tezos!,
+        tezos: defined(tezos),
         network: NETWORK,
         from,
         to,

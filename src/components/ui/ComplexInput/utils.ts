@@ -1,6 +1,6 @@
-import { Nullable, Token } from '@utils/types';
+import { Nullable, RawToken } from '@interfaces/types';
 
-export const getBlackListedTokens = (tokenA: Nullable<Token>, tokenB: Nullable<Token>) => [
+export const getBlackListedTokens = (tokenA: Nullable<RawToken>, tokenB: Nullable<RawToken>) => [
   ...(tokenA ? [tokenA] : []),
   ...(tokenB ? [tokenB] : [])
 ];

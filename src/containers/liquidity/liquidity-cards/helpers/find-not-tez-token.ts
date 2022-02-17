@@ -1,5 +1,5 @@
 import { TEZOS_TOKEN } from '@app.config';
-import { Token } from '@utils/types';
+import { RawToken } from '@interfaces/types';
 
-export const findNotTezToken = (tokens: Token[]) =>
+export const findNotTezToken = (tokens: RawToken[]) =>
   tokens.find(({ contractAddress }) => contractAddress !== TEZOS_TOKEN.contractAddress) || null;

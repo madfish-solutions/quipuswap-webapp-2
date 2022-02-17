@@ -1,14 +1,14 @@
 import { RouteProps } from '@quipuswap/ui-kit';
 
+import { DexPair, RawToken } from '@interfaces/types';
 import { getTokenSlug, getTokenSymbol, transformTokenDataToAnalyticsLink } from '@utils/helpers';
-import { DexPair, Token } from '@utils/types';
 
-export const dexRouteToQuipuUiKitRoute = (inputToken: Token, dexRoute: DexPair[]) => {
+export const dexRouteToQuipuUiKitRoute = (inputToken: RawToken, dexRoute: DexPair[]) => {
   if (dexRoute.length === 0) {
     return [];
   }
 
-  return dexRoute.reduce<{ displayedRoute: RouteProps['routes']; currentToken: Token }>(
+  return dexRoute.reduce<{ displayedRoute: RouteProps['routes']; currentToken: RawToken }>(
     ({ displayedRoute, currentToken }, { token1, token2 }, index) => {
       const token1IsNext = getTokenSlug(token2) === getTokenSlug(currentToken);
       const newCurrentToken = token1IsNext ? token1 : token2;
