@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { RewardInfo, RewardItem } from '../reward-info';
+import { RewardInfo } from '../reward-info';
 
 interface Props {
   pendingRewardAmount: BigNumber;
@@ -13,17 +13,13 @@ interface Props {
   onHarvestAll: () => void;
 }
 
-export const StakingRewardsList: FC<Props> = ({
-  pendingRewardAmount,
-  pendingRewardCurrency,
-  rewardItemTitle,
-  rewardItemAmount,
-  rewardItemCurrency,
-  onHarvestAll
-}) => {
+export const StakingRewardsList: FC<Props> = ({ pendingRewardAmount, pendingRewardCurrency, onHarvestAll }) => {
   return (
-    <RewardInfo amount={pendingRewardAmount} onHarvestAll={onHarvestAll} currency={pendingRewardCurrency}>
-      <RewardItem title={rewardItemTitle} amount={rewardItemAmount} currency={rewardItemCurrency} />
-    </RewardInfo>
+    <RewardInfo
+      amount={pendingRewardAmount}
+      onButtonClick={onHarvestAll}
+      buttonText="Harvest All"
+      currency={pendingRewardCurrency}
+    />
   );
 };

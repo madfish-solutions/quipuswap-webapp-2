@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext, ReactNode } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -6,7 +6,7 @@ import cx from 'classnames';
 import styles from './card-cell.module.scss';
 
 interface Props {
-  header?: React.ReactNode;
+  header?: ReactNode;
   className?: string;
 }
 
