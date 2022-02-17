@@ -97,7 +97,8 @@ export const useAddLiquidityService = (
 
     const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
-    const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
+    const isTokensOrderValid =
+      tokenA.contractAddress === pairTokenA.contractAddress && tokenA.fa2TokenId === pairTokenA.fa2TokenId;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
