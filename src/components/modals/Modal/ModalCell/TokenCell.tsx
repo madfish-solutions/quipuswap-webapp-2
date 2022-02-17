@@ -54,7 +54,7 @@ export const TokenCell: FC<TokenCellProps> = ({
         <div className={cx(s.mleft8, s.tokenBody)}>
           <div className={s.joinRow}>
             <h6>{tokenSymbol}</h6>
-            {tokenType && <Bage className={s.bage} text={getTokenTypeTitle(tokenType)} />}
+            {tokenType && tokenName !== 'Tezos' && <Bage className={s.bage} text={getTokenTypeTitle(tokenType)} />}
           </div>
 
           <span className={cx(s.caption)}>{tokenName}</span>
