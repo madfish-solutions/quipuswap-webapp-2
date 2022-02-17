@@ -9,6 +9,9 @@
 
 .root {
   padding-top: 22px;
+  :global(.slick-track) {
+    display: flex;
+  }
   :global(.slick-dots) {
     position: static;
     display: flex !important;
