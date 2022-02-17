@@ -41,13 +41,16 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
+export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
+export const MINUTES_IN_HOUR = 60;
+export const HOURS_IN_DAY = 24;
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
 export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
 export const LIQUIDITY_DEFAULT_SLIPPAGE = 0;
 export const DEFAULT_DEADLINE_MINS = 30;
 const MAX_DEADLINE_DAYS = 30;
-export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
+export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
@@ -130,6 +133,12 @@ const TTDEX_CONTRACTS = {
   [QSNets.hangzhounet]: 'KT1Ni6JpXqGyZKXhJCPQJZ9x5x5bd7tXPNPC',
   [QSNets.mainnet]: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi'
 };
+
+const STAKING_CONTRACTS_ADDRESSES = {
+  [QSNets.mainnet]: process.env.NEXT_PUBLIC_MAINNET_STAKING_CONTRACT,
+  [QSNets.hangzhounet]: process.env.NEXT_PUBLIC_HANGZHOUNET_STAKING_CONTRACT
+};
+export const STAKING_CONTRACT_ADDRESS = STAKING_CONTRACTS_ADDRESSES[NETWORK_ID];
 
 export const DEX_POOLS_URLS = {
   mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,

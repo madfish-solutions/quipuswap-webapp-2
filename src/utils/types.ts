@@ -120,6 +120,12 @@ export interface VoterType {
   candidate: Nullable<string>;
 }
 
+export interface StakerType {
+  stake: Nullable<BigNumber>;
+  unstake: Nullable<BigNumber>;
+  candidate: Nullable<string>;
+}
+
 export interface TokenDataType {
   token: {
     address: string;
@@ -141,6 +147,9 @@ export interface VoteFormValues {
   selectedBaker: string;
   currentBacker?: string;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+export type StakeFormValues = VoteFormValues;
 
 export interface PoolTableType {
   id: number;

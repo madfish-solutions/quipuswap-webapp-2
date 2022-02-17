@@ -6,9 +6,9 @@ import { StateWrapper } from '@components/state-wrapper';
 import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './components';
 import { Iterator } from './helpers/iterator';
 import styles from './stake-list.page.module.scss';
-import { StakeListItem } from './structures';
+import { StakeListItem, StakeListItemProps } from './structures';
 
-const mock = [
+export const mockStakings: StakeListItemProps[] = [
   {
     tokenA: TEZOS_TOKEN,
     tokenB: MAINNET_DEFAULT_TOKEN,
@@ -38,7 +38,7 @@ export const StakeList = () => {
     <div>
       <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
         <Iterator
-          data={mock}
+          data={mockStakings}
           render={StakeListItem}
           fallback={<EmptyStakeList />}
           isGrouped

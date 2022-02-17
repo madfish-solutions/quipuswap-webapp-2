@@ -1,0 +1,14 @@
+{
+  "Stake Details": "Stake Details",
+  "Value Locked": "Value Locked",
+  "APR": "APR",
+  "dailyApr": "Daily",
+  "Current Delegate": "Current Delegate",
+  "Next Delegate": "Next Delegate",
+  "stakingEndsIn": "Ends in",
+  "Lock Period": "Lock Period",
+  "Withdrawal Fee": "Withdrawal Fee",
+  "Interface Fee": "Interface Fee",
+  "Token Contract": "Token Contract",
+  "Staking Contract": "Staking Contract"
+}

@@ -1,40 +1,55 @@
-import { FC, useContext } from 'react';
+import { FC, useEffect, useState } from 'react';
 
-import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
-import { BaseLayout } from '@components/common/BaseLayout';
-import { PageTitle } from '@components/common/page-title';
-import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
-import s from '@styles/PrivacyPolicy.module.sass';
+import { mockStakings, StakeItem } from '@containers/stake';
+import { StakeListItemProps } from '@containers/stake/list/structures';
+import { useToasts } from '@hooks/use-toasts';
+import NotFound from 'pages/404';
 
-const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
-};
+interface MockLoadingState {
+  loading: true;
+  error: null;
+  data: null;
+}
 
-// TODO: replace with tokens from selected staking
-const STUB_TOKEN1 = TEZOS_TOKEN;
-const STUB_TOKEN2 = networksDefaultTokens[NETWORK_ID];
+interface MockErrorState {
+  loading: false;
+  error: Error;
+  data: null;
+}
+
+interface MockReadyState {
+  loading: false;
+  error: null;
+  data: StakeListItemProps;
+}
+
+type MockState = MockLoadingState | MockErrorState | MockReadyState;
 
 const StakeItemPage: FC = () => {
-  const { t } = useTranslation(['common', 'privacy']);
-  const { colorThemeMode } = useContext(ColorThemeContext);
+  const { showErrorToast } = useToasts();
 
-  return (
-    <BaseLayout
-      title={t(`privacy|Stake - ${SITE_TITLE}`)}
-      description={t(`privacy|${SITE_DESCRIPTION}`)}
-      className={cx(s.wrapper, modeClass[colorThemeMode])}
-    >
-      <PageTitle>
-        {STUB_TOKEN1.metadata.symbol}/{STUB_TOKEN2.metadata.symbol}
-      </PageTitle>
-    </BaseLayout>
-  );
+  const [mockState, setMockState] = useState<MockState>({ loading: true, error: null, data: null });
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMockState({ loading: false, error: null, data: mockStakings[0] });
+    }, 5000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (mockState.error) {
+      showErrorToast(mockState.error);
+    }
+  }, [mockState.error, showErrorToast]);
+
+  if (mockState.error) {
+    return <NotFound />;
+  }
+
+  return <StakeItem data={mockState.data} />;
 };
 // eslint-disable-next-line import/no-default-export
 export default StakeItemPage;

@@ -42,7 +42,7 @@ const MY_DEPOSIT_TOOLTIP = 'My Deposit tooltip';
 const MY_EARNED = 'My Earned';
 const MY_EARNED_TOOLTIP = 'My Erned tooltip';
 
-interface Props {
+export interface StakeListItemProps {
   tokenA: Token;
   tokenB: Token;
   stakeStatus: eStakeStatus;
@@ -59,7 +59,7 @@ interface Props {
   depositTokenUrl: string;
 }
 
-export const StakeListItem: FC<Props> = ({
+export const StakeListItem: FC<StakeListItemProps> = ({
   tokenA,
   tokenB,
   stakeStatus,
