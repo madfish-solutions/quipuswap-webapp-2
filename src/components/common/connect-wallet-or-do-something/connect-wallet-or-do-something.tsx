@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import cx from 'classnames';
+
 import CC from '@styles/CommonContainer.module.sass';
 import { useAccountPkh } from '@utils/dapp';
 
@@ -12,5 +14,5 @@ export const ConnectWalletOrDoSomething: FC = ({ children }) => {
     return <>{children}</>;
   }
 
-  return <ConnectWalletButton className={CC.connect} />;
+  return <ConnectWalletButton className={cx(CC.connect, CC.button)} />;
 };

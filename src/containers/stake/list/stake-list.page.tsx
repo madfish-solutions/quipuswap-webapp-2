@@ -1,6 +1,7 @@
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
+import { useIsLoading } from '@utils/dapp';
 
 import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './components';
 import { Iterator } from './helpers/iterator';
@@ -27,13 +28,15 @@ const mock = [
 ];
 
 export const StakeList = () => {
+  const isLoading = useIsLoading();
+
   return (
     <div>
-      <StateWrapper loaderFallback={<StakeListSkeleton className={styles.mb48} />}>
+      <StateWrapper isLoading={isLoading} loaderFallback={<StakeListSkeleton className={styles.mb48} />}>
         <StakingRewardsList />
       </StateWrapper>
 
-      <StateWrapper loaderFallback={<StakeListSkeleton />}>
+      <StateWrapper loaderFallback={<StakeListSkeleton />} isLoading={isLoading}>
         <Iterator
           data={mock}
           render={StakeListItem}
