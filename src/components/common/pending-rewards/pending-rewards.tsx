@@ -1,11 +1,11 @@
-import { FC, useContext, useState } from 'react';
+import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { Goblet } from '@components/svg/goblet';
+import { GobletIcon } from '@components/svg/goblet-icon';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useAccountPkh } from '@utils/dapp';
 
@@ -26,12 +26,6 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
   const { t } = useTranslation(['stake']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const [loading, setLoading] = useState(true);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 1500);
-
   return (
     <div className={cx(styles.reward, modeClass[colorThemeMode])}>
       <div className={styles.container}>
@@ -43,14 +37,13 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
               amount={amount}
               currency={currency}
               isLeftCurrency={currency === '$'}
-              isLoading={loading}
             />
           </>
         ) : (
           <span className={styles.amount}>{t('stake|You might win a lot')}</span>
         )}
       </div>
-      <Goblet />
+      <GobletIcon />
     </div>
   );
 };

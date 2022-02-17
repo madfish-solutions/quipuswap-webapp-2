@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode } from 'react';
 
 import BigNumber from 'bignumber.js';
 
@@ -24,12 +24,6 @@ interface Props {
 const ZERO_REWARDS = 0;
 
 export const RewardInfo: FC<Props> = ({ amount, onButtonClick, currency, header, buttonText, children }) => {
-  const [loading, setLoading] = useState(true);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 1500);
-
   const isButtonDisabled = amount.eq(ZERO_REWARDS);
 
   return (
@@ -39,7 +33,7 @@ export const RewardInfo: FC<Props> = ({ amount, onButtonClick, currency, header,
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>
-            <Button className={styles.button} onClick={onButtonClick} disabled={isButtonDisabled} loading={loading}>
+            <Button className={styles.button} onClick={onButtonClick} disabled={isButtonDisabled}>
               {buttonText}
             </Button>
           </ConnectWalletOrDoSomething>

@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
@@ -29,19 +27,13 @@ const mock = [
 ];
 
 export const StakeList = () => {
-  const [loading, setLoading] = useState(true);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 1500);
-
   return (
     <div>
-      <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton className={styles.mb48} />}>
+      <StateWrapper loaderFallback={<StakeListSkeleton className={styles.mb48} />}>
         <StakingRewardsList />
       </StateWrapper>
 
-      <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
+      <StateWrapper loaderFallback={<StakeListSkeleton />}>
         <Iterator
           data={mock}
           render={StakeListItem}

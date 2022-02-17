@@ -11,12 +11,10 @@ const mock = {
 };
 
 export const StakingRewardsList: FC = () => {
-  const onHarvestAll = noop;
-
   return (
     <RewardInfo
       amount={mock.pendingRewardAmount}
-      onButtonClick={onHarvestAll}
+      onButtonClick={noop}
       buttonText="Harvest All"
       currency={mock.pendingRewardCurrency}
     />
