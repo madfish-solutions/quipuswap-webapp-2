@@ -105,7 +105,8 @@ export const useRemoveLiquidityService = (
     const { decimals: decimalsB } = tokenB.metadata;
     const { tokenAPool, tokenBPool, totalSupply, tokenA: pairTokenA } = pairInfo;
 
-    const isTokensOrderValid = pairTokenA.contractAddress === tokenA.contractAddress;
+    const isTokensOrderValid =
+      tokenA.contractAddress === pairTokenA.contractAddress && tokenA.fa2TokenId === pairTokenA.fa2TokenId;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
