@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { Card, ExternalLink } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -8,25 +9,35 @@ import { MS_IN_SECOND, STAKING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@app.
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { getDollarEquivalent } from '@containers/stake/list/helpers';
 import { CandidateButton } from '@containers/voiting/components';
+import { StakeItem } from '@interfaces/staking';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
-import { isNull } from '@utils/helpers';
+import { bigNumberToString } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 import { Countdown } from '../countdown';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
 
-const tokenContractAddress = 'KT1CaWSNEnU6RR9ZMSSgD5tQtQDqdpw4sG83';
-
 const endTimestamp = Date.now() + 90069 * MS_IN_SECOND;
 
-export const StakingDetails: FC = () => {
+interface Props {
+  data: Nullable<StakeItem>;
+  isError: boolean;
+}
+
+export const StakingDetails: FC<Props> = ({ data, isError }) => {
   const { t } = useTranslation(['common', 'vote']);
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
+  const tvlDollarEquivalent =
+    data && getDollarEquivalent(bigNumberToString(data.tvl), bigNumberToString(data.depositExchangeRate));
+  const distributionDollarEquivalent =
+    data && getDollarEquivalent(bigNumberToString(new BigNumber(1000)), bigNumberToString(data.earnExchangeRate));
 
   return (
     <Card
@@ -36,19 +47,31 @@ export const StakingDetails: FC = () => {
       contentClassName={s.content}
     >
       <DetailsCardCell cellName={t('stake|Value Locked')} className={CardCellClassName} tooltipContent={null}>
-        <StateCurrencyAmount dollarEquivalent="1.01" currency="TOKEN" amount="1000000" amountDecimals={2} />
+        <StateCurrencyAmount
+          dollarEquivalent={tvlDollarEquivalent}
+          currency={data?.tokenB ? 'TOKEN' : data?.tokenA.metadata.symbol}
+          amount={data?.tvl ?? null}
+          amountDecimals={data?.tokenB ? 6 : data?.tokenA.metadata.decimals}
+          isError={isError}
+        />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Daily Distribution')} tooltipContent={null} className={CardCellClassName}>
-        <StateCurrencyAmount dollarEquivalent="1.01" currency="TOKEN" amount="1000" amountDecimals={2} />
+        <StateCurrencyAmount
+          dollarEquivalent={distributionDollarEquivalent}
+          currency={data?.rewardToken.metadata.symbol}
+          amount="1000"
+          amountDecimals={data?.rewardToken.metadata.decimals}
+          isError={isError}
+        />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|APR')} tooltipContent={null} className={CardCellClassName}>
-        <StatePercentage isLoading={false} value="888" />
+        <StatePercentage value={data?.apr?.toFixed() ?? null} isLoading={!isError && !data} />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|dailyApr')} tooltipContent={null} className={CardCellClassName}>
-        <StatePercentage isLoading={false} value="0.008" />
+        <StatePercentage isLoading={!isError && !data} value={data?.apr?.dividedBy(365).toFixed() ?? null} />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Current Delegate')} tooltipContent={null} className={CardCellClassName}>
@@ -79,7 +102,7 @@ export const StakingDetails: FC = () => {
         <Button
           className={cx(s.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
-          href={isNull(tokenContractAddress) ? undefined : `${TZKT_EXPLORER_URL}/${tokenContractAddress}`}
+          href={data?.depositTokenUrl}
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
@@ -89,7 +112,7 @@ export const StakingDetails: FC = () => {
         <Button
           className={cx(s.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
-          href={STAKING_CONTRACT_ADDRESS ? `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}` : undefined}
+          href={data?.stakeUrl ?? `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}`}
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >

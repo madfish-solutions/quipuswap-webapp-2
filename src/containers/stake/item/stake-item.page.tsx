@@ -32,7 +32,7 @@ export const StakeItem = ({ data, isError }: Props) => {
 
       <StickyBlock>
         <WrappedStakingForm />
-        <StakingDetails />
+        <StakingDetails data={data} isError={isError} />
       </StickyBlock>
     </StakingProvider>
   );
