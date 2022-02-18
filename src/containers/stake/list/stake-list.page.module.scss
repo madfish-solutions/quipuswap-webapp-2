@@ -1,13 +1,17 @@
 .list {
-    display: grid;
-    row-gap: 32px;
+  display: grid;
+  row-gap: 32px;
 }
 
 .listWrapper {
-    display: grid;
-    place-items: center;
+  display: grid;
+  place-items: center;
 }
 
 .listSkeleton {
-    height: 220px;
+  height: 220px;
+}
+
+.mb48 {
+  margin-bottom: 48px;
 }

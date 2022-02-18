@@ -7,7 +7,7 @@ import { DashPlug } from '@components/ui/dash-plug';
 import { useAccountPkh } from '@utils/dapp';
 import { formatBalance, isExist, isNull } from '@utils/helpers';
 
-import styles from './reward-item.module.scss';
+import styles from './voting-reward-item.module.scss';
 
 export interface RewardItemProps {
   amount: Nullable<string>;
@@ -22,7 +22,7 @@ const modeClass = {
 
 const REWARD_DASH_ZOOM = 1.45;
 
-export const RewardItem: FC<RewardItemProps> = ({ amount, description, currency }) => {
+export const VotingRewardItem: FC<RewardItemProps> = ({ amount, description, currency }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const accountPkh = useAccountPkh();
 

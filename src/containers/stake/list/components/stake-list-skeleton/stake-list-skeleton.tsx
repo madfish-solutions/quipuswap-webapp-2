@@ -4,9 +4,13 @@ import { Skeleton } from '@components/common/Skeleton';
 
 import styles from './stake-list-skeleton.module.scss';
 
-export const StakeListSkeleton: FC = () => {
+interface Props {
+  className?: string;
+}
+
+export const StakeListSkeleton: FC<Props> = ({ className }) => {
   return (
-    <div>
+    <div className={className}>
       <Skeleton className={styles.listSkeleton} />
     </div>
   );
