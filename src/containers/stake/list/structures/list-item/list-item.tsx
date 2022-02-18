@@ -6,8 +6,7 @@ import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StakeItem } from '@interfaces/staking';
-import { useAccountPkh } from '@utils/dapp';
-import { getTokensPairName, getTokenSymbol, isExist, bigNumberToString } from '@utils/helpers';
+import { bigNumberToString, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import { StakeStatusBox } from '../../components/stake-status-box';
@@ -52,8 +51,6 @@ export const StakeListItem: FC<StakeItem> = ({
   depositBalance,
   earnBalance
 }) => {
-  const accountPkh = useAccountPkh();
-
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
   const tvlDollarEquivalent = getDollarEquivalent(bigNumberToString(tvl), bigNumberToString(depositExchangeRate));
@@ -63,6 +60,8 @@ export const StakeListItem: FC<StakeItem> = ({
   const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, bigNumberToString(depositExchangeRate));
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
   const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, bigNumberToString(earnExchangeRate));
+
+  const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
   return (
     <Card className={styles.card}>
@@ -112,7 +111,7 @@ export const StakeListItem: FC<StakeItem> = ({
                 <StateCurrencyAmount amount={apy} currency="%" isError={!apr} />
               </ListItemCardCell>
             </div>
-            {accountPkh && (
+            {isAllowUserData && (
               <div className={styles.userData}>
                 <ListItemCardCell
                   cellName={MY_BALANCE}
