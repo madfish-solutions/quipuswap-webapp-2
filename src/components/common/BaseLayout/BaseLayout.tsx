@@ -14,8 +14,11 @@ import { AccountModal } from '@components/modals/AccountModal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
+import { useAuthStore } from '@hooks/stores/use-auth-store';
+import { useUiStore } from '@hooks/stores/use-ui-store';
 import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
+import { useAccountPkh } from '@utils/dapp';
 
 import s from './BaseLayout.module.sass';
 
@@ -27,8 +30,25 @@ interface BaseLayoutProps {
 }
 
 export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+  const uiStore = useUiStore();
+  const authStore = useAuthStore();
+  const accountPkh = useAccountPkh();
   const canonicalURL = QUIPUSWAP + useRouter().asPath;
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
+
+  /*
+    Set Auth Data
+   */
+  useEffect(() => {
+    authStore.setAccountPkh(accountPkh);
+  }, [authStore, accountPkh]);
+
+  /*
+    Set UI Data
+   */
+  useEffect(() => {
+    uiStore.setColorThemeMode(colorThemeMode);
+  }, [uiStore, colorThemeMode]);
 
   useEffect(() => {
     if (colorThemeMode === ColorModes.Dark) {
