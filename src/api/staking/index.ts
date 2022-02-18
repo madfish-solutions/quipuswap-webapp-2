@@ -1,2 +1,2 @@
-export * from './getStakesList';
-export * from './getStakesStats';
+export * from './get-staking-list.api';
+export * from './get-staking-stats.api';

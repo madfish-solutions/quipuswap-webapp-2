@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
+import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingStore } from '@hooks/stores/use-staking-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
@@ -15,14 +16,19 @@ import { StakeListItem } from './structures';
 
 export const StakeList = observer(() => {
   const { showErrorToast } = useToasts();
+  const authStore = useAuthStore();
   const stakingStore = useStakingStore();
   const isLoading = useIsLoading();
   /*
     Load data
    */
   useEffect(() => {
-    void stakingStore.list.load();
-  }, [stakingStore]);
+    const load = async () => {
+      await stakingStore.list.load();
+    };
+
+    void load();
+  }, [stakingStore, authStore.accountPkh]);
 
   /*
     Handle errors

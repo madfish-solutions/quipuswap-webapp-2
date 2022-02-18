@@ -1,6 +1,6 @@
-import { AuthStore } from './AuthStore';
-import { StakingStore } from './StakingStore';
-import { UiStore } from './UiStore';
+import { AuthStore } from './auth.store';
+import { StakingStore } from './staking.store';
+import { UiStore } from './ui.store';
 
 export class RootStore {
   authStore: AuthStore;

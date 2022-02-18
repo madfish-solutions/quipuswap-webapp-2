@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { StakeStatus } from '@interfaces/staking';
+import { StakeStatus } from '@interfaces/staking.interfaces';
 
 import styles from './stake-status.module.scss';
 

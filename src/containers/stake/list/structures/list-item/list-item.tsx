@@ -5,7 +5,7 @@ import { Card } from '@quipuswap/ui-kit';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { StakeItem } from '@interfaces/staking';
+import { StakeItem } from '@interfaces/staking.interfaces';
 import { bigNumberToString, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';

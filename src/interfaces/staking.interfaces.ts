@@ -52,16 +52,18 @@ interface AbstractStakeItem {
   depositTokenUrl: string;
 }
 
+export interface UserStakeData {
+  myBalance: BigNumber;
+  depositBalance: BigNumber;
+  earnBalance: BigNumber;
+}
+
 interface NoUserStakeItem extends AbstractStakeItem {
   myBalance: null;
   depositBalance: null;
   earnBalance: null;
 }
 
-interface UserStakeItem extends AbstractStakeItem {
-  myBalance: BigNumber;
-  depositBalance: BigNumber;
-  earnBalance: BigNumber;
-}
+interface UserStakeItem extends AbstractStakeItem, UserStakeData {}
 
 export type StakeItem = NoUserStakeItem | UserStakeItem;

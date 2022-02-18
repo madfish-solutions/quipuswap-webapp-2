@@ -1,12 +1,12 @@
 import { ColorModes } from '@quipuswap/ui-kit';
 import { action, makeObservable, observable } from 'mobx';
 
-import { RootStore } from './RootStore';
+import { RootStore } from './root.store';
 
 export class UiStore {
   colorThemeMode: ColorModes = ColorModes.Dark;
 
-  constructor(private root: RootStore) {
+  constructor(private rootStore: RootStore) {
     makeObservable(this, {
       colorThemeMode: observable,
       setColorThemeMode: action

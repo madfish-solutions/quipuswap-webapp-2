@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { RawStakeItem, RawStakeStats, StakeItem, StakeStats } from '@interfaces/staking';
+import { RawStakeItem, RawStakeStats, StakeItem, StakeStats } from '@interfaces/staking.interfaces';
 import { Token } from '@utils/types';
 
 const mapToken = (raw: Token): Token => ({
