@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { formatIntegerWithDecimals } from '@utils/helpers';
+import { formatIntegerWithDecimals, isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -27,7 +27,7 @@ export const PercentSelector: FC<PercentSelectorProps> = ({ handleBalance, value
   const handleMAX = () =>
     handleBalance(BigNumber.maximum(new BigNumber(value || '0').minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
 
-  const disabled = value === null;
+  const disabled = isNull(value);
 
   return (
     <div className={s.controls}>

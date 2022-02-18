@@ -18,6 +18,7 @@ import {
 } from '@utils/helpers';
 import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
+import { UnexpectedEmptyValueError } from '../../../../errors/unexpected-empty-value.error';
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
@@ -280,7 +281,7 @@ export const useAddLiquidityService = (
       }
     } else {
       if (!pairInfo || !pairInfo.id) {
-        throw new Error('PairInfo is undefined');
+        throw new UnexpectedEmptyValueError('PairInfo');
       }
       const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
         tezos,
