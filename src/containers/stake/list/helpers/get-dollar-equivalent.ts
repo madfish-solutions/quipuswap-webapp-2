@@ -1,4 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-export const getDollarEquivalent = (value: string, exhangeRate: string) =>
-  new BigNumber(value).times(exhangeRate).toFixed();
+import { Optional } from '@utils/types';
+
+export const getDollarEquivalent = (value: Optional<BigNumber.Value>, exchangeRate: Optional<BigNumber.Value>) =>
+  value && exchangeRate ? new BigNumber(value).times(new BigNumber(exchangeRate)).toFixed() : null;

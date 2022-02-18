@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
 import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
-import { fromDecimals, getTokenSlug } from '@utils/helpers';
+import { defined, fromDecimals, getTokenSlug } from '@utils/helpers';
 import { Token } from '@utils/types';
 
 export const [BalancesProvider, useBalances] = constate(() => {
@@ -17,7 +17,13 @@ export const [BalancesProvider, useBalances] = constate(() => {
 
   const updateBalance = async (token: Token) => {
     if (accountPkh) {
-      const balance = await getUserBalance(tezos!, accountPkh, token.contractAddress, token.type, token.fa2TokenId);
+      const balance = await getUserBalance(
+        defined(tezos),
+        accountPkh,
+        token.contractAddress,
+        token.type,
+        token.fa2TokenId
+      );
 
       if (balance) {
         setBalances(prevValue => ({

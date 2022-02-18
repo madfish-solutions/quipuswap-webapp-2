@@ -94,10 +94,12 @@ export const getSwapTransferParams = async (tezos: TezosToolkit, accountPkh: str
     if (!fa2Operators[tokenAddress]) {
       fa2Operators[tokenAddress] = {};
     }
-    if (!fa2Operators[tokenAddress][tokenId!]) {
-      fa2Operators[tokenAddress][tokenId!] = [];
+    if (tokenId !== undefined) {
+      if (!fa2Operators[tokenAddress][tokenId]) {
+        fa2Operators[tokenAddress][tokenId] = [];
+      }
+      fa2Operators[tokenAddress][tokenId].push(operator);
     }
-    fa2Operators[tokenAddress][tokenId!].push(operator);
   };
   const deadline = await getBlockchainTimestamp(tezos, deadlineTimespan);
 

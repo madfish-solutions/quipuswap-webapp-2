@@ -11,15 +11,16 @@ import { LP_TOKEN_DECIMALS, TEZOS_TOKEN } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
 import { UnstakeButton } from '@containers/stake/item/components/unstake-button';
 import { getCandidateInfo, BakerCleaner } from '@containers/stake/item/helpers';
 import {
   useAvailableBalances,
-  useTokensLoading,
-  useTokensPair,
   useStakingId,
-  useStakingRouting
+  useStakingLoading,
+  useStakingRouting,
+  useTokenOrPair
 } from '@containers/stake/item/helpers/staking.provider';
 import { TabsContent } from '@containers/stake/item/hooks';
 import { StakingTabs } from '@containers/stake/item/types';
@@ -56,12 +57,12 @@ const RealForm: React.FC<StakingFormProps> = ({
 
   const { data: bakers } = useBakers();
 
-  const { stakingId } = useStakingId();
-  const { currentCandidate } = getCandidateInfo(stakingId, bakers);
-  const { tokenPair } = useTokensPair();
+  const stakingId = useStakingId();
+  const { currentCandidate } = stakingId ? getCandidateInfo(stakingId, bakers) : { currentCandidate: null };
+  const tokenOrPair = useTokenOrPair();
   const { stakingTab, handleSetActiveId, currentTab } = useStakingRouting();
   const { availableBalance } = useAvailableBalances();
-  const tokensUpdating = useTokensLoading();
+  const stakingLoading = useStakingLoading();
 
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
@@ -117,26 +118,38 @@ const RealForm: React.FC<StakingFormProps> = ({
         contentClassName={s.content}
       >
         <Field name="balance1" validate={validate} parse={v => parseDecimals(v, 0, Infinity, LP_TOKEN_DECIMALS)}>
-          {({ input, meta }) => (
-            <PositionSelect
-              {...input}
-              notSelectable1={TEZOS_TOKEN}
-              tokenPair={tokenPair}
-              tokenPairFrozen={true}
-              balance={availableBalance}
-              handleBalance={value => {
-                form.mutators.setValue('balance1', toSixDecimals(value));
-              }}
-              tokensUpdating={tokensUpdating}
-              shouldShowBalanceButtons={Boolean(accountPkh)}
-              balanceLabel={t('stake|Available balance')}
-              notFrozen
-              id="liquidity-remove-input"
-              label={currentTab.label}
-              className={s.input}
-              error={errorInterceptor((meta.dirty && meta.error) || meta.submitError)}
-            />
-          )}
+          {({ input, meta }) =>
+            'token2' in tokenOrPair ? (
+              <PositionSelect
+                {...input}
+                notSelectable1={TEZOS_TOKEN}
+                tokenPair={tokenOrPair}
+                tokenPairFrozen={true}
+                balance={availableBalance}
+                handleBalance={value => {
+                  form.mutators.setValue('balance1', toSixDecimals(value));
+                }}
+                /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+                tokensUpdating={{ isTokenChanging: stakingLoading.isStakingLoading, setIsTokenChanging: () => {} }}
+                shouldShowBalanceButtons={Boolean(accountPkh)}
+                balanceLabel={t('stake|Available balance')}
+                notFrozen
+                id="liquidity-remove-input"
+                label={currentTab.label}
+                className={s.input}
+                error={errorInterceptor((meta.dirty && meta.error) || meta.submitError)}
+              />
+            ) : (
+              <TokenSelect
+                balance={availableBalance ?? null}
+                label="Amount"
+                /* eslint-disable-next-line @typescript-eslint/no-empty-function */
+                handleBalance={() => {}}
+                token={tokenOrPair.token}
+                blackListedTokens={[]}
+              />
+            )
+          }
         </Field>
         {currentTab.id === StakingTabs.stake && (
           <Field name="selectedBaker" validate={required}>
@@ -166,14 +179,13 @@ const RealForm: React.FC<StakingFormProps> = ({
           </Field>
         )}
         <div className={s.buttons}>
-          {accountPkh && <UnstakeButton className={s.button} />}
-          {accountPkh ? (
+          {accountPkh && stakingTab === StakingTabs.unstake && <UnstakeButton className={s.button} />}
+          {accountPkh && stakingTab === StakingTabs.stake && (
             <Button onClick={handleStakeOrUnstake} className={s.button} disabled={isStakeOrUnstakeButtonDisabled()}>
               {currentTab.label}
             </Button>
-          ) : (
-            <ConnectWalletButton className={cx(s.connect, s['mt-24'])} />
           )}
+          {!accountPkh && <ConnectWalletButton className={cx(s.connect, s['mt-24'])} />}
         </div>
       </Card>
     </>

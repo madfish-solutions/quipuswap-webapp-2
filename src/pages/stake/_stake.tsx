@@ -5,6 +5,7 @@ import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
 import { StakeList } from '@containers/stake';
+import { ListStats } from '@containers/stake/list/list-stats/list-stats';
 import { StakeDataProvider, StakeListDataProvider } from '@containers/stake/providers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
@@ -27,6 +28,7 @@ export const Stake: FC = () => {
     >
       <StakeDataProvider>
         <StakeListDataProvider>
+          <ListStats />
           <StakeList />
         </StakeListDataProvider>
       </StakeDataProvider>

@@ -19,11 +19,11 @@ export const UnstakeButton: FC<UnstakeButtonProps> = ({ className }) => {
   const tezos = useTezos();
   const { candidate, stake } = useStaker();
   const { currentTab } = useStakingRouting();
-  const { stakingId } = useStakingId();
+  const stakingId = useStakingId();
   const { data: bakers } = useBakers();
 
   const isStakeTab = currentTab.id === StakingTabs.stake;
-  const { currentCandidate } = getCandidateInfo(stakingId, bakers);
+  const { currentCandidate } = stakingId ? getCandidateInfo(stakingId, bakers) : { currentCandidate: null };
 
   const wrapCandidate = isStakeTab ? candidate : currentCandidate?.address;
 

@@ -49,10 +49,15 @@ export interface TokenPair {
   dex?: Nullable<FoundDex>;
 }
 
+export interface StakingSingleToken {
+  token: Token;
+  balance?: Nullable<string>;
+  frozenBalance?: Nullable<string>;
+}
+
 export interface Token {
   type: Standard;
   contractAddress: string;
-  // TODO: change the type to BigNumber
   fa2TokenId?: number;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;

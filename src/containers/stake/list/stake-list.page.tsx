@@ -1,44 +1,23 @@
-import { useState } from 'react';
+import { observer } from 'mobx-react-lite';
 
-import { MAINNET_DEFAULT_TOKEN, TEZOS_TOKEN } from '@app.config';
 import { StateWrapper } from '@components/state-wrapper';
+import { useToasts } from '@hooks/use-toasts';
 
-import { eStakeStatus, StakeListSkeleton, EmptyStakeList } from './components';
+import { useLoadOnMountStakingStore } from '../item/hooks/use-load-on-mount-staking-store';
+import { EmptyStakeList, StakeListSkeleton } from './components';
 import { Iterator } from './helpers/iterator';
 import styles from './stake-list.page.module.scss';
-import { StakeListItem, StakeListItemProps } from './structures';
+import { StakeListItem } from './structures';
 
-export const mockStakings: StakeListItemProps[] = [
-  {
-    tokenA: TEZOS_TOKEN,
-    tokenB: MAINNET_DEFAULT_TOKEN,
-    stakeStatus: eStakeStatus.PAUSED,
-    rewardToken: MAINNET_DEFAULT_TOKEN,
-    tvl: '100000',
-    apr: 888,
-    apy: 0.0008,
-    myBalance: '1000000',
-    depositBalance: '1000000',
-    earnBalance: '1000000',
-    depositExhangeRate: '0.0257213123',
-    earnExhangeRate: '0.2321123213',
-    stakeUrl: '',
-    depositTokenUrl: ''
-  }
-];
-
-export const StakeList = () => {
-  const [loading, setLoading] = useState(true);
-
-  setTimeout(() => {
-    setLoading(false);
-  }, 1500);
+export const StakeList = observer(() => {
+  const { showErrorToast } = useToasts();
+  const stakingStore = useLoadOnMountStakingStore(showErrorToast);
 
   return (
     <div>
-      <StateWrapper isLoading={loading} loaderFallback={<StakeListSkeleton />}>
+      <StateWrapper isLoading={stakingStore.list.isLoading} loaderFallback={<StakeListSkeleton />}>
         <Iterator
-          data={mockStakings}
+          data={stakingStore.list.data}
           render={StakeListItem}
           fallback={<EmptyStakeList />}
           isGrouped
@@ -47,4 +26,4 @@ export const StakeList = () => {
       </StateWrapper>
     </div>
   );
-};
+});

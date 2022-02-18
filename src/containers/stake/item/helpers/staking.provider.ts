@@ -1,15 +1,19 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
 import { networksDefaultTokens, NETWORK_ID, TEZOS_TOKEN } from '@app.config';
+import { StakeItem } from '@interfaces/staking';
 import { useAccountPkh, useOnBlock, useTezos } from '@utils/dapp';
-import { Nullable, StakerType, Token, TokenPair } from '@utils/types';
+import { Nullable, StakerType, StakingSingleToken, TokenPair } from '@utils/types';
 
 import { useStakingRouter } from '../hooks';
 import { StakingTabs } from '../types';
-import { getStakeBalances } from './get-staking-balance';
+
+interface Props {
+  data: Nullable<StakeItem>;
+}
 
 const initialStaker: StakerType = {
   stake: null,
@@ -25,21 +29,32 @@ const fallbackTokenPair: TokenPair = {
   balance: null,
   frozenBalance: null
 };
+
 // eslint-disable-next-line sonarjs/cognitive-complexity
-const useStakingService = () => {
+const useStakingService = ({ data }: Props) => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
-
-  const [isTokenChanging, setIsTokenChanging] = useState(false);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
   const [staker, setStaker] = useState<StakerType>(initialStaker);
 
-  const [stakingId, setStakingId] = useState<BigNumber>(new BigNumber(0));
+  const rawStakingId = data?.id;
+  const stakingId = useMemo(() => (rawStakingId ? new BigNumber(rawStakingId) : null), [rawStakingId]);
 
-  const [tokenPair, setTokenPair] = useState<TokenPair>(fallbackTokenPair);
-  const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, defaultToken]);
-  const tokensRef = useRef<[Token, Token]>([token1, token2]);
+  const tokenOrPair = useMemo<StakingSingleToken | TokenPair>(() => {
+    if (data?.tokenB) {
+      return {
+        token1: data.tokenA,
+        token2: data.tokenB,
+        balance: data.myBalance?.toFixed(),
+        frozenBalance: data.depositBalance?.toFixed()
+      };
+    }
+
+    return data
+      ? { token: data.tokenA, balance: data.myBalance?.toFixed(), frozenBalance: data.depositBalance?.toFixed() }
+      : fallbackTokenPair;
+  }, [data]);
 
   const {
     urlLoaded,
@@ -52,43 +67,31 @@ const useStakingService = () => {
     handleSetActiveId
   } = useStakingRouter();
 
-  const { availableStakeBalance, availableUnstakeBalance } = useMemo(() => getStakeBalances(), []);
-
-  useEffect(() => {
-    tokensRef.current = [token1, token2];
-  }, [token1, token2]);
-
-  const localAvailableBalance = currentTab.id === StakingTabs.stake ? availableStakeBalance : availableUnstakeBalance;
+  const localAvailableBalance = currentTab.id === StakingTabs.stake ? tokenOrPair?.balance : tokenOrPair?.frozenBalance;
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   const getBalances = useCallback(async () => {}, []);
 
   useEffect(() => {
-    if (initialLoad && token1 && token2) {
+    if (initialLoad && tokenOrPair) {
       void getBalances();
     }
     // eslint-disable-next-line
   }, [tezos, accountPkh]);
 
   const updateBalances = useCallback(() => {
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
+    if (tezos && tokenOrPair) {
       getBalances();
     }
-  }, [tezos, tokenPair, getBalances]);
+  }, [tezos, tokenOrPair, getBalances]);
 
   useOnBlock(tezos, updateBalances);
 
-  const isStakingLoading = useMemo(() => {
-    return !urlLoaded || !initialLoad || isTokenChanging;
-  }, [urlLoaded, initialLoad, isTokenChanging]);
+  const isStakingLoading = !data;
 
   const availableBalance = isStakingLoading ? null : localAvailableBalance;
 
   return {
-    tokensLoading: {
-      isTokenChanging,
-      setIsTokenChanging
-    },
     rewards: {
       rewards,
       setRewards
@@ -100,26 +103,15 @@ const useStakingService = () => {
       setStaker
     },
 
-    stakingId: {
-      stakingId,
-      setStakingId
-    },
+    stakingId,
 
     availableBalances: {
-      availableStakeBalance,
-      availableUnstakeBalance,
+      availableStakeBalance: data?.myBalance,
+      availableUnstakeBalance: data?.depositBalance,
       availableBalance
     },
 
-    tokenPair: {
-      tokenPair,
-      setTokenPair
-    },
-    tokens: {
-      token1,
-      token2,
-      setTokens
-    },
+    tokenOrPair,
 
     stakingRouting: {
       urlLoaded,
@@ -142,7 +134,6 @@ const useStakingService = () => {
 
 export const [
   StakingProvider,
-  useTokensLoading,
 
   useRewards,
   useStaker,
@@ -151,8 +142,7 @@ export const [
 
   useAvailableBalances,
 
-  useTokensPair,
-  useStakingTokens,
+  useTokenOrPair,
 
   useStakingRouting,
   useStakingHandlers,
@@ -160,7 +150,6 @@ export const [
   useStakingLoading
 ] = constate(
   useStakingService,
-  v => v.tokensLoading,
 
   v => v.rewards,
   v => v.staker,
@@ -169,8 +158,7 @@ export const [
 
   v => v.availableBalances,
 
-  v => v.tokenPair,
-  v => v.tokens,
+  v => v.tokenOrPair,
 
   v => v.stakingRouting,
   v => v.handlers,

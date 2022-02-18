@@ -7,7 +7,7 @@ import { useStakingId, useStakingRouting } from '../../helpers/staking.provider'
 
 export const useHandleStake = () => {
   const tezos = useTezos();
-  const { stakingId } = useStakingId();
+  const stakingId = useStakingId();
   const { currentTab } = useStakingRouting();
   const { showErrorToast } = useToasts();
 
