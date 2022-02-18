@@ -184,18 +184,19 @@
     column-gap: 32px;
   }
 
-  .stakeStats {
+  .userData {
     position: relative;
-    &:after {
+    &:before {
       content: "";
       position: absolute;
 
       width: 1px;
       height: 80%;
 
-      left: calc(100% + 24px);
+      left: 0;
       top: 50%;
       transform: translateY(-50%);
+      margin-left: -28px;
 
       background: #8b90a0;
     }

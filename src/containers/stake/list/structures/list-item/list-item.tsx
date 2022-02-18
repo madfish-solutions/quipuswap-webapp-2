@@ -125,6 +125,7 @@ export const StakeListItem: FC<StakeItem> = ({
                     amount={myBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myBalanceDollarEquivalent}
+                    isError={!myBalance}
                   />
                 </ListItemCardCell>
 
@@ -139,6 +140,7 @@ export const StakeListItem: FC<StakeItem> = ({
                     amount={depositBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myDepositDollarEquivalent}
+                    isError={!depositBalance}
                   />
                 </ListItemCardCell>
 
@@ -153,6 +155,7 @@ export const StakeListItem: FC<StakeItem> = ({
                     amount={earnBalance}
                     currency={MyEarnTokenSymbol}
                     dollarEquivalent={myEarnDollarEquivalent}
+                    isError={!earnBalance}
                   />
                 </ListItemCardCell>
               </div>
