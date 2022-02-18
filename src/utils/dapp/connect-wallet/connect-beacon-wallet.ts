@@ -11,7 +11,7 @@ import {
   NETWORK,
   NETWORK_ID
 } from '@app.config';
-import { NoBeaconWallet, WalletNotConected } from '@errors';
+import { NoBeaconWallet, WalletNotConnected } from '@errors';
 import { isDefaultConnectType } from '@utils/helpers';
 import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
 
@@ -61,7 +61,7 @@ export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: Q
   tezos.setWalletProvider(beaconWallet);
   const activeAcc = await beaconWallet.client.getActiveAccount();
   if (!activeAcc) {
-    throw new WalletNotConected();
+    throw new WalletNotConnected();
   }
 
   tezos.setSignerProvider(new ReadOnlySigner(activeAcc.address, activeAcc.publicKey));

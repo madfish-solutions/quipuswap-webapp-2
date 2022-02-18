@@ -19,7 +19,7 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
-  dollarEquivalent?: string;
+  dollarEquivalent?: Nullable<string>;
   amountDecimals?: number;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
