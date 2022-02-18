@@ -1,4 +1,5 @@
 import { Nullable } from '@quipuswap/ui-kit';
+import { makeAutoObservable } from 'mobx';
 
 import { getStakesList } from '@api/staking/getStakesList';
 import { getStakesStats } from '@api/staking/getStakesStats';
@@ -16,5 +17,26 @@ export class StakingStore {
 
   constructor(root: RootStore) {
     this.root = root;
+  }
+
+  makeStakingObservable = (stakingId: string) => {
+    return makeAutoObservable({
+      value: this.list,
+      get staking() {
+        return this.value.data.find(({ id }) => id === stakingId);
+      }
+    });
+  };
+
+  get listIsInitialized() {
+    return this.list.isInitialized;
+  }
+
+  get listIsLoading() {
+    return this.list.isLoading;
+  }
+
+  get listError() {
+    return this.list.error;
   }
 }

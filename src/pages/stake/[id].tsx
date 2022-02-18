@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
@@ -23,19 +23,24 @@ const StakeItemPage = observer(() => {
   const { t } = useTranslation(['common', 'privacy', 'stake']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { showErrorToast } = useToasts();
-  const {
-    list: { error, data: stakeList }
-  } = useLoadOnMountStakingStore(showErrorToast);
+  const { makeStakingObservable, listIsLoading, listIsInitialized, listError } =
+    useLoadOnMountStakingStore(showErrorToast);
+  const loadingFinished = !listIsLoading && listIsInitialized;
+
   const router = useRouter();
 
   const stakeId = router.query['id'];
-  const stake = stakeList.find(({ id }) => id === stakeId);
+  const stakeObservable = useMemo(
+    () => makeStakingObservable(stakeId?.toString() ?? '0'),
+    [makeStakingObservable, stakeId]
+  );
+  const stake = stakeObservable.staking;
 
   useEffect(() => {
-    if (stakeList.length > 0 && !stake) {
+    if (!stake && loadingFinished) {
       router.replace('/404');
     }
-  }, [stakeList, stake, router, stakeId]);
+  }, [stake, router, loadingFinished]);
 
   return (
     <BaseLayout
@@ -43,7 +48,7 @@ const StakeItemPage = observer(() => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <StakeItem data={stake ?? null} isError={Boolean(error)} />
+      <StakeItem data={stake ?? null} isError={Boolean(listError)} />
     </BaseLayout>
   );
 });

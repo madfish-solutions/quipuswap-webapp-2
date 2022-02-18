@@ -8,6 +8,7 @@ export class LoadingErrorData<RawData, Data> {
   data: Data;
   isLoading = false;
   error: Nullable<Error> = null;
+  isInitialized = false;
 
   constructor(
     private defaultData: Data,
@@ -27,6 +28,7 @@ export class LoadingErrorData<RawData, Data> {
   async load() {
     try {
       this.isLoading = true;
+      this.isInitialized = true;
       this.rawData = await this.getDate();
       this.data = this.mapping(this.rawData);
       this.error = null;
