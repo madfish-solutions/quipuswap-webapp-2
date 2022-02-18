@@ -30,7 +30,7 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
       <div className={s.rateView}>
         <StateCurrencyAmount amount="1" currency={currencyInputSymbol} />
         <span className={s.equal}>=</span>
-        <StateCurrencyAmount isError={isNull(rate)} amount={rate} currency={currencyOutputSymbol} />
+        <StateCurrencyAmount isError={isNull(rate)} amount={rate} currency={currencyOutputSymbol} balanceRule />
       </div>
       <div className={s.usdEquityWrapper}>
         <StateDollarEquivalent isError={isNull(usdRate)} dollarEquivalent={usdRate} />

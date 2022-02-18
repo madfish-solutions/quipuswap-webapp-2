@@ -268,7 +268,10 @@ function useDApp() {
 
   const estimationToolkit = useMemo(() => {
     if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
-      const cloneTezosToolkit = new TezosToolkit(tezos!.rpc);
+      if (!tezos?.rpc) {
+        throw new Error('Tezos RPC in undefined');
+      }
+      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
       cloneTezosToolkit.setPackerProvider(michelEncoder);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 

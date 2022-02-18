@@ -20,7 +20,8 @@ export const useLiquidityDetailsService = (
 
   const isPoolNotExists = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
-  const isTokensOrderValid = tokenA?.contractAddress === pairInfo?.tokenA.contractAddress;
+  const isTokensOrderValid =
+    tokenA?.contractAddress === pairInfo?.tokenA.contractAddress && tokenA?.fa2TokenId === pairInfo?.tokenA.fa2TokenId;
 
   const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
   const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;

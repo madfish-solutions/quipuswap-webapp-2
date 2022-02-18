@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { TEZOS_TOKEN, TOKEN_TO_TOKEN_DEX } from '@app.config';
 import useUpdateOnBlockSWR from '@hooks/useUpdateOnBlockSWR';
 import { useAccountPkh, useEstimationToolkit } from '@utils/dapp';
-import { estimateSwapFee, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@utils/helpers';
+import { defined, estimateSwapFee, fromDecimals, getTokenPairSlug, getTokenSlug, toDecimals } from '@utils/helpers';
 import { DexPair, Nullable, Undefined, Token } from '@utils/types';
 
 import { SwapFeeNotEnoughParametersError } from './use-swap-fee.errors';
@@ -29,7 +29,7 @@ export const useSwapFee = ({ inputToken, inputAmount, dexChain, slippageToleranc
     async (_key: string, senderPkh: Nullable<string>, recipientPkh: Undefined<string>) => {
       if (senderPkh && inputToken && dexChain && inputAmount) {
         try {
-          const rawNewFee = await estimateSwapFee(tezos!, senderPkh, {
+          const rawNewFee = await estimateSwapFee(defined(tezos), senderPkh, {
             inputToken,
             inputAmount: toDecimals(inputAmount, inputToken),
             dexChain,

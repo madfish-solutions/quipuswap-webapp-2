@@ -51,3 +51,4 @@ export * from './token-type';
 export * from './is-token-to-tezos-dex';
 export * from './is-token-to-token-dex';
 export * from './is-whitelisted-token';
+export * from './big-number-to-string';

@@ -5,61 +5,38 @@ import { Card } from '@quipuswap/ui-kit';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StakeItem } from '@interfaces/staking';
 import { useAccountPkh } from '@utils/dapp';
-import { getTokenPairSlug, getTokenSlug, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
-import { Token } from '@utils/types';
+import { getTokensPairName, getTokenSymbol, isExist, bigNumberToString } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
-import { eStakeStatus, StakeStatus } from '../../components/stake-status';
+import { StakeStatusBox } from '../../components/stake-status-box';
 import { getDollarEquivalent } from '../../helpers';
 import styles from './list-item.module.scss';
 
 const ICON_SIZE = 48;
 
+// TODO: Move to Translation
 const SELECT = 'Select';
-
 const FULL_CARD_TOOLTIP_TEXT = 'This is text';
-
 const TOKEN_CONTRACT = 'Token contract';
 const STAKE_CONTRACT = 'Farm Contract';
 const LINKS_THEME = 'underlined';
-
 const TVL = 'TVL';
 const TVL_TOOLTIP = 'tvl tooltip';
-
 const APR = 'APR';
 const APR_TOOLTIP = 'apr tooltip';
-
-const APY = 'My Balance';
+const APY = 'APY';
 const APY_TOOLTIP = 'apy tooltip';
-
 const MY_BALANCE = 'My Balance';
 const MY_BALANCE_TOOLTIP = 'My Balance tooltip';
-
 const MY_DEPOSIT = 'My Deposit';
 const MY_DEPOSIT_TOOLTIP = 'My Deposit tooltip';
-
 const MY_EARNED = 'My Earned';
-const MY_EARNED_TOOLTIP = 'My Erned tooltip';
+const MY_EARNED_TOOLTIP = 'My Earned tooltip';
 
-interface Props {
-  tokenA: Token;
-  tokenB: Token;
-  stakeStatus: eStakeStatus;
-  rewardToken: Token;
-  tvl: string;
-  apr: number;
-  apy: number;
-  myBalance: string;
-  depositBalance: string;
-  earnBalance: string;
-  depositExhangeRate: string;
-  earnExhangeRate: string;
-  stakeUrl: string;
-  depositTokenUrl: string;
-}
-
-export const StakeListItem: FC<Props> = ({
+export const StakeListItem: FC<StakeItem> = ({
+  id,
   tokenA,
   tokenB,
   stakeStatus,
@@ -67,33 +44,25 @@ export const StakeListItem: FC<Props> = ({
   tvl,
   apr,
   apy,
+  depositExchangeRate,
+  earnExchangeRate,
+  stakeUrl,
+  depositTokenUrl,
   myBalance,
   depositBalance,
-  earnBalance,
-  depositExhangeRate,
-  earnExhangeRate,
-  stakeUrl,
-  depositTokenUrl
+  earnBalance
 }) => {
   const accountPkh = useAccountPkh();
 
   const isPairFull = isExist(tokenB);
-
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
+  const tvlDollarEquivalent = getDollarEquivalent(bigNumberToString(tvl), bigNumberToString(depositExchangeRate));
+  const selectLink = `stake/${id}`;
 
-  const tvlDollarEquivalent = getDollarEquivalent(tvl, depositExhangeRate);
-
-  const aprAmount = `${apr}%`;
-  const apyAmount = `${apy}%`;
-
-  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExhangeRate);
-
-  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExhangeRate);
-
+  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, bigNumberToString(depositExchangeRate));
+  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, bigNumberToString(depositExchangeRate));
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
-  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExhangeRate);
-
-  const selectLink = isPairFull ? `stake/${getTokenPairSlug(tokenA, tokenB)}` : getTokenSlug(tokenA);
+  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, bigNumberToString(earnExchangeRate));
 
   return (
     <Card className={styles.card}>
@@ -101,7 +70,7 @@ export const StakeListItem: FC<Props> = ({
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StakeStatus status={stakeStatus} />
+            <StakeStatusBox status={stakeStatus} />
             <Tooltip className={styles.tooltip} content={FULL_CARD_TOOLTIP_TEXT} />
           </div>
 
@@ -131,7 +100,7 @@ export const StakeListItem: FC<Props> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                {aprAmount}
+                <StateCurrencyAmount amount={apr} currency="%" isError={!apr} />
               </ListItemCardCell>
 
               <ListItemCardCell
@@ -140,10 +109,9 @@ export const StakeListItem: FC<Props> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                {apyAmount}
+                <StateCurrencyAmount amount={apy} currency="%" isError={!apr} />
               </ListItemCardCell>
             </div>
-
             {accountPkh && (
               <div className={styles.userData}>
                 <ListItemCardCell

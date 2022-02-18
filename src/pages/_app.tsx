@@ -13,6 +13,7 @@ import { NewExchangeRatesProvider } from '@hooks/use-new-exchange-rate';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
+import { RootStoreProvider } from '@providers/RootStoreProvider';
 import { DEFAULT_SEO } from '@seo.config';
 import { DAppProvider, DAppTokensProvider, DAppBakerProvider } from '@utils/dapp';
 import { debounce, isClient } from '@utils/helpers';
@@ -91,23 +92,25 @@ const App = ({ Component, pageProps }: AppProps) => {
         <link rel="icon" id="favicon" href="/favicon.ico" />
       </Head>
 
-      <DAppProvider>
-        <DAppBakerProvider>
-          <DAppTokensProvider>
-            <ColorThemeProvider>
-              <BalancesProvider>
-                <ExchangeRatesProvider>
-                  <NewExchangeRatesProvider>
-                    <DexGraphProvider>
-                      <Component {...pageProps} />
-                    </DexGraphProvider>
-                  </NewExchangeRatesProvider>
-                </ExchangeRatesProvider>
-              </BalancesProvider>
-            </ColorThemeProvider>
-          </DAppTokensProvider>
-        </DAppBakerProvider>
-      </DAppProvider>
+      <RootStoreProvider>
+        <DAppProvider>
+          <DAppBakerProvider>
+            <DAppTokensProvider>
+              <ColorThemeProvider>
+                <BalancesProvider>
+                  <ExchangeRatesProvider>
+                    <NewExchangeRatesProvider>
+                      <DexGraphProvider>
+                        <Component {...pageProps} />
+                      </DexGraphProvider>
+                    </NewExchangeRatesProvider>
+                  </ExchangeRatesProvider>
+                </BalancesProvider>
+              </ColorThemeProvider>
+            </DAppTokensProvider>
+          </DAppBakerProvider>
+        </DAppProvider>
+      </RootStoreProvider>
     </>
   );
 };
