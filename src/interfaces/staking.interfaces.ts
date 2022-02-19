@@ -38,7 +38,7 @@ export interface RawStakeItem {
 }
 
 interface AbstractStakeItem {
-  id: string;
+  id: BigNumber;
   tokenA: Token;
   tokenB: Undefined<Token>;
   stakeStatus: StakeStatus;

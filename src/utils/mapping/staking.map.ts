@@ -10,6 +10,7 @@ const mapToken = (raw: Token): Token => ({
 
 const mapStakeItem = (raw: RawStakeItem): StakeItem => ({
   ...raw,
+  id: new BigNumber(raw.id),
   tokenA: mapToken(raw.tokenA),
   tokenB: raw.tokenB ? mapToken(raw.tokenB) : undefined,
   rewardToken: mapToken(raw.rewardToken),

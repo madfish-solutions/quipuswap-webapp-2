@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { StakeList } from '@containers/stake';
+import { StakeListPage } from '@containers/stake';
 import { ListStats } from '@containers/stake/list/list-stats/list-stats';
 import { StakeDataProvider, StakeListDataProvider } from '@containers/stake/providers';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
@@ -16,7 +16,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Stake: FC = () => {
+export const StakingList: FC = () => {
   const { t } = useTranslation(['common', 'privacy']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -29,7 +29,7 @@ export const Stake: FC = () => {
       <StakeDataProvider>
         <StakeListDataProvider>
           <ListStats />
-          <StakeList />
+          <StakeListPage />
         </StakeListDataProvider>
       </StakeDataProvider>
     </BaseLayout>
@@ -37,4 +37,4 @@ export const Stake: FC = () => {
 };
 
 // eslint-disable-next-line import/no-default-export
-export default Stake;
+export default StakingList;
