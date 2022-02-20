@@ -31,7 +31,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   notSelectable?: boolean;
   handleChange?: (token: Token) => void;
-  handleBalance: (value: string) => void;
+  handleBalance?: (value: string) => void;
   token: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
@@ -130,9 +130,11 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             </div>
           </div>
         </div>
-        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
-        </Scaffolding>
+        {handleBalance ? (
+          <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+            <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
+          </Scaffolding>
+        ) : null}
         <ComplexError error={error} />
       </div>
       {tokensModal && (

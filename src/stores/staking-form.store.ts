@@ -1,16 +1,19 @@
 import BigNumber from 'bignumber.js';
-import { action, makeObservable, observable, computed } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { StakingTabs } from '@containers/stake/item/types';
 import { StakeItem } from '@interfaces/staking.interfaces';
-import { Nullable, TokenPair } from '@utils/types';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
 const DEFAULT_BALANCE = 0;
 
 export class StakingFormStore {
   stakeItem: Nullable<StakeItem> = null;
   currentTab: StakingTabs = StakingTabs.stake;
+
   balance = new BigNumber(DEFAULT_BALANCE);
+  selectedBaker: Nullable<WhitelistedBaker> = null;
+
   isLoading = false;
 
   constructor() {
@@ -18,13 +21,16 @@ export class StakingFormStore {
       currentTab: observable,
       stakeItem: observable,
       balance: observable,
+      selectedBaker: observable,
       isLoading: observable,
+
       isLpToken: computed,
-      tokenPair: computed,
+
       setTab: action,
       setStakeItem: action,
       clearBalance: action,
       setBalance: action,
+      setSelectedBaker: action,
       stake: action,
       unstake: action
     });
@@ -41,6 +47,10 @@ export class StakingFormStore {
 
   setBalance(balance: BigNumber.Value) {
     this.balance = new BigNumber(balance);
+  }
+
+  setSelectedBaker(selectedBaker: Nullable<WhitelistedBaker>) {
+    this.selectedBaker = selectedBaker;
   }
 
   clearBalance() {
@@ -61,18 +71,5 @@ export class StakingFormStore {
 
   get isLpToken() {
     return Boolean(this.stakeItem?.tokenB);
-  }
-
-  get tokenPair(): Nullable<TokenPair> {
-    if (!this.stakeItem || !this.stakeItem.tokenB) {
-      return null;
-    }
-
-    return {
-      // balance: Nullable<string>, // TODO
-      // frozenBalance: Nullable<string>, // TODO
-      token1: this.stakeItem.tokenA,
-      token2: this.stakeItem.tokenB
-    };
   }
 }

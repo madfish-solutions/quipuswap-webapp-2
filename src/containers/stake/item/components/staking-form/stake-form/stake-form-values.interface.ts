@@ -1,5 +1,4 @@
 export interface StakeFormValues {
-  balance: number;
+  balance: string;
   selectedBaker: string;
-  currentBacker?: string;
 }

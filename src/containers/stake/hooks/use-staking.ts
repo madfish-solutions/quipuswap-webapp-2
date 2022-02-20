@@ -10,6 +10,7 @@ import { useIsLoading } from '@utils/dapp';
 import { isUndefined } from '@utils/helpers';
 
 export const useStaking = () => {
+  const router = useRouter();
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const stakingStore = useStakingStore();
@@ -36,15 +37,13 @@ export const useStaking = () => {
     }
   }, [showErrorToast, stakingStore.list.error]);
 
-  const router = useRouter();
   const stakeId = router.query['id'];
-  const item = isUndefined(stakeId) ? undefined : stakingStore.defineStake(new BigNumber(`${stakeId}`));
+  const stakeItem = isUndefined(stakeId) ? undefined : stakingStore.defineStake(new BigNumber(`${stakeId}`));
 
   return {
     isLoading: isLoading || stakingStore.list.isLoading,
     list: stakingStore.list,
     error: stakingStore.list.error,
-    item,
-    router
+    stakeItem
   };
 };

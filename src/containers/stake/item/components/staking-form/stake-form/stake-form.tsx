@@ -1,52 +1,57 @@
 import { FC } from 'react';
 
-import { FormApi, Mutator } from 'final-form';
 import { observer } from 'mobx-react-lite';
-import { withTypes } from 'react-final-form';
+import { useTranslation } from 'next-i18next';
 
-import { StakeFormSpy } from '@containers/stake/item/components/staking-form/stake-form/stake-form-spy';
-import { StakeFormValues } from '@containers/stake/item/components/staking-form/stake-form/stake-form-values.interface';
-import { useStakingFormStore } from '@hooks/stores/use-staking-form-store';
-import { Nullable } from '@utils/types';
-
-// TODO: Refactor solution of BakerCleaner
-
-interface IForm {
-  form: Nullable<FormApi<StakeFormValues, Partial<StakeFormValues>>>;
-}
-
-const pointerForm: IForm = { form: null };
+import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or-do-something';
+import { ComplexBaker } from '@components/ui/ComplexInput';
+import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { Button } from '@components/ui/elements/button';
+import { useStakeFormViewModel } from '@containers/stake/item/components/staking-form/stake-form/use-stake-form.vm';
+import s from '@styles/CommonContainer.module.sass';
 
 export const StakeForm: FC = observer(() => {
-  const { Form } = withTypes<StakeFormValues>();
+  const { t } = useTranslation(['common', 'stake']);
+  const {
+    formik,
+    userTokenBalance,
+    balanceError,
+    stakeItem,
+    bakerError,
+    disabled,
+    handleBalanceChange,
+    handleBakerChange
+  } = useStakeFormViewModel();
 
-  const stakingFormStore = useStakingFormStore();
-
-  const handleStakeSubmit = async (values: StakeFormValues) => {
-    // eslint-disable-next-line no-console
-    console.log('submit', values);
-    await stakingFormStore.stake();
-  };
-
-  const mutators: { [key: string]: Mutator<StakeFormValues, Partial<StakeFormValues>> } = {
-    setValue: ([field, value], state, { changeValue }) => {
-      changeValue(state, field, () => value);
-    }
-  };
-
-  const handleFormRender = (handleSubmit: () => Promise<void>, form: FormApi<StakeFormValues>) => {
-    if (pointerForm.form !== form) {
-      pointerForm.form = form;
-    }
-
-    return <StakeFormSpy form={form} handleSubmit={handleSubmit} />;
-  };
+  if (!stakeItem) {
+    return null;
+  }
 
   return (
-    <Form
-      onSubmit={handleStakeSubmit}
-      mutators={mutators}
-      render={({ handleSubmit, form }) => handleFormRender(handleSubmit as () => Promise<void>, form)}
-    />
+    <form onSubmit={formik.handleSubmit}>
+      <TokenSelect
+        label={t('common|Amount')}
+        name="balance"
+        value={formik.values.balance}
+        balance={userTokenBalance}
+        error={balanceError}
+        token={stakeItem.tokenA}
+        blackListedTokens={[]}
+        notSelectable
+        onChange={event => {
+          // @ts-ignore
+          handleBalanceChange(event.target.value || '');
+        }}
+        handleBalance={handleBalanceChange}
+      />
+      <ComplexBaker label={t('common|Baker')} className={s.mt24} handleChange={handleBakerChange} error={bakerError} />
+      <div className={s.buttons}>
+        <ConnectWalletOrDoSomething>
+          <Button type="submit" className={s.button} disabled={disabled}>
+            {t('stake|Stake')}
+          </Button>
+        </ConnectWalletOrDoSomething>
+      </div>
+    </form>
   );
 });
