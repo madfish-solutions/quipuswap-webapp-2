@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 
 import { getStakingListApi } from '@api/staking/get-staking-list.api';
 import { getStakingStatsApi } from '@api/staking/get-staking-stats.api';
-import { RawStakeItem, RawStakeStats, StakeItem, StakeStats } from '@interfaces/staking.interfaces';
+import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
@@ -11,7 +11,7 @@ import { RootStore } from './root.store';
 import { StakingFormStore } from './staking-form.store';
 
 export class StakingStore {
-  list = new LoadingErrorData<RawStakeItem[], StakeItem[]>(
+  list = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
     async () => getStakingListApi(this.rootStore.authStore.accountPkh),
     mapStakesItems

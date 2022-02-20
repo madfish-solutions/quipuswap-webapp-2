@@ -1,14 +1,14 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { StakingTabs } from '@containers/stake/item/types';
-import { StakeItem } from '@interfaces/staking.interfaces';
+import { StakingTabs } from '@containers/staking/item/types';
+import { StakingItem } from '@interfaces/staking.interfaces';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 const DEFAULT_BALANCE = 0;
 
 export class StakingFormStore {
-  stakeItem: Nullable<StakeItem> = null;
+  stakeItem: Nullable<StakingItem> = null;
   currentTab: StakingTabs = StakingTabs.stake;
 
   balance = new BigNumber(DEFAULT_BALANCE);
@@ -41,7 +41,7 @@ export class StakingFormStore {
     this.currentTab = tab;
   }
 
-  setStakeItem(stakeItem: Nullable<StakeItem>) {
+  setStakeItem(stakeItem: Nullable<StakingItem>) {
     this.stakeItem = stakeItem;
   }
 

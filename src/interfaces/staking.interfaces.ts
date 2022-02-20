@@ -16,17 +16,17 @@ export interface StakeStats {
   totalClaimedReward: BigNumber;
 }
 
-export enum StakeStatus {
+export enum StakingStatus {
   ACTIVE = 'ACTIVE',
   PENDING = 'PENDING',
   DISABLED = 'DISABLED'
 }
 
-export interface RawStakeItem {
+export interface RawStakingItem {
   id: string;
   tokenA: Token;
   tokenB: Undefined<Token>;
-  stakeStatus: StakeStatus;
+  stakeStatus: StakingStatus;
   rewardToken: Token;
   tvl: string;
   apr: Nullable<number>;
@@ -37,11 +37,11 @@ export interface RawStakeItem {
   depositTokenUrl: string;
 }
 
-interface AbstractStakeItem {
+interface AbstractStakingItem {
   id: BigNumber;
   tokenA: Token;
   tokenB: Undefined<Token>;
-  stakeStatus: StakeStatus;
+  stakeStatus: StakingStatus;
   rewardToken: Token;
   tvl: BigNumber;
   apr: Nullable<BigNumber>;
@@ -52,18 +52,18 @@ interface AbstractStakeItem {
   depositTokenUrl: string;
 }
 
-export interface UserStakeData {
+interface UserStakingData {
   myBalance: BigNumber;
   depositBalance: BigNumber;
   earnBalance: BigNumber;
 }
 
-interface NoUserStakeItem extends AbstractStakeItem {
+interface NoUserStakingItem extends AbstractStakingItem {
   myBalance: null;
   depositBalance: null;
   earnBalance: null;
 }
 
-interface UserStakeItem extends AbstractStakeItem, UserStakeData {}
+interface UserStakingItem extends AbstractStakingItem, UserStakingData {}
 
-export type StakeItem = NoUserStakeItem | UserStakeItem;
+export type StakingItem = NoUserStakingItem | UserStakingItem;

@@ -50,9 +50,9 @@ export const navigationData: NavigationDataProps[] = [
   },
   {
     id: 4,
-    href: '/stake',
-    as: `/stake`,
-    label: <Trans ns="common">Stake</Trans>,
+    href: '/staking',
+    as: `/staking`,
+    label: <Trans ns="common">Staking</Trans>,
     Icon: StakeIcon
   },
   // {

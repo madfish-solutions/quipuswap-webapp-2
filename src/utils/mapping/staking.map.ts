@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { RawStakeItem, RawStakeStats, StakeItem, StakeStats } from '@interfaces/staking.interfaces';
+import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
 import { Token } from '@utils/types';
 
 const mapToken = (raw: Token): Token => ({
@@ -8,7 +8,7 @@ const mapToken = (raw: Token): Token => ({
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId)
 });
 
-const mapStakeItem = (raw: RawStakeItem): StakeItem => ({
+const mapStakeItem = (raw: RawStakingItem): StakingItem => ({
   ...raw,
   id: new BigNumber(raw.id),
   tokenA: mapToken(raw.tokenA),
@@ -24,7 +24,7 @@ const mapStakeItem = (raw: RawStakeItem): StakeItem => ({
   earnBalance: null
 });
 
-export const mapStakesItems = (rawList: RawStakeItem[]): StakeItem[] => rawList.map(mapStakeItem);
+export const mapStakesItems = (rawList: RawStakingItem[]): StakingItem[] => rawList.map(mapStakeItem);
 
 export const mapStakeStats = (raw: RawStakeStats): StakeStats => ({
   totalValueLocked: new BigNumber(raw.totalValueLocked),
