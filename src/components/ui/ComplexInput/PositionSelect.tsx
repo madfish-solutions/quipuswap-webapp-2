@@ -35,7 +35,6 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   handleBalance: (value: string) => void;
   tokenPair: Nullable<TokenPair>;
   setTokenPair?: (tokenPair: TokenPair) => void;
-  tokenPairFrozen?: boolean;
   tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
@@ -64,7 +63,6 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   notSelectable2 = undefined,
   tokenPair,
   setTokenPair,
-  tokenPairFrozen,
   notFrozen,
   tokensUpdating,
   isPoolNotExists,
@@ -99,6 +97,8 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
   const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;
+
+  const tokenPairFrozen = notSelectable1 && notSelectable2;
 
   return (
     <>
@@ -174,7 +174,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                     'Select LP'
                   )}
                 </h6>
-                <Shevron />
+                {!tokenPairFrozen && <Shevron />}
               </Button>
             </div>
           </div>

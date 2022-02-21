@@ -21,7 +21,9 @@ const mapStakeItem = (raw: RawStakingItem): StakingItem => ({
   earnExchangeRate: new BigNumber(raw.earnExchangeRate),
   myBalance: null,
   depositBalance: null,
-  earnBalance: null
+  earnBalance: null,
+  myDelegate: null,
+  myLastStaked: null
 });
 
 export const mapStakesItems = (rawList: RawStakingItem[]): StakingItem[] => rawList.map(mapStakeItem);

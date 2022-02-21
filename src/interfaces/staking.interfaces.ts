@@ -56,12 +56,16 @@ interface UserStakingData {
   myBalance: BigNumber;
   depositBalance: BigNumber;
   earnBalance: BigNumber;
+  myDelegate: string;
+  myLastStaked: number;
 }
 
 interface NoUserStakingItem extends AbstractStakingItem {
   myBalance: null;
   depositBalance: null;
   earnBalance: null;
+  myDelegate: null;
+  myLastStaked: null;
 }
 
 interface UserStakingItem extends AbstractStakingItem, UserStakingData {}

@@ -1,26 +1,29 @@
 import { FC } from 'react';
 
 import { Card, ExternalLink } from '@quipuswap/ui-kit';
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { MS_IN_SECOND, STAKING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@app.config';
+import { IS_NETWORK_MAINNET, MS_IN_SECOND, STAKING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@app.config';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { getDollarEquivalent } from '@containers/staking/list/helpers';
 import { CandidateButton } from '@containers/voiting/components';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers } from '@utils/dapp';
+import { bigNumberToString, getDollarEquivalent } from '@utils/helpers';
 import { Optional } from '@utils/types';
 
+import { getDepositTokenSymbol } from '../../helpers';
 import { Countdown } from '../countdown';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
 
 const endTimestamp = Date.now() + 90069 * MS_IN_SECOND;
+const dailyDistribution = new BigNumber(1000);
 
 interface Props {
   item: Optional<StakingItem>;
@@ -33,16 +36,16 @@ export const StakingDetails: FC<Props> = ({ item, isError }) => {
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
 
-  const tvlDollarEquivalent = item && getDollarEquivalent(item.tvl, item.depositExchangeRate);
-  const tokenBSymbol = item?.tokenB ? 'TOKEN' : item?.tokenA.metadata.symbol;
-  const tvl = item?.tvl ?? null;
-  const tokenBDecimals = item?.tokenB ? null : item?.tokenA.metadata.decimals;
-  const rewardTokenAmount = 1000;
-  const distributionDollarEquivalent = item && getDollarEquivalent(rewardTokenAmount, item.earnExchangeRate);
-  const rewardTokenSymbol = item?.rewardToken.metadata.symbol;
-  const rewardTokenDecimals = item?.rewardToken.metadata.decimals;
-
-  const isLoading = !isError && !item;
+  const depositTokenSymbol = item && getDepositTokenSymbol(item);
+  const depositTokenDecimals = item?.tokenB ? 6 : item?.tokenA.metadata.decimals ?? 0;
+  const tvlDollarEquivalent = item && IS_NETWORK_MAINNET ? item.tvl.toFixed() : null;
+  const tokensTvl = item?.depositExchangeRate.gt(0)
+    ? item.tvl.dividedBy(item.depositExchangeRate).decimalPlaces(depositTokenDecimals)
+    : null;
+  const distributionDollarEquivalent =
+    item && IS_NETWORK_MAINNET
+      ? getDollarEquivalent(bigNumberToString(dailyDistribution), bigNumberToString(item.earnExchangeRate))
+      : null;
 
   return (
     <Card
@@ -53,26 +56,28 @@ export const StakingDetails: FC<Props> = ({ item, isError }) => {
     >
       <DetailsCardCell cellName={t('stake|Value Locked')} className={CardCellClassName} tooltipContent={null}>
         <StateCurrencyAmount
+          balanceRule
           dollarEquivalent={tvlDollarEquivalent}
-          currency={tokenBSymbol}
-          amount={tvl}
-          amountDecimals={tokenBDecimals}
+          currency={depositTokenSymbol}
+          amount={tokensTvl}
+          amountDecimals={depositTokenDecimals}
           isError={isError}
         />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Daily Distribution')} tooltipContent={null} className={CardCellClassName}>
         <StateCurrencyAmount
+          balanceRule
           dollarEquivalent={distributionDollarEquivalent}
-          currency={rewardTokenSymbol}
-          amount={rewardTokenAmount}
-          amountDecimals={rewardTokenDecimals}
+          currency={item?.rewardToken.metadata.symbol}
+          amount={dailyDistribution.toFixed()}
+          amountDecimals={item?.rewardToken.metadata.decimals}
           isError={isError}
         />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|APR')} tooltipContent={null} className={CardCellClassName}>
-        <StatePercentage value={item?.apr?.toFixed() ?? null} isLoading={isLoading} />
+        <StatePercentage value={item?.apr?.toFixed() ?? null} isLoading={!isError && !item} />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|dailyApr')} tooltipContent={null} className={CardCellClassName}>
