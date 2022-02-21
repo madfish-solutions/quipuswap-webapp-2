@@ -4,12 +4,12 @@ import { observer } from 'mobx-react-lite';
 
 import { Slider } from '@components/ui/slider';
 import { TopStats } from '@components/ui/top-stats';
-import { useStakingStore } from '@hooks/stores/use-staking-store';
+import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 
 import styles from './list-stats.module.scss';
 
 export const ListStats: FC = observer(() => {
-  const stakingStore = useStakingStore();
+  const stakingStore = useStakingListStore();
 
   const amount = stakingStore.stats.data;
 

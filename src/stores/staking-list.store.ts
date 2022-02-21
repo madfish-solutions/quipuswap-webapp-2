@@ -8,24 +8,20 @@ import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
-import { StakingFormStore } from './staking-form.store';
 
-export class StakingStore {
+export class StakingListStore {
   list = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
     async () => getStakingListApi(this.rootStore.authStore.accountPkh),
     mapStakesItems
   );
   stats = new LoadingErrorData<RawStakeStats, Nullable<StakeStats>>(null, getStakingStatsApi, mapStakeStats);
-  form: StakingFormStore;
 
-  constructor(private rootStore: RootStore) {
-    this.form = new StakingFormStore(this.rootStore);
-  }
+  constructor(private rootStore: RootStore) {}
 
   async loadStakeItem(stakingId: BigNumber) {
     const stakeItem = this.list.data.find(({ id }) => stakingId.eq(id)) || null;
-    this.form.setStakeItem(stakeItem);
-    await this.form.loadAvailableBalance();
+    this.rootStore.stakingItemStore.setStakeItem(stakeItem);
+    await this.rootStore.stakingItemStore.loadAvailableBalance();
   }
 }

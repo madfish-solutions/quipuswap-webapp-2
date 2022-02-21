@@ -3,20 +3,20 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { StakingFormValues } from '@containers/staking/item/components/staking-form/staking-form/staking-form-values.interface';
 import { useStakingFormValidation } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.validation';
-import { useStakingFormStore } from '@hooks/stores/use-staking-form-store';
+import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 export const useStakingFormViewModel = () => {
-  const stakingFormStore = useStakingFormStore();
-  const { stakeItem, isLoading, isLpToken, availableBalance } = stakingFormStore;
+  const stakingItemStore = useStakingItemStore();
+  const { stakeItem, isLoading, isLpToken, availableBalance } = stakingItemStore;
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
   const validationSchema = useStakingFormValidation(availableBalance);
 
   const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
-    await stakingFormStore.stake();
+    await stakingItemStore.stake();
     actions.setSubmitting(false);
   };
 
@@ -40,12 +40,12 @@ export const useStakingFormViewModel = () => {
     formik.errors.selectedBaker && formik.touched.selectedBaker ? formik.errors.selectedBaker : undefined;
 
   const handleBalanceChange = (value: string) => {
-    stakingFormStore.setBalance(value);
+    stakingItemStore.setBalance(value);
     formik.setFieldValue('balance', value);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
-    stakingFormStore.setSelectedBaker(baker);
+    stakingItemStore.setSelectedBaker(baker);
     formik.setFieldValue('selectedBaker', baker.address);
   };
 

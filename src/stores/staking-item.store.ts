@@ -10,7 +10,7 @@ import { RootStore } from './root.store';
 
 const DEFAULT_BALANCE = 0;
 
-export class StakingFormStore {
+export class StakingItemStore {
   stakeItem: Nullable<StakingItem> = null;
   currentTab: StakingTabs = StakingTabs.stake;
   availableBalance: Nullable<BigNumber> = null;

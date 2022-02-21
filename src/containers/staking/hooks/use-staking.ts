@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 
 import { useAuthStore } from '@hooks/stores/use-auth-store';
-import { useStakingFormStore } from '@hooks/stores/use-staking-form-store';
-import { useStakingStore } from '@hooks/stores/use-staking-store';
+import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
 import { isUndefined } from '@utils/helpers';
@@ -14,8 +14,8 @@ export const useStaking = () => {
   const router = useRouter();
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
-  const stakingStore = useStakingStore();
-  const stakingFormStore = useStakingFormStore();
+  const stakingStore = useStakingListStore();
+  const stakingFormStore = useStakingItemStore();
   const isLoading = useIsLoading();
   /*
     Load data
