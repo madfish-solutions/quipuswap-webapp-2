@@ -4,22 +4,19 @@ import memoizee from 'memoizee';
 
 import { KNOWN_LAMBDA_CONTRACTS } from '@app.config';
 import { Standard } from '@graphql';
-
-import { getReadOnlyTezos } from './getReadOnlyTezos';
+import { getReadOnlyTezos } from '@utils/dapp/getReadOnlyTezos';
+import { Token } from '@utils/types';
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()
 });
-
-// TODO: implement for liquidity
-// const isLPToken = (contract: string) => false;
 
 export const getUserBalance = async (
   tezos: TezosToolkit,
   account: string,
   contractAddress: string,
   type: Standard = Standard.Fa12,
-  tokenId = 0
+  tokenId?: number
 ) => {
   const newTezos = getReadOnlyTezos(tezos);
 
@@ -28,14 +25,6 @@ export const getUserBalance = async (
   }
   const contract = await newTezos.contract.at(contractAddress);
 
-  // if (isLPToken(contractAddress)) {
-  //   const dexStorage = await contract.storage<any>();
-  //   const ledgerValue = await dexStorage.storage.ledger.get(account);
-  //
-  //   return ledgerValue
-  //     ? new BigNumber(ledgerValue.balance).plus(ledgerValue.frozen_balance)
-  //     : new BigNumber(0);
-  // }
   const chainId = await loadChainId(newTezos);
   const lambdaContract = KNOWN_LAMBDA_CONTRACTS.get(chainId);
 
@@ -62,3 +51,6 @@ export const getUserBalance = async (
 
   return nat;
 };
+
+export const getUserTokenBalance = async (tezos: TezosToolkit, account: string, token: Token) =>
+  getUserBalance(tezos, account, token.contractAddress, token.type, token.fa2TokenId);

@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js';
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
@@ -10,13 +9,11 @@ import { WhitelistedBaker } from '@utils/types';
 
 export const useStakingFormViewModel = () => {
   const stakingFormStore = useStakingFormStore();
-  const { stakeItem, isLoading, isLpToken } = stakingFormStore;
+  const { stakeItem, isLoading, isLpToken, availableBalance } = stakingFormStore;
 
-  // TODO
-  const userTokenBalanceBn = new BigNumber(777);
-  const userTokenBalance = bigNumberToString(userTokenBalanceBn);
+  const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
-  const validationSchema = useStakingFormValidation(userTokenBalanceBn);
+  const validationSchema = useStakingFormValidation(availableBalance);
 
   const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     await stakingFormStore.stake();

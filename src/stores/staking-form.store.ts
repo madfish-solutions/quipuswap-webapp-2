@@ -1,28 +1,33 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
+import { getUserTokenBalance } from '@api/get-user-balance';
 import { StakingTabs } from '@containers/staking/item/types';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { Nullable, WhitelistedBaker } from '@utils/types';
+
+import { RootStore } from './root.store';
 
 const DEFAULT_BALANCE = 0;
 
 export class StakingFormStore {
   stakeItem: Nullable<StakingItem> = null;
   currentTab: StakingTabs = StakingTabs.stake;
+  availableBalance: Nullable<BigNumber> = null;
 
   balance = new BigNumber(DEFAULT_BALANCE);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
   isLoading = false;
 
-  constructor() {
+  constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
       stakeItem: observable,
       balance: observable,
       selectedBaker: observable,
       isLoading: observable,
+      availableBalance: observable,
 
       isLpToken: computed,
 
@@ -32,7 +37,8 @@ export class StakingFormStore {
       setBalance: action,
       setSelectedBaker: action,
       stake: action,
-      unstake: action
+      unstake: action,
+      setAvailableBalance: action
     });
     this.clearBalance();
   }
@@ -71,5 +77,24 @@ export class StakingFormStore {
 
   get isLpToken() {
     return Boolean(this.stakeItem?.tokenB);
+  }
+
+  setAvailableBalance(balance: Nullable<BigNumber>) {
+    this.availableBalance = balance;
+  }
+
+  async loadAvailableBalance() {
+    if (!this.rootStore.tezos || !this.rootStore.authStore.accountPkh || !this.stakeItem?.tokenA) {
+      this.setAvailableBalance(null);
+
+      return;
+    }
+
+    const balance = await getUserTokenBalance(
+      this.rootStore.tezos,
+      this.rootStore.authStore.accountPkh,
+      this.stakeItem.tokenA
+    );
+    this.setAvailableBalance(balance);
   }
 }

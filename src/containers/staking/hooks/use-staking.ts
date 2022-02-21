@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useRouter } from 'next/router';
 
 import { useAuthStore } from '@hooks/stores/use-auth-store';
+import { useStakingFormStore } from '@hooks/stores/use-staking-form-store';
 import { useStakingStore } from '@hooks/stores/use-staking-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
@@ -14,6 +15,7 @@ export const useStaking = () => {
   const { showErrorToast } = useToasts();
   const authStore = useAuthStore();
   const stakingStore = useStakingStore();
+  const stakingFormStore = useStakingFormStore();
   const isLoading = useIsLoading();
   /*
     Load data
@@ -22,11 +24,15 @@ export const useStaking = () => {
     const load = async () => {
       if (!isLoading) {
         await stakingStore.list.load();
+        const stakeId = router.query['id'];
+        if (!isUndefined(stakeId)) {
+          await stakingStore.loadStakeItem(new BigNumber(`${stakeId}`));
+        }
       }
     };
 
     void load();
-  }, [stakingStore, authStore.accountPkh, isLoading]);
+  }, [stakingStore, authStore.accountPkh, isLoading, router.query]);
 
   /*
     Handle errors
@@ -37,13 +43,10 @@ export const useStaking = () => {
     }
   }, [showErrorToast, stakingStore.list.error]);
 
-  const stakeId = router.query['id'];
-  const stakeItem = isUndefined(stakeId) ? undefined : stakingStore.defineStake(new BigNumber(`${stakeId}`));
-
   return {
     isLoading: isLoading || stakingStore.list.isLoading,
     list: stakingStore.list,
     error: stakingStore.list.error,
-    stakeItem
+    stakeItem: stakingFormStore.stakeItem
   };
 };

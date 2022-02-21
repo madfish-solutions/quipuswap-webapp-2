@@ -17,14 +17,15 @@ export class StakingStore {
     mapStakesItems
   );
   stats = new LoadingErrorData<RawStakeStats, Nullable<StakeStats>>(null, getStakingStatsApi, mapStakeStats);
-  form = new StakingFormStore();
+  form: StakingFormStore;
 
-  constructor(private rootStore: RootStore) {}
+  constructor(private rootStore: RootStore) {
+    this.form = new StakingFormStore(this.rootStore);
+  }
 
-  defineStake(stakingId: BigNumber) {
+  async loadStakeItem(stakingId: BigNumber) {
     const stakeItem = this.list.data.find(({ id }) => stakingId.eq(id)) || null;
     this.form.setStakeItem(stakeItem);
-
-    return stakeItem;
+    await this.form.loadAvailableBalance();
   }
 }
