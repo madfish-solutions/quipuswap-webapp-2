@@ -6,7 +6,7 @@ import Head from 'next/head';
 import Script from 'next/script';
 
 import { BASE_URL } from '@app.config';
-import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-uase-layout.vm';
+import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-base-layout.vm';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
