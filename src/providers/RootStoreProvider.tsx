@@ -4,7 +4,7 @@ import { enableStaticRendering } from 'mobx-react-lite';
 
 import { Undefined } from '@utils/types';
 
-import { RootStore } from '../stores/RootStore';
+import { RootStore } from '../stores/root.store';
 
 enableStaticRendering(typeof window === 'undefined');
 

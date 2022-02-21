@@ -60,5 +60,8 @@
   "FA 1.2": "FA 1.2",
   "FA 2.0": "FA 2.0",
   "Set the transaction execution deadline. If reached before the transaction is executed, the transaction will be aborted.": "Set the transaction execution deadline. If reached before the transaction is executed, the transaction will be aborted.",
-  "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.": "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through."
+  "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.": "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.",
+  "dayLetter": "D",
+  "hourLetter": "H",
+  "minuteLetter": "M"
 }
