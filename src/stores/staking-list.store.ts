@@ -1,9 +1,8 @@
 import { Nullable } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 
 import { getStakingListApi } from '@api/staking/get-staking-list.api';
 import { getStakingStatsApi } from '@api/staking/get-staking-stats.api';
-import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
+import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
@@ -18,10 +17,4 @@ export class StakingListStore {
   stats = new LoadingErrorData<RawStakeStats, Nullable<StakeStats>>(null, getStakingStatsApi, mapStakeStats);
 
   constructor(private rootStore: RootStore) {}
-
-  async loadStakeItem(stakingId: BigNumber) {
-    const stakeItem = this.list.data.find(({ id }) => stakingId.eq(id)) || null;
-    this.rootStore.stakingItemStore.setStakeItem(stakeItem);
-    await this.rootStore.stakingItemStore.loadAvailableBalance();
-  }
 }

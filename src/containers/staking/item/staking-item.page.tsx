@@ -13,7 +13,7 @@ import { StakingDetails } from './components/staking-details';
 
 export const StakingItemPage: FC = observer(() => {
   const router = useRouter();
-  const { isLoading, stakeItem, error, getTitle } = useStakeItemPageViewModel();
+  const { isLoading, stakeItem, getTitle } = useStakeItemPageViewModel();
 
   if (!isLoading && isUndefined(stakeItem)) {
     void router.replace('/404');
@@ -27,12 +27,10 @@ export const StakingItemPage: FC = observer(() => {
 
       {/* TODO: add items like reward stats */}
 
-      {stakeItem && (
-        <StickyBlock>
-          <StakingTabsCard />
-          <StakingDetails item={stakeItem} isError={!!error} />
-        </StickyBlock>
-      )}
+      <StickyBlock>
+        <StakingTabsCard />
+        <StakingDetails item={stakeItem} isError={!isLoading && !stakeItem} />
+      </StickyBlock>
     </>
   );
 });

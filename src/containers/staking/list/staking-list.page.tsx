@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
-import { useStaking } from '@containers/staking/hooks/use-staking';
+import { useStakingListViewModel } from '@containers/staking/list/use-staking-list.vm';
 
 import { EmptyStakeList, StakingListSkeleton } from './components';
 import { Iterator } from './helpers/iterator';
@@ -10,7 +10,7 @@ import styles from './staking-list.page.module.scss';
 import { StakingListItem } from './structures';
 
 export const StakingListPage = observer(() => {
-  const { isLoading, list } = useStaking();
+  const { isLoading, list } = useStakingListViewModel();
 
   return (
     <div>

@@ -97,4 +97,10 @@ export class StakingItemStore {
     );
     this.setAvailableBalance(balance);
   }
+
+  async loadStakeItem(stakingId: BigNumber) {
+    const stakeItem = this.rootStore.stakingListStore.list.data.find(({ id }) => stakingId.eq(id)) || null;
+    this.setStakeItem(stakeItem);
+    await this.loadAvailableBalance();
+  }
 }
