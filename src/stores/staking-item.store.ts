@@ -1,10 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { stakeAssetsApi } from '@api/staking/stake-assets.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { defined } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import { RootStore } from './root.store';
@@ -19,15 +17,12 @@ export class StakingItemStore {
   balance = new BigNumber(DEFAULT_BALANCE);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
-  isLoading = false;
-
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
       stakeItem: observable,
       balance: observable,
       selectedBaker: observable,
-      isLoading: observable,
       availableBalance: observable,
 
       isLpToken: computed,
@@ -37,8 +32,6 @@ export class StakingItemStore {
       clearBalance: action,
       setBalance: action,
       setSelectedBaker: action,
-      stake: action,
-      unstake: action,
       setAvailableBalance: action
     });
     this.clearBalance();
@@ -62,30 +55,6 @@ export class StakingItemStore {
 
   clearBalance() {
     this.setBalance(DEFAULT_BALANCE);
-  }
-
-  async stake() {
-    try {
-      this.isLoading = true;
-      await stakeAssetsApi(
-        defined(this.rootStore.tezos),
-        defined(this.rootStore.authStore.accountPkh),
-        defined(this.stakeItem).id.toNumber(),
-        this.balance,
-        defined(this.selectedBaker).address
-      );
-      this.rootStore.notificationsStore.success('Success!');
-    } catch (error) {
-      this.rootStore.notificationsStore.error(error as Error);
-    } finally {
-      this.isLoading = false;
-    }
-  }
-
-  async unstake() {
-    // eslint-disable-next-line no-console
-    console.log('unstake');
-    this.isLoading = true;
   }
 
   get isLpToken() {
