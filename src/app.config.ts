@@ -184,3 +184,5 @@ export const CHAIN_ID_MAPPING = new Map<QSNets, string>([
 export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const LP_TOKEN_DECIMALS = 6;
+
+export const QUIPUSWAP_OLD_VERSION_LINK = process.env.NEXT_PUBLIC_QUIPUSWAP_OLD_VERSION_LINK!;
