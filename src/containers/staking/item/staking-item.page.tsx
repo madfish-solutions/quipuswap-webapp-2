@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 
 import { PageTitle } from '@components/common/page-title';
-import { StakingTabsCard } from '@containers/staking/item/components/staking-form/staking-tabs-card';
+import { StakingTabsCard } from '@containers/staking/item/components/staking-tabs/staking-tabs-card';
 import { useStakeItemPageViewModel } from '@containers/staking/item/use-stake-item-page.vm';
 import { isUndefined } from '@utils/helpers';
 

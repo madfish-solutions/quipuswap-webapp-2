@@ -1,8 +1,8 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { StakingFormValues } from '@containers/staking/item/components/staking-form/staking-form/staking-form-values.interface';
-import { useStakingFormValidation } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.validation';
+import { StakingFormValues } from '@containers/staking/item/components/staking-tabs/staking-form/staking-form-values.interface';
+import { useStakingFormValidation } from '@containers/staking/item/components/staking-tabs/staking-form/use-staking-form.validation';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
