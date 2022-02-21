@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { getUserTokenBalance } from '@api/get-user-balance';
 import { stakeAssetsApi } from '@api/staking/stake-assets.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { StakingItem } from '@interfaces/staking.interfaces';
@@ -97,24 +96,14 @@ export class StakingItemStore {
     this.availableBalance = balance;
   }
 
-  async loadAvailableBalance() {
-    if (!this.rootStore.tezos || !this.rootStore.authStore.accountPkh || !this.stakeItem?.tokenA) {
-      this.setAvailableBalance(null);
-
-      return;
-    }
-
-    const balance = await getUserTokenBalance(
-      this.rootStore.tezos,
-      this.rootStore.authStore.accountPkh,
-      this.stakeItem.tokenA
-    );
-    this.setAvailableBalance(balance);
-  }
-
-  async loadStakeItem(stakingId: BigNumber) {
+  findStakeItem(stakingId: BigNumber) {
     const stakeItem = this.rootStore.stakingListStore.list.data.find(({ id }) => stakingId.eq(id)) || null;
     this.setStakeItem(stakeItem);
-    await this.loadAvailableBalance();
+
+    if (!stakeItem) {
+      throw new Error('StakeItem not found: ' + stakingId.toFixed());
+    }
+
+    return stakeItem;
   }
 }

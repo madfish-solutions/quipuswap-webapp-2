@@ -6,37 +6,41 @@ import { Undefined } from '@utils/types';
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
   data: Data;
+
   isLoading = false;
   error: Nullable<Error> = null;
-  isInitialized = false;
 
-  constructor(
-    private defaultData: Data,
-    private getDate: () => Promise<RawData>,
-    private mapping: (data: RawData) => Data
-  ) {
+  constructor(private defaultData: Data, private mapping: (data: RawData) => Data) {
     this.data = defaultData;
     makeObservable(this, {
-      load: action,
       rawData: observable,
       data: observable,
       isLoading: observable,
-      error: observable
+      error: observable,
+
+      setData: action,
+      startLoading: action,
+      finishLoading: action
     });
   }
 
-  async load() {
-    try {
-      this.isLoading = true;
-      this.isInitialized = true;
-      this.rawData = await this.getDate();
-      this.data = this.mapping(this.rawData);
-      this.error = null;
-    } catch (error) {
-      this.error = error as Error;
+  setData(rawData: RawData | Error) {
+    if (rawData instanceof Error) {
+      this.error = rawData;
+      this.rawData = undefined;
       this.data = this.defaultData;
-    } finally {
-      this.isLoading = false;
+    } else {
+      this.error = null;
+      this.rawData = rawData;
+      this.data = this.mapping(rawData);
     }
+  }
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
   }
 }

@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { getStakingListApi, getStakingStatsApi } from '@api/staking';
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useToasts } from '@hooks/use-toasts';
@@ -10,18 +11,35 @@ export const useStakingListViewModel = () => {
   const authStore = useAuthStore();
   const stakingListStore = useStakingListStore();
   const isLoading = useIsLoading();
+
   /*
     Load data
    */
   useEffect(() => {
     const load = async () => {
-      if (!isLoading) {
-        await stakingListStore.list.load();
+      if (!isLoading && authStore.accountPkh) {
+        try {
+          stakingListStore.list.startLoading();
+          stakingListStore.stats.startLoading();
+          const [list, stats] = await Promise.all([
+            await getStakingListApi(authStore.accountPkh),
+            await getStakingStatsApi()
+          ]);
+          stakingListStore.list.setData(list);
+          stakingListStore.stats.setData(stats);
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          console.log('error', error);
+          showErrorToast(error as Error);
+        } finally {
+          stakingListStore.list.finishLoading();
+          stakingListStore.stats.finishLoading();
+        }
       }
     };
 
     void load();
-  }, [stakingListStore, authStore.accountPkh, isLoading]);
+  }, [stakingListStore, authStore.accountPkh, isLoading, showErrorToast]);
 
   /*
     Handle errors
