@@ -4,7 +4,7 @@ import { FormikHelpers } from 'formik/dist/types';
 import { StakingFormValues } from '@containers/staking/item/components/staking-form/staking-form/staking-form-values.interface';
 import { useStakingFormValidation } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.validation';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString } from '@utils/helpers';
+import { bigNumberToString, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 export const useStakingFormViewModel = () => {
@@ -31,9 +31,9 @@ export const useStakingFormViewModel = () => {
 
   // TODO
   // eslint-disable-next-line no-console
-  console.log('isLpToken', isLpToken);
+  console.log('isLpToken', isLpToken, formik.errors, formik.touched);
 
-  const disabled = isLoading || formik.isSubmitting;
+  const disabled = isLoading || formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const balanceError = formik.errors.balance && formik.touched.balance ? formik.errors.balance : undefined;
 
   const bakerError =

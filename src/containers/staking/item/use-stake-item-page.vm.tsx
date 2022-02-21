@@ -41,11 +41,11 @@ export const useStakeItemPageViewModel = () => {
 
   const getTitle = () => {
     if (stakeItem?.tokenB) {
-      return `${stakeItem.tokenA.metadata.symbol}/${stakeItem.tokenB.metadata.symbol}`;
+      return `Staking ${stakeItem.tokenA.metadata.symbol}/${stakeItem.tokenB.metadata.symbol}`;
     }
 
     if (stakeItem) {
-      return stakeItem.tokenA.metadata.symbol;
+      return `Staking ${stakeItem.tokenA.metadata.symbol}`;
     }
 
     if (!isLoading && isNull(stakeItem)) {
