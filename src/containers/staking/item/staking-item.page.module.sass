@@ -30,10 +30,17 @@
   font-size: 1.143rem
   line-height: 1.5
 
-.delegate
-  background: $brand-02
-  -webkit-background-clip: text
-  -webkit-text-fill-color: transparent
+.light
+  .delegate
+    background: $brand-01
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
+
+.dark
+  .delegate
+    background: $brand-02
+    -webkit-background-clip: text
+    -webkit-text-fill-color: transparent
 
 @include media('>Lphone')
   .statsValueText

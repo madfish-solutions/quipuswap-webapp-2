@@ -35,6 +35,7 @@
   "Sell Price": "Sell Price",
   "The amount of token B you receive for 1 token A, according to the current exchange rate.": "The amount of token B you receive for 1 token A, according to the current exchange rate.",
   "Buy Price": "Buy Price",
+  "Buy": "Buy",
   "The amount of token A you receive for 1 token B, according to the current exchange rate.": "The amount of token A you receive for 1 token B, according to the current exchange rate.",
   "Price impact": "Price impact",
   "Fee": "Fee",
@@ -63,5 +64,8 @@
   "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.": "Token prices in a pool may change significantly within seconds. Slippage tolerance defines the difference between the expected and current exchange rate that you find acceptable. The higher the slippage tolerance, the more likely a transaction will go through.",
   "dayLetter": "D",
   "hourLetter": "H",
-  "minuteLetter": "M"
+  "minuteLetter": "M",
+  "Trade": "Trade",
+  "Invest": "Invest",
+  "Divest": "Divest"
 }

@@ -9,6 +9,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
 import { useStakingFormViewModel } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.vm';
 import s from '@styles/CommonContainer.module.sass';
+import { getTokenSlug } from '@utils/helpers';
 
 export const StakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
@@ -43,8 +44,17 @@ export const StakingForm: FC = observer(() => {
           handleBalanceChange(event.target.value || '');
         }}
         handleBalance={handleBalanceChange}
+        showBuyButton
       />
       <ComplexBaker label={t('common|Baker')} className={s.mt24} handleChange={handleBakerChange} error={bakerError} />
+      <div className={s.suggestedOperationsButtons}>
+        <Button theme="underlined" href={`/swap/tez-${getTokenSlug(stakeItem.tokenA)}`}>
+          {t('common|Trade')}
+        </Button>
+        <Button theme="underlined" href={`/liquidity/add/tez-${getTokenSlug(stakeItem.tokenA)}`}>
+          {t('common|Invest')}
+        </Button>
+      </div>
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>

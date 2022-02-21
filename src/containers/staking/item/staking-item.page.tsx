@@ -1,6 +1,6 @@
-import { FC, useMemo } from 'react';
+import { FC, useContext, useMemo } from 'react';
 
-import { StickyBlock } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext, StickyBlock } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
@@ -36,7 +36,13 @@ import styles from './staking-item.page.module.sass';
 const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber(0);
 const endTimestamp = Date.now() + 90069 * MS_IN_SECOND;
 
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const StakingItemPage: FC = observer(() => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
   const router = useRouter();
   const { data: bakers, loading: bakersLoading } = useBakers();
@@ -70,7 +76,7 @@ export const StakingItemPage: FC = observer(() => {
 
       <RewardInfo
         amount={myEarnDollarEquivalent ? new BigNumber(myEarnDollarEquivalent) : null}
-        className={styles.rewardInfo}
+        className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
         header={{
           content: (
             <>

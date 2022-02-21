@@ -3,6 +3,7 @@ import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -10,7 +11,14 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  getTokenInputAmountCap,
+  getTokenSlug,
+  getTokenSymbol,
+  isExist,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { getMessageNotWhitelistedToken } from '@utils/helpers/is-whitelisted-token';
 import { Nullable, Token } from '@utils/types';
 
@@ -32,6 +40,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   notSelectable?: boolean;
   handleChange?: (token: Token) => void;
   handleBalance?: (value: string) => void;
+  showBuyButton?: boolean;
   token: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
@@ -55,12 +64,14 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   error,
   id,
   handleChange,
+  showBuyButton,
   token,
   setToken,
   blackListedTokens,
   tokensLoading,
   ...props
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
@@ -103,7 +114,19 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
-            <div className={s.item2}>{account && <Balance balance={balance} colorMode={colorThemeMode} />}</div>
+            <div className={s.item2}>
+              {account && <Balance balance={balance} colorMode={colorThemeMode} />}
+              {showBuyButton && token && (
+                <Button
+                  href={`/swap/tez-${getTokenSlug(token)}`}
+                  theme="quaternary"
+                  className={s.actionButton}
+                  textClassName={s.actionButtonText}
+                >
+                  {t('common|Buy')}
+                </Button>
+              )}
+            </div>
             <input
               className={cx(s.item3, s.input)}
               onFocus={() => setActive(true)}
