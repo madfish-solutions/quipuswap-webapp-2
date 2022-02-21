@@ -73,7 +73,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const FormattedNumber = balanceRule
     ? formatValueBalance(amount)
-    : FormatNumber(amount ?? 0, { decimals: amountDecimals || undefined });
+    : FormatNumber(amount ?? 0, { decimals: amountDecimals ?? undefined });
 
   const content = (
     <span className={wrapClassName}>
