@@ -2,8 +2,10 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { stakeAssetsApi } from '@api/staking/stake-assets.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { StakingItem } from '@interfaces/staking.interfaces';
+import { defined } from '@utils/helpers';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import { RootStore } from './root.store';
@@ -64,9 +66,21 @@ export class StakingItemStore {
   }
 
   async stake() {
-    // eslint-disable-next-line no-console
-    console.log('stake');
-    this.isLoading = true;
+    try {
+      this.isLoading = true;
+      await stakeAssetsApi(
+        defined(this.rootStore.tezos),
+        defined(this.rootStore.authStore.accountPkh),
+        defined(this.stakeItem).id.toNumber(),
+        this.balance,
+        defined(this.selectedBaker).address
+      );
+      this.rootStore.notificationsStore.success('Success!');
+    } catch (error) {
+      this.rootStore.notificationsStore.error(error as Error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async unstake() {

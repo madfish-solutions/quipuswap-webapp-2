@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 import { NextSeo } from 'next-seo';
 import Head from 'next/head';
 import Script from 'next/script';
@@ -25,7 +26,7 @@ interface BaseLayoutProps {
   className?: string;
 }
 
-export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, className, children }) => {
+export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, image, className, children }) => {
   const { isDarkFavicon, canonicalURL, isComponentDidMount } = useBaseLayoutViewModel();
 
   return (
@@ -107,4 +108,4 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
       )}
     </>
   );
-};
+});
