@@ -1,6 +1,7 @@
 import { FC, useContext, KeyboardEvent } from 'react';
 
-import { Bage, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { Bage } from '@components/ui/bage';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
@@ -15,6 +16,7 @@ interface TokenCellProps {
   tokenName: string;
   tokenSymbol: string;
   tokenType?: Standard;
+  isTezosToken?: boolean;
   tabIndex?: number;
   onClick?: () => void;
 }
@@ -31,7 +33,8 @@ export const TokenCell: FC<TokenCellProps> = ({
   tokenIcon,
   tokenName,
   tokenType,
-  tokenSymbol
+  tokenSymbol,
+  isTezosToken
 }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -54,7 +57,7 @@ export const TokenCell: FC<TokenCellProps> = ({
         <div className={cx(s.mleft8, s.tokenBody)}>
           <div className={s.joinRow}>
             <h6>{tokenSymbol}</h6>
-            {tokenType && <Bage className={s.bage} text={getTokenTypeTitle(tokenType)} />}
+            {tokenType && !isTezosToken && <Bage className={s.bage} text={getTokenTypeTitle(tokenType)} />}
           </div>
 
           <span className={cx(s.caption)}>{tokenName}</span>
