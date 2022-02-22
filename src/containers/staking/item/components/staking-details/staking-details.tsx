@@ -2,59 +2,43 @@ import { FC } from 'react';
 
 import { Card, ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
-import {
-  HOURS_IN_DAY,
-  IS_NETWORK_MAINNET,
-  MINUTES_IN_HOUR,
-  MS_IN_SECOND,
-  SECONDS_IN_MINUTE,
-  STAKING_CONTRACT_ADDRESS,
-  TZKT_EXPLORER_URL
-} from '@app.config';
+import { MS_IN_SECOND, STAKING_CONTRACT_ADDRESS, TZKT_EXPLORER_URL } from '@app.config';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { CandidateButton } from '@containers/voiting/components';
 import s from '@styles/CommonContainer.module.sass';
-import { bigNumberToString, defined, getDollarEquivalent } from '@utils/helpers';
 
-import { useStakeItemPageViewModel } from '../../use-stake-item-page.vm';
 import { Countdown } from '../countdown';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
+import { useStakingDetailsViewModel } from './use-staking-details.vm';
 
 interface Props {
   isError: boolean;
 }
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
-export const StakingDetails: FC<Props> = ({ isError }) => {
+export const StakingDetails: FC<Props> = observer(({ isError }) => {
   const { t } = useTranslation(['common', 'vote']);
 
-  const { stakeItem, currentDelegate, nextDelegate, endTimestamp } = useStakeItemPageViewModel();
-  const isLoading = !isError && !stakeItem;
-  const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
-
-  const depositTokenDecimals = stakeItem?.stakedToken.metadata.decimals ?? 0;
-  const tvlDollarEquivalent = stakeItem && IS_NETWORK_MAINNET ? stakeItem.tvl.toFixed() : null;
-  const tokensTvl = stakeItem?.depositExchangeRate.gt(0)
-    ? stakeItem.tvl.dividedBy(stakeItem.depositExchangeRate).decimalPlaces(depositTokenDecimals)
-    : null;
-  const dailyDistribution = stakeItem?.rewardPerSecond
-    .times(SECONDS_IN_MINUTE)
-    .times(MINUTES_IN_HOUR)
-    .times(HOURS_IN_DAY);
-  const distributionDollarEquivalent =
-    stakeItem && IS_NETWORK_MAINNET
-      ? getDollarEquivalent(
-          bigNumberToString(defined(dailyDistribution)),
-          bigNumberToString(stakeItem.earnExchangeRate)
-        )
-      : null;
+  const {
+    stakeItem,
+    currentDelegate,
+    nextDelegate,
+    endTimestamp,
+    tvlDollarEquivalent,
+    CardCellClassName,
+    tokensTvl,
+    depositTokenDecimals,
+    distributionDollarEquivalent,
+    dailyDistribution,
+    isLoading
+  } = useStakingDetailsViewModel();
 
   return (
     <Card
@@ -148,4 +132,4 @@ export const StakingDetails: FC<Props> = ({ isError }) => {
       </div>
     </Card>
   );
-};
+});
