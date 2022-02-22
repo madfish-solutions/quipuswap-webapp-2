@@ -7,8 +7,9 @@ import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or
 import { ComplexBaker } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
-import { useStakingFormViewModel } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.vm';
 import s from '@styles/CommonContainer.module.sass';
+
+import { useStakingFormViewModel } from './use-staking-form.vm';
 
 export const StakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);

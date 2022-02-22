@@ -1,40 +1,32 @@
 import { useEffect } from 'react';
 
-import { useAuthStore } from '@hooks/stores/use-auth-store';
+import { useGetStakingList } from '@containers/staking/hooks/use-get-staking-list';
+import { useGetStakingStats } from '@containers/staking/hooks/use-get-staking-stats';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
-import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
 
 export const useStakingListViewModel = () => {
-  const { showErrorToast } = useToasts();
-  const authStore = useAuthStore();
   const stakingListStore = useStakingListStore();
-  const isLoading = useIsLoading();
-  /*
-    Load data
-   */
-  useEffect(() => {
-    const load = async () => {
-      if (!isLoading) {
-        await stakingListStore.list.load();
-      }
-    };
-
-    void load();
-  }, [stakingListStore, authStore.accountPkh, isLoading]);
+  const isTezosLoading = useIsLoading();
+  const { getStakingList } = useGetStakingList();
+  const { getStakingStats } = useGetStakingStats();
 
   /*
-    Handle errors
-   */
+   Load data
+  */
   useEffect(() => {
-    if (stakingListStore.list.error?.message) {
-      showErrorToast(stakingListStore.list.error?.message);
+    if (isTezosLoading) {
+      return;
     }
-  }, [showErrorToast, stakingListStore.list.error]);
+    void getStakingList();
+    void getStakingStats();
+  }, [getStakingList, getStakingStats, isTezosLoading]);
+
+  const { listStore } = stakingListStore;
+  const { data: list, isLoading } = listStore;
 
   return {
-    isLoading: isLoading || stakingListStore.list.isLoading,
-    list: stakingListStore.list,
-    error: stakingListStore.list.error
+    isLoading,
+    list
   };
 };

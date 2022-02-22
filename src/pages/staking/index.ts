@@ -1,6 +1,6 @@
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import StakingList from './_staking';
+import StakingList from './_stakingList';
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {

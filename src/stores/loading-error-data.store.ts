@@ -6,9 +6,9 @@ import { Undefined } from '@utils/types';
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
   data: Data;
+
   isLoading = false;
   error: Nullable<Error> = null;
-  isInitialized = false;
 
   constructor(
     private defaultData: Data,
@@ -17,26 +17,51 @@ export class LoadingErrorData<RawData, Data> {
   ) {
     this.data = defaultData;
     makeObservable(this, {
-      load: action,
       rawData: observable,
       data: observable,
       isLoading: observable,
-      error: observable
+      error: observable,
+
+      setRawData: action,
+      startLoading: action,
+      finishLoading: action
     });
+  }
+
+  setRawData(rawData: RawData) {
+    this.error = null;
+    this.rawData = rawData;
+    this.data = this.mapping(rawData);
+  }
+
+  setError(error: Error) {
+    this.error = error;
+    this.rawData = undefined;
+    this.data = this.defaultData;
+  }
+
+  startLoading() {
+    this.isLoading = true;
+  }
+
+  finishLoading() {
+    this.isLoading = false;
   }
 
   async load() {
     try {
-      this.isLoading = true;
-      this.isInitialized = true;
-      this.rawData = await this.getDate();
-      this.data = this.mapping(this.rawData);
-      this.error = null;
+      this.startLoading();
+      this.setRawData(await this.getDate());
     } catch (error) {
-      this.error = error as Error;
-      this.data = this.defaultData;
+      // eslint-disable-next-line no-console
+      console.log('error', error);
+      this.setError(error as Error);
+
+      throw error;
     } finally {
-      this.isLoading = false;
+      this.finishLoading();
     }
+
+    return undefined;
   }
 }

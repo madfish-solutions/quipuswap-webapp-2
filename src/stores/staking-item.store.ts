@@ -2,53 +2,57 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { StakingTabs } from '@containers/staking/item/types';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
+import { isNull } from '@utils/helpers';
+import { noopMap } from '@utils/mapping/noop-map';
+import { mapStakeItem } from '@utils/mapping/staking.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
+import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const DEFAULT_BALANCE = 0;
 
 export class StakingItemStore {
-  stakeItem: Nullable<StakingItem> = null;
+  stakingId: Nullable<BigNumber> = null;
+
+  itemStore = new LoadingErrorData<RawStakingItem, Nullable<StakingItem>>(
+    null,
+    async () => getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh),
+    mapStakeItem
+  );
+
+  availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
+    null,
+    async () => this.getUserTokenBalance(),
+    noopMap
+  );
+
   currentTab: StakingTabs = StakingTabs.stake;
-  availableBalance: Nullable<BigNumber> = null;
 
   balance = new BigNumber(DEFAULT_BALANCE);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
-  isLoading = false;
-
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
-      stakeItem: observable,
       balance: observable,
       selectedBaker: observable,
-      isLoading: observable,
-      availableBalance: observable,
 
       isLpToken: computed,
 
       setTab: action,
-      setStakeItem: action,
       clearBalance: action,
       setBalance: action,
-      setSelectedBaker: action,
-      stake: action,
-      unstake: action,
-      setAvailableBalance: action
+      setSelectedBaker: action
     });
     this.clearBalance();
   }
 
   setTab(tab: StakingTabs) {
     this.currentTab = tab;
-  }
-
-  setStakeItem(stakeItem: Nullable<StakingItem>) {
-    this.stakeItem = stakeItem;
   }
 
   setBalance(balance: BigNumber.Value) {
@@ -63,44 +67,19 @@ export class StakingItemStore {
     this.setBalance(DEFAULT_BALANCE);
   }
 
-  async stake() {
-    // eslint-disable-next-line no-console
-    console.log('stake');
-    this.isLoading = true;
-  }
-
-  async unstake() {
-    // eslint-disable-next-line no-console
-    console.log('unstake');
-    this.isLoading = true;
+  setStakingId(stakingId: Nullable<BigNumber>) {
+    this.stakingId = stakingId;
   }
 
   get isLpToken() {
-    return Boolean(this.stakeItem?.tokenB);
+    return Boolean(this.itemStore.data?.tokenB);
   }
 
-  setAvailableBalance(balance: Nullable<BigNumber>) {
-    this.availableBalance = balance;
-  }
-
-  async loadAvailableBalance() {
-    if (!this.rootStore.tezos || !this.rootStore.authStore.accountPkh || !this.stakeItem?.tokenA) {
-      this.setAvailableBalance(null);
-
-      return;
+  private async getUserTokenBalance() {
+    if (isNull(this.rootStore.tezos) || isNull(this.rootStore.authStore.accountPkh) || isNull(this.itemStore.data)) {
+      return null;
     }
 
-    const balance = await getUserTokenBalance(
-      this.rootStore.tezos,
-      this.rootStore.authStore.accountPkh,
-      this.stakeItem.tokenA
-    );
-    this.setAvailableBalance(balance);
-  }
-
-  async loadStakeItem(stakingId: BigNumber) {
-    const stakeItem = this.rootStore.stakingListStore.list.data.find(({ id }) => stakingId.eq(id)) || null;
-    this.setStakeItem(stakeItem);
-    await this.loadAvailableBalance();
+    return getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.itemStore.data?.tokenA);
   }
 }
