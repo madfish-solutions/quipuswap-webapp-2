@@ -57,7 +57,7 @@ export class LoadingErrorData<RawData, Data> {
       console.log('error', error);
       this.setError(error as Error);
 
-      return Promise.reject(error);
+      throw error;
     } finally {
       this.finishLoading();
     }

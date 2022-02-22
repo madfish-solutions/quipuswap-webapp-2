@@ -6,10 +6,11 @@ import { useRouter } from 'next/router';
 
 import { DashPlug } from '@components/ui/dash-plug';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
-import stakingPageStyles from '@containers/staking/item/staking-item.page.module.sass';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useIsLoading } from '@utils/dapp';
-import { isNull, isUndefined } from '@utils/helpers';
+import { getTokensName, isNull, isUndefined } from '@utils/helpers';
+
+import stakingPageStyles from './staking-item.page.module.sass';
 
 export const useStakeItemPageViewModel = () => {
   const router = useRouter();
@@ -32,12 +33,8 @@ export const useStakeItemPageViewModel = () => {
   const { data: stakeItem } = stakingItemStore.itemStore;
 
   const getTitle = () => {
-    if (stakeItem?.tokenB) {
-      return `Staking ${stakeItem.tokenA.metadata.symbol}/${stakeItem.tokenB.metadata.symbol}`;
-    }
-
     if (stakeItem) {
-      return `Staking ${stakeItem.tokenA.metadata.symbol}`;
+      return `Staking ${getTokensName(stakeItem.tokenA, stakeItem.tokenB)}`;
     }
 
     if (!isLoading && isNull(stakeItem)) {

@@ -2,11 +2,12 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { useDoStake } from '@containers/staking/hooks/use-do-stake';
-import { StakingFormValues } from '@containers/staking/item/components/staking-tabs/staking-form/staking-form-values.interface';
-import { useStakingFormValidation } from '@containers/staking/item/components/staking-tabs/staking-form/use-staking-form.validation';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
+
+import { StakingFormValues } from './staking-form-values.interface';
+import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();

@@ -4,7 +4,7 @@ import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
-import { copy } from '@utils/mapping/copy';
+import { noopMap } from '@utils/mapping/noop-map';
 
 export const useGetStakingList = () => {
   const { showErrorToast } = useToasts();
@@ -22,7 +22,7 @@ export const useGetStakingList = () => {
       }
     }
     // We need it only for dependency for loading list based on it.
-    copy(authStore.accountPkh);
+    noopMap(authStore.accountPkh);
   }, [authStore.accountPkh, isLoading, showErrorToast, listStore]);
 
   return { getStakingList };

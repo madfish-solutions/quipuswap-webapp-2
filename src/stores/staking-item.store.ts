@@ -5,7 +5,8 @@ import { getUserTokenBalance } from '@api/get-user-balance';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
-import { copy } from '@utils/mapping/copy';
+import { isNull } from '@utils/helpers';
+import { noopMap } from '@utils/mapping/noop-map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -26,7 +27,7 @@ export class StakingItemStore {
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => this.getUserTokenBalance(),
-    copy
+    noopMap
   );
 
   currentTab: StakingTabs = StakingTabs.stake;
@@ -75,7 +76,7 @@ export class StakingItemStore {
   }
 
   private async getUserTokenBalance() {
-    if (!this.rootStore.tezos || !this.rootStore.authStore.accountPkh || !this.itemStore.data) {
+    if (isNull(this.rootStore.tezos) || isNull(this.rootStore.authStore.accountPkh) || isNull(this.itemStore.data)) {
       return null;
     }
 
