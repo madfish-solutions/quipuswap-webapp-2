@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 
+import { PageTitle } from '@components/common/page-title';
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { StateWrapper } from '@components/state-wrapper';
 import { ListStats } from '@containers/staking/list/list-stats/list-stats';
@@ -15,13 +16,14 @@ export const StakingListPage = observer(() => {
 
   return (
     <div>
+      <PageTitle>Staking</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton className={styles.mb48} />}>
         <StakingRewardsList />
       </StateWrapper>
-      <StateWrapper isLoading={list.isLoading} loaderFallback={<StakingListSkeleton />}>
+      <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton />}>
         <Iterator
-          data={list.data}
+          data={list}
           render={StakingListItem}
           fallback={<EmptyStakeList />}
           isGrouped

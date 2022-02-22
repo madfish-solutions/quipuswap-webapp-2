@@ -8,7 +8,7 @@ const mapToken = (raw: Token): Token => ({
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId)
 });
 
-const mapStakeItem = (raw: RawStakingItem): StakingItem => ({
+export const mapStakeItem = (raw: RawStakingItem): StakingItem => ({
   ...raw,
   id: new BigNumber(raw.id),
   tokenA: mapToken(raw.tokenA),

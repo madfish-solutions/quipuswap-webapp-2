@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { PageTitle } from '@components/common/page-title';
 import { StakingListPage } from '@containers/staking';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
@@ -25,7 +24,6 @@ export const StakingList: FC = () => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <PageTitle>Staking</PageTitle>
       <StakingListPage />
     </BaseLayout>
   );

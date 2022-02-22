@@ -10,7 +10,11 @@ export class LoadingErrorData<RawData, Data> {
   isLoading = false;
   error: Nullable<Error> = null;
 
-  constructor(private defaultData: Data, private mapping: (data: RawData) => Data) {
+  constructor(
+    private defaultData: Data,
+    private getDate: () => Promise<RawData>,
+    private mapping: (data: RawData) => Data
+  ) {
     this.data = defaultData;
     makeObservable(this, {
       rawData: observable,
@@ -18,22 +22,22 @@ export class LoadingErrorData<RawData, Data> {
       isLoading: observable,
       error: observable,
 
-      setData: action,
+      setRawData: action,
       startLoading: action,
       finishLoading: action
     });
   }
 
-  setData(rawData: RawData | Error) {
-    if (rawData instanceof Error) {
-      this.error = rawData;
-      this.rawData = undefined;
-      this.data = this.defaultData;
-    } else {
-      this.error = null;
-      this.rawData = rawData;
-      this.data = this.mapping(rawData);
-    }
+  setRawData(rawData: RawData) {
+    this.error = null;
+    this.rawData = rawData;
+    this.data = this.mapping(rawData);
+  }
+
+  setError(error: Error) {
+    this.error = error;
+    this.rawData = undefined;
+    this.data = this.defaultData;
   }
 
   startLoading() {
@@ -42,5 +46,22 @@ export class LoadingErrorData<RawData, Data> {
 
   finishLoading() {
     this.isLoading = false;
+  }
+
+  async load() {
+    try {
+      this.startLoading();
+      this.setRawData(await this.getDate());
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.log('error', error);
+      this.setError(error as Error);
+
+      return Promise.reject(error);
+    } finally {
+      this.finishLoading();
+    }
+
+    return undefined;
   }
 }

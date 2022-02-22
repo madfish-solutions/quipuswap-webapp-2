@@ -8,9 +8,11 @@ import s from '@styles/CommonContainer.module.sass';
 
 export const UnstakeForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
-  const stakingFormStore = useStakingItemStore();
+  const stakingItemStore = useStakingItemStore();
+  const { itemStore } = stakingItemStore;
+  const { data: stakeItem } = itemStore;
 
-  const availableBalance = stakingFormStore.stakeItem?.depositBalance;
+  const availableBalance = stakeItem?.depositBalance;
 
   return (
     <div className={s.content}>
