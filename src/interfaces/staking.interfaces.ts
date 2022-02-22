@@ -24,6 +24,7 @@ export enum StakingStatus {
 
 export interface RawStakingItem {
   id: string;
+  stakedToken: Token;
   tokenA: Token;
   tokenB: Undefined<Token>;
   stakeStatus: StakingStatus;
@@ -35,10 +36,21 @@ export interface RawStakingItem {
   earnExchangeRate: string;
   stakeUrl: string;
   depositTokenUrl: string;
+  rewardPerSecond: string;
+  currentDelegate: string;
+  nextDelegate: string;
+  timelock: string;
+  endTime: string;
+  harvestFee: string;
+  withdrawalFee: string;
+  myBalance: Undefined<string>;
+  depositBalance: Undefined<string>;
+  earnBalance: Undefined<string>;
 }
 
 interface AbstractStakingItem {
   id: BigNumber;
+  stakedToken: Token;
   tokenA: Token;
   tokenB: Undefined<Token>;
   stakeStatus: StakingStatus;
@@ -50,14 +62,21 @@ interface AbstractStakingItem {
   earnExchangeRate: BigNumber;
   stakeUrl: string;
   depositTokenUrl: string;
+  rewardPerSecond: BigNumber;
+  currentDelegate: Nullable<string>;
+  nextDelegate: Nullable<string>;
+  timelock: number;
+  endTime: number;
+  harvestFee: BigNumber;
+  withdrawalFee: BigNumber;
 }
 
 interface UserStakingData {
   myBalance: BigNumber;
   depositBalance: BigNumber;
   earnBalance: BigNumber;
-  myDelegate: string;
-  myLastStaked: number;
+  myDelegate: Nullable<string>;
+  myLastStaked: Nullable<number>;
 }
 
 interface NoUserStakingItem extends AbstractStakingItem {

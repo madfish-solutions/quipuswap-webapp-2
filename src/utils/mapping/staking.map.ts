@@ -1,30 +1,66 @@
 import BigNumber from 'bignumber.js';
 
+import { ZERO_ADDRESS } from '@app.config';
 import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
-import { Token } from '@utils/types';
+import { getStakingDepositTokenSymbol, mapRawBigNumber, mapStakingToken } from '@utils/helpers';
 
-const mapToken = (raw: Token): Token => ({
-  ...raw,
-  fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId)
-});
+const mapStakeItem = ({
+  id,
+  tokenA,
+  tokenB,
+  rewardToken,
+  tvl,
+  apr,
+  apy,
+  depositExchangeRate,
+  earnExchangeRate,
+  stakedToken,
+  rewardPerSecond,
+  currentDelegate,
+  nextDelegate,
+  timelock,
+  endTime,
+  harvestFee,
+  withdrawalFee,
+  myBalance,
+  earnBalance,
+  depositBalance,
+  ...rest
+}: RawStakingItem): StakingItem => {
+  const stakedTokenBase = mapStakingToken(stakedToken);
 
-const mapStakeItem = (raw: RawStakingItem): StakingItem => ({
-  ...raw,
-  id: new BigNumber(raw.id),
-  tokenA: mapToken(raw.tokenA),
-  tokenB: raw.tokenB ? mapToken(raw.tokenB) : undefined,
-  rewardToken: mapToken(raw.rewardToken),
-  tvl: new BigNumber(raw.tvl),
-  apr: raw.apr ? new BigNumber(raw.apr) : null,
-  apy: raw.apy ? new BigNumber(raw.apy) : null,
-  depositExchangeRate: new BigNumber(raw.depositExchangeRate),
-  earnExchangeRate: new BigNumber(raw.earnExchangeRate),
-  myBalance: null,
-  depositBalance: null,
-  earnBalance: null,
-  myDelegate: null,
-  myLastStaked: null
-});
+  return {
+    ...rest,
+    id: new BigNumber(id),
+    stakedToken: {
+      ...stakedTokenBase,
+      metadata: {
+        ...stakedTokenBase.metadata,
+        symbol: getStakingDepositTokenSymbol({ tokenA, tokenB })
+      }
+    },
+    tokenA: mapStakingToken(tokenA),
+    tokenB: tokenB ? mapStakingToken(tokenB) : undefined,
+    rewardToken: mapStakingToken(rewardToken),
+    tvl: new BigNumber(tvl),
+    apr: mapRawBigNumber(apr),
+    apy: mapRawBigNumber(apy),
+    depositExchangeRate: new BigNumber(depositExchangeRate),
+    earnExchangeRate: new BigNumber(earnExchangeRate),
+    rewardPerSecond: new BigNumber(rewardPerSecond),
+    myBalance: mapRawBigNumber(myBalance),
+    depositBalance: mapRawBigNumber(depositBalance),
+    earnBalance: mapRawBigNumber(earnBalance),
+    currentDelegate: currentDelegate === ZERO_ADDRESS ? null : currentDelegate,
+    nextDelegate: nextDelegate === ZERO_ADDRESS ? null : nextDelegate,
+    timelock: Number(timelock),
+    endTime: new Date(endTime).getTime(),
+    harvestFee: mapRawBigNumber(harvestFee),
+    withdrawalFee: mapRawBigNumber(withdrawalFee),
+    myDelegate: null,
+    myLastStaked: null
+  };
+};
 
 export const mapStakesItems = (rawList: RawStakingItem[]): StakingItem[] => rawList.map(mapStakeItem);
 

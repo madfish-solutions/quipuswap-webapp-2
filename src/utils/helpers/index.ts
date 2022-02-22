@@ -53,3 +53,5 @@ export * from './is-token-to-token-dex';
 export * from './is-whitelisted-token';
 export * from './big-number-to-string';
 export * from './get-dollar-equivalent';
+export * from './staking';
+export * from './get-baker-name';
