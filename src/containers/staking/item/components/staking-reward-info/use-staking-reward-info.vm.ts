@@ -2,13 +2,14 @@ import { useMemo } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@app.config';
+import { MS_IN_SECOND, ZERO_ADDRESS } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, getDollarEquivalent, isExist } from '@utils/helpers';
 
 const mockLastStaked = Date.now();
-const mockMyDelegateAddress = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
+// eslint-disable-next-line
+const mockMyDelegateAddress: string = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
 const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber('0');
 
 export const useStakingRewardInfoViewModel = () => {
@@ -22,7 +23,7 @@ export const useStakingRewardInfoViewModel = () => {
   const myDelegate = useMemo(() => {
     const myDelegateAddress = mockMyDelegateAddress;
 
-    return isExist(myDelegateAddress)
+    return isExist(myDelegateAddress) && myDelegateAddress !== ZERO_ADDRESS
       ? bakers.find(({ address }) => address === myDelegateAddress) ?? { address: myDelegateAddress }
       : null;
   }, [bakers]);

@@ -10,7 +10,8 @@ import {
   MS_IN_SECOND,
   SECONDS_IN_MINUTE,
   STAKING_CONTRACT_ADDRESS,
-  TZKT_EXPLORER_URL
+  TZKT_EXPLORER_URL,
+  ZERO_ADDRESS
 } from '@app.config';
 import styles from '@containers/staking/item/components/staking-details/staking-details.module.sass';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
@@ -32,7 +33,7 @@ export const useStakingDetailsViewModel = () => {
   const [currentDelegate, nextDelegate] = useMemo(() => {
     if (stakeItem) {
       return [stakeItem.currentDelegate, stakeItem.nextDelegate].map(delegateAddress =>
-        isNull(delegateAddress)
+        isNull(delegateAddress) || delegateAddress === ZERO_ADDRESS
           ? null
           : bakers.find(({ address }) => address === delegateAddress) ?? { address: defined(delegateAddress) }
       );
@@ -42,9 +43,10 @@ export const useStakingDetailsViewModel = () => {
   }, [stakeItem, bakers]);
 
   const depositTokenDecimals = stakeItem?.stakedToken.metadata.decimals ?? 0;
-  const tvlDollarEquivalent = stakeItem
-    ? stakeItem.tvl.multipliedBy(stakeItem.depositExchangeRate).decimalPlaces(2).toFixed()
-    : null;
+  const tvlDollarEquivalent =
+    stakeItem && IS_NETWORK_MAINNET
+      ? stakeItem.tvl.multipliedBy(stakeItem.depositExchangeRate).decimalPlaces(2).toFixed()
+      : null;
   const dailyDistribution = stakeItem
     ? fromDecimals(new BigNumber(stakeItem.rewardPerSecond), stakeItem.rewardToken)
         .times(SECONDS_IN_MINUTE)
