@@ -10,6 +10,7 @@ import { defined } from '@utils/helpers';
 
 export const useDoUnstake = () => {
   const rootStore = useRootStore();
+
   const { showErrorToast, showSuccessToast } = useToasts();
 
   const doUnstake = useCallback(
