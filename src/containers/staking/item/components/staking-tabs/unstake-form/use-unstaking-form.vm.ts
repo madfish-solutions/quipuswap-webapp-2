@@ -21,9 +21,7 @@ export const useUnstakingFormViewModel = () => {
 
   const handleStakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
-    // @ts-ignore
-    const token = defined(stakeItem).stakedToken;
-    await doUnstake(defined(stakeItem), inputAmount, token);
+    await doUnstake(defined(stakeItem), inputAmount);
     actions.setSubmitting(false);
   };
 
