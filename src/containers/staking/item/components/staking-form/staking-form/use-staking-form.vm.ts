@@ -4,7 +4,7 @@ import { FormikHelpers } from 'formik/dist/types';
 import { StakingFormValues } from '@containers/staking/item/components/staking-form/staking-form/staking-form-values.interface';
 import { useStakingFormValidation } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.validation';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString } from '@utils/helpers';
+import { bigNumberToString, getTokenSlug } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 export const useStakingFormViewModel = () => {
@@ -49,6 +49,9 @@ export const useStakingFormViewModel = () => {
     formik.setFieldValue('selectedBaker', baker.address);
   };
 
+  const tradeHref = stakeItem ? `/swap/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
+  const investHref = stakeItem ? `/liquidity/add/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
+
   return {
     formik,
     userTokenBalance,
@@ -57,6 +60,8 @@ export const useStakingFormViewModel = () => {
     bakerError,
     disabled,
     handleBalanceChange,
-    handleBakerChange
+    handleBakerChange,
+    tradeHref,
+    investHref
   };
 };
