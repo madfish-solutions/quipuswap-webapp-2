@@ -7,18 +7,21 @@ import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/RootStoreProvider';
 import { defined } from '@utils/helpers';
+import { Token } from '@utils/types';
 
 export const useDoUnstake = () => {
   const rootStore = useRootStore();
+
   const { showErrorToast, showSuccessToast } = useToasts();
 
   const doUnstake = useCallback(
-    async (stakeItem: StakingItem, balance: BigNumber) => {
+    async (stakeItem: StakingItem, balance: BigNumber, token: Token) => {
       try {
         await unstakeAssetsApi(
           defined(rootStore.tezos),
           defined(rootStore.authStore.accountPkh),
           defined(stakeItem).id.toNumber(),
+          token,
           balance
         );
         showSuccessToast('Stake successful');
