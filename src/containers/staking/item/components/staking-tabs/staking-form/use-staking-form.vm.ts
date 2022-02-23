@@ -22,7 +22,10 @@ export const useStakingFormViewModel = () => {
 
   const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
-    await doStake(defined(stakeItem), inputAmount, defined(selectedBaker));
+    // @ts-ignore
+    const tokenAddress = stakeItem?.stakedToken;
+    await doStake(defined(stakeItem), balance, tokenAddress, defined(selectedBaker));
+
     actions.setSubmitting(false);
   };
 
