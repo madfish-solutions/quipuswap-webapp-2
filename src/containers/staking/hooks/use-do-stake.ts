@@ -7,17 +7,19 @@ import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/RootStoreProvider';
 import { defined } from '@utils/helpers';
-import { WhitelistedBaker } from '@utils/types';
+import { Token, WhitelistedBaker } from '@utils/types';
 
 export const useDoStake = () => {
   const rootStore = useRootStore();
+
   const { showErrorToast, showSuccessToast } = useToasts();
 
   const doStake = useCallback(
-    async (stakeItem: StakingItem, balance: BigNumber, selectedBaker: WhitelistedBaker) => {
+    async (stakeItem: StakingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
       try {
         await stakeAssetsApi(
           defined(rootStore.tezos),
+          tokenAddress,
           defined(rootStore.authStore.accountPkh),
           defined(stakeItem).id.toNumber(),
           balance,
