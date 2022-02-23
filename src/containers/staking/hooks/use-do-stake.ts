@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { stakeAssetsApi } from '@api/staking/stake-assets.api';
+import { stakeTokenApi } from '@api/staking/stake-token.api';
 import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/RootStoreProvider';
@@ -17,11 +17,11 @@ export const useDoStake = () => {
   const doStake = useCallback(
     async (stakeItem: StakingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
       try {
-        await stakeAssetsApi(
+        await stakeTokenApi(
           defined(rootStore.tezos),
           tokenAddress,
           defined(rootStore.authStore.accountPkh),
-          defined(stakeItem).id.toNumber(),
+          defined(stakeItem).id,
           balance,
           defined(selectedBaker).address
         );
