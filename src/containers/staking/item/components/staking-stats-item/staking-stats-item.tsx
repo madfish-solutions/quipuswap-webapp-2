@@ -11,6 +11,7 @@ import styles from './staking-stats-item.module.sass';
 
 export interface StakingStatsItemProps {
   itemName: string;
+  loading: boolean;
 }
 
 const modeClass = {
@@ -18,16 +19,12 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children }) => {
+export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children, loading }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { accountPkh } = useAuthStore();
 
   const content =
-    isNull(accountPkh) || isNull(children) ? (
-      <DashPlug animation={Boolean(accountPkh)} className={styles.dash} />
-    ) : (
-      children
-    );
+    isNull(accountPkh) || isNull(children) ? <DashPlug animation={loading} className={styles.dash} /> : children;
 
   return (
     <div className={cx(modeClass[colorThemeMode], styles.item)}>

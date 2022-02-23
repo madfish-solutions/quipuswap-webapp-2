@@ -4,8 +4,8 @@ import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useBakers } from '@utils/dapp';
-import { bigNumberToString, getDollarEquivalent } from '@utils/helpers';
+import { useBakers, useIsLoading } from '@utils/dapp';
+import { bigNumberToString, getDollarEquivalent, isExist } from '@utils/helpers';
 
 const mockLastStaked = Date.now();
 const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber('0');
@@ -14,21 +14,19 @@ export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { stakeItem } = stakingItemStore;
   const { data: bakers, loading: bakersLoading } = useBakers();
+  const dAppLoading = useIsLoading();
+  const stakingLoading = (!stakingItemStore.stakeItem && !stakingItemStore.error) || dAppLoading;
 
   // TODO: Remove Copy/past
-  const [currentDelegate, nextDelegate, myDelegate] = useMemo(() => {
-    if (stakeItem) {
-      const { currentDelegate, nextDelegate, myDelegate } = stakeItem;
+  const myDelegate = useMemo(() => {
+    const myDelegateAddress = stakeItem?.myDelegate;
 
-      return [currentDelegate, nextDelegate, myDelegate].map(
-        delegateAddress => bakers.find(({ address }) => address === delegateAddress) ?? null
-      );
-    }
-
-    return [null, null, null];
+    return isExist(myDelegateAddress)
+      ? bakers.find(({ address }) => address === myDelegateAddress) ?? { address: myDelegateAddress }
+      : null;
   }, [stakeItem, bakers]);
 
-  const delegatesLoading = bakersLoading || !stakeItem;
+  const delegatesLoading = bakersLoading || stakingLoading;
   const endTimestamp = stakeItem ? mockLastStaked + stakeItem.timelock * MS_IN_SECOND : null;
 
   const myEarnDollarEquivalent = getDollarEquivalent(
@@ -42,8 +40,6 @@ export const useStakingRewardInfoViewModel = () => {
     delegatesLoading,
     endTimestamp,
     myEarnDollarEquivalent,
-    // TODO: Use it
-    currentDelegate,
-    nextDelegate
+    stakingLoading
   };
 };

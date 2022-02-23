@@ -19,14 +19,15 @@ export const useStakeItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'stake']);
   const stakingListStore = useStakingListStore();
   const stakingItemStore = useStakingItemStore();
-  const isLoading = useIsLoading();
+  const dAppLoading = useIsLoading();
+  const isLoading = (!stakingItemStore.stakeItem && !stakingItemStore.error) || dAppLoading;
 
   /*
    Load data
   */
   useEffect(() => {
     const load = async () => {
-      if (!isLoading) {
+      if (!dAppLoading) {
         await stakingListStore.list.load();
         const stakeId = router.query['id'];
         if (!isUndefined(stakeId)) {
@@ -36,7 +37,7 @@ export const useStakeItemPageViewModel = () => {
     };
 
     void load();
-  }, [stakingItemStore, authStore.accountPkh, isLoading, router.query, stakingListStore.list]);
+  }, [stakingItemStore, authStore.accountPkh, dAppLoading, router.query, stakingListStore.list]);
 
   const { stakeItem } = stakingItemStore;
 

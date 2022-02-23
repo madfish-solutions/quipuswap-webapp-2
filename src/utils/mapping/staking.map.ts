@@ -22,7 +22,6 @@ const mapStakeItem = ({
   endTime,
   harvestFee,
   withdrawalFee,
-  myBalance,
   earnBalance,
   depositBalance,
   ...rest
@@ -48,7 +47,6 @@ const mapStakeItem = ({
     depositExchangeRate: new BigNumber(depositExchangeRate),
     earnExchangeRate: new BigNumber(earnExchangeRate),
     rewardPerSecond: new BigNumber(rewardPerSecond),
-    myBalance: mapRawBigNumber(myBalance),
     depositBalance: mapRawBigNumber(depositBalance),
     earnBalance: mapRawBigNumber(earnBalance),
     currentDelegate: currentDelegate === ZERO_ADDRESS ? null : currentDelegate,
@@ -57,6 +55,7 @@ const mapStakeItem = ({
     endTime: new Date(endTime).getTime(),
     harvestFee: mapRawBigNumber(harvestFee),
     withdrawalFee: mapRawBigNumber(withdrawalFee),
+    myBalance: null,
     myDelegate: null,
     myLastStaked: null
   };

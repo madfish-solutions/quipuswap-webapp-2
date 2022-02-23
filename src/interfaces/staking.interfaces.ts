@@ -43,7 +43,6 @@ export interface RawStakingItem {
   endTime: string;
   harvestFee: string;
   withdrawalFee: string;
-  myBalance: Undefined<string>;
   depositBalance: Undefined<string>;
   earnBalance: Undefined<string>;
 }
@@ -72,7 +71,7 @@ interface AbstractStakingItem {
 }
 
 interface UserStakingData {
-  myBalance: BigNumber;
+  myBalance: Nullable<BigNumber>;
   depositBalance: BigNumber;
   earnBalance: BigNumber;
   myDelegate: Nullable<string>;

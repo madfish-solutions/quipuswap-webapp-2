@@ -19,6 +19,7 @@ export class StakingItemStore {
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
   isLoading = false;
+  error: Nullable<Error> = null;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -27,6 +28,7 @@ export class StakingItemStore {
       balance: observable,
       selectedBaker: observable,
       isLoading: observable,
+      error: observable,
       availableBalance: observable,
 
       isLpToken: computed,
@@ -38,7 +40,9 @@ export class StakingItemStore {
       setSelectedBaker: action,
       stake: action,
       unstake: action,
-      setAvailableBalance: action
+      setAvailableBalance: action,
+      setLoading: action,
+      setError: action
     });
     this.clearBalance();
   }
@@ -83,6 +87,14 @@ export class StakingItemStore {
     this.availableBalance = balance;
   }
 
+  setLoading(isLoading: boolean) {
+    this.isLoading = isLoading;
+  }
+
+  setError(error: Nullable<Error>) {
+    this.error = error;
+  }
+
   async loadAvailableBalance() {
     if (!this.rootStore.tezos || !this.rootStore.authStore.accountPkh || !this.stakeItem?.tokenA) {
       this.setAvailableBalance(null);
@@ -99,8 +111,16 @@ export class StakingItemStore {
   }
 
   async loadStakeItem(stakingId: BigNumber) {
-    const stakeItem = this.rootStore.stakingListStore.list.data.find(({ id }) => stakingId.eq(id)) || null;
-    this.setStakeItem(stakeItem);
-    await this.loadAvailableBalance();
+    try {
+      this.setLoading(true);
+      const stakeItem = this.rootStore.stakingListStore.list.data.find(({ id }) => stakingId.eq(id)) || null;
+      this.setStakeItem(stakeItem);
+      await this.loadAvailableBalance();
+      this.setError(null);
+    } catch (e) {
+      this.setError(e as Error);
+    } finally {
+      this.setLoading(false);
+    }
   }
 }

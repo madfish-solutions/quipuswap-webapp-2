@@ -9,13 +9,12 @@ import { noop } from 'rxjs';
 
 import { RewardInfo } from '@components/common/reward-info';
 import { ArrowDown } from '@components/svg/ArrowDown';
-import { DashPlug } from '@components/ui/dash-plug';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { Countdown } from '@containers/staking/item/components/countdown';
 import { useStakingRewardInfoViewModel } from '@containers/staking/item/components/staking-reward-info/use-staking-reward-info.vm';
 import { StakingStatsItem } from '@containers/staking/item/components/staking-stats-item';
-import { defined, getBakerName, isNull } from '@utils/helpers';
+import { defined, getBakerName } from '@utils/helpers';
 
 import styles from './staking-reward-info.module.sass';
 
@@ -27,7 +26,7 @@ const modeClass = {
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
-  const { stakeItem, myDelegate, delegatesLoading, endTimestamp, myEarnDollarEquivalent } =
+  const { stakeItem, myDelegate, delegatesLoading, endTimestamp, myEarnDollarEquivalent, stakingLoading } =
     useStakingRewardInfoViewModel();
 
   return (
@@ -49,7 +48,7 @@ export const StakingRewardInfo: FC = observer(() => {
       buttonText="Harvest"
       currency="$"
     >
-      <StakingStatsItem itemName={t('stake|Your Share')}>
+      <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
         {stakeItem ? (
           <StateCurrencyAmount
             amount={stakeItem.earnBalance}
@@ -63,15 +62,13 @@ export const StakingRewardInfo: FC = observer(() => {
         ) : null}
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Your delegate')}>
-        {isNull(myDelegate) ? (
-          <DashPlug animation={delegatesLoading} className={styles.dashPlug} />
-        ) : (
+      <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
+        {myDelegate ? (
           <span className={cx(styles.delegate, styles.statsValueText)}>{getBakerName(myDelegate)}</span>
-        )}
+        ) : null}
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')}>
+      <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
         {stakeItem ? <Countdown endTimestamp={defined(endTimestamp)} /> : null}
       </StakingStatsItem>
     </RewardInfo>
