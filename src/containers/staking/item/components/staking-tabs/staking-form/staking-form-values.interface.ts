@@ -1,4 +1,4 @@
 export interface StakingFormValues {
-  balance: string;
+  inputAmount: string;
   selectedBaker: string;
 }

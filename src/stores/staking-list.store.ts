@@ -10,7 +10,7 @@ import { RootStore } from './root.store';
 export class StakingListStore {
   listStore = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
-    async () => getStakingListApi(this.rootStore.authStore.accountPkh),
+    async () => await getStakingListApi(this.rootStore.authStore.accountPkh),
     mapStakesItems
   );
 
