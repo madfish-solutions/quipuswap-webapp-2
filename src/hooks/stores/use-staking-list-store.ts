@@ -1,4 +1,4 @@
-import { useRootStore } from '@providers/RootStoreProvider';
+import { useRootStore } from '@providers/root-store-provider';
 
 export const useStakingListStore = () => {
   const { stakingListStore } = useRootStore();

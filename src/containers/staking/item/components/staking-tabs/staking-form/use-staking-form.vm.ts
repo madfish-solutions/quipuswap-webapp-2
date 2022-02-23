@@ -1,18 +1,18 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { useDoStake } from '@containers/staking/hooks/use-do-stake';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
-import { StakingFormValues } from './staking-form-values.interface';
+import { useDoStake } from '../../../../hooks/use-do-stake';
+import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, availableBalanceStore, balance, selectedBaker } = stakingItemStore;
+  const { itemStore, isLpToken, availableBalanceStore, inputAmount, selectedBaker } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
@@ -22,14 +22,15 @@ export const useStakingFormViewModel = () => {
 
   const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
-    await doStake(defined(stakeItem), balance, defined(selectedBaker));
+    const token = defined(stakeItem).stakedToken;
+    await doStake(defined(stakeItem), inputAmount, token, defined(selectedBaker));
     actions.setSubmitting(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      balance: '',
-      selectedBaker: ''
+      [StakingFormFields.inputAmount]: '',
+      [StakingFormFields.selectedBaker]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
@@ -40,34 +41,40 @@ export const useStakingFormViewModel = () => {
   console.log('isLpToken', isLpToken);
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
-  const balanceError = formik.errors.balance && formik.touched.balance ? formik.errors.balance : undefined;
+  const inputAmountError =
+    formik.errors[StakingFormFields.inputAmount] && formik.touched[StakingFormFields.inputAmount]
+      ? formik.errors[StakingFormFields.inputAmount]
+      : undefined;
 
   const bakerError =
-    formik.errors.selectedBaker && formik.touched.selectedBaker ? formik.errors.selectedBaker : undefined;
+    formik.errors[StakingFormFields.selectedBaker] && formik.touched[StakingFormFields.selectedBaker]
+      ? formik.errors[StakingFormFields.selectedBaker]
+      : undefined;
 
-  const handleBalanceChange = (value: string) => {
-    stakingItemStore.setBalance(value);
-    formik.setFieldValue('balance', value);
+  const handleInputAmountChange = (value: string) => {
+    stakingItemStore.setInputAmount(value);
+    formik.setFieldValue(StakingFormFields.inputAmount, value);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
     stakingItemStore.setSelectedBaker(baker);
-    formik.setFieldValue('selectedBaker', baker.address);
+    formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
   const tradeHref = stakeItem ? `/swap/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
   const investHref = stakeItem ? `/liquidity/add/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
 
   return {
-    formik,
+    handleSubmit: formik.handleSubmit,
+    inputAmount: formik.values[StakingFormFields.inputAmount],
     userTokenBalance,
-    balanceError,
+    inputAmountError,
     stakeItem,
     bakerError,
     disabled,
-    handleBalanceChange,
-    handleBakerChange,
     tradeHref,
-    investHref
+    investHref,
+    handleInputAmountChange,
+    handleBakerChange
   };
 };

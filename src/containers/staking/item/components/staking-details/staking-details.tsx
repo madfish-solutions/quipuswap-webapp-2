@@ -26,6 +26,7 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
   const { t } = useTranslation(['common', 'vote']);
 
   const {
+    endTime,
     tvlDollarEquivalent,
     dailyDistribution,
     distributionDollarEquivalent,
@@ -90,7 +91,7 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|stakingEndsIn')} tooltipContent={null} className={CardCellClassName}>
-        <StateData isLoading={isLoading} data={stakeItem?.endTime ?? null}>
+        <StateData isLoading={isLoading} data={endTime}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>
       </DetailsCardCell>

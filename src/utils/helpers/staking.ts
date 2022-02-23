@@ -31,5 +31,5 @@ export const getStakingDepositTokenSymbol = (stakeItem: Pick<StakingItem, 'token
   return tokenBSymbol ? `${tokenASymbol}/${tokenBSymbol}` : tokenASymbol;
 };
 
-export const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T) =>
+export const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T): BigNumber | T =>
   isExist(raw) ? new BigNumber(raw) : raw;

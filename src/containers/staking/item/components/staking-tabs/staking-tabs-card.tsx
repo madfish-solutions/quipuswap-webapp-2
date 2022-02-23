@@ -3,18 +3,19 @@ import { FC } from 'react';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import { observer } from 'mobx-react-lite';
 
+import { Skeleton } from '@components/common/Skeleton';
 import { StakingTabs } from '@containers/staking/item/types';
 import s from '@styles/CommonContainer.module.sass';
 
 import { StakingForm } from './staking-form/staking-form';
-import { UnstakeForm } from './unstake-form/unstake-form';
+import { UnstakingForm } from './unstake-form/unstaking-form';
 import { TabsContent, useStakingTabsCardViewModel } from './use-staking-tabs-card.vm';
 
 export const StakingTabsCard: FC = observer(() => {
   const { stakeItem, currentTab, isStakeForm, changeTabHandle } = useStakingTabsCardViewModel();
 
   if (!stakeItem) {
-    return null;
+    return <Skeleton className={s.Skeleton} />;
   }
 
   return (
@@ -32,7 +33,7 @@ export const StakingTabsCard: FC = observer(() => {
       }}
       contentClassName={s.content}
     >
-      {isStakeForm ? <StakingForm /> : <UnstakeForm />}
+      {isStakeForm ? <StakingForm /> : <UnstakingForm />}
     </Card>
   );
 });

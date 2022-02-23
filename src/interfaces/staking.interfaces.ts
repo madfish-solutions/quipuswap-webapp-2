@@ -43,8 +43,9 @@ export interface RawStakingItem {
   endTime: string;
   harvestFee: string;
   withdrawalFee: string;
-  depositBalance: Undefined<string>;
-  earnBalance: Undefined<string>;
+  myBalance?: string;
+  depositBalance?: string;
+  earnBalance?: string;
 }
 
 interface AbstractStakingItem {
@@ -61,31 +62,27 @@ interface AbstractStakingItem {
   earnExchangeRate: BigNumber;
   stakeUrl: string;
   depositTokenUrl: string;
-  rewardPerSecond: BigNumber;
-  currentDelegate: Nullable<string>;
-  nextDelegate: Nullable<string>;
-  timelock: number;
-  endTime: number;
-  harvestFee: BigNumber;
-  withdrawalFee: BigNumber;
+  rewardPerSecond: string;
+  currentDelegate: string;
+  nextDelegate: string;
+  timelock: string;
+  endTime: string;
+  harvestFee: string;
+  withdrawalFee: string;
 }
 
-interface UserStakingData {
-  myBalance: Nullable<BigNumber>;
+export interface UserStakingItem extends AbstractStakingItem {
+  myBalance: BigNumber;
   depositBalance: BigNumber;
   earnBalance: BigNumber;
-  myDelegate: Nullable<string>;
-  myLastStaked: Nullable<number>;
 }
 
-interface NoUserStakingItem extends AbstractStakingItem {
+export interface NoUserStakingItem extends AbstractStakingItem {
   myBalance: null;
   depositBalance: null;
   earnBalance: null;
-  myDelegate: null;
-  myLastStaked: null;
 }
 
-interface UserStakingItem extends AbstractStakingItem, UserStakingData {}
+// interface UserStakingItem extends AbstractStakingItem, UserStakingData {}
 
 export type StakingItem = NoUserStakingItem | UserStakingItem;

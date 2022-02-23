@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { QUIPUSWAP } from '@app.config';
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useUiStore } from '@hooks/stores/use-ui-store';
-import { useRootStore } from '@providers/RootStoreProvider';
+import { useRootStore } from '@providers/root-store-provider';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 
 export const useBaseLayoutViewModel = () => {

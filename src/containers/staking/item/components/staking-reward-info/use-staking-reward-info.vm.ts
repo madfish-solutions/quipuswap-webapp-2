@@ -8,6 +8,7 @@ import { useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, getDollarEquivalent, isExist } from '@utils/helpers';
 
 const mockLastStaked = Date.now();
+const mockMyDelegateAddress = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
 const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber('0');
 
 export const useStakingRewardInfoViewModel = () => {
@@ -19,15 +20,15 @@ export const useStakingRewardInfoViewModel = () => {
 
   // TODO: Remove Copy/past
   const myDelegate = useMemo(() => {
-    const myDelegateAddress = stakeItem?.myDelegate;
+    const myDelegateAddress = mockMyDelegateAddress;
 
     return isExist(myDelegateAddress)
       ? bakers.find(({ address }) => address === myDelegateAddress) ?? { address: myDelegateAddress }
       : null;
-  }, [stakeItem, bakers]);
+  }, [bakers]);
 
   const delegatesLoading = bakersLoading || stakingLoading;
-  const endTimestamp = stakeItem ? mockLastStaked + stakeItem.timelock * MS_IN_SECOND : null;
+  const endTimestamp = stakeItem ? mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND : null;
 
   const myEarnDollarEquivalent = getDollarEquivalent(
     stakeItem?.earnBalance,

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
@@ -45,7 +46,7 @@ export const useStakingDetailsViewModel = () => {
     ? stakeItem.tvl.multipliedBy(stakeItem.depositExchangeRate).decimalPlaces(2).toFixed()
     : null;
   const dailyDistribution = stakeItem
-    ? fromDecimals(stakeItem.rewardPerSecond, stakeItem.rewardToken)
+    ? fromDecimals(new BigNumber(stakeItem.rewardPerSecond), stakeItem.rewardToken)
         .times(SECONDS_IN_MINUTE)
         .times(MINUTES_IN_HOUR)
         .times(HOURS_IN_DAY)
@@ -61,13 +62,14 @@ export const useStakingDetailsViewModel = () => {
   const dailyApr = stakeItem?.apr?.dividedBy(365).toFixed() ?? null;
 
   return {
+    endTime: stakeItem ? new Date(stakeItem.endTime).getTime() : null,
     tvlDollarEquivalent,
     dailyDistribution,
     distributionDollarEquivalent,
     dailyApr,
     currentDelegate,
     nextDelegate,
-    timelock: stakeItem ? stakeItem.timelock * MS_IN_SECOND : null,
+    timelock: stakeItem ? Number(stakeItem.timelock) * MS_IN_SECOND : null,
     CardCellClassName,
     depositTokenDecimals,
     stakeUrl: stakeItem?.stakeUrl ?? `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}`,
