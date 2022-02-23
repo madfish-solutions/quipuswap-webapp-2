@@ -5,45 +5,37 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 import { DashPlug } from '@components/ui/dash-plug';
-import { useAuthStore } from '@hooks/stores/use-auth-store';
+import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useIsLoading } from '@utils/dapp';
-import { isNull, isUndefined } from '@utils/helpers';
+import { getTokensName, isNull, isUndefined } from '@utils/helpers';
 
 import stakingPageStyles from './staking-item.page.module.sass';
 
 export const useStakeItemPageViewModel = () => {
   const router = useRouter();
-  const authStore = useAuthStore();
   const { t } = useTranslation(['common', 'stake']);
-  const stakingListStore = useStakingListStore();
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
-  const isLoading = (!stakingItemStore.stakeItem && !stakingItemStore.error) || dAppLoading;
+  const { getStakingItem } = useGetStakingItem();
 
   /*
    Load data
   */
   useEffect(() => {
-    const load = async () => {
-      if (!dAppLoading) {
-        await stakingListStore.list.load();
-        const stakeId = router.query['id'];
-        if (!isUndefined(stakeId)) {
-          await stakingItemStore.loadStakeItem(new BigNumber(`${stakeId}`));
-        }
-      }
-    };
+    const stakeId = router.query['id'];
+    if (dAppLoading || isUndefined(stakeId)) {
+      return;
+    }
+    void getStakingItem(new BigNumber(`${stakeId}`));
+  }, [getStakingItem, dAppLoading, router.query]);
 
-    void load();
-  }, [stakingItemStore, authStore.accountPkh, dAppLoading, router.query, stakingListStore.list]);
-
-  const { stakeItem } = stakingItemStore;
+  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
+  const isLoading = (!stakeItem && !stakeItemError) || dAppLoading;
 
   const getTitle = () => {
     if (stakeItem) {
-      return stakeItem.stakedToken.metadata.symbol;
+      return `Staking ${getTokensName(stakeItem.tokenA, stakeItem.tokenB)}`;
     }
 
     if (!isLoading && isNull(stakeItem)) {
@@ -53,9 +45,5 @@ export const useStakeItemPageViewModel = () => {
     return <DashPlug animation={true} className={stakingPageStyles.titleLoader} zoom={1.45} />;
   };
 
-  return {
-    isLoading,
-    stakeItem,
-    getTitle
-  };
+  return { isLoading, stakeItem, getTitle };
 };

@@ -101,3 +101,7 @@ export const getTokensPairName = (tokenX: Token, tokenY: Token) => {
 export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
   return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };
+
+export const getTokensName = (token: Token, optionalToken: Optional<Token>) => {
+  return optionalToken ? `${getTokenSymbol(token)} / ${getTokenSymbol(optionalToken)}` : getTokenSymbol(token);
+};

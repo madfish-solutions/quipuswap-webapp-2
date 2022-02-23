@@ -11,7 +11,7 @@ import styles from './list-stats.module.scss';
 export const ListStats: FC = observer(() => {
   const stakingStore = useStakingListStore();
 
-  const amount = stakingStore.stats.data;
+  const amount = stakingStore.statsStore.data;
 
   const stats = [
     {

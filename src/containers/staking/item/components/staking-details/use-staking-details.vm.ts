@@ -21,8 +21,8 @@ import { bigNumberToString, defined, fromDecimals, getDollarEquivalent, isNull }
 export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
-  const isLoading = (!stakingItemStore.stakeItem && !stakingItemStore.error) || dAppLoading;
-  const { stakeItem } = stakingItemStore;
+  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
+  const isLoading = (!stakeItem && !stakeItemError) || dAppLoading;
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);

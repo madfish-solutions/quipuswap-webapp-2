@@ -19,7 +19,9 @@ export const useStakingTabsCardViewModel = () => {
     stakingItemStore.setTab(tab);
   };
 
-  const { stakeItem, currentTab } = stakingItemStore;
+  const { itemStore, currentTab } = stakingItemStore;
+  const { data: stakeItem } = itemStore;
+
   const isStakeForm = stakingItemStore.currentTab === StakingTabs.stake;
 
   return {

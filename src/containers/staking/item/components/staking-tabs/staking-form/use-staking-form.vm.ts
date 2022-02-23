@@ -1,22 +1,28 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { StakingFormValues } from '@containers/staking/item/components/staking-form/staking-form/staking-form-values.interface';
-import { useStakingFormValidation } from '@containers/staking/item/components/staking-form/staking-form/use-staking-form.validation';
+import { useDoStake } from '@containers/staking/hooks/use-do-stake';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, getTokenSlug } from '@utils/helpers';
+import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
+
+import { StakingFormValues } from './staking-form-values.interface';
+import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { stakeItem, isLoading, isLpToken, availableBalance } = stakingItemStore;
+  const { doStake } = useDoStake();
+  const { itemStore, isLpToken, availableBalanceStore, balance, selectedBaker } = stakingItemStore;
+  const { data: stakeItem } = itemStore;
+  const { data: availableBalance } = availableBalanceStore;
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
   const validationSchema = useStakingFormValidation(availableBalance);
 
-  const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
-    await stakingItemStore.stake();
+  const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+    actions.setSubmitting(true);
+    await doStake(defined(stakeItem), balance, defined(selectedBaker));
     actions.setSubmitting(false);
   };
 
@@ -33,7 +39,7 @@ export const useStakingFormViewModel = () => {
   // eslint-disable-next-line no-console
   console.log('isLpToken', isLpToken);
 
-  const disabled = isLoading || formik.isSubmitting;
+  const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const balanceError = formik.errors.balance && formik.touched.balance ? formik.errors.balance : undefined;
 
   const bakerError =

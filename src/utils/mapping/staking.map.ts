@@ -4,7 +4,7 @@ import { ZERO_ADDRESS } from '@app.config';
 import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
 import { getStakingDepositTokenSymbol, mapRawBigNumber, mapStakingToken } from '@utils/helpers';
 
-const mapStakeItem = ({
+export const mapStakeItem = ({
   id,
   tokenA,
   tokenB,

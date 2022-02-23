@@ -3,11 +3,11 @@ import { FC } from 'react';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import { observer } from 'mobx-react-lite';
 
-import { StakingForm } from '@containers/staking/item/components/staking-form/staking-form/staking-form';
-import { UnstakeForm } from '@containers/staking/item/components/staking-form/unstake-form/unstake-form';
 import { StakingTabs } from '@containers/staking/item/types';
 import s from '@styles/CommonContainer.module.sass';
 
+import { StakingForm } from './staking-form/staking-form';
+import { UnstakeForm } from './unstake-form/unstake-form';
 import { TabsContent, useStakingTabsCardViewModel } from './use-staking-tabs-card.vm';
 
 export const StakingTabsCard: FC = observer(() => {

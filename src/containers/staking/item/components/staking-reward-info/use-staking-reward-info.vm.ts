@@ -12,10 +12,10 @@ const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber('0');
 
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { stakeItem } = stakingItemStore;
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
-  const stakingLoading = (!stakingItemStore.stakeItem && !stakingItemStore.error) || dAppLoading;
+  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
+  const stakingLoading = (!stakeItem && !stakeItemError) || dAppLoading;
 
   // TODO: Remove Copy/past
   const myDelegate = useMemo(() => {
