@@ -15,7 +15,6 @@ export const stakeTokenApi = async (
   bakerAddress: string
 ) => {
   const stakingContract = await tezos.wallet.at(STAKING_CONTRACT_ADDRESS);
-
   const stakingParams = stakingContract.methods
     .deposit(stakingId.toNumber(), amount, STAKING_REFERRER_CONTRACT, accountPkh, bakerAddress)
     .toTransferParams();
