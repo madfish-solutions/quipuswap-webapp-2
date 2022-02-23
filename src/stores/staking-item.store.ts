@@ -32,7 +32,6 @@ export class StakingItemStore {
 
   currentTab: StakingTabs = StakingTabs.stake;
 
-  // TODO
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 

@@ -9,6 +9,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
+import { StakingFormFields } from './staking-form.interface';
 import { useStakingFormViewModel } from './use-staking-form.vm';
 
 export const StakingForm: FC = observer(() => {
@@ -33,7 +34,7 @@ export const StakingForm: FC = observer(() => {
     <form onSubmit={handleSubmit}>
       <TokenSelect
         label={t('common|Amount')}
-        name="inputAmount"
+        name={StakingFormFields.inputAmount}
         value={inputAmount}
         balance={userTokenBalance}
         error={inputAmountError}

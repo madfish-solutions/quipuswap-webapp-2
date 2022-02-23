@@ -7,20 +7,20 @@ import { DefaultSeo } from 'next-seo';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 
-import { useAopViewModel } from '@hooks/use-app.vm';
+import { useAppViewModel } from '@hooks/use-app.vm';
 import { DexGraphProvider } from '@hooks/use-dex-graph';
 import { NewExchangeRatesProvider } from '@hooks/use-new-exchange-rate';
 import { ExchangeRatesProvider } from '@hooks/useExchangeRate';
 import { withApollo } from '@hooks/withApollo';
 import { BalancesProvider } from '@providers/BalancesProvider';
-import { RootStoreProvider } from '@providers/RootStoreProvider';
+import { RootStoreProvider } from '@providers/root-store-provider';
 import { DAppBakerProvider, DAppProvider, DAppTokensProvider } from '@utils/dapp';
 
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import '@styles/globals.sass';
 
 const App = ({ Component, pageProps }: AppProps) => {
-  const { title, description, titleTemplate, defaultTitle, openGraph, twitter, additionalMetaTags } = useAopViewModel();
+  const { title, description, titleTemplate, defaultTitle, openGraph, twitter, additionalMetaTags } = useAppViewModel();
 
   return (
     <>

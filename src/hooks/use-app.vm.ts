@@ -10,7 +10,7 @@ const RESIZE_DEBOUNCE = 1000; // 1 sec
 const HEIGHT_KOEF = 0.01;
 const HEIGHT_EMPTY = 0;
 
-export const useAopViewModel = () => {
+export const useAppViewModel = () => {
   const router = useRouter();
 
   if (isClient && localStorage.getItem('theme') === ColorModes.Dark) {

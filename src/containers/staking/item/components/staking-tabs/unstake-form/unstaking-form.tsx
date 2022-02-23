@@ -8,6 +8,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
+import { UnstakingFormFields } from './unstaking-form.interface';
 import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 
 export const UnstakingForm: FC = observer(() => {
@@ -30,7 +31,7 @@ export const UnstakingForm: FC = observer(() => {
     <form onSubmit={handleSubmit}>
       <TokenSelect
         label={t('common|Amount')}
-        name="inputAmount"
+        name={UnstakingFormFields.inputAmount}
         value={inputAmount}
         balance={userTokenBalance}
         error={inputAmountError}

@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { stakeTokenApi } from '@api/staking/stake-token.api';
 import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { useRootStore } from '@providers/RootStoreProvider';
+import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@utils/helpers';
 import { Token, WhitelistedBaker } from '@utils/types';
 

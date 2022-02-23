@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { unstakeAssetsApi } from '@api/staking/unstake-assets.api';
 import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { useRootStore } from '@providers/RootStoreProvider';
+import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@utils/helpers';
 
 export const useDoUnstake = () => {

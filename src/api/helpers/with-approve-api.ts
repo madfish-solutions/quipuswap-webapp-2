@@ -2,8 +2,9 @@ import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { allowContractSpendYourTokens } from '@containers/liquidity/liquidity-cards/blockchain';
 import { Token } from '@utils/types';
+
+import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
 
 const RESET_AMOUNT = 0;
 
@@ -15,16 +16,14 @@ export const withApproveApi = async (
   amount: BigNumber.Value,
   operationParams: TransferParams
 ) => {
-  const resetOperator = allowContractSpendYourTokens(tezos, token, contractAddress, RESET_AMOUNT, accountPkh);
-
-  const updateOperator = allowContractSpendYourTokens(tezos, token, contractAddress, amount, accountPkh);
-
-  const [resetOperatorResolved, updateOperatorResolved] = await Promise.all([resetOperator, updateOperator]);
+  const resetOperatorPromise = allowContractSpendYourTokens(tezos, token, contractAddress, RESET_AMOUNT, accountPkh);
+  const updateOperatorPromise = allowContractSpendYourTokens(tezos, token, contractAddress, amount, accountPkh);
+  const [resetOperator, updateOperator] = await Promise.all([resetOperatorPromise, updateOperatorPromise]);
 
   return await batchify(tezos.wallet.batch([]), [
-    resetOperatorResolved.toTransferParams(),
-    updateOperatorResolved.toTransferParams(),
+    resetOperator.toTransferParams(),
+    updateOperator.toTransferParams(),
     operationParams,
-    resetOperatorResolved.toTransferParams()
+    resetOperator.toTransferParams()
   ]).send();
 };

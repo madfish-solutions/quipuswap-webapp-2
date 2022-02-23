@@ -5,7 +5,7 @@ import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, defined, isEmptyArray } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
-import { UnstakingFormValues } from './unstaking-form-values.interface';
+import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
 import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
 export const useUnstakingFormViewModel = () => {
@@ -27,7 +27,7 @@ export const useUnstakingFormViewModel = () => {
 
   const formik = useFormik({
     initialValues: {
-      inputAmount: ''
+      [UnstakingFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
@@ -39,16 +39,18 @@ export const useUnstakingFormViewModel = () => {
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const inputAmountError =
-    formik.errors.inputAmount && formik.touched.inputAmount ? formik.errors.inputAmount : undefined;
+    formik.errors[UnstakingFormFields.inputAmount] && formik.touched[UnstakingFormFields.inputAmount]
+      ? formik.errors[UnstakingFormFields.inputAmount]
+      : undefined;
 
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
-    formik.setFieldValue('inputAmount', value);
+    formik.setFieldValue(UnstakingFormFields.inputAmount, value);
   };
 
   return {
     handleSubmit: formik.handleSubmit,
-    inputAmount: formik.values.inputAmount,
+    inputAmount: formik.values[UnstakingFormFields.inputAmount],
     userTokenBalance,
     inputAmountError,
     stakeItem,

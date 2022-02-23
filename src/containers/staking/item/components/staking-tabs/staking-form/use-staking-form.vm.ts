@@ -6,7 +6,7 @@ import { bigNumberToString, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
-import { StakingFormValues } from './staking-form-values.interface';
+import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
@@ -30,8 +30,8 @@ export const useStakingFormViewModel = () => {
 
   const formik = useFormik({
     initialValues: {
-      inputAmount: '',
-      selectedBaker: ''
+      [StakingFormFields.inputAmount]: '',
+      [StakingFormFields.selectedBaker]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
@@ -43,24 +43,28 @@ export const useStakingFormViewModel = () => {
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const inputAmountError =
-    formik.errors.inputAmount && formik.touched.inputAmount ? formik.errors.inputAmount : undefined;
+    formik.errors[StakingFormFields.inputAmount] && formik.touched[StakingFormFields.inputAmount]
+      ? formik.errors[StakingFormFields.inputAmount]
+      : undefined;
 
   const bakerError =
-    formik.errors.selectedBaker && formik.touched.selectedBaker ? formik.errors.selectedBaker : undefined;
+    formik.errors[StakingFormFields.selectedBaker] && formik.touched[StakingFormFields.selectedBaker]
+      ? formik.errors[StakingFormFields.selectedBaker]
+      : undefined;
 
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
-    formik.setFieldValue('inputAmount', value);
+    formik.setFieldValue(StakingFormFields.inputAmount, value);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
     stakingItemStore.setSelectedBaker(baker);
-    formik.setFieldValue('selectedBaker', baker.address);
+    formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
   return {
     handleSubmit: formik.handleSubmit,
-    inputAmount: formik.values.inputAmount,
+    inputAmount: formik.values[StakingFormFields.inputAmount],
     userTokenBalance,
     inputAmountError,
     stakeItem,
