@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Card, Tabs } from '@quipuswap/ui-kit';
 import { observer } from 'mobx-react-lite';
 
+import { Skeleton } from '@components/common/Skeleton';
 import { StakingTabs } from '@containers/staking/item/types';
 import s from '@styles/CommonContainer.module.sass';
 
@@ -14,7 +15,7 @@ export const StakingTabsCard: FC = observer(() => {
   const { stakeItem, currentTab, isStakeForm, changeTabHandle } = useStakingTabsCardViewModel();
 
   if (!stakeItem) {
-    return null;
+    return <Skeleton className={s.Skeleton} />;
   }
 
   return (
