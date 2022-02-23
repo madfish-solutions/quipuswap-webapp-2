@@ -1,38 +1,33 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { useDoStake } from '@containers/staking/hooks/use-do-stake';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, defined, isEmptyArray } from '@utils/helpers';
-import { WhitelistedBaker } from '@utils/types';
 
-import { StakingFormValues } from './staking-form-values.interface';
-import { useStakingFormValidation } from './use-staking-form.validation';
+import { useDoUnstake } from '../../../../hooks/use-do-unstake';
+import { UnstakingFormValues } from './unstaking-form-values.interface';
+import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
-export const useStakingFormViewModel = () => {
+export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { doStake } = useDoStake();
-  const { itemStore, isLpToken, availableBalanceStore, inputAmount, selectedBaker } = stakingItemStore;
+  const { doUnstake } = useDoUnstake();
+  const { itemStore, isLpToken, availableBalanceStore, inputAmount } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
-  const validationSchema = useStakingFormValidation(availableBalance);
+  const validationSchema = useUnstakingFormValidation(availableBalance);
 
-  const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+  const handleStakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
-    // @ts-ignore
-    const tokenAddress = stakeItem?.stakedToken;
-    await doStake(defined(stakeItem), balance, tokenAddress, defined(selectedBaker));
-
+    await doUnstake(defined(stakeItem), inputAmount);
     actions.setSubmitting(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      inputAmount: '',
-      selectedBaker: ''
+      inputAmount: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
@@ -46,17 +41,9 @@ export const useStakingFormViewModel = () => {
   const inputAmountError =
     formik.errors.inputAmount && formik.touched.inputAmount ? formik.errors.inputAmount : undefined;
 
-  const bakerError =
-    formik.errors.selectedBaker && formik.touched.selectedBaker ? formik.errors.selectedBaker : undefined;
-
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
     formik.setFieldValue('inputAmount', value);
-  };
-
-  const handleBakerChange = (baker: WhitelistedBaker) => {
-    stakingItemStore.setSelectedBaker(baker);
-    formik.setFieldValue('selectedBaker', baker.address);
   };
 
   return {
@@ -65,9 +52,7 @@ export const useStakingFormViewModel = () => {
     userTokenBalance,
     inputAmountError,
     stakeItem,
-    bakerError,
     disabled,
-    handleInputAmountChange,
-    handleBakerChange
+    handleInputAmountChange
   };
 };
