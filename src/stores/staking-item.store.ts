@@ -13,39 +13,39 @@ import { Nullable, WhitelistedBaker } from '@utils/types';
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
-const DEFAULT_BALANCE = 0;
+const DEFAULT_INPUT_AMOUNT = 0;
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
 
   itemStore = new LoadingErrorData<RawStakingItem, Nullable<StakingItem>>(
     null,
-    async () => getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh),
+    async () => await getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh),
     mapStakeItem
   );
 
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
-    async () => this.getUserTokenBalance(),
+    async () => await this.getUserTokenBalance(),
     noopMap
   );
 
   currentTab: StakingTabs = StakingTabs.stake;
 
-  balance = new BigNumber(DEFAULT_BALANCE);
+  inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
-      balance: observable,
+      inputAmount: observable,
       selectedBaker: observable,
 
       isLpToken: computed,
 
       setTab: action,
       clearBalance: action,
-      setBalance: action,
+      setInputAmount: action,
       setSelectedBaker: action
     });
     this.clearBalance();
@@ -55,8 +55,8 @@ export class StakingItemStore {
     this.currentTab = tab;
   }
 
-  setBalance(balance: BigNumber.Value) {
-    this.balance = new BigNumber(balance);
+  setInputAmount(inputAmount: BigNumber.Value) {
+    this.inputAmount = new BigNumber(inputAmount);
   }
 
   setSelectedBaker(selectedBaker: Nullable<WhitelistedBaker>) {
@@ -64,7 +64,7 @@ export class StakingItemStore {
   }
 
   clearBalance() {
-    this.setBalance(DEFAULT_BALANCE);
+    this.setInputAmount(DEFAULT_INPUT_AMOUNT);
   }
 
   setStakingId(stakingId: Nullable<BigNumber>) {

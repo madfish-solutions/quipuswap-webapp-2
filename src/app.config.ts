@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token, WhitelistedBaker } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -195,3 +195,21 @@ export const CHAIN_ID_MAPPING = new Map<QSNets, string>([
 export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 
 export const LP_TOKEN_DECIMALS = 6;
+
+export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
+  {
+    address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
+  },
+  {
+    address: 'tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp'
+  },
+  {
+    address: 'tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru'
+  },
+  {
+    address: 'tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16'
+  },
+  {
+    address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
+  }
+];

@@ -11,7 +11,7 @@ import { RootStore } from './root.store';
 export class StakingListStore {
   listStore = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
-    async () => getStakingListApi(this.rootStore.authStore.accountPkh, defined(this.rootStore.tezos)),
+    async () => await getStakingListApi(this.rootStore.authStore.accountPkh, defined(this.rootStore.tezos)),
     mapStakesItems
   );
 

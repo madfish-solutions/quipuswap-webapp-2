@@ -4,27 +4,24 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or-do-something';
-import { ComplexBaker } from '@components/ui/ComplexInput';
 import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
-import { StakingFormFields } from './staking-form.interface';
-import { useStakingFormViewModel } from './use-staking-form.vm';
+import { UnstakingFormFields } from './unstaking-form.interface';
+import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 
-export const StakingForm: FC = observer(() => {
+export const UnstakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
   const {
-    handleSubmit,
     inputAmount,
+    handleSubmit,
     userTokenBalance,
     inputAmountError,
     stakeItem,
-    bakerError,
     disabled,
-    handleInputAmountChange,
-    handleBakerChange
-  } = useStakingFormViewModel();
+    handleInputAmountChange
+  } = useUnstakingFormViewModel();
 
   if (!stakeItem) {
     return null;
@@ -34,7 +31,7 @@ export const StakingForm: FC = observer(() => {
     <form onSubmit={handleSubmit}>
       <TokenSelect
         label={t('common|Amount')}
-        name={StakingFormFields.inputAmount}
+        name={UnstakingFormFields.inputAmount}
         value={inputAmount}
         balance={userTokenBalance}
         error={inputAmountError}
@@ -47,11 +44,10 @@ export const StakingForm: FC = observer(() => {
         }}
         handleBalance={handleInputAmountChange}
       />
-      <ComplexBaker label={t('common|Baker')} className={s.mt24} handleChange={handleBakerChange} error={bakerError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>
-            {t('stake|Stake')}
+            {t('stake|Unstake')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>

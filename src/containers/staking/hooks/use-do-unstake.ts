@@ -2,28 +2,25 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { stakeTokenApi } from '@api/staking/stake-token.api';
+import { unstakeAssetsApi } from '@api/staking/unstake-assets.api';
 import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { defined } from '@utils/helpers';
-import { Token, WhitelistedBaker } from '@utils/types';
 
-export const useDoStake = () => {
+export const useDoUnstake = () => {
   const rootStore = useRootStore();
 
   const { showErrorToast, showSuccessToast } = useToasts();
 
-  const doStake = useCallback(
-    async (stakeItem: StakingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
+  const doUnstake = useCallback(
+    async (stakeItem: StakingItem, balance: BigNumber) => {
       try {
-        await stakeTokenApi(
+        await unstakeAssetsApi(
           defined(rootStore.tezos),
-          tokenAddress,
           defined(rootStore.authStore.accountPkh),
-          defined(stakeItem).id,
-          balance,
-          defined(selectedBaker).address
+          defined(stakeItem).id.toNumber(),
+          balance
         );
         showSuccessToast('Stake successful');
       } catch (error) {
@@ -35,5 +32,5 @@ export const useDoStake = () => {
     [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, showSuccessToast]
   );
 
-  return { doStake };
+  return { doUnstake };
 };
