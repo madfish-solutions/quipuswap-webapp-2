@@ -39,7 +39,7 @@ export const UnstakingForm: FC = observer(() => {
         notSelectable
         onChange={event => {
           // @ts-ignore
-          handleBalanceChange(event.target.value || '');
+          handleInputAmountChange(event.target.value || '');
         }}
         handleBalance={handleInputAmountChange}
       />
