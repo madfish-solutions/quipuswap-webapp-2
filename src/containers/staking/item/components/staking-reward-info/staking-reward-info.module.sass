@@ -1,5 +1,6 @@
 @import "@styles/breakpoints"
 @import "@styles/variables"
+@import "@styles/text"
 
 @include media('>SDesktop')
   .titleLoader
@@ -27,15 +28,11 @@
 
 .light
   .delegate
-    background: $brand-01
-    -webkit-background-clip: text
-    -webkit-text-fill-color: transparent
+    @include background-text-color($brand-01)
 
 .dark
   .delegate
-    background: $brand-02
-    -webkit-background-clip: text
-    -webkit-text-fill-color: transparent
+    @include background-text-color($brand-02)
 
 @include media('>Lphone')
   .statsValueText

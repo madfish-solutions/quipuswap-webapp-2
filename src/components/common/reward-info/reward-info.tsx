@@ -5,6 +5,7 @@ import cx from 'classnames';
 
 import { Card } from '@components/ui/card';
 import { Button } from '@components/ui/elements/button';
+import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
@@ -27,7 +28,7 @@ interface Props {
 const ZERO_REWARDS = 0;
 
 export const RewardInfo: FC<Props> = ({ amount, className, onButtonClick, currency, header, buttonText, children }) => {
-  const isButtonDisabled = !amount || amount.eq(ZERO_REWARDS);
+  const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS);
 
   return (
     <Card className={cx(styles.card, className)} header={header}>

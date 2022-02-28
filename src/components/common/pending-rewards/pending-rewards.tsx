@@ -35,7 +35,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
             <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
             <StateCurrencyAmount
               className={styles.amount}
-              amount={amount ?? null}
+              amount={amount}
               currency={currency}
               isLeftCurrency={currency === '$'}
             />

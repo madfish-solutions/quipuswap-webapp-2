@@ -10,7 +10,14 @@ import { noop } from 'rxjs';
 import { LoadingBakerCell, Modal } from '@components/modals/Modal';
 import { BakerCell } from '@components/ui/components';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@utils/dapp';
-import { isEmptyArray, localSearchBaker, isBackerNotEmpty, formatBalance, getBakerName } from '@utils/helpers';
+import {
+  isEmptyArray,
+  localSearchBaker,
+  isBackerNotEmpty,
+  formatBalance,
+  getBakerName,
+  AddressTransformation
+} from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 import { isValidBakerAddress } from '@utils/validators';
 
@@ -173,7 +180,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
             bakerList.map(baker => (
               <BakerCell
                 key={baker.address}
-                bakerName={getBakerName(baker, false)}
+                bakerName={getBakerName(baker, AddressTransformation.NONE)}
                 bakerFee={getBakerFee(baker)}
                 bakerFreeSpace={getBakerFreeSpace(baker)}
                 bakerLogo={getBakerLogo(baker)}
