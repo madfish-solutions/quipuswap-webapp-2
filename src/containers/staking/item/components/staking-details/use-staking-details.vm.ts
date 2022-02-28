@@ -3,11 +3,9 @@ import cx from 'classnames';
 
 import {
   DAYS_IN_YEAR,
-  HOURS_IN_DAY,
   IS_NETWORK_MAINNET,
-  MINUTES_IN_HOUR,
   MS_IN_SECOND,
-  SECONDS_IN_MINUTE,
+  SECONDS_IN_DAY,
   STAKING_CONTRACT_ADDRESS,
   TZKT_EXPLORER_URL,
   USD_DECIMALS
@@ -24,7 +22,6 @@ export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized, error } = stakingItemStore.itemStore;
-  console.log(dataLoading, dataInitialized, dAppLoading);
   const isLoading = dataLoading || !dataInitialized || dAppLoading;
   const { data: bakers } = useBakers();
 
@@ -75,10 +72,7 @@ export const useStakingDetailsViewModel = () => {
     ? bigNumberToString(tvl.multipliedBy(depositExchangeRate).decimalPlaces(USD_DECIMALS))
     : null;
   const dailyDistribution = bigNumberToString(
-    fromDecimals(new BigNumber(rewardPerSecond), rewardToken)
-      .times(SECONDS_IN_MINUTE)
-      .times(MINUTES_IN_HOUR)
-      .times(HOURS_IN_DAY)
+    fromDecimals(new BigNumber(rewardPerSecond), rewardToken).times(SECONDS_IN_DAY)
   );
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
     ? getDollarEquivalent(dailyDistribution, bigNumberToString(earnExchangeRate))
