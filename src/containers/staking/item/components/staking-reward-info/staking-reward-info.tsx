@@ -8,20 +8,22 @@ import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
 import { RewardInfo } from '@components/common/reward-info';
-import { ArrowDown } from '@components/svg/ArrowDown';
-import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { Countdown } from '@containers/staking/item/components/countdown';
-import { useStakingRewardInfoViewModel } from '@containers/staking/item/components/staking-reward-info/use-staking-reward-info.vm';
-import { StakingStatsItem } from '@containers/staking/item/components/staking-stats-item';
-import { defined, getBakerName } from '@utils/helpers';
+import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
+import { Countdown } from '../countdown';
+import { StakingRewardHeader } from '../staking-reward-header';
+import { useStakingRewardInfoViewModel } from '../staking-reward-info/use-staking-reward-info.vm';
+import { StakingStatsItem } from '../staking-stats-item';
+import { StateData } from '../state-data';
 import styles from './staking-reward-info.module.sass';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
+
+const StakingFallback = () => null;
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -34,42 +36,39 @@ export const StakingRewardInfo: FC = observer(() => {
       amount={myEarnDollarEquivalent ? new BigNumber(myEarnDollarEquivalent) : null}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{
-        content: (
-          <>
-            <Button href="/staking" theme="quaternary" icon className={styles.arrowButton}>
-              <ArrowDown className={styles.backArrow} />
-            </Button>
-            <span>Back to stakings</span>
-          </>
-        ),
+        content: <StakingRewardHeader />,
         className: styles.rewardHeader
       }}
       onButtonClick={noop}
-      buttonText="Harvest"
+      buttonText={t('stake|Harvest')}
       currency="$"
     >
       <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
-        {stakeItem ? (
-          <StateCurrencyAmount
-            amount={stakeItem.earnBalance}
-            className={styles.statsValueText}
-            currency={stakeItem.rewardToken.metadata.symbol}
-            dollarEquivalent={myEarnDollarEquivalent}
-            amountDecimals={stakeItem.rewardToken.metadata.decimals}
-            balanceRule
-            labelSize="large"
-          />
-        ) : null}
+        <StateData data={stakeItem} Fallback={StakingFallback}>
+          {({ earnBalance, rewardToken }) => (
+            <StateCurrencyAmount
+              amount={earnBalance}
+              className={styles.statsValueText}
+              currency={getTokenSymbol(rewardToken)}
+              dollarEquivalent={myEarnDollarEquivalent}
+              amountDecimals={rewardToken.metadata.decimals}
+              balanceRule
+              labelSize="large"
+            />
+          )}
+        </StateData>
       </StakingStatsItem>
 
       <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
-        {myDelegate ? (
-          <span className={cx(styles.delegate, styles.statsValueText)}>{getBakerName(myDelegate)}</span>
-        ) : null}
+        <StateData data={myDelegate} Fallback={StakingFallback}>
+          {delegate => <span className={cx(styles.delegate, styles.statsValueText)}>{getBakerName(delegate)}</span>}
+        </StateData>
       </StakingStatsItem>
 
       <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
-        {stakeItem ? <Countdown endTimestamp={defined(endTimestamp)} /> : null}
+        <StateData data={endTimestamp} Fallback={StakingFallback}>
+          {timestamp => <Countdown endTimestamp={timestamp} />}
+        </StateData>
       </StakingStatsItem>
     </RewardInfo>
   );

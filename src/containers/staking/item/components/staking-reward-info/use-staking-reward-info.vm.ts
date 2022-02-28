@@ -1,46 +1,43 @@
-import { useMemo } from 'react';
-
-import BigNumber from 'bignumber.js';
-
-import { MS_IN_SECOND, ZERO_ADDRESS } from '@app.config';
+import { MS_IN_SECOND } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useBakers, useIsLoading } from '@utils/dapp';
-import { bigNumberToString, getDollarEquivalent, isExist } from '@utils/helpers';
+import { bigNumberToString, getDollarEquivalent } from '@utils/helpers';
+
+import { makeBaker } from '../helpers';
 
 const mockLastStaked = Date.now();
 // eslint-disable-next-line
 const mockMyDelegateAddress: string = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
-const DEFAULT_EARN_EXCHANGE_RATE = new BigNumber('0');
 
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
-  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
-  const stakingLoading = (!stakeItem && !stakeItemError) || dAppLoading;
-
-  // TODO: Remove Copy/past
-  const myDelegate = useMemo(() => {
-    const myDelegateAddress = mockMyDelegateAddress;
-
-    return isExist(myDelegateAddress) && myDelegateAddress !== ZERO_ADDRESS
-      ? bakers.find(({ address }) => address === myDelegateAddress) ?? { address: myDelegateAddress }
-      : null;
-  }, [bakers]);
-
+  const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
+  const stakingLoading = dataLoading || !dataInitialized || dAppLoading;
   const delegatesLoading = bakersLoading || stakingLoading;
-  const endTimestamp = stakeItem ? mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND : null;
+
+  if (!stakeItem) {
+    return {
+      stakeItem,
+      myDelegate: null,
+      delegatesLoading,
+      endTimestamp: null,
+      myEarnDollarEquivalent: null,
+      stakingLoading
+    };
+  }
 
   const myEarnDollarEquivalent = getDollarEquivalent(
-    stakeItem?.earnBalance,
-    bigNumberToString(stakeItem?.earnExchangeRate ?? DEFAULT_EARN_EXCHANGE_RATE)
+    stakeItem.earnBalance,
+    bigNumberToString(stakeItem.earnExchangeRate)
   );
 
   return {
     stakeItem,
-    myDelegate,
+    myDelegate: makeBaker(mockMyDelegateAddress, bakers),
     delegatesLoading,
-    endTimestamp,
+    endTimestamp: mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND,
     myEarnDollarEquivalent,
     stakingLoading
   };

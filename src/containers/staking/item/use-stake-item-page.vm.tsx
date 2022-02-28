@@ -30,8 +30,8 @@ export const useStakeItemPageViewModel = () => {
     void getStakingItem(new BigNumber(`${stakeId}`));
   }, [getStakingItem, dAppLoading, router.query]);
 
-  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
-  const isLoading = (!stakeItem && !stakeItemError) || dAppLoading;
+  const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
+  const isLoading = dataLoading || !dataInitialized || dAppLoading;
 
   const getTitle = () => {
     if (stakeItem) {

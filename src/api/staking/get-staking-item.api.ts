@@ -7,6 +7,7 @@ import { Nullable } from '@utils/types';
 const STALKING_LIST_API_URL = `${STALKING_API_URL}/list`;
 
 export const getStakingItemApi = async (stakingId: Nullable<BigNumber>, accountPkh: Nullable<string>) => {
+  console.log('getStakingItemApi', stakingId?.toFixed(), accountPkh);
   if (!stakingId) {
     throw new Error('Failed to get nullable stakingId');
   }

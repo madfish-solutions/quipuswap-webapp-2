@@ -8,7 +8,17 @@ import {
   NoUserStakingItem,
   UserStakingItem
 } from '@interfaces/staking.interfaces';
-import { isUndefined, mapRawBigNumber, mapStakingToken } from '@utils/helpers';
+import { getTokensName, isExist, isUndefined } from '@utils/helpers';
+import { Token } from '@utils/types';
+
+const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
+  ...raw,
+  fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId),
+  metadata: { ...raw.metadata, symbol: newSymbol ?? raw.metadata.symbol }
+});
+
+const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T): BigNumber | T =>
+  isExist(raw) ? new BigNumber(raw) : raw;
 
 export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
   let balances: NoUserStakingItem | UserStakingItem;
@@ -33,6 +43,7 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
     id: new BigNumber(raw.id),
     tokenA: mapStakingToken(raw.tokenA),
     tokenB: raw.tokenB ? mapStakingToken(raw.tokenB) : undefined,
+    stakedToken: mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB)),
     rewardToken: mapStakingToken(raw.rewardToken),
     tvl: new BigNumber(raw.tvl),
     apr: mapRawBigNumber(raw.apr),

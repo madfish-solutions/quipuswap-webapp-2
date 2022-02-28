@@ -10,7 +10,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-interface DashPlugProps {
+export interface DashPlugProps {
   zoom?: number;
   animation?: boolean;
   className?: string;

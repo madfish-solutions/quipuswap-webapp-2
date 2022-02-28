@@ -28,7 +28,7 @@ export const StakingItemPage: FC = observer(() => {
       <StakingRewardInfo />
       <StickyBlock>
         <StakingTabsCard />
-        <StakingDetails isError={!isLoading && !stakeItem} />
+        <StakingDetails />
       </StickyBlock>
     </>
   );

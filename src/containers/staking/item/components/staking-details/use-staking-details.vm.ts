@@ -1,9 +1,8 @@
-import { useMemo } from 'react';
-
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
+  DAYS_IN_YEAR,
   HOURS_IN_DAY,
   IS_NETWORK_MAINNET,
   MINUTES_IN_HOUR,
@@ -11,71 +10,103 @@ import {
   SECONDS_IN_MINUTE,
   STAKING_CONTRACT_ADDRESS,
   TZKT_EXPLORER_URL,
-  ZERO_ADDRESS
+  USD_DECIMALS
 } from '@app.config';
-import styles from '@containers/staking/item/components/staking-details/staking-details.module.sass';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useIsLoading } from '@utils/dapp';
-import { bigNumberToString, defined, fromDecimals, getDollarEquivalent, isNull } from '@utils/helpers';
+import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
+import { makeBaker } from '../helpers';
+import styles from './staking-details.module.sass';
+
 export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
-  const { data: stakeItem, error: stakeItemError } = stakingItemStore.itemStore;
-  const isLoading = (!stakeItem && !stakeItemError) || dAppLoading;
+  const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized, error } = stakingItemStore.itemStore;
+  console.log(dataLoading, dataInitialized, dAppLoading);
+  const isLoading = dataLoading || !dataInitialized || dAppLoading;
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
 
-  // TODO: Remove Copy/past
-  const [currentDelegate, nextDelegate] = useMemo(() => {
-    if (stakeItem) {
-      return [stakeItem.currentDelegate, stakeItem.nextDelegate].map(delegateAddress =>
-        isNull(delegateAddress) || delegateAddress === ZERO_ADDRESS
-          ? null
-          : bakers.find(({ address }) => address === delegateAddress) ?? { address: defined(delegateAddress) }
-      );
-    }
+  if (!stakeItem) {
+    return {
+      endTime: null,
+      tvlDollarEquivalent: null,
+      dailyDistribution: null,
+      distributionDollarEquivalent: null,
+      apr: null,
+      dailyApr: null,
+      currentDelegate: null,
+      nextDelegate: null,
+      timelock: null,
+      CardCellClassName,
+      depositTokenDecimals: 0,
+      stakeUrl: `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}`,
+      stakedTokenSymbol: null,
+      rewardTokenSymbol: null,
+      rewardTokenDecimals: 0,
+      tvl: null,
+      withdrawalFee: null,
+      harvestFee: null,
+      isLoading,
+      isError: false
+    };
+  }
 
-    return [null, null];
-  }, [stakeItem, bakers]);
+  const {
+    apr,
+    rewardToken,
+    stakedToken,
+    tvl,
+    depositExchangeRate,
+    earnExchangeRate,
+    rewardPerSecond,
+    endTime,
+    timelock,
+    stakeUrl,
+    withdrawalFee,
+    harvestFee,
+    depositTokenUrl
+  } = stakeItem;
 
-  const depositTokenDecimals = stakeItem?.stakedToken.metadata.decimals ?? 0;
-  const tvlDollarEquivalent =
-    stakeItem && IS_NETWORK_MAINNET
-      ? stakeItem.tvl.multipliedBy(stakeItem.depositExchangeRate).decimalPlaces(2).toFixed()
-      : null;
-  const dailyDistribution = stakeItem
-    ? fromDecimals(new BigNumber(stakeItem.rewardPerSecond), stakeItem.rewardToken)
-        .times(SECONDS_IN_MINUTE)
-        .times(MINUTES_IN_HOUR)
-        .times(HOURS_IN_DAY)
+  const tvlDollarEquivalent = IS_NETWORK_MAINNET
+    ? bigNumberToString(tvl.multipliedBy(depositExchangeRate).decimalPlaces(USD_DECIMALS))
     : null;
-  const distributionDollarEquivalent =
-    stakeItem && IS_NETWORK_MAINNET
-      ? getDollarEquivalent(
-          bigNumberToString(defined(dailyDistribution)),
-          bigNumberToString(stakeItem.earnExchangeRate)
-        )
-      : null;
-
-  const dailyApr = stakeItem?.apr?.dividedBy(365).toFixed() ?? null;
+  const dailyDistribution = bigNumberToString(
+    fromDecimals(new BigNumber(rewardPerSecond), rewardToken)
+      .times(SECONDS_IN_MINUTE)
+      .times(MINUTES_IN_HOUR)
+      .times(HOURS_IN_DAY)
+  );
+  const distributionDollarEquivalent = IS_NETWORK_MAINNET
+    ? getDollarEquivalent(dailyDistribution, bigNumberToString(earnExchangeRate))
+    : null;
+  const currentDelegate = makeBaker(stakeItem.currentDelegate, bakers);
+  const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
 
   return {
-    endTime: stakeItem ? new Date(stakeItem.endTime).getTime() : null,
+    endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent,
     dailyDistribution,
     distributionDollarEquivalent,
-    dailyApr,
+    apr: apr ? bigNumberToString(apr) : null,
+    dailyApr: apr ? bigNumberToString(apr.dividedBy(DAYS_IN_YEAR)) : null,
     currentDelegate,
     nextDelegate,
-    timelock: stakeItem ? Number(stakeItem.timelock) * MS_IN_SECOND : null,
+    timelock: Number(timelock) * MS_IN_SECOND,
     CardCellClassName,
-    depositTokenDecimals,
-    stakeUrl: stakeItem?.stakeUrl ?? `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}`,
-    stakeItem,
-    isLoading
+    depositTokenDecimals: stakedToken.metadata.decimals,
+    stakeUrl,
+    stakedTokenSymbol: getTokenSymbol(stakedToken),
+    rewardTokenSymbol: getTokenSymbol(rewardToken),
+    rewardTokenDecimals: rewardToken.metadata.decimals,
+    tvl: bigNumberToString(tvl),
+    withdrawalFee,
+    harvestFee,
+    depositTokenUrl,
+    isLoading,
+    isError: Boolean(error)
   };
 };

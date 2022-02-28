@@ -18,11 +18,7 @@ import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
 import { useStakingDetailsViewModel } from './use-staking-details.vm';
 
-interface Props {
-  isError: boolean;
-}
-
-export const StakingDetails: FC<Props> = observer(({ isError }) => {
+export const StakingDetails: FC = observer(() => {
   const { t } = useTranslation(['common', 'vote']);
 
   const {
@@ -30,6 +26,7 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
     tvlDollarEquivalent,
     dailyDistribution,
     distributionDollarEquivalent,
+    apr,
     dailyApr,
     currentDelegate,
     nextDelegate,
@@ -37,8 +34,15 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
     CardCellClassName,
     depositTokenDecimals,
     stakeUrl,
-    stakeItem,
-    isLoading
+    stakedTokenSymbol,
+    rewardTokenSymbol,
+    rewardTokenDecimals,
+    tvl,
+    withdrawalFee,
+    harvestFee,
+    depositTokenUrl,
+    isLoading,
+    isError
   } = useStakingDetailsViewModel();
 
   return (
@@ -52,8 +56,8 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
         <StateCurrencyAmount
           balanceRule
           dollarEquivalent={tvlDollarEquivalent}
-          currency={stakeItem?.stakedToken.metadata.symbol}
-          amount={stakeItem?.tvl.toFixed() ?? null}
+          currency={stakedTokenSymbol}
+          amount={tvl}
           amountDecimals={depositTokenDecimals}
           isError={isError}
         />
@@ -63,15 +67,15 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
         <StateCurrencyAmount
           balanceRule
           dollarEquivalent={distributionDollarEquivalent}
-          currency={stakeItem?.rewardToken.metadata.symbol}
-          amount={dailyDistribution?.toFixed() ?? null}
-          amountDecimals={stakeItem?.rewardToken.metadata.decimals}
+          currency={rewardTokenSymbol}
+          amount={dailyDistribution}
+          amountDecimals={rewardTokenDecimals}
           isError={isError}
         />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|APR')} tooltipContent={null} className={CardCellClassName}>
-        <StatePercentage value={stakeItem?.apr?.toFixed() ?? null} isLoading={isLoading} />
+        <StatePercentage value={apr} isLoading={isLoading} />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|dailyApr')} tooltipContent={null} className={CardCellClassName}>
@@ -103,13 +107,13 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Withdrawal Fee')} tooltipContent={null} className={CardCellClassName}>
-        <StateData isLoading={isLoading} data={stakeItem?.withdrawalFee ?? null}>
+        <StateData isLoading={isLoading} data={withdrawalFee}>
           {withdrawalFee => <StatePercentage isLoading={false} value={withdrawalFee} />}
         </StateData>
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Interface Fee')} tooltipContent={null} className={CardCellClassName}>
-        <StateData isLoading={isLoading} data={stakeItem?.harvestFee ?? null}>
+        <StateData isLoading={isLoading} data={harvestFee}>
           {harvestFee => <StatePercentage isLoading={false} value={harvestFee} />}
         </StateData>
       </DetailsCardCell>
@@ -118,7 +122,7 @@ export const StakingDetails: FC<Props> = observer(({ isError }) => {
         <Button
           className={cx(s.detailsButton, styles.stakeDetailsButton)}
           theme="inverse"
-          href={stakeItem?.depositTokenUrl}
+          href={depositTokenUrl}
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
