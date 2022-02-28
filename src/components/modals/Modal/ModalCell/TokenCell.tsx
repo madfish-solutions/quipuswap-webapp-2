@@ -1,11 +1,11 @@
 import { FC, useContext, KeyboardEvent } from 'react';
 
-import { Bage } from '@components/ui/bage';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { TokensLogos } from '@components/common/TokensLogos';
+import { Bage } from '@components/ui/bage';
 import { Standard } from '@graphql';
 import { isTokenTypeFa12 } from '@utils/helpers/token-type';
 
