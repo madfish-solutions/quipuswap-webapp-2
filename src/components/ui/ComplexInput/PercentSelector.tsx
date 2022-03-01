@@ -2,14 +2,14 @@ import React from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { formatIntegerWithDecimals } from '@utils/helpers';
+import { defined, formatIntegerWithDecimals } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 interface PercentSelectorProps {
-  handleBalance: (state: string) => void;
+  handleBalance?: (state: string) => void;
   value: Nullable<string>;
   amountCap?: BigNumber;
 }
@@ -25,11 +25,11 @@ export const PercentSelector: React.FC<PercentSelectorProps> = ({
   value,
   amountCap = DEFAULT_INPUT_CAP
 }) => {
-  const handle25 = () => handleBalance(multipliedByPercent(value!, 0.25));
-  const handle50 = () => handleBalance(multipliedByPercent(value!, 0.5));
-  const handle75 = () => handleBalance(multipliedByPercent(value!, 0.75));
+  const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25));
+  const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5));
+  const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75));
   const handleMAX = () =>
-    handleBalance(BigNumber.maximum(new BigNumber(value!).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
+    handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
 
   const disabled = value === null;
 

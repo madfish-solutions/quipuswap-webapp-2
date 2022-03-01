@@ -32,7 +32,8 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   notSelectable?: boolean;
   handleChange?: (token: Token) => void;
-  handleBalance: (value: string) => void;
+  handleBalance?: (value: string) => void;
+  tokenInputAmountCap?: BigNumber;
   token: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
@@ -48,7 +49,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = null,
   shouldShowBalanceButtons = true,
-  shouldHideTokenSelect = false,
+  shouldHideTokenSelect,
   label,
   handleBalance,
   exchangeRate = null,
@@ -61,7 +62,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   setToken,
   blackListedTokens,
   tokensLoading,
+  tokenInputAmountCap,
   ...props
+  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -113,6 +116,9 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
                   colorMode={colorThemeMode}
                 />
               )}
+              {shouldHideTokenSelect && !account && (
+                <Balance balance="0" unit={tokenSelectSymbol} colorMode={colorThemeMode} />
+              )}
             </div>
             <input
               className={cx(s.item3, s.input)}
@@ -143,7 +149,11 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
+          <PercentSelector
+            amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
+            value={balance}
+            handleBalance={handleBalance}
+          />
         </Scaffolding>
         <ComplexError error={error} />
       </div>
