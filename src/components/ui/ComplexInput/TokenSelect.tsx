@@ -24,6 +24,7 @@ const DEFAULT_EXCHANGE_RATE = 0;
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
+  shouldHideTokenSelect?: boolean;
   className?: string;
   balance: Nullable<string>;
   exchangeRate?: string;
@@ -47,6 +48,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = null,
   shouldShowBalanceButtons = true,
+  shouldHideTokenSelect = false,
   label,
   handleBalance,
   exchangeRate = null,
@@ -103,7 +105,15 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
-            <div className={s.item2}>{account && <Balance balance={balance} colorMode={colorThemeMode} />}</div>
+            <div className={s.item2}>
+              {account && (
+                <Balance
+                  balance={balance}
+                  unit={shouldHideTokenSelect ? tokenSelectSymbol : undefined}
+                  colorMode={colorThemeMode}
+                />
+              )}
+            </div>
             <input
               className={cx(s.item3, s.input)}
               onFocus={() => setActive(true)}
@@ -114,20 +124,22 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               disabled={disabled || props.disabled}
               {...props}
             />
-            <div className={s.dangerContainer}>
-              {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
-              <Button
-                disabled={notSelectable}
-                onClick={() => !notSelectable && setTokensModal(true)}
-                theme="quaternary"
-                className={s.item4}
-                textClassName={s.item4Inner}
-              >
-                <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
-                <h6 className={cx(s.token)}>{tokenLabel}</h6>
-                {!notSelectable && <Shevron />}
-              </Button>
-            </div>
+            {!shouldHideTokenSelect && (
+              <div className={s.dangerContainer}>
+                {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
+                <Button
+                  disabled={notSelectable}
+                  onClick={() => !notSelectable && setTokensModal(true)}
+                  theme="quaternary"
+                  className={s.item4}
+                  textClassName={s.item4Inner}
+                >
+                  <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                  <h6 className={cx(s.token)}>{tokenLabel}</h6>
+                  {!notSelectable && <Shevron />}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
