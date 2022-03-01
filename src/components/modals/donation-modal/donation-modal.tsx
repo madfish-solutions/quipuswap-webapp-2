@@ -12,7 +12,7 @@ import { Button } from '@components/ui/elements/button';
 import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import { useBalances } from '@providers/BalancesProvider';
 import { useAccountPkh, useOnBlock, useTezos } from '@utils/dapp';
-import { bigNumberToString, isEmptyArray, isExist, isNull } from '@utils/helpers';
+import { isEmptyArray, isExist, isNull } from '@utils/helpers';
 
 import s from './donation-modal.module.sass';
 import { useDonationFormik } from './use-donation-formik';
@@ -65,7 +65,7 @@ export const DonationModal: FC = () => {
           {t('common|Learn more')}
         </Button>
         <TokenSelect
-          balance={isExist(tezosBalance) ? bigNumberToString(tezosBalance) : null}
+          balance={isExist(tezosBalance) ? tezosBalance.toFixed() : null}
           disabled={false}
           error={errors.amount}
           label=""
