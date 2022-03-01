@@ -10,7 +10,7 @@ import { RateView } from '@components/common/pair-details/rate-view';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StatePriceImpact } from '@components/ui/state-components/price-impact';
-import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { ViewPairAnlitics } from '@components/ui/view-pair-analitics';
 import s from '@styles/CommonContainer.module.sass';
 import { DexPair, Nullable, Undefined, Token } from '@utils/types';
@@ -87,7 +87,7 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         tooltipContent={t('swap|Expected fee for this transaction charged by the Tezos blockchain.')}
         className={s.cell}
       >
-        <StateCurrencyAmount balanceRule isError={Boolean(feeError)} amount={fee} currency="TEZ" />
+        <StateCurrencyAmount amountRule={AmountRule.Balance} isError={Boolean(feeError)} amount={fee} currency="TEZ" />
       </DetailsCardCell>
 
       <DetailsCardCell

@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StateDollarEquivalent } from '@components/ui/state-components/state-dollar-equivalent';
 import { useNewExchangeRates } from '@hooks/use-new-exchange-rate';
 import s from '@styles/CommonContainer.module.sass';
@@ -30,7 +30,12 @@ export const RateView: FC<RateViewProps> = ({ rate, inputToken, outputToken }) =
       <div className={s.rateView}>
         <StateCurrencyAmount amount="1" currency={currencyInputSymbol} />
         <span className={s.equal}>=</span>
-        <StateCurrencyAmount isError={isNull(rate)} amount={rate} currency={currencyOutputSymbol} balanceRule />
+        <StateCurrencyAmount
+          isError={isNull(rate)}
+          amount={rate}
+          currency={currencyOutputSymbol}
+          amountRule={AmountRule.Balance}
+        />
       </div>
       <div className={s.usdEquityWrapper}>
         <StateDollarEquivalent isError={isNull(usdRate)} dollarEquivalent={usdRate} />

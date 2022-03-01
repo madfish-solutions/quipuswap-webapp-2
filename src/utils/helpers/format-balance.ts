@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 
 import { FormatNumber } from '@utils/formatNumber';
 import { bigNumberToString } from '@utils/helpers/big-number-to-string';
-import { Nullable } from '@utils/types';
 
 const FIRST_POSITION = 0;
 const ONE_ELEMENT = 1;
@@ -24,9 +23,9 @@ const formatDecimal = (decimals: string): string => {
 
 export const formatIntegerWithDecimals = (value: string) => {
   const [integer, decimals] = value.split('.');
-  const formatedDecimals = decimals ? formatDecimal(decimals) : null;
+  const formattedDecimals = decimals ? formatDecimal(decimals) : null;
 
-  return formatedDecimals ? `${integer}.${formatedDecimals}` : integer;
+  return formattedDecimals ? `${integer}.${formattedDecimals}` : integer;
 };
 
 export const formatBalance = (value: string): string => {
@@ -36,22 +35,21 @@ export const formatBalance = (value: string): string => {
   const defaultBalanceLength = isNegative ? DEFAULT_NEGATIVE_BALANCE_LENGTH : DEFAULT_BALANCE_LENGTH;
 
   if (isZeroString(integer)) {
-    const formatedDecimal = decimals ? formatDecimal(decimals) : null;
+    const formattedDecimal = decimals ? formatDecimal(decimals) : null;
 
-    if (formatedDecimal) {
-      return value;
+    if (formattedDecimal) {
+      return value.slice(FIRST_POSITION, DEFAULT_BALANCE_LENGTH);
     }
 
     return ZERO_STRING;
   } else if (integer.length < defaultBalanceLength) {
     const decimals_ = decimals ? decimals.slice(FIRST_POSITION, defaultBalanceLength - integer.length) : ZERO_STRING;
-    const formatedDecimal = formatDecimal(decimals_);
+    const formattedDecimal = formatDecimal(decimals_);
 
-    return formatedDecimal ? `${FormatNumber(integer)}.${formatedDecimal}` : FormatNumber(integer);
+    return formattedDecimal ? `${FormatNumber(integer)}.${formattedDecimal}` : FormatNumber(integer);
   } else {
     return FormatNumber(integer);
   }
 };
 
-export const formatValueBalance = (value: Nullable<BigNumber.Value>) =>
-  value ? formatBalance(bigNumberToString(new BigNumber(value))) : '';
+export const formatValueBalance = (value: BigNumber.Value) => formatBalance(bigNumberToString(new BigNumber(value)));

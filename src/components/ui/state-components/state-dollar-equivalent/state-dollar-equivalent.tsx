@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber } from '@utils/formatNumber';
 import { isExist } from '@utils/helpers';
+import { shortNumberWithLetters } from '@utils/helpers/short-number-with-letters';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
@@ -44,7 +44,7 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
           isError={isError}
           errorFallback={wrapErrorFallback}
         >
-          {FormatNumber(dollarEquivalent ?? 0, { decimals: 2 })}
+          {dollarEquivalent ? shortNumberWithLetters(dollarEquivalent) : null}
         </StateWrapper>
       </span>
     </span>

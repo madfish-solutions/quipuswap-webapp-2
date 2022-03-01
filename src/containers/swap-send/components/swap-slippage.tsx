@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { DEFAULT_SLIPPAGE_PERCENTAGE } from '@app.config';
 import { Slippage } from '@components/common/Slippage';
 import { Tooltip } from '@components/ui/components/tooltip';
-import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { getMinimalOutput, getTokenSymbol } from '@utils/helpers';
 import { Nullable, Token } from '@utils/types';
@@ -45,10 +45,10 @@ export const SwapSlippage: FC<Props> = ({ error, outputAmount, onChange, slippag
           <>
             <span className={s.receiveLabel}>Minimum received:</span>
             <StateCurrencyAmount
+              amountRule={AmountRule.Balance}
               amount={minimumReceived}
               isError={!minimumReceived && !loading}
               currency={outputToken ? getTokenSymbol(outputToken) : ''}
-              balanceRule
             />
           </>
         )}
