@@ -78,6 +78,7 @@ export const DonationModal: FC = () => {
           onChange={handleChange}
           className={s.input}
           value={values.amount}
+          placeholder="0.00"
         />
         {isNull(accountPkh) ? (
           <ConnectWalletButton className={s.button} />
