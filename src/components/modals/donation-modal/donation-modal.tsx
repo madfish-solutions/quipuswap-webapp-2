@@ -61,7 +61,7 @@ export const DonationModal: FC = () => {
         <img src="ukraine_outline.png" alt="Ukraine" className={s.image} />
         <div className={s.title}>Stand with Ukraine</div>
         <div className={s.description}>Donate TEZ - support Ukrainians in their fight with Putin occupants</div>
-        <Button external href="#" theme="underlined" className={s.learnMore}>
+        <Button external href="https://donate.tezos.org.ua/" theme="underlined" className={s.learnMore}>
           {t('common|Learn more')}
         </Button>
         <TokenSelect
