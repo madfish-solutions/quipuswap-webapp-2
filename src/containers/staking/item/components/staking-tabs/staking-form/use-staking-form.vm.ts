@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
+import { bigNumberToString, getTokenSlug, defined, isEmptyArray, fromDecimals } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
@@ -14,7 +14,8 @@ export const useStakingFormViewModel = () => {
   const { doStake } = useDoStake();
   const { itemStore, isLpToken, availableBalanceStore, inputAmount, selectedBaker } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const { data: availableBalance } = availableBalanceStore;
+  const { data: rawAvailableBalance } = availableBalanceStore;
+  const availableBalance = rawAvailableBalance ? fromDecimals(rawAvailableBalance, stakeItem?.stakedToken ?? 0) : null;
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 

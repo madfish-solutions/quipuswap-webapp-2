@@ -17,7 +17,11 @@ export const useGetStakingItem = () => {
         try {
           stakingItemStore.setStakingId(stakingId);
           await stakingItemStore.itemStore.load();
-          await stakingItemStore.availableBalanceStore.load();
+          await Promise.all([
+            stakingItemStore.availableBalanceStore.load(),
+            stakingItemStore.userStakingStatsStore.load(),
+            stakingItemStore.userStakingDelegateStore.load()
+          ]);
         } catch (error) {
           showErrorToast(error as Error);
         }
