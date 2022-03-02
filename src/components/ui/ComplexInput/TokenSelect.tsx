@@ -24,7 +24,6 @@ const DEFAULT_EXCHANGE_RATE = 0;
 
 interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   shouldShowBalanceButtons?: boolean;
-  shouldHideTokenSelect?: boolean;
   className?: string;
   balance: Nullable<string>;
   exchangeRate?: string;
@@ -32,8 +31,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   notSelectable?: boolean;
   handleChange?: (token: Token) => void;
-  handleBalance?: (value: string) => void;
-  tokenInputAmountCap?: BigNumber;
+  handleBalance: (value: string) => void;
   token: Nullable<Token>;
   tokensLoading?: boolean;
   blackListedTokens: Token[];
@@ -49,7 +47,6 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   className,
   balance = null,
   shouldShowBalanceButtons = true,
-  shouldHideTokenSelect,
   label,
   handleBalance,
   exchangeRate = null,
@@ -62,9 +59,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   setToken,
   blackListedTokens,
   tokensLoading,
-  tokenInputAmountCap,
   ...props
-  // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
@@ -108,18 +103,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
-            <div className={s.item2}>
-              {account && (
-                <Balance
-                  balance={balance}
-                  unit={shouldHideTokenSelect ? tokenSelectSymbol : undefined}
-                  colorMode={colorThemeMode}
-                />
-              )}
-              {shouldHideTokenSelect && !account && (
-                <Balance balance="0" unit={tokenSelectSymbol} colorMode={colorThemeMode} />
-              )}
-            </div>
+            <div className={s.item2}>{account && <Balance balance={balance} colorMode={colorThemeMode} />}</div>
             <input
               className={cx(s.item3, s.input)}
               onFocus={() => setActive(true)}
@@ -130,30 +114,24 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
               disabled={disabled || props.disabled}
               {...props}
             />
-            {!shouldHideTokenSelect && (
-              <div className={s.dangerContainer}>
-                {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
-                <Button
-                  disabled={notSelectable}
-                  onClick={() => !notSelectable && setTokensModal(true)}
-                  theme="quaternary"
-                  className={s.item4}
-                  textClassName={s.item4Inner}
-                >
-                  <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
-                  <h6 className={cx(s.token)}>{tokenLabel}</h6>
-                  {!notSelectable && <Shevron />}
-                </Button>
-              </div>
-            )}
+            <div className={s.dangerContainer}>
+              {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
+              <Button
+                disabled={notSelectable}
+                onClick={() => !notSelectable && setTokensModal(true)}
+                theme="quaternary"
+                className={s.item4}
+                textClassName={s.item4Inner}
+              >
+                <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
+                <h6 className={cx(s.token)}>{tokenLabel}</h6>
+                {!notSelectable && <Shevron />}
+              </Button>
+            </div>
           </div>
         </div>
         <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector
-            amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
-            value={balance}
-            handleBalance={handleBalance}
-          />
+          <PercentSelector amountCap={getTokenInputAmountCap(token)} value={balance} handleBalance={handleBalance} />
         </Scaffolding>
         <ComplexError error={error} />
       </div>

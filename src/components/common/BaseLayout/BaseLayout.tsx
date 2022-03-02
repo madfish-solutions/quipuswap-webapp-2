@@ -11,11 +11,10 @@ import { BASE_URL, QUIPUSWAP } from '@app.config';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
-import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
-import { GlobalModalsStateProvider } from '@hooks/use-global-modals-state';
+import { ConnectModalsStateProvider } from '@hooks/useConnectModalsState';
 import { DEFAULT_SEO } from '@seo.config';
 
 import s from './BaseLayout.module.sass';
@@ -101,7 +100,7 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
         }
       />
       {isComponentDidMount ? (
-        <GlobalModalsStateProvider>
+        <ConnectModalsStateProvider>
           <div className={s.root}>
             <Header />
             <Sidebar className={s.sidebar} />
@@ -114,8 +113,7 @@ export const BaseLayout: FC<BaseLayoutProps> = ({ title, description, image, cla
 
           <WalletModal />
           <AccountModal />
-          <DonationModal />
-        </GlobalModalsStateProvider>
+        </ConnectModalsStateProvider>
       ) : (
         <div />
       )}

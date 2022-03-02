@@ -15,7 +15,6 @@ export interface BalanceProps {
   balance: Optional<string>;
   colorMode: ColorModes;
   text?: string;
-  unit?: string;
 }
 
 const themeClass = {
@@ -23,7 +22,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit }) => {
+export const Balance: FC<BalanceProps> = ({ balance, colorMode, text }) => {
   const { t } = useTranslation();
 
   const formattedBalance = useMemo(() => {
@@ -48,7 +47,7 @@ export const Balance: FC<BalanceProps> = ({ balance, colorMode, text, unit }) =>
           loaderFallback={<DashPlug />}
           errorFallback={<DashPlug animation={false} />}
         >
-          {unit ? `${formattedBalance} ${unit}` : formattedBalance}
+          {formattedBalance}
         </StateWrapper>
       </div>
     </div>

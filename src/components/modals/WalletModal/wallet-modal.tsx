@@ -10,8 +10,8 @@ import { Modal } from '@components/modals/Modal';
 import { WalletButton } from '@components/modals/WalletModal/wallet-button';
 import { Button } from '@components/ui/elements/button';
 import { NoTempleWallet } from '@errors';
-import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import { useToasts } from '@hooks/use-toasts';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useConnectWithBeacon, useConnectWithTemple } from '@utils/dapp';
 import { WalletType } from '@utils/types';
 
@@ -25,8 +25,8 @@ export const WalletModal: FC = () => {
   const { showErrorToast } = useToasts();
   const [isTermsAccepted, setIsTermsAccepted] = useState(localStorage.getItem(SAVED_TERMS_KEY) === 'true' ?? false);
 
-  const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useGlobalModalsState();
-  const { closeAccountInfoModal } = useGlobalModalsState();
+  const { connectWalletModalOpen, closeConnectWalletModal, openInstallTempleWalletModal } = useConnectModalsState();
+  const { closeAccountInfoModal } = useConnectModalsState();
   const connectWithBeacon = useConnectWithBeacon();
   const connectWithTemple = useConnectWithTemple();
   const [isTempleInstalled, setIsTempleInstalled] = useState(true);

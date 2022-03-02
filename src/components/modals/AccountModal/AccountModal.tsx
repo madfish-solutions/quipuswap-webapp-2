@@ -8,7 +8,7 @@ import { noop } from 'rxjs';
 import { Modal } from '@components/modals/Modal';
 import { CheckMark } from '@components/svg/CheckMark';
 import { Button } from '@components/ui/elements/button';
-import { useGlobalModalsState } from '@hooks/use-global-modals-state';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useDisconnect } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
 
@@ -25,7 +25,7 @@ export const AccountModal: FC = () => {
   const disconnect = useDisconnect();
   const [copied, setCopied] = useState<boolean>(false);
 
-  const { accountInfoModalOpen, closeAccountInfoModal } = useGlobalModalsState();
+  const { accountInfoModalOpen, closeAccountInfoModal } = useConnectModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const timeout = useRef(setTimeout(noop, 0));
 

@@ -54,7 +54,6 @@ export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 export const MAX_HOPS_COUNT = 5;
 
 export const TEZ_TO_LEAVE = new BigNumber('0.1');
-export const TEZ_TRANSFER_AMOUNT_CAP = new BigNumber('0.01');
 
 export const PRESET_AMOUNT_INPUT_DECIMALS = 2;
 export const MINIMUM_PRESET_AMOUNT_INPUT_VALUE = 0;
@@ -73,8 +72,6 @@ export const SAVED_BAKERS_KEY = 'savedCustomBakers';
 export const SAVED_TERMS_KEY = 'savedTerms';
 export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
-export const DONATION_ADDRESS = 'tz1LpP5zU73ivpXwHnKYBDRBL3F7aoNsaGWu';
-
 export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
   contractAddress: 'tez',
@@ -86,10 +83,6 @@ export const TEZOS_TOKEN: Token = {
     thumbnailUri: `${IPFS_GATEWAY}/Qmf3brydfr8c6CKGUUu73Dd7wfBw66Zbzof5E1BWGeU222`
   }
 };
-
-export const TEZOS_TOKEN_DECIMALS = TEZOS_TOKEN.metadata.decimals;
-export const TEZOS_TOKEN_SYMBOL = TEZOS_TOKEN.metadata.symbol;
-export const TEZOS_TOKEN_SLUG = TEZOS_TOKEN.contractAddress;
 
 export const MAINNET_DEFAULT_TOKEN: Token = {
   type: Standard.Fa2,

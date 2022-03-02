@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Button } from '@components/ui/elements/button';
-import { useGlobalModalsState } from '@hooks/use-global-modals-state';
+import { useConnectModalsState } from '@hooks/useConnectModalsState';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { shortize } from '@utils/helpers';
 
@@ -12,8 +12,8 @@ interface ConnectWalletButtonProps {
 export const ConnectWalletButton: React.FC<ConnectWalletButtonProps> = ({ className }) => {
   const ready = useReady();
   const accountPkh = useAccountPkh();
-  const { openConnectWalletModal } = useGlobalModalsState();
-  const { openAccountInfoModal } = useGlobalModalsState();
+  const { openConnectWalletModal } = useConnectModalsState();
+  const { openAccountInfoModal } = useConnectModalsState();
 
   if (ready && accountPkh) {
     return (
