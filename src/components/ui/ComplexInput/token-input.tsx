@@ -39,7 +39,6 @@ interface Props {
   error?: string;
   tokenA: Nullable<Token>;
   tokenB?: Nullable<Token>;
-  blackListedTokens: Token[];
   tokensLoading?: boolean;
 }
 

@@ -31,14 +31,13 @@ export const StakingForm: FC = observer(() => {
   return (
     <form onSubmit={handleSubmit}>
       <TokenInput
-        id="staking"
+        id="staking-form"
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
         error={inputAmountError}
         tokenA={stakeItem.tokenA}
         tokenB={stakeItem.tokenB}
-        blackListedTokens={[]}
         onInputChange={handleInputAmountChange}
       />
       <ComplexBaker label={t('common|Baker')} className={s.mt24} handleChange={handleBakerChange} error={bakerError} />
