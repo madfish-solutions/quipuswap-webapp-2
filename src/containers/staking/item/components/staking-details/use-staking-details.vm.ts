@@ -56,7 +56,7 @@ export const useStakingDetailsViewModel = () => {
     apr,
     rewardToken,
     stakedToken,
-    tvl,
+    tvl: tvlDollarEquivalent,
     depositExchangeRate,
     earnExchangeRate,
     rewardPerSecond,
@@ -68,9 +68,7 @@ export const useStakingDetailsViewModel = () => {
     depositTokenUrl
   } = stakeItem;
 
-  const tvlDollarEquivalent = IS_NETWORK_MAINNET
-    ? bigNumberToString(tvl.multipliedBy(depositExchangeRate).decimalPlaces(USD_DECIMALS))
-    : null;
+  const tvl = bigNumberToString(tvlDollarEquivalent.dividedBy(depositExchangeRate).decimalPlaces(USD_DECIMALS));
   const dailyDistribution = bigNumberToString(
     fromDecimals(new BigNumber(rewardPerSecond), rewardToken).times(SECONDS_IN_DAY)
   );
@@ -82,7 +80,7 @@ export const useStakingDetailsViewModel = () => {
 
   return {
     endTime: new Date(endTime).getTime(),
-    tvlDollarEquivalent,
+    tvlDollarEquivalent: bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
     distributionDollarEquivalent,
     apr: apr ? bigNumberToString(apr) : null,
@@ -96,7 +94,7 @@ export const useStakingDetailsViewModel = () => {
     stakedTokenSymbol: getTokenSymbol(stakedToken),
     rewardTokenSymbol: getTokenSymbol(rewardToken),
     rewardTokenDecimals: rewardToken.metadata.decimals,
-    tvl: bigNumberToString(tvl),
+    tvl,
     withdrawalFee,
     harvestFee,
     depositTokenUrl,
