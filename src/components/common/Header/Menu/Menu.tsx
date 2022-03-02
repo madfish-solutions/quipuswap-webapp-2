@@ -4,7 +4,8 @@ import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
+import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
+import { DonationButton } from '@components/common/donation-button';
 import { NetworkSelect, ColorModeSwitcher } from '@components/ui/components';
 import { Button } from '@components/ui/elements/button';
 
@@ -44,6 +45,11 @@ export const Menu: React.FC<MenuProps> = ({ className }) => {
             {t('common|Old version')}
           </Button>
         </div>
+        {IS_NETWORK_MAINNET && (
+          <div className={s.row}>
+            <DonationButton />
+          </div>
+        )}
         <div className={s.row}>
           <Button href="https://www.madfish.solutions/" external theme="clean" className={s.madfish}>
             <Madfish />

@@ -4,8 +4,9 @@ import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
+import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { DonationButton } from '@components/common/donation-button';
 import { NetworkSelect } from '@components/ui/components';
 import { Button } from '@components/ui/elements/button';
 
@@ -30,6 +31,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
+        {IS_NETWORK_MAINNET && <DonationButton className={s.button} />}
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={cx(s.button, s.select)} />
       </div>
