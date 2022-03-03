@@ -5,4 +5,3 @@ export * from './send-transaction/initialize-liquidity-tez';
 export * from './send-transaction/add-liquidity-tez';
 export * from './send-transaction/add-liquidity-token-to-token';
 export * from './send-transaction/add-pair-token-to-token';
-export * from './helpers/allow-contract-spend-your-tokens';

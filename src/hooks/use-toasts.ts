@@ -2,6 +2,8 @@ import { useCallback } from 'react';
 
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
+import { isUndefined } from '@utils/helpers';
+
 import { useUpdateToast } from './useUpdateToast';
 
 export interface UseToasts {
@@ -15,19 +17,35 @@ export const useToasts = (): UseToasts => {
   const updateToast = useUpdateToast();
 
   const showErrorToast = useCallback(
-    (err: Error | string) => {
-      if (err instanceof Error) {
+    (error: Error | string) => {
+      if (typeof error === 'string') {
         updateToast({
           type: 'error',
-          render: `${err.name}: ${err.message}`
+          render: error
         });
+
+        return;
       }
-      if (typeof err === 'string') {
+
+      if (
+        typeof error === 'object' &&
+        'name' in error &&
+        'message' in error &&
+        !isUndefined(error.name) &&
+        !isUndefined(error.message)
+      ) {
         updateToast({
           type: 'error',
-          render: err
+          render: `${error.name}: ${error.message}`
         });
+
+        return;
       }
+
+      updateToast({
+        type: 'error',
+        render: `${JSON.stringify(error)}`
+      });
     },
     [updateToast]
   );

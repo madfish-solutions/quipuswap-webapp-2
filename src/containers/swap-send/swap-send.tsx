@@ -30,7 +30,8 @@ import {
   isEmptyArray,
   makeToken,
   getTokenPairSlug,
-  isTokenToTokenDex
+  isTokenToTokenDex,
+  defined
 } from '@utils/helpers';
 import { makeSwapOrSendRedirectionUrl } from '@utils/redirections';
 import { DexGraph } from '@utils/routing';
@@ -399,7 +400,9 @@ const OrdinarySwapSend: FC<SwapSendProps & WithRouterProps> = ({ className, init
       <StickyBlock className={className}>
         <Card
           header={{
-            content: <Tabs values={TabsContent} activeId={action!} setActiveId={handleTabSwitch} className={s.tabs} />,
+            content: (
+              <Tabs values={TabsContent} activeId={defined(action)} setActiveId={handleTabSwitch} className={s.tabs} />
+            ),
             // TODO: add a button for transactions history
             className: s.header
           }}

@@ -18,7 +18,7 @@ interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   error?: string;
   id?: string;
   handleChange?: (baker: WhitelistedBaker) => void;
-  cleanBaker: BakerCleaner;
+  cleanBaker?: BakerCleaner;
 }
 
 const modeClass = {
@@ -44,7 +44,7 @@ export const ComplexBaker: FC<ComplexBakerProps> = ({
   const [baker, setBaker] = useState<Nullable<WhitelistedBaker>>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => cleanBaker.set(KEY_BAKER_CLEAN_UP, () => setBaker(null)), [cleanBaker]);
+  useEffect(() => cleanBaker?.set(KEY_BAKER_CLEAN_UP, () => setBaker(null)), [cleanBaker]);
 
   const compoundClassName = cx(modeClass[colorThemeMode], { [s.error]: !!error }, className);
   const buttonText = getWhitelistedBakerName(baker) ?? DEFAULT_BUTTON_LABEL;

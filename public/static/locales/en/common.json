@@ -64,5 +64,8 @@
   "Donate": "Donate",
   "donationSuccess": "Your donation has been successfully processed! Thank you!",
   "Learn more": "Learn more",
-  "valueOutOfRangeError": "Value has to be a number between {{min}} and {{max}}. Note: you need at least 0.01 TEZ to be left on your wallet to pay gas fee"
+  "valueOutOfRangeError": "Value has to be a number between {{min}} and {{max}}. Note: you need at least 0.01 TEZ to be left on your wallet to pay gas fee",
+  "dayLetter": "D",
+  "hourLetter": "H",
+  "minuteLetter": "M"
 }
