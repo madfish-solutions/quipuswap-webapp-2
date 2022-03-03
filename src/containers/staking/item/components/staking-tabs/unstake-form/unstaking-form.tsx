@@ -4,11 +4,10 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or-do-something';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
+import { TokenInput } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
-import { UnstakingFormFields } from './unstaking-form.interface';
 import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 
 export const UnstakingForm: FC = observer(() => {
@@ -29,20 +28,15 @@ export const UnstakingForm: FC = observer(() => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <TokenSelect
+      <TokenInput
+        id="unstaking-form"
         label={t('common|Amount')}
-        name={UnstakingFormFields.inputAmount}
         value={inputAmount}
         balance={userTokenBalance}
         error={inputAmountError}
-        token={stakeItem.tokenA}
-        blackListedTokens={[]}
-        notSelectable
-        onChange={event => {
-          // @ts-ignore
-          handleInputAmountChange(event.target.value || '');
-        }}
-        handleBalance={handleInputAmountChange}
+        tokenA={stakeItem.tokenA}
+        tokenB={stakeItem.tokenB}
+        onInputChange={handleInputAmountChange}
       />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>

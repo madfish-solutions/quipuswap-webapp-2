@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, useContext, useMemo, useRef, useState } from 'react';
 
-import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
@@ -11,6 +11,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import {
   getMessageNotWhitelistedToken,
+  getMessageNotWhitelistedTokenPair,
   getTokenInputAmountCap,
   getTokenSymbol,
   isExist,
@@ -37,7 +38,6 @@ interface Props {
   shouldShowBalanceButtons?: boolean;
   exchangeRate?: string;
   error?: string;
-  notSelectable?: boolean;
   tokenA: Nullable<Token>;
   tokenB?: Nullable<Token>;
   tokensLoading?: boolean;
@@ -57,7 +57,6 @@ export const TokenInput: FC<Props> = ({
   onInputChange,
   balance = null,
   shouldShowBalanceButtons = true,
-  notSelectable = false,
   error,
   tokenA,
   tokenB,
@@ -127,12 +126,10 @@ export const TokenInput: FC<Props> = ({
   );
   const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
-  const notWhitelistedMessageA = tokenA ? getMessageNotWhitelistedToken(tokenA) : null;
-  const notWhitelistedMessageB = tokenB ? getMessageNotWhitelistedToken(tokenB) : null;
-
-  const notWhitelistedMessage = `${notWhitelistedMessageA ? notWhitelistedMessageA : ''} ${
-    notWhitelistedMessageB ? notWhitelistedMessageB : ''
-  }`;
+  const notWhitelistedMessage =
+    tokenA && tokenB
+      ? getMessageNotWhitelistedTokenPair(tokenA, tokenB)
+      : tokenA && getMessageNotWhitelistedToken(tokenA);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     onInputChange(event.target.value);
@@ -168,12 +165,7 @@ export const TokenInput: FC<Props> = ({
           />
           <div className={styles.dangerContainer}>
             {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
-            <Button
-              disabled={notSelectable}
-              theme="quaternary"
-              className={styles.item4}
-              textClassName={styles.item4Inner}
-            >
+            <Button disabled={disabled} theme="quaternary" className={styles.item4} textClassName={styles.item4Inner}>
               {isBothTokensExist ? (
                 <TokensLogos
                   firstTokenIcon={firstTokenIcon}
@@ -185,7 +177,6 @@ export const TokenInput: FC<Props> = ({
                 <TokensLogos firstTokenIcon={firstTokenIcon} firstTokenSymbol={firstTokenSymbol} />
               )}
               <h6 className={styles.token}>{tokenLabel}</h6>
-              {!notSelectable && <Shevron />}
             </Button>
           </div>
         </div>
