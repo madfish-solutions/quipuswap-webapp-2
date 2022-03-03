@@ -36,11 +36,9 @@ export const StakingDetails: FC<Props> = ({ item, isError }) => {
   const tvlDollarEquivalent = item && getDollarEquivalent(item.tvl, item.depositExchangeRate);
   const tokenBSymbol = item?.tokenB ? 'TOKEN' : item?.tokenA.metadata.symbol;
   const tvl = item?.tvl ?? null;
-  const tokenBDecimals = item?.tokenB ? null : item?.tokenA.metadata.decimals;
   const rewardTokenAmount = 1000;
   const distributionDollarEquivalent = item && getDollarEquivalent(rewardTokenAmount, item.earnExchangeRate);
   const rewardTokenSymbol = item?.rewardToken.metadata.symbol;
-  const rewardTokenDecimals = item?.rewardToken.metadata.decimals;
 
   const isLoading = !isError && !item;
 
@@ -56,7 +54,6 @@ export const StakingDetails: FC<Props> = ({ item, isError }) => {
           dollarEquivalent={tvlDollarEquivalent}
           currency={tokenBSymbol}
           amount={tvl}
-          amountDecimals={tokenBDecimals}
           isError={isError}
         />
       </DetailsCardCell>
@@ -66,7 +63,6 @@ export const StakingDetails: FC<Props> = ({ item, isError }) => {
           dollarEquivalent={distributionDollarEquivalent}
           currency={rewardTokenSymbol}
           amount={rewardTokenAmount}
-          amountDecimals={rewardTokenDecimals}
           isError={isError}
         />
       </DetailsCardCell>

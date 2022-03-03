@@ -83,7 +83,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          balanceRule
           amount={fixedTokenAPoll}
           currency={tokenASymbol}
           isLoading={isLoadingA}
@@ -100,7 +99,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          balanceRule
           amount={fixedTokenBPoll}
           currency={tokenBSymbol}
           isLoading={isLoadingB}
@@ -119,7 +117,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             className={s.LiquidityDetails_CardCell}
           >
             <StateCurrencyAmount
-              balanceRule
               amount={totalAmount}
               isLoading={isLoadingShares || isLoadingA}
               isError={isErrorShares}
@@ -134,7 +131,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             className={s.LiquidityDetails_CardCell}
           >
             <StateCurrencyAmount
-              balanceRule
               amount={frozenAmount}
               isLoading={isLoadingShares || isLoadingB}
               isError={isErrorShares}

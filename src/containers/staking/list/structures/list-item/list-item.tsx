@@ -87,7 +87,6 @@ export const StakingListItem: FC<StakingItem> = ({
                 cardCellClassName={styles.cardCell}
               >
                 <StateCurrencyAmount
-                  balanceRule
                   amount={tvl}
                   currency={depositTokenSymbol}
                   dollarEquivalent={tvlDollarEquivalent}
@@ -121,7 +120,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    balanceRule
                     amount={myBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myBalanceDollarEquivalent}
@@ -136,7 +134,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    balanceRule
                     amount={depositBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myDepositDollarEquivalent}
@@ -151,7 +148,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    balanceRule
                     amount={earnBalance}
                     currency={MyEarnTokenSymbol}
                     dollarEquivalent={myEarnDollarEquivalent}

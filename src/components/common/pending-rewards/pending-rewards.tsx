@@ -36,6 +36,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency }) => {
               className={styles.amount}
               amount={amount}
               currency={currency}
+              amountDecimals={2}
               isLeftCurrency={currency === '$'}
             />
           </>

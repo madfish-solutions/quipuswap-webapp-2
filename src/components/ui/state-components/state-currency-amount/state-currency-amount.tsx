@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
+import { FormatNumberOptions } from '@utils/formatNumber';
 import { formatValueBalance, isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
@@ -23,7 +23,6 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
-  balanceRule?: boolean;
 }
 
 const sizeClass = {
@@ -51,8 +50,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView,
-  balanceRule
+  aliternativeView
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -71,9 +69,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const FormattedNumber = balanceRule
-    ? formatValueBalance(amount)
-    : FormatNumber(amount ?? 0, { decimals: amountDecimals ?? undefined });
+  const formattedAmount = amount ? formatValueBalance(amount, amountDecimals ?? undefined) : null;
+
+  const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
   const content = (
     <span className={wrapClassName}>
@@ -85,7 +83,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{aliternativeView ?? FormattedNumber}</span>
+        <span className={s.inner} title={title}>
+          {aliternativeView ?? formattedAmount}
+        </span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}

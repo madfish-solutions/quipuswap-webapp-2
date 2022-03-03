@@ -4,7 +4,7 @@ import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
-import { noopMap } from '@utils/mapping/noop-map';
+import { noopMap } from '@utils/mapping/noop.map';
 
 export const useGetStakingList = () => {
   const { showErrorToast } = useToasts();
