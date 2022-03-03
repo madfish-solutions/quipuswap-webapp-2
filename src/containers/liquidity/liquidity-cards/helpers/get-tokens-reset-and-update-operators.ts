@@ -1,9 +1,8 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { allowContractSpendYourTokens } from '@api/helpers/allow-contract-spend-your-tokens';
 import { Token } from '@utils/types';
-
-import { allowContractSpendYourTokens } from '../blockchain';
 
 const RESET_AMOUNT = 0;
 const RESET_AMOUNT_BN = new BigNumber(RESET_AMOUNT);

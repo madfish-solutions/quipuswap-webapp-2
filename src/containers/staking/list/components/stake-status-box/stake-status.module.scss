@@ -1,0 +1,31 @@
+@import "@styles/variables";
+
+.container {
+  padding: 1px;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.status {
+  display: block;
+
+  padding: 4px 8px;
+
+  color: $text-03;
+  font-size: 12px;
+  font-weight: bold;
+
+  border-radius: 8px;
+}
+
+.light {
+  .status {
+    background-color: $ui-01;
+  }
+}
+
+.dark {
+  .status {
+    background-color: $ui-07;
+  }
+}
