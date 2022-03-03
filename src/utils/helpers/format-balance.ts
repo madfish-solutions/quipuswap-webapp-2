@@ -10,6 +10,7 @@ const ONE_ELEMENT = 1;
 export const DEFAULT_BALANCE_LENGTH = 7;
 const DEFAULT_NEGATIVE_BALANCE_LENGTH = 8;
 const ZERO_STRING = '0';
+const MAX_AMOUNT_WITHOUT_LETTERS = 1e6; // 1M
 
 const isZeroString = (value: string) => value === ZERO_STRING;
 
@@ -55,8 +56,6 @@ export const formatBalance = (value: string, amountDecimals?: number): string =>
     return FormatNumber(integer);
   }
 };
-
-const MAX_AMOUNT_WITHOUT_LETTERS = 1000000;
 
 export const formatValueBalance = (amount: BigNumber.Value, amountDecimals?: number): string => {
   const bn = new BigNumber(amount);
