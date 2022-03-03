@@ -62,7 +62,6 @@ export const StakingRewardInfo: FC = observer(() => {
               currency={getTokenSymbol(stakedToken)}
               dollarEquivalent={myShareDollarEquivalent}
               amountDecimals={stakedToken.metadata.decimals}
-              balanceRule
               labelSize="large"
             />
           )}

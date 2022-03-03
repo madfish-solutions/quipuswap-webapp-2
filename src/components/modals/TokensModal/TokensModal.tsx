@@ -9,7 +9,7 @@ import ReactModal from 'react-modal';
 
 import { LoadingTokenCell, Modal, TokenCell } from '@components/modals/Modal';
 import { useAddCustomToken } from '@utils/dapp';
-import { getTokenName, getTokenSymbol, isEmptyArray, prepareTokenLogo } from '@utils/helpers';
+import { getTokenName, getTokenSymbol, isEmptyArray, isTezosToken, prepareTokenLogo } from '@utils/helpers';
 import { Token } from '@utils/types';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '../constants';
@@ -84,6 +84,7 @@ export const TokensModal: FC<TokensModalProps> = ({ onChange, blackListedTokens 
                 tokenIcon={prepareTokenLogo(metadata?.thumbnailUri)}
                 tokenName={getTokenName(token)}
                 tokenSymbol={getTokenSymbol(token)}
+                isTezosToken={isTezosToken(token)}
                 tokenType={type}
                 tabIndex={0}
                 onClick={() => handleTokenSelect(form, token)}

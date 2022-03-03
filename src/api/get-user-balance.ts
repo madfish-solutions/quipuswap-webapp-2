@@ -53,4 +53,4 @@ export const getUserBalance = async (
 };
 
 export const getUserTokenBalance = async (tezos: TezosToolkit, account: string, token: Token) =>
-  getUserBalance(tezos, account, token.contractAddress, token.type, token.fa2TokenId);
+  await getUserBalance(tezos, account, token.contractAddress, token.type, token.fa2TokenId);

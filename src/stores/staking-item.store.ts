@@ -9,7 +9,8 @@ import { getUserStakingStats } from '@api/staking/get-user-staking-stats.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, RawUserStakingStats, StakingItem, UserStakingStats } from '@interfaces/staking.interfaces';
 import { isNull } from '@utils/helpers';
-import { noopMap } from '@utils/mapping/noop-map';
+import { balanceMap } from '@utils/mapping/balance.map';
+import { noopMap } from '@utils/mapping/noop.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
 import { mapUserStakingStats } from '@utils/mapping/user-staking-stats.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
@@ -31,7 +32,7 @@ export class StakingItemStore {
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
-    noopMap
+    balance => balanceMap(balance, this.itemStore.data?.tokenA)
   );
 
   userStakingStatsStore = new LoadingErrorData<Nullable<RawUserStakingStats>, Nullable<UserStakingStats>>(

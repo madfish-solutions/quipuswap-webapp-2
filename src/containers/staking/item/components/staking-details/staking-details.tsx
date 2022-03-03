@@ -32,11 +32,9 @@ export const StakingDetails: FC = observer(() => {
     nextDelegate,
     timelock,
     CardCellClassName,
-    depositTokenDecimals,
     stakeUrl,
     stakedTokenSymbol,
     rewardTokenSymbol,
-    rewardTokenDecimals,
     tvl,
     withdrawalFee,
     harvestFee,
@@ -54,22 +52,18 @@ export const StakingDetails: FC = observer(() => {
     >
       <DetailsCardCell cellName={t('stake|Value Locked')} className={CardCellClassName} tooltipContent={null}>
         <StateCurrencyAmount
-          balanceRule
           dollarEquivalent={tvlDollarEquivalent}
           currency={stakedTokenSymbol}
           amount={tvl}
-          amountDecimals={depositTokenDecimals}
           isError={isError}
         />
       </DetailsCardCell>
 
       <DetailsCardCell cellName={t('stake|Daily Distribution')} tooltipContent={null} className={CardCellClassName}>
         <StateCurrencyAmount
-          balanceRule
           dollarEquivalent={distributionDollarEquivalent}
           currency={rewardTokenSymbol}
           amount={dailyDistribution}
-          amountDecimals={rewardTokenDecimals}
           isError={isError}
         />
       </DetailsCardCell>
