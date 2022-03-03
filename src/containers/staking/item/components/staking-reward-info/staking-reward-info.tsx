@@ -12,6 +12,7 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
+import { DashPlugFallbackProps, DashPlugFallback } from '../dash-plug-fallback';
 import { StakingRewardHeader } from '../staking-reward-header';
 import { useStakingRewardInfoViewModel } from '../staking-reward-info/use-staking-reward-info.vm';
 import { StakingStatsItem } from '../staking-stats-item';
@@ -23,13 +24,22 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const StakingFallback = () => null;
+const RewardDashPlugFallback: FC<DashPlugFallbackProps> = ({ className, ...restProps }) => (
+  <DashPlugFallback className={cx(className, styles.dash)} {...restProps} />
+);
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
-  const { stakeItem, myDelegate, delegatesLoading, endTimestamp, myEarnDollarEquivalent, stakingLoading } =
-    useStakingRewardInfoViewModel();
+  const {
+    stakeItem,
+    myDelegate,
+    delegatesLoading,
+    endTimestamp,
+    myEarnDollarEquivalent,
+    myShareDollarEquivalent,
+    stakingLoading
+  } = useStakingRewardInfoViewModel();
 
   return (
     <RewardInfo
@@ -44,14 +54,14 @@ export const StakingRewardInfo: FC = observer(() => {
       currency="$"
     >
       <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
-        <StateData data={stakeItem} Fallback={StakingFallback}>
-          {({ earnBalance, rewardToken }) => (
+        <StateData data={stakeItem} Fallback={RewardDashPlugFallback}>
+          {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
-              amount={earnBalance}
+              amount={depositBalance}
               className={styles.statsValueText}
-              currency={getTokenSymbol(rewardToken)}
-              dollarEquivalent={myEarnDollarEquivalent}
-              amountDecimals={rewardToken.metadata.decimals}
+              currency={getTokenSymbol(stakedToken)}
+              dollarEquivalent={myShareDollarEquivalent}
+              amountDecimals={stakedToken.metadata.decimals}
               balanceRule
               labelSize="large"
             />
@@ -60,13 +70,13 @@ export const StakingRewardInfo: FC = observer(() => {
       </StakingStatsItem>
 
       <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
-        <StateData data={myDelegate} Fallback={StakingFallback}>
+        <StateData data={myDelegate} isLoading={delegatesLoading} Fallback={RewardDashPlugFallback}>
           {delegate => <span className={cx(styles.delegate, styles.statsValueText)}>{getBakerName(delegate)}</span>}
         </StateData>
       </StakingStatsItem>
 
       <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
-        <StateData data={endTimestamp} Fallback={StakingFallback}>
+        <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>
       </StakingStatsItem>
