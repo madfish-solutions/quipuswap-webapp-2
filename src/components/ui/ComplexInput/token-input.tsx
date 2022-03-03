@@ -11,6 +11,7 @@ import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
 import {
   getMessageNotWhitelistedToken,
+  getMessageNotWhitelistedTokenPair,
   getTokenInputAmountCap,
   getTokenSymbol,
   isExist,
@@ -125,12 +126,10 @@ export const TokenInput: FC<Props> = ({
   );
   const tokenLabel = tokensLoading ? <DashPlug zoom={1.45} animation /> : tokenSelectSymbol;
 
-  const notWhitelistedMessageA = tokenA ? getMessageNotWhitelistedToken(tokenA) : null;
-  const notWhitelistedMessageB = tokenB ? getMessageNotWhitelistedToken(tokenB) : null;
-
-  const notWhitelistedMessage = `${notWhitelistedMessageA ? notWhitelistedMessageA : ''}${
-    notWhitelistedMessageB ? notWhitelistedMessageB : ''
-  }`;
+  const notWhitelistedMessage =
+    tokenA && tokenB
+      ? getMessageNotWhitelistedTokenPair(tokenA, tokenB)
+      : tokenA && getMessageNotWhitelistedToken(tokenA);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     onInputChange(event.target.value);
