@@ -4,7 +4,9 @@ import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
 import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
+import { DonationButton } from '@components/common/donation-button';
 import { NetworkSelect } from '@components/ui/components';
 import { Button } from '@components/ui/elements/button';
 
@@ -29,6 +31,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
   return (
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       <div className={s.wallet}>
+        {IS_NETWORK_MAINNET && <DonationButton className={s.button} />}
         <ConnectWalletButton className={s.button} />
         <NetworkSelect className={cx(s.button, s.select)} />
       </div>
@@ -39,7 +42,7 @@ export const Sidebar: FC<SidebarProps> = ({ className }) => {
         <Button className={s.footerItem} href="https://www.madfish.solutions/" external theme="clean">
           <Madfish />
         </Button>
-        <Button external href="https://v1.quipuswap.com/" theme="secondary" className={s.button}>
+        <Button external href={QUIPUSWAP_OLD_VERSION_LINK} theme="secondary" className={s.button}>
           {t('common|Old version')}
         </Button>
       </footer>

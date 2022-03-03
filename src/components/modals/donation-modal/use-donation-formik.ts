@@ -1,0 +1,90 @@
+import BigNumber from 'bignumber.js';
+import { useFormik } from 'formik';
+import { useTranslation } from 'next-i18next';
+import { object as objectSchema } from 'yup';
+
+import {
+  DONATION_ADDRESS,
+  TEZOS_TOKEN_DECIMALS,
+  TEZOS_TOKEN_SLUG,
+  TEZOS_TOKEN_SYMBOL,
+  TEZ_TRANSFER_AMOUNT_CAP
+} from '@app.config';
+import { useGlobalModalsState } from '@hooks/use-global-modals-state';
+import { useToasts } from '@hooks/use-toasts';
+import { useBalances } from '@providers/BalancesProvider';
+import { useTezos } from '@utils/dapp';
+import { useConfirmOperation } from '@utils/dapp/confirm-operation';
+import { defined, fromDecimals } from '@utils/helpers';
+import { makeNumberAsStringTestFn, numberAsStringSchema } from '@utils/validators/number-as-string';
+
+import { DonationFormValues } from './types';
+
+const TOKEN_ATOM_RAW_AMOUNT = 1;
+const MIN_INPUT_AMOUNT = fromDecimals(new BigNumber(TOKEN_ATOM_RAW_AMOUNT), TEZOS_TOKEN_DECIMALS);
+const EMPTY_BALANCE_AMOUNT = 0;
+const REQUIRE_FIELD_MESSAGE = 'common|This field is required';
+
+export const useDonationFormik = () => {
+  const { t } = useTranslation(['common']);
+  const { showErrorToast } = useToasts();
+  const { closeDonationModal } = useGlobalModalsState();
+
+  const { balances } = useBalances();
+  const tezos = useTezos();
+  const confirmOperation = useConfirmOperation();
+  const inputTokenBalance = balances[TEZOS_TOKEN_SLUG];
+  const max = inputTokenBalance?.minus(TEZ_TRANSFER_AMOUNT_CAP);
+  const emptyBalanceAmountValidationSchema = numberAsStringSchema(MIN_INPUT_AMOUNT)
+    .test(
+      'balance',
+      () => t('common|Insufficient funds'),
+      makeNumberAsStringTestFn(value => value.eq(EMPTY_BALANCE_AMOUNT))
+    )
+    .required(t(REQUIRE_FIELD_MESSAGE));
+  const someBalanceAmountValidationSchema = numberAsStringSchema(
+    MIN_INPUT_AMOUNT,
+    max,
+    max && t('common|valueOutOfRangeError', { min: MIN_INPUT_AMOUNT.toFixed(), max: max.toFixed() })
+  )
+    .test(
+      'input-decimals-amount',
+      () =>
+        t('common|tokenDecimalsOverflowError', {
+          tokenSymbol: TEZOS_TOKEN_SYMBOL,
+          decimalPlaces: TEZOS_TOKEN_DECIMALS
+        }),
+      makeNumberAsStringTestFn(value => value.decimalPlaces() <= TEZOS_TOKEN_DECIMALS)
+    )
+    .required(t(REQUIRE_FIELD_MESSAGE));
+
+  const validationSchema = objectSchema().shape({
+    amount: inputTokenBalance?.eq(EMPTY_BALANCE_AMOUNT)
+      ? emptyBalanceAmountValidationSchema
+      : someBalanceAmountValidationSchema
+  });
+
+  const handleSubmit = async (formValues: Partial<DonationFormValues>) => {
+    try {
+      const operation = await defined(tezos)
+        .wallet.transfer({ to: DONATION_ADDRESS, amount: Number(formValues.amount) })
+        .send();
+
+      closeDonationModal();
+
+      await confirmOperation(operation.opHash, {
+        message: t('common|donationSuccess')
+      });
+    } catch (e) {
+      showErrorToast(e as Error);
+    }
+  };
+
+  return useFormik({
+    validationSchema,
+    initialValues: { amount: '' },
+    initialErrors: {},
+    onSubmit: handleSubmit,
+    validateOnChange: true
+  });
+};

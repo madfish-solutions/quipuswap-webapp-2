@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
@@ -16,24 +16,27 @@ export const [BalancesProvider, useBalances] = constate(() => {
 
   useEffect(() => setBalances({}), [accountPkh]);
 
-  const updateBalance = async (token: Token) => {
-    if (accountPkh) {
-      const balance = await getUserBalance(
-        defined(tezos),
-        accountPkh,
-        token.contractAddress,
-        token.type,
-        token.fa2TokenId
-      );
+  const updateBalance = useCallback(
+    async (token: Token) => {
+      if (accountPkh) {
+        const balance = await getUserBalance(
+          defined(tezos),
+          accountPkh,
+          token.contractAddress,
+          token.type,
+          token.fa2TokenId
+        );
 
-      if (balance) {
-        setBalances(prevValue => ({
-          ...prevValue,
-          [getTokenSlug(token)]: fromDecimals(balance, token.metadata.decimals)
-        }));
+        if (balance) {
+          setBalances(prevValue => ({
+            ...prevValue,
+            [getTokenSlug(token)]: fromDecimals(balance, token.metadata.decimals)
+          }));
+        }
       }
-    }
-  };
+    },
+    [accountPkh, tezos]
+  );
 
   return { balances, updateBalance };
 });
