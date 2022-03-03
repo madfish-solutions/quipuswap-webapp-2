@@ -3,6 +3,8 @@ import BigNumber from 'bignumber.js';
 import { FormatNumber } from '@utils/formatNumber';
 import { bigNumberToString } from '@utils/helpers/big-number-to-string';
 
+import { shortNumberWithLetters } from './short-number-with-letters';
+
 const FIRST_POSITION = 0;
 const ONE_ELEMENT = 1;
 const DEFAULT_BALANCE_LENGTH = 7;
@@ -28,7 +30,7 @@ export const formatIntegerWithDecimals = (value: string) => {
   return formattedDecimals ? `${integer}.${formattedDecimals}` : integer;
 };
 
-export const formatBalance = (value: string): string => {
+export const formatBalance = (value: string, amountDecimals?: number): string => {
   const [integer, decimals] = value.split('.');
 
   const isNegative = Number(integer) < 0;
@@ -38,12 +40,14 @@ export const formatBalance = (value: string): string => {
     const formattedDecimal = decimals ? formatDecimal(decimals) : null;
 
     if (formattedDecimal) {
-      return value.slice(FIRST_POSITION, DEFAULT_BALANCE_LENGTH);
+      return value.slice(FIRST_POSITION, amountDecimals ?? DEFAULT_BALANCE_LENGTH);
     }
 
     return ZERO_STRING;
   } else if (integer.length < defaultBalanceLength) {
-    const decimals_ = decimals ? decimals.slice(FIRST_POSITION, defaultBalanceLength - integer.length) : ZERO_STRING;
+    const decimals_ = decimals
+      ? decimals.slice(FIRST_POSITION, amountDecimals ?? defaultBalanceLength - integer.length)
+      : ZERO_STRING;
     const formattedDecimal = formatDecimal(decimals_);
 
     return formattedDecimal ? `${FormatNumber(integer)}.${formattedDecimal}` : FormatNumber(integer);
@@ -52,4 +56,13 @@ export const formatBalance = (value: string): string => {
   }
 };
 
-export const formatValueBalance = (value: BigNumber.Value) => formatBalance(bigNumberToString(new BigNumber(value)));
+const MAX_AMOUNT_WITHOUT_LETTERS = 100000;
+
+export const formatValueBalance = (amount: BigNumber.Value, amountDecimals?: number): string => {
+  const bn = new BigNumber(amount);
+  if (bn.gte(MAX_AMOUNT_WITHOUT_LETTERS)) {
+    return shortNumberWithLetters(amount, amountDecimals);
+  }
+
+  return formatBalance(bigNumberToString(new BigNumber(amount)), amountDecimals);
+};

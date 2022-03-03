@@ -25,22 +25,22 @@ const LETTERS_DIGITS = {
 const LETTERS = Object.keys(LETTERS_DIGITS);
 const DIGITS = Object.values(LETTERS_DIGITS);
 
-const FRACTION = 1;
-const short = (value: number, digit: number, letter: string) =>
-  formatValueBalance((value / digit).toFixed(FRACTION)) + letter;
+const DECIMALS = 1;
+const short = (value: number, digit: number, letter: string, amountDecimals?: number) =>
+  formatValueBalance((value / digit).toFixed(amountDecimals ?? DECIMALS)) + letter;
 
-export const shortNumberWithLetters = (value: BigNumber.Value) => {
+export const shortNumberWithLetters = (value: BigNumber.Value, amountDecimals?: number) => {
   const bn = new BigNumber(value);
   const num = bn.toNumber();
   if (num < LETTERS_DIGITS.K) {
-    return formatValueBalance(value);
+    return formatValueBalance(value, amountDecimals);
   }
 
   for (let index = 0; index <= DIGITS.length; index++) {
     if (num >= DIGITS[index] && num < DIGITS[index + 1]) {
-      return short(num, DIGITS[index], LETTERS[index]);
+      return short(num, DIGITS[index], LETTERS[index], amountDecimals);
     }
   }
 
-  return short(num, LETTERS_DIGITS.S, DigitsLetters.S);
+  return short(num, LETTERS_DIGITS.S, DigitsLetters.S, amountDecimals);
 };

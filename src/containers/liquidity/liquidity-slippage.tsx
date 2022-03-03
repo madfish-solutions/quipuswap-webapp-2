@@ -13,7 +13,7 @@ import {
 } from '@app.config';
 import { NewPresetsAmountInput } from '@components/common/new-preset-amount';
 import { Tooltip } from '@components/ui/components/tooltip';
-import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import s from '@styles/CommonContainer.module.sass';
 import { useSlippage } from '@utils/dapp/slippage-deadline';
 import { getTokenSymbol } from '@utils/helpers';
@@ -90,7 +90,6 @@ export const LiquiditySlippage: FC<Props> = ({
       <div className={s.amountWrapper}>
         <span className={s.receiveLabel}>Max {investedOrReceivedText} A:</span>
         <StateCurrencyAmount
-          amountRule={AmountRule.Balance}
           amount={maxInvestedOrReceivedA}
           amountDecimals={tokenA?.metadata.decimals}
           currency={getTokenSymbol(tokenA ?? TEZOS_TOKEN)}
@@ -99,7 +98,6 @@ export const LiquiditySlippage: FC<Props> = ({
       <div className={s.amountWrapper}>
         <span className={s.receiveLabel}>Max {investedOrReceivedText} B:</span>
         <StateCurrencyAmount
-          amountRule={AmountRule.Balance}
           amount={maxInvestedOrReceivedB}
           amountDecimals={tokenB?.metadata.decimals}
           currency={getTokenSymbol(tokenB ?? DEFAULT_STABLE_TOKEN)}

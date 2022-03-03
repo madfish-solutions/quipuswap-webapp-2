@@ -5,19 +5,13 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
+import { FormatNumberOptions } from '@utils/formatNumber';
 import { formatValueBalance, isExist } from '@utils/helpers';
-import { shortNumberWithLetters } from '@utils/helpers/short-number-with-letters';
 import { Nullable } from '@utils/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import s from './state-currency-amount.module.sass';
-
-export enum AmountRule {
-  Balance = 'Balance',
-  LetterShort = 'LetterShort'
-}
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   className?: string;
@@ -29,7 +23,6 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
-  amountRule?: AmountRule;
 }
 
 const sizeClass = {
@@ -57,8 +50,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView,
-  amountRule
+  aliternativeView
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -77,20 +69,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const getFormattedAmount = () => {
-    if (!amountRule) {
-      return FormatNumber(amount ?? 0, { decimals: amountDecimals ?? undefined });
-    }
-    if (!amount) {
-      return '';
-    }
-    switch (amountRule) {
-      case AmountRule.Balance:
-        return formatValueBalance(amount);
-      case AmountRule.LetterShort:
-        return shortNumberWithLetters(amount);
-    }
-  };
+  const formattedAmount = amount ? formatValueBalance(amount, amountDecimals ?? undefined) : null;
 
   const content = (
     <span className={wrapClassName}>
@@ -102,7 +81,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{aliternativeView ?? getFormattedAmount()}</span>
+        <span className={s.inner}>{aliternativeView ?? formattedAmount}</span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}

@@ -4,7 +4,7 @@ import { Card } from '@quipuswap/ui-kit';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
-import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { bigNumberToString, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
@@ -87,7 +87,6 @@ export const StakingListItem: FC<StakingItem> = ({
                 cardCellClassName={styles.cardCell}
               >
                 <StateCurrencyAmount
-                  amountRule={AmountRule.LetterShort}
                   amount={tvl}
                   currency={depositTokenSymbol}
                   dollarEquivalent={tvlDollarEquivalent}
@@ -100,7 +99,7 @@ export const StakingListItem: FC<StakingItem> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                <StateCurrencyAmount amount={apr} currency="%" isError={!apr} amountRule={AmountRule.LetterShort} />
+                <StateCurrencyAmount amount={apr} currency="%" isError={!apr} />
               </ListItemCardCell>
 
               <ListItemCardCell
@@ -109,7 +108,7 @@ export const StakingListItem: FC<StakingItem> = ({
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
-                <StateCurrencyAmount amount={apy} currency="%" isError={!apr} amountRule={AmountRule.LetterShort} />
+                <StateCurrencyAmount amount={apy} currency="%" isError={!apr} />
               </ListItemCardCell>
             </div>
             {isAllowUserData && (
@@ -121,7 +120,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    amountRule={AmountRule.LetterShort}
                     amount={myBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myBalanceDollarEquivalent}
@@ -136,7 +134,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    amountRule={AmountRule.LetterShort}
                     amount={depositBalance}
                     currency={depositTokenSymbol}
                     dollarEquivalent={myDepositDollarEquivalent}
@@ -151,7 +148,6 @@ export const StakingListItem: FC<StakingItem> = ({
                   cardCellClassName={styles.cardCell}
                 >
                   <StateCurrencyAmount
-                    amountRule={AmountRule.LetterShort}
                     amount={earnBalance}
                     currency={MyEarnTokenSymbol}
                     dollarEquivalent={myEarnDollarEquivalent}

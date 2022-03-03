@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next';
 import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
-import { AmountRule, StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
 import { useAccountPkh } from '@utils/dapp';
 import { isNull, isUndefined } from '@utils/helpers';
@@ -83,7 +83,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          amountRule={AmountRule.Balance}
           amount={fixedTokenAPoll}
           currency={tokenASymbol}
           isLoading={isLoadingA}
@@ -100,7 +99,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
         className={s.LiquidityDetails_CardCell}
       >
         <StateCurrencyAmount
-          amountRule={AmountRule.Balance}
           amount={fixedTokenBPoll}
           currency={tokenBSymbol}
           isLoading={isLoadingB}
@@ -119,7 +117,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             className={s.LiquidityDetails_CardCell}
           >
             <StateCurrencyAmount
-              amountRule={AmountRule.Balance}
               amount={totalAmount}
               isLoading={isLoadingShares || isLoadingA}
               isError={isErrorShares}
@@ -134,7 +131,6 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
             className={s.LiquidityDetails_CardCell}
           >
             <StateCurrencyAmount
-              amountRule={AmountRule.Balance}
               amount={frozenAmount}
               isLoading={isLoadingShares || isLoadingB}
               isError={isErrorShares}
