@@ -128,7 +128,7 @@ export const TokenInput: FC<Props> = ({
   const notWhitelistedMessageA = tokenA ? getMessageNotWhitelistedToken(tokenA) : null;
   const notWhitelistedMessageB = tokenB ? getMessageNotWhitelistedToken(tokenB) : null;
 
-  const notWhitelistedMessage = `${notWhitelistedMessageA ? notWhitelistedMessageA : ''} ${
+  const notWhitelistedMessage = `${notWhitelistedMessageA ? notWhitelistedMessageA : ''}${
     notWhitelistedMessageB ? notWhitelistedMessageB : ''
   }`;
 
