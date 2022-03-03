@@ -6,7 +6,7 @@ import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
 import { isNull } from '@utils/helpers';
-import { noopMap } from '@utils/mapping/noop-map';
+import { balanceMap } from '@utils/mapping/balance.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -27,7 +27,7 @@ export class StakingItemStore {
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
-    noopMap
+    balance => balanceMap(balance, this.itemStore.data?.tokenA)
   );
 
   currentTab: StakingTabs = StakingTabs.stake;
