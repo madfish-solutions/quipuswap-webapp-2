@@ -10,7 +10,7 @@ import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
 import { getBlackListedTokens } from '@components/ui/ComplexInput/utils';
 import { Button } from '@components/ui/elements/button';
 import CC from '@styles/CommonContainer.module.sass';
-import { isTezIncluded, isExist } from '@utils/helpers';
+import { isTezIncluded, isExist, isUndefined } from '@utils/helpers';
 
 import { LiquidityDeadline } from '../../liquidity-deadline';
 import { LiquiditySlippage, LiquiditySlippageType } from '../../liquidity-slippage';
@@ -49,7 +49,7 @@ export const AddLiquidityForm: FC<AddFormInterface> = ({
   } = useAddLiquidityService(dex, tokenA, tokenB, onTokenAChange, onTokenBChange);
 
   const isButtonDisabled =
-    !dex ||
+    isUndefined(dex) ||
     !accountPkh ||
     !tokenA ||
     !tokenB ||

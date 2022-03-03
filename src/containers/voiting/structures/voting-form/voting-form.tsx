@@ -26,7 +26,7 @@ import {
 } from '@containers/voiting/helpers/voting.provider';
 import { TabsContent } from '@containers/voiting/hooks';
 import { VotingTabs } from '@containers/voiting/tabs.enum';
-import { useConnectModalsState } from '@hooks/useConnectModalsState';
+import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
 import { isAssetEqual, parseDecimals } from '@utils/helpers';
@@ -52,7 +52,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
-  const { connectWalletModalOpen, closeConnectWalletModal } = useConnectModalsState();
+  const { connectWalletModalOpen, closeConnectWalletModal } = useGlobalModalsState();
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
   const [oldAsset, setOldAsset] = useState<Token>();

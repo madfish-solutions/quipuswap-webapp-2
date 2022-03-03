@@ -15,7 +15,6 @@ const PERCENTAGE_DECIMALS = 3;
 export const StatePercentage: FC<Props> = ({ isLoading, value }) => {
   return (
     <StateCurrencyAmount
-      balanceRule
       isError={!isLoading && isNull(value)}
       amount={value}
       amountDecimals={PERCENTAGE_DECIMALS}
