@@ -12,14 +12,17 @@
   :global(.slick-track) {
     display: flex;
   }
+
   :global(.slick-dots) {
     position: static;
     display: flex !important;
+    column-gap: 4px;
     justify-content: center;
     margin-top: 10px;
     margin-bottom: 8px;
     height: 4px;
   }
+
   :global(.slick-dots li) {
     height: 4px;
     width: 24px;
@@ -62,9 +65,27 @@
   }
 }
 
-@include media('>tablet') {
+@include media('>Ltablet') {
   .root {
     padding-top: 24px;
     padding-bottom: 24px;
+
+    :global(.slick-slide) {
+      position: relative;
+  
+      &:first-child::after {
+        display: none;
+      }
+  
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -24px;
+        height: 104px;
+        width: 1px;
+        background-color: $text-01;
+      }
+    }
   }
 }
