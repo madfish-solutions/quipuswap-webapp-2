@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { formatValueBalance } from './format-balance';
+import { DEFAULT_BALANCE_LENGTH, formatValueBalance } from './format-balance';
 
 enum DigitsLetters {
   K = 'K',
@@ -25,9 +25,13 @@ const LETTERS_DIGITS = {
 const LETTERS = Object.keys(LETTERS_DIGITS);
 const DIGITS = Object.values(LETTERS_DIGITS);
 
-const DECIMALS = 1;
-const short = (value: number, digit: number, letter: string, amountDecimals?: number) =>
-  formatValueBalance((value / digit).toFixed(amountDecimals ?? DECIMALS)) + letter;
+const short = (value: number, digit: number, letter: string, amountDecimals?: number) => {
+  const newValue = value / digit;
+  const [integers] = newValue.toFixed().split('.');
+  const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH - integers.length;
+
+  return formatValueBalance(newValue.toFixed(decimals)) + letter;
+};
 
 export const shortNumberWithLetters = (value: BigNumber.Value, amountDecimals?: number) => {
   const bn = new BigNumber(value);
