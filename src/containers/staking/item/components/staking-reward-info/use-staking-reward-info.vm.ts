@@ -1,3 +1,5 @@
+import BigNumber from 'bignumber.js';
+
 import { MS_IN_SECOND } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useIsLoading } from '@utils/dapp';
@@ -60,7 +62,7 @@ export const useStakingRewardInfoViewModel = () => {
 
   const myEarnDollarEquivalent = getDollarEquivalent(
     // TODO: correct the formula
-    fromDecimals(stakingStats.earned.minus(stakingStats.prevEarned), stakeItem.rewardToken),
+    fromDecimals(BigNumber.max(stakingStats.earned.minus(stakingStats.prevEarned), 0), stakeItem.rewardToken),
     bigNumberToString(stakeItem.earnExchangeRate)
   );
 
