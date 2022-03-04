@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 import { noop } from 'rxjs';
 
+import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
@@ -70,7 +71,16 @@ export const StakingRewardInfo: FC = observer(() => {
 
       <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
         <StateData data={myDelegate} isLoading={delegatesLoading} Fallback={RewardDashPlugFallback}>
-          {delegate => <span className={cx(styles.delegate, styles.statsValueText)}>{getBakerName(delegate)}</span>}
+          {delegate => (
+            <a
+              href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className={cx(styles.delegate, styles.statsValueText)}
+            >
+              {getBakerName(delegate)}
+            </a>
+          )}
         </StateData>
       </StakingStatsItem>
 

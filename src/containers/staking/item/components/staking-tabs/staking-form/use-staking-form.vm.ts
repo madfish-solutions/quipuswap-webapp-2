@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
+import { useLoadTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
@@ -12,13 +13,13 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, availableBalanceStore, inputAmount, selectedBaker } = stakingItemStore;
+  const { itemStore, isLpToken, inputAmount, selectedBaker } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const { data: availableBalance } = availableBalanceStore;
+  const { tokenBalance } = useLoadTokenBalance(stakeItem?.stakedToken ?? null);
 
-  const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
+  const userTokenBalance = tokenBalance ? bigNumberToString(tokenBalance) : null;
 
-  const validationSchema = useStakingFormValidation(availableBalance);
+  const validationSchema = useStakingFormValidation(tokenBalance);
 
   const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
