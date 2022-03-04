@@ -7,6 +7,7 @@ export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;
   data: Data;
 
+  isInitialized = false;
   isLoading = false;
   error: Nullable<Error> = null;
 
@@ -19,6 +20,7 @@ export class LoadingErrorData<RawData, Data> {
     makeObservable(this, {
       rawData: observable,
       data: observable,
+      isInitialized: observable,
       isLoading: observable,
       error: observable,
 
@@ -42,6 +44,7 @@ export class LoadingErrorData<RawData, Data> {
 
   startLoading() {
     this.isLoading = true;
+    this.isInitialized = true;
   }
 
   finishLoading() {
