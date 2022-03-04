@@ -2,8 +2,8 @@ import { Dispatch, SetStateAction } from 'react';
 
 import { TezosToolkit } from '@taquito/taquito';
 
-import { getUserBalance } from '@api/get-user-balance';
 import { TEZOS_TOKEN } from '@app.config';
+import { getUserBalance } from '@utils/dapp';
 import { Nullable, TokenDataMap, Token } from '@utils/types';
 
 import { fromDecimals } from './fromDecimals';

@@ -148,15 +148,13 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             )}
           </div>
         </div>
-        {handleBalance ? (
-          <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-            <PercentSelector
-              amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
-              value={balance}
-              handleBalance={handleBalance}
-            />
-          </Scaffolding>
-        ) : null}
+        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+          <PercentSelector
+            amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
+            value={balance}
+            handleBalance={handleBalance}
+          />
+        </Scaffolding>
         <ComplexError error={error} />
       </div>
       {tokensModal && (

@@ -8,7 +8,6 @@ import { useAccountPkh, useTezos, useEstimationToolkit } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { useDeadline, useSlippage } from '@utils/dapp/slippage-deadline';
 import {
-  defined,
   getAddLiquidityMessage,
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
@@ -19,7 +18,6 @@ import {
 } from '@utils/helpers';
 import { Nullable, Optional, Undefined, Token } from '@utils/types';
 
-import { UnexpectedEmptyValueError } from '../../../../errors/unexpected-empty-value.error';
 import { addLiquidityTez, addLiquidityTokenToToken, addPairTokenToToken, initializeLiquidityTez } from '../blockchain';
 import { calculatePoolAmount, removeExtraZeros, sortTokensContracts, checkIsPoolNotExists } from '../helpers';
 import { useLoadTokenBalance, usePairInfo } from '../hooks';
@@ -180,8 +178,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenBInput,
-      defined(tokenA),
-      defined(tokenB),
+      tokenA!,
+      tokenB!,
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -197,8 +195,8 @@ export const useAddLiquidityService = (
     tokensCalculations(
       event.target.value,
       tokenAInput,
-      defined(tokenB),
-      defined(tokenA),
+      tokenB!,
+      tokenA!,
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -210,15 +208,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenABalance = (value: string) => {
-    const { decimals } = defined(tokenA).metadata;
+    const { decimals } = tokenA!.metadata;
     const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenA);
     tokensCalculations(
       fixedValue,
       tokenBInput,
-      defined(tokenA),
-      defined(tokenB),
+      tokenA!,
+      tokenB!,
       pairInfo,
       tokenABalance,
       tokenBBalance,
@@ -230,15 +228,15 @@ export const useAddLiquidityService = (
   };
 
   const handleTokenBBalance = (value: string) => {
-    const { decimals } = defined(tokenB).metadata;
+    const { decimals } = tokenB!.metadata;
     const fixedValue = removeExtraZeros(value, decimals);
 
     setLastEditedInput(LastChangedToken.tokenB);
     tokensCalculations(
       fixedValue,
       tokenAInput,
-      defined(tokenB),
-      defined(tokenA),
+      tokenB!,
+      tokenA!,
       pairInfo,
       tokenBBalance,
       tokenABalance,
@@ -282,20 +280,17 @@ export const useAddLiquidityService = (
         });
       }
     } else {
-      if (!pairInfo || !pairInfo.id) {
-        throw new UnexpectedEmptyValueError('PairInfo');
-      }
       const addLiquidityTokenToTokenOperation = await addLiquidityTokenToToken(
         tezos,
         accountPkh,
         dex,
-        pairInfo.id,
+        pairInfo!.id!,
         pairInputA,
         pairTokenA,
         pairTokenB,
-        pairInfo.totalSupply,
-        pairInfo.tokenAPool,
-        pairInfo.tokenBPool,
+        pairInfo!.totalSupply,
+        pairInfo!.tokenAPool,
+        pairInfo!.tokenBPool,
         deadline,
         slippage
       );
@@ -375,7 +370,7 @@ export const useAddLiquidityService = (
   };
 
   const handleAddLiquidity = async () => {
-    if (defined(dex).contract.address === TOKEN_TO_TOKEN_DEX) {
+    if (dex?.contract.address === TOKEN_TO_TOKEN_DEX) {
       return await investTokenToToken();
     }
 

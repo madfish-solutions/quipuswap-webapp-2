@@ -19,8 +19,8 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
-  dollarEquivalent?: Nullable<string>;
-  amountDecimals?: Nullable<number>;
+  dollarEquivalent?: string;
+  amountDecimals?: number;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
   balanceRule?: boolean;
@@ -73,7 +73,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
 
   const FormattedNumber = balanceRule
     ? formatValueBalance(amount)
-    : FormatNumber(amount ?? 0, { decimals: amountDecimals ?? undefined });
+    : FormatNumber(amount ?? 0, { decimals: amountDecimals });
 
   const content = (
     <span className={wrapClassName}>

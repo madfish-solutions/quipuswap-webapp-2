@@ -2,14 +2,10 @@ import { FC } from 'react';
 
 import { CardCell } from '@quipuswap/ui-kit';
 
-import { isExist } from '@utils/helpers';
-import { Nullable } from '@utils/types';
-
 import { Tooltip } from '../components/tooltip';
-
 interface DetailsCardCellProps {
   cellName: string;
-  tooltipContent: Nullable<string>;
+  tooltipContent: string;
   className: string;
 }
 
@@ -19,7 +15,7 @@ export const DetailsCardCell: FC<DetailsCardCellProps> = ({ children, cellName, 
       header={
         <>
           {cellName}
-          {isExist(tooltipContent) && <Tooltip content={tooltipContent} />}
+          <Tooltip content={tooltipContent} />
         </>
       }
       className={className}

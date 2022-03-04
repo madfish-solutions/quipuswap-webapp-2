@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token, WhitelistedBaker } from '@utils/types';
+import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -41,16 +41,13 @@ export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
 export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
 
-export const MS_IN_SECOND = 1000;
 export const SECONDS_IN_MINUTE = 60;
-export const MINUTES_IN_HOUR = 60;
-export const HOURS_IN_DAY = 24;
 export const MAX_SLIPPAGE_PERCENTAGE = 30;
 export const DEFAULT_SLIPPAGE_PERCENTAGE = 0.5;
 export const LIQUIDITY_DEFAULT_SLIPPAGE = 0;
 export const DEFAULT_DEADLINE_MINS = 30;
 const MAX_DEADLINE_DAYS = 30;
-export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * HOURS_IN_DAY * MINUTES_IN_HOUR;
+export const MAX_DEADLINE_MINS = MAX_DEADLINE_DAYS * 24 * 60;
 export const MIN_DEADLINE_MINS = 1;
 export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
@@ -141,13 +138,6 @@ const TTDEX_CONTRACTS = {
   [QSNets.mainnet]: 'KT1VNEzpf631BLsdPJjt2ZhgUitR392x6cSi'
 };
 
-const STAKING_CONTRACTS_ADDRESSES = {
-  [QSNets.mainnet]: process.env.NEXT_PUBLIC_MAINNET_STAKING_CONTRACT,
-  [QSNets.hangzhounet]: process.env.NEXT_PUBLIC_HANGZHOUNET_STAKING_CONTRACT
-};
-export const STAKING_CONTRACT_ADDRESS = STAKING_CONTRACTS_ADDRESSES[NETWORK_ID]!;
-export const STAKING_REFERRER_CONTRACT = process.env.NEXT_PUBLIC_STAKING_REFERRER_CONTRACT!;
-
 export const DEX_POOLS_URLS = {
   mainnet: process.env.NEXT_PUBLIC_MAINNET_POOLS_URL!,
   hangzhounet: process.env.NEXT_PUBLIC_HANGZHOUNET_POOLS_URL!
@@ -162,7 +152,6 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
-export const STALKING_API_URL = process.env.NEXT_PUBLIC_STALKING_API_URL!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
@@ -204,20 +193,3 @@ export const TOKEN_TO_TOKEN_DEX = TTDEX_CONTRACTS[NETWORK_ID];
 export const LP_TOKEN_DECIMALS = 6;
 
 export const QUIPUSWAP_OLD_VERSION_LINK = process.env.NEXT_PUBLIC_QUIPUSWAP_OLD_VERSION_LINK!;
-export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
-  {
-    address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
-  },
-  {
-    address: 'tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp'
-  },
-  {
-    address: 'tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru'
-  },
-  {
-    address: 'tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16'
-  },
-  {
-    address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
-  }
-];
