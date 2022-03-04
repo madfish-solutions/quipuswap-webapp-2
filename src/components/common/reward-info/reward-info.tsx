@@ -1,16 +1,20 @@
 import { FC, ReactNode } from 'react';
 
 import BigNumber from 'bignumber.js';
+import cx from 'classnames';
 
 import { Card } from '@components/ui/card';
 import { Button } from '@components/ui/elements/button';
+import { isNull } from '@utils/helpers';
+import { Nullable } from '@utils/types';
 
 import { ConnectWalletOrDoSomething } from '../connect-wallet-or-do-something';
 import { PendingRewards } from '../pending-rewards';
 import styles from './reward-info.module.scss';
 
 interface Props {
-  amount: BigNumber;
+  amount: Nullable<BigNumber>;
+  className?: string;
   currency: string;
   onButtonClick: () => void;
   buttonText: string;
@@ -23,11 +27,11 @@ interface Props {
 
 const ZERO_REWARDS = 0;
 
-export const RewardInfo: FC<Props> = ({ amount, onButtonClick, currency, header, buttonText, children }) => {
-  const isButtonDisabled = amount.eq(ZERO_REWARDS);
+export const RewardInfo: FC<Props> = ({ amount, className, onButtonClick, currency, header, buttonText, children }) => {
+  const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS);
 
   return (
-    <Card className={styles.card} header={header}>
+    <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
         <PendingRewards amount={amount} currency={currency} />
         <div className={styles.userInfoContainer}>
