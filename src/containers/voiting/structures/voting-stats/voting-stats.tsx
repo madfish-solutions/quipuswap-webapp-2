@@ -16,7 +16,7 @@ import { useClaimRewards } from '@containers/voiting/hooks';
 import { useAccountPkh, useTezos } from '@utils/dapp';
 import { isNull } from '@utils/helpers';
 
-import { VotingStatsItem, VotingRewardItem } from '../../components';
+import { VotingStatsItem, RewardItem } from '../../components';
 import { isRewardGreaterThenZero } from '../../helpers/is-reward-greater-yhen-zero';
 import s from './voting-stats.module.scss';
 
@@ -54,7 +54,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <VotingRewardItem description={t('vote|Your Pending Rewards')} amount={rewardAmount} currency="TEZ" />
+      <RewardItem description={t('vote|Your Pending Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>
         <div className={s.votingsStatsItemContainer}>

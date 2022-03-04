@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorThemeContext } from '@providers/ColorThemeContext';
 
 export const ArrowDown: React.FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);

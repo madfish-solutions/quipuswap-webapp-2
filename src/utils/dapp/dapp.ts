@@ -30,7 +30,6 @@ export interface DAppType {
   accountPkh: Nullable<string>;
   accountPublicKey: Nullable<string>;
   templeWallet: Nullable<TempleWallet>;
-  isLoading: boolean;
 }
 
 export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
@@ -45,15 +44,13 @@ const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
 function useDApp() {
   const router = useRouter();
 
-  const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
-    useState<DAppType>({
-      connectionType: null,
-      tezos: null,
-      accountPkh: null,
-      accountPublicKey: null,
-      templeWallet: null,
-      isLoading: true
-    });
+  const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet }, setState] = useState<DAppType>({
+    connectionType: null,
+    tezos: null,
+    accountPkh: null,
+    accountPublicKey: null,
+    templeWallet: null
+  });
 
   const setFallbackState = useCallback(
     () =>
@@ -80,7 +77,6 @@ function useDApp() {
       if (available) {
         try {
           let perm;
-          setState(prevState => ({ ...prevState, isLoading: true }));
           try {
             perm = await TempleWallet.getCurrentPermission();
           } catch (error) {
@@ -112,8 +108,6 @@ function useDApp() {
         } catch (e) {
           // eslint-disable-next-line
           console.error(e);
-        } finally {
-          setState(prevState => ({ ...prevState, isLoading: false }));
         }
       }
 
@@ -209,8 +203,7 @@ function useDApp() {
       tezos: toolkit,
       accountPkh: pkh,
       accountPublicKey: pk,
-      templeWallet: wallet,
-      isLoading: false
+      templeWallet: wallet
     }));
   }, []);
 
@@ -223,8 +216,7 @@ function useDApp() {
       tezos: toolkit,
       accountPkh: pkh,
       accountPublicKey: pk,
-      templeWallet: null,
-      isLoading: false
+      templeWallet: null
     }));
   }, []);
 
@@ -259,8 +251,7 @@ function useDApp() {
         accountPkh: null,
         accountPublicKey: null,
         connectionType: null,
-        tezos: fallbackToolkits[networkNew.id],
-        isLoading: false
+        tezos: fallbackToolkits[networkNew.id]
       }));
     },
     [router.asPath]
@@ -268,10 +259,7 @@ function useDApp() {
 
   const estimationToolkit = useMemo(() => {
     if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
-      if (!tezos?.rpc) {
-        throw new Error('Tezos RPC in undefined');
-      }
-      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
+      const cloneTezosToolkit = new TezosToolkit(tezos!.rpc);
       cloneTezosToolkit.setPackerProvider(michelEncoder);
       cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
 
@@ -288,7 +276,6 @@ function useDApp() {
     accountPkh,
     templeWallet,
     ready,
-    isLoading,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
@@ -307,8 +294,7 @@ export const [
   useConnectWithTemple,
   useDisconnect,
   useChangeNetwork,
-  useEstimationToolkit,
-  useIsLoading
+  useEstimationToolkit
 ] = constate(
   useDApp,
   v => v.connectionType,
@@ -320,6 +306,5 @@ export const [
   v => v.connectWithTemple,
   v => v.disconnect,
   v => v.changeNetwork,
-  v => v.estimationToolkit,
-  v => v.isLoading
+  v => v.estimationToolkit
 );

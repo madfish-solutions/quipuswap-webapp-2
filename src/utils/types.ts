@@ -52,6 +52,7 @@ export interface TokenPair {
 export interface Token {
   type: Standard;
   contractAddress: string;
+  // TODO: change the type to BigNumber
   fa2TokenId?: number;
   isWhitelisted: Nullable<boolean>;
   metadata: TokenMetadata;

@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import React from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { defined, formatIntegerWithDecimals, isNull } from '@utils/helpers';
+import { defined, formatIntegerWithDecimals } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { Button } from '../elements/button';
@@ -17,17 +17,21 @@ interface PercentSelectorProps {
 const DEFAULT_INPUT_CAP = new BigNumber('0');
 const MIN_SELECTABLE_VALUE = 0;
 
-const multipliedByPercent = (value: Nullable<string>, percent: number) =>
-  formatIntegerWithDecimals(new BigNumber(value || '0').times(percent).toFixed());
+const multipliedByPercent = (value: string, percent: number) =>
+  formatIntegerWithDecimals(new BigNumber(value).times(percent).toFixed());
 
-export const PercentSelector: FC<PercentSelectorProps> = ({ handleBalance, value, amountCap = DEFAULT_INPUT_CAP }) => {
+export const PercentSelector: React.FC<PercentSelectorProps> = ({
+  handleBalance,
+  value,
+  amountCap = DEFAULT_INPUT_CAP
+}) => {
   const handle25 = () => handleBalance?.(multipliedByPercent(defined(value), 0.25));
   const handle50 = () => handleBalance?.(multipliedByPercent(defined(value), 0.5));
   const handle75 = () => handleBalance?.(multipliedByPercent(defined(value), 0.75));
   const handleMAX = () =>
     handleBalance?.(BigNumber.maximum(new BigNumber(defined(value)).minus(amountCap), MIN_SELECTABLE_VALUE).toFixed());
 
-  const disabled = isNull(value);
+  const disabled = value === null;
 
   return (
     <div className={s.controls}>

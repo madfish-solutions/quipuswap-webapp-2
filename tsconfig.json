@@ -21,8 +21,6 @@
       "@utils/*": ["utils/*"],
       "@hooks/*": ["hooks/*"],
       "@providers/*": ["providers/*"],
-      "@api/*": ["api/*"],
-      "@interfaces/*": ["interfaces/*"],
 
       "@icons/*": ["../public/svg/*"],
       "@images/*": ["../public/images/*"],

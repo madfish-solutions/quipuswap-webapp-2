@@ -2,8 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { getUserBalance } from '@api/get-user-balance';
-import { useAccountPkh, useTezos } from '@utils/dapp';
+import { getUserBalance, useAccountPkh, useTezos } from '@utils/dapp';
 import { fromDecimals } from '@utils/helpers';
 import { Nullable, Token } from '@utils/types';
 
