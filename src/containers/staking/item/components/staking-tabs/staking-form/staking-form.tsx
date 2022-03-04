@@ -20,8 +20,10 @@ export const StakingForm: FC = observer(() => {
     stakeItem,
     bakerError,
     disabled,
-    handleInputAmountChange,
-    handleBakerChange
+    handleBakerChange,
+    tradeHref,
+    investHref,
+    handleInputAmountChange
   } = useStakingFormViewModel();
 
   if (!stakeItem) {
@@ -41,6 +43,14 @@ export const StakingForm: FC = observer(() => {
         onInputChange={handleInputAmountChange}
       />
       <ComplexBaker label={t('common|Baker')} className={s.mt24} handleChange={handleBakerChange} error={bakerError} />
+      <div className={s.suggestedOperationsButtons}>
+        <Button theme="underlined" href={tradeHref}>
+          {t('common|Trade')}
+        </Button>
+        <Button theme="underlined" href={investHref}>
+          {t('common|Invest')}
+        </Button>
+      </div>
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>

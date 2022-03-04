@@ -8,6 +8,7 @@ import { PageTitle } from '@components/common/page-title';
 import { isUndefined } from '@utils/helpers';
 
 import { StakingDetails } from './components/staking-details';
+import { StakingRewardInfo } from './components/staking-reward-info';
 import { StakingTabsCard } from './components/staking-tabs/staking-tabs-card';
 import { useStakeItemPageViewModel } from './use-stake-item-page.vm';
 
@@ -24,12 +25,10 @@ export const StakingItemPage: FC = observer(() => {
   return (
     <>
       <PageTitle>{getTitle()}</PageTitle>
-
-      {/* TODO: add items like reward stats */}
-
+      <StakingRewardInfo />
       <StickyBlock>
         <StakingTabsCard />
-        <StakingDetails item={stakeItem} isError={!isLoading && !stakeItem} />
+        <StakingDetails />
       </StickyBlock>
     </>
   );

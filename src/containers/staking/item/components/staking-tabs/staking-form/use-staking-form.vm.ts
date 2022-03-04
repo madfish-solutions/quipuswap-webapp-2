@@ -3,7 +3,7 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { useLoadTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, defined, isEmptyArray } from '@utils/helpers';
+import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
@@ -21,7 +21,7 @@ export const useStakingFormViewModel = () => {
 
   const validationSchema = useStakingFormValidation(tokenBalance);
 
-  const handleStakeSubmit = async (values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+  const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     await doStake(defined(stakeItem), inputAmount, token, defined(selectedBaker));
@@ -62,6 +62,9 @@ export const useStakingFormViewModel = () => {
     formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
+  const tradeHref = stakeItem ? `/swap/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
+  const investHref = stakeItem ? `/liquidity/add/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
+
   return {
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
@@ -70,6 +73,8 @@ export const useStakingFormViewModel = () => {
     stakeItem,
     bakerError,
     disabled,
+    tradeHref,
+    investHref,
     handleInputAmountChange,
     handleBakerChange
   };
