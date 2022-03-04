@@ -27,5 +27,9 @@
   "lockPeriodTooltip": "The minimum amount of time locked assets can not be withdrawn. If withdrawn earlier, withdrawal fee will be applied and some portion of deposited tokens will be charged",
   "withdrawalFeeTooltip": "A fee incurred on withdrawal of assets from a running farm. All earned token rewards will be re-staked in the name of the farm, while accumulated rewards will be exchanged to QUIPU and burnt",
   "interfaceFeeTooltip": "Applied at withdrawal as the percentage of earned tokens",
-  "Back to stakings": "Back to stakings"
+  "Back to stakings": "Back to stakings",
+  "yourShareTooltip": "Current value of your stake in this farm",
+  "yourDelegateTooltip": "The baker you prefer to vote for with your tokens on the Dex to increase chances this baker will be chosen as the delegate for the pool",
+  "feeEndsInTooltip": "Countdown till the moment when the stake can be withdrawn without paying the withdrawal fee",
+  "singleFarmRewardTooltip": "Your unclaimed staking reward from this farm"
 }
