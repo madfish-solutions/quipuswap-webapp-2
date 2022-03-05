@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite';
 
 import { PageTitle } from '@components/common/page-title';
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
+import { TestnetAlert } from '@components/common/testnet-alert';
 import { StateWrapper } from '@components/state-wrapper';
 import { ListStats } from '@containers/staking/list/list-stats/list-stats';
 import { useStakingListViewModel } from '@containers/staking/list/use-staking-list.vm';
@@ -15,7 +16,8 @@ export const StakingListPage = observer(() => {
   const { isLoading, list } = useStakingListViewModel();
 
   return (
-    <div>
+    <>
+      <TestnetAlert />
       <PageTitle>Staking</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton className={styles.mb48} />}>
@@ -30,6 +32,6 @@ export const StakingListPage = observer(() => {
           wrapperClassName={styles.list}
         />
       </StateWrapper>
-    </div>
+    </>
   );
 });
