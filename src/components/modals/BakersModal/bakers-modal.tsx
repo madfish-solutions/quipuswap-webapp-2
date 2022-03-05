@@ -139,7 +139,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
   useEffect(() => handleTokenSearch(), [bakers, inputValue]);
 
   const getBakerFee = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? fixBakerFee(baker.fee) : '');
-  const getBakerLogo = (baker: WhitelistedBaker) => (isBackerNotEmpty(baker) ? baker.logo : '');
+  const getBakerLogo = (baker: WhitelistedBaker) => ('logo' in baker ? baker.logo : '');
   const getBakerFreeSpace = (baker: WhitelistedBaker) => {
     if (isBackerNotEmpty(baker)) {
       const freeSpace = baker.freeSpace.toFixed(TEZOS_TOKEN.metadata.decimals);

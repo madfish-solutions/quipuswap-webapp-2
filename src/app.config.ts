@@ -210,18 +210,23 @@ export const LP_TOKEN_DECIMALS = 6;
 export const QUIPUSWAP_OLD_VERSION_LINK = process.env.NEXT_PUBLIC_QUIPUSWAP_OLD_VERSION_LINK!;
 export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
   {
-    address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
+    address: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9',
+    logo: 'https://services.tzkt.io/v1/avatars/tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
   },
   {
-    address: 'tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp'
+    address: 'tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp',
+    logo: 'https://services.tzkt.io/v1/avatars/tz1cBHUzXNFEHc21QZTc9oyT8Xig1Yv7Wqtp'
   },
   {
-    address: 'tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru'
+    address: 'tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru',
+    logo: 'https://services.tzkt.io/v1/avatars/tz1PirbogVqfmBT9XCuYJ1KnDx4bnMSYfGru'
   },
   {
-    address: 'tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16'
+    address: 'tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16',
+    logo: 'https://services.tzkt.io/v1/avatars/tz1WVs9DWoMLYcoL24JnsmbDqDShCnxxDt16'
   },
   {
-    address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
+    address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4',
+    logo: 'https://services.tzkt.io/v1/avatars/tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
   }
 ];
