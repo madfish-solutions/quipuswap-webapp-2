@@ -11,6 +11,8 @@ import {
 import { getTokensName, isExist, isUndefined } from '@utils/helpers';
 import { Token } from '@utils/types';
 
+import { balanceMap } from './balance.map';
+
 const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
   ...raw,
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId),
@@ -25,9 +27,9 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
 
   if (!isUndefined(raw.myBalance) && !isUndefined(raw.depositBalance) && !isUndefined(raw.earnBalance)) {
     balances = {
-      myBalance: new BigNumber(raw.myBalance),
-      depositBalance: new BigNumber(raw.depositBalance),
-      earnBalance: new BigNumber(raw.earnBalance)
+      myBalance: balanceMap(new BigNumber(raw.myBalance), raw.stakedToken),
+      depositBalance: balanceMap(new BigNumber(raw.depositBalance), raw.stakedToken),
+      earnBalance: balanceMap(new BigNumber(raw.earnBalance), raw.rewardToken)
     } as UserStakingItem;
   } else {
     balances = {

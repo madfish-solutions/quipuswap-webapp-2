@@ -11,6 +11,8 @@ import { Nullable } from '@utils/types';
 import { DashPlug } from '../../dash-plug';
 import s from './state-dollar-equivalent.module.sass';
 
+const USD_DECIMALS_AMOUNT = 2;
+
 export interface StateDollarEquivalentProps extends Partial<StateWrapperProps> {
   dollarEquivalent: Nullable<BigNumber.Value>;
 }
@@ -33,7 +35,7 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
   const wrapLoaderFallback = loaderFallback ?? <DashPlug zoom={0.7} />;
   const wrapErrorFallback = errorFallback ?? <DashPlug zoom={0.7} animation={false} />;
 
-  const formattedAmount = dollarEquivalent ? formatValueBalance(dollarEquivalent, 2) : null;
+  const formattedAmount = dollarEquivalent ? formatValueBalance(dollarEquivalent, USD_DECIMALS_AMOUNT) : null;
 
   const title = dollarEquivalent ? new BigNumber(dollarEquivalent).toFixed() : undefined;
 
