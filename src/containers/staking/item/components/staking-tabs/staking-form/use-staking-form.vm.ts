@@ -13,7 +13,7 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, inputAmount, selectedBaker } = stakingItemStore;
+  const { itemStore, inputAmount, selectedBaker } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { tokenBalance } = useLoadTokenBalance(stakeItem?.stakedToken ?? null);
 
@@ -36,10 +36,6 @@ export const useStakingFormViewModel = () => {
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
   });
-
-  // TODO
-  // eslint-disable-next-line no-console
-  console.log('isLpToken', isLpToken);
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const inputAmountError =

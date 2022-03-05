@@ -22,7 +22,7 @@ export const useDoUnstake = () => {
           defined(stakeItem).id.toNumber(),
           balance
         );
-        showSuccessToast('Stake successful');
+        showSuccessToast('Unstake successful');
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
