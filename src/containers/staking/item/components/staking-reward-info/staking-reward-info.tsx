@@ -42,9 +42,14 @@ export const StakingRewardInfo: FC = observer(() => {
       }}
       onButtonClick={noop}
       buttonText={t('stake|Harvest')}
+      rewardTooltip={t('stake|singleFarmRewardTooltip')}
       currency="$"
     >
-      <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Your Share')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|yourShareTooltip')}
+      >
         <StateData data={stakeItem} Fallback={StakingFallback}>
           {({ earnBalance, rewardToken }) => (
             <StateCurrencyAmount
@@ -59,7 +64,11 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Your delegate')}
+        loading={delegatesLoading}
+        tooltipContent={t('stake|yourDelegateTooltip')}
+      >
         <StateData data={myDelegate} Fallback={StakingFallback}>
           {delegate => (
             <a
@@ -74,7 +83,11 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Withdrawal fee ends in')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|feeEndsInTooltip')}
+      >
         <StateData data={endTimestamp} Fallback={StakingFallback}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>

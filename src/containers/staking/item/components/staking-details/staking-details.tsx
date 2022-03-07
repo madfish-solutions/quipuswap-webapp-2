@@ -50,7 +50,11 @@ export const StakingDetails: FC = observer(() => {
       }}
       contentClassName={s.content}
     >
-      <DetailsCardCell cellName={t('stake|Value Locked')} className={CardCellClassName} tooltipContent={null}>
+      <DetailsCardCell
+        cellName={t('stake|Value Locked')}
+        className={CardCellClassName}
+        tooltipContent={t('stake|valueLockedTooltip')}
+      >
         <StateCurrencyAmount
           dollarEquivalent={tvlDollarEquivalent}
           currency={stakedTokenSymbol}
@@ -59,7 +63,11 @@ export const StakingDetails: FC = observer(() => {
         />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Daily Distribution')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Daily Distribution')}
+        tooltipContent={t('stake|dailyDistributionTooltip')}
+        className={CardCellClassName}
+      >
         <StateCurrencyAmount
           dollarEquivalent={distributionDollarEquivalent}
           currency={rewardTokenSymbol}
@@ -68,45 +76,73 @@ export const StakingDetails: FC = observer(() => {
         />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|APR')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell cellName={t('stake|APR')} tooltipContent={t('stake|aprTooltip')} className={CardCellClassName}>
         <StatePercentage value={apr} isLoading={isLoading} />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|dailyApr')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|dailyApr')}
+        tooltipContent={t('stake|dailyAprTooltip')}
+        className={CardCellClassName}
+      >
         <StatePercentage isLoading={isLoading} value={dailyApr} />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Current Delegate')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Current Delegate')}
+        tooltipContent={t('stake|currentDelegateTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={currentDelegate}>
           {delegate => <CandidateButton candidate={delegate} />}
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Next Delegate')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Next Delegate')}
+        tooltipContent={t('stake|nextDelegateTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={nextDelegate}>
           {delegate => <CandidateButton candidate={delegate} />}
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|stakingEndsIn')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|stakingEndsIn')}
+        tooltipContent={t('stake|stakingEndsInTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={endTime}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Lock Period')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Lock Period')}
+        tooltipContent={t('stake|lockPeriodTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={timelock}>
           {value => <TimespanView value={value} />}
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Withdrawal Fee')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Withdrawal Fee')}
+        tooltipContent={t('stake|withdrawalFeeTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={withdrawalFee}>
           {withdrawalFee => <StatePercentage isLoading={false} value={withdrawalFee} />}
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|Interface Fee')} tooltipContent={null} className={CardCellClassName}>
+      <DetailsCardCell
+        cellName={t('stake|Interface Fee')}
+        tooltipContent={t('stake|interfaceFeeTooltip')}
+        className={CardCellClassName}
+      >
         <StateData isLoading={isLoading} data={harvestFee}>
           {harvestFee => <StatePercentage isLoading={false} value={harvestFee} />}
         </StateData>

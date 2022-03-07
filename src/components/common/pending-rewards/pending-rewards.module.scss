@@ -1,5 +1,5 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
+@import '@styles/variables';
+@import '@styles/breakpoints';
 
 .reward {
   display: flex;
@@ -24,6 +24,10 @@
 .title {
   font-size: 1rem;
   line-height: 1.143;
+}
+
+.titleWrapper {
+  display: flex;
 }
 
 .amount {
@@ -53,7 +57,7 @@
   }
 }
 
-@include media(">SDesktop") {
+@include media('>SDesktop') {
   .reward {
     margin-bottom: 0;
   }
@@ -62,4 +66,3 @@
     font-size: 2.286rem;
   }
 }
-
