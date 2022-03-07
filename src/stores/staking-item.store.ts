@@ -10,7 +10,7 @@ import { getContract } from '@utils/dapp';
 import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
-import { Nullable, WhitelistedBaker } from '@utils/types';
+import { Nullable, StakedAmount, StakingStorate, WhitelistedBaker } from '@utils/types';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
@@ -97,11 +97,13 @@ export class StakingItemStore {
     }
 
     const contract = await getContract(this.rootStore.tezos, STAKING_CONTRACT_ADDRESS);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const storage = (await contract.storage()) as any;
+    const storage = await contract.storage<StakingStorate>();
 
-    const stakedAmount = await storage.storage.users_info.get([this.stakingId, this.rootStore.authStore.accountPkh]);
+    const stakedAmount = await storage.storage.users_info.get<StakedAmount>([
+      this.stakingId,
+      this.rootStore.authStore.accountPkh
+    ]);
 
-    return stakedAmount.staked as BigNumber;
+    return stakedAmount?.staked ?? null;
   }
 }
