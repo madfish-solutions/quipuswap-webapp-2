@@ -7,6 +7,7 @@ import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or
 import { ComplexBaker, TokenInput } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
+import { isNull } from '@utils/helpers';
 
 import { useStakingFormViewModel } from './use-staking-form.vm';
 
@@ -47,9 +48,11 @@ export const StakingForm: FC = observer(() => {
         <Button theme="underlined" href={tradeHref}>
           {t('common|Trade')}
         </Button>
-        <Button theme="underlined" href={investHref}>
-          {t('common|Invest')}
-        </Button>
+        {!isNull(investHref) && (
+          <Button theme="underlined" href={investHref}>
+            {t('common|Invest')}
+          </Button>
+        )}
       </div>
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>

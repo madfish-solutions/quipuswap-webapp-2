@@ -23,17 +23,27 @@ interface Props {
     button?: ReactNode;
     className?: string;
   };
+  rewardTooltip?: string;
 }
 
 const ZERO_REWARDS = 0;
 
-export const RewardInfo: FC<Props> = ({ amount, className, onButtonClick, currency, header, buttonText, children }) => {
+export const RewardInfo: FC<Props> = ({
+  amount,
+  className,
+  onButtonClick,
+  currency,
+  header,
+  rewardTooltip,
+  buttonText,
+  children
+}) => {
   const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS);
 
   return (
     <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
-        <PendingRewards amount={amount} currency={currency} />
+        <PendingRewards amount={amount} currency={currency} tooltip={rewardTooltip} />
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>

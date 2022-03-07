@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
-import { noop } from 'rxjs';
 
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
@@ -29,8 +28,15 @@ const StakingFallback = () => null;
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
-  const { stakeItem, myDelegate, delegatesLoading, endTimestamp, myEarnDollarEquivalent, stakingLoading } =
-    useStakingRewardInfoViewModel();
+  const {
+    stakeItem,
+    myDelegate,
+    delegatesLoading,
+    endTimestamp,
+    myEarnDollarEquivalent,
+    stakingLoading,
+    handleHarvest
+  } = useStakingRewardInfoViewModel();
 
   return (
     <RewardInfo
@@ -40,11 +46,16 @@ export const StakingRewardInfo: FC = observer(() => {
         content: <StakingRewardHeader />,
         className: styles.rewardHeader
       }}
-      onButtonClick={noop}
+      onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
+      rewardTooltip={t('stake|singleFarmRewardTooltip')}
       currency="$"
     >
-      <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Your Share')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|yourShareTooltip')}
+      >
         <StateData data={stakeItem} Fallback={StakingFallback}>
           {({ earnBalance, rewardToken }) => (
             <StateCurrencyAmount
@@ -59,7 +70,11 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Your delegate')}
+        loading={delegatesLoading}
+        tooltipContent={t('stake|yourDelegateTooltip')}
+      >
         <StateData data={myDelegate} Fallback={StakingFallback}>
           {delegate => (
             <a
@@ -74,7 +89,11 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Withdrawal fee ends in')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|feeEndsInTooltip')}
+      >
         <StateData data={endTimestamp} Fallback={StakingFallback}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>
