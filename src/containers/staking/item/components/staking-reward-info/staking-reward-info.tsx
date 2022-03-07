@@ -29,6 +29,7 @@ export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
   const {
+    shouldShowCandidate,
     stakeItem,
     myDelegate,
     delegatesLoading,
@@ -70,24 +71,26 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem
-        itemName={t('stake|Your delegate')}
-        loading={delegatesLoading}
-        tooltipContent={t('stake|yourDelegateTooltip')}
-      >
-        <StateData data={myDelegate} Fallback={StakingFallback}>
-          {delegate => (
-            <a
-              href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className={cx(styles.delegate, styles.statsValueText)}
-            >
-              {getBakerName(delegate)}
-            </a>
-          )}
-        </StateData>
-      </StakingStatsItem>
+      {shouldShowCandidate && (
+        <StakingStatsItem
+          itemName={t('stake|Your delegate')}
+          loading={delegatesLoading}
+          tooltipContent={t('stake|yourDelegateTooltip')}
+        >
+          <StateData data={myDelegate} Fallback={StakingFallback}>
+            {delegate => (
+              <a
+                href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={cx(styles.delegate, styles.statsValueText)}
+              >
+                {getBakerName(delegate)}
+              </a>
+            )}
+          </StateData>
+        </StakingStatsItem>
+      )}
 
       <StakingStatsItem
         itemName={t('stake|Withdrawal fee ends in')}

@@ -40,7 +40,8 @@ export const StakingDetails: FC = observer(() => {
     harvestFee,
     depositTokenUrl,
     isLoading,
-    isError
+    isError,
+    shouldShowDelegates
   } = useStakingDetailsViewModel();
 
   return (
@@ -88,25 +89,29 @@ export const StakingDetails: FC = observer(() => {
         <StatePercentage isLoading={isLoading} value={dailyApr} />
       </DetailsCardCell>
 
-      <DetailsCardCell
-        cellName={t('stake|Current Delegate')}
-        tooltipContent={t('stake|currentDelegateTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={currentDelegate}>
-          {delegate => <CandidateButton candidate={delegate} />}
-        </StateData>
-      </DetailsCardCell>
+      {shouldShowDelegates && (
+        <>
+          <DetailsCardCell
+            cellName={t('stake|Current Delegate')}
+            tooltipContent={t('stake|currentDelegateTooltip')}
+            className={CardCellClassName}
+          >
+            <StateData isLoading={isLoading} data={currentDelegate}>
+              {delegate => <CandidateButton candidate={delegate} />}
+            </StateData>
+          </DetailsCardCell>
 
-      <DetailsCardCell
-        cellName={t('stake|Next Delegate')}
-        tooltipContent={t('stake|nextDelegateTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={nextDelegate}>
-          {delegate => <CandidateButton candidate={delegate} />}
-        </StateData>
-      </DetailsCardCell>
+          <DetailsCardCell
+            cellName={t('stake|Next Delegate')}
+            tooltipContent={t('stake|nextDelegateTooltip')}
+            className={CardCellClassName}
+          >
+            <StateData isLoading={isLoading} data={nextDelegate}>
+              {delegate => <CandidateButton candidate={delegate} />}
+            </StateData>
+          </DetailsCardCell>
+        </>
+      )}
 
       <DetailsCardCell
         cellName={t('stake|stakingEndsIn')}

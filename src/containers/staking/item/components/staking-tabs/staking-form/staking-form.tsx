@@ -14,7 +14,7 @@ import { useStakingFormViewModel } from './use-staking-form.vm';
 export const StakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
   const {
-    canDelegate,
+    shouldShowBakerInput,
     handleSubmit,
     inputAmount,
     userTokenBalance,
@@ -44,7 +44,7 @@ export const StakingForm: FC = observer(() => {
         tokenB={stakeItem.tokenB}
         onInputChange={handleInputAmountChange}
       />
-      {canDelegate && (
+      {shouldShowBakerInput && (
         <ComplexBaker
           label={t('common|Baker')}
           className={s.mt24}
