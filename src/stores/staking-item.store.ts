@@ -59,9 +59,9 @@ export class StakingItemStore {
     this.inputAmount = new BigNumber(inputAmount);
   }
 
-  setSelectedBaker(selectedBaker: Nullable<WhitelistedBaker>) {
+  setSelectedBaker = (selectedBaker: Nullable<WhitelistedBaker>) => {
     this.selectedBaker = selectedBaker;
-  }
+  };
 
   clearBalance() {
     this.setInputAmount(DEFAULT_INPUT_AMOUNT);

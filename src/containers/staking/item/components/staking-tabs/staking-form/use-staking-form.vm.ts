@@ -1,28 +1,40 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { TEZOS_TOKEN } from '@app.config';
+import { FALLBACK_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useLoadTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, defined, isEmptyArray, isNull, isExist, getTokenPairSlug } from '@utils/helpers';
+import {
+  bigNumberToString,
+  defined,
+  isEmptyArray,
+  isNull,
+  isTezosToken,
+  isExist,
+  getTokenPairSlug
+} from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, inputAmount, selectedBaker } = stakingItemStore;
+  const { itemStore, isLpToken, inputAmount, selectedBaker, setSelectedBaker } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { tokenBalance } = useLoadTokenBalance(stakeItem?.stakedToken ?? null);
 
   const userTokenBalance = tokenBalance ? bigNumberToString(tokenBalance) : null;
 
-  const validationSchema = useStakingFormValidation(tokenBalance);
+  const canDelegate = isNull(stakeItem) || isTezosToken(stakeItem.tokenA);
+  const prevCanDelegateRef = useRef(true);
+
+  const validationSchema = useStakingFormValidation(tokenBalance, canDelegate);
 
   const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
@@ -39,6 +51,14 @@ export const useStakingFormViewModel = () => {
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
   });
+
+  useEffect(() => {
+    if (prevCanDelegateRef.current !== canDelegate) {
+      formik.setFieldValue(StakingFormFields.selectedBaker, '');
+      setSelectedBaker(canDelegate ? null : { address: FALLBACK_BAKER });
+    }
+    prevCanDelegateRef.current = canDelegate;
+  }, [canDelegate, formik, setSelectedBaker]);
 
   // TODO
   // eslint-disable-next-line no-console
@@ -61,7 +81,7 @@ export const useStakingFormViewModel = () => {
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
-    stakingItemStore.setSelectedBaker(baker);
+    setSelectedBaker(baker);
     formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
@@ -77,6 +97,7 @@ export const useStakingFormViewModel = () => {
   }, [stakeItem]);
 
   return {
+    canDelegate,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
     userTokenBalance,
