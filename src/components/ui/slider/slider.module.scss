@@ -12,6 +12,7 @@
   :global(.slick-track) {
     display: flex;
   }
+
   :global(.slick-dots) {
     position: static;
     display: flex !important;
@@ -20,9 +21,15 @@
     margin-bottom: 8px;
     height: 4px;
   }
+
   :global(.slick-dots li) {
     height: 4px;
     width: 24px;
+    margin-right: 4px;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   :global(.customSelect__control) {
@@ -31,6 +38,12 @@
 }
 
 .light {
+  :global(.slick-slide) {
+    &::after {
+      background-color: $ui-03;
+    }
+  }
+
   :global(.slick-active) {
     .dot {
       background-color: $ui-05
@@ -47,6 +60,12 @@
 }
 
 .dark {
+  :global(.slick-slide) {
+    &::after {
+      background-color: $text-01;
+    }
+  }
+
   :global(.slick-active){
     .dot {
       background-color: $text-02;
@@ -62,9 +81,26 @@
   }
 }
 
-@include media('>tablet') {
+@include media('>Ltablet') {
   .root {
     padding-top: 24px;
     padding-bottom: 24px;
+
+    :global(.slick-slide) {
+      position: relative;
+  
+      &:first-child::after {
+        display: none;
+      }
+  
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -24px;
+        height: 104px;
+        width: 1px;
+      }
+    }
   }
 }
