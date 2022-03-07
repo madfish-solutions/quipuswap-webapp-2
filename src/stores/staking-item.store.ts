@@ -3,8 +3,10 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
+import { STAKING_CONTRACT_ADDRESS } from '@app.config';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
+import { getContract } from '@utils/dapp';
 import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
@@ -28,6 +30,12 @@ export class StakingItemStore {
     null,
     async () => await this.getUserTokenBalance(),
     balance => balanceMap(balance, this.itemStore.data?.tokenA)
+  );
+
+  depositBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
+    null,
+    async () => await this.getUserDepositBalance(),
+    balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
   currentTab: StakingTabs = StakingTabs.stake;
@@ -81,5 +89,19 @@ export class StakingItemStore {
     }
 
     return getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.itemStore.data?.tokenA);
+  }
+
+  private async getUserDepositBalance() {
+    if (isNull(this.rootStore.tezos) || isNull(this.rootStore.authStore.accountPkh) || isNull(this.itemStore.data)) {
+      return null;
+    }
+
+    const contract = await getContract(this.rootStore.tezos, STAKING_CONTRACT_ADDRESS);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const storage = (await contract.storage()) as any;
+
+    const stakedAmount = await storage.storage.users_info.get([this.stakingId, this.rootStore.authStore.accountPkh]);
+
+    return stakedAmount.staked as BigNumber;
   }
 }

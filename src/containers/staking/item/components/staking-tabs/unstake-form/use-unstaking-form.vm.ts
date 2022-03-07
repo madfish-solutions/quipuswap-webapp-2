@@ -1,13 +1,8 @@
-import { useEffect, useState } from 'react';
-
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { STAKING_CONTRACT_ADDRESS } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { getContract, useAccountPkh, useTezos } from '@utils/dapp';
-import { bigNumberToString, defined, fromDecimals, isEmptyArray, toDecimals } from '@utils/helpers';
-import { Nullable } from '@utils/types';
+import { defined, isEmptyArray, toDecimals, bigNumberToString } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
@@ -16,33 +11,13 @@ import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doUnstake } = useDoUnstake();
-  const accountPkh = useAccountPkh();
-  const tezos = useTezos();
-  const { itemStore, isLpToken, availableBalanceStore, inputAmount } = stakingItemStore;
+  const { itemStore, isLpToken, inputAmount, depositBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const { data: availableBalance } = availableBalanceStore;
+  const { data: depositBalance } = depositBalanceStore;
 
-  const [userTokenBalance, setUserTokenBalance] = useState<Nullable<string>>(null);
+  const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : null;
 
-  useEffect(() => {
-    const userStakedBalance = async () => {
-      if (!tezos || !stakeItem || !accountPkh) {
-        return;
-      }
-
-      const contract = await getContract(tezos, STAKING_CONTRACT_ADDRESS);
-      const storage = await contract.storage();
-
-      // @ts-ignore
-      const stakedAmount = await storage.storage.users_info.get([stakeItem.id, accountPkh]);
-
-      setUserTokenBalance(bigNumberToString(fromDecimals(stakedAmount.staked, stakeItem.stakedToken)));
-    };
-
-    void userStakedBalance();
-  });
-
-  const validationSchema = useUnstakingFormValidation(availableBalance);
+  const validationSchema = useUnstakingFormValidation(depositBalanceStore.data);
 
   const handleStakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);

@@ -18,6 +18,7 @@ export const useGetStakingItem = () => {
           stakingItemStore.setStakingId(stakingId);
           await stakingItemStore.itemStore.load();
           await stakingItemStore.availableBalanceStore.load();
+          await stakingItemStore.depositBalanceStore.load();
         } catch (error) {
           showErrorToast(error as Error);
         }
