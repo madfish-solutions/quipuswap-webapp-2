@@ -38,6 +38,12 @@
 }
 
 .light {
+  :global(.slick-slide) {
+    &::after {
+      background-color: $ui-03;
+    }
+  }
+
   :global(.slick-active) {
     .dot {
       background-color: $ui-05
@@ -54,6 +60,12 @@
 }
 
 .dark {
+  :global(.slick-slide) {
+    &::after {
+      background-color: $text-01;
+    }
+  }
+
   :global(.slick-active){
     .dot {
       background-color: $text-02;
@@ -88,7 +100,6 @@
         top: -24px;
         height: 104px;
         width: 1px;
-        background-color: $text-01;
       }
     }
   }
