@@ -20,12 +20,12 @@ export const useStakingRewardInfoViewModel = () => {
   const stakingLoading = dataLoading || !dataInitialized || dAppLoading;
   const delegatesLoading = bakersLoading || stakingLoading;
 
-  const handleHarvest = () => {
+  const handleHarvest = async () => {
     if (!tezos || !accountPkh || !stakeItem) {
       return;
     }
 
-    harvestAssetsApi(tezos, stakeItem.id.toNumber(), accountPkh);
+    await harvestAssetsApi(tezos, stakeItem.id.toNumber(), accountPkh);
   };
 
   if (!stakeItem) {
