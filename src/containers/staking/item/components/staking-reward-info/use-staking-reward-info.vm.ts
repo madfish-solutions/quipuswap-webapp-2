@@ -13,6 +13,7 @@ const mockMyDelegateAddress: string = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
 export const useStakingRewardInfoViewModel = () => {
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
+
   const stakingItemStore = useStakingItemStore();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
