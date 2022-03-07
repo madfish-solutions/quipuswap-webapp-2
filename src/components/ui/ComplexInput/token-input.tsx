@@ -15,6 +15,7 @@ import {
   getTokenInputAmountCap,
   getTokenSymbol,
   isExist,
+  isNull,
   prepareTokenLogo,
   prettyPrice
 } from '@utils/helpers';
@@ -184,7 +185,7 @@ export const TokenInput: FC<Props> = ({
       {onInputChange ? (
         <Scaffolding showChild={shouldShowBalanceButtons} className={styles.scaffoldingPercentSelector}>
           <PercentSelector
-            amountCap={tokenB ? getTokenInputAmountCap(tokenA) : undefined}
+            amountCap={isNull(tokenB) ? getTokenInputAmountCap(tokenA) : undefined}
             value={balance}
             handleBalance={onInputChange}
           />
