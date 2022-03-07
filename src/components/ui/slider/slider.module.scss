@@ -16,7 +16,6 @@
   :global(.slick-dots) {
     position: static;
     display: flex !important;
-    column-gap: 4px;
     justify-content: center;
     margin-top: 10px;
     margin-bottom: 8px;
@@ -26,6 +25,11 @@
   :global(.slick-dots li) {
     height: 4px;
     width: 24px;
+    margin-right: 4px;
+
+    &:last-child {
+      margin-right: 0;
+    }
   }
 
   :global(.customSelect__control) {
