@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
-import { noop } from 'rxjs';
 
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
@@ -29,8 +28,15 @@ const StakingFallback = () => null;
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
-  const { stakeItem, myDelegate, delegatesLoading, endTimestamp, myEarnDollarEquivalent, stakingLoading } =
-    useStakingRewardInfoViewModel();
+  const {
+    stakeItem,
+    myDelegate,
+    delegatesLoading,
+    endTimestamp,
+    myEarnDollarEquivalent,
+    stakingLoading,
+    handleHarvest
+  } = useStakingRewardInfoViewModel();
 
   return (
     <RewardInfo
@@ -40,7 +46,7 @@ export const StakingRewardInfo: FC = observer(() => {
         content: <StakingRewardHeader />,
         className: styles.rewardHeader
       }}
-      onButtonClick={noop}
+      onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
       rewardTooltip={t('stake|singleFarmRewardTooltip')}
       currency="$"
