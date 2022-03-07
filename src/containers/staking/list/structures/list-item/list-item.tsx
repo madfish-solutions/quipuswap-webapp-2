@@ -39,7 +39,8 @@ export const StakingListItem: FC<StakingItem> = ({
   tokenB,
   stakeStatus,
   rewardToken,
-  tvl,
+  tvlInStakedToken: tvl,
+  tvlInUsd: tvlDollarEquivalent,
   apr,
   apy,
   depositExchangeRate,
@@ -52,7 +53,6 @@ export const StakingListItem: FC<StakingItem> = ({
 }) => {
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
-  const tvlDollarEquivalent = getDollarEquivalent(bigNumberToString(tvl), bigNumberToString(depositExchangeRate));
 
   const selectLink = `staking/${id}`;
 
@@ -88,7 +88,7 @@ export const StakingListItem: FC<StakingItem> = ({
                 <StateCurrencyAmount
                   amount={tvl}
                   currency={depositTokenSymbol}
-                  dollarEquivalent={tvlDollarEquivalent}
+                  dollarEquivalent={bigNumberToString(tvlDollarEquivalent)}
                 />
               </ListItemCardCell>
 
