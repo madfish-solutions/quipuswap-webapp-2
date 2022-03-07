@@ -2,15 +2,14 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { getDepositAmount } from '@api/staking/get-deposit-amount';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
-import { STAKING_CONTRACT_ADDRESS } from '@app.config';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
-import { getContract } from '@utils/dapp';
 import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
-import { Nullable, StakedAmount, StakingStorate, WhitelistedBaker } from '@utils/types';
+import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
@@ -92,18 +91,15 @@ export class StakingItemStore {
   }
 
   private async getUserDepositBalance() {
-    if (isNull(this.rootStore.tezos) || isNull(this.rootStore.authStore.accountPkh) || isNull(this.itemStore.data)) {
+    if (
+      isNull(this.rootStore.tezos) ||
+      isNull(this.rootStore.authStore.accountPkh) ||
+      isNull(this.itemStore.data) ||
+      isNull(this.stakingId)
+    ) {
       return null;
     }
 
-    const contract = await getContract(this.rootStore.tezos, STAKING_CONTRACT_ADDRESS);
-    const storage = await contract.storage<StakingStorate>();
-
-    const stakedAmount = await storage.storage.users_info.get<StakedAmount>([
-      this.stakingId,
-      this.rootStore.authStore.accountPkh
-    ]);
-
-    return stakedAmount?.staked ?? null;
+    return await getDepositAmount(this.rootStore.tezos, this.stakingId, this.rootStore.authStore.accountPkh);
   }
 }
