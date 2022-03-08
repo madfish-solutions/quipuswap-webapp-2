@@ -2,29 +2,38 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { unstakeAssetsApi } from '@api/staking/unstake-assets.api';
 import { useToasts } from '@hooks/use-toasts';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 
-export const useDoUnstake = () => {
+import { harvestAllAssets } from '../../../api/staking/harvest-all-assets.api';
+const ZERO_AMOUNT = 0;
+
+export const useDoHarvestAll = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
-
   const { showErrorToast } = useToasts();
 
-  const doUnstake = useCallback(
-    async (stakeItem: StakingItem, balance: BigNumber) => {
+  const doHarvestAll = useCallback(
+    async (stakeList: StakingItem[]) => {
+      const stakingIsd: BigNumber[] = [];
+
+      stakeList.forEach(({ id, earnBalance }) => {
+        if (earnBalance?.gt(ZERO_AMOUNT)) {
+          stakingIsd.push(id);
+        }
+      });
+
       try {
-        const operation = await unstakeAssetsApi(
+        const operation = await harvestAllAssets(
           defined(rootStore.tezos),
-          defined(rootStore.authStore.accountPkh),
-          defined(stakeItem).id,
-          balance
+          stakingIsd,
+          defined(rootStore.authStore.accountPkh)
         );
-        await confirmOperation(operation.opHash, { message: 'Unstake successful' });
+
+        await confirmOperation(operation.opHash, { message: 'Stake successful' });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
@@ -34,5 +43,5 @@ export const useDoUnstake = () => {
     [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
   );
 
-  return { doUnstake };
+  return { doHarvestAll };
 };
