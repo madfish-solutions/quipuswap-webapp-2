@@ -1,9 +1,12 @@
+import { useMemo } from 'react';
+
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
+import { TEZOS_TOKEN } from '@app.config';
 import { useLoadTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, getTokenSlug, defined, isEmptyArray } from '@utils/helpers';
+import { bigNumberToString, defined, isEmptyArray, isNull, isExist, getTokenPairSlug } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
@@ -58,8 +61,16 @@ export const useStakingFormViewModel = () => {
     formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
-  const tradeHref = stakeItem ? `/swap/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
-  const investHref = stakeItem ? `/liquidity/add/tez-${getTokenSlug(stakeItem.tokenA)}` : undefined;
+  const { tradeHref, investHref } = useMemo(() => {
+    if (isNull(stakeItem)) {
+      return {};
+    }
+
+    const { tokenA, tokenB } = stakeItem;
+    const pairSlug = isExist(tokenB) ? getTokenPairSlug(tokenA, tokenB) : getTokenPairSlug(TEZOS_TOKEN, tokenA);
+
+    return { tradeHref: `/swap/${pairSlug}`, investHref: isExist(tokenB) ? `/liquidity/add/${pairSlug}` : null };
+  }, [stakeItem]);
 
   return {
     handleSubmit: formik.handleSubmit,

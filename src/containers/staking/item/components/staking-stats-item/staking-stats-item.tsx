@@ -3,6 +3,7 @@ import { FC, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { Tooltip } from '@components/ui/components/tooltip';
 import { DashPlug } from '@components/ui/dash-plug';
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { isNull } from '@utils/helpers';
@@ -12,6 +13,7 @@ import styles from './staking-stats-item.module.sass';
 export interface StakingStatsItemProps {
   itemName: string;
   loading: boolean;
+  tooltipContent: string;
 }
 
 const modeClass = {
@@ -19,7 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children, loading }) => {
+export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children, loading, tooltipContent }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { accountPkh } = useAuthStore();
 
@@ -28,7 +30,10 @@ export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children
 
   return (
     <div className={cx(modeClass[colorThemeMode], styles.item)}>
-      <span className={styles.header}>{itemName}:</span>
+      <span className={styles.header}>
+        {itemName}
+        <Tooltip content={tooltipContent} />
+      </span>
       <div className={styles.value}>{content}</div>
     </div>
   );
