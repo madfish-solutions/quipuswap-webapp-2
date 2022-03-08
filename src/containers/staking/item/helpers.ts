@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 
 import { ZERO_ADDRESS } from '@app.config';
 import { StakingItem, StakingStatus, UserStakingStats } from '@interfaces/staking.interfaces';
-import { toIntegerSeconds } from '@utils/helpers';
+import { isTezosToken, toIntegerSeconds } from '@utils/helpers';
 import { Optional, WhitelistedBaker } from '@utils/types';
 
 const rewardPrecision = new BigNumber('1e18');
@@ -35,3 +35,5 @@ export const getEarnBalance = (stakeItem: StakingItem, stakingStats: UserStaking
     .minus(stakingStats.prevEarned)
     .minus(earnedWithoutPrecision.times(rewardPrecision));
 };
+
+export const canDelegate = (stakeItem: StakingItem) => isTezosToken(stakeItem.tokenA);

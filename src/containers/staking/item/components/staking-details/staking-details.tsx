@@ -18,6 +18,9 @@ import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
 import { useStakingDetailsViewModel } from './use-staking-details.vm';
 
+const NO_TIMELOCK_VALUE = 0;
+const NO_WITHDRAWAL_FEE_VALUE = '0';
+
 export const StakingDetails: FC = observer(() => {
   const { t } = useTranslation(['common', 'vote']);
 
@@ -40,7 +43,8 @@ export const StakingDetails: FC = observer(() => {
     harvestFee,
     depositTokenUrl,
     isLoading,
-    isError
+    isError,
+    shouldShowDelegates
   } = useStakingDetailsViewModel();
 
   return (
@@ -88,25 +92,29 @@ export const StakingDetails: FC = observer(() => {
         <StatePercentage isLoading={isLoading} value={dailyApr} />
       </DetailsCardCell>
 
-      <DetailsCardCell
-        cellName={t('stake|Current Delegate')}
-        tooltipContent={t('stake|currentDelegateTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={currentDelegate}>
-          {delegate => <CandidateButton candidate={delegate} />}
-        </StateData>
-      </DetailsCardCell>
+      {shouldShowDelegates && (
+        <>
+          <DetailsCardCell
+            cellName={t('stake|Current Delegate')}
+            tooltipContent={t('stake|currentDelegateTooltip')}
+            className={CardCellClassName}
+          >
+            <StateData isLoading={isLoading} data={currentDelegate}>
+              {delegate => <CandidateButton candidate={delegate} />}
+            </StateData>
+          </DetailsCardCell>
 
-      <DetailsCardCell
-        cellName={t('stake|Next Delegate')}
-        tooltipContent={t('stake|nextDelegateTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={nextDelegate}>
-          {delegate => <CandidateButton candidate={delegate} />}
-        </StateData>
-      </DetailsCardCell>
+          <DetailsCardCell
+            cellName={t('stake|Next Delegate')}
+            tooltipContent={t('stake|nextDelegateTooltip')}
+            className={CardCellClassName}
+          >
+            <StateData isLoading={isLoading} data={nextDelegate}>
+              {delegate => <CandidateButton candidate={delegate} />}
+            </StateData>
+          </DetailsCardCell>
+        </>
+      )}
 
       <DetailsCardCell
         cellName={t('stake|stakingEndsIn')}
@@ -118,25 +126,29 @@ export const StakingDetails: FC = observer(() => {
         </StateData>
       </DetailsCardCell>
 
-      <DetailsCardCell
-        cellName={t('stake|Lock Period')}
-        tooltipContent={t('stake|lockPeriodTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={timelock}>
-          {value => <TimespanView value={value} />}
-        </StateData>
-      </DetailsCardCell>
+      {timelock !== NO_TIMELOCK_VALUE && (
+        <DetailsCardCell
+          cellName={t('stake|Lock Period')}
+          tooltipContent={t('stake|lockPeriodTooltip')}
+          className={CardCellClassName}
+        >
+          <StateData isLoading={isLoading} data={timelock}>
+            {value => <TimespanView value={value} />}
+          </StateData>
+        </DetailsCardCell>
+      )}
 
-      <DetailsCardCell
-        cellName={t('stake|Withdrawal Fee')}
-        tooltipContent={t('stake|withdrawalFeeTooltip')}
-        className={CardCellClassName}
-      >
-        <StateData isLoading={isLoading} data={withdrawalFee}>
-          {withdrawalFee => <StatePercentage isLoading={false} value={withdrawalFee} />}
-        </StateData>
-      </DetailsCardCell>
+      {withdrawalFee !== NO_WITHDRAWAL_FEE_VALUE && (
+        <DetailsCardCell
+          cellName={t('stake|Withdrawal Fee')}
+          tooltipContent={t('stake|withdrawalFeeTooltip')}
+          className={CardCellClassName}
+        >
+          <StateData isLoading={isLoading} data={withdrawalFee}>
+            {withdrawalFee => <StatePercentage isLoading={false} value={withdrawalFee} />}
+          </StateData>
+        </DetailsCardCell>
+      )}
 
       <DetailsCardCell
         cellName={t('stake|Interface Fee')}

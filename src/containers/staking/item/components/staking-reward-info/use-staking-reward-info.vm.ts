@@ -4,7 +4,7 @@ import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useIsLoading, useTezos } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
 
-import { getEarnBalance, makeBaker } from '../helpers';
+import { canDelegate, getEarnBalance, makeBaker } from '../../helpers';
 
 export const useStakingRewardInfoViewModel = () => {
   const { itemStore, userStakingDelegateStore, userStakingStatsStore } = useStakingItemStore();
@@ -43,6 +43,7 @@ export const useStakingRewardInfoViewModel = () => {
 
   if (!stakeItem) {
     return {
+      shouldShowCandidate: true,
       stakeItem,
       myDelegate: null,
       delegatesLoading,
@@ -50,14 +51,17 @@ export const useStakingRewardInfoViewModel = () => {
       myEarnDollarEquivalent: null,
       myShareDollarEquivalent: null,
       stakingLoading,
+      timelock: null,
       handleHarvest
     };
   }
 
   const commonProps = {
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
+    shouldShowCandidate: canDelegate(stakeItem),
     delegatesLoading,
     stakingLoading,
+    timelock: stakeItem.timelock,
     handleHarvest
   };
 
