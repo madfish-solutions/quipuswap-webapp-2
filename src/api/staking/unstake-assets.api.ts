@@ -6,7 +6,7 @@ import { STAKING_CONTRACT_ADDRESS } from '@app.config';
 export const unstakeAssetsApi = async (
   tezos: TezosToolkit,
   accountPkh: string,
-  stakingId: number,
+  stakingId: BigNumber,
   amount: BigNumber
 ) => {
   const stakingContract = await tezos.wallet.at(STAKING_CONTRACT_ADDRESS);
