@@ -225,3 +225,10 @@ export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
     address: 'tz1VoSM93UoY5gjuvb1bHdwdJZzU4P5eEAs4'
   }
 ];
+
+const dummyBakers: Record<QSNets, string> = {
+  [QSNets.mainnet]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
+  [QSNets.hangzhounet]: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
+};
+
+export const DUMMY_BAKER = dummyBakers[NETWORK_ID];
