@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
-import { getDepositAmount } from '@api/staking/get-deposit-amount';
+import { getDepositAmount } from '@api/staking/get-deposit-amount.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
