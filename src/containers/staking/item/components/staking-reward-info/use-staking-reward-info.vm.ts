@@ -1,7 +1,7 @@
-import { harvestAssetsApi } from '@api/staking/harvest-assets.api';
 import { MS_IN_SECOND } from '@app.config';
+import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useAccountPkh, useBakers, useIsLoading, useTezos } from '@utils/dapp';
+import { useAccountPkh, useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, defined, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
@@ -9,9 +9,9 @@ import { canDelegate, makeBaker } from '../../helpers';
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { itemStore, userStakingDelegateStore, userStakingStatsStore } = stakingItemStore;
-  const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
+  const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
   const {
@@ -35,11 +35,7 @@ export const useStakingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
 
   const handleHarvest = async () => {
-    if (!tezos || !accountPkh || !stakeItem) {
-      return;
-    }
-
-    await harvestAssetsApi(tezos, stakeItem.id.toNumber(), accountPkh);
+    return await doHarvest(stakeItem);
   };
 
   if (!stakeItem) {

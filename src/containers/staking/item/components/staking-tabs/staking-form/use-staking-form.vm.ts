@@ -25,7 +25,7 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
+  const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
@@ -60,10 +60,6 @@ export const useStakingFormViewModel = () => {
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, stakingItemStore]);
-
-  // TODO
-  // eslint-disable-next-line no-console
-  console.log('isLpToken', isLpToken);
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const inputAmountError =

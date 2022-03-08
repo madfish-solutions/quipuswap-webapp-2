@@ -3,4 +3,4 @@ import { isFullBaker, WhitelistedBaker, WhitelistedBakerFull } from '@utils/type
 import { isExist } from './type-checks';
 
 export const isBackerNotEmpty = (baker: WhitelistedBaker): baker is WhitelistedBakerFull =>
-  isFullBaker(baker) && isExist(baker.name);
+  isFullBaker(baker) && isExist(baker.name) && isExist(baker.freeSpace);

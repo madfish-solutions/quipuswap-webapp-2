@@ -1,9 +1,9 @@
 import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
-import { noop } from 'rxjs';
 
 import { RewardInfo } from '../reward-info';
+import { useStakingRewardsListViewModel } from './use-staking-rewards-list.vm';
 
 const mock = {
   pendingRewardAmount: new BigNumber('100.123'),
@@ -11,10 +11,12 @@ const mock = {
 };
 
 export const StakingRewardsList: FC = () => {
+  const { handleHarvestAll } = useStakingRewardsListViewModel();
+
   return (
     <RewardInfo
       amount={mock.pendingRewardAmount}
-      onButtonClick={noop}
+      onButtonClick={handleHarvestAll}
       buttonText="Harvest All"
       currency={mock.pendingRewardCurrency}
     />

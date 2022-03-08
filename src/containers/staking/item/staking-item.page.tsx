@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import { useRouter } from 'next/router';
 
 import { PageTitle } from '@components/common/page-title';
+import { TestnetAlert } from '@components/common/testnet-alert';
 import { isUndefined } from '@utils/helpers';
 
 import { StakingDetails } from './components/staking-details';
@@ -24,6 +25,7 @@ export const StakingItemPage: FC = observer(() => {
 
   return (
     <>
+      <TestnetAlert />
       <PageTitle>{getTitle()}</PageTitle>
       <StakingRewardInfo />
       <StickyBlock>
