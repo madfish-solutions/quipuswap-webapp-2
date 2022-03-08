@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { getDepositAmount } from '@api/staking/get-deposit-amount.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
 import { getUserStakingStats } from '@api/staking/get-user-staking-stats.api';
@@ -119,5 +120,18 @@ export class StakingItemStore {
     return await this.getUserData(async (tezos, accountPkh, item) =>
       getUserStakingDelegate(tezos, accountPkh, item.id)
     );
+  }
+
+  private async getUserDepositBalance() {
+    if (
+      isNull(this.rootStore.tezos) ||
+      isNull(this.rootStore.authStore.accountPkh) ||
+      isNull(this.itemStore.data) ||
+      isNull(this.stakingId)
+    ) {
+      return null;
+    }
+
+    return await getDepositAmount(this.rootStore.tezos, this.stakingId, this.rootStore.authStore.accountPkh);
   }
 }
