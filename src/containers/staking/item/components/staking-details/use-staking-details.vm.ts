@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
@@ -67,9 +66,7 @@ export const useStakingDetailsViewModel = () => {
     depositTokenUrl
   } = stakeItem;
 
-  const dailyDistribution = bigNumberToString(
-    fromDecimals(new BigNumber(rewardPerSecond), rewardToken).times(SECONDS_IN_DAY)
-  );
+  const dailyDistribution = bigNumberToString(fromDecimals(rewardPerSecond, rewardToken).times(SECONDS_IN_DAY));
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
     ? getDollarEquivalent(dailyDistribution, bigNumberToString(earnExchangeRate))
     : null;

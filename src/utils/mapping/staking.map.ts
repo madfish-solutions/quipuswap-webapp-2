@@ -55,7 +55,8 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
     apy: mapRawBigNumber(raw.apy),
     depositExchangeRate: new BigNumber(raw.depositExchangeRate),
     earnExchangeRate: new BigNumber(raw.earnExchangeRate),
-    rewardPerShare: new BigNumber(raw.rewardPerShare)
+    rewardPerShare: new BigNumber(raw.rewardPerShare),
+    rewardPerSecond: new BigNumber(raw.rewardPerSecond)
   };
 };
 

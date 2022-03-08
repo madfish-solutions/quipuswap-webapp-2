@@ -67,7 +67,7 @@ interface AbstractStakingItem {
   earnExchangeRate: BigNumber;
   stakeUrl: string;
   depositTokenUrl: string;
-  rewardPerSecond: string;
+  rewardPerSecond: BigNumber;
   currentDelegate: string;
   nextDelegate: string;
   timelock: string;
