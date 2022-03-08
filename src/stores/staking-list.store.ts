@@ -1,5 +1,6 @@
 import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
+import { computed, makeObservable } from 'mobx';
 
 import { getStakingListApi, getStakingStatsApi } from '@api/staking';
 import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
@@ -33,5 +34,9 @@ export class StakingListStore {
     );
   }
 
-  constructor(private rootStore: RootStore) {}
+  constructor(private rootStore: RootStore) {
+    makeObservable(this, {
+      pendingRewards: computed
+    });
+  }
 }
