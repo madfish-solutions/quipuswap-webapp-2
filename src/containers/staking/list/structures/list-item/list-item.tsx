@@ -88,7 +88,7 @@ export const StakingListItem: FC<StakingItem> = ({
                 <StateCurrencyAmount
                   amount={tvl}
                   currency={depositTokenSymbol}
-                  dollarEquivalent={bigNumberToString(tvlDollarEquivalent)}
+                  dollarEquivalent={tvlDollarEquivalent}
                 />
               </ListItemCardCell>
 
