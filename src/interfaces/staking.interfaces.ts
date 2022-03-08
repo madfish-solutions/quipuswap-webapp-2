@@ -29,7 +29,8 @@ export interface RawStakingItem {
   tokenB: Undefined<Token>;
   stakeStatus: StakingStatus;
   rewardToken: Token;
-  tvl: string;
+  tvlInUsd: string;
+  tvlInStakedToken: string;
   apr: Nullable<number>;
   apy: Nullable<number>;
   depositExchangeRate: string;
@@ -43,6 +44,8 @@ export interface RawStakingItem {
   endTime: string;
   harvestFee: string;
   withdrawalFee: string;
+  rewardPerShare: string;
+  udp: string;
   myBalance?: string;
   depositBalance?: string;
   earnBalance?: string;
@@ -55,7 +58,8 @@ interface AbstractStakingItem {
   tokenB: Undefined<Token>;
   stakeStatus: StakingStatus;
   rewardToken: Token;
-  tvl: BigNumber;
+  tvlInUsd: BigNumber;
+  tvlInStakedToken: BigNumber;
   apr: Nullable<BigNumber>;
   apy: Nullable<BigNumber>;
   depositExchangeRate: BigNumber;
@@ -69,6 +73,8 @@ interface AbstractStakingItem {
   endTime: string;
   harvestFee: string;
   withdrawalFee: string;
+  rewardPerShare: BigNumber;
+  udp: string;
 }
 
 export interface UserStakingItem extends AbstractStakingItem {
