@@ -18,18 +18,18 @@ export const useDoHarvestAll = () => {
 
   const doHarvestAll = useCallback(
     async (stakeList: StakingItem[]) => {
-      const stakingIsd: BigNumber[] = [];
+      const stakingIds: BigNumber[] = [];
 
       stakeList.forEach(({ id, earnBalance }) => {
         if (earnBalance?.gt(ZERO_AMOUNT)) {
-          stakingIsd.push(id);
+          stakingIds.push(id);
         }
       });
 
       try {
         const operation = await harvestAllAssets(
           defined(rootStore.tezos),
-          stakingIsd,
+          stakingIds,
           defined(rootStore.authStore.accountPkh)
         );
 
