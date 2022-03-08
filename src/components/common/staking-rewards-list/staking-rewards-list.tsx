@@ -1,22 +1,15 @@
 import { FC } from 'react';
 
-import BigNumber from 'bignumber.js';
 import { noop } from 'rxjs';
+
+import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 
 import { RewardInfo } from '../reward-info';
 
-const mock = {
-  pendingRewardAmount: new BigNumber('100.123'),
-  pendingRewardCurrency: '$'
-};
-
 export const StakingRewardsList: FC = () => {
+  const stakingListStore = useStakingListStore();
+
   return (
-    <RewardInfo
-      amount={mock.pendingRewardAmount}
-      onButtonClick={noop}
-      buttonText="Harvest All"
-      currency={mock.pendingRewardCurrency}
-    />
+    <RewardInfo amount={stakingListStore.pendingRewards} onButtonClick={noop} buttonText="Harvest All" currency="$" />
   );
 };
