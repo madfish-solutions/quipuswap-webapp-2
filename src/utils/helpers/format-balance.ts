@@ -41,7 +41,7 @@ export const formatBalance = (value: string, amountDecimals?: number): string =>
     const formattedDecimal = decimals ? formatDecimal(decimals) : null;
 
     if (formattedDecimal) {
-      return `${integer}.${formattedDecimal.slice(FIRST_POSITION, amountDecimals ?? DEFAULT_BALANCE_LENGTH)}`;
+      return value.slice(FIRST_POSITION, amountDecimals ?? DEFAULT_BALANCE_LENGTH);
     }
 
     return ZERO_STRING;

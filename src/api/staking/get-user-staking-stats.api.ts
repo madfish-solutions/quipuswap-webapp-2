@@ -1,9 +1,11 @@
-import { BigMapAbstraction, TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
 import { STAKING_CONTRACT_ADDRESS } from '@app.config';
 import { RawUserStakingStats } from '@interfaces/staking.interfaces';
 import { getStorageInfo } from '@utils/dapp';
+
+import { StakingContractStorage } from './get-user-staking.types';
 
 const DEFAULT_STATS_VALUE = 0;
 
@@ -12,9 +14,9 @@ export const getUserStakingStats = async (
   accountPkh: string,
   id: BigNumber
 ): Promise<RawUserStakingStats> => {
-  const stakingStorage = await getStorageInfo(tezos, STAKING_CONTRACT_ADDRESS);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const usersInfo: BigMapAbstraction = (stakingStorage as any).storage.users_info;
+  const {
+    storage: { users_info: usersInfo }
+  } = await getStorageInfo<StakingContractStorage>(tezos, STAKING_CONTRACT_ADDRESS);
 
   return (
     (await usersInfo.get([id, accountPkh])) ?? {

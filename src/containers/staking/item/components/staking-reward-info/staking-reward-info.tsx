@@ -12,7 +12,7 @@ import { StateCurrencyAmount } from '@components/ui/state-components/state-curre
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
-import { DashPlugFallbackProps, DashPlugFallback } from '../dash-plug-fallback';
+import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { StakingRewardHeader } from '../staking-reward-header';
 import { useStakingRewardInfoViewModel } from '../staking-reward-info/use-staking-reward-info.vm';
 import { StakingStatsItem } from '../staking-stats-item';
@@ -23,10 +23,6 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-
-const RewardDashPlugFallback: FC<DashPlugFallbackProps> = ({ className, ...restProps }) => (
-  <DashPlugFallback className={cx(className, styles.dash)} {...restProps} />
-);
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
