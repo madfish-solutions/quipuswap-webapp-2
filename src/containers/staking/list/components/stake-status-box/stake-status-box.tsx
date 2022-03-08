@@ -13,8 +13,7 @@ const gradients = {
   [StakingStatus.PENDING]: 'linear-gradient(98deg, #FF6B00 0%, #F9A605 100%)',
   // [StakeStatus.FAILED]: '#EA2424',
   // [StakeStatus.ACTIVATED]: '#A1A4B1',
-  [StakingStatus.DISABLED]: '#A1A4B1',
-  [StakingStatus.FINISHED]: '#A1A4B1'
+  [StakingStatus.DISABLED]: '#A1A4B1'
   // [StakeStatus.PAUSED]: 'linear-gradient(98deg, #FF6B00 0%, #F9A605 100%)'
 };
 
