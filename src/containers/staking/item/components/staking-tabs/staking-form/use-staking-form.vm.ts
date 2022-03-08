@@ -25,8 +25,7 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, inputAmount, selectedBaker, availableBalanceStore } =
-    stakingItemStore;
+  const { itemStore, isLpToken, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
@@ -60,7 +59,7 @@ export const useStakingFormViewModel = () => {
       stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
-  }, [shouldShowBakerInput, formik, stakingItemStore.setSelectedBaker]);
+  }, [shouldShowBakerInput, formik, stakingItemStore]);
 
   // TODO
   // eslint-disable-next-line no-console
