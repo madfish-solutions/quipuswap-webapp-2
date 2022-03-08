@@ -14,7 +14,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
-import { makeBaker } from '../helpers';
+import { canDelegate, makeBaker } from '../../helpers';
 import styles from './staking-details.module.sass';
 
 export const useStakingDetailsViewModel = () => {
@@ -28,6 +28,7 @@ export const useStakingDetailsViewModel = () => {
 
   if (!stakeItem) {
     return {
+      shouldShowDelegates: true,
       endTime: null,
       tvlDollarEquivalent: null,
       dailyDistribution: null,
@@ -77,6 +78,7 @@ export const useStakingDetailsViewModel = () => {
   const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
 
   return {
+    shouldShowDelegates: canDelegate(stakeItem),
     endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent: bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,

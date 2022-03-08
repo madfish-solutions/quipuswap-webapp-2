@@ -1,9 +1,9 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { TEZOS_TOKEN } from '@app.config';
+import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import {
   bigNumberToString,
@@ -17,9 +17,11 @@ import {
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
+import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
@@ -29,7 +31,10 @@ export const useStakingFormViewModel = () => {
 
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
-  const validationSchema = useStakingFormValidation(availableBalance);
+  const shouldShowBakerInput = isNull(stakeItem) || canDelegate(stakeItem);
+  const prevShouldShowBakerInputRef = useRef(true);
+
+  const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput);
 
   const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
@@ -47,6 +52,14 @@ export const useStakingFormViewModel = () => {
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
   });
+
+  useEffect(() => {
+    if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
+      formik.setFieldValue(StakingFormFields.selectedBaker, '');
+      stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
+    }
+    prevShouldShowBakerInputRef.current = shouldShowBakerInput;
+  }, [shouldShowBakerInput, formik, stakingItemStore]);
 
   // TODO
   // eslint-disable-next-line no-console
@@ -85,6 +98,7 @@ export const useStakingFormViewModel = () => {
   }, [stakeItem]);
 
   return {
+    shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
     userTokenBalance,

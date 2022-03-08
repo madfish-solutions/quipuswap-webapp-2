@@ -23,18 +23,21 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const NO_TIMELOCK_VALUE = '0';
 const StakingFallback = () => null;
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['stake']);
   const {
+    shouldShowCandidate,
     stakeItem,
     myDelegate,
     delegatesLoading,
     endTimestamp,
     myEarnDollarEquivalent,
     stakingLoading,
+    timelock,
     handleHarvest
   } = useStakingRewardInfoViewModel();
 
@@ -70,34 +73,38 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem
-        itemName={t('stake|Your delegate')}
-        loading={delegatesLoading}
-        tooltipContent={t('stake|yourDelegateTooltip')}
-      >
-        <StateData data={myDelegate} Fallback={StakingFallback}>
-          {delegate => (
-            <a
-              href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className={cx(styles.delegate, styles.statsValueText)}
-            >
-              {getBakerName(delegate)}
-            </a>
-          )}
-        </StateData>
-      </StakingStatsItem>
+      {shouldShowCandidate && (
+        <StakingStatsItem
+          itemName={t('stake|Your delegate')}
+          loading={delegatesLoading}
+          tooltipContent={t('stake|yourDelegateTooltip')}
+        >
+          <StateData data={myDelegate} Fallback={StakingFallback}>
+            {delegate => (
+              <a
+                href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className={cx(styles.delegate, styles.statsValueText)}
+              >
+                {getBakerName(delegate)}
+              </a>
+            )}
+          </StateData>
+        </StakingStatsItem>
+      )}
 
-      <StakingStatsItem
-        itemName={t('stake|Withdrawal fee ends in')}
-        loading={stakingLoading}
-        tooltipContent={t('stake|feeEndsInTooltip')}
-      >
-        <StateData data={endTimestamp} Fallback={StakingFallback}>
-          {timestamp => <Countdown endTimestamp={timestamp} />}
-        </StateData>
-      </StakingStatsItem>
+      {timelock !== NO_TIMELOCK_VALUE && (
+        <StakingStatsItem
+          itemName={t('stake|Withdrawal fee ends in')}
+          loading={stakingLoading}
+          tooltipContent={t('stake|feeEndsInTooltip')}
+        >
+          <StateData data={endTimestamp} Fallback={StakingFallback}>
+            {timestamp => <Countdown endTimestamp={timestamp} />}
+          </StateData>
+        </StakingStatsItem>
+      )}
     </RewardInfo>
   );
 });
