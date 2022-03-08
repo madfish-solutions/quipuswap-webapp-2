@@ -1,4 +1,6 @@
 import { ZERO_ADDRESS } from '@app.config';
+import { StakingItem } from '@interfaces/staking.interfaces';
+import { isTezosToken } from '@utils/helpers';
 import { Optional, WhitelistedBaker } from '@utils/types';
 
 export const makeBaker = (delegateAddress: Optional<string>, knownBakers: WhitelistedBaker[]) => {
@@ -8,3 +10,5 @@ export const makeBaker = (delegateAddress: Optional<string>, knownBakers: Whitel
 
   return null;
 };
+
+export const canDelegate = (stakeItem: StakingItem) => isTezosToken(stakeItem.tokenA);

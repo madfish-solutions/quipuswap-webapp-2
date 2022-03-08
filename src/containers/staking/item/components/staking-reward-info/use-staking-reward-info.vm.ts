@@ -4,7 +4,7 @@ import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useBakers, useIsLoading, useAccountPkh, useTezos } from '@utils/dapp';
 import { bigNumberToString, getDollarEquivalent } from '@utils/helpers';
 
-import { makeBaker } from '../helpers';
+import { canDelegate, makeBaker } from '../../helpers';
 
 const mockLastStaked = Date.now();
 // eslint-disable-next-line
@@ -31,12 +31,14 @@ export const useStakingRewardInfoViewModel = () => {
 
   if (!stakeItem) {
     return {
+      shouldShowCandidate: true,
       stakeItem,
       myDelegate: null,
       delegatesLoading,
       endTimestamp: null,
       myEarnDollarEquivalent: null,
       stakingLoading,
+      timelock: null,
       handleHarvest
     };
   }
@@ -47,12 +49,14 @@ export const useStakingRewardInfoViewModel = () => {
   );
 
   return {
+    shouldShowCandidate: canDelegate(stakeItem),
     stakeItem,
     myDelegate: makeBaker(mockMyDelegateAddress, bakers),
     delegatesLoading,
     endTimestamp: mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND,
     myEarnDollarEquivalent,
     stakingLoading,
+    timelock: stakeItem.timelock,
     handleHarvest
   };
 };

@@ -7,15 +7,14 @@ import {
   MS_IN_SECOND,
   SECONDS_IN_DAY,
   STAKING_CONTRACT_ADDRESS,
-  TZKT_EXPLORER_URL,
-  USD_DECIMALS
+  TZKT_EXPLORER_URL
 } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
-import { makeBaker } from '../helpers';
+import { canDelegate, makeBaker } from '../../helpers';
 import styles from './staking-details.module.sass';
 
 export const useStakingDetailsViewModel = () => {
@@ -29,6 +28,7 @@ export const useStakingDetailsViewModel = () => {
 
   if (!stakeItem) {
     return {
+      shouldShowDelegates: true,
       endTime: null,
       tvlDollarEquivalent: null,
       dailyDistribution: null,
@@ -56,8 +56,8 @@ export const useStakingDetailsViewModel = () => {
     apr,
     rewardToken,
     stakedToken,
-    tvl: tvlDollarEquivalent,
-    depositExchangeRate,
+    tvlInUsd: tvlDollarEquivalent,
+    tvlInStakedToken: tvl,
     earnExchangeRate,
     rewardPerSecond,
     endTime,
@@ -68,7 +68,6 @@ export const useStakingDetailsViewModel = () => {
     depositTokenUrl
   } = stakeItem;
 
-  const tvl = bigNumberToString(tvlDollarEquivalent.dividedBy(depositExchangeRate).decimalPlaces(USD_DECIMALS));
   const dailyDistribution = bigNumberToString(
     fromDecimals(new BigNumber(rewardPerSecond), rewardToken).times(SECONDS_IN_DAY)
   );
@@ -79,6 +78,7 @@ export const useStakingDetailsViewModel = () => {
   const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
 
   return {
+    shouldShowDelegates: canDelegate(stakeItem),
     endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent: bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
