@@ -2,12 +2,13 @@ import { harvestAssetsApi } from '@api/staking/harvest-assets.api';
 import { MS_IN_SECOND } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useIsLoading, useTezos } from '@utils/dapp';
-import { bigNumberToString, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
+import { bigNumberToString, defined, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
 
-import { canDelegate, getEarnBalance, makeBaker } from '../../helpers';
+import { canDelegate, makeBaker } from '../../helpers';
 
 export const useStakingRewardInfoViewModel = () => {
-  const { itemStore, userStakingDelegateStore, userStakingStatsStore } = useStakingItemStore();
+  const stakingItemStore = useStakingItemStore();
+  const { itemStore, userStakingDelegateStore, userStakingStatsStore } = stakingItemStore;
   const tezos = useTezos();
   const accountPkh = useAccountPkh();
 
@@ -75,9 +76,8 @@ export const useStakingRewardInfoViewModel = () => {
     };
   }
 
-  const earnBalance = stakeItem && stakingStats && getEarnBalance(stakeItem, stakingStats);
   const myEarnDollarEquivalent = getDollarEquivalent(
-    fromDecimals(earnBalance, stakeItem.rewardToken),
+    fromDecimals(defined(stakingItemStore.earnBalance), stakeItem.rewardToken),
     bigNumberToString(stakeItem.earnExchangeRate)
   );
 
@@ -91,7 +91,7 @@ export const useStakingRewardInfoViewModel = () => {
     stakeItem: {
       ...stakeItem,
       depositBalance: fromDecimals(stakingStats.staked, stakeItem.stakedToken),
-      earnBalance
+      earnBalance: defined(stakingItemStore.earnBalance)
     },
     endTimestamp: new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
     myEarnDollarEquivalent,
