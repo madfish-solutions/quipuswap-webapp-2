@@ -11,6 +11,8 @@ export const DEFAULT_BALANCE_LENGTH = 7;
 const DEFAULT_NEGATIVE_BALANCE_LENGTH = 8;
 const ZERO_STRING = '0';
 const MAX_AMOUNT_WITHOUT_LETTERS = 1e6; // 1M
+const ZERO_STRING_LENGTH = 2;
+const SIGN_PASS = 0;
 
 const isZeroString = (value: string) => value === ZERO_STRING;
 
@@ -34,14 +36,16 @@ export const formatIntegerWithDecimals = (value: string) => {
 export const formatBalance = (value: string, amountDecimals?: number): string => {
   const [integer, decimals] = value.split('.');
 
-  const isNegative = Number(integer) < 0;
+  const isNegative = Number(integer) < SIGN_PASS;
   const defaultBalanceLength = isNegative ? DEFAULT_NEGATIVE_BALANCE_LENGTH : DEFAULT_BALANCE_LENGTH;
 
   if (isZeroString(integer)) {
     const formattedDecimal = decimals ? formatDecimal(decimals) : null;
 
     if (formattedDecimal) {
-      return value.slice(FIRST_POSITION, amountDecimals ?? DEFAULT_BALANCE_LENGTH);
+      const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH;
+
+      return value.slice(FIRST_POSITION, decimals + ZERO_STRING_LENGTH);
     }
 
     return ZERO_STRING;

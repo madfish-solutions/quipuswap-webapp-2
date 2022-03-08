@@ -1,6 +1,5 @@
 import { WhitelistedBaker } from '@utils/types';
 
-import { isBackerNotEmpty } from './is-backer-not-empty';
 import { shortize } from './shortize';
 
 export enum AddressTransformation {
@@ -9,7 +8,7 @@ export enum AddressTransformation {
 }
 
 export const getBakerName = (baker: WhitelistedBaker, addressTransformation = AddressTransformation.SHORTIZE) => {
-  if (isBackerNotEmpty(baker)) {
+  if ('name' in baker) {
     return baker.name;
   }
 

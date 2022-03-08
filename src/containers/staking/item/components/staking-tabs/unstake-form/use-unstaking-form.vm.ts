@@ -11,7 +11,7 @@ import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, isLpToken, inputAmount, depositBalanceStore } = stakingItemStore;
+  const { itemStore, inputAmount, depositBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: depositBalance } = depositBalanceStore;
 
@@ -19,7 +19,7 @@ export const useUnstakingFormViewModel = () => {
 
   const validationSchema = useUnstakingFormValidation(depositBalanceStore.data);
 
-  const handleStakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
+  const handleUnstakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
@@ -32,12 +32,8 @@ export const useUnstakingFormViewModel = () => {
       [UnstakingFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleStakeSubmit
+    onSubmit: handleUnstakeSubmit
   });
-
-  // TODO
-  // eslint-disable-next-line no-console
-  console.log('isLpToken', isLpToken);
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
   const inputAmountError =

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
 import { getDepositAmount } from '@api/staking/get-deposit-amount.api';
@@ -48,8 +48,6 @@ export class StakingItemStore {
       inputAmount: observable,
       selectedBaker: observable,
 
-      isLpToken: computed,
-
       setTab: action,
       clearBalance: action,
       setInputAmount: action,
@@ -76,10 +74,6 @@ export class StakingItemStore {
 
   setStakingId(stakingId: Nullable<BigNumber>) {
     this.stakingId = stakingId;
-  }
-
-  get isLpToken() {
-    return Boolean(this.itemStore.data?.tokenB);
   }
 
   private async getUserTokenBalance() {
