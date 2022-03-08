@@ -25,7 +25,7 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
-  const { itemStore, isLpToken, inputAmount, selectedBaker, setSelectedBaker, availableBalanceStore } =
+  const { itemStore, isLpToken, inputAmount, selectedBaker, availableBalanceStore } =
     stakingItemStore;
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
@@ -57,10 +57,10 @@ export const useStakingFormViewModel = () => {
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
       formik.setFieldValue(StakingFormFields.selectedBaker, '');
-      setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
+      stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
-  }, [shouldShowBakerInput, formik, setSelectedBaker]);
+  }, [shouldShowBakerInput, formik, stakingItemStore.setSelectedBaker]);
 
   // TODO
   // eslint-disable-next-line no-console
@@ -83,7 +83,7 @@ export const useStakingFormViewModel = () => {
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
-    setSelectedBaker(baker);
+    stakingItemStore.setSelectedBaker(baker);
     formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
   };
 
