@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
-import { FALLBACK_BAKER, TEZOS_TOKEN } from '@app.config';
+import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useLoadTokenBalance } from '@containers/liquidity/liquidity-cards/hooks';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { bigNumberToString, defined, isEmptyArray, isNull, isExist, getTokenPairSlug } from '@utils/helpers';
@@ -48,7 +48,7 @@ export const useStakingFormViewModel = () => {
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
       formik.setFieldValue(StakingFormFields.selectedBaker, '');
-      setSelectedBaker(shouldShowBakerInput ? null : { address: FALLBACK_BAKER });
+      setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, setSelectedBaker]);

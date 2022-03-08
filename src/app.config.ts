@@ -226,9 +226,9 @@ export const HANGZHOUNET_BAKERS: WhitelistedBaker[] = [
   }
 ];
 
-const fallbackBakers: Record<QSNets, string> = {
+const dummyBakers: Record<QSNets, string> = {
   [QSNets.mainnet]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
   [QSNets.hangzhounet]: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9'
 };
 
-export const FALLBACK_BAKER = fallbackBakers[NETWORK_ID];
+export const DUMMY_BAKER = dummyBakers[NETWORK_ID];

@@ -23,6 +23,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
+const NO_TIMELOCK_VALUE = '0';
 const StakingFallback = () => null;
 
 export const StakingRewardInfo: FC = observer(() => {
@@ -36,6 +37,7 @@ export const StakingRewardInfo: FC = observer(() => {
     endTimestamp,
     myEarnDollarEquivalent,
     stakingLoading,
+    timelock,
     handleHarvest
   } = useStakingRewardInfoViewModel();
 
@@ -92,15 +94,17 @@ export const StakingRewardInfo: FC = observer(() => {
         </StakingStatsItem>
       )}
 
-      <StakingStatsItem
-        itemName={t('stake|Withdrawal fee ends in')}
-        loading={stakingLoading}
-        tooltipContent={t('stake|feeEndsInTooltip')}
-      >
-        <StateData data={endTimestamp} Fallback={StakingFallback}>
-          {timestamp => <Countdown endTimestamp={timestamp} />}
-        </StateData>
-      </StakingStatsItem>
+      {timelock !== NO_TIMELOCK_VALUE && (
+        <StakingStatsItem
+          itemName={t('stake|Withdrawal fee ends in')}
+          loading={stakingLoading}
+          tooltipContent={t('stake|feeEndsInTooltip')}
+        >
+          <StateData data={endTimestamp} Fallback={StakingFallback}>
+            {timestamp => <Countdown endTimestamp={timestamp} />}
+          </StateData>
+        </StakingStatsItem>
+      )}
     </RewardInfo>
   );
 });

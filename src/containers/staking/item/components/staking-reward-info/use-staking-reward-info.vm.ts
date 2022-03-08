@@ -38,6 +38,7 @@ export const useStakingRewardInfoViewModel = () => {
       endTimestamp: null,
       myEarnDollarEquivalent: null,
       stakingLoading,
+      timelock: null,
       handleHarvest
     };
   }
@@ -55,6 +56,7 @@ export const useStakingRewardInfoViewModel = () => {
     endTimestamp: mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND,
     myEarnDollarEquivalent,
     stakingLoading,
+    timelock: stakeItem.timelock,
     handleHarvest
   };
 };
