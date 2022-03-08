@@ -24,6 +24,7 @@ export const StakingListPage = observer(() => {
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton />}>
         <Iterator
           data={list}
+          keyFn={item => item.id.toFixed()}
           render={StakingListItem}
           fallback={<EmptyStakeList />}
           isGrouped

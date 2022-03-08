@@ -1,5 +1,5 @@
-@import "@styles/variables";
-@import "@styles/breakpoints";
+@import '@styles/variables';
+@import '@styles/breakpoints';
 
 .card {
   margin-bottom: 48px;
@@ -33,14 +33,13 @@
   width: 160px;
 }
 
-@include media(">phone") {
+@include media('>phone') {
   .button {
     width: 160px;
   }
 }
 
-
-@include media(">SDesktop") {
+@include media('>SDesktop') {
   .userRewards {
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: auto auto;
@@ -50,7 +49,9 @@
     display: flex;
     column-gap: 32px;
   }
+}
 
+@include media('>Lphone') {
   .button {
     align-self: end;
   }

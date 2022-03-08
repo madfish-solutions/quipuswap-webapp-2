@@ -5,7 +5,6 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
-import { noop } from 'rxjs';
 
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
@@ -39,7 +38,8 @@ export const StakingRewardInfo: FC = observer(() => {
     endTimestamp,
     myEarnDollarEquivalent,
     myShareDollarEquivalent,
-    stakingLoading
+    stakingLoading,
+    handleHarvest
   } = useStakingRewardInfoViewModel();
 
   return (
@@ -50,11 +50,16 @@ export const StakingRewardInfo: FC = observer(() => {
         content: <StakingRewardHeader />,
         className: styles.rewardHeader
       }}
-      onButtonClick={noop}
+      onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
+      rewardTooltip={t('stake|singleFarmRewardTooltip')}
       currency="$"
     >
-      <StakingStatsItem itemName={t('stake|Your Share')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Your Share')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|yourShareTooltip')}
+      >
         <StateData data={stakeItem} Fallback={RewardDashPlugFallback}>
           {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
@@ -69,8 +74,12 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Your delegate')} loading={delegatesLoading}>
-        <StateData data={myDelegate} isLoading={delegatesLoading} Fallback={RewardDashPlugFallback}>
+      <StakingStatsItem
+        itemName={t('stake|Your delegate')}
+        loading={delegatesLoading}
+        tooltipContent={t('stake|yourDelegateTooltip')}
+      >
+        <StateData data={myDelegate} Fallback={RewardDashPlugFallback}>
           {delegate => (
             <a
               href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
@@ -84,7 +93,11 @@ export const StakingRewardInfo: FC = observer(() => {
         </StateData>
       </StakingStatsItem>
 
-      <StakingStatsItem itemName={t('stake|Withdrawal fee ends in')} loading={stakingLoading}>
+      <StakingStatsItem
+        itemName={t('stake|Withdrawal fee ends in')}
+        loading={stakingLoading}
+        tooltipContent={t('stake|feeEndsInTooltip')}
+      >
         <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
           {timestamp => <Countdown endTimestamp={timestamp} />}
         </StateData>
