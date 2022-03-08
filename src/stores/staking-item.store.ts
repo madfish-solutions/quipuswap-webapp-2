@@ -7,13 +7,8 @@ import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
 import { getUserStakingStats } from '@api/staking/get-user-staking-stats.api';
 import { StakingTabs } from '@containers/staking/item/types';
-import {
-  RawStakingItem,
-  RawUserStakingStats,
-  StakingItem,
-  StakingStatus,
-  UserStakingStats
-} from '@interfaces/staking.interfaces';
+import { RawUserStakingStats } from '@interfaces/staking-storage.interfaces';
+import { RawStakingItem, StakingItem, StakingStatus, UserStakingStats } from '@interfaces/staking.interfaces';
 import { isNull, toDecimals, toIntegerSeconds } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { noopMap } from '@utils/mapping/noop.map';

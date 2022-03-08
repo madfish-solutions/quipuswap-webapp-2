@@ -1,4 +1,4 @@
-import { RawUserStakingStats } from '@interfaces/staking.interfaces';
+import { RawUserStakingStats } from '@interfaces/staking-storage.interfaces';
 import { Nullable } from '@utils/types';
 
 export const mapUserStakingStats = (raw: Nullable<RawUserStakingStats>) =>

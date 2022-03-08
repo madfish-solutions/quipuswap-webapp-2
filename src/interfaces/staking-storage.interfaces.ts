@@ -1,7 +1,7 @@
 import { BigMapAbstraction, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-export interface StakingStorate {
+export interface StakingStorage {
   storage: {
     admin: string;
     baker_registry: string;
@@ -21,7 +21,7 @@ export interface StakingStorate {
   t_farm_lambdas: BigMapAbstraction;
 }
 
-export interface StakedAmount {
+export interface RawUserStakingStats {
   allowances: Array<TransferParams>;
   claimed: BigNumber;
   earned: BigNumber;

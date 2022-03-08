@@ -89,15 +89,6 @@ export interface NoUserStakingItem extends AbstractStakingItem {
   earnBalance: null;
 }
 
-export interface RawUserStakingStats {
-  last_staked: string;
-  staked: BigNumber;
-  earned: BigNumber;
-  claimed: BigNumber;
-  prev_earned: BigNumber;
-  prev_staked: BigNumber;
-}
-
 export interface UserStakingStats {
   lastStaked: string;
   staked: BigNumber;
