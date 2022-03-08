@@ -11,6 +11,8 @@ import {
 import { getTokensName, isExist, isUndefined } from '@utils/helpers';
 import { Token } from '@utils/types';
 
+import { balanceMap } from './balance.map';
+
 const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
   ...raw,
   fa2TokenId: raw.fa2TokenId === undefined ? undefined : Number(raw.fa2TokenId),
@@ -22,12 +24,14 @@ const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T): 
 
 export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
   let balances: NoUserStakingItem | UserStakingItem;
+  const stakedToken = mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB));
+  const rewardToken = mapStakingToken(raw.rewardToken);
 
   if (!isUndefined(raw.myBalance) && !isUndefined(raw.depositBalance) && !isUndefined(raw.earnBalance)) {
     balances = {
-      myBalance: new BigNumber(raw.myBalance),
-      depositBalance: new BigNumber(raw.depositBalance),
-      earnBalance: new BigNumber(raw.earnBalance)
+      myBalance: balanceMap(new BigNumber(raw.myBalance), stakedToken),
+      depositBalance: balanceMap(new BigNumber(raw.depositBalance), stakedToken),
+      earnBalance: balanceMap(new BigNumber(raw.earnBalance), rewardToken)
     } as UserStakingItem;
   } else {
     balances = {
@@ -43,13 +47,15 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
     id: new BigNumber(raw.id),
     tokenA: mapStakingToken(raw.tokenA),
     tokenB: raw.tokenB ? mapStakingToken(raw.tokenB) : undefined,
-    stakedToken: mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB)),
-    rewardToken: mapStakingToken(raw.rewardToken),
-    tvl: new BigNumber(raw.tvl),
+    stakedToken,
+    rewardToken,
+    tvlInUsd: new BigNumber(raw.tvlInUsd),
+    tvlInStakedToken: new BigNumber(raw.tvlInStakedToken),
     apr: mapRawBigNumber(raw.apr),
     apy: mapRawBigNumber(raw.apy),
     depositExchangeRate: new BigNumber(raw.depositExchangeRate),
-    earnExchangeRate: new BigNumber(raw.earnExchangeRate)
+    earnExchangeRate: new BigNumber(raw.earnExchangeRate),
+    rewardPerShare: new BigNumber(raw.rewardPerShare)
   };
 };
 
