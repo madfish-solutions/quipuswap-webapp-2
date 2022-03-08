@@ -19,8 +19,7 @@ export interface StakeStats {
 export enum StakingStatus {
   ACTIVE = 'ACTIVE',
   PENDING = 'PENDING',
-  DISABLED = 'DISABLED',
-  FINISHED = 'FINISHED'
+  DISABLED = 'DISABLED'
 }
 
 export interface RawStakingItem {
