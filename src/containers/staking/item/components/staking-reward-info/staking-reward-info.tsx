@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
+// import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
@@ -35,8 +35,8 @@ export const StakingRewardInfo: FC = observer(() => {
     myDelegate,
     delegatesLoading,
     endTimestamp,
-    myEarnDollarEquivalent,
     myShareDollarEquivalent,
+    myEarnTokens,
     stakingLoading,
     timelock,
     handleHarvest
@@ -44,7 +44,7 @@ export const StakingRewardInfo: FC = observer(() => {
 
   return (
     <RewardInfo
-      amount={myEarnDollarEquivalent ? new BigNumber(myEarnDollarEquivalent) : null}
+      amount={myEarnTokens}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{
         content: <StakingRewardHeader />,
@@ -53,7 +53,7 @@ export const StakingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
       rewardTooltip={t('stake|singleFarmRewardTooltip')}
-      currency="$"
+      currency={stakeItem ? getTokenSymbol(stakeItem.rewardToken) : '\u00a0'}
     >
       <StakingStatsItem
         itemName={t('stake|Your Share')}

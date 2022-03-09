@@ -45,7 +45,7 @@ export const useStakingRewardInfoViewModel = () => {
       myDelegate: null,
       delegatesLoading,
       endTimestamp: null,
-      myEarnDollarEquivalent: null,
+      myEarnTokens: null,
       myShareDollarEquivalent: null,
       stakingLoading,
       timelock: null,
@@ -67,15 +67,12 @@ export const useStakingRewardInfoViewModel = () => {
       ...commonProps,
       stakeItem,
       endTimestamp: null,
-      myEarnDollarEquivalent: null,
+      myEarnTokens: null,
       myShareDollarEquivalent: null
     };
   }
 
-  const myEarnDollarEquivalent = getDollarEquivalent(
-    fromDecimals(defined(stakingItemStore.earnBalance), stakeItem.rewardToken),
-    bigNumberToString(stakeItem.earnExchangeRate)
-  );
+  const myEarnTokens = fromDecimals(defined(stakingItemStore.earnBalance), stakeItem.rewardToken);
 
   const myShareDollarEquivalent = getDollarEquivalent(
     fromDecimals(stakingStats.staked, stakeItem.stakedToken),
@@ -90,7 +87,7 @@ export const useStakingRewardInfoViewModel = () => {
       earnBalance: defined(stakingItemStore.earnBalance)
     },
     endTimestamp: new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
-    myEarnDollarEquivalent,
+    myEarnTokens,
     myShareDollarEquivalent,
     stakingLoading
   };
