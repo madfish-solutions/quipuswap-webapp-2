@@ -21,6 +21,7 @@ import { RootStore } from './root.store';
 
 const NO_BALANCE_VALUE = 0;
 const DEFAULT_INPUT_AMOUNT = 0;
+const REWARD_PRECISION = new BigNumber('1e18');
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
@@ -117,7 +118,10 @@ export class StakingItemStore {
       reward.dividedToIntegerBy(toDecimals(tvlInStakedToken, stakeItem.stakedToken))
     );
 
-    return stakingStats.earned.plus(stakingStats.staked.times(rewardPerShare)).minus(stakingStats.prevEarned);
+    return stakingStats.earned
+      .plus(stakingStats.staked.times(rewardPerShare))
+      .minus(stakingStats.prevEarned)
+      .dividedToIntegerBy(REWARD_PRECISION);
   }
 
   private getUserData = async <T>(
