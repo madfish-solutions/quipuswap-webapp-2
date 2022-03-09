@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
-import { Card } from '@quipuswap/ui-kit';
+import { Card, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import cx from 'classnames';
 
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
@@ -33,6 +34,11 @@ const MY_DEPOSIT_TOOLTIP = 'My Deposit tooltip';
 const MY_EARNED = 'My Earned';
 const MY_EARNED_TOOLTIP = 'My Earned tooltip';
 
+const themeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
 export const StakingListItem: FC<StakingItem> = ({
   id,
   tokenA,
@@ -51,6 +57,8 @@ export const StakingListItem: FC<StakingItem> = ({
   depositBalance,
   earnBalance
 }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
+
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
@@ -64,7 +72,7 @@ export const StakingListItem: FC<StakingItem> = ({
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
   return (
-    <Card className={styles.card}>
+    <Card className={cx(styles.card, themeClass[colorThemeMode])}>
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>

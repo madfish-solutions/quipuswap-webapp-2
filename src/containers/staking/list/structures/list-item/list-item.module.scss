@@ -1,4 +1,5 @@
 @import "@styles/breakpoints";
+@import "@styles/variables";
 
 .card {
   padding: 24px;
@@ -68,6 +69,24 @@
   display: flex;
   column-gap: 24px;
 }
+
+.light {
+  .userData {
+    &::before {
+      background-color: $text-03;
+    }
+  }
+}
+
+.dark {
+  .userData {
+    &::before {
+      background-color: $text-02;
+    }
+  }
+
+}
+
 
 @include media(">phone", "<Lphone") {
   .stats {
@@ -202,8 +221,6 @@
       top: 50%;
       transform: translateY(-50%);
       margin-left: -28px;
-
-      background: #8b90a0;
     }
   }
 
