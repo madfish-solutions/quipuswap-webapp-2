@@ -37,7 +37,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
+export const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
