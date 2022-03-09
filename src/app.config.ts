@@ -166,7 +166,14 @@ export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
 export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
-export const STALKING_API_URL = process.env.NEXT_PUBLIC_STALKING_API_URL!;
+
+export const STALKING_API_URLS = {
+  [QSNets.mainnet]: process.env.NEXT_PUBLIC_MAINNET_STALKING_API_URL!,
+  [QSNets.hangzhounet]: process.env.NEXT_PUBLIC_HANGZHOUNET_STALKING_API_URL!
+};
+
+export const STALKING_API_URL = STALKING_API_URLS[NETWORK_ID]!;
+
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
