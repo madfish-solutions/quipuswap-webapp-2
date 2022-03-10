@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { RawStakingItem, RawStakeStats, StakingItem, StakeStats, UserBalances } from '@interfaces/staking.interfaces';
+import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
 import { getTokensName, isExist } from '@utils/helpers';
-import { Token } from '@utils/types';
+import { Optional, Token } from '@utils/types';
 
 import { balanceMap } from './balance.map';
 
@@ -15,30 +15,27 @@ const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
 const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T): BigNumber | T =>
   isExist(raw) ? new BigNumber(raw) : raw;
 
+const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
+  if (isExist(balanceAmount)) {
+    return balanceMap(new BigNumber(balanceAmount), token);
+  }
+
+  return null;
+};
+
 export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
-  const balances: UserBalances = {
-    myBalance: null,
-    depositBalance: null,
-    earnBalance: null
-  };
   const stakedToken = mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB));
   const rewardToken = mapStakingToken(raw.rewardToken);
 
-  if (isExist(raw.myBalance)) {
-    balances.myBalance = balanceMap(new BigNumber(raw.myBalance), stakedToken);
-  }
-
-  if (isExist(raw.depositBalance)) {
-    balances.depositBalance = balanceMap(new BigNumber(raw.depositBalance), stakedToken);
-  }
-
-  if (isExist(raw.earnBalance)) {
-    balances.earnBalance = balanceMap(new BigNumber(raw.earnBalance), rewardToken);
-  }
+  const myBalance = nullableBalanceMap(raw.myBalance, stakedToken);
+  const depositBalance = nullableBalanceMap(raw.depositBalance, stakedToken);
+  const earnBalance = nullableBalanceMap(raw.earnBalance, rewardToken);
 
   return {
     ...raw,
-    ...balances,
+    myBalance,
+    depositBalance,
+    earnBalance,
     id: new BigNumber(raw.id),
     tokenA: mapStakingToken(raw.tokenA),
     tokenB: raw.tokenB ? mapStakingToken(raw.tokenB) : undefined,
