@@ -23,14 +23,12 @@ export class StakingListStore {
 
   get pendingRewards() {
     const rewardsInUsd = this.listStore.data.map(({ earnBalance, earnExchangeRate }) =>
-      earnBalance?.multipliedBy(earnExchangeRate)
+      earnBalance && earnExchangeRate ? earnBalance.multipliedBy(earnExchangeRate) : null
     );
 
-    return (
-      rewardsInUsd.reduce(
-        (prevValue, currentValue) => prevValue?.plus(currentValue ?? ZERO_AMOUNT),
-        new BigNumber(ZERO_AMOUNT)
-      ) ?? null
+    return rewardsInUsd.reduce<BigNumber>(
+      (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
+      new BigNumber(ZERO_AMOUNT)
     );
   }
 

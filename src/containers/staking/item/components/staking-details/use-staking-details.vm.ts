@@ -69,10 +69,10 @@ export const useStakingDetailsViewModel = () => {
   } = stakeItem;
 
   const dailyDistribution = bigNumberToString(
-    fromDecimals(new BigNumber(rewardPerSecond), rewardToken).times(SECONDS_IN_DAY)
+    fromDecimals(rewardPerSecond.times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken)
   );
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
-    ? getDollarEquivalent(dailyDistribution, bigNumberToString(earnExchangeRate))
+    ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
     : null;
   const currentDelegate = makeBaker(stakeItem.currentDelegate, bakers);
   const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
@@ -80,7 +80,7 @@ export const useStakingDetailsViewModel = () => {
   return {
     shouldShowDelegates: canDelegate(stakeItem),
     endTime: new Date(endTime).getTime(),
-    tvlDollarEquivalent: bigNumberToString(tvlDollarEquivalent),
+    tvlDollarEquivalent: tvlDollarEquivalent && bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
     distributionDollarEquivalent,
     apr: apr ? bigNumberToString(apr) : null,
