@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import {
@@ -16,6 +17,9 @@ import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } 
 import { canDelegate, makeBaker } from '../../helpers';
 import styles from './staking-details.module.sass';
 
+const NO_WITHDRAWAL_FEE_VALUE = 0;
+const NO_TIMELOCK_VALUE = '0';
+
 export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
@@ -28,6 +32,8 @@ export const useStakingDetailsViewModel = () => {
   if (!stakeItem) {
     return {
       shouldShowDelegates: true,
+      shouldShowLockPeriod: true,
+      shouldShowWithdrawalFee: true,
       endTime: null,
       tvlDollarEquivalent: null,
       dailyDistribution: null,
@@ -67,17 +73,21 @@ export const useStakingDetailsViewModel = () => {
     depositTokenUrl
   } = stakeItem;
 
-  const dailyDistribution = bigNumberToString(fromDecimals(rewardPerSecond, rewardToken).times(SECONDS_IN_DAY));
+  const dailyDistribution = bigNumberToString(
+    fromDecimals(rewardPerSecond.times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken)
+  );
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
-    ? getDollarEquivalent(dailyDistribution, bigNumberToString(earnExchangeRate))
+    ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
     : null;
   const currentDelegate = makeBaker(stakeItem.currentDelegate, bakers);
   const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
 
   return {
     shouldShowDelegates: canDelegate(stakeItem),
+    shouldShowLockPeriod: timelock !== NO_TIMELOCK_VALUE,
+    shouldShowWithdrawalFee: !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE),
     endTime: new Date(endTime).getTime(),
-    tvlDollarEquivalent: bigNumberToString(tvlDollarEquivalent),
+    tvlDollarEquivalent: tvlDollarEquivalent && bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
     distributionDollarEquivalent,
     apr: apr ? bigNumberToString(apr) : null,

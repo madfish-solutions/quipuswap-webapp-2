@@ -10,15 +10,7 @@ interface Props {
   isLoading: boolean;
   value: Nullable<BigNumber.Value>;
 }
-const PERCENTAGE_DECIMALS = 3;
 
 export const StatePercentage: FC<Props> = ({ isLoading, value }) => {
-  return (
-    <StateCurrencyAmount
-      isError={!isLoading && isNull(value)}
-      amount={value}
-      amountDecimals={PERCENTAGE_DECIMALS}
-      currency="%"
-    />
-  );
+  return <StateCurrencyAmount isError={!isLoading && isNull(value)} amount={value} currency="%" />;
 };

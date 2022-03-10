@@ -2,7 +2,7 @@ import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useIsLoading } from '@utils/dapp';
-import { bigNumberToString, defined, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
+import { defined, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
@@ -76,7 +76,7 @@ export const useStakingRewardInfoViewModel = () => {
 
   const myShareDollarEquivalent = getDollarEquivalent(
     fromDecimals(stakingStats.staked, stakeItem.stakedToken),
-    bigNumberToString(stakeItem.depositExchangeRate)
+    stakeItem.depositExchangeRate
   );
 
   return {
@@ -88,7 +88,6 @@ export const useStakingRewardInfoViewModel = () => {
     },
     endTimestamp: new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
     myEarnTokens,
-    myShareDollarEquivalent,
-    stakingLoading
+    myShareDollarEquivalent
   };
 };
