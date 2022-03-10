@@ -21,7 +21,7 @@ export const useUnstakingFormViewModel = () => {
 
   const validationSchema = useUnstakingFormValidation(depositBalance);
 
-  const handleUnstakeSubmit = async (_values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
+  const handleUnstakeSubmit = async (_: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);

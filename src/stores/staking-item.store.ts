@@ -1,4 +1,3 @@
-import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
@@ -7,9 +6,9 @@ import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
 import { getUserStakingStats } from '@api/staking/get-user-staking-stats.api';
 import { StakingTabs } from '@containers/staking/item/types';
-import { RawUserStakingStats } from '@interfaces/staking-storage.interfaces';
-import { RawStakingItem, StakingItem, StakingStatus, UserStakingStats } from '@interfaces/staking.interfaces';
-import { isNull, toDecimals, toIntegerSeconds } from '@utils/helpers';
+import { StakedAmount } from '@interfaces/staking-storage.interfaces';
+import { RawStakingItem, StakingItem, UserStakingStats } from '@interfaces/staking.interfaces';
+import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
@@ -19,16 +18,14 @@ import { Nullable, WhitelistedBaker } from '@utils/types';
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
-const NO_BALANCE_VALUE = 0;
 const DEFAULT_INPUT_AMOUNT = 0;
-const REWARD_PRECISION = new BigNumber('1e18');
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
 
   itemStore = new LoadingErrorData<RawStakingItem, Nullable<StakingItem>>(
     null,
-    async () => await getStakingItemApi(this.stakingId),
+    async () => await getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh),
     mapStakeItem
   );
 
@@ -38,7 +35,7 @@ export class StakingItemStore {
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  userStakingStatsStore = new LoadingErrorData<Nullable<RawUserStakingStats>, Nullable<UserStakingStats>>(
+  userStakingStatsStore = new LoadingErrorData<Nullable<StakedAmount>, Nullable<UserStakingStats>>(
     null,
     async () => await this.getUserStakingStats(),
     mapUserStakingStats
@@ -62,7 +59,6 @@ export class StakingItemStore {
       selectedBaker: observable,
 
       isLpToken: computed,
-      earnBalance: computed,
 
       setTab: action,
       clearBalance: action,
@@ -96,37 +92,7 @@ export class StakingItemStore {
     return Boolean(this.itemStore.data?.tokenB);
   }
 
-  get earnBalance() {
-    const stakeItem = this.itemStore.data;
-    const stakingStats = this.userStakingStatsStore.data;
-
-    if (isNull(stakeItem) || isNull(stakingStats)) {
-      return null;
-    }
-
-    if (stakeItem.stakeStatus === StakingStatus.PENDING || stakingStats.staked.eq(NO_BALANCE_VALUE)) {
-      return new BigNumber(NO_BALANCE_VALUE);
-    }
-
-    const { tvlInStakedToken } = stakeItem;
-    const now = toIntegerSeconds(Date.now());
-    const endTimestamp = toIntegerSeconds(new Date(stakeItem.endTime));
-    const lastUpdateTimestamp = toIntegerSeconds(new Date(stakeItem.udp));
-    const timeDiff = Math.min(now, endTimestamp) - lastUpdateTimestamp;
-    const reward = stakeItem.rewardPerSecond.times(timeDiff);
-    const rewardPerShare = stakeItem.rewardPerShare.plus(
-      reward.dividedToIntegerBy(toDecimals(tvlInStakedToken, stakeItem.stakedToken))
-    );
-
-    return stakingStats.earned
-      .plus(stakingStats.staked.times(rewardPerShare))
-      .minus(stakingStats.prevEarned)
-      .dividedToIntegerBy(REWARD_PRECISION);
-  }
-
-  private getUserData = async <T>(
-    fetchFn: (tezos: TezosToolkit, accountPkh: string, item: StakingItem) => Promise<T>
-  ) => {
+  private async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
 
@@ -134,22 +100,28 @@ export class StakingItemStore {
       return null;
     }
 
-    return await fetchFn(tezos, authStore.accountPkh, item);
-  };
-
-  private async getUserTokenBalance() {
-    return await this.getUserData(async (tezos, accountPkh, item) =>
-      getUserTokenBalance(tezos, accountPkh, item.stakedToken)
-    );
+    return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }
 
   private async getUserStakingStats() {
-    return await this.getUserData(async (tezos, accountPkh, item) => getUserStakingStats(tezos, accountPkh, item.id));
+    const { tezos, authStore } = this.rootStore;
+    const { data: item } = this.itemStore;
+
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+      return null;
+    }
+
+    return await getUserStakingStats(tezos, authStore.accountPkh, item.id);
   }
 
   private async getUserStakingDelegate() {
-    return await this.getUserData(async (tezos, accountPkh, item) =>
-      getUserStakingDelegate(tezos, accountPkh, item.id)
-    );
+    const { tezos, authStore } = this.rootStore;
+    const { data: item } = this.itemStore;
+
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+      return null;
+    }
+
+    return await getUserStakingDelegate(tezos, authStore.accountPkh, item.id);
   }
 }

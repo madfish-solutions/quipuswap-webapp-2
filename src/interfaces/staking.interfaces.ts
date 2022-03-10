@@ -98,6 +98,4 @@ export interface UserStakingStats {
   prevStaked: BigNumber;
 }
 
-// interface UserStakingItem extends AbstractStakingItem, UserStakingData {}
-
 export type StakingItem = NoUserStakingItem | UserStakingItem;

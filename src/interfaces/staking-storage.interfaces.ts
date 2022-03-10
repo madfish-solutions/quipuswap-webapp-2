@@ -21,7 +21,7 @@ export interface StakingStorage {
   t_farm_lambdas: BigMapAbstraction;
 }
 
-export interface RawUserStakingStats {
+export interface StakedAmount {
   allowances: Array<TransferParams>;
   claimed: BigNumber;
   earned: BigNumber;

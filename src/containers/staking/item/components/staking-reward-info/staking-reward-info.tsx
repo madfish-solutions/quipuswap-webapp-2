@@ -34,8 +34,9 @@ export const StakingRewardInfo: FC = observer(() => {
     myDelegate,
     delegatesLoading,
     endTimestamp,
-    myShareDollarEquivalent,
+    myDepositDollarEquivalent,
     myEarnTokens,
+    rewardTokenSymbol,
     stakingLoading,
     timelock,
     handleHarvest
@@ -52,7 +53,7 @@ export const StakingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
       rewardTooltip={t('stake|singleFarmRewardTooltip')}
-      currency={stakeItem ? getTokenSymbol(stakeItem.rewardToken) : '\u00a0'}
+      currency={rewardTokenSymbol}
     >
       <StakingStatsItem
         itemName={t('stake|Your Share')}
@@ -65,7 +66,7 @@ export const StakingRewardInfo: FC = observer(() => {
               amount={depositBalance}
               className={styles.statsValueText}
               currency={getTokenSymbol(stakedToken)}
-              dollarEquivalent={myShareDollarEquivalent}
+              dollarEquivalent={myDepositDollarEquivalent}
               amountDecimals={stakedToken.metadata.decimals}
               labelSize="large"
             />

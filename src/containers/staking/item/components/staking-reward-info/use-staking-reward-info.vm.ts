@@ -2,16 +2,18 @@ import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useIsLoading } from '@utils/dapp';
-import { defined, fromDecimals, getDollarEquivalent, isExist, isNull } from '@utils/helpers';
+import { getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
+const TOKEN_SYMBOL_FILLER = '\u00a0';
+
 export const useStakingRewardInfoViewModel = () => {
+  const { doHarvest } = useDoHarvest();
   const stakingItemStore = useStakingItemStore();
   const { itemStore, userStakingDelegateStore, userStakingStatsStore } = stakingItemStore;
   const accountPkh = useAccountPkh();
 
-  const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
   const {
@@ -46,48 +48,28 @@ export const useStakingRewardInfoViewModel = () => {
       delegatesLoading,
       endTimestamp: null,
       myEarnTokens: null,
-      myShareDollarEquivalent: null,
+      myDepositDollarEquivalent: null,
+      rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
       stakingLoading,
       timelock: null,
       handleHarvest
     };
   }
 
-  const commonProps = {
-    myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
+  const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
+
+  return {
     shouldShowCandidate: canDelegate(stakeItem),
+    stakeItem,
+    myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
+    endTimestamp:
+      stakingStats && new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
+    myEarnTokens: stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null,
+    myDepositDollarEquivalent,
+    rewardTokenSymbol: stakeItem ? getTokenSymbol(stakeItem.rewardToken) : TOKEN_SYMBOL_FILLER,
     stakingLoading,
     timelock: stakeItem.timelock,
     handleHarvest
-  };
-
-  if (!stakingStats) {
-    return {
-      ...commonProps,
-      stakeItem,
-      endTimestamp: null,
-      myEarnTokens: null,
-      myShareDollarEquivalent: null
-    };
-  }
-
-  const myEarnTokens = fromDecimals(defined(stakingItemStore.earnBalance), stakeItem.rewardToken);
-
-  const myShareDollarEquivalent = getDollarEquivalent(
-    fromDecimals(stakingStats.staked, stakeItem.stakedToken),
-    stakeItem.depositExchangeRate
-  );
-
-  return {
-    ...commonProps,
-    stakeItem: {
-      ...stakeItem,
-      depositBalance: fromDecimals(stakingStats.staked, stakeItem.stakedToken),
-      earnBalance: defined(stakingItemStore.earnBalance)
-    },
-    endTimestamp: new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
-    myEarnTokens,
-    myShareDollarEquivalent
   };
 };
