@@ -37,7 +37,7 @@
   "tokenContract": "Token Contract",
   "stakeContract": "Farm Contract",
   "tvl": "TVL",
-  "tvlTooltip": "Total amount of assets locked under this contract.",
+  "tvlTooltip": "Total amount of assets locked in the farm.",
   "apr": "APR",
   "apy": "APY",
   "apyTooltip": "Annual Percentage Yield. An estimated  annual compounded return — expected earnings if you reinvest the reward daily. !APY is indicative and should not be used as a performance measure!",
