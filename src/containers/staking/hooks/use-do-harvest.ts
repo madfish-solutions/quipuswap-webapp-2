@@ -8,10 +8,13 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
+import { useGetStakingItem } from './use-get-staking-item';
+
 export const useDoHarvest = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
+  const { getStakingItem } = useGetStakingItem();
 
   const doHarvest = useCallback(
     async (stakeItem: Nullable<StakingItem>) => {
@@ -23,13 +26,15 @@ export const useDoHarvest = () => {
         );
 
         await confirmOperation(operation.opHash, { message: 'Harvest successful' });
+
+        await getStakingItem(defined(stakeItem).id);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
+    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation, getStakingItem]
   );
 
   return { doHarvest };

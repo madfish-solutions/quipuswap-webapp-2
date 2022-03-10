@@ -10,10 +10,13 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 import { Token, WhitelistedBaker } from '@utils/types';
 
+import { useGetStakingItem } from './use-get-staking-item';
+
 export const useDoStake = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
+  const { getStakingItem } = useGetStakingItem();
 
   const doStake = useCallback(
     async (stakeItem: StakingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
@@ -28,13 +31,15 @@ export const useDoStake = () => {
         );
 
         await confirmOperation(operation.opHash, { message: 'Stake successful' });
+
+        await getStakingItem(defined(stakeItem).id);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
+    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation, getStakingItem]
   );
 
   return { doStake };
