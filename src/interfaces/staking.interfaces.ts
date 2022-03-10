@@ -23,32 +23,41 @@ export enum StakingStatus {
 }
 
 export interface RawStakingItem {
-  id: string;
-  stakedToken: Token;
-  tokenA: Token;
-  tokenB: Undefined<Token>;
-  stakeStatus: StakingStatus;
-  rewardToken: Token;
-  tvlInUsd: string;
-  tvlInStakedToken: string;
   apr: Nullable<number>;
   apy: Nullable<number>;
-  depositExchangeRate: string;
-  earnExchangeRate: string;
-  stakeUrl: string;
-  depositTokenUrl: string;
-  rewardPerSecond: string;
+
   currentDelegate: string;
-  nextDelegate: string;
-  timelock: string;
-  endTime: string;
-  harvestFee: string;
-  withdrawalFee: string;
-  rewardPerShare: string;
-  udp: string;
-  myBalance?: string;
+
   depositBalance?: string;
+  depositExchangeRate: string;
+  depositTokenUrl: string;
+
   earnBalance?: string;
+  earnExchangeRate: string;
+  endTime: string;
+
+  harvestFee: string;
+  id: string;
+  nextDelegate: string;
+
+  rewardPerSecond: string;
+  rewardPerShare: string;
+  rewardToken: Token;
+
+  stakeStatus: StakingStatus;
+  stakeUrl: string;
+  stakedToken: Token;
+
+  timelock: string;
+  tokenA: Token;
+  tokenB: Undefined<Token>;
+  tvlInStakedToken: string;
+  tvlInUsd: string;
+
+  udp: string;
+  withdrawalFee: string;
+
+  myBalance?: string;
 }
 
 interface AbstractStakingItem {
@@ -76,19 +85,10 @@ interface AbstractStakingItem {
   rewardPerShare: BigNumber;
   udp: string;
 }
-
-export interface UserStakingItem extends AbstractStakingItem {
-  myBalance: BigNumber;
-  depositBalance: BigNumber;
-  earnBalance: BigNumber;
+export interface UserBalances {
+  myBalance: Nullable<BigNumber>;
+  depositBalance: Nullable<BigNumber>;
+  earnBalance: Nullable<BigNumber>;
 }
 
-export interface NoUserStakingItem extends AbstractStakingItem {
-  myBalance: null;
-  depositBalance: null;
-  earnBalance: null;
-}
-
-// interface UserStakingItem extends AbstractStakingItem, UserStakingData {}
-
-export type StakingItem = NoUserStakingItem | UserStakingItem;
+export interface StakingItem extends AbstractStakingItem, UserBalances {}
