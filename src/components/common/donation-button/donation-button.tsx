@@ -30,7 +30,7 @@ export const DonationButton: React.FC<DonationButtonProps> = ({ className }) => 
       theme="secondary"
     >
       <div className={styles.contentWrapper}>
-        {t('common|Support')}
+        <span>{t('common|Support')}</span>
         <img src="/ukraine_outline.png" alt="Ukraine" className={styles.ukraineOutline} />
       </div>
     </Button>
