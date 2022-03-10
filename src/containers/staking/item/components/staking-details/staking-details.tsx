@@ -18,9 +18,6 @@ import { TimespanView } from '../timespan-view';
 import styles from './staking-details.module.sass';
 import { useStakingDetailsViewModel } from './use-staking-details.vm';
 
-const NO_TIMELOCK_VALUE = 0;
-const NO_WITHDRAWAL_FEE_VALUE = 0;
-
 export const StakingDetails: FC = observer(() => {
   const { t } = useTranslation(['common', 'vote']);
 
@@ -44,7 +41,9 @@ export const StakingDetails: FC = observer(() => {
     depositTokenUrl,
     isLoading,
     isError,
-    shouldShowDelegates
+    shouldShowDelegates,
+    shouldShowLockPeriod,
+    shouldShowWithdrawalFee
   } = useStakingDetailsViewModel();
 
   return (
@@ -126,7 +125,7 @@ export const StakingDetails: FC = observer(() => {
         </StateData>
       </DetailsCardCell>
 
-      {timelock !== NO_TIMELOCK_VALUE && (
+      {shouldShowLockPeriod && (
         <DetailsCardCell
           cellName={t('stake|Lock Period')}
           tooltipContent={t('stake|lockPeriodTooltip')}
@@ -138,7 +137,7 @@ export const StakingDetails: FC = observer(() => {
         </DetailsCardCell>
       )}
 
-      {!withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE) && (
+      {shouldShowWithdrawalFee && (
         <DetailsCardCell
           cellName={t('stake|Withdrawal Fee')}
           tooltipContent={t('stake|withdrawalFeeTooltip')}

@@ -17,6 +17,9 @@ import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } 
 import { canDelegate, makeBaker } from '../../helpers';
 import styles from './staking-details.module.sass';
 
+const NO_WITHDRAWAL_FEE_VALUE = 0;
+const NO_TIMELOCK_VALUE = '0';
+
 export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const dAppLoading = useIsLoading();
@@ -29,6 +32,8 @@ export const useStakingDetailsViewModel = () => {
   if (!stakeItem) {
     return {
       shouldShowDelegates: true,
+      shouldShowLockPeriod: true,
+      shouldShowWithdrawalFee: true,
       endTime: null,
       tvlDollarEquivalent: null,
       dailyDistribution: null,
@@ -79,6 +84,8 @@ export const useStakingDetailsViewModel = () => {
 
   return {
     shouldShowDelegates: canDelegate(stakeItem),
+    shouldShowLockPeriod: timelock !== NO_TIMELOCK_VALUE,
+    shouldShowWithdrawalFee: !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE),
     endTime: new Date(endTime).getTime(),
     tvlDollarEquivalent: tvlDollarEquivalent && bigNumberToString(tvlDollarEquivalent),
     dailyDistribution,
