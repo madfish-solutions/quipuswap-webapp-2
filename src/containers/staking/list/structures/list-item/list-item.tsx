@@ -7,7 +7,7 @@ import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { bigNumberToString, getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
+import { getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import { StakeStatusBox } from '../../components/stake-status-box';
@@ -67,10 +67,10 @@ export const StakingListItem: FC<StakingItem> = ({
 
   const selectLink = `staking/${id}`;
 
-  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, bigNumberToString(depositExchangeRate));
-  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, bigNumberToString(depositExchangeRate));
+  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
+  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
-  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, bigNumberToString(earnExchangeRate));
+  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExchangeRate);
 
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
