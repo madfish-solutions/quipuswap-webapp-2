@@ -28,7 +28,7 @@ export class StakingItemStore {
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
-    balance => balanceMap(balance, this.itemStore.data?.tokenA)
+    balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
   depositBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
@@ -81,7 +81,11 @@ export class StakingItemStore {
       return null;
     }
 
-    return getUserTokenBalance(this.rootStore.tezos, this.rootStore.authStore.accountPkh, this.itemStore.data?.tokenA);
+    return getUserTokenBalance(
+      this.rootStore.tezos,
+      this.rootStore.authStore.accountPkh,
+      this.itemStore.data?.stakedToken
+    );
   }
 
   private async getUserDepositBalance() {
