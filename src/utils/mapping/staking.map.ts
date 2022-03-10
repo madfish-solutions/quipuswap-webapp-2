@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { RawStakingItem, RawStakeStats, StakingItem, StakeStats, UserBalances } from '@interfaces/staking.interfaces';
-import { getTokensName, isExist, isUndefined } from '@utils/helpers';
+import { getTokensName, isExist } from '@utils/helpers';
 import { Token } from '@utils/types';
 
 import { balanceMap } from './balance.map';
@@ -24,15 +24,15 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
   const stakedToken = mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB));
   const rewardToken = mapStakingToken(raw.rewardToken);
 
-  if (!isUndefined(raw.myBalance)) {
+  if (isExist(raw.myBalance)) {
     balances.myBalance = balanceMap(new BigNumber(raw.myBalance), stakedToken);
   }
 
-  if (!isUndefined(raw.depositBalance)) {
+  if (isExist(raw.depositBalance)) {
     balances.depositBalance = balanceMap(new BigNumber(raw.depositBalance), stakedToken);
   }
 
-  if (!isUndefined(raw.earnBalance)) {
+  if (isExist(raw.earnBalance)) {
     balances.earnBalance = balanceMap(new BigNumber(raw.earnBalance), rewardToken);
   }
 
