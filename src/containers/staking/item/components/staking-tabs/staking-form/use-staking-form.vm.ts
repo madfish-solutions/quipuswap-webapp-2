@@ -56,7 +56,7 @@ export const useStakingFormViewModel = () => {
   const inputAmountError = getFormikError(formik, StakingFormFields.inputAmount);
   const bakerError = getFormikError(formik, StakingFormFields.selectedBaker);
 
-  const disabled = formik.isSubmitting || !!inputAmountError || !!bakerError;
+  const disabled = formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError);
 
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
