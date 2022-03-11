@@ -1,15 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import {
-  RawStakingItem,
-  RawStakeStats,
-  StakingItem,
-  StakeStats,
-  NoUserStakingItem,
-  UserStakingItem
-} from '@interfaces/staking.interfaces';
-import { fromDecimals, getTokensName, isExist, isUndefined } from '@utils/helpers';
-import { Nullable, Optional, Token, Undefined } from '@utils/types';
+import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
+import { isExist, getTokensName, fromDecimals } from '@utils/helpers';
+import { Token, Undefined, Nullable, Optional } from '@utils/types';
 
 import { balanceMap } from './balance.map';
 
@@ -29,28 +22,27 @@ function mapRawBigNumber(raw: Optional<BigNumber.Value>, decimals = DEFAULT_DECI
   return isExist(raw) ? fromDecimals(new BigNumber(raw), decimals) : raw;
 }
 
+const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
+  if (isExist(balanceAmount)) {
+    return balanceMap(new BigNumber(balanceAmount), token);
+  }
+
+  return null;
+};
+
 export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
-  let balances: NoUserStakingItem | UserStakingItem;
   const stakedToken = mapStakingToken(raw.stakedToken, getTokensName(raw.tokenA, raw.tokenB));
   const rewardToken = mapStakingToken(raw.rewardToken);
 
-  if (!isUndefined(raw.depositBalance) && !isUndefined(raw.earnBalance)) {
-    balances = {
-      myBalance: raw.myBalance ? balanceMap(new BigNumber(raw.myBalance), stakedToken) : null,
-      depositBalance: balanceMap(new BigNumber(raw.depositBalance), stakedToken),
-      earnBalance: balanceMap(new BigNumber(raw.earnBalance), rewardToken)
-    } as UserStakingItem;
-  } else {
-    balances = {
-      myBalance: null,
-      depositBalance: null,
-      earnBalance: null
-    } as NoUserStakingItem;
-  }
+  const myBalance = nullableBalanceMap(raw.myBalance, stakedToken);
+  const depositBalance = nullableBalanceMap(raw.depositBalance, stakedToken);
+  const earnBalance = nullableBalanceMap(raw.earnBalance, rewardToken);
 
   return {
     ...raw,
-    ...balances,
+    myBalance,
+    depositBalance,
+    earnBalance,
     id: new BigNumber(raw.id),
     tokenA: mapStakingToken(raw.tokenA),
     tokenB: raw.tokenB ? mapStakingToken(raw.tokenB) : undefined,
