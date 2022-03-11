@@ -3,39 +3,32 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { Smiles } from '@components/smiles/smiles';
-import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { StateWrapper } from '@components/state-wrapper';
 import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
 import { Currency } from '../state-currency-amount';
 import s from './price-impact.module.sass';
 import { usePriceImpactViewModel } from './use-price-impact.vm';
-interface StatePriceImpactProps extends Partial<StateWrapperProps> {
+interface StatePriceImpactProps {
   priceImpact: Nullable<BigNumber.Value>;
 }
 
 export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => {
-  const {
-    alternativeView,
-    condition,
-    priceImpactClassName,
-    wrapIsLoading,
-    wrapLoaderFallback,
-    wrapErrorFallback,
-    FormattedNumber
-  } = usePriceImpactViewModel(priceImpact);
+  const { condition, priceImpactClassName, isLoading, loaderFallback, errorFallback, wrapPriceImpact } =
+    usePriceImpactViewModel(priceImpact);
 
   return (
     <span className={s.amount}>
       <StateWrapper
-        isLoading={wrapIsLoading}
-        loaderFallback={wrapLoaderFallback}
+        isLoading={isLoading}
+        loaderFallback={loaderFallback}
         isError={isNull(priceImpact)}
-        errorFallback={wrapErrorFallback}
+        errorFallback={errorFallback}
       >
-        <span className={priceImpactClassName}>{alternativeView ?? FormattedNumber}</span>
+        <span className={priceImpactClassName}>{wrapPriceImpact}</span>
         <Currency>%</Currency>
-        {priceImpact ? <Smiles condition={condition} /> : null}
+        <Smiles condition={condition} />
       </StateWrapper>
     </span>
   );
