@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
-import { getDepositAmount } from '@api/staking/get-deposit-amount.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
@@ -28,12 +27,6 @@ export class StakingItemStore {
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
-    balance => balanceMap(balance, this.itemStore.data?.stakedToken)
-  );
-
-  depositBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
-    null,
-    async () => await this.getUserDepositBalance(),
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
@@ -86,18 +79,5 @@ export class StakingItemStore {
       this.rootStore.authStore.accountPkh,
       this.itemStore.data?.stakedToken
     );
-  }
-
-  private async getUserDepositBalance() {
-    if (
-      isNull(this.rootStore.tezos) ||
-      isNull(this.rootStore.authStore.accountPkh) ||
-      isNull(this.itemStore.data) ||
-      isNull(this.stakingId)
-    ) {
-      return null;
-    }
-
-    return await getDepositAmount(this.rootStore.tezos, this.stakingId, this.rootStore.authStore.accountPkh);
   }
 }
