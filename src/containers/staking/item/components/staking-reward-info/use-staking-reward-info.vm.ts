@@ -11,16 +11,16 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 export const useStakingRewardInfoViewModel = () => {
   const { doHarvest } = useDoHarvest();
   const stakingItemStore = useStakingItemStore();
-  const { itemStore, userStakingDelegateStore, userStakingStatsStore } = stakingItemStore;
+  const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = stakingItemStore;
   const accountPkh = useAccountPkh();
 
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
   const {
-    data: stakingStats,
-    isLoading: stakingStatsStoreLoading,
+    data: lastStakedTime,
+    isLoading: lastStakedTimeLoading,
     isInitialized: stakingStatsStoreInitialized
-  } = userStakingStatsStore;
+  } = lastStakedTimeStore;
   const { data: stakeItem, isLoading: itemStoreLoading, isInitialized: itemStoreInitialized } = itemStore;
   const {
     data: delegateAddress,
@@ -29,7 +29,7 @@ export const useStakingRewardInfoViewModel = () => {
   } = userStakingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
-  const stakingStatsStoreReady = (!stakingStatsStoreLoading && stakingStatsStoreInitialized) || !walletIsConnected;
+  const stakingStatsStoreReady = (!lastStakedTimeLoading && stakingStatsStoreInitialized) || !walletIsConnected;
   const itemStoreReady = !itemStoreLoading && itemStoreInitialized;
   const stakingDelegateStoreReady =
     (!stakingDelegateStoreLoading && stakingDelegateStoreInitialized) || !walletIsConnected;
@@ -63,8 +63,7 @@ export const useStakingRewardInfoViewModel = () => {
     stakeItem,
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
-    endTimestamp:
-      stakingStats && new Date(stakingStats.lastStaked).getTime() + Number(stakeItem.timelock) * MS_IN_SECOND,
+    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(stakeItem.timelock) * MS_IN_SECOND : null,
     myEarnTokens: stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null,
     myDepositDollarEquivalent,
     rewardTokenSymbol: stakeItem ? getTokenSymbol(stakeItem.rewardToken) : TOKEN_SYMBOL_FILLER,

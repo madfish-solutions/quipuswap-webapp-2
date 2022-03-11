@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, defined, isEmptyArray, fromDecimals, toDecimals, isExist } from '@utils/helpers';
+import { bigNumberToString, defined, isEmptyArray, toDecimals } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
@@ -11,11 +11,9 @@ import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, userStakingStatsStore, inputAmount } = stakingItemStore;
+  const { itemStore, inputAmount } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const { data: stakingStats } = userStakingStatsStore;
-  const depositBalance =
-    isExist(stakeItem) && isExist(stakingStats) ? fromDecimals(stakingStats.staked, stakeItem.stakedToken) : null;
+  const depositBalance = stakingItemStore.depositBalance;
 
   const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : null;
 

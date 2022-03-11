@@ -2,23 +2,22 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { getLastStakedTime } from '@api/staking/get-last-staked-time.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
-import { getUserStakingStats } from '@api/staking/get-user-staking-stats.api';
 import { StakingTabs } from '@containers/staking/item/types';
-import { StakedAmount } from '@interfaces/staking-storage.interfaces';
-import { RawStakingItem, StakingItem, UserStakingStats } from '@interfaces/staking.interfaces';
-import { isNull } from '@utils/helpers';
+import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
+import { fromDecimals, isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
-import { mapUserStakingStats } from '@utils/mapping/user-staking-stats.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const DEFAULT_INPUT_AMOUNT = 0;
+const NO_DEPOSIT_AMOUNT = 0;
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
@@ -35,10 +34,10 @@ export class StakingItemStore {
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  userStakingStatsStore = new LoadingErrorData<Nullable<StakedAmount>, Nullable<UserStakingStats>>(
+  lastStakedTimeStore = new LoadingErrorData<Nullable<number>, Nullable<number>>(
     null,
-    async () => await this.getUserStakingStats(),
-    mapUserStakingStats
+    async () => await this.getLastStakedTime(),
+    noopMap
   );
 
   userStakingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
@@ -59,6 +58,7 @@ export class StakingItemStore {
       selectedBaker: observable,
 
       isLpToken: computed,
+      depositBalance: computed,
 
       setTab: action,
       clearBalance: action,
@@ -92,6 +92,12 @@ export class StakingItemStore {
     return Boolean(this.itemStore.data?.tokenB);
   }
 
+  get depositBalance() {
+    const { data: item } = this.itemStore;
+
+    return item && fromDecimals(item.depositBalance ?? new BigNumber(NO_DEPOSIT_AMOUNT), item.stakedToken);
+  }
+
   private async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
@@ -103,7 +109,7 @@ export class StakingItemStore {
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }
 
-  private async getUserStakingStats() {
+  private async getLastStakedTime() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
 
@@ -111,7 +117,7 @@ export class StakingItemStore {
       return null;
     }
 
-    return await getUserStakingStats(tezos, authStore.accountPkh, item.id);
+    return await getLastStakedTime(tezos, authStore.accountPkh, item.id);
   }
 
   private async getUserStakingDelegate() {

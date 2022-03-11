@@ -99,12 +99,3 @@ export interface StakingItem extends UserBalances {
   udp: string;
   withdrawalFee: BigNumber;
 }
-
-export interface UserStakingStats {
-  lastStaked: string;
-  staked: BigNumber;
-  earned: BigNumber;
-  claimed: BigNumber;
-  prevEarned: BigNumber;
-  prevStaked: BigNumber;
-}

@@ -19,7 +19,7 @@ export const useGetStakingItem = () => {
           await stakingItemStore.itemStore.load();
           await Promise.all([
             stakingItemStore.availableBalanceStore.load(),
-            stakingItemStore.userStakingStatsStore.load(),
+            stakingItemStore.lastStakedTimeStore.load(),
             stakingItemStore.userStakingDelegateStore.load()
           ]);
         } catch (error) {
