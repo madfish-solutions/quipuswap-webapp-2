@@ -15,7 +15,7 @@ export const useUnstakingFormViewModel = () => {
   const { data: stakeItem } = itemStore;
   const depositBalance = stakingItemStore.depositBalance;
 
-  const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : null;
+  const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : undefined;
 
   const validationSchema = useUnstakingFormValidation(depositBalance);
 

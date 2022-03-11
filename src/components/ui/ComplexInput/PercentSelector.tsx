@@ -3,14 +3,14 @@ import { FC } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { defined, formatIntegerWithDecimals, isNull } from '@utils/helpers';
-import { Nullable } from '@utils/types';
+import { Nullable, Optional } from '@utils/types';
 
 import { Button } from '../elements/button';
 import s from './ComplexInput.module.sass';
 
 interface PercentSelectorProps {
   handleBalance?: (state: string) => void;
-  value: Nullable<string>;
+  value: Optional<string>;
   amountCap?: BigNumber;
 }
 
