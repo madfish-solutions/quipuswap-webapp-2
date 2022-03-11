@@ -60,7 +60,7 @@ export const StakingRewardInfo: FC = observer(() => {
         loading={stakingLoading}
         tooltipContent={t('stake|yourShareTooltip')}
       >
-        <StateData data={stakeItem} Fallback={RewardDashPlugFallback}>
+        <StateData data={stakeItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
           {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
               amount={depositBalance}
@@ -80,7 +80,7 @@ export const StakingRewardInfo: FC = observer(() => {
           loading={delegatesLoading}
           tooltipContent={t('stake|yourDelegateTooltip')}
         >
-          <StateData data={myDelegate} Fallback={RewardDashPlugFallback}>
+          <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
               <a
                 href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
