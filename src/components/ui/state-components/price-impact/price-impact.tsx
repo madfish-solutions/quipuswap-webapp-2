@@ -2,28 +2,34 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { Smiles } from '@components/smiles/smiles';
+import { StateWrapper } from '@components/state-wrapper';
 import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
-import { StateCurrencyAmount } from '../state-currency-amount';
-
+import { Currency } from '../state-currency-amount';
+import s from './price-impact.module.sass';
+import { usePriceImpactViewModel } from './use-price-impact.vm';
 interface StatePriceImpactProps {
   priceImpact: Nullable<BigNumber.Value>;
 }
-const PRICE_IMPACT_DECIMALS = 2;
 
 export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => {
-  const wrapPriceImpact = isNull(priceImpact) ? null : new BigNumber(priceImpact);
-
-  const aliternativeView = wrapPriceImpact?.lt(0.01) ? '<0.01' : null;
+  const { condition, priceImpactClassName, isLoading, loaderFallback, errorFallback, wrapPriceImpact } =
+    usePriceImpactViewModel(priceImpact);
 
   return (
-    <StateCurrencyAmount
-      isError={isNull(priceImpact)}
-      amount={priceImpact}
-      aliternativeView={aliternativeView}
-      amountDecimals={PRICE_IMPACT_DECIMALS}
-      currency="%"
-    />
+    <span className={s.amount}>
+      <StateWrapper
+        isLoading={isLoading}
+        loaderFallback={loaderFallback}
+        isError={isNull(priceImpact)}
+        errorFallback={errorFallback}
+      >
+        <span className={priceImpactClassName}>{wrapPriceImpact}</span>
+        <Currency>%</Currency>
+        <Smiles condition={condition} />
+      </StateWrapper>
+    </span>
   );
 };
