@@ -1,8 +1,10 @@
+import BigNumber from 'bignumber.js';
+
 import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useBakers, useIsLoading } from '@utils/dapp';
-import { bigNumberToString, getDollarEquivalent } from '@utils/helpers';
+import { getDollarEquivalent } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
@@ -37,10 +39,8 @@ export const useStakingRewardInfoViewModel = () => {
     };
   }
 
-  const myEarnDollarEquivalent = getDollarEquivalent(
-    stakeItem.earnBalance,
-    bigNumberToString(stakeItem.earnExchangeRate)
-  );
+  const myEarnDollarEquivalent = getDollarEquivalent(stakeItem.earnBalance, stakeItem.earnExchangeRate);
+  const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
 
   return {
     shouldShowCandidate: canDelegate(stakeItem),
@@ -48,7 +48,8 @@ export const useStakingRewardInfoViewModel = () => {
     myDelegate: makeBaker(mockMyDelegateAddress, bakers),
     delegatesLoading,
     endTimestamp: mockLastStaked + Number(stakeItem.timelock) * MS_IN_SECOND,
-    myEarnDollarEquivalent,
+    myDepositDollarEquivalent,
+    myEarnDollarEquivalent: myEarnDollarEquivalent ? new BigNumber(myEarnDollarEquivalent) : null,
     stakingLoading,
     timelock: stakeItem.timelock,
     handleHarvest

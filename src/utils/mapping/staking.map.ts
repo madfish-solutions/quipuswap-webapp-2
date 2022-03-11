@@ -1,10 +1,13 @@
 import BigNumber from 'bignumber.js';
 
-import { RawStakingItem, RawStakeStats, StakingItem, StakeStats } from '@interfaces/staking.interfaces';
-import { getTokensName, isExist } from '@utils/helpers';
-import { Optional, Token } from '@utils/types';
+import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
+import { isExist, getTokensName, fromDecimals } from '@utils/helpers';
+import { Token, Undefined, Nullable, Optional } from '@utils/types';
 
 import { balanceMap } from './balance.map';
+
+const DEFAULT_DECIMALS = 0;
+const FEES_PERCENTAGE_PRECISION = 16;
 
 const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
   ...raw,
@@ -12,8 +15,12 @@ const mapStakingToken = (raw: Token, newSymbol?: string): Token => ({
   metadata: { ...raw.metadata, symbol: newSymbol ?? raw.metadata.symbol }
 });
 
-const mapRawBigNumber = <T extends null | undefined>(raw: BigNumber.Value | T): BigNumber | T =>
-  isExist(raw) ? new BigNumber(raw) : raw;
+function mapRawBigNumber(raw: BigNumber.Value, decimals?: number): BigNumber;
+function mapRawBigNumber(raw: Undefined<BigNumber.Value>, decimals?: number): Undefined<BigNumber>;
+function mapRawBigNumber(raw: Nullable<BigNumber.Value>, decimals?: number): Nullable<BigNumber>;
+function mapRawBigNumber(raw: Optional<BigNumber.Value>, decimals = DEFAULT_DECIMALS): Optional<BigNumber> {
+  return isExist(raw) ? fromDecimals(new BigNumber(raw), decimals) : raw;
+}
 
 const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
   if (isExist(balanceAmount)) {
@@ -41,13 +48,16 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
     tokenB: raw.tokenB ? mapStakingToken(raw.tokenB) : undefined,
     stakedToken,
     rewardToken,
-    tvlInUsd: new BigNumber(raw.tvlInUsd),
+    tvlInUsd: mapRawBigNumber(raw.tvlInUsd),
     tvlInStakedToken: new BigNumber(raw.tvlInStakedToken),
     apr: mapRawBigNumber(raw.apr),
     apy: mapRawBigNumber(raw.apy),
-    depositExchangeRate: new BigNumber(raw.depositExchangeRate),
-    earnExchangeRate: new BigNumber(raw.earnExchangeRate),
-    rewardPerShare: new BigNumber(raw.rewardPerShare)
+    depositExchangeRate: mapRawBigNumber(raw.depositExchangeRate),
+    earnExchangeRate: mapRawBigNumber(raw.earnExchangeRate),
+    rewardPerShare: new BigNumber(raw.rewardPerShare),
+    harvestFee: mapRawBigNumber(raw.harvestFee, FEES_PERCENTAGE_PRECISION),
+    withdrawalFee: mapRawBigNumber(raw.withdrawalFee, FEES_PERCENTAGE_PRECISION),
+    rewardPerSecond: mapRawBigNumber(raw.rewardPerSecond)
   };
 };
 

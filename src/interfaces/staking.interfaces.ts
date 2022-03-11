@@ -29,11 +29,11 @@ export interface RawStakingItem {
   currentDelegate: string;
 
   depositBalance?: string;
-  depositExchangeRate: string;
+  depositExchangeRate: Nullable<string>;
   depositTokenUrl: string;
 
   earnBalance?: string;
-  earnExchangeRate: string;
+  earnExchangeRate: Nullable<string>;
   endTime: string;
 
   harvestFee: string;
@@ -52,7 +52,7 @@ export interface RawStakingItem {
   tokenA: Token;
   tokenB: Undefined<Token>;
   tvlInStakedToken: string;
-  tvlInUsd: string;
+  tvlInUsd: Nullable<string>;
 
   udp: string;
   withdrawalFee: string;
@@ -72,17 +72,17 @@ export interface StakingItem extends UserBalances {
 
   currentDelegate: string;
 
-  depositExchangeRate: BigNumber;
+  depositExchangeRate: Nullable<BigNumber>;
   depositTokenUrl: string;
 
-  earnExchangeRate: BigNumber;
+  earnExchangeRate: Nullable<BigNumber>;
   endTime: string;
 
-  harvestFee: string;
+  harvestFee: BigNumber;
   id: BigNumber;
   nextDelegate: string;
 
-  rewardPerSecond: string;
+  rewardPerSecond: BigNumber;
   rewardPerShare: BigNumber;
   rewardToken: Token;
 
@@ -93,9 +93,9 @@ export interface StakingItem extends UserBalances {
   timelock: string;
   tokenA: Token;
   tokenB: Undefined<Token>;
-  tvlInUsd: BigNumber;
+  tvlInUsd: Nullable<BigNumber>;
   tvlInStakedToken: BigNumber;
 
   udp: string;
-  withdrawalFee: string;
+  withdrawalFee: BigNumber;
 }

@@ -9,13 +9,16 @@ import { useStakingRewardsListViewModel } from './use-staking-rewards-list.vm';
 
 export const StakingRewardsList: FC = observer(() => {
   const stakingListStore = useStakingListStore();
-  const { handleHarvestAll } = useStakingRewardsListViewModel();
+  const { handleHarvestAll, translation } = useStakingRewardsListViewModel();
+
+  const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 
   return (
     <RewardInfo
       amount={stakingListStore.pendingRewards}
       onButtonClick={handleHarvestAll}
-      buttonText="Harvest All"
+      rewardTooltip={rewardsTooltipTranslation}
+      buttonText={harvestAllTranslation}
       currency="$"
     />
   );

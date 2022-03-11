@@ -1,7 +1,6 @@
 import { FC, useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
@@ -35,6 +34,7 @@ export const StakingRewardInfo: FC = observer(() => {
     myDelegate,
     delegatesLoading,
     endTimestamp,
+    myDepositDollarEquivalent,
     myEarnDollarEquivalent,
     stakingLoading,
     timelock,
@@ -43,7 +43,7 @@ export const StakingRewardInfo: FC = observer(() => {
 
   return (
     <RewardInfo
-      amount={myEarnDollarEquivalent ? new BigNumber(myEarnDollarEquivalent) : null}
+      amount={myEarnDollarEquivalent}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{
         content: <StakingRewardHeader />,
@@ -60,13 +60,13 @@ export const StakingRewardInfo: FC = observer(() => {
         tooltipContent={t('stake|yourShareTooltip')}
       >
         <StateData data={stakeItem} Fallback={StakingFallback}>
-          {({ earnBalance, rewardToken }) => (
+          {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
-              amount={earnBalance}
+              amount={depositBalance}
               className={styles.statsValueText}
-              currency={getTokenSymbol(rewardToken)}
-              dollarEquivalent={myEarnDollarEquivalent}
-              amountDecimals={rewardToken.metadata.decimals}
+              currency={getTokenSymbol(stakedToken)}
+              dollarEquivalent={myDepositDollarEquivalent}
+              amountDecimals={stakedToken.metadata.decimals}
               labelSize="large"
             />
           )}

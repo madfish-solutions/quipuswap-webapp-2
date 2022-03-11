@@ -7,32 +7,15 @@ import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { bigNumberToString, getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
+import { getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import { StakeStatusBox } from '../../components/stake-status-box';
 import styles from './list-item.module.scss';
+import { useListItemViewModal } from './use-list-item.vm';
 
 const ICON_SIZE = 48;
-
-// TODO: Move to Translation
-const SELECT = 'Select';
-const FULL_CARD_TOOLTIP_TEXT = 'This is text';
-const TOKEN_CONTRACT = 'Token contract';
-const STAKE_CONTRACT = 'Farm Contract';
 const LINKS_THEME = 'underlined';
-const TVL = 'TVL';
-const TVL_TOOLTIP = 'tvl tooltip';
-const APR = 'APR';
-const APR_TOOLTIP = 'apr tooltip';
-const APY = 'APY';
-const APY_TOOLTIP = 'apy tooltip';
-const MY_BALANCE = 'My Balance';
-const MY_BALANCE_TOOLTIP = 'My Balance tooltip';
-const MY_DEPOSIT = 'My Deposit';
-const MY_DEPOSIT_TOOLTIP = 'My Deposit tooltip';
-const MY_EARNED = 'My Earned';
-const MY_EARNED_TOOLTIP = 'My Earned tooltip';
 
 const themeClass = {
   [ColorModes.Light]: styles.light,
@@ -58,16 +41,36 @@ export const StakingListItem: FC<StakingItem> = ({
   earnBalance
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
+  const { translation } = useListItemViewModal();
+
+  const {
+    selectTranslation,
+    fullCardTooltipTranslation,
+    tokenContractTranslation,
+    stakeContractTranslation,
+    tvlTranslation,
+    tvlTooltipTranslation,
+    aprTranslation,
+    aprTooltipTranslation,
+    apyTranslation,
+    apyTooltipTranslation,
+    yourBalanceTranslation,
+    yourBalanceTooltipTranslation,
+    yourDepositTranslation,
+    yourDepositTooltipTranslation,
+    yourEarnedTranslation,
+    yourEarnedTooltipTranslation
+  } = translation;
 
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
   const selectLink = `staking/${id}`;
 
-  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, bigNumberToString(depositExchangeRate));
-  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, bigNumberToString(depositExchangeRate));
+  const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
+  const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
   const MyEarnTokenSymbol = getTokenSymbol(rewardToken);
-  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, bigNumberToString(earnExchangeRate));
+  const myEarnDollarEquivalent = getDollarEquivalent(earnBalance, earnExchangeRate);
 
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
@@ -78,7 +81,7 @@ export const StakingListItem: FC<StakingItem> = ({
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
             <StakeStatusBox status={stakeStatus} />
-            <Tooltip className={styles.tooltip} content={FULL_CARD_TOOLTIP_TEXT} />
+            <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
           </div>
 
           <div className={styles.rewardTarget}>
@@ -88,8 +91,8 @@ export const StakingListItem: FC<StakingItem> = ({
           <div className={styles.stats}>
             <div className={styles.stakeStats}>
               <ListItemCardCell
-                cellName={TVL}
-                tooltip={TVL_TOOLTIP}
+                cellName={tvlTranslation}
+                tooltip={tvlTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
@@ -101,8 +104,8 @@ export const StakingListItem: FC<StakingItem> = ({
               </ListItemCardCell>
 
               <ListItemCardCell
-                cellName={APR}
-                tooltip={APR_TOOLTIP}
+                cellName={aprTranslation}
+                tooltip={aprTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
@@ -110,8 +113,8 @@ export const StakingListItem: FC<StakingItem> = ({
               </ListItemCardCell>
 
               <ListItemCardCell
-                cellName={APY}
-                tooltip={APY_TOOLTIP}
+                cellName={apyTranslation}
+                tooltip={apyTooltipTranslation}
                 cellNameClassName={styles.CardCellHeader}
                 cardCellClassName={styles.cardCell}
               >
@@ -121,8 +124,8 @@ export const StakingListItem: FC<StakingItem> = ({
             {isAllowUserData && (
               <div className={styles.userData}>
                 <ListItemCardCell
-                  cellName={MY_BALANCE}
-                  tooltip={MY_BALANCE_TOOLTIP}
+                  cellName={yourBalanceTranslation}
+                  tooltip={yourBalanceTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
                 >
@@ -135,8 +138,8 @@ export const StakingListItem: FC<StakingItem> = ({
                 </ListItemCardCell>
 
                 <ListItemCardCell
-                  cellName={MY_DEPOSIT}
-                  tooltip={MY_DEPOSIT_TOOLTIP}
+                  cellName={yourDepositTranslation}
+                  tooltip={yourDepositTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
                 >
@@ -149,8 +152,8 @@ export const StakingListItem: FC<StakingItem> = ({
                 </ListItemCardCell>
 
                 <ListItemCardCell
-                  cellName={MY_EARNED}
-                  tooltip={MY_EARNED_TOOLTIP}
+                  cellName={yourEarnedTranslation}
+                  tooltip={yourEarnedTooltipTranslation}
                   cellNameClassName={styles.CardCellHeader}
                   cardCellClassName={styles.cardCell}
                 >
@@ -167,17 +170,17 @@ export const StakingListItem: FC<StakingItem> = ({
         </div>
         <div className={styles.right}>
           <div className={styles.links}>
-            <Button href={depositTokenUrl} external theme={LINKS_THEME} title={TOKEN_CONTRACT}>
-              {TOKEN_CONTRACT}
+            <Button href={depositTokenUrl} external theme={LINKS_THEME} title={tokenContractTranslation}>
+              {tokenContractTranslation}
             </Button>
 
-            <Button href={stakeUrl} external theme={LINKS_THEME} title={STAKE_CONTRACT}>
-              {STAKE_CONTRACT}
+            <Button href={stakeUrl} external theme={LINKS_THEME} title={stakeContractTranslation}>
+              {stakeContractTranslation}
             </Button>
           </div>
 
           <Button className={styles.button} href={selectLink}>
-            {SELECT}
+            {selectTranslation}
           </Button>
         </div>
       </div>
