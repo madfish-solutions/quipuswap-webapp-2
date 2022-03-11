@@ -57,7 +57,6 @@ export class StakingItemStore {
       inputAmount: observable,
       selectedBaker: observable,
 
-      isLpToken: computed,
       depositBalance: computed,
 
       setTab: action,
@@ -86,10 +85,6 @@ export class StakingItemStore {
 
   setStakingId(stakingId: Nullable<BigNumber>) {
     this.stakingId = stakingId;
-  }
-
-  get isLpToken() {
-    return Boolean(this.itemStore.data?.tokenB);
   }
 
   get depositBalance() {
