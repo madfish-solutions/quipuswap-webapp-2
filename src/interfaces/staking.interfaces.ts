@@ -23,70 +23,81 @@ export enum StakingStatus {
 }
 
 export interface RawStakingItem {
-  id: string;
-  stakedToken: Token;
-  tokenA: Token;
-  tokenB: Undefined<Token>;
-  stakeStatus: StakingStatus;
-  rewardToken: Token;
-  tvlInUsd: Nullable<string>;
-  tvlInStakedToken: string;
   apr: Nullable<number>;
   apy: Nullable<number>;
-  depositExchangeRate: Nullable<string>;
-  earnExchangeRate: Nullable<string>;
-  stakeUrl: string;
-  depositTokenUrl: string;
-  rewardPerSecond: string;
-  currentDelegate: string;
-  nextDelegate: string;
-  timelock: string;
-  endTime: string;
-  harvestFee: string;
-  withdrawalFee: string;
-  rewardPerShare: string;
-  udp: string;
-  myBalance?: string;
-  depositBalance?: string;
-  earnBalance?: string;
-}
 
-interface AbstractStakingItem {
-  id: BigNumber;
+  currentDelegate: string;
+
+  depositBalance?: string;
+  depositExchangeRate: Nullable<string>;
+  depositTokenUrl: string;
+
+  earnBalance?: string;
+  earnExchangeRate: Nullable<string>;
+  endTime: string;
+
+  harvestFee: string;
+  id: string;
+  nextDelegate: string;
+
+  rewardPerSecond: string;
+  rewardPerShare: string;
+  rewardToken: Token;
+
+  stakeStatus: StakingStatus;
+  stakeUrl: string;
   stakedToken: Token;
+
+  timelock: string;
   tokenA: Token;
   tokenB: Undefined<Token>;
-  stakeStatus: StakingStatus;
-  rewardToken: Token;
-  tvlInUsd: Nullable<BigNumber>;
-  tvlInStakedToken: BigNumber;
+  tvlInStakedToken: string;
+  tvlInUsd: Nullable<string>;
+
+  udp: string;
+  withdrawalFee: string;
+
+  myBalance?: string;
+}
+
+export interface UserBalances {
+  myBalance: Nullable<BigNumber>;
+  earnBalance: Nullable<BigNumber>;
+  depositBalance: Nullable<BigNumber>;
+}
+
+export interface StakingItem extends UserBalances {
   apr: Nullable<BigNumber>;
   apy: Nullable<BigNumber>;
-  depositExchangeRate: Nullable<BigNumber>;
-  earnExchangeRate: Nullable<BigNumber>;
-  stakeUrl: string;
-  depositTokenUrl: string;
-  rewardPerSecond: BigNumber;
+
   currentDelegate: string;
-  nextDelegate: string;
-  timelock: string;
+
+  depositExchangeRate: Nullable<BigNumber>;
+  depositTokenUrl: string;
+
+  earnExchangeRate: Nullable<BigNumber>;
   endTime: string;
+
   harvestFee: BigNumber;
-  withdrawalFee: BigNumber;
+  id: BigNumber;
+  nextDelegate: string;
+
+  rewardPerSecond: BigNumber;
   rewardPerShare: BigNumber;
+  rewardToken: Token;
+
+  stakeStatus: StakingStatus;
+  stakeUrl: string;
+  stakedToken: Token;
+
+  timelock: string;
+  tokenA: Token;
+  tokenB: Undefined<Token>;
+  tvlInUsd: Nullable<BigNumber>;
+  tvlInStakedToken: BigNumber;
+
   udp: string;
-}
-
-export interface UserStakingItem extends AbstractStakingItem {
-  myBalance: BigNumber;
-  depositBalance: BigNumber;
-  earnBalance: BigNumber;
-}
-
-export interface NoUserStakingItem extends AbstractStakingItem {
-  myBalance: null;
-  depositBalance: null;
-  earnBalance: null;
+  withdrawalFee: BigNumber;
 }
 
 export interface UserStakingStats {
@@ -97,5 +108,3 @@ export interface UserStakingStats {
   prevEarned: BigNumber;
   prevStaked: BigNumber;
 }
-
-export type StakingItem = NoUserStakingItem | UserStakingItem;
