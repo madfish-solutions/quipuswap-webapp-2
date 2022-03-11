@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { StakingStatus } from '@interfaces/staking.interfaces';
 import { defined, isEmptyArray, toDecimals, bigNumberToString } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
@@ -15,6 +16,7 @@ export const useUnstakingFormViewModel = () => {
   const { data: stakeItem } = itemStore;
   const { data: depositBalance } = depositBalanceStore;
 
+  const isStakingAlertVisible = stakeItem?.stakeStatus !== StakingStatus.ACTIVE;
   const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : null;
 
   const validationSchema = useUnstakingFormValidation(depositBalanceStore.data);
@@ -47,6 +49,7 @@ export const useUnstakingFormViewModel = () => {
   };
 
   return {
+    isStakingAlertVisible,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[UnstakingFormFields.inputAmount],
     userTokenBalance,

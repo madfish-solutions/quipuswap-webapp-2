@@ -5,6 +5,7 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { StakingStatus } from '@interfaces/staking.interfaces';
 import {
   bigNumberToString,
   toDecimals,
@@ -29,6 +30,7 @@ export const useStakingFormViewModel = () => {
   const { data: stakeItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
+  const isStakingAlertVisible = stakeItem?.stakeStatus !== StakingStatus.ACTIVE;
   const userTokenBalance = availableBalance ? bigNumberToString(availableBalance) : null;
 
   const shouldShowBakerInput = isNull(stakeItem) || canDelegate(stakeItem);
@@ -94,6 +96,7 @@ export const useStakingFormViewModel = () => {
   }, [stakeItem]);
 
   return {
+    isStakingAlertVisible,
     shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
