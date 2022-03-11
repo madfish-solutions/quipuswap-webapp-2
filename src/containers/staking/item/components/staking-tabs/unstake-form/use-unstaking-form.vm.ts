@@ -13,11 +13,10 @@ export const useUnstakingFormViewModel = () => {
   const { doUnstake } = useDoUnstake();
   const { itemStore, inputAmount } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const depositBalance = stakingItemStore.depositBalance;
 
-  const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : undefined;
+  const userTokenBalance = stakeItem?.depositBalance ? bigNumberToString(stakeItem?.depositBalance) : undefined;
 
-  const validationSchema = useUnstakingFormValidation(depositBalance);
+  const validationSchema = useUnstakingFormValidation(stakeItem?.depositBalance ?? null);
 
   const handleUnstakeSubmit = async (_: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);

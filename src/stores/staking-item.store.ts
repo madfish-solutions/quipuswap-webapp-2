@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
 import { getLastStakedTime } from '@api/staking/get-last-staked-time.api';
@@ -7,7 +7,7 @@ import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
 import { StakingTabs } from '@containers/staking/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
-import { fromDecimals, isNull } from '@utils/helpers';
+import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
@@ -17,7 +17,6 @@ import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const DEFAULT_INPUT_AMOUNT = 0;
-const NO_DEPOSIT_AMOUNT = 0;
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
@@ -57,8 +56,6 @@ export class StakingItemStore {
       inputAmount: observable,
       selectedBaker: observable,
 
-      depositBalance: computed,
-
       setTab: action,
       clearBalance: action,
       setInputAmount: action,
@@ -85,12 +82,6 @@ export class StakingItemStore {
 
   setStakingId(stakingId: Nullable<BigNumber>) {
     this.stakingId = stakingId;
-  }
-
-  get depositBalance() {
-    const { data: item } = this.itemStore;
-
-    return item && fromDecimals(item.depositBalance ?? new BigNumber(NO_DEPOSIT_AMOUNT), item.stakedToken);
   }
 
   private async getUserTokenBalance() {
