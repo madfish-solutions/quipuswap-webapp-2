@@ -12,6 +12,7 @@ import {
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
   getTokenSymbol,
+  isNull,
   isUndefined,
   toDecimals
 } from '@utils/helpers';
@@ -97,7 +98,8 @@ export const useAddLiquidityService = (
 
     const { tokenAPool, tokenBPool, tokenA: pairTokenA } = pairInfo;
 
-    const isTokensOrderValid = tokenA.contractAddress === pairTokenA.contractAddress;
+    const isTokensOrderValid =
+      tokenA.contractAddress === pairTokenA.contractAddress && tokenA.fa2TokenId === pairTokenA.fa2TokenId;
     const validTokenAPool = isTokensOrderValid ? tokenAPool : tokenBPool;
     const validTokenBPool = isTokensOrderValid ? tokenBPool : tokenAPool;
 
@@ -310,7 +312,7 @@ export const useAddLiquidityService = (
   };
 
   const investTezosToToken = async () => {
-    if (!tezos || !accountPkh || !dex || !tokenA || !tokenB || !estimatedTezos) {
+    if (!tezos || !accountPkh || isUndefined(dex) || !tokenA || !tokenB || !estimatedTezos) {
       return;
     }
 
@@ -321,7 +323,10 @@ export const useAddLiquidityService = (
     const tezValue = toDecimals(tezTokenBN, TEZOS_TOKEN);
 
     const shouldAddLiquidity =
-      pairInfo && pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) && pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
+      !isNull(dex) &&
+      pairInfo &&
+      pairInfo.tokenAPool.gt(EMPTY_POOL_AMOUNT) &&
+      pairInfo.tokenBPool.gt(EMPTY_POOL_AMOUNT);
 
     if (shouldAddLiquidity) {
       const addLiquidityTezOperation = await addLiquidityTez(tezos, dex, tezValue, estimatedTezos);
@@ -365,7 +370,7 @@ export const useAddLiquidityService = (
   };
 
   const handleAddLiquidity = async () => {
-    if (dex!.contract.address === TOKEN_TO_TOKEN_DEX) {
+    if (dex?.contract.address === TOKEN_TO_TOKEN_DEX) {
       return await investTokenToToken();
     }
 
