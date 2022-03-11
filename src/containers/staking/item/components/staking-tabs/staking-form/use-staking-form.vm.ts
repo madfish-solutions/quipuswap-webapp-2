@@ -5,15 +5,8 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import {
-  bigNumberToString,
-  toDecimals,
-  defined,
-  isEmptyArray,
-  isNull,
-  isExist,
-  getTokenPairSlug
-} from '@utils/helpers';
+import { getFormikError } from '@utils/forms/get-formik-error';
+import { bigNumberToString, defined, getTokenPairSlug, isExist, isNull, toDecimals } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
@@ -21,7 +14,6 @@ import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
-// eslint-disable-next-line sonarjs/cognitive-complexity
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doStake } = useDoStake();
@@ -61,16 +53,10 @@ export const useStakingFormViewModel = () => {
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, stakingItemStore]);
 
-  const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
-  const inputAmountError =
-    formik.errors[StakingFormFields.inputAmount] && formik.touched[StakingFormFields.inputAmount]
-      ? formik.errors[StakingFormFields.inputAmount]
-      : undefined;
+  const inputAmountError = getFormikError(formik, StakingFormFields.inputAmount);
+  const bakerError = getFormikError(formik, StakingFormFields.selectedBaker);
 
-  const bakerError =
-    formik.errors[StakingFormFields.selectedBaker] && formik.touched[StakingFormFields.selectedBaker]
-      ? formik.errors[StakingFormFields.selectedBaker]
-      : undefined;
+  const disabled = formik.isSubmitting || !!inputAmountError || !!bakerError;
 
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
