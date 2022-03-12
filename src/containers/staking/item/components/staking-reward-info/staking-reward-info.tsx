@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StakeItemPandingReward } from '@tests/staking/item';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
@@ -52,6 +53,8 @@ export const StakingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('stake|Harvest')}
       rewardTooltip={t('stake|singleFarmRewardTooltip')}
+      rewardButtonAttributeTestId={StakeItemPandingReward.HARVEST_BUTTON}
+      pendingRewardAttributeTestId={StakeItemPandingReward.PENDING_REWARD}
       currency="$"
     >
       <StakingStatsItem
