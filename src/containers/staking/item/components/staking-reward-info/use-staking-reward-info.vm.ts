@@ -1,10 +1,13 @@
 import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND } from '@app.config';
+import { DELAY_BEFORE_DATA_UPDATE } from '@containers/staking/hooks/constants';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
+import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useBakers, useIsLoading } from '@utils/dapp';
-import { getDollarEquivalent } from '@utils/helpers';
+import { defined, getDollarEquivalent } from '@utils/helpers';
+import { sleep } from '@utils/helpers/sleep';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
@@ -13,8 +16,9 @@ const mockLastStaked = Date.now();
 const mockMyDelegateAddress: string = 'tz2XdXvVTgrBzZkBHtDiEWgfrgJXu33rkcJN';
 
 export const useStakingRewardInfoViewModel = () => {
-  const { doHarvest } = useDoHarvest();
   const stakingItemStore = useStakingItemStore();
+  const { getStakingItem } = useGetStakingItem();
+  const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppLoading = useIsLoading();
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
@@ -22,7 +26,11 @@ export const useStakingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || stakingLoading;
 
   const handleHarvest = async () => {
-    return await doHarvest(stakeItem);
+    await doHarvest(stakeItem);
+
+    await sleep(DELAY_BEFORE_DATA_UPDATE);
+
+    await getStakingItem(defined(stakeItem).id);
   };
 
   if (!stakeItem) {

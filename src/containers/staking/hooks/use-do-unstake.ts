@@ -8,16 +8,11 @@ import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
-import { sleep } from '@utils/helpers/sleep';
-
-import { DELAY_BEFORE_DATA_UPDATE } from './constants';
-import { useGetStakingItem } from './use-get-staking-item';
 
 export const useDoUnstake = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const { getStakingItem } = useGetStakingItem();
 
   const doUnstake = useCallback(
     async (stakeItem: StakingItem, balance: BigNumber) => {
@@ -29,17 +24,13 @@ export const useDoUnstake = () => {
           balance
         );
         await confirmOperation(operation.opHash, { message: 'Unstake successful' });
-
-        await sleep(DELAY_BEFORE_DATA_UPDATE);
-
-        await getStakingItem(defined(stakeItem).id);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation, getStakingItem]
+    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
   );
 
   return { doUnstake };

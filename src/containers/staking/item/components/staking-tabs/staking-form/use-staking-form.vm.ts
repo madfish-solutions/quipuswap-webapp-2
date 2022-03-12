@@ -7,15 +7,19 @@ import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { getFormikError } from '@utils/forms/get-formik-error';
 import { bigNumberToString, defined, getTokenPairSlug, isExist, isNull, toDecimals } from '@utils/helpers';
+import { sleep } from '@utils/helpers/sleep';
 import { WhitelistedBaker } from '@utils/types';
 
+import { DELAY_BEFORE_DATA_UPDATE } from '../../../../hooks/constants';
 import { useDoStake } from '../../../../hooks/use-do-stake';
+import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
 import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
+  const { getStakingItem } = useGetStakingItem();
   const { doStake } = useDoStake();
   const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
@@ -36,6 +40,10 @@ export const useStakingFormViewModel = () => {
 
     formik.resetForm();
     actions.setSubmitting(false);
+
+    await sleep(DELAY_BEFORE_DATA_UPDATE);
+
+    await getStakingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
