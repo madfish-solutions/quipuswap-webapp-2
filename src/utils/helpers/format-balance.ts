@@ -55,12 +55,10 @@ export const formatBalance = (value: string, amountDecimals?: number): string =>
   const defaultBalanceLength = isNegative ? DEFAULT_NEGATIVE_BALANCE_LENGTH : DEFAULT_BALANCE_LENGTH;
 
   if (isZeroString(integer)) {
-    const formattedDecimal = decimals ? formatDecimal(decimals) : null;
+    if (decimals) {
+      const decimalsLength = amountDecimals ?? DEFAULT_BALANCE_LENGTH;
 
-    if (formattedDecimal) {
-      const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH;
-
-      const preparedValue = value.slice(FIRST_POSITION, decimals + ZERO_STRING_LENGTH);
+      const preparedValue = value.slice(FIRST_POSITION, decimalsLength + ZERO_STRING_LENGTH);
 
       return cleanUpZeros(preparedValue);
     }
