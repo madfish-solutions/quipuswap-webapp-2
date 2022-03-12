@@ -14,7 +14,7 @@ export const useStakingFormValidation = (userBalance: Nullable<BigNumber>, canDe
       ? yup
           .number()
           .max(userBalance.toNumber(), `Max available value is ${userBalance.toNumber()}`)
-          .moreThan(ZERO, `Value should be more than 0`)
+          .moreThan(ZERO, 'The value should be greater than zero.')
       : yup.number();
 
     const bakerSchema = canDelegate ? yup.string().required('Baker is required') : yup.string();

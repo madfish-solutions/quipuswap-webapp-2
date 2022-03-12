@@ -14,7 +14,7 @@ export const useUnstakingFormValidation = (stakedBalance: Nullable<BigNumber>) =
       ? yup
           .number()
           .max(stakedBalance.toNumber(), `Max available value is ${stakedBalance.toNumber()}`)
-          .moreThan(ZERO, `Value should be more than 0`)
+          .moreThan(ZERO, 'The value should be greater than zero.')
       : yup.number();
 
     return yup.object().shape({
