@@ -12,22 +12,26 @@ export const useListStatsViewModel = () => {
     {
       title: t('stake|totalValueLocked'),
       tooltip: t('stake|totalValueLockedTooltip'),
-      amount: amount?.totalValueLocked
+      amount: amount?.totalValueLocked,
+      testId: 'totalValueLocked'
     },
     {
       title: t('stake|totalDailyReward'),
       tooltip: t('stake|totalDailyRewardTooltip'),
-      amount: amount?.totalDailyReward
+      amount: amount?.totalDailyReward,
+      testId: 'totalDailyReward'
     },
     {
       title: t('stake|totalPendingReward'),
       tooltip: t('stake|totalPendingRewardTooltip'),
-      amount: amount?.totalPendingReward
+      amount: amount?.totalPendingReward,
+      testId: 'totalPendingReward'
     },
     {
       title: t('stake|totalClaimedReward'),
       tooltip: t('stake|totalClaimedRewardTooltip'),
-      amount: amount?.totalClaimedReward
+      amount: amount?.totalClaimedReward,
+      testId: 'totalClaimedReward'
     }
   ];
 
