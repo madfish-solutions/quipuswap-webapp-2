@@ -6,10 +6,15 @@ import * as yup from 'yup';
 
 import { UnstakingFormFields } from './unstaking-form.interface';
 
+const ZERO = 0;
+
 export const useUnstakingFormValidation = (stakedBalance: Nullable<BigNumber>) =>
   useMemo(() => {
     const inputAmountSchema = stakedBalance
-      ? yup.number().max(stakedBalance.toNumber(), `Max available value is ${stakedBalance.toNumber()}`)
+      ? yup
+          .number()
+          .max(stakedBalance.toNumber(), `Max available value is ${stakedBalance.toNumber()}`)
+          .moreThan(ZERO, `Value should be more than 0`)
       : yup.number();
 
     return yup.object().shape({
