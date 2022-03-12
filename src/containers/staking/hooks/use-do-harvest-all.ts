@@ -9,14 +9,12 @@ import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 
 import { harvestAllAssets } from '../../../api/staking/harvest-all-assets.api';
-import { useGetStakingList } from './use-get-staking-list';
 const ZERO_AMOUNT = 0;
 
 export const useDoHarvestAll = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const { getStakingList } = useGetStakingList();
 
   const doHarvestAll = useCallback(
     async (stakeList: StakingItem[]) => {
@@ -36,15 +34,13 @@ export const useDoHarvestAll = () => {
         );
 
         await confirmOperation(operation.opHash, { message: 'Stake successful' });
-
-        await getStakingList();
       } catch (error) {
         // eslint-disable-next-line no-console
         console.log('error', error);
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation, getStakingList]
+    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
   );
 
   return { doHarvestAll };
