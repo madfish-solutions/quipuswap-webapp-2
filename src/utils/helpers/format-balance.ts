@@ -13,11 +13,16 @@ const ZERO_STRING = '0';
 const MAX_AMOUNT_WITHOUT_LETTERS = 1e6; // 1M
 const ZERO_STRING_LENGTH = 2;
 const SIGN_PASS = 0;
+const POINT = '.';
+
+const getLastElement = (value: string) => {
+  return value[value.length - ONE_ELEMENT];
+};
 
 const isZeroString = (value: string) => value === ZERO_STRING;
 
 const formatDecimal = (decimals: string): string => {
-  if (isZeroString(decimals[decimals.length - ONE_ELEMENT])) {
+  if (isZeroString(getLastElement(decimals))) {
     const decimals_ = decimals.slice(FIRST_POSITION, decimals.length - ONE_ELEMENT);
 
     return formatDecimal(decimals_);
@@ -26,15 +31,25 @@ const formatDecimal = (decimals: string): string => {
   return decimals;
 };
 
+const cleanUpZeros = (value: string) => {
+  const preparedValue = formatDecimal(value);
+
+  if (getLastElement(preparedValue) === POINT) {
+    return ZERO_STRING;
+  } else {
+    return preparedValue;
+  }
+};
+
 export const formatIntegerWithDecimals = (value: string) => {
-  const [integer, decimals] = value.split('.');
+  const [integer, decimals] = value.split(POINT);
   const formattedDecimals = decimals ? formatDecimal(decimals) : null;
 
   return formattedDecimals ? `${integer}.${formattedDecimals}` : integer;
 };
 
 export const formatBalance = (value: string, amountDecimals?: number): string => {
-  const [integer, decimals] = value.split('.');
+  const [integer, decimals] = value.split(POINT);
 
   const isNegative = Number(integer) < SIGN_PASS;
   const defaultBalanceLength = isNegative ? DEFAULT_NEGATIVE_BALANCE_LENGTH : DEFAULT_BALANCE_LENGTH;
@@ -45,7 +60,9 @@ export const formatBalance = (value: string, amountDecimals?: number): string =>
     if (formattedDecimal) {
       const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH;
 
-      return value.slice(FIRST_POSITION, decimals + ZERO_STRING_LENGTH);
+      const preparedValue = value.slice(FIRST_POSITION, decimals + ZERO_STRING_LENGTH);
+
+      return cleanUpZeros(preparedValue);
     }
 
     return ZERO_STRING;
