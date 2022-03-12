@@ -8,8 +8,6 @@ import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
 import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
-const EMPTY_AMOUNT = '';
-
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { doUnstake } = useDoUnstake();
@@ -26,13 +24,13 @@ export const useUnstakingFormViewModel = () => {
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
     await doUnstake(defined(stakeItem), inputAmountWithDecimals);
 
-    cleanForm();
+    formik.resetForm();
     actions.setSubmitting(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      [UnstakingFormFields.inputAmount]: EMPTY_AMOUNT
+      [UnstakingFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleUnstakeSubmit
@@ -47,10 +45,6 @@ export const useUnstakingFormViewModel = () => {
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(value);
     formik.setFieldValue(UnstakingFormFields.inputAmount, value);
-  };
-
-  const cleanForm = () => {
-    handleInputAmountChange(EMPTY_AMOUNT);
   };
 
   return {

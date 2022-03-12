@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
@@ -13,9 +13,6 @@ import { useDoStake } from '../../../../hooks/use-do-stake';
 import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
-
-const EMPTY_AMOUNT = '';
-const EMPTY_SELECTED_BAKER = '';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
@@ -37,30 +34,26 @@ export const useStakingFormViewModel = () => {
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
     await doStake(defined(stakeItem), inputAmountWithDecimals, token, defined(selectedBaker));
 
-    cleanForm();
+    formik.resetForm();
     actions.setSubmitting(false);
   };
 
   const formik = useFormik({
     initialValues: {
-      [StakingFormFields.inputAmount]: EMPTY_AMOUNT,
-      [StakingFormFields.selectedBaker]: EMPTY_SELECTED_BAKER
+      [StakingFormFields.inputAmount]: '',
+      [StakingFormFields.selectedBaker]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleStakeSubmit
   });
 
-  const setEmptyBaker = useCallback(() => {
-    formik.setFieldValue(StakingFormFields.selectedBaker, EMPTY_SELECTED_BAKER);
-    stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
-  }, [shouldShowBakerInput, formik, stakingItemStore]);
-
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
-      setEmptyBaker();
+      formik.setFieldValue(StakingFormFields.selectedBaker, '');
+      stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
-  }, [setEmptyBaker, shouldShowBakerInput]);
+  }, [shouldShowBakerInput, formik, stakingItemStore]);
 
   const inputAmountError = getFormikError(formik, StakingFormFields.inputAmount);
   const bakerError = getFormikError(formik, StakingFormFields.selectedBaker);
@@ -75,11 +68,6 @@ export const useStakingFormViewModel = () => {
   const handleBakerChange = (baker: WhitelistedBaker) => {
     stakingItemStore.setSelectedBaker(baker);
     formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
-  };
-
-  const cleanForm = () => {
-    handleInputAmountChange(EMPTY_AMOUNT);
-    shouldShowBakerInput && setEmptyBaker();
   };
 
   const { tradeHref, investHref } = useMemo(() => {
