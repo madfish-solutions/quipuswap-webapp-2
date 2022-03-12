@@ -19,7 +19,7 @@ import {
   prepareTokenLogo,
   prettyPrice
 } from '@utils/helpers';
-import { Nullable, Token } from '@utils/types';
+import { Nullable, Optional, Token } from '@utils/types';
 
 import { Danger } from '../components/danger';
 import { DashPlug } from '../dash-plug';
@@ -35,7 +35,7 @@ interface Props {
   id: string;
   value: string;
   onInputChange: (value: string) => void;
-  balance: Nullable<string>;
+  balance: Optional<string>;
   shouldShowBalanceButtons?: boolean;
   exchangeRate?: string;
   error?: string;
@@ -56,7 +56,7 @@ export const TokenInput: FC<Props> = ({
   id,
   value,
   onInputChange,
-  balance = null,
+  balance,
   shouldShowBalanceButtons = true,
   error,
   tokenA,
