@@ -8,8 +8,10 @@ import { StakingItem } from '@interfaces/staking.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
+import { sleep } from '@utils/helpers/sleep';
 import { Token, WhitelistedBaker } from '@utils/types';
 
+import { DELAY_BEFORE_DATA_UPDATE } from './constants';
 import { useGetStakingItem } from './use-get-staking-item';
 
 export const useDoStake = () => {
@@ -31,6 +33,8 @@ export const useDoStake = () => {
         );
 
         await confirmOperation(operation.opHash, { message: 'Stake successful' });
+
+        await sleep(DELAY_BEFORE_DATA_UPDATE);
 
         await getStakingItem(defined(stakeItem).id);
       } catch (error) {

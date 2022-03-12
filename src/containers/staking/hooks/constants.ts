@@ -1,0 +1,1 @@
+export const DELAY_BEFORE_DATA_UPDATE = 3000;
