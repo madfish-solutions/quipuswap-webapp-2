@@ -7,10 +7,8 @@ import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { getFormikError } from '@utils/forms/get-formik-error';
 import { bigNumberToString, defined, getTokenPairSlug, isExist, isNull, toDecimals } from '@utils/helpers';
-import { sleep } from '@utils/helpers/sleep';
 import { WhitelistedBaker } from '@utils/types';
 
-import { DELAY_BEFORE_DATA_UPDATE } from '../../../../hooks/constants';
 import { useDoStake } from '../../../../hooks/use-do-stake';
 import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
 import { canDelegate } from '../../../helpers';
@@ -19,7 +17,7 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { getStakingItem } = useGetStakingItem();
+  const { delayedGetStakingItem } = useGetStakingItem();
   const { doStake } = useDoStake();
   const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
@@ -32,7 +30,7 @@ export const useStakingFormViewModel = () => {
 
   const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput);
 
-  const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+  const handleStakeSubmit = async (_: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
@@ -40,10 +38,15 @@ export const useStakingFormViewModel = () => {
 
     formik.resetForm();
     actions.setSubmitting(false);
+  };
 
-    await sleep(DELAY_BEFORE_DATA_UPDATE);
+  const handleStakeSubmitAndUpdateData = async (
+    values: StakingFormValues,
+    actions: FormikHelpers<StakingFormValues>
+  ) => {
+    await handleStakeSubmit(values, actions);
 
-    await getStakingItem(defined(stakeItem).id);
+    await delayedGetStakingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
@@ -52,7 +55,7 @@ export const useStakingFormViewModel = () => {
       [StakingFormFields.selectedBaker]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleStakeSubmit
+    onSubmit: handleStakeSubmitAndUpdateData
   });
 
   useEffect(() => {

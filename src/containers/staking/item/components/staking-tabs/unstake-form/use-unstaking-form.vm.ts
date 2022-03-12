@@ -3,9 +3,7 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { defined, isEmptyArray, toDecimals, bigNumberToString } from '@utils/helpers';
-import { sleep } from '@utils/helpers/sleep';
 
-import { DELAY_BEFORE_DATA_UPDATE } from '../../../../hooks/constants';
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
 import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
@@ -13,7 +11,7 @@ import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { getStakingItem } = useGetStakingItem();
+  const { delayedGetStakingItem } = useGetStakingItem();
   const { doUnstake } = useDoUnstake();
   const { itemStore, inputAmount } = stakingItemStore;
   const { data: stakeItem } = itemStore;
@@ -30,10 +28,15 @@ export const useUnstakingFormViewModel = () => {
 
     formik.resetForm();
     actions.setSubmitting(false);
+  };
 
-    await sleep(DELAY_BEFORE_DATA_UPDATE);
+  const handleUnstakeSubmitAndUpdateData = async (
+    values: UnstakingFormValues,
+    actions: FormikHelpers<UnstakingFormValues>
+  ) => {
+    await handleUnstakeSubmit(values, actions);
 
-    await getStakingItem(defined(stakeItem).id);
+    await delayedGetStakingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
@@ -41,7 +44,7 @@ export const useUnstakingFormViewModel = () => {
       [UnstakingFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleUnstakeSubmit
+    onSubmit: handleUnstakeSubmitAndUpdateData
   });
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
