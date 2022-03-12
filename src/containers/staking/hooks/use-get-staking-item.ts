@@ -2,12 +2,11 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { DELAY_BEFORE_DATA_UPDATE } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
 import { sleep } from '@utils/helpers/sleep';
-
-import { DELAY_BEFORE_DATA_UPDATE } from './constants';
 
 export const useGetStakingItem = () => {
   const { showErrorToast } = useToasts();
