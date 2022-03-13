@@ -22,8 +22,8 @@ export const useStakingListViewModel = () => {
     void getStakingStats();
   }, [getStakingList, getStakingStats, isTezosLoading]);
 
-  const { listStore } = stakingListStore;
-  const { data: list, isLoading } = listStore;
+  const { listStore, list } = stakingListStore;
+  const { isLoading } = listStore;
 
   return {
     isLoading,

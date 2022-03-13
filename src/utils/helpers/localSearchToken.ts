@@ -1,4 +1,4 @@
-import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@utils/types';
+import { QSNets, TokenWithQSNetworkType, Undefined } from '@utils/types';
 
 import { isExist } from './type-checks';
 
@@ -8,9 +8,9 @@ export interface TokenWithRequiredNetwork extends TokenWithQSNetworkType {
 
 export const localSearchToken = (
   { metadata, contractAddress, fa2TokenId, network: tokenNetwork }: TokenWithRequiredNetwork,
-  network: QSNetwork,
+  network: QSNets,
   oldInput: string,
-  oldInputToken: number
+  oldInputToken: Undefined<number>
 ) => {
   const isName = metadata?.name?.toLowerCase().includes(oldInput.toLowerCase());
   const isSymbol =
@@ -18,7 +18,7 @@ export const localSearchToken = (
   const isContract = contractAddress.toLowerCase().includes(oldInput.toLowerCase());
   const fa2TokenIdMatches =
     ((!isExist(oldInputToken) || oldInputToken === 0) && fa2TokenId === undefined) || fa2TokenId === oldInputToken;
-  const networkIdMatches = !tokenNetwork || tokenNetwork === network.id;
+  const networkIdMatches = !tokenNetwork || tokenNetwork === network;
 
   return networkIdMatches && (isName || isSymbol || (isContract && fa2TokenIdMatches));
 };

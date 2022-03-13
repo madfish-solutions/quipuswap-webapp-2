@@ -45,7 +45,7 @@ SearchTokenType) => {
     const inputToken = strStr.split('_')[1] ?? 0;
     const isTokens = tokens
       .sort((a, b) => localSearchSortSymbol(b, a, inputValue, inputToken))
-      .filter(token => localSearchToken(token as TokenWithRequiredNetwork, network, inputValue, +inputToken));
+      .filter(token => localSearchToken(token as TokenWithRequiredNetwork, network.id, inputValue, +inputToken));
     if (isTokens.length === 0) {
       return searchCustomToken(inputValue, +inputToken, true).then(x => {
         if (x) {

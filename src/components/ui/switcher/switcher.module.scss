@@ -1,0 +1,57 @@
+@import "@styles/variables";
+
+.switcher {
+  display: flex;
+  width: 48px;
+  height: 24px;
+  border-radius: 100vh;
+  position: relative;
+  transition: transform 0.75s ease-in-out;
+  transform-origin: 50% 50%;
+  cursor: pointer;
+  background: $ui-05;
+
+  &:before {
+    transition: transform 0.75s ease;
+    transition-delay: 0.5s;
+    content: "";
+    display: block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    top: 4px;
+    left: 4px;
+  }
+
+  &.light {
+    &:before {
+      background: $ui-01;
+    }
+
+    &.active {
+      background: $brand-01;
+    }
+  }
+
+  &.dark {
+    &:before {
+      background: $ui-07;
+    }
+
+    &.active {
+      background: $brand-02;
+    }
+  }
+
+  &.active {
+    &:before {
+      transform: translateX(24px);
+    }
+  }
+
+  &.disabled {
+    background: $ui-04;
+    cursor: not-allowed;
+  }
+}
