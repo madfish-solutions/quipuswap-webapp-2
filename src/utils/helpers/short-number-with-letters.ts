@@ -32,7 +32,7 @@ const short = (value: number, digit: number, letter: string, amountDecimals?: nu
   const [integers] = newValue.toFixed().split('.');
   const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH - integers.length;
 
-  return formatValueBalance(newValue.toFixed(Math.min(decimals, ZERO))) + letter;
+  return formatValueBalance(newValue.toFixed(Math.max(decimals, ZERO))) + letter;
 };
 
 export const shortNumberWithLetters = (value: BigNumber.Value, amountDecimals?: number) => {
