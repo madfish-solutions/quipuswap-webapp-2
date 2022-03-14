@@ -13,6 +13,7 @@ import {
   getInitializeLiquidityMessage,
   getTokenInputAmountCap,
   getTokenSymbol,
+  isExist,
   isNull,
   isUndefined,
   toDecimals
@@ -375,7 +376,7 @@ export const useAddLiquidityService = (
   };
 
   const handleAddLiquidity = async () => {
-    if (defined(dex).contract.address === TOKEN_TO_TOKEN_DEX) {
+    if (isExist(dex) && dex.contract.address === TOKEN_TO_TOKEN_DEX) {
       return await investTokenToToken();
     }
 

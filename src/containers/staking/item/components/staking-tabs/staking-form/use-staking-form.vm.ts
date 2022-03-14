@@ -10,12 +10,14 @@ import { bigNumberToString, defined, getTokenPairSlug, isExist, isNull, toDecima
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
+import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
 import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
+  const { delayedGetStakingItem } = useGetStakingItem();
   const { doStake } = useDoStake();
   const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
@@ -28,12 +30,23 @@ export const useStakingFormViewModel = () => {
 
   const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput);
 
-  const handleStakeSubmit = async (_values: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+  const handleStakeSubmit = async (_: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
     await doStake(defined(stakeItem), inputAmountWithDecimals, token, defined(selectedBaker));
+
+    formik.resetForm();
     actions.setSubmitting(false);
+  };
+
+  const handleStakeSubmitAndUpdateData = async (
+    values: StakingFormValues,
+    actions: FormikHelpers<StakingFormValues>
+  ) => {
+    await handleStakeSubmit(values, actions);
+
+    await delayedGetStakingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
@@ -42,7 +55,7 @@ export const useStakingFormViewModel = () => {
       [StakingFormFields.selectedBaker]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleStakeSubmit
+    onSubmit: handleStakeSubmitAndUpdateData
   });
 
   useEffect(() => {

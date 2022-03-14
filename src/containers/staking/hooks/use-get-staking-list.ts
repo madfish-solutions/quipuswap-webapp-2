@@ -1,9 +1,11 @@
 import { useCallback } from 'react';
 
+import { DELAY_BEFORE_DATA_UPDATE } from '@app.config';
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useToasts } from '@hooks/use-toasts';
 import { useIsLoading } from '@utils/dapp';
+import { sleep } from '@utils/helpers/sleep';
 import { noopMap } from '@utils/mapping/noop.map';
 
 export const useGetStakingList = () => {
@@ -25,5 +27,11 @@ export const useGetStakingList = () => {
     noopMap(authStore.accountPkh);
   }, [authStore.accountPkh, isLoading, showErrorToast, listStore]);
 
-  return { getStakingList };
+  const delayedGetStakingList = useCallback(async () => {
+    await sleep(DELAY_BEFORE_DATA_UPDATE);
+
+    await getStakingList();
+  }, [getStakingList]);
+
+  return { getStakingList, delayedGetStakingList };
 };
