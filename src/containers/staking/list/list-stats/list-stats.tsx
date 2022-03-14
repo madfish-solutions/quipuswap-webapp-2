@@ -14,8 +14,8 @@ export const ListStats: FC = observer(() => {
   return (
     <div className={styles.listStats}>
       <Slider>
-        {stats.map(({ title, amount, tooltip }) => (
-          <TopStats title={title} amount={amount} key={title} tooltip={tooltip} />
+        {stats.map(({ title, amount, tooltip, testId }) => (
+          <TopStats title={title} amount={amount} key={title} tooltip={tooltip} testId={testId} />
         ))}
       </Slider>
     </div>

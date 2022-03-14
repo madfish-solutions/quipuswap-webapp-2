@@ -40,7 +40,7 @@
   "tvlTooltip": "Total amount of assets locked in the farm.",
   "apr": "APR",
   "apy": "APY",
-  "apyTooltip": "Annual Percentage Yield. An estimated  annual compounded return — expected earnings if you reinvest the reward daily. !APY is indicative and should not be used as a performance measure!",
+  "apyTooltip": "Annual Percentage Yield. An estimated  annual compounded return — expected earnings if you reinvest the reward daily. APY is indicative and should not be used as a performance measure!",
   "yourBalance": "Your Balance",
   "yourBalanceTooltip": "The amount of corresponding tokens on your currently synced account.",
   "yourDeposit": "Your Deposit",

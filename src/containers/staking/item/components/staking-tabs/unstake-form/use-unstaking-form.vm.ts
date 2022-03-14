@@ -6,27 +6,39 @@ import { StakingStatus } from '@interfaces/staking.interfaces';
 import { defined, isEmptyArray, toDecimals, bigNumberToString } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
+import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
 import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
 import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
 export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
+  const { delayedGetStakingItem } = useGetStakingItem();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, inputAmount, depositBalanceStore } = stakingItemStore;
+  const { itemStore, inputAmount } = stakingItemStore;
   const { data: stakeItem } = itemStore;
-  const { data: depositBalance } = depositBalanceStore;
 
   const isStakingAlertVisible = stakeItem?.stakeStatus !== StakingStatus.ACTIVE;
-  const userTokenBalance = depositBalance ? bigNumberToString(depositBalance) : null;
+  const userTokenBalance = stakeItem?.depositBalance ? bigNumberToString(stakeItem?.depositBalance) : undefined;
 
-  const validationSchema = useUnstakingFormValidation(depositBalanceStore.data);
+  const validationSchema = useUnstakingFormValidation(stakeItem?.depositBalance ?? null);
 
   const handleUnstakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
     await doUnstake(defined(stakeItem), inputAmountWithDecimals);
+
+    formik.resetForm();
     actions.setSubmitting(false);
+  };
+
+  const handleUnstakeSubmitAndUpdateData = async (
+    values: UnstakingFormValues,
+    actions: FormikHelpers<UnstakingFormValues>
+  ) => {
+    await handleUnstakeSubmit(values, actions);
+
+    await delayedGetStakingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
@@ -34,7 +46,7 @@ export const useUnstakingFormViewModel = () => {
       [UnstakingFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
-    onSubmit: handleUnstakeSubmit
+    onSubmit: handleUnstakeSubmitAndUpdateData
   });
 
   const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));

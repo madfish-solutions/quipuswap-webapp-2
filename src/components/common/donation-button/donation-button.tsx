@@ -29,10 +29,8 @@ export const DonationButton: React.FC<DonationButtonProps> = ({ className }) => 
       onClick={openDonationModal}
       theme="secondary"
     >
-      <div className={styles.contentWrapper}>
-        {t('common|Support')}
-        <img src="/ukraine_outline.png" alt="Ukraine" className={styles.ukraineOutline} />
-      </div>
+      <span>{t('common|Support')}</span>
+      <img src="/ukraine_outline.png" alt="Ukraine" className={styles.ukraineOutline} />
     </Button>
   );
 };

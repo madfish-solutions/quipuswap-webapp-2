@@ -8,6 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { GobletIcon } from '@components/svg/goblet-icon';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { DataTestAttribute } from '@tests/types';
 import { useAccountPkh } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 
@@ -18,13 +19,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-interface Props {
+interface Props extends DataTestAttribute {
   amount: Nullable<BigNumber>;
   currency: string;
   tooltip?: string;
 }
 
-export const PendingRewards: FC<Props> = ({ amount, currency, tooltip }) => {
+export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['stake']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -44,6 +45,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip }) => {
               currency={currency}
               amountDecimals={2}
               isLeftCurrency={currency === '$'}
+              testId={testId}
             />
           </>
         ) : (

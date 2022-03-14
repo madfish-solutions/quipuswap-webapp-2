@@ -24,6 +24,8 @@ interface Props {
     className?: string;
   };
   rewardTooltip?: string;
+  rewardButtonAttributeTestId: string;
+  pendingRewardAttributeTestId: string;
 }
 
 const ZERO_REWARDS = 0;
@@ -36,6 +38,8 @@ export const RewardInfo: FC<Props> = ({
   header,
   rewardTooltip,
   buttonText,
+  rewardButtonAttributeTestId,
+  pendingRewardAttributeTestId,
   children
 }) => {
   const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS);
@@ -43,11 +47,21 @@ export const RewardInfo: FC<Props> = ({
   return (
     <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
-        <PendingRewards amount={amount} currency={currency} tooltip={rewardTooltip} />
+        <PendingRewards
+          testId={rewardButtonAttributeTestId}
+          amount={amount}
+          currency={currency}
+          tooltip={rewardTooltip}
+        />
         <div className={styles.userInfoContainer}>
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>
-            <Button className={styles.button} onClick={onButtonClick} disabled={isButtonDisabled}>
+            <Button
+              testId={pendingRewardAttributeTestId}
+              className={styles.button}
+              onClick={onButtonClick}
+              disabled={isButtonDisabled}
+            >
               {buttonText}
             </Button>
           </ConnectWalletOrDoSomething>
