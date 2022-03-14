@@ -3,7 +3,6 @@ import { FC } from 'react';
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { useTranslation } from 'next-i18next';
 
 import { Card } from '@components/ui/card';
 import { Switcher } from '@components/ui/switcher';
@@ -17,7 +16,6 @@ export const MAX_TOKEN_ID = Number.MAX_SAFE_INTEGER;
 export const STEP = 1;
 
 export const ListFilter: FC = observer(() => {
-  const { t } = useTranslation(['common']);
   const {
     search,
     tokenIdValue,
@@ -27,8 +25,16 @@ export const ListFilter: FC = observer(() => {
     setStakedOnly,
     setActiveOnly,
     handleIncrement,
-    handleDecrement
+    handleDecrement,
+    translation
   } = useListFilterViewModel();
+
+  const {
+    inputPlaceholderTranslation,
+    numberInputPlaceholderTranslation,
+    stakedOnlyTranslation,
+    activeOnlyTranslation
+  } = translation;
 
   return (
     <Card className={cx(styles.filterCard)}>
@@ -37,7 +43,7 @@ export const ListFilter: FC = observer(() => {
         onChange={onSearchChange}
         className={styles.searchInput}
         StartAdornment={Search}
-        placeholder={t('common|Search')}
+        placeholder={inputPlaceholderTranslation}
         readOnly={false}
       />
 
@@ -45,7 +51,7 @@ export const ListFilter: FC = observer(() => {
         value={tokenIdValue}
         onChange={onTokenIdChange}
         className={styles.numberInput}
-        placeholder={t('common|Token ID')}
+        placeholder={numberInputPlaceholderTranslation}
         step={STEP}
         min={MIN_TOKEN_ID}
         max={MAX_TOKEN_ID}
@@ -55,11 +61,11 @@ export const ListFilter: FC = observer(() => {
 
       <div className={styles.switcherContainer}>
         <Switcher disabled={isStakedOnlyDisabled} onChange={setStakedOnly} />
-        <span>Staked Only</span>
+        <span>{stakedOnlyTranslation}</span>
       </div>
       <div className={styles.switcherContainer}>
         <Switcher onChange={setActiveOnly} />
-        <span>Active Only</span>
+        <span>{activeOnlyTranslation}</span>
       </div>
       <div className={styles.switcherContainer}>
         <Sorter menuPlacement="auto" />

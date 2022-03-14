@@ -1,10 +1,13 @@
 import { FormEvent, useCallback } from 'react';
 
+import { useTranslation } from 'next-i18next';
+
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { useStakingFilterStore } from '@hooks/stores/use-staking-filter-store';
 import { isNull } from '@utils/helpers';
 
 export const useListFilterViewModel = () => {
+  const { t } = useTranslation(['common', 'stake']);
   const stakingFilterStore = useStakingFilterStore();
   const { accountPkh } = useAuthStore();
 
@@ -46,6 +49,13 @@ export const useListFilterViewModel = () => {
     stakingFilterStore.handleDecrement();
   };
 
+  const translation = {
+    inputPlaceholderTranslation: t('common|Search'),
+    numberInputPlaceholderTranslation: t('common|Search'),
+    stakedOnlyTranslation: t('stake|stakedOnly'),
+    activeOnlyTranslation: t('stake|activeOnly')
+  };
+
   return {
     search,
     tokenIdValue,
@@ -55,6 +65,7 @@ export const useListFilterViewModel = () => {
     onSearchChange,
     onTokenIdChange,
     handleIncrement,
-    handleDecrement
+    handleDecrement,
+    translation
   };
 };
