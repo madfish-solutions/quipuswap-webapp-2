@@ -3,11 +3,20 @@ import BigNumber from 'bignumber.js';
 
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { isNull, isExist } from '@utils/helpers';
+import { Optional } from '@utils/types';
 
 import { SortValue, SortType } from './sorter.types';
 
 const CHANGE = 1;
 const SKIP = -1;
+
+const multipliedIfPossible = (first: Optional<BigNumber>, second: Optional<BigNumber>): Nullable<BigNumber> => {
+  if (isExist(first) && isExist(second)) {
+    return first.multipliedBy(second);
+  }
+
+  return null;
+};
 
 const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, up: SortValue['up']) => {
   if (isNull(first)) {
@@ -36,40 +45,22 @@ const sortTvl = (first: StakingItem, second: StakingItem, sortValue: SortValue) 
 };
 
 const sortBalance = (first: StakingItem, second: StakingItem, sortValue: SortValue) => {
-  let balanceA = null;
-  let balanceB = null;
-  if (isExist(first.myBalance) && isExist(first.depositExchangeRate)) {
-    balanceA = first.myBalance.multipliedBy(first.depositExchangeRate);
-  }
-  if (isExist(second.myBalance) && isExist(second.depositExchangeRate)) {
-    balanceB = second.myBalance.multipliedBy(second.depositExchangeRate);
-  }
+  const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);
+  const balanceB = multipliedIfPossible(second.myBalance, second.depositExchangeRate);
 
   return sortBigNumber(balanceA, balanceB, sortValue.up);
 };
 
 const sortDeposit = (first: StakingItem, second: StakingItem, sortValue: SortValue) => {
-  let depositA = null;
-  let depositB = null;
-  if (isExist(first.depositBalance) && isExist(first.depositExchangeRate)) {
-    depositA = first.depositBalance.multipliedBy(first.depositExchangeRate);
-  }
-  if (isExist(second.depositBalance) && isExist(second.depositExchangeRate)) {
-    depositB = second.depositBalance.multipliedBy(second.depositExchangeRate);
-  }
+  const depositA = multipliedIfPossible(first.depositBalance, first.depositExchangeRate);
+  const depositB = multipliedIfPossible(second.depositBalance, second.depositExchangeRate);
 
   return sortBigNumber(depositA, depositB, sortValue.up);
 };
 
 const sortEarned = (first: StakingItem, second: StakingItem, sortValue: SortValue) => {
-  let earnA = null;
-  let earnB = null;
-  if (isExist(first.earnBalance) && isExist(first.earnExchangeRate)) {
-    earnA = first.earnBalance.multipliedBy(first.earnExchangeRate);
-  }
-  if (isExist(second.earnBalance) && isExist(second.earnExchangeRate)) {
-    earnB = second.earnBalance.multipliedBy(second.earnExchangeRate);
-  }
+  const earnA = multipliedIfPossible(first.earnBalance, first.earnExchangeRate);
+  const earnB = multipliedIfPossible(second.earnBalance, second.earnExchangeRate);
 
   return sortBigNumber(earnA, earnB, sortValue.up);
 };
