@@ -1,4 +1,4 @@
-import { QSNets, QSNetwork, TokenWithQSNetworkType, Undefined } from '@utils/types';
+import { QSNets, QSNetwork, TokenWithQSNetworkType } from '@utils/types';
 
 import { isExist } from './type-checks';
 
@@ -10,7 +10,7 @@ export const localSearchToken = (
   { metadata, contractAddress, fa2TokenId, network: tokenNetwork }: TokenWithRequiredNetwork,
   network: QSNetwork,
   oldInput: string,
-  oldInputToken: Undefined<number>
+  oldInputToken: number
 ) => {
   const isName = metadata?.name?.toLowerCase().includes(oldInput.toLowerCase());
   const isSymbol =
