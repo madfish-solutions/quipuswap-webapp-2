@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
-import { Card, ExternalLink } from '@quipuswap/ui-kit';
+import { ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
+import { CardStake } from '@components/ui/card/card-stake';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -43,15 +44,17 @@ export const StakingDetails: FC = observer(() => {
     isError,
     shouldShowDelegates,
     shouldShowLockPeriod,
-    shouldShowWithdrawalFee
+    shouldShowWithdrawalFee,
+    stakeStatus
   } = useStakingDetailsViewModel();
 
   return (
-    <Card
+    <CardStake
       header={{
         content: t('stake|Stake Details')
       }}
       contentClassName={s.content}
+      stakeStatus={stakeStatus}
     >
       <DetailsCardCell
         cellName={t('stake|Value Locked')}
@@ -180,6 +183,6 @@ export const StakingDetails: FC = observer(() => {
           {t('stake|Staking Contract')}
         </Button>
       </div>
-    </Card>
+    </CardStake>
   );
 });
