@@ -14,7 +14,6 @@ import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 export const UnstakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
   const {
-    isStakingAlertVisible,
     inputAmount,
     handleSubmit,
     userTokenBalance,
@@ -40,7 +39,7 @@ export const UnstakingForm: FC = observer(() => {
         tokenB={stakeItem.tokenB}
         onInputChange={handleInputAmountChange}
       />
-      {isStakingAlertVisible && <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} />}
+      <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>

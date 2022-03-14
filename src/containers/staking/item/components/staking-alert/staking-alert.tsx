@@ -1,29 +1,26 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
 import { StakingStatus } from '@interfaces/staking.interfaces';
 
 import styles from './staking-alert.module.scss';
+import { useStakingAlertViewModel } from './staking-alert.vm';
 
+const variants = {
+  [StakingStatus.PENDING]: styles.pending,
+  [StakingStatus.DISABLED]: styles.disabled
+};
 interface Props {
   variant: StakingStatus;
   className?: string;
 }
-
 export const StakingAlert: FC<Props> = ({ variant, className }) => {
-  const { t } = useTranslation(['stake']);
+  const { stakeStatusTranslation } = useStakingAlertViewModel();
 
-  return (
-    <div
-      className={cx(styles.root, className, {
-        [styles.pending]: variant === StakingStatus.PENDING,
-        [styles.disabled]: variant === StakingStatus.DISABLED
-      })}
-    >
-      {variant === StakingStatus.DISABLED && t('stake|stakeDisabled')}
-      {variant === StakingStatus.PENDING && t('stake|stakePending')}
-    </div>
-  );
+  if (variant === StakingStatus.ACTIVE) {
+    return null;
+  }
+
+  return <div className={cx(styles.root, className, variants[variant])}>{stakeStatusTranslation[variant]}</div>;
 };
