@@ -25,12 +25,14 @@ const LETTERS_DIGITS = {
 const LETTERS = Object.keys(LETTERS_DIGITS);
 const DIGITS = Object.values(LETTERS_DIGITS);
 
+const ZERO = 0;
+
 const short = (value: number, digit: number, letter: string, amountDecimals?: number) => {
   const newValue = value / digit;
   const [integers] = newValue.toFixed().split('.');
   const decimals = amountDecimals ?? DEFAULT_BALANCE_LENGTH - integers.length;
 
-  return formatValueBalance(newValue.toFixed(decimals)) + letter;
+  return formatValueBalance(newValue.toFixed(Math.min(decimals, ZERO))) + letter;
 };
 
 export const shortNumberWithLetters = (value: BigNumber.Value, amountDecimals?: number) => {
