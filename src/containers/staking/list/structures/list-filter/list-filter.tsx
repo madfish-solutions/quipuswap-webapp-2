@@ -6,9 +6,9 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { Card } from '@components/ui/card';
-import { Sorter } from '@components/ui/sorter';
 import { Switcher } from '@components/ui/switcher';
 
+import { Sorter } from '../../components/sorter';
 import styles from './list-filter.module.scss';
 import { useListFilterViewModel } from './list-filter.vm';
 

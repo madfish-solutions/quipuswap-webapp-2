@@ -4,6 +4,7 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getStakingListApi, getStakingStatsApi } from '@api/staking';
 import { NETWORK_ID } from '@app.config';
+import { SortType, SortValue } from '@containers/staking/list/components';
 import { RawStakeStats, RawStakingItem, StakeStats, StakingItem, StakingStatus } from '@interfaces/staking.interfaces';
 import { defined, isExist, isNull, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
@@ -14,7 +15,22 @@ import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const ZERO_AMOUNT = 0;
+const CHANGE = 1;
+const SKIP = -1;
 
+const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, up: SortValue['up']) => {
+  if (isNull(first)) {
+    return CHANGE;
+  }
+
+  if (isNull(second)) {
+    return SKIP;
+  }
+
+  const isFirstBigger = first.isGreaterThan(second);
+
+  return up === isFirstBigger ? CHANGE : SKIP;
+};
 export class StakingListStore {
   listStore = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
@@ -56,7 +72,7 @@ export class StakingListStore {
       );
     }
 
-    return list;
+    return this.sort(list, this.sortValue);
   }
 
   get tokenIdValue() {
@@ -71,6 +87,7 @@ export class StakingListStore {
   activeOnly = false;
   search = '';
   tokenId: Nullable<BigNumber> = null;
+  sortValue: Nullable<SortValue> = null;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -80,12 +97,14 @@ export class StakingListStore {
       activeOnly: observable,
       search: observable,
       tokenId: observable,
+      sortValue: observable,
       setStakedOnly: action,
       setActiveOnly: action,
       onSearchChange: action,
       onTokenIdChange: action,
       handleIncrement: action,
-      handleDecrement: action
+      handleDecrement: action,
+      onSorterChange: action
     });
   }
 
@@ -123,6 +142,39 @@ export class StakingListStore {
     } else if (this.tokenId.isGreaterThan('0')) {
       this.tokenId = this.tokenId.minus('1');
     }
+  }
+
+  onSorterChange(value: SortValue) {
+    this.sortValue = value;
+  }
+
+  private sort(list: Array<StakingItem>, sortValue: Nullable<SortValue>) {
+    if (isNull(sortValue)) {
+      return list;
+    }
+
+    const localList = [...list];
+
+    localList.sort((first, second) => {
+      switch (sortValue.value) {
+        case SortType.APR:
+          return sortBigNumber(first.apr, second.apr, sortValue.up);
+        case SortType.APY:
+          return sortBigNumber(first.apy, second.apy, sortValue.up);
+        case SortType.BALANCE:
+          return sortBigNumber(first.myBalance, second.myBalance, sortValue.up);
+        case SortType.DEPOSIT:
+          return sortBigNumber(first.depositBalance, second.depositBalance, sortValue.up);
+        case SortType.EARNED:
+          return sortBigNumber(first.earnBalance, second.earnBalance, sortValue.up);
+        case SortType.TVL:
+          return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortValue.up);
+        default:
+          throw new Error('Invalid sort type'); //never happend
+      }
+    });
+
+    return localList;
   }
 
   private searchToken(token: Token): boolean {
