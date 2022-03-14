@@ -6,9 +6,23 @@ import { sortStakingList, SortValue } from '@containers/staking/list/components'
 import { StakingItem, StakingStatus } from '@interfaces/staking.interfaces';
 import { isExist, isNull } from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
-import { Token } from '@utils/types';
+import { Optional, Token } from '@utils/types';
 
 import { RootStore } from './root.store';
+
+const ZERO = 0;
+
+const includes = (strA: Optional<string>, strB: string) => {
+  if (isExist(strA)) {
+    return strA.toLowerCase().includes(strB.toLowerCase());
+  }
+
+  return false;
+};
+
+const isZeroTokenId = (tokenId: Optional<number>) => {
+  return !isExist(tokenId) || tokenId === ZERO;
+};
 
 export class StakingFilterStore {
   get tokenIdValue() {
@@ -109,16 +123,15 @@ export class StakingFilterStore {
 
     const tokenId = this.tokenId?.toNumber();
 
-    const fa2TokenIdMatches = (isNull(this.tokenId) || tokenId === 0) && (fa2TokenId === 0 || fa2TokenId === undefined);
+    const fa2TokenIdMatches = (isZeroTokenId(tokenId) && isZeroTokenId(fa2TokenId)) || tokenId === fa2TokenId;
 
     if (contractOnly) {
       return isContract && fa2TokenIdMatches;
     }
 
-    const isName = metadata?.name?.toLowerCase().includes(this.search.toLowerCase());
+    const isName = includes(metadata?.name, this.search);
 
-    const isSymbol =
-      metadata?.symbol?.toLowerCase().includes(this.search.toLowerCase()) && metadata?.symbol !== contractAddress;
+    const isSymbol = includes(metadata?.symbol, this.search);
 
     return isName || isSymbol || (isContract && fa2TokenIdMatches);
   }
