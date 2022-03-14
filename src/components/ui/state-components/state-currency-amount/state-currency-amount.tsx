@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
+import { DataTestAttribute } from '@tests/types';
 import { FormatNumberOptions } from '@utils/formatNumber';
 import { formatValueBalance, isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
@@ -13,7 +14,7 @@ import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import s from './state-currency-amount.module.sass';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
@@ -50,7 +51,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   isError,
   errorFallback,
   amountDecimals,
-  aliternativeView
+  aliternativeView,
+  testId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -83,7 +85,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner} title={title}>
+        <span data-test-id={testId} className={s.inner} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
