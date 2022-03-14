@@ -1,49 +1,49 @@
 import { FormEvent, useCallback } from 'react';
 
 import { useAuthStore } from '@hooks/stores/use-auth-store';
-import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
+import { useStakingFilterStore } from '@hooks/stores/use-staking-filter-store';
 import { isNull } from '@utils/helpers';
 
 export const useListFilterViewModel = () => {
-  const stakingListStore = useStakingListStore();
+  const stakingFilterStore = useStakingFilterStore();
   const { accountPkh } = useAuthStore();
 
-  const { search, tokenIdValue } = stakingListStore;
+  const { search, tokenIdValue } = stakingFilterStore;
 
   const setStakedOnly = useCallback(
     (state: boolean) => {
-      return stakingListStore.setStakedOnly(state);
+      return stakingFilterStore.setStakedOnly(state);
     },
-    [stakingListStore]
+    [stakingFilterStore]
   );
 
   const setActiveOnly = useCallback(
     (state: boolean) => {
-      return stakingListStore.setActiveOnly(state);
+      return stakingFilterStore.setActiveOnly(state);
     },
-    [stakingListStore]
+    [stakingFilterStore]
   );
 
   const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e)) {
       return;
     }
-    stakingListStore.onSearchChange((e.target as HTMLInputElement).value);
+    stakingFilterStore.onSearchChange((e.target as HTMLInputElement).value);
   };
 
   const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e) || isNull(e.target)) {
       return;
     }
-    stakingListStore.onTokenIdChange((e.target as HTMLInputElement).value);
+    stakingFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
   };
 
   const handleIncrement = () => {
-    stakingListStore.handleIncrement();
+    stakingFilterStore.handleIncrement();
   };
 
   const handleDecrement = () => {
-    stakingListStore.handleDecrement();
+    stakingFilterStore.handleDecrement();
   };
 
   return {
