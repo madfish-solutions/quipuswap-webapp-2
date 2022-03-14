@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { NETWORK_ID } from '@app.config';
+import { NETWORK } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenType, useSearchCustomTokens, useSearchTokens, useTezos, useTokens } from '@utils/dapp';
 import {
@@ -65,7 +65,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
     }
 
     const isTokens = tokens.filter((token: Token) =>
-      localSearchToken(token as TokenWithRequiredNetwork, NETWORK_ID, inputValue, inputToken)
+      localSearchToken(token as TokenWithRequiredNetwork, NETWORK, inputValue, inputToken)
     );
 
     let foundToken: Nullable<Token> = null;
