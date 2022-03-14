@@ -8,6 +8,7 @@ import { TokenInput } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
+import { StakingAlert } from '../../staking-alert';
 import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 
 export const UnstakingForm: FC = observer(() => {
@@ -38,6 +39,7 @@ export const UnstakingForm: FC = observer(() => {
         tokenB={stakeItem.tokenB}
         onInputChange={handleInputAmountChange}
       />
+      <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>
