@@ -1,0 +1,8 @@
+.sorter {
+  width: 128px;
+  :global('.customSelect__single-value') {
+    &::after {
+      display: none !important;
+    }
+  }
+}

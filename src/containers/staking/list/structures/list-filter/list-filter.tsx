@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { Card } from '@components/ui/card';
+import { Sorter } from '@components/ui/sorter';
 import { Switcher } from '@components/ui/switcher';
 
 import styles from './list-filter.module.scss';
@@ -59,6 +60,9 @@ export const ListFilter: FC = observer(() => {
       <div className={styles.switcherContainer}>
         <Switcher onChange={setActiveOnly} />
         <span>Active Only</span>
+      </div>
+      <div className={styles.switcherContainer}>
+        <Sorter menuPlacement="auto" />
       </div>
     </Card>
   );
