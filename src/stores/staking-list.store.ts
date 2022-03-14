@@ -3,10 +3,9 @@ import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getStakingListApi, getStakingStatsApi } from '@api/staking';
-import { NETWORK_ID } from '@app.config';
-import { SortType, SortValue } from '@containers/staking/list/components';
+import { sortStakingList, SortValue } from '@containers/staking/list/components';
 import { RawStakeStats, RawStakingItem, StakeStats, StakingItem, StakingStatus } from '@interfaces/staking.interfaces';
-import { defined, isExist, isNull, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
+import { defined, isExist, isNull } from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 import { Token } from '@utils/types';
@@ -15,22 +14,7 @@ import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const ZERO_AMOUNT = 0;
-const CHANGE = 1;
-const SKIP = -1;
 
-const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, up: SortValue['up']) => {
-  if (isNull(first)) {
-    return CHANGE;
-  }
-
-  if (isNull(second)) {
-    return SKIP;
-  }
-
-  const isFirstBigger = first.isGreaterThan(second);
-
-  return up === isFirstBigger ? CHANGE : SKIP;
-};
 export class StakingListStore {
   listStore = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
@@ -65,14 +49,14 @@ export class StakingListStore {
     if (this.search) {
       list = list.filter(
         ({ stakedToken, rewardToken, tokenA, tokenB }) =>
-          this.searchToken(stakedToken) ||
+          this.searchToken(stakedToken, true) ||
           this.searchToken(rewardToken) ||
           this.searchToken(tokenA) ||
           (isExist(tokenB) && this.searchToken(tokenB))
       );
     }
 
-    return this.sort(list, this.sortValue);
+    return sortStakingList(list, this.sortValue);
   }
 
   get tokenIdValue() {
@@ -148,36 +132,22 @@ export class StakingListStore {
     this.sortValue = value;
   }
 
-  private sort(list: Array<StakingItem>, sortValue: Nullable<SortValue>) {
-    if (isNull(sortValue)) {
-      return list;
+  private searchToken({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {
+    const isContract = contractAddress === this.search;
+
+    const tokenId = this.tokenId?.toNumber();
+
+    const fa2TokenIdMatches = (isNull(this.tokenId) || tokenId === 0) && (fa2TokenId === 0 || fa2TokenId === undefined);
+
+    if (contractOnly) {
+      return isContract && fa2TokenIdMatches;
     }
 
-    const localList = [...list];
+    const isName = metadata?.name?.toLowerCase().includes(this.search.toLowerCase());
 
-    localList.sort((first, second) => {
-      switch (sortValue.value) {
-        case SortType.APR:
-          return sortBigNumber(first.apr, second.apr, sortValue.up);
-        case SortType.APY:
-          return sortBigNumber(first.apy, second.apy, sortValue.up);
-        case SortType.BALANCE:
-          return sortBigNumber(first.myBalance, second.myBalance, sortValue.up);
-        case SortType.DEPOSIT:
-          return sortBigNumber(first.depositBalance, second.depositBalance, sortValue.up);
-        case SortType.EARNED:
-          return sortBigNumber(first.earnBalance, second.earnBalance, sortValue.up);
-        case SortType.TVL:
-          return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortValue.up);
-        default:
-          throw new Error('Invalid sort type'); //never happend
-      }
-    });
+    const isSymbol =
+      metadata?.symbol?.toLowerCase().includes(this.search.toLowerCase()) && metadata?.symbol !== contractAddress;
 
-    return localList;
-  }
-
-  private searchToken(token: Token): boolean {
-    return localSearchToken(token as TokenWithRequiredNetwork, NETWORK_ID, this.search, this.tokenId?.toNumber());
+    return isName || isSymbol || (isContract && fa2TokenIdMatches);
   }
 }

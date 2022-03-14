@@ -12,38 +12,8 @@ interface Props extends SelectProps {
   className?: string;
 }
 
-export enum SortType {
-  APR = 'APR',
-  APY = 'APY',
-  TVL = 'TVL',
-  BALANCE = 'BALANCE',
-  DEPOSIT = 'DEPOSIT',
-  EARNED = 'EARNED'
-}
-
-export interface SortValue {
-  label: string;
-  value: SortType;
-  up: boolean;
-}
-
-const sortingValues = [
-  { label: 'APR', value: SortType.APR, up: true },
-  { label: 'APR', value: SortType.APR, up: false },
-  { label: 'APY', value: SortType.APY, up: true },
-  { label: 'APY', value: SortType.APY, up: false },
-  { label: 'TVL', value: SortType.TVL, up: true },
-  { label: 'TVL', value: SortType.TVL, up: false },
-  { label: 'Balance', value: SortType.BALANCE, up: true },
-  { label: 'Balance', value: SortType.BALANCE, up: false },
-  { label: 'Deposit', value: SortType.DEPOSIT, up: true },
-  { label: 'Deposit', value: SortType.DEPOSIT, up: false },
-  { label: 'Earned', value: SortType.EARNED, up: true },
-  { label: 'Earned', value: SortType.EARNED, up: false }
-];
-
 export const Sorter: FC<Props> = ({ className, menuPlacement }) => {
-  const { onSorterChange } = useSorterViewModel();
+  const { onSorterChange, sortingValues } = useSorterViewModel();
 
   return (
     <SelectUI
