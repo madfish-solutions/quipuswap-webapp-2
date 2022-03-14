@@ -11,7 +11,7 @@ import {
 } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import s from '@styles/CommonContainer.module.sass';
-import { useBakers, useIsLoading } from '@utils/dapp';
+import { useBakers, useReady } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
@@ -22,9 +22,9 @@ const NO_TIMELOCK_VALUE = '0';
 
 export const useStakingDetailsViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const dAppLoading = useIsLoading();
+  const dAppReady = useReady();
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized, error } = stakingItemStore.itemStore;
-  const isLoading = dataLoading || !dataInitialized || dAppLoading;
+  const isLoading = dataLoading || !dataInitialized || !dAppReady;
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);

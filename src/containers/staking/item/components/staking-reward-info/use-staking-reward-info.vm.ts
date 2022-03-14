@@ -4,7 +4,7 @@ import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useBakers, useIsLoading } from '@utils/dapp';
+import { useBakers, useReady } from '@utils/dapp';
 import { defined, getDollarEquivalent } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
@@ -18,9 +18,9 @@ export const useStakingRewardInfoViewModel = () => {
   const { delayedGetStakingItem } = useGetStakingItem();
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
-  const dAppLoading = useIsLoading();
+  const dAppReady = useReady();
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
-  const stakingLoading = dataLoading || !dataInitialized || dAppLoading;
+  const stakingLoading = dataLoading || !dataInitialized || !dAppReady;
   const delegatesLoading = bakersLoading || stakingLoading;
 
   const handleHarvest = async () => {
