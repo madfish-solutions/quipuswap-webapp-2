@@ -12,7 +12,7 @@ interface Props extends SelectProps {
   className?: string;
 }
 
-export const Sorter: FC<Props> = ({ className, menuPlacement }) => {
+export const Sorter: FC<Props> = ({ className }) => {
   const { onSorterChange, sortingValues } = useSorterViewModel();
 
   return (
@@ -21,7 +21,6 @@ export const Sorter: FC<Props> = ({ className, menuPlacement }) => {
       value={{ label: 'Sorted By' }}
       onChange={onSorterChange}
       className={cx(className, styles.sorter)}
-      menuPlacement={menuPlacement}
     />
   );
 };

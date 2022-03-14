@@ -68,7 +68,7 @@ export const ListFilter: FC = observer(() => {
         <span>{activeOnlyTranslation}</span>
       </div>
       <div className={styles.switcherContainer}>
-        <Sorter menuPlacement="auto" />
+        <Sorter />
       </div>
     </Card>
   );
