@@ -8,7 +8,7 @@ import { Nullable, Optional, Token } from '@utils/types';
 
 import { PairInfo } from '../add-liquidity-form';
 import { loadTokenToTokenPairInfo } from '../blockchain';
-import { getTezTokenPairInfo } from '../helpers';
+import { checkIsPoolNotExists, getTezTokenPairInfo } from '../helpers';
 
 export const usePairInfo = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, tokenB: Nullable<Token>) => {
   const [pairInfo, setPairInfo] = useState<Optional<PairInfo>>(undefined);
@@ -36,5 +36,13 @@ export const usePairInfo = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, to
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dex]);
 
-  return { pairInfo, updatePairInfo: loadPairInfo };
+  const isTokensOrderValid =
+    tokenA?.contractAddress === pairInfo?.tokenA.contractAddress && tokenA?.fa2TokenId === pairInfo?.tokenA.fa2TokenId;
+
+  const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
+  const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
+
+  const isPoolNotExists = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
+
+  return { pairInfo, updatePairInfo: loadPairInfo, isTokensOrderValid, tokenAPool, tokenBPool, isPoolNotExists };
 };

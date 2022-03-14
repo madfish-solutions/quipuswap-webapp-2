@@ -2,7 +2,7 @@ import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
 import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
-import { fromDecimals, getTokenSymbol, isTezIncluded, isUndefined } from '@utils/helpers';
+import { fromDecimals, getTokenSymbol, isTezIncluded, isTokenFa2, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
 
 import { calculatePoolAmount, checkIsPoolNotExists } from '../helpers';
@@ -11,23 +11,17 @@ import { usePairInfo } from '../hooks';
 const ONE_TOKEN = 1;
 const ONE_TOKEN_BN = new BigNumber(ONE_TOKEN);
 
-export const useLiquidityDetailsService = (
+const getPoolFixed = (token: Nullable<Token>, pool: Nullable<BigNumber>) => token && pool && fromDecimals(pool, token);
+
+export const useLiquidityDetailsViewModel = (
   dex: Optional<FoundDex>,
   tokenA: Nullable<Token>,
   tokenB: Nullable<Token>
 ) => {
-  const { pairInfo } = usePairInfo(dex, tokenA, tokenB);
+  const { pairInfo, tokenAPool, tokenBPool, isPoolNotExists } = usePairInfo(dex, tokenA, tokenB);
 
-  const isPoolNotExists = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
-
-  const isTokensOrderValid =
-    tokenA?.contractAddress === pairInfo?.tokenA.contractAddress && tokenA?.fa2TokenId === pairInfo?.tokenA.fa2TokenId;
-
-  const tokenAPool = isTokensOrderValid ? pairInfo?.tokenAPool ?? null : pairInfo?.tokenBPool ?? null;
-  const tokenBPool = isTokensOrderValid ? pairInfo?.tokenBPool ?? null : pairInfo?.tokenAPool ?? null;
-
-  const fixedTokenAPoll = tokenA && tokenAPool && fromDecimals(tokenAPool, tokenA);
-  const fixedTokenBPoll = tokenB && tokenBPool && fromDecimals(tokenBPool, tokenB);
+  const fixedTokenAPoll = getPoolFixed(tokenA, tokenAPool);
+  const fixedTokenBPoll = getPoolFixed(tokenB, tokenBPool);
 
   const tokenASymbol = tokenA ? getTokenSymbol(tokenA) : null;
   const tokenBSymbol = tokenB ? getTokenSymbol(tokenB) : null;
@@ -39,7 +33,26 @@ export const useLiquidityDetailsService = (
     dex && isTezIncluded([tokenA, tokenB]) && !isUndefined(pairInfo) && !checkIsPoolNotExists(pairInfo)
       ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}`
       : null;
+
   const contractLink = dex ? `${TZKT_EXPLORER_URL}/${dex.contract.address}` : null;
+
+  const getPairId = () => {
+    if (!dex) {
+      return null;
+    }
+
+    if (pairInfo?.id) {
+      return pairInfo?.id?.toFixed();
+    }
+
+    if ((tokenA && isTokenFa2(tokenA)) || (tokenB && isTokenFa2(tokenB))) {
+      return '0';
+    }
+
+    return null;
+  };
+
+  const pairId = getPairId();
 
   return {
     fixedTokenAPoll,
@@ -50,6 +63,7 @@ export const useLiquidityDetailsService = (
     buyPrice,
     pairLink,
     contractLink,
-    isPoolNotExists
+    isPoolNotExists,
+    pairId
   };
 };
