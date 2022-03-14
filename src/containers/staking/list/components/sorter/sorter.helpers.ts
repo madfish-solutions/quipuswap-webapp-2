@@ -2,7 +2,7 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { isNull, isExist } from '@utils/helpers';
+import { isNull, isExist, cloneArray } from '@utils/helpers';
 import { Optional } from '@utils/types';
 
 import { SortValue, SortType } from './sorter.types';
@@ -83,7 +83,7 @@ export const sortStakingList = (list: Array<StakingItem>, sortValue: Nullable<So
     return list;
   }
 
-  const localList = [...list];
+  const localList = cloneArray(list);
 
   localList.sort((first, second) => sortStaking(first, second, sortValue));
 
