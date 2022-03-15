@@ -2,11 +2,22 @@ import BigNumber from 'bignumber.js';
 
 import { Nullable, Token, Undefined } from '@utils/types';
 
+export interface BlockInfo {
+  level: number;
+  hash: string;
+  timestamp: string;
+}
+
 export interface RawStakeStats {
   totalValueLocked: string;
   totalDailyReward: string;
   totalPendingReward: string;
   totalClaimedReward: string;
+}
+
+export interface StakeStatsResponse {
+  stats: RawStakeStats;
+  blockInfo: BlockInfo;
 }
 
 export interface StakeStats {
@@ -28,11 +39,9 @@ export interface RawStakingItem {
 
   currentDelegate: string;
 
-  depositBalance?: string;
   depositExchangeRate: Nullable<string>;
   depositTokenUrl: string;
 
-  earnBalance?: string;
   earnExchangeRate: Nullable<string>;
   endTime: string;
 
@@ -47,6 +56,7 @@ export interface RawStakingItem {
   stakeStatus: StakingStatus;
   stakeUrl: string;
   stakedToken: Token;
+  staked: string;
 
   timelock: string;
   tokenA: Token;
@@ -58,6 +68,18 @@ export interface RawStakingItem {
   withdrawalFee: string;
 
   myBalance?: string;
+  depositBalance?: string;
+  earnBalance?: string;
+}
+
+export interface StakeListResponse {
+  list: Array<RawStakingItem>;
+  blockInfo: BlockInfo;
+}
+
+export interface StakeItemResponse {
+  item: RawStakingItem;
+  blockInfo: BlockInfo;
 }
 
 export interface UserBalances {
