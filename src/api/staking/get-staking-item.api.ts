@@ -6,6 +6,7 @@ import { StakeContractStorageWrapper } from '@interfaces/stake-contract.interfac
 import { RawStakingItem, StakeItemResponse } from '@interfaces/staking.interfaces';
 import { isNull } from '@utils/helpers';
 import { Nullable } from '@utils/types';
+import { AuthStore } from 'stores/auth.store';
 
 import { getBalances } from './helpers';
 
@@ -37,10 +38,11 @@ const injectBalance = async (item: RawStakingItem, accountPkh: string, tezos: Te
 
 export const getStakingItemApi = async (
   stakingId: Nullable<BigNumber>,
-  { accountPkh }: { accountPkh: Nullable<string> }, //avoid race condition
+  authStore: AuthStore, //avoid race condition
   tezos: Nullable<TezosToolkit>
 ) => {
   const fetchResult = await getStakingItemFetch(stakingId);
+  const { accountPkh } = authStore;
 
   if (isNull(accountPkh) || isNull(tezos)) {
     return fetchResult;
