@@ -4,12 +4,22 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
+import { StakingStatus } from '@interfaces/staking.interfaces';
+import { Undefined } from '@utils/types';
+
 import { StakingFormFields } from './staking-form.interface';
+import { useStakingStatusValidation } from './use-staking-status.validation';
 
 const ZERO = 0;
 
-export const useStakingFormValidation = (userBalance: Nullable<BigNumber>, canDelegate: boolean) =>
-  useMemo(() => {
+export const useStakingFormValidation = (
+  userBalance: Nullable<BigNumber>,
+  canDelegate: boolean,
+  stakingStatus: Undefined<StakingStatus>
+) => {
+  const stakingStatusSchema = useStakingStatusValidation(stakingStatus);
+
+  return useMemo(() => {
     const inputAmountSchema = userBalance
       ? yup
           .number()
@@ -21,6 +31,8 @@ export const useStakingFormValidation = (userBalance: Nullable<BigNumber>, canDe
 
     return yup.object().shape({
       [StakingFormFields.inputAmount]: inputAmountSchema.required('Value is required'),
-      [StakingFormFields.selectedBaker]: bakerSchema
+      [StakingFormFields.selectedBaker]: bakerSchema,
+      [StakingFormFields.stakingStatus]: stakingStatusSchema
     });
-  }, [userBalance, canDelegate]);
+  }, [userBalance, canDelegate, stakingStatusSchema]);
+};

@@ -6,7 +6,6 @@ import { useTranslation } from 'next-i18next';
 import { ConnectWalletOrDoSomething } from '@components/common/connect-wallet-or-do-something';
 import { ComplexBaker, TokenInput } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/elements/button';
-import { StakingStatus } from '@interfaces/staking.interfaces';
 import s from '@styles/CommonContainer.module.sass';
 import { isNull } from '@utils/helpers';
 
@@ -23,6 +22,7 @@ export const StakingForm: FC = observer(() => {
     inputAmountError,
     stakeItem,
     bakerError,
+    stakingStatusError,
     disabled,
     handleBakerChange,
     tradeHref,
@@ -64,7 +64,7 @@ export const StakingForm: FC = observer(() => {
           </Button>
         )}
       </div>
-      <StakingAlert className={s.mt16} variant={StakingStatus.ACTIVE} />
+      <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} errorMessage={stakingStatusError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>
