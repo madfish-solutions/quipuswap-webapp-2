@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
-import { CardStake } from '@components/ui/card/card-stake';
+import { Card } from '@components/ui/card/card';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -49,12 +49,12 @@ export const StakingDetails: FC = observer(() => {
   } = useStakingDetailsViewModel();
 
   return (
-    <CardStake
+    <Card
       header={{
         content: t('stake|Stake Details')
       }}
       contentClassName={s.content}
-      stakeStatus={stakeStatus}
+      status={stakeStatus}
     >
       <DetailsCardCell
         cellName={t('stake|Value Locked')}
@@ -183,6 +183,6 @@ export const StakingDetails: FC = observer(() => {
           {t('stake|Staking Contract')}
         </Button>
       </div>
-    </CardStake>
+    </Card>
   );
 });

@@ -3,6 +3,9 @@ import { FC, ReactNode, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { StakeStatusBox } from '@containers/staking/list/components';
+import { StakingStatus } from '@interfaces/staking.interfaces';
+
 import styles from './card.module.scss';
 
 interface Props {
@@ -14,6 +17,8 @@ interface Props {
   };
   additional?: ReactNode;
   footer?: ReactNode;
+  contentClassName?: string;
+  status?: StakingStatus;
   isV2?: boolean;
 }
 
@@ -22,7 +27,16 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Card: FC<Props> = ({ className, header, additional, footer, children, isV2 = false }) => {
+export const Card: FC<Props> = ({
+  className,
+  header,
+  additional,
+  footer,
+  children,
+  isV2 = false,
+  status,
+  contentClassName
+}) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   if (isV2) {
@@ -34,11 +48,12 @@ export const Card: FC<Props> = ({ className, header, additional, footer, childre
       {header && (
         <div className={cx(styles.header, header.className)}>
           {header.content}
+          {status ? <StakeStatusBox status={status} /> : null}
           {header.button}
         </div>
       )}
       {additional && <div className={styles.additional}>{additional}</div>}
-      {children}
+      <div className={cx(styles.content, contentClassName)}>{children}</div>
       {footer && <div className={styles.footer}>{footer}</div>}
     </div>
   );
