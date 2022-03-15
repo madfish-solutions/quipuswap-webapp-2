@@ -1,4 +1,4 @@
-import { FormEvent, useCallback } from 'react';
+import { FormEvent } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
@@ -13,19 +13,13 @@ export const useListFilterViewModel = () => {
 
   const { search, tokenIdValue } = stakingFilterStore;
 
-  const setStakedOnly = useCallback(
-    (state: boolean) => {
-      return stakingFilterStore.setStakedOnly(state);
-    },
-    [stakingFilterStore]
-  );
+  const setStakedOnly = (state: boolean) => {
+    return stakingFilterStore.setStakedOnly(state);
+  };
 
-  const setActiveOnly = useCallback(
-    (state: boolean) => {
-      return stakingFilterStore.setActiveOnly(state);
-    },
-    [stakingFilterStore]
-  );
+  const setActiveOnly = (state: boolean) => {
+    return stakingFilterStore.setActiveOnly(state);
+  };
 
   const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e)) {
