@@ -37,12 +37,10 @@ const injectBalance = async (item: RawStakingItem, accountPkh: string, tezos: Te
 
 export const getStakingItemApi = async (
   stakingId: Nullable<BigNumber>,
-  accountPkh: Nullable<string>,
+  { accountPkh }: { accountPkh: Nullable<string> }, //avoid race condition
   tezos: Nullable<TezosToolkit>
 ) => {
   const fetchResult = await getStakingItemFetch(stakingId);
-
-  //accountPkh is Null
 
   if (isNull(accountPkh) || isNull(tezos)) {
     return fetchResult;
