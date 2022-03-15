@@ -4,7 +4,7 @@ import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import { StatusLabel } from '@components/ui/status-label';
-import { ActiveStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 
 import styles from './card.module.scss';
 
