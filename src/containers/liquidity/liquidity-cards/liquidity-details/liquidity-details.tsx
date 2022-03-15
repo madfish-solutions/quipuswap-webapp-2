@@ -4,17 +4,20 @@ import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
 
 import { EMPTY_POOL_AMOUNT } from '@app.config';
+import { LinkToContract } from '@components/common/link-to-contract/link-to-contract';
 import { RateView } from '@components/common/pair-details/rate-view';
+import { StateWrapper } from '@components/state-wrapper';
+import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
 import { useAccountPkh } from '@utils/dapp';
-import { isNull, isUndefined } from '@utils/helpers';
+import { isExist, isNull, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
-import { useLiquidityDetailsService } from './use-liqiudity-details.service';
+import { useLiquidityDetailsViewModel } from './use-liqiudity-details.vm';
 
 interface Props {
   dex: Optional<FoundDex>;
@@ -36,8 +39,10 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
     fixedTokenBPoll,
     pairLink,
     contractLink,
-    isPoolNotExists
-  } = useLiquidityDetailsService(dex, tokenA, tokenB);
+    isPoolNotExists,
+    contractAddress,
+    pairId
+  } = useLiquidityDetailsViewModel(dex, tokenA, tokenB);
 
   const isDexNotExists = isUndefined(dex);
   const isLoadingA = isDexNotExists || isNull(tokenA);
@@ -53,6 +58,37 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
 
   return (
     <>
+      <DetailsCardCell
+        cellName={t('common|Pair Address')}
+        tooltipContent={t(
+          'common|Address of the share(LP) token contract. Along with pair id(if any)it can be used to find the LP token in your wallet.',
+          { tokenASymbol, tokenBSymbol }
+        )}
+        className={s.LiquidityDetails_CardCell}
+      >
+        <StateWrapper
+          loaderFallback={<DashPlug />}
+          isError={!contractAddress || !contractLink}
+          errorFallback={<DashPlug animation={false} />}
+        >
+          {contractAddress && contractLink && <LinkToContract contractAddress={contractAddress} link={contractLink} />}
+        </StateWrapper>
+      </DetailsCardCell>
+
+      <DetailsCardCell
+        cellName={t('common|Pair ID')}
+        tooltipContent={t('common|Token id of the share(LP) token.', { tokenASymbol, tokenBSymbol })}
+        className={s.LiquidityDetails_CardCell}
+      >
+        <StateWrapper
+          loaderFallback={<DashPlug />}
+          isError={!isExist(pairId)}
+          errorFallback={<DashPlug animation={false} />}
+        >
+          {pairId}
+        </StateWrapper>
+      </DetailsCardCell>
+
       <DetailsCardCell
         cellName={t('common|Sell Price')}
         tooltipContent={t(
