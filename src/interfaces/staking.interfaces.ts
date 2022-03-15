@@ -16,7 +16,7 @@ export interface StakeStats {
   totalClaimedReward: BigNumber;
 }
 
-export enum StakingStatus {
+export enum ActiveStatus {
   ACTIVE = 'ACTIVE',
   PENDING = 'PENDING',
   DISABLED = 'DISABLED'
@@ -44,7 +44,7 @@ export interface RawStakingItem {
   rewardPerShare: string;
   rewardToken: Token;
 
-  stakeStatus: StakingStatus;
+  stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
 
@@ -86,7 +86,7 @@ export interface StakingItem extends UserBalances {
   rewardPerShare: BigNumber;
   rewardToken: Token;
 
-  stakeStatus: StakingStatus;
+  stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
 

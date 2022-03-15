@@ -51,10 +51,10 @@ export const StakingDetails: FC = observer(() => {
   return (
     <Card
       header={{
-        content: t('stake|Stake Details')
+        content: t('stake|Stake Details'),
+        status: stakeStatus
       }}
       contentClassName={s.content}
-      status={stakeStatus}
     >
       <DetailsCardCell
         cellName={t('stake|Value Locked')}

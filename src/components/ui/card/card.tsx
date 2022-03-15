@@ -3,8 +3,8 @@ import { FC, ReactNode, useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { StakeStatusBox } from '@containers/staking/list/components';
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { StatusLabel } from '@components/ui/status-label';
+import { ActiveStatus } from '@interfaces/staking.interfaces';
 
 import styles from './card.module.scss';
 
@@ -13,12 +13,12 @@ interface Props {
   header?: {
     content: ReactNode;
     button?: ReactNode;
+    status?: ActiveStatus;
     className?: string;
   };
   additional?: ReactNode;
   footer?: ReactNode;
   contentClassName?: string;
-  status?: StakingStatus;
   isV2?: boolean;
 }
 
@@ -34,7 +34,6 @@ export const Card: FC<Props> = ({
   footer,
   children,
   isV2 = false,
-  status,
   contentClassName
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -48,7 +47,7 @@ export const Card: FC<Props> = ({
       {header && (
         <div className={cx(styles.header, header.className)}>
           {header.content}
-          {status ? <StakeStatusBox status={status} /> : null}
+          {header.status ? <StatusLabel status={header.status} /> : null}
           {header.button}
         </div>
       )}

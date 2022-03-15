@@ -10,7 +10,7 @@ import {
   TZKT_EXPLORER_URL
 } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/staking.interfaces';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useIsLoading } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
@@ -55,7 +55,7 @@ export const useStakingDetailsViewModel = () => {
       harvestFee: null,
       isLoading,
       isError: false,
-      stakeStatus: StakingStatus.DISABLED
+      stakeStatus: ActiveStatus.DISABLED
     };
   }
 
