@@ -5,17 +5,17 @@ import BigNumber from 'bignumber.js';
 import { DELAY_BEFORE_DATA_UPDATE } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useToasts } from '@hooks/use-toasts';
-import { useIsLoading } from '@utils/dapp';
+import { useReady } from '@utils/dapp';
 import { sleep } from '@utils/helpers/sleep';
 
 export const useGetStakingItem = () => {
   const { showErrorToast } = useToasts();
   const stakingItemStore = useStakingItemStore();
-  const isLoading = useIsLoading();
+  const isReady = useReady();
 
   const getStakingItem = useCallback(
     async (stakingId: BigNumber) => {
-      if (!isLoading) {
+      if (isReady) {
         try {
           stakingItemStore.setStakingId(stakingId);
           await stakingItemStore.itemStore.load();
@@ -25,7 +25,7 @@ export const useGetStakingItem = () => {
         }
       }
     },
-    [isLoading, showErrorToast, stakingItemStore]
+    [isReady, showErrorToast, stakingItemStore]
   );
 
   const delayedGetStakingItem = useCallback(

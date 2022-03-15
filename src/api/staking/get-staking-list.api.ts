@@ -40,10 +40,10 @@ const injectBalance = async (list: Array<RawStakingItem>, accountPkh: string, te
   return list.map(item => ({ ...item, myBalance: balances.get(item.id) }));
 };
 
-export const getStakingListApi = async (accountPkh: Nullable<string>, tezos: TezosToolkit) => {
+export const getStakingListApi = async (accountPkh: Nullable<string>, tezos: Nullable<TezosToolkit>) => {
   const fetchResult = await stakingListFetch(accountPkh);
 
-  if (isNull(accountPkh)) {
+  if (isNull(accountPkh) || isNull(tezos)) {
     return fetchResult;
   } else {
     return await injectBalance(fetchResult, accountPkh, tezos);
