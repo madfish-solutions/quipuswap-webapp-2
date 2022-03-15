@@ -1,9 +1,10 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 
+import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { Props as SelectProps } from 'react-select';
+import Select, { Props as SelectProps } from 'react-select';
 
-import { SelectUI } from '@components/ui/elements';
+import { Sort } from '@components/svg/sort';
 
 import styles from './sorter.module.scss';
 import { useSorterViewModel } from './sorter.vm';
@@ -12,15 +13,25 @@ interface Props extends SelectProps {
   className?: string;
 }
 
-export const Sorter: FC<Props> = ({ className }) => {
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
+export const Sorter: FC<Props> = ({ className, ...props }) => {
+  const { colorThemeMode } = useContext(ColorThemeContext);
   const { onSorterChange, sortingValues } = useSorterViewModel();
 
   return (
-    <SelectUI
-      options={sortingValues}
-      value={{ label: 'Sorted By' }}
-      onChange={onSorterChange}
-      className={cx(className, styles.sorter)}
-    />
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
+      <Select
+        classNamePrefix="sorterSelect"
+        onChange={onSorterChange}
+        options={sortingValues}
+        isSearchable={false}
+        {...props}
+      />
+      <Sort />
+    </div>
   );
 };
