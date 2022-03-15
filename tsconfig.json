@@ -30,7 +30,9 @@
       "@client": ["client.tsx"],
       "@graphql": ["graphql.ts"],
       "@app.config": ["app.config.ts"],
-      "@seo.config": ["seo.config.ts"]
+      "@seo.config": ["seo.config.ts"],
+
+      "@tests/*": ["tests/*"],
     },
     "lib": ["dom", "dom.iterable", "esnext"],
     "forceConsistentCasingInFileNames": true,

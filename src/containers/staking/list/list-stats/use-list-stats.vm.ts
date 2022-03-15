@@ -1,6 +1,7 @@
 import { useTranslation } from 'next-i18next';
 
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
+import { StakeListStatsDTA } from '@tests/staking/list';
 
 export const useListStatsViewModel = () => {
   const { t } = useTranslation(['stake']);
@@ -12,22 +13,26 @@ export const useListStatsViewModel = () => {
     {
       title: t('stake|totalValueLocked'),
       tooltip: t('stake|totalValueLockedTooltip'),
-      amount: amount?.totalValueLocked
+      amount: amount?.totalValueLocked,
+      testId: StakeListStatsDTA.TOTAL_VALUE_LOCKED
     },
     {
       title: t('stake|totalDailyReward'),
       tooltip: t('stake|totalDailyRewardTooltip'),
-      amount: amount?.totalDailyReward
+      amount: amount?.totalDailyReward,
+      testId: StakeListStatsDTA.TOTAL_DAILY_REWARD
     },
     {
       title: t('stake|totalPendingReward'),
       tooltip: t('stake|totalPendingRewardTooltip'),
-      amount: amount?.totalPendingReward
+      amount: amount?.totalPendingReward,
+      testId: StakeListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
       title: t('stake|totalClaimedReward'),
       tooltip: t('stake|totalClaimedRewardTooltip'),
-      amount: amount?.totalClaimedReward
+      amount: amount?.totalClaimedReward,
+      testId: StakeListStatsDTA.TOTAL_CLAIMED_REWARD
     }
   ];
 
