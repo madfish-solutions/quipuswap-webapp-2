@@ -44,5 +44,15 @@ export const usePairInfo = (dex: Optional<FoundDex>, tokenA: Nullable<Token>, to
 
   const isPoolNotExists = !isUndefined(pairInfo) && checkIsPoolNotExists(pairInfo);
 
-  return { pairInfo, updatePairInfo: loadPairInfo, isTokensOrderValid, tokenAPool, tokenBPool, isPoolNotExists };
+  const isPoolExists = !isPoolNotExists;
+
+  return {
+    pairInfo,
+    updatePairInfo: loadPairInfo,
+    isTokensOrderValid,
+    tokenAPool,
+    tokenBPool,
+    isPoolExists,
+    isPoolNotExists
+  };
 };
