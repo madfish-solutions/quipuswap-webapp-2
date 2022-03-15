@@ -16,6 +16,7 @@ import { useStakingFormViewModel } from './use-staking-form.vm';
 export const StakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
   const {
+    bakerInputValue,
     shouldShowBakerInput,
     handleSubmit,
     inputAmount,
@@ -52,6 +53,7 @@ export const StakingForm: FC = observer(() => {
           className={s.mt24}
           handleChange={handleBakerChange}
           error={bakerError}
+          value={bakerInputValue}
         />
       )}
       <div className={s.suggestedOperationsButtons}>
