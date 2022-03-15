@@ -44,6 +44,22 @@ const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) =>
   return fromRewardPrecision(pending);
 };
 
+export const getBalances = (userInfo: Undefined<UsersInfoValue>, item: RawStakingItem) => {
+  if (!userInfo) {
+    return {
+      depositBalance: '0',
+      earnBalance: '0'
+    };
+  }
+
+  const reward = getUserPendingReward(userInfo, item);
+
+  return {
+    depositBalance: userInfo.staked.toFixed(),
+    earnBalance: reward.toFixed()
+  };
+};
+
 export const getUserFarmBalances = async (
   accountAddress: string,
   storage: StakeContractStorage,
@@ -68,21 +84,9 @@ export const getUserFarmBalances = async (
 
     const farm = list.find(item => item.id === index.toString());
     if (farm) {
-      if (!usersInfoValue) {
-        balances.set(farm.id, {
-          depositBalance: '0',
-          earnBalance: '0'
-        });
+      const balance = getBalances(usersInfoValue, farm);
 
-        continue;
-      }
-
-      const reward = getUserPendingReward(usersInfoValue, farm);
-
-      balances.set(farm.id, {
-        depositBalance: usersInfoValue.staked.toFixed(),
-        earnBalance: reward.toFixed()
-      });
+      balances.set(farm.id, balance);
     }
   }
 

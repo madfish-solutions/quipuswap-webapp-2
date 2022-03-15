@@ -20,7 +20,7 @@ export class StakingItemStore {
 
   itemStore = new LoadingErrorData<RawStakingItem, Nullable<StakingItem>>(
     null,
-    async () => await getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh),
+    async () => await getStakingItemApi(this.stakingId, this.rootStore.authStore.accountPkh, this.rootStore.tezos),
     mapStakeItem
   );
 
