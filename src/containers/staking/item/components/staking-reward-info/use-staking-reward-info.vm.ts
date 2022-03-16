@@ -2,7 +2,7 @@ import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useAccountPkh, useBakers, useIsLoading } from '@utils/dapp';
+import { useAccountPkh, useBakers, useReady } from '@utils/dapp';
 import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
@@ -17,7 +17,7 @@ export const useStakingRewardInfoViewModel = () => {
   const { delayedGetStakingItem } = useGetStakingItem();
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
-  const dAppLoading = useIsLoading();
+  const dAppReady = useReady();
   const {
     data: lastStakedTime,
     isLoading: lastStakedTimeLoading,
@@ -35,7 +35,7 @@ export const useStakingRewardInfoViewModel = () => {
   const itemStoreReady = !itemStoreLoading && itemStoreInitialized;
   const stakingDelegateStoreReady =
     (!stakingDelegateStoreLoading && stakingDelegateStoreInitialized) || !walletIsConnected;
-  const stakingLoading = dAppLoading || !stakingStatsStoreReady || !itemStoreReady;
+  const stakingLoading = !dAppReady || !stakingStatsStoreReady || !itemStoreReady;
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
 
   const handleHarvest = async () => {
