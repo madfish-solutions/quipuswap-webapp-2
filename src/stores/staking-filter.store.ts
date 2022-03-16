@@ -3,7 +3,8 @@ import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
 import { sortStakingList, SortValue } from '@containers/staking/list/components';
-import { StakingItem, StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
+import { StakingItem } from '@interfaces/staking.interfaces';
 import { isExist, isNull } from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
 import { Optional, Token } from '@utils/types';
@@ -62,7 +63,7 @@ export class StakingFilterStore {
     }
 
     if (this.activeOnly) {
-      list = list.filter(({ stakeStatus }) => stakeStatus === StakingStatus.ACTIVE);
+      list = list.filter(({ stakeStatus }) => stakeStatus === ActiveStatus.ACTIVE);
     }
 
     if (this.search) {
