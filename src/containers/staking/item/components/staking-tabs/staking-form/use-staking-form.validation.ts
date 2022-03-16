@@ -4,18 +4,13 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { StakingFormFields } from './staking-form.interface';
+import { stakingOperationAmountSchema } from '@containers/staking/item/helpers';
 
-const ZERO = 0;
+import { StakingFormFields } from './staking-form.interface';
 
 export const useStakingFormValidation = (userBalance: Nullable<BigNumber>, canDelegate: boolean) =>
   useMemo(() => {
-    const inputAmountSchema = userBalance
-      ? yup
-          .number()
-          .max(userBalance.toNumber(), `Max available value is ${userBalance.toNumber()}`)
-          .moreThan(ZERO, 'The value should be greater than zero.')
-      : yup.number();
+    const inputAmountSchema = stakingOperationAmountSchema(userBalance);
 
     const bakerSchema = canDelegate ? yup.string().required('Baker is required') : yup.string();
 
