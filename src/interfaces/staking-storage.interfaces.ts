@@ -1,7 +1,7 @@
 import { BigMapAbstraction, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-export interface StakingStorate {
+export interface StakingStorage {
   storage: {
     admin: string;
     baker_registry: string;

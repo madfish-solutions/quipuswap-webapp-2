@@ -21,18 +21,18 @@ export const useStakeItemPageViewModel = () => {
   const { getStakingItem } = useGetStakingItem();
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const rawStakeId = router.query['id'];
 
   /*
    Load data
   */
   useEffect(() => {
-    const stakeId = router.query['id'];
-    if ((!dAppReady || isUndefined(stakeId)) && prevAccountPkhRef.current === accountPkh) {
+    if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getStakingItem(new BigNumber(`${stakeId}`));
+    void getStakingItem(new BigNumber(`${rawStakeId}`));
     prevAccountPkhRef.current = accountPkh;
-  }, [getStakingItem, dAppReady, router.query, accountPkh]);
+  }, [getStakingItem, dAppReady, rawStakeId, accountPkh]);
 
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
