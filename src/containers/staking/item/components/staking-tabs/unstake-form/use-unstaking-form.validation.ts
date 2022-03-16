@@ -4,8 +4,7 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { stakingOperationAmountSchema } from '@containers/staking/item/helpers';
-
+import { stakingOperationAmountSchema } from '../../../helpers';
 import { UnstakingFormFields } from './unstaking-form.interface';
 
 export const useUnstakingFormValidation = (stakedBalance: Nullable<BigNumber>) =>

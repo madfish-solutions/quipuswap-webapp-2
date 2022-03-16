@@ -4,10 +4,10 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { stakingOperationAmountSchema } from '@containers/staking/item/helpers';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
+import { stakingOperationAmountSchema } from '../../../helpers';
 import { StakingFormFields } from './staking-form.interface';
 import { useStakingStatusValidation } from './use-staking-status.validation';
 
