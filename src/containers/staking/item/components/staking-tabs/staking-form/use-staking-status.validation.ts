@@ -1,10 +1,10 @@
 import { useTranslation } from 'next-i18next';
 import { object } from 'yup';
 
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
-export const useStakingStatusValidation = (stakingStatus: Undefined<StakingStatus>) => {
+export const useStakingStatusValidation = (stakingStatus: Undefined<ActiveStatus>) => {
   const { t } = useTranslation(['stake']);
 
   return object()
@@ -12,11 +12,11 @@ export const useStakingStatusValidation = (stakingStatus: Undefined<StakingStatu
     .test(
       'value-type1',
       () => t('stake|pending'),
-      _ => stakingStatus !== StakingStatus.PENDING
+      _ => stakingStatus !== ActiveStatus.PENDING
     )
     .test(
       'value-type2',
       () => t('stake|disabled'),
-      _ => stakingStatus !== StakingStatus.DISABLED
+      _ => stakingStatus !== ActiveStatus.DISABLED
     );
 };

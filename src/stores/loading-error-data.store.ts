@@ -56,7 +56,7 @@ export class LoadingErrorData<RawData, Data> {
       this.setRawData(await this.getDate());
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log('error', error);
+      console.error('error', error);
       this.setError(error as Error);
 
       throw error;

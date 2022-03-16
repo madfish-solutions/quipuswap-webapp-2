@@ -4,7 +4,7 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import * as yup from 'yup';
 
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
 import { StakingFormFields } from './staking-form.interface';
@@ -15,7 +15,7 @@ const ZERO = 0;
 export const useStakingFormValidation = (
   userBalance: Nullable<BigNumber>,
   canDelegate: boolean,
-  stakingStatus: Undefined<StakingStatus>
+  stakingStatus: Undefined<ActiveStatus>
 ) => {
   const stakingStatusSchema = useStakingStatusValidation(stakingStatus);
 

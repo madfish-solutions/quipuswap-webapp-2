@@ -5,7 +5,7 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
 import { bigNumberToString, toDecimals, defined, isNull, isExist, getTokenPairSlug } from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
@@ -32,7 +32,7 @@ export const useStakingFormViewModel = () => {
   const prevShouldShowBakerInputRef = useRef(true);
 
   const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput, stakeItem?.stakeStatus);
-  const isStakingAvailable = stakeItem?.stakeStatus === StakingStatus.ACTIVE;
+  const isStakingAvailable = stakeItem?.stakeStatus === ActiveStatus.ACTIVE;
 
   const handleStakeSubmit = async (_: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
