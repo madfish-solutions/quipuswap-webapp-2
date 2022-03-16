@@ -5,6 +5,7 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
 import {
   bigNumberToString,
@@ -23,6 +24,8 @@ import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
 
+const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
+
 export const useStakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { delayedGetStakingItem } = useGetStakingItem();
@@ -36,13 +39,17 @@ export const useStakingFormViewModel = () => {
   const shouldShowBakerInput = isNull(stakeItem) || canDelegate(stakeItem);
   const prevShouldShowBakerInputRef = useRef(true);
 
-  const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput);
+  const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput, stakeItem?.stakeStatus);
+  const isStakingAvailable = stakeItem?.stakeStatus === ActiveStatus.ACTIVE;
 
   const handleStakeSubmit = async (_: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
     actions.setSubmitting(true);
-    const token = defined(stakeItem).stakedToken;
-    const inputAmountWithDecimals = toDecimals(inputAmount, token);
-    await doStake(defined(stakeItem), inputAmountWithDecimals, token, defined(selectedBaker));
+
+    if (isStakingAvailable) {
+      const token = defined(stakeItem).stakedToken;
+      const inputAmountWithDecimals = toDecimals(inputAmount, token);
+      await doStake(defined(stakeItem), inputAmountWithDecimals, token, defined(selectedBaker));
+    }
 
     formik.resetForm();
     actions.setSubmitting(false);
@@ -58,26 +65,29 @@ export const useStakingFormViewModel = () => {
   };
 
   const formik = useFormik({
+    validationSchema,
     initialValues: {
       [StakingFormFields.inputAmount]: '',
-      [StakingFormFields.selectedBaker]: ''
+      [StakingFormFields.selectedBaker]: '',
+      [StakingFormFields.stakingStatus]: ''
     },
-    validationSchema: validationSchema,
     onSubmit: handleStakeSubmitAndUpdateData
   });
 
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
       formik.setFieldValue(StakingFormFields.selectedBaker, '');
-      stakingItemStore.setSelectedBaker(shouldShowBakerInput ? null : { address: DUMMY_BAKER });
+      stakingItemStore.setSelectedBaker(getDummyBaker(shouldShowBakerInput));
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, stakingItemStore]);
 
   const inputAmountError = getFormikError(formik, StakingFormFields.inputAmount);
   const bakerError = getFormikError(formik, StakingFormFields.selectedBaker);
+  const stakingStatusError = getFormikError(formik, StakingFormFields.stakingStatus);
 
-  const disabled = formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError);
+  const disabled =
+    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(stakingStatusError);
 
   const handleInputAmountChange = (value: string) => {
     stakingItemStore.setInputAmount(prepareNumberAsString(value));
@@ -101,6 +111,7 @@ export const useStakingFormViewModel = () => {
   }, [stakeItem]);
 
   return {
+    bakerInputValue: formik.values[StakingFormFields.selectedBaker],
     shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
@@ -108,6 +119,7 @@ export const useStakingFormViewModel = () => {
     inputAmountError,
     stakeItem,
     bakerError,
+    stakingStatusError,
     disabled,
     tradeHref,
     investHref,
