@@ -93,6 +93,7 @@ export const useStakingFormViewModel = () => {
   }, [stakeItem]);
 
   return {
+    bakerInputValue: formik.values[StakingFormFields.selectedBaker],
     shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
