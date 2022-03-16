@@ -71,5 +71,6 @@
   "minuteLetter": "M",
   "Trade": "Trade",
   "Invest": "Invest",
-  "Divest": "Divest"
+  "Divest": "Divest",
+  "Default": "Default",
 }

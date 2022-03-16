@@ -2,7 +2,7 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { action, makeObservable, observable } from 'mobx';
 
-import { sortStakingList, SortValue } from '@containers/staking/list/components';
+import { SortDirection, SortField, sortStakingList } from '@containers/staking/list/components';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { isExist, isNull } from '@utils/helpers';
@@ -38,7 +38,8 @@ export class StakingFilterStore {
   activeOnly = false;
   search = '';
   tokenId: Nullable<BigNumber> = null;
-  sortValue: Nullable<SortValue> = null;
+  sortField: SortField = SortField.ID;
+  sortDirection: SortDirection = SortDirection.DESC;
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -46,14 +47,16 @@ export class StakingFilterStore {
       activeOnly: observable,
       search: observable,
       tokenId: observable,
-      sortValue: observable,
+      sortField: observable,
+      sortDirection: observable,
       setStakedOnly: action,
       setActiveOnly: action,
       onSearchChange: action,
       onTokenIdChange: action,
       handleIncrement: action,
       handleDecrement: action,
-      onSorterChange: action
+      onSortFieldChange: action,
+      onSortDirectionToggle: action
     });
   }
 
@@ -76,7 +79,7 @@ export class StakingFilterStore {
       );
     }
 
-    return sortStakingList(list, this.sortValue);
+    return sortStakingList(list, this.sortField, this.sortDirection);
   }
 
   setStakedOnly(state: boolean) {
@@ -115,8 +118,12 @@ export class StakingFilterStore {
     }
   }
 
-  onSorterChange(value: SortValue) {
-    this.sortValue = value;
+  onSortFieldChange(field: SortField) {
+    this.sortField = field;
+  }
+
+  onSortDirectionToggle() {
+    this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
   }
 
   private searchToken({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {

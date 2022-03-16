@@ -2,7 +2,11 @@ import { FC, useContext } from 'react';
 
 import { ColorThemeContext } from '@quipuswap/ui-kit';
 
-export const Sort: FC<IconProps> = ({ className }) => {
+interface Props extends IconProps {
+  rotate?: boolean;
+}
+
+export const Sort: FC<Props> = ({ className, rotate }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
@@ -10,6 +14,7 @@ export const Sort: FC<IconProps> = ({ className }) => {
       width="24"
       height="24"
       viewBox="0 0 24 24"
+      transform={rotate ? 'rotate(180 0 0)' : undefined}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}

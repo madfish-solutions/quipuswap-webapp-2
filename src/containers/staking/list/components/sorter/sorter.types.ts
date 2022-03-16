@@ -1,4 +1,5 @@
-export enum SortType {
+export enum SortField {
+  ID = 'ID',
   APR = 'APR',
   APY = 'APY',
   TVL = 'TVL',
@@ -7,8 +8,12 @@ export enum SortType {
   EARNED = 'EARNED'
 }
 
-export interface SortValue {
+export interface SortFieldItem {
   label: string;
-  value: SortType;
-  up: boolean;
+  field: SortField;
+}
+
+export enum SortDirection {
+  ASC = 'ASC',
+  DESC = 'DESC'
 }
