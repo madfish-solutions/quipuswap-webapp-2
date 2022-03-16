@@ -6,7 +6,6 @@ import { withTypes } from 'react-final-form';
 import { isNull } from '@utils/helpers';
 import { VoteFormValues, Nullable } from '@utils/types';
 
-import { bakerCleaner } from '../../helpers';
 import { useVotingHandlers, useVotingRouting } from '../../helpers/voting.provider';
 import { useHandleVote } from '../../hooks';
 import { VotingTabs } from '../../tabs.enum';
@@ -27,7 +26,6 @@ const cleanUp = (tab: VotingTabs) => {
     pointerForm.form.mutators.setValue(BALANCE1, null);
     if (tab === VotingTabs.vote) {
       pointerForm.form.mutators.setValue(SELECTED_BAKER, null);
-      bakerCleaner.run();
     }
   }
 };
@@ -58,7 +56,7 @@ export const WrappedVotingForm: FC = () => {
       pointerForm.form = form;
     }
 
-    return <VotingForm form={form} handleSubmit={handleSubmit} bakerCleaner={bakerCleaner} />;
+    return <VotingForm form={form} handleSubmit={handleSubmit} />;
   };
 
   return (

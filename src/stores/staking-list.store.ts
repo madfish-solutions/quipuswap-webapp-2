@@ -4,7 +4,6 @@ import { computed, makeObservable } from 'mobx';
 
 import { getStakingListApi, getStakingStatsApi } from '@api/staking';
 import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
-import { defined } from '@utils/helpers';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
@@ -15,7 +14,7 @@ const ZERO_AMOUNT = 0;
 export class StakingListStore {
   listStore = new LoadingErrorData<RawStakingItem[], StakingItem[]>(
     [],
-    async () => await getStakingListApi(this.rootStore.authStore.accountPkh, defined(this.rootStore.tezos)),
+    async () => await getStakingListApi(this.rootStore.authStore.accountPkh, this.rootStore.tezos),
     mapStakesItems
   );
 

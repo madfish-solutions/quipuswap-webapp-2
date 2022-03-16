@@ -12,6 +12,7 @@ import { StakeItemPandingReward } from '@tests/staking/item';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
+import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { StakingRewardHeader } from '../staking-reward-header';
 import { useStakingRewardInfoViewModel } from '../staking-reward-info/use-staking-reward-info.vm';
 import { StakingStatsItem } from '../staking-stats-item';
@@ -24,7 +25,6 @@ const modeClass = {
 };
 
 const NO_TIMELOCK_VALUE = '0';
-const StakingFallback = () => null;
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -36,7 +36,8 @@ export const StakingRewardInfo: FC = observer(() => {
     delegatesLoading,
     endTimestamp,
     myDepositDollarEquivalent,
-    myEarnDollarEquivalent,
+    myRewardInTokens,
+    rewardTokenSymbol,
     stakingLoading,
     timelock,
     handleHarvest
@@ -44,7 +45,7 @@ export const StakingRewardInfo: FC = observer(() => {
 
   return (
     <RewardInfo
-      amount={myEarnDollarEquivalent}
+      amount={myRewardInTokens}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{
         content: <StakingRewardHeader />,
@@ -55,14 +56,14 @@ export const StakingRewardInfo: FC = observer(() => {
       rewardTooltip={t('stake|singleFarmRewardTooltip')}
       rewardButtonAttributeTestId={StakeItemPandingReward.HARVEST_BUTTON}
       pendingRewardAttributeTestId={StakeItemPandingReward.PENDING_REWARD}
-      currency="$"
+      currency={rewardTokenSymbol}
     >
       <StakingStatsItem
         itemName={t('stake|Your Share')}
         loading={stakingLoading}
         tooltipContent={t('stake|yourShareTooltip')}
       >
-        <StateData data={stakeItem} Fallback={StakingFallback}>
+        <StateData data={stakeItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
           {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
               amount={depositBalance}
@@ -82,7 +83,7 @@ export const StakingRewardInfo: FC = observer(() => {
           loading={delegatesLoading}
           tooltipContent={t('stake|yourDelegateTooltip')}
         >
-          <StateData data={myDelegate} Fallback={StakingFallback}>
+          <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
               <a
                 href={`${TZKT_EXPLORER_URL}/${delegate.address}`}
@@ -103,7 +104,7 @@ export const StakingRewardInfo: FC = observer(() => {
           loading={stakingLoading}
           tooltipContent={t('stake|feeEndsInTooltip')}
         >
-          <StateData data={endTimestamp} Fallback={StakingFallback}>
+          <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown endTimestamp={timestamp} />}
           </StateData>
         </StakingStatsItem>

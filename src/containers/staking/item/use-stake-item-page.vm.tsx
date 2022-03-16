@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 import { DashPlug } from '@components/ui/dash-plug';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { useAccountPkh, useIsLoading } from '@utils/dapp';
+import { useAccountPkh, useReady } from '@utils/dapp';
 import { getTokensName, isNull, isUndefined } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
@@ -17,25 +17,25 @@ export const useStakeItemPageViewModel = () => {
   const router = useRouter();
   const { t } = useTranslation(['common', 'stake']);
   const stakingItemStore = useStakingItemStore();
-  const dAppLoading = useIsLoading();
+  const dAppReady = useReady();
   const { getStakingItem } = useGetStakingItem();
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const rawStakeId = router.query['id'];
 
   /*
    Load data
   */
   useEffect(() => {
-    const stakeId = router.query['id'];
-    if ((dAppLoading || isUndefined(stakeId)) && prevAccountPkhRef.current === accountPkh) {
+    if ((!dAppReady || isUndefined(rawStakeId)) && prevAccountPkhRef.current === accountPkh) {
       return;
     }
-    void getStakingItem(new BigNumber(`${stakeId}`));
+    void getStakingItem(new BigNumber(`${rawStakeId}`));
     prevAccountPkhRef.current = accountPkh;
-  }, [getStakingItem, dAppLoading, router.query, accountPkh]);
+  }, [getStakingItem, dAppReady, rawStakeId, accountPkh]);
 
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
-  const isLoading = dataLoading || !dataInitialized || dAppLoading;
+  const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   const getTitle = () => {
     if (stakeItem) {

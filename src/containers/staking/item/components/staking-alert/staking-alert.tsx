@@ -2,25 +2,24 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { StakingStatus } from '@interfaces/staking.interfaces';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
+import { Undefined } from '@utils/types';
 
 import styles from './staking-alert.module.scss';
-import { useStakingAlertViewModel } from './staking-alert.vm';
 
 const variants = {
-  [StakingStatus.PENDING]: styles.pending,
-  [StakingStatus.DISABLED]: styles.disabled
+  [ActiveStatus.PENDING]: styles.pending,
+  [ActiveStatus.DISABLED]: styles.disabled
 };
 interface Props {
-  variant: StakingStatus;
+  variant: ActiveStatus;
+  errorMessage: Undefined<string>;
   className?: string;
 }
-export const StakingAlert: FC<Props> = ({ variant, className }) => {
-  const { stakeStatusTranslation } = useStakingAlertViewModel();
-
-  if (variant === StakingStatus.ACTIVE) {
+export const StakingAlert: FC<Props> = ({ variant, errorMessage, className }) => {
+  if (!errorMessage || variant === ActiveStatus.ACTIVE) {
     return null;
   }
 
-  return <div className={cx(styles.root, className, variants[variant])}>{stakeStatusTranslation[variant]}</div>;
+  return <div className={cx(styles.root, className, variants[variant])}>{errorMessage}</div>;
 };

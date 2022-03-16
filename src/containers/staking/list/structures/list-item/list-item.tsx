@@ -6,11 +6,11 @@ import cx from 'classnames';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StatusLabel } from '@components/ui/status-label';
 import { StakingItem } from '@interfaces/staking.interfaces';
 import { getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
-import { StakeStatusBox } from '../../components/stake-status-box';
 import styles from './list-item.module.scss';
 import { useListItemViewModal } from './use-list-item.vm';
 
@@ -80,7 +80,7 @@ export const StakingListItem: FC<StakingItem> = ({
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StakeStatusBox status={stakeStatus} />
+            <StatusLabel status={stakeStatus} />
             <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
           </div>
 
