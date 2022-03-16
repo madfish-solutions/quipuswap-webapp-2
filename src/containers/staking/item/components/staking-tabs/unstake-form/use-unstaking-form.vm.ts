@@ -2,7 +2,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { defined, isEmptyArray, toDecimals, bigNumberToString } from '@utils/helpers';
+import { bigNumberToString, defined, isEmptyArray, toDecimals } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
@@ -20,7 +20,7 @@ export const useUnstakingFormViewModel = () => {
 
   const validationSchema = useUnstakingFormValidation(stakeItem?.depositBalance ?? null);
 
-  const handleUnstakeSubmit = async (values: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
+  const handleUnstakeSubmit = async (_: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(stakeItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
