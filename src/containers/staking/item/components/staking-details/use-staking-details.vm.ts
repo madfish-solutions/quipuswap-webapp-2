@@ -10,6 +10,7 @@ import {
   TZKT_EXPLORER_URL
 } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useReady } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
@@ -53,7 +54,8 @@ export const useStakingDetailsViewModel = () => {
       withdrawalFee: null,
       harvestFee: null,
       isLoading,
-      isError: false
+      isError: false,
+      stakeStatus: ActiveStatus.DISABLED
     };
   }
 
@@ -70,7 +72,8 @@ export const useStakingDetailsViewModel = () => {
     stakeUrl,
     withdrawalFee,
     harvestFee,
-    depositTokenUrl
+    depositTokenUrl,
+    stakeStatus
   } = stakeItem;
 
   const dailyDistribution = bigNumberToString(
@@ -106,6 +109,7 @@ export const useStakingDetailsViewModel = () => {
     harvestFee,
     depositTokenUrl,
     isLoading,
-    isError: Boolean(error)
+    isError: Boolean(error),
+    stakeStatus
   };
 };

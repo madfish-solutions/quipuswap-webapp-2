@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
-import { Card, ExternalLink } from '@quipuswap/ui-kit';
+import { ExternalLink } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
+import { Card } from '@components/ui/card/card';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -43,13 +44,15 @@ export const StakingDetails: FC = observer(() => {
     isError,
     shouldShowDelegates,
     shouldShowLockPeriod,
-    shouldShowWithdrawalFee
+    shouldShowWithdrawalFee,
+    stakeStatus
   } = useStakingDetailsViewModel();
 
   return (
     <Card
       header={{
-        content: t('stake|Stake Details')
+        content: t('stake|Stake Details'),
+        status: stakeStatus
       }}
       contentClassName={s.content}
     >

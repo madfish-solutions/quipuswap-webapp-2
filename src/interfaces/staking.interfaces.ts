@@ -2,6 +2,8 @@ import BigNumber from 'bignumber.js';
 
 import { Nullable, Token, Undefined } from '@utils/types';
 
+import { ActiveStatus } from './active-statuts-enum';
+
 export interface RawStakeStats {
   totalValueLocked: string;
   totalDailyReward: string;
@@ -14,12 +16,6 @@ export interface StakeStats {
   totalDailyReward: BigNumber;
   totalPendingReward: BigNumber;
   totalClaimedReward: BigNumber;
-}
-
-export enum StakingStatus {
-  ACTIVE = 'ACTIVE',
-  PENDING = 'PENDING',
-  DISABLED = 'DISABLED'
 }
 
 export interface RawStakingItem {
@@ -44,7 +40,7 @@ export interface RawStakingItem {
   rewardPerShare: string;
   rewardToken: Token;
 
-  stakeStatus: StakingStatus;
+  stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
 
@@ -86,7 +82,7 @@ export interface StakingItem extends UserBalances {
   rewardPerShare: BigNumber;
   rewardToken: Token;
 
-  stakeStatus: StakingStatus;
+  stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
 
