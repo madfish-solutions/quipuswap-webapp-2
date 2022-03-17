@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
@@ -23,12 +23,6 @@ const initialVoter: VoterType = {
 
 const defaultToken = networksDefaultTokens[NETWORK_ID];
 
-const fallbackTokenPair: TokenPair = {
-  token1: TEZOS_TOKEN,
-  token2: defaultToken,
-  balance: null,
-  frozenBalance: null
-};
 // eslint-disable-next-line sonarjs/cognitive-complexity
 const useVotingService = () => {
   const tezos = useTezos();
@@ -47,7 +41,7 @@ const useVotingService = () => {
 
   const [dex, setDex] = useState<Nullable<FoundDex>>(null);
 
-  const [tokenPair, setTokenPair] = useState<TokenPair>(fallbackTokenPair);
+  const [tokenPair, setTokenPair] = useState<Nullable<TokenPair>>(null);
   const [[token1, token2], setTokens] = useState<Token[]>([TEZOS_TOKEN, defaultToken]);
   const tokensRef = useRef<[Token, Token]>([token1, token2]);
 
@@ -65,7 +59,8 @@ const useVotingService = () => {
   } = useVotingRouter(token1, token2);
 
   const { availableVoteBalance, availableVetoBalance } = useMemo(
-    () => getVoteVetoBalances(tokenPair, voter),
+    () =>
+      tokenPair ? getVoteVetoBalances(tokenPair, voter) : { availableVoteBalance: null, availableVetoBalance: null },
     [tokenPair, voter]
   );
 
@@ -90,11 +85,19 @@ const useVotingService = () => {
     }
   };
 
+  const wrappedSetTokenPair = useCallback((pairAction: SetStateAction<TokenPair>) => {
+    if (typeof pairAction === 'function') {
+      setTokenPair(prevPair => pairAction(defined(prevPair)));
+    } else {
+      setTokenPair(pairAction);
+    }
+  }, []);
+
   const tokenPairSelect = useCallback(
     async (pair: TokenPair) => {
-      handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
+      handleTokenPairSelect(pair, wrappedSetTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
-    [tezos, accountPkh, showErrorToast]
+    [tezos, accountPkh, showErrorToast, wrappedSetTokenPair]
   );
 
   const handleTokenPairSelectChange = (pair: TokenPair) => {
@@ -102,7 +105,7 @@ const useVotingService = () => {
     tokenPairSelect(pair);
   };
 
-  const getBalances = useCallback(async () => tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
+  const getBalances = useCallback(async () => tokenPair && tokenPairSelect(tokenPair), [tokenPairSelect, tokenPair]);
 
   useEffect(() => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
@@ -116,7 +119,7 @@ const useVotingService = () => {
         setInitialLoad,
         setUrlLoaded,
         setTokens,
-        setTokenPair,
+        setTokenPair: wrappedSetTokenPair,
         searchCustomToken
       });
     }
@@ -131,7 +134,7 @@ const useVotingService = () => {
   }, [tezos, accountPkh]);
 
   const updateBalances = useCallback(() => {
-    if (tezos && tokenPair.token1 && tokenPair.token2) {
+    if (tezos && tokenPair?.token1 && tokenPair.token2) {
       getBalances();
     }
   }, [tezos, tokenPair, getBalances]);

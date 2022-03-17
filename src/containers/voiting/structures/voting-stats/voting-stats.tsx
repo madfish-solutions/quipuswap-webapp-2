@@ -40,7 +40,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
   const { tokenPair } = useTokensPair();
   const { isVotingLoading } = useVotingLoading();
 
-  const balanceAmount = !isVotingLoading && accountPkh && tokenPair.balance ? tokenPair.balance : null;
+  const balanceAmount = !isVotingLoading && accountPkh && tokenPair?.balance ? tokenPair.balance : null;
 
   const voteAmount = isVotingLoading || isNull(vote) ? null : vote.toFixed();
   const vetoAmount = isVotingLoading || isNull(veto) ? null : veto.toFixed();

@@ -29,7 +29,7 @@ import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
-import { isAssetEqual, parseDecimals } from '@utils/helpers';
+import { defined, isAssetEqual, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
@@ -69,27 +69,31 @@ const RealForm: React.FC<VotingFormProps> = ({
   const tokensUpdating = useTokensLoading();
 
   const handleInputChange = async () => {
-    if (!tezos) {
-      return;
-    }
-    const currentTokenA = tokenDataToToken(token1);
-    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
-      return;
-    }
-    if (tezos && tokenPair) {
-      const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId ?? undefined
-      };
-      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
-      if (isAssetSame) {
+    try {
+      if (!tezos) {
         return;
       }
-      const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
-      if (tempDex && tempDex !== dex) {
-        setDex(tempDex);
+      const currentTokenA = tokenDataToToken(token1);
+      if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
+        return;
       }
-      setOldAsset(toAsset);
+      if (tezos && tokenPair) {
+        const toAsset = {
+          contract: tokenPair.token2.contractAddress,
+          id: tokenPair.token2.fa2TokenId ?? undefined
+        };
+        const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
+        if (isAssetSame) {
+          return;
+        }
+        const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
+        if (tempDex && tempDex !== dex) {
+          setDex(tempDex);
+        }
+        setOldAsset(toAsset);
+      }
+    } catch (_) {
+      // nothing to do
     }
   };
 
@@ -99,7 +103,7 @@ const RealForm: React.FC<VotingFormProps> = ({
   }, [values.balance1, values.selectedBaker, tokenPair, dex, currentTab]);
 
   useEffect(() => {
-    form.mutators.setValue('balance1', form.getFieldState('balance1')!.value);
+    form.mutators.setValue('balance1', defined(form.getFieldState('balance1')).value);
     // eslint-disable-next-line
   }, [currentTab, dex]);
 

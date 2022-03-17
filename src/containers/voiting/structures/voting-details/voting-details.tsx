@@ -31,7 +31,7 @@ export const VotingDetails: FC = () => {
 
   const { totalVotes, totalVeto, votesToVeto } = getVotingInfo(dex);
 
-  const pairLink = tokenPair.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
+  const pairLink = tokenPair?.dex && `${QUIPUSWAP_ANALYTICS_PAIRS}/${tokenPair.dex.contract.address}`;
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertialCenter);
 
@@ -102,7 +102,7 @@ export const VotingDetails: FC = () => {
         <StateCurrencyAmount amount={votesToVetoAmount} />
       </DetailsCardCell>
 
-      {tokenPair.dex && (
+      {tokenPair?.dex && (
         <div className={s.detailsButtons}>
           <Button
             className={s.detailsButton}
