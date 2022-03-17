@@ -15,7 +15,7 @@ export const StakingRewardHeader: FC = () => {
       <Button href="/staking" theme="quaternary" icon className={styles.arrowButton}>
         <ArrowDown className={styles.backArrow} />
       </Button>
-      <span>{t('stake|Back to stakings')}</span>
+      <span>{t('stake|Back to the list')}</span>
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
+import { DEFAULT_DECIMALS } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { defined, isEmptyArray, toDecimals, bigNumberToString, prepareNumberAsString } from '@utils/helpers';
 
@@ -64,6 +65,7 @@ export const useUnstakingFormViewModel = () => {
     userTokenBalance,
     inputAmountError,
     stakeItem,
+    stakedTokenDecimals: stakeItem?.stakedToken.metadata.decimals ?? DEFAULT_DECIMALS,
     disabled,
     handleInputAmountChange
   };
