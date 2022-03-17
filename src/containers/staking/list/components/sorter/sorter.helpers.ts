@@ -28,8 +28,13 @@ const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, 
   }
 
   const isFirstBigger = first.isGreaterThan(second);
+  const isSortedAsc = sortDirection === SortDirection.ASC;
 
-  return sortDirection === SortDirection.ASC && isFirstBigger ? CHANGE : SKIP;
+  if ((isSortedAsc && isFirstBigger) || (!isSortedAsc && !isFirstBigger)) {
+    return CHANGE;
+  }
+
+  return SKIP;
 };
 
 const sortById = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
