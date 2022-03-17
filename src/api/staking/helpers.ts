@@ -23,7 +23,6 @@ const MILISECONDS_IN_SECONDS = 1000;
 export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
-export const toRewardPrecision = (reward: BigNumber) => reward.multipliedBy(new BigNumber(REWARD_PRECISION));
 
 const isZeroString = (string: string) => string === '0';
 
