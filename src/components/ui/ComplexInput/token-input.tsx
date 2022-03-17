@@ -36,6 +36,7 @@ interface Props {
   value: string;
   onInputChange: (value: string) => void;
   balance: Optional<string>;
+  decimals: number;
   shouldShowBalanceButtons?: boolean;
   exchangeRate?: string;
   error?: string;
@@ -57,6 +58,7 @@ export const TokenInput: FC<Props> = ({
   value,
   onInputChange,
   balance,
+  decimals,
   shouldShowBalanceButtons = true,
   error,
   tokenA,
@@ -144,6 +146,9 @@ export const TokenInput: FC<Props> = ({
     setIsFocused(false);
   };
 
+  const handlePercentageSelect = (newValue: string) =>
+    onInputChange(new BigNumber(newValue).decimalPlaces(decimals).toFixed());
+
   const amountCap = isNull(tokenB) ? getTokenInputAmountCap(tokenA) : undefined;
 
   return (
@@ -184,11 +189,9 @@ export const TokenInput: FC<Props> = ({
           </div>
         </div>
       </div>
-      {onInputChange ? (
-        <Scaffolding showChild={shouldShowBalanceButtons} className={styles.scaffoldingPercentSelector}>
-          <PercentSelector amountCap={amountCap} value={balance} handleBalance={onInputChange} />
-        </Scaffolding>
-      ) : null}
+      <Scaffolding showChild={shouldShowBalanceButtons} className={styles.scaffoldingPercentSelector}>
+        <PercentSelector amountCap={amountCap} value={balance} handleBalance={handlePercentageSelect} />
+      </Scaffolding>
       <ComplexError error={error} />
     </div>
   );

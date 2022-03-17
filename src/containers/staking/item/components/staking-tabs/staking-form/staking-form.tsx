@@ -42,6 +42,7 @@ export const StakingForm: FC = observer(() => {
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
+        decimals={stakeItem.stakedToken.metadata.decimals}
         error={inputAmountError}
         tokenA={stakeItem.tokenA}
         tokenB={stakeItem.tokenB}
