@@ -23,6 +23,7 @@ const MILISECONDS_IN_SECONDS = 1000;
 export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
+export const toRewardPrecision = (reward: BigNumber) => reward.multipliedBy(new BigNumber(REWARD_PRECISION));
 
 const isZeroString = (string: string) => string === '0';
 
@@ -39,7 +40,9 @@ const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) =>
 
   const rewardPerShare = new BigNumber(item.rewardPerShare).plus(reward.dividedBy(item.staked));
 
-  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
+  const pending = userInfo.earned
+    .plus(userInfo.staked.multipliedBy(toRewardPrecision(rewardPerShare)))
+    .minus(userInfo.prev_earned);
 
   return fromRewardPrecision(pending);
 };
