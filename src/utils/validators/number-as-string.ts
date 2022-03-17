@@ -87,7 +87,7 @@ export function numberAsStringSchema(
     .transform(value => (typeof value === 'string' ? prepareNumberAsString(value) : value))
     .test(
       'is-valid',
-      'Must be a number',
+      i18n?.t('common|invalidNumberMessage') ?? '',
       makeNumberAsStringTestFn(value => !value.isNaN())
     );
 

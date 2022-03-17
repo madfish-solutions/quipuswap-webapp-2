@@ -73,5 +73,6 @@
   "minuteLetter": "M",
   "Trade": "Trade",
   "Invest": "Invest",
-  "Divest": "Divest"
+  "Divest": "Divest",
+  "invalidNumberMessage": "The input value is invalid. Only valid numbers with dot or comma separator are accepted."
 }
