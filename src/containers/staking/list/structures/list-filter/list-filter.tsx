@@ -37,7 +37,7 @@ export const ListFilter: FC = observer(() => {
   } = translation;
 
   return (
-    <Card className={cx(styles.filterCard)}>
+    <Card contentClassName={styles.cardContent} className={cx(styles.filterCard)}>
       <Input
         value={search}
         onChange={onSearchChange}
@@ -59,15 +59,15 @@ export const ListFilter: FC = observer(() => {
         onDecrementClick={handleDecrement}
       />
 
-      <div className={styles.switcherContainer}>
+      <div className={cx(styles.switcherContainer, styles.switcherStakeOnly)}>
         <Switcher disabled={isStakedOnlyDisabled} onChange={setStakedOnly} />
-        <span>{stakedOnlyTranslation}</span>
+        <span className={styles.switcherTranslation}>{stakedOnlyTranslation}</span>
       </div>
-      <div className={styles.switcherContainer}>
+      <div className={cx(styles.switcherContainer, styles.switcherActiveOnly)}>
         <Switcher onChange={setActiveOnly} />
-        <span>{activeOnlyTranslation}</span>
+        <span className={styles.switcherTranslation}>{activeOnlyTranslation}</span>
       </div>
-      <div className={styles.switcherContainer}>
+      <div className={cx(styles.switcherContainer, styles.sorterContainer)}>
         <Sorter />
       </div>
     </Card>
