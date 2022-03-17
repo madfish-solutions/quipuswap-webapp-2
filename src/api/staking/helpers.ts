@@ -40,9 +40,7 @@ const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) =>
 
   const rewardPerShare = new BigNumber(item.rewardPerShare).plus(reward.dividedBy(item.staked));
 
-  const pending = userInfo.earned
-    .plus(userInfo.staked.multipliedBy(toRewardPrecision(rewardPerShare)))
-    .minus(userInfo.prev_earned);
+  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
 
   return fromRewardPrecision(pending);
 };
