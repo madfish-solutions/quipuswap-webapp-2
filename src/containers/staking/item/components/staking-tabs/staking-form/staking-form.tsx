@@ -22,6 +22,7 @@ export const StakingForm: FC = observer(() => {
     userTokenBalance,
     inputAmountError,
     stakeItem,
+    stakedTokenDecimals,
     bakerError,
     stakingStatusError,
     disabled,
@@ -42,7 +43,7 @@ export const StakingForm: FC = observer(() => {
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
-        decimals={stakeItem.stakedToken.metadata.decimals}
+        decimals={stakedTokenDecimals}
         error={inputAmountError}
         tokenA={stakeItem.tokenA}
         tokenB={stakeItem.tokenB}

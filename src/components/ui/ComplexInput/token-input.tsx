@@ -146,8 +146,10 @@ export const TokenInput: FC<Props> = ({
     setIsFocused(false);
   };
 
-  const handlePercentageSelect = (newValue: string) =>
-    onInputChange(new BigNumber(newValue).decimalPlaces(decimals).toFixed());
+  const handlePercentageSelect = (newValue: string) => {
+    const value = new BigNumber(newValue).decimalPlaces(decimals).toFixed();
+    onInputChange(value);
+  };
 
   const amountCap = isNull(tokenB) ? getTokenInputAmountCap(tokenA) : undefined;
 
