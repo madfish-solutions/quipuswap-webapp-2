@@ -1,14 +1,16 @@
 @import "@styles/variables";
 
 .filterCard {
-  display: flex;
-  align-items: center;
-  column-gap: 24px;
-
-  padding: 16px;
   margin-bottom: 32px;
 
   overflow: visible;
+}
+
+.filterCardContent {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
 }
 
 .searchInput {

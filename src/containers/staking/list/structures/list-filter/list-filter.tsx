@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
 import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
-import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '@components/ui/card';
@@ -37,7 +36,7 @@ export const ListFilter: FC = observer(() => {
   } = translation;
 
   return (
-    <Card contentClassName={cx(styles.filterCard)}>
+    <Card className={styles.filterCard} contentClassName={styles.filterCardContent}>
       <Input
         value={search}
         onChange={onSearchChange}
