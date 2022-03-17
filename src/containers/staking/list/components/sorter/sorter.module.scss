@@ -5,14 +5,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 128px;
+  min-width: 128px;
   font-size: 1rem;
   font-weight: 600;
 }
 
 .root {
   :global(sorterSelect__placeholder) {
-    
+
   }
   :global(.sorterSelect__control) {
     min-height: 24px;
@@ -25,6 +25,7 @@
 
   :global(.sorterSelect__value-container) {
     min-height: 24px;
+    min-width: 100px;
     max-width: 100%;
     border-radius: 8px;
     margin: 0;
@@ -145,7 +146,7 @@
 
   }
 
-  :global(.sorterSelect__option--is-selected) { 
+  :global(.sorterSelect__option--is-selected) {
     color: $hover-primary-02-fallback;
   }
 
