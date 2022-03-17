@@ -36,11 +36,17 @@ export const useSorterViewModel = () => {
   ];
 
   const sortingValues = isNull(accountPkh) ? sortValues : sortValues.concat(sortUserValues);
+  const sortingValue = sortingValues
+    .map(item => ({
+      ...item,
+      label: `Sorted by ${item.label}`
+    }))
+    .find(({ field }) => field === sortField);
 
   const sortDirectionRotate = sortDirection === SortDirection.ASC;
 
   return {
-    sortField,
+    sortingValue,
     sortDirectionRotate,
     sortingValues,
     handleSortFieldChange,

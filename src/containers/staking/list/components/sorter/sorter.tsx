@@ -22,7 +22,7 @@ const modeClass = {
 
 export const Sorter: FC<Props> = observer(({ className, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { sortField, sortDirectionRotate, handleSortFieldChange, handleSortDirectionToggle, sortingValues } =
+  const { sortingValue, sortDirectionRotate, handleSortFieldChange, handleSortDirectionToggle, sortingValues } =
     useSorterViewModel();
 
   return (
@@ -32,7 +32,7 @@ export const Sorter: FC<Props> = observer(({ className, ...props }) => {
         onChange={handleSortFieldChange}
         options={sortingValues}
         isSearchable={false}
-        value={sortField}
+        value={sortingValue}
         {...props}
       />
       <Button theme="tertiary" onClick={handleSortDirectionToggle}>
