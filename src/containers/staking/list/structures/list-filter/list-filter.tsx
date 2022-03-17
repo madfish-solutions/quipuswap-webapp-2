@@ -37,7 +37,7 @@ export const ListFilter: FC = observer(() => {
   } = translation;
 
   return (
-    <Card className={cx(styles.filterCard)}>
+    <Card contentClassName={cx(styles.filterCard)}>
       <Input
         value={search}
         onChange={onSearchChange}
