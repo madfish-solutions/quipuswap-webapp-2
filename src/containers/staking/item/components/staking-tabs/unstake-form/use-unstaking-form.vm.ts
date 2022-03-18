@@ -3,7 +3,8 @@ import { FormikHelpers } from 'formik/dist/types';
 
 import { DEFAULT_DECIMALS } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
-import { bigNumberToString, defined, isEmptyArray, toDecimals } from '@utils/helpers';
+import { getFormikError } from '@utils/forms/get-formik-error';
+import { bigNumberToString, defined, isExist, toDecimals } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
@@ -48,7 +49,9 @@ export const useUnstakingFormViewModel = () => {
     onSubmit: handleUnstakeSubmitAndUpdateData
   });
 
-  const disabled = formik.isSubmitting || !isEmptyArray(Object.keys(formik.errors));
+  const ustakingAmountError = getFormikError(formik, UnstakingFormFields.inputAmount);
+
+  const disabled = formik.isSubmitting || isExist(ustakingAmountError);
   const inputAmountError =
     formik.errors[UnstakingFormFields.inputAmount] && formik.touched[UnstakingFormFields.inputAmount]
       ? formik.errors[UnstakingFormFields.inputAmount]
