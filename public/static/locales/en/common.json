@@ -51,6 +51,8 @@
   "Insufficient funds": "Insufficient funds",
   "Minimal value is {{min}}": "Minimal value is {{min}}",
   "Maximal value is {{max}}": "Maximal value is {{max}}",
+  "lteLowerMessage": "The value should be greater than {{lower}}",
+  "gteUpperMessage": "The value should be lower that {{upper}}",
   "Value has to be a number between {{min}} and {{max}}": "Value has to be a number between {{min}} and {{max}}",
   "tokenDecimalsOverflowError": "The precision of {{tokenSymbol}} token can't be greater than {{decimalPlaces}} places",
   "deadlineOutOfRangeError": "Deadline has to be between 1m and 30 days (43200m)",
@@ -73,4 +75,5 @@
   "Invest": "Invest",
   "Divest": "Divest",
   "Default": "Default",
+  "invalidNumberMessage": "The input value is invalid. Only valid numbers with dot or comma separator are accepted."
 }

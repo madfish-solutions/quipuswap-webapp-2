@@ -7,10 +7,9 @@ import * as yup from 'yup';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
+import { stakingOperationAmountSchema } from '../../../helpers';
 import { StakingFormFields } from './staking-form.interface';
 import { useStakingStatusValidation } from './use-staking-status.validation';
-
-const ZERO = 0;
 
 export const useStakingFormValidation = (
   userBalance: Nullable<BigNumber>,
@@ -20,12 +19,7 @@ export const useStakingFormValidation = (
   const stakingStatusSchema = useStakingStatusValidation(stakingStatus);
 
   return useMemo(() => {
-    const inputAmountSchema = userBalance
-      ? yup
-          .number()
-          .max(userBalance.toNumber(), `Max available value is ${userBalance.toNumber()}`)
-          .moreThan(ZERO, 'The value should be greater than zero.')
-      : yup.number();
+    const inputAmountSchema = stakingOperationAmountSchema(userBalance);
 
     const bakerSchema = canDelegate ? yup.string().required('Baker is required') : yup.string();
 

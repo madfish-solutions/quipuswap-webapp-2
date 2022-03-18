@@ -15,7 +15,7 @@ import { useToasts } from '@hooks/use-toasts';
 import { useBalances } from '@providers/BalancesProvider';
 import { useTezos } from '@utils/dapp';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
-import { defined, fromDecimals } from '@utils/helpers';
+import { defined, fromDecimals, prepareNumberAsString } from '@utils/helpers';
 import { makeNumberAsStringTestFn, numberAsStringSchema } from '@utils/validators/number-as-string';
 
 import { DonationFormValues } from './types';
@@ -35,7 +35,10 @@ export const useDonationFormik = () => {
   const confirmOperation = useConfirmOperation();
   const inputTokenBalance = balances[TEZOS_TOKEN_SLUG];
   const max = inputTokenBalance?.minus(TEZ_TRANSFER_AMOUNT_CAP);
-  const emptyBalanceAmountValidationSchema = numberAsStringSchema(MIN_INPUT_AMOUNT)
+  const emptyBalanceAmountValidationSchema = numberAsStringSchema({
+    value: EMPTY_BALANCE_AMOUNT,
+    isInclusive: false
+  })
     .test(
       'balance',
       () => t('common|Insufficient funds'),
@@ -43,8 +46,11 @@ export const useDonationFormik = () => {
     )
     .required(t(REQUIRE_FIELD_MESSAGE));
   const someBalanceAmountValidationSchema = numberAsStringSchema(
-    MIN_INPUT_AMOUNT,
-    max,
+    {
+      value: EMPTY_BALANCE_AMOUNT,
+      isInclusive: false
+    },
+    max && { value: max, isInclusive: true },
     max && t('common|valueOutOfRangeError', { min: MIN_INPUT_AMOUNT.toFixed(), max: max.toFixed() })
   )
     .test(
@@ -66,9 +72,8 @@ export const useDonationFormik = () => {
 
   const handleSubmit = async (formValues: Partial<DonationFormValues>) => {
     try {
-      const operation = await defined(tezos)
-        .wallet.transfer({ to: DONATION_ADDRESS, amount: Number(formValues.amount) })
-        .send();
+      const amount = Number(prepareNumberAsString(defined(formValues.amount)));
+      const operation = await defined(tezos).wallet.transfer({ to: DONATION_ADDRESS, amount: amount }).send();
 
       closeDonationModal();
 
