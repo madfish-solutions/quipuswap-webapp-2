@@ -18,7 +18,7 @@ export const StakingListPage = observer(() => {
   return (
     <>
       <TestnetAlert />
-      <PageTitle>Staking</PageTitle>
+      <PageTitle>Farming</PageTitle>
       <ListStats />
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton className={styles.mb48} />}>
         <StakingRewardsList />

@@ -180,7 +180,7 @@ export const StakingDetails: FC = observer(() => {
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('stake|Staking Contract')}
+          {t('stake|Farm Contract')}
         </Button>
       </div>
     </Card>

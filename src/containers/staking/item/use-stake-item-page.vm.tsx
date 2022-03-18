@@ -39,11 +39,11 @@ export const useStakeItemPageViewModel = () => {
 
   const getTitle = () => {
     if (stakeItem) {
-      return `Staking ${getTokensName(stakeItem.tokenA, stakeItem.tokenB)}`;
+      return `Farming ${getTokensName(stakeItem.tokenA, stakeItem.tokenB)}`;
     }
 
     if (!isLoading && isNull(stakeItem)) {
-      return t('stake|Failed to load staking');
+      return t('stake|Failed to load farming');
     }
 
     return <DashPlug animation={true} className={stakingPageStyles.titleLoader} zoom={1.45} />;

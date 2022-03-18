@@ -65,7 +65,7 @@ export const StakingListItem: FC<StakingItem> = ({
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
-  const selectLink = `staking/${id}`;
+  const selectLink = `farming/${id}`;
 
   const myBalanceDollarEquivalent = getDollarEquivalent(myBalance, depositExchangeRate);
   const myDepositDollarEquivalent = getDollarEquivalent(depositBalance, depositExchangeRate);
