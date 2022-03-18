@@ -1,4 +1,5 @@
 @import '@styles/_variables';
+@import "@styles/text";
 
 .root {
   position: relative;
@@ -92,15 +93,11 @@
   }
 
   :global(.sorterSelect__placeholder) {
-    background: $brand-01;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-01);
   }
 
   :global(.sorterSelect__single-value) {
-    background: $brand-01;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-01);
     &::after {
       border-top: 5px solid $hover-primary-01-fallback // COLOR
     }
@@ -131,15 +128,11 @@
   }
 
   :global(.sorterSelect__placeholder) {
-    background: $brand-02;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-02);
   }
 
   :global(.sorterSelect__single-value) {
-    background: $brand-02;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    @include background-text-color($brand-02);
     &::after {
       border-top: 5px solid $hover-primary-02-fallback;
     }

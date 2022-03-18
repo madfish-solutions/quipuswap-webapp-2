@@ -45,7 +45,7 @@ export const useListFilterViewModel = () => {
 
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
-    numberInputPlaceholderTranslation: t('common|Search'),
+    numberInputPlaceholderTranslation: t('common|Token ID'),
     stakedOnlyTranslation: t('stake|stakedOnly'),
     activeOnlyTranslation: t('stake|activeOnly')
   };
