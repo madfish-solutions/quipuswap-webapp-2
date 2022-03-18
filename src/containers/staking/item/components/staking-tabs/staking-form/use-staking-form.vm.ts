@@ -7,7 +7,15 @@ import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
-import { bigNumberToString, toDecimals, defined, isNull, isExist, getTokenPairSlug } from '@utils/helpers';
+import {
+  bigNumberToString,
+  toDecimals,
+  defined,
+  isNull,
+  isExist,
+  getTokenPairSlug,
+  prepareNumberAsString
+} from '@utils/helpers';
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
@@ -82,7 +90,7 @@ export const useStakingFormViewModel = () => {
     formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(stakingStatusError);
 
   const handleInputAmountChange = (value: string) => {
-    stakingItemStore.setInputAmount(value);
+    stakingItemStore.setInputAmount(prepareNumberAsString(value));
     formik.setFieldValue(StakingFormFields.inputAmount, value);
   };
 

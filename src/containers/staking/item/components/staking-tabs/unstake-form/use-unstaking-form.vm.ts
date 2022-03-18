@@ -4,7 +4,7 @@ import { FormikHelpers } from 'formik/dist/types';
 import { DEFAULT_DECIMALS } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { getFormikError } from '@utils/forms/get-formik-error';
-import { bigNumberToString, defined, isExist, toDecimals } from '@utils/helpers';
+import { bigNumberToString, defined, isExist, prepareNumberAsString, toDecimals } from '@utils/helpers';
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
@@ -58,7 +58,7 @@ export const useUnstakingFormViewModel = () => {
       : undefined;
 
   const handleInputAmountChange = (value: string) => {
-    stakingItemStore.setInputAmount(value);
+    stakingItemStore.setInputAmount(prepareNumberAsString(value));
     formik.setFieldValue(UnstakingFormFields.inputAmount, value);
   };
 
