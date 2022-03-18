@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { USD_DECIMALS } from '@app.config';
 import { GobletIcon } from '@components/svg/goblet-icon';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
@@ -21,11 +22,12 @@ const modeClass = {
 
 interface Props extends DataTestAttribute {
   amount: Nullable<BigNumber>;
+  amountDecimals?: number;
   currency: string;
   tooltip?: string;
 }
 
-export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId }) => {
+export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, amountDecimals = USD_DECIMALS }) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['stake']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -43,7 +45,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId })
               className={styles.amount}
               amount={amount}
               currency={currency}
-              amountDecimals={2}
+              amountDecimals={amountDecimals}
               isLeftCurrency={currency === '$'}
               testId={testId}
             />
