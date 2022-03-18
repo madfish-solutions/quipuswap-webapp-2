@@ -72,9 +72,8 @@ export const useDonationFormik = () => {
 
   const handleSubmit = async (formValues: Partial<DonationFormValues>) => {
     try {
-      const operation = await defined(tezos)
-        .wallet.transfer({ to: DONATION_ADDRESS, amount: Number(prepareNumberAsString(defined(formValues.amount))) })
-        .send();
+      const amount = Number(prepareNumberAsString(defined(formValues.amount)));
+      const operation = await defined(tezos).wallet.transfer({ to: DONATION_ADDRESS, amount: amount }).send();
 
       closeDonationModal();
 
