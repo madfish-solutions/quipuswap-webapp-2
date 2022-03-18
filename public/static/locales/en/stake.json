@@ -57,6 +57,11 @@
   "totalClaimedRewardTooltip": "Total amount of rewards collected by users so far.",
   "harvestAll": "Harvest All",
   "rewardsTooltip": "Your unclaimed available staking rewards across all farms.",
+  "stakedOnly": "Staked Only",
+  "activeOnly": "Active Only",
+  "balance": "Balance",
+  "deposit": "Deposit",
+  "earned": "Earned",
   "disabled": "Staking is finished! Please withdraw all your stake and rewards.",
   "pending": "Staking is paused!"
 }

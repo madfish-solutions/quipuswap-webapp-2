@@ -4,6 +4,7 @@ import { computed, makeObservable } from 'mobx';
 
 import { getStakingListApi, getStakingStatsApi } from '@api/staking';
 import { RawStakeStats, RawStakingItem, StakeStats, StakingItem } from '@interfaces/staking.interfaces';
+import { multipliedIfPossible } from '@utils/helpers/multiplied-if-possible';
 import { mapStakesItems, mapStakeStats } from '@utils/mapping/staking.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
@@ -22,7 +23,7 @@ export class StakingListStore {
 
   get pendingRewards() {
     const rewardsInUsd = this.listStore.data.map(({ earnBalance, earnExchangeRate }) =>
-      earnBalance && earnExchangeRate ? earnBalance.multipliedBy(earnExchangeRate) : null
+      multipliedIfPossible(earnBalance, earnExchangeRate)
     );
 
     return rewardsInUsd.reduce<BigNumber>(
@@ -31,9 +32,14 @@ export class StakingListStore {
     );
   }
 
+  get list() {
+    return this.rootStore.stakingFilterStore.filterAndSort(this.listStore.data);
+  }
+
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
-      pendingRewards: computed
+      pendingRewards: computed,
+      list: computed
     });
   }
 }

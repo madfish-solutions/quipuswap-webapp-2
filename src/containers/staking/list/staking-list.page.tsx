@@ -11,6 +11,7 @@ import { EmptyStakeList, StakingListSkeleton } from './components';
 import { Iterator } from './helpers/iterator';
 import styles from './staking-list.page.module.scss';
 import { StakingListItem } from './structures';
+import { ListFilter } from './structures/list-filter';
 
 export const StakingListPage = observer(() => {
   const { isLoading, list } = useStakingListViewModel();
@@ -24,6 +25,7 @@ export const StakingListPage = observer(() => {
         <StakingRewardsList />
       </StateWrapper>
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton />}>
+        <ListFilter />
         <Iterator
           data={list}
           keyFn={item => item.id.toFixed()}
