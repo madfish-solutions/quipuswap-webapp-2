@@ -58,7 +58,6 @@ export class StakingFilterStore {
       handleDecrement: action,
       onSortFieldChange: action,
       onSortDirectionToggle: action,
-      filterAndSort: action,
       tokenIdValue: computed
     });
   }
