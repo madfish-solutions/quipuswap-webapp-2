@@ -1,6 +1,6 @@
 import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { SortDirection, SortField, sortStakingList } from '@containers/staking/list/components';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
@@ -12,6 +12,7 @@ import { Optional, Token } from '@utils/types';
 import { RootStore } from './root.store';
 
 const ZERO = 0;
+export const STEP = 1;
 
 const includes = (strA: Optional<string>, strB: string) => {
   if (isExist(strA)) {
@@ -56,7 +57,9 @@ export class StakingFilterStore {
       handleIncrement: action,
       handleDecrement: action,
       onSortFieldChange: action,
-      onSortDirectionToggle: action
+      onSortDirectionToggle: action,
+      filterAndSort: action,
+      tokenIdValue: computed
     });
   }
 
@@ -72,10 +75,10 @@ export class StakingFilterStore {
     if (this.search) {
       list = list.filter(
         ({ stakedToken, rewardToken, tokenA, tokenB }) =>
-          this.searchToken(stakedToken, true) ||
-          this.searchToken(rewardToken) ||
-          this.searchToken(tokenA) ||
-          (isExist(tokenB) && this.searchToken(tokenB))
+          this.tokenMatchesSearch(stakedToken, true) ||
+          this.tokenMatchesSearch(rewardToken) ||
+          this.tokenMatchesSearch(tokenA) ||
+          (isExist(tokenB) && this.tokenMatchesSearch(tokenB))
       );
     }
 
@@ -104,17 +107,17 @@ export class StakingFilterStore {
 
   handleIncrement() {
     if (isNull(this.tokenId)) {
-      this.tokenId = new BigNumber('0');
+      this.tokenId = new BigNumber(ZERO);
     } else {
-      this.tokenId = this.tokenId.plus('1');
+      this.tokenId = this.tokenId.plus(STEP);
     }
   }
 
   handleDecrement() {
     if (isNull(this.tokenId)) {
-      this.tokenId = new BigNumber('0');
-    } else if (this.tokenId.isGreaterThan('0')) {
-      this.tokenId = this.tokenId.minus('1');
+      this.tokenId = new BigNumber(ZERO);
+    } else if (this.tokenId.isGreaterThan(ZERO)) {
+      this.tokenId = this.tokenId.minus(STEP);
     }
   }
 
@@ -126,7 +129,7 @@ export class StakingFilterStore {
     this.sortDirection = this.sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
   }
 
-  private searchToken({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {
+  private tokenMatchesSearch({ metadata, contractAddress, fa2TokenId }: Token, contractOnly?: boolean): boolean {
     const isContract = contractAddress === this.search;
 
     const tokenId = this.tokenId?.toNumber();

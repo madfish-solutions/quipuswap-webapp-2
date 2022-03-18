@@ -26,11 +26,9 @@ export const Switcher: FC<Props> = ({ onChange, disabled }) => {
   });
 
   const onClick = () => {
-    if (disabled) {
-      return;
+    if (!disabled) {
+      handleClick(onChange);
     }
-
-    handleClick(onChange);
   };
 
   return <div onClick={onClick} className={compoundClassName}></div>;

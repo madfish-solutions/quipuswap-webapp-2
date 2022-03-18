@@ -2,25 +2,17 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
 import { StakingItem } from '@interfaces/staking.interfaces';
-import { isNull, isExist, cloneArray } from '@utils/helpers';
-import { Optional } from '@utils/types';
+import { isNull, cloneArray } from '@utils/helpers';
+import { multipliedIfPossible } from '@utils/helpers/multiplied-if-possible';
 
 import { SortDirection, SortField } from './sorter.types';
 
-const CHANGE = 1;
+const SWAP = 1;
 const SKIP = -1;
-
-const multipliedIfPossible = (first: Optional<BigNumber>, second: Optional<BigNumber>): Nullable<BigNumber> => {
-  if (isExist(first) && isExist(second)) {
-    return first.multipliedBy(second);
-  }
-
-  return null;
-};
 
 const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, sortDirection: SortDirection) => {
   if (isNull(first)) {
-    return CHANGE;
+    return SWAP;
   }
 
   if (isNull(second)) {
@@ -31,7 +23,7 @@ const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, 
   const isSortedAsc = sortDirection === SortDirection.ASC;
 
   if ((isSortedAsc && isFirstBigger) || (!isSortedAsc && !isFirstBigger)) {
-    return CHANGE;
+    return SWAP;
   }
 
   return SKIP;

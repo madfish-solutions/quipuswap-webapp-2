@@ -6,6 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Card } from '@components/ui/card';
 import { Switcher } from '@components/ui/switcher';
+import { STEP } from 'stores/staking-filter.store';
 
 import { Sorter } from '../../components/sorter';
 import styles from './list-filter.module.scss';
@@ -13,7 +14,6 @@ import { useListFilterViewModel } from './list-filter.vm';
 
 export const MIN_TOKEN_ID = 0;
 export const MAX_TOKEN_ID = Number.MAX_SAFE_INTEGER;
-export const STEP = 1;
 
 export const ListFilter: FC = observer(() => {
   const {

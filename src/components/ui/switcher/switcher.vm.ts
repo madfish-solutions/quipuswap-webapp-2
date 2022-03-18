@@ -4,13 +4,8 @@ export const useSwitcherViewModel = () => {
   const [state, setState] = useState(false);
 
   const handleClick = (callback: (state: boolean) => void) => {
-    if (state === true) {
-      setState(false);
-      callback(false);
-    } else {
-      setState(true);
-      callback(true);
-    }
+    setState(!state);
+    callback(!state);
   };
 
   return {
