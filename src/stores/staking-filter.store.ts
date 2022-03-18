@@ -14,7 +14,7 @@ import { RootStore } from './root.store';
 const ZERO = 0;
 export const STEP = 1;
 
-const includes = (strA: Optional<string>, strB: string) => {
+const includesCaseInsensitive = (strA: Optional<string>, strB: string) => {
   if (isExist(strA)) {
     return strA.toLowerCase().includes(strB.toLowerCase());
   }
@@ -140,9 +140,9 @@ export class StakingFilterStore {
       return isContract && fa2TokenIdMatches;
     }
 
-    const isName = includes(metadata?.name, this.search);
+    const isName = includesCaseInsensitive(metadata?.name, this.search);
 
-    const isSymbol = includes(metadata?.symbol, this.search);
+    const isSymbol = includesCaseInsensitive(metadata?.symbol, this.search);
 
     return isName || isSymbol || (isContract && fa2TokenIdMatches);
   }
