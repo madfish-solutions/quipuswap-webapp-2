@@ -7,6 +7,7 @@ export class MakeInterval<T extends () => void> {
   constructor(private readonly job: T, private readonly ms: number) {}
 
   start() {
+    this.stop();
     this.interval = setInterval(this.job, this.ms);
   }
 
