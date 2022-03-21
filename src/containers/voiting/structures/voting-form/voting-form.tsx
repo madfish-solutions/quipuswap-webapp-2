@@ -74,27 +74,25 @@ const RealForm: React.FC<VotingFormProps> = ({
   useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
   const handleInputChange = async () => {
-    if (!tezos) {
-      return;
-    }
-    const currentTokenA = tokenDataToToken(token1);
-    if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
-      return;
-    }
-    if (tezos && tokenPair) {
-      const toAsset = {
-        contract: tokenPair.token2.contractAddress,
-        id: tokenPair.token2.fa2TokenId ?? undefined
-      };
-      const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
-      if (isAssetSame) {
-        return;
+    try {
+      const currentTokenA = tokenDataToToken(token1);
+      if (currentTokenA.contractAddress === TEZOS_TOKEN.contractAddress && tezos && tokenPair) {
+        const toAsset = {
+          contract: tokenPair.token2.contractAddress,
+          id: tokenPair.token2.fa2TokenId ?? undefined
+        };
+        const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
+        if (isAssetSame) {
+          return;
+        }
+        const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
+        if (tempDex && tempDex !== dex) {
+          setDex(tempDex);
+        }
+        setOldAsset(toAsset);
       }
-      const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
-      if (tempDex && tempDex !== dex) {
-        setDex(tempDex);
-      }
-      setOldAsset(toAsset);
+    } catch (_) {
+      // nothing to do
     }
   };
 
