@@ -6,7 +6,7 @@ import { useGetStakingStats } from '@containers/staking/hooks/use-get-staking-st
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 
 export const useStakingRewardsListViewModel = () => {
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
 
   const stakingListStore = useStakingListStore();
   const { delayedGetStakingList } = useGetStakingList();
@@ -22,8 +22,8 @@ export const useStakingRewardsListViewModel = () => {
   return {
     handleHarvestAll,
     translation: {
-      harvestAllTranslation: t('stake|harvestAll'),
-      rewardsTooltipTranslation: t('stake|rewardsTooltip')
+      harvestAllTranslation: t('farm|harvestAll'),
+      rewardsTooltipTranslation: t('farm|rewardsTooltip')
     }
   };
 };

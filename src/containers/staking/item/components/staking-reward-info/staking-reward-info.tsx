@@ -28,7 +28,7 @@ const NO_TIMELOCK_VALUE = '0';
 
 export const StakingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
   const {
     shouldShowCandidate,
     stakeItem,
@@ -54,16 +54,16 @@ export const StakingRewardInfo: FC = observer(() => {
         className: styles.rewardHeader
       }}
       onButtonClick={handleHarvest}
-      buttonText={t('stake|Harvest')}
-      rewardTooltip={t('stake|singleFarmRewardTooltip')}
+      buttonText={t('farm|Harvest')}
+      rewardTooltip={t('farm|singleFarmRewardTooltip')}
       rewardButtonAttributeTestId={StakeItemPandingReward.HARVEST_BUTTON}
       pendingRewardAttributeTestId={StakeItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
       <StakingStatsItem
-        itemName={t('stake|Your Share')}
+        itemName={t('farm|Your Share')}
         loading={stakingLoading}
-        tooltipContent={t('stake|yourShareTooltip')}
+        tooltipContent={t('farm|yourShareTooltip')}
       >
         <StateData data={stakeItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
           {({ depositBalance, stakedToken }) => (
@@ -81,9 +81,9 @@ export const StakingRewardInfo: FC = observer(() => {
 
       {shouldShowCandidate && (
         <StakingStatsItem
-          itemName={t('stake|Your delegate')}
+          itemName={t('farm|Your delegate')}
           loading={delegatesLoading}
-          tooltipContent={t('stake|yourDelegateTooltip')}
+          tooltipContent={t('farm|yourDelegateTooltip')}
         >
           <StateData data={myDelegate} Fallback={RewardDashPlugFallback} isLoading={delegatesLoading}>
             {delegate => (
@@ -102,9 +102,9 @@ export const StakingRewardInfo: FC = observer(() => {
 
       {timelock !== NO_TIMELOCK_VALUE && (
         <StakingStatsItem
-          itemName={t('stake|Withdrawal fee ends in')}
+          itemName={t('farm|Withdrawal fee ends in')}
           loading={stakingLoading}
-          tooltipContent={t('stake|feeEndsInTooltip')}
+          tooltipContent={t('farm|feeEndsInTooltip')}
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown endTimestamp={timestamp} />}

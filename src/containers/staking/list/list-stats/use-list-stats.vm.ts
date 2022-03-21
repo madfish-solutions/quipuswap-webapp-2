@@ -4,33 +4,33 @@ import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { StakeListStatsDTA } from '@tests/staking/list';
 
 export const useListStatsViewModel = () => {
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
   const stakingStore = useStakingListStore();
 
   const amount = stakingStore.statsStore.data;
 
   const stats = [
     {
-      title: t('stake|totalValueLocked'),
-      tooltip: t('stake|totalValueLockedTooltip'),
+      title: t('farm|totalValueLocked'),
+      tooltip: t('farm|totalValueLockedTooltip'),
       amount: amount?.totalValueLocked,
       testId: StakeListStatsDTA.TOTAL_VALUE_LOCKED
     },
     {
-      title: t('stake|totalDailyReward'),
-      tooltip: t('stake|totalDailyRewardTooltip'),
+      title: t('farm|totalDailyReward'),
+      tooltip: t('farm|totalDailyRewardTooltip'),
       amount: amount?.totalDailyReward,
       testId: StakeListStatsDTA.TOTAL_DAILY_REWARD
     },
     {
-      title: t('stake|totalPendingReward'),
-      tooltip: t('stake|totalPendingRewardTooltip'),
+      title: t('farm|totalPendingReward'),
+      tooltip: t('farm|totalPendingRewardTooltip'),
       amount: amount?.totalPendingReward,
       testId: StakeListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
-      title: t('stake|totalClaimedReward'),
-      tooltip: t('stake|totalClaimedRewardTooltip'),
+      title: t('farm|totalClaimedReward'),
+      tooltip: t('farm|totalClaimedRewardTooltip'),
       amount: amount?.totalClaimedReward,
       testId: StakeListStatsDTA.TOTAL_CLAIMED_REWARD
     }

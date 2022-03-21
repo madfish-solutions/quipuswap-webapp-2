@@ -20,7 +20,7 @@ import styles from './staking-details.module.sass';
 import { useStakingDetailsViewModel } from './use-staking-details.vm';
 
 export const StakingDetails: FC = observer(() => {
-  const { t } = useTranslation(['common', 'vote']);
+  const { t } = useTranslation(['farm']);
 
   const {
     endTime,
@@ -51,15 +51,15 @@ export const StakingDetails: FC = observer(() => {
   return (
     <Card
       header={{
-        content: t('stake|Stake Details'),
+        content: t('farm|Stake Details'),
         status: stakeStatus
       }}
       contentClassName={s.content}
     >
       <DetailsCardCell
-        cellName={t('stake|Value Locked')}
+        cellName={t('farm|Value Locked')}
         className={CardCellClassName}
-        tooltipContent={t('stake|valueLockedTooltip')}
+        tooltipContent={t('farm|valueLockedTooltip')}
       >
         <StateCurrencyAmount
           dollarEquivalent={tvlDollarEquivalent}
@@ -70,8 +70,8 @@ export const StakingDetails: FC = observer(() => {
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={t('stake|Daily Distribution')}
-        tooltipContent={t('stake|dailyDistributionTooltip')}
+        cellName={t('farm|Daily Distribution')}
+        tooltipContent={t('farm|dailyDistributionTooltip')}
         className={CardCellClassName}
       >
         <StateCurrencyAmount
@@ -82,13 +82,13 @@ export const StakingDetails: FC = observer(() => {
         />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('stake|APR')} tooltipContent={t('stake|aprTooltip')} className={CardCellClassName}>
+      <DetailsCardCell cellName={t('farm|APR')} tooltipContent={t('stake|aprTooltip')} className={CardCellClassName}>
         <StatePercentage value={apr} isLoading={isLoading} />
       </DetailsCardCell>
 
       <DetailsCardCell
-        cellName={t('stake|dailyApr')}
-        tooltipContent={t('stake|dailyAprTooltip')}
+        cellName={t('farm|dailyApr')}
+        tooltipContent={t('farm|dailyAprTooltip')}
         className={CardCellClassName}
       >
         <StatePercentage isLoading={isLoading} value={dailyApr} />
@@ -97,8 +97,8 @@ export const StakingDetails: FC = observer(() => {
       {shouldShowDelegates && (
         <>
           <DetailsCardCell
-            cellName={t('stake|Current Delegate')}
-            tooltipContent={t('stake|currentDelegateTooltip')}
+            cellName={t('farm|Current Delegate')}
+            tooltipContent={t('farm|currentDelegateTooltip')}
             className={CardCellClassName}
           >
             <StateData isLoading={isLoading} data={currentDelegate}>
@@ -107,8 +107,8 @@ export const StakingDetails: FC = observer(() => {
           </DetailsCardCell>
 
           <DetailsCardCell
-            cellName={t('stake|Next Delegate')}
-            tooltipContent={t('stake|nextDelegateTooltip')}
+            cellName={t('farm|Next Delegate')}
+            tooltipContent={t('farm|nextDelegateTooltip')}
             className={CardCellClassName}
           >
             <StateData isLoading={isLoading} data={nextDelegate}>
@@ -119,8 +119,8 @@ export const StakingDetails: FC = observer(() => {
       )}
 
       <DetailsCardCell
-        cellName={t('stake|stakingEndsIn')}
-        tooltipContent={t('stake|stakingEndsInTooltip')}
+        cellName={t('farm|stakingEndsIn')}
+        tooltipContent={t('farm|stakingEndsInTooltip')}
         className={CardCellClassName}
       >
         <StateData isLoading={isLoading} data={endTime}>
@@ -130,8 +130,8 @@ export const StakingDetails: FC = observer(() => {
 
       {shouldShowLockPeriod && (
         <DetailsCardCell
-          cellName={t('stake|Lock Period')}
-          tooltipContent={t('stake|lockPeriodTooltip')}
+          cellName={t('farm|Lock Period')}
+          tooltipContent={t('farm|lockPeriodTooltip')}
           className={CardCellClassName}
         >
           <StateData isLoading={isLoading} data={timelock}>
@@ -142,8 +142,8 @@ export const StakingDetails: FC = observer(() => {
 
       {shouldShowWithdrawalFee && (
         <DetailsCardCell
-          cellName={t('stake|Withdrawal Fee')}
-          tooltipContent={t('stake|withdrawalFeeTooltip')}
+          cellName={t('farm|Withdrawal Fee')}
+          tooltipContent={t('farm|withdrawalFeeTooltip')}
           className={CardCellClassName}
         >
           <StateData isLoading={isLoading} data={withdrawalFee}>
@@ -153,8 +153,8 @@ export const StakingDetails: FC = observer(() => {
       )}
 
       <DetailsCardCell
-        cellName={t('stake|Interface Fee')}
-        tooltipContent={t('stake|interfaceFeeTooltip')}
+        cellName={t('farm|Interface Fee')}
+        tooltipContent={t('farm|interfaceFeeTooltip')}
         className={CardCellClassName}
       >
         <StateData isLoading={isLoading} data={harvestFee}>
@@ -170,7 +170,7 @@ export const StakingDetails: FC = observer(() => {
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('stake|Token Contract')}
+          {t('farm|Token Contract')}
         </Button>
 
         <Button
@@ -180,7 +180,7 @@ export const StakingDetails: FC = observer(() => {
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('stake|Farm Contract')}
+          {t('farm|Farm Contract')}
         </Button>
       </div>
     </Card>

@@ -11,7 +11,7 @@ import s from '@styles/CommonContainer.module.sass';
 import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
 
 export const UnstakingForm: FC = observer(() => {
-  const { t } = useTranslation(['common', 'stake']);
+  const { t } = useTranslation(['common', 'farm']);
   const {
     inputAmount,
     handleSubmit,
@@ -43,7 +43,7 @@ export const UnstakingForm: FC = observer(() => {
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>
-            {t('stake|Unstake')}
+            {t('farm|Unstake')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>

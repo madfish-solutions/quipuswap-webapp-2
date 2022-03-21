@@ -16,7 +16,7 @@ const modeClass = {
 };
 
 const StakingItem = () => {
-  const { t } = useTranslation(['common', 'privacy', 'stake']);
+  const { t } = useTranslation(['common', 'privacy', 'farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -39,7 +39,7 @@ export const getServerSideProps = async props => {
 
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'privacy', 'stake']))
+      ...(await serverSideTranslations(locale, ['common', 'privacy', 'farm']))
     }
   };
 };

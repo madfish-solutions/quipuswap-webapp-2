@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { StakingListPage } from '@containers/staking';
+import { FarmingListPage } from '@containers/staking';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
@@ -14,7 +14,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const StakingList: FC = () => {
+export const FarmingList: FC = () => {
   const { t } = useTranslation(['common', 'privacy']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -24,10 +24,10 @@ export const StakingList: FC = () => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <StakingListPage />
+      <FarmingListPage />
     </BaseLayout>
   );
 };
 
 // eslint-disable-next-line import/no-default-export
-export default StakingList;
+export default FarmingList;

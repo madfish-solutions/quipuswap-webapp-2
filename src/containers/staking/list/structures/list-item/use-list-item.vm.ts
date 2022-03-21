@@ -1,25 +1,25 @@
 import { useTranslation } from 'next-i18next';
 export const useListItemViewModal = () => {
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
 
   return {
     translation: {
-      selectTranslation: t('stake|select'),
-      fullCardTooltipTranslation: t('stake|fullCardTooltip'),
-      tokenContractTranslation: t('stake|tokenContract'),
-      stakeContractTranslation: t('stake|stakeContract'),
-      tvlTranslation: t('stake|tvl'),
-      tvlTooltipTranslation: t('stake|tvlTooltip'),
-      aprTranslation: t('stake|apr'),
-      aprTooltipTranslation: t('stake|aprTooltip'),
-      apyTranslation: t('stake|apy'),
-      apyTooltipTranslation: t('stake|apyTooltip'),
-      yourBalanceTranslation: t('stake|yourBalance'),
-      yourBalanceTooltipTranslation: t('stake|yourBalanceTooltip'),
-      yourDepositTranslation: t('stake|yourDeposit'),
-      yourDepositTooltipTranslation: t('stake|yourDepositTooltip'),
-      yourEarnedTranslation: t('stake|yourEarned'),
-      yourEarnedTooltipTranslation: t('stake|yourEarnedTooltip')
+      selectTranslation: t('farm|select'),
+      fullCardTooltipTranslation: t('farm|fullCardTooltip'),
+      tokenContractTranslation: t('farm|tokenContract'),
+      stakeContractTranslation: t('farm|stakeContract'),
+      tvlTranslation: t('farm|tvl'),
+      tvlTooltipTranslation: t('farm|tvlTooltip'),
+      aprTranslation: t('farm|apr'),
+      aprTooltipTranslation: t('farm|aprTooltip'),
+      apyTranslation: t('farm|apy'),
+      apyTooltipTranslation: t('farm|apyTooltip'),
+      yourBalanceTranslation: t('farm|yourBalance'),
+      yourBalanceTooltipTranslation: t('farm|yourBalanceTooltip'),
+      yourDepositTranslation: t('farm|yourDeposit'),
+      yourDepositTooltipTranslation: t('farm|yourDepositTooltip'),
+      yourEarnedTranslation: t('farm|yourEarned'),
+      yourEarnedTooltipTranslation: t('farm|yourEarnedTooltip')
     }
   };
 };

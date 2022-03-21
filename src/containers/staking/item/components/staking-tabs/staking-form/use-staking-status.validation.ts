@@ -5,18 +5,18 @@ import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
 export const useStakingStatusValidation = (stakingStatus: Undefined<ActiveStatus>) => {
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
 
   return object()
     .shape({})
     .test(
       'value-type1',
-      () => t('stake|pending'),
+      () => t('farm|pending'),
       _ => stakingStatus !== ActiveStatus.PENDING
     )
     .test(
       'value-type2',
-      () => t('stake|disabled'),
+      () => t('farm|disabled'),
       _ => stakingStatus !== ActiveStatus.DISABLED
     );
 };

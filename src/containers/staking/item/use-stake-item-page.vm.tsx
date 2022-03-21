@@ -15,7 +15,7 @@ import stakingPageStyles from './staking-item.page.module.sass';
 
 export const useStakeItemPageViewModel = () => {
   const router = useRouter();
-  const { t } = useTranslation(['common', 'stake']);
+  const { t } = useTranslation(['common', 'farm']);
   const stakingItemStore = useStakingItemStore();
   const dAppReady = useReady();
   const { getStakingItem } = useGetStakingItem();
@@ -43,7 +43,7 @@ export const useStakeItemPageViewModel = () => {
     }
 
     if (!isLoading && isNull(stakeItem)) {
-      return t('stake|Failed to load farming');
+      return t('farm|Failed to load farming');
     }
 
     return <DashPlug animation={true} className={stakingPageStyles.titleLoader} zoom={1.45} />;

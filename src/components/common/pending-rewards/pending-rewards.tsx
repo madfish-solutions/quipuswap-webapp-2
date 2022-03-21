@@ -29,7 +29,7 @@ interface Props extends DataTestAttribute {
 
 export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, amountDecimals = USD_DECIMALS }) => {
   const accountPkh = useAccountPkh();
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -38,7 +38,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, a
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
+              <span className={styles.title}>{t('farm|Your Pending Rewards')}</span>
               {tooltip && <Tooltip content={tooltip} />}
             </div>
             <StateCurrencyAmount
@@ -51,7 +51,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, a
             />
           </>
         ) : (
-          <span className={styles.amount}>{t('stake|You might win a lot')}</span>
+          <span className={styles.amount}>{t('farm|You might win a lot')}</span>
         )}
       </div>
       <GobletIcon />

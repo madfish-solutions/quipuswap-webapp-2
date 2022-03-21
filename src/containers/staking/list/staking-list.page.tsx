@@ -12,7 +12,7 @@ import { Iterator } from './helpers/iterator';
 import styles from './staking-list.page.module.scss';
 import { StakingListItem } from './structures';
 
-export const StakingListPage = observer(() => {
+export const FarmingListPage = observer(() => {
   const { isLoading, list } = useStakingListViewModel();
 
   return (

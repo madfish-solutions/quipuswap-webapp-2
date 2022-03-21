@@ -13,7 +13,7 @@ import { StakingAlert } from '../../staking-alert';
 import { useStakingFormViewModel } from './use-staking-form.vm';
 
 export const StakingForm: FC = observer(() => {
-  const { t } = useTranslation(['common', 'stake']);
+  const { t } = useTranslation(['common', 'farm']);
   const {
     bakerInputValue,
     shouldShowBakerInput,
@@ -72,7 +72,7 @@ export const StakingForm: FC = observer(() => {
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>
-            {t('stake|Stake')}
+            {t('farm|Stake')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
