@@ -89,7 +89,7 @@ const useVotingService = () => {
     async (pair: TokenPair) => {
       handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
-    [tezos, accountPkh, showErrorToast, setTokenPair]
+    [tezos, accountPkh, showErrorToast]
   );
 
   const handleTokenPairSelectChange = (pair: TokenPair) => {
