@@ -12,7 +12,8 @@
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
     "makemessages": "i18next 'src/**/*.{js,jsx,ts,tsx}'",
-    "schema": "graphql-codegen --config codegen.yml"
+    "schema": "graphql-codegen --config codegen.yml",
+    "test": "jest"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.0",
@@ -61,12 +62,16 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-typescript": "^7.16.7",
     "@graphql-codegen/cli": "1.21.7",
     "@graphql-codegen/introspection": "^1.18.2",
     "@graphql-codegen/typescript": "1.23.0",
     "@graphql-codegen/typescript-operations": "1.18.4",
     "@graphql-codegen/typescript-react-apollo": "2.3.1",
     "@types/classnames": "^2.3.1",
+    "@types/jest": "^27.4.1",
     "@types/memoizee": "^0.4.6",
     "@types/react": "^17.0.13",
     "@types/react-final-form-listeners": "^1.0.0",
@@ -74,6 +79,7 @@
     "@types/react-select": "^4.0.17",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
     "@typescript-eslint/parser": "^5.7.0",
+    "babel-jest": "^27.5.1",
     "cross-env": "^7.0.3",
     "eslint": "^8.4.1",
     "eslint-config-next": "^11.0.1",
@@ -89,6 +95,7 @@
     "eslint-plugin-sonarjs": "^0.11.0",
     "husky": "4.3.8",
     "i18next-parser": "^4.2.0",
+    "jest": "^27.5.1",
     "prettier": "^2.5.1",
     "sonarjs": "^1.0.0",
     "typescript": "^4.5.5"

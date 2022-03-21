@@ -43,6 +43,6 @@
     "downlevelIteration": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
-  "ignorePatterns": ["graphql.ts"]
+  "exclude": ["node_modules", "**/*test.ts", "**/*test.tsx"],
+  "ignorePatterns": ["graphql.ts", "**/*test.ts", "**/*test.tsx"]
 }
