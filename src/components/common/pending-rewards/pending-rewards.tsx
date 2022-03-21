@@ -51,7 +51,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, a
             />
           </>
         ) : (
-          <span className={styles.amount}>{t('stake|You might win a lot')}</span>
+          <span className={styles.amount}>{t('stake|Here can be your reward')}</span>
         )}
       </div>
       <GobletIcon />
