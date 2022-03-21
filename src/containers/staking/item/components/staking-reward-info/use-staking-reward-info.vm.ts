@@ -3,7 +3,7 @@ import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useReady } from '@utils/dapp';
-import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull, loadingErrorDataIsReady } from '@utils/helpers';
+import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
@@ -23,9 +23,9 @@ export const useStakingRewardInfoViewModel = () => {
   const { data: delegateAddress } = userStakingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
-  const userInfoStoreReady = loadingErrorDataIsReady(userInfoStore, walletIsConnected);
-  const itemStoreReady = loadingErrorDataIsReady(itemStore);
-  const stakingDelegateStoreReady = loadingErrorDataIsReady(userStakingDelegateStore, walletIsConnected);
+  const userInfoStoreReady = userInfoStore.isReady || !walletIsConnected;
+  const itemStoreReady = itemStore.isReady;
+  const stakingDelegateStoreReady = userStakingDelegateStore.isReady || !walletIsConnected;
   const pendingRewardsReady = isExist(stakeItem?.earnBalance) || !walletIsConnected;
   const stakingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;

@@ -72,15 +72,11 @@ export class StakingItemStore {
       clearBalance: action,
       setInputAmount: action,
       setSelectedBaker: action,
+      updatePendingRewards: action,
 
-      pendingRewardsLive: computed,
       stakeItem: computed
     });
     this.clearBalance();
-  }
-
-  get pendingRewardsLive() {
-    return this.pendingRewards;
   }
 
   get stakeItem() {
@@ -91,7 +87,7 @@ export class StakingItemStore {
       noBalancesStakeItem && {
         ...noBalancesStakeItem,
         depositBalance: userInfo && fromDecimals(userInfo.staked, noBalancesStakeItem.stakedToken),
-        earnBalance: this.pendingRewardsLive && fromDecimals(this.pendingRewardsLive, noBalancesStakeItem.rewardToken)
+        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, noBalancesStakeItem.rewardToken)
       }
     );
   }

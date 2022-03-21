@@ -29,7 +29,7 @@ const NOTHING_STAKED_VALUE = 0;
 
 export const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem | StakingItem) => {
   const totalStaked =
-    'staked' in item ? new BigNumber(item.staked) : toDecimals(item.tvlInStakedToken, item.rewardToken);
+    'staked' in item ? new BigNumber(item.staked) : toDecimals(item.tvlInStakedToken, item.stakedToken);
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');

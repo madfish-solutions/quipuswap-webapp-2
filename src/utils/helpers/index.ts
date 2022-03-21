@@ -55,4 +55,3 @@ export * from './big-number-to-string';
 export * from './get-dollar-equivalent';
 export * from './get-baker-name';
 export * from './prepare-number-as-string';
-export * from './loading-error-data-is-ready';
