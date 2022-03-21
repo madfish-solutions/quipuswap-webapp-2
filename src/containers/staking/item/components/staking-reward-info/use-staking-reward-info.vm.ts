@@ -54,6 +54,7 @@ export const useStakingRewardInfoViewModel = () => {
       myRewardInTokens: null,
       myDepositDollarEquivalent: null,
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
+      rewardTokenDecimals: 0,
       stakingLoading,
       timelock: null,
       handleHarvest
@@ -70,7 +71,8 @@ export const useStakingRewardInfoViewModel = () => {
     endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(stakeItem.timelock) * MS_IN_SECOND : null,
     myRewardInTokens: stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null,
     myDepositDollarEquivalent,
-    rewardTokenSymbol: stakeItem ? getTokenSymbol(stakeItem.rewardToken) : TOKEN_SYMBOL_FILLER,
+    rewardTokenSymbol: getTokenSymbol(stakeItem.rewardToken),
+    rewardTokenDecimals: stakeItem.rewardToken.metadata.decimals,
     stakingLoading,
     timelock: stakeItem.timelock,
     handleHarvest

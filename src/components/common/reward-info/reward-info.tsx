@@ -14,6 +14,7 @@ import styles from './reward-info.module.scss';
 
 interface Props {
   amount: Nullable<BigNumber>;
+  amountDecimals?: number;
   className?: string;
   currency: string;
   onButtonClick: () => void;
@@ -32,6 +33,7 @@ const ZERO_REWARDS = 0;
 
 export const RewardInfo: FC<Props> = ({
   amount,
+  amountDecimals,
   className,
   onButtonClick,
   currency,
@@ -50,6 +52,7 @@ export const RewardInfo: FC<Props> = ({
         <PendingRewards
           testId={rewardButtonAttributeTestId}
           amount={amount}
+          amountDecimals={amountDecimals}
           currency={currency}
           tooltip={rewardTooltip}
         />

@@ -16,6 +16,12 @@ export const isNewsWithLink = (news: News): news is NewsWithLink => 'url' in new
 
 export const NewsData: News[] = [
   {
+    id: 'token-to-token-security-audit',
+    img: '/images/token-to-token-security-audit.png',
+    url: 'https://story.madfish.solutions/runtime-verification-published-quipuswaps-token-to-token-contract-audit/',
+    external: true
+  },
+  {
     id: 'major-update',
     img: '/images/major-update.png',
     url: 'https://story.madfish.solutions/quipuswap-update-token-to-token-swaps-improved-routing-interfaces-and-more/',
