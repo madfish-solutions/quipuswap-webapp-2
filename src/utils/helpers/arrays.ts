@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-magic-numbers */
 export const getUniqArray = <T>(list: T[], getKey: (el: T) => string): T[] => {
   const map: Record<string, boolean> = {};
 
@@ -12,6 +13,8 @@ export const getUniqArray = <T>(list: T[], getKey: (el: T) => string): T[] => {
     return false;
   });
 };
+
+export const cloneArray = <T>(array: Array<T>): Array<T> => array.slice();
 
 export const isFoundIndex = (index: number) => index !== -1;
 
