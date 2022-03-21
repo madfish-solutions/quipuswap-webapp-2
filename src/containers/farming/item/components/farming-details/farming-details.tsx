@@ -16,8 +16,8 @@ import { Countdown } from '../countdown';
 import { StateData } from '../state-data';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
-import styles from './staking-details.module.sass';
-import { useStakingDetailsViewModel } from './use-staking-details.vm';
+import styles from './farming-details.module.sass';
+import { useStakingDetailsViewModel } from './use-farming-details.vm';
 
 export const StakingDetails: FC = observer(() => {
   const { t } = useTranslation(['farm']);
@@ -51,7 +51,7 @@ export const StakingDetails: FC = observer(() => {
   return (
     <Card
       header={{
-        content: t('farm|Stake Details'),
+        content: t('farm|Farm Details'),
         status: stakeStatus
       }}
       contentClassName={s.content}
@@ -82,7 +82,7 @@ export const StakingDetails: FC = observer(() => {
         />
       </DetailsCardCell>
 
-      <DetailsCardCell cellName={t('farm|APR')} tooltipContent={t('stake|aprTooltip')} className={CardCellClassName}>
+      <DetailsCardCell cellName={t('farm|APR')} tooltipContent={t('farm|aprTooltip')} className={CardCellClassName}>
         <StatePercentage value={apr} isLoading={isLoading} />
       </DetailsCardCell>
 

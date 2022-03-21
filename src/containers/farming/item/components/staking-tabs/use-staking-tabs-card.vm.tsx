@@ -1,4 +1,4 @@
-import { StakingTabs } from '@containers/staking/item/types';
+import { StakingTabs } from '@containers/farming/item/types';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 
 export const TabsContent = [

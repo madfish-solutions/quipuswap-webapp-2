@@ -1,16 +1,16 @@
 {
-  "Stake Details": "Stake Details",
+  "Farm Details": "Farm Details",
   "Value Locked": "Value Locked",
   "APR": "APR",
   "dailyApr": "Daily",
   "Current Delegate": "Current Delegate",
   "Next Delegate": "Next Delegate",
-  "stakingEndsIn": "Ends in",
+  "farmingEndsIn": "Ends in",
   "Lock Period": "Lock Period",
   "Withdrawal Fee": "Withdrawal Fee",
   "Interface Fee": "Interface Fee",
   "Token Contract": "Token Contract",
-  "Staking Contract": "Staking Contract",
+  "Farm Contract": "Farm Contract",
   "Harvest All": "Harvest all",
   "Your Claimed": "Your Claimed",
   "Your Pending Rewards": "Your Pending Rewards",
@@ -35,7 +35,7 @@
   "select": "Select",
   "fullCardTooltip": "Add Liquidity to the selected liquidity pool, stake liquidity tokens here, earn rewards.",
   "tokenContract": "Token Contract",
-  "stakeContract": "Farm Contract",
+  "farmContract": "Farm Contract",
   "tvl": "TVL",
   "tvlTooltip": "Total amount of assets locked in the farm.",
   "apr": "APR",
@@ -57,6 +57,6 @@
   "totalClaimedRewardTooltip": "Total amount of rewards collected by users so far.",
   "harvestAll": "Harvest All",
   "rewardsTooltip": "Your unclaimed available farming rewards across all farms.",
-  "disabled": "Staking is finished! Please withdraw all your stake and rewards.",
-  "pending": "Staking is paused!"
+  "disabled": "Farming is finished! Please withdraw all your stake and rewards.",
+  "pending": "Farming is paused!"
 }

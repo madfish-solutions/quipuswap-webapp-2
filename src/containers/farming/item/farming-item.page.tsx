@@ -8,14 +8,14 @@ import { PageTitle } from '@components/common/page-title';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { isUndefined } from '@utils/helpers';
 
-import { StakingDetails } from './components/staking-details';
-import { StakingRewardInfo } from './components/staking-reward-info';
+import { StakingDetails } from './components/farming-details';
+import { FarmingRewardInfo } from './components/farming-reward-info';
 import { StakingTabsCard } from './components/staking-tabs/staking-tabs-card';
-import { useStakeItemPageViewModel } from './use-stake-item-page.vm';
+import { useFarmItemPageViewModel } from './use-farm-item-page.vm';
 
 export const StakingItemPage: FC = observer(() => {
   const router = useRouter();
-  const { isLoading, stakeItem, getTitle } = useStakeItemPageViewModel();
+  const { isLoading, stakeItem, getTitle } = useFarmItemPageViewModel();
 
   if (!isLoading && isUndefined(stakeItem)) {
     void router.replace('/404');
@@ -27,7 +27,7 @@ export const StakingItemPage: FC = observer(() => {
     <>
       <TestnetAlert />
       <PageTitle>{getTitle()}</PageTitle>
-      <StakingRewardInfo />
+      <FarmingRewardInfo />
       <StickyBlock>
         <StakingTabsCard />
         <StakingDetails />

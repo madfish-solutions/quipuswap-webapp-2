@@ -4,7 +4,7 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 import { observer } from 'mobx-react-lite';
 
 import { Skeleton } from '@components/common/Skeleton';
-import { StakingTabs } from '@containers/staking/item/types';
+import { StakingTabs } from '@containers/farming/item/types';
 import s from '@styles/CommonContainer.module.sass';
 
 import { StakingForm } from './staking-form/staking-form';

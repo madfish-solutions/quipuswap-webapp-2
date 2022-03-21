@@ -12,12 +12,12 @@ import { StakeItemPandingReward } from '@tests/staking/item';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
+import { FarmingRewardHeader } from '../farming-reward-header';
+import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
-import { StakingRewardHeader } from '../staking-reward-header';
-import { useStakingRewardInfoViewModel } from '../staking-reward-info/use-staking-reward-info.vm';
-import { StakingStatsItem } from '../staking-stats-item';
 import { StateData } from '../state-data';
-import styles from './staking-reward-info.module.sass';
+import styles from './farming-reward-info.module.sass';
+import { useStakingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -26,7 +26,7 @@ const modeClass = {
 
 const NO_TIMELOCK_VALUE = '0';
 
-export const StakingRewardInfo: FC = observer(() => {
+export const FarmingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['farm']);
   const {
@@ -50,7 +50,7 @@ export const StakingRewardInfo: FC = observer(() => {
       amountDecimals={rewardTokenDecimals}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{
-        content: <StakingRewardHeader />,
+        content: <FarmingRewardHeader />,
         className: styles.rewardHeader
       }}
       onButtonClick={handleHarvest}
@@ -60,7 +60,7 @@ export const StakingRewardInfo: FC = observer(() => {
       pendingRewardAttributeTestId={StakeItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
-      <StakingStatsItem
+      <FarmingStatsItem
         itemName={t('farm|Your Share')}
         loading={stakingLoading}
         tooltipContent={t('farm|yourShareTooltip')}
@@ -77,10 +77,10 @@ export const StakingRewardInfo: FC = observer(() => {
             />
           )}
         </StateData>
-      </StakingStatsItem>
+      </FarmingStatsItem>
 
       {shouldShowCandidate && (
-        <StakingStatsItem
+        <FarmingStatsItem
           itemName={t('farm|Your delegate')}
           loading={delegatesLoading}
           tooltipContent={t('farm|yourDelegateTooltip')}
@@ -97,11 +97,11 @@ export const StakingRewardInfo: FC = observer(() => {
               </a>
             )}
           </StateData>
-        </StakingStatsItem>
+        </FarmingStatsItem>
       )}
 
       {timelock !== NO_TIMELOCK_VALUE && (
-        <StakingStatsItem
+        <FarmingStatsItem
           itemName={t('farm|Withdrawal fee ends in')}
           loading={stakingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
@@ -109,7 +109,7 @@ export const StakingRewardInfo: FC = observer(() => {
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
             {timestamp => <Countdown endTimestamp={timestamp} />}
           </StateData>
-        </StakingStatsItem>
+        </FarmingStatsItem>
       )}
     </RewardInfo>
   );

@@ -4,16 +4,16 @@ import { PageTitle } from '@components/common/page-title';
 import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { StateWrapper } from '@components/state-wrapper';
-import { ListStats } from '@containers/staking/list/list-stats/list-stats';
-import { useStakingListViewModel } from '@containers/staking/list/use-staking-list.vm';
+import { ListStats } from '@containers/farming/list/list-stats/list-stats';
+import { useFarmingListViewModel } from '@containers/farming/list/use-faming-list.vm';
 
 import { EmptyStakeList, StakingListSkeleton } from './components';
+import styles from './farming-list.page.module.scss';
 import { Iterator } from './helpers/iterator';
-import styles from './staking-list.page.module.scss';
 import { StakingListItem } from './structures';
 
 export const FarmingListPage = observer(() => {
-  const { isLoading, list } = useStakingListViewModel();
+  const { isLoading, list } = useFarmingListViewModel();
 
   return (
     <>

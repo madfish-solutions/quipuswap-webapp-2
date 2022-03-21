@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 
-import { useGetStakingList } from '@containers/staking/hooks/use-get-staking-list';
-import { useGetStakingStats } from '@containers/staking/hooks/use-get-staking-stats';
+import { useGetStakingList } from '@containers/farming/hooks/use-get-staking-list';
+import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-stats';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useReady } from '@utils/dapp';
 
-export const useStakingListViewModel = () => {
+export const useFarmingListViewModel = () => {
   const stakingListStore = useStakingListStore();
   const isReady = useReady();
   const { getStakingList } = useGetStakingList();

@@ -4,7 +4,7 @@ import FarmingList from './_farmingList';
 
 export const getStaticProps = async ({ locale }: { locale: string }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common', 'stake']))
+    ...(await serverSideTranslations(locale, ['common', 'farm']))
   }
 });
 

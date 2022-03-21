@@ -8,9 +8,9 @@ import { DashPlug } from '@components/ui/dash-plug';
 import { useAuthStore } from '@hooks/stores/use-auth-store';
 import { isNull } from '@utils/helpers';
 
-import styles from './staking-stats-item.module.sass';
+import styles from './farming-stats-item.module.sass';
 
-export interface StakingStatsItemProps {
+export interface FarmingStatsItemProps {
   itemName: string;
   loading: boolean;
   tooltipContent: string;
@@ -21,7 +21,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StakingStatsItem: FC<StakingStatsItemProps> = ({ itemName, children, loading, tooltipContent }) => {
+export const FarmingStatsItem: FC<FarmingStatsItemProps> = ({ itemName, children, loading, tooltipContent }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { accountPkh } = useAuthStore();
 

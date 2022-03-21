@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { StakingItemPage } from '@containers/staking';
+import { StakingItemPage } from '@containers/farming';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';

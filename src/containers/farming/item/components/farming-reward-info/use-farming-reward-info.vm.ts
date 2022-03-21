@@ -1,6 +1,6 @@
 import { MS_IN_SECOND } from '@app.config';
-import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
-import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
+import { useDoHarvest } from '@containers/farming/hooks/use-do-harvest';
+import { useGetStakingItem } from '@containers/farming/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useReady } from '@utils/dapp';
 import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';

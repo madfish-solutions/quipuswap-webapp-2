@@ -1,8 +1,8 @@
 import { useTranslation } from 'next-i18next';
 
-import { useDoHarvestAll } from '@containers/staking/hooks/use-do-harvest-all';
-import { useGetStakingList } from '@containers/staking/hooks/use-get-staking-list';
-import { useGetStakingStats } from '@containers/staking/hooks/use-get-staking-stats';
+import { useDoHarvestAll } from '@containers/farming/hooks/use-do-harvest-all';
+import { useGetStakingList } from '@containers/farming/hooks/use-get-staking-list';
+import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-stats';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 
 export const useStakingRewardsListViewModel = () => {

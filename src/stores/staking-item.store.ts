@@ -5,7 +5,7 @@ import { getUserTokenBalance } from '@api/get-user-balance';
 import { getLastStakedTime } from '@api/staking/get-last-staked-time.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
-import { StakingTabs } from '@containers/staking/item/types';
+import { StakingTabs } from '@containers/farming/item/types';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
 import { isNull } from '@utils/helpers';
 import { balanceMap } from '@utils/mapping/balance.map';

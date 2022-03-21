@@ -5,15 +5,15 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 
 import { DashPlug } from '@components/ui/dash-plug';
-import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
+import { useGetStakingItem } from '@containers/farming/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useReady } from '@utils/dapp';
 import { getTokensName, isNull, isUndefined } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
-import stakingPageStyles from './staking-item.page.module.sass';
+import stakingPageStyles from './farming-item.page.module.sass';
 
-export const useStakeItemPageViewModel = () => {
+export const useFarmItemPageViewModel = () => {
   const router = useRouter();
   const { t } = useTranslation(['common', 'farm']);
   const stakingItemStore = useStakingItemStore();

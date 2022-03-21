@@ -16,7 +16,7 @@ import { useBakers, useReady } from '@utils/dapp';
 import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
-import styles from './staking-details.module.sass';
+import styles from './farming-details.module.sass';
 
 const NO_WITHDRAWAL_FEE_VALUE = 0;
 const NO_TIMELOCK_VALUE = '0';
