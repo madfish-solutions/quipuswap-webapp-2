@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { StakeContractStorage, UsersInfoKey, UsersInfoValue } from '@interfaces/stake-contract.interface';
-import { RawStakingItem } from '@interfaces/staking.interfaces';
+import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
 import { Undefined } from '@utils/types';
 
 export interface UserBalances {
@@ -24,10 +24,10 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-const isZeroString = (string: string) => string === '0';
+const NOTHING_STAKED_VALUE = 0;
 
-const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) => {
-  if (isZeroString(item.staked)) {
+export const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem | StakingItem) => {
+  if (userInfo.staked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
   }
 
@@ -37,7 +37,7 @@ const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) =>
     Math.floor((Date.now() - new Date(item.udp).getTime()) / MILISECONDS_IN_SECONDS)
   ).multipliedBy(rewardPerSecond);
 
-  const rewardPerShare = new BigNumber(item.rewardPerShare).plus(reward.dividedBy(item.staked));
+  const rewardPerShare = new BigNumber(item.rewardPerShare).plus(reward.dividedBy(userInfo.staked));
 
   const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
 

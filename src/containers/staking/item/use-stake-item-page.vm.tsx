@@ -34,6 +34,12 @@ export const useStakeItemPageViewModel = () => {
     prevAccountPkhRef.current = accountPkh;
   }, [getStakingItem, dAppReady, rawStakeId, accountPkh]);
 
+  useEffect(() => {
+    stakingItemStore.makePendingRewardsLiveable();
+
+    return () => stakingItemStore.clearIntervals();
+  }, [stakingItemStore]);
+
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = stakingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 

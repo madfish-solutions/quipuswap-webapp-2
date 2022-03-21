@@ -3,7 +3,7 @@ import { useDoHarvest } from '@containers/staking/hooks/use-do-harvest';
 import { useGetStakingItem } from '@containers/staking/hooks/use-get-staking-item';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
 import { useAccountPkh, useBakers, useReady } from '@utils/dapp';
-import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';
+import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull, loadingErrorDataIsReady } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 
@@ -11,31 +11,23 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = stakingItemStore;
+  const { itemStore, userStakingDelegateStore, userInfoStore } = stakingItemStore;
+  const stakeItem = stakingItemStore.stakeItem;
   const accountPkh = useAccountPkh();
 
   const { delayedGetStakingItem } = useGetStakingItem();
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
-  const {
-    data: lastStakedTime,
-    isLoading: lastStakedTimeLoading,
-    isInitialized: stakingStatsStoreInitialized
-  } = lastStakedTimeStore;
-  const { data: stakeItem, isLoading: itemStoreLoading, isInitialized: itemStoreInitialized } = itemStore;
-  const {
-    data: delegateAddress,
-    isLoading: stakingDelegateStoreLoading,
-    isInitialized: stakingDelegateStoreInitialized
-  } = userStakingDelegateStore;
+  const { data: userInfo } = userInfoStore;
+  const { data: delegateAddress } = userStakingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
-  const stakingStatsStoreReady = (!lastStakedTimeLoading && stakingStatsStoreInitialized) || !walletIsConnected;
-  const itemStoreReady = !itemStoreLoading && itemStoreInitialized;
-  const stakingDelegateStoreReady =
-    (!stakingDelegateStoreLoading && stakingDelegateStoreInitialized) || !walletIsConnected;
-  const stakingLoading = !dAppReady || !stakingStatsStoreReady || !itemStoreReady;
+  const userInfoStoreReady = loadingErrorDataIsReady(userInfoStore, walletIsConnected);
+  const itemStoreReady = loadingErrorDataIsReady(itemStore);
+  const stakingDelegateStoreReady = loadingErrorDataIsReady(userStakingDelegateStore, walletIsConnected);
+  const pendingRewardsReady = isExist(stakeItem?.earnBalance) || !walletIsConnected;
+  const stakingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
 
   const handleHarvest = async () => {
@@ -62,6 +54,7 @@ export const useStakingRewardInfoViewModel = () => {
   }
 
   const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
+  const lastStakedTime = userInfo ? new Date(userInfo.last_staked).getTime() : null;
 
   return {
     shouldShowCandidate: canDelegate(stakeItem),
