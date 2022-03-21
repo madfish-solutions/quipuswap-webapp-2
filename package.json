@@ -13,7 +13,8 @@
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
     "makemessages": "i18next 'src/**/*.{js,jsx,ts,tsx}'",
     "schema": "graphql-codegen --config codegen.yml",
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.0",
