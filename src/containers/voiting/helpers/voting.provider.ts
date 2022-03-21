@@ -34,7 +34,7 @@ const useVotingService = () => {
 
   const exchangeRates = useExchangeRates();
 
-  const [isTokenChanging, setIsTokenChanging] = useState(false);
+  const [isTokenChanging, setIsTokenChanging] = useState(true);
 
   const [rewards, setRewards] = useState<Nullable<string>>(null);
   const [voter, setVoter] = useState<VoterType>(initialVoter);

@@ -165,14 +165,17 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                   loading={isTokensLoading}
                 />
                 <h6 className={cx(s.token, s.tokensSelect)}>
-                  {tokenPair ? (
-                    <Fragment>
-                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token1, 5)} {'/'}{' '}
-                      {isTokensLoading ? <DashPlug /> : getTokenSymbol(tokenPair.token2, 5)}
-                    </Fragment>
-                  ) : (
-                    'Select LP'
+                  {isTokensLoading && (
+                    <>
+                      <DashPlug />
+                      {' / '}
+                      <DashPlug />
+                    </>
                   )}
+                  {!isTokensLoading &&
+                    tokenPair &&
+                    `${getTokenSymbol(tokenPair.token1, 5)} / ${getTokenSymbol(tokenPair.token2, 5)}`}
+                  {!isTokensLoading && !tokenPair && 'Select LP'}
                 </h6>
                 {!tokenPairFrozen && <Shevron />}
               </Button>
