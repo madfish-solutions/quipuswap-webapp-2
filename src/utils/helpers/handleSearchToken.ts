@@ -3,7 +3,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { TezosToolkit } from '@taquito/taquito';
 
 import { TEZOS_TOKEN } from '@app.config';
-import { QSNetwork, Token, TokenPair } from '@utils/types';
+import { Nullable, QSNetwork, Token, TokenPair } from '@utils/types';
 
 import { isTokenEqual } from './is-token-equal';
 import { localSearchSortSymbol } from './localSearchSortSymbol';
@@ -19,7 +19,7 @@ interface SearchTokenType {
   setTokens: Dispatch<SetStateAction<Token[]>>;
   setInitialLoad: Dispatch<SetStateAction<boolean>>;
   setUrlLoaded: Dispatch<SetStateAction<boolean>>;
-  setTokenPair?: Dispatch<SetStateAction<TokenPair>>;
+  setTokenPair?: Dispatch<SetStateAction<Nullable<TokenPair>>>;
   searchCustomToken: (address: string, tokenId?: number, saveAfterSearch?: boolean) => Promise<Token | null>;
 }
 

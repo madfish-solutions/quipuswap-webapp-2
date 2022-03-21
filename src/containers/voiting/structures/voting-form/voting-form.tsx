@@ -70,14 +70,8 @@ const RealForm: React.FC<VotingFormProps> = ({
 
   const handleInputChange = async () => {
     try {
-      if (!tezos) {
-        return;
-      }
       const currentTokenA = tokenDataToToken(token1);
-      if (currentTokenA.contractAddress !== TEZOS_TOKEN.contractAddress) {
-        return;
-      }
-      if (tezos && tokenPair) {
+      if (currentTokenA.contractAddress === TEZOS_TOKEN.contractAddress && tezos && tokenPair) {
         const toAsset = {
           contract: tokenPair.token2.contractAddress,
           id: tokenPair.token2.fa2TokenId ?? undefined

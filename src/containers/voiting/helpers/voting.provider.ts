@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import constate from 'constate';
@@ -85,19 +85,11 @@ const useVotingService = () => {
     }
   };
 
-  const wrappedSetTokenPair = useCallback((pairAction: SetStateAction<TokenPair>) => {
-    if (typeof pairAction === 'function') {
-      setTokenPair(prevPair => pairAction(defined(prevPair)));
-    } else {
-      setTokenPair(pairAction);
-    }
-  }, []);
-
   const tokenPairSelect = useCallback(
     async (pair: TokenPair) => {
-      handleTokenPairSelect(pair, wrappedSetTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
+      handleTokenPairSelect(pair, setTokenPair, showErrorToast, tezos, accountPkh, NETWORK_ID).then(dataSetter);
     },
-    [tezos, accountPkh, showErrorToast, wrappedSetTokenPair]
+    [tezos, accountPkh, showErrorToast, setTokenPair]
   );
 
   const handleTokenPairSelectChange = (pair: TokenPair) => {
@@ -119,7 +111,7 @@ const useVotingService = () => {
         setInitialLoad,
         setUrlLoaded,
         setTokens,
-        setTokenPair: wrappedSetTokenPair,
+        setTokenPair: setTokenPair,
         searchCustomToken
       });
     }

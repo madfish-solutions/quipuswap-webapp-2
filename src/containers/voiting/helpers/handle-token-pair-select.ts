@@ -18,7 +18,7 @@ export interface HandleTokenPairSelectReturnType {
 
 export const handleTokenPairSelect = async (
   pair: TokenPair,
-  setTokenPair: Dispatch<SetStateAction<TokenPair>>,
+  setTokenPair: Dispatch<SetStateAction<Nullable<TokenPair>>>,
   showErrorToast: UseToasts['showErrorToast'],
   tezos: Nullable<TezosToolkit>,
   accountPkh: Nullable<string>,
