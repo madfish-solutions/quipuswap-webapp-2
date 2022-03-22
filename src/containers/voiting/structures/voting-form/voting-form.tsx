@@ -29,7 +29,7 @@ import { VotingTabs } from '@containers/voiting/tabs.enum';
 import { useGlobalModalsState } from '@hooks/use-global-modals-state';
 import s from '@styles/CommonContainer.module.sass';
 import { useTezos, useAccountPkh, useBakers } from '@utils/dapp';
-import { isAssetEqual, parseDecimals } from '@utils/helpers';
+import { isAssetEqual, isTezosToken, parseDecimals } from '@utils/helpers';
 import { tokenDataToToken } from '@utils/helpers/tokenDataToToken';
 import { VoteFormValues, Undefined } from '@utils/types';
 import { required, validateMinMax, validateBalance, composeValidators } from '@utils/validators';
@@ -76,20 +76,18 @@ const RealForm: React.FC<VotingFormProps> = ({
   const handleInputChange = async () => {
     try {
       const currentTokenA = tokenDataToToken(token1);
-      if (currentTokenA.contractAddress === TEZOS_TOKEN.contractAddress && tezos && tokenPair) {
+      if (isTezosToken(currentTokenA) && tezos && tokenPair) {
         const toAsset = {
           contract: tokenPair.token2.contractAddress,
           id: tokenPair.token2.fa2TokenId ?? undefined
         };
-        const isAssetSame = isAssetEqual(toAsset, oldAsset ?? { contract: '' });
-        if (isAssetSame) {
-          return;
+        if (!oldAsset || !isAssetEqual(toAsset, oldAsset)) {
+          const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
+          if (tempDex !== dex) {
+            setDex(tempDex);
+          }
+          setOldAsset(toAsset);
         }
-        const tempDex = await findDex(tezos, FACTORIES[NETWORK_ID], toAsset);
-        if (tempDex && tempDex !== dex) {
-          setDex(tempDex);
-        }
-        setOldAsset(toAsset);
       }
     } catch (_) {
       // nothing to do
