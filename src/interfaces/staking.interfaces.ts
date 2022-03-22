@@ -106,6 +106,7 @@ export interface StakingItem extends UserBalances {
   stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
+  staked: string;
 
   timelock: string;
   tokenA: Token;

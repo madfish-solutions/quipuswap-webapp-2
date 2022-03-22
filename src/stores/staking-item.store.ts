@@ -6,6 +6,7 @@ import { getStakingItemApi } from '@api/staking/get-staking-item.api';
 import { getUserInfoApi } from '@api/staking/get-user-info.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
 import { getUserPendingReward } from '@api/staking/helpers';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@app.config';
 import { StakingTabs } from '@containers/staking/item/types';
 import { UsersInfoValue } from '@interfaces/stake-contract.interface';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
@@ -20,8 +21,6 @@ import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
 
 const DEFAULT_INPUT_AMOUNT = 0;
-const USER_INFO_UPDATE_INTERVAL = 30000;
-const REWARD_UPDATE_INTERVAL = 1000;
 
 export class StakingItemStore {
   stakingId: Nullable<BigNumber> = null;
@@ -55,11 +54,9 @@ export class StakingItemStore {
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
   pendingRewards: Nullable<BigNumber> = null;
-  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), REWARD_UPDATE_INTERVAL);
+  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
 
-  updateUserInfoInterval = new MakeInterval(() => {
-    this.userInfoStore.load();
-  }, USER_INFO_UPDATE_INTERVAL);
+  updateUserInfoInterval = new MakeInterval(async () => this.userInfoStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -79,15 +76,15 @@ export class StakingItemStore {
     this.clearBalance();
   }
 
-  get stakeItem() {
-    const { data: noBalancesStakeItem } = this.itemStore;
+  get stakeItem(): Nullable<StakingItem> {
+    const { data: stakeItem } = this.itemStore;
     const { data: userInfo } = this.userInfoStore;
 
     return (
-      noBalancesStakeItem && {
-        ...noBalancesStakeItem,
-        depositBalance: userInfo && fromDecimals(userInfo.staked, noBalancesStakeItem.stakedToken),
-        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, noBalancesStakeItem.rewardToken)
+      stakeItem && {
+        ...stakeItem,
+        depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
+        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
       }
     );
   }

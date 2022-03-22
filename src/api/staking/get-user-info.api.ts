@@ -8,7 +8,7 @@ import { getStorageInfo } from '@utils/dapp';
 
 const ZERO = 0;
 
-const DEFAULT_USER_INFO = {
+const DEFAULT_USER_INFO: UsersInfoValue = {
   last_staked: new Date(ZERO).toISOString(),
   staked: new BigNumber(ZERO),
   earned: new BigNumber(ZERO),

@@ -12,7 +12,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { itemStore, userStakingDelegateStore, userInfoStore } = stakingItemStore;
-  const stakeItem = stakingItemStore.stakeItem;
+  const { stakeItem } = stakingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetStakingItem } = useGetStakingItem();

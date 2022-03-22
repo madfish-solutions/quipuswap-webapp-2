@@ -2,7 +2,6 @@ import BigNumber from 'bignumber.js';
 
 import { StakeContractStorage, UsersInfoKey, UsersInfoValue } from '@interfaces/stake-contract.interface';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
-import { toDecimals } from '@utils/helpers';
 import { Undefined } from '@utils/types';
 
 export interface UserBalances {
@@ -28,8 +27,7 @@ export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntege
 const NOTHING_STAKED_VALUE = 0;
 
 export const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem | StakingItem) => {
-  const totalStaked =
-    'staked' in item ? new BigNumber(item.staked) : toDecimals(item.tvlInStakedToken, item.stakedToken);
+  const totalStaked = new BigNumber(item.staked);
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
