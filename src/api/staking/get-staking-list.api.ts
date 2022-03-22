@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 
 import { getUserBalance } from '@api/get-user-balance';
-import { STAKING_CONTRACT_ADDRESS, STALKING_API_URL } from '@app.config';
+import { FARMING_CONTRACT_ADDRESS, STALKING_API_URL } from '@app.config';
 import { StakeContractStorageWrapper } from '@interfaces/stake-contract.interface';
 import { RawStakingItem, StakeListResponse } from '@interfaces/staking.interfaces';
 import { bigNumberToString, isNull } from '@utils/helpers';
@@ -26,7 +26,7 @@ export interface UserBalances {
 
 const injectBalance = async (list: Array<RawStakingItem>, accountPkh: string, tezos: TezosToolkit) => {
   const balances: Map<string, UserBalances> = new Map();
-  const wrapStorage = await (await tezos.contract.at(STAKING_CONTRACT_ADDRESS)).storage<StakeContractStorageWrapper>();
+  const wrapStorage = await (await tezos.contract.at(FARMING_CONTRACT_ADDRESS)).storage<StakeContractStorageWrapper>();
 
   const storage = wrapStorage.storage;
 

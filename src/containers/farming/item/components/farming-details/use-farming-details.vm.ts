@@ -6,7 +6,7 @@ import {
   IS_NETWORK_MAINNET,
   MS_IN_SECOND,
   SECONDS_IN_DAY,
-  STAKING_CONTRACT_ADDRESS,
+  FARMING_CONTRACT_ADDRESS,
   TZKT_EXPLORER_URL
 } from '@app.config';
 import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
@@ -46,7 +46,7 @@ export const useStakingDetailsViewModel = () => {
       timelock: null,
       CardCellClassName,
       depositTokenDecimals: 0,
-      stakeUrl: `${TZKT_EXPLORER_URL}/${STAKING_CONTRACT_ADDRESS}`,
+      stakeUrl: `${TZKT_EXPLORER_URL}/${FARMING_CONTRACT_ADDRESS}`,
       stakedTokenSymbol: null,
       rewardTokenSymbol: null,
       rewardTokenDecimals: 0,

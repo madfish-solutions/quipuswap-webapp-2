@@ -1,7 +1,7 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { STAKING_CONTRACT_ADDRESS, STALKING_API_URL } from '@app.config';
+import { FARMING_CONTRACT_ADDRESS, STALKING_API_URL } from '@app.config';
 import { StakeContractStorageWrapper } from '@interfaces/stake-contract.interface';
 import { RawStakingItem, StakeItemResponse } from '@interfaces/staking.interfaces';
 import { isNull } from '@utils/helpers';
@@ -25,7 +25,7 @@ export const getStakingItemFetch = async (stakingId: Nullable<BigNumber>) => {
 };
 
 const injectBalance = async (item: RawStakingItem, accountPkh: string, tezos: TezosToolkit) => {
-  const wrapStorage = await (await tezos.contract.at(STAKING_CONTRACT_ADDRESS)).storage<StakeContractStorageWrapper>();
+  const wrapStorage = await (await tezos.contract.at(FARMING_CONTRACT_ADDRESS)).storage<StakeContractStorageWrapper>();
 
   const storage = wrapStorage.storage;
 
