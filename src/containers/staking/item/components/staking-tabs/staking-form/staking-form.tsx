@@ -19,6 +19,7 @@ export const StakingForm: FC = observer(() => {
     shouldShowBakerInput,
     handleSubmit,
     inputAmount,
+    isSubmitting,
     userTokenBalance,
     inputAmountError,
     stakeItem,
@@ -71,7 +72,7 @@ export const StakingForm: FC = observer(() => {
       <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} errorMessage={stakingStatusError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
-          <Button type="submit" className={s.button} disabled={disabled}>
+          <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
             {t('stake|Stake')}
           </Button>
         </ConnectWalletOrDoSomething>

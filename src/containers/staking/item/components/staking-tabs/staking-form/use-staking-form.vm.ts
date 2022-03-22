@@ -115,6 +115,7 @@ export const useStakingFormViewModel = () => {
     shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[StakingFormFields.inputAmount],
+    isSubmitting: formik.isSubmitting,
     userTokenBalance,
     inputAmountError,
     stakeItem,
