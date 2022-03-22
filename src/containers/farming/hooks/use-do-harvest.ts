@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { harvestAssetsApi } from '@api/staking/harvest-assets.api';
+import { harvestAssetsApi } from '@api/farming/harvest-assets.api';
 import { useToasts } from '@hooks/use-toasts';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
@@ -14,7 +14,7 @@ export const useDoHarvest = () => {
   const { showErrorToast } = useToasts();
 
   const doHarvest = useCallback(
-    async (stakeItem: Nullable<StakingItem>) => {
+    async (stakeItem: Nullable<FarmingItem>) => {
       try {
         const operation = await harvestAssetsApi(
           defined(rootStore.tezos),

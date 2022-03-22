@@ -6,7 +6,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Card } from '@components/ui/card';
 import { Switcher } from '@components/ui/switcher';
-import { STEP } from 'stores/staking-filter.store';
+import { STEP } from 'stores/farming-filter.store';
 
 import { Sorter } from '../../components/sorter';
 import styles from './list-filter.module.scss';

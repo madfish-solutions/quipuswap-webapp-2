@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { stakeTokenApi } from '@api/staking/stake-token.api';
+import { stakeTokenApi } from '@api/farming/stake-token.api';
 import { useToasts } from '@hooks/use-toasts';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
@@ -16,7 +16,7 @@ export const useDoStake = () => {
   const { showErrorToast } = useToasts();
 
   const doStake = useCallback(
-    async (stakeItem: StakingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
+    async (stakeItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
       try {
         const operation = await stakeTokenApi(
           defined(rootStore.tezos),

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { ZERO_ADDRESS } from '@app.config';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { isTezosToken } from '@utils/helpers';
 import { Nullable, Optional, WhitelistedBaker } from '@utils/types';
 import { numberAsStringSchema } from '@utils/validators/number-as-string';
@@ -16,7 +16,7 @@ export const makeBaker = (delegateAddress: Optional<string>, knownBakers: Whitel
   return null;
 };
 
-export const canDelegate = (stakeItem: StakingItem) => isTezosToken(stakeItem.tokenA);
+export const canDelegate = (stakeItem: FarmingItem) => isTezosToken(stakeItem.tokenA);
 
 export const stakingOperationAmountSchema = (balance: Nullable<BigNumber>) =>
   balance

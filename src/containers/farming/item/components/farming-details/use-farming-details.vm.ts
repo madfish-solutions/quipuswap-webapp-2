@@ -9,7 +9,7 @@ import {
   FARMING_CONTRACT_ADDRESS,
   TZKT_EXPLORER_URL
 } from '@app.config';
-import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useReady } from '@utils/dapp';
@@ -21,8 +21,8 @@ import styles from './farming-details.module.sass';
 const NO_WITHDRAWAL_FEE_VALUE = 0;
 const NO_TIMELOCK_VALUE = '0';
 
-export const useStakingDetailsViewModel = () => {
-  const stakingItemStore = useStakingItemStore();
+export const useFarmingDetailsViewModel = () => {
+  const stakingItemStore = useFarmingItemStore();
   const dAppReady = useReady();
   const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized, error } = stakingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;

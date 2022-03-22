@@ -7,7 +7,7 @@ import { Tooltip } from '@components/ui/components/tooltip';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StatusLabel } from '@components/ui/status-label';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
@@ -22,7 +22,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const FarmsListItem: FC<StakingItem> = ({
+export const FarmingListItem: FC<FarmingItem> = ({
   id,
   tokenA,
   tokenB,

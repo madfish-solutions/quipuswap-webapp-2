@@ -17,9 +17,9 @@ import { StateData } from '../state-data';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
 import styles from './farming-details.module.sass';
-import { useStakingDetailsViewModel } from './use-farming-details.vm';
+import { useFarmingDetailsViewModel } from './use-farming-details.vm';
 
-export const StakingDetails: FC = observer(() => {
+export const FarmingDetails: FC = observer(() => {
   const { t } = useTranslation(['farm']);
 
   const {
@@ -46,12 +46,12 @@ export const StakingDetails: FC = observer(() => {
     shouldShowLockPeriod,
     shouldShowWithdrawalFee,
     stakeStatus
-  } = useStakingDetailsViewModel();
+  } = useFarmingDetailsViewModel();
 
   return (
     <Card
       header={{
-        content: t('farm|Farm Details'),
+        content: t('farm|Farming Details'),
         status: stakeStatus
       }}
       contentClassName={s.content}
@@ -180,7 +180,7 @@ export const StakingDetails: FC = observer(() => {
           external
           icon={<ExternalLink className={s.linkIcon} />}
         >
-          {t('farm|Farm Contract')}
+          {t('farm|Farming Contract')}
         </Button>
       </div>
     </Card>

@@ -3,12 +3,12 @@ import { useCallback } from 'react';
 import BigNumber from 'bignumber.js';
 
 import { useToasts } from '@hooks/use-toasts';
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 
-import { harvestAllAssets } from '../../../api/staking/harvest-all-assets.api';
+import { harvestAllAssets } from '../../../api/farming/harvest-all-assets.api';
 const ZERO_AMOUNT = 0;
 
 export const useDoHarvestAll = () => {
@@ -17,7 +17,7 @@ export const useDoHarvestAll = () => {
   const { showErrorToast } = useToasts();
 
   const doHarvestAll = useCallback(
-    async (stakeList: StakingItem[]) => {
+    async (stakeList: FarmingItem[]) => {
       const stakingIds: BigNumber[] = [];
 
       stakeList.forEach(({ id, earnBalance }) => {

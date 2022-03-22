@@ -9,7 +9,7 @@ import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 import { isNull } from '@utils/helpers';
 
-import { StakingAlert } from '../../staking-alert';
+import { StakingAlert } from '../../farming-alert';
 import { useStakingFormViewModel } from './use-staking-form.vm';
 
 export const StakingForm: FC = observer(() => {

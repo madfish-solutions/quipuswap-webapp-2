@@ -1,25 +1,25 @@
 import { useEffect } from 'react';
 
-import { useGetStakingList } from '@containers/farming/hooks/use-get-staking-list';
-import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-stats';
-import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
+import { useGetFarmingList } from '@containers/farming/hooks/use-get-farming-list';
+import { useGetFarmingStats } from '@containers/farming/hooks/use-get-farming-stats';
+import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
 import { useReady } from '@utils/dapp';
 
 export const useFarmsListViewModel = () => {
-  const stakingListStore = useStakingListStore();
+  const stakingListStore = useFarmingListStore();
   const isReady = useReady();
-  const { getStakingList } = useGetStakingList();
-  const { getStakingStats } = useGetStakingStats();
+  const { getFarmingList } = useGetFarmingList();
+  const { getFarmingStats } = useGetFarmingStats();
 
   /*
    Load data
   */
   useEffect(() => {
     if (isReady) {
-      void getStakingList();
-      void getStakingStats();
+      void getFarmingList();
+      void getFarmingStats();
     }
-  }, [getStakingList, getStakingStats, isReady]);
+  }, [getFarmingList, getFarmingStats, isReady]);
 
   const { listStore, list } = stakingListStore;
   const { isLoading } = listStore;

@@ -1,5 +1,5 @@
 import { StakingTabs } from '@containers/farming/item/types';
-import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 
 export const TabsContent = [
   {
@@ -13,16 +13,16 @@ export const TabsContent = [
 ];
 
 export const useStakingTabsCardViewModel = () => {
-  const stakingItemStore = useStakingItemStore();
+  const farmingItemStore = useFarmingItemStore();
 
   const changeTabHandle = (tab: StakingTabs) => {
-    stakingItemStore.setTab(tab);
+    farmingItemStore.setTab(tab);
   };
 
-  const { itemStore, currentTab } = stakingItemStore;
+  const { itemStore, currentTab } = farmingItemStore;
   const { data: stakeItem } = itemStore;
 
-  const isStakeForm = stakingItemStore.currentTab === StakingTabs.stake;
+  const isStakeForm = farmingItemStore.currentTab === StakingTabs.stake;
 
   return {
     stakeItem,

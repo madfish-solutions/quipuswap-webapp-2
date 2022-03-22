@@ -1,7 +1,7 @@
 import { MS_IN_SECOND } from '@app.config';
 import { useDoHarvest } from '@containers/farming/hooks/use-do-harvest';
-import { useGetStakingItem } from '@containers/farming/hooks/use-get-staking-item';
-import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { useGetFarmingItem } from '@containers/farming/hooks/use-get-farming-item';
+import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { useAccountPkh, useBakers, useReady } from '@utils/dapp';
 import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@utils/helpers';
 
@@ -9,12 +9,12 @@ import { canDelegate, makeBaker } from '../../helpers';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
 
-export const useStakingRewardInfoViewModel = () => {
-  const stakingItemStore = useStakingItemStore();
+export const useFarmingRewardInfoViewModel = () => {
+  const stakingItemStore = useFarmingItemStore();
   const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = stakingItemStore;
   const accountPkh = useAccountPkh();
 
-  const { delayedGetStakingItem } = useGetStakingItem();
+  const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
@@ -41,7 +41,7 @@ export const useStakingRewardInfoViewModel = () => {
   const handleHarvest = async () => {
     await doHarvest(stakeItem);
 
-    await delayedGetStakingItem(defined(stakeItem).id);
+    await delayedGetFarmingItem(defined(stakeItem).id);
   };
 
   if (!stakeItem) {

@@ -1,7 +1,7 @@
 import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 
-import { StakingItem } from '@interfaces/staking.interfaces';
+import { FarmingItem } from '@interfaces/farming.interfaces';
 import { isNull, cloneArray } from '@utils/helpers';
 import { multipliedIfPossible } from '@utils/helpers/multiplied-if-possible';
 
@@ -29,37 +29,37 @@ const sortBigNumber = (first: Nullable<BigNumber>, second: Nullable<BigNumber>, 
   return SKIP;
 };
 
-const sortById = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortById = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   return sortBigNumber(first.id, second.id, sortDirection);
 };
 
-const sortByApr = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByApr = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   return sortBigNumber(first.apr, second.apr, sortDirection);
 };
 
-const sortByApy = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByApy = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   return sortBigNumber(first.apy, second.apy, sortDirection);
 };
 
-const sortByTvl = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByTvl = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   return sortBigNumber(first.tvlInUsd, second.tvlInUsd, sortDirection);
 };
 
-const sortByBalance = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByBalance = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   const balanceA = multipliedIfPossible(first.myBalance, first.depositExchangeRate);
   const balanceB = multipliedIfPossible(second.myBalance, second.depositExchangeRate);
 
   return sortBigNumber(balanceA, balanceB, sortDirection);
 };
 
-const sortByDeposit = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByDeposit = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   const depositA = multipliedIfPossible(first.depositBalance, first.depositExchangeRate);
   const depositB = multipliedIfPossible(second.depositBalance, second.depositExchangeRate);
 
   return sortBigNumber(depositA, depositB, sortDirection);
 };
 
-const sortByEarned = (first: StakingItem, second: StakingItem, sortDirection: SortDirection) => {
+const sortByEarned = (first: FarmingItem, second: FarmingItem, sortDirection: SortDirection) => {
   const earnA = multipliedIfPossible(first.earnBalance, first.earnExchangeRate);
   const earnB = multipliedIfPossible(second.earnBalance, second.earnExchangeRate);
 
@@ -76,11 +76,11 @@ const stakingSorts = {
   [SortField.EARNED]: sortByEarned
 };
 
-const sortStaking = (first: StakingItem, second: StakingItem, sortField: SortField, sortDirection: SortDirection) => {
+const sortStaking = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) => {
   return stakingSorts[sortField](first, second, sortDirection);
 };
 
-export const sortStakingList = (list: Array<StakingItem>, sortField: SortField, sortDirection: SortDirection) => {
+export const sortStakingList = (list: Array<FarmingItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {
     return list;
   }

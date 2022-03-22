@@ -3,12 +3,12 @@ import { FormEvent } from 'react';
 import { useTranslation } from 'next-i18next';
 
 import { useAuthStore } from '@hooks/stores/use-auth-store';
-import { useStakingFilterStore } from '@hooks/stores/use-staking-filter-store';
+import { useFarmingFilterStore } from '@hooks/stores/use-farming-filter-store';
 import { isNull } from '@utils/helpers';
 
 export const useListFilterViewModel = () => {
-  const { t } = useTranslation(['common', 'stake']);
-  const stakingFilterStore = useStakingFilterStore();
+  const { t } = useTranslation(['common', 'farm']);
+  const stakingFilterStore = useFarmingFilterStore();
   const { accountPkh } = useAuthStore();
 
   const { search, tokenIdValue } = stakingFilterStore;
@@ -46,8 +46,8 @@ export const useListFilterViewModel = () => {
   const translation = {
     inputPlaceholderTranslation: t('common|Search'),
     numberInputPlaceholderTranslation: t('common|Token ID'),
-    stakedOnlyTranslation: t('stake|stakedOnly'),
-    activeOnlyTranslation: t('stake|activeOnly')
+    stakedOnlyTranslation: t('farm|stakedOnly'),
+    activeOnlyTranslation: t('farm|activeOnly')
   };
 
   return {

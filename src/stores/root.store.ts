@@ -3,27 +3,27 @@ import { TezosToolkit } from '@taquito/taquito';
 import { action, makeObservable, observable } from 'mobx';
 
 import { AuthStore } from './auth.store';
-import { StakingFilterStore } from './staking-filter.store';
-import { StakingItemStore } from './staking-item.store';
-import { StakingListStore } from './staking-list.store';
+import { FarmingFilterStore } from './farming-filter.store';
+import { FarmingItemStore } from './farming-item.store';
+import { FarmingListStore } from './farming-list.store';
 import { UiStore } from './ui.store';
 
 export class RootStore {
   authStore: AuthStore;
   uiStore: UiStore;
 
-  stakingListStore: StakingListStore;
-  stakingFilterStore: StakingFilterStore;
-  stakingItemStore: StakingItemStore;
+  farmingListStore: FarmingListStore;
+  farmingFilterStore: FarmingFilterStore;
+  farmingItemStore: FarmingItemStore;
 
   tezos: Nullable<TezosToolkit> = null;
 
   constructor() {
     this.authStore = new AuthStore(this);
     this.uiStore = new UiStore(this);
-    this.stakingListStore = new StakingListStore(this);
-    this.stakingFilterStore = new StakingFilterStore(this);
-    this.stakingItemStore = new StakingItemStore(this);
+    this.farmingListStore = new FarmingListStore(this);
+    this.farmingFilterStore = new FarmingFilterStore(this);
+    this.farmingItemStore = new FarmingItemStore(this);
 
     makeObservable(this, {
       tezos: observable,

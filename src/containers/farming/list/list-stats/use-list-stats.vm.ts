@@ -1,38 +1,38 @@
 import { useTranslation } from 'next-i18next';
 
-import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
-import { StakeListStatsDTA } from '@tests/staking/list';
+import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
+import { FarmingListStatsDTA } from '@tests/farming/list';
 
 export const useListStatsViewModel = () => {
   const { t } = useTranslation(['farm']);
-  const stakingStore = useStakingListStore();
+  const farmingStore = useFarmingListStore();
 
-  const amount = stakingStore.statsStore.data;
+  const amount = farmingStore.statsStore.data;
 
   const stats = [
     {
       title: t('farm|totalValueLocked'),
       tooltip: t('farm|totalValueLockedTooltip'),
       amount: amount?.totalValueLocked,
-      testId: StakeListStatsDTA.TOTAL_VALUE_LOCKED
+      testId: FarmingListStatsDTA.TOTAL_VALUE_LOCKED
     },
     {
       title: t('farm|totalDailyReward'),
       tooltip: t('farm|totalDailyRewardTooltip'),
       amount: amount?.totalDailyReward,
-      testId: StakeListStatsDTA.TOTAL_DAILY_REWARD
+      testId: FarmingListStatsDTA.TOTAL_DAILY_REWARD
     },
     {
       title: t('farm|totalPendingReward'),
       tooltip: t('farm|totalPendingRewardTooltip'),
       amount: amount?.totalPendingReward,
-      testId: StakeListStatsDTA.TOTAL_PENDING_REWARD
+      testId: FarmingListStatsDTA.TOTAL_PENDING_REWARD
     },
     {
       title: t('farm|totalClaimedReward'),
       tooltip: t('farm|totalClaimedRewardTooltip'),
       amount: amount?.totalClaimedReward,
-      testId: StakeListStatsDTA.TOTAL_CLAIMED_REWARD
+      testId: FarmingListStatsDTA.TOTAL_CLAIMED_REWARD
     }
   ];
 

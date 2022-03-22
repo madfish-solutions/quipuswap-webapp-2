@@ -1,22 +1,22 @@
 import { useTranslation } from 'next-i18next';
 
 import { useDoHarvestAll } from '@containers/farming/hooks/use-do-harvest-all';
-import { useGetStakingList } from '@containers/farming/hooks/use-get-staking-list';
-import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-stats';
-import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
+import { useGetFarmingList } from '@containers/farming/hooks/use-get-farming-list';
+import { useGetFarmingStats } from '@containers/farming/hooks/use-get-farming-stats';
+import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
 
 export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation(['farm']);
 
-  const stakingListStore = useStakingListStore();
-  const { delayedGetStakingList } = useGetStakingList();
-  const { delayedGetStakingStats } = useGetStakingStats();
+  const farmingListStore = useFarmingListStore();
+  const { delayedGetFarmingList } = useGetFarmingList();
+  const { delayedGetFarmingStats } = useGetFarmingStats();
   const { doHarvestAll } = useDoHarvestAll();
 
   const handleHarvestAll = async () => {
-    await doHarvestAll(stakingListStore.listStore.data);
+    await doHarvestAll(farmingListStore.listStore.data);
 
-    await Promise.all([delayedGetStakingList(), delayedGetStakingStats()]);
+    await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   };
 
   return {

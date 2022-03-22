@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next';
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { StakeItemPandingReward } from '@tests/staking/item';
+import { FarmingItemPandingReward } from '@tests/farming/item';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
@@ -17,7 +17,7 @@ import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { StateData } from '../state-data';
 import styles from './farming-reward-info.module.sass';
-import { useStakingRewardInfoViewModel } from './use-farming-reward-info.vm';
+import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
 const modeClass = {
   [ColorModes.Light]: styles.light,
@@ -42,7 +42,7 @@ export const FarmingRewardInfo: FC = observer(() => {
     stakingLoading,
     timelock,
     handleHarvest
-  } = useStakingRewardInfoViewModel();
+  } = useFarmingRewardInfoViewModel();
 
   return (
     <RewardInfo
@@ -56,8 +56,8 @@ export const FarmingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
-      rewardButtonAttributeTestId={StakeItemPandingReward.HARVEST_BUTTON}
-      pendingRewardAttributeTestId={StakeItemPandingReward.PENDING_REWARD}
+      rewardButtonAttributeTestId={FarmingItemPandingReward.HARVEST_BUTTON}
+      pendingRewardAttributeTestId={FarmingItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
       <FarmingStatsItem

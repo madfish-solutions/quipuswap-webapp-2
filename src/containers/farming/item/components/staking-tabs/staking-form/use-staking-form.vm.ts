@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
-import { useStakingItemStore } from '@hooks/stores/use-staking-item-store';
+import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
 import {
@@ -19,7 +19,7 @@ import {
 import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
-import { useGetStakingItem } from '../../../../hooks/use-get-staking-item';
+import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
 import { canDelegate } from '../../../helpers';
 import { StakingFormFields, StakingFormValues } from './staking-form.interface';
 import { useStakingFormValidation } from './use-staking-form.validation';
@@ -27,8 +27,8 @@ import { useStakingFormValidation } from './use-staking-form.validation';
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 
 export const useStakingFormViewModel = () => {
-  const stakingItemStore = useStakingItemStore();
-  const { delayedGetStakingItem } = useGetStakingItem();
+  const stakingItemStore = useFarmingItemStore();
+  const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
   const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = stakingItemStore;
   const { data: stakeItem } = itemStore;
@@ -61,7 +61,7 @@ export const useStakingFormViewModel = () => {
   ) => {
     await handleStakeSubmit(values, actions);
 
-    await delayedGetStakingItem(defined(stakeItem).id);
+    await delayedGetFarmingItem(defined(stakeItem).id);
   };
 
   const formik = useFormik({
