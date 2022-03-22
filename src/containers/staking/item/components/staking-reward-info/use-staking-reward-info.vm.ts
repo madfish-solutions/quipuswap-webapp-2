@@ -65,7 +65,7 @@ export const useStakingRewardInfoViewModel = () => {
   const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
   const myRewardInTokens = stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInUsd = getDollarEquivalent(myRewardInTokens, stakeItem.earnExchangeRate);
-  
+
   return {
     shouldShowCandidate: canDelegate(stakeItem),
     stakeItem,
