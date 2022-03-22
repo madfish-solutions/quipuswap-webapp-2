@@ -7,7 +7,7 @@ export const useListItemViewModal = () => {
       selectTranslation: t('farm|select'),
       fullCardTooltipTranslation: t('farm|fullCardTooltip'),
       tokenContractTranslation: t('farm|tokenContract'),
-      stakeContractTranslation: t('farm|stakeContract'),
+      stakeContractTranslation: t('farm|farmingContract'),
       tvlTranslation: t('farm|tvl'),
       tvlTooltipTranslation: t('farm|tvlTooltip'),
       aprTranslation: t('farm|apr'),
