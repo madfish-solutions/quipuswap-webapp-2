@@ -11,7 +11,7 @@ export const useListFilterViewModel = () => {
   const stakingFilterStore = useStakingFilterStore();
   const { accountPkh } = useAuthStore();
 
-  const { search, tokenIdValue } = stakingFilterStore;
+  const { search, tokenIdValue, activeOnly, stakedOnly } = stakingFilterStore;
 
   const setStakedOnly = (state: boolean) => {
     return stakingFilterStore.setStakedOnly(state);
@@ -53,6 +53,8 @@ export const useListFilterViewModel = () => {
   return {
     search,
     tokenIdValue,
+    activeOnly,
+    stakedOnly,
     isStakedOnlyDisabled: isNull(accountPkh),
     setStakedOnly,
     setActiveOnly,

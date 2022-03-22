@@ -36,7 +36,7 @@ export class StakingFilterStore {
   }
 
   stakedOnly = false;
-  activeOnly = false;
+  activeOnly = true;
   search = '';
   tokenId: Nullable<BigNumber> = null;
   sortField: SortField = SortField.ID;

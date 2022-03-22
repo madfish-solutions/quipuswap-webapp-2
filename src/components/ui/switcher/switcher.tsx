@@ -8,6 +8,7 @@ import { useSwitcherViewModel } from './switcher.vm';
 
 interface Props {
   onChange: (state: boolean) => void;
+  initialValue: boolean;
   disabled?: boolean;
 }
 
@@ -16,9 +17,9 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Switcher: FC<Props> = ({ onChange, disabled }) => {
+export const Switcher: FC<Props> = ({ onChange, disabled, initialValue }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { state, handleClick } = useSwitcherViewModel();
+  const { state, handleClick } = useSwitcherViewModel(initialValue);
 
   const compoundClassName = cx(modeClass[colorThemeMode], styles.switcher, {
     [styles.active]: Boolean(state),
