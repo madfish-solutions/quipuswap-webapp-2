@@ -5,7 +5,7 @@ import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-st
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { useReady } from '@utils/dapp';
 
-export const useFarmingListViewModel = () => {
+export const useFarmsListViewModel = () => {
   const stakingListStore = useStakingListStore();
   const isReady = useReady();
   const { getStakingList } = useGetStakingList();

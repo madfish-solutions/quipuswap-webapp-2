@@ -22,7 +22,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StakingListItem: FC<StakingItem> = ({
+export const FarmsListItem: FC<StakingItem> = ({
   id,
   tokenA,
   tokenB,

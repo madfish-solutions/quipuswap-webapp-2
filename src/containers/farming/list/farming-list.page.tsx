@@ -1,19 +1,19 @@
 import { observer } from 'mobx-react-lite';
 
+import { StakingRewardsList } from '@components/common/farming-rewards-list';
 import { PageTitle } from '@components/common/page-title';
-import { StakingRewardsList } from '@components/common/staking-rewards-list';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { StateWrapper } from '@components/state-wrapper';
 import { ListStats } from '@containers/farming/list/list-stats/list-stats';
-import { useFarmingListViewModel } from '@containers/farming/list/use-faming-list.vm';
+import { useFarmsListViewModel } from '@containers/farming/list/use-farming-list.vm';
 
 import { EmptyStakeList, StakingListSkeleton } from './components';
 import styles from './farming-list.page.module.scss';
 import { Iterator } from './helpers/iterator';
-import { StakingListItem } from './structures';
+import { FarmsListItem } from './structures';
 
-export const FarmingListPage = observer(() => {
-  const { isLoading, list } = useFarmingListViewModel();
+export const FarmsListPage = observer(() => {
+  const { isLoading, list } = useFarmsListViewModel();
 
   return (
     <>
@@ -27,7 +27,7 @@ export const FarmingListPage = observer(() => {
         <Iterator
           data={list}
           keyFn={item => item.id.toFixed()}
-          render={StakingListItem}
+          render={FarmsListItem}
           fallback={<EmptyStakeList />}
           isGrouped
           wrapperClassName={styles.list}

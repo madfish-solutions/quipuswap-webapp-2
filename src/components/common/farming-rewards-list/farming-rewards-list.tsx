@@ -6,11 +6,11 @@ import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 import { StakeListPandingReward } from '@tests/staking/list';
 
 import { RewardInfo } from '../reward-info';
-import { useStakingRewardsListViewModel } from './use-staking-rewards-list.vm';
+import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const StakingRewardsList: FC = observer(() => {
   const stakingListStore = useStakingListStore();
-  const { handleHarvestAll, translation } = useStakingRewardsListViewModel();
+  const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
 
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 

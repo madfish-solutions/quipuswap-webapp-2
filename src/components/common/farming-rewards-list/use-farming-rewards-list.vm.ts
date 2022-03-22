@@ -5,7 +5,7 @@ import { useGetStakingList } from '@containers/farming/hooks/use-get-staking-lis
 import { useGetStakingStats } from '@containers/farming/hooks/use-get-staking-stats';
 import { useStakingListStore } from '@hooks/stores/use-staking-list-store';
 
-export const useStakingRewardsListViewModel = () => {
+export const useFarmingRewardsListViewModel = () => {
   const { t } = useTranslation(['farm']);
 
   const stakingListStore = useStakingListStore();

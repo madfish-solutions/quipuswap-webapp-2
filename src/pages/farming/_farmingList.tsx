@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { BaseLayout } from '@components/common/BaseLayout';
-import { FarmingListPage } from '@containers/farming';
+import { FarmsListPage } from '@containers/farming';
 import { ColorModes, ColorThemeContext } from '@providers/ColorThemeContext';
 import { SITE_DESCRIPTION, SITE_TITLE } from '@seo.config';
 import s from '@styles/PrivacyPolicy.module.sass';
@@ -14,7 +14,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const FarmingList: FC = () => {
+export const FarmsList: FC = () => {
   const { t } = useTranslation(['common', 'privacy']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -24,10 +24,10 @@ export const FarmingList: FC = () => {
       description={t(`privacy|${SITE_DESCRIPTION}`)}
       className={cx(s.wrapper, modeClass[colorThemeMode])}
     >
-      <FarmingListPage />
+      <FarmsListPage />
     </BaseLayout>
   );
 };
 
 // eslint-disable-next-line import/no-default-export
-export default FarmingList;
+export default FarmsList;
