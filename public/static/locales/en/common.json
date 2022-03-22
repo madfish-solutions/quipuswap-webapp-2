@@ -74,5 +74,6 @@
   "Trade": "Trade",
   "Invest": "Invest",
   "Divest": "Divest",
+  "Default": "Default",
   "invalidNumberMessage": "The input value is invalid. Only valid numbers with dot or comma separator are accepted."
 }

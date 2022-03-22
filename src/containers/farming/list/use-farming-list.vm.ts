@@ -21,8 +21,8 @@ export const useFarmsListViewModel = () => {
     }
   }, [getStakingList, getStakingStats, isReady]);
 
-  const { listStore } = stakingListStore;
-  const { data: list, isLoading } = listStore;
+  const { listStore, list } = stakingListStore;
+  const { isLoading } = listStore;
 
   return {
     isLoading,

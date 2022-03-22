@@ -11,6 +11,7 @@ import { EmptyStakeList, StakingListSkeleton } from './components';
 import styles from './farming-list.page.module.scss';
 import { Iterator } from './helpers/iterator';
 import { FarmsListItem } from './structures';
+import { ListFilter } from './structures/list-filter';
 
 export const FarmsListPage = observer(() => {
   const { isLoading, list } = useFarmsListViewModel();
@@ -24,6 +25,7 @@ export const FarmsListPage = observer(() => {
         <StakingRewardsList />
       </StateWrapper>
       <StateWrapper isLoading={isLoading} loaderFallback={<StakingListSkeleton />}>
+        <ListFilter />
         <Iterator
           data={list}
           keyFn={item => item.id.toFixed()}
