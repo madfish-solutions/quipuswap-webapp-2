@@ -65,6 +65,7 @@ export const useUnstakingFormViewModel = () => {
   return {
     handleSubmit: formik.handleSubmit,
     inputAmount: formik.values[UnstakingFormFields.inputAmount],
+    isSubmitting: formik.isSubmitting,
     userTokenBalance,
     inputAmountError,
     farmingItem,

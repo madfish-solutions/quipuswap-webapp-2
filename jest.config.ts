@@ -1,0 +1,10 @@
+import type { Config } from '@jest/types';
+
+const config: Config.InitialOptions = {
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  rootDir: './src'
+};
+
+// eslint-disable-next-line import/no-default-export
+export default config;

@@ -1,10 +1,11 @@
 import { FC } from 'react';
 
-import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { Input, Search } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 
 import { Card } from '@components/ui/card';
+import { NumberInput } from '@components/ui/number-input';
 import { Switcher } from '@components/ui/switcher';
 import { STEP } from 'stores/farming-filter.store';
 
@@ -63,10 +64,12 @@ export const ListFilter: FC = observer(() => {
         <Switcher disabled={isStakedOnlyDisabled} onChange={setStakedOnly} />
         <span className={styles.switcherTranslation}>{stakedOnlyTranslation}</span>
       </div>
+
       <div className={cx(styles.switcherContainer, styles.switcherActiveOnly)}>
         <Switcher onChange={setActiveOnly} />
         <span className={styles.switcherTranslation}>{activeOnlyTranslation}</span>
       </div>
+
       <div className={cx(styles.switcherContainer, styles.sorterContainer)}>
         <Sorter />
       </div>
