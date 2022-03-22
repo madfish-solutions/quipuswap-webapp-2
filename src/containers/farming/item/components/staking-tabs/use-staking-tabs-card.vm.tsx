@@ -20,12 +20,12 @@ export const useStakingTabsCardViewModel = () => {
   };
 
   const { itemStore, currentTab } = farmingItemStore;
-  const { data: stakeItem } = itemStore;
+  const { data: farmingItem } = itemStore;
 
   const isStakeForm = farmingItemStore.currentTab === StakingTabs.stake;
 
   return {
-    stakeItem,
+    farmingItem,
     currentTab,
     isStakeForm,
     changeTabHandle

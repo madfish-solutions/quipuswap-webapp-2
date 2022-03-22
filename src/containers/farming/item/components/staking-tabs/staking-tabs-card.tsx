@@ -12,9 +12,9 @@ import { UnstakingForm } from './unstake-form/unstaking-form';
 import { TabsContent, useStakingTabsCardViewModel } from './use-staking-tabs-card.vm';
 
 export const StakingTabsCard: FC = observer(() => {
-  const { stakeItem, currentTab, isStakeForm, changeTabHandle } = useStakingTabsCardViewModel();
+  const { farmingItem, currentTab, isStakeForm, changeTabHandle } = useStakingTabsCardViewModel();
 
-  if (!stakeItem) {
+  if (!farmingItem) {
     return <Skeleton className={s.Skeleton} />;
   }
 

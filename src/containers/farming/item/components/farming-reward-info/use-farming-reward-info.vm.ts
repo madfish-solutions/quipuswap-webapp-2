@@ -10,8 +10,8 @@ import { canDelegate, makeBaker } from '../../helpers';
 const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
-  const stakingItemStore = useFarmingItemStore();
-  const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = stakingItemStore;
+  const farmingItemStore = useFarmingItemStore();
+  const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -23,7 +23,7 @@ export const useFarmingRewardInfoViewModel = () => {
     isLoading: lastStakedTimeLoading,
     isInitialized: stakingStatsStoreInitialized
   } = lastStakedTimeStore;
-  const { data: stakeItem, isLoading: itemStoreLoading, isInitialized: itemStoreInitialized } = itemStore;
+  const { data: farmingItem, isLoading: itemStoreLoading, isInitialized: itemStoreInitialized } = itemStore;
   const {
     data: delegateAddress,
     isLoading: stakingDelegateStoreLoading,
@@ -39,15 +39,15 @@ export const useFarmingRewardInfoViewModel = () => {
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
 
   const handleHarvest = async () => {
-    await doHarvest(stakeItem);
+    await doHarvest(farmingItem);
 
-    await delayedGetFarmingItem(defined(stakeItem).id);
+    await delayedGetFarmingItem(defined(farmingItem).id);
   };
 
-  if (!stakeItem) {
+  if (!farmingItem) {
     return {
       shouldShowCandidate: true,
-      stakeItem,
+      farmingItem,
       myDelegate: null,
       delegatesLoading,
       endTimestamp: null,
@@ -61,20 +61,20 @@ export const useFarmingRewardInfoViewModel = () => {
     };
   }
 
-  const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
+  const myDepositDollarEquivalent = getDollarEquivalent(farmingItem.depositBalance, farmingItem.depositExchangeRate);
 
   return {
-    shouldShowCandidate: canDelegate(stakeItem),
-    stakeItem,
+    shouldShowCandidate: canDelegate(farmingItem),
+    farmingItem,
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
-    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(stakeItem.timelock) * MS_IN_SECOND : null,
-    myRewardInTokens: stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null,
+    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null,
+    myRewardInTokens: farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null,
     myDepositDollarEquivalent,
-    rewardTokenSymbol: getTokenSymbol(stakeItem.rewardToken),
-    rewardTokenDecimals: stakeItem.rewardToken.metadata.decimals,
+    rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
+    rewardTokenDecimals: farmingItem.rewardToken.metadata.decimals,
     stakingLoading,
-    timelock: stakeItem.timelock,
+    timelock: farmingItem.timelock,
     handleHarvest
   };
 };

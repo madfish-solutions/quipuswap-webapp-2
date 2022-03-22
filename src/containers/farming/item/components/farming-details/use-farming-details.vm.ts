@@ -22,15 +22,20 @@ const NO_WITHDRAWAL_FEE_VALUE = 0;
 const NO_TIMELOCK_VALUE = '0';
 
 export const useFarmingDetailsViewModel = () => {
-  const stakingItemStore = useFarmingItemStore();
+  const farmingItemStore = useFarmingItemStore();
   const dAppReady = useReady();
-  const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized, error } = stakingItemStore.itemStore;
+  const {
+    data: farmingItem,
+    isLoading: dataLoading,
+    isInitialized: dataInitialized,
+    error
+  } = farmingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
   const { data: bakers } = useBakers();
 
   const CardCellClassName = cx(s.cellCenter, s.cell, styles.vertical);
 
-  if (!stakeItem) {
+  if (!farmingItem) {
     return {
       shouldShowDelegates: true,
       shouldShowLockPeriod: true,
@@ -74,7 +79,7 @@ export const useFarmingDetailsViewModel = () => {
     harvestFee,
     depositTokenUrl,
     stakeStatus
-  } = stakeItem;
+  } = farmingItem;
 
   const dailyDistribution = bigNumberToString(
     fromDecimals(rewardPerSecond.times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken)
@@ -82,11 +87,11 @@ export const useFarmingDetailsViewModel = () => {
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
     ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
     : null;
-  const currentDelegate = makeBaker(stakeItem.currentDelegate, bakers);
-  const nextDelegate = makeBaker(stakeItem.nextDelegate, bakers);
+  const currentDelegate = makeBaker(farmingItem.currentDelegate, bakers);
+  const nextDelegate = makeBaker(farmingItem.nextDelegate, bakers);
 
   return {
-    shouldShowDelegates: canDelegate(stakeItem),
+    shouldShowDelegates: canDelegate(farmingItem),
     shouldShowLockPeriod: timelock !== NO_TIMELOCK_VALUE,
     shouldShowWithdrawalFee: !withdrawalFee?.isEqualTo(NO_WITHDRAWAL_FEE_VALUE),
     endTime: new Date(endTime).getTime(),

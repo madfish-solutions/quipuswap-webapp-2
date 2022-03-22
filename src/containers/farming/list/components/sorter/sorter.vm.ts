@@ -8,18 +8,18 @@ import { SortDirection, SortFieldItem, SortField } from './sorter.types';
 
 export const useSorterViewModel = () => {
   const { t } = useTranslation(['farm', 'common']);
-  const stakingFilterStore = useFarmingFilterStore();
-  const { sortField, sortDirection } = stakingFilterStore;
+  const farmingFilterStore = useFarmingFilterStore();
+  const { sortField, sortDirection } = farmingFilterStore;
   const { accountPkh } = useAuthStore();
 
   const handleSortFieldChange = (value: unknown) => {
     const item = value as SortFieldItem;
 
-    return stakingFilterStore.onSortFieldChange(item.field);
+    return farmingFilterStore.onSortFieldChange(item.field);
   };
 
   const handleSortDirectionToggle = () => {
-    return stakingFilterStore.onSortDirectionToggle();
+    return farmingFilterStore.onSortDirectionToggle();
   };
 
   const sortValues: SortFieldItem[] = [

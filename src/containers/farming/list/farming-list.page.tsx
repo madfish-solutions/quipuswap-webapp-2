@@ -5,16 +5,16 @@ import { PageTitle } from '@components/common/page-title';
 import { TestnetAlert } from '@components/common/testnet-alert';
 import { StateWrapper } from '@components/state-wrapper';
 import { ListStats } from '@containers/farming/list/list-stats/list-stats';
-import { useFarmsListViewModel } from '@containers/farming/list/use-farming-list.vm';
+import { useFarmingListViewModel } from '@containers/farming/list/use-farming-list.vm';
 
-import { EmptyStakeList, FarmingListSkeleton } from './components';
+import { EmptyFarmingList, FarmingListSkeleton } from './components';
 import styles from './farming-list.page.module.scss';
 import { Iterator } from './helpers/iterator';
 import { FarmingListItem } from './structures';
 import { ListFilter } from './structures/list-filter';
 
 export const FarmsListPage = observer(() => {
-  const { isLoading, list } = useFarmsListViewModel();
+  const { isLoading, list } = useFarmingListViewModel();
 
   return (
     <>
@@ -30,7 +30,7 @@ export const FarmsListPage = observer(() => {
           data={list}
           keyFn={item => item.id.toFixed()}
           render={FarmingListItem}
-          fallback={<EmptyStakeList />}
+          fallback={<EmptyFarmingList />}
           isGrouped
           wrapperClassName={styles.list}
         />

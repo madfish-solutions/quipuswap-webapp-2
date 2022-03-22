@@ -4,7 +4,7 @@ import styles from './empty-stake-list.module.scss';
 
 const NO_DATA = 'No Data!';
 
-export const EmptyStakeList = () => {
+export const EmptyFarmingList = () => {
   return (
     <div className={styles.listWrapper}>
       <TokenNotFound />

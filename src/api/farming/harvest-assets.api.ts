@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js';
 
 import { FARMING_CONTRACT_ADDRESS } from '@app.config';
 
-export const harvestAssetsApi = async (tezos: TezosToolkit, stakingId: BigNumber, rewardsReceiver: string) => {
+export const harvestAssetsApi = async (tezos: TezosToolkit, farmingId: BigNumber, rewardsReceiver: string) => {
   const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
-  const harvestParams = farmingContract.methods.harvest(stakingId, rewardsReceiver);
+  const harvestParams = farmingContract.methods.harvest(farmingId, rewardsReceiver);
 
   return await harvestParams.send();
 };

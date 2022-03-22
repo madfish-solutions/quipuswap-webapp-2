@@ -5,8 +5,8 @@ import { useGetFarmingStats } from '@containers/farming/hooks/use-get-farming-st
 import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
 import { useReady } from '@utils/dapp';
 
-export const useFarmsListViewModel = () => {
-  const stakingListStore = useFarmingListStore();
+export const useFarmingListViewModel = () => {
+  const farmingListStore = useFarmingListStore();
   const isReady = useReady();
   const { getFarmingList } = useGetFarmingList();
   const { getFarmingStats } = useGetFarmingStats();
@@ -21,7 +21,7 @@ export const useFarmsListViewModel = () => {
     }
   }, [getFarmingList, getFarmingStats, isReady]);
 
-  const { listStore, list } = stakingListStore;
+  const { listStore, list } = farmingListStore;
   const { isLoading } = listStore;
 
   return {

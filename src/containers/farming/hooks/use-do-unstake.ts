@@ -15,12 +15,12 @@ export const useDoUnstake = () => {
   const { showErrorToast } = useToasts();
 
   const doUnstake = useCallback(
-    async (stakeItem: FarmingItem, balance: BigNumber) => {
+    async (farmingItem: FarmingItem, balance: BigNumber) => {
       try {
         const operation = await unstakeAssetsApi(
           defined(rootStore.tezos),
           defined(rootStore.authStore.accountPkh),
-          defined(stakeItem).id,
+          defined(farmingItem).id,
           balance
         );
         await confirmOperation(operation.opHash, { message: 'Unstake successful' });

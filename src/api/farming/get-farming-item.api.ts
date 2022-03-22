@@ -12,12 +12,12 @@ import { getBalances } from './helpers';
 
 const FARMING_LIST_API_URL = `${FARMING_API_URL}/list`;
 
-export const getFarmingItemFetch = async (stakingId: Nullable<BigNumber>) => {
-  if (!stakingId) {
-    throw new Error('Failed to get nullable stakingId');
+export const getFarmingItemFetch = async (farmingId: Nullable<BigNumber>) => {
+  if (!farmingId) {
+    throw new Error('Failed to get nullable farmingId');
   }
 
-  const response = await fetch(`${FARMING_LIST_API_URL}/${stakingId.toFixed()}`);
+  const response = await fetch(`${FARMING_LIST_API_URL}/${farmingId.toFixed()}`);
 
   const data = (await response.json()) as FarmingItemResponse;
 
@@ -39,11 +39,11 @@ const injectBalance = async (item: RawFarmingItem, accountPkh: string, tezos: Te
 };
 
 export const getFarmingItemApi = async (
-  stakingId: Nullable<BigNumber>,
+  farmingId: Nullable<BigNumber>,
   authStore: AuthStore, //avoid race condition
   tezos: Nullable<TezosToolkit>
 ) => {
-  const fetchResult = await getFarmingItemFetch(stakingId);
+  const fetchResult = await getFarmingItemFetch(farmingId);
   const { accountPkh } = authStore;
 
   if (isNull(accountPkh) || isNull(tezos)) {

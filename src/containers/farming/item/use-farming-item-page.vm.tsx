@@ -34,20 +34,20 @@ export const useFarmingItemPageViewModel = () => {
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 
-  const { data: stakeItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
+  const { data: farmingItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   const getTitle = () => {
-    if (stakeItem) {
-      return `Farming ${getTokensName(stakeItem.tokenA, stakeItem.tokenB)}`;
+    if (farmingItem) {
+      return `Farming ${getTokensName(farmingItem.tokenA, farmingItem.tokenB)}`;
     }
 
-    if (!isLoading && isNull(stakeItem)) {
+    if (!isLoading && isNull(farmingItem)) {
       return t('farm|Failed to load farming');
     }
 
     return <DashPlug animation={true} className={stakingPageStyles.titleLoader} zoom={1.45} />;
   };
 
-  return { isLoading, stakeItem, getTitle };
+  return { isLoading, farmingItem, getTitle };
 };

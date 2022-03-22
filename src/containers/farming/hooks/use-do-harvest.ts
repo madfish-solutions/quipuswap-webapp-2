@@ -14,11 +14,11 @@ export const useDoHarvest = () => {
   const { showErrorToast } = useToasts();
 
   const doHarvest = useCallback(
-    async (stakeItem: Nullable<FarmingItem>) => {
+    async (farmingItem: Nullable<FarmingItem>) => {
       try {
         const operation = await harvestAssetsApi(
           defined(rootStore.tezos),
-          defined(stakeItem).id,
+          defined(farmingItem).id,
           defined(rootStore.authStore.accountPkh)
         );
 

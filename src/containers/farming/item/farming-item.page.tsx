@@ -15,9 +15,9 @@ import { useFarmingItemPageViewModel } from './use-farming-item-page.vm';
 
 export const FarmingItemPage: FC = observer(() => {
   const router = useRouter();
-  const { isLoading, stakeItem, getTitle } = useFarmingItemPageViewModel();
+  const { isLoading, farmingItem, getTitle } = useFarmingItemPageViewModel();
 
-  if (!isLoading && isUndefined(stakeItem)) {
+  if (!isLoading && isUndefined(farmingItem)) {
     void router.replace('/404');
 
     return null;

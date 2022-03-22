@@ -19,11 +19,11 @@ import { RootStore } from './root.store';
 const DEFAULT_INPUT_AMOUNT = 0;
 
 export class FarmingItemStore {
-  stakingId: Nullable<BigNumber> = null;
+  farmingId: Nullable<BigNumber> = null;
 
   itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
     null,
-    async () => await getFarmingItemApi(this.stakingId, this.rootStore.authStore, this.rootStore.tezos),
+    async () => await getFarmingItemApi(this.farmingId, this.rootStore.authStore, this.rootStore.tezos),
     mapFarmItem
   );
 
@@ -80,8 +80,8 @@ export class FarmingItemStore {
     this.setInputAmount(DEFAULT_INPUT_AMOUNT);
   }
 
-  setStakingId(stakingId: Nullable<BigNumber>) {
-    this.stakingId = stakingId;
+  setFarmingId(farmingId: Nullable<BigNumber>) {
+    this.farmingId = farmingId;
   }
 
   private async getUserTokenBalance() {

@@ -17,13 +17,13 @@ export const UnstakingForm: FC = observer(() => {
     handleSubmit,
     userTokenBalance,
     inputAmountError,
-    stakeItem,
+    farmingItem,
     stakedTokenDecimals,
     disabled,
     handleInputAmountChange
   } = useUnstakingFormViewModel();
 
-  if (!stakeItem) {
+  if (!farmingItem) {
     return null;
   }
 
@@ -36,8 +36,8 @@ export const UnstakingForm: FC = observer(() => {
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
         error={inputAmountError}
-        tokenA={stakeItem.tokenA}
-        tokenB={stakeItem.tokenB}
+        tokenA={farmingItem.tokenA}
+        tokenB={farmingItem.tokenB}
         onInputChange={handleInputAmountChange}
       />
       <div className={s.buttons}>

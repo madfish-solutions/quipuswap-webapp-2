@@ -12,21 +12,21 @@ import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.inter
 import { useUnstakingFormValidation } from './use-unstaking-form.validation';
 
 export const useUnstakingFormViewModel = () => {
-  const stakingItemStore = useFarmingItemStore();
+  const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, inputAmount } = stakingItemStore;
-  const { data: stakeItem } = itemStore;
+  const { itemStore, inputAmount } = farmingItemStore;
+  const { data: farmingItem } = itemStore;
 
-  const userTokenBalance = stakeItem?.depositBalance ? bigNumberToString(stakeItem?.depositBalance) : undefined;
+  const userTokenBalance = farmingItem?.depositBalance ? bigNumberToString(farmingItem?.depositBalance) : undefined;
 
-  const validationSchema = useUnstakingFormValidation(stakeItem?.depositBalance ?? null);
+  const validationSchema = useUnstakingFormValidation(farmingItem?.depositBalance ?? null);
 
   const handleUnstakeSubmit = async (_: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
     actions.setSubmitting(true);
-    const token = defined(stakeItem).stakedToken;
+    const token = defined(farmingItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
-    await doUnstake(defined(stakeItem), inputAmountWithDecimals);
+    await doUnstake(defined(farmingItem), inputAmountWithDecimals);
 
     formik.resetForm();
     actions.setSubmitting(false);
@@ -38,7 +38,7 @@ export const useUnstakingFormViewModel = () => {
   ) => {
     await handleUnstakeSubmit(values, actions);
 
-    await delayedGetFarmingItem(defined(stakeItem).id);
+    await delayedGetFarmingItem(defined(farmingItem).id);
   };
 
   const formik = useFormik({
@@ -58,7 +58,7 @@ export const useUnstakingFormViewModel = () => {
       : undefined;
 
   const handleInputAmountChange = (value: string) => {
-    stakingItemStore.setInputAmount(prepareNumberAsString(value));
+    farmingItemStore.setInputAmount(prepareNumberAsString(value));
     formik.setFieldValue(UnstakingFormFields.inputAmount, value);
   };
 
@@ -67,8 +67,8 @@ export const useUnstakingFormViewModel = () => {
     inputAmount: formik.values[UnstakingFormFields.inputAmount],
     userTokenBalance,
     inputAmountError,
-    stakeItem,
-    stakedTokenDecimals: stakeItem?.stakedToken.metadata.decimals ?? DEFAULT_DECIMALS,
+    farmingItem,
+    stakedTokenDecimals: farmingItem?.stakedToken.metadata.decimals ?? DEFAULT_DECIMALS,
     disabled,
     handleInputAmountChange
   };

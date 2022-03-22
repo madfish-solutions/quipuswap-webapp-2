@@ -16,13 +16,13 @@ export const useDoStake = () => {
   const { showErrorToast } = useToasts();
 
   const doStake = useCallback(
-    async (stakeItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
+    async (farmingItem: FarmingItem, balance: BigNumber, tokenAddress: Token, selectedBaker: WhitelistedBaker) => {
       try {
         const operation = await stakeTokenApi(
           defined(rootStore.tezos),
           tokenAddress,
           defined(rootStore.authStore.accountPkh),
-          defined(stakeItem).id,
+          defined(farmingItem).id,
           balance,
           defined(selectedBaker).address
         );

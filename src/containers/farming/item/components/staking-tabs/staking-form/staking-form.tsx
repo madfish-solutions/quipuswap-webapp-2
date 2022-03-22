@@ -21,7 +21,7 @@ export const StakingForm: FC = observer(() => {
     inputAmount,
     userTokenBalance,
     inputAmountError,
-    stakeItem,
+    farmingItem,
     stakedTokenDecimals,
     bakerError,
     stakingStatusError,
@@ -32,7 +32,7 @@ export const StakingForm: FC = observer(() => {
     handleInputAmountChange
   } = useStakingFormViewModel();
 
-  if (!stakeItem) {
+  if (!farmingItem) {
     return null;
   }
 
@@ -45,8 +45,8 @@ export const StakingForm: FC = observer(() => {
         balance={userTokenBalance}
         decimals={stakedTokenDecimals}
         error={inputAmountError}
-        tokenA={stakeItem.tokenA}
-        tokenB={stakeItem.tokenB}
+        tokenA={farmingItem.tokenA}
+        tokenB={farmingItem.tokenB}
         onInputChange={handleInputAmountChange}
       />
       {shouldShowBakerInput && (
@@ -68,7 +68,7 @@ export const StakingForm: FC = observer(() => {
           </Button>
         )}
       </div>
-      <StakingAlert className={s.mt16} variant={stakeItem.stakeStatus} errorMessage={stakingStatusError} />
+      <StakingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={stakingStatusError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled}>

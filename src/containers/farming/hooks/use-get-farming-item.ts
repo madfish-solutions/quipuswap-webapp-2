@@ -14,10 +14,10 @@ export const useGetFarmingItem = () => {
   const isReady = useReady();
 
   const getFarmingItem = useCallback(
-    async (stakingId: BigNumber) => {
+    async (farmingId: BigNumber) => {
       if (isReady) {
         try {
-          farmingItemStore.setStakingId(stakingId);
+          farmingItemStore.setFarmingId(farmingId);
           await farmingItemStore.itemStore.load();
           await Promise.all([
             farmingItemStore.availableBalanceStore.load(),
@@ -33,10 +33,10 @@ export const useGetFarmingItem = () => {
   );
 
   const delayedGetFarmingItem = useCallback(
-    async (stakingId: BigNumber) => {
+    async (farmingId: BigNumber) => {
       await sleep(DELAY_BEFORE_DATA_UPDATE);
 
-      await getFarmingItem(stakingId);
+      await getFarmingItem(farmingId);
     },
     [getFarmingItem]
   );

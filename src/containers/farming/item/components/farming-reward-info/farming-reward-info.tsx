@@ -31,7 +31,7 @@ export const FarmingRewardInfo: FC = observer(() => {
   const { t } = useTranslation(['farm']);
   const {
     shouldShowCandidate,
-    stakeItem,
+    farmingItem,
     myDelegate,
     delegatesLoading,
     endTimestamp,
@@ -65,7 +65,7 @@ export const FarmingRewardInfo: FC = observer(() => {
         loading={stakingLoading}
         tooltipContent={t('farm|yourShareTooltip')}
       >
-        <StateData data={stakeItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
+        <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
           {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
               amount={depositBalance}
