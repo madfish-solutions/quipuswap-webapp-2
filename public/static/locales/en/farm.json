@@ -63,5 +63,12 @@
   "deposit": "Deposit",
   "earned": "Earned",
   "disabled": "Farming is finished! Please withdraw all your stake and rewards.",
-  "pending": "Farming is paused!"
+  "pending": "Farming is paused!",
+  "Failed to load farming": "Failed to load farming",
+  "Daily Distribution": "Daily Distribution",
+  "Your Share": "Your Share",
+  "Your delegate": "Your delegate",
+  "Withdrawal fee ends in": "Withdrawal fee ends in",
+  "Stake": "Stake",
+  "Unstake": "Unstake"
 }
