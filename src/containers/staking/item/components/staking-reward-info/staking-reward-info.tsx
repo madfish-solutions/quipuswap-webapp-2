@@ -37,6 +37,7 @@ export const StakingRewardInfo: FC = observer(() => {
     endTimestamp,
     myDepositDollarEquivalent,
     myRewardInTokens,
+    myRewardInUsd,
     rewardTokenDecimals,
     rewardTokenSymbol,
     stakingLoading,
@@ -47,6 +48,7 @@ export const StakingRewardInfo: FC = observer(() => {
   return (
     <RewardInfo
       amount={myRewardInTokens}
+      dollarEquivalent={myRewardInUsd}
       amountDecimals={rewardTokenDecimals}
       className={cx(styles.rewardInfo, modeClass[colorThemeMode])}
       header={{

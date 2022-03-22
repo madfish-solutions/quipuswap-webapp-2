@@ -52,6 +52,7 @@ export const useStakingRewardInfoViewModel = () => {
       delegatesLoading,
       endTimestamp: null,
       myRewardInTokens: null,
+      myRewardInUsd: null,
       myDepositDollarEquivalent: null,
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
       rewardTokenDecimals: 0,
@@ -62,6 +63,8 @@ export const useStakingRewardInfoViewModel = () => {
   }
 
   const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
+  const myRewardInTokens = stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null;
+  const myRewardInUsd = getDollarEquivalent(myRewardInTokens, stakeItem.earnExchangeRate);
 
   return {
     shouldShowCandidate: canDelegate(stakeItem),
@@ -69,7 +72,8 @@ export const useStakingRewardInfoViewModel = () => {
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
     endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(stakeItem.timelock) * MS_IN_SECOND : null,
-    myRewardInTokens: stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null,
+    myRewardInTokens,
+    myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(stakeItem.rewardToken),
     rewardTokenDecimals: stakeItem.rewardToken.metadata.decimals,
