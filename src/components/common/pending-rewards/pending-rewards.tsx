@@ -22,12 +22,20 @@ const modeClass = {
 
 interface Props extends DataTestAttribute {
   amount: Nullable<BigNumber>;
+  dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
   tooltip?: string;
 }
 
-export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, amountDecimals = USD_DECIMALS }) => {
+export const PendingRewards: FC<Props> = ({
+  amount,
+  currency,
+  tooltip,
+  testId,
+  dollarEquivalent,
+  amountDecimals = USD_DECIMALS
+}) => {
   const accountPkh = useAccountPkh();
   const { t } = useTranslation(['stake']);
   const { colorThemeMode } = useContext(ColorThemeContext);
@@ -45,6 +53,7 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, a
               className={styles.amount}
               amount={amount}
               currency={currency}
+              dollarEquivalent={dollarEquivalent}
               amountDecimals={amountDecimals}
               isLeftCurrency={currency === '$'}
               testId={testId}

@@ -1,9 +1,10 @@
 import { useCallback, FC } from 'react';
 
-import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { Input, Search } from '@quipuswap/ui-kit';
 import { useTranslation } from 'next-i18next';
 import { Field, FieldMetaState } from 'react-final-form';
 
+import { NumberInput } from '@components/ui/number-input';
 import { parseNumber } from '@utils/helpers';
 import { validateMinMaxNonStrict } from '@utils/validators';
 
