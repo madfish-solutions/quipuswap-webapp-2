@@ -45,6 +45,7 @@ export const mapStakeItem = (raw: RawStakingItem): StakingItem => {
 
   return {
     ...raw,
+    staked: new BigNumber(raw.staked),
     myBalance,
     depositBalance,
     earnBalance,
