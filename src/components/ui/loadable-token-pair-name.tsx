@@ -1,7 +1,8 @@
+import { FC } from 'react';
+
+import { DashPlug } from '@components/ui/dash-plug';
 import { getTokensPairName } from '@utils/helpers';
 import { Nullable, Optional, TokenPair } from '@utils/types';
-
-import { DashPlug } from './dash-plug';
 
 interface Props {
   tokenPair: Nullable<TokenPair>;
@@ -10,7 +11,7 @@ interface Props {
   tokenSymbolSliceAmount?: number;
 }
 
-export const LoadableTokenPairName = ({ tokenPair, isLoading, placeholder, tokenSymbolSliceAmount }: Props) => {
+export const LoadableTokenPairName: FC<Props> = ({ tokenPair, isLoading, placeholder, tokenSymbolSliceAmount }) => {
   if (isLoading) {
     return (
       <>
