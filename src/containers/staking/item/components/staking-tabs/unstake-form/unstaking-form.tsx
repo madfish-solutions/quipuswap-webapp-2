@@ -14,6 +14,7 @@ export const UnstakingForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'stake']);
   const {
     inputAmount,
+    isSubmitting,
     handleSubmit,
     userTokenBalance,
     inputAmountError,
@@ -42,7 +43,7 @@ export const UnstakingForm: FC = observer(() => {
       />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
-          <Button type="submit" className={s.button} disabled={disabled}>
+          <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
             {t('stake|Unstake')}
           </Button>
         </ConnectWalletOrDoSomething>
