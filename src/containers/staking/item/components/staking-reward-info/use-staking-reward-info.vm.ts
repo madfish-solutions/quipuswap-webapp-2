@@ -11,31 +11,23 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useStakingRewardInfoViewModel = () => {
   const stakingItemStore = useStakingItemStore();
-  const { itemStore, userStakingDelegateStore, lastStakedTimeStore } = stakingItemStore;
+  const { itemStore, userStakingDelegateStore, userInfoStore } = stakingItemStore;
+  const { stakeItem } = stakingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetStakingItem } = useGetStakingItem();
   const { doHarvest } = useDoHarvest();
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
-  const {
-    data: lastStakedTime,
-    isLoading: lastStakedTimeLoading,
-    isInitialized: stakingStatsStoreInitialized
-  } = lastStakedTimeStore;
-  const { data: stakeItem, isLoading: itemStoreLoading, isInitialized: itemStoreInitialized } = itemStore;
-  const {
-    data: delegateAddress,
-    isLoading: stakingDelegateStoreLoading,
-    isInitialized: stakingDelegateStoreInitialized
-  } = userStakingDelegateStore;
+  const { data: userInfo } = userInfoStore;
+  const { data: delegateAddress } = userStakingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
-  const stakingStatsStoreReady = (!lastStakedTimeLoading && stakingStatsStoreInitialized) || !walletIsConnected;
-  const itemStoreReady = !itemStoreLoading && itemStoreInitialized;
-  const stakingDelegateStoreReady =
-    (!stakingDelegateStoreLoading && stakingDelegateStoreInitialized) || !walletIsConnected;
-  const stakingLoading = !dAppReady || !stakingStatsStoreReady || !itemStoreReady;
+  const userInfoStoreReady = userInfoStore.isReady || !walletIsConnected;
+  const itemStoreReady = itemStore.isReady;
+  const stakingDelegateStoreReady = userStakingDelegateStore.isReady || !walletIsConnected;
+  const pendingRewardsReady = isExist(stakeItem?.earnBalance) || !walletIsConnected;
+  const stakingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
 
   const handleHarvest = async () => {
@@ -63,6 +55,7 @@ export const useStakingRewardInfoViewModel = () => {
   }
 
   const myDepositDollarEquivalent = getDollarEquivalent(stakeItem.depositBalance, stakeItem.depositExchangeRate);
+  const lastStakedTime = userInfo ? new Date(userInfo.last_staked).getTime() : null;
   const myRewardInTokens = stakeItem.earnBalance?.decimalPlaces(stakeItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInUsd = getDollarEquivalent(myRewardInTokens, stakeItem.earnExchangeRate);
 

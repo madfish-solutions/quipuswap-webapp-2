@@ -1,13 +1,17 @@
 import BigNumber from 'bignumber.js';
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getUserTokenBalance } from '@api/get-user-balance';
-import { getLastStakedTime } from '@api/staking/get-last-staked-time.api';
 import { getStakingItemApi } from '@api/staking/get-staking-item.api';
+import { getUserInfoApi } from '@api/staking/get-user-info.api';
 import { getUserStakingDelegate } from '@api/staking/get-user-staking-delegate.api';
+import { getUserPendingReward } from '@api/staking/helpers';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@app.config';
 import { StakingTabs } from '@containers/staking/item/types';
+import { UsersInfoValue } from '@interfaces/stake-contract.interface';
 import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
-import { isNull } from '@utils/helpers';
+import { fromDecimals, isNull } from '@utils/helpers';
+import { MakeInterval } from '@utils/helpers/make-interval';
 import { balanceMap } from '@utils/mapping/balance.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { mapStakeItem } from '@utils/mapping/staking.map';
@@ -23,7 +27,7 @@ export class StakingItemStore {
 
   itemStore = new LoadingErrorData<RawStakingItem, Nullable<StakingItem>>(
     null,
-    async () => await getStakingItemApi(this.stakingId, this.rootStore.authStore, this.rootStore.tezos),
+    async () => await getStakingItemApi(this.stakingId),
     mapStakeItem
   );
 
@@ -33,9 +37,9 @@ export class StakingItemStore {
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  lastStakedTimeStore = new LoadingErrorData<Nullable<number>, Nullable<number>>(
+  userInfoStore = new LoadingErrorData<Nullable<UsersInfoValue>, Nullable<UsersInfoValue>>(
     null,
-    async () => await this.getLastStakedTime(),
+    async () => await this.getUserInfo(),
     noopMap
   );
 
@@ -49,19 +53,57 @@ export class StakingItemStore {
 
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
+  pendingRewards: Nullable<BigNumber> = null;
+  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
+
+  updateUserInfoInterval = new MakeInterval(async () => this.userInfoStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
       inputAmount: observable,
       selectedBaker: observable,
+      pendingRewards: observable,
 
       setTab: action,
       clearBalance: action,
       setInputAmount: action,
-      setSelectedBaker: action
+      setSelectedBaker: action,
+      updatePendingRewards: action,
+
+      stakeItem: computed
     });
     this.clearBalance();
+  }
+
+  get stakeItem(): Nullable<StakingItem> {
+    const { data: stakeItem } = this.itemStore;
+    const { data: userInfo } = this.userInfoStore;
+
+    return (
+      stakeItem && {
+        ...stakeItem,
+        depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
+        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
+      }
+    );
+  }
+
+  makePendingRewardsLiveable() {
+    this.pendingRewardsInterval.start();
+    this.updateUserInfoInterval.start();
+  }
+
+  updatePendingRewards() {
+    const { data: userInfo } = this.userInfoStore;
+    const { data: item } = this.itemStore;
+
+    this.pendingRewards = userInfo && item && getUserPendingReward(userInfo, item);
+  }
+
+  clearIntervals() {
+    this.pendingRewardsInterval.stop();
+    this.updateUserInfoInterval.stop();
   }
 
   setTab(tab: StakingTabs) {
@@ -84,6 +126,17 @@ export class StakingItemStore {
     this.stakingId = stakingId;
   }
 
+  private async getUserInfo() {
+    const { tezos, authStore } = this.rootStore;
+    const { data: item } = this.itemStore;
+
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+      return null;
+    }
+
+    return await getUserInfoApi(item, authStore.accountPkh, tezos);
+  }
+
   private async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
@@ -93,17 +146,6 @@ export class StakingItemStore {
     }
 
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
-  }
-
-  private async getLastStakedTime() {
-    const { tezos, authStore } = this.rootStore;
-    const { data: item } = this.itemStore;
-
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
-      return null;
-    }
-
-    return await getLastStakedTime(tezos, authStore.accountPkh, item.id);
   }
 
   private async getUserStakingDelegate() {

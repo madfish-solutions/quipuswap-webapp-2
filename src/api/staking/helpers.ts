@@ -1,7 +1,9 @@
 import BigNumber from 'bignumber.js';
 
+import { MS_IN_SECOND } from '@app.config';
 import { StakeContractStorage, UsersInfoKey, UsersInfoValue } from '@interfaces/stake-contract.interface';
-import { RawStakingItem } from '@interfaces/staking.interfaces';
+import { RawStakingItem, StakingItem } from '@interfaces/staking.interfaces';
+import { mapStakeItem } from '@utils/mapping/staking.map';
 import { Undefined } from '@utils/types';
 
 export interface UserBalances {
@@ -18,26 +20,24 @@ export const fillIndexArray = (value: number): Array<BigNumber> => {
   return indexArray;
 };
 
-const MILISECONDS_IN_SECONDS = 1000;
+const NOTHING_STAKED_VALUE = 0;
 
 export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-const isZeroString = (string: string) => string === '0';
+export const getUserPendingReward = (userInfo: UsersInfoValue, item: StakingItem) => {
+  const { staked: totalStaked, rewardPerSecond } = item;
 
-const getUserPendingReward = (userInfo: UsersInfoValue, item: RawStakingItem) => {
-  if (isZeroString(item.staked)) {
+  if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
   }
 
-  const rewardPerSecond = new BigNumber(item.rewardPerSecond);
+  const reward = new BigNumber(Math.floor((Date.now() - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+    rewardPerSecond
+  );
 
-  const reward = new BigNumber(
-    Math.floor((Date.now() - new Date(item.udp).getTime()) / MILISECONDS_IN_SECONDS)
-  ).multipliedBy(rewardPerSecond);
-
-  const rewardPerShare = new BigNumber(item.rewardPerShare).plus(reward.dividedBy(item.staked));
+  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
 
   const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
 
@@ -52,7 +52,7 @@ export const getBalances = (userInfo: Undefined<UsersInfoValue>, item: RawStakin
     };
   }
 
-  const reward = getUserPendingReward(userInfo, item);
+  const reward = getUserPendingReward(userInfo, mapStakeItem(item));
 
   return {
     depositBalance: userInfo.staked.toFixed(),

@@ -21,9 +21,10 @@ export const useGetStakingItem = () => {
           await stakingItemStore.itemStore.load();
           await Promise.all([
             stakingItemStore.availableBalanceStore.load(),
-            stakingItemStore.lastStakedTimeStore.load(),
+            stakingItemStore.userInfoStore.load(),
             stakingItemStore.userStakingDelegateStore.load()
           ]);
+          stakingItemStore.updatePendingRewards();
         } catch (error) {
           showErrorToast(error as Error);
         }

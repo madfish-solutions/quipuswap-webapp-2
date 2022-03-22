@@ -88,7 +88,7 @@ export interface UsersInfoValue {
   claimed: nat;
   prev_earned: nat;
   prev_staked: nat;
-  allowances: Set<address>; //VALIDATE!
+  allowances: address[];
 }
 
 export type VotesKey = [nat, key_hash];

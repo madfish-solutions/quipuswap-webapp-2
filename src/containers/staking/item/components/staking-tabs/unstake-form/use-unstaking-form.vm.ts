@@ -15,8 +15,8 @@ export const useUnstakingFormViewModel = () => {
   const stakingItemStore = useStakingItemStore();
   const { delayedGetStakingItem } = useGetStakingItem();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, inputAmount } = stakingItemStore;
-  const { data: stakeItem } = itemStore;
+  const { inputAmount } = stakingItemStore;
+  const { stakeItem } = stakingItemStore;
 
   const userTokenBalance = stakeItem?.depositBalance ? bigNumberToString(stakeItem?.depositBalance) : undefined;
 
