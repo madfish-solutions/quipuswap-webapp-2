@@ -35,7 +35,7 @@ const nullableBalanceMap = (balanceAmount: Optional<string>, token: Token) => {
   return null;
 };
 
-export const mapFarmItem = (raw: RawFarmingItem): FarmingItem => {
+export const mapFarmingItem = (raw: RawFarmingItem): FarmingItem => {
   const stakedToken = mapFarmingToken(raw.stakedToken, Boolean(raw.tokenB), getTokensName(raw.tokenA, raw.tokenB));
   const rewardToken = mapFarmingToken(raw.rewardToken);
 
@@ -45,6 +45,7 @@ export const mapFarmItem = (raw: RawFarmingItem): FarmingItem => {
 
   return {
     ...raw,
+    staked: new BigNumber(raw.staked),
     myBalance,
     depositBalance,
     earnBalance,
@@ -66,9 +67,9 @@ export const mapFarmItem = (raw: RawFarmingItem): FarmingItem => {
   };
 };
 
-export const mapFarmsItems = (rawList: RawFarmingItem[]): FarmingItem[] => rawList.map(mapFarmItem);
+export const mapFarmingItems = (rawList: RawFarmingItem[]): FarmingItem[] => rawList.map(mapFarmingItem);
 
-export const mapFarmStats = (raw: RawFarmingStats): FarmingStats => ({
+export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalValueLocked: new BigNumber(raw.totalValueLocked),
   totalDailyReward: new BigNumber(raw.totalDailyReward),
   totalPendingReward: new BigNumber(raw.totalPendingReward),

@@ -106,6 +106,7 @@ export interface FarmingItem extends UserBalances {
   stakeStatus: ActiveStatus;
   stakeUrl: string;
   stakedToken: Token;
+  staked: BigNumber;
 
   timelock: string;
   tokenA: Token;

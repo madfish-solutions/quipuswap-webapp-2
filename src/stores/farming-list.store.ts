@@ -5,7 +5,7 @@ import { computed, makeObservable } from 'mobx';
 import { getFarmingListApi, getFarmingStatsApi } from '@api/farming';
 import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@interfaces/farming.interfaces';
 import { multipliedIfPossible } from '@utils/helpers/multiplied-if-possible';
-import { mapFarmsItems, mapFarmStats } from '@utils/mapping/farming.map';
+import { mapFarmingItems, mapFarmingStats } from '@utils/mapping/farming.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
@@ -16,10 +16,10 @@ export class FarmingListStore {
   listStore = new LoadingErrorData<RawFarmingItem[], FarmingItem[]>(
     [],
     async () => await getFarmingListApi(this.rootStore.authStore.accountPkh, this.rootStore.tezos),
-    mapFarmsItems
+    mapFarmingItems
   );
 
-  statsStore = new LoadingErrorData<RawFarmingStats, Nullable<FarmingStats>>(null, getFarmingStatsApi, mapFarmStats);
+  statsStore = new LoadingErrorData<RawFarmingStats, Nullable<FarmingStats>>(null, getFarmingStatsApi, mapFarmingStats);
 
   get pendingRewards() {
     const rewardsInUsd = this.listStore.data.map(({ earnBalance, earnExchangeRate }) =>

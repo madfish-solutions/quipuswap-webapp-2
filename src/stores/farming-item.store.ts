@@ -1,15 +1,19 @@
 import BigNumber from 'bignumber.js';
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getFarmingItemApi } from '@api/farming/get-farming-item.api';
-import { getLastStakedTime } from '@api/farming/get-last-staked-time.api';
 import { getUserFarmingDelegate } from '@api/farming/get-user-farming-delegate.api';
+import { getUserInfoApi } from '@api/farming/get-user-info.api';
+import { getUserPendingReward } from '@api/farming/helpers';
 import { getUserTokenBalance } from '@api/get-user-balance';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@app.config';
 import { StakingTabs } from '@containers/farming/item/types';
+import { UsersInfoValue } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
-import { isNull } from '@utils/helpers';
+import { fromDecimals, isNull } from '@utils/helpers';
+import { MakeInterval } from '@utils/helpers/make-interval';
 import { balanceMap } from '@utils/mapping/balance.map';
-import { mapFarmItem } from '@utils/mapping/farming.map';
+import { mapFarmingItem } from '@utils/mapping/farming.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -24,7 +28,7 @@ export class FarmingItemStore {
   itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
     null,
     async () => await getFarmingItemApi(this.farmingId, this.rootStore.authStore, this.rootStore.tezos),
-    mapFarmItem
+    mapFarmingItem
   );
 
   availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
@@ -33,9 +37,9 @@ export class FarmingItemStore {
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  lastStakedTimeStore = new LoadingErrorData<Nullable<number>, Nullable<number>>(
+  userInfoStore = new LoadingErrorData<Nullable<UsersInfoValue>, Nullable<UsersInfoValue>>(
     null,
-    async () => await this.getLastStakedTime(),
+    async () => await this.getUserInfo(),
     noopMap
   );
 
@@ -49,19 +53,57 @@ export class FarmingItemStore {
 
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
+  pendingRewards: Nullable<BigNumber> = null;
+  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
+
+  updateUserInfoInterval = new MakeInterval(async () => this.userInfoStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
       currentTab: observable,
       inputAmount: observable,
       selectedBaker: observable,
+      pendingRewards: observable,
 
       setTab: action,
       clearBalance: action,
       setInputAmount: action,
-      setSelectedBaker: action
+      setSelectedBaker: action,
+      updatePendingRewards: action,
+
+      farmingItem: computed
     });
     this.clearBalance();
+  }
+
+  get farmingItem(): Nullable<FarmingItem> {
+    const { data: stakeItem } = this.itemStore;
+    const { data: userInfo } = this.userInfoStore;
+
+    return (
+      stakeItem && {
+        ...stakeItem,
+        depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
+        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
+      }
+    );
+  }
+
+  makePendingRewardsLiveable() {
+    this.pendingRewardsInterval.start();
+    this.updateUserInfoInterval.start();
+  }
+
+  updatePendingRewards() {
+    const { data: userInfo } = this.userInfoStore;
+    const { data: item } = this.itemStore;
+
+    this.pendingRewards = userInfo && item && getUserPendingReward(userInfo, item);
+  }
+
+  clearIntervals() {
+    this.pendingRewardsInterval.stop();
+    this.updateUserInfoInterval.stop();
   }
 
   setTab(tab: StakingTabs) {
@@ -84,6 +126,17 @@ export class FarmingItemStore {
     this.farmingId = farmingId;
   }
 
+  private async getUserInfo() {
+    const { tezos, authStore } = this.rootStore;
+    const { data: item } = this.itemStore;
+
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
+      return null;
+    }
+
+    return await getUserInfoApi(item, authStore.accountPkh, tezos);
+  }
+
   private async getUserTokenBalance() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
@@ -93,17 +146,6 @@ export class FarmingItemStore {
     }
 
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
-  }
-
-  private async getLastStakedTime() {
-    const { tezos, authStore } = this.rootStore;
-    const { data: item } = this.itemStore;
-
-    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
-      return null;
-    }
-
-    return await getLastStakedTime(tezos, authStore.accountPkh, item.id);
   }
 
   private async getUserStakingDelegate() {

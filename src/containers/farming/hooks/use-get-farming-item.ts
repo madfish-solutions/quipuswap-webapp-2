@@ -21,7 +21,7 @@ export const useGetFarmingItem = () => {
           await farmingItemStore.itemStore.load();
           await Promise.all([
             farmingItemStore.availableBalanceStore.load(),
-            farmingItemStore.lastStakedTimeStore.load(),
+            farmingItemStore.userInfoStore.load(),
             farmingItemStore.userStakingDelegateStore.load()
           ]);
         } catch (error) {

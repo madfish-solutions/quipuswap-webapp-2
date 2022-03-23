@@ -34,6 +34,12 @@ export const useFarmingItemPageViewModel = () => {
     prevAccountPkhRef.current = accountPkh;
   }, [getFarmingItem, dAppReady, rawStakeId, accountPkh]);
 
+  useEffect(() => {
+    farmingItemStore.makePendingRewardsLiveable();
+
+    return () => farmingItemStore.clearIntervals();
+  }, [farmingItemStore]);
+
   const { data: farmingItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
