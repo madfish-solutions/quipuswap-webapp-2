@@ -7,7 +7,7 @@ import { getUserInfoApi } from '@api/farming/get-user-info.api';
 import { getUserPendingReward } from '@api/farming/helpers';
 import { getUserTokenBalance } from '@api/get-user-balance';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@app.config';
-import { FarmingTabs } from '@containers/farming/item/types';
+import { FarmingFormTabs } from '@containers/farming/item/types';
 import { UsersInfoValue } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
 import { fromDecimals, isNull } from '@utils/helpers';
@@ -43,13 +43,13 @@ export class FarmingItemStore {
     noopMap
   );
 
-  getUserFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
+  userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
     null,
     async () => await this.getUserFarmingDelegate(),
     noopMap
   );
 
-  currentTab: FarmingTabs = FarmingTabs.stake;
+  currentTab: FarmingFormTabs = FarmingFormTabs.stake;
 
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
@@ -106,7 +106,7 @@ export class FarmingItemStore {
     this.updateUserInfoInterval.stop();
   }
 
-  setTab(tab: FarmingTabs) {
+  setTab(tab: FarmingFormTabs) {
     this.currentTab = tab;
   }
 

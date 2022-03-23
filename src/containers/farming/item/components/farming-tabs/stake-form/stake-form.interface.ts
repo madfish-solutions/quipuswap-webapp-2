@@ -1,11 +1,11 @@
 export enum StakeFormFields {
   inputAmount = 'inputAmount',
   selectedBaker = 'selectedBaker',
-  farmingStatus = 'farmingStatus'
+  farmStatus = 'farmStatus'
 }
 
 export interface StakeFormValues {
   [StakeFormFields.inputAmount]: string;
   [StakeFormFields.selectedBaker]: string;
-  [StakeFormFields.farmingStatus]: string;
+  [StakeFormFields.farmStatus]: string;
 }

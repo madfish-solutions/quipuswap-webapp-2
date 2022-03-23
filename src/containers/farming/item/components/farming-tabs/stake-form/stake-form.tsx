@@ -25,7 +25,7 @@ export const StakeForm: FC = observer(() => {
     farmingItem,
     stakedTokenDecimals,
     bakerError,
-    farmingStatusError,
+    farmStatusError,
     disabled,
     handleBakerChange,
     tradeHref,
@@ -69,7 +69,7 @@ export const StakeForm: FC = observer(() => {
           </Button>
         )}
       </div>
-      <FarmingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={farmingStatusError} />
+      <FarmingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>

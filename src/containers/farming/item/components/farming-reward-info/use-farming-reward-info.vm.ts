@@ -11,7 +11,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, getUserFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
+  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -19,12 +19,12 @@ export const useFarmingRewardInfoViewModel = () => {
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
   const { data: userInfo } = userInfoStore;
-  const { data: delegateAddress } = getUserFarmingDelegateStore;
+  const { data: delegateAddress } = userFarmingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
   const userInfoStoreReady = userInfoStore.isReady || !walletIsConnected;
   const itemStoreReady = itemStore.isReady;
-  const farmingDelegateStoreReady = getUserFarmingDelegateStore.isReady || !walletIsConnected;
+  const farmingDelegateStoreReady = userFarmingDelegateStore.isReady || !walletIsConnected;
   const pendingRewardsReady = isExist(farmingItem?.earnBalance) || !walletIsConnected;
   const farmingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
   const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;

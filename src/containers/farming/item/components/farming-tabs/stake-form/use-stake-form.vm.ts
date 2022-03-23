@@ -66,7 +66,7 @@ export const useStakeFormViewModel = () => {
     initialValues: {
       [StakeFormFields.inputAmount]: '',
       [StakeFormFields.selectedBaker]: '',
-      [StakeFormFields.farmingStatus]: ''
+      [StakeFormFields.farmStatus]: ''
     },
     onSubmit: handleStakeSubmitAndUpdateData
   });
@@ -81,10 +81,10 @@ export const useStakeFormViewModel = () => {
 
   const inputAmountError = getFormikError(formik, StakeFormFields.inputAmount);
   const bakerError = getFormikError(formik, StakeFormFields.selectedBaker);
-  const farmingStatusError = getFormikError(formik, StakeFormFields.farmingStatus);
+  const farmStatusError = getFormikError(formik, StakeFormFields.farmStatus);
 
   const disabled =
-    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmingStatusError);
+    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmStatusError);
 
   const handleInputAmountChange = (value: string) => {
     farmingItemStore.setInputAmount(prepareNumberAsString(value));
@@ -118,7 +118,7 @@ export const useStakeFormViewModel = () => {
     farmingItem,
     stakedTokenDecimals: farmingItem?.stakedToken.metadata.decimals ?? DEFAULT_DECIMALS,
     bakerError,
-    farmingStatusError,
+    farmStatusError,
     disabled,
     tradeHref,
     investHref,

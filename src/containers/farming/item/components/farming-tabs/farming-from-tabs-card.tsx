@@ -4,15 +4,15 @@ import { Card, Tabs } from '@quipuswap/ui-kit';
 import { observer } from 'mobx-react-lite';
 
 import { Skeleton } from '@components/common/Skeleton';
-import { FarmingTabs } from '@containers/farming/item/types';
+import { FarmingFormTabs } from '@containers/farming/item/types';
 import styles from '@styles/CommonContainer.module.sass';
 
 import { StakeForm } from './stake-form/stake-form';
 import { UnstakeForm } from './unstake-form/unstake-form';
-import { TabsContent, useFarmingTabsCardViewModel } from './use-farming-tabs-card.vm';
+import { TabsContent, useFarmingFormTabsCardViewModel } from './use-farming-form-tabs-card.vm';
 
-export const FarmingTabsCard: FC = observer(() => {
-  const { farmingItem, currentTab, isStakeForm, changeTabHandle } = useFarmingTabsCardViewModel();
+export const FarmingFormTabsCard: FC = observer(() => {
+  const { farmingItem, currentTab, isStakeForm, changeTabHandle } = useFarmingFormTabsCardViewModel();
 
   if (!farmingItem) {
     return <Skeleton className={styles.Skeleton} />;
@@ -25,7 +25,7 @@ export const FarmingTabsCard: FC = observer(() => {
           <Tabs
             values={TabsContent}
             activeId={currentTab}
-            setActiveId={id => changeTabHandle(id as FarmingTabs)}
+            setActiveId={id => changeTabHandle(id as FarmingFormTabs)}
             className={styles.tabs}
           />
         ),

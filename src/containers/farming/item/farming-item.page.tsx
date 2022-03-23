@@ -10,7 +10,7 @@ import { isUndefined } from '@utils/helpers';
 
 import { FarmingDetails } from './components/farming-details';
 import { FarmingRewardInfo } from './components/farming-reward-info';
-import { FarmingTabsCard } from './components/farming-tabs/farming-tabs-card';
+import { FarmingFormTabsCard } from './components/farming-tabs/farming-from-tabs-card';
 import { useFarmingItemPageViewModel } from './use-farming-item-page.vm';
 
 export const FarmingItemPage: FC = observer(() => {
@@ -29,7 +29,7 @@ export const FarmingItemPage: FC = observer(() => {
       <PageTitle>{getTitle()}</PageTitle>
       <FarmingRewardInfo />
       <StickyBlock>
-        <FarmingTabsCard />
+        <FarmingFormTabsCard />
         <FarmingDetails />
       </StickyBlock>
     </>

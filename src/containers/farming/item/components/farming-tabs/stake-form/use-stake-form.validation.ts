@@ -7,26 +7,26 @@ import * as yup from 'yup';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { Undefined } from '@utils/types';
 
-import { farmingOperationAmountSchema } from '../../../helpers';
+import { operationAmountSchema } from '../../../helpers';
 import { StakeFormFields } from './stake-form.interface';
 import { useFarmingStatusValidation } from './use-farming-status.validation';
 
 export const useStakeFormValidation = (
   userBalance: Nullable<BigNumber>,
   canDelegate: boolean,
-  farmingStatus: Undefined<ActiveStatus>
+  farmStatus: Undefined<ActiveStatus>
 ) => {
-  const farmingStatusSchema = useFarmingStatusValidation(farmingStatus);
+  const farmStatusSchema = useFarmingStatusValidation(farmStatus);
 
   return useMemo(() => {
-    const inputAmountSchema = farmingOperationAmountSchema(userBalance);
+    const inputAmountSchema = operationAmountSchema(userBalance);
 
     const bakerSchema = canDelegate ? yup.string().required('Baker is required') : yup.string();
 
     return yup.object().shape({
       [StakeFormFields.inputAmount]: inputAmountSchema.required('Value is required'),
       [StakeFormFields.selectedBaker]: bakerSchema,
-      [StakeFormFields.farmingStatus]: farmingStatusSchema
+      [StakeFormFields.farmStatus]: farmStatusSchema
     });
-  }, [userBalance, canDelegate, farmingStatusSchema]);
+  }, [userBalance, canDelegate, farmStatusSchema]);
 };

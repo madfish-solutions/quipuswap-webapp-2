@@ -1,4 +1,4 @@
-export enum FarmingTabs {
+export enum FarmingFormTabs {
   stake = 'stake',
   unstake = 'unstake'
 }
