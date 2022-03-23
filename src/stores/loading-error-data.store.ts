@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 
 import { Undefined, Nullable } from '@utils/types';
 
@@ -25,8 +25,14 @@ export class LoadingErrorData<RawData, Data> {
 
       setRawData: action,
       startLoading: action,
-      finishLoading: action
+      finishLoading: action,
+
+      isReady: computed
     });
+  }
+
+  get isReady() {
+    return !this.isLoading && this.isInitialized;
   }
 
   setRawData(rawData: RawData) {

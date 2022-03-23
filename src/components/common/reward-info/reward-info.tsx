@@ -14,6 +14,7 @@ import styles from './reward-info.module.scss';
 
 interface Props {
   amount: Nullable<BigNumber>;
+  dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   className?: string;
   currency: string;
@@ -33,6 +34,7 @@ const ZERO_REWARDS = 0;
 
 export const RewardInfo: FC<Props> = ({
   amount,
+  dollarEquivalent,
   amountDecimals,
   className,
   onButtonClick,
@@ -50,8 +52,9 @@ export const RewardInfo: FC<Props> = ({
     <Card className={cx(styles.card, className)} header={header}>
       <div className={styles.container}>
         <PendingRewards
-          testId={rewardButtonAttributeTestId}
+          testId={pendingRewardAttributeTestId}
           amount={amount}
+          dollarEquivalent={dollarEquivalent}
           amountDecimals={amountDecimals}
           currency={currency}
           tooltip={rewardTooltip}
@@ -60,7 +63,7 @@ export const RewardInfo: FC<Props> = ({
           {children && <div className={styles.childrenContainer}>{children}</div>}
           <ConnectWalletOrDoSomething>
             <Button
-              testId={pendingRewardAttributeTestId}
+              testId={rewardButtonAttributeTestId}
               className={styles.button}
               onClick={onButtonClick}
               disabled={isButtonDisabled}

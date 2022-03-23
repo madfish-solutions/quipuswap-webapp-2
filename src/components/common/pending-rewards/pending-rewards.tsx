@@ -22,14 +22,22 @@ const modeClass = {
 
 interface Props extends DataTestAttribute {
   amount: Nullable<BigNumber>;
+  dollarEquivalent?: Nullable<BigNumber.Value>;
   amountDecimals?: number;
   currency: string;
   tooltip?: string;
 }
 
-export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, amountDecimals = USD_DECIMALS }) => {
+export const PendingRewards: FC<Props> = ({
+  amount,
+  currency,
+  tooltip,
+  testId,
+  dollarEquivalent,
+  amountDecimals = USD_DECIMALS
+}) => {
   const accountPkh = useAccountPkh();
-  const { t } = useTranslation(['stake']);
+  const { t } = useTranslation(['farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -38,20 +46,21 @@ export const PendingRewards: FC<Props> = ({ amount, currency, tooltip, testId, a
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>{t('stake|Your Pending Rewards')}</span>
+              <span className={styles.title}>{t('farm|Your Pending Rewards')}</span>
               {tooltip && <Tooltip content={tooltip} />}
             </div>
             <StateCurrencyAmount
               className={styles.amount}
               amount={amount}
               currency={currency}
+              dollarEquivalent={dollarEquivalent}
               amountDecimals={amountDecimals}
               isLeftCurrency={currency === '$'}
               testId={testId}
             />
           </>
         ) : (
-          <span className={styles.amount}>{t('stake|Earn extra income with QuipuSwap')}</span>
+          <span className={styles.amount}>{t('farm|Earn extra income with QuipuSwap')}</span>
         )}
       </div>
       <GobletIcon />

@@ -175,7 +175,12 @@ export const TokenInput: FC<Props> = ({
           />
           <div className={styles.dangerContainer}>
             {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
-            <Button disabled={disabled} theme="quaternary" className={styles.item4} textClassName={styles.item4Inner}>
+            <Button
+              disabled={disabled}
+              theme="quaternary"
+              className={cx(styles.item4, styles.frozen)}
+              textClassName={styles.item4Inner}
+            >
               {isBothTokensExist ? (
                 <TokensLogos
                   firstTokenIcon={firstTokenIcon}

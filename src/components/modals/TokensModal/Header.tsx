@@ -1,11 +1,12 @@
 import { FC, useCallback } from 'react';
 
-import { Input, NumberInput, Search } from '@quipuswap/ui-kit';
+import { Input, Search } from '@quipuswap/ui-kit';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { Field, FieldMetaState } from 'react-final-form';
 
 import s from '@components/modals/TokensModal/TokensModal.module.sass';
+import { NumberInput } from '@components/ui/number-input';
 import { parseNumber } from '@utils/helpers';
 import { validateMinMaxNonStrict } from '@utils/validators';
 
