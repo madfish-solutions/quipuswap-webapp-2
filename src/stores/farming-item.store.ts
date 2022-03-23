@@ -27,7 +27,7 @@ export class FarmingItemStore {
 
   itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
     null,
-    async () => await getFarmingItemApi(this.farmingId, this.rootStore.authStore, this.rootStore.tezos),
+    async () => await getFarmingItemApi(this.farmingId),
     mapFarmingItem
   );
 

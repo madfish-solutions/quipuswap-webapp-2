@@ -24,6 +24,7 @@ export const useGetFarmingItem = () => {
             farmingItemStore.userInfoStore.load(),
             farmingItemStore.userStakingDelegateStore.load()
           ]);
+          farmingItemStore.updatePendingRewards();
         } catch (error) {
           showErrorToast(error as Error);
         }

@@ -15,8 +15,7 @@ export const useUnstakingFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
-  const { itemStore, inputAmount } = farmingItemStore;
-  const { data: farmingItem } = itemStore;
+  const { inputAmount, farmingItem } = farmingItemStore;
 
   const userTokenBalance = farmingItem?.depositBalance ? bigNumberToString(farmingItem?.depositBalance) : undefined;
 
