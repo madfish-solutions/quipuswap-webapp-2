@@ -2,7 +2,7 @@ import { Nullable } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { SortDirection, SortField, sortStakingList } from '@containers/farming/list/components';
+import { SortDirection, SortField, sortFarmingList } from '@containers/farming/list/components';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { FarmingItem } from '@interfaces/farming.interfaces';
 import { isExist, isNull } from '@utils/helpers';
@@ -81,7 +81,7 @@ export class FarmingFilterStore {
       );
     }
 
-    return sortStakingList(list, this.sortField, this.sortDirection);
+    return sortFarmingList(list, this.sortField, this.sortDirection);
   }
 
   setStakedOnly(state: boolean) {

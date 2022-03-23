@@ -8,10 +8,10 @@ import { bigNumberToString, defined, isExist, prepareNumberAsString, toDecimals 
 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
-import { UnstakingFormFields, UnstakingFormValues } from './unstaking-form.interface';
-import { useUnstakingFormValidation } from './use-unstaking-form.validation';
+import { UnstakeFormFields, UnstakeFormValues } from './unstake-form.interface';
+import { useUnstakeFormValidation } from './use-unstake-form.validation';
 
-export const useUnstakingFormViewModel = () => {
+export const useUnstakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
@@ -19,9 +19,9 @@ export const useUnstakingFormViewModel = () => {
 
   const userTokenBalance = farmingItem?.depositBalance ? bigNumberToString(farmingItem?.depositBalance) : undefined;
 
-  const validationSchema = useUnstakingFormValidation(farmingItem?.depositBalance ?? null);
+  const validationSchema = useUnstakeFormValidation(farmingItem?.depositBalance ?? null);
 
-  const handleUnstakeSubmit = async (_: UnstakingFormValues, actions: FormikHelpers<UnstakingFormValues>) => {
+  const handleUnstakeSubmit = async (_: UnstakeFormValues, actions: FormikHelpers<UnstakeFormValues>) => {
     actions.setSubmitting(true);
     const token = defined(farmingItem).stakedToken;
     const inputAmountWithDecimals = toDecimals(inputAmount, token);
@@ -32,8 +32,8 @@ export const useUnstakingFormViewModel = () => {
   };
 
   const handleUnstakeSubmitAndUpdateData = async (
-    values: UnstakingFormValues,
-    actions: FormikHelpers<UnstakingFormValues>
+    values: UnstakeFormValues,
+    actions: FormikHelpers<UnstakeFormValues>
   ) => {
     await handleUnstakeSubmit(values, actions);
 
@@ -42,28 +42,28 @@ export const useUnstakingFormViewModel = () => {
 
   const formik = useFormik({
     initialValues: {
-      [UnstakingFormFields.inputAmount]: ''
+      [UnstakeFormFields.inputAmount]: ''
     },
     validationSchema: validationSchema,
     onSubmit: handleUnstakeSubmitAndUpdateData
   });
 
-  const ustakingAmountError = getFormikError(formik, UnstakingFormFields.inputAmount);
+  const unstakeAmountError = getFormikError(formik, UnstakeFormFields.inputAmount);
 
-  const disabled = formik.isSubmitting || isExist(ustakingAmountError);
+  const disabled = formik.isSubmitting || isExist(unstakeAmountError);
   const inputAmountError =
-    formik.errors[UnstakingFormFields.inputAmount] && formik.touched[UnstakingFormFields.inputAmount]
-      ? formik.errors[UnstakingFormFields.inputAmount]
+    formik.errors[UnstakeFormFields.inputAmount] && formik.touched[UnstakeFormFields.inputAmount]
+      ? formik.errors[UnstakeFormFields.inputAmount]
       : undefined;
 
   const handleInputAmountChange = (value: string) => {
     farmingItemStore.setInputAmount(prepareNumberAsString(value));
-    formik.setFieldValue(UnstakingFormFields.inputAmount, value);
+    formik.setFieldValue(UnstakeFormFields.inputAmount, value);
   };
 
   return {
     handleSubmit: formik.handleSubmit,
-    inputAmount: formik.values[UnstakingFormFields.inputAmount],
+    inputAmount: formik.values[UnstakeFormFields.inputAmount],
     isSubmitting: formik.isSubmitting,
     userTokenBalance,
     inputAmountError,

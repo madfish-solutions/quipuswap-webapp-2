@@ -21,12 +21,12 @@ import { WhitelistedBaker } from '@utils/types';
 import { useDoStake } from '../../../../hooks/use-do-stake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
 import { canDelegate } from '../../../helpers';
-import { StakingFormFields, StakingFormValues } from './staking-form.interface';
-import { useStakingFormValidation } from './use-staking-form.validation';
+import { StakeFormFields, StakeFormValues } from './stake-form.interface';
+import { useStakeFormValidation } from './use-stake-form.validation';
 
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 
-export const useStakingFormViewModel = () => {
+export const useStakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
@@ -39,10 +39,10 @@ export const useStakingFormViewModel = () => {
   const shouldShowBakerInput = isNull(farmingItem) || canDelegate(farmingItem);
   const prevShouldShowBakerInputRef = useRef(true);
 
-  const validationSchema = useStakingFormValidation(availableBalance, shouldShowBakerInput, farmingItem?.stakeStatus);
+  const validationSchema = useStakeFormValidation(availableBalance, shouldShowBakerInput, farmingItem?.stakeStatus);
   const isStakingAvailable = farmingItem?.stakeStatus === ActiveStatus.ACTIVE;
 
-  const handleStakeSubmit = async (_: StakingFormValues, actions: FormikHelpers<StakingFormValues>) => {
+  const handleStakeSubmit = async (_: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
     actions.setSubmitting(true);
 
     if (isStakingAvailable) {
@@ -56,8 +56,8 @@ export const useStakingFormViewModel = () => {
   };
 
   const handleStakeSubmitAndUpdateData = async (
-    values: StakingFormValues,
-    actions: FormikHelpers<StakingFormValues>
+    values: StakeFormValues,
+    actions: FormikHelpers<StakeFormValues>
   ) => {
     await handleStakeSubmit(values, actions);
 
@@ -67,36 +67,36 @@ export const useStakingFormViewModel = () => {
   const formik = useFormik({
     validationSchema,
     initialValues: {
-      [StakingFormFields.inputAmount]: '',
-      [StakingFormFields.selectedBaker]: '',
-      [StakingFormFields.stakingStatus]: ''
+      [StakeFormFields.inputAmount]: '',
+      [StakeFormFields.selectedBaker]: '',
+      [StakeFormFields.farmingStatus]: ''
     },
     onSubmit: handleStakeSubmitAndUpdateData
   });
 
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
-      formik.setFieldValue(StakingFormFields.selectedBaker, '');
+      formik.setFieldValue(StakeFormFields.selectedBaker, '');
       farmingItemStore.setSelectedBaker(getDummyBaker(shouldShowBakerInput));
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, farmingItemStore]);
 
-  const inputAmountError = getFormikError(formik, StakingFormFields.inputAmount);
-  const bakerError = getFormikError(formik, StakingFormFields.selectedBaker);
-  const stakingStatusError = getFormikError(formik, StakingFormFields.stakingStatus);
+  const inputAmountError = getFormikError(formik, StakeFormFields.inputAmount);
+  const bakerError = getFormikError(formik, StakeFormFields.selectedBaker);
+  const farmingStatusError = getFormikError(formik, StakeFormFields.farmingStatus);
 
   const disabled =
-    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(stakingStatusError);
+    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmingStatusError);
 
   const handleInputAmountChange = (value: string) => {
     farmingItemStore.setInputAmount(prepareNumberAsString(value));
-    formik.setFieldValue(StakingFormFields.inputAmount, value);
+    formik.setFieldValue(StakeFormFields.inputAmount, value);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
     farmingItemStore.setSelectedBaker(baker);
-    formik.setFieldValue(StakingFormFields.selectedBaker, baker.address);
+    formik.setFieldValue(StakeFormFields.selectedBaker, baker.address);
   };
 
   const { tradeHref, investHref } = useMemo(() => {
@@ -111,17 +111,17 @@ export const useStakingFormViewModel = () => {
   }, [farmingItem]);
 
   return {
-    bakerInputValue: formik.values[StakingFormFields.selectedBaker],
+    bakerInputValue: formik.values[StakeFormFields.selectedBaker],
     shouldShowBakerInput,
     handleSubmit: formik.handleSubmit,
-    inputAmount: formik.values[StakingFormFields.inputAmount],
+    inputAmount: formik.values[StakeFormFields.inputAmount],
     isSubmitting: formik.isSubmitting,
     userTokenBalance,
     inputAmountError,
     farmingItem,
     stakedTokenDecimals: farmingItem?.stakedToken.metadata.decimals ?? DEFAULT_DECIMALS,
     bakerError,
-    stakingStatusError,
+    farmingStatusError,
     disabled,
     tradeHref,
     investHref,

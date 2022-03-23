@@ -66,7 +66,7 @@ const sortByEarned = (first: FarmingItem, second: FarmingItem, sortDirection: So
   return sortBigNumber(earnA, earnB, sortDirection);
 };
 
-const stakingSorts = {
+const farmingSorts = {
   [SortField.ID]: sortById,
   [SortField.APR]: sortByApr,
   [SortField.APY]: sortByApy,
@@ -76,18 +76,18 @@ const stakingSorts = {
   [SortField.EARNED]: sortByEarned
 };
 
-const sortStaking = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) => {
-  return stakingSorts[sortField](first, second, sortDirection);
+const sortFarming = (first: FarmingItem, second: FarmingItem, sortField: SortField, sortDirection: SortDirection) => {
+  return farmingSorts[sortField](first, second, sortDirection);
 };
 
-export const sortStakingList = (list: Array<FarmingItem>, sortField: SortField, sortDirection: SortDirection) => {
+export const sortFarmingList = (list: Array<FarmingItem>, sortField: SortField, sortDirection: SortDirection) => {
   if (isNull(sortField)) {
     return list;
   }
 
   const localList = cloneArray(list);
 
-  localList.sort((first, second) => sortStaking(first, second, sortField, sortDirection));
+  localList.sort((first, second) => sortFarming(first, second, sortField, sortDirection));
 
   return localList;
 };

@@ -18,7 +18,7 @@ export const makeBaker = (delegateAddress: Optional<string>, knownBakers: Whitel
 
 export const canDelegate = (farmingItem: FarmingItem) => isTezosToken(farmingItem.tokenA);
 
-export const stakingOperationAmountSchema = (balance: Nullable<BigNumber>) =>
+export const farmingOperationAmountSchema = (balance: Nullable<BigNumber>) =>
   balance
     ? numberAsStringSchema(
         { value: ZERO, isInclusive: false },

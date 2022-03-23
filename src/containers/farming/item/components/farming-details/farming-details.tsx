@@ -119,8 +119,8 @@ export const FarmingDetails: FC = observer(() => {
       )}
 
       <DetailsCardCell
-        cellName={t('farm|stakingEndsIn')}
-        tooltipContent={t('farm|stakingEndsInTooltip')}
+        cellName={t('farm|farmingEndsIn')}
+        tooltipContent={t('farm|farmingEndsInTooltip')}
         className={CardCellClassName}
       >
         <StateData isLoading={isLoading} data={endTime}>

@@ -11,7 +11,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, userStakingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
+  const { itemStore, getUserFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();
@@ -19,15 +19,15 @@ export const useFarmingRewardInfoViewModel = () => {
   const { data: bakers, loading: bakersLoading } = useBakers();
   const dAppReady = useReady();
   const { data: userInfo } = userInfoStore;
-  const { data: delegateAddress } = userStakingDelegateStore;
+  const { data: delegateAddress } = getUserFarmingDelegateStore;
 
   const walletIsConnected = isExist(accountPkh);
   const userInfoStoreReady = userInfoStore.isReady || !walletIsConnected;
   const itemStoreReady = itemStore.isReady;
-  const stakingDelegateStoreReady = userStakingDelegateStore.isReady || !walletIsConnected;
+  const farmingDelegateStoreReady = getUserFarmingDelegateStore.isReady || !walletIsConnected;
   const pendingRewardsReady = isExist(farmingItem?.earnBalance) || !walletIsConnected;
-  const stakingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
-  const delegatesLoading = bakersLoading || stakingLoading || !stakingDelegateStoreReady;
+  const farmingLoading = !dAppReady || !userInfoStoreReady || !itemStoreReady || !pendingRewardsReady;
+  const delegatesLoading = bakersLoading || farmingLoading || !farmingDelegateStoreReady;
 
   const handleHarvest = async () => {
     await doHarvest(farmingItem);
@@ -47,7 +47,7 @@ export const useFarmingRewardInfoViewModel = () => {
       myDepositDollarEquivalent: null,
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
       rewardTokenDecimals: 0,
-      stakingLoading,
+      farmingLoading,
       timelock: null,
       handleHarvest
     };
@@ -69,7 +69,7 @@ export const useFarmingRewardInfoViewModel = () => {
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
     rewardTokenDecimals: farmingItem.rewardToken.metadata.decimals,
-    stakingLoading,
+    farmingLoading,
     timelock: farmingItem.timelock,
     handleHarvest
   };
