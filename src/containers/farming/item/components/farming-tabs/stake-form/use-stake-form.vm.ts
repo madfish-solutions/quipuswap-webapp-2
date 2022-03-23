@@ -55,10 +55,7 @@ export const useStakeFormViewModel = () => {
     actions.setSubmitting(false);
   };
 
-  const handleStakeSubmitAndUpdateData = async (
-    values: StakeFormValues,
-    actions: FormikHelpers<StakeFormValues>
-  ) => {
+  const handleStakeSubmitAndUpdateData = async (values: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
     await handleStakeSubmit(values, actions);
 
     await delayedGetFarmingItem(defined(farmingItem).id);
