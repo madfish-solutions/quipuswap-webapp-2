@@ -45,7 +45,7 @@ export class FarmingItemStore {
 
   getUserFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
     null,
-    async () => await this.getUseringDelegate(),
+    async () => await this.getUserFarmingDelegate(),
     noopMap
   );
 
@@ -148,7 +148,7 @@ export class FarmingItemStore {
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }
 
-  private async getUseringDelegate() {
+  private async getUserFarmingDelegate() {
     const { tezos, authStore } = this.rootStore;
     const { data: item } = this.itemStore;
 
