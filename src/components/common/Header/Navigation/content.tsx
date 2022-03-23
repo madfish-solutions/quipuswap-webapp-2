@@ -3,7 +3,7 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { StakeIcon } from '@components/svg/Sidebar/StakeIcon';
+import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';
 
 interface LinkInterface {
   id: number;
@@ -50,10 +50,10 @@ export const navigationData: NavigationDataProps[] = [
   },
   {
     id: 4,
-    href: '/staking',
-    as: `/staking`,
-    label: <Trans ns="common">Staking</Trans>,
-    Icon: StakeIcon
+    href: '/farming',
+    as: `/farming`,
+    label: <Trans ns="common">Farming</Trans>,
+    Icon: FarmIcon
   },
   // {
   //   id: 5,

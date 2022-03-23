@@ -1,0 +1,65 @@
+import { FormEvent } from 'react';
+
+import { useTranslation } from 'next-i18next';
+
+import { useAuthStore } from '@hooks/stores/use-auth-store';
+import { useFarmingFilterStore } from '@hooks/stores/use-farming-filter-store';
+import { isNull } from '@utils/helpers';
+
+export const useListFilterViewModel = () => {
+  const { t } = useTranslation(['common', 'farm']);
+  const farmingFilterStore = useFarmingFilterStore();
+  const { accountPkh } = useAuthStore();
+
+  const { search, tokenIdValue } = farmingFilterStore;
+
+  const setStakedOnly = (state: boolean) => {
+    return farmingFilterStore.setStakedOnly(state);
+  };
+
+  const setActiveOnly = (state: boolean) => {
+    return farmingFilterStore.setActiveOnly(state);
+  };
+
+  const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
+    if (isNull(e)) {
+      return;
+    }
+    farmingFilterStore.onSearchChange((e.target as HTMLInputElement).value);
+  };
+
+  const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
+    if (isNull(e) || isNull(e.target)) {
+      return;
+    }
+    farmingFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
+  };
+
+  const handleIncrement = () => {
+    farmingFilterStore.handleIncrement();
+  };
+
+  const handleDecrement = () => {
+    farmingFilterStore.handleDecrement();
+  };
+
+  const translation = {
+    inputPlaceholderTranslation: t('common|Search'),
+    numberInputPlaceholderTranslation: t('common|Token ID'),
+    stakedOnlyTranslation: t('farm|stakedOnly'),
+    activeOnlyTranslation: t('farm|activeOnly')
+  };
+
+  return {
+    search,
+    tokenIdValue,
+    isStakedOnlyDisabled: isNull(accountPkh),
+    setStakedOnly,
+    setActiveOnly,
+    onSearchChange,
+    onTokenIdChange,
+    handleIncrement,
+    handleDecrement,
+    translation
+  };
+};
