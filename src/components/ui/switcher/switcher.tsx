@@ -4,11 +4,10 @@ import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
 import styles from './switcher.module.scss';
-import { useSwitcherViewModel } from './switcher.vm';
 
 interface Props {
-  onChange: (state: boolean) => void;
-  initialValue: boolean;
+  onClick: (state: boolean) => void;
+  value: boolean;
   disabled?: boolean;
 }
 
@@ -17,20 +16,13 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Switcher: FC<Props> = ({ onChange, disabled, initialValue }) => {
+export const Switcher: FC<Props> = ({ onClick, disabled, value }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const { state, handleClick } = useSwitcherViewModel(initialValue);
 
   const compoundClassName = cx(modeClass[colorThemeMode], styles.switcher, {
-    [styles.active]: Boolean(state),
+    [styles.active]: Boolean(value),
     [styles.disabled]: Boolean(disabled)
   });
 
-  const onClick = () => {
-    if (!disabled) {
-      handleClick(onChange);
-    }
-  };
-
-  return <div onClick={onClick} className={compoundClassName}></div>;
+  return <div onClick={() => onClick(!value)} className={compoundClassName}></div>;
 };
