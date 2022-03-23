@@ -83,8 +83,7 @@ export const useStakeFormViewModel = () => {
   const bakerError = getFormikError(formik, StakeFormFields.selectedBaker);
   const farmStatusError = getFormikError(formik, StakeFormFields.farmStatus);
 
-  const disabled =
-    formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmStatusError);
+  const disabled = formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmStatusError);
 
   const handleInputAmountChange = (value: string) => {
     farmingItemStore.setInputAmount(prepareNumberAsString(value));
