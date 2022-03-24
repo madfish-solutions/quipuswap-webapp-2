@@ -27,7 +27,7 @@ export const OpportunityCard: React.FC<OpportunityCardProps> = ({ className, Ico
       <Icon className={s.icon} />
       <h3 className={s.title}>{title}</h3>
       <p className={s.description}>{description}</p>
-      <Button {...props} disabled={!!button.disabled} className={s.button}>
+      <Button test-id="Cards" {...props} disabled={!!button.disabled} className={s.button}>
         {button.label}
       </Button>
     </Card>
