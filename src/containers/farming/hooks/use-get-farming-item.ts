@@ -22,7 +22,7 @@ export const useGetFarmingItem = () => {
           await Promise.all([
             farmingItemStore.availableBalanceStore.load(),
             farmingItemStore.userInfoStore.load(),
-            farmingItemStore.userStakingDelegateStore.load()
+            farmingItemStore.userFarmingDelegateStore.load()
           ]);
           farmingItemStore.updatePendingRewards();
         } catch (error) {

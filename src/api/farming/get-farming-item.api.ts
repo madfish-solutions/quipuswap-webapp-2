@@ -8,7 +8,7 @@ const FARMING_LIST_API_URL = `${FARMING_API_URL}/list`;
 
 export const getFarmingItemApi = async (farmingId: Nullable<BigNumber>) => {
   if (!farmingId) {
-    throw new Error('Failed to get nullable stakingId');
+    throw new Error('Failed to get nullable farmingId');
   }
 
   const response = await fetch(`${FARMING_LIST_API_URL}/${farmingId.toFixed()}`);

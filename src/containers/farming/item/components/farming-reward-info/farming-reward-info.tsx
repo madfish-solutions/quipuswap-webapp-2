@@ -40,7 +40,7 @@ export const FarmingRewardInfo: FC = observer(() => {
     myRewardInUsd,
     rewardTokenDecimals,
     rewardTokenSymbol,
-    stakingLoading,
+    farmingLoading,
     timelock,
     handleHarvest
   } = useFarmingRewardInfoViewModel();
@@ -64,10 +64,10 @@ export const FarmingRewardInfo: FC = observer(() => {
     >
       <FarmingStatsItem
         itemName={t('farm|Your Share')}
-        loading={stakingLoading}
+        loading={farmingLoading}
         tooltipContent={t('farm|yourShareTooltip')}
       >
-        <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={stakingLoading}>
+        <StateData data={farmingItem} Fallback={RewardDashPlugFallback} isLoading={farmingLoading}>
           {({ depositBalance, stakedToken }) => (
             <StateCurrencyAmount
               amount={depositBalance}
@@ -105,7 +105,7 @@ export const FarmingRewardInfo: FC = observer(() => {
       {timelock !== NO_TIMELOCK_VALUE && (
         <FarmingStatsItem
           itemName={t('farm|Withdrawal fee ends in')}
-          loading={stakingLoading}
+          loading={farmingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>

@@ -16,7 +16,7 @@ interface Props {
   errorMessage: Undefined<string>;
   className?: string;
 }
-export const StakingAlert: FC<Props> = ({ variant, errorMessage, className }) => {
+export const FarmingAlert: FC<Props> = ({ variant, errorMessage, className }) => {
   if (!errorMessage || variant === ActiveStatus.ACTIVE) {
     return null;
   }

@@ -47,7 +47,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
     selectTranslation,
     fullCardTooltipTranslation,
     tokenContractTranslation,
-    stakeContractTranslation,
+    farmingContractTranslation,
     tvlTranslation,
     tvlTooltipTranslation,
     aprTranslation,
@@ -174,8 +174,8 @@ export const FarmingListItem: FC<FarmingItem> = ({
               {tokenContractTranslation}
             </Button>
 
-            <Button href={stakeUrl} external theme={LINKS_THEME} title={stakeContractTranslation}>
-              {stakeContractTranslation}
+            <Button href={stakeUrl} external theme={LINKS_THEME} title={farmingContractTranslation}>
+              {farmingContractTranslation}
             </Button>
           </div>
 

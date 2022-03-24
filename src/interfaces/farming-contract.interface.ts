@@ -9,7 +9,7 @@ export interface FarmingContractStorageWrapper {
 }
 
 export interface FarmingContractStorage {
-  farms: BigMap<nat, FarmingValue>;
+  farms: BigMap<nat, FarmsValue>;
   referrers: BigMap<address, address>;
   users_info: BigMap<UsersInfoKey, UsersInfoValue>;
   votes: BigMap<VotesKey, nat>;
@@ -25,10 +25,10 @@ export interface FarmingContractStorage {
   farms_count: nat;
 }
 
-export interface FarmingValue {
+export interface FarmsValue {
   fees: Fees;
   upd: timestamp;
-  stake_params: FarmingParams;
+  stake_params: StakeParams;
   reward_token: RewardToken;
   timelock: nat;
   current_delegated: key_hash;
@@ -48,7 +48,7 @@ export interface Fees {
   withdrawal_fee: nat;
 }
 
-export interface FarmingParams {
+export interface StakeParams {
   staked_token: StakedToken;
   is_v1_lp: boolean;
 }

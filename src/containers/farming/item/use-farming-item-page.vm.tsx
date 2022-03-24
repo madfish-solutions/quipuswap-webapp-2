@@ -11,7 +11,7 @@ import { useAccountPkh, useReady } from '@utils/dapp';
 import { getTokensName, isNull, isUndefined } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
-import stakingPageStyles from './farming-item.page.module.sass';
+import styles from './farming-item.page.module.sass';
 
 export const useFarmingItemPageViewModel = () => {
   const router = useRouter();
@@ -52,7 +52,7 @@ export const useFarmingItemPageViewModel = () => {
       return t('farm|Failed to load farming');
     }
 
-    return <DashPlug animation={true} className={stakingPageStyles.titleLoader} zoom={1.45} />;
+    return <DashPlug animation={true} className={styles.titleLoader} zoom={1.45} />;
   };
 
   return { isLoading, farmingItem, getTitle };

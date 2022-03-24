@@ -15,7 +15,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-const StakingItem = () => {
+const FarmingItem = () => {
   const { t } = useTranslation(['common', 'privacy', 'farm']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -31,7 +31,7 @@ const StakingItem = () => {
 };
 
 // eslint-disable-next-line import/no-default-export
-export default StakingItem;
+export default FarmingItem;
 
 // @ts-ignore
 export const getServerSideProps = async props => {

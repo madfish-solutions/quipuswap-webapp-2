@@ -9,10 +9,10 @@ import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 import { isNull } from '@utils/helpers';
 
-import { StakingAlert } from '../../farming-alert';
-import { useStakingFormViewModel } from './use-staking-form.vm';
+import { FarmingAlert } from '../../farming-alert';
+import { useStakeFormViewModel } from './use-stake-form.vm';
 
-export const StakingForm: FC = observer(() => {
+export const StakeForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'farm']);
   const {
     bakerInputValue,
@@ -25,13 +25,13 @@ export const StakingForm: FC = observer(() => {
     farmingItem,
     stakedTokenDecimals,
     bakerError,
-    stakingStatusError,
+    farmStatusError,
     disabled,
     handleBakerChange,
     tradeHref,
     investHref,
     handleInputAmountChange
-  } = useStakingFormViewModel();
+  } = useStakeFormViewModel();
 
   if (!farmingItem) {
     return null;
@@ -40,7 +40,7 @@ export const StakingForm: FC = observer(() => {
   return (
     <form onSubmit={handleSubmit}>
       <TokenInput
-        id="staking-form"
+        id="stake-form"
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
@@ -69,11 +69,11 @@ export const StakingForm: FC = observer(() => {
           </Button>
         )}
       </div>
-      <StakingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={stakingStatusError} />
+      <FarmingAlert className={s.mt16} variant={farmingItem.stakeStatus} errorMessage={farmStatusError} />
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
-            {t('stake|Stake')}
+            {t('farm|Stake')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>

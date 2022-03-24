@@ -8,9 +8,9 @@ import { TokenInput } from '@components/ui/ComplexInput';
 import { Button } from '@components/ui/elements/button';
 import s from '@styles/CommonContainer.module.sass';
 
-import { useUnstakingFormViewModel } from './use-unstaking-form.vm';
+import { useUnstakeFormViewModel } from './use-unstake-form.vm';
 
-export const UnstakingForm: FC = observer(() => {
+export const UnstakeForm: FC = observer(() => {
   const { t } = useTranslation(['common', 'farm']);
   const {
     inputAmount,
@@ -22,7 +22,7 @@ export const UnstakingForm: FC = observer(() => {
     stakedTokenDecimals,
     disabled,
     handleInputAmountChange
-  } = useUnstakingFormViewModel();
+  } = useUnstakeFormViewModel();
 
   if (!farmingItem) {
     return null;
@@ -31,7 +31,7 @@ export const UnstakingForm: FC = observer(() => {
   return (
     <form onSubmit={handleSubmit}>
       <TokenInput
-        id="unstaking-form"
+        id="unstake-form"
         label={t('common|Amount')}
         value={inputAmount}
         balance={userTokenBalance}
@@ -44,7 +44,7 @@ export const UnstakingForm: FC = observer(() => {
       <div className={s.buttons}>
         <ConnectWalletOrDoSomething>
           <Button type="submit" className={s.button} disabled={disabled} loading={isSubmitting}>
-            {t('stake|Unstake')}
+            {t('farm|Unstake')}
           </Button>
         </ConnectWalletOrDoSomething>
       </div>
