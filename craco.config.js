@@ -16,7 +16,8 @@ module.exports = {
           os: require.resolve("os-browserify/browser"),
           https: require.resolve("https-browserify"),
           http: require.resolve("stream-http"),
-          path: require.resolve("path-browserify")
+          path: require.resolve("path-browserify"),
+          fs: false
         },
       },
       plugins: [
