@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { render } from 'react-dom';
 
-import { App } from 'App';
-
+import App from './App';
 import { DAppProvider } from './providers/use-dapp';
 import { WalletWrapper } from './providers/wallet-wrapper';
 

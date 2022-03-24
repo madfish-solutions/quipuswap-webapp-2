@@ -3,7 +3,7 @@
     "baseUrl": "./src",
     "paths": {
       "@shared": ["./shared"],
-      "@providers": ["./providers"],
+      "@providers": ["./providers"]
     }
   }
 }
