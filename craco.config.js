@@ -1,4 +1,5 @@
 const webpack = require("webpack");
+const CracoAlias = require("craco-alias");
 
 module.exports = {
   webpack: {
@@ -11,7 +12,7 @@ module.exports = {
           util: require.resolve("util"),
           buffer: require.resolve("buffer"),
           asset: require.resolve("assert"),
-          crypto: require.resolve("crypto-browserify"), 
+          crypto: require.resolve("crypto-browserify"),
           url: require.resolve("url"),
           os: require.resolve("os-browserify/browser"),
           https: require.resolve("https-browserify"),
@@ -28,4 +29,14 @@ module.exports = {
       ],
     },
   },
+  plugins: [
+    {
+      plugin: CracoAlias,
+      options: {
+        source: "tsconfig",
+        baseUrl: "./src",
+        tsConfigPath: "./tsconfig.paths.json"
+      }
+    }
+  ]
 };

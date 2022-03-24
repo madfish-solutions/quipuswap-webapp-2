@@ -1,5 +1,6 @@
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
-import { ConnectWalletButton } from './shared/components/connect-button';
+import { ConnectWalletButton } from '@shared';
+
 
 function App() {
   return (
