@@ -1,2 +1,2 @@
-export * from './AccountModal'
-export * from './WalletModal'
+export * from './AccountModal';
+export * from './WalletModal';

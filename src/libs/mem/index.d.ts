@@ -1,23 +1,25 @@
+/* eslint-disable import/no-default-export */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare type AnyFunction = (...arguments_: any) => any;
 interface CacheStorageContent<ValueType> {
-    data: ValueType;
-    maxAge: number;
+  data: ValueType;
+  maxAge: number;
 }
 interface CacheStorage<KeyType, ValueType> {
-    has: (key: KeyType) => boolean;
-    get: (key: KeyType) => CacheStorageContent<ValueType> | undefined;
-    set: (key: KeyType, value: CacheStorageContent<ValueType>) => void;
-    delete: (key: KeyType) => void;
-    clear?: () => void;
+  has: (key: KeyType) => boolean;
+  get: (key: KeyType) => CacheStorageContent<ValueType> | undefined;
+  set: (key: KeyType, value: CacheStorageContent<ValueType>) => void;
+  delete: (key: KeyType) => void;
+  clear?: () => void;
 }
 export interface Options<FunctionToMemoize extends AnyFunction, CacheKeyType> {
-    /**
+  /**
     Milliseconds until the cache expires.
 
     @default Infinity
     */
-    readonly maxAge?: number;
-    /**
+  readonly maxAge?: number;
+  /**
     Determines the cache key for storing the result based on the function arguments. By default, __only the first argument is considered__ and it only works with [primitives](https://developer.mozilla.org/en-US/docs/Glossary/Primitive).
 
     A `cacheKey` function can return any type supported by `Map` (or whatever structure you use in the `cache` option).
@@ -42,14 +44,14 @@ export interface Options<FunctionToMemoize extends AnyFunction, CacheKeyType> {
     @default arguments_ => arguments_[0]
     @example arguments_ => JSON.stringify(arguments_)
     */
-    readonly cacheKey?: (arguments_: Parameters<FunctionToMemoize>) => CacheKeyType;
-    /**
+  readonly cacheKey?: (arguments_: Parameters<FunctionToMemoize>) => CacheKeyType;
+  /**
     Use a different cache storage. Must implement the following methods: `.has(key)`, `.get(key)`, `.set(key, value)`, `.delete(key)`, and optionally `.clear()`. You could for example use a `WeakMap` instead or [`quick-lru`](https://github.com/sindresorhus/quick-lru) for a LRU cache.
 
     @default new Map()
     @example new WeakMap()
     */
-    readonly cache?: CacheStorage<CacheKeyType, ReturnType<FunctionToMemoize>>;
+  readonly cache?: CacheStorage<CacheKeyType, ReturnType<FunctionToMemoize>>;
 }
 /**
 [Memoize](https://en.wikipedia.org/wiki/Memoization) functions - An optimization used to speed up consecutive function calls by caching the result of calls with identical input.
@@ -79,7 +81,10 @@ memoized('bar');
 //=> 2
 ```
 */
-export default function mem<FunctionToMemoize extends AnyFunction, CacheKeyType>(fn: FunctionToMemoize, { cacheKey, cache, maxAge, }?: Options<FunctionToMemoize, CacheKeyType>): FunctionToMemoize;
+export default function mem<FunctionToMemoize extends AnyFunction, CacheKeyType>(
+  fn: FunctionToMemoize,
+  { cacheKey, cache, maxAge }?: Options<FunctionToMemoize, CacheKeyType>
+): FunctionToMemoize;
 /**
 @returns A [decorator](https://github.com/tc39/proposal-decorators) to memoize class methods or static class methods.
 
@@ -106,7 +111,9 @@ class ExampleWithOptions {
 }
 ```
 */
-export declare function memDecorator<FunctionToMemoize extends AnyFunction, CacheKeyType>(options?: Options<FunctionToMemoize, CacheKeyType>): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
+export declare function memDecorator<FunctionToMemoize extends AnyFunction, CacheKeyType>(
+  options?: Options<FunctionToMemoize, CacheKeyType>
+): (target: any, propertyKey: string, descriptor: PropertyDescriptor) => void;
 /**
 Clear all cached data of a memoized function.
 

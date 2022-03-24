@@ -1,5 +1,9 @@
 import { RpcClient } from '@taquito/rpc';
+
 import mem from '../../libs/mem';
+
+const REFRESH_INTERVAL = 20_000; // 20 src
+const MEM_MAX_AGE = 180_000; // 3 min
 
 interface RPCOptions {
   block: string;
@@ -29,9 +33,9 @@ function onlyOncePerExec<T>(factory: () => Promise<T>) {
 
 /* eslint-disable no-param-reassign */
 export class FastRpcClient extends RpcClient {
-  refreshInterval = 20_000; // 20 src
+  refreshInterval = REFRESH_INTERVAL;
 
-  memMaxAge = 180_000; // 3 min
+  memMaxAge = MEM_MAX_AGE;
 
   private latestBlock?: {
     hash: string;

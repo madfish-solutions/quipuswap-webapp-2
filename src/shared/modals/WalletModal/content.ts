@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { Beacon, Temple } from '@quipuswap/ui-kit';
-import { WalletType } from '../../../types/types';
 
+import { WalletType } from '../../../types/types';
 
 interface WalletProps {
   id: WalletType;

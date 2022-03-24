@@ -1,13 +1,10 @@
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import { ConnectWalletButton } from '@shared';
 
-
-function App() {
+export const App = () => {
   return (
     <div className="App">
-      <ConnectWalletButton/>
+      <ConnectWalletButton />
     </div>
   );
-}
-
-export default App;
+};
