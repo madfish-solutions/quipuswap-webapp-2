@@ -6,6 +6,7 @@ import { ConnectWalletButton } from '@shared';
 export default function App() {
 
 
+
   return (
     <div className="App">
       <ConnectWalletButton />

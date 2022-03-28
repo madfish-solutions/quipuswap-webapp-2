@@ -26,6 +26,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   description:
     'Tezos mainnet',
   disabled:            false
+
 };
 
 export const HANGZHOUNET_NETWORK: QSNetwork = {
