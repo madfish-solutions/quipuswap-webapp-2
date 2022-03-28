@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-type-alias */
 import { MichelsonMap } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
@@ -11,7 +10,7 @@ export interface FarmingContractStorageWrapper {
 export interface FarmingContractStorage {
   farms: BigMap<nat, FarmsValue>;
   referrers: BigMap<address, address>;
-  users_info: BigMap<UsersInfoKey, UsersInfoValue>;
+  users_info: BigMap<UsersInfoKey, RawFarmingUserInfo>;
   votes: BigMap<VotesKey, nat>;
   candidates: BigMap<CandidatesKey, key_hash>;
   banned_bakers: BigMap<key_hash, BannedBakersValue>;
@@ -53,7 +52,9 @@ export interface StakeParams {
   is_v1_lp: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type StakedToken = ContractToken;
+// eslint-disable-next-line @typescript-eslint/no-type-alias
 type RewardToken = ContractToken;
 
 export type ContractToken = FA12Token | FA2Token;
@@ -81,7 +82,17 @@ export interface TokenMetadataValue {
 
 export type UsersInfoKey = [nat, address];
 
-export interface UsersInfoValue {
+export interface FarmingUserInfo {
+  last_staked: Date;
+  staked: BigNumber;
+  earned: BigNumber;
+  claimed: BigNumber;
+  prev_earned: BigNumber;
+  prev_staked: BigNumber;
+  allowances: string[];
+}
+
+export interface RawFarmingUserInfo {
   last_staked: timestamp;
   staked: nat;
   earned: nat;

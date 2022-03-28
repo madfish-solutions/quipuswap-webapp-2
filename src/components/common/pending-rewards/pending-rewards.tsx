@@ -9,7 +9,7 @@ import { USD_DECIMALS } from '@app.config';
 import { GobletIcon } from '@components/svg/goblet-icon';
 import { Tooltip } from '@components/ui/components/tooltip';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { DataTestAttribute } from '@tests/types';
+import { DataTestAttribute } from '@tests/data-test-attribute';
 import { useAccountPkh } from '@utils/dapp';
 import { Nullable } from '@utils/types';
 

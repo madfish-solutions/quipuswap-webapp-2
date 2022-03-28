@@ -8,7 +8,6 @@ import { useTranslation } from 'next-i18next';
 import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
-import { FarmingItemPandingReward } from '@tests/farming/item';
 import { getBakerName, getTokenSymbol } from '@utils/helpers';
 
 import { Countdown } from '../countdown';
@@ -16,6 +15,7 @@ import { FarmingRewardHeader } from '../farming-reward-header';
 import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { StateData } from '../state-data';
+import { FarmingItemPendingReward } from './farming-item-pending-reward';
 import styles from './farming-reward-info.module.sass';
 import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
@@ -58,8 +58,8 @@ export const FarmingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
-      rewardButtonAttributeTestId={FarmingItemPandingReward.HARVEST_BUTTON}
-      pendingRewardAttributeTestId={FarmingItemPandingReward.PENDING_REWARD}
+      rewardButtonAttributeTestId={FarmingItemPendingReward.HARVEST_BUTTON}
+      pendingRewardAttributeTestId={FarmingItemPendingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
     >
       <FarmingStatsItem

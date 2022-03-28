@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { MS_IN_SECOND } from '@app.config';
-import { FarmingContractStorage, UsersInfoKey, UsersInfoValue } from '@interfaces/farming-contract.interface';
+import { FarmingContractStorage, UsersInfoKey, FarmingUserInfo } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
 import { mapFarmingItem } from '@utils/mapping/farming.map';
 import { Undefined } from '@utils/types';
@@ -26,25 +26,27 @@ export const REWARD_PRECISION = 1e18;
 
 export const fromRewardPrecision = (reward: BigNumber) => reward.dividedToIntegerBy(new BigNumber(REWARD_PRECISION));
 
-export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem) => {
-  const { staked: totalStaked, rewardPerSecond } = item;
+export const getUserPendingReward = (farmingUserInfo: FarmingUserInfo, farming: FarmingItem) => {
+  const { staked: totalStaked, rewardPerSecond } = farming;
 
   if (totalStaked.eq(NOTHING_STAKED_VALUE)) {
     return new BigNumber('0');
   }
 
-  const reward = new BigNumber(Math.floor((Date.now() - new Date(item.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
+  const reward = new BigNumber(Math.floor((Date.now() - new Date(farming.udp).getTime()) / MS_IN_SECOND)).multipliedBy(
     rewardPerSecond
   );
 
-  const rewardPerShare = item.rewardPerShare.plus(reward.dividedBy(totalStaked));
+  const rewardPerShare = farming.rewardPerShare.plus(reward.dividedBy(totalStaked));
 
-  const pending = userInfo.earned.plus(userInfo.staked.multipliedBy(rewardPerShare)).minus(userInfo.prev_earned);
+  const pending = farmingUserInfo.earned
+    .plus(farmingUserInfo.staked.multipliedBy(rewardPerShare))
+    .minus(farmingUserInfo.prev_earned);
 
   return fromRewardPrecision(pending);
 };
 
-export const getBalances = (userInfo: Undefined<UsersInfoValue>, item: RawFarmingItem) => {
+export const getBalances = (userInfo: Undefined<FarmingUserInfo>, item: RawFarmingItem) => {
   if (!userInfo) {
     return {
       depositBalance: '0',
@@ -75,7 +77,7 @@ export const getUserFarmBalances = async (
 
   const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
 
-  const usersInfoValues: Array<Undefined<UsersInfoValue>> = [];
+  const usersInfoValues: Array<Undefined<FarmingUserInfo>> = [];
 
   usersInfoValuesMap.forEach(userInfoValue => usersInfoValues.push(userInfoValue));
 

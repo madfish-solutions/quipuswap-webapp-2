@@ -55,16 +55,17 @@ export const useFarmingRewardInfoViewModel = () => {
 
   const myDepositDollarEquivalent = getDollarEquivalent(farmingItem.depositBalance, farmingItem.depositExchangeRate);
   const lastStakedTime = userInfo ? new Date(userInfo.last_staked).getTime() : null;
-  const myRewardInTokens = farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
-  const myRewardInUsd = getDollarEquivalent(myRewardInTokens, farmingItem.earnExchangeRate);
+  const myRewardInUsd = getDollarEquivalent(farmingItem.earnBalance, farmingItem.earnExchangeRate);
+  const myDelegate = isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers);
+  const endTimestamp = isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
 
   return {
     shouldShowCandidate: canDelegate(farmingItem),
     farmingItem,
-    myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
+    myDelegate,
     delegatesLoading,
-    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null,
-    myRewardInTokens,
+    endTimestamp,
+    myRewardInTokens: farmingItem.earnBalance,
     myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),

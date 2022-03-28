@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import BigNumber from 'bignumber.js';
 
-import { DataTestAttribute } from '@tests/types';
+import { DataTestAttribute } from '@tests/data-test-attribute';
 import { Optional } from '@utils/types';
 
 import { Tooltip } from '../components/tooltip';

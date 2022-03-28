@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { DataTestAttribute } from '@tests/types';
+import { DataTestAttribute } from '@tests/data-test-attribute';
 import { FormatNumberOptions } from '@utils/formatNumber';
 import { formatValueBalance, isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';

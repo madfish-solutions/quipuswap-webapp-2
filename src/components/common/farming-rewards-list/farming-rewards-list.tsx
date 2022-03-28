@@ -2,27 +2,24 @@ import { FC } from 'react';
 
 import { observer } from 'mobx-react-lite';
 
-import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
-import { FarmingListPandingReward } from '@tests/farming/list';
-
 import { RewardInfo } from '../reward-info';
+import { FarmingListPendingReward } from './farming-list-pending-reward';
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 
 export const FarmingRewardsList: FC = observer(() => {
-  const farmingListStore = useFarmingListStore();
-  const { handleHarvestAll, translation } = useFarmingRewardsListViewModel();
+  const { pendingRewards, handleHarvestAll, translation } = useFarmingRewardsListViewModel();
 
   const { rewardsTooltipTranslation, harvestAllTranslation } = translation;
 
   return (
     <RewardInfo
-      amount={farmingListStore.pendingRewards}
+      amount={pendingRewards}
       onButtonClick={handleHarvestAll}
       rewardTooltip={rewardsTooltipTranslation}
       buttonText={harvestAllTranslation}
       currency="$"
-      rewardButtonAttributeTestId={FarmingListPandingReward.HARVEST_ALL_BUTTON}
-      pendingRewardAttributeTestId={FarmingListPandingReward.PENDING_REWARD}
+      rewardButtonAttributeTestId={FarmingListPendingReward.HARVEST_ALL_BUTTON}
+      pendingRewardAttributeTestId={FarmingListPendingReward.PENDING_REWARD}
     />
   );
 });

@@ -3,7 +3,7 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { DataTestAttribute } from '@tests/types';
+import { DataTestAttribute } from '@tests/data-test-attribute';
 import { isUndefined } from '@utils/helpers';
 
 import { ButtonContent } from './button-content';

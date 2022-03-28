@@ -5,7 +5,7 @@ export enum FarmingListStatsDTA {
   TOTAL_CLAIMED_REWARD = 'totalClaimedReward'
 }
 
-export enum FarmingListPandingReward {
+export enum FarmingListPendingReward {
   HARVEST_ALL_BUTTON = 'harvestAllButton',
   PENDING_REWARD = 'allPendingReward'
 }

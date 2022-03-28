@@ -1,9 +1,10 @@
 import BigNumber from 'bignumber.js';
 
 import { DEFAULT_DECIMALS } from '@app.config';
+import { FarmingUserInfo, RawFarmingUserInfo } from '@interfaces/farming-contract.interface';
 import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@interfaces/farming.interfaces';
 import { isExist, getTokensName, fromDecimals } from '@utils/helpers';
-import { Token, Undefined, Nullable, Optional } from '@utils/types';
+import { Token, Nullable, Optional } from '@utils/types';
 
 import { balanceMap } from './balance.map';
 
@@ -21,7 +22,6 @@ const mapFarmingToken = (raw: Token, isLp?: boolean, newSymbol?: string): Token 
 });
 
 function mapRawBigNumber(raw: BigNumber.Value, decimals?: number): BigNumber;
-function mapRawBigNumber(raw: Undefined<BigNumber.Value>, decimals?: number): Undefined<BigNumber>;
 function mapRawBigNumber(raw: Nullable<BigNumber.Value>, decimals?: number): Nullable<BigNumber>;
 function mapRawBigNumber(raw: Optional<BigNumber.Value>, decimals = DEFAULT_MAP_BN_DECIMALS): Optional<BigNumber> {
   return isExist(raw) ? fromDecimals(new BigNumber(raw), decimals) : raw;
@@ -75,3 +75,12 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalPendingReward: new BigNumber(raw.totalPendingReward),
   totalClaimedReward: new BigNumber(raw.totalClaimedReward)
 });
+
+export const mapFarmingUserInfo = (raw: Nullable<RawFarmingUserInfo>): Nullable<FarmingUserInfo> =>
+  raw && {
+    ...raw,
+    last_staked: new Date(raw.last_staked)
+  };
+
+export const mapFarmingsUserInfo = (rawList: RawFarmingUserInfo[]): FarmingUserInfo[] =>
+  rawList.map(mapFarmingUserInfo).filter(isExist);

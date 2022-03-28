@@ -8,12 +8,12 @@ import { getUserPendingReward } from '@api/farming/helpers';
 import { getUserTokenBalance } from '@api/get-user-balance';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@app.config';
 import { FarmingFormTabs } from '@containers/farming/item/types';
-import { UsersInfoValue } from '@interfaces/farming-contract.interface';
+import { FarmingUserInfo, RawFarmingUserInfo } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
 import { fromDecimals, isNull } from '@utils/helpers';
 import { MakeInterval } from '@utils/helpers/make-interval';
 import { balanceMap } from '@utils/mapping/balance.map';
-import { mapFarmingItem } from '@utils/mapping/farming.map';
+import { mapFarmingItem, mapFarmingUserInfo } from '@utils/mapping/farming.map';
 import { noopMap } from '@utils/mapping/noop.map';
 import { Nullable, WhitelistedBaker } from '@utils/types';
 
@@ -37,10 +37,10 @@ export class FarmingItemStore {
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  userInfoStore = new LoadingErrorData<Nullable<UsersInfoValue>, Nullable<UsersInfoValue>>(
+  userInfoStore = new LoadingErrorData<Nullable<RawFarmingUserInfo>, Nullable<FarmingUserInfo>>(
     null,
     async () => await this.getUserInfo(),
-    noopMap
+    mapFarmingUserInfo
   );
 
   userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
@@ -84,7 +84,11 @@ export class FarmingItemStore {
       stakeItem && {
         ...stakeItem,
         depositBalance: userInfo && fromDecimals(userInfo.staked, stakeItem.stakedToken),
-        earnBalance: this.pendingRewards && fromDecimals(this.pendingRewards, stakeItem.rewardToken)
+        earnBalance:
+          this.pendingRewards &&
+          fromDecimals(this.pendingRewards, stakeItem.rewardToken).decimalPlaces(
+            stakeItem.stakedToken.metadata.decimals
+          )
       }
     );
   }
