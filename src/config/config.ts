@@ -25,7 +25,7 @@ export const MAINNET_NETWORK: QSNetwork = {
   metadata: METADATA_API_MAINNET,
   description:
     'Tezos mainnet',
-  disabled:            false
+  disabled:              false
 
 };
 
