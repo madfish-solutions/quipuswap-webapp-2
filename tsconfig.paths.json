@@ -9,7 +9,7 @@
       "@providers": ["./providers"],
       "@shared/*": ["./shared/*"],
       "@styles": ["./styles"],
-      "@types": ["./types/types"]
+      "@types": ["./types"]
     }
   }
 }
