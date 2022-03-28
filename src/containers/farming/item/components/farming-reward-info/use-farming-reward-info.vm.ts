@@ -8,6 +8,7 @@ import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@
 import { canDelegate, makeBaker } from '../../helpers';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
+const NO_TIMELOCK_VALUE = '0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
@@ -48,7 +49,9 @@ export const useFarmingRewardInfoViewModel = () => {
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
       rewardTokenDecimals: 0,
       farmingLoading,
-      timelock: null,
+      shouldShowCountdown: false,
+      shouldShowCountdownValue: false,
+      isHarvestAvailable: false,
       handleHarvest
     };
   }
@@ -58,19 +61,27 @@ export const useFarmingRewardInfoViewModel = () => {
   const myRewardInTokens = farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInUsd = getDollarEquivalent(myRewardInTokens, farmingItem.earnExchangeRate);
 
+  const shouldShowCountdown = farmingItem.timelock !== NO_TIMELOCK_VALUE;
+  const shouldShowCountdownValue = farmingItem.depositBalance ? !farmingItem.depositBalance.isZero() : false;
+
+  const endTimestamp = isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
+  const isHarvestAvailable = endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
+
   return {
     shouldShowCandidate: canDelegate(farmingItem),
     farmingItem,
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
-    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null,
+    endTimestamp,
     myRewardInTokens,
     myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
     rewardTokenDecimals: farmingItem.rewardToken.metadata.decimals,
     farmingLoading,
-    timelock: farmingItem.timelock,
+    shouldShowCountdown,
+    shouldShowCountdownValue,
+    isHarvestAvailable,
     handleHarvest
   };
 };
