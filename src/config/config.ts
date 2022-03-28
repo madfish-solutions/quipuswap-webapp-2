@@ -17,14 +17,12 @@ export const METADATA_API_TESTNET = 'http://165.232.69.152:3002/metadata'; // pr
 export const MAINNET_NETWORK: QSNetwork = {
   id: 'mainnet',
   connectType: 'default',
-
   name: 'Tezos Mainnet',
-
   type: 'main',
   rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
   metadata: METADATA_API_MAINNET,
   description: 'Tezos mainnet',
-  disabled:      false
+  disabled:     false
 };
 
 export const HANGZHOUNET_NETWORK: QSNetwork = {
