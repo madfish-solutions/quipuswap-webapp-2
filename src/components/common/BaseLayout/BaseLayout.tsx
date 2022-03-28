@@ -11,7 +11,7 @@ import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-base-l
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
-import { ConfiramtionModalProvider } from '@components/modals/confirmation-modal';
+import { ConfirmationModalProvider } from '@components/modals/confirmation-modal';
 import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
@@ -92,7 +92,7 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
       />
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
-          <ConfiramtionModalProvider>
+          <ConfirmationModalProvider>
             <div className={s.root}>
               <Header />
               <Sidebar className={s.sidebar} />
@@ -102,7 +102,7 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
                 {children}
               </main>
             </div>
-          </ConfiramtionModalProvider>
+          </ConfirmationModalProvider>
 
           <WalletModal />
           <AccountModal />
