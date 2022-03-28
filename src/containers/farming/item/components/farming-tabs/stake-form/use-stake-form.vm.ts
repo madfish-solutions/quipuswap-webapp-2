@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useRef } from 'react';
 
+import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
+import { TFunction, useTranslation } from 'next-i18next';
 
-import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
+import { DEFAULT_DECIMALS, DUMMY_BAKER, NO_TIMELOCK_VALUE, TEZOS_TOKEN } from '@app.config';
 import { useConfirmationModal } from '@components/modals/confirmation-modal';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
@@ -15,9 +17,10 @@ import {
   isNull,
   isExist,
   getTokenPairSlug,
-  prepareNumberAsString
+  prepareNumberAsString,
+  parseTimelock
 } from '@utils/helpers';
-import { WhitelistedBaker } from '@utils/types';
+import { Optional, Undefined, WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
@@ -27,8 +30,46 @@ import { useStakeFormValidation } from './use-stake-form.validation';
 
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 
-export const useStakeFormViewModel = () => {
+const getConfirmationMessage = (
+  depositBalance: Optional<BigNumber>,
+  timelock: Undefined<string>,
+  withdrawalFee: Undefined<BigNumber>,
+  translation: TFunction
+) => {
+  if (!isExist(depositBalance) || !isExist(timelock) || !isExist(withdrawalFee)) {
+    return null;
+  }
+
+  const { days, hours, minutes } = parseTimelock(timelock);
+  const persent = withdrawalFee.toFixed();
+
+  if (depositBalance.isZero()) {
+    return translation('farm|confirmationFirstStake', { days, hours, persent });
+  } else {
+    return translation('farm|confirmationUpdateStake', { days, hours, minutes });
+  }
+};
+
+const useStakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
+  const { t } = useTranslation('farm');
+  const farmingItemStore = useFarmingItemStore();
+  const timelock = farmingItemStore.farmingItem?.timelock;
+
+  if (timelock === NO_TIMELOCK_VALUE) {
+    return async (callback: () => Promise<void>) => callback();
+  }
+
+  const depositBalance = farmingItemStore.farmingItem?.depositBalance;
+  const withdrawalFee = farmingItemStore.farmingItem?.withdrawalFee;
+
+  const confirmationMessage = getConfirmationMessage(depositBalance, timelock, withdrawalFee, t);
+
+  return (callback: () => Promise<void>) => openConfirmationModal(confirmationMessage, callback);
+};
+
+export const useStakeFormViewModel = () => {
+  const confirmationPopup = useStakeConfirmationPopup();
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
@@ -58,7 +99,7 @@ export const useStakeFormViewModel = () => {
   };
 
   const handleStakeSubmitAndUpdateData = async (values: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
-    openConfirmationModal('Are you shure?', async () => {
+    confirmationPopup(async () => {
       await handleStakeSubmit(values, actions);
 
       await delayedGetFarmingItem(defined(farmingItem).id);

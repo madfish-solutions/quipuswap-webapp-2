@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
-import { TZKT_EXPLORER_URL } from '@app.config';
+import { NO_TIMELOCK_VALUE, TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { FarmingItemPandingReward } from '@tests/farming/item';
@@ -23,8 +23,6 @@ const modeClass = {
   [ColorModes.Light]: styles.light,
   [ColorModes.Dark]: styles.dark
 };
-
-const NO_TIMELOCK_VALUE = '0';
 
 export const FarmingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
