@@ -11,6 +11,7 @@ import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-base-l
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
+import { ConfiramtionModalProvider } from '@components/modals/confirmation-modal';
 import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@components/modals/WalletModal';
 import { Background } from '@components/svg/Background';
@@ -91,15 +92,17 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
       />
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
-          <div className={s.root}>
-            <Header />
-            <Sidebar className={s.sidebar} />
-            <Background className={s.background} />
-            <main className={cx(s.wrapper, className)}>
-              <ToastWrapper />
-              {children}
-            </main>
-          </div>
+          <ConfiramtionModalProvider>
+            <div className={s.root}>
+              <Header />
+              <Sidebar className={s.sidebar} />
+              <Background className={s.background} />
+              <main className={cx(s.wrapper, className)}>
+                <ToastWrapper />
+                {children}
+              </main>
+            </div>
+          </ConfiramtionModalProvider>
 
           <WalletModal />
           <AccountModal />

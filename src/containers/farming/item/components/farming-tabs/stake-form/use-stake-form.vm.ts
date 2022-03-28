@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
 
 import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
+import { useConfirmationModal } from '@components/modals/confirmation-modal';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
@@ -27,6 +28,7 @@ import { useStakeFormValidation } from './use-stake-form.validation';
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 
 export const useStakeFormViewModel = () => {
+  const { openConfirmationModal } = useConfirmationModal();
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
@@ -56,9 +58,11 @@ export const useStakeFormViewModel = () => {
   };
 
   const handleStakeSubmitAndUpdateData = async (values: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
-    await handleStakeSubmit(values, actions);
+    openConfirmationModal('Are you shure?', async () => {
+      await handleStakeSubmit(values, actions);
 
-    await delayedGetFarmingItem(defined(farmingItem).id);
+      await delayedGetFarmingItem(defined(farmingItem).id);
+    });
   };
 
   const formik = useFormik({
