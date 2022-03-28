@@ -9,7 +9,7 @@
     "lint": "eslint ./src --ext .ts,.tsx",
     "lint-fix": "eslint --fix ./src --ext .ts,.tsx",
     "eject": "react-scripts eject",
-    "prepare": "husky install"
+    "postinstall": "husky install"
   },
   "dependencies": {
     "@airgap/beacon-sdk": "^2.3.10",
@@ -68,7 +68,7 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-sonarjs": "^0.11.0",
-    "husky": "^7.0.0",
+    "husky": "^7.0.4",
     "prettier": "^2.6.0",
     "sass": "^1.49.9",
     "typescript": "^4.6.2"
