@@ -1,12 +1,9 @@
 import { useEffect, useMemo, useRef } from 'react';
 
-import BigNumber from 'bignumber.js';
 import { useFormik } from 'formik';
 import { FormikHelpers } from 'formik/dist/types';
-import { TFunction, useTranslation } from 'next-i18next';
 
-import { DEFAULT_DECIMALS, DUMMY_BAKER, NO_TIMELOCK_VALUE, TEZOS_TOKEN } from '@app.config';
-import { useConfirmationModal } from '@components/modals/confirmation-modal';
+import { DEFAULT_DECIMALS, DUMMY_BAKER, TEZOS_TOKEN } from '@app.config';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import { getFormikError } from '@utils/forms/get-formik-error';
@@ -17,56 +14,18 @@ import {
   isNull,
   isExist,
   getTokenPairSlug,
-  prepareNumberAsString,
-  parseTimelock
+  prepareNumberAsString
 } from '@utils/helpers';
-import { Optional, Undefined, WhitelistedBaker } from '@utils/types';
+import { WhitelistedBaker } from '@utils/types';
 
 import { useDoStake } from '../../../../hooks/use-do-stake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
 import { canDelegate } from '../../../helpers';
 import { StakeFormFields, StakeFormValues } from './stake-form.interface';
+import { useStakeConfirmationPopup } from './use-stake-confirmation-popup';
 import { useStakeFormValidation } from './use-stake-form.validation';
 
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
-
-const getConfirmationMessage = (
-  depositBalance: Optional<BigNumber>,
-  timelock: Undefined<string>,
-  withdrawalFee: Undefined<BigNumber>,
-  translation: TFunction
-) => {
-  if (!isExist(depositBalance) || !isExist(timelock) || !isExist(withdrawalFee)) {
-    return null;
-  }
-
-  const { days, hours, minutes } = parseTimelock(timelock);
-  const persent = withdrawalFee.toFixed();
-
-  if (depositBalance.isZero()) {
-    return translation('farm|confirmationFirstStake', { days, hours, persent });
-  } else {
-    return translation('farm|confirmationUpdateStake', { days, hours, minutes });
-  }
-};
-
-const useStakeConfirmationPopup = () => {
-  const { openConfirmationModal } = useConfirmationModal();
-  const { t } = useTranslation('farm');
-  const farmingItemStore = useFarmingItemStore();
-  const timelock = farmingItemStore.farmingItem?.timelock;
-
-  if (timelock === NO_TIMELOCK_VALUE) {
-    return async (callback: () => Promise<void>) => callback();
-  }
-
-  const depositBalance = farmingItemStore.farmingItem?.depositBalance;
-  const withdrawalFee = farmingItemStore.farmingItem?.withdrawalFee;
-
-  const confirmationMessage = getConfirmationMessage(depositBalance, timelock, withdrawalFee, t);
-
-  return (callback: () => Promise<void>) => openConfirmationModal(confirmationMessage, callback);
-};
 
 export const useStakeFormViewModel = () => {
   const confirmationPopup = useStakeConfirmationPopup();
