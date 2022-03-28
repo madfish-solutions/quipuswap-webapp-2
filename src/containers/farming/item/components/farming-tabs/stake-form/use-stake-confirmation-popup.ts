@@ -7,6 +7,8 @@ import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { isExist, parseTimelock } from '@utils/helpers';
 import { Optional, Undefined } from '@utils/types';
 
+const IS_TIMELOCK_IN_SECONDS = true;
+
 const getConfirmationMessage = (
   depositBalance: Optional<BigNumber>,
   timelock: Undefined<string>,
@@ -17,7 +19,7 @@ const getConfirmationMessage = (
     return null;
   }
 
-  const { days, hours, minutes } = parseTimelock(timelock);
+  const { days, hours, minutes } = parseTimelock(timelock, IS_TIMELOCK_IN_SECONDS);
   const persent = withdrawalFee.toFixed();
 
   if (depositBalance.isZero()) {

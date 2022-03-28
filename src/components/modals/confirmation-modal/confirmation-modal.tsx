@@ -30,19 +30,19 @@ export const ConfirmationModal: FC = () => {
   return (
     <Modal
       portalClassName={styles.modal}
-      title={t('common|Confirmation')}
+      title={t('common|confirmation')}
       contentClassName={compoundClassName}
       isOpen={confirmationModalOpen}
       onRequestClose={closeConfirmationModal}
     >
       <StakeIcon className={styles.stakeIcon} />
-      <div className={styles.title}>Are you sure?</div>
+      <div className={styles.title}>{t('common|areYouSure')}</div>
       <div className={styles.description}>{message}</div>
       <div className={styles.buttons}>
         <Button theme="secondary" onClick={closeConfirmationModal}>
-          {t('common| No')}
+          {t('common|no')}
         </Button>
-        <Button onClick={onYesClick}>{t('common| Yes')}</Button>
+        <Button onClick={onYesClick}>{t('common|yes')}</Button>
       </div>
     </Modal>
   );
