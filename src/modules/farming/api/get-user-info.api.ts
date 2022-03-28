@@ -1,9 +1,9 @@
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
-import { getStorageInfo } from '@shared';
+import { FARMING_CONTRACT_ADDRESS } from '@config';
+import { getStorageInfo } from '@shared/dapp';
 
-import { FARMING_CONTRACT_ADDRESS } from '../../../config/config';
 import { FarmingContractStorageWrapper, UsersInfoValue, FarmingItem } from '../interfaces';
 
 const ZERO = 0;

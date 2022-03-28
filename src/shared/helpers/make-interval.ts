@@ -1,4 +1,4 @@
-import { Nullable } from '../../types/types';
+import { Nullable } from '../types/types';
 import { isExist } from './type-checks';
 
 export class MakeInterval<T extends () => void> {

@@ -1,5 +1,6 @@
-import { TEZOS_TOKEN } from '../../config/config';
-import { Nullable, Optional, Token, TokenMetadata } from '../../types/types';
+import { TEZOS_TOKEN } from '@config';
+
+import { Nullable, Optional, Token, TokenMetadata } from '../types/types';
 import { isValidTokenSlug } from '../validators';
 import { shortize } from './shortize';
 import { isExist } from './type-checks';

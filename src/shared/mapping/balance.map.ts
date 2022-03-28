@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
-import { Nullable, Optional, Token } from '../../types/types';
 import { fromDecimals } from '../helpers';
+import { Nullable, Optional, Token } from '../types/types';
 
 export const balanceMap = (balance: Nullable<BigNumber>, token: Optional<Token>) => {
   if (!balance) {

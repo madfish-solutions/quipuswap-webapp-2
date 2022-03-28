@@ -9,7 +9,7 @@ import {
   useConnectWithTemple,
   TEMPLE_WALLET_NOT_INSTALLED_MESSAGE
 } from '../../../providers/use-dapp';
-import { WalletType } from '../../../types/types';
+import { WalletType } from '../../types/types';
 import { Wallets } from './content';
 import s from './WalletModal.module.sass';
 

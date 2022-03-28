@@ -1,4 +1,4 @@
-import { Nullable } from '../../types/types';
+import { Nullable } from '../types/types';
 
 /* eslint-disable @typescript-eslint/no-magic-numbers */
 export const getUniqArray = <T>(list: T[], getKey: (el: T) => string): T[] => {

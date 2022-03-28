@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { multipliedIfPossible, isNull, cloneArray } from '@shared';
+import { multipliedIfPossible, isNull, cloneArray } from '@shared/helpers';
+import { Nullable } from '@shared/types/types';
 
-import { Nullable } from '../../../../../types/types';
 import { FarmingItem } from '../../../interfaces/farming.interfaces';
 import { SortDirection, SortField } from './sorter.types';
 

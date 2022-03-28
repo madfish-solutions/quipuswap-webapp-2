@@ -6,9 +6,9 @@ export const useFarmingStore = () => {
   const rootStore = useRootStore();
 
   useEffect(() => {
-    rootStore.createFarmingStore();
+    rootStore.createFarmingListStore();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return rootStore.farmingStore;
+  return rootStore.farmingListStore;
 };

@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { computed, makeObservable } from 'mobx';
 
-import { getFarmingListApi, getFarmingStatsApi } from '../../pages/farming/api';
-import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '../../pages/farming/interfaces';
-import { Nullable } from '../../types/types';
-import { multipliedIfPossible } from '../helpers';
-import { mapFarmingItems, mapFarmingStats } from '../mapping';
-import { LoadingErrorData } from './loading-error-data.store';
-import { RootStore } from './root.store';
+import { multipliedIfPossible } from '@shared/helpers';
+import { mapFarmingItems, mapFarmingStats } from '@shared/mapping';
+import { RootStore, LoadingErrorData } from '@shared/store';
+import { Nullable } from '@shared/types/types';
+
+import { getFarmingListApi, getFarmingStatsApi } from '../api';
+import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '../interfaces';
 
 const ZERO_AMOUNT = 0;
 

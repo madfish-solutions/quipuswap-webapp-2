@@ -1,7 +1,6 @@
 export * from './arrays';
 export * from './big-number-to-string';
 export * from './from-decimals';
-export * from '../dapp/get-storage-info';
 export * from './get-token-appellation';
 export * from './is-client';
 export * from './make-interval';

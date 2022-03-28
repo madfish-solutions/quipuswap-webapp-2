@@ -2,8 +2,8 @@ import { createContext, ReactNode, useContext } from 'react';
 
 import { enableStaticRendering } from 'mobx-react-lite';
 
-import { RootStore } from '../shared/store/root.store';
-import { Undefined } from '../types/types';
+import { RootStore } from '@shared/store/root.store';
+import { Undefined } from '@shared/types/types';
 
 enableStaticRendering(typeof window === 'undefined');
 

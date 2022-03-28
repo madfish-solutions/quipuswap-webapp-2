@@ -1,7 +1,7 @@
 /* eslint-disable import/no-default-export */
 
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
-import { ConnectWalletButton } from '@shared';
+import { ConnectWalletButton } from '@shared/components';
 
 export default function App() {
   return (

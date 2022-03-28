@@ -2,8 +2,14 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "paths": {
-      "@shared": ["./shared"],
-      "@providers": ["./providers"]
+      "@blockchain": ["./blockchain"],
+      "@config": ["./config"],
+      "@hooks": ["./hooks"],
+      "@modules/*": ["./modules/*"],
+      "@providers": ["./providers"],
+      "@shared/*": ["./shared/*"],
+      "@styles": ["./styles"],
+      "@types": ["./types/types"]
     }
   }
 }

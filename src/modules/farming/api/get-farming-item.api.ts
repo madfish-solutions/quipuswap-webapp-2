@@ -1,7 +1,8 @@
 import BigNumber from 'bignumber.js';
 
-import { FARMING_API_URL } from '../../../config/config';
-import { Nullable } from '../../../types/types';
+import { FARMING_API_URL } from '@config';
+import { Nullable } from '@shared/types/types';
+
 import { FarmingItemResponse } from '../interfaces';
 
 const FARMING_LIST_API_URL = `${FARMING_API_URL}/list`;

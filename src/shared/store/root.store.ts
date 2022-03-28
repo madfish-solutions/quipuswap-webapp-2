@@ -1,12 +1,15 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { action, makeObservable, observable } from 'mobx';
 
-import { Nullable } from '../../types/types';
+import {
+  FarmingFilterStore as IFarmingFilterStore,
+  FarmingItemStore as IFarmingItemStore,
+  FarmingListStore as IFarmingListStore
+} from '@modules/farming/store';
+
 import { isNull } from '../helpers';
+import { Nullable } from '../types/types';
 import { AuthStore } from './auth.store';
-import { FarmingFilterStore as IFarmingFilterStore } from './farming-filter.store';
-import { FarmingItemStore as IFarmingItemStore } from './farming-item.store';
-import { FarmingListStore as IFarmingListStore } from './farming-list.store';
 import { UiStore } from './ui.store';
 
 export class RootStore {
@@ -43,21 +46,21 @@ export class RootStore {
 
   async createFarmingFilterStore() {
     if (isNull(this.farmingFilterStore)) {
-      const { FarmingFilterStore } = await import('./farming-filter.store');
+      const { FarmingFilterStore } = await import('@modules/farming/store/farming-filter.store');
       this.farmingFilterStore = new FarmingFilterStore(this);
     }
   }
 
   async createFarmingListStore() {
     if (isNull(this.farmingListStore)) {
-      const { FarmingListStore } = await import('./farming-list.store');
+      const { FarmingListStore } = await import('@modules/farming/store/farming-list.store');
       this.farmingListStore = new FarmingListStore(this);
     }
   }
 
   async createFarmingItemStore() {
     if (isNull(this.farmingItemStore)) {
-      const { FarmingItemStore } = await import('./farming-item.store');
+      const { FarmingItemStore } = await import('@modules/farming/store/farming-item.store');
       this.farmingItemStore = new FarmingItemStore(this);
     }
   }

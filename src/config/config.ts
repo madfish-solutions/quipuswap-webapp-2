@@ -1,4 +1,4 @@
-import { QSNetwork, QSNets, Standard, Token } from '../types/types';
+import { QSNetwork, QSNets, Standard, Token } from '@shared/types/types';
 
 export const APP_NAME = 'QuipuSwap Xmas';
 export const SAVED_LISTS_KEY = 'savedCustomLists';
@@ -41,8 +41,8 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 
 export const FARMING_API_URLS = {
-  [QSNets.mainnet]: process.env.MAINNET_FARMING_CONTRACT!,
-  [QSNets.hangzhounet]: process.env.HANGZHOUNET_FARMING_CONTRACT!
+  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_FARMING_CONTRACT!,
+  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_FARMING_CONTRACT!
 };
 
 export const NETWORK_ID = (process.env.NETWORK ?? QSNets.mainnet) as QSNets;

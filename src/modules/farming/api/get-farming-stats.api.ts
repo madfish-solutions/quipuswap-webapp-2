@@ -1,4 +1,5 @@
-import { FARMING_API_URL } from '../../../config/config';
+import { FARMING_API_URL } from '@config';
+
 import { FarmingStatsResponse } from '../interfaces';
 
 const FARMING_STATS_API_URL = `${FARMING_API_URL}/stats`;

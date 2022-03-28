@@ -7,12 +7,9 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '../config/config';
-import { isClient } from '../shared/helpers/is-client';
-import { getNetwork, setNetwork, toBeaconNetworkType } from '../shared/helpers/network';
-import { ReadOnlySigner } from '../shared/helpers/readonly-signer';
-import { FastRpcClient } from '../shared/helpers/taquito-fast-rpc';
-import { QSNetwork } from '../types/types';
+import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config';
+import { getNetwork, setNetwork, toBeaconNetworkType, isClient, ReadOnlySigner, FastRpcClient } from '@shared/helpers';
+import { QSNetwork } from '@shared/types/types';
 
 const michelEncoder = new MichelCodecPacker();
 

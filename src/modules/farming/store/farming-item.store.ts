@@ -1,21 +1,16 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '../../config/config';
-import {
-  getUserPendingReward,
-  getFarmingItemApi,
-  getUserInfoApi,
-  getUserFarmingDelegate
-} from '../../pages/farming/api';
-import { FarmingFormTabs } from '../../pages/farming/containers/item';
-import { RawFarmingItem, FarmingItem, UsersInfoValue } from '../../pages/farming/interfaces';
-import { Nullable, WhitelistedBaker } from '../../types/types';
-import { getUserTokenBalance } from '../api';
-import { fromDecimals, isNull, MakeInterval } from '../helpers';
-import { balanceMap, mapFarmingItem, noopMap } from '../mapping';
-import { LoadingErrorData } from './loading-error-data.store';
-import { RootStore } from './root.store';
+import { getUserTokenBalance } from '@blockchain';
+import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config';
+import { fromDecimals, isNull, MakeInterval } from '@shared/helpers';
+import { balanceMap, mapFarmingItem, noopMap } from '@shared/mapping';
+import { RootStore, LoadingErrorData } from '@shared/store';
+import { Nullable, WhitelistedBaker } from '@shared/types/types';
+
+import { getUserPendingReward, getFarmingItemApi, getUserInfoApi, getUserFarmingDelegate } from '../api';
+import { RawFarmingItem, FarmingItem, UsersInfoValue } from '../interfaces';
+import { FarmingFormTabs } from '../pages/item';
 
 const DEFAULT_INPUT_AMOUNT = 0;
 

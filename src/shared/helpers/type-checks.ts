@@ -1,5 +1,5 @@
-import { Nullable, Optional, Undefined } from '../../types/types';
 import { UnexpectedEmptyValueError } from '../errors';
+import { Nullable, Optional, Undefined } from '../types/types';
 
 export const isNull = <T>(value: Nullable<T>): value is null => value === null;
 

@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { SortDirection, SortField, sortFarmingList } from '../../pages/farming/containers/list/sorter/';
-import { FarmingItem } from '../../pages/farming/interfaces';
-import { Nullable, Optional, Token } from '../../types/types';
-import { isExist, isNull, isEmptyString } from '../helpers';
-import { ActiveStatus } from '../interfaces/active-statuts-enum';
-import { RootStore } from './root.store';
+import { isExist, isNull, isEmptyString } from '@shared/helpers';
+import { RootStore } from '@shared/store';
+import { ActiveStatus } from '@shared/types/active-statuts-enum';
+import { Nullable, Optional, Token } from '@shared/types/types';
+
+import { FarmingItem } from '../interfaces';
+import { SortDirection, SortField, sortFarmingList } from '../pages/list/sorter';
 
 const ZERO = 0;
 export const STEP = 1;

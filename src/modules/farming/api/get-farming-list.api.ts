@@ -1,9 +1,10 @@
 import { TezosToolkit } from '@taquito/taquito';
 
-import { FARMING_CONTRACT_ADDRESS, FARMING_API_URL } from '../../../config/config';
-import { getUserBalance } from '../../../shared/api';
-import { bigNumberToString, isNull } from '../../../shared/helpers';
-import { Nullable } from '../../../types/types';
+import { getUserBalance } from '@blockchain';
+import { FARMING_CONTRACT_ADDRESS, FARMING_API_URL } from '@config';
+import { bigNumberToString, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types/types';
+
 import { FarmingContractStorageWrapper, RawFarmingItem, FarmingListResponse } from '../interfaces';
 import { getUserFarmBalances } from './helpers';
 

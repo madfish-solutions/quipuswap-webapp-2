@@ -1,6 +1,6 @@
 import { action, makeObservable, observable } from 'mobx';
 
-import { Nullable } from '../../types/types';
+import { Nullable } from '../types/types';
 import { RootStore } from './root.store';
 
 export class AuthStore {

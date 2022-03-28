@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from 'mobx';
 
-import { Undefined, Nullable } from '../../types/types';
+import { Undefined, Nullable } from '../types/types';
 
 export class LoadingErrorData<RawData, Data> {
   rawData: Undefined<RawData>;

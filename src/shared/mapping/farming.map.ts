@@ -1,9 +1,10 @@
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_DECIMALS } from '../../config/config';
-import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '../../pages/farming/interfaces';
-import { Token, Undefined, Nullable, Optional } from '../../types/types';
+import { DEFAULT_DECIMALS } from '@config';
+import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@modules/farming/interfaces';
+
 import { isExist, getTokensName, fromDecimals } from '../helpers';
+import { Token, Undefined, Nullable, Optional } from '../types/types';
 import { balanceMap } from './balance.map';
 
 const DEFAULT_MAP_BN_DECIMALS = 0;
