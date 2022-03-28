@@ -1,12 +1,10 @@
 import { ReactNode, useCallback, useState } from 'react';
 
 import constate from 'constate';
+import { noop } from 'rxjs';
 
 import { useSingleModalState } from '@hooks/use-single-modal-state';
 import { Nullable } from '@utils/types';
-
-// eslint-disable-next-line @typescript-eslint/no-empty-function
-const noop = async () => {};
 
 export const [ConfirmationModalConstateProvider, useConfirmationModal] = constate(() => {
   const [message, setMessage] = useState<Nullable<ReactNode>>(null);
