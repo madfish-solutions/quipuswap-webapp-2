@@ -23,10 +23,8 @@ export const MAINNET_NETWORK: QSNetwork = {
   type: 'main',
   rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
   metadata: METADATA_API_MAINNET,
-  description:
-    'Tezos mainnet',
-  disabled:              false
-
+  description: 'Tezos mainnet',
+  disabled:      false
 };
 
 export const HANGZHOUNET_NETWORK: QSNetwork = {
