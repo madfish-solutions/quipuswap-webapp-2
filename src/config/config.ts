@@ -1,3 +1,4 @@
+import { defined } from '@shared/helpers';
 import { QSNetwork, QSNets, Standard, Token } from '@shared/types/types';
 
 export const APP_NAME = 'QuipuSwap Xmas';
@@ -41,16 +42,16 @@ export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const DEFAULT_NETWORK = MAINNET_NETWORK;
 
 export const FARMING_API_URLS = {
-  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_FARMING_CONTRACT!,
-  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_FARMING_CONTRACT!
+  [QSNets.mainnet]: defined(process.env.REACT_APP_MAINNET_FARMING_CONTRACT),
+  [QSNets.hangzhounet]: defined(process.env.REACT_APP_HANGZHOUNET_FARMING_CONTRACT)
 };
 
 export const NETWORK_ID = (process.env.NETWORK ?? QSNets.mainnet) as QSNets;
-export const FARMING_API_URL = FARMING_API_URLS[NETWORK_ID]!;
+export const FARMING_API_URL = FARMING_API_URLS[NETWORK_ID];
 
 export const DEFAULT_DECIMALS = 6;
 
-export const IPFS_GATEWAY = process.env.IPFS_GATEWAY!;
+export const IPFS_GATEWAY = defined(process.env.IPFS_GATEWAY);
 
 export const TEZOS_TOKEN: Token = {
   type: Standard.Fa12,
@@ -68,17 +69,17 @@ export const FARM_REWARD_UPDATE_INTERVAL = 1000;
 export const FARM_USER_INFO_UPDATE_INTERVAL = 30000;
 
 const FARMING_CONTRACTS_ADDRESSES = {
-  [QSNets.mainnet]: process.env.NEXT_PUBLIC_MAINNET_FARMING_CONTRACT,
-  [QSNets.hangzhounet]: process.env.NEXT_PUBLIC_HANGZHOUNET_FARMING_CONTRACT
+  [QSNets.mainnet]: defined(process.env.REACT_APP_MAINNET_FARMING_CONTRACT),
+  [QSNets.hangzhounet]: defined(process.env.REACT_APP_HANGZHOUNET_FARMING_CONTRACT)
 };
-export const FARMING_CONTRACT_ADDRESS = FARMING_CONTRACTS_ADDRESSES[NETWORK_ID]!;
+export const FARMING_CONTRACT_ADDRESS = FARMING_CONTRACTS_ADDRESSES[NETWORK_ID];
 
 export const MS_IN_SECOND = 1000;
 
-export const READ_ONLY_SIGNER_PK = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK!;
-export const READ_ONLY_SIGNER_PK_HASH = process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH!;
-export const MAINNET_LAMBDA_VIEW_CONTRACT = process.env.NEXT_PUBLIC_MAINNET_LAMBDA_VIEW_CONTRACT!;
-export const HANGZHOUNET_LAMBDA_VIEW_CONTRACT = process.env.NEXT_PUBLIC_HANGZHOUNET_LAMBDA_VIEW_CONTRACT!;
+export const READ_ONLY_SIGNER_PK = defined(process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK);
+export const READ_ONLY_SIGNER_PK_HASH = defined(process.env.NEXT_PUBLIC_READ_ONLY_SIGNER_PK_HASH);
+export const MAINNET_LAMBDA_VIEW_CONTRACT = defined(process.env.NEXT_PUBLIC_MAINNET_LAMBDA_VIEW_CONTRACT);
+export const HANGZHOUNET_LAMBDA_VIEW_CONTRACT = defined(process.env.NEXT_PUBLIC_HANGZHOUNET_LAMBDA_VIEW_CONTRACT);
 export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXdQprcVkpaWU', MAINNET_LAMBDA_VIEW_CONTRACT],
   ['NetXZSsxBpMQeAT', HANGZHOUNET_LAMBDA_VIEW_CONTRACT]
