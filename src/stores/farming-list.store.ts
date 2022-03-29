@@ -4,7 +4,13 @@ import { action, computed, makeObservable, observable } from 'mobx';
 
 import { getFarmingListApi, getFarmingStatsApi } from '@api/farming';
 import { getAllFarmsUserInfoApi } from '@api/farming/get-user-info.api';
-import { getUserPendingReward, UsersInfoValueWithId } from '@api/farming/helpers';
+import {
+  getEndTimestamp,
+  getIsHarvestAvailable,
+  getUserInfoLastStakedTime,
+  getUserPendingReward,
+  UsersInfoValueWithId
+} from '@api/farming/helpers';
 import { FARM_REWARD_UPDATE_INTERVAL } from '@app.config';
 import { FarmingItem, FarmingStats, RawFarmingItem, RawFarmingStats } from '@interfaces/farming.interfaces';
 import { fromDecimals, isExist, isNull } from '@utils/helpers';
@@ -79,21 +85,35 @@ export class FarmingListStore {
     this.pendingRewardsInterval.stop();
   }
 
-  updatePendingRewards() {
-    const rewardsInUsd = this.listStore.data.map(farmingItem => {
-      // @ts-ignore
-      const userInfo = this.userInfo.data?.find(_userInfo => farmingItem.id.eq(_userInfo.id[0]));
-      const rewards = userInfo && getUserPendingReward(userInfo, farmingItem);
-      const earnBalance = rewards && fromDecimals(rewards, farmingItem.rewardToken);
+  private findUserInfo(farmingItem: FarmingItem) {
+    // @ts-ignore
+    return this.userInfo.data?.find(_userInfo => farmingItem.id.eq(_userInfo.id[0])) || null;
+  }
 
-      return earnBalance && multipliedIfPossible(earnBalance, farmingItem.earnExchangeRate);
-    });
+  updatePendingRewards() {
+    const rewardsInUsd = this.listStore.data
+      .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
+      .filter(farmingItem => {
+        const lastStakedTime = getUserInfoLastStakedTime(this.findUserInfo(farmingItem));
+        const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
+
+        return getIsHarvestAvailable(endTimestamp);
+      })
+      .map(farmingItem => {
+        const userInfo = this.findUserInfo(farmingItem);
+        const rewards = userInfo && getUserPendingReward(userInfo, farmingItem);
+        const earnBalance = rewards && fromDecimals(rewards, farmingItem.rewardToken);
+
+        return earnBalance && multipliedIfPossible(earnBalance, farmingItem.earnExchangeRate);
+      });
 
     this.pendingRewards = rewardsInUsd.some(isExist)
       ? rewardsInUsd.reduce<BigNumber>(
           (prevValue, currentValue) => prevValue.plus(currentValue ?? ZERO_AMOUNT),
           new BigNumber(ZERO_AMOUNT)
         )
+      : this.listStore.data.filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT)).some(isExist)
+      ? new BigNumber(ZERO_AMOUNT)
       : null;
   }
 }

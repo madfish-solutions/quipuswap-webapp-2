@@ -1,7 +1,7 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import BigNumber from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@app.config';
+import { MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@app.config';
 import {
   FarmingContractStorage,
   RawUsersInfoValue,
@@ -9,9 +9,9 @@ import {
   UsersInfoValue
 } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
-import { defined } from '@utils/helpers';
+import { defined, isExist } from '@utils/helpers';
 import { mapFarmingItem, mapUsersInfoValue } from '@utils/mapping/farming.map';
-import { Undefined } from '@utils/types';
+import { Nullable, Undefined } from '@utils/types';
 
 export interface UserBalances {
   depositBalance: string;
@@ -120,3 +120,12 @@ export const getUserFarmBalances = async (
 
   return balances;
 };
+
+export const getUserInfoLastStakedTime = (userInfo: Nullable<UsersInfoValue>) =>
+  userInfo ? new Date(userInfo.last_staked).getTime() : null;
+
+export const getEndTimestamp = (farmingItem: FarmingItem, lastStakedTime: Nullable<number>) =>
+  isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
+
+export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
+  endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;

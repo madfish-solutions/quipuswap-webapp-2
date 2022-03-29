@@ -54,7 +54,7 @@ export const VotingStats: React.FC<VotingStatsProps> = ({ className }) => {
 
   return (
     <Card className={className} contentClassName={cx(s.content, modeClass[colorThemeMode])}>
-      <VotingRewardItem description={t('vote|Your Pending Rewards')} amount={rewardAmount} currency="TEZ" />
+      <VotingRewardItem description={t('vote|Your Claimable Rewards')} amount={rewardAmount} currency="TEZ" />
 
       <div className={s.right}>
         <div className={s.votingsStatsItemContainer}>

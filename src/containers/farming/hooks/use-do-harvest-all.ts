@@ -2,29 +2,36 @@ import { useCallback } from 'react';
 
 import BigNumber from 'bignumber.js';
 
+import { harvestAllAssets } from '@api/farming/harvest-all-assets.api';
+import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@api/farming/helpers';
+import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { useToasts } from '@hooks/use-toasts';
 import { FarmingItem } from '@interfaces/farming.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
 import { useConfirmOperation } from '@utils/dapp/confirm-operation';
 import { defined } from '@utils/helpers';
 
-import { harvestAllAssets } from '../../../api/farming/harvest-all-assets.api';
 const ZERO_AMOUNT = 0;
 
 export const useDoHarvestAll = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
+  const farmingItemStore = useFarmingItemStore();
+  const { userInfoStore } = farmingItemStore;
+  const { data: userInfo } = userInfoStore;
 
   const doHarvestAll = useCallback(
     async (stakeList: FarmingItem[]) => {
-      const farmingIds: BigNumber[] = [];
+      const farmingIds: BigNumber[] = stakeList
+        .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
+        .filter(farmingItem => {
+          const lastStakedTime = getUserInfoLastStakedTime(userInfo);
+          const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
 
-      stakeList.forEach(({ id, earnBalance }) => {
-        if (earnBalance?.gt(ZERO_AMOUNT)) {
-          farmingIds.push(id);
-        }
-      });
+          return getIsHarvestAvailable(endTimestamp);
+        })
+        .map(({ id }) => id);
 
       try {
         const operation = await harvestAllAssets(
@@ -40,7 +47,7 @@ export const useDoHarvestAll = () => {
         showErrorToast(error as Error);
       }
     },
-    [rootStore.authStore.accountPkh, rootStore.tezos, showErrorToast, confirmOperation]
+    [userInfo, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
   );
 
   return { doHarvestAll };
