@@ -1,11 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 
-import { enableStaticRendering } from 'mobx-react-lite';
-
-import { RootStore } from '@shared/store/root.store';
+import { RootStore } from '@shared/store';
 import { Undefined } from '@shared/types/types';
-
-enableStaticRendering(typeof window === 'undefined');
 
 let store: RootStore;
 
@@ -38,6 +34,8 @@ const initializeStore = (): RootStore => {
 
 export const RootStoreProvider = ({ children }: { children: ReactNode }) => {
   const store = initializeStore();
+  // eslint-disable-next-line no-console
+  console.log('RootStoreProvider', children);
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 };

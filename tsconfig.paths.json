@@ -8,7 +8,7 @@
       "@providers": ["./providers"],
       "@shared/*": ["./shared/*"],
       "@styles": ["./styles"],
-      "@types": ["./types"]
+      "@tests": ["./tests"]
     }
   }
 }

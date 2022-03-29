@@ -1,5 +1,8 @@
 export * from './arrays';
 export * from './big-number-to-string';
+export * from './calculate-rate-amount';
+export * from './format-balance';
+export * from './format-number';
 export * from './from-decimals';
 export * from './get-token-appellation';
 export * from './is-client';
@@ -7,6 +10,7 @@ export * from './make-interval';
 export * from './multiplied-if-possible';
 export * from './network';
 export * from './readonly-signer';
+export * from './short-number-with-letters';
 export * from './shortize';
 export * from './strings';
 export * from './taquito-fast-rpc';

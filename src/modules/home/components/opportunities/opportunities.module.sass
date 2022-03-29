@@ -1,0 +1,15 @@
+@import "@styles/breakpoints"
+@import "@styles/variables"
+
+.cards
+  display: grid
+  gap: 16px
+
+@include media('>660px')
+  .cards
+    grid-template-columns: repeat(2, 1fr)
+
+@include media('>SDesktop')
+  .cards
+    grid-template-columns: repeat(3, 1fr)
+    gap: 32px

@@ -84,3 +84,26 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXdQprcVkpaWU', MAINNET_LAMBDA_VIEW_CONTRACT],
   ['NetXZSsxBpMQeAT', HANGZHOUNET_LAMBDA_VIEW_CONTRACT]
 ]);
+
+export const MAINNET_RPC_URL = defined(process.env.NEXT_PUBLIC_MAINNET_RPC_URL);
+export const HANGZHOUNET_RPC_URL = defined(process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL);
+
+const networks: Record<QSNets, QSNetwork> = {
+  [QSNets.mainnet]: MAINNET_NETWORK,
+  [QSNets.hangzhounet]: HANGZHOUNET_NETWORK
+};
+export const NETWORK = networks[NETWORK_ID];
+export const IS_NETWORK_MAINNET = NETWORK_ID === QSNets.mainnet;
+
+export const MAINNET_DEFAULT_TOKEN: Token = {
+  type: Standard.Fa2,
+  contractAddress: 'KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb',
+  fa2TokenId: 0,
+  isWhitelisted: true,
+  metadata: {
+    decimals: 6,
+    symbol: 'QUIPU',
+    name: 'Quipuswap Governance Token',
+    thumbnailUri: 'https://quipuswap.com/tokens/quipu.png'
+  }
+};

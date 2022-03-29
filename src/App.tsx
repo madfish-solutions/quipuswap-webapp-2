@@ -4,14 +4,11 @@ import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 
 import { observer } from 'mobx-react-lite';
 
-import { ConnectWalletButton } from '@shared/components';
-
 const App = observer(() => {
-  return (
-    <div className="App">
-      <ConnectWalletButton />
-    </div>
-  );
+  // eslint-disable-next-line no-console
+  console.log('123');
+
+  return <div className="App">qweqweqwe</div>;
 });
 
 export default App;
