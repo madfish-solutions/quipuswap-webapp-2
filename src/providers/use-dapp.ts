@@ -6,12 +6,13 @@ import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
-import { getNetwork, setNetwork, toBeaconNetworkType } from '../shared/helpers/network';
-import { isClient } from '../shared/helpers/is-client';
+
 import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '../config/config';
-import { QSNetwork } from '../types/types';
+import { isClient } from '../shared/helpers/is-client';
+import { getNetwork, setNetwork, toBeaconNetworkType } from '../shared/helpers/network';
 import { ReadOnlySigner } from '../shared/helpers/readonly-signer';
 import { FastRpcClient } from '../shared/helpers/taquito-fast-rpc';
+import { QSNetwork } from '../types/types';
 
 const michelEncoder = new MichelCodecPacker();
 
@@ -147,6 +148,7 @@ const useDApp = () => {
 
   const ready = Boolean(tezos) || templeInitialAvailable === false;
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   useEffect(() => {
     TempleWallet.onAvailabilityChange(async available => {
       const lastUsedConnection = localStorage.getItem(LAST_USED_CONNECTION_KEY);

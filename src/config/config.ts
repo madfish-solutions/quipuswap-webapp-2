@@ -1,4 +1,4 @@
-import { QSNetwork } from "../types/types";
+import { QSNetwork } from '../types/types';
 
 export const APP_NAME = 'QuipuSwap Xmas';
 export const SAVED_LISTS_KEY = 'savedCustomLists';

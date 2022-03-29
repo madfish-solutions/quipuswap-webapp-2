@@ -1,11 +1,14 @@
-import { shortize } from '../helpers/shortize';
+import { FC } from 'react';
+
 import { useConnectModalsState } from '../../providers/use-connect-modals-state';
 import { useAccountPkh, useReady } from '../../providers/use-dapp';
-import { FC } from 'react';
+import { shortize } from '../helpers/shortize';
 
 interface ConnectWalletButtonProps {
   className?: string;
 }
+
+const DEFAULT_LENGTH = 7;
 
 export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className }) => {
   const ready = useReady();
@@ -16,7 +19,7 @@ export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className })
   if (ready && accountPkh) {
     return (
       <button className={className} onClick={openAccountInfoModal} title={accountPkh}>
-        {accountPkh ? shortize(accountPkh, 7) : 'Connect wallet'}
+        {accountPkh ? shortize(accountPkh, DEFAULT_LENGTH) : 'Connect wallet'}
       </button>
     );
   }
