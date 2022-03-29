@@ -26,7 +26,6 @@ export const PrivacyPolicy: FC = () => {
       <Card>
         <CardContent className={s.content}>
           <EnPrivacyPolicy />
-          123123
         </CardContent>
       </Card>
     </Layout>
