@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
-import { NO_TIMELOCK_VALUE, TZKT_EXPLORER_URL } from '@app.config';
+import { TZKT_EXPLORER_URL } from '@app.config';
 import { RewardInfo } from '@components/common/reward-info';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { FarmingItemPandingReward } from '@tests/farming/item';
@@ -39,7 +39,9 @@ export const FarmingRewardInfo: FC = observer(() => {
     rewardTokenDecimals,
     rewardTokenSymbol,
     farmingLoading,
-    timelock,
+    shouldShowCountdown,
+    shouldShowCountdownValue,
+    isHarvestAvailable,
     handleHarvest
   } = useFarmingRewardInfoViewModel();
 
@@ -56,6 +58,7 @@ export const FarmingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
+      disabled={!isHarvestAvailable}
       rewardButtonAttributeTestId={FarmingItemPandingReward.HARVEST_BUTTON}
       pendingRewardAttributeTestId={FarmingItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
@@ -100,14 +103,14 @@ export const FarmingRewardInfo: FC = observer(() => {
         </FarmingStatsItem>
       )}
 
-      {timelock !== NO_TIMELOCK_VALUE && (
+      {shouldShowCountdown && (
         <FarmingStatsItem
-          itemName={t('farm|Withdrawal fee ends in')}
+          itemName={t('farm|Lock period ends in')}
           loading={farmingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
-            {timestamp => <Countdown endTimestamp={timestamp} />}
+            {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}
           </StateData>
         </FarmingStatsItem>
       )}

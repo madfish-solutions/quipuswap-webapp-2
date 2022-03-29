@@ -26,6 +26,7 @@ interface Props {
     className?: string;
   };
   rewardTooltip?: string;
+  disabled?: boolean;
   rewardButtonAttributeTestId: string;
   pendingRewardAttributeTestId: string;
 }
@@ -42,11 +43,12 @@ export const RewardInfo: FC<Props> = ({
   header,
   rewardTooltip,
   buttonText,
+  disabled,
   rewardButtonAttributeTestId,
   pendingRewardAttributeTestId,
   children
 }) => {
-  const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS);
+  const isButtonDisabled = isNull(amount) || amount.eq(ZERO_REWARDS) || disabled;
 
   return (
     <Card className={cx(styles.card, className)} header={header}>

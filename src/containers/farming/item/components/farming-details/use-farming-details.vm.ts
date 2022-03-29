@@ -7,7 +7,8 @@ import {
   MS_IN_SECOND,
   SECONDS_IN_DAY,
   FARMING_CONTRACT_ADDRESS,
-  TZKT_EXPLORER_URL
+  TZKT_EXPLORER_URL,
+  NO_TIMELOCK_VALUE
 } from '@app.config';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
@@ -19,7 +20,6 @@ import { canDelegate, makeBaker } from '../../helpers';
 import styles from './farming-details.module.sass';
 
 const NO_WITHDRAWAL_FEE_VALUE = 0;
-const NO_TIMELOCK_VALUE = '0';
 
 export const useFarmingDetailsViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
