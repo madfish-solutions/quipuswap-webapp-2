@@ -2,18 +2,15 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 import { observer } from 'mobx-react-lite';
-import { NextSeo } from 'next-seo';
-import Head from 'next/head';
-import Script from 'next/script';
 
-import { BASE_URL } from '@app.config';
-import { useBaseLayoutViewModel } from '@components/common/BaseLayout/use-base-layout.vm';
+import { BASE_URL } from 'config/config';
+import { useBaseLayoutViewModel } from './use-layout.vm';
 import { Header } from '@components/common/Header';
 import { Sidebar } from '@components/common/Header/Sidebar';
 import { AccountModal } from '@components/modals/AccountModal';
-import { DonationModal } from '@components/modals/donation-modal';
-import { WalletModal } from '@components/modals/WalletModal';
-import { Background } from '@components/svg/Background';
+// import { DonationModal } from '@components/modals/donation-modal';
+import { WalletModal } from '@shared/modals/WalletModal';
+import { Background } from '@shared/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
 import { GlobalModalsStateProvider } from '@hooks/use-global-modals-state';
 import { DEFAULT_SEO } from '@seo.config';

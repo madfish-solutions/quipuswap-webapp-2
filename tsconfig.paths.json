@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@blockchain": ["./blockchain"],
+      "@config": ["./config"],
+      "@modules/*": ["./modules/*"],
+      "@providers": ["./providers"],
+      "@shared/*": ["./shared/*"],
+      "@styles": ["./styles"],
+      "@types": ["./types"]
+    }
+  }
+}
