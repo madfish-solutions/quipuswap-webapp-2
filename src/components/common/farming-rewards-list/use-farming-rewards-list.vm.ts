@@ -31,7 +31,6 @@ export const useFarmingRewardsListViewModel = () => {
   }, [farmingListStore]);
 
   return {
-    pendingRewards: farmingListStore.pendingRewards,
     handleHarvestAll,
     translation: {
       harvestAllTranslation: t('farm|harvestAll'),
