@@ -310,8 +310,8 @@ export const ITHACANET_BAKERS: WhitelistedBaker[] = [
 
 const dummyBakers: Record<QSNets, string> = {
   [QSNets.mainnet]: 'tz1aRoaRhSpRYvFdyvgWLL6TGyRoGF51wDjM',
-  [QSNets.hangzhounet]: 'tz1aWXP237BLwNHJcCD4b3DutCevhqq2T1Z9',
-  [QSNets.ithacanet]: 'TODO' // TODO
+  [QSNets.hangzhounet]: HANGZHOUNET_BAKERS[0].address,
+  [QSNets.ithacanet]: ITHACANET_BAKERS[0].address
 };
 
 export const DUMMY_BAKER = dummyBakers[NETWORK_ID];
