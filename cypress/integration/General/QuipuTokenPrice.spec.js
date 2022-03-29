@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Should_DisplayQuipuPrice_When_PageIsLoaded', () => {
+describe('QUIPU price', () => {
 
     it('Should_DisplayQuipuPrice_When_PageIsLoaded',() => {
 // Go to the home page
