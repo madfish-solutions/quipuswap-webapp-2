@@ -25,25 +25,25 @@ const DEFAULT_INPUT_AMOUNT = 0;
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;
 
-  itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
+  readonly itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
     null,
     async () => await getFarmingItemApi(this.farmingId),
     mapFarmingItem
   );
 
-  availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
+  readonly availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  userInfoStore = new LoadingErrorData<Nullable<RawUsersInfoValue>, Nullable<UsersInfoValue>>(
+  readonly userInfoStore = new LoadingErrorData<Nullable<RawUsersInfoValue>, Nullable<UsersInfoValue>>(
     null,
     async () => await this.getUserInfo(),
     mapUsersInfoValue
   );
 
-  userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
+  readonly userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
     null,
     async () => await this.getUserFarmingDelegate(),
     noopMap
@@ -53,10 +53,13 @@ export class FarmingItemStore {
 
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
-  pendingRewards: Nullable<BigNumber> = null;
 
-  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
-  updateUserInfoInterval = new MakeInterval(async () => this.userInfoStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
+  pendingRewards: Nullable<BigNumber> = null;
+  readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
+  readonly updateUserInfoInterval = new MakeInterval(
+    async () => this.userInfoStore.load(),
+    FARM_USER_INFO_UPDATE_INTERVAL
+  );
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
