@@ -2,8 +2,9 @@ import React, { useCallback, useRef, useEffect } from 'react';
 
 import { Button, Modal, shortize } from '@quipuswap/ui-kit';
 
-import { useConnectModalsState } from '../../../providers/use-connect-modals-state';
-import { useAccountPkh, useDisconnect } from '../../../providers/use-dapp';
+import { useConnectModalsState } from '@providers/use-connect-modals-state';
+import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
+
 import s from './AccountModal.module.sass';
 
 const ADDRESS_LENGTH = 8;

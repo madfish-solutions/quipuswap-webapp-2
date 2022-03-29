@@ -1,35 +1,35 @@
 import { FC } from 'react';
 
 import cx from 'classnames';
-import { observer } from 'mobx-react-lite';
+// import { observer } from 'mobx-react-lite';
 
-import { BASE_URL } from 'config/config';
-import { useBaseLayoutViewModel } from './use-layout.vm';
-import { Header } from '@components/common/Header';
-import { Sidebar } from '@components/common/Header/Sidebar';
-import { AccountModal } from '@components/modals/AccountModal';
+// import { Header } from '@components/common/Header';
+// import { Sidebar } from '@components/common/Header/Sidebar';
+import { ToastWrapper } from '@shared/components/toast-wrapper';
+import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
+import { AccountModal } from '@shared/modals/AccountModal';
 // import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@shared/modals/WalletModal';
 import { Background } from '@shared/svg/Background';
-import { ToastWrapper } from '@components/ui/toast-wrapper';
-import { GlobalModalsStateProvider } from '@hooks/use-global-modals-state';
-import { DEFAULT_SEO } from '@seo.config';
+// import { BASE_URL } from 'config/config';
+// import { DEFAULT_SEO } from '@seo.config';
 
-import s from './BaseLayout.module.sass';
+import s from './layout.module.sass';
+import { useBaseLayoutViewModel } from './use-layout.vm';
 
-interface BaseLayoutProps {
+interface LayoutProps {
   title?: string;
   description?: string;
   image?: string;
   className?: string;
 }
 
-export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, image, className, children }) => {
-  const { isDarkFavicon, canonicalURL, isComponentDidMount } = useBaseLayoutViewModel();
+export const Layout: FC<LayoutProps> = ({ title, description, image, className, children }) => {
+  const { isComponentDidMount } = useBaseLayoutViewModel(); //isDarkFavicon, canonicalURL
 
   return (
     <>
-      <Head>
+      {/* <Head>
         {isDarkFavicon ? (
           <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
@@ -85,12 +85,12 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
               ]
             : []
         }
-      />
+      /> */}
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
           <div className={s.root}>
-            <Header />
-            <Sidebar className={s.sidebar} />
+            {/* <Header /> */}
+            {/* <Sidebar className={s.sidebar} /> */}
             <Background className={s.background} />
             <main className={cx(s.wrapper, className)}>
               <ToastWrapper />
@@ -100,11 +100,11 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
 
           <WalletModal />
           <AccountModal />
-          <DonationModal />
+          {/* <DonationModal /> */}
         </GlobalModalsStateProvider>
       ) : (
         <div />
       )}
     </>
   );
-});
+};

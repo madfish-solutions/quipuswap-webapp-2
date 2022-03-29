@@ -1,42 +1,43 @@
 import { useContext, useEffect } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 
-import { QUIPUSWAP } from '@app.config';
-import { useAuthStore } from '@hooks/stores/use-auth-store';
-import { useUiStore } from '@hooks/stores/use-ui-store';
-import { useRootStore } from '@providers/root-store-provider';
-import { useAccountPkh, useTezos } from '@utils/dapp';
+import { QUIPUSWAP } from '@config/config';
+
+// import { useAuthStore } from '@shared/hooks/use-auth-store';
+// import { useUiStore } from '@shared/hooks/use-ui-store';
+// import { useRootStore } from 'providers/root-store-provider';
+// import { useAccountPkh, useTezos } from 'providers/use-dapp';
 
 export const useBaseLayoutViewModel = () => {
-  const rootStore = useRootStore();
-  const uiStore = useUiStore();
-  const authStore = useAuthStore();
-  const accountPkh = useAccountPkh();
-  const tezos = useTezos();
-  const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
+  // const rootStore = useRootStore();
+  // const uiStore = useUiStore();
+  // const authStore = useAuthStore();
+  // const accountPkh = useAccountPkh();
+  // const tezos = useTezos();
+  const { colorThemeMode } = useContext(ColorThemeContext); // isComponentDidMount
 
   /*
     Set TezosToolkit
    */
-  useEffect(() => {
-    rootStore.setTezos(tezos);
-  }, [rootStore, tezos]);
+  // useEffect(() => {
+  //   rootStore.setTezos(tezos);
+  // }, [rootStore, tezos]);
 
   /*
     Set Auth Data
    */
-  useEffect(() => {
-    authStore.setAccountPkh(accountPkh);
-  }, [authStore, accountPkh]);
+  // useEffect(() => {
+  //   authStore.setAccountPkh(accountPkh);
+  // }, [authStore, accountPkh]);
 
   /*
     Set UI Data
    */
-  useEffect(() => {
-    uiStore.setColorThemeMode(colorThemeMode);
-  }, [uiStore, colorThemeMode]);
+  // useEffect(() => {
+  //   uiStore.setColorThemeMode(colorThemeMode);
+  // }, [uiStore, colorThemeMode]);
 
   /*
     Set Theme ClassName to the body
@@ -50,7 +51,7 @@ export const useBaseLayoutViewModel = () => {
   }, [colorThemeMode]);
 
   const isDarkFavicon = colorThemeMode === ColorModes.Dark;
-  const canonicalURL = QUIPUSWAP + useRouter().asPath;
+  const canonicalURL = QUIPUSWAP + useLocation().pathname;
 
-  return { isDarkFavicon, canonicalURL, isComponentDidMount };
+  return { isDarkFavicon, canonicalURL, isComponentDidMount: true };
 };

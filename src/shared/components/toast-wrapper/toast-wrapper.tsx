@@ -5,9 +5,9 @@ import cx from 'classnames';
 import { ToastContainer, ToastContentProps, TypeOptions } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { CloseIcon } from '@components/svg/close-icon';
+import { Button } from '@shared/components/button';
+import { CloseIcon } from '@shared/svg/close-icon';
 
-import { Button } from '../elements/button';
 import s from './toast-wrapper.module.sass';
 
 const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (

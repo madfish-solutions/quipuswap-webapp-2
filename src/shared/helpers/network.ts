@@ -7,7 +7,7 @@ import {
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY
 } from '../../config/config';
-import { QSNetwork, QSMainNet } from '../../types/types';
+import { QSNetwork, QSMainNet } from '../types/types';
 
 export const getNetwork = () => {
   const netId = typeof window === 'undefined' ? undefined : localStorage.getItem(NETWORK_ID_KEY);

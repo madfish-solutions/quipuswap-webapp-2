@@ -7,12 +7,13 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
+import { QSNetwork } from '@shared/types/types';
+
 import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '../config/config';
 import { isClient } from '../shared/helpers/is-client';
 import { getNetwork, setNetwork, toBeaconNetworkType } from '../shared/helpers/network';
 import { ReadOnlySigner } from '../shared/helpers/readonly-signer';
 import { FastRpcClient } from '../shared/helpers/taquito-fast-rpc';
-import { QSNetwork } from '../types/types';
 
 const michelEncoder = new MichelCodecPacker();
 
@@ -83,7 +84,7 @@ const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork)
     }
     await beaconWallet.requestPermissions({
       network:
-        network.connectType === 'custom' && network.type === 'test'
+        network.connectType === 'default' && network.type === 'test'
           ? {
               type: NetworkType.CUSTOM,
               name: network.name,
