@@ -9,9 +9,11 @@ import { bigNumberToString, defined, isExist, prepareNumberAsString, toDecimals 
 import { useDoUnstake } from '../../../../hooks/use-do-unstake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
 import { UnstakeFormFields, UnstakeFormValues } from './unstake-form.interface';
+import { useUnstakeConfirmationPopup } from './use-unstake-confirmation-popup';
 import { useUnstakeFormValidation } from './use-unstake-form.validation';
 
 export const useUnstakeFormViewModel = () => {
+  const confirmationPopup = useUnstakeConfirmationPopup();
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
@@ -35,9 +37,11 @@ export const useUnstakeFormViewModel = () => {
     values: UnstakeFormValues,
     actions: FormikHelpers<UnstakeFormValues>
   ) => {
-    await handleUnstakeSubmit(values, actions);
+    confirmationPopup(async () => {
+      await handleUnstakeSubmit(values, actions);
 
-    await delayedGetFarmingItem(defined(farmingItem).id);
+      await delayedGetFarmingItem(defined(farmingItem).id);
+    });
   };
 
   const formik = useFormik({

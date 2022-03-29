@@ -62,6 +62,8 @@ export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 export const MAX_HOPS_COUNT = 5;
 
+export const NO_TIMELOCK_VALUE = '0';
+
 export const TEZ_TO_LEAVE = new BigNumber('0.1');
 export const TEZ_TRANSFER_AMOUNT_CAP = new BigNumber('0.01');
 

@@ -5,8 +5,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { HOURS_IN_DAY, MINUTES_IN_HOUR, MS_IN_SECOND, SECONDS_IN_MINUTE } from '@app.config';
 import { DashPlug } from '@components/ui/dash-plug';
+import { parseTimelock } from '@utils/helpers';
 import { Undefined } from '@utils/types';
 
 import styles from './timespan-view.module.scss';
@@ -46,16 +46,12 @@ export const TimespanView = ({
 }: TimespanViewProps) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
-
-  const totalMins = new BigNumber(value).dividedToIntegerBy(SECONDS_IN_MINUTE * MS_IN_SECOND);
-  const mins = totalMins.modulo(MINUTES_IN_HOUR);
-  const hours = totalMins.dividedToIntegerBy(MINUTES_IN_HOUR).modulo(HOURS_IN_DAY);
-  const days = totalMins.dividedToIntegerBy(MINUTES_IN_HOUR * HOURS_IN_DAY);
+  const { days, hours, minutes } = parseTimelock(value);
 
   const viewParts = [
-    { periodName: t('common|dayLetter'), amount: days.toNumber() },
-    { periodName: t('common|hourLetter'), amount: hours.toNumber() },
-    { periodName: t('common|minuteLetter'), amount: mins.toNumber() }
+    { periodName: t('common|dayLetter'), amount: days },
+    { periodName: t('common|hourLetter'), amount: hours },
+    { periodName: t('common|minuteLetter'), amount: minutes }
   ];
 
   return (

@@ -1,4 +1,4 @@
-import { MS_IN_SECOND } from '@app.config';
+import { MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@app.config';
 import { useDoHarvest } from '@containers/farming/hooks/use-do-harvest';
 import { useGetFarmingItem } from '@containers/farming/hooks/use-get-farming-item';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
@@ -8,7 +8,6 @@ import { defined, getDollarEquivalent, getTokenSymbol, isExist, isNull } from '@
 import { canDelegate, makeBaker } from '../../helpers';
 
 const TOKEN_SYMBOL_FILLER = '\u00a0';
-const NO_TIMELOCK_VALUE = '0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
