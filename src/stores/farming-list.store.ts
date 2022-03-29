@@ -3,9 +3,13 @@ import BigNumber from 'bignumber.js';
 import { computed, makeObservable } from 'mobx';
 
 import { getFarmingListApi, getFarmingStatsApi } from '@api/farming';
+import { getAllFarmsUserInfoApi } from '@api/farming/get-user-info.api';
+import { UsersInfoValueWithId } from '@api/farming/helpers';
 import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@interfaces/farming.interfaces';
+import { isNull } from '@utils/helpers';
 import { multipliedIfPossible } from '@utils/helpers/multiplied-if-possible';
 import { mapFarmingItems, mapFarmingStats } from '@utils/mapping/farming.map';
+import { noopMap } from '@utils/mapping/noop.map';
 
 import { LoadingErrorData } from './loading-error-data.store';
 import { RootStore } from './root.store';
@@ -17,6 +21,12 @@ export class FarmingListStore {
     [],
     async () => await getFarmingListApi(this.rootStore.authStore.accountPkh, this.rootStore.tezos),
     mapFarmingItems
+  );
+
+  userInfo = new LoadingErrorData<Nullable<UsersInfoValueWithId[]>, Nullable<UsersInfoValueWithId[]>>(
+    [],
+    async () => await this.getUserInfo(),
+    noopMap
   );
 
   statsStore = new LoadingErrorData<RawFarmingStats, Nullable<FarmingStats>>(null, getFarmingStatsApi, mapFarmingStats);
@@ -41,5 +51,16 @@ export class FarmingListStore {
       pendingRewards: computed,
       list: computed
     });
+  }
+
+  private async getUserInfo() {
+    const { tezos, authStore } = this.rootStore;
+    const { data: list } = this.listStore;
+
+    if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(list)) {
+      return null;
+    }
+
+    return getAllFarmsUserInfoApi(tezos, authStore.accountPkh);
   }
 }

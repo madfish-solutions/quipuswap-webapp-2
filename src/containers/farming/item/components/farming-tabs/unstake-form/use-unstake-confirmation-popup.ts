@@ -9,12 +9,12 @@ import { Nullable, Undefined } from '@utils/types';
 
 const TIME_LOCK_ENDS = 0;
 
-const getTimeout = (lastStaked: Undefined<string>, timelock: Undefined<string>) => {
+const getTimeout = (lastStaked: Undefined<Date>, timelock: Undefined<string>) => {
   if (isUndefined(lastStaked) || isUndefined(timelock)) {
     return null;
   }
 
-  const lastStakedTime = new Date(lastStaked).getTime();
+  const lastStakedTime = lastStaked.getTime();
   const endTimestamp = lastStakedTime + Number(timelock) * MS_IN_SECOND;
 
   return Math.max(endTimestamp - Date.now(), TIME_LOCK_ENDS);

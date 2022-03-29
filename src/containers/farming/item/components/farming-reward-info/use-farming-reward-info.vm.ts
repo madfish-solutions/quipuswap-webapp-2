@@ -60,9 +60,9 @@ export const useFarmingRewardInfoViewModel = () => {
   const myRewardInTokens = farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInUsd = getDollarEquivalent(myRewardInTokens, farmingItem.earnExchangeRate);
 
+  // TODO
   const shouldShowCountdown = farmingItem.timelock !== NO_TIMELOCK_VALUE;
   const shouldShowCountdownValue = farmingItem.depositBalance ? !farmingItem.depositBalance.isZero() : false;
-
   const endTimestamp = isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
   const isHarvestAvailable = endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
 
