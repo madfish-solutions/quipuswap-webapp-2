@@ -2,10 +2,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { render } from 'react-dom';
 
+import { RootStoreProvider, DAppProvider, WalletWrapper } from '@providers';
+
 import App from './App';
-import { RootStoreProvider } from './providers/root-store-provider';
-import { DAppProvider } from './providers/use-dapp';
-import { WalletWrapper } from './providers/wallet-wrapper';
 
 require('dotenv').config();
 

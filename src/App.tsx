@@ -8,7 +8,7 @@ import { ConnectWalletButton } from '@shared/components';
 
 const App = observer(() => {
   return (
-    <div className="App">
+    <div>
       <ConnectWalletButton />
     </div>
   );
