@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 
-import { ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorThemeContext } from '@providers';
 
-import { isClient } from '../helpers/is-client';
+import { isClient } from '@shared/helpers/is-client';
 
 export const Background: React.FC<IconProps> = ({ className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);

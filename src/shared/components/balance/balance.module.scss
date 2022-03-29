@@ -1,0 +1,43 @@
+@import "@styles/_variables";
+@import "@styles/_breakpoints";
+
+.item2Line {
+	display: flex;
+	align-items: center;
+}
+
+.caption {
+	font-size: 0.857rem;
+  line-height: 1.33;
+  color: $text-03;
+}
+
+.label2 {
+	font-weight: bold;
+  font-size: 0.857rem;
+  line-height: 1.33;
+  color: $text-03;
+}
+
+.price {
+	margin-left: 8px;
+}
+
+.light {
+	&.price {
+		color: $text-01
+	}
+}
+
+.dark {
+	&.price {
+    color: $text-inverse
+	}
+}
+
+
+@include media(">tablet") {
+	.item2Line {
+		justify-content: flex-end;
+	}
+}

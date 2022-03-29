@@ -7,16 +7,15 @@ import {
   TEZOS_TOKEN_SLUG,
   TEZOS_TOKEN_SYMBOL,
   TEZ_TRANSFER_AMOUNT_CAP
-} from '../../../app.config';
-import { useGlobalModalsState } from '../../hooks/use-global-modals-state';
-import { useToasts } from '../../hooks/use-toasts';
-import { useBalances } from '../../../providers/balances-provider';
-import { useTezos } from '../../../providers/use-dapp';
-import { useConfirmOperation } from '../../dapp/confirm-operation';
-import { prepareNumberAsString } from '../../helpers/prepare-number-as-string';
-import { fromDecimals } from '../../../shared/helpers/from-decimals';
-import { defined } from '../../../shared/helpers/type-checks';
-import { makeNumberAsStringTestFn, numberAsStringSchema } from '../../helpers/number-as-string';
+} from '@config';
+import { useGlobalModalsState } from '@shared/hooks/use-global-modals-state';
+import { useToasts } from '@shared/hooks/use-toasts';
+import { useBalances, useTezos } from '@providers';
+import { useConfirmOperation } from '@shared/dapp/confirm-operation';
+import { prepareNumberAsString } from '@shared/helpers/prepare-number-as-string';
+import { fromDecimals } from '@shared/helpers/from-decimals';
+import { defined } from '@shared/helpers/type-checks';
+import { makeNumberAsStringTestFn, numberAsStringSchema } from '@shared/helpers/number-as-string';
 
 import { DonationFormValues } from './types';
 

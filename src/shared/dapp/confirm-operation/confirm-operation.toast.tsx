@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { TZKT_EXPLORER_URL } from '@app.config';
-import { Button } from '@components/ui/elements/button';
-import { shortize } from '@utils/helpers';
+import { TZKT_EXPLORER_URL } from '@config';
+import { Button } from '@shared/components/button';
+import { shortize } from '@shared/helpers/shortize';
 
 import { ConfirmationToastProps } from './confirm-operation.types';
 

@@ -1,10 +1,9 @@
 import { BigNumber } from 'bignumber.js';
 import { string as stringSchema, StringSchema } from 'yup';
-import { i18n } from 'next-i18next';
 
-import { prepareNumberAsString } from '../helpers/prepare-number-as-string';
-import { formatBalance } from '../helpers/format-balance';
-import { Optional } from '../../types';
+import { prepareNumberAsString } from '@shared/helpers/prepare-number-as-string';
+import { formatBalance } from '@shared/helpers/format-balance';
+import { Optional } from 'types/types';
 
 type NumberAsStringSchema = StringSchema<string | undefined, Record<string, unknown>, string | undefined>;
 

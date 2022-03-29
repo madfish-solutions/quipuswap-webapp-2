@@ -10,13 +10,14 @@ import {
   LAST_USED_CONNECTION_KEY,
   NETWORK,
   NETWORK_ID
-} from '@app.config';
-import { NoBeaconWallet, WalletNotConnected } from '@errors';
-import { isDefaultConnectType } from '@utils/helpers';
-import { ConnectType, LastUsedConnectionKey, QSNets, QSNetwork } from '@utils/types';
+} from '@config';
+import { NoBeaconWallet } from '@shared/errors/no-beacon-wallet.error';
+import { WalletNotConnected } from '@shared/errors/wallet-not-connected.error';
+import { isDefaultConnectType } from '@shared/helpers/is-default-connect-type';
+import { QSNetwork, QSNets, ConnectType, LastUsedConnectionKey } from 'types/types';
 
-import { toBeaconNetworkType } from '../network';
-import { ReadOnlySigner } from '../ReadOnlySigner';
+import { toBeaconNetworkType } from '@shared/helpers/network';
+import { ReadOnlySigner } from '@shared/dapp/read-only-signer';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
 

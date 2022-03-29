@@ -1,1 +1,1 @@
-export * from './QPToken';
+export * from './QP-Token';

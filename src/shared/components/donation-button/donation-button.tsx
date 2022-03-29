@@ -2,10 +2,9 @@ import React, { useContext } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
-import { Button } from '@components/ui/elements/button';
-import { useGlobalModalsState } from '@hooks/use-global-modals-state';
+import { Button } from '@shared/components/button';
+import { useGlobalModalsState } from '@shared/hooks/use-global-modals-state';
 
 import styles from './donation-button.module.sass';
 
@@ -19,7 +18,6 @@ const modeClass = {
 };
 
 export const DonationButton: React.FC<DonationButtonProps> = ({ className }) => {
-  const { t } = useTranslation(['common']);
   const { openDonationModal } = useGlobalModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
 

@@ -1,5 +1,5 @@
 import { RpcClient } from '@taquito/rpc';
-import mem from '../../libs/mem';
+import mem from 'libs/mem';
 
 interface RPCOptions {
   block: string;

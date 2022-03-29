@@ -2,11 +2,11 @@ import React, { useCallback, useMemo } from 'react';
 
 import { Props as SelectProps } from 'react-select';
 
-import { ALL_NETWORKS, NETWORK } from '../../../app.config';
-import { useChangeNetwork } from '../../../providers/use-dapp';
-import { Nullable } from '../../types/types';
+import { ALL_NETWORKS, NETWORK } from '@config';
+import { useChangeNetwork } from '@providers';
+import { Nullable } from 'types/types';
 
-import { SelectUI } from '../../../shared/components/select-ui';
+import { SelectUI } from '@shared/components/select-ui';
 
 interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
   className?: string;

@@ -1,11 +1,9 @@
-import React, { FC, ReactNode, useContext, useMemo, useState } from 'react';
+import { FC, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
-import { isActivePath } from '@components/common/Header/Navigation/utils';
+import { isActivePath } from './utils';
 
 import { navigationData } from './content';
 import s from './Navigation.module.sass';
@@ -21,7 +19,6 @@ interface NavigationProps {
 }
 
 export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
-  const router = useRouter();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [isInnerMenuOpened, setIsInnerMenuOpened] = useState(false);
 

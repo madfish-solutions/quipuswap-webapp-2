@@ -1,18 +1,18 @@
 import { FC, useCallback, useContext, useEffect } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@providers';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
-import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZ_TRANSFER_AMOUNT_CAP } from '@app.config';
-import { ConnectWalletButton } from '@components/common/ConnectWalletButton';
-import { Modal } from '@components/modals/Modal';
-import { TokenSelect } from '@components/ui/ComplexInput/TokenSelect';
-import { Button } from '@components/ui/elements/button';
-import { useGlobalModalsState } from '@hooks/use-global-modals-state';
-import { useBalances } from '@providers/BalancesProvider';
-import { useAccountPkh, useOnBlock, useTezos } from '@utils/dapp';
-import { isEmptyArray, isExist, isNull } from '@utils/helpers';
+import { TEZOS_TOKEN, TEZOS_TOKEN_SLUG, TEZ_TRANSFER_AMOUNT_CAP } from '@config';
+import { ConnectWalletButton } from '@shared/components/connect-wallet-button';
+import { Modal } from '@shared/modals/modal';
+import { TokenSelect } from '@shared/components/token-select/token-select';
+import { Button } from '@shared/components/button';
+import { useGlobalModalsState } from '@shared/hooks/use-global-modals-state';
+import { useBalances } from '@providers';
+import { useAccountPkh, useTezos } from '@providers';
+import { useOnBlock } from '@shared/dapp/use-on-block';
+import { isEmptyArray, isExist, isNull } from '@shared/helpers/type-checks';
 
 import s from './donation-modal.module.sass';
 import { useDonationFormik } from './use-donation-formik';
@@ -23,7 +23,7 @@ const modeClass = {
 };
 
 export const DonationModal: FC = () => {
-  const { t } = useTranslation(['common']);
+  // const { t } = useTranslation(['common']);
   const { donationModalOpen, closeDonationModal } = useGlobalModalsState();
   const { colorThemeMode } = useContext(ColorThemeContext);
   const compoundClassName = cx(s.modal, modeClass[colorThemeMode]);

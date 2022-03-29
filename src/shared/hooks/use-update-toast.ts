@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import { UpdateOptions, toast } from 'react-toastify';
 
-import { toastContent } from '../../providers/toast-wrapper';
+import { toastContent } from '@providers';
 
 const DEFAULT_AUTOCLOSE_TIMER = 15000;
 

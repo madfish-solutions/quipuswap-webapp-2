@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Button } from '../button';
-import { useGlobalModalsState } from '../../hooks/use-global-modals-state';
-import { useAccountPkh, useReady } from '../../../providers/use-dapp';
-import { shortize } from '../../helpers/shortize';
+import { Button } from '@shared/components/button';
+import { useGlobalModalsState } from '@shared/hooks/use-global-modals-state';
+import { useAccountPkh, useReady } from '@providers';
+import { shortize } from '@shared/helpers/shortize';
 
 interface ConnectWalletButtonProps {
   className?: string;

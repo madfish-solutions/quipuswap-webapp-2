@@ -1,6 +1,6 @@
-import { Nullable, Optional, Undefined } from '../types/types';
+import { Nullable, Optional, Undefined } from 'types/types';
 
-import { UnexpectedEmptyValueError } from '../../errors/unexpected-empty-value.error';
+import { UnexpectedEmptyValueError } from '@shared/errors/unexpected-empty-value.error';
 
 export const isNull = <T>(value: Nullable<T>): value is null => value === null;
 
@@ -10,6 +10,8 @@ export const isUndefined = <T>(value: Undefined<T>): value is undefined => value
   Check to empty value
  */
 export const isExist = <T>(value: Optional<T>): value is T => !isNull(value) && !isUndefined(value);
+
+export const isEmptyArray = (array: unknown[]) => array.length === 0;
 
 export const defined = <T>(value: Optional<T>, message?: string): T => {
   if (!isExist(value)) {

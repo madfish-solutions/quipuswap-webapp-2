@@ -1,9 +1,9 @@
 import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 
-import { QSNets } from '@utils/types';
+import { QSNets } from 'types/types';
 
-import { ReadOnlySigner } from '../ReadOnlySigner';
+import { ReadOnlySigner } from '@shared/dapp/read-only-signer';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
 

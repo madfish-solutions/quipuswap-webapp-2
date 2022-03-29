@@ -1,8 +1,8 @@
 import { OperationEntry } from '@taquito/rpc';
 
-import { useToasts } from '@hooks/use-toasts';
+import { useToasts } from '@shared/hooks/use-toasts';
 
-import { useTezos } from '..';
+import { useTezos } from '@providers';
 import { confirmOperation } from './confirm-operation.service';
 import { ConfirmationSuccessToast, TransactionSendedToast } from './confirm-operation.toast';
 import { OperationMessage } from './confirm-operation.types';

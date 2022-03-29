@@ -3,12 +3,12 @@ import { useCallback, useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import constate from 'constate';
 
-import { getUserBalance } from '../api/get-user-balance';
-import { useAccountPkh, useTezos } from '../providers/use-dapp';
-import { getTokenSlug } from '../shared/helpers/get-token-slug';
-import { fromDecimals } from '../shared/helpers/from-decimals';
-import { defined } from '../shared/helpers/type-checks';
-import { Token } from '../types';
+import { getUserBalance } from 'api';
+import { useAccountPkh, useTezos } from '@providers';
+import { getTokenSlug } from '@shared/helpers/get-token-slug';
+import { fromDecimals } from '@shared/helpers/from-decimals';
+import { defined } from '@shared/helpers/type-checks';
+import { Token } from 'types/types';
 
 export const [BalancesProvider, useBalances] = constate(() => {
   const tezos = useTezos();

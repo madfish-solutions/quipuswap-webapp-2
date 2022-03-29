@@ -2,17 +2,16 @@ import { FC, useContext } from 'react';
 
 import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
-import { useTranslation } from 'next-i18next';
 
-import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@app.config';
-import { ConnectWalletButton } from '../connect-wallet-button';
-import { DonationButton } from '../donation-button';
-import { NetworkSelect } from '../network-select';
-import { Button } from '../button';
+import { IS_NETWORK_MAINNET, QUIPUSWAP_OLD_VERSION_LINK } from '@config';
+import { ConnectWalletButton } from '@shared/components/connect-wallet-button';
+import { DonationButton } from '@shared/components/donation-button';
+import { NetworkSelect } from '@shared/components/network-select';
+import { Button } from '@shared/components/button';
 
-import { Navigation } from '../navigation';
-import { QPToken } from '../QPToken';
-import { Socials } from '../socials';
+import { Navigation } from '@shared/components/navigation';
+import { QPToken } from '@shared/components/QPToken';
+import { Socials } from '@shared/components/socials';
 import s from './Sidebar.module.sass';
 
 interface SidebarProps {
@@ -25,7 +24,6 @@ const modeClass = {
 };
 
 export const Sidebar: FC<SidebarProps> = ({ className }) => {
-  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

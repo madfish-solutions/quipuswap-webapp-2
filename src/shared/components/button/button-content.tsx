@@ -2,7 +2,7 @@ import React from 'react';
 
 import cx from 'classnames';
 
-import { LogoSmallMonochrome } from '@components/svg/logo-small-monochrome';
+import { LogoSmallMonochrome } from '@shared/svg/logo-small-monochrome';
 
 import { ButtonProps } from './button';
 import s from './button.module.sass';

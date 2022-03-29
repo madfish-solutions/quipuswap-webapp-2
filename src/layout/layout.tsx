@@ -2,19 +2,19 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { BASE_URL } from '../app.config'; 
+// import { BASE_URL } from '../app.config'; 
 import { useBaseLayoutViewModel } from './use-layout.vm';
-import { Header } from '../shared/components/header';
-import { Sidebar } from '../shared/components/sidebar'; // shared/components
-import { AccountModal } from '../shared/modals/AccountModal';
-import { DonationModal } from '../shared/modals/donation-modal'; // sharded/modals
-import { WalletModal } from '../shared/modals/WalletModal';
-import { Background } from '../shared/svg/Background'; // shared/svg
-import { ToastWrapper } from '../providers/toast-wrapper'; // provider
-import { GlobalModalsStateProvider } from '../shared/hooks/use-global-modals-state'; // shared/hooks
-import { DEFAULT_SEO } from '../seo.config';
+import { Header } from '@shared/components/header';
+import { Sidebar } from '@shared/components/sidebar'; // shared/components
+// import { AccountModal } from '../shared/modals/AccountModal';
+// import { DonationModal } from '../shared/modals/donation-modal'; // sharded/modals
+// import { WalletModal } from '../shared/modals/WalletModal';
+import { Background } from '@shared/svg/Background'; // shared/svg
+import { ToastWrapper } from '@providers'; // provider
+// import { GlobalModalsStateProvider } from '../shared/hooks/use-global-modals-state'; // shared/hooks
+// import { DEFAULT_SEO } from '../seo.config';
 
-import s from './BaseLayout.module.sass';
+import s from './layout.module.scss';
 
 interface BaseLayoutProps {
   title?: string;

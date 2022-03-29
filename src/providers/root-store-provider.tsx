@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 
 import { enableStaticRendering } from 'mobx-react-lite';
 
-import { Undefined } from '@utils/types';
+import { Undefined } from 'types/types';
 
 import { RootStore } from '../stores/root.store';
 

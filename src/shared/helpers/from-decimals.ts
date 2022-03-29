@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Token } from '../../types';
+import { Token } from 'types/types';
 
 export const fromDecimals = (num: BigNumber, decimalsOrToken: number | Token) =>
   num.div(

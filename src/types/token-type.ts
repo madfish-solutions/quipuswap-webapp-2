@@ -1,28 +1,11 @@
-import { TokenMetadata } from "./token-data";
-import { FoundDex } from "./dex-type";
-import { QSMainNet } from "./qs-network-type";
-import { Nullable } from "./type-check";
-import { Standard } from "./standard";
+import { TokenId, TokenIdFa2, Standard } from './types';
+import { isExist } from '@shared/helpers/type-checks';
 
-export interface TokenPair {
-  balance?: Nullable<string>;
-  frozenBalance?: Nullable<string>;
-  token1: Token;
-  token2: Token;
-  dex?: Nullable<FoundDex>;
-}
+export const isTokenTypeFa2 = (type: Standard): type is Standard.Fa2 => type.toUpperCase() === Standard.Fa2;
 
-export interface Token {
-  type: Standard;
-  contractAddress: string;
-  fa2TokenId?: number;
-  isWhitelisted: Nullable<boolean>;
-  metadata: TokenMetadata;
-}
+export const isTokenTypeFa12 = (type: Standard): type is Standard.Fa12 => type.toUpperCase() === Standard.Fa12;
 
-export interface TokenWithQSNetworkType extends Token {
-  network?: QSMainNet;
-}
+export const isTokenFa2 = (token: TokenId): token is TokenIdFa2 =>
+  isTokenTypeFa2(token.type) || ('fa2TokenId' in token && isExist(token.fa2TokenId));
 
-export type TokenId = Pick<Token, 'contractAddress' | 'fa2TokenId' | 'type'>;
-export type TokenIdFa2 = Required<TokenId>;
+export const isTokenFa12 = (token: TokenId) => isTokenTypeFa12(token.type);

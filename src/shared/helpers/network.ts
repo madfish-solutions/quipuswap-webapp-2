@@ -1,6 +1,6 @@
 import { NetworkType as BeaconNetworkType } from '@airgap/beacon-sdk';
-import { NETWORK_ID_KEY, DEFAULT_NETWORK, ALL_NETWORKS, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '../../config/config';
-import { QSNetwork, QSMainNet } from '../../types/types';
+import { NETWORK_ID_KEY, DEFAULT_NETWORK, ALL_NETWORKS, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config';
+import { QSNetwork, QSNets } from 'types/types';
 
 
 export const getNetwork = () => {
@@ -19,9 +19,9 @@ export const setNetwork = (net: QSNetwork) => {
   localStorage.removeItem(LAST_USED_CONNECTION_KEY);
 };
 
-const beaconNetworkTypes: Record<QSMainNet, BeaconNetworkType> = {
+const beaconNetworkTypes: Record<QSNets, BeaconNetworkType> = {
   mainnet: BeaconNetworkType.MAINNET,
   hangzhounet: BeaconNetworkType.HANGZHOUNET
 };
 
-export const toBeaconNetworkType = (netId: QSMainNet) => beaconNetworkTypes[netId];
+export const toBeaconNetworkType = (netId: QSNets) => beaconNetworkTypes[netId];

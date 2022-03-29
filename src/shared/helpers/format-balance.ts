@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
-import { FormatNumber } from '../../shared/helpers/format-number';
-import { bigNumberToString } from '../../shared/helpers/big-number-to-string';
+import { FormatNumber } from '@shared/helpers/format-number';
+import { bigNumberToString } from '@shared/helpers/big-number-to-string';
 
 import { shortNumberWithLetters } from './short-number-with-letters';
 
@@ -30,6 +30,7 @@ const formatDecimal = (decimals: string): string => {
 
   return decimals;
 };
+
 
 const cleanUpZeros = (value: string) => {
   const preparedValue = formatDecimal(value);

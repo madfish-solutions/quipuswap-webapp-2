@@ -1,0 +1,35 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+
+.button
+  &:not(:last-child)
+    margin-bottom: 24px
+
+.modal
+  padding: 40px 24px 24px
+
+.button
+  cursor: pointer
+  .buttonInner
+    padding-left: 0
+    padding-right: 0
+
+.buttonContent
+  display: flex
+  align-items: center
+  justify-content: center
+  //font-size: 0.857rem
+
+.icon
+  margin-right: 8px
+
+@include media('>tablet')
+  .button
+    &:not(:last-child)
+      margin-right: 24px
+      margin-bottom: 0
+  .modal
+    padding-bottom: 40px
+  .wallets
+    display: flex
+    align-items: center

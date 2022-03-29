@@ -2,7 +2,7 @@ import React from 'react';
 
 import cx from 'classnames';
 
-import { Button } from '@components/ui/elements/button';
+import { Button } from '@shared/components/button';
 
 import { SocialLinksData } from './content';
 import s from './Socials.module.sass';

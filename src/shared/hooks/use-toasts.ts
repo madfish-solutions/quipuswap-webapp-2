@@ -2,9 +2,9 @@ import { useCallback } from 'react';
 
 import { ToastContent, UpdateOptions } from 'react-toastify';
 
-import { isUndefined } from '../../shared/helpers/type-checks';
+import { isUndefined } from '@shared/helpers/type-checks';
 
-import { useUpdateToast } from '../hooks/use-update-toast';
+import { useUpdateToast } from '@shared/hooks/use-update-toast';
 
 export interface UseToasts {
   updateToast: ({ type, render, progress, autoClose, ...restOptions }: UpdateOptions) => void;

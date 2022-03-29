@@ -2,9 +2,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { KNOWN_LAMBDA_CONTRACTS } from '../app.config';
-import { getReadOnlyTezos } from '../shared/dapp/getReadOnlyTezos';
-import { Token } from '../types';
+import { KNOWN_LAMBDA_CONTRACTS } from '@config';
+import { getReadOnlyTezos } from '@shared/dapp/get-read-only-tezos';
+import { Token } from 'types/types';
+import { Standard } from 'types/types'
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()

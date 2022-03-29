@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@providers';
 
-import { QUIPUSWAP } from '../app.config';
+import { QUIPUSWAP } from '@config';
 
 export const useBaseLayoutViewModel = () => {
   const { colorThemeMode, isComponentDidMount } = useContext(ColorThemeContext);
@@ -20,7 +20,7 @@ export const useBaseLayoutViewModel = () => {
   }, [colorThemeMode]);
 
   const isDarkFavicon = colorThemeMode === ColorModes.Dark;
-  const canonicalURL = QUIPUSWAP + useRouter().asPath;
+  const canonicalURL = QUIPUSWAP + '2'; // useRouter().asPath
 
   return { isDarkFavicon, canonicalURL, isComponentDidMount };
 };

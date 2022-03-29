@@ -1,4 +1,4 @@
-import { useRootStore } from '@providers/root-store-provider';
+import { useRootStore } from '@providers';
 
 export const useAuthStore = () => {
   const { authStore } = useRootStore();

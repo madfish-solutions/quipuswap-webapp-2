@@ -3,8 +3,8 @@ import React, { useContext } from 'react';
 import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { DataTestAttribute } from '@tests/types';
-import { isUndefined } from '@utils/helpers';
+import { DataTestAttribute } from 'tests/types';
+import { isUndefined } from '@shared/helpers/type-checks';
 
 import { ButtonContent } from './button-content';
 import s from './button.module.sass';
