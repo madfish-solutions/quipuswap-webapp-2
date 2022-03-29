@@ -1,8 +1,8 @@
 /* eslint-disable import/no-default-export */
 
-import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import { Routes, Route } from 'react-router-dom';
 
+import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import PrivacyPolicy from '@modules/privacy-policy';
 import TermsOfService from '@modules/terms-of-service';
 import { ConnectWalletButton } from '@shared/components';
