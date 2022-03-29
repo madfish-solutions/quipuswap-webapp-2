@@ -26,7 +26,6 @@ export const TermsOfService: FC = () => {
       <Card>
         <CardContent className={s.content}>
           <EnTermsOfService />
-          sadadsad
         </CardContent>
       </Card>
     </Layout>

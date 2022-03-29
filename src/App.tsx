@@ -15,7 +15,7 @@ export default function App() {
       <Layout>
         <ConnectWalletButton />
         <Routes>
-          <Route path="/" element={<h1>hello</h1>} />
+          <Route path="/" element={<h1>Main page</h1>} />
           <Route path="/p" element={<PrivacyPolicy />} />
           <Route path="/t" element={<TermsOfService />} />
         </Routes>
