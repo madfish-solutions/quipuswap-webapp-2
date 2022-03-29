@@ -1,0 +1,76 @@
+{
+  "extends": [
+    "react-app",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:import/typescript",
+    "plugin:sonarjs/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
+  ],
+  "plugins": ["@typescript-eslint", "react-hooks", "import", "prettier", "sonarjs"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "ignorePatterns": ["graphql.ts"],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "rules": {
+    "import/no-named-as-default": 0,
+    "prettier/prettier": "error",
+    "import/order": [
+      "error",
+      {
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "groups": [["external", "builtin"], "internal", ["parent", "sibling", "index"]],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        },
+        "newlines-between": "always"
+      }
+    ],
+    "newline-before-return": ["error"],
+    "comma-dangle": ["error", "never"],
+    "import/no-default-export": "error",
+    "no-restricted-exports": ["error", { "restrictedNamedExports": ["default"] }],
+    "react-hooks/exhaustive-deps": "error",
+    "curly": "error",
+    "no-console": "error",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/no-unnecessary-type-assertion": "error",
+    "@typescript-eslint/promise-function-async": "error",
+    "@typescript-eslint/prefer-for-of": "error",
+    "@typescript-eslint/no-useless-constructor": "error",
+    "@typescript-eslint/no-use-before-define": "error",
+    "@typescript-eslint/no-type-alias": ["error", {
+      "allowAliases": "in-unions",
+      "allowTupleTypes": "always",
+      "allowGenerics": "always",
+      "allowLiterals": "in-unions-and-intersections",
+      "allowCallbacks": "always"
+    }],
+    "@typescript-eslint/no-this-alias": "error",
+    "@typescript-eslint/no-require-imports": "error",
+    "@typescript-eslint/no-magic-numbers": "warn",
+    "@typescript-eslint/no-for-in-array": "error",
+    "@typescript-eslint/no-array-constructor": "error",
+    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/require-array-sort-compare": "error",
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "no-restricted-imports": "error"
+  }
+}

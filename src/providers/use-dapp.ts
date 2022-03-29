@@ -8,7 +8,7 @@ import constate from 'constate';
 import useSWR from 'swr';
 import { getNetwork, setNetwork, toBeaconNetworkType } from '../shared/helpers/network';
 import { isClient } from '@shared/helpers/is-client';
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config';
+import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from 'config/config';
 import { QSNetwork } from 'types/types';
 import { ReadOnlySigner } from '@shared/helpers/readonly-signer';
 import { FastRpcClient } from '@shared/helpers/taquito-fast-rpc';

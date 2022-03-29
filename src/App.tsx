@@ -1,8 +1,10 @@
+/* eslint-disable import/no-default-export */
+
 import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import { ConnectWalletButton } from './shared/components/connect-button';
 import { Layout } from './layout';
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <Layout>
@@ -11,5 +13,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

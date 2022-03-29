@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 import mimicFn from 'mimic-fn';
 import mapAgeCleaner from 'map-age-cleaner';
 const cacheStore = new WeakMap();

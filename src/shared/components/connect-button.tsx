@@ -6,6 +6,8 @@ interface ConnectWalletButtonProps {
   className?: string;
 }
 
+const DEFAULT_LENGTH = 7;
+
 export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className }) => {
   const ready = useReady();
   const accountPkh = useAccountPkh();
@@ -15,7 +17,7 @@ export const ConnectWalletButton: FC<ConnectWalletButtonProps> = ({ className })
   if (ready && accountPkh) {
     return (
       <button className={className} onClick={openAccountInfoModal} title={accountPkh}>
-        {accountPkh ? shortize(accountPkh, 7) : 'Connect wallet'}
+        {accountPkh ? shortize(accountPkh, DEFAULT_LENGTH) : 'Connect wallet'}
       </button>
     );
   }
