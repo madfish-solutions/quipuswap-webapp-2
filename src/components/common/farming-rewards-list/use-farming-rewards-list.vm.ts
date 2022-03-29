@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { useTranslation } from 'next-i18next';
 
 import { useDoHarvestAll } from '@containers/farming/hooks/use-do-harvest-all';
@@ -19,7 +21,17 @@ export const useFarmingRewardsListViewModel = () => {
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   };
 
+  useEffect(() => {
+    farmingListStore.updatePendingRewards();
+    farmingListStore.makePendingRewardsLiveable();
+
+    return () => {
+      farmingListStore.clearIntervals();
+    };
+  }, [farmingListStore]);
+
   return {
+    pendingRewards: farmingListStore.pendingRewards,
     handleHarvestAll,
     translation: {
       harvestAllTranslation: t('farm|harvestAll'),
