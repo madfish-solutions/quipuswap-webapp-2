@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
-import { QSNets, ConnectType, QSNetwork, QSNetworkType, Token, WhitelistedBaker } from '@utils/types';
+import { ConnectType, QSNets, QSNetwork, QSNetworkType, Token, WhitelistedBaker } from '@utils/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -40,8 +40,21 @@ export const networksBaseUrls: Record<QSNets, string> = {
 export const BASE_URL = networksBaseUrls[NETWORK_ID];
 
 export const BAKERS_API = process.env.NEXT_PUBLIC_BAKERS_API_URL!;
-export const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
-export const TESTNET_TOKENS = process.env.NEXT_PUBLIC_TESTNET_TOKENS!;
+
+const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
+const HANGZHOUNET_TOKENS = process.env.NEXT_PUBLIC_HANGZHOUNET_TOKENS!;
+const ITHACANET_TOKENS = process.env.NEXT_PUBLIC_ITHACANET_TOKENS!;
+
+export const getTokensUrl = () => {
+  switch (NETWORK_ID) {
+    case QSNets.hangzhounet:
+      return HANGZHOUNET_TOKENS;
+    case QSNets.ithacanet:
+      return ITHACANET_TOKENS;
+    default:
+      return MAINNET_TOKENS;
+  }
+};
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
 export const FARM_REWARD_UPDATE_INTERVAL = 1000;

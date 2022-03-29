@@ -2,14 +2,7 @@ import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@ta
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import {
-  IS_NETWORK_MAINNET,
-  MAINNET_TOKENS,
-  networksDefaultTokens,
-  SAVED_TOKENS_KEY,
-  TESTNET_TOKENS,
-  TEZOS_TOKEN
-} from '@app.config';
+import { networksDefaultTokens, SAVED_TOKENS_KEY, TEZOS_TOKEN, getTokensUrl } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenSlug, ipfsToHttps, isClient, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
@@ -113,7 +106,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(IS_NETWORK_MAINNET ? MAINNET_TOKENS : TESTNET_TOKENS));
+  const response = await fetch(ipfsToHttps(getTokensUrl()));
   const json = await response.json();
   if (json.tokens?.length) {
     // TODO: remove 'any' type as soon as fa2TokenId type is changed to BigNumber
