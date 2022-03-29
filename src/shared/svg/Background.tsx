@@ -1,15 +1,17 @@
-import React, { useContext } from 'react';
+import { FC } from 'react';
 
-import { ColorThemeContext } from '@quipuswap/ui-kit';
+// import { ColorThemeContext } from '@quipuswap/ui-kit';
 
 import { isClient } from '@shared/helpers/is-client';
 
-export const Background: React.FC<IconProps> = ({ className }) => {
-  const { colorThemeMode } = useContext(ColorThemeContext);
+import background from './Desktopdark.png';
+
+export const Background: FC<IconProps> = ({ className }) => {
+  // const { colorThemeMode } = useContext(ColorThemeContext);
 
   if (!isClient) {
     return null;
   }
 
-  return <img src={`/svg/Desktop${colorThemeMode}.png`} alt="background" className={className} />;
+  return <img src={background} alt="background" className={className} />;
 };
