@@ -1,7 +1,7 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import BigNumber from 'bignumber.js';
 
-import { MS_IN_SECOND, NO_TIMELOCK_VALUE } from '@app.config';
+import { FARMING_DAILY_DISTRIBUTION_DECIMALS, MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@app.config';
 import {
   FarmingContractStorage,
   RawUsersInfoValue,
@@ -9,9 +9,9 @@ import {
   UsersInfoValue
 } from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
-import { defined, isExist } from '@utils/helpers';
+import { defined, fromDecimals, isExist } from '@utils/helpers';
 import { mapFarmingItem, mapUsersInfoValue } from '@utils/mapping/farming.map';
-import { Nullable, Undefined } from '@utils/types';
+import { Nullable, Token, Undefined } from '@utils/types';
 
 export interface UserBalances {
   depositBalance: string;
@@ -129,3 +129,9 @@ export const getEndTimestamp = (farmingItem: FarmingItem, lastStakedTime: Nullab
 
 export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
   endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
+
+export const getDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
+  fromDecimals(
+    rewardPerSecond.div(FARMING_DAILY_DISTRIBUTION_DECIMALS).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN),
+    rewardToken
+  );

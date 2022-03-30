@@ -104,7 +104,7 @@ export class FarmingListStore {
         const rewards = userInfo && getUserPendingReward(userInfo, farmingItem);
         const earnBalance = rewards && fromDecimals(rewards, farmingItem.rewardToken);
 
-        return earnBalance && multipliedIfPossible(earnBalance, farmingItem.earnExchangeRate);
+        return multipliedIfPossible(earnBalance, farmingItem.earnExchangeRate);
       });
 
     this.pendingRewards = rewardsInUsd.some(isExist)
