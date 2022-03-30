@@ -3,9 +3,8 @@
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
-import { ColorThemeProvider } from '@providers/color-theme-context';
-
 import App from './App';
+import { ColorThemeProvider } from './providers/color-theme-context';
 import { DAppProvider } from './providers/use-dapp';
 import { WalletWrapper } from './providers/wallet-wrapper';
 
