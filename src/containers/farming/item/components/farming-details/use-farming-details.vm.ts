@@ -1,11 +1,10 @@
-import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { getDailyDistribution } from '@api/farming/helpers';
 import {
   DAYS_IN_YEAR,
   IS_NETWORK_MAINNET,
   MS_IN_SECOND,
-  SECONDS_IN_DAY,
   FARMING_CONTRACT_ADDRESS,
   TZKT_EXPLORER_URL,
   NO_TIMELOCK_VALUE
@@ -14,7 +13,7 @@ import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
 import { ActiveStatus } from '@interfaces/active-statuts-enum';
 import s from '@styles/CommonContainer.module.sass';
 import { useBakers, useReady } from '@utils/dapp';
-import { bigNumberToString, fromDecimals, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
+import { bigNumberToString, getDollarEquivalent, getTokenSymbol } from '@utils/helpers';
 
 import { canDelegate, makeBaker } from '../../helpers';
 import styles from './farming-details.module.sass';
@@ -81,9 +80,7 @@ export const useFarmingDetailsViewModel = () => {
     stakeStatus
   } = farmingItem;
 
-  const dailyDistribution = bigNumberToString(
-    fromDecimals(rewardPerSecond.times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN), rewardToken)
-  );
+  const dailyDistribution = bigNumberToString(getDailyDistribution(rewardPerSecond, rewardToken));
   const distributionDollarEquivalent = IS_NETWORK_MAINNET
     ? getDollarEquivalent(dailyDistribution, earnExchangeRate)
     : null;

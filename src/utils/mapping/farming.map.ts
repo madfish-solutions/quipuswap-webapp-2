@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { DEFAULT_DECIMALS } from '@app.config';
+import { RawUsersInfoValue, UsersInfoValue } from '@interfaces/farming-contract.interface';
 import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@interfaces/farming.interfaces';
 import { isExist, getTokensName, fromDecimals } from '@utils/helpers';
 import { Token, Undefined, Nullable, Optional } from '@utils/types';
@@ -75,3 +76,12 @@ export const mapFarmingStats = (raw: RawFarmingStats): FarmingStats => ({
   totalPendingReward: new BigNumber(raw.totalPendingReward),
   totalClaimedReward: new BigNumber(raw.totalClaimedReward)
 });
+
+export const mapUsersInfoValue = (raw: Nullable<RawUsersInfoValue>): Nullable<UsersInfoValue> =>
+  raw && {
+    ...raw,
+    last_staked: new Date(raw.last_staked)
+  };
+
+export const mapUsersInfoValues = (rawList: RawUsersInfoValue[]): UsersInfoValue[] =>
+  rawList.map(mapUsersInfoValue).filter(isExist);

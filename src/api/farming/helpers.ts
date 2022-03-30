@@ -1,15 +1,38 @@
+import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import BigNumber from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@app.config';
-import { FarmingContractStorage, UsersInfoKey, UsersInfoValue } from '@interfaces/farming-contract.interface';
+import { MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@app.config';
+import {
+  FarmingContractStorage,
+  RawUsersInfoValue,
+  UsersInfoKey,
+  UsersInfoValue
+} from '@interfaces/farming-contract.interface';
 import { RawFarmingItem, FarmingItem } from '@interfaces/farming.interfaces';
-import { mapFarmingItem } from '@utils/mapping/farming.map';
-import { Undefined } from '@utils/types';
+import { defined, fromDecimals, isExist } from '@utils/helpers';
+import { mapFarmingItem, mapUsersInfoValue } from '@utils/mapping/farming.map';
+import { Nullable, Token, Undefined } from '@utils/types';
 
 export interface UserBalances {
   depositBalance: string;
   earnBalance: string;
 }
+
+export interface UsersInfoValueWithId extends UsersInfoValue {
+  id: MichelsonMapKey;
+}
+
+const ZERO = 0;
+
+export const DEFAULT_RAW_USER_INFO: RawUsersInfoValue = {
+  last_staked: new Date().toISOString(),
+  staked: new BigNumber(ZERO),
+  earned: new BigNumber(ZERO),
+  claimed: new BigNumber(ZERO),
+  prev_earned: new BigNumber(ZERO),
+  prev_staked: new BigNumber(ZERO),
+  allowances: []
+};
 
 export const fillIndexArray = (value: number): Array<BigNumber> => {
   const indexArray = [];
@@ -44,7 +67,7 @@ export const getUserPendingReward = (userInfo: UsersInfoValue, item: FarmingItem
   return fromRewardPrecision(pending);
 };
 
-export const getBalances = (userInfo: Undefined<UsersInfoValue>, item: RawFarmingItem) => {
+export const getBalances = (userInfo: Undefined<UsersInfoValueWithId>, item: RawFarmingItem) => {
   if (!userInfo) {
     return {
       depositBalance: '0',
@@ -60,35 +83,55 @@ export const getBalances = (userInfo: Undefined<UsersInfoValue>, item: RawFarmin
   };
 };
 
+export const getAllFarmUserInfo = async (storage: FarmingContractStorage, accountAddress: string) => {
+  const farmsCount = storage.farms_count;
+  const farmIds = fillIndexArray(farmsCount.toNumber());
+  const userInfoKeys = farmIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
+  const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
+
+  const usersInfoValues: Array<UsersInfoValueWithId> = [];
+
+  usersInfoValuesMap.forEach((userInfoValue, key) => {
+    const value = defined(mapUsersInfoValue(userInfoValue ? userInfoValue : DEFAULT_RAW_USER_INFO));
+
+    return usersInfoValues.push({ id: key, ...value });
+  });
+
+  return usersInfoValues;
+};
+
 export const getUserFarmBalances = async (
   accountAddress: string,
   storage: FarmingContractStorage,
   list: Array<RawFarmingItem>
 ) => {
-  const balances: Map<string, UserBalances> = new Map();
+  const userInfoValues = await getAllFarmUserInfo(storage, accountAddress);
 
-  const farmsCount = storage.farms_count;
-
-  const farmIds = fillIndexArray(farmsCount.toNumber());
-
-  const userInfoKeys = farmIds.map(farmId => [farmId, accountAddress] as UsersInfoKey);
-
-  const usersInfoValuesMap = await storage.users_info.getMultipleValues(userInfoKeys);
-
-  const usersInfoValues: Array<Undefined<UsersInfoValue>> = [];
-
-  usersInfoValuesMap.forEach(userInfoValue => usersInfoValues.push(userInfoValue));
-
-  for (let index = 0; index < usersInfoValues.length; index++) {
-    const usersInfoValue = usersInfoValues[index];
-
+  const balances: Map<string, UserBalances> = userInfoValues.reduce((acc, usersInfoValue, index) => {
     const farm = list.find(item => item.id === index.toString());
     if (farm) {
       const balance = getBalances(usersInfoValue, farm);
 
-      balances.set(farm.id, balance);
+      acc.set(farm.id, balance);
     }
-  }
+
+    return acc;
+  }, new Map());
 
   return balances;
 };
+
+export const getUserInfoLastStakedTime = (userInfo: Nullable<UsersInfoValue>) =>
+  userInfo ? new Date(userInfo.last_staked).getTime() : null;
+
+export const getEndTimestamp = (farmingItem: FarmingItem, lastStakedTime: Nullable<number>) =>
+  isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null;
+
+export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
+  endTimestamp ? endTimestamp - Date.now() < Number(NO_TIMELOCK_VALUE) : false;
+
+export const getDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
+  fromDecimals(
+    fromRewardPrecision(rewardPerSecond).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN),
+    rewardToken
+  );
