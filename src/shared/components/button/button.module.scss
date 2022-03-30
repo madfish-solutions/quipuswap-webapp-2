@@ -1,5 +1,6 @@
 @import '@styles/_variables';
 @import '@styles/_breakpoints';
+@import '@styles/_text';
 
 .loadingIcon {
   width: 24px;
@@ -145,14 +146,10 @@
       &:hover, &:focus {
         .text {
           color: $hover-primary-01-fallback;
-          background: $hover-primary-01;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          @include background-text-color($hover-primary-01);
           > * {
             color: $hover-primary-01-fallback;
-            background: $hover-primary-01;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            @include background-text-color($hover-primary-01);
           }
         }
 
@@ -166,14 +163,10 @@
       }
         .text {
           color: $text-01;
-          background: none;
-          -webkit-background-clip: initial;
-          -webkit-text-fill-color: $text-01;
+          @include background-text-color($text-01);
           > * {
             color: $text-01;
-            background: none;
-            -webkit-background-clip: initial;
-            -webkit-text-fill-color: $text-01;
+            @include background-text-color($text-01);
           }
         }
 
@@ -198,14 +191,10 @@
   &.inverse, &.underlined {
     .text {
       color: $hover-primary-01-fallback;
-      background: $brand-01;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      @include background-text-color($brand-01);
       > * {
         color: $hover-primary-01-fallback;
-        background: $brand-01;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        @include background-text-color($brand-01);
       }
     }
     .loadingIcon {
@@ -265,14 +254,10 @@
       &:hover, &:focus {
         .text {
           color: $hover-primary-02-fallback;
-          background: $hover-primary-02;
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
+          @include background-text-color($hover-primary-02);
           > * {
             color: $hover-primary-02-fallback;
-            background: $hover-primary-02;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            @include background-text-color($hover-primary-02);
           }
         }
 
@@ -284,14 +269,10 @@
       &:active {
         .text {
           color: $text-inverse;
-          background: none;
-          -webkit-background-clip: initial;
-          -webkit-text-fill-color: $text-inverse;
+          @include background-text-color($text-inverse);
           > * {
             color: $text-inverse;
-            background: none;
-            -webkit-background-clip: initial;
-            -webkit-text-fill-color: $text-inverse;
+            @include background-text-color($text-inverse);
           }
         }
 
@@ -318,14 +299,10 @@
   &.inverse, &.underlined {
     .text {
       color: $hover-primary-02-fallback;
-      background: $brand-02;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      @include background-text-color($brand-02);
       > * {
         color: $hover-primary-02-fallback;
-        background: $brand-02;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        @include background-text-color($brand-02);
       }
     }
 
