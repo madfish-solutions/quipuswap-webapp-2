@@ -1,4 +1,6 @@
-export const LogoSmallMonochrome: React.FC<IconProps> = ({ className }) => (
+import { FC } from 'react';
+
+export const LogoSmallMonochrome: FC<IconProps> = ({ className }) => (
   <svg width={24} height={24} fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path d="M11.986 19.508c-4.152 0-7.528-3.374-7.528-7.523 0-4.149 3.376-7.523 7.528-7.523 4.152 0 7.528 3.374 7.528 7.523 0 .468-.044.932-.127 1.375l2.532 2.53c.478-1.209.741-2.53.741-3.905 0-5.88-4.785-10.667-10.674-10.667-5.888 0-10.674 4.788-10.674 10.667 0 5.885 4.79 10.668 10.674 10.668 1.356 0 2.65-.253 3.844-.717l-2.541-2.54a7.191 7.191 0 0 1-1.303.112Z" />
     <path

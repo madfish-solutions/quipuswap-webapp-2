@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components/button';
 
 import styles from '../privacy-policy.module.scss';
@@ -12,7 +12,7 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const EnPrivacyPolicy: React.FC = () => {
+export const EnPrivacyPolicy: FC = () => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
@@ -283,6 +283,3 @@ export const EnPrivacyPolicy: React.FC = () => {
     </div>
   );
 };
-
-// eslint-disable-next-line import/no-default-export
-export default EnPrivacyPolicy;

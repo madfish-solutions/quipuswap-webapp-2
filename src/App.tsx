@@ -1,6 +1,5 @@
 /* eslint-disable import/no-default-export */
 
-import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
 import { Link } from 'react-router-dom';
 
 import { Layout } from './layout';

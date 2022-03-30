@@ -1533,13 +1533,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.4.tgz#d8c7b8db9226d2d7664553a0741ad7d0397ee503"
   integrity sha512-q/ytXxO5NKvyT37pmisQAItCFqA7FD/vNb8dgaJy3/630Fsc+Mz9/9f2SziBoIZ30TJooXyTwZmhi1zjXmObYg==
 
-"@quipuswap/ui-kit@^0.1.47":
-  version "0.1.47"
-  resolved "https://registry.yarnpkg.com/@quipuswap/ui-kit/-/ui-kit-0.1.47.tgz#8d4e6e75fdd2d86b0457abd6a33625963074b7a6"
-  integrity sha512-9SItu8CLONImaYank0Lj/HSj4mtG52/WrN2QH4oN38dYjqPZQxVB4B8TaqwNUF6y0ZwuHbXDFVIdaHq3onJGOA==
-  dependencies:
-    slick-carousel "^1.8.1"
-
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
@@ -2196,6 +2189,13 @@
   version "17.0.14"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-17.0.14.tgz#c8f917156b652ddf807711f5becbd2ab018dea9f"
   integrity sha512-H03xwEP1oXmSfl3iobtmQ/2dHF5aBHr8aUMwyGZya6OW45G+xtdzmq6HkncefiBt5JU8DVyaWl/nWZbjZCnzAQ==
+  dependencies:
+    "@types/react" "*"
+
+"@types/react-modal@^3.13.1":
+  version "3.13.1"
+  resolved "https://registry.yarnpkg.com/@types/react-modal/-/react-modal-3.13.1.tgz#5b9845c205fccc85d9a77966b6e16dc70a60825a"
+  integrity sha512-iY/gPvTDIy6Z+37l+ibmrY+GTV4KQTHcCyR5FIytm182RQS69G5ps4PH2FxtC7bAQ2QRHXMevsBgck7IQruHNg==
   dependencies:
     "@types/react" "*"
 
@@ -8809,11 +8809,6 @@ slash@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-4.0.0.tgz#2422372176c4c6c5addb5e2ada885af984b396a7"
   integrity sha512-3dOsAHXXUkQTpOYcoAxLIorMTp4gIQr5IW3iVb7A7lFIp0VHhnynm9izx6TssdrIcVIESAlVjtnO2K8bg+Coew==
-
-slick-carousel@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/slick-carousel/-/slick-carousel-1.8.1.tgz#a4bfb29014887bb66ce528b90bd0cda262cc8f8d"
-  integrity sha512-XB9Ftrf2EEKfzoQXt3Nitrt/IPbT+f1fgqBdoxO3W/+JYvtEOW6EgxnWfr9GH6nmULv7Y2tPmEX3koxThVmebA==
 
 sockjs@^0.3.21:
   version "0.3.24"

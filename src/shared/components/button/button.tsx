@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isUndefined } from '@shared/helpers/type-checks';
 
 import { DataTestAttribute } from '../../../tests/types';
@@ -18,9 +18,9 @@ export type ButtonProps = {
   className?: string;
   innerClassName?: string;
   textClassName?: string;
-  icon?: React.ReactNode;
-  control?: React.ReactNode;
-} & (React.HTMLProps<HTMLButtonElement> | React.HTMLProps<HTMLAnchorElement>) &
+  icon?: ReactNode;
+  control?: ReactNode;
+} & (HTMLProps<HTMLButtonElement> | HTMLProps<HTMLAnchorElement>) &
   // eslint-disable-next-line @typescript-eslint/no-type-alias
   DataTestAttribute;
 
@@ -39,7 +39,7 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: FC<ButtonProps> = ({
   loading,
   type = 'button',
   theme = 'primary',
@@ -71,7 +71,7 @@ export const Button: React.FC<ButtonProps> = ({
       target: external ? '_blank' : undefined,
       rel: external ? 'noreferrer noopener' : undefined,
       className: compoundClassName,
-      ...(props as React.HTMLProps<HTMLAnchorElement>)
+      ...(props as HTMLProps<HTMLAnchorElement>)
     };
 
     return (
@@ -89,7 +89,7 @@ export const Button: React.FC<ButtonProps> = ({
       type={type}
       className={compoundClassName}
       data-test-id={testId}
-      {...(props as React.HTMLProps<HTMLButtonElement>)}
+      {...(props as HTMLProps<HTMLButtonElement>)}
     >
       {control}
       {content}

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import cx from 'classnames';
 
@@ -6,7 +6,7 @@ import { Button } from '@shared/components/button';
 
 import styles from '../terms.module.scss';
 
-export const EnTermsOfService: React.FC = () => (
+export const EnTermsOfService: FC = () => (
   <>
     <h1 className={styles.mb24}>Terms of Service</h1>
     <p className={styles.big}>
@@ -304,6 +304,3 @@ export const EnTermsOfService: React.FC = () => (
     </p>
   </>
 );
-
-// eslint-disable-next-line import/no-default-export
-export default EnTermsOfService;

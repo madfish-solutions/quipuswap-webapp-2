@@ -71,3 +71,9 @@ export interface WhitelistedBakerFull extends WhitelistedBakerEmpty {
   fee: number;
   freeSpace: BigNumber;
 }
+
+export enum ActiveStatus {
+  ACTIVE = 'ACTIVE',
+  PENDING = 'PENDING',
+  DISABLED = 'DISABLED'
+}
