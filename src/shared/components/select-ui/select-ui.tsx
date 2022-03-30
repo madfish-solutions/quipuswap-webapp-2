@@ -1,9 +1,9 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-
 import cx from 'classnames';
 import Select, { Props as SelectProps } from 'react-select';
+
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import styles from './select-ui.module.scss';
 
