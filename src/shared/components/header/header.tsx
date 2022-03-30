@@ -7,7 +7,7 @@ import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
 import { MenuClosed, MenuOpened } from '../../svg';
 import { Button } from '../button';
 import { ColorModeSwitcher } from '../color-mode-switcher';
-import { ConnectWalletButton } from '../connect-button';
+import { ConnectWalletButton } from '../connect-wallet-button';
 import { LogoButton } from '../logo-button';
 import styles from './header.module.scss';
 import { Menu } from './menu';

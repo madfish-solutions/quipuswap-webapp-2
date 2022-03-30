@@ -8,7 +8,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import { Madfish } from '../../../svg';
 import { Button } from '../../button';
-import { ConnectWalletButton } from '../../connect-button';
+import { ConnectWalletButton } from '../../connect-wallet-button';
 import { NetworkSelect } from '../../network-select';
 import { Navigation } from '../navigation';
 import { QPToken } from '../qp-token';
