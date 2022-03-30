@@ -26,16 +26,16 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
 
   const content = useMemo(() => {
     const result: ReactNode[] = [];
-    navigationData.forEach(({ id, href, label, Icon, links, as, matchHrefs = [href] }) => {
-      if (href) {
+    navigationData.forEach(({ id, to, label, Icon, links }) => {
+      if (to) {
         result.push(
-          <Link key={id} to={href}>
+          <Link key={id} to={to}>
             {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
             <a
               className={cx(
                 styles.link,
                 {
-                  [styles.active]: matchHrefs.some(matchHref => isActivePath(router.pathname, matchHref!))
+                  [styles.active]: isActivePath(router.pathname, to)
                 },
                 modeClass[colorThemeMode]
               )}
@@ -59,7 +59,7 @@ export const Navigation: FC<NavigationProps> = ({ iconId, className }) => {
             </button>
             <span className={styles.linksInner}>
               {links.map(link => (
-                <Link key={link.id} to={link.href ?? ''}>
+                <Link key={link.id} to={link.to ?? ''}>
                   {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                   <a
                     className={cx(styles.linkInner, modeClass[colorThemeMode])}

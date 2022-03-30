@@ -6,9 +6,7 @@ import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } fro
 
 interface LinkInterface {
   id: number;
-  href?: string;
-  matchHrefs?: string[];
-  as?: string;
+  to?: string;
   label: React.ReactNode;
   target?: string;
   Icon?: React.FC<{ className?: string; id?: string }>;
@@ -21,54 +19,49 @@ interface NavigationDataProps extends LinkInterface {
 export const navigationData: NavigationDataProps[] = [
   {
     id: 0,
-    href: '/',
+    to: '/',
     label: <Trans ns="common">Home</Trans>,
     Icon: HomeIcon
   },
   {
     id: 1,
-    href: '/swap',
-    matchHrefs: ['/swap', '/send'],
-    as: `/swap`,
+    to: '/swap',
     label: <Trans ns="common">Swap</Trans>,
     Icon: SwapIcon
   },
   {
     id: 2,
-    href: '/liquidity/[method]',
-    as: `/liquidity/add`,
+    to: '/liquidity',
     label: <Trans ns="common">Liquidity</Trans>,
     Icon: LiquidityIcon
   },
   {
     id: 3,
-    href: '/voting/[method]',
-    as: `/voting/vote`,
+    to: '/voting',
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
   },
   {
     id: 4,
-    href: '/farming',
-    as: `/farming`,
+    to: '/farming',
     label: <Trans ns="common">Farming</Trans>,
     Icon: FarmIcon
   },
   // {
   //   id: 5,
-  //   href: '/farm',
+  //   to: '/farm',
   //   label: <Trans ns="common">Farm</Trans>,
   //   Icon: FarmIcon,
   // },
   // {
   //   id: 6,
-  //   href: '/portfolio',
+  //   to: '/portfolio',
   //   label: <Trans ns="common">Portfolio</Trans>,
   //   Icon: PortfolioIcon,
   // },
   // {
   //   id: 7,
-  //   href: '/governance',
+  //   to: '/governance',
   //   label: <Trans ns="common">Governance</Trans>,
   //   Icon: GovernanceIcon,
   // },
@@ -79,55 +72,55 @@ export const navigationData: NavigationDataProps[] = [
     links: [
       {
         id: 0,
-        href: 'https://analytics.quipuswap.com/',
+        to: 'https://analytics.quipuswap.com/',
         label: 'Analytics',
         target: '_blank'
       },
       {
         id: 1,
-        href: 'https://story.madfish.solutions/category/quipuswap/',
+        to: 'https://story.madfish.solutions/category/quipuswap/',
         label: 'About',
         target: '_blank'
       },
       {
         id: 2,
-        href: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
+        to: 'https://story.madfish.solutions/least-authority-has-successfully-conducted-the-quipuswap-security-audit/',
         label: 'Audit',
         target: '_blank'
       },
       {
         id: 3,
-        href: 'https://madfish.crunch.help/quipu-swap',
+        to: 'https://madfish.crunch.help/quipu-swap',
         label: 'Help',
         target: '_blank'
       },
       {
         id: 4,
-        href: 'https://docs.quipuswap.com/',
+        to: 'https://docs.quipuswap.com/',
         label: 'Docs',
         target: '_blank'
       },
       {
         id: 5,
-        href: 'https://story.madfish.solutions/',
+        to: 'https://story.madfish.solutions/',
         label: 'Blog',
         target: '_blank'
       },
 
       {
         id: 8,
-        href: 'https://madfish.canny.io/quipuswap-feature-requests',
+        to: 'https://madfish.canny.io/quipuswap-feature-requests',
         label: 'Feedback',
         target: '_blank'
       },
       {
         id: 6,
-        href: '/terms-of-service',
+        to: '/terms-of-service',
         label: 'Terms of Usage'
       },
       {
         id: 7,
-        href: '/privacy-policy',
+        to: '/privacy-policy',
         label: 'Privacy Policy'
       }
     ]
