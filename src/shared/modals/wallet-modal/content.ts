@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
-import { Beacon } from '@shared/svg/beacon';
-import { Temple } from '@shared/svg/temple';
-import { WalletType } from '@shared/types/types';
+import { Beacon, Temple } from '../../svg';
+import { WalletType } from '../../types/types';
 
 interface WalletProps {
   id: WalletType;

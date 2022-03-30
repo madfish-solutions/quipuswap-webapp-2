@@ -1,12 +1,13 @@
 import React, { useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+
 // import { MAINNET_DEFAULT_TOKEN } from '@config/config';
 
-import { QuipuToken } from '../../svg';
+import { QuipuToken } from '../../../svg';
 import styles from './qp-token.module.scss';
 
 const modeClass = {

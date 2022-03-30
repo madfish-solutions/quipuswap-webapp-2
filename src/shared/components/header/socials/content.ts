@@ -1,4 +1,4 @@
-import { GithubIcon, RedditIcon, TwitterIcon, DiscordIcon, TelegramIcon } from '@quipuswap/ui-kit';
+import { GithubIcon, RedditIcon, TwitterIcon, DiscordIcon, TelegramIcon } from '../../../svg';
 
 export const SocialLinksData = [
   {

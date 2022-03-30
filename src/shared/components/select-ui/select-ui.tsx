@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+
 import cx from 'classnames';
 import Select, { Props as SelectProps } from 'react-select';
 

@@ -1,8 +1,9 @@
 import { FC, ReactNode, useContext, useMemo, useState } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { Link, useLocation } from 'react-router-dom';
+
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import { navigationData } from './content';
 import styles from './navigation.module.scss';

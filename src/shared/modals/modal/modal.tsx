@@ -8,7 +8,7 @@ import ReactModal from 'react-modal';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components/button';
 import { Card } from '@shared/components/card';
-import { PopupClose } from '@shared/svg/popup-close';
+import { PopupClose } from '@shared/svg';
 
 import styles from './modal.module.scss';
 

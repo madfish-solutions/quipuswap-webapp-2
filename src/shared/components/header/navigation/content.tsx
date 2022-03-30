@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
-import { FarmIcon } from '../../svg';
+import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } from '../../../svg';
 
 interface LinkInterface {
   id: number;
@@ -32,7 +31,7 @@ export const navigationData: NavigationDataProps[] = [
     matchHrefs: ['/swap', '/send'],
     as: `/swap`,
     label: <Trans ns="common">Swap</Trans>,
-    Icon: SwapIconSidebar
+    Icon: SwapIcon
   },
   {
     id: 2,

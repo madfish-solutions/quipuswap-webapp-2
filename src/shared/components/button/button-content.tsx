@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { LogoSmallMonochrome } from '@shared/svg/logo-small-monochrome';
+import { LogoSmallMonochrome } from '@shared/svg';
 
 import { ButtonProps } from './button';
 import styles from './button.module.scss';

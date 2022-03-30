@@ -1,8 +1,6 @@
 import { FC, useContext } from 'react';
 
-import { ColorThemeContext } from '@quipuswap/ui-kit';
-
-import { IconProps } from './icon.props';
+import { ColorThemeContext } from '@providers/color-theme-context';
 
 export const FarmIcon: FC<IconProps> = ({ id, className }) => {
   const { themeColors } = useContext(ColorThemeContext);

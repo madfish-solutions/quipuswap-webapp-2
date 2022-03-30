@@ -1,11 +1,12 @@
 import { FC, useContext } from 'react';
 
-import { Madfish, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { QUIPUSWAP_OLD_VERSION_LINK } from '@config/config';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import { Madfish } from '../../../svg';
 import { Button } from '../../button';
 import { ConnectWalletButton } from '../../connect-button';
 import { NetworkSelect } from '../../network-select';

@@ -1,9 +1,10 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
-import { DarkMode, LightMode } from '../svg';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+
+import { DarkMode, LightMode } from '../../svg';
 import styles from './color-mode-switcher.module.scss';
 
 export interface ColorModeSwitcherProps {

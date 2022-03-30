@@ -1,11 +1,14 @@
 import { useState, useEffect, useContext, FC } from 'react';
 
-import { LogoButton, ColorModes, MenuClosed, MenuOpened, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { ColorThemeContext, ColorModes } from '@providers/color-theme-context';
+
+import { MenuClosed, MenuOpened } from '../../svg';
 import { Button } from '../button';
 import { ColorModeSwitcher } from '../color-mode-switcher';
 import { ConnectWalletButton } from '../connect-button';
+import { LogoButton } from '../logo-button';
 import styles from './header.module.scss';
 import { Menu } from './menu';
 

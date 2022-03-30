@@ -7,7 +7,7 @@ import { ToastWrapper } from '@shared/components/toast-wrapper';
 import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
 import { AccountModal } from '@shared/modals/account-modal';
 import { WalletModal } from '@shared/modals/wallet-modal';
-import { Background } from '@shared/svg/Background';
+import { Background } from '@shared/svg';
 
 import styles from './layout.module.scss';
 import { useLayoutViewModel } from './use-layout.vm';
