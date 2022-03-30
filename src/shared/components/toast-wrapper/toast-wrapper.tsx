@@ -8,17 +8,17 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Button } from '@shared/components/button';
 import { CloseIcon } from '@shared/svg/close-icon';
 
-import s from './toast-wrapper.module.sass';
+import styles from './toast-wrapper.module.scss';
 
 const CustomCloseButton = ({ closeToast }: Pick<ToastContentProps, 'closeToast'>) => (
-  <Button className={s.closeButton} onClick={closeToast} theme="quaternary">
+  <Button className={styles.closeButton} onClick={closeToast} theme="quaternary">
     <CloseIcon />
   </Button>
 );
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const ToastWrapper: FC = () => {
@@ -30,10 +30,10 @@ export const ToastWrapper: FC = () => {
       limit={3}
       hideProgressBar
       position="top-center"
-      className={cx(modeClass[colorThemeMode], s.notificationContainer)}
-      bodyClassName={s.toastBody}
+      className={cx(modeClass[colorThemeMode], styles.notificationContainer)}
+      bodyClassName={styles.toastBody}
       closeButton={CustomCloseButton}
-      toastClassName={s.notification}
+      toastClassName={styles.notification}
       pauseOnHover
       closeOnClick={false}
       pauseOnFocusLoss
@@ -47,13 +47,13 @@ export const toastContent = (children: ReactNode, type?: TypeOptions | null) => 
 
   if (type && type !== 'default') {
     if (type === 'info') {
-      icon = <Loader className={s.icon} />;
+      icon = <Loader className={styles.icon} />;
     }
     if (type === 'success') {
-      icon = <ToastSuccess className={s.icon} />;
+      icon = <ToastSuccess className={styles.icon} />;
     }
     if (type === 'error') {
-      icon = <ToastError className={s.icon} />;
+      icon = <ToastError className={styles.icon} />;
     }
   }
 

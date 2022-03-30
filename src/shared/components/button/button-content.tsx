@@ -5,7 +5,7 @@ import cx from 'classnames';
 import { LogoSmallMonochrome } from '@shared/svg/logo-small-monochrome';
 
 import { ButtonProps } from './button';
-import s from './button.module.sass';
+import styles from './button.module.scss';
 
 type ButtonContentProps = Pick<ButtonProps, 'theme' | 'innerClassName' | 'textClassName' | 'loading'>;
 
@@ -18,11 +18,11 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
 }) => {
   if (loading) {
     return theme === 'secondary' ? (
-      <span className={cx(s.inner, innerClassName)}>
-        <LogoSmallMonochrome className={s.loadingIcon} />
+      <span className={cx(styles.inner, innerClassName)}>
+        <LogoSmallMonochrome className={styles.loadingIcon} />
       </span>
     ) : (
-      <LogoSmallMonochrome className={s.loadingIcon} />
+      <LogoSmallMonochrome className={styles.loadingIcon} />
     );
   }
 
@@ -31,11 +31,11 @@ export const ButtonContent: React.FC<ButtonContentProps> = ({
       return <>{children}</>;
     case 'secondary':
       return (
-        <span className={cx(s.inner, innerClassName)}>
-          <span className={cx(s.text, textClassName)}>{children}</span>
+        <span className={cx(styles.inner, innerClassName)}>
+          <span className={cx(styles.text, textClassName)}>{children}</span>
         </span>
       );
     default:
-      return <span className={cx(s.text, textClassName)}>{children}</span>;
+      return <span className={cx(styles.text, textClassName)}>{children}</span>;
   }
 };

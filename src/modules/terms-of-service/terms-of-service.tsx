@@ -4,14 +4,14 @@ import { ColorModes, ColorThemeContext, Card, CardContent } from '@quipuswap/ui-
 import cx from 'classnames';
 
 import { SITE_DESCRIPTION, SITE_TITLE } from '@config/seo.config';
-import s from '@styles/terms.module.sass';
 
 import { Layout } from '../../layout';
 import { EnTermsOfService } from './content/en-terms-of-service';
+import styles from './terms.module.scss';
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const TermsOfService: FC = () => {
@@ -21,10 +21,10 @@ export const TermsOfService: FC = () => {
     <Layout
       title={`terms|Terms of Usage - ${SITE_TITLE}`}
       description={`terms|${SITE_DESCRIPTION}`}
-      className={cx(s.wrapper, modeClass[colorThemeMode])}
+      className={cx(styles.wrapper, modeClass[colorThemeMode])}
     >
       <Card>
-        <CardContent className={s.content}>
+        <CardContent className={styles.content}>
           <EnTermsOfService />
         </CardContent>
       </Card>

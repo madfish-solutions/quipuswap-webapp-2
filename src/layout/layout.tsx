@@ -7,14 +7,14 @@ import cx from 'classnames';
 // import { Sidebar } from '@components/common/Header/Sidebar';
 import { ToastWrapper } from '@shared/components/toast-wrapper';
 import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
-import { AccountModal } from '@shared/modals/AccountModal';
+import { AccountModal } from '@shared/modals/account-modal';
 // import { DonationModal } from '@components/modals/donation-modal';
-import { WalletModal } from '@shared/modals/WalletModal';
+import { WalletModal } from '@shared/modals/wallet-modal';
 import { Background } from '@shared/svg/Background';
 // import { BASE_URL } from 'config/config';
 // import { DEFAULT_SEO } from '@seo.config';
 
-import s from './layout.module.sass';
+import styles from './layout.module.scss';
 import { useBaseLayoutViewModel } from './use-layout.vm';
 
 interface LayoutProps {
@@ -88,11 +88,11 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
       /> */}
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
-          <div className={s.root}>
+          <div className={styles.root}>
             {/* <Header /> */}
             {/* <Sidebar className={s.sidebar} /> */}
-            <Background className={s.background} />
-            <main className={cx(s.wrapper, className)}>
+            <Background className={styles.background} />
+            <main className={cx(styles.wrapper, className)}>
               <ToastWrapper />
               {children}
             </main>

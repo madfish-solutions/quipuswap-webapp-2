@@ -8,7 +8,7 @@ import { useConnectWithBeacon, useConnectWithTemple, TEMPLE_WALLET_NOT_INSTALLED
 import { WalletType } from '@shared/types/types';
 
 import { Wallets } from './content';
-import s from './WalletModal.module.sass';
+import styles from './wallet-modal.module.scss';
 
 interface WalletProps {
   className?: string;
@@ -21,14 +21,14 @@ interface WalletProps {
 
 export const Wallet: FC<WalletProps> = ({ id, Icon, label, onClick, disabled = false }) => (
   <Button
-    className={s.button}
-    innerClassName={s.buttonInner}
-    textClassName={s.buttonContent}
+    className={styles.button}
+    innerClassName={styles.buttonInner}
+    textClassName={styles.buttonContent}
     theme="secondary"
     onClick={() => !disabled && onClick(id)}
     disabled={disabled}
   >
-    <Icon className={s.icon} />
+    <Icon className={styles.icon} />
     <span>{label}</span>
   </Button>
 );
@@ -67,13 +67,13 @@ export const WalletModal: FC = () => {
 
   return (
     <Modal
-      containerClassName={s.modalWrap}
-      contentClassName={s.modal}
+      containerClassName={styles.modalWrap}
+      contentClassName={styles.modal}
       title="Connect wallet"
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
-      <div className={s.wallets}>
+      <div className={styles.wallets}>
         {Wallets.map(({ id, Icon, label }) => (
           <Wallet key={id} id={id} Icon={Icon} label={label} onClick={handleConnectClick} />
         ))}

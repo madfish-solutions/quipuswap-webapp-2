@@ -7,7 +7,7 @@ import { isUndefined } from '@shared/helpers/type-checks';
 
 import { DataTestAttribute } from '../../../tests/types';
 import { ButtonContent } from './button-content';
-import s from './button.module.sass';
+import styles from './button.module.scss';
 
 export type ButtonProps = {
   loading?: boolean;
@@ -25,18 +25,18 @@ export type ButtonProps = {
   DataTestAttribute;
 
 const themeClass = {
-  primary: s.primary,
-  secondary: s.secondary,
-  tertiary: s.tertiary,
-  quaternary: s.quaternary,
-  inverse: s.inverse,
-  underlined: s.underlined,
-  clean: s.clean
+  primary: styles.primary,
+  secondary: styles.secondary,
+  tertiary: styles.tertiary,
+  quaternary: styles.quaternary,
+  inverse: styles.inverse,
+  underlined: styles.underlined,
+  clean: styles.clean
 };
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -56,8 +56,8 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
-  const compoundClassName = cx(className, s.root, modeClass[colorThemeMode], themeClass[theme], {
-    [s.loading]: loading
+  const compoundClassName = cx(className, styles.root, modeClass[colorThemeMode], themeClass[theme], {
+    [styles.loading]: loading
   });
 
   const content = (
