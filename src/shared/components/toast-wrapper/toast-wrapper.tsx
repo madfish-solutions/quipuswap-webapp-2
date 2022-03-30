@@ -1,12 +1,15 @@
 import { FC, ReactNode, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext, Loader, ToastError, ToastSuccess } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { ToastContainer, ToastContentProps, TypeOptions } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+import 'react-toastify/dist/ReactToastify.css';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { Button } from '@shared/components/button';
+import { Loader } from '@shared/components/loader';
 import { CloseIcon } from '@shared/svg/close-icon';
+import { ToastError } from '@shared/svg/toast-error';
+import { ToastSuccess } from '@shared/svg/toast-success';
 
 import styles from './toast-wrapper.module.scss';
 

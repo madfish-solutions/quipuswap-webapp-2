@@ -2,7 +2,7 @@ import { FC, useContext } from 'react';
 
 import { ColorThemeContext } from '@providers/color-theme-context';
 
-export const CloseIcon: FC<IconProps> = ({ className }) => {
+export const PopupClose: FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);
 
   return (
@@ -16,11 +16,11 @@ export const CloseIcon: FC<IconProps> = ({ className }) => {
     >
       <path
         d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z"
-        fill="url(#ToastClose-paint0_linear)"
+        fill="url(#PopupClose-paint0_linear)"
       />
       <defs>
         <linearGradient
-          id="ToastClose-paint0_linear"
+          id="PopupClose-paint0_linear"
           x1="5"
           y1="5"
           x2="20.6591"

@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import cx from 'classnames';
 
@@ -9,13 +9,7 @@ import styles from './button.module.scss';
 
 type ButtonContentProps = Pick<ButtonProps, 'theme' | 'innerClassName' | 'textClassName' | 'loading'>;
 
-export const ButtonContent: React.FC<ButtonContentProps> = ({
-  children,
-  theme,
-  innerClassName,
-  textClassName,
-  loading
-}) => {
+export const ButtonContent: FC<ButtonContentProps> = ({ children, theme, innerClassName, textClassName, loading }) => {
   if (loading) {
     return theme === 'secondary' ? (
       <span className={cx(styles.inner, innerClassName)}>

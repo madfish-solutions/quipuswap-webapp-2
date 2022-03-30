@@ -1,12 +1,12 @@
-import React from 'react';
+import { FC } from 'react';
 
-import { Beacon, Temple } from '@quipuswap/ui-kit';
-
+import { Beacon } from '@shared/svg/beacon';
+import { Temple } from '@shared/svg/temple';
 import { WalletType } from '@shared/types/types';
 
 interface WalletProps {
   id: WalletType;
-  Icon: React.FC<{ className?: string }>;
+  Icon: FC<{ className?: string }>;
   label: string;
 }
 
