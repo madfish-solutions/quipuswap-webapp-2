@@ -85,7 +85,7 @@ export class FarmingListStore {
     this.pendingRewardsInterval.stop();
   }
 
-  private findUserInfo(farmingItem: FarmingItem) {
+  findUserInfo(farmingItem: FarmingItem) {
     // @ts-ignore
     return this.userInfo.data?.find(_userInfo => farmingItem.id.eq(_userInfo.id[0])) || null;
   }

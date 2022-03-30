@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 
 import { harvestAllAssets } from '@api/farming/harvest-all-assets.api';
 import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@api/farming/helpers';
-import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
+import { useFarmingListStore } from '@hooks/stores/use-farming-list-store';
 import { useToasts } from '@hooks/use-toasts';
 import { FarmingItem } from '@interfaces/farming.interfaces';
 import { useRootStore } from '@providers/root-store-provider';
@@ -17,15 +17,15 @@ export const useDoHarvestAll = () => {
   const rootStore = useRootStore();
   const confirmOperation = useConfirmOperation();
   const { showErrorToast } = useToasts();
-  const farmingItemStore = useFarmingItemStore();
-  const { userInfoStore } = farmingItemStore;
-  const { data: userInfo } = userInfoStore;
+
+  const farmingListStore = useFarmingListStore();
 
   const doHarvestAll = useCallback(
     async (stakeList: FarmingItem[]) => {
       const farmingIds: BigNumber[] = stakeList
         .filter(({ earnBalance }) => earnBalance?.gt(ZERO_AMOUNT))
         .filter(farmingItem => {
+          const userInfo = farmingListStore.findUserInfo(farmingItem);
           const lastStakedTime = getUserInfoLastStakedTime(userInfo);
           const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
 
@@ -47,7 +47,7 @@ export const useDoHarvestAll = () => {
         showErrorToast(error as Error);
       }
     },
-    [userInfo, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
+    [farmingListStore, rootStore.tezos, rootStore.authStore.accountPkh, confirmOperation, showErrorToast]
   );
 
   return { doHarvestAll };
