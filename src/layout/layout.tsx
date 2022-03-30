@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 // import { observer } from 'mobx-react-lite';
 
-// import { Header } from '@components/common/Header';
+import { Header } from '@shared/components';
 // import { Sidebar } from '@components/common/Header/Sidebar';
 import { ToastWrapper } from '@shared/components/toast-wrapper';
 import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
@@ -89,7 +89,7 @@ export const Layout: FC<LayoutProps> = ({ title, description, image, className, 
       {isComponentDidMount ? (
         <GlobalModalsStateProvider>
           <div className={styles.root}>
-            {/* <Header /> */}
+            <Header />
             {/* <Sidebar className={s.sidebar} /> */}
             <Background className={styles.background} />
             <main className={cx(styles.wrapper, className)}>

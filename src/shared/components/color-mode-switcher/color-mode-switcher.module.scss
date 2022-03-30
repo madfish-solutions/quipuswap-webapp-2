@@ -1,0 +1,47 @@
+@import "@styles/_variables";
+@import "@styles/_breakpoints";
+
+.root {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  color: $ui-04;
+}
+
+.divider {
+  margin: 0 3px;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:disabled {
+    cursor: default;
+  }
+
+  &:not(:hover):not(:focus):not(.active) {
+    .icon {
+      defs {
+        display: none;
+      }
+    }
+
+    &.light {
+      .icon {
+        path {
+          fill: $ui-02;
+        }
+      }
+    }
+
+    &.dark {
+      .icon {
+        path {
+          fill: $ui-06;
+        }
+      }
+    }
+  }
+}
