@@ -1,7 +1,7 @@
 import { MichelsonMapKey } from '@taquito/michelson-encoder';
 import BigNumber from 'bignumber.js';
 
-import { FARMING_DAILY_DISTRIBUTION_DECIMALS, MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@app.config';
+import { MS_IN_SECOND, NO_TIMELOCK_VALUE, SECONDS_IN_DAY } from '@app.config';
 import {
   FarmingContractStorage,
   RawUsersInfoValue,
@@ -132,6 +132,6 @@ export const getIsHarvestAvailable = (endTimestamp: Nullable<number>) =>
 
 export const getDailyDistribution = (rewardPerSecond: BigNumber, rewardToken: Token) =>
   fromDecimals(
-    rewardPerSecond.div(FARMING_DAILY_DISTRIBUTION_DECIMALS).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN),
+    fromRewardPrecision(rewardPerSecond).times(SECONDS_IN_DAY).integerValue(BigNumber.ROUND_DOWN),
     rewardToken
   );
