@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { useConnectModalsState } from '../../providers/use-connect-modals-state';
-import { useAccountPkh, useReady } from '../../providers/use-dapp';
-import { shortize } from '../helpers/shortize';
+import { useConnectModalsState } from '@providers/use-connect-modals-state';
+import { useAccountPkh, useReady } from '@providers/use-dapp';
+import { shortize } from '@shared/helpers/shortize';
 
 interface ConnectWalletButtonProps {
   className?: string;

@@ -1,12 +1,14 @@
 /* eslint-disable import/no-default-export */
 
-import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
-import { ConnectWalletButton } from '@shared';
+import { Layout } from './layout';
+import { Router } from './router';
+
+import './styles/globals.scss';
 
 export default function App() {
   return (
-    <div className="App">
-      <ConnectWalletButton />
-    </div>
+    <Layout>
+      <Router />
+    </Layout>
   );
 }

@@ -1,0 +1,73 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 11;
+}
+
+.root {
+  width: 100%;
+  height: 64px;
+  transition: background-color $colorChangeAnimationTime, border-color $colorChangeAnimationTime;
+  z-index: 2;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+}
+
+.coloModeSwitcher, .languageSwitcher {
+  display: none;
+}
+
+.connect {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0 24px;
+  max-width: 160px;
+}
+
+.menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  transform: translateY(-100%);
+  transition: transform $animationTime, background-color $colorChangeAnimationTime;
+
+  &.active {
+    transform: translateY(0);
+  }
+}
+
+.light {
+  border-bottom: 1px solid $ui-03;
+  background-color: $ui-02;
+}
+
+.dark {
+  border-bottom: 1px solid $ui-07;
+  background-color: $ui-06;
+}
+
+@include media('>SDesktop') {
+  .root {
+    padding: 0 32px 0 16px;
+  }
+
+  .menuButton, .menu, .connect {
+    display: none;
+  }
+
+  .coloModeSwitcher {
+    margin-left: 40px;
+  }
+
+  .languageSwitcher, .coloModeSwitcher {
+    display: flex;
+  }
+}
