@@ -6,7 +6,7 @@ export * from './socials';
 export * from './temple';
 export * from './toast-error';
 export * from './toast-success';
-export * from './Background';
+export * from './background';
 export * from './dark-mode';
 export * from './farm-icon';
 export * from './governance-icon';
