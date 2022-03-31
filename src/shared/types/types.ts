@@ -13,7 +13,7 @@ export enum QSNets {
 
 export interface QSNetwork {
   id: QSMainNet;
-  connectType: 'custom' | 'default';
+  connectType: 'default' | 'custom';
   name: string;
   type: 'main' | 'test';
   rpcBaseURL: string;
@@ -38,6 +38,12 @@ export enum Standard {
   Fa2 = 'FA2'
 }
 
+export interface TokenMetadata {
+  decimals: number;
+  symbol: string;
+  name: string;
+  thumbnailUri: string;
+}
 export enum ConnectType {
   DEFAULT = 'DEFAULT',
   CUSTOM = 'CUSTOM'
@@ -51,15 +57,6 @@ export interface Token {
   metadata: TokenMetadata;
 }
 
-export interface TokenMetadata {
-  decimals: number;
-  symbol: string;
-  name: string;
-  thumbnailUri: string;
-}
-
-export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
-
 export interface WhitelistedBakerEmpty {
   address: string;
 }
@@ -71,6 +68,8 @@ export interface WhitelistedBakerFull extends WhitelistedBakerEmpty {
   fee: number;
   freeSpace: BigNumber;
 }
+
+export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
 
 export enum ActiveStatus {
   ACTIVE = 'ACTIVE',

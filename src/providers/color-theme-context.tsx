@@ -45,7 +45,6 @@ const themeColorsObj = {
 
 interface ColorThemeContextValue {
   colorThemeMode: ColorModes;
-  isComponentDidMount: boolean;
   themeColors: ThemeColorsPros;
   setColorThemeMode: () => void;
   setThemeColors: (mode: ColorModes) => void;
@@ -53,7 +52,6 @@ interface ColorThemeContextValue {
 
 export const defaultDataContext: ColorThemeContextValue = {
   colorThemeMode: ColorModes.Light,
-  isComponentDidMount: false,
   themeColors: themeColorsObj.light,
   setColorThemeMode: noop,
   setThemeColors: noop
@@ -64,7 +62,6 @@ export const ColorThemeContext = createContext<ColorThemeContextValue>(defaultDa
 export const ColorThemeProvider: FC = ({ children }) => {
   const [colorThemeMode, setColorThemeMode] = useState(ColorModes.Dark);
   const [themeColors, setThemeColors] = useState(themeColorsObj.dark);
-  const [isComponentDidMount, setIsComponentDidMount] = useState(false);
 
   const setMode = (mode: ColorModes) => {
     window.localStorage.setItem(COLOR_MODE_STORAGE_KEY, mode);
@@ -88,7 +85,6 @@ export const ColorThemeProvider: FC = ({ children }) => {
     } else {
       setMode(ColorModes.Light);
     }
-    setIsComponentDidMount(true);
   }, []);
 
   useEffect(() => {
@@ -103,7 +99,6 @@ export const ColorThemeProvider: FC = ({ children }) => {
     <ColorThemeContext.Provider
       value={{
         colorThemeMode,
-        isComponentDidMount,
         themeColors,
         setColorThemeMode: toggleColorTheme,
         setThemeColors: (theme: ColorModes) => setColorThemeMode(theme)

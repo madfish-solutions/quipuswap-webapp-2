@@ -4,10 +4,10 @@ import { AbortedBeaconError } from '@airgap/beacon-sdk';
 
 import { useConnectModalsState } from '@providers/use-connect-modals-state';
 import { useConnectWithBeacon, useConnectWithTemple, TEMPLE_WALLET_NOT_INSTALLED_MESSAGE } from '@providers/use-dapp';
-import { Button } from '@shared/components/button';
-import { Modal } from '@shared/modals/modal';
-import { WalletType } from '@shared/types/types';
 
+import { Button } from '../../components';
+import { WalletType } from '../../types/types';
+import { Modal } from '../modal';
 import { Wallets } from './content';
 import styles from './wallet-modal.module.scss';
 

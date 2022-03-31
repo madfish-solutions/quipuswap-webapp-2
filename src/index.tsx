@@ -5,20 +5,24 @@ import { BrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import { ColorThemeProvider } from './providers/color-theme-context';
+import { RootStoreProvider } from './providers/root-store-provider';
 import { DAppProvider } from './providers/use-dapp';
 import { WalletWrapper } from './providers/wallet-wrapper';
 
 require('dotenv').config();
 
 render(
-  <ColorThemeProvider>
-    <BrowserRouter>
-      <DAppProvider>
-        <WalletWrapper>
-          <App />
-        </WalletWrapper>
-      </DAppProvider>
-    </BrowserRouter>
-  </ColorThemeProvider>,
+  <RootStoreProvider>
+    <ColorThemeProvider>
+      <BrowserRouter>
+        <DAppProvider>
+          <WalletWrapper>
+            <App />
+          </WalletWrapper>
+        </DAppProvider>
+      </BrowserRouter>
+    </ColorThemeProvider>
+  </RootStoreProvider>,
+
   document.getElementById('root')
 );

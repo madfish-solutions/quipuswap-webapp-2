@@ -2,10 +2,10 @@ import { FC, useCallback, useRef, useEffect } from 'react';
 
 import { useConnectModalsState } from '@providers/use-connect-modals-state';
 import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
-import { Button } from '@shared/components/button';
-import { shortize } from '@shared/helpers';
-import { Modal } from '@shared/modals/modal';
 
+import { Button } from '../../components';
+import { shortize } from '../../helpers';
+import { Modal } from '../modal';
 import styles from './account-modal.module.scss';
 
 const ADDRESS_LENGTH = 8;

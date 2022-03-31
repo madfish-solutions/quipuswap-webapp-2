@@ -1,6 +1,7 @@
 export * from './button';
 export * from './card';
 export * from './color-mode-switcher';
+export * from './connect-wallet-button';
 export * from './header';
 export * from './loader';
 export * from './logo-button';
@@ -9,4 +10,3 @@ export * from './page-title';
 export * from './select-ui';
 export * from './status-label';
 export * from './toast-wrapper';
-export * from './connect-button';
