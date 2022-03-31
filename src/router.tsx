@@ -1,0 +1,33 @@
+import { FC } from 'react';
+
+import { Routes, Route } from 'react-router-dom';
+
+import { Farming } from './modules/farming';
+import { Home } from './modules/home';
+import { Liquidity } from './modules/liquidity';
+import { PrivacyPolicy } from './modules/privacy-policy';
+import { Swap } from './modules/swap';
+import { TermsOfService } from './modules/terms-of-service';
+import { Voting } from './modules/voting';
+
+export const routes = {
+  home: '/',
+  privacyPolicy: 'privacy-policy',
+  termsOfService: 'terms-of-service',
+  liquidity: 'liquidity',
+  swap: 'swap',
+  farming: 'farming',
+  voting: 'voting'
+};
+
+export const Router: FC = () => (
+  <Routes>
+    <Route path={routes.home} element={<Home />} />
+    <Route path={routes.swap} element={<Swap />} />
+    <Route path={routes.liquidity} element={<Liquidity />} />
+    <Route path={routes.voting} element={<Voting />} />
+    <Route path={routes.farming} element={<Farming />} />
+    <Route path={routes.privacyPolicy} element={<PrivacyPolicy />} />
+    <Route path={routes.termsOfService} element={<TermsOfService />} />
+  </Routes>
+);

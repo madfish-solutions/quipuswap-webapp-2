@@ -1,0 +1,55 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.root {
+  position: relative;
+  box-shadow: $elevation-03;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  font-size: 1.143rem;
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.content {
+  padding-top: 16px;
+}
+
+.footer {
+  width: 100%;
+  padding: 40px 24px 24px 24px;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.additional {
+  margin: 16px 24px 0px 16px;
+}
+
+.light {
+  background-color: $ui-01;
+
+  .header {
+    color: $text-01;
+    border-bottom: 1px solid $ui-03;
+  }
+}
+
+.dark {
+  background-color: $ui-07;
+
+  .header {
+    color: $text-inverse;
+    border-bottom: 1px solid $ui-06;
+  }
+}

@@ -6,7 +6,7 @@ import {
   ALL_NETWORKS,
   LAST_USED_ACCOUNT_KEY,
   LAST_USED_CONNECTION_KEY
-} from '@config';
+} from '@config/config';
 
 import { QSNetwork, QSMainNet } from '../types/types';
 

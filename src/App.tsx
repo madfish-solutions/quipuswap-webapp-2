@@ -1,16 +1,16 @@
 /* eslint-disable import/no-default-export */
-
-import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
-
 import { observer } from 'mobx-react-lite';
 
-import { ConnectWalletButton } from '@shared/components';
+import { Layout } from './layout';
+import { Router } from './router';
+
+import './styles/globals.scss';
 
 const App = observer(() => {
   return (
-    <div className="App">
-      <ConnectWalletButton />
-    </div>
+    <Layout>
+      <Router />
+    </Layout>
   );
 });
 

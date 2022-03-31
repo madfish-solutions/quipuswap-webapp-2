@@ -7,7 +7,7 @@ import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config';
+import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/config';
 import { getNetwork, setNetwork, toBeaconNetworkType, isClient, ReadOnlySigner, FastRpcClient } from '@shared/helpers';
 import { QSNetwork } from '@shared/types/types';
 
@@ -80,7 +80,7 @@ const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork)
     }
     await beaconWallet.requestPermissions({
       network:
-        network.connectType === 'custom' && network.type === 'test'
+        network.connectType === 'default' && network.type === 'test'
           ? {
               type: NetworkType.CUSTOM,
               name: network.name,

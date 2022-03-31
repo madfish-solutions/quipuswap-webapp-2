@@ -1,0 +1,22 @@
+import React from 'react';
+
+import cx from 'classnames';
+
+import { Button } from '../../button';
+import { SocialLinksData } from './content';
+import styles from './socials.module.scss';
+
+interface SocialsProps {
+  id?: string;
+  className?: string;
+}
+
+export const Socials: React.FC<SocialsProps> = ({ id, className }) => (
+  <div className={cx(styles.root, className)}>
+    {SocialLinksData.map(({ id: socialId, href, label, Icon }) => (
+      <Button key={socialId} theme="quaternary" href={href} external title={label} className={styles.link}>
+        <Icon className={styles.icon} id={id} />
+      </Button>
+    ))}
+  </div>
+);
