@@ -234,6 +234,8 @@ const networks: Record<QSNets, QSNetwork> = {
   [QSNets.ithacanet]: ITHACANET_NETWORK
 };
 export const NETWORK = networks[NETWORK_ID];
+// eslint-disable-next-line no-console
+console.log('\x1b[32m%s\x1b[0m', NETWORK.id);
 export const IS_NETWORK_MAINNET = NETWORK_ID === QSNets.mainnet;
 
 export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK, ITHACANET_NETWORK];
