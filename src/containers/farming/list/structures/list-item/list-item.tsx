@@ -83,10 +83,10 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
   const timeLockLabel = getTimeLockDescription(timelock);
-  const isTimeLockVisible = !!Number(timelock);
+  const shouldShowLockPeriod = !!Number(timelock);
 
-  const isWithdrawalFeeVisible = !withdrawalFee.eq(0);
   const withdrawalFeeLabel = withdrawalFee.toFixed();
+  const shouldShowWithdrawalFee = !withdrawalFee.eq(0);
 
   return (
     <Card className={cx(styles.card, themeClass[colorThemeMode])}>
@@ -94,9 +94,11 @@ export const FarmingListItem: FC<FarmingItem> = ({
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StatusLabel status={stakeStatus} />
-            {isTimeLockVisible && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
-            {isWithdrawalFeeVisible && <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />}
+            <StatusLabel status={stakeStatus} filled />
+            {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+            {shouldShowWithdrawalFee && (
+              <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+            )}
             <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
           </div>
 

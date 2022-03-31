@@ -9,6 +9,7 @@ import { Card } from '@components/ui/card/card';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
+import { StatusLabel } from '@components/ui/status-label';
 import { CandidateButton } from '@containers/voiting/components';
 import s from '@styles/CommonContainer.module.sass';
 
@@ -32,6 +33,8 @@ export const FarmingDetails: FC = observer(() => {
     currentDelegate,
     nextDelegate,
     timelock,
+    timeLockLabel,
+    shouldShowTags,
     CardCellClassName,
     stakeUrl,
     stakedTokenSymbol,
@@ -56,6 +59,15 @@ export const FarmingDetails: FC = observer(() => {
       }}
       contentClassName={s.content}
     >
+      {shouldShowTags && (
+        <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} tooltipContent={t('farm|Tags')}>
+          <div className={styles.tags}>
+            {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+            {shouldShowWithdrawalFee && <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} />}
+          </div>
+        </DetailsCardCell>
+      )}
+
       <DetailsCardCell
         cellName={t('farm|Value Locked')}
         className={CardCellClassName}
