@@ -1,6 +1,6 @@
 {
   "name": "next-production-starter",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "scripts": {
     "dev:mainnet": "cross-env NEXT_PUBLIC_NETWORK=mainnet DEFAULT_TOKENS_SLUGS=tez-KT193D4vozYnhGJQVtw7CoxxqphqUEEwK6Vb_0 NEXT_PUBLIC_MAINNET_BASE_URL=http://localhost:3000 NEXT_PUBLIC_HANGZHOUNET_BASE_URL=http://localhost:3002 next dev -p 3000",
