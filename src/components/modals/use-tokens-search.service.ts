@@ -82,19 +82,19 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
 
   useEffect(() => void handleTokenSearch(), [tokens, inputValue, inputToken, handleTokenSearch]);
 
-  const isCurrentToken = (token: Token) =>
-    token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken;
-
-  const allTokens = useMemo(
-    () => {
-      const targetTokens = !isEmptyArray(filteredTokens) ? filteredTokens : searchTokens.filter(isCurrentToken);
-      const uniqTokens_ = uniqTokens(targetTokens);
-
-      return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
-      // inputValue is needed
-    }, // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputValue, filteredTokens, searchTokens, blackListedTokens]
+  const isCurrentToken = useCallback(
+    (token: Token) =>
+      token.contractAddress.toLocaleLowerCase() === inputValue.toLocaleLowerCase() && token.fa2TokenId === inputToken,
+    [inputToken, inputValue]
   );
+
+  const allTokens = useMemo(() => {
+    const targetTokens = !isEmptyArray(filteredTokens) ? filteredTokens : searchTokens.filter(isCurrentToken);
+    const uniqTokens_ = uniqTokens(targetTokens);
+    void inputValue; // static for require dependency
+
+    return uniqTokens_.filter(x => !blackListedTokens.find(y => isTokenEqual(x, y)));
+  }, [filteredTokens, searchTokens, isCurrentToken, blackListedTokens, inputValue]);
 
   useEffect(() => {
     getTokenType(inputValue, defined(tezos)).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
