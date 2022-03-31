@@ -1,4 +1,4 @@
-import { Dispatch, FC, Fragment, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
+import { Dispatch, FC, HTMLProps, SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 
 import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import cx from 'classnames';
@@ -100,6 +100,22 @@ export const PositionSelect: FC<PositionSelectProps> = ({
 
   const tokenPairFrozen = notSelectable1 && notSelectable2;
 
+  const getBalance = () => {
+    if (shouldShowBalanceButtons) {
+      return notFrozen ? (
+        <Balance
+          balance={wrapAvailableBalance}
+          text={balanceLabel ?? t('common|Total Balance')}
+          colorMode={colorThemeMode}
+        />
+      ) : (
+        <Balance balance={wrapFrozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
+      );
+    }
+
+    return <div className={s.item2Line} />;
+  };
+
   return (
     <>
       <PositionsModal
@@ -124,20 +140,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         <div className={s.background}>
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)} />
-            <div className={s.item2}>
-              {!notFrozen && shouldShowBalanceButtons && (
-                <Balance balance={wrapFrozenBalance} text={t('common|Frozen Balance')} colorMode={colorThemeMode} />
-              )}
-              {shouldShowBalanceButtons ? (
-                <Balance
-                  balance={wrapAvailableBalance}
-                  text={balanceLabel ?? t('common|Total Balance')}
-                  colorMode={colorThemeMode}
-                />
-              ) : (
-                <div className={s.item2Line} />
-              )}
-            </div>
+            <div className={s.item2}>{getBalance()}</div>
             <input
               autoComplete="off"
               className={cx(s.item3, s.input)}
