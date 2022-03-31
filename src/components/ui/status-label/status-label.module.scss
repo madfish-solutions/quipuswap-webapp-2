@@ -4,6 +4,7 @@
   padding: 1px;
   width: fit-content;
   border-radius: 8px;
+  white-space: nowrap;
 }
 
 .status {
@@ -11,7 +12,6 @@
 
   padding: 4px 8px;
 
-  color: $text-03;
   font-size: 12px;
   font-weight: bold;
 
@@ -19,13 +19,21 @@
 }
 
 .light {
-  .status {
+  .filled {
+    color: $text-inverse;
+  }
+  .bordered {
     background-color: $ui-01;
+    color: $text-03;
   }
 }
 
 .dark {
-  .status {
+  .filled {
+    color: $text-inverse;
+  }
+  .bordered {
     background-color: $ui-07;
+    color: $text-03;
   }
 }

@@ -19,6 +19,8 @@ const gradients = {
 
 interface Props {
   status: ActiveStatus;
+  label?: string;
+  filled?: boolean;
 }
 
 const themeClass = {
@@ -26,12 +28,12 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StatusLabel: FC<Props> = ({ status }) => {
+export const StatusLabel: FC<Props> = ({ status, label, filled }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode])} style={{ background: gradients[status] }}>
-      <span className={cx(styles.status)}>{status}</span>
+      <span className={cx(styles.status, filled ? styles.filled : styles.bordered)}>{label ?? status}</span>
     </div>
   );
 };

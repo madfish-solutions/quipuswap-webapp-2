@@ -9,7 +9,7 @@ import { Tooltip } from '../components/tooltip';
 
 interface DetailsCardCellProps {
   cellName: string;
-  tooltipContent: Nullable<string>;
+  tooltipContent?: Nullable<string>;
   className: string;
 }
 
