@@ -1,14 +1,17 @@
 /* eslint-disable import/no-default-export */
-
-import '@quipuswap/ui-kit/dist/ui-kit.cjs.development.css';
-
 import { observer } from 'mobx-react-lite';
 
-const App = observer(() => {
-  // eslint-disable-next-line no-console
-  console.log('123');
+import { Layout } from './layout';
+import { Router } from './router';
 
-  return <div className="App">qweqweqwe</div>;
+import './styles/globals.scss';
+
+const App = observer(() => {
+  return (
+    <Layout>
+      <Router />
+    </Layout>
+  );
 });
 
 export default App;

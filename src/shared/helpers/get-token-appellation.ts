@@ -1,4 +1,4 @@
-import { TEZOS_TOKEN } from '@config';
+import { TEZOS_TOKEN } from '@config/config';
 
 import { Nullable, Optional, Token, TokenMetadata } from '../types/types';
 import { isValidTokenSlug } from '../validators';

@@ -1,0 +1,11 @@
+@mixin background-text-color($color) {
+  background: $color;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@mixin background-none-fill-color($color) {
+  background: none;
+  -webkit-background-clip: initial;
+  -webkit-text-fill-color: transparent;
+}

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { FARMING_API_URL } from '@config';
+import { FARMING_API_URL } from '@config/config';
 import { Nullable } from '@shared/types/types';
 
 import { FarmingItemResponse } from '../interfaces';

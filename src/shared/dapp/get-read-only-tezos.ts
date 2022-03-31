@@ -1,8 +1,9 @@
-import { ReadOnlySigner } from '@quipuswap/sdk';
 import { TezosToolkit } from '@taquito/taquito';
 import memoizee from 'memoizee';
 
-import { READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH } from '@config';
+import { READ_ONLY_SIGNER_PK, READ_ONLY_SIGNER_PK_HASH } from '@config/config';
+
+import { ReadOnlySigner } from '../helpers';
 
 const readOnlySigner = new ReadOnlySigner(READ_ONLY_SIGNER_PK_HASH, READ_ONLY_SIGNER_PK);
 

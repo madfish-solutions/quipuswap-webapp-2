@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useRootStore } from '@providers';
+import { useRootStore } from '@providers/root-store-provider';
 
 export const useFarmingListStore = () => {
   const rootStore = useRootStore();

@@ -1,7 +1,6 @@
 import { FC } from 'react';
 
-import { AccountModal } from '@shared/modals/AccountModal';
-import { WalletModal } from '@shared/modals/WalletModal';
+import { AccountModal, WalletModal } from '@shared/modals';
 
 import { ConnectModalsStateProvider } from './use-connect-modals-state';
 

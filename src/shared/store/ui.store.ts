@@ -1,5 +1,6 @@
-import { ColorModes } from '@quipuswap/ui-kit';
 import { action, makeObservable, observable } from 'mobx';
+
+import { ColorModes } from '@providers/color-theme-context';
 
 import { RootStore } from './root.store';
 

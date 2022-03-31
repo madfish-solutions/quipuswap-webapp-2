@@ -1,5 +1,9 @@
 import BigNumber from 'bignumber.js';
 
+export type Undefined<T> = T | undefined;
+export type Nullable<T> = T | null;
+export type Optional<T> = T | null | undefined;
+
 export type QSMainNet = 'mainnet' | 'hangzhounet';
 
 export enum QSNets {
@@ -18,14 +22,15 @@ export interface QSNetwork {
   disabled: boolean;
 }
 
+export enum QSNetworkType {
+  MAIN = 'MAIN',
+  TEST = 'TEST'
+}
+
 export enum WalletType {
   BEACON = 'beacon',
   TEMPLE = 'temple'
 }
-
-export type Undefined<T> = T | undefined;
-export type Nullable<T> = T | null;
-export type Optional<T> = T | null | undefined;
 
 export enum Standard {
   Null = 'Null',
@@ -38,6 +43,10 @@ export interface TokenMetadata {
   symbol: string;
   name: string;
   thumbnailUri: string;
+}
+export enum ConnectType {
+  DEFAULT = 'DEFAULT',
+  CUSTOM = 'CUSTOM'
 }
 
 export interface Token {
@@ -61,3 +70,9 @@ export interface WhitelistedBakerFull extends WhitelistedBakerEmpty {
 }
 
 export type WhitelistedBaker = WhitelistedBakerEmpty | WhitelistedBakerFull;
+
+export enum ActiveStatus {
+  ACTIVE = 'ACTIVE',
+  PENDING = 'PENDING',
+  DISABLED = 'DISABLED'
+}

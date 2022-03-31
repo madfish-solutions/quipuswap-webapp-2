@@ -3,12 +3,12 @@
     "baseUrl": "./src",
     "paths": {
       "@blockchain": ["./blockchain"],
-      "@config": ["./config"],
+      "@config/*": ["./config/*"],
       "@modules/*": ["./modules/*"],
-      "@providers": ["./providers"],
+      "@providers/*": ["./providers/*"],
       "@shared/*": ["./shared/*"],
-      "@styles": ["./styles"],
-      "@tests": ["./tests"]
+      "@styles/*": ["./styles/*"],
+      "@types/*": ["./types/*"]
     }
   }
 }
