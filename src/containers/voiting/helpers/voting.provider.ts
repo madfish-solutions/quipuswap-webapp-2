@@ -7,7 +7,7 @@ import { networksDefaultTokens, NETWORK, NETWORK_ID, TEZOS_TOKEN } from '@app.co
 import { useToasts } from '@hooks/use-toasts';
 import { useExchangeRates } from '@hooks/useExchangeRate';
 import { useAccountPkh, useOnBlock, useSearchCustomTokens, useTezos, useTokens } from '@utils/dapp';
-import { handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
+import { defined, handleSearchToken, isEmptyArray, isExist, isNull, isTokenEqual } from '@utils/helpers';
 import { Nullable, VoterType, Token, TokenPair } from '@utils/types';
 
 import { useVotingRouter } from '../hooks';
@@ -103,7 +103,7 @@ const useVotingService = () => {
     if (from && to && !initialLoad && !isEmptyArray(tokens) && exchangeRates) {
       void handleSearchToken({
         tokens,
-        tezos: tezos!,
+        tezos: defined(tezos),
         network: NETWORK,
         from,
         to,

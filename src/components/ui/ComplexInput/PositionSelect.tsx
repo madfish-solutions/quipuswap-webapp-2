@@ -34,7 +34,7 @@ interface PositionSelectProps extends HTMLProps<HTMLInputElement> {
   handleChange?: (tokenPair: TokenPair) => void;
   handleBalance: (value: string) => void;
   tokenPair: Nullable<TokenPair>;
-  setTokenPair: (tokenPair: TokenPair) => void;
+  setTokenPair?: (tokenPair: TokenPair) => void;
   tokensUpdating?: {
     isTokenChanging: boolean;
     setIsTokenChanging: Dispatch<SetStateAction<boolean>>;
@@ -98,6 +98,8 @@ export const PositionSelect: FC<PositionSelectProps> = ({
   const wrapFrozenBalance = isPoolNotExists ? undefined : frozenBalance ?? null;
   const wrapAvailableBalance = isPoolNotExists ? undefined : balance ?? null;
 
+  const tokenPairFrozen = notSelectable1 && notSelectable2;
+
   return (
     <>
       <PositionsModal
@@ -105,7 +107,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
         onRequestClose={() => setTokensModal(false)}
         onChange={selectedToken => {
           tokensUpdating?.setIsTokenChanging(true);
-          setTokenPair(selectedToken);
+          setTokenPair?.(selectedToken);
           if (handleChange) {
             handleChange(selectedToken);
           }
@@ -150,7 +152,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
             <div className={s.dangerContainer}>
               {notWhitelistedMessage && <Danger content={notWhitelistedMessage} />}
               <Button
-                onClick={() => setTokensModal(true)}
+                onClick={() => !tokenPairFrozen && setTokensModal(true)}
                 theme="quaternary"
                 className={s.item4}
                 textClassName={s.item4Inner}
@@ -170,7 +172,7 @@ export const PositionSelect: FC<PositionSelectProps> = ({
                     tokenSymbolSliceAmount={5}
                   />
                 </h6>
-                <Shevron />
+                {!tokenPairFrozen && <Shevron />}
               </Button>
             </div>
           </div>

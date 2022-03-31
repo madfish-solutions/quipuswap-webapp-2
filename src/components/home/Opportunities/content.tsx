@@ -42,8 +42,8 @@ export const OpportunitiesCardsData: OpportunitiesCardsDataType[] = [
       </Trans>
     ),
     button: {
-      label: <Trans ns="home">Coming soon</Trans>,
-      disabled: true
+      label: <Trans ns="home">Start Farming</Trans>,
+      href: '/farming'
     }
   },
   {

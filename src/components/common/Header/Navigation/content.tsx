@@ -3,6 +3,8 @@ import React from 'react';
 import { HomeIcon, VotingIcon, LiquidityIcon, SwapIconSidebar, MoreIcon } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
 
+import { FarmIcon } from '@components/svg/Sidebar/FarmIcon';
+
 interface LinkInterface {
   id: number;
   href?: string;
@@ -45,6 +47,13 @@ export const navigationData: NavigationDataProps[] = [
     as: `/voting/vote`,
     label: <Trans ns="common">Voting</Trans>,
     Icon: VotingIcon
+  },
+  {
+    id: 4,
+    href: '/farming',
+    as: `/farming`,
+    label: <Trans ns="common">Farming</Trans>,
+    Icon: FarmIcon
   },
   // {
   //   id: 5,

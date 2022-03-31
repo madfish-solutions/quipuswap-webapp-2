@@ -55,10 +55,13 @@ const useDappTokens = () => {
         searchTokens: { loading: true, data: [] }
       }));
       try {
-        const tokenContract = await getContract(tezos!, address);
+        if (!tezos) {
+          throw new Error('Tezos is undefined');
+        }
+        const tokenContract = await getContract(tezos, address);
 
         const isFa2 = Boolean(tokenContract.methods.update_operators);
-        if (isFa2 && !(await fa2TokenExists(tezos!, address, tokenId ?? DEFAULT_FA2_TOKEN_ID))) {
+        if (isFa2 && !(await fa2TokenExists(tezos, address, tokenId ?? DEFAULT_FA2_TOKEN_ID))) {
           throw new InvalidFa2TokenIdError(address, tokenId ?? DEFAULT_FA2_TOKEN_ID);
         }
 

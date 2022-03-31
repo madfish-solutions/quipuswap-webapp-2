@@ -5,7 +5,8 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
 import { StateWrapper, StateWrapperProps } from '@components/state-wrapper';
-import { FormatNumber, FormatNumberOptions } from '@utils/formatNumber';
+import { DataTestAttribute } from '@tests/types';
+import { FormatNumberOptions } from '@utils/formatNumber';
 import { formatValueBalance, isExist } from '@utils/helpers';
 import { Nullable } from '@utils/types';
 
@@ -13,17 +14,16 @@ import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import s from './state-currency-amount.module.sass';
 
-export interface StateCurrencyAmountProps extends Partial<StateWrapperProps> {
+export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;
   amount: Nullable<BigNumber.Value>;
   currency?: Nullable<string>;
   labelSize?: keyof typeof sizeClass;
   isLeftCurrency?: boolean;
-  dollarEquivalent?: string;
-  amountDecimals?: number;
+  dollarEquivalent?: Nullable<BigNumber.Value>;
+  amountDecimals?: Nullable<number>;
   options?: FormatNumberOptions;
   aliternativeView?: Nullable<string>;
-  balanceRule?: boolean;
 }
 
 const sizeClass = {
@@ -52,7 +52,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   errorFallback,
   amountDecimals,
   aliternativeView,
-  balanceRule
+  testId
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
@@ -71,9 +71,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const isLeftVisible = isLeftCurrency && currency;
   const isRightVisible = !isLeftCurrency && currency;
 
-  const FormattedNumber = balanceRule
-    ? formatValueBalance(amount)
-    : FormatNumber(amount ?? 0, { decimals: amountDecimals });
+  const formattedAmount = amount ? formatValueBalance(amount, amountDecimals ?? undefined) : null;
+
+  const title = amount ? new BigNumber(amount).toFixed() : undefined;
 
   const content = (
     <span className={wrapClassName}>
@@ -85,7 +85,9 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span className={s.inner}>{aliternativeView ?? FormattedNumber}</span>
+        <span data-test-id={testId} className={s.inner} title={title}>
+          {aliternativeView ?? formattedAmount}
+        </span>
       </StateWrapper>
 
       {isRightVisible && <Currency>{currency}</Currency>}

@@ -1,9 +1,8 @@
 import { TezosToolkit } from '@taquito/taquito';
 
+import { getUserBalance } from '@api/get-user-balance';
 import { Standard } from '@graphql';
 import { isNull } from '@utils/helpers';
-
-import { getUserBalance } from './getUserBalance';
 
 const SOME_ACCOUNT_ADDRESS = 'tz1TTXUmQaxe1dTLPtyD4WMQP6aKYK9C8fKw';
 

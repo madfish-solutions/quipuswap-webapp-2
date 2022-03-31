@@ -3,7 +3,14 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { NETWORK } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenType, useSearchCustomTokens, useSearchTokens, useTezos, useTokens } from '@utils/dapp';
-import { isEmptyArray, isExist, isTokenEqual, localSearchToken, TokenWithRequiredNetwork } from '@utils/helpers';
+import {
+  defined,
+  isEmptyArray,
+  isExist,
+  isTokenEqual,
+  localSearchToken,
+  TokenWithRequiredNetwork
+} from '@utils/helpers';
 import { isEmptyString } from '@utils/helpers/strings';
 import { Nullable, Token } from '@utils/types';
 
@@ -90,7 +97,7 @@ export const useTokensSearchService = <Type extends { search: string; tokenId: n
   );
 
   useEffect(() => {
-    getTokenType(inputValue, tezos!).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
+    getTokenType(inputValue, defined(tezos)).then(tokenType => setSoleFa2Token(tokenType === Standard.Fa2));
   }, [inputValue, tezos]);
 
   const isTokensNotFound = isEmptyTokens && !searchLoading && !tokensLoading;

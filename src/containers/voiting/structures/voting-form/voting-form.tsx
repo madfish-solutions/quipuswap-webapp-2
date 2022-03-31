@@ -14,7 +14,7 @@ import { ComplexBaker } from '@components/ui/ComplexInput';
 import { PositionSelect } from '@components/ui/ComplexInput/PositionSelect';
 import { Button } from '@components/ui/elements/button';
 import { UnvoteButton } from '@containers/voiting/components';
-import { getCandidateInfo, BakerCleaner } from '@containers/voiting/helpers';
+import { getCandidateInfo } from '@containers/voiting/helpers';
 import {
   useAvailableBalances,
   useTokensLoading,
@@ -38,17 +38,14 @@ interface VotingFormProps {
   values: VoteFormValues;
   form: FormApi<VoteFormValues, Partial<VoteFormValues>>;
   handleSubmit: () => Promise<void>;
-  bakerCleaner: BakerCleaner;
 }
 
-const KEY_IS_BAKER_CHOSEN_TO_FALSE = 'isBakerChosenToFalse';
 const toSixDecimals = (value: string) => new BigNumber(value).decimalPlaces(TEZOS_TOKEN.metadata.decimals).toNumber();
 
 const RealForm: React.FC<VotingFormProps> = ({
   handleSubmit,
   values,
-  form,
-  bakerCleaner
+  form
   // eslint-disable-next-line
 }) => {
   const { t } = useTranslation(['common', 'vote']);
@@ -70,8 +67,6 @@ const RealForm: React.FC<VotingFormProps> = ({
   const { handleTokenPairSelectChange } = useVotingHandlers();
   const { availableBalance } = useAvailableBalances();
   const tokensUpdating = useTokensLoading();
-
-  useEffect(() => bakerCleaner.set(KEY_IS_BAKER_CHOSEN_TO_FALSE, () => setIsBakerChoosen(false)), [bakerCleaner]);
 
   const handleInputChange = async () => {
     try {
@@ -180,7 +175,6 @@ const RealForm: React.FC<VotingFormProps> = ({
                 label="Baker"
                 id="voting-baker"
                 className={s.mt24}
-                cleanBaker={bakerCleaner}
                 handleChange={bakerObj => {
                   input.onChange(bakerObj.address);
                   const asyncisBanned = async () => {

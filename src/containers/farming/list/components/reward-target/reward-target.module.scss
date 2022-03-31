@@ -1,0 +1,38 @@
+@import "@styles/variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  column-gap: 4px;
+}
+
+.iconButton {
+  transform: rotate(-90deg);
+  margin-right: 12px;
+}
+
+.earn,
+.tokenSymbol {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.light {
+  .earn {
+    color: $text-02;
+  }
+
+  .tokenSymbol {
+    color: $text-01;
+  }
+}
+
+.dark {
+  .earn {
+    color: $text-03;
+  }
+
+  .tokenSymbol {
+    color: $text-inverse;
+  }
+}

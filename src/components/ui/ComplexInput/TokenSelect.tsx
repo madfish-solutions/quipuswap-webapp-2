@@ -3,6 +3,7 @@ import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 import { ColorModes, ColorThemeContext, Shevron } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { TokensLogos } from '@components/common/TokensLogos';
 import { TokensModal } from '@components/modals/TokensModal';
@@ -10,7 +11,14 @@ import { Scaffolding } from '@components/scaffolding';
 import { ComplexError } from '@components/ui/ComplexInput/ComplexError';
 import { PercentSelector } from '@components/ui/ComplexInput/PercentSelector';
 import { useAccountPkh } from '@utils/dapp';
-import { getTokenInputAmountCap, getTokenSymbol, isExist, prepareTokenLogo, prettyPrice } from '@utils/helpers';
+import {
+  getTokenInputAmountCap,
+  getTokenSlug,
+  getTokenSymbol,
+  isExist,
+  prepareTokenLogo,
+  prettyPrice
+} from '@utils/helpers';
 import { getMessageNotWhitelistedToken } from '@utils/helpers/is-whitelisted-token';
 import { Nullable, Token } from '@utils/types';
 
@@ -33,6 +41,7 @@ interface TokenSelectProps extends HTMLProps<HTMLInputElement> {
   notSelectable?: boolean;
   handleChange?: (token: Token) => void;
   handleBalance?: (value: string) => void;
+  showBuyButton?: boolean;
   tokenInputAmountCap?: BigNumber;
   token: Nullable<Token>;
   tokensLoading?: boolean;
@@ -58,6 +67,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   error,
   id,
   handleChange,
+  showBuyButton,
   token,
   setToken,
   blackListedTokens,
@@ -66,6 +76,7 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
   ...props
   // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
+  const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
   const [tokensModal, setTokensModal] = useState<boolean>(false);
   const [focused, setActive] = useState<boolean>(false);
@@ -109,6 +120,16 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
           <div className={s.shape}>
             <div className={cx(s.item1, s.label2)}>{equivalentContent}</div>
             <div className={s.item2}>
+              {showBuyButton && token && (
+                <Button
+                  href={`/swap/tez-${getTokenSlug(token)}`}
+                  theme="quaternary"
+                  className={s.actionButton}
+                  textClassName={s.actionButtonText}
+                >
+                  {t('common|Buy')}
+                </Button>
+              )}
               {account && (
                 <Balance
                   balance={balance}
@@ -148,13 +169,15 @@ export const TokenSelect: React.FC<TokenSelectProps> = ({
             )}
           </div>
         </div>
-        <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
-          <PercentSelector
-            amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
-            value={balance}
-            handleBalance={handleBalance}
-          />
-        </Scaffolding>
+        {handleBalance ? (
+          <Scaffolding showChild={shouldShowBalanceButtons} className={s.scaffoldingPercentSelector}>
+            <PercentSelector
+              amountCap={tokenInputAmountCap ?? getTokenInputAmountCap(token)}
+              value={balance}
+              handleBalance={handleBalance}
+            />
+          </Scaffolding>
+        ) : null}
         <ComplexError error={error} />
       </div>
       {tokensModal && (
