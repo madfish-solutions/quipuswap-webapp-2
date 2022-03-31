@@ -14,7 +14,7 @@
   "tokens": [
     {
       "network": "ithacanet",
-      "type": "fa1.2",
+      "type": "FA12",
       "contractAddress": "KT1BRxbKjhRabGSB6saqK6QrBenaSvFJSgHu",
       "metadata": {
         "decimals": 10,
@@ -25,7 +25,7 @@
     },
     {
       "network": "ithacanet",
-      "type": "fa1.2",
+      "type": "FA12",
       "contractAddress": "KT1PzyU2nXYW8RkoFqmqWPFCA7bgC7yGNRoC",
       "metadata": {
         "decimals": 12,
@@ -36,7 +36,7 @@
     },
     {
       "network": "ithacanet",
-      "type": "fa2",
+      "type": "FA2",
       "contractAddress": "KT1SMhGgVwhm2JQjU4hDcpt4w1p7brxxFRPD",
       "fa2TokenId": 0,
       "metadata": {
@@ -48,7 +48,7 @@
     },
     {
       "network": "ithacanet",
-      "type": "fa2",
+      "type": "FA2",
       "contractAddress": "KT1XH2e9mwvZmR7NBcx1qwskZKxePtMwheak",
       "fa2TokenId": 0,
       "metadata": {
