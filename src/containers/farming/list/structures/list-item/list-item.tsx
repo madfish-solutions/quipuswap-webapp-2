@@ -8,7 +8,13 @@ import { Button } from '@components/ui/elements/button';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { StatusLabel } from '@components/ui/status-label';
 import { FarmingItem } from '@interfaces/farming.interfaces';
-import { getDollarEquivalent, getTokensPairName, getTokenSymbol, isExist } from '@utils/helpers';
+import {
+  getDollarEquivalent,
+  getTimeLockDescription,
+  getTokensPairName,
+  getTokenSymbol,
+  isExist
+} from '@utils/helpers';
 
 import { ListItemCardCell, RewardTarget, TokensLogosAndSymbols } from '../../components';
 import styles from './list-item.module.scss';
@@ -38,7 +44,9 @@ export const FarmingListItem: FC<FarmingItem> = ({
   depositTokenUrl,
   myBalance,
   depositBalance,
-  earnBalance
+  earnBalance,
+  timelock,
+  withdrawalFee
 }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { translation } = useListItemViewModal();
@@ -74,13 +82,23 @@ export const FarmingListItem: FC<FarmingItem> = ({
 
   const isAllowUserData = Boolean(myBalance || depositBalance || earnBalance);
 
+  const timeLockLabel = getTimeLockDescription(timelock);
+  const shouldShowLockPeriod = !!Number(timelock);
+
+  const withdrawalFeeLabel = withdrawalFee.toFixed();
+  const shouldShowWithdrawalFee = !withdrawalFee.eq(0);
+
   return (
     <Card className={cx(styles.card, themeClass[colorThemeMode])}>
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
             <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StatusLabel status={stakeStatus} />
+            <StatusLabel status={stakeStatus} filled />
+            {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+            {shouldShowWithdrawalFee && (
+              <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+            )}
             <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
           </div>
 
