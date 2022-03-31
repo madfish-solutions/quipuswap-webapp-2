@@ -1,11 +1,19 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { TestnetAlert } from '@shared/components/testnet-alert';
 
-import { PageTitle } from '@shared/components';
+import { News, DexDashboard, Opportunities } from './components';
 
 export const Home: FC = () => {
-  const { t } = useTranslation(['common']);
-
-  return <PageTitle>{t('Home Page')}</PageTitle>;
+  return (
+    <>
+      <TestnetAlert />
+      <News />
+      <DexDashboard />
+      <Opportunities />
+      {/* {IS_NETWORK_MAINNET && <TopPairs />} */}
+      {/* TODO: Implement it. */}
+      {/* <TopFarmings /> */}
+    </>
+  );
 };

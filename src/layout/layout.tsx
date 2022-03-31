@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { Sidebar, Header } from '@shared/components';
+import { Sidebar, Header } from '@shared/components/header';
 import { ToastWrapper } from '@shared/components/toast-wrapper';
 import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
 import { AccountModal } from '@shared/modals/account-modal';

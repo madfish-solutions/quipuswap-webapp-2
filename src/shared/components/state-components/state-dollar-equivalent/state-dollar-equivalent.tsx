@@ -1,14 +1,15 @@
-import React, { FC, useContext } from 'react';
+import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+
 import { formatValueBalance, isExist } from '../../../helpers';
 import { Nullable } from '../../../types/types';
+import { DashPlug } from '../../dash-plug';
 import { StateWrapper, StateWrapperProps } from '../../state-wrapper';
-import { DashPlug } from '../../ui';
-import s from './state-dollar-equivalent.module.sass';
+import s from './state-dollar-equivalent.module.scss';
 
 const USD_DECIMALS_AMOUNT = 2;
 

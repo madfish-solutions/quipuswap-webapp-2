@@ -1,16 +1,16 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { IS_NETWORK_MAINNET } from '@config';
+import { IS_NETWORK_MAINNET } from '@config/config';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { calculateRateAmount, isExist } from '@shared/helpers';
 import { Nullable } from '@shared/types/types';
 
 import { DashboardCard } from './dashboard-card';
-import s from './dex-dashboard.module.sass';
+import styles from './dex-dashboard.module.scss';
 
 interface DexDashboardInnerProps {
   totalLiquidity: Nullable<string> | undefined;
@@ -22,8 +22,8 @@ interface DexDashboardInnerProps {
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
@@ -46,7 +46,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
       {IS_NETWORK_MAINNET ? (
         <>
           <DashboardCard
-            className={cx(s.card, modeClass[colorThemeMode])}
+            className={cx(styles.card, modeClass[colorThemeMode])}
             size="extraLarge"
             volume={tvl}
             tooltip={t(
@@ -56,7 +56,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             currency="$"
           />
           <DashboardCard
-            className={cx(s.card, modeClass[colorThemeMode])}
+            className={cx(styles.card, modeClass[colorThemeMode])}
             size="extraLarge"
             volume={volume24h}
             tooltip={t('home|The accumulated cost of all assets traded via QuipuSwap today.')}
@@ -64,7 +64,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
             currency="$"
           />
           <DashboardCard
-            className={cx(s.card, modeClass[colorThemeMode])}
+            className={cx(styles.card, modeClass[colorThemeMode])}
             size="extraLarge"
             volume={transactions24h}
             tooltip={t('home|The overall number of transactions conducted on QuipuSwap today.')}
@@ -73,7 +73,7 @@ export const DexDashboardInner: FC<DexDashboardInnerProps> = ({
         </>
       ) : null}
       <DashboardCard
-        className={cx(s.card, modeClass[colorThemeMode])}
+        className={cx(styles.card, modeClass[colorThemeMode])}
         size="extraLarge"
         volume={totalSupply ? totalSupply.toString() : null}
         tooltip={t('home|The current number of available QUIPU tokens.')}

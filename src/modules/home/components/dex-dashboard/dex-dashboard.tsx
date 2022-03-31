@@ -1,28 +1,29 @@
-import { useEffect, FC } from 'react';
+import { useEffect, FC, useState } from 'react';
 
-import { Card, SliderUI } from '@quipuswap/ui-kit';
 import { TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@config';
+import { IS_NETWORK_MAINNET, MAINNET_DEFAULT_TOKEN, MAINNET_RPC_URL } from '@config/config';
+import { Card } from '@shared/components/card';
+import { Slider } from '@shared/components/slider';
 import { getStorageInfo } from '@shared/dapp';
 import { fromDecimals } from '@shared/helpers';
 
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
 import { Section } from '../section';
-import s from './dex-dashboard.module.sass';
+import { DexDashboardInner } from './dex-dashboard-inner';
+import s from './dex-dashboard.module.scss';
 
 interface DexDashboardProps {
   className?: string;
 }
 
-const DEFAULT = 0;
+const ZERO = 0;
 
 export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
   const { t } = useTranslation(['home']);
+  const [totalSupply, setTotalSupply] = useState<BigNumber>();
 
   useEffect(() => {
     const asyncLoad = async () => {
@@ -30,7 +31,7 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
       const tezos = new TezosToolkit(MAINNET_RPC_URL);
       const contract = await getStorageInfo(tezos, MAINNET_DEFAULT_TOKEN.contractAddress);
       // @ts-ignore
-      const rawTotalSupply = await contract?.token_info.get(DEFAULT);
+      const rawTotalSupply = await contract?.token_info.get(ZERO);
       setTotalSupply(fromDecimals(rawTotalSupply, MAINNET_DEFAULT_TOKEN));
     };
     void asyncLoad();
@@ -45,12 +46,27 @@ export const DexDashboard: FC<DexDashboardProps> = ({ className }) => {
       className={cx(className)}
     >
       <Card className={s.mobile} contentClassName={s.mobContent}>
-        <SliderUI className={s.mobSlider}></SliderUI>
+        <Slider className={s.mobSlider}>
+          <DexDashboardInner
+            volume24={'888888'}
+            totalLiquidity={'888888'}
+            xtzUsdQuote={'888888'}
+            trasactionsCount24h={888888}
+            totalSupply={totalSupply}
+            loading={false}
+          />
+        </Slider>
       </Card>
-      <Card className={s.desktop} contentClassName={desktopContentClassName}></Card>
+      <Card className={s.desktop} contentClassName={desktopContentClassName}>
+        <DexDashboardInner
+          volume24={'888888'}
+          totalLiquidity={'888888'}
+          xtzUsdQuote={'888888'}
+          trasactionsCount24h={888888}
+          totalSupply={totalSupply}
+          loading={false}
+        />
+      </Card>
     </Section>
   );
 };
-function setTotalSupply(arg0: BigNumber) {
-  throw new Error('Function not implemented.');
-}

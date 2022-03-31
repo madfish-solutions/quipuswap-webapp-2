@@ -1,22 +1,24 @@
 import React, { useContext } from 'react';
 
-import { SliderUI, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { Section, responsive } from '@modules/home/components';
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { Slider } from '@shared/components/slider';
 
+import { responsive } from '../news';
+import { Section } from '../section';
 import { NewsData } from './content';
 import { NewsCard } from './news-card';
-import s from './news.module.sass';
+import styles from './news.module.scss';
 
 interface NewsProps {
   className?: string;
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const News: React.FC<NewsProps> = ({ className }) => {
@@ -32,11 +34,11 @@ export const News: React.FC<NewsProps> = ({ className }) => {
       )}
       className={cx(className)}
     >
-      <SliderUI items={4} className={s.uncenter} responsive={responsive}>
+      <Slider items={4} className={styles.uncenter} responsive={responsive}>
         {NewsData.map(news => (
-          <NewsCard key={news.id} className={cx(s.card, modeClass[colorThemeMode])} news={news} />
+          <NewsCard key={news.id} className={cx(styles.card, modeClass[colorThemeMode])} news={news} />
         ))}
-      </SliderUI>
+      </Slider>
     </Section>
   );
 };

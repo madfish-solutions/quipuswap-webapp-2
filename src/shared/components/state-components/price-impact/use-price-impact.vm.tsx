@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 
 import { isExist, isNull, FormatNumber } from '../../../helpers';
 import { Nullable } from '../../../types/types';
+import { DashPlug } from '../../dash-plug';
 import { SmileCondition } from '../../smiles';
-import { DashPlug } from '../../ui/dash-plug';
-import s from './price-impact.module.sass';
+import s from './price-impact.module.scss';
 
 const PRICE_IMPACT_DECIMALS = 2;
 const DEFAULT_PRICE_IMPACT = 0;

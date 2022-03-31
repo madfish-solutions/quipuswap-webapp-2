@@ -1,0 +1,124 @@
+@import "@styles/_variables";
+@import "@styles/_breakpoints";
+
+.wrapper {
+  cursor: pointer;
+  display: flex;
+}
+
+.small {
+  width: 26px;
+  height: 26px;
+  padding: 5px;
+  margin: -5px -5px -5px 0;
+}
+
+.info {
+  height: 100%;
+  width: 100%;
+}
+
+.light.info {
+  background: none;
+  border: none;
+}
+
+.dark.info {
+  background: none;
+  border: none;
+}
+
+.light.info, .dark.info {
+  color: $text-03;
+}
+
+.root {
+  box-shadow: $elevation-06;
+  max-width: 180px;
+  font-weight: normal;
+  padding: 16px;
+  font-size: 0.857rem;
+  border-radius: 4px;
+
+  &[data-placement^='right'], &[data-placement^='left'] {
+    :global(.tippy-arrow) {
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+    }
+  }
+
+  &[data-placement^='top'], &[data-placement^='bottom'] {
+    :global(.tippy-arrow) {
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+    }
+  }
+}
+
+.light {
+  background: $text-inverse;
+  border: 1px solid $text-inverse;
+  color: $text-01;
+
+  &[data-placement^='right'] {
+    :global(.tippy-arrow) {
+      border-right: 15px solid $text-inverse;
+      left: -15px;
+    }
+  }
+
+  &[data-placement^='left'] {
+    :global(.tippy-arrow) {
+      border-left: 15px solid $text-inverse;
+      right: -15px;
+    }
+  }
+
+  &[data-placement^='top'] {
+    :global(.tippy-arrow) {
+      border-top: 15px solid $text-inverse;
+      bottom: -15px;
+    }
+  }
+
+  &[data-placement^='bottom'] {
+    :global(.tippy-arrow) {
+      border-bottom: 15px solid $text-inverse;
+      top: -15px;
+    }
+  }
+}
+
+.dark {
+  background: $text-01;
+  border: 1px solid $text-01;
+  color: $text-inverse;
+
+  &[data-placement^='right'] {
+    :global(.tippy-arrow) {
+      border-right: 9px solid $text-01;
+      left: -9px;
+    }
+  }
+
+  &[data-placement^='left'] {
+    :global(.tippy-arrow) {
+      border-left: 9px solid $text-01;
+      right: -9px;
+    }
+  }
+
+  &[data-placement^='top'] {
+    :global(.tippy-arrow) {
+      border-top: 9px solid $text-01;
+      bottom: -9px;
+    }
+  }
+
+  &[data-placement^='bottom'] {
+    :global(.tippy-arrow) {
+      border-bottom: 9px solid $text-01;
+      top: -9px;
+    }
+  }
+}

@@ -1,13 +1,14 @@
 import { FC, useMemo } from 'react';
 
-import { ColorModes } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
+import { ColorModes } from '@providers/color-theme-context';
+
 import { formatBalance, isExist, isNull, isUndefined } from '../../../helpers';
 import { Optional } from '../../../types/types';
+import { DashPlug } from '../../dash-plug';
 import { StateWrapper } from '../../state-wrapper';
-import { DashPlug } from '../../ui';
 import styles from './balance.module.scss';
 
 export interface BalanceProps {

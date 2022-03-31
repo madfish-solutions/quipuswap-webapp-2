@@ -1,16 +1,17 @@
 import { FC, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
+
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
 import { DataTestAttribute } from '../../../../tests/types';
 import { formatValueBalance, isExist, FormatNumberOptions } from '../../../helpers';
 import { Nullable } from '../../../types/types';
+import { DashPlug } from '../../dash-plug';
 import { StateWrapper, StateWrapperProps } from '../../state-wrapper';
-import { DashPlug } from '../../ui';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
-import s from './state-currency-amount.module.sass';
+import s from './state-currency-amount.module.scss';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;

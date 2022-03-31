@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { TEZOS_TOKEN } from '@config';
+import { TEZOS_TOKEN } from '@config/config';
 
 import { fromDecimals } from './from-decimals';
 

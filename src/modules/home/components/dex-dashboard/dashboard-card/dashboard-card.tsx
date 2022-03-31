@@ -1,13 +1,13 @@
 import { FC, ReactNode, useContext } from 'react';
 
-import { ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components/state-components';
-import { Tooltip } from '@shared/components/ui';
+import { Tooltip } from '@shared/components/tooltip';
 import { Nullable } from '@shared/types/types';
 
-import s from './dashboard-card.module.sass';
+import styles from './dashboard-card.module.scss';
 
 interface DashboardCardProps {
   volume: Nullable<string>;
@@ -20,8 +20,8 @@ interface DashboardCardProps {
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const DashboardCard: FC<DashboardCardProps> = ({
@@ -36,16 +36,17 @@ export const DashboardCard: FC<DashboardCardProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
-    <div className={cx(s.root, className, modeClass[colorThemeMode])}>
-      <h4 className={s.header}>
+    <div className={cx(styles.root, className, modeClass[colorThemeMode])}>
+      <h4 className={styles.header}>
         {label} <Tooltip content={tooltip} />
       </h4>
       <StateCurrencyAmount
-        className={s.currencyAmount}
+        className={styles.currencyAmount}
         amount={volume}
         currency={currency}
         isLeftCurrency={currency === '$'}
         labelSize={size}
+        isLoading={loading}
       />
     </div>
   );

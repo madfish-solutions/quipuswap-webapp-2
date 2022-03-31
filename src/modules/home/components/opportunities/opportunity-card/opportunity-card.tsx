@@ -1,10 +1,9 @@
 import { FC, ReactNode } from 'react';
 
-import { Card } from '@quipuswap/ui-kit';
+import { Button } from '@shared/components/button';
+import { Card } from '@shared/components/card';
 
-import { Button } from '@shared/components/ui';
-
-import s from './opportunity-card.module.sass';
+import s from './opportunity-card.module.scss';
 
 interface OpportunityCardProps {
   className?: string;

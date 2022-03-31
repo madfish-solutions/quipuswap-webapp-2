@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import s from './section.module.sass';
+import s from './section.module.scss';
 
 export interface SectionProps {
   header: string;

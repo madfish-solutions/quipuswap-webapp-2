@@ -1,7 +1,8 @@
 import { FC, ReactNode } from 'react';
 
-import { Earn, Farm, Trade } from '@quipuswap/ui-kit';
 import { Trans } from 'next-i18next';
+
+import { Earn, Farm, Trade } from '@shared/svg';
 
 interface OpportunitiesCardsDataType {
   id: number;

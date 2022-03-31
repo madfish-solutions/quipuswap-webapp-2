@@ -34,8 +34,6 @@ const initializeStore = (): RootStore => {
 
 export const RootStoreProvider = ({ children }: { children: ReactNode }) => {
   const store = initializeStore();
-  // eslint-disable-next-line no-console
-  console.log('RootStoreProvider', children);
 
   return <StoreContext.Provider value={store}>{children}</StoreContext.Provider>;
 };

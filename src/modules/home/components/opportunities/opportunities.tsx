@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Section } from '../section';
 import { OpportunitiesCardsData } from './content';
-import s from './opportunities.module.sass';
+import s from './opportunities.module.scss';
 import { OpportunityCard } from './opportunity-card';
 
 interface OpportunitiesProps {
