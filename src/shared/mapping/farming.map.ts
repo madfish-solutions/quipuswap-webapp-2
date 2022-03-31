@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { DEFAULT_DECIMALS } from '@config';
+import { DEFAULT_DECIMALS } from '@config/config';
 import { RawFarmingStats, RawFarmingItem, FarmingStats, FarmingItem } from '@modules/farming/interfaces';
 
 import { isExist, getTokensName, fromDecimals } from '../helpers';

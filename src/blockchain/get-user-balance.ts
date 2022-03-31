@@ -2,7 +2,7 @@ import { ChainIds, TezosToolkit } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { KNOWN_LAMBDA_CONTRACTS } from '@config';
+import { KNOWN_LAMBDA_CONTRACTS } from '@config/config';
 import { getReadOnlyTezos } from '@shared/dapp';
 import { Standard, Token } from '@shared/types/types';
 

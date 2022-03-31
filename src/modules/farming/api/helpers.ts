@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { MS_IN_SECOND } from '@config';
+import { MS_IN_SECOND } from '@config/config';
 import { mapFarmingItem } from '@shared/mapping';
 import { Undefined } from '@shared/types/types';
 
