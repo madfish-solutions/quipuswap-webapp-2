@@ -2,9 +2,10 @@ import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
 import BigNumber from 'bignumber.js';
 
+import { Standard } from '@graphql';
+import { getAllowance } from '@utils/dapp';
+import { isTezosToken } from '@utils/helpers';
 import { Token } from '@utils/types';
-
-import { allowContractSpendYourTokens } from './allow-contract-spend-your-tokens';
 
 const RESET_AMOUNT = 0;
 
@@ -16,14 +17,45 @@ export const withApproveApi = async (
   amount: BigNumber.Value,
   operationParams: TransferParams
 ) => {
-  const resetOperatorPromise = allowContractSpendYourTokens(tezos, token, contractAddress, RESET_AMOUNT, accountPkh);
-  const updateOperatorPromise = allowContractSpendYourTokens(tezos, token, contractAddress, amount, accountPkh);
-  const [resetOperator, updateOperator] = await Promise.all([resetOperatorPromise, updateOperatorPromise]);
+  const operationsParams: TransferParams[] = [];
+  if (isTezosToken(token)) {
+    operationsParams.push(operationParams);
+  } else {
+    const tokenContract = await tezos.wallet.at(token.contractAddress);
+    if (token.type === Standard.Fa12) {
+      const currentAllowance = await getAllowance(tezos, token.contractAddress, accountPkh, contractAddress);
+      if (currentAllowance.isGreaterThan(RESET_AMOUNT)) {
+        operationsParams.push(tokenContract.methods.approve(contractAddress, RESET_AMOUNT).toTransferParams());
+      }
+      operationsParams.push(tokenContract.methods.approve(contractAddress, amount).toTransferParams(), operationParams);
+    } else {
+      operationsParams.push(
+        tokenContract.methods
+          .update_operators([
+            {
+              add_operator: {
+                owner: accountPkh,
+                operator: contractAddress,
+                token_id: token.fa2TokenId
+              }
+            }
+          ])
+          .toTransferParams(),
+        operationParams,
+        tokenContract.methods
+          .update_operators([
+            {
+              remove_operator: {
+                owner: accountPkh,
+                operator: contractAddress,
+                token_id: token.fa2TokenId
+              }
+            }
+          ])
+          .toTransferParams()
+      );
+    }
+  }
 
-  return await batchify(tezos.wallet.batch([]), [
-    resetOperator.toTransferParams(),
-    updateOperator.toTransferParams(),
-    operationParams,
-    resetOperator.toTransferParams()
-  ]).send();
+  return await batchify(tezos.wallet.batch([]), operationsParams).send();
 };
