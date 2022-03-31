@@ -60,7 +60,7 @@ export const FarmingDetails: FC = observer(() => {
       contentClassName={s.content}
     >
       {shouldShowTags && (
-        <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName} tooltipContent={t('farm|Tags')}>
+        <DetailsCardCell cellName={t('farm|Tags')} className={CardCellClassName}>
           <div className={styles.tags}>
             {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
             {shouldShowWithdrawalFee && <StatusLabel label={`${withdrawalFee}% UNLOCK FEE`} status={stakeStatus} />}
