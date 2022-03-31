@@ -2,11 +2,11 @@ import { ContractAbstraction, ContractProvider, TezosToolkit, Wallet } from '@ta
 import BigNumber from 'bignumber.js';
 import memoizee from 'memoizee';
 
-import { networksDefaultTokens, SAVED_TOKENS_KEY, TEZOS_TOKEN, getTokensUrl } from '@app.config';
+import { networksDefaultTokens, SAVED_TOKENS_KEY, TEZOS_TOKEN, TOKENS_URL } from '@app.config';
 import { Standard } from '@graphql';
 import { getTokenSlug, ipfsToHttps, isClient, isTokenEqual } from '@utils/helpers';
 import { getUniqArray } from '@utils/helpers/arrays';
-import { Token, TokenPair, QSNetwork, TokenId, TokenWithQSNetworkType, QSNets, Nullable } from '@utils/types';
+import { Nullable, QSNets, QSNetwork, Token, TokenId, TokenPair, TokenWithQSNetworkType } from '@utils/types';
 import { isValidContractAddress } from '@utils/validators';
 
 import { getAllowance } from './getAllowance';
@@ -106,7 +106,7 @@ export const getFallbackTokens = (network: QSNetwork, addTokensFromLocalStorage?
 export const getTokens = async (network: QSNetwork, addTokensFromLocalStorage?: boolean) => {
   let tokens = getFallbackTokens(network, addTokensFromLocalStorage);
 
-  const response = await fetch(ipfsToHttps(getTokensUrl()));
+  const response = await fetch(ipfsToHttps(TOKENS_URL));
   const json = await response.json();
   const arr: Token[] = json.tokens?.length ? json.tokens : json.length ? json : [];
 

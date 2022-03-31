@@ -45,16 +45,13 @@ const MAINNET_TOKENS = process.env.NEXT_PUBLIC_MAINNET_TOKENS!;
 const HANGZHOUNET_TOKENS = process.env.NEXT_PUBLIC_HANGZHOUNET_TOKENS!;
 const ITHACANET_TOKENS = process.env.NEXT_PUBLIC_ITHACANET_TOKENS!;
 
-export const getTokensUrl = () => {
-  switch (NETWORK_ID) {
-    case QSNets.hangzhounet:
-      return HANGZHOUNET_TOKENS;
-    case QSNets.ithacanet:
-      return ITHACANET_TOKENS;
-    default:
-      return MAINNET_TOKENS;
-  }
+const TOKENS_URL_MAP: Record<QSNets, string> = {
+  [QSNets.mainnet]: MAINNET_TOKENS,
+  [QSNets.hangzhounet]: HANGZHOUNET_TOKENS,
+  [QSNets.ithacanet]: ITHACANET_TOKENS
 };
+
+export const TOKENS_URL = TOKENS_URL_MAP[NETWORK_ID];
 
 export const ZERO_ADDRESS = 'tz1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZNkiRg';
 export const FARM_REWARD_UPDATE_INTERVAL = 1000;
