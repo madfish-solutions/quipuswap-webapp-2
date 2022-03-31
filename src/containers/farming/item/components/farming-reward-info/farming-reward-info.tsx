@@ -24,8 +24,6 @@ const modeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-const NO_TIMELOCK_VALUE = '0';
-
 export const FarmingRewardInfo: FC = observer(() => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['farm']);
@@ -41,7 +39,9 @@ export const FarmingRewardInfo: FC = observer(() => {
     rewardTokenDecimals,
     rewardTokenSymbol,
     farmingLoading,
-    timelock,
+    shouldShowCountdown,
+    shouldShowCountdownValue,
+    isHarvestAvailable,
     handleHarvest
   } = useFarmingRewardInfoViewModel();
 
@@ -58,6 +58,7 @@ export const FarmingRewardInfo: FC = observer(() => {
       onButtonClick={handleHarvest}
       buttonText={t('farm|Harvest')}
       rewardTooltip={t('farm|singleFarmRewardTooltip')}
+      disabled={!isHarvestAvailable}
       rewardButtonAttributeTestId={FarmingItemPandingReward.HARVEST_BUTTON}
       pendingRewardAttributeTestId={FarmingItemPandingReward.PENDING_REWARD}
       currency={rewardTokenSymbol}
@@ -102,14 +103,14 @@ export const FarmingRewardInfo: FC = observer(() => {
         </FarmingStatsItem>
       )}
 
-      {timelock !== NO_TIMELOCK_VALUE && (
+      {shouldShowCountdown && (
         <FarmingStatsItem
-          itemName={t('farm|Withdrawal fee ends in')}
+          itemName={t('farm|Lock period ends in')}
           loading={farmingLoading}
           tooltipContent={t('farm|feeEndsInTooltip')}
         >
           <StateData data={endTimestamp} Fallback={RewardDashPlugFallback}>
-            {timestamp => <Countdown endTimestamp={timestamp} />}
+            {timestamp => <Countdown shouldShow={shouldShowCountdownValue} endTimestamp={timestamp} />}
           </StateData>
         </FarmingStatsItem>
       )}

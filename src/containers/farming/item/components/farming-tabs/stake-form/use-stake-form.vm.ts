@@ -22,11 +22,13 @@ import { useDoStake } from '../../../../hooks/use-do-stake';
 import { useGetFarmingItem } from '../../../../hooks/use-get-farming-item';
 import { canDelegate } from '../../../helpers';
 import { StakeFormFields, StakeFormValues } from './stake-form.interface';
+import { useStakeConfirmationPopup } from './use-stake-confirmation-popup';
 import { useStakeFormValidation } from './use-stake-form.validation';
 
 const getDummyBaker = (condition: boolean) => (condition ? null : { address: DUMMY_BAKER });
 
 export const useStakeFormViewModel = () => {
+  const confirmationPopup = useStakeConfirmationPopup();
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
@@ -56,9 +58,11 @@ export const useStakeFormViewModel = () => {
   };
 
   const handleStakeSubmitAndUpdateData = async (values: StakeFormValues, actions: FormikHelpers<StakeFormValues>) => {
-    await handleStakeSubmit(values, actions);
+    confirmationPopup(async () => {
+      await handleStakeSubmit(values, actions);
 
-    await delayedGetFarmingItem(defined(farmingItem).id);
+      await delayedGetFarmingItem(defined(farmingItem).id);
+    });
   };
 
   const formik = useFormik({

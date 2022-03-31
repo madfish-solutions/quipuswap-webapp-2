@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+Release: `v2.1.0`
+
 ## Getting Started
 
 Run development servers for mainnet, hangzhounet or ithacanet:

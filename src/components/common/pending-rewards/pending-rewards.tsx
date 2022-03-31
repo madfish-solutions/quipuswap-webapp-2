@@ -46,7 +46,7 @@ export const PendingRewards: FC<Props> = ({
         {accountPkh ? (
           <>
             <div className={styles.titleWrapper}>
-              <span className={styles.title}>{t('farm|Your Pending Rewards')}</span>
+              <span className={styles.title}>{t('farm|Your Claimable Rewards')}</span>
               {tooltip && <Tooltip content={tooltip} />}
             </div>
             <StateCurrencyAmount

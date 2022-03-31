@@ -1,4 +1,5 @@
-import { MS_IN_SECOND } from '@app.config';
+import { getEndTimestamp, getIsHarvestAvailable, getUserInfoLastStakedTime } from '@api/farming/helpers';
+import { NO_TIMELOCK_VALUE } from '@app.config';
 import { useDoHarvest } from '@containers/farming/hooks/use-do-harvest';
 import { useGetFarmingItem } from '@containers/farming/hooks/use-get-farming-item';
 import { useFarmingItemStore } from '@hooks/stores/use-farming-item-store';
@@ -48,29 +49,39 @@ export const useFarmingRewardInfoViewModel = () => {
       rewardTokenSymbol: TOKEN_SYMBOL_FILLER,
       rewardTokenDecimals: 0,
       farmingLoading,
-      timelock: null,
+      shouldShowCountdown: false,
+      shouldShowCountdownValue: false,
+      isHarvestAvailable: false,
       handleHarvest
     };
   }
 
   const myDepositDollarEquivalent = getDollarEquivalent(farmingItem.depositBalance, farmingItem.depositExchangeRate);
-  const lastStakedTime = userInfo ? new Date(userInfo.last_staked).getTime() : null;
   const myRewardInTokens = farmingItem.earnBalance?.decimalPlaces(farmingItem.stakedToken.metadata.decimals) ?? null;
   const myRewardInUsd = getDollarEquivalent(myRewardInTokens, farmingItem.earnExchangeRate);
+
+  // TODO: Move to the model
+  const shouldShowCountdown = farmingItem.timelock !== NO_TIMELOCK_VALUE;
+  const shouldShowCountdownValue = farmingItem.depositBalance ? !farmingItem.depositBalance.isZero() : false;
+  const lastStakedTime = getUserInfoLastStakedTime(userInfo);
+  const endTimestamp = getEndTimestamp(farmingItem, lastStakedTime);
+  const isHarvestAvailable = getIsHarvestAvailable(endTimestamp);
 
   return {
     shouldShowCandidate: canDelegate(farmingItem),
     farmingItem,
     myDelegate: isNull(delegateAddress) ? null : makeBaker(delegateAddress, bakers),
     delegatesLoading,
-    endTimestamp: isExist(lastStakedTime) ? lastStakedTime + Number(farmingItem.timelock) * MS_IN_SECOND : null,
+    endTimestamp,
     myRewardInTokens,
     myRewardInUsd,
     myDepositDollarEquivalent,
     rewardTokenSymbol: getTokenSymbol(farmingItem.rewardToken),
     rewardTokenDecimals: farmingItem.rewardToken.metadata.decimals,
     farmingLoading,
-    timelock: farmingItem.timelock,
+    shouldShowCountdown,
+    shouldShowCountdownValue,
+    isHarvestAvailable,
     handleHarvest
   };
 };
