@@ -19,3 +19,10 @@ export const parseTimelock = (timelock: BigNumber.Value, isTimelockInSeconds?: b
     minutes: minutes.toNumber()
   };
 };
+
+export const getTimeLockDescription = (timelock: BigNumber.Value): string => {
+  const ms = Number(timelock) * MS_IN_SECOND;
+  const { days, hours, minutes } = parseTimelock(ms);
+
+  return `${days} DAYS`;
+};

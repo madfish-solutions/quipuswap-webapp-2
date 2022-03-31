@@ -19,6 +19,7 @@ const gradients = {
 
 interface Props {
   status: ActiveStatus;
+  label?: string;
 }
 
 const themeClass = {
@@ -26,12 +27,12 @@ const themeClass = {
   [ColorModes.Dark]: styles.dark
 };
 
-export const StatusLabel: FC<Props> = ({ status }) => {
+export const StatusLabel: FC<Props> = ({ status, label }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (
     <div className={cx(styles.container, themeClass[colorThemeMode])} style={{ background: gradients[status] }}>
-      <span className={cx(styles.status)}>{status}</span>
+      <span className={cx(styles.status)}>{label ?? status}</span>
     </div>
   );
 };

@@ -99,6 +99,7 @@ export const useFarmingDetailsViewModel = () => {
     dailyApr: apr ? bigNumberToString(apr.dividedBy(DAYS_IN_YEAR)) : null,
     currentDelegate,
     nextDelegate,
+    // TODO: Move it to mapping
     timelock: Number(timelock) * MS_IN_SECOND,
     CardCellClassName,
     depositTokenDecimals: stakedToken.metadata.decimals,
