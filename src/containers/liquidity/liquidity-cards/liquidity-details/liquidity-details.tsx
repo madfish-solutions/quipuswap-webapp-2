@@ -1,9 +1,6 @@
 /* eslint-disable no-console */
 import { FC } from 'react';
 
-import { FoundDex } from '@quipuswap/sdk';
-import { useTranslation } from 'next-i18next';
-
 import { EMPTY_POOL_AMOUNT } from '@app.config';
 import { ContractHashWithCopy } from '@components/common/contract-hash-with-copy/contract-hash-with-copy';
 import { RateView } from '@components/common/pair-details/rate-view';
@@ -12,9 +9,11 @@ import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
 import { StateCurrencyAmount } from '@components/ui/state-components/state-currency-amount';
 import { useLoadLiquidityShare } from '@containers/liquidity/hooks/use-load-liquidity-share';
+import { FoundDex } from '@quipuswap/sdk';
 import { useAccountPkh } from '@utils/dapp';
 import { isExist, isNull, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
+import { useTranslation } from 'next-i18next';
 
 import { LiquidityDetailsButtons } from './components/liquidity-details-buttons';
 import s from './liquidity-details.module.sass';
@@ -72,9 +71,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           isError={!contractAddress || !contractLink}
           errorFallback={<DashPlug animation={false} />}
         >
-          {contractAddress && contractLink && (
-            <ContractHashWithCopy contractAddress={contractAddress} link={contractLink} />
-          )}
+          {contractAddress && contractLink && <ContractHashWithCopy contractAddress={contractAddress} />}
         </StateWrapper>
       </DetailsCardCell>
 
