@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { BigNumber } from 'bignumber.js';
 import { observable, makeObservable, action, computed } from 'mobx';
 
@@ -141,6 +142,7 @@ export class FarmingItemStore {
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
       return null;
     }
+    console.log('here');
 
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }

@@ -31,7 +31,7 @@ export const useStakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doStake } = useDoStake();
-  const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = farmingItemStore!;
+  const { itemStore, inputAmount, selectedBaker, availableBalanceStore } = farmingItemStore;
   const { data: farmingItem } = itemStore;
   const { data: availableBalance } = availableBalanceStore;
 
@@ -77,7 +77,7 @@ export const useStakeFormViewModel = () => {
   useEffect(() => {
     if (prevShouldShowBakerInputRef.current !== shouldShowBakerInput) {
       formik.setFieldValue(StakeFormFields.selectedBaker, '');
-      farmingItemStore!.setSelectedBaker(getDummyBaker(shouldShowBakerInput));
+      farmingItemStore.setSelectedBaker(getDummyBaker(shouldShowBakerInput));
     }
     prevShouldShowBakerInputRef.current = shouldShowBakerInput;
   }, [shouldShowBakerInput, formik, farmingItemStore]);
@@ -89,12 +89,12 @@ export const useStakeFormViewModel = () => {
   const disabled = formik.isSubmitting || isExist(inputAmountError) || isExist(bakerError) || isExist(farmStatusError);
 
   const handleInputAmountChange = (value: string) => {
-    farmingItemStore!.setInputAmount(prepareNumberAsString(value));
+    farmingItemStore.setInputAmount(prepareNumberAsString(value));
     formik.setFieldValue(StakeFormFields.inputAmount, value);
   };
 
   const handleBakerChange = (baker: WhitelistedBaker) => {
-    farmingItemStore!.setSelectedBaker(baker);
+    farmingItemStore.setSelectedBaker(baker);
     formik.setFieldValue(StakeFormFields.selectedBaker, baker.address);
   };
 

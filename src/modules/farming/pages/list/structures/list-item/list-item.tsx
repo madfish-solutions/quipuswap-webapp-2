@@ -62,7 +62,7 @@ export const FarmingListItem: FC<FarmingItem> = ({
   const isPairFull = isExist(tokenB);
   const depositTokenSymbol = isPairFull ? getTokensPairName(tokenA, tokenB) : getTokenSymbol(tokenA);
 
-  const selectLink = `farming/${id}`;
+  const selectLink = `/farming/${id}`;
 
   const myBalanceDollarEquivalent = multipliedIfPossible(myBalance, depositExchangeRate);
   const myDepositDollarEquivalent = multipliedIfPossible(depositBalance, depositExchangeRate);
