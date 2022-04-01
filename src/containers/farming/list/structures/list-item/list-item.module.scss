@@ -41,6 +41,47 @@
   justify-content: space-between;
   row-gap: 12px;
   overflow-x: auto;
+  position: relative;
+
+  scrollbar-width: thin;
+
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  &::-webkit-resizer {
+    display: none;
+  }
 }
 
 .CardCellHeader {
@@ -71,6 +112,12 @@
 }
 
 .light {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $ui-05;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-03;
@@ -79,6 +126,12 @@
 }
 
 .dark {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $text-02;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-02;
