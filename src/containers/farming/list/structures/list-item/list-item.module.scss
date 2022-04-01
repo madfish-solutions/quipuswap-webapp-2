@@ -43,6 +43,8 @@
   overflow-x: auto;
   position: relative;
 
+  scrollbar-width: thin;
+
   &:hover {
     &::-webkit-scrollbar {
       display: block;
