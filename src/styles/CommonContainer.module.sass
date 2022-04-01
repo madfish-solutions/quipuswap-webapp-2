@@ -1,0 +1,252 @@
+@import "@styles/variables"
+@import "@styles/breakpoints"
+//TODO
+.rotation
+  -webkit-transition: all 2s ease
+  -moz-transition: all 2s ease
+  -o-transition: all 2s ease
+  -ms-transition: all 2s ease
+  transition: all 2s ease
+
+.rotation-active
+  transform: rotate(180deg)
+
+.Skeleton
+  height: 440px
+
+.header
+  padding-top: 0
+  padding-bottom: 0
+
+.tabs
+  margin-bottom: -1px
+
+.content
+  padding: 40px 24px 24px
+  display: flex
+  flex-direction: column
+
+.mb24
+  margin-bottom: 24px
+
+.mt12
+  margin-top: 12px
+
+.mt16
+  margin-top: 16px
+
+.mt24
+  margin-top: 24px
+
+.amountWrapper
+  display: flex
+  margin-top: 16px
+
+  &:last-child
+    margin-top: 8px
+
+.info
+  cursor: pointer
+  user-select: none
+  margin-left: 6px
+
+.simpleError
+  max-height: 60px
+  overflow: hidden
+  transition: max-height $animationTime
+  font-size: 0.857rem
+  line-height: 1.33
+  padding-top: 8px
+  display: inline-block
+  color: $support-error
+
+.iconButton
+  margin: 11px auto
+
+.routeLine
+  row-gap: 4px
+
+.receive
+  display: flex
+  margin-top: 16px
+  margin-bottom: 24px
+
+.votingStats
+  margin-bottom: 24px
+
+.receiveLabel
+  margin-right: 8px
+  font-size: 0.857rem
+
+.button
+  margin-top: 40px
+  max-width: 280px
+
+.farmingCard
+  padding: 24px
+  text-align: center
+
+  &:not(:last-child)
+    margin-bottom: 32px
+
+.farmingControllerCard
+  padding: 0 24px 16px 24px
+
+.farmingControllerContent
+  flex-wrap: wrap
+
+.cellCenter
+  align-items: flex-start
+
+.cell
+  &:not(:last-child)
+    margin-bottom: 16px
+
+.switcherWrap
+  display: flex
+  align-items: center
+
+.cellAmount
+  display: flex
+  flex-direction: column
+  justify-content: flex-start
+  align-items: flex-start
+  word-break: break-all
+
+  .rateView
+    display: flex
+
+  .usdEquityWrapper
+    display: flex
+    justify-content: flex-end
+    width: 100%
+
+.sortItem
+  flex: 1
+  display: flex
+  justify-content: flex-end
+
+.equal
+  margin: 0 8px
+  line-height: 1.14
+
+.detailsButton
+  display: flex
+  align-items: center
+  margin-left: auto
+  margin-top: 32px
+
+.detailsButtons
+  display: flex
+  flex-direction: column
+  align-items: flex-end
+  margin-top: 26px
+  margin-left: auto
+
+  .detailsButton
+    margin-left: 0
+    margin-top: 0
+
+    &:not(:first-child)
+      margin-top: 16px
+
+.linkIcon
+  margin-left: 8px
+
+.inputLabel
+  display: flex
+  font-weight: 600
+  line-height: 1.14
+  color: $text-03
+
+.switcher
+  display: flex
+  align-items: center
+  font-weight: 600
+
+.buttons
+  display: flex
+  flex-direction: column
+  margin-top: 40px
+
+  .button
+    margin-top: 0
+    margin-left: 0
+    width: 100%
+    max-width: 280px
+
+    &:not(:last-child)
+      margin-bottom: 16px
+
+.connect
+  display: flex
+  align-items: center
+  justify-content: center
+  margin: 0 0 0 auto
+  max-width: 280px
+
+@include media('>Lphone', '<=tablet')
+  .routeLine,
+  .cellCenter
+    align-items: center
+  .button
+    margin-left: auto
+    width: 180px
+  .connect
+    max-width: 180px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+
+    .button
+      max-width: 180px
+
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px
+  .detailsButtons
+    flex-direction: row
+
+    .detailsButton
+      &:not(:first-child)
+        margin-top: 0
+        margin-left: 32px
+
+@include media('>tablet', '<Ltablet')
+  .routeLine
+    align-items: flex-start
+
+.suggestedOperationsButtons
+  display: flex
+  column-gap: 24px
+  margin-top: 24px
+
+@include media('>Ltablet')
+  .routeLine
+    align-items: center
+  .farmingControllerContent
+    flex-wrap: nowrap
+  .searchInput
+    margin-top: 0
+    order: 0
+    width: auto
+    flex-basis: auto
+  .switcherWrap
+    margin-left: 24px
+  .button
+    margin-left: auto
+    width: 180px
+  .connect
+    max-width: 180px
+  .votingStats
+    margin-bottom: 32px
+  .buttons
+    flex-direction: row
+    justify-content: flex-end
+
+    .button
+      max-width: 180px
+
+      &:not(:last-child)
+        margin-bottom: 0
+        margin-right: 24px

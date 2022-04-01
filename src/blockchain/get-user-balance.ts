@@ -4,7 +4,7 @@ import memoizee from 'memoizee';
 
 import { KNOWN_LAMBDA_CONTRACTS } from '@config/config';
 import { getReadOnlyTezos } from '@shared/dapp';
-import { Standard, Token } from '@shared/types/types';
+import { Standard, Token } from '@shared/types';
 
 const loadChainId = memoizee(async (tezos: TezosToolkit) => tezos.rpc.getChainId(), {
   normalizer: ([tezos]) => tezos.rpc.getRpcUrl()

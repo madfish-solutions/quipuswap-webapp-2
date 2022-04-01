@@ -3,10 +3,10 @@ import { TezosToolkit } from '@taquito/taquito';
 import { getUserBalance } from '@blockchain';
 import { FARMING_CONTRACT_ADDRESS, FARMING_API_URL } from '@config/config';
 import { bigNumberToString, isNull } from '@shared/helpers';
-import { Nullable } from '@shared/types/types';
+import { Nullable } from '@shared/types';
 
+import { getUserFarmBalances } from '../helpers';
 import { FarmingContractStorageWrapper, RawFarmingItem, FarmingListResponse } from '../interfaces';
-import { getUserFarmBalances } from './helpers';
 
 const FARMING_LIST_API_URL = `${FARMING_API_URL}/list`;
 

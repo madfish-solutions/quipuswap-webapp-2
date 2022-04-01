@@ -1,46 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { Standard, QSNets, QSNetwork, Token, WhitelistedBaker } from '@shared/types/types';
-
-export const APP_NAME = 'QuipuSwap Xmas';
-export const SAVED_LISTS_KEY = 'savedCustomLists';
-export const SAVED_TOKENS_KEY = 'savedCustomTokens';
-export const SAVED_BAKERS_KEY = 'savedCustomBakers';
-export const SAVED_TERMS_KEY = 'savedTerms';
-export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
-export const BASE_URL = '';
-export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
-export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
-export const NETWORK_ID_KEY = 'networkId';
-
-export const METADATA_API_MAINNET = 'https://metadata.templewallet.com/metadata'; // process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
-export const METADATA_API_TESTNET = 'http://165.232.69.152:3002/metadata'; // process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
-
-export const MAINNET_NETWORK: QSNetwork = {
-  id: 'mainnet',
-  connectType: 'default',
-  name: 'Tezos Mainnet',
-  type: 'main',
-  rpcBaseURL: 'https://mainnet-node.madfish.solutions/',
-  metadata: METADATA_API_MAINNET,
-  description: 'Tezos mainnet',
-  disabled: false
-};
-
-export const HANGZHOUNET_NETWORK: QSNetwork = {
-  id: 'hangzhounet',
-  connectType: 'default',
-  name: 'Hangzhounet Testnet',
-  type: 'test',
-  rpcBaseURL: 'https://hangzhounet-node.madfish.xyz',
-  metadata: METADATA_API_TESTNET,
-  description: 'Hangzhounet testnet',
-  disabled: false
-};
-
-export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
-
-export const DEFAULT_NETWORK = MAINNET_NETWORK;
+import { Standard, QSNets, QSNetwork, Token, WhitelistedBaker, ConnectType, QSNetworkType } from '@shared/types';
 
 export const COLOR_MODE_STORAGE_KEY = 'theme';
 
@@ -65,10 +25,12 @@ export const IPFS = 'ipfs';
 export const IPFS_GATEWAY = process.env.NEXT_PUBLIC_IPFS_GATEWAY!;
 
 export const FEE_RATE = process.env.NEXT_PUBLIC_FEE!;
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME!;
 
 export const NETWORK_ID = (process.env.NEXT_PUBLIC_NETWORK ?? QSNets.mainnet) as QSNets;
 export const MAINNET_BASE_URL = process.env.NEXT_PUBLIC_MAINNET_BASE_URL!;
 export const HANGZHOUNET_BASE_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_BASE_URL!;
+export const BASE_URL = NETWORK_ID === QSNets.mainnet ? MAINNET_BASE_URL : HANGZHOUNET_BASE_URL;
 export const networksBaseUrls = {
   [QSNets.mainnet]: MAINNET_BASE_URL,
   [QSNets.hangzhounet]: HANGZHOUNET_BASE_URL
@@ -99,6 +61,8 @@ export const MAX_ITEMS_PER_PAGE = 5;
 export const MAX_ITEMS_PER_PAGE_MOBILE = 3;
 export const MAX_HOPS_COUNT = 5;
 
+export const NO_TIMELOCK_VALUE = '0';
+
 export const TEZ_TO_LEAVE = new BigNumber('0.1');
 export const TEZ_TRANSFER_AMOUNT_CAP = new BigNumber('0.01');
 
@@ -115,6 +79,11 @@ export const KNOWN_LAMBDA_CONTRACTS = new Map([
   ['NetXdQprcVkpaWU', MAINNET_LAMBDA_VIEW_CONTRACT],
   ['NetXZSsxBpMQeAT', HANGZHOUNET_LAMBDA_VIEW_CONTRACT]
 ]);
+
+export const SAVED_TOKENS_KEY = 'savedCustomTokens';
+export const SAVED_BAKERS_KEY = 'savedCustomBakers';
+export const SAVED_TERMS_KEY = 'savedTerms';
+export const SAVED_ANALYTICS_KEY = 'savedAnalytics';
 
 export const DONATION_ADDRESS = 'tz1LpP5zU73ivpXwHnKYBDRBL3F7aoNsaGWu';
 
@@ -182,8 +151,8 @@ const TTDEX_CONTRACTS = {
 };
 
 const FARMING_CONTRACTS_ADDRESSES = {
-  [QSNets.mainnet]: process.env.REACT_APP_MAINNET_FARMING_CONTRACT!,
-  [QSNets.hangzhounet]: process.env.REACT_APP_HANGZHOUNET_FARMING_CONTRACT!
+  [QSNets.mainnet]: process.env.NEXT_PUBLIC_MAINNET_FARMING_CONTRACT,
+  [QSNets.hangzhounet]: process.env.NEXT_PUBLIC_HANGZHOUNET_FARMING_CONTRACT
 };
 export const FARMING_CONTRACT_ADDRESS = FARMING_CONTRACTS_ADDRESSES[NETWORK_ID]!;
 export const FARMING_REFERRER_CONTRACT = process.env.NEXT_PUBLIC_FARMING_REFERRER_CONTRACT!;
@@ -199,6 +168,8 @@ const tzktExplorerUrls = {
 };
 export const TZKT_EXPLORER_URL = tzktExplorerUrls[NETWORK_ID];
 
+export const METADATA_API_MAINNET = process.env.NEXT_PUBLIC_METADATA_API_MAINNET!; // 'ex https://<host>:<port>/metadata'
+export const METADATA_API_TESTNET = process.env.NEXT_PUBLIC_METADATA_API_TESTNET!;
 export const EXCHANGE_RATES_URL = process.env.NEXT_PUBLIC_EXCHANGE_RATES_URL!;
 
 export const FARMING_API_URLS = {
@@ -211,7 +182,26 @@ export const FARMING_API_URL = FARMING_API_URLS[NETWORK_ID]!;
 // NETWORKS
 export const MAINNET_RPC_URL = process.env.NEXT_PUBLIC_MAINNET_RPC_URL!;
 export const HANGZHOUNET_RPC_URL = process.env.NEXT_PUBLIC_HANGZHOUNET_RPC_URL!;
-
+export const LAST_USED_CONNECTION_KEY = 'lastUsedConnection';
+export const LAST_USED_ACCOUNT_KEY = 'lastUsedAccount';
+const MAINNET_NETWORK: QSNetwork = {
+  id: QSNets.mainnet,
+  connectType: ConnectType.DEFAULT,
+  name: 'Mainnet',
+  type: QSNetworkType.MAIN,
+  rpcBaseURL: MAINNET_RPC_URL,
+  metadata: METADATA_API_MAINNET,
+  disabled: false
+};
+const HANGZHOUNET_NETWORK: QSNetwork = {
+  id: QSNets.hangzhounet,
+  connectType: ConnectType.DEFAULT,
+  name: 'Hangzhounet',
+  type: QSNetworkType.TEST,
+  rpcBaseURL: HANGZHOUNET_RPC_URL,
+  metadata: METADATA_API_TESTNET,
+  disabled: false
+};
 const networks: Record<QSNets, QSNetwork> = {
   [QSNets.mainnet]: MAINNET_NETWORK,
   [QSNets.hangzhounet]: HANGZHOUNET_NETWORK
@@ -219,6 +209,7 @@ const networks: Record<QSNets, QSNetwork> = {
 export const NETWORK = networks[NETWORK_ID];
 export const IS_NETWORK_MAINNET = NETWORK_ID === QSNets.mainnet;
 
+export const ALL_NETWORKS = [MAINNET_NETWORK, HANGZHOUNET_NETWORK];
 export const CHAIN_ID_MAPPING = new Map<QSNets, string>([
   [QSNets.mainnet, 'NetXdQprcVkpaWU'],
   [QSNets.hangzhounet, 'NetXZSsxBpMQeAT']

@@ -1,0 +1,30 @@
+@import "../../../styles/_variables";
+@import "../../../styles/_breakpoints";
+
+.bageBorder {
+  border-radius: 9px;
+  padding: 1px;
+}
+
+.bage {
+  font-weight: bold;
+  font-size: 0.857rem;
+  border-radius: 8px;
+  padding: 3px 7px;
+}
+
+.light {
+  background: $brand-01;
+  .bage {
+    background-color: $ui-02;
+    color: $text-02;
+  }
+}
+
+.dark {
+  background: $brand-02;
+  .bage {
+    background-color: $ui-06;
+    color: $text-03;
+  }
+}
