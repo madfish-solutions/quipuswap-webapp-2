@@ -160,8 +160,6 @@
       }
 
       &:active {
-
-      }
         .text {
           color: $text-01;
           @include background-text-color($text-01);
@@ -174,6 +172,7 @@
         .loadingIcon {
           fill: $text-01;
         }
+      }
     }
     &:disabled {
       .text {
