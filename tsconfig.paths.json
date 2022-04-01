@@ -9,7 +9,8 @@
       "@shared/*": ["./shared/*"],
       "@styles/*": ["./styles/*"],
       "@types/*": ["./types/*"],
-      "@images/*": ["./images/*"]
+      "@images/*": ["./images/*"],
+      "@tests/*": ["./tests/*"]
     }
   }
 }

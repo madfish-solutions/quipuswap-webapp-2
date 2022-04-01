@@ -1,10 +1,10 @@
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
-import { isExist, isNull, FormatNumber } from '../../../helpers';
-import { Nullable } from '../../../types/types';
-import { DashPlug } from '../../dash-plug';
-import { SmileCondition } from '../../smiles';
-import s from './price-impact.module.scss';
+import { DashPlug, SmileCondition } from '@shared/components';
+import { FormatNumber, isExist, isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
+
+import styles from './price-impact.module.scss';
 
 const PRICE_IMPACT_DECIMALS = 2;
 const DEFAULT_PRICE_IMPACT = 0;
@@ -21,9 +21,9 @@ enum Color {
 }
 
 const colorStyle = {
-  [Color.GREEN]: s.green,
-  [Color.YELLOW]: s.yellow,
-  [Color.RED]: s.red
+  [Color.GREEN]: styles.green,
+  [Color.YELLOW]: styles.yellow,
+  [Color.RED]: styles.red
 };
 
 const getCondition = (priceImpact: Nullable<BigNumber.Value>) => {

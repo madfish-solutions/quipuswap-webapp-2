@@ -1,4 +1,5 @@
-import { UnexpectedEmptyValueError } from '../errors';
+import { UnexpectedEmptyValueError } from '@shared/errors';
+
 import { Nullable, Optional, Undefined } from '../types/types';
 
 export const isNull = <T>(value: Nullable<T>): value is null => value === null;

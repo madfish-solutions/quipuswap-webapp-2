@@ -1,7 +1,7 @@
 import { TEZOS_TOKEN } from '@config/config';
+import { Nullable, Optional, Token, TokenMetadata } from '@shared/types';
+import { isValidTokenSlug } from '@shared/validators';
 
-import { Nullable, Optional, Token, TokenMetadata } from '../types/types';
-import { isValidTokenSlug } from '../validators';
 import { shortize } from './shortize';
 import { isExist } from './type-checks';
 
@@ -25,12 +25,9 @@ const parseAddresOrGetField = (metadata: TokenMetadata, field: MetadataTokenFiel
   return [null, false];
 };
 
-const SLICE_START = 0;
-const SLICE_LAST_SYMBOLS_AMOUNT = 2;
-
 const shortizeTokenAppellation = (viewName: string, sliceAmount: number) => {
-  if (viewName.length > sliceAmount + SLICE_LAST_SYMBOLS_AMOUNT) {
-    return `${viewName.slice(SLICE_START, sliceAmount)}...`;
+  if (viewName.length > sliceAmount + 2) {
+    return `${viewName.slice(0, sliceAmount)}...`;
   } else {
     return viewName;
   }
@@ -77,6 +74,32 @@ export const getTokenSymbol = (token: Token, sliceAmount = TOKEN_LENGTH) => {
   }
 
   return shortize(token.contractAddress);
+};
+
+export const getTokenName = (token: Token, sliceAmount = TOKEN_LENGTH) => {
+  if (isTezosToken(token)) {
+    return TEZOS_TOKEN.metadata.name;
+  }
+
+  const shortAddressOrName = parseAndShortize(token.metadata, MetadataTokenField.name, sliceAmount);
+  if (shortAddressOrName) {
+    return shortAddressOrName;
+  }
+
+  const shortAddressOrSymbol = parseAndShortize(token.metadata, MetadataTokenField.symbol, sliceAmount);
+  if (shortAddressOrSymbol) {
+    return shortAddressOrSymbol;
+  }
+
+  return shortize(token.contractAddress);
+};
+
+export const getTokensPairName = (tokenX: Token, tokenY: Token, sliceAmount?: number) => {
+  return `${getTokenSymbol(tokenX, sliceAmount)} / ${getTokenSymbol(tokenY, sliceAmount)}`;
+};
+
+export const getTokensOptionalPairName = (inputToken: Optional<Token>, outputToken: Optional<Token>) => {
+  return inputToken && outputToken ? getTokensPairName(inputToken, outputToken) : '';
 };
 
 export const getTokensName = (token: Token, optionalToken: Optional<Token>) => {

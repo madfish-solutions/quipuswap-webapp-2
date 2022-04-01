@@ -1,17 +1,17 @@
 import { FC, useContext } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { FormatNumberOptions, formatValueBalance, isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
+import { DataTestAttribute } from 'tests/types';
 
-import { DataTestAttribute } from '../../../../tests/types';
-import { formatValueBalance, isExist, FormatNumberOptions } from '../../../helpers';
-import { Nullable } from '../../../types/types';
 import { DashPlug } from '../../dash-plug';
-import { StateWrapper, StateWrapperProps } from '../../state-wrapper';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
-import s from './state-currency-amount.module.scss';
+import { StateWrapper, StateWrapperProps } from '../state-wrapper';
+import styles from './state-currency-amount.module.scss';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;
@@ -26,17 +26,17 @@ export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, Da
 }
 
 const sizeClass = {
-  extraLarge: s.extraLarge,
-  large: s.large,
-  small: s.small
+  extraLarge: styles.extraLarge,
+  large: styles.large,
+  small: styles.small
 };
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
-export const Currency: FC = ({ children }) => <span className={s.currency}>{children}</span>;
+export const Currency: FC = ({ children }) => <span className={styles.currency}>{children}</span>;
 
 export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   className,
@@ -56,8 +56,8 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const wrapClassName = cx(
-    s.amount,
-    { [s.isLeftCurrency]: isLeftCurrency },
+    styles.amount,
+    { [styles.isLeftCurrency]: isLeftCurrency },
     sizeClass[labelSize],
     modeClass[colorThemeMode],
     className
@@ -84,7 +84,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
         isError={isError}
         errorFallback={wrapErrorFallback}
       >
-        <span data-test-id={testId} className={s.inner} title={title}>
+        <span data-test-id={testId} className={styles.inner} title={title}>
           {aliternativeView ?? formattedAmount}
         </span>
       </StateWrapper>
@@ -98,7 +98,7 @@ export const StateCurrencyAmount: FC<StateCurrencyAmountProps> = ({
   }
 
   return (
-    <div className={cx(s.root, modeClass[colorThemeMode], className)}>
+    <div className={cx(styles.root, modeClass[colorThemeMode], className)}>
       {content}
       <StateDollarEquivalent dollarEquivalent={dollarEquivalent} />
     </div>

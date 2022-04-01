@@ -1,25 +1,12 @@
 import { FC, useContext } from 'react';
 
 import cx from 'classnames';
-import ReactSlider, { ResponsiveObject } from 'react-slick';
+import ReactSlider from 'react-slick';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
+import { Card } from '../card';
 import styles from './slider.module.scss';
-
-const modeClass = {
-  [ColorModes.Light]: styles.light,
-  [ColorModes.Dark]: styles.dark
-};
-
-interface SliderProps {
-  items?: number;
-  unCenter?: boolean;
-  responsive?: ResponsiveObject[];
-  className?: string;
-}
-
-const DEFAULT_AMOUNT_OD_SLIDES = 1;
 
 const SliderSettings = {
   slidesToShow: 4,
@@ -46,18 +33,23 @@ const SliderSettings = {
   customPaging: () => <div className={styles.dot} />
 };
 
-export const Slider: FC<SliderProps> = ({
-  children,
-  items = DEFAULT_AMOUNT_OD_SLIDES,
-  responsive = [],
-  unCenter = false,
-  className
-}) => {
+const modeClass = {
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
+};
+
+interface Props {
+  className?: string;
+}
+
+export const Slider: FC<Props> = ({ className, children }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
+  const compoundClassnames = cx(className, modeClass[colorThemeMode], styles.root);
+
   return (
-    <div className={cx(styles.root, className, modeClass[colorThemeMode], { [styles.unCenter]: unCenter })}>
+    <Card className={compoundClassnames} isV2>
       <ReactSlider {...SliderSettings}>{children}</ReactSlider>
-    </div>
+    </Card>
   );
 };

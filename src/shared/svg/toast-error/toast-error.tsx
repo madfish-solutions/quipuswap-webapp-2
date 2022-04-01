@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { IconProps } from '@shared/types';
+
 export const ToastError: FC<IconProps> = ({ className }) => {
   return (
     <svg

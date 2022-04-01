@@ -1,41 +1,44 @@
-import BigNumber from 'bignumber.js';
-import { action, computed, makeObservable, observable } from 'mobx';
+/* eslint-disable no-console */
+import { BigNumber } from 'bignumber.js';
+import { observable, makeObservable, action, computed } from 'mobx';
 
 import { getUserTokenBalance } from '@blockchain';
 import { FARM_REWARD_UPDATE_INTERVAL, FARM_USER_INFO_UPDATE_INTERVAL } from '@config/config';
 import { fromDecimals, isNull, MakeInterval } from '@shared/helpers';
-import { balanceMap, mapFarmingItem, noopMap } from '@shared/mapping';
-import { RootStore, LoadingErrorData } from '@shared/store';
-import { Nullable, WhitelistedBaker } from '@shared/types/types';
+import { balanceMap, noopMap } from '@shared/mapping';
+import { LoadingErrorData, RootStore } from '@shared/store';
+import { Nullable, WhitelistedBaker } from '@shared/types';
 
-import { getUserPendingReward, getFarmingItemApi, getUserInfoApi, getUserFarmingDelegate } from '../api';
-import { RawFarmingItem, FarmingItem, UsersInfoValue } from '../interfaces';
-import { FarmingFormTabs } from '../pages/item';
+import { getFarmingItemApi, getUserFarmingDelegate, getUserInfoApi } from '../api';
+import { getUserPendingReward } from '../helpers';
+import { FarmingItem, RawFarmingItem, RawUsersInfoValue, UsersInfoValue } from '../interfaces';
+import { mapFarmingItem, mapUsersInfoValue } from '../mapping';
+import { FarmingFormTabs } from '../pages/item/types'; //TODO
 
 const DEFAULT_INPUT_AMOUNT = 0;
 
 export class FarmingItemStore {
   farmingId: Nullable<BigNumber> = null;
 
-  itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
+  readonly itemStore = new LoadingErrorData<RawFarmingItem, Nullable<FarmingItem>>(
     null,
     async () => await getFarmingItemApi(this.farmingId),
     mapFarmingItem
   );
 
-  availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
+  readonly availableBalanceStore = new LoadingErrorData<Nullable<BigNumber>, Nullable<BigNumber>>(
     null,
     async () => await this.getUserTokenBalance(),
     balance => balanceMap(balance, this.itemStore.data?.stakedToken)
   );
 
-  userInfoStore = new LoadingErrorData<Nullable<UsersInfoValue>, Nullable<UsersInfoValue>>(
+  readonly userInfoStore = new LoadingErrorData<Nullable<RawUsersInfoValue>, Nullable<UsersInfoValue>>(
     null,
     async () => await this.getUserInfo(),
-    noopMap
+    mapUsersInfoValue
   );
 
-  userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
+  readonly userFarmingDelegateStore = new LoadingErrorData<Nullable<string>, Nullable<string>>(
     null,
     async () => await this.getUserFarmingDelegate(),
     noopMap
@@ -45,10 +48,13 @@ export class FarmingItemStore {
 
   inputAmount = new BigNumber(DEFAULT_INPUT_AMOUNT);
   selectedBaker: Nullable<WhitelistedBaker> = null;
-  pendingRewards: Nullable<BigNumber> = null;
-  pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
 
-  updateUserInfoInterval = new MakeInterval(async () => this.userInfoStore.load(), FARM_USER_INFO_UPDATE_INTERVAL);
+  pendingRewards: Nullable<BigNumber> = null;
+  readonly pendingRewardsInterval = new MakeInterval(() => this.updatePendingRewards(), FARM_REWARD_UPDATE_INTERVAL);
+  readonly updateUserInfoInterval = new MakeInterval(
+    async () => this.userInfoStore.load(),
+    FARM_USER_INFO_UPDATE_INTERVAL
+  );
 
   constructor(private rootStore: RootStore) {
     makeObservable(this, {
@@ -136,6 +142,7 @@ export class FarmingItemStore {
     if (isNull(tezos) || isNull(authStore.accountPkh) || isNull(item)) {
       return null;
     }
+    console.log('here');
 
     return await getUserTokenBalance(tezos, authStore.accountPkh, item.stakedToken);
   }

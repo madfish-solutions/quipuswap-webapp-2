@@ -4,11 +4,11 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import s from './dash-plug.module.scss';
+import styles from './dash-plug.module.scss';
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export interface DashPlugProps {
@@ -26,9 +26,9 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className, quanti
   const container = useRef<HTMLDivElement>(null);
 
   const wrapperClassName = cx(
-    s['inline-loading'],
+    styles['inline-loading'],
     {
-      [s.animation]: animation !== false
+      [styles.animation]: animation !== false
     },
     modeClass[colorThemeMode],
     className
@@ -45,7 +45,7 @@ export const DashPlug: FC<DashPlugProps> = ({ zoom, animation, className, quanti
   return (
     <div ref={container} className={wrapperClassName}>
       {iterator.map(key => (
-        <div className={s.dash} key={key} />
+        <div className={styles.dash} key={key} />
       ))}
     </div>
   );

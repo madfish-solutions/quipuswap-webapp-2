@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 
 import { ColorThemeContext } from '@providers/color-theme-context';
+import { IconProps } from '@shared/types';
 
 export const RedditIcon: FC<IconProps> = ({ id, className }) => {
   const { themeColors } = useContext(ColorThemeContext);

@@ -3,6 +3,9 @@
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
+import { DAppBakerProvider } from '@providers/dapp-bakers';
+import { DAppTokensProvider } from '@providers/dapp-tokens';
+
 import App from './App';
 import { ColorThemeProvider } from './providers/color-theme-context';
 import { RootStoreProvider } from './providers/root-store-provider';
@@ -16,9 +19,13 @@ render(
     <ColorThemeProvider>
       <BrowserRouter>
         <DAppProvider>
-          <WalletWrapper>
-            <App />
-          </WalletWrapper>
+          <DAppBakerProvider>
+            <DAppTokensProvider>
+              <WalletWrapper>
+                <App />
+              </WalletWrapper>
+            </DAppTokensProvider>
+          </DAppBakerProvider>
         </DAppProvider>
       </BrowserRouter>
     </ColorThemeProvider>

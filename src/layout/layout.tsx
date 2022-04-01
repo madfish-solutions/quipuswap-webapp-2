@@ -2,12 +2,11 @@ import { FC } from 'react';
 
 import cx from 'classnames';
 
-import { Sidebar, Header } from '@shared/components/header';
-import { ToastWrapper } from '@shared/components/toast-wrapper';
-import { GlobalModalsStateProvider } from '@shared/hooks/use-global-modals-state';
-import { AccountModal } from '@shared/modals/account-modal';
-import { WalletModal } from '@shared/modals/wallet-modal';
+import { Sidebar, Header } from '@shared/components';
+import { GlobalModalsStateProvider } from '@shared/hooks';
+import { AccountModal, WalletModal } from '@shared/modals';
 import { Background } from '@shared/svg';
+import { ToastWrapper } from '@shared/utils';
 
 import styles from './layout.module.scss';
 import { useLayoutViewModel } from './use-layout.vm';

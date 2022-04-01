@@ -20,5 +20,6 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx"
-  }
+  },
+  "exclude": ["./quipuswap-ui-kit"]
 }

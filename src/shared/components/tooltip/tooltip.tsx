@@ -4,28 +4,28 @@ import Tippy, { TippyProps } from '@tippyjs/react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { Info } from '@shared/svg';
 
-import { Info } from '../../svg';
-import s from './tooltip.module.scss';
+import styles from './tooltip.module.sass';
 
 export interface TooltipProps extends TippyProps {
-  content: React.ReactNode;
+  content: ReactNode;
   className?: string;
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const Tooltip: FC<TooltipProps> = ({ content, className, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
-  const compoundClassName = cx(s.root, modeClass[colorThemeMode]);
+  const compoundClassName = cx(styles.root, modeClass[colorThemeMode]);
 
   return (
     <Tippy className={compoundClassName} duration={0} {...props} content={content}>
-      <div className={cx(s.wrapper, s.small, className)}>
-        <Info className={cx(s.info, modeClass[colorThemeMode])} />
+      <div className={cx(styles.wrapper, styles.small, className)}>
+        <Info className={cx(styles.info, modeClass[colorThemeMode])} />
       </div>
     </Tippy>
   );

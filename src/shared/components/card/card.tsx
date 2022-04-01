@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StatusLabel } from '@shared/components/status-label';
-import { ActiveStatus } from '@shared/types/types';
+import { ActiveStatus } from '@shared/types';
 
 import styles from './card.module.scss';
 

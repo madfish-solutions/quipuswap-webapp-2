@@ -8,15 +8,15 @@
 }
 
 .root {
+  padding-top: 22px;
   :global(.slick-track) {
     display: flex;
-    column-gap: 32px;
   }
 
   :global(.slick-dots) {
     position: static;
     display: flex !important;
-    justify-content: flex-start;
+    justify-content: center;
     margin-top: 10px;
     margin-bottom: 8px;
     height: 4px;
@@ -88,6 +88,19 @@
 
     :global(.slick-slide) {
       position: relative;
+  
+      &:first-child::after {
+        display: none;
+      }
+  
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -24px;
+        height: 104px;
+        width: 1px;
+      }
     }
   }
 }

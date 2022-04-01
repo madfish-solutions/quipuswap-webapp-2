@@ -1,15 +1,15 @@
 import { FC, useContext } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
+import { formatValueBalance, isExist } from '@shared/helpers';
+import { Nullable } from '@shared/types';
 
-import { formatValueBalance, isExist } from '../../../helpers';
-import { Nullable } from '../../../types/types';
 import { DashPlug } from '../../dash-plug';
-import { StateWrapper, StateWrapperProps } from '../../state-wrapper';
-import s from './state-dollar-equivalent.module.scss';
+import { StateWrapper, StateWrapperProps } from '../state-wrapper';
+import styles from './state-dollar-equivalent.module.scss';
 
 const USD_DECIMALS_AMOUNT = 2;
 
@@ -18,8 +18,8 @@ export interface StateDollarEquivalentProps extends Partial<StateWrapperProps> {
 }
 
 const modeClass = {
-  [ColorModes.Light]: s.light,
-  [ColorModes.Dark]: s.dark
+  [ColorModes.Light]: styles.light,
+  [ColorModes.Dark]: styles.dark
 };
 
 export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
@@ -40,9 +40,9 @@ export const StateDollarEquivalent: FC<StateDollarEquivalentProps> = ({
   const title = dollarEquivalent ? new BigNumber(dollarEquivalent).toFixed() : undefined;
 
   return (
-    <span className={cx(s.dollarEquivalent, modeClass[colorThemeMode])}>
+    <span className={cx(styles.dollarEquivalent, modeClass[colorThemeMode])}>
       ≈ ${' '}
-      <span className={s.dollarEquivalentInner} title={title}>
+      <span className={styles.dollarEquivalentInner} title={title}>
         <StateWrapper
           isLoading={wrapIsLoading}
           loaderFallback={wrapLoaderFallback}

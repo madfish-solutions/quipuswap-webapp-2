@@ -1,13 +1,14 @@
 import { FC } from 'react';
 
-import BigNumber from 'bignumber.js';
+import { BigNumber } from 'bignumber.js';
 
-import { isNull } from '../../../helpers';
-import { Nullable } from '../../../types/types';
-import { Smiles } from '../../smiles';
-import { StateWrapper } from '../../state-wrapper';
+import { Smiles } from '@shared/components';
+import { isNull } from '@shared/helpers';
+import { Nullable } from '@shared/types';
+
 import { Currency } from '../state-currency-amount';
-import s from './price-impact.module.scss';
+import { StateWrapper } from '../state-wrapper';
+import styles from './price-impact.module.scss';
 import { usePriceImpactViewModel } from './use-price-impact.vm';
 
 interface StatePriceImpactProps {
@@ -19,7 +20,7 @@ export const StatePriceImpact: FC<StatePriceImpactProps> = ({ priceImpact }) => 
     usePriceImpactViewModel(priceImpact);
 
   return (
-    <span className={s.amount}>
+    <span className={styles.amount}>
       <StateWrapper
         isLoading={isLoading}
         loaderFallback={loaderFallback}

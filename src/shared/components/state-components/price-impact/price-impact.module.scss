@@ -1,4 +1,4 @@
-@import "@styles/_variables";
+@import "@styles/variables";
 
 .amount {
   display: flex;
@@ -7,15 +7,12 @@
   font-weight: 600;
   line-height: 1.14;
 }
-
 .green {
   color: $green;
 }
-
 .yellow {
   color: $yellow;
 }
-
 .red {
   color: $red;
 }

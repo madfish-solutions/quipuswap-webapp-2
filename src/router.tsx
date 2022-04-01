@@ -16,7 +16,7 @@ export const routes = {
   termsOfService: 'terms-of-service',
   liquidity: 'liquidity',
   swap: 'swap',
-  farming: 'farming',
+  farming: 'farming/*',
   voting: 'voting'
 };
 

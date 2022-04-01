@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { SmileGreen, SmileRed, SmileYellow } from '../../svg';
-import { Nullable } from '../../types/types';
+import { SmileGreen, SmileYellow, SmileRed } from '@shared/svg';
+import { Nullable } from '@shared/types';
 
 export enum SmileCondition {
   POSITIVE = 'POSITIVE',

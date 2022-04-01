@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import { RootStore } from '@shared/store/root.store';
-import { Undefined } from '@shared/types/types';
+import { Undefined } from '@shared/types';
 
 let store: RootStore;
 

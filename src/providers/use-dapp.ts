@@ -1,138 +1,67 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { NetworkType } from '@airgap/beacon-sdk';
-import { BeaconWallet } from '@taquito/beacon-wallet';
-import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import { TezosToolkit } from '@taquito/taquito';
 import { TempleWallet } from '@temple-wallet/dapp';
 import constate from 'constate';
 import useSWR from 'swr';
 
-import { APP_NAME, BASE_URL, LAST_USED_ACCOUNT_KEY, LAST_USED_CONNECTION_KEY } from '@config/config';
-import { getNetwork, setNetwork, toBeaconNetworkType, isClient, ReadOnlySigner, FastRpcClient } from '@shared/helpers';
-import { QSNetwork } from '@shared/types/types';
+import {
+  APP_NAME,
+  LAST_USED_ACCOUNT_KEY,
+  LAST_USED_CONNECTION_KEY,
+  NETWORK,
+  //   networksBaseUrls,
+  NETWORK_ID
+} from '@config/config';
+import {
+  //   isNull,
+  ReadOnlySigner,
+  beaconWallet,
+  connectWalletBeacon,
+  connectWalletTemple,
+  getTempleWalletState,
+  michelEncoder,
+  rpcClients
+} from '@shared/helpers';
+import { LastUsedConnectionKey, Nullable, QSNets, QSNetwork } from '@shared/types';
 
-const michelEncoder = new MichelCodecPacker();
-
-export const TEMPLE_WALLET_NOT_INSTALLED_MESSAGE = 'Temple wallet not installed';
-
-const net = getNetwork();
-const beaconWallet = !isClient
-  ? undefined
-  : new BeaconWallet({
-      name: APP_NAME,
-      iconUrl: `${BASE_URL}/favicon.ico`,
-      preferredNetwork: (() => {
-        const net = getNetwork();
-        if (!(net.connectType === 'custom' && net.type === 'test')) {
-          return toBeaconNetworkType(net.id);
-        }
-
-        return toBeaconNetworkType('mainnet');
-      })()
-    });
-
-const connectWalletTemple = async (forcePermission: boolean, network: QSNetwork) => {
-  const available = await TempleWallet.isAvailable();
-  if (!available) {
-    throw new Error(TEMPLE_WALLET_NOT_INSTALLED_MESSAGE);
-  }
-
-  let perm;
-  if (!forcePermission) {
-    perm = await TempleWallet.getCurrentPermission();
-  }
-
-  const wallet = new TempleWallet(APP_NAME, perm);
-
-  if (!wallet.connected) {
-    await wallet.connect(
-      network.connectType === 'default'
-        ? network.id
-        : {
-            name: network.name,
-            rpc: network.rpcBaseURL
-          },
-      { forcePermission: true }
-    );
-  }
-
-  const rpcClient = new FastRpcClient(network.rpcBaseURL);
-  const tezos = new TezosToolkit(rpcClient);
-  tezos.setWalletProvider(wallet);
-  tezos.setPackerProvider(michelEncoder);
-  tezos.setRpcProvider(rpcClient);
-  const { pkh, publicKey } = wallet.permission!;
-  tezos.setSignerProvider(new ReadOnlySigner(pkh, publicKey));
-  localStorage.setItem(LAST_USED_CONNECTION_KEY, 'temple');
-
-  return { pkh, toolkit: tezos, wallet };
-};
-
-const connectWalletBeacon = async (forcePermission: boolean, network: QSNetwork) => {
-  if (!beaconWallet) {
-    throw new Error('Cannot use beacon out of window');
-  }
-
-  const activeAccount = await beaconWallet.client.getActiveAccount();
-  if (forcePermission || !activeAccount) {
-    if (activeAccount) {
-      await beaconWallet.clearActiveAccount();
-    }
-    await beaconWallet.requestPermissions({
-      network:
-        network.connectType === 'default' && network.type === 'test'
-          ? {
-              type: NetworkType.CUSTOM,
-              name: network.name,
-              rpcUrl: network.rpcBaseURL
-            }
-          : { type: toBeaconNetworkType(network.id) }
-    });
-  }
-
-  const rpcClient = new FastRpcClient(network.rpcBaseURL);
-  const tezos = new TezosToolkit(rpcClient);
-  tezos.setPackerProvider(michelEncoder);
-  tezos.setWalletProvider(beaconWallet);
-  const activeAcc = await beaconWallet.client.getActiveAccount();
-  if (!activeAcc) {
-    throw new Error('Not connected');
-  }
-
-  tezos.setSignerProvider(new ReadOnlySigner(activeAcc.address, activeAcc.publicKey));
-  localStorage.setItem(LAST_USED_CONNECTION_KEY, 'beacon');
-  localStorage.setItem(LAST_USED_ACCOUNT_KEY, activeAcc.accountIdentifier);
-
-  return { pkh: activeAcc.address, toolkit: tezos };
-};
-
-interface DApp {
-  connectionType: 'beacon' | 'temple' | null;
-  tezos: TezosToolkit | null;
-  accountPkh: string | null;
-  templeWallet: TempleWallet | null;
-  network: QSNetwork;
+export interface DAppType {
+  connectionType: Nullable<LastUsedConnectionKey>;
+  tezos: Nullable<TezosToolkit>;
+  accountPkh: Nullable<string>;
+  accountPublicKey: Nullable<string>;
+  templeWallet: Nullable<TempleWallet>;
+  isLoading: boolean;
 }
 
-const fallbackRpcClient = new FastRpcClient(net.rpcBaseURL);
-const fallbackToolkit = new TezosToolkit(fallbackRpcClient);
-fallbackToolkit.setPackerProvider(michelEncoder);
+export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
+  hangzhounet: new TezosToolkit(rpcClients.hangzhounet),
+  mainnet: new TezosToolkit(rpcClients.mainnet)
+};
 
-const useDApp = () => {
-  const [{ connectionType, tezos, accountPkh, templeWallet, network }, setState] = useState<DApp>({
-    connectionType: null,
-    tezos: null,
-    accountPkh: null,
-    templeWallet: null,
-    network: net
-  });
+Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
+
+// const URL_WITH_SLUGS_REGEX = /(.*)\/[a-z_0-9]+-[a-z_0-9]+/i;
+
+function useDApp() {
+  //   const router = useRouter();
+
+  const [{ accountPublicKey, connectionType, tezos, accountPkh, templeWallet, isLoading }, setState] =
+    useState<DAppType>({
+      connectionType: null,
+      tezos: null,
+      accountPkh: null,
+      accountPublicKey: null,
+      templeWallet: null,
+      isLoading: true
+    });
 
   const setFallbackState = useCallback(
     () =>
       setState(prevState => ({
         ...prevState,
         connectionType: null,
-        tezos: prevState.tezos ?? fallbackToolkit
+        tezos: prevState.tezos ?? fallbackToolkits[NETWORK_ID]
       })),
     []
   );
@@ -152,6 +81,7 @@ const useDApp = () => {
       if (available) {
         try {
           let perm;
+          setState(prevState => ({ ...prevState, isLoading: true }));
           try {
             perm = await TempleWallet.getCurrentPermission();
           } catch (error) {
@@ -159,25 +89,22 @@ const useDApp = () => {
             console.log(error);
           }
 
-          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === 'temple' ? perm : null);
+          const wlt = new TempleWallet(APP_NAME, lastUsedConnection === LastUsedConnectionKey.TEMPLE ? perm : null);
 
-          if (lastUsedConnection === 'temple') {
-            const rpcClient = new FastRpcClient(network.rpcBaseURL);
-            const newToolkit = wlt.connected ? new TezosToolkit(rpcClient) : fallbackToolkit;
-            newToolkit.setWalletProvider(wlt);
-            const newAccountPkh = wlt.connected ? await wlt.getPKH() : null;
-
+          if (lastUsedConnection === LastUsedConnectionKey.TEMPLE) {
+            const { pkh, pk, tezos } = await getTempleWalletState(wlt, NETWORK_ID);
             setState(prevState => ({
               ...prevState,
               templeWallet: wlt,
-              tezos: newToolkit,
-              accountPkh: newAccountPkh,
-              connectionType: wlt.connected ? 'temple' : null
+              tezos,
+              accountPkh: pkh,
+              accountPublicKey: pk,
+              connectionType: wlt.connected ? LastUsedConnectionKey.TEMPLE : null
             }));
           } else {
             setState(prevState => ({
               ...prevState,
-              tezos: prevState.tezos ?? fallbackToolkit,
+              tezos: prevState.tezos ?? fallbackToolkits[NETWORK_ID],
               templeWallet: wlt
             }));
           }
@@ -186,16 +113,17 @@ const useDApp = () => {
         } catch (e) {
           // eslint-disable-next-line
           console.error(e);
+        } finally {
+          setState(prevState => ({ ...prevState, isLoading: false }));
         }
       }
 
-      if (lastUsedConnection !== 'beacon') {
+      if (lastUsedConnection !== LastUsedConnectionKey.BEACON) {
         setFallbackState();
       }
     });
-
     const lastUsedAccount = localStorage.getItem(LAST_USED_ACCOUNT_KEY);
-    if (localStorage.getItem(LAST_USED_CONNECTION_KEY) === 'beacon' && lastUsedAccount) {
+    if (localStorage.getItem(LAST_USED_CONNECTION_KEY) === LastUsedConnectionKey.BEACON && lastUsedAccount) {
       if (!beaconWallet) {
         return;
       }
@@ -210,8 +138,7 @@ const useDApp = () => {
             return;
           }
 
-          const rpcClient = new FastRpcClient(net.rpcBaseURL);
-          const toolkit = new TezosToolkit(rpcClient);
+          const toolkit = new TezosToolkit(rpcClients[NETWORK_ID]);
           toolkit.setPackerProvider(michelEncoder);
           toolkit.setWalletProvider(beaconWallet);
 
@@ -219,9 +146,10 @@ const useDApp = () => {
             ...prevState,
             templeWallet: null,
             accountPkh: value.address,
-            connectionType: 'beacon',
+            accountPublicKey: value.publicKey,
+            connectionType: LastUsedConnectionKey.BEACON,
             tezos: toolkit,
-            network: net
+            network: NETWORK
           }));
         })
         .catch(e => {
@@ -230,113 +158,146 @@ const useDApp = () => {
           setFallbackState();
         });
     }
-  }, [setFallbackState, network.rpcBaseURL]);
+  }, [setFallbackState]);
 
   useEffect(() => {
-    if (templeInitialAvailable === false && localStorage.getItem(LAST_USED_CONNECTION_KEY) === 'temple') {
+    if (
+      templeInitialAvailable === false &&
+      localStorage.getItem(LAST_USED_CONNECTION_KEY) === LastUsedConnectionKey.TEMPLE
+    ) {
       setFallbackState();
     }
   }, [setFallbackState, templeInitialAvailable]);
 
   useEffect(() => {
-    if (!tezos || tezos.rpc.getRpcUrl() !== network.rpcBaseURL) {
+    if (!tezos || tezos.rpc.getRpcUrl() !== NETWORK.rpcBaseURL) {
       const wlt = new TempleWallet(APP_NAME, null);
-      const fallbackRpcClient = new FastRpcClient(network.rpcBaseURL);
-      const fallbackTzTk = new TezosToolkit(fallbackRpcClient);
-      fallbackTzTk.setPackerProvider(michelEncoder);
-      const pkh = null;
+      const fallbackTzTk = fallbackToolkits[NETWORK_ID];
       setState(prevState => ({
         ...prevState,
-        network,
         templeWallet: wlt,
         tezos: fallbackTzTk,
-        accountPkh: pkh,
+        accountPkh: null,
+        accountPublicKey: null,
         connectionType: null
       }));
     }
     // eslint-disable-next-line
-  }, [network]);
+  }, []);
 
   useEffect(() => {
     if (templeWallet && templeWallet.connected) {
       TempleWallet.onPermissionChange(perm => {
         if (!perm) {
-          const fallbackRpcClient = new FastRpcClient(net.rpcBaseURL);
           setState(prevState => ({
             ...prevState,
             templeWallet: new TempleWallet(APP_NAME),
-            tezos: new TezosToolkit(fallbackRpcClient),
+            tezos: fallbackToolkits[NETWORK_ID],
             accountPkh: null,
-            connectionType: null,
-            network: net
+            accountPublicKey: null,
+            connectionType: null
           }));
         }
       });
     }
   }, [templeWallet]);
 
-  const connectWithTemple = useCallback(
-    async (forcePermission: boolean) => {
-      const { pkh, toolkit, wallet } = await connectWalletTemple(forcePermission, network);
-      setState(prevState => ({
-        ...prevState,
-        connectionType: 'temple',
-        tezos: toolkit,
-        accountPkh: pkh,
-        templeWallet: wallet,
-        network
-      }));
-    },
-    [network]
-  );
+  const connectWithTemple = useCallback(async (forcePermission: boolean) => {
+    const { pkh, pk, toolkit, wallet } = await connectWalletTemple(forcePermission, NETWORK);
+    setState(prevState => ({
+      ...prevState,
+      connectionType: LastUsedConnectionKey.TEMPLE,
+      tezos: toolkit,
+      accountPkh: pkh,
+      accountPublicKey: pk,
+      templeWallet: wallet,
+      isLoading: false
+    }));
+  }, []);
 
-  const connectWithBeacon = useCallback(
-    async (forcePermission: boolean) => {
-      const { pkh, toolkit } = await connectWalletBeacon(forcePermission, network);
+  const connectWithBeacon = useCallback(async (forcePermission: boolean) => {
+    const { pkh, pk, toolkit } = await connectWalletBeacon(forcePermission, NETWORK);
 
-      setState(prevState => ({
-        ...prevState,
-        connectionType: 'beacon',
-        tezos: toolkit,
-        accountPkh: pkh,
-        templeWallet: null,
-        network
-      }));
-    },
-    [network]
-  );
+    setState(prevState => ({
+      ...prevState,
+      connectionType: LastUsedConnectionKey.BEACON,
+      tezos: toolkit,
+      accountPkh: pkh,
+      accountPublicKey: pk,
+      templeWallet: null,
+      isLoading: false
+    }));
+  }, []);
 
   const disconnect = useCallback(async () => {
     setState(prevState => ({
       ...prevState,
-      tezos: fallbackToolkit,
+      tezos: fallbackToolkits[NETWORK_ID],
       accountPkh: null,
+      accountPublicKey: null,
       connectionType: null
     }));
     localStorage.removeItem(LAST_USED_CONNECTION_KEY);
   }, []);
 
-  const changeNetwork = useCallback((networkNew: QSNetwork) => {
-    setState(prevState => ({
-      ...prevState,
-      network: networkNew
-    }));
-    setNetwork(networkNew);
-  }, []);
+  const changeNetwork = useCallback(
+    (networkNew: QSNetwork) => {
+      if (networkNew.id === NETWORK_ID) {
+        return;
+      }
+
+      //TODO
+      //   const currentPath = router.asPath;
+      //   const urlWithSlugsRegexResult = URL_WITH_SLUGS_REGEX.exec(currentPath);
+      //   if (isNull(urlWithSlugsRegexResult)) {
+      //     window.location.href = `${networksBaseUrls[networkNew.id]}${currentPath}`;
+      //   } else {
+      //     const basePath = urlWithSlugsRegexResult[1];
+      //     window.location.href = `${networksBaseUrls[networkNew.id]}${basePath}`;
+      //   }
+
+      setState(prevState => ({
+        ...prevState,
+        accountPkh: null,
+        accountPublicKey: null,
+        connectionType: null,
+        tezos: fallbackToolkits[networkNew.id],
+        isLoading: false
+      }));
+    },
+    //[router.asPath]
+    []
+  );
+
+  const estimationToolkit = useMemo(() => {
+    if (accountPkh && accountPublicKey && connectionType === LastUsedConnectionKey.BEACON) {
+      if (!tezos?.rpc) {
+        throw new Error('Tezos RPC in undefined');
+      }
+      const cloneTezosToolkit = new TezosToolkit(tezos.rpc);
+      cloneTezosToolkit.setPackerProvider(michelEncoder);
+      cloneTezosToolkit.setSignerProvider(new ReadOnlySigner(accountPkh, accountPublicKey));
+
+      return cloneTezosToolkit;
+    }
+
+    return tezos;
+  }, [tezos, connectionType, accountPkh, accountPublicKey]);
 
   return {
     connectionType,
+    estimationToolkit,
     tezos,
     accountPkh,
     templeWallet,
     ready,
-    network,
+    isLoading,
     connectWithBeacon,
     connectWithTemple,
     disconnect,
     changeNetwork
   };
-};
+}
 
 export const [
   DAppProvider,
@@ -345,11 +306,12 @@ export const [
   useAccountPkh,
   useTempleWallet,
   useReady,
-  useNetwork,
   useConnectWithBeacon,
   useConnectWithTemple,
   useDisconnect,
-  useChangeNetwork
+  useChangeNetwork,
+  useEstimationToolkit,
+  useIsLoading
 ] = constate(
   useDApp,
   v => v.connectionType,
@@ -357,9 +319,10 @@ export const [
   v => v.accountPkh,
   v => v.templeWallet,
   v => v.ready,
-  v => v.network,
   v => v.connectWithBeacon,
   v => v.connectWithTemple,
   v => v.disconnect,
-  v => v.changeNetwork
+  v => v.changeNetwork,
+  v => v.estimationToolkit,
+  v => v.isLoading
 );

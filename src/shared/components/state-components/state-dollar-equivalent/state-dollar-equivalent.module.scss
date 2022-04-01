@@ -8,18 +8,15 @@
   font-weight: 400;
   line-height: 1.33;
 }
-
 .dollarEquivalentInner {
   margin-left: 4px;
   transition: color $colorChangeAnimationTime;
 }
-
 .light {
   .dollarEquivalentInner {
     color: $text-01;
   }
 }
-
 .dark {
   .dollarEquivalentInner {
     color: $text-inverse;
