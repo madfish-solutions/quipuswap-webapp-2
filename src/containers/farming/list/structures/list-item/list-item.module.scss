@@ -41,36 +41,44 @@
   justify-content: space-between;
   row-gap: 12px;
   overflow-x: auto;
+  position: relative;
+
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+    }
+  }
 
   &::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
+    display: none;
+    width: 4px;
+    height: 4px;
   }
 
   &::-webkit-scrollbar-button {
-    background-color: #666
+    display: none;
   }
 
   &::-webkit-scrollbar-track {
-    background-color: #999
+    display: none;
   }
 
   &::-webkit-scrollbar-track-piece {
-    background-color: #ffffff
+    display: none;
   }
 
   &::-webkit-scrollbar-thumb {
     height: 50px;
-    background-color: #666;
-    border-radius: 3px;
+    background-color: white;
+    border-radius: 4px;
   }
 
   &::-webkit-scrollbar-corner {
-    background-color: #999;
+    display: none;
   }
 
   &::-webkit-resizer {
-    background-color: #666
+    display: none;
   }
 }
 
@@ -102,6 +110,12 @@
 }
 
 .light {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $ui-05;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-03;
@@ -110,6 +124,12 @@
 }
 
 .dark {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $text-02;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-02;
