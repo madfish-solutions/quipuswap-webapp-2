@@ -9,7 +9,7 @@ import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { StateCurrencyAmount } from '@shared/components';
 import { getBakerName, getTokenSymbol } from '@shared/helpers';
 import { RewardInfo } from '@shared/structures';
-import { FarmingItemPandingReward } from 'tests/farming/item';
+import { FarmingItemPandingReward } from '@tests/farming';
 
 import { Countdown } from '../countdown';
 import { FarmingRewardHeader } from '../farming-reward-header';

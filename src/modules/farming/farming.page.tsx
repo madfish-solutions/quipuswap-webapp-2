@@ -1,11 +1,22 @@
 import { FC } from 'react';
 
-import { useTranslation } from 'next-i18next';
+import { Route, Routes } from 'react-router-dom';
 
-import { PageTitle } from '@shared/components';
+import { StateWrapper } from '@shared/components';
+
+import { useFarmingPageViewModel } from './farming-page.vm';
+import { FarmingItemPage } from './pages/item';
+import { FarmsListPage } from './pages/list';
 
 export const Farming: FC = () => {
-  const { t } = useTranslation(['common']);
+  const { isInitialazied } = useFarmingPageViewModel();
 
-  return <PageTitle>{t('Farming Page')}</PageTitle>;
+  return (
+    <StateWrapper isLoading={!isInitialazied} loaderFallback={<div>loading...</div>}>
+      <Routes>
+        <Route path="/" element={<FarmsListPage />} />
+        <Route path="/:farmId" element={<FarmingItemPage />} />
+      </Routes>
+    </StateWrapper>
+  );
 };

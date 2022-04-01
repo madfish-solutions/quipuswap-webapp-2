@@ -1,4 +1,3 @@
-import s from '@styles/CommonContainer.module.sass';
 import cx from 'classnames';
 
 import {
@@ -15,6 +14,7 @@ import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
 import { bigNumberToString, multipliedIfPossible, getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
+import s from '@styles/CommonContainer.module.sass';
 
 import { canDelegate, makeBaker } from '../../helpers';
 import styles from './farming-details.module.sass';

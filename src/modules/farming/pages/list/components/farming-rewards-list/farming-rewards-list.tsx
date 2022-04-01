@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { useFarmingListStore } from '@modules/farming/hooks';
 import { RewardInfo } from '@shared/structures';
-import { FarmingListPandingReward } from 'tests/farming/list';
+import { FarmingListPandingReward } from '@tests/farming';
 
 import { useFarmingRewardsListViewModel } from './use-farming-rewards-list.vm';
 

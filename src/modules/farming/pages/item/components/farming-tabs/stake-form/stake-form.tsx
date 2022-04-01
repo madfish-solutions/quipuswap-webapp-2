@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
-import s from '@styles/CommonContainer.module.sass';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
+import s from '@styles/CommonContainer.module.sass';
 
 import { FarmingAlert } from '../../farming-alert';
 import { useStakeFormViewModel } from './use-stake-form.vm';

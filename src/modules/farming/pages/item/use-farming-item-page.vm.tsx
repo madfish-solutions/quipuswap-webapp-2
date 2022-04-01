@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import { useTranslation } from 'next-i18next';
+import { useParams } from 'react-router-dom';
 
 import { useFarmingItemStore } from '@modules/farming/hooks';
 import { useGetFarmingItem } from '@modules/farming/hooks/loaders/use-get-farming-item';
@@ -12,14 +13,18 @@ import { Nullable } from '@shared/types';
 
 import styles from './farming-item.page.module.sass';
 
-export const useFarmingItemPageViewModel = (rawStakeId: string) => {
+export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);
   const farmingItemStore = useFarmingItemStore();
   const dAppReady = useReady();
   const { getFarmingItem } = useGetFarmingItem();
   const accountPkh = useAccountPkh();
   const prevAccountPkhRef = useRef<Nullable<string>>(accountPkh);
+  const params = useParams();
 
+  const rawStakeId = params.farmId;
+  // eslint-disable-next-line no-console
+  console.log(rawStakeId);
   /*
    Load data
   */
@@ -41,7 +46,7 @@ export const useFarmingItemPageViewModel = (rawStakeId: string) => {
     return () => farmingItemStore.clearIntervals();
   }, [farmingItemStore]);
 
-  const { data: farmingItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore!.itemStore;
+  const { data: farmingItem, isLoading: dataLoading, isInitialized: dataInitialized } = farmingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
 
   const getTitle = () => {

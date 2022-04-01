@@ -10,7 +10,7 @@ import { FarmingFormTabsCard } from './components/farming-tabs/farming-from-tabs
 import { useFarmingItemPageViewModel } from './use-farming-item-page.vm';
 
 export const FarmingItemPage: FC = observer(() => {
-  const { getTitle } = useFarmingItemPageViewModel('1'); //TODO
+  const { getTitle } = useFarmingItemPageViewModel();
 
   return (
     <>

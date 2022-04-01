@@ -21,7 +21,7 @@ export const useFarmingListViewModel = () => {
     }
   }, [getFarmingList, getFarmingStats, isReady]);
 
-  const { listStore, list } = farmingListStore!;
+  const { listStore, list } = farmingListStore;
   const { isLoading } = listStore;
 
   return {

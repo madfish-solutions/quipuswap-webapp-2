@@ -11,36 +11,36 @@ export const useListFilterViewModel = () => {
   const farmingFilterStore = useFarmingFilterStore();
   const { accountPkh } = useAuthStore();
 
-  const { search, tokenIdValue, activeOnly, stakedOnly } = farmingFilterStore!;
+  const { search, tokenIdValue, activeOnly, stakedOnly } = farmingFilterStore;
 
   const setStakedOnly = (state: boolean) => {
-    return farmingFilterStore!.setStakedOnly(state);
+    return farmingFilterStore.setStakedOnly(state);
   };
 
   const setActiveOnly = (state: boolean) => {
-    return farmingFilterStore!.setActiveOnly(state);
+    return farmingFilterStore.setActiveOnly(state);
   };
 
   const onSearchChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e)) {
       return;
     }
-    farmingFilterStore!.onSearchChange((e.target as HTMLInputElement).value);
+    farmingFilterStore.onSearchChange((e.target as HTMLInputElement).value);
   };
 
   const onTokenIdChange = (e: FormEvent<HTMLInputElement>) => {
     if (isNull(e) || isNull(e.target)) {
       return;
     }
-    farmingFilterStore!.onTokenIdChange((e.target as HTMLInputElement).value);
+    farmingFilterStore.onTokenIdChange((e.target as HTMLInputElement).value);
   };
 
   const handleIncrement = () => {
-    farmingFilterStore!.handleIncrement();
+    farmingFilterStore.handleIncrement();
   };
 
   const handleDecrement = () => {
-    farmingFilterStore!.handleDecrement();
+    farmingFilterStore.handleDecrement();
   };
 
   const translation = {

@@ -1,14 +1,8 @@
-import { useEffect } from 'react';
-
+import { FarmingFilterStore } from '@modules/farming/store';
 import { useRootStore } from '@providers/root-store-provider';
 
 export const useFarmingFilterStore = () => {
-  const rootStore = useRootStore();
+  const { farmingFilterStore } = useRootStore();
 
-  useEffect(() => {
-    rootStore.createFarmingFilterStore();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  return rootStore.farmingFilterStore;
+  return farmingFilterStore as FarmingFilterStore;
 };
