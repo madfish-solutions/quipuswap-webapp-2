@@ -153,6 +153,20 @@
   .button {
     width: 160px;
   }
+
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
+  }
+}
+
+@include media(">840px") {
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
+  }
 }
 
 @include media(">tablet", "<Ltablet") {
@@ -246,11 +260,5 @@
 
   .button {
     width: 160px;
-  }
-
-  .tagsWithTooltip {
-    grid-column: 2 / 3;
-    grid-row: 1 / 2;
-    margin-top: 0;
   }
 }
