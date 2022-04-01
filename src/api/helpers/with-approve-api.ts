@@ -1,5 +1,6 @@
 import { batchify } from '@quipuswap/sdk';
 import { TezosToolkit, TransferParams } from '@taquito/taquito';
+import { SendParams } from '@taquito/taquito/dist/types/contract/contract-methods/contract-method-interface';
 import BigNumber from 'bignumber.js';
 
 import { Standard } from '@graphql';
@@ -15,12 +16,15 @@ const withFA12ApproveApi = async (
   token: Token,
   accountPkh: string,
   amount: BigNumber.Value,
-  operationParams: TransferParams
+  operationParams: TransferParams,
+  sendParams?: Partial<SendParams>
 ) => {
   const tokenContract = await tezos.wallet.at(token.contractAddress);
   const currentAllowance = await getAllowance(tezos, tokenContract.address, accountPkh, contractAddress);
-  const resetAllowanceParams = tokenContract.methods.approve(contractAddress, RESET_AMOUNT).toTransferParams();
-  const setAllowanceParams = tokenContract.methods.approve(contractAddress, amount).toTransferParams();
+  const resetAllowanceParams = tokenContract.methods
+    .approve(contractAddress, RESET_AMOUNT)
+    .toTransferParams(sendParams);
+  const setAllowanceParams = tokenContract.methods.approve(contractAddress, amount).toTransferParams(sendParams);
 
   const operationsParams = currentAllowance.isGreaterThan(RESET_AMOUNT)
     ? [resetAllowanceParams, setAllowanceParams, operationParams]
@@ -34,7 +38,8 @@ const withFA2ApproveApi = async (
   contractAddress: string,
   token: Token,
   accountPkh: string,
-  operationParams: TransferParams
+  operationParams: TransferParams,
+  sendParams?: Partial<SendParams>
 ) => {
   const tokenContract = await tezos.wallet.at(token.contractAddress);
   const addOperatorParams = tokenContract.methods
@@ -47,7 +52,7 @@ const withFA2ApproveApi = async (
         }
       }
     ])
-    .toTransferParams();
+    .toTransferParams(sendParams);
   const removeOperatorParams = tokenContract.methods
     .update_operators([
       {
@@ -58,7 +63,7 @@ const withFA2ApproveApi = async (
         }
       }
     ])
-    .toTransferParams();
+    .toTransferParams(sendParams);
 
   return await batchify(tezos.wallet.batch([]), [addOperatorParams, operationParams, removeOperatorParams]).send();
 };
@@ -69,14 +74,15 @@ export const withApproveApi = async (
   token: Token,
   accountPkh: string,
   amount: BigNumber.Value,
-  operationParams: TransferParams
+  operationParams: TransferParams,
+  sendParams?: Partial<SendParams>
 ) => {
   if (isTezosToken(token)) {
     return await batchify(tezos.wallet.batch([]), [operationParams]).send();
   }
   if (token.type === Standard.Fa12) {
-    return await withFA12ApproveApi(tezos, contractAddress, token, accountPkh, amount, operationParams);
+    return await withFA12ApproveApi(tezos, contractAddress, token, accountPkh, amount, operationParams, sendParams);
   }
 
-  return await withFA2ApproveApi(tezos, contractAddress, token, accountPkh, operationParams);
+  return await withFA2ApproveApi(tezos, contractAddress, token, accountPkh, operationParams, sendParams);
 };

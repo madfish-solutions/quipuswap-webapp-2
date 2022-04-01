@@ -12,5 +12,5 @@ export const unstakeAssetsApi = async (
   const farmingParams = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
   const withdrawParams = farmingParams.methods.withdraw(farmingId, amount, accountPkh, accountPkh);
 
-  return await withdrawParams.send();
+  return await withdrawParams.send({ storageLimit: 50 });
 };

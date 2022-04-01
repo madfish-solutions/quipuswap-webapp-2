@@ -3,6 +3,7 @@ import React, { Fragment, useContext } from 'react';
 import { Button, ColorModes, ColorThemeContext } from '@quipuswap/ui-kit';
 import cx from 'classnames';
 
+import { HIDE_ANALYTICS } from '@app.config';
 import { isLastElementIndex } from '@utils/helpers';
 
 import s from './route.module.sass';
@@ -30,9 +31,13 @@ export const Route: React.FC<Props> = ({ routes, className }) => {
     <div className={cx(s.root, modeClass[colorThemeMode], className)}>
       {routes.map((route, index) => (
         <Fragment key={route.id}>
-          <Button external href={route.link} className={s.route} theme="quaternary">
-            {route.name}
-          </Button>
+          {HIDE_ANALYTICS ? (
+            <span className={s.route}> {route.name}</span>
+          ) : (
+            <Button external href={route.link} className={s.route} theme="quaternary">
+              {route.name}
+            </Button>
+          )}
           {!isLastElementIndex(index, routes) && <span className={s.divider}>&gt;</span>}
         </Fragment>
       ))}
