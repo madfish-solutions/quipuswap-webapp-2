@@ -20,20 +20,17 @@ import { isDefaultConnectType } from './is-default-connect-type';
 import { michelEncoder } from './michel-encoder';
 import { rpcClients } from './rpc-clients';
 
-export const beaconWallet =
-  typeof window === 'undefined'
-    ? undefined
-    : new BeaconWallet({
-        name: APP_NAME,
-        iconUrl: `${BASE_URL}/favicon.ico`,
-        preferredNetwork: (() => {
-          if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
-            return toBeaconNetworkType(QSNets.mainnet);
-          }
+export const beaconWallet = new BeaconWallet({
+  name: APP_NAME,
+  iconUrl: `${BASE_URL}/favicon.ico`,
+  preferredNetwork: (() => {
+    if (NETWORK.connectType === ConnectType.DEFAULT || IS_NETWORK_MAINNET) {
+      return toBeaconNetworkType(QSNets.mainnet);
+    }
 
-          return toBeaconNetworkType(NETWORK_ID);
-        })()
-      });
+    return toBeaconNetworkType(NETWORK_ID);
+  })()
+});
 
 export const connectWalletBeacon = async (forcePermission: boolean, qsNetwork: QSNetwork) => {
   if (!beaconWallet) {
