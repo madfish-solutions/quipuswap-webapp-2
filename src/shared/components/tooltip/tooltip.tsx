@@ -1,4 +1,4 @@
-import { FC, useContext } from 'react';
+import { FC, ReactNode, useContext } from 'react';
 
 import Tippy, { TippyProps } from '@tippyjs/react';
 import cx from 'classnames';

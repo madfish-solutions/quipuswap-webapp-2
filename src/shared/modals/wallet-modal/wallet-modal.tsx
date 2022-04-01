@@ -16,7 +16,7 @@ import { useToasts } from '@shared/utils';
 import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
 import { WalletButton } from './wallet-button';
-import styles from './WalletModal.module.scss';
+import styles from './wallet-modal.module.scss';
 
 const INSTALL_TEMPLE = 'Install Temple';
 

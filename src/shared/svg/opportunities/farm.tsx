@@ -1,6 +1,7 @@
 import { FC, useContext } from 'react';
 
 import { ColorThemeContext } from '@providers/color-theme-context';
+import { IconProps } from '@shared/types';
 
 export const Farm: FC<IconProps> = ({ className }) => {
   const { themeColors } = useContext(ColorThemeContext);

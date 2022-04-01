@@ -4,9 +4,8 @@ import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { Slider } from '@shared/components/slider';
 
-import { responsive } from '../news';
+import { HomeSlider } from '../home-slider';
 import { Section } from '../section';
 import { NewsData } from './content';
 import { NewsCard } from './news-card';
@@ -34,11 +33,11 @@ export const News: React.FC<NewsProps> = ({ className }) => {
       )}
       className={cx(className)}
     >
-      <Slider items={4} className={styles.uncenter} responsive={responsive}>
+      <HomeSlider className={styles.uncenter}>
         {NewsData.map(news => (
           <NewsCard key={news.id} className={cx(styles.card, modeClass[colorThemeMode])} news={news} />
         ))}
-      </Slider>
+      </HomeSlider>
     </Section>
   );
 };
