@@ -34,8 +34,9 @@ export interface DAppType {
 }
 
 export const fallbackToolkits: Record<QSNets, TezosToolkit> = {
-  hangzhounet: new TezosToolkit(rpcClients.hangzhounet),
-  mainnet: new TezosToolkit(rpcClients.mainnet)
+  [QSNets.mainnet]: new TezosToolkit(rpcClients.mainnet),
+  [QSNets.hangzhounet]: new TezosToolkit(rpcClients.hangzhounet),
+  [QSNets.ithacanet]: new TezosToolkit(rpcClients.ithacanet)
 };
 
 Object.values(fallbackToolkits).forEach(toolkit => toolkit.setPackerProvider(michelEncoder));
