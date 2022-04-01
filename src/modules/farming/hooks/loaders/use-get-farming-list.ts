@@ -14,7 +14,7 @@ export const useGetFarmingList = () => {
   const authStore = useAuthStore();
   const isReady = useReady();
   const farmingListStore = useFarmingListStore();
-  const { listStore } = farmingListStore!;
+  const { listStore } = farmingListStore;
 
   const getFarmingList = useCallback(async () => {
     if (isReady) {

@@ -23,7 +23,7 @@ export const useUnstakeFormViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
   const { delayedGetFarmingItem } = useGetFarmingItem();
   const { doUnstake } = useDoUnstake();
-  const { inputAmount, farmingItem } = farmingItemStore!;
+  const { inputAmount, farmingItem } = farmingItemStore;
 
   const userTokenBalance = farmingItem?.depositBalance ? bigNumberToString(farmingItem?.depositBalance) : undefined;
 
@@ -67,7 +67,7 @@ export const useUnstakeFormViewModel = () => {
       : undefined;
 
   const handleInputAmountChange = (value: string) => {
-    farmingItemStore!.setInputAmount(prepareNumberAsString(value));
+    farmingItemStore.setInputAmount(prepareNumberAsString(value));
     formik.setFieldValue(UnstakeFormFields.inputAmount, value);
   };
 

@@ -18,14 +18,14 @@ export const useGetFarmingItem = () => {
     async (farmingId: BigNumber) => {
       if (isReady) {
         try {
-          farmingItemStore!.setFarmingId(farmingId);
-          await farmingItemStore!.itemStore.load();
+          farmingItemStore.setFarmingId(farmingId);
+          await farmingItemStore.itemStore.load();
           await Promise.all([
-            farmingItemStore!.availableBalanceStore.load(),
-            farmingItemStore!.userInfoStore.load(),
-            farmingItemStore!.userFarmingDelegateStore.load()
+            farmingItemStore.availableBalanceStore.load(),
+            farmingItemStore.userInfoStore.load(),
+            farmingItemStore.userFarmingDelegateStore.load()
           ]);
-          farmingItemStore!.updatePendingRewards();
+          farmingItemStore.updatePendingRewards();
         } catch (error) {
           showErrorToast(error as Error);
         }

@@ -13,7 +13,7 @@ const TOKEN_SYMBOL_FILLER = '\u00a0';
 
 export const useFarmingRewardInfoViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
-  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore!;
+  const { itemStore, userFarmingDelegateStore, userInfoStore, farmingItem } = farmingItemStore;
   const accountPkh = useAccountPkh();
 
   const { delayedGetFarmingItem } = useGetFarmingItem();

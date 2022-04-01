@@ -16,17 +16,17 @@ export const useFarmingRewardsListViewModel = () => {
   const { doHarvestAll } = useDoHarvestAll();
 
   const handleHarvestAll = async () => {
-    await doHarvestAll(farmingListStore!.listStore.data);
+    await doHarvestAll(farmingListStore.listStore.data);
 
     await Promise.all([delayedGetFarmingList(), delayedGetFarmingStats()]);
   };
 
   useEffect(() => {
-    farmingListStore!.updatePendingRewards();
-    farmingListStore!.makePendingRewardsLiveable();
+    farmingListStore.updatePendingRewards();
+    farmingListStore.makePendingRewardsLiveable();
 
     return () => {
-      farmingListStore!.clearIntervals();
+      farmingListStore.clearIntervals();
     };
   }, [farmingListStore]);
 

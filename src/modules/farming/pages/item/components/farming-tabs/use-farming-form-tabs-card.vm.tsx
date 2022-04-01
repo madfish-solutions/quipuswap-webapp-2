@@ -17,13 +17,13 @@ export const useFarmingFormTabsCardViewModel = () => {
   const farmingItemStore = useFarmingItemStore();
 
   const changeTabHandle = (tab: FarmingFormTabs) => {
-    farmingItemStore!.setTab(tab);
+    farmingItemStore.setTab(tab);
   };
 
-  const { itemStore, currentTab } = farmingItemStore!;
+  const { itemStore, currentTab } = farmingItemStore;
   const { data: farmingItem } = itemStore;
 
-  const isStakeForm = farmingItemStore!.currentTab === FarmingFormTabs.stake;
+  const isStakeForm = farmingItemStore.currentTab === FarmingFormTabs.stake;
 
   return {
     farmingItem,

@@ -33,14 +33,14 @@ export const useStakeConfirmationPopup = () => {
   const { openConfirmationModal } = useConfirmationModal();
   const { t } = useTranslation('farm');
   const farmingItemStore = useFarmingItemStore();
-  const timelock = farmingItemStore!.farmingItem?.timelock;
+  const timelock = farmingItemStore.farmingItem?.timelock;
 
   if (timelock === NO_TIMELOCK_VALUE) {
     return async (callback: () => Promise<void>) => callback();
   }
 
-  const depositBalance = farmingItemStore!.farmingItem?.depositBalance;
-  const withdrawalFee = farmingItemStore!.farmingItem?.withdrawalFee;
+  const depositBalance = farmingItemStore.farmingItem?.depositBalance;
+  const withdrawalFee = farmingItemStore.farmingItem?.withdrawalFee;
 
   const confirmationMessage = getConfirmationMessage(depositBalance, timelock, withdrawalFee, t);
 

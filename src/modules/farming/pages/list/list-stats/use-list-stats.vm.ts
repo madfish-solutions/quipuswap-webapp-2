@@ -7,7 +7,7 @@ export const useListStatsViewModel = () => {
   const { t } = useTranslation(['farm']);
   const farmingStore = useFarmingListStore();
 
-  const amount = farmingStore!.statsStore.data;
+  const amount = farmingStore.statsStore.data;
 
   const stats = [
     {
