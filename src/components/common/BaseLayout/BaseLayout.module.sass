@@ -9,20 +9,17 @@
   width: 100%
   padding-top: 64px
 
-.wrapper
+.mainWrapper
+  flex: 1
   padding: 24px
 
-.background
-  display: none
-  position: fixed
-  left: 0
-  top: 0
-  z-index: -1
+.light.mainWrapper
+  background: top center url('/images/bg-white.png') repeat-x
+  background-size: 75%
 
-@include media('>tablet')
-  .background
-    display: block
-    left: 0
+.dark.mainWrapper
+  background: top center url('/images/bg-dark.png') repeat-x
+  background-size: 75%
 
 @include media('>SDesktop')
   .root
@@ -32,7 +29,3 @@
     max-width: 1236px
     padding: 24px 32px 32px
     margin: 0 auto
-  .background
-    display: block
-    left: calc(50% + 200px)
-    transform: translateX(calc(-50% - 100px))
