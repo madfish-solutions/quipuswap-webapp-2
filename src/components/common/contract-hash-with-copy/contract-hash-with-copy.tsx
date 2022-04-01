@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { FC, useRef, useState } from 'react';
 
 import { Button, Copy } from '@quipuswap/ui-kit';
 import { noop } from 'rxjs';
@@ -8,11 +8,11 @@ import { shortize } from '@utils/helpers';
 
 import styles from './contract-hash-with-copy.module.sass';
 
-interface ContractHashProps {
+interface Props {
   contractAddress: string;
 }
 
-export const ContractHashWithCopy: React.FC<ContractHashProps> = ({ contractAddress }) => {
+export const ContractHashWithCopy: FC<Props> = ({ contractAddress }) => {
   const [copied, setCopied] = useState<boolean>(false);
   const timeout = useRef(setTimeout(noop, 0));
 
