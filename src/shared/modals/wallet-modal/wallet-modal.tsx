@@ -16,7 +16,7 @@ import { useToasts } from '@shared/utils';
 import { Modal } from '../modal';
 import { Beacon, Temple } from './content';
 import { WalletButton } from './wallet-button';
-import s from './WalletModal.module.scss';
+import styles from './wallet-modal.module.scss';
 
 const INSTALL_TEMPLE = 'Install Temple';
 
@@ -80,33 +80,33 @@ export const WalletModal: FC = () => {
 
   return (
     <Modal
-      containerClassName={s.modalWrap}
-      contentClassName={s.modal}
+      containerClassName={styles.modalWrap}
+      contentClassName={styles.modal}
       title={t('common|Connect wallet')}
       isOpen={connectWalletModalOpen}
       onRequestClose={closeConnectWalletModal}
     >
-      <div className={s.terms}>
-        <div className={s.def}>
+      <div className={styles.terms}>
+        <div className={styles.def}>
           <Button
             control={<Checkbox checked={isTermsAccepted} />}
             onClick={handleCheck1}
             theme="quaternary"
-            className={s.btn}
+            className={styles.btn}
           >
-            <div className={s.btnText}>{t('common|Accept terms')}</div>
+            <div className={styles.btnText}>{t('common|Accept terms')}</div>
           </Button>
           {t('common|I have read and agree to the')}{' '}
-          <Button className={s.defText} theme="underlined" href="/terms-of-service" external>
+          <Button className={styles.defText} theme="underlined" href="/terms-of-service" external>
             {t('common|Terms of Usage')}
           </Button>{' '}
           {t('common|and')}{' '}
-          <Button className={s.defText} theme="underlined" href="/privacy-policy" external>
+          <Button className={styles.defText} theme="underlined" href="/privacy-policy" external>
             {t('common|Privacy Policy')}
           </Button>
         </div>
       </div>
-      <div className={s.wallets}>
+      <div className={styles.wallets}>
         <WalletButton
           available={isTempleInstalled}
           id={Temple.id}

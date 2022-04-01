@@ -3,7 +3,7 @@ import { FC, useCallback, useRef, useEffect } from 'react';
 import { useConnectModalsState } from '@providers/use-connect-modals-state';
 import { useAccountPkh, useDisconnect } from '@providers/use-dapp';
 
-import { Button } from '../../components';
+import { Button } from '../../components/button';
 import { shortize } from '../../helpers';
 import { Modal } from '../modal';
 import styles from './account-modal.module.scss';

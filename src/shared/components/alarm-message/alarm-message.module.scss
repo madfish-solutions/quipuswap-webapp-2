@@ -8,14 +8,17 @@
   border: 1px solid #EA2424;
   border-radius: 8px;
 }
+
 .light {
   color: $text-01;
   background: $ui-01;
 }
+
 .dark {
   color: $text-inverse;
   background: $ui-06;
 }
+
 @include media('>SDesktop') {
   .alarmMessage {
     padding: 12px 16px;

@@ -1,5 +1,6 @@
 export * from './arrays';
 export * from './big-number-to-string';
+export * from './calculate-rate-amount';
 export * from './from-decimals';
 export * from './get-token-appellation';
 export * from './is-client';

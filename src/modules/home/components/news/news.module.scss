@@ -1,0 +1,36 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.root {
+  margin: 16px;
+}
+
+.content {
+  padding: 0;
+}
+
+.card img {
+  border-radius: 8px;
+}
+
+.uncenter {
+  :global(.slick-dots) {
+    display: flex !important;
+    margin-left: 16px;
+  }
+}
+
+@include media('>phone') {
+  .uncenter {
+    margin: 0;
+
+    :global(.slick-dots) {
+      display: flex !important;
+      margin-left: 0;
+    }
+  }
+
+  .root {
+    margin: 0 32px 16px 0;
+  }
+}
