@@ -4,7 +4,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'next-i18next';
 
 import { Button, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
-import s from '@styles/CommonContainer.module.sass';
+import s from '@styles/CommonContainer.module.scss';
 
 import { useUnstakeFormViewModel } from './use-unstake-form.vm';
 

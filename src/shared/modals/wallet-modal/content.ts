@@ -1,11 +1,11 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { Beacon as BeaconIcon, Temple as TempleIcon } from '@shared/svg';
 import { WalletType } from '@shared/types';
 
 interface WalletProps {
   id: WalletType;
-  Icon: React.FC<{ className?: string }>;
+  Icon: FC<{ className?: string }>;
   label: string;
 }
 

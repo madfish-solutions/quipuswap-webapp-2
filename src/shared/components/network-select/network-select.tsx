@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import { FC, useCallback, useMemo } from 'react';
 
 import { Props as SelectProps } from 'react-select';
 
@@ -12,7 +12,7 @@ interface NetworkSelectProps extends Pick<SelectProps, 'menuPlacement'> {
   className?: string;
 }
 
-export const NetworkSelect: React.FC<NetworkSelectProps> = ({ menuPlacement, className }) => {
+export const NetworkSelect: FC<NetworkSelectProps> = ({ menuPlacement, className }) => {
   const changeNetwork = useChangeNetwork();
 
   const selectValues = useMemo(() => ALL_NETWORKS.map(el => ({ value: el.id, label: el.name })), []);

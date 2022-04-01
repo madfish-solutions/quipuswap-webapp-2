@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { Button } from '@shared/components';
 import { ArrowDown } from '@shared/svg';
 
-import styles from './farming-reward-header.module.sass';
+import styles from './farming-reward-header.module.scss';
 
 export const FarmingRewardHeader: FC = () => {
   const { t } = useTranslation(['farm']);

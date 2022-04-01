@@ -4,7 +4,7 @@ import cx from 'classnames';
 import { FormApi } from 'final-form';
 import { useTranslation } from 'next-i18next';
 import { withTypes } from 'react-final-form';
-import ReactModal from 'react-modal';
+import { Props } from 'react-modal';
 
 import { DEFAULT_SEARCH_VALUE, DEFAULT_TOKEN_ID, MOCK_LOADING_ARRAY } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
@@ -24,7 +24,7 @@ import { Token } from '@shared/types';
 
 import { LoadingTokenCell, TokenCell } from '../modal-cell';
 import { AutoSave } from './AutoSave';
-import s from './TokensModal.module.sass';
+import s from './TokensModal.module.scss';
 import { FormValues, TMFormField } from './types';
 
 const themeClass = {
@@ -33,7 +33,7 @@ const themeClass = {
 };
 
 // eslint-disable-next-line import/no-named-as-default-member
-interface TokensModalProps extends ReactModal.Props {
+interface TokensModalProps extends Props {
   onChange: (token: Token) => void;
   blackListedTokens: Token[];
 }

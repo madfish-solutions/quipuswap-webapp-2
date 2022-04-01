@@ -4,7 +4,7 @@ import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import s from './alarm-message.module.sass';
+import s from './alarm-message.module.scss';
 
 interface Props {
   message: string;

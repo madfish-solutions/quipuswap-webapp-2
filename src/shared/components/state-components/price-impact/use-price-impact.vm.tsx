@@ -4,7 +4,7 @@ import { DashPlug, SmileCondition } from '@shared/components';
 import { FormatNumber, isExist, isNull } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import s from './price-impact.module.sass';
+import s from './price-impact.module.scss';
 
 const PRICE_IMPACT_DECIMALS = 2;
 const DEFAULT_PRICE_IMPACT = 0;

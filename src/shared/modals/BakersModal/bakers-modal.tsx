@@ -1,12 +1,13 @@
-import React, { useRef, useState, useEffect, useContext } from 'react';
+import { useRef, useState, useEffect, useContext, FC } from 'react';
 
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
-import ReactModal from 'react-modal';
+import { Props } from 'react-modal';
 import { noop } from 'rxjs';
 
 import { TEZOS_TOKEN } from '@config/config';
+import { AUTOSAVE_DEBOUNCE_MS, MOCK_LOADING_ARRAY, TAB_INDEX } from '@config/constants';
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { useBakers, useSearchBakers, useSearchCustomBaker } from '@providers/dapp-bakers';
 import { BakerCell, Input, LoadingBakerCell } from '@shared/components';
@@ -31,7 +32,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-interface BakersModalProps extends ReactModal.Props {
+interface BakersModalProps extends Props {
   onChange: (baker: WhitelistedBaker) => void;
 }
 
@@ -46,11 +47,7 @@ interface FormValues {
   search: string;
 }
 
-const LOADING_ARRAY = [1, 2, 3, 4, 5, 6];
-const TAB_INDEX = 0;
-const AUTOSAVE_DEBOUNCE_MS = 1000;
-
-const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
+const Header: FC<HeaderProps> = ({ debounce, save, values }) => {
   const { t } = useTranslation(['common']);
 
   const [, setVal] = useState(values);
@@ -108,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ debounce, save, values }) => {
 // eslint-disable-next-line
 const AutoSave = (props: any) => <FormSpy {...props} subscription={{ values: true }} component={Header} />;
 
-export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) => {
+export const BakersModal: FC<BakersModalProps> = ({ onChange, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   const { t } = useTranslation(['common']);
   const { Form } = withTypes<FormValues>();
@@ -177,7 +174,7 @@ export const BakersModal: React.FC<BakersModalProps> = ({ onChange, ...props }) 
               <div className={s.notFoundLabel}>{t('common|No bakers found')}</div>
             </div>
           )}
-          {isLoading && LOADING_ARRAY.map(x => <LoadingBakerCell key={x} />)}
+          {isLoading && MOCK_LOADING_ARRAY.map(x => <LoadingBakerCell key={x} />)}
           {!isLoading &&
             bakerList.map(baker => (
               <BakerCell

@@ -1,0 +1,12 @@
+@import "@styles/_breakpoints";
+
+.titleLoader {
+  display: flex;
+  align-items: center;
+  height: 3.429rem;
+}
+@include media('>SDesktop') {
+  .pageTitle {
+    height: 4.571rem;
+  }
+}

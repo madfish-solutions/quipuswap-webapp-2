@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC, ReactNode } from 'react';
 
 import { Trans } from 'next-i18next';
 
@@ -7,9 +7,9 @@ import { FarmIcon, HomeIcon, LiquidityIcon, MoreIcon, SwapIcon, VotingIcon } fro
 interface LinkInterface {
   id: number;
   to?: string;
-  label: React.ReactNode;
+  label: ReactNode;
   target?: string;
-  Icon?: React.FC<{ className?: string; id?: string }>;
+  Icon?: FC<{ className?: string; id?: string }>;
 }
 
 interface NavigationDataProps extends LinkInterface {

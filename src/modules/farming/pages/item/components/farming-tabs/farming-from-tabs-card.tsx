@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { Card, Skeleton, Tabs } from '@shared/components';
-import styles from '@styles/CommonContainer.module.sass';
+import styles from '@styles/CommonContainer.module.scss';
 
 import { FarmingFormTabs } from '../../types';
 import { StakeForm } from './stake-form/stake-form';

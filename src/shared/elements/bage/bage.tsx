@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -17,7 +17,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Bage: React.FC<BageProps> = ({ className, innerClassName, text }) => {
+export const Bage: FC<BageProps> = ({ className, innerClassName, text }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   return (

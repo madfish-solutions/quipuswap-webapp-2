@@ -1,10 +1,10 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, FocusEvent, HTMLProps, FC } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 
-import s from './Input.module.sass';
+import s from './Input.module.scss';
 
 export type InputProps = {
   error?: string;
@@ -16,9 +16,9 @@ export type InputProps = {
   labelClassName?: string;
   inputClassName?: string;
   inputSize?: keyof typeof sizeClass;
-  StartAdornment?: React.FC<{ className?: string }>;
-  EndAdornment?: React.FC<{ className?: string }>;
-} & React.HTMLProps<HTMLInputElement>;
+  StartAdornment?: FC<{ className?: string }>;
+  EndAdornment?: FC<{ className?: string }>;
+} & HTMLProps<HTMLInputElement>;
 
 const sizeClass = {
   medium: s.medium,
@@ -30,7 +30,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Input: React.FC<InputProps> = ({
+export const Input: FC<InputProps> = ({
   inputSize = 'medium',
   disabled = false,
   active = false,
@@ -61,12 +61,12 @@ export const Input: React.FC<InputProps> = ({
     className
   );
 
-  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleFocus = (e: FocusEvent<HTMLInputElement>) => {
     setActive(true);
     onFocus?.(e);
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+  const handleBlur = (e: FocusEvent<HTMLInputElement>) => {
     setActive(false);
     onBlur?.(e);
   };

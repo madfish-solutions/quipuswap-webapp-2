@@ -17,7 +17,7 @@ import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logos';
 import { ComplexError } from './ComplexError';
-import s from './ComplexInput.module.sass';
+import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
 interface PositionSelectProps extends HTMLProps<HTMLInputElement> {

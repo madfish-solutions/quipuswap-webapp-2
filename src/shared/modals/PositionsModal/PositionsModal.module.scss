@@ -1,0 +1,78 @@
+@import "@styles/variables";
+@import "@styles/breakpoints";
+
+.tokenModal {
+  height: 100%;
+}
+.maxHeight {
+  display: flex;
+  flex-direction: column;
+}
+.penIcon {
+  margin-left: 8px;
+}
+.modalButton {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modalInput:not(:last-child) {
+  margin-bottom: 16px;
+}
+.tokenid {
+  display: flex;
+  flex-direction: column;
+}
+.tokenNotFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 96px 0px;
+  margin: 0px auto;
+  font-weight: 600;
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+.notFoundLabel {
+  margin-top: 16px;
+}
+.listItem {
+  position: relative;
+  padding: 12px 24px;
+  transition: background-color $animationTime;
+  outline: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.iconButton {
+  margin: 8px auto;
+}
+.light {
+  .listItem {
+    border-bottom: 1px solid $ui-03;
+  }
+  .listText {
+    color: $text-02;
+  }
+  .tokenNotFound {
+    color: $text-01;
+  }
+}
+.dark {
+  .listItem {
+    border-bottom: 1px solid $ui-06;
+  }
+  .listText {
+    color: $text-03;
+  }
+  .tokenNotFound {
+    color: $text-inverse;
+  }
+}
+@include media(">Ltablet") {
+  .modalButton {
+    max-width: 180px;
+  }
+}

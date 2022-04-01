@@ -1,4 +1,4 @@
-import { HTMLProps, useContext, useMemo, useRef, useState } from 'react';
+import { FC, HTMLProps, useContext, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -26,7 +26,7 @@ import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logos';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';
-import s from './ComplexInput.module.sass';
+import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
 const DEFAULT_EXCHANGE_RATE = 0;
@@ -55,7 +55,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const TokenSelect: React.FC<TokenSelectProps> = ({
+export const TokenSelect: FC<TokenSelectProps> = ({
   className,
   balance = null,
   shouldShowBalanceButtons = true,

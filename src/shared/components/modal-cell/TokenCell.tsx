@@ -9,7 +9,7 @@ import { isTokenTypeFa12 } from '@shared/helpers/tokens/token-type';
 import { Standard } from '@shared/types';
 
 import { TokensLogos } from '../tokens-logos';
-import s from './ModalCell.module.sass';
+import s from './ModalCell.module.scss';
 
 interface TokenCellProps {
   tokenIcon: string | null;

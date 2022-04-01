@@ -1,6 +1,6 @@
 const LEFT_LENGTH = 7;
 const RIGHT_LENGTH = 4;
-
+const FISRT_INDEX = 0;
 export const shortize = (str: string, length?: number) => {
   if (!str) {
     return '';
@@ -9,5 +9,5 @@ export const shortize = (str: string, length?: number) => {
   const wrapLeftLenght = length ?? LEFT_LENGTH;
   const wrapRightLenght = length ?? RIGHT_LENGTH;
 
-  return `${str.slice(0, wrapLeftLenght)}...${str.slice(-wrapRightLenght)}`;
+  return `${str.slice(FISRT_INDEX, wrapLeftLenght)}...${str.slice(-wrapRightLenght)}`;
 };

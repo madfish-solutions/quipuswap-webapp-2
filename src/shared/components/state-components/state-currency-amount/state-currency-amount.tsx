@@ -11,7 +11,7 @@ import { DataTestAttribute } from 'tests/types';
 import { DashPlug } from '../../dash-plug';
 import { StateDollarEquivalent } from '../state-dollar-equivalent';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
-import s from './state-currency-amount.module.sass';
+import s from './state-currency-amount.module.scss';
 
 export interface StateCurrencyAmountProps extends Partial<StateWrapperProps>, DataTestAttribute {
   className?: string;

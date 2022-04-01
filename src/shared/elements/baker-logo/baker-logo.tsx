@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import cx from 'classnames';
 
 import { Baker } from '@shared/svg';
@@ -10,7 +12,7 @@ export interface BakerLogoProps {
   bakerIcon?: string;
 }
 
-export const BakerLogo: React.FC<BakerLogoProps> = ({ bakerIcon, bakerName, className }) => {
+export const BakerLogo: FC<BakerLogoProps> = ({ bakerIcon, bakerName, className }) => {
   const compoundClassName = cx(s.root, className);
 
   return (

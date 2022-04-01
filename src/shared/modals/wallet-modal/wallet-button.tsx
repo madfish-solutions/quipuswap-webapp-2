@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Button } from '@shared/components';
 import { WalletType } from '@shared/types';
 
-import s from './WalletModal.module.sass';
+import s from './WalletModal.module.scss';
 
 const TEMPLE_WALLET_LINK = 'https://templewallet.com/';
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 
 import { FallbackLogo } from '@shared/svg';
 import { Nullable } from '@shared/types';
@@ -22,7 +22,7 @@ interface PropsFill extends PropsAbstraction {
 
 type Props = PropsFixed | PropsFill;
 
-export const TokenLogo: React.FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = 24 }) => {
+export const TokenLogo: FC<Props> = ({ src, tokenSymbol, layout = 'fixed', size = 24 }) => {
   const [loadError, setLoadError] = useState(false);
 
   const handleLoadError = () => setLoadError(true);

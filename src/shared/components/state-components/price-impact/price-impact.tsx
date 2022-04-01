@@ -8,7 +8,7 @@ import { Nullable } from '@shared/types';
 
 import { Currency } from '../state-currency-amount';
 import { StateWrapper } from '../state-wrapper';
-import s from './price-impact.module.sass';
+import s from './price-impact.module.scss';
 import { usePriceImpactViewModel } from './use-price-impact.vm';
 
 interface StatePriceImpactProps {

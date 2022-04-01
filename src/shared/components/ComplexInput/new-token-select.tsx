@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ChangeEvent, FC, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -25,7 +25,7 @@ import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logos';
 import { TokensModal } from '../TokensModal';
 import { ComplexError } from './ComplexError';
-import s from './ComplexInput.module.sass';
+import s from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
 interface NewTokenSelectProps {
@@ -50,7 +50,7 @@ const themeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
+export const NewTokenSelect: FC<NewTokenSelectProps> = ({
   amount,
   className,
   balance,
@@ -102,7 +102,7 @@ export const NewTokenSelect: React.FC<NewTokenSelectProps> = ({
     }
   };
 
-  const handleAmountChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAmountChange = (evt: ChangeEvent<HTMLInputElement>) => {
     const val = evt.target.value.replace(/ /g, '').replace(/,/g, '.');
     const numVal = new BigNumber(val || 0);
 

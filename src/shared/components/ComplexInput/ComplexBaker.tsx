@@ -12,7 +12,7 @@ import { Nullable, WhitelistedBaker } from '@shared/types';
 
 import { Button } from '../button';
 import { ComplexError } from './ComplexError';
-import s from './ComplexInput.module.sass';
+import s from './ComplexInput.module.scss';
 
 interface ComplexBakerProps extends HTMLProps<HTMLInputElement> {
   className?: string;

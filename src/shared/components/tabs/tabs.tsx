@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState, useRef, FC } from 'react';
 
 import cx from 'classnames';
 
@@ -22,7 +22,7 @@ const modeClass = {
   [ColorModes.Dark]: s.dark
 };
 
-export const Tabs: React.FC<TabsProps> = ({ values, activeId, setActiveId, className, withUnderline = true }) => {
+export const Tabs: FC<TabsProps> = ({ values, activeId, setActiveId, className, withUnderline = true }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);

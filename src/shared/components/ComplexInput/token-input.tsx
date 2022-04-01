@@ -24,7 +24,7 @@ import { Scaffolding } from '../scaffolding';
 import { Balance } from '../state-components/balance';
 import { TokensLogos } from '../tokens-logos';
 import { ComplexError } from './ComplexError';
-import styles from './ComplexInput.module.sass';
+import styles from './ComplexInput.module.scss';
 import { PercentSelector } from './PercentSelector';
 
 const DEFAULT_EXCHANGE_RATE = 0;

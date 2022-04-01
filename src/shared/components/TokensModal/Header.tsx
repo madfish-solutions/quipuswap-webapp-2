@@ -12,7 +12,7 @@ import { validateMinMaxNonStrict } from '@shared/validators';
 
 import { Input } from '../input';
 import { NumberInput } from '../number-input';
-import s from './TokensModal.module.sass';
+import s from './TokensModal.module.scss';
 import { FormValues, TMFormField } from './types';
 
 export interface HeaderProps {

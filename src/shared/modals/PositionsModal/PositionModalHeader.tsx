@@ -10,7 +10,7 @@ import { useSaveFunction } from '@shared/helpers/crutches';
 import { Search } from '@shared/svg';
 import { validateMinMaxNonStrict } from '@shared/validators';
 
-import s from './PositionsModal.module.sass';
+import s from './PositionsModal.module.scss';
 import { HeaderProps, PMFormField } from './PositionsModal.types';
 
 export const Header: FC<HeaderProps> = ({ isSecondInput, debounce, save, values, form }) => {

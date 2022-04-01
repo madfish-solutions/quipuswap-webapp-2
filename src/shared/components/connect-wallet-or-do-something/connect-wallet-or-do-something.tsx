@@ -3,7 +3,7 @@ import { FC } from 'react';
 import cx from 'classnames';
 
 import { useAccountPkh } from '@providers/use-dapp';
-import CC from '@styles/CommonContainer.module.sass';
+import CC from '@styles/CommonContainer.module.scss';
 
 import { ConnectWalletButton } from '../connect-wallet-button';
 

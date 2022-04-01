@@ -14,10 +14,10 @@ import { useBakers } from '@providers/dapp-bakers';
 import { useReady } from '@providers/use-dapp';
 import { bigNumberToString, multipliedIfPossible, getTokenSymbol } from '@shared/helpers';
 import { ActiveStatus } from '@shared/types';
-import s from '@styles/CommonContainer.module.sass';
+import s from '@styles/CommonContainer.module.scss';
 
 import { canDelegate, makeBaker } from '../../helpers';
-import styles from './farming-details.module.sass';
+import styles from './farming-details.module.scss';
 
 const NO_WITHDRAWAL_FEE_VALUE = 0;
 
@@ -29,7 +29,7 @@ export const useFarmingDetailsViewModel = () => {
     isLoading: dataLoading,
     isInitialized: dataInitialized,
     error
-  } = farmingItemStore!.itemStore;
+  } = farmingItemStore.itemStore;
   const isLoading = dataLoading || !dataInitialized || !dAppReady;
   const { data: bakers } = useBakers();
 

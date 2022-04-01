@@ -17,7 +17,7 @@ import { Token } from '@shared/types';
 
 import { Modal } from '../modal';
 import { Header } from './PositionModalHeader';
-import s from './PositionsModal.module.sass';
+import s from './PositionsModal.module.scss';
 import { FormValues, IPositionsModalProps, PMFormField } from './PositionsModal.types';
 import { PositionTokenCell } from './PositionTokenCell';
 

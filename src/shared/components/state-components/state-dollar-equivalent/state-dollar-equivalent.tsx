@@ -9,7 +9,7 @@ import { Nullable } from '@shared/types';
 
 import { DashPlug } from '../../dash-plug';
 import { StateWrapper, StateWrapperProps } from '../state-wrapper';
-import s from './state-dollar-equivalent.module.sass';
+import s from './state-dollar-equivalent.module.scss';
 
 const USD_DECIMALS_AMOUNT = 2;
 

@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, ComplexBaker, ConnectWalletOrDoSomething, TokenInput } from '@shared/components';
 import { isNull } from '@shared/helpers';
-import s from '@styles/CommonContainer.module.sass';
+import s from '@styles/CommonContainer.module.scss';
 
 import { FarmingAlert } from '../../farming-alert';
 import { useStakeFormViewModel } from './use-stake-form.vm';

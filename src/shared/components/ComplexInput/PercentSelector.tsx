@@ -6,7 +6,7 @@ import { defined, formatIntegerWithDecimals, isNull } from '@shared/helpers';
 import { Nullable, Optional } from '@shared/types';
 
 import { Button } from '../button';
-import s from './ComplexInput.module.sass';
+import s from './ComplexInput.module.scss';
 
 interface PercentSelectorProps {
   handleBalance?: (state: string) => void;

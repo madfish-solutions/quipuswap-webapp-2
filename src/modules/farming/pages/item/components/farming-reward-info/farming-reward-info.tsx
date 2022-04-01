@@ -16,7 +16,7 @@ import { FarmingRewardHeader } from '../farming-reward-header';
 import { FarmingStatsItem } from '../farming-stats-item';
 import { RewardDashPlugFallback } from '../reward-dash-plug-fallback';
 import { StateData } from '../state-data';
-import styles from './farming-reward-info.module.sass';
+import styles from './farming-reward-info.module.scss';
 import { useFarmingRewardInfoViewModel } from './use-farming-reward-info.vm';
 
 const modeClass = {

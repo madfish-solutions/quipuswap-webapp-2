@@ -11,7 +11,7 @@ import { Countdown } from '../countdown';
 import { StateData } from '../state-data';
 import { StatePercentage } from '../state-percentage';
 import { TimespanView } from '../timespan-view';
-import styles from './farming-details.module.sass';
+import styles from './farming-details.module.scss';
 import { useFarmingDetailsViewModel } from './use-farming-details.vm';
 
 export const FarmingDetails: FC = observer(() => {

@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
 import { IS_NETWORK_MAINNET } from '@config/config';
 
 import { AlarmMessage } from '../alarm-message';
-import s from './testnet-alert.module.sass';
+import s from './testnet-alert.module.scss';
 
 export const TestnetAlert: FC = () => {
   const { t } = useTranslation(['common']);

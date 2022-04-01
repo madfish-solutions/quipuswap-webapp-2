@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import cx from 'classnames';
 
@@ -30,7 +30,7 @@ interface FillTokensLogosProps extends TokensLogosPropsAbstraction {
 
 export type TokensLogosProps = FixedTokensLogosProps | FillTokensLogosProps;
 
-export const TokensLogos: React.FC<TokensLogosProps> = props => {
+export const TokensLogos: FC<TokensLogosProps> = props => {
   const { firstTokenIcon, firstTokenSymbol, secondTokenIcon, secondTokenSymbol, className, imageClassName, loading } =
     props;
 

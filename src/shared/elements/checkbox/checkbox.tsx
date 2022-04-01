@@ -1,23 +1,23 @@
-import { useContext } from 'react';
+import { FC, HTMLProps, useContext } from 'react';
 
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { CheckboxIcon, Checkdone } from '@shared/svg';
 
-import s from './checkbox.module.sass';
+import s from './checkbox.module.scss';
 
 export type CheckboxProps = {
   external?: boolean;
   className?: string;
-} & React.HTMLProps<HTMLInputElement>;
+} & HTMLProps<HTMLInputElement>;
 
 const modeClass = {
   [ColorModes.Light]: s.light,
   [ColorModes.Dark]: s.dark
 };
 
-export const Checkbox: React.FC<CheckboxProps> = ({ className, checked, ...props }) => {
+export const Checkbox: FC<CheckboxProps> = ({ className, checked, ...props }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
 
   const compoundClassName = cx(s.root, modeClass[colorThemeMode], className);

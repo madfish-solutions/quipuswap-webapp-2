@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 
@@ -32,7 +32,7 @@ enum Key {
   ENTER = 'Enter'
 }
 
-export const BakerCell: React.FC<BakerCellProps> = ({
+export const BakerCell: FC<BakerCellProps> = ({
   bakerFee,
   bakerFreeSpace,
   bakerName,

@@ -11,7 +11,7 @@ import { DashPlug } from '@shared/components';
 import { getTokensName, isNull, isUndefined } from '@shared/helpers';
 import { Nullable } from '@shared/types';
 
-import styles from './farming-item.page.module.sass';
+import styles from './farming-item.page.module.scss';
 
 export const useFarmingItemPageViewModel = () => {
   const { t } = useTranslation(['common', 'farm']);

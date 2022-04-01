@@ -7,7 +7,7 @@ import { DashPlug, Tooltip } from '@shared/components';
 import { isNull } from '@shared/helpers';
 import { useAuthStore } from '@shared/hooks';
 
-import styles from './farming-stats-item.module.sass';
+import styles from './farming-stats-item.module.scss';
 
 export interface FarmingStatsItemProps {
   itemName: string;
