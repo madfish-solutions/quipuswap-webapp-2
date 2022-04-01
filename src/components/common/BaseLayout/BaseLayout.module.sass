@@ -9,9 +9,12 @@
   width: 100%
   padding-top: 64px
 
+.sidebar
+  min-width: 200px
+
 .mainWrapper
   flex: 1
-  padding: 24px
+  padding: 0 24px
 
 .light.mainWrapper
   background: top center url('/images/bg-white.png') repeat-x
@@ -24,8 +27,9 @@
 @include media('>SDesktop')
   .root
     flex-direction: row
-  .wrapper
+  .mainWrapper
     width: calc(100% - 200px)
+  .wrapper
     max-width: 1236px
     padding: 24px 32px 32px
     margin: 0 auto
