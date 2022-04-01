@@ -1,0 +1,21 @@
+@import "@styles/breakpoints";
+
+.title {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.143;
+}
+
+.content {
+  font-size: 1.143rem;
+  line-height: 1.5;
+}
+
+@include media(">SDesktop") {
+  .content {
+    font-size: 1.714rem;
+    line-height: 1.333;
+  }
+}

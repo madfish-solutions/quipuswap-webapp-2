@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import BigNumber from 'bignumber.js';
 import cx from 'classnames';
@@ -22,7 +22,7 @@ interface QPTokenProps {
 
 const DEFAULT_PRECISION = 2;
 
-export const QPToken: React.FC<QPTokenProps> = ({ id, className }) => {
+export const QPToken: FC<QPTokenProps> = ({ id, className }) => {
   const { colorThemeMode } = useContext(ColorThemeContext);
   // const exchangeRates = useExchangeRates();
 

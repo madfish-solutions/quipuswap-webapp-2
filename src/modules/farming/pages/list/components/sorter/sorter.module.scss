@@ -1,0 +1,152 @@
+@import '@styles/_variables';
+@import "@styles/text";
+
+.root {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 128px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.root {
+  :global(.sorterSelect__control) {
+    min-height: 24px;
+    cursor: pointer;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 9px;
+  }
+
+  :global(.sorterSelect__value-container) {
+    min-height: 24px;
+    min-width: 150px;
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 0;
+    padding: 0;
+    transition: background-color $colorChangeAnimationTime;
+  }
+
+  :global(.sorterSelect__single-value) {
+    max-width: 100%;
+    width: 100%;
+    height: 100%;
+    padding-left: 24px;
+    margin-left: 0;
+    margin-right: 0;
+    line-height: 24px;
+    text-align: left;
+    font-weight: 600;
+    transition: color $colorChangeAnimationTime;
+  }
+
+  :global(.sorterSelect__control--menu-is-open) {
+    :global(.sorterSelect__single-value) {
+      &::after {
+        transform: translateY(-50%) rotate(180deg)
+      }
+    }
+  }
+
+  :global(.sorterSelect__option) {
+    background-color: transparent;
+    transition: background-color $colorChangeAnimationTime;
+    padding: 8px 16px;
+    cursor: pointer;
+    color: $text-02;
+  }
+
+  :global(.sorterSelect__menu) {
+    min-width: 128px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    box-shadow: $elevation-03;
+  }
+
+  :global(.sorterSelect__menu-list) {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  :global(.sorterSelect__indicators) {
+    display: none
+  }
+}
+
+.light {
+  :global(.sorterSelect__control) {
+    background-color: $brand-01;
+  }
+
+  :global(.sorterSelect__value-container) {
+    background-color: $ui-01
+  }
+
+  :global(.sorterSelect__placeholder) {
+    @include background-text-color($brand-01);
+  }
+
+  :global(.sorterSelect__single-value) {
+    @include background-text-color($brand-01);
+    &::after {
+      border-top: 5px solid $hover-primary-01-fallback // COLOR
+    }
+  }
+
+  :global(.sorterSelect__option--is-selected) {
+    color: $hover-primary-01-fallback;
+  }
+
+  :global(.sorterSelect__menu) {
+    background-color: $ui-01;
+    &:hover {
+      :global(.sorterSelect__option--is-focused) {
+        background-color: $hover-light-row;
+        color: $text-01;
+      }
+    }
+  }
+}
+
+.dark {
+  :global(.sorterSelect__control) {
+    background-color: $brand-02;
+  }
+
+  :global(.sorterSelect__value-container) {
+    background-color: $ui-07;
+  }
+
+  :global(.sorterSelect__placeholder) {
+    @include background-text-color($brand-02);
+  }
+
+  :global(.sorterSelect__single-value) {
+    @include background-text-color($brand-02);
+    &::after {
+      border-top: 5px solid $hover-primary-02-fallback;
+    }
+
+  }
+
+  :global(.sorterSelect__option--is-selected) {
+    color: $hover-primary-02-fallback;
+  }
+
+  :global(.sorterSelect__menu) {
+    background-color: $ui-07;
+    &:hover {
+      :global(.sorterSelect__option--is-focused) {
+        background-color: $hover-dark-row;
+        color: $text-inverse;
+      }
+    }
+  }
+}

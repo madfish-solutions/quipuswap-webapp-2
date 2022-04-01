@@ -1,0 +1,45 @@
+@import "@styles/variables";
+
+.modal {
+  padding: 24px;
+  z-index: 99;
+}
+
+.stakeIcon {
+  height: 36px;
+  width: 100%;
+}
+
+.title {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.title,
+.description {
+  text-align: center;
+}
+
+.light {
+  .title,
+  .description {
+    color: $text-01;
+  }
+}
+
+.dark {
+  .title,
+  .description {
+    color: $text-inverse;
+  }
+}
+
+
+.buttons {
+  margin-top: 40px;
+
+  display: flex;
+  column-gap: 16px;
+}

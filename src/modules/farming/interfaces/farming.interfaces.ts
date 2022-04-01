@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
+import { Nullable, Token, Undefined } from '@shared/types';
 import { ActiveStatus } from '@shared/types/active-statuts-enum';
-import { Nullable, Token, Undefined } from '@shared/types/types';
 
 export interface BlockInfo {
   level: number;

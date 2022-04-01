@@ -1,0 +1,236 @@
+@import '@styles/_variables';
+@import '@styles/_breakpoints';
+
+.root {
+  font-size: 1rem;
+  line-height: 1.14;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  transition: color $colorChangeAnimationTime;
+}
+.primary,
+.secondary,
+.tertiary {
+  padding: 12px;
+  min-height: 40px;
+  max-width: 327px;
+  width: 100%;
+}
+.quaternary,
+.clean {
+  min-width: auto;
+}
+.quaternary,
+.inverse,
+.underlined {
+  padding: 6px 8px;
+  margin: -6px -8px;
+}
+// Themes
+.secondary {
+  position: relative;
+  padding: 2px;
+  .inner {
+    padding: 10px 22px;
+    min-height: 36px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color $colorChangeAnimationTime;
+  }
+  .text {
+    transition: color $colorChangeAnimationTime;
+  }
+}
+.tertiary,
+.quaternary,
+.clean {
+  transition: background $colorChangeAnimationTime;
+}
+.underlined {
+  position: relative;
+  line-height: 1;
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 8px;
+    width: calc(100% - 16px);
+    height: 1px;
+  }
+// Colors
+}
+.light {
+  color: $text-01;
+  &.primary,
+  &.secondary {
+    background: $brand-01;
+    color: $text-inverse;
+    transition: background $animationTime, color $animationTime;
+    &:hover,
+    &:focus {
+      background: $hover-primary-01;
+    }
+    &:active {
+      background: $brand-01;
+    }
+    &:disabled {
+      background: $ui-04;
+    }
+  }
+  &.secondary {
+    .inner {
+      background-color: $ui-01;
+    }
+    .text {
+      color: $text-01;
+    }
+    &:not(:disabled) {
+      &:hover,
+      &:focus {
+        .text {
+          color: $hover-primary-01-fallback;
+          background: $hover-primary-01;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+      &:active {
+        .text {
+          color: $text-01;
+          background: none;
+          -webkit-background-clip: initial;
+          -webkit-text-fill-color: $text-01;
+        }
+      }
+    }
+    &:disabled {
+      .text {
+        color: $ui-04;
+      }
+    }
+  }
+  &.tertiary,
+  &.quaternary,
+  &.clean {
+    &:not(:disabled) {
+      &:hover,
+      &:focus {
+        color: $hover-primary-01-fallback;
+        background: $hover-primary-01;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      &:active {
+        color: $text-01;
+        background: none;
+        -webkit-background-clip: initial;
+        -webkit-text-fill-color: $text-01;
+      }
+    }
+    &:disabled {
+      color: $ui-04;
+    }
+  }
+  &.inverse,
+  &.underlined {
+    color: $hover-primary-01-fallback;
+    background: $brand-01;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  &.underlined {
+    position: relative;
+    &::after {
+      background: $brand-01;
+    }
+  }
+}
+.dark {
+  color: $text-inverse;
+  &.primary {
+    color: $text-01;
+  }
+  &.primary,
+  &.secondary {
+    background: $brand-02;
+    transition: background $animationTime;
+    &:hover,
+    &:focus {
+      background: $hover-primary-02;
+    }
+    &:active {
+      background: $brand-02;
+    }
+    &:disabled {
+      background: $ui-04;
+    }
+  }
+  &.secondary {
+    .inner {
+      background-color: $ui-06;
+    }
+    &:not(:disabled) {
+      &:hover,
+      &:focus {
+        .text {
+          color: $hover-primary-02-fallback;
+          background: $hover-primary-02;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+      }
+      &:active {
+        .text {
+          color: $text-inverse;
+          background: none;
+          -webkit-background-clip: initial;
+          -webkit-text-fill-color: $text-inverse;
+        }
+      }
+    }
+    &:disabled {
+      .text {
+        color: $ui-04;
+      }
+    }
+  }
+  &.tertiary,
+  &.quaternary,
+  &.clean {
+    &:not(:disabled) {
+      &:hover,
+      &:focus {
+        color: $hover-primary-02-fallback;
+        background: $hover-primary-02;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      &:active {
+        color: $text-inverse;
+        background: none;
+        -webkit-background-clip: initial;
+        -webkit-text-fill-color: $text-inverse;
+      }
+    }
+    &:disabled {
+      color: $ui-04;
+    }
+  }
+  &.inverse,
+  &.underlined {
+    color: $hover-primary-02-fallback;
+    background: $brand-02;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  &.underlined {
+    position: relative;
+    &::after {
+      background: $brand-02;
+    }
+  }
+}

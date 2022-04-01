@@ -3,7 +3,7 @@ import { FC, useContext } from 'react';
 import cx from 'classnames';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { ActiveStatus } from '@shared/types/types';
+import { ActiveStatus } from '@shared/types';
 
 import styles from './status-label.module.scss';
 

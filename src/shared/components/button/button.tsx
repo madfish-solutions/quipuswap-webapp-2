@@ -1,6 +1,7 @@
 import { FC, HTMLProps, ReactNode, useContext } from 'react';
 
 import cx from 'classnames';
+import { Link } from 'react-router-dom';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { isUndefined } from '@shared/helpers/type-checks';
@@ -74,12 +75,15 @@ export const Button: FC<ButtonProps> = ({
       ...(props as HTMLProps<HTMLAnchorElement>)
     };
 
+    //TODO _blank
     return (
-      <a data-test-id={testId} {...anchorProps}>
-        {control}
-        {content}
-        {icon}
-      </a>
+      <Link to={props.href}>
+        <a data-test-id={testId} {...anchorProps}>
+          {control}
+          {content}
+          {icon}
+        </a>
+      </Link>
     );
   }
 

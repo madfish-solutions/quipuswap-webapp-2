@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import cx from 'classnames';
 
@@ -11,7 +11,7 @@ interface SocialsProps {
   className?: string;
 }
 
-export const Socials: React.FC<SocialsProps> = ({ id, className }) => (
+export const Socials: FC<SocialsProps> = ({ id, className }) => (
   <div className={cx(styles.root, className)}>
     {SocialLinksData.map(({ id: socialId, href, label, Icon }) => (
       <Button key={socialId} theme="quaternary" href={href} external title={label} className={styles.link}>

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { FC, useContext } from 'react';
 
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
@@ -24,7 +24,7 @@ interface MenuProps {
   className?: string;
 }
 
-export const Menu: React.FC<MenuProps> = ({ className }) => {
+export const Menu: FC<MenuProps> = ({ className }) => {
   const { t } = useTranslation(['common']);
   const { colorThemeMode } = useContext(ColorThemeContext);
 
