@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import cx from 'classnames';
 import { useTranslation } from 'next-i18next';
 
-import { NETWORK_ID, networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
+import { HIDE_ANALYTICS, NETWORK_ID, networksDefaultTokens, TEZOS_TOKEN } from '@app.config';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { DashPlug } from '@components/ui/dash-plug';
 import { DetailsCardCell } from '@components/ui/details-card-cell';
@@ -100,12 +100,14 @@ export const SwapDetails: FC<SwapDetailsProps> = ({
         {Boolean(routes.length) ? <Route routes={routes} /> : <DashPlug animation={false} />}
       </DetailsCardCell>
 
-      <ViewPairAnlitics
-        route={route}
-        className={s.detailsButtons}
-        buttonClassName={s.detailsButton}
-        iconClassName={s.linkIcon}
-      />
+      {!HIDE_ANALYTICS && (
+        <ViewPairAnlitics
+          route={route}
+          className={s.detailsButtons}
+          buttonClassName={s.detailsButton}
+          iconClassName={s.linkIcon}
+        />
+      )}
     </Card>
   );
 };

@@ -1,7 +1,7 @@
 import { FoundDex } from '@quipuswap/sdk';
 import BigNumber from 'bignumber.js';
 
-import { QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
+import { HIDE_ANALYTICS, QUIPUSWAP_ANALYTICS_PAIRS, TZKT_EXPLORER_URL } from '@app.config';
 import { fromDecimals, getTokenSymbol, isTezIncluded, isTokenFa2, isUndefined } from '@utils/helpers';
 import { Nullable, Optional, Token } from '@utils/types';
 
@@ -20,7 +20,7 @@ const getPairLink = (
   tokenB: Nullable<Token>,
   pairInfo: Optional<PairInfo>
 ) =>
-  dex && isTezIncluded([tokenA, tokenB]) && !isUndefined(pairInfo) && !checkIsPoolNotExists(pairInfo)
+  !HIDE_ANALYTICS && dex && isTezIncluded([tokenA, tokenB]) && !isUndefined(pairInfo) && !checkIsPoolNotExists(pairInfo)
     ? `${QUIPUSWAP_ANALYTICS_PAIRS}/${dex.contract.address}`
     : null;
 

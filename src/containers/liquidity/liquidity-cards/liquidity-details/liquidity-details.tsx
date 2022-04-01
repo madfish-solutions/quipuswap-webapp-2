@@ -1,10 +1,11 @@
+/* eslint-disable no-console */
 import { FC } from 'react';
 
 import { FoundDex } from '@quipuswap/sdk';
 import { useTranslation } from 'next-i18next';
 
 import { EMPTY_POOL_AMOUNT } from '@app.config';
-import { LinkToContract } from '@components/common/link-to-contract/link-to-contract';
+import { ContractHashWithCopy } from '@components/common/contract-hash-with-copy/contract-hash-with-copy';
 import { RateView } from '@components/common/pair-details/rate-view';
 import { StateWrapper } from '@components/state-wrapper';
 import { DashPlug } from '@components/ui/dash-plug';
@@ -71,7 +72,7 @@ export const LiquidityDetails: FC<Props> = ({ dex, tokenA, tokenB }) => {
           isError={!contractAddress || !contractLink}
           errorFallback={<DashPlug animation={false} />}
         >
-          {contractAddress && contractLink && <LinkToContract contractAddress={contractAddress} link={contractLink} />}
+          {contractAddress && contractLink && <ContractHashWithCopy contractAddress={contractAddress} />}
         </StateWrapper>
       </DetailsCardCell>
 

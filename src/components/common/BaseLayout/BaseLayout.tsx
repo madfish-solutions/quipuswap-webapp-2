@@ -14,7 +14,6 @@ import { AccountModal } from '@components/modals/AccountModal';
 import { ConfirmationModalProvider } from '@components/modals/confirmation-modal';
 import { DonationModal } from '@components/modals/donation-modal';
 import { WalletModal } from '@components/modals/WalletModal';
-import { Background } from '@components/svg/Background';
 import { ToastWrapper } from '@components/ui/toast-wrapper';
 import { GlobalModalsStateProvider } from '@hooks/use-global-modals-state';
 import { DEFAULT_SEO } from '@seo.config';
@@ -29,12 +28,12 @@ interface BaseLayoutProps {
 }
 
 export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, image, className, children }) => {
-  const { isDarkFavicon, canonicalURL, isComponentDidMount } = useBaseLayoutViewModel();
+  const { isDarkTheme, canonicalURL, isComponentDidMount } = useBaseLayoutViewModel();
 
   return (
     <>
       <Head>
-        {isDarkFavicon ? (
+        {isDarkTheme ? (
           <link rel="icon" href={`${BASE_URL}/favicon.ico`} />
         ) : (
           <link rel="icon" href={`${BASE_URL}/light-favicon.ico`} />
@@ -96,11 +95,12 @@ export const BaseLayout: FC<BaseLayoutProps> = observer(({ title, description, i
             <div className={s.root}>
               <Header />
               <Sidebar className={s.sidebar} />
-              <Background className={s.background} />
-              <main className={cx(s.wrapper, className)}>
-                <ToastWrapper />
-                {children}
-              </main>
+              <div className={cx(s.mainWrapper, isDarkTheme ? s.dark : s.light)}>
+                <main className={cx(s.wrapper, className)}>
+                  <ToastWrapper />
+                  {children}
+                </main>
+              </div>
             </div>
           </ConfirmationModalProvider>
 

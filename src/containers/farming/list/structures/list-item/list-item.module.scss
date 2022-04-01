@@ -23,9 +23,27 @@
 }
 
 .itemLeftHeader {
-  display: flex;
-  align-items: center;
+  display: grid;
   column-gap: 5px;
+  grid-template-columns: repeat(2, min-content);
+  grid-template-rows: repeat(2, min-content);
+  align-items: center;
+}
+
+.tagsWithTooltip {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 8px;
+  grid-column: 1 / 2;
+  margin-top: 8px;
+}
+
+.iconWithStatusLabel {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  column-gap: 8px;
 }
 
 .tooltip {
@@ -41,6 +59,48 @@
   justify-content: space-between;
   row-gap: 12px;
   overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+
+  scrollbar-width: thin;
+
+  &:hover {
+    &::-webkit-scrollbar {
+      display: block;
+    }
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+    width: 4px;
+    height: 4px;
+  }
+
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-track-piece {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 50px;
+    background-color: white;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+
+  &::-webkit-resizer {
+    display: none;
+  }
 }
 
 .CardCellHeader {
@@ -71,6 +131,12 @@
 }
 
 .light {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $ui-05;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-03;
@@ -79,14 +145,18 @@
 }
 
 .dark {
+  .stats {
+    &::-webkit-scrollbar-thumb {
+      background-color: $text-02;
+    }
+  }
+
   .userData {
     &::before {
       background-color: $text-02;
     }
   }
-
 }
-
 
 @include media(">phone", "<Lphone") {
   .stats {
@@ -136,6 +206,20 @@
 
   .button {
     width: 160px;
+  }
+
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
+  }
+}
+
+@include media(">900px") {
+  .tagsWithTooltip {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    margin-top: 0;
   }
 }
 

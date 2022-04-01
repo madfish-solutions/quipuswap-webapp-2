@@ -93,13 +93,17 @@ export const FarmingListItem: FC<FarmingItem> = ({
       <div className={styles.container}>
         <div className={styles.left}>
           <div className={styles.itemLeftHeader}>
-            <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
-            <StatusLabel status={stakeStatus} filled />
-            {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
-            {shouldShowWithdrawalFee && (
-              <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
-            )}
-            <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
+            <div className={styles.iconWithStatusLabel}>
+              <TokensLogosAndSymbols width={ICON_SIZE} tokenA={tokenA} tokenB={tokenB} />
+              <StatusLabel status={stakeStatus} filled />
+            </div>
+            <div className={styles.tagsWithTooltip}>
+              {shouldShowLockPeriod && <StatusLabel label={`${timeLockLabel} LOCK`} status={stakeStatus} />}
+              {shouldShowWithdrawalFee && (
+                <StatusLabel label={`${withdrawalFeeLabel}% UNLOCK FEE`} status={stakeStatus} />
+              )}
+              <Tooltip className={styles.tooltip} content={fullCardTooltipTranslation} />
+            </div>
           </div>
 
           <div className={styles.rewardTarget}>
