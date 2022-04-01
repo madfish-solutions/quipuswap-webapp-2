@@ -1,4 +1,5 @@
 import { TezosToolkit } from '@taquito/taquito';
+import { SendParams } from '@taquito/taquito/dist/types/contract/contract-methods/contract-method-interface';
 import BigNumber from 'bignumber.js';
 
 import { FARMING_CONTRACT_ADDRESS, FARMING_REFERRER_CONTRACT } from '@app.config';
@@ -14,10 +15,11 @@ export const stakeTokenApi = async (
   amount: BigNumber,
   bakerAddress: string
 ) => {
+  const sendParams: Partial<SendParams> = { storageLimit: 600 };
   const farmingContract = await tezos.wallet.at(FARMING_CONTRACT_ADDRESS);
   const farmingParams = farmingContract.methods
     .deposit(farmingId, amount, FARMING_REFERRER_CONTRACT, accountPkh, bakerAddress)
-    .toTransferParams();
+    .toTransferParams(sendParams);
 
-  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, farmingParams);
+  return await withApproveApi(tezos, FARMING_CONTRACT_ADDRESS, token, accountPkh, amount, farmingParams, sendParams);
 };
