@@ -2,11 +2,11 @@ import { Fragment, useContext } from 'react';
 
 import { BigNumber } from 'bignumber.js';
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
 import { DashPlug } from '@shared/components';
 import { parseTimelock } from '@shared/helpers';
-import { useTranslation } from '@shared/hooks';
 import { Undefined } from '@shared/types';
 
 import styles from './timespan-view.module.scss';

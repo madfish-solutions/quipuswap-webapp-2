@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -11,9 +13,8 @@ import { ExchangeRatesProvider, NewExchangeRatesProvider } from '@providers/use-
 import { WalletWrapper } from '@providers/wallet-wrapper';
 import { DexGraphProvider } from '@shared/hooks';
 
-import { App } from './App';
+import App from './App';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports,@typescript-eslint/no-var-requires
 require('dotenv').config();
 
 render(

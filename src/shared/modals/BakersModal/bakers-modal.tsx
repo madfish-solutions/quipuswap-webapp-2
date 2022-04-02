@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect, useContext, FC } from 'react';
 
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 import { Field, FormSpy, withTypes } from 'react-final-form';
 import { Props } from 'react-modal';
 import { noop } from 'rxjs';
@@ -18,7 +19,6 @@ import {
   isEmptyArray,
   localSearchBaker
 } from '@shared/helpers';
-import { useTranslation } from '@shared/hooks';
 import { NotFound, Search } from '@shared/svg';
 import { WhitelistedBaker } from '@shared/types';
 import { isValidBakerAddress } from '@shared/validators';

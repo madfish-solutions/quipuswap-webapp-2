@@ -39,4 +39,3 @@ export * from './view-pair-analytics';
 export * from './swap-button';
 export * from './deadline-input';
 export * from './slippage';
-export * from './trans';

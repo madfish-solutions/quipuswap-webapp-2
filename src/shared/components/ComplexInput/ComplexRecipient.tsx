@@ -1,10 +1,10 @@
 import { FC, HTMLProps, useContext, useRef, useState } from 'react';
 
 import cx from 'classnames';
+import { useTranslation } from 'next-i18next';
 import TextareaAutosize from 'react-textarea-autosize';
 
 import { ColorModes, ColorThemeContext } from '@providers/color-theme-context';
-import { useTranslation } from '@shared/hooks';
 import { useToasts } from '@shared/utils';
 
 import { Button } from '../button';

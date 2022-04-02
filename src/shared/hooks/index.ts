@@ -9,4 +9,3 @@ export * from './use-update-toast';
 export * from './use-on-block';
 export const useUpdateOnBlockSWR = useUpdateOnBlockSWR_;
 export * from './use-dex-graph';
-export * from './use-translation';

@@ -1,7 +1,8 @@
 import { FC } from 'react';
 
+import { useTranslation } from 'next-i18next';
+
 import { IS_NETWORK_MAINNET } from '@config/config';
-import { useTranslation } from '@shared/hooks';
 
 import { AlarmMessage } from '../alarm-message';
 import s from './testnet-alert.module.scss';

@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
-
-import { i18n } from '../hooks';
+import { i18n } from 'next-i18next';
 
 export const validateMinMax = (min: number, max: number) => (value: string) =>
   !value || (new BigNumber(value).gt(new BigNumber(min)) && new BigNumber(value).lt(new BigNumber(max)))
