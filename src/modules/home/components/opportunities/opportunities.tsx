@@ -19,7 +19,7 @@ export const Opportunities: FC<OpportunitiesProps> = ({ className }) => {
   return (
     <Section
       className={cx(s.root, className)}
-      header={t('QuipuSwap opportunities')}
+      header={t('home|QuipuSwap opportunities')}
       description={`${t('home|Start to work with the biggest DEX on Tezos: swap, farm, stake.')}`}
     >
       <div className={s.cards}>

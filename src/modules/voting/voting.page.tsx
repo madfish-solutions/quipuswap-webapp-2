@@ -6,5 +6,6 @@ import { useTranslation } from '@translation';
 export const Voting: FC = () => {
   const { t } = useTranslation(['common']);
 
+  //@ts-ignore
   return <PageTitle>{t('Voting Page')}</PageTitle>;
 };

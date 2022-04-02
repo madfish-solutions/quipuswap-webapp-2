@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-type-alias */
 import { en as enLocal } from './locales';
-
-export type TFunction = (localText: `${FileName}|${string}`, params: Record<string, number | string>) => string;
+type Params = Record<string, number | string>;
 
 export type FileName = keyof typeof enLocal;
 
 type Values = typeof enLocal[FileName];
 
-type Key = keyof Values; //TODO: try to get real keys of obj
+type KeysOfUnion<T> = T extends T ? keyof T : never;
 
-const t = (localText: `${FileName}|${string}` | string, params?: Record<string, number | string>) => {
+export type Key = KeysOfUnion<Values>;
+
+export type TFunction = (localText: `${FileName}|${Key}`, params: Params) => string;
+
+const t = (localText: `${FileName}|${Key}`, params?: Record<string, number | string>) => {
   const [file, key] = localText.split('|') as [FileName, Key];
   if (!key) {
     return file as string;
@@ -17,7 +20,7 @@ const t = (localText: `${FileName}|${string}` | string, params?: Record<string, 
 
   const local = enLocal[file];
 
-  const text = local[key] as string;
+  const text = local[key as never] as string;
 
   if (!params) {
     return text ?? key ?? localText;

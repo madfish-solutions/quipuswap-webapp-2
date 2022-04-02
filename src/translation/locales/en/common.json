@@ -79,5 +79,17 @@
   "confirmation": "Confirmation",
   "areYouSure": "Are you sure?",
   "no": "No",
-  "yes": "Yes"
+  "yes": "Yes",
+  "I have read and agree to the": "I have read and agree to the",
+  "Privacy Policy":"Privacy Policy",
+  "Terms of Usage": "Terms of Usage",
+  "Accept terms":"Accept terms",
+  "and":"and",
+  "Amount": "Amount",
+  "Baker": "Baker",
+  "You are on Testnet now!": "You are on Testnet now!",
+  "View {{tokenA}}/{{tokenB}} Pair Analytics":"View {{tokenA}}/{{tokenB}} Pair Analytics",
+  "The amount of token A you receive for 1 token B according to the current exchange rate.": "The amount of token A you receive for 1 token B according to the current exchange rate.",
+  "Our latest news": "Our latest news",
+  "Never miss important updates. Check what has happened in the QuipuSwap ecosystem recently..": "Never miss important updates. Check what has happened in the QuipuSwap ecosystem recently.."
 }

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { FileName, useTranslation } from '@translation';
+import { FileName, Key, useTranslation } from '@translation';
 
 interface Props {
   ns: FileName;
@@ -9,5 +9,5 @@ interface Props {
 export const Trans: FC<Props> = ({ ns, children }) => {
   const { t } = useTranslation();
 
-  return <>{t(`${ns}|${children}`)}</>;
+  return <>{t(`${ns}|${children as Key}`)}</>;
 };
